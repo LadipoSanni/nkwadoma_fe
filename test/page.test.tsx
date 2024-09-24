@@ -3,6 +3,7 @@ import Home from "@/app/page";
 import {render, screen} from "@testing-library/react";
 import '@testing-library/jest-dom';
 import { Providers } from "@/app/provider";
+import Image from "next/image";
 
 
 describe("testing home component", ()=> {
