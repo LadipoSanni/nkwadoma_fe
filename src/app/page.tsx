@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import CounterValue from "./counter/page";
 
 export default function Home() {
