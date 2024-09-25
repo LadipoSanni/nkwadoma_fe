@@ -5,7 +5,7 @@ import {useRouter} from "next/navigation";
 
 const SideBar = () => {
     const router = useRouter();
-    const [showSide, setShowSide] = useState(false)
+    const [showSide] = useState(false)
     return (
         <>
             <>
