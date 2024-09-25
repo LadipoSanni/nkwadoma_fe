@@ -1,10 +1,9 @@
 import React from 'react'
-import Counter from '@/counter/Counter'
 
 const CounterValue = () => {
   return (
     <div>
-        <Counter />
+        {/*<Counter />*/}
         <div>ghg</div>
     </div>
   )
