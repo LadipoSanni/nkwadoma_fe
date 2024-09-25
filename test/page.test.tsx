@@ -7,7 +7,6 @@ import { Providers } from "@/app/provider";
 
 
 describe("testing home component", ()=> {
-
     const renderComponent = () => {
      return render(
             <Providers>
@@ -15,7 +14,6 @@ describe("testing home component", ()=> {
             </Providers>
         )
     }
-
 
     it(`test that the img with the incorrect id will not render`, ()=> {
         renderComponent()

@@ -3,7 +3,6 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { useDispatch,useSelector, type TypedUseSelectorHook } from "react-redux";
 import counterReducer from "./slice/CounterSlice";
 
-
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
