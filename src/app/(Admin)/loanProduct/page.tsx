@@ -1,8 +1,11 @@
 import React from 'react'
+import LoanProductPage from '@/pages/portFolioManager/loanProduct/LoanProductPage'
 
 function page() {
   return (
-    <div>page</div>
+    <div>
+      <LoanProductPage />
+    </div>
   )
 }
 
