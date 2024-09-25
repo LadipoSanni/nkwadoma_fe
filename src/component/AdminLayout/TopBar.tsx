@@ -11,7 +11,7 @@ const TopBar = () => {
         <>
             <header
                 id="adminlayoutHeader"
-                className="bg-white border border-r-grey-400 flex items-center h-[8vh] w-full md:h-[10vh] md:w-[84vw] absolute md:static right-0 justify-between border-b border-gray-300"
+                className="bg-white md:border-b md:border-b-grey-400 flex items-center h-[8vh] w-full md:h-[10vh] md:w-[84vw] absolute md:static right-0 justify-between border-b border-gray-300"
             >
                 <div className={'flex  w-[96%]  mr-auto ml-auto  place-content-between'}>
                     <div className={`flex gap-2 h-[1rem] mt-auto mb-auto place-content-center `}>
