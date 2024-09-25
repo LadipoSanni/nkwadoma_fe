@@ -1,12 +1,12 @@
 import React from 'react'
 
 interface Props {
-    
+   sx?: string; 
 }
 
-function Table({}: Props) {
+function Table({sx}: Props) {
   return (
-    <div>Table</div>
+    <div className={`${sx}`}>Table</div>
   )
 }
 

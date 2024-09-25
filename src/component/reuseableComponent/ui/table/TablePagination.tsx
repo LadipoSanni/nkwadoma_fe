@@ -3,16 +3,16 @@ import {Button, Pagination} from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-interface Props {
+interface Props<T> {
     page: number;
     rowsPerPage: number;
-    tableData: any[];
+    tableData: T[];
     handlePageChange: (event: React.ChangeEvent<unknown>, newPage: number) => void;
     handleNextPage: () => void;
     handlePreviousPage: () => void;
 }
 
-function TablePagination({ page, rowsPerPage, tableData, handlePageChange, handleNextPage, handlePreviousPage }: Props) {
+function TablePagination<T>({ page, rowsPerPage, tableData, handlePageChange, handleNextPage, handlePreviousPage }: Props<T>) {
   return (
     <div id="dynamicTablePagination" className={'flex items-center p-3 h-16 justify-between'}>
     <Button

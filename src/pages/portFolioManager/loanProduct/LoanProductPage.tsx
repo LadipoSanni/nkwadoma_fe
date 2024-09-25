@@ -1,10 +1,12 @@
 import React from 'react'
 
-type Props = {}
+type Props = {
+    sx?:string
+}
 
-function LoanProductPage({}: Props) {
+function LoanProductPage({sx}: Props) {
   return (
-    <div>LoanProductPage</div>
+    <div className={`${sx}`}>LoanProductPage</div>
   )
 }
 
