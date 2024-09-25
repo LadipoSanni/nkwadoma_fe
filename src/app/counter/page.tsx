@@ -5,6 +5,7 @@ const CounterValue = () => {
   return (
     <div>
         <Counter />
+        <div>ghg</div>
     </div>
   )
 }

@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { useDispatch,useSelector, type TypedUseSelectorHook } from "react-redux";
 import counterReducer from "./slice/CounterSlice";
-import Image from "next/image";
 
 export const store = configureStore({
   reducer: {
