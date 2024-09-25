@@ -3,7 +3,7 @@ import ReactModal from "react-modal";
 import styles from "./styles.module.css";
 
 interface Props {
-    isOpen?: any;
+    isOpen: boolean;
     closeModal?: () => void;
     className?: string;
     children: React.ReactNode;
