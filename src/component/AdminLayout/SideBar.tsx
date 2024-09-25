@@ -1,8 +1,7 @@
 "use client"
 import React, {useState} from 'react';
-import Image from "next/image"
 import {useRouter} from "next/navigation";
-import {Avatar} from "@mui/material";
+
 
 const SideBar = () => {
     const router = useRouter();
@@ -13,7 +12,7 @@ const SideBar = () => {
                 {showSide &&
                     <aside
                         id={'mobileSideBar'}
-                        className={` w-[100vw] h-[100vh] border border-r-grey-200  flex z-10 md:hidden`}
+                        className={` w-[100vw] h-[100vh]  border-r-2 border-r-grey-200  flex z-10 md:hidden`}
                     >
                         <div
                             className={` w-[70vw]  py-8 px-5 border border-r-grey-200 z-10 h-[100%] bg-learnSpaceWhite `}
@@ -47,8 +46,8 @@ const SideBar = () => {
 
                 }
                 <aside
-                    id={'barCollapse'}
-                    className={`  hidden md:flex  md:w-[16vw] py-8 px-5 border border-r-[#E0E3E8] z-10 h-[100%] bg-pink-200  `}
+                    id={'adminMediumSideBar'}
+                    className={`hidden md:flex md:bg-white md:w-[16vw] md:py-8 md:px-5  md:border-r-2 md:border-r-[#E0E3E8] md:z-10 md:h-[100%]`}
                 >
 
                     <div className={`h-[100%] w-[90%] mr-auto ml-auto`}>
@@ -62,9 +61,11 @@ const SideBar = () => {
                             {/*    selectedName={selectedName}*/}
                             {/*    barCollapse={barCollapse}*/}
                             {/*/>*/}
+                            {/*cuycuy*/}
                         </div>
                         <div className={`hidden  md:grid md:w-[78%] md:mr-auto md:ml-auto `}>
                             {/*<SideBarBottomLayer/>*/}
+                            {/*cycfhuycfhu*/}
                         </div>
                     </div>
                 </aside>

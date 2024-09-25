@@ -3,9 +3,7 @@ import SelectedLoan from "@/component/SelectedLoan";
 
 const Page = () => {
     return (
-        <>
           <SelectedLoan/>
-        </>
     );
 };
 
