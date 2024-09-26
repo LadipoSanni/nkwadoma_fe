@@ -35,9 +35,10 @@ const SelectLoanTab = () => {
                 data-testid="loanStatusBox"
                 style={{textTransform: 'none', color: 'black'}}
                 className={`${currentTab === index ? `${styles.selectedLoan}` : `` }`}
+                onClick={(event)=> {handleChange(event, index)}}
             >
                 <span
-                    data-testid="loanStatusText"
+                    data-testid={name}
                     id={"loanStatusText"}
                     style={{textTransform: 'none', color: 'black'}}
                     className={`${styles.loanText}`}
@@ -51,24 +52,27 @@ const SelectLoanTab = () => {
         <div
             id="selectLoanTabContainer"
             data-testid="selectLoanContainer"
-            className={`flex bg-[#fafbfc] overflow-scroll overflow-x-scroll md:overflow-hidden w-[99%] ml-1 mt-1 md:w-[50%] h-[8vh] md:h-[8vh] md:rounded rounded- `}
+            className={`flex bg-[#fafbfc] w-[70%] ml-1 mt-1 md:w-[50%] h-[6vh] md:h-[8vh] md:rounded rounded- `}
         >
 
             <Tabs
+                value={0}
                 data-testid="selectLoanTabs"
                 style={{display: 'flex',placeContent: 'center', textAlign: 'center',
-                    height: '99%', width: '99%', gap: '1rem', }}
+                    height: '99%', width: '99%', gap: '1rem' }}
                 id="selectLoanTabs"
-                onChange={handleChange}
+                TabIndicatorProps={{ hidden: true }}
             >
-                {tabContent?.map((item, index) => (
-                    <Tab
-                        id={item.id}
-                        key={index}
-                        label={<MenuItem name={item.name} index={index}/>}
-                        value={index}
-                    />
-                ))}
+                <div className={`h-[99%] w-[99%] overflow-x-scroll md:overflow-hidden`}>
+                    {tabContent?.map((item, index) => (
+                        <Tab
+                            id={item.id}
+                            key={index}
+                            label={<MenuItem name={item.name} index={index}/>}
+                            value={index}
+                        />
+                    ))}
+                </div>
             </Tabs>
         </div>
     );
