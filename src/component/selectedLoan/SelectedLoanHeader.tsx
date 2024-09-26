@@ -1,12 +1,14 @@
 import React from 'react';
 import SelectLoanTab from "@/component/selectedLoan/SelectLoanTab";
-import InstitutionAndFilter from "@/component/selectedLoan/InstitutionAndFilter";
+import OrganizationAndFilter from "@/component/selectedLoan/OrganizationAndFilter";
 
 const SelectedLoanHeader = () => {
     return (
-        <div className={`grid mt-4 md:mr-auto md:ml-auto ml-1 w-[98%] h-[20%] md:w-[98%] md:h-[22%]`}>
+        <div
+            id="SelectedLoanInnerHeader"
+            className={`grid mt-4 md:mr-auto md:ml-auto ml-1 w-[98%] h-[20%] md:w-[98%] md:h-[22%]`}>
           <SelectLoanTab/>
-          <InstitutionAndFilter/>
+          <OrganizationAndFilter/>
         </div>
     );
 };
