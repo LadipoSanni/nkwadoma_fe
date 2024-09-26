@@ -1,9 +1,11 @@
 import React from 'react';
-import SelectedLoan from "@/component/SelectedLoan";
+import SelectedLoanHeader from "@/component/selectedLoan/SelectedLoanHeader";
 
 const Page = () => {
     return (
-          <SelectedLoan/>
+        <>
+            <SelectedLoanHeader/>
+        </>
     );
 };
 
