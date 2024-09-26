@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import {Tabs, Tab} from "@mui/material";
-import {store, useAppSelector} from "@/redux/store";
+import {store} from "@/redux/store";
 import styles from "./SelectedLoan.module.css"
 import {setCurrentTab} from "@/redux/slice/SelectedLoan";
 import {useRouter} from "next/navigation"
@@ -12,7 +12,6 @@ interface type{
 }
 
 const SelectLoanTab = () => {
-    const currentTabItem = useAppSelector(state => state.selectedLoan.currentTab)
     const [currentTab, setCurrentTabs] = React.useState(0)
     const router = useRouter()
 
