@@ -4,6 +4,7 @@ import {Tabs, Tab} from "@mui/material";
 import {store, useAppSelector} from "@/redux/store";
 import styles from "./SelectedLoan.module.css"
 import {setCurrentTab} from "@/redux/slice/SelectedLoan";
+import {useRouter} from "next/navigation"
 
 interface type{
     name: string,
@@ -13,18 +14,22 @@ interface type{
 const SelectLoanTab = () => {
     const currentTabItem = useAppSelector(state => state.selectedLoan.currentTab)
     const [currentTab, setCurrentTabs] = React.useState(0)
+    const router = useRouter()
 
     const tabContent = [
-        {name: "loan referrals", id: "loanReferrals"},
-        {name: "loan requests", id:"loanRequests"},
-        {name: 'loan offers', id: 'loanOffers'},
-        {name: 'loan disbursal', id:"loanDisbursal"},
-        {name: 'loan books', id: "loanBooks"}
+        {name: "loan referrals", id: "loanReferrals", route: 'loanReferral'},
+        {name: "loan requests", id:"loanRequests", route:"loanRequest"},
+        {name: 'loan offers', id: 'loanOffers', route :"loanOffer" },
+        {name: 'loan disbursal', id:"loanDisbursal", route: 'loanDisbursal'},
+        {name: 'loan books', id: "loanBooks", route: "loanBook"}
     ]
+
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setCurrentTabs(newValue)
         store.dispatch(setCurrentTab(tabContent[newValue].name))
+        router.push(`/loan/${tabContent[newValue].route}` )
+
     }
 
     function MenuItem (props: type) {
