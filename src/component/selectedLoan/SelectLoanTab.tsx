@@ -58,7 +58,7 @@ const SelectLoanTab = () => {
         <div
             id="selectLoanTabContainer"
             data-testid="selectLoanContainer"
-            className={`flex bg-[#fafbfc] w-[66%] ml-1 mt-1 md:w-[55%] h-[6vh] md:h-[8vh] md:rounded rounded- `}
+            className={`flex bg-[#fafbfc] w-[70%] ml-1 mt-1 md:w-[55%] h-[6vh] md:h-[8vh] md:rounded rounded- `}
         >
 
             <Tabs
