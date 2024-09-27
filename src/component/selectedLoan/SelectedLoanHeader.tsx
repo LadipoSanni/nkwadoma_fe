@@ -6,7 +6,7 @@ const SelectedLoanHeader = () => {
     return (
         <div
             id="SelectedLoanInnerHeader"
-            className={`grid mt-4 md:mr-auto md:ml-auto ml-1 w-[98%] h-[20%] md:w-[98%] md:h-[22%]`}>
+            className={`grid mt-4 md:mr-auto md:ml-auto  w-[88vw] mr-auto ml-auto h-[13rem] md:w-[98%] md:h-[22%]`}>
           <SelectLoanTab/>
           <OrganizationAndFilter/>
         </div>
