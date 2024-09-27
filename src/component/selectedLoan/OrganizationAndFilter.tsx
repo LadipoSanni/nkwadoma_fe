@@ -4,7 +4,9 @@ import SearchAndFilterLoan from "@/component/selectedLoan/SearchAndFilterLoan";
 
 const OrganizationAndFilter = () => {
     return (
-        <div className={`grid md:place-content-between md:flex md:mr-auto md:ml-auto ml-1 w-[70%] h-[98%] md:w-[98%] md:h-[22%]`}>
+        <div
+            id="organzationAndFilterComponent"
+            className={`grid md:place-content-between md:flex md:mr-auto md:ml-auto ml-1 w-[70%] h-[98%] md:w-[98%] md:h-[22%]`}>
             <OrganizationNameAndChangeButton/>
             <SearchAndFilterLoan/>
         </div>
