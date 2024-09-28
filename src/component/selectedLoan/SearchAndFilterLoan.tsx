@@ -18,7 +18,7 @@ const SearchAndFilterLoan = () => {
                     placeholder='Search'
                     tabIndex={2}
                     sx={{width: 'inherit'}}
-                    // onChange={(e) => handleSearch(e.target.value)}
+                    // xl={(e) => handleSearch(e.target.value)}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
