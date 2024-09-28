@@ -3,14 +3,13 @@ import React from 'react';
 import {IoMdMenu} from "react-icons/io";
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {store, useAppSelector} from "@/redux/store";
+import {store} from "@/redux/store";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 
 
 const TopBar = () => {
 
     const [arrowToggled,setArrowToggle] = React.useState(false)
-    const show = useAppSelector(state => state.adminLayout.showMobileSideBar)
 
 
     const toggleArrow = ()=> {
