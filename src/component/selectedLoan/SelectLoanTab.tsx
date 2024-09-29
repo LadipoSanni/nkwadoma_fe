@@ -20,7 +20,9 @@ const SelectLoanTab = () => {
         {name: "loan requests", id: "loanRequests", route: "loanRequest"},
         {name: 'loan offers', id: 'loanOffers', route: "loanOffer"},
         {name: 'loan disbursal', id: "loanDisbursal", route: 'loanDisbursal'},
-        {name: 'loan books', id: "loanBooks", route: "loanBook"}
+        {name: 'loan books', id: "loanBooks", route: "loanBook"},
+        {name: 'loan books', id: "loanBooks", route: "loanBook"},
+
     ]
 
 
@@ -47,7 +49,7 @@ const SelectLoanTab = () => {
                     data-testid={name}
                     id={"loanStatusText"}
                     style={{textTransform: 'none', color: 'black'}}
-                    className={`${styles.loanText}`}
+                    className={`flex text-sm`}
                 >{name}</div>
 
             </div>
@@ -58,30 +60,39 @@ const SelectLoanTab = () => {
         <div
             id="selectLoanTabContainer"
             data-testid="selectLoanContainer"
-            className={`flex bg-[#fafbfc] w-[70%] ml-1 mt-1 md:w-[55%] h-[6vh] md:h-[8vh] md:rounded rounded- `}
+            className={`flex bg-[#fafbfc] overflow-x-scroll md:overflow-hidden w-[98%] ml-1 mt-1 md:w-[55%] h-[6vh] md:h-[8vh] md:rounded rounded- `}
         >
 
-            <Tabs
-                value={0}
-                data-testid="selectLoanTabs"
-                style={{
-                    display: 'flex', placeContent: 'center', textAlign: 'center',
-                    height: '99%', width: '99%', gap: '1rem'
-                }}
-                id="selectLoanTabs"
-                TabIndicatorProps={{hidden: true}}
-            >
-                <div className={`h-[99%] w-[99%] overflow-x-scroll md:overflow-hidden`}>
-                    {tabContent?.map((item, index) => (
-                        <Tab
-                            id={item.id}
-                            key={index}
-                            label={<MenuItem name={item.name} index={index}/>}
-                            value={index}
-                        />
-                    ))}
+            {/*<Tabs*/}
+            {/*    value={0}*/}
+            {/*    data-testid="selectLoanTabs"*/}
+            {/*    style={{*/}
+            {/*        display: 'flex', placeContent: 'center', textAlign: 'center',*/}
+            {/*        height: '99%', width: 'inherit', gap: '1rem', backgroundColor: '#fafbfc',*/}
+            {/*    }}*/}
+            {/*    id="selectLoanTabs"*/}
+            {/*    TabIndicatorProps={{hidden: true}}*/}
+            {/*>*/}
+            {/*    <div className={`h-[99%] w-[99%] overflow-x-scroll md:overflow-hidden`}>*/}
+            {/*        {tabContent?.map((item, index) => (*/}
+            {/*            <Tab*/}
+            {/*                id={item.id}*/}
+            {/*                key={index}*/}
+            {/*                label={<MenuItem name={item.name} index={index}/>}*/}
+            {/*                value={index}*/}
+            {/*            />*/}
+            {/*        ))}*/}
+            {/*    </div>*/}
+            {/*</Tabs>*/}
+            {tabContent?.map((item, index) => (
+                // eslint-disable-next-line react/jsx-key
+                <div
+                    id={item.id}
+                    className={` bg-red-200 flex place-self-center h-[2rem]  w-[20vh] ml-1 mr-1`}
+                >
+                    <MenuItem name={item.name} index={index}/>
                 </div>
-            </Tabs>
+            ))}
         </div>
     );
 };

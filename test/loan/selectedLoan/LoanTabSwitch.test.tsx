@@ -4,6 +4,16 @@ import {render, screen} from "@testing-library/react";
 import SelectLoanTab from "@/component/selectedLoan/SelectLoanTab";
 
 
+// Mock useRouter:
+jest.mock("next/navigation", () => ({
+    useRouter() {
+        return {
+            prefetch: () => null
+        };
+    }
+}));
+
+
 describe("testing loan tab switch component", ()=> {
 
     it("test that loan tab is rendered", ()=> {
@@ -29,9 +39,9 @@ describe("testing loan tab switch component", ()=> {
 
     it("test that store update when the tab is been click", ()=> {
         render(
-            <Providers>
+            // <Providers>
                 <SelectLoanTab/>
-            </Providers>
+            // </Providers>
         )
 
     })
