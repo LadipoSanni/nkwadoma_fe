@@ -52,12 +52,12 @@ const SideBar = () => {
                 }
                 <aside
                     id={'adminMediumSideBar'}
-                    className={`hidden md:flex md:bg-white md:w-[16vw] md:py-8 md:px-5  md:border-r-2 md:border-r-[#E0E3E8] md:z-10 md:h-[100%]`}
+                    className={`hidden md:flex md:bg-white md:w-[16vw] md:py-4 md:px-5  md:border-r-2 md:border-r-[#E0E3E8] md:z-10 md:h-[100%]`}
                 >
 
-                    <div className={`h-[100%] bg-amber-200 w-[98%] mr-auto ml-auto`}>
+                    <div className={`h-[100%] w-[98%] mr-auto ml-auto`}>
                         {/*<div id={'fund'}  className={``}>*/}
-                            <div id={'Logo'} className=" w-[98%] bg-red-200 flex items-center  gap-2 object-fit  ">
+                            <div id={'Logo'} className=" w-[98%]  flex items-center  gap-2 object-fit  ">
                                 <Avatar id={'MeduimLogo'} src={'/logo.svg'}
                                         className={` w-[80%]`}
                                         variant="square"

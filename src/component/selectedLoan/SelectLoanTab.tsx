@@ -1,6 +1,5 @@
 "use client"
 import React from 'react';
-import {Tabs, Tab} from "@mui/material";
 import {store} from "@/redux/store";
 import styles from "./SelectedLoan.module.css"
 import {setCurrentTab} from "@/redux/slice/SelectedLoan";
@@ -21,7 +20,6 @@ const SelectLoanTab = () => {
         {name: 'loan offers', id: 'loanOffers', route: "loanOffer"},
         {name: 'loan disbursal', id: "loanDisbursal", route: 'loanDisbursal'},
         {name: 'loan books', id: "loanBooks", route: "loanBook"},
-        {name: 'loan books', id: "loanBooks", route: "loanBook"},
 
     ]
 
@@ -33,7 +31,7 @@ const SelectLoanTab = () => {
 
     }
 
-    function MenuItem(props: type) {
+    function  MenuItem(props: type) {
         const {name, index} = props
         return (
             <div
@@ -48,8 +46,7 @@ const SelectLoanTab = () => {
                 <div
                     data-testid={name}
                     id={"loanStatusText"}
-                    style={{textTransform: 'none', color: 'black'}}
-                    className={`flex text-sm`}
+                    className={`flex text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
                 >{name}</div>
 
             </div>
@@ -66,7 +63,7 @@ const SelectLoanTab = () => {
                 // eslint-disable-next-line react/jsx-key
                 <div
                     id={item.id}
-                    className={`flex place-self-center w-auto bg-pink-200 md:h-auto md:px-2 md:w-auto ml-1 mr-1`}
+                    className={`flex place-self-center w-auto  md:h-auto md:px-2 md:w-auto ml-2 mr-2`}
                 >
                     <MenuItem name={item.name} index={index}/>
                 </div>
