@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { useDispatch,useSelector, type TypedUseSelectorHook } from "react-redux";
-import counterReducer from "./slice/CounterSlice";
 import selectedLoanReducer from "@/redux/slice/SelectedLoan";
+import adminLayoutReducer from "@/redux/slice/layout/adminLayout";
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    adminLayout: adminLayoutReducer,
     selectedLoan: selectedLoanReducer,
   },
   middleware: (getDefaultMiddleware) =>

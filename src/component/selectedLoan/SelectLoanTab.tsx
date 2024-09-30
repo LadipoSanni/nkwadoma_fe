@@ -1,6 +1,5 @@
 "use client"
 import React from 'react';
-import {Tabs, Tab} from "@mui/material";
 import {store} from "@/redux/store";
 import styles from "./SelectedLoan.module.css"
 import {setCurrentTab} from "@/redux/slice/SelectedLoan";
@@ -20,7 +19,8 @@ const SelectLoanTab = () => {
         {name: "loan requests", id: "loanRequests", route: "loanRequest"},
         {name: 'loan offers', id: 'loanOffers', route: "loanOffer"},
         {name: 'loan disbursal', id: "loanDisbursal", route: 'loanDisbursal'},
-        {name: 'loan books', id: "loanBooks", route: "loanBook"}
+        {name: 'loan books', id: "loanBooks", route: "loanBook"},
+
     ]
 
 
@@ -31,14 +31,14 @@ const SelectLoanTab = () => {
 
     }
 
-    function MenuItem(props: type) {
+    function  MenuItem(props: type) {
         const {name, index} = props
         return (
             <div
                 id="loanStatusBox"
                 data-testid="loanStatusBox"
                 style={{textTransform: 'none', color: 'black'}}
-                className={`${currentTab === index ? `${styles.selectedLoan}` : ``}`}
+                className={`py-1  flex place-self-center mr-auto ml-auto text-sm ${currentTab === index ? ` shadow ring-grey-100 ${styles.selectedLoan}` : ``}`}
                 onClick={(event) => {
                     handleChange(event, index)
                 }}
@@ -46,8 +46,7 @@ const SelectLoanTab = () => {
                 <div
                     data-testid={name}
                     id={"loanStatusText"}
-                    style={{textTransform: 'none', color: 'black'}}
-                    className={`${styles.loanText}`}
+                    className={`flex text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
                 >{name}</div>
 
             </div>
@@ -58,30 +57,17 @@ const SelectLoanTab = () => {
         <div
             id="selectLoanTabContainer"
             data-testid="selectLoanContainer"
-            className={`flex bg-[#fafbfc] w-[70%] ml-1 mt-1 md:w-[55%] h-[6vh] md:h-[8vh] md:rounded rounded- `}
+            className={`flex bg-[#fafbfc] overflow-x-auto md:overflow-hidden  w-[98%] ml-1 mt-1 md:w-[55%] h-[9vh] md:h-[8vh] md:rounded rounded `}
         >
-
-            <Tabs
-                value={0}
-                data-testid="selectLoanTabs"
-                style={{
-                    display: 'flex', placeContent: 'center', textAlign: 'center',
-                    height: '99%', width: '99%', gap: '1rem'
-                }}
-                id="selectLoanTabs"
-                TabIndicatorProps={{hidden: true}}
-            >
-                <div className={`h-[99%] w-[99%] overflow-x-scroll md:overflow-hidden`}>
-                    {tabContent?.map((item, index) => (
-                        <Tab
-                            id={item.id}
-                            key={index}
-                            label={<MenuItem name={item.name} index={index}/>}
-                            value={index}
-                        />
-                    ))}
+            {tabContent?.map((item, index) => (
+                // eslint-disable-next-line react/jsx-key
+                <div
+                    id={item.id}
+                    className={`flex place-self-center w-auto  md:h-auto md:px-2 md:w-auto ml-2 mr-2`}
+                >
+                    <MenuItem name={item.name} index={index}/>
                 </div>
-            </Tabs>
+            ))}
         </div>
     );
 };
