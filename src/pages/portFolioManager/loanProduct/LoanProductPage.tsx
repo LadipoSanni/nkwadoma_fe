@@ -65,7 +65,7 @@ function LoanProductPage() {
 
   return (
     <div className={`grid grid-cols-1  place-items-center   h-full`} id="loanProductPage">
-      <div className="grid rounded bg-white w-[100%]  h-[85vh] " id='loanProductPageMainContainer'>
+      <div className="grid rounded bg-white w-[100%] md:w-[80%] lg:fixed h-[85vh] " id='loanProductPageMainContainer'>
         <div
           className={`mr-auto ml-auto w-[96%]  place-content-end gap-2   md:flex`} id="InputContainer"
         >

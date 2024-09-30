@@ -32,6 +32,7 @@ interface Props<T extends { [key: string]: any }> {
 function LoanProductTable<T extends { [key: string]: any }>({tableHeader, tableData, handleRowClick, tableHeight,sx,tableStyle }: Props<T>) {
   const [page, setPage] = useState(1);
     const rowsPerPage = 10;
+    const [selectedColumn, setSelectedColum] = useState(tableHeader[1].id);
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage);
@@ -51,8 +52,8 @@ function LoanProductTable<T extends { [key: string]: any }>({tableHeader, tableD
 
     const paginatedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
     return (
-      <div id="loanProductTableContainer" className={`w-[100%]`}>
-          <Paper id="loanProductTablePaper" sx={{ width: '100%', overflow: 'hidden' }} elevation={0}>
+      <div id="loanProductTableContainer" className={`w-[100%] `}>
+          <Paper className='hidden md:block' id="loanProductTablePaper" sx={{ width: '100%', overflow: 'hidden' }} elevation={0}>
               <div id="loanProductTableBorder" className='border-[1px] border-[#D0D5DD] border-solid rounded-md'>
                   <TableContainer id="loanProductTableScrollbar" className='scrollbar-custom' sx={{ height: `${tableHeight}vh` }}>
                       <Table id="dynamicTable" stickyHeader sx={{ width: '100%', border: '#d0d5dd', height: 'auto', backgroundColor: '#ffffff' }}>

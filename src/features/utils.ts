@@ -33,7 +33,7 @@ export const loanProductData = [
         AmountEarned: '₦10,000.00'
     },
     {
-        loanProductName: 'Product design loan',
+        loanProductName: 'Product design fund',
         loanProductSponsor: 'Ndike Funilayo',
         tenor: '30',
         interestRate: '10',
@@ -187,7 +187,7 @@ export const loanProductData = [
         AmountEarned: '₦10,000.00'
     },
     {
-        loanProductName: 'Product design loan',
+        loanProductName: 'Product design',
         loanProductSponsor: 'Ndike Funilayo',
         tenor: '30',
         interestRate: '10',
