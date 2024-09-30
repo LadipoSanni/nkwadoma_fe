@@ -25,7 +25,7 @@ function ViewAllLoanRequest() {
     ];
 
     const handleRowClick = (row: any) => {
-        router.push(`/loan/loanRequest/Details/`);
+        router.push(`/loan`);
     };
 
     return (
