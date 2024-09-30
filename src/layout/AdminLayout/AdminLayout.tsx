@@ -1,6 +1,6 @@
 import React from 'react';
-import SideBar from "@/component/AdminLayout/SideBar";
-import TopBar from "@/component/AdminLayout/TopBar";
+import SideBar from "@/layout/AdminLayout/SideBar";
+import TopBar from "@/layout/AdminLayout/TopBar";
 
 type props = {
     children: React.ReactNode;

@@ -1,10 +1,27 @@
+"use client"
 import React from 'react';
-// import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {IoMdMenu} from "react-icons/io";
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {store} from "@/redux/store";
+import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 
 
 const TopBar = () => {
 
+    const [arrowToggled,setArrowToggle] = React.useState(false)
+
+
+    const toggleArrow = ()=> {
+        if (arrowToggled){
+            setArrowToggle(false)
+        }else {
+            setArrowToggle(true)
+        }
+    }
+    const openMobileSideBar = () => {
+        store.dispatch(setShowMobileSideBar(true))
+    }
 
     return (
         <>
@@ -15,9 +32,9 @@ const TopBar = () => {
                 <div className={'flex  w-[96%]  mr-auto ml-auto  place-content-between'}>
                     <div className={`flex gap-2 h-[1rem] mt-auto mb-auto place-content-center `}>
                         <div id={'buttonsDiv'} className={`relative flex place-items-center md:hidden`}>
-                            {/*<IoMdMenu color='#667085' style={{height: '1rem', width: '1rem'}}*/}
-                            {/*          id={'LayOutHamburger'}/>*/}
-
+                            <IoMdMenu color='#667085' style={{height: '1rem', width: '1rem'}}
+                                      onClick={openMobileSideBar}
+                                      id={'LayOutHamburger'}/>
                         </div>
                         <div className={` relative flex place-items-center `}>
                             <div className={` font-medium    `}></div>
@@ -49,17 +66,16 @@ const TopBar = () => {
                                 {/*   // className={` flex ${styles.userRole} `}>{utils.formatRole(userRole)}</p>*/}
                             </div>
                             <div id={'toggleArrowDiv'} className={``}>
-                                {/*{arrowToggled ?*/}
-                                {/*    <ExpandLessIcon sx={{color: '#667085'}} onClick={toggleArrow}/> :*/}
-                                {/*    <ExpandMoreIcon sx={{color: '#667085'}} onClick={toggleArrow}/>*/}
-                                {/*}*/}
+                                {arrowToggled ?
+                                    <ExpandLessIcon sx={{color: '#667085'}} onClick={toggleArrow}/> :
+                                    <ExpandMoreIcon sx={{color: '#667085'}} onClick={toggleArrow}/>
+                                }
                                 {/*{arrowToggled &&*/}
                                 {/*    <ProfileDropdown onLogoutClick={handleLogout} close={toggleArrow}/>}*/}
                             </div>
                         </div>
                     </div>
                 </div>
-
             </header>
         </>
     );
