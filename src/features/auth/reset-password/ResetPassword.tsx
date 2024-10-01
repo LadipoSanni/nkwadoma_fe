@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import {InputAdornment, TextField} from "@mui/material";
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import AuthButton from "@/reuseable/buttons/AuthButton";
@@ -13,10 +13,23 @@ const ResetPassword = () => {
     const EMAILHEADER: string = "Email";
     const userEmail: string = "folashade@gmail.com"
     const [hidePassword, setHidePassword] = useState(true)
+    const [newPassword, setNewPassword] = useState('new password')
 
 
     const handleReset = () => {
+    }
 
+    const handleChange = (event: ChangeEvent <HTMLTextAreaElement| HTMLInputElement > ) => {
+        event.stopPropagation()
+        setNewPassword(event.target.value)
+    }
+
+    const changePasswordVisibility = () =>{
+        if (hidePassword){
+            setHidePassword(false)
+        }else{
+            setHidePassword(true)
+        }
     }
 
 
@@ -26,7 +39,7 @@ const ResetPassword = () => {
         >
             <div
                 id="resetPasswordComponent"
-                className={`w-[100vw] h-[100vh] bg-white  md:grid md:place-items-center md:shadow-md md:w-[35vw] md:h-[55vh] md:rounded`}
+                className={`w-[100vw] h-[100vh] bg-white  md:grid md:place-items-center md:shadow-md md:w-[30vw] md:h-[50vh] md:rounded`}
             >
                 <div
                     className={`w-[92%] md:w-[80%] grid grid-rows-1 content-between px-2 h-[98%] md:h-[90%]`}>
@@ -36,11 +49,11 @@ const ResetPassword = () => {
                     </div>
                     <div
                         id="buttonsContainer"
-                        className={`h-[30%]  md:h-auto py-1 mt-4 grid gap-4 md:grid md:gap `}>
-                        <div className={`w-[100%] h-[5rem] grid gap-1 `}>
-                            <label className={`mb-`}>{EMAILHEADER}</label>
+                        className={`h-[30%]  md:h-auto py-1 md:mb-10  md:mt-1 grid gap-4 md:grid md:gap-1 `}>
+                        <div className={`w-[100%] h-[5rem] grid gap-0 `}>
+                            <label className={`font-light`}>{EMAILHEADER}</label>
                             <TextField
-                                id="searchLoan"
+                                id="emailField"
                                 size='small'
                                 placeholder={userEmail}
                                 tabIndex={2}
@@ -56,26 +69,27 @@ const ResetPassword = () => {
                                 variant="outlined"
                             />
                         </div>
-                        <div className={`w-[100%] h-[5rem] grid gap-1  `}>
-                            <label>New Password</label>
+                        <div className={`w-[100%] h-[5rem] grid gap-0  `}>
+                            <label className={`font-light`}>New Password</label>
                             <TextField
                               size={"small"}
                                id="newPassWordContainer"
-    sx={{width: 'inherit', height: '2.7rem'}}
-    // type={hidePassword ? 'text' : 'password'}
-    InputProps={{
-        endAdornment: (
-            <InputAdornment  position="end">
-                {hidePassword ? <VisibilityOffIcon/> : <VisibilityIcon/>}
-            </InputAdornment>
-        ),
-    }}></TextField>
+                              onChange={(event)=> {handleChange(event)}}
+                               sx={{width: 'inherit', height: '2.7rem'}}
+                               type={hidePassword ? 'password' : 'text'}
+                               InputProps={{
+                                  endAdornment: (
+                                     <InputAdornment onClick={changePasswordVisibility}  position="end">
+                                        {hidePassword ? <VisibilityOffIcon/> : <VisibilityIcon/>}
+                                     </InputAdornment>
+                                  ),
+                               }}></TextField>
                         </div>
                     </div>
-                </div>
-                <div className={`w-[27vw] grid place-content-center `}>
-                    <AuthButton backgroundColor={'#0d9b48'} textColor={"white"} id={"resetPasswordButton"}
-                                buttonText={"Reset"} width={"inherit"} handleClick={handleReset}/>
+                    <div className={`w-[100%]`}>
+                        <AuthButton backgroundColor={'#0d9b48'} textColor={"white"} id={"resetPasswordButton"}
+                                    buttonText={"Reset"} width={"inherit"} handleClick={handleReset}></AuthButton>
+                    </div>
                 </div>
             </div>
         </div>
