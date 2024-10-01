@@ -1,14 +1,23 @@
-import React from 'react';
-import {FormControl, InputAdornment, OutlinedInput, TextField} from "@mui/material";
+"use client"
+import React, {useState} from 'react';
+import {InputAdornment, TextField} from "@mui/material";
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import {SearchOutlined} from "@mui/icons-material";
+import AuthButton from "@/reuseable/buttons/AuthButton";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const ResetPassword = () => {
 
-    const RESETPASSWORDHEADER : string = "Reset password?";
-    const RESETPASSWORDTEXT : string = "Let's get you a new password";
+    const RESETPASSWORDHEADER: string = "Reset password?";
+    const RESETPASSWORDTEXT: string = "Let's get you a new password";
     const EMAILHEADER: string = "Email";
     const userEmail: string = "folashade@gmail.com"
+    const [hidePassword, setHidePassword] = useState(true)
+
+
+    const handleReset = () => {
+
+    }
 
 
     return (
@@ -17,37 +26,25 @@ const ResetPassword = () => {
         >
             <div
                 id="resetPasswordComponent"
-                className={`w-[100vw] h-[100vh] bg-white  md:grid md:place-items-center md:shadow-md md:w-[25vw] md:h-[50vh] md:rounded`}
+                className={`w-[100vw] h-[100vh] bg-white  md:grid md:place-items-center md:shadow-md md:w-[35vw] md:h-[55vh] md:rounded`}
             >
                 <div
-                    className={`w-[92%] md:w-[80%] px-4 h-[98%] md:h-[90%]`}
-                >
-                    <div id={"RESETPASSWORDHEADER"} className={`font-bold text-lg`}>{RESETPASSWORDHEADER}</div>
-                    <div id={"RESETPASSWORDTEXT"} className={` text-[#667085]`}>{RESETPASSWORDTEXT}</div>
+                    className={`w-[92%] md:w-[80%] grid grid-rows-1 content-between px-2 h-[98%] md:h-[90%]`}>
+                    <div className={` h-[3rem] grid gap-0 `}>
+                        <div id={"RESETPASSWORDHEADER"} className={`font-bold text-lg`}>{RESETPASSWORDHEADER}</div>
+                        <div id={"RESETPASSWORDTEXT"} className={` text-[#667085]`}>{RESETPASSWORDTEXT}</div>
+                    </div>
                     <div
-                        id="buttonContainer"
-                        className={`h-[30%] md:h-[12rem] mt-4 grid gap-2 md:grid md:gap-2 md:mt-[1rem]`}
-                    >
-                        <div className={`w-[inherit] h-[5rem] `}>
-                            <div>{EMAILHEADER}</div>
-                            {/*<FormControl*/}
-                            {/*    sx={{width: 'inherit', height:"1rem", '& .MuiInputBase-input' : {borderColor: '#dde1e6'} }} variant="outlined" disabled={true}>*/}
-                            {/*    <OutlinedInput*/}
-                            {/*        id="outlined-adornment-weight"*/}
-                            {/*        startAdornment={<InputAdornment position="start">{userEmail}</InputAdornment>}*/}
-                            {/*        endAdornment={<InputAdornment position="end"><MailOutlineIcon/></InputAdornment>}*/}
-                            {/*        aria-describedby="outlined-weight-helper-text"*/}
-                            {/*        inputProps={{*/}
-                            {/*            'aria-label': `${userEmail}`,*/}
-                            {/*        }}*/}
-                            {/*        label={userEmail}></OutlinedInput>*/}
-                            {/*</FormControl>*/}
+                        id="buttonsContainer"
+                        className={`h-[30%]  md:h-auto py-1 mt-4 grid gap-4 md:grid md:gap `}>
+                        <div className={`w-[100%] h-[5rem] grid gap-1 `}>
+                            <label className={`mb-`}>{EMAILHEADER}</label>
                             <TextField
                                 id="searchLoan"
-                                // size='small'
+                                size='small'
                                 placeholder={userEmail}
                                 tabIndex={2}
-                                sx={{width: 'inherit'}}
+                                sx={{width: 'inherit', height: '3rem'}}
                                 disabled={true}
                                 InputProps={{
                                     endAdornment: (
@@ -59,11 +56,27 @@ const ResetPassword = () => {
                                 variant="outlined"
                             />
                         </div>
-
+                        <div className={`w-[100%] h-[5rem] grid gap-1  `}>
+                            <label>New Password</label>
+                            <TextField
+                              size={"small"}
+                               id="newPassWordContainer"
+    sx={{width: 'inherit', height: '2.7rem'}}
+    // type={hidePassword ? 'text' : 'password'}
+    InputProps={{
+        endAdornment: (
+            <InputAdornment  position="end">
+                {hidePassword ? <VisibilityOffIcon/> : <VisibilityIcon/>}
+            </InputAdornment>
+        ),
+    }}></TextField>
+                        </div>
                     </div>
-
                 </div>
-
+                <div className={`w-[27vw] grid place-content-center `}>
+                    <AuthButton backgroundColor={'#0d9b48'} textColor={"white"} id={"resetPasswordButton"}
+                                buttonText={"Reset"} width={"inherit"} handleClick={handleReset}/>
+                </div>
             </div>
         </div>
 
