@@ -6,7 +6,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {store} from "@/redux/store";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import {Badge} from "@mui/material";
-import {Notifications} from "@mui/icons-material";
 import {FiBell} from "react-icons/fi";
 
 
