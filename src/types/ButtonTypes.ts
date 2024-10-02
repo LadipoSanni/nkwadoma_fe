@@ -5,6 +5,7 @@ export interface AuthButtonPropsType {
     width: string,
     textColor: string,
     backgroundColor: string,
+    disable: boolean,
     handleClick: ()=> void;
 }
 
