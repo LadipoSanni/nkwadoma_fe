@@ -4,7 +4,7 @@ import { InputAdornment, TextField } from "@mui/material";
 import { SearchOutlined } from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import LoanProductTable from "@/component/reuseable/table/LoanProductTable";
-import { loanProductData } from "@/features/utils";
+import { loanProductData } from "@/utils/LoanProductEmptyMockData";
 
 function LoanProductPage() {
   // const [openModal, setOpenModal] = React.useState(false);

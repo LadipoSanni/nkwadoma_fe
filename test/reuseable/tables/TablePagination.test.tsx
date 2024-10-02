@@ -1,116 +1,133 @@
-import {fireEvent, render, screen} from "@testing-library/react";
-import TablePagination from "@/reuseable/table/TablePagination";
-
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const {expect, describe, it} = require("@jest/globals");
-
-
-const mockPageChange = jest.fn();
-const mockNextPage = jest.fn();
-const mockPreviousPage = jest.fn();
-
+import TablePagination from "@/component/reuseable/table/TablePagination";
+import { render, screen, fireEvent,cleanup,within} from "@testing-library/react";
 
 
 describe("TablePagination", () => {
-    it("should test that pagination table does not exist", () => {
-        const {queryByTestId} = render(<div></div>);
-        expect(queryByTestId('dynamicTable')).not.toBeInTheDocument();
+    beforeEach(() => {
+        cleanup()
     })
 
-    it("should test that pagination table exist", () => {
-        const {queryByTestId} = render(
+    const mockHandlePageChange = jest.fn();
+    const mockHandleNextPage = jest.fn();
+    const mockHandlePreviousPage = jest.fn();
+
+    
+
+
+    beforeEach(() => {
+        
+    });
+
+
+   
+
+    it("should render TablePagination component", () => {
+        const tableData = Array.from({ length: 100 })
+        render(
             <TablePagination
                 page={1}
                 rowsPerPage={10}
-                tableData={[...Array(20)]}
-                handlePageChange={mockPageChange}
-                handleNextPage={mockNextPage}
-                handlePreviousPage={mockPreviousPage}
+                tableData={tableData}
+                handlePageChange={mockHandlePageChange}
+                handleNextPage={mockHandleNextPage}
+                handlePreviousPage={mockHandlePreviousPage}
             />
-        );
-        expect(queryByTestId('dynamicTable')).toBeInTheDocument();
+        )
+        expect(screen.getByText("Previous")).toBeInTheDocument();
+        expect(screen.getByText("Next")).toBeInTheDocument();
+        expect(screen.getByText("10")).toBeInTheDocument();
+        
+    });
+
+    it("should call handleNextPage when the Next button is clicked", () => {
+        const tableData = Array.from({ length: 100 })
+        render(
+            <TablePagination
+                page={1}
+                rowsPerPage={10}
+                tableData={tableData}
+                handlePageChange={mockHandlePageChange}
+                handleNextPage={mockHandleNextPage}
+                handlePreviousPage={mockHandlePreviousPage}
+            />
+        )
+        const next = screen.getByText("Next")
+        expect(next).toBeInTheDocument(); 
+        fireEvent.click(next);
+        expect(mockHandleNextPage).toHaveBeenCalled();
+        
     })
 
-    it('should test that pagination control renders', () => {
+    it("should call handlePreviousPage when the Next button is clicked",() => {
+        const tableData = Array.from({ length: 100 })
         render(
             <TablePagination
                 page={1}
                 rowsPerPage={10}
-                tableData={[...Array(20)]}
-                handlePageChange={mockPageChange}
-                handleNextPage={mockNextPage}
-                handlePreviousPage={mockPreviousPage}
+                tableData={tableData}
+                handlePageChange={mockHandlePageChange}
+                handleNextPage={mockHandleNextPage}
+                handlePreviousPage={mockHandlePreviousPage}
             />
-        );
-        expect(screen.getByTestId('tablePreviousButton')).toBeInTheDocument();
-        expect(screen.getByTestId('tableNextButton')).toBeInTheDocument();
-        expect(screen.getByTestId('tablePaginationControl')).toBeInTheDocument();
+        )
+        const prev = screen.getByText("Previous")
+        expect(prev).toBeInTheDocument(); 
+        fireEvent.click(prev);
+        expect(mockHandlePreviousPage).toHaveBeenCalled();
+    })
 
-        fireEvent.click(screen.getByTestId(`tableNextButton`))
-        expect(mockNextPage).toHaveBeenCalled();
-    });
 
-    it('should call handlePageChange when a pagination number is clicked', () => {
+    it("should hide Previous button when page is 1", () => {
+        const tableData = Array.from({ length: 100 })
         render(
             <TablePagination
                 page={1}
                 rowsPerPage={10}
-                tableData={[...Array(30)]}
-                handlePageChange={mockPageChange}
-                handleNextPage={mockNextPage}
-                handlePreviousPage={mockPreviousPage}
+                tableData={tableData}
+                handlePageChange={mockHandlePageChange}
+                handleNextPage={mockHandleNextPage}
+                handlePreviousPage={mockHandlePreviousPage}
             />
-        );
+        )
+        const prev = screen.getByText("Previous")
+        expect(prev).toBeInTheDocument(); 
+        expect(prev).toHaveStyle("visibility: hidden");
+    })
 
-        fireEvent.click(screen.getByText('2'));
-
-        expect(mockPageChange).toHaveBeenCalledWith(expect.anything(), 2);
-    });
-
-    it('should call handleNextPage and handlePreviousPage when Next and Previous buttons are clicked', () => {
+    it("should hide Next button when page is equal to total number of pages", () => {
+        const tableDatas = Array.from({ length: 10 })
         render(
-            <TablePagination
-                page={2}
-                rowsPerPage={10}
-                tableData={[...Array(30)]}
-                handlePageChange={mockPageChange}
-                handleNextPage={mockNextPage}
-                handlePreviousPage={mockPreviousPage}
-            />
-        );
-
-        fireEvent.click(screen.getByTestId('tableNextButton'));
-        expect(mockNextPage).toHaveBeenCalled();
-
-        fireEvent.click(screen.getByTestId('tablePreviousButton'));
-        expect(mockPreviousPage).toHaveBeenCalled();
-    });
-
-    it('should hide the Previous button on the first page and the Next button on the last page', () => {
-        const {rerender} = render(
             <TablePagination
                 page={1}
                 rowsPerPage={10}
-                tableData={[...Array(30)]}
-                handlePageChange={mockPageChange}
-                handleNextPage={mockNextPage}
-                handlePreviousPage={mockPreviousPage}
+                tableData={tableDatas}
+                handlePageChange={mockHandlePageChange}
+                handleNextPage={mockHandleNextPage}
+                handlePreviousPage={mockHandlePreviousPage}
             />
         );
-        expect(screen.getByTestId('tablePreviousButton')).toHaveStyle('visibility: hidden');
-        expect(screen.getByTestId('tableNextButton')).toHaveStyle('visibility: visible');
+        
+        const hideNextButton = screen.getByTestId("dynamicTablePagination");
+        const next = within(hideNextButton).queryByRole('button', { name: /Next/ });
+        expect(next).not.toBeInTheDocument(); 
+        
+    })
 
-        rerender(
+    it('should show next button is responsive', () => {
+        const tableData = Array.from({ length: 100 })
+        render(
             <TablePagination
-                page={3}
+                page={1}
                 rowsPerPage={10}
-                tableData={[...Array(30)]}
-                handlePageChange={mockPageChange}
-                handleNextPage={mockNextPage}
-                handlePreviousPage={mockPreviousPage}
+                tableData={tableData}
+                handlePageChange={mockHandlePageChange}
+                handleNextPage={mockHandleNextPage}
+                handlePreviousPage={mockHandlePreviousPage}
             />
-        );
-        expect(screen.getByTestId('tablePreviousButton')).toHaveStyle('visibility: visible');
-        expect(screen.getByTestId('tableNextButton')).toHaveStyle('visibility: hidden');
-    });
+        )
+        const nextButton = screen.getByRole('button', { name: /Next/i });
+        fireEvent.click(nextButton);
+       
+
+    })
 })

@@ -9,6 +9,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import {useState} from "react";
+import AuthButton from "@/reuseable/buttons/AuthButton";
 
 const Login: React.FC = () => {
     const route = useRouter()
@@ -41,7 +42,10 @@ const Login: React.FC = () => {
     //     }
     // }
 
-    const isFormValid = email && password;
+    const handleReset = () => {
+
+    }
+
 
     return (
         <section data-testid={`parentDivId`} id={`parentDivId`}
@@ -54,7 +58,7 @@ const Login: React.FC = () => {
                     </h1>
                     {/* eslint-disable-next-line react/no-unescaped-entities */}
                     <p className={`font-sans text-base text-[#57595D] `}>Welcome, It's good to see you again !</p>
-                    <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`} className="pt-5 space-y-5" >
+                    <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`} className="pt-5 space-y-5">
                         <div data-testid={`emailId`} id={`emailId`}>
                             <InputLabel htmlFor="email">Email</InputLabel>
                             <OutlinedInput
@@ -102,22 +106,26 @@ const Login: React.FC = () => {
                                 className={`w-full`}
                             />
                         </div>
-                        {/*<AuthButton id={`loginButton`} buttonText={`Login`} width={`30px`} textColor={`white`} backgroundColor={`#90D8AE`} handleClick={handleLogin}/>*/}
-                        <div data-testid={`submitButton`} id={`submitButton`} className={`pt-6`}>
-                            <button
-                                id={`loginButton`}
-                                data-testid={`loginButton`}
-                                type="submit"
-                                className={`w-full text-white font-medium rounded-sm text-sm px-5 py-2.5 text-center transition-all duration-300 ${
-                                    isFormValid
-                                        ? "bg-[#0D9B48] cursor-pointer"
-                                        : "bg-[#90D8AE] cursor-not-allowed"
-                                }`}
-                                disabled={!isFormValid}
-                            >
-                                Login
-                            </button>
+                        <div id={"authButtonContainer"} className={`w-[100%]`}>
+                            <AuthButton disable={true} backgroundColor={'#0d9b48'} textColor={"white"}
+                                        id={"resetPasswordButton"}
+                                        buttonText={"Login"} width={"inherit"} handleClick={handleReset}></AuthButton>
                         </div>
+                        {/*<div data-testid={`submitButton`} id={`submitButton`} className={`pt-6`}>*/}
+                        {/*    <button*/}
+                        {/*        id={`loginButton`}*/}
+                        {/*        data-testid={`loginButton`}*/}
+                        {/*        type="submit"*/}
+                        {/*        className={`w-full text-white font-medium rounded-sm text-sm px-5 py-2.5 text-center transition-all duration-300 ${*/}
+                        {/*            isFormValid*/}
+                        {/*                ? "bg-[#0D9B48] cursor-pointer"*/}
+                        {/*                : "bg-[#90D8AE] cursor-not-allowed"*/}
+                        {/*        }`}*/}
+                        {/*        disabled={!isFormValid}*/}
+                        {/*    >*/}
+                        {/*        Login*/}
+                        {/*    </button>*/}
+                        {/*</div>*/}
                         <a href="/auth/forget-password"
                            className="flex items-center justify-center text-sm  text-[#101828] leading-4">Forgot
                             Password?</a>
