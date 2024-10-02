@@ -5,12 +5,17 @@ import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import {useState} from "react";
+import AuthButton from "@/reuseable/buttons/AuthButton";
 
 const ForgetPassword: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const handleForgetPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
     };
+
+    const handleReset = ()=>{
+
+    }
 
     const isFormValid = email
 
@@ -46,18 +51,10 @@ const ForgetPassword: React.FC = () => {
                             style={{marginTop: '5px'}}
                             className="w-full"
                         />
-                        <div className={`pt-10`}>
-                            <button
-                                type="submit"
-                                className={`w-full text-white font-medium rounded-sm text-sm px-5 py-2.5 text-center transition-all duration-300 ${
-                                    isFormValid
-                                        ? "bg-[#0D9B48] cursor-pointer"
-                                        : "bg-[#90D8AE] cursor-not-allowed"
-                                }`}
-                                disabled={!isFormValid}
-                            >
-                                Send
-                            </button>
+                        <div id={"authButtonContainer"} className={`w-[100%] pt-8`}>
+                            <AuthButton disable={!isFormValid} backgroundColor={'#0D9B48'} textColor={"white"}
+                                        id={"resetPasswordButton"}
+                                        buttonText={"Login"} width={"inherit"} handleClick={handleReset}></AuthButton>
                         </div>
                     </div>
                     {/*<AuthButton id={`loginButton`} buttonText={`Login`} width={`30px`} textColor={`white`} backgroundColor={`#90D8AE`} handleClick={handleLogin}/>*/}
