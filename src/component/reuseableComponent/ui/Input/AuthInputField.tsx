@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, InputHTMLAttributes } from 'react';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 interface ReusableInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -10,7 +9,7 @@ interface ReusableInputProps extends InputHTMLAttributes<HTMLInputElement> {
     endAdornment?: React.ReactNode | string;
 }
 
-const CustomInputField: React.FC<ReusableInputProps> = ({ label, id, endAdornment, type, ...props }) => {
+const AuthInputField: React.FC<ReusableInputProps> = ({ label, id, endAdornment, type, ...props }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const handleToggleVisibility = () => {
@@ -51,4 +50,4 @@ const CustomInputField: React.FC<ReusableInputProps> = ({ label, id, endAdornmen
     );
 };
 
-export default CustomInputField;
+export default AuthInputField;

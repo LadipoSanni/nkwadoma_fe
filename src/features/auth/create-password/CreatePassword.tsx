@@ -1,5 +1,5 @@
 import React from 'react';
-import CustomInputField from "@/component/reuseableComponent/ui/Input/CustomInputField";
+import AuthInputField from "@/component/reuseableComponent/ui/Input/AuthInputField";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const CreatePassword = () => {
@@ -15,14 +15,14 @@ const CreatePassword = () => {
                            className={'text-[#667085] text-[16px] font-normal leading-[20px]'}>Welcome Henry</p>
                     </div>
                     <div id={'create-password-inputs'} className={'grid gap-4'}>
-                        <CustomInputField label={'Password'} id={'password'} type={'password'} endAdornment={'Show'}
-                                          placeholder={'password'}/>
-                        <CustomInputField label={'Confirm Password'} id={'confirmPassword'} type={'password'}
-                                          endAdornment={<VisibilityOffIcon id={`visibility-icon`} style={{
-                                              color: '#000000',
-                                              width: '16px',
-                                              height: '16px'
-                                          }}/>} placeholder={'Enter password'}/>
+                        <AuthInputField label={'Password'} id={'password'} type={'password'} endAdornment={'Show'}
+                                        placeholder={'password'}/>
+                        <AuthInputField label={'Confirm Password'} id={'confirmPassword'} type={'password'}
+                                        endAdornment={<VisibilityOffIcon id={`visibility-icon`} style={{
+                                            color: '#000000',
+                                            width: '16px',
+                                            height: '16px'
+                                        }}/>} placeholder={'Enter password'}/>
                     </div>
                 </main>
                 {/*<button*/}
