@@ -1,9 +1,9 @@
 import CreatePassword from "@/features/auth/create-password/CreatePassword";
 
-const CreatePasswordForm = () => {
+const page = () => {
     return (
         <CreatePassword/>
     );
 };
 
-export default CreatePasswordForm;
+export default page;
