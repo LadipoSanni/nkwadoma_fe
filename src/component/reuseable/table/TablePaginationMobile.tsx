@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Pagination} from "@mui/material";
+import {Button} from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
@@ -7,12 +7,11 @@ interface Props<T> {
     page: number;
     rowsPerPage: number;
     tableData: T[];
-    handlePageChange: (event: React.ChangeEvent<unknown>, newPage: number) => void;
     handleNextPage: () => void;
     handlePreviousPage: () => void;
 }
 
-function TablePaginationMobile<T>({ page, rowsPerPage, tableData, handlePageChange, handleNextPage, handlePreviousPage }: Props<T>) {
+function TablePaginationMobile<T>({ page, rowsPerPage, tableData,handleNextPage, handlePreviousPage }: Props<T>) {
   return (
     <div data-testid="dynamicTablePagination" id="dynamicTablePagination" className={'flex items-center p-3 h-16 justify-between'}>
     <Button

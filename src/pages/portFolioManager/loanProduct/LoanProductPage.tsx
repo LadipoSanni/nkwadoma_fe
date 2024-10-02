@@ -7,11 +7,11 @@ import LoanProductTable from "@/component/reuseable/table/LoanProductTable";
 import { loanProductData } from "@/features/utils";
 
 function LoanProductPage() {
-  const [openModal, setOpenModal] = React.useState(false);
-  const skeletonLoader = false;
-  const handleCloseCreateModal = () => {
-    setOpenModal(false);
-  };
+  // const [openModal, setOpenModal] = React.useState(false);
+  // const skeletonLoader = false;
+  // const handleCloseCreateModal = () => {
+  //   setOpenModal(false);
+  // };
 
   const handleRowClick = () => {
     
@@ -92,7 +92,7 @@ function LoanProductPage() {
           <Button
             id="CreateLoanProductButton"
             className=""
-            onClick={() => setOpenModal(true)}
+            // onClick={() => setOpenModal(true)}
             sx={{
               backgroundColor: "#0D9B48",
               color: "white",

@@ -12,24 +12,27 @@ import {
   Paper,
   MenuItem,
   Select,
-  IconButton,
   FormControl
 } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-interface ColumnProps {
+interface ColumnProps<T> {
   title: string;
   id: string;
-  selector?: (row: any) => any;
+  selector?: (row: T) => React.ReactNode;
   sortable?: boolean;
+}
+
+interface TableRowData {
+  [key: string]: string | number | null | React.ReactNode;
 }
 
 
 
-interface Props<T extends { [key: string]: any }> {
+interface Props<T extends TableRowData> {
    tableData: T[];
-    tableHeader: ColumnProps[];
+    tableHeader: ColumnProps<T>[];
     handleRowClick: (row: T) => void;
     tableHeight?: number;
     sx?: string
@@ -37,7 +40,7 @@ interface Props<T extends { [key: string]: any }> {
     staticColunm?: string
 }
 
-function LoanProductTable<T extends { [key: string]: any }>({tableHeader, tableData, handleRowClick, tableHeight,sx,tableStyle,staticColunm }: Props<T>) {
+function LoanProductTable<T extends TableRowData>({tableHeader, tableData, handleRowClick, tableHeight,sx,tableStyle,staticColunm }: Props<T>) {
   const [page, setPage] = useState(1);
     const rowsPerPage = 10;
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
@@ -93,7 +96,7 @@ function LoanProductTable<T extends { [key: string]: any }>({tableHeader, tableD
                                       onClick={() => handleRowClick(row)}
                                       className={`${sx}`}
                                   >
-                                      {tableHeader.map((column:any) => (
+                                      {tableHeader.map((column) => (
                                           <TableCell id={`dynamicTableBodyCell${rowIndex}${column.id}`} key={column.id}>
                                               <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`} className={`${Styles.tableBodyItem} ${tableStyle}`}>
                                                   {column.selector ? column.selector(row) : row[column.id]}
@@ -198,7 +201,6 @@ function LoanProductTable<T extends { [key: string]: any }>({tableHeader, tableD
                       page={page}
                       rowsPerPage={rowsPerPage}
                       tableData={tableData}
-                      handlePageChange={handlePageChange}
                       handleNextPage={handleNextPage}
                       handlePreviousPage={handlePreviousPage}
                   />
