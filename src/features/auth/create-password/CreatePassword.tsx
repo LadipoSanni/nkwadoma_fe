@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthInputField from "@/component/reuseableComponent/ui/Input/AuthInputField";
+import AuthInputField from "@/reuseable/Input/AuthInputField";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const CreatePassword = () => {

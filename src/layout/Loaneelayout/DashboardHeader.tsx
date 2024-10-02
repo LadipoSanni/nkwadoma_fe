@@ -1,8 +1,8 @@
 "use client"
 import React, {useEffect, useRef, useState} from 'react';
 import {usePathname} from 'next/navigation';
-import LoneeProfile from "@/component/reuseableComponent/ui/profile/LoneeProfile";
-import NotificationBar from "@/component/reuseableComponent/ui/notification/NotificationBar";
+import LoneeProfile from "@/reuseable/profile/LoneeProfile";
+import NotificationBar from "@/reuseable/notification/NotificationBar";
 import MenuIcon from '@mui/icons-material/Menu';
 // import MobileNavigationSidebar from "./MobileNavigationSidebar";
 
