@@ -1,11 +1,9 @@
-import React from 'react';
+import CreatePassword from "@/features/auth/create-password/CreatePassword";
 
-const Page = () => {
+const page = () => {
     return (
-        <div>
-            
-        </div>
+        <CreatePassword/>
     );
 };
 
-export default Page;
+export default page;
