@@ -11,8 +11,8 @@ const AuthButton = ({id, buttonText, width, handleClick, textColor, backgroundCo
             disabled={disable}
             id={id}
             onClick={handleClick}
-            style={{height: '2.5rem',width: `${width}`, color: `${textColor}`, backgroundColor: `${backgroundColor}`}}
-            className={`grid place-content-center rounded-md`}
+            style={{height: '2.5rem',width: `${width}`, color: `${textColor}`, backgroundColor: `${disable ? "#D0D5DD": backgroundColor}`}}
+            className={`grid place-content-center rounded`}
         >
             {buttonText}
         </button>
