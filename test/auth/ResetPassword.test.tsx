@@ -1,6 +1,8 @@
 import "@testing-library/react"
 import ResetPassword from "@/features/auth/reset-password/ResetPassword";
 import {fireEvent, queryByAttribute, render, screen} from "@testing-library/react";
+import {userEvent} from "@testing-library/user-event";
+
 type TestElement = Document | Element | Window | Node
 
 describe("test reset password", ()=> {
@@ -32,16 +34,17 @@ describe("test reset password", ()=> {
         expect(getById(view.container, "newPassWordContainer")).toBeInTheDocument()
         expect(getById(view.container, 'resetEmailField')).toBeInTheDocument()
     });
-    // it('should contain two input fields where one is and disabled and the other is not', () => {
-    //      render(
-    //         <ResetPassword/>
-    //     )
-    //     const disabledInput = screen.getByTestId('resetEmailField' )
-    //     const Input = screen.getByTestId('resetEmailField' )
-    //     // fireEvent.change(disabledInput, {target: {value: "hello@gmail.com"}})
-    //     fireEvent.change(Input, {target: {value: "hello@12.com"}})
-    //     expect(hasInput(disabledInput, "hello@gmail.com")).toBe(false)
-    //     expect(hasInput(Input, 'hello@12.com')).toBe(true)
-    //
-    // });
+    it('should contain two input fields where one is and disabled and the other is not', () => {
+         render(
+            <ResetPassword/>
+        )
+        const disabledInput = screen.getByTestId('resetEmailField' )
+        const Input = screen.getByTestId('newPassWordContainer' )
+        // fireEvent.change(disabledInput, {target: {value: "hello@gmail.com"}})
+        // fireEvent.change(Input, {target: {value: "hello@12.com"}})
+        // const input = screen.findByTestId("name-input");
+        userEvent.type(Input, "Jay");
+        expect(Input.ariaValueNow).toHaveValue("Jay")
+
+    });
 })

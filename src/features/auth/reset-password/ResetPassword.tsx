@@ -21,7 +21,7 @@ const ResetPassword = () => {
 
     const handleChange = (event: ChangeEvent <HTMLTextAreaElement| HTMLInputElement > ) => {
         event.stopPropagation()
-        setNewPassword(event.target.value)
+        setNewPassword(event.currentTarget.value)
     }
 
     const changePasswordVisibility = () =>{
@@ -60,6 +60,7 @@ const ResetPassword = () => {
                                 tabIndex={2}
                                 sx={{width: 'inherit', height: '3rem'}}
                                 disabled={true}
+                                // value={}
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
