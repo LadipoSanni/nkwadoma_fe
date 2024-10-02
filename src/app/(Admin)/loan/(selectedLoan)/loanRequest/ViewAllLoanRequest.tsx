@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation'
 import React, {useEffect, useState} from "react";
 import {LoanRequestTable} from "@/app/(Admin)/loan/(selectedLoan)/loanRequest/LoanRequestMockData"
-import EmptyState from "@/reuseable/emptyStates/EmptyState";
+import LoanEmptyState from "@/reuseable/emptyStates/LoanEmptyState";
 import DynamicTable from "@/reuseable/table/DynamicTable";
 
 function ViewAllLoanRequest() {
@@ -29,11 +29,11 @@ function ViewAllLoanRequest() {
     };
 
     return (
-        <div data-testid={'mainDiv'} className={`flex flex-col h-full py-[20px] px-[40px]  w-screen md:w-auto `}>
+        <div data-testid={'mainDiv'} id={`mainDiv`} className={`flex flex-col h-full py-[20px] px-[40px]  w-screen md:w-auto `}>
             {
                 LoanRequestTable.length < 1 ?
                     <div data-testid={`emptyStateDiv`}>
-                        <EmptyState title={'Loan REQUEST will show here'} />
+                        <LoanEmptyState title={'Loan REQUEST will show here'} />
                     </div>
                     :
                     <div data-testid={`tableDiv`}>
