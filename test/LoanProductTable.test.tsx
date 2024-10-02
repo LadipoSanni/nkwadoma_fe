@@ -1,4 +1,4 @@
-import { render, screen, fireEvent,cleanup,} from "@testing-library/react";
+import { render, screen, fireEvent,cleanup,within} from "@testing-library/react";
 import LoanProductTable from "@/component/reuseable/table/LoanProductTable";
 
 const mockTableData = [
@@ -38,6 +38,8 @@ describe('LoanProductTable component', () => {
         );
     });
 
+    
+
     it('renders the table with correct headers', () => {
         mockTableHeader.forEach(column => {
             const headers = screen.getAllByText(column.title);
@@ -46,41 +48,43 @@ describe('LoanProductTable component', () => {
         });
     });
 
-    test('renders the correct number of rows on the first page', () => {
+    test('renders the correct number of rows on the first page for both the large screen and mobile screen', () => {
         const rows = screen.getAllByRole('row');
-        expect(rows).toHaveLength(11); 
+        expect(rows).toHaveLength(22); 
+       
+        
     });
 
-    // test('handles row click', () => {
-    //     const firstRow = screen.getByText('Loan A');
-    //     fireEvent.click(firstRow);
-    //     expect(mockHandleRowClick).toHaveBeenCalledWith(mockTableData[0]);
+    test('handles row click', () => {
+        const firstRow = screen.getByText('Loan A');
+        fireEvent.click(firstRow);
+        expect(mockHandleRowClick).toHaveBeenCalledWith(mockTableData[0]);
 
-    //     const secondRow = screen.getByText('Loan B');
-    //     fireEvent.click(secondRow);
-    //     expect(mockHandleRowClick).toHaveBeenCalledWith(mockTableData[1]);
-    // });
+        const secondRow = screen.getByText('Loan B');
+        fireEvent.click(secondRow);
+        expect(mockHandleRowClick).toHaveBeenCalledWith(mockTableData[1]);
+    });
 
-    // test('paginates correctly', () => {
+    test('paginates correctly', () => {
         
-    //     const nextButton = screen.getByRole('button', { name: /next/i });
-    //     fireEvent.click(nextButton);
+        const nextButton = screen.getAllByRole('button', { name: /next/i });
+        fireEvent.click(nextButton[0]);
 
-    //     expect(screen.getByText('Loan K')).toBeInTheDocument();
-    //     expect(screen.queryByText('Loan A')).not.toBeInTheDocument();
-    // });
+        expect(screen.getByText('Loan K')).toBeInTheDocument();
+        expect(screen.queryByText('Loan A')).not.toBeInTheDocument();
+    });
 
-    // test('handles previous page button click', () => {
+    test('handles previous page button click', () => {
 
-    //     const nextButton = screen.getByRole('button', { name: /next/i });
-    //     fireEvent.click(nextButton);
+        const nextButton = screen.getAllByRole('button', { name: /next/i });
+        fireEvent.click(nextButton[0]);
         
-    //     const prevButton = screen.getByRole('button', { name: /previous/i });
-    //     fireEvent.click(prevButton);
+        const prevButton = screen.getAllByRole('button', { name: /previous/i });
+        fireEvent.click(prevButton[1]);
 
-    //     expect(screen.getByText('Loan A')).toBeInTheDocument();
-    //     expect(screen.queryByText('Loan K')).not.toBeInTheDocument();
-    // });
+        expect(screen.getByText('Loan A')).toBeInTheDocument();
+        expect(screen.queryByText('Loan K')).not.toBeInTheDocument();
+    });
 
     // test('displays a message when there is no data', () => {
     //     render(
@@ -94,25 +98,25 @@ describe('LoanProductTable component', () => {
     //     expect(screen.getByText('No data available')).toBeInTheDocument();
     // });
 
-    // test('does not go beyond the last page', () => {
-    //     const nextButton = screen.getByRole('button', { name: /next/i });
-    //     fireEvent.click(nextButton); 
-    //     fireEvent.click(nextButton); 
+    test('does not go beyond the last page', () => {
+        const nextButton = screen.getAllByRole('button', { name: /next/i });
+        fireEvent.click(nextButton[0]); 
+        fireEvent.click(nextButton[0]); 
     
-    //     expect(screen.getByText('Loan K')).toBeInTheDocument(); 
-    //     expect(screen.queryByText('Loan A')).not.toBeInTheDocument();
-    // });
+        expect(screen.getByText('Loan K')).toBeInTheDocument(); 
+        expect(screen.queryByText('Loan A')).not.toBeInTheDocument();
+    });
 
-    // test('Loan K not available on  the first page', () => {
-    //     const nextButton = screen.getByRole('button', { name: /next/i });
-    //     fireEvent.click(nextButton);
+    test('Loan K not available on  the first page', () => {
+        const nextButton = screen.getAllByRole('button', { name: /next/i });
+        fireEvent.click(nextButton[0]);
 
-    //     const prevButton = screen.getByRole('button', { name: /previous/i });
-    //     fireEvent.click(prevButton); 
+        const prevButton = screen.getAllByRole('button', { name: /previous/i });
+        fireEvent.click(prevButton[1]); 
     
-    //     expect(screen.getByText('Loan A')).toBeInTheDocument(); 
-    //     expect(screen.queryByText('Loan K')).not.toBeInTheDocument();
-    // });
+        expect(screen.getByText('Loan A')).toBeInTheDocument(); 
+        expect(screen.queryByText('Loan K')).not.toBeInTheDocument();
+    });
     
     
     
