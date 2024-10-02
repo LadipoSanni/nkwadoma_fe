@@ -41,10 +41,12 @@ const Login: React.FC = () => {
     //         // route("/auth/forget-password")
     //     }
     // }
-
+    //
     const handleReset = () => {
 
     }
+
+    const isFormValid = email && password
 
 
     return (
@@ -107,25 +109,10 @@ const Login: React.FC = () => {
                             />
                         </div>
                         <div id={"authButtonContainer"} className={`w-[100%]`}>
-                            <AuthButton disable={true} backgroundColor={'#0d9b48'} textColor={"white"}
+                            <AuthButton disable={!isFormValid} backgroundColor={'#0D9B48'} textColor={"white"}
                                         id={"resetPasswordButton"}
                                         buttonText={"Login"} width={"inherit"} handleClick={handleReset}></AuthButton>
                         </div>
-                        {/*<div data-testid={`submitButton`} id={`submitButton`} className={`pt-6`}>*/}
-                        {/*    <button*/}
-                        {/*        id={`loginButton`}*/}
-                        {/*        data-testid={`loginButton`}*/}
-                        {/*        type="submit"*/}
-                        {/*        className={`w-full text-white font-medium rounded-sm text-sm px-5 py-2.5 text-center transition-all duration-300 ${*/}
-                        {/*            isFormValid*/}
-                        {/*                ? "bg-[#0D9B48] cursor-pointer"*/}
-                        {/*                : "bg-[#90D8AE] cursor-not-allowed"*/}
-                        {/*        }`}*/}
-                        {/*        disabled={!isFormValid}*/}
-                        {/*    >*/}
-                        {/*        Login*/}
-                        {/*    </button>*/}
-                        {/*</div>*/}
                         <a href="/auth/forget-password"
                            className="flex items-center justify-center text-sm  text-[#101828] leading-4">Forgot
                             Password?</a>
