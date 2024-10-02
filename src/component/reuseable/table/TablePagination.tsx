@@ -14,9 +14,8 @@ interface Props<T> {
 
 function TablePagination<T>({ page, rowsPerPage, tableData, handlePageChange, handleNextPage, handlePreviousPage }: Props<T>) {
   return (
-    <div data-testid={`dynamicTable`} id="dynamicTablePagination" className={'flex items-center p-3 h-16 justify-between'}>
+    <div data-testid="dynamicTablePagination" id="dynamicTablePagination" className={'flex items-center p-3 h-16 justify-between'}>
     <Button
-        data-testid={`tablePreviousButton`}
         id="dynamicTablePreviousButton"
         onClick={handlePreviousPage}
         startIcon={<ArrowBackIcon sx={{color: '#667085'}} />}
@@ -33,7 +32,6 @@ function TablePagination<T>({ page, rowsPerPage, tableData, handlePageChange, ha
         Previous
     </Button>
     <Pagination
-        data-testid={`tablePaginationControl`}
         id="dynamicTablePaginationControl"
         count={Math.ceil(tableData.length / rowsPerPage)}
         page={page}
@@ -60,7 +58,6 @@ function TablePagination<T>({ page, rowsPerPage, tableData, handlePageChange, ha
         }}
     />
     <Button
-        data-testid={`tableNextButton`}
         id="dynamicTableNextButton"
         onClick={handleNextPage}
         endIcon={<ArrowForwardIcon sx={{color: '#667085'}}/>}
@@ -70,7 +67,7 @@ function TablePagination<T>({ page, rowsPerPage, tableData, handlePageChange, ha
             border: '1px solid var(--Default-colors-Borders, #D0D5DD)',
             background: '#FFF',
             boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
-            visibility: page >= Math.ceil(tableData.length / rowsPerPage) ? 'hidden' : 'visible',
+            visibility: page >= Math.ceil(tableData.length / rowsPerPage)? 'hidden' : 'visible',
             textTransform: 'none'
 
         }}
