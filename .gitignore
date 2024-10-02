@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.idea/git_toolbox_blame.xml
+.idea/git_toolbox_prj.xml
