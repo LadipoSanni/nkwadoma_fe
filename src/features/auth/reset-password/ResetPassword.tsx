@@ -35,6 +35,7 @@ const ResetPassword = () => {
 
     return (
         <div
+            id={"resetPasswordContainer"}
             className={`h-[100vh] w-[100vw] grid place-content-center md:grid md:place-content-center md:h-[100vh] md:w-[100vw]`}
         >
             <div
@@ -42,8 +43,9 @@ const ResetPassword = () => {
                 className={`w-[100vw] h-[100vh] bg-white  md:grid md:place-items-center md:shadow-md md:w-[30vw] md:h-[50vh] md:rounded`}
             >
                 <div
+                    id={"resetPasswordInnerContainer"}
                     className={`w-[92%] md:w-[80%] grid grid-rows-1 content-between px-2 h-[98%] md:h-[90%]`}>
-                    <div className={` h-[3rem] grid gap-0 `}>
+                    <div id="resetPasswordHeaderContainer" className={` h-[3rem] grid gap-0 `}>
                         <div id={"RESETPASSWORDHEADER"} className={`font-bold text-lg`}>{RESETPASSWORDHEADER}</div>
                         <div id={"RESETPASSWORDTEXT"} className={` text-[#667085]`}>{RESETPASSWORDTEXT}</div>
                     </div>
@@ -90,7 +92,7 @@ const ResetPassword = () => {
                                }}></TextField>
                         </div>
                     </div>
-                    <div className={`w-[100%]`}>
+                    <div id={"authButtonContainer"} className={`w-[100%]`}>
                         <AuthButton backgroundColor={'#0d9b48'} textColor={"white"} id={"resetPasswordButton"}
                                     buttonText={"Reset"} width={"inherit"} handleClick={handleReset}></AuthButton>
                     </div>
