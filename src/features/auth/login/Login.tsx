@@ -1,6 +1,6 @@
 "use client"
 import * as React from "react";
-import {useRouter} from 'next/navigation'
+// import {useRouter} from 'next/navigation'
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -12,7 +12,7 @@ import {useState} from "react";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 
 const Login: React.FC = () => {
-    const route = useRouter()
+    // const route = useRouter()
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [showPassword, setShowPassword] = React.useState(false);
