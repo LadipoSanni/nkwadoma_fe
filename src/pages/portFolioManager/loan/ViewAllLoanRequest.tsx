@@ -34,14 +34,16 @@ function ViewAllLoanRequest() {
     };
 
     return (
-        <div data-testid={'mainDiv'} id={`mainDiv`} className={`flex flex-col h-full py-[20px] px-[40px]  w-screen md:w-auto `}>
+        <div data-testid={'mainDivContainer'} id={`mainDivContainer`} 
+        className={`flex flex-col h-full md:py-[20px] md:px-[40px]`}
+        >
             {
                 LoanRequestTable.length < 1 ?
                     <div data-testid={`emptyStateDiv`}>
                         <LoanEmptyState title={'Loan REQUEST will show here'} />
                     </div>
                     :
-                    <div data-testid={`tableDiv`}>
+                    <div data-testid={`tableDiv`} className=''>
                         <DynamicTable
                             tableHeight={52}
                             tableHeader={columns}
