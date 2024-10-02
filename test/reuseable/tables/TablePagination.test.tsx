@@ -1,5 +1,5 @@
 import {fireEvent, render, screen} from "@testing-library/react";
-import TablePagination from "./TablePagination";
+import TablePagination from "@/reuseable/table/TablePagination";
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const {expect, describe, it} = require("@jest/globals");
@@ -14,7 +14,7 @@ const mockPreviousPage = jest.fn();
 describe("TablePagination", () => {
     it("should test that pagination table does not exist", () => {
         const {queryByTestId} = render(<div></div>);
-        expect(queryByTestId('dynamicTablePagination')).not.toBeInTheDocument();
+        expect(queryByTestId('dynamicTable')).not.toBeInTheDocument();
     })
 
     it("should test that pagination table exist", () => {
@@ -28,7 +28,7 @@ describe("TablePagination", () => {
                 handlePreviousPage={mockPreviousPage}
             />
         );
-        expect(queryByTestId('dynamicTablePagination')).toBeInTheDocument();
+        expect(queryByTestId('dynamicTable')).toBeInTheDocument();
     })
 
     it('should test that pagination control renders', () => {
@@ -42,11 +42,11 @@ describe("TablePagination", () => {
                 handlePreviousPage={mockPreviousPage}
             />
         );
-        expect(screen.getByTestId('dynamicTablePreviousButton')).toBeInTheDocument();
-        expect(screen.getByTestId('dynamicTableNextButton')).toBeInTheDocument();
-        expect(screen.getByTestId('dynamicTablePaginationControl')).toBeInTheDocument();
+        expect(screen.getByTestId('tablePreviousButton')).toBeInTheDocument();
+        expect(screen.getByTestId('tableNextButton')).toBeInTheDocument();
+        expect(screen.getByTestId('tablePaginationControl')).toBeInTheDocument();
 
-        fireEvent.click(screen.getByTestId(`dynamicTableNextButton`))
+        fireEvent.click(screen.getByTestId(`tableNextButton`))
         expect(mockNextPage).toHaveBeenCalled();
     });
 
@@ -79,10 +79,10 @@ describe("TablePagination", () => {
             />
         );
 
-        fireEvent.click(screen.getByTestId('dynamicTableNextButton'));
+        fireEvent.click(screen.getByTestId('tableNextButton'));
         expect(mockNextPage).toHaveBeenCalled();
 
-        fireEvent.click(screen.getByTestId('dynamicTablePreviousButton'));
+        fireEvent.click(screen.getByTestId('tablePreviousButton'));
         expect(mockPreviousPage).toHaveBeenCalled();
     });
 
@@ -97,8 +97,8 @@ describe("TablePagination", () => {
                 handlePreviousPage={mockPreviousPage}
             />
         );
-        expect(screen.getByTestId('dynamicTablePreviousButton')).toHaveStyle('visibility: hidden');
-        expect(screen.getByTestId('dynamicTableNextButton')).toHaveStyle('visibility: visible');
+        expect(screen.getByTestId('tablePreviousButton')).toHaveStyle('visibility: hidden');
+        expect(screen.getByTestId('tableNextButton')).toHaveStyle('visibility: visible');
 
         rerender(
             <TablePagination
@@ -110,7 +110,7 @@ describe("TablePagination", () => {
                 handlePreviousPage={mockPreviousPage}
             />
         );
-        expect(screen.getByTestId('dynamicTablePreviousButton')).toHaveStyle('visibility: visible');
-        expect(screen.getByTestId('dynamicTableNextButton')).toHaveStyle('visibility: hidden');
+        expect(screen.getByTestId('tablePreviousButton')).toHaveStyle('visibility: visible');
+        expect(screen.getByTestId('tableNextButton')).toHaveStyle('visibility: hidden');
     });
 })
