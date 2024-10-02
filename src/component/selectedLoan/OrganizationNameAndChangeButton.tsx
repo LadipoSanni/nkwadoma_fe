@@ -6,6 +6,12 @@ import styles from "./SelectedLoan.module.css"
 const OrganizationNameAndChangeButton = () => {
 
     const [openInstitutionModal, setOpenInstitutionModal] = React.useState(false)
+ 
+    const  handleOpenInstitutionModal = () => {
+        setOpenInstitutionModal(true) 
+        
+    }
+    
 
     return (
         <div
@@ -19,12 +25,15 @@ const OrganizationNameAndChangeButton = () => {
                     <div id="instituteName" style={{marginTop: 'auto'}} className={` ${styles.organizationName}`}
                     >School of Product, Yaba</div>
             </div>
-            <div id="changeOranizationDIV" className={`grid mt-[auto] mb-auto`} onClick={() => {
-                setOpenInstitutionModal(true)
+            { openInstitutionModal &&  <div id="changeOranizationDIV" className={`grid mt-[auto] mb-auto`} onClick={() => {
+                handleOpenInstitutionModal()
             }}>
                 <span id="changeOrganizationText" className={`${styles.changeOrganizationText}`}>Change</span>
                 <hr id="changeOrganizationLine" className={`${styles.changeOrganizationLine}`}/>
             </div>
+       
+            }
+           
         </div>
     );
 };
