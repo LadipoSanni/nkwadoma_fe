@@ -93,7 +93,7 @@ const ResetPassword = () => {
                         </div>
                     </div>
                     <div id={"authButtonContainer"} className={`w-[100%]`}>
-                        <AuthButton disable={false} backgroundColor={'#0d9b48'} textColor={"white"} id={"resetPasswordButton"}
+                        <AuthButton disable={true} backgroundColor={'#0d9b48'} textColor={"white"} id={"resetPasswordButton"}
                                     buttonText={"Reset"} width={"inherit"} handleClick={handleReset}></AuthButton>
                     </div>
                 </div>
