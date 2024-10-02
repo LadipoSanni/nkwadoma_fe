@@ -14,8 +14,9 @@ interface Props<T> {
 
 function TablePagination<T>({ page, rowsPerPage, tableData, handlePageChange, handleNextPage, handlePreviousPage }: Props<T>) {
   return (
-    <div id="dynamicTablePagination" className={'flex items-center p-3 h-16 justify-between'}>
+    <div data-testid={`dynamicTable`} id="dynamicTablePagination" className={'flex items-center p-3 h-16 justify-between'}>
     <Button
+        data-testid={`tablePreviousButton`}
         id="dynamicTablePreviousButton"
         onClick={handlePreviousPage}
         startIcon={<ArrowBackIcon sx={{color: '#667085'}} />}
@@ -32,6 +33,7 @@ function TablePagination<T>({ page, rowsPerPage, tableData, handlePageChange, ha
         Previous
     </Button>
     <Pagination
+        data-testid={`tablePaginationControl`}
         id="dynamicTablePaginationControl"
         count={Math.ceil(tableData.length / rowsPerPage)}
         page={page}
@@ -58,6 +60,7 @@ function TablePagination<T>({ page, rowsPerPage, tableData, handlePageChange, ha
         }}
     />
     <Button
+        data-testid={`tableNextButton`}
         id="dynamicTableNextButton"
         onClick={handleNextPage}
         endIcon={<ArrowForwardIcon sx={{color: '#667085'}}/>}
