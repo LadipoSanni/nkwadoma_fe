@@ -3,8 +3,8 @@ import React from "react";
 import { InputAdornment, TextField } from "@mui/material";
 import { SearchOutlined } from "@mui/icons-material";
 import Button from "@mui/material/Button";
-import LoanProductTable from "@/component/reuseable/table/LoanProductTable";
-import { loanProductData } from "@/features/utils";
+import LoanProductTable from "@/reuseable/table/LoanProductTable";
+import { loanProductData } from "@/utils/LoanProductMockData";
 
 function LoanProductPage() {
   // const [openModal, setOpenModal] = React.useState(false);

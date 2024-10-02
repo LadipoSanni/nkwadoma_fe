@@ -1,5 +1,5 @@
-import { render, screen, fireEvent,cleanup,} from "@testing-library/react";
-import LoanProductTable from "@/component/reuseable/table/LoanProductTable";
+import { render, screen, fireEvent,cleanup,within} from "@testing-library/react";
+import LoanProductTable from "@/reuseable/table/LoanProductTable";
 
 const mockTableData = [
     { id: 1, name: 'Loan A', amount: 1000 },
@@ -17,9 +17,9 @@ const mockTableData = [
 ];
 
 const mockTableHeader = [
-    { title: 'ID', id: 'id', selector: (row: any) => row.id },
-    { title: 'Name', id: 'name', selector: (row: any) => row.name },
-    { title: 'Amount', id: 'amount', selector: (row: any) => row.amount },
+    { title: 'fund', id: 'funds', selector: (row: any) => row.id },
+    { title: 'product purchased', id: 'products purchased', selector: (row: any) => row.name },
+    { title: 'disburse', id: 'disburses', selector: (row: any) => row.amount },
 ];
 
 const mockHandleRowClick = jest.fn();
@@ -38,16 +38,21 @@ describe('LoanProductTable component', () => {
         );
     });
 
+    
+
     it('renders the table with correct headers', () => {
         mockTableHeader.forEach(column => {
-            expect(screen.getByText(column.title)).toBeInTheDocument();
+            const headers = screen.getAllByText(column.title);
+           expect(headers.length).toBeGreaterThan(0);
             
         });
     });
 
-    test('renders the correct number of rows on the first page', () => {
+    test('renders the correct number of rows on the first page for both the large screen and mobile screen', () => {
         const rows = screen.getAllByRole('row');
-        expect(rows).toHaveLength(11); 
+        expect(rows).toHaveLength(22); 
+       
+        
     });
 
     test('handles row click', () => {
@@ -62,8 +67,8 @@ describe('LoanProductTable component', () => {
 
     test('paginates correctly', () => {
         
-        const nextButton = screen.getByRole('button', { name: /next/i });
-        fireEvent.click(nextButton);
+        const nextButton = screen.getAllByRole('button', { name: /next/i });
+        fireEvent.click(nextButton[0]);
 
         expect(screen.getByText('Loan K')).toBeInTheDocument();
         expect(screen.queryByText('Loan A')).not.toBeInTheDocument();
@@ -71,11 +76,11 @@ describe('LoanProductTable component', () => {
 
     test('handles previous page button click', () => {
 
-        const nextButton = screen.getByRole('button', { name: /next/i });
-        fireEvent.click(nextButton);
+        const nextButton = screen.getAllByRole('button', { name: /next/i });
+        fireEvent.click(nextButton[0]);
         
-        const prevButton = screen.getByRole('button', { name: /previous/i });
-        fireEvent.click(prevButton);
+        const prevButton = screen.getAllByRole('button', { name: /previous/i });
+        fireEvent.click(prevButton[1]);
 
         expect(screen.getByText('Loan A')).toBeInTheDocument();
         expect(screen.queryByText('Loan K')).not.toBeInTheDocument();
@@ -94,20 +99,20 @@ describe('LoanProductTable component', () => {
     // });
 
     test('does not go beyond the last page', () => {
-        const nextButton = screen.getByRole('button', { name: /next/i });
-        fireEvent.click(nextButton); 
-        fireEvent.click(nextButton); 
+        const nextButton = screen.getAllByRole('button', { name: /next/i });
+        fireEvent.click(nextButton[0]); 
+        fireEvent.click(nextButton[0]); 
     
         expect(screen.getByText('Loan K')).toBeInTheDocument(); 
         expect(screen.queryByText('Loan A')).not.toBeInTheDocument();
     });
 
     test('Loan K not available on  the first page', () => {
-        const nextButton = screen.getByRole('button', { name: /next/i });
-        fireEvent.click(nextButton);
+        const nextButton = screen.getAllByRole('button', { name: /next/i });
+        fireEvent.click(nextButton[0]);
 
-        const prevButton = screen.getByRole('button', { name: /previous/i });
-        fireEvent.click(prevButton); 
+        const prevButton = screen.getAllByRole('button', { name: /previous/i });
+        fireEvent.click(prevButton[1]); 
     
         expect(screen.getByText('Loan A')).toBeInTheDocument(); 
         expect(screen.queryByText('Loan K')).not.toBeInTheDocument();

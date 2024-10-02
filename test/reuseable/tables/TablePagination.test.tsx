@@ -1,4 +1,4 @@
-import TablePagination from "@/component/reuseable/table/TablePagination";
+import TablePagination from "@/reuseable/table/TablePagination";
 import { render, screen, fireEvent,cleanup,within} from "@testing-library/react";
 
 

@@ -8,3 +8,6 @@ export interface AuthButtonPropsType {
     disable: boolean,
     handleClick: ()=> void;
 }
+
+
+

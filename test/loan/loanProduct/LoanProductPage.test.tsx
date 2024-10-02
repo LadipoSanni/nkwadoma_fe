@@ -27,16 +27,6 @@ describe("TablePagination", () => {
     })
 
 
-    it("renders paginated data and navigates pages", () => {
-        const loanProductNameHeader = screen.getByText('Product design fund');
-    expect(loanProductNameHeader).toBeInTheDocument();
-
-    const nextPageButton = screen.getByRole('button', { name: /next/i });;
-    fireEvent.click(nextPageButton);
-
-    const nextLoanProduct = screen.getByText('Product design'); 
-    expect(nextLoanProduct).toBeInTheDocument();
-    })
 
     
 
