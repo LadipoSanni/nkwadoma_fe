@@ -53,7 +53,8 @@ const ResetPassword = () => {
                         <div className={`w-[100%] h-[5rem] grid gap-0 `}>
                             <label className={`font-light`}>{EMAILHEADER}</label>
                             <TextField
-                                id="emailField"
+                                id="resetEmailField"
+                                data-testid={"resetEmailField"}
                                 size='small'
                                 placeholder={userEmail}
                                 tabIndex={2}
@@ -74,9 +75,11 @@ const ResetPassword = () => {
                             <TextField
                               size={"small"}
                                id="newPassWordContainer"
+                              data-testid={"newPassWordContainer"}
                               onChange={(event)=> {handleChange(event)}}
-                               sx={{width: 'inherit', height: '2.7rem'}}
+                               sx={{width: 'inherit', height: '2.7rem', '& .MuiOutlinedInput-root': { "&.Mui-focused fieldset": {borderColor: '#757575'}}, }}
                                type={hidePassword ? 'password' : 'text'}
+                              value={newPassword}
                                InputProps={{
                                   endAdornment: (
                                      <InputAdornment onClick={changePasswordVisibility}  position="end">
