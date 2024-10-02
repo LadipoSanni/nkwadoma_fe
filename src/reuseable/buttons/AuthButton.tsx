@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import {AuthButtonPropsType} from "@/types/ButtonTypes";
 
@@ -8,7 +9,8 @@ const AuthButton = ({id, buttonText, width, handleClick, textColor, backgroundCo
         <button
             id={id}
             onClick={handleClick}
-            className={`w-${width} text-${textColor} bg-${backgroundColor} flex`}
+            style={{height: '2.5rem',width: `${width}`, color: `${textColor}`, backgroundColor: `${backgroundColor}`}}
+            className={`grid place-content-center rounded-md`}
         >
             {buttonText}
         </button>
