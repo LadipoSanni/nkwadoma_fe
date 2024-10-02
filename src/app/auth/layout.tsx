@@ -6,9 +6,9 @@ type props = {
 
 const Layout = ({children}: props) => {
     return (
-        <main id={'auth-main-layout'} className={'grid place-content-center bg-[#EAEAEA] h-screen w-screen'}>
+        <div>
             {children}
-        </main>
+        </div>
     );
 };
 

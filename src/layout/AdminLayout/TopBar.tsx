@@ -5,6 +5,8 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {store} from "@/redux/store";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
+import {Badge} from "@mui/material";
+import {FiBell} from "react-icons/fi";
 
 
 const TopBar = () => {
@@ -43,14 +45,14 @@ const TopBar = () => {
                     </div>
 
                     <div id="LayOutProfileAndNotification" className="flex items-center gap-5 md:gap-10">
-                        {/*<div id={'bellDiv'} className={` flex place-content-center object-fit h-[2.6rem]  w-[2.6rem] rounded-md mr-[1.7rem] `}>*/}
-                        {/*  {bellClicked && <Notifications close={clickBell}/>}*/}
-                        {/*      <Badge*/}
-                        {/*         badgeContent={'33'}*/}
-                        {/*         color="success" sx={{marginTop: 'auto', marginBottom: 'auto', height: '70%', width: '70%'}} >*/}
-                        {/*                <FiBell className={` w-[100%] h-[100%] object-cover `}/>*/}
-                        {/*      </Badge>*/}
-                        {/*</div>*/}
+                        <div id={'bellDiv'} className={` flex place-content-center object-fit h-[2.6rem]  w-[2.6rem] rounded-md mr-[1.7rem] `}>
+                           {/*<Notifications />*/}
+                              <Badge
+                                 badgeContent={'33'}
+                                 color="success" sx={{marginTop: 'auto', marginBottom: 'auto', height: '70%', width: '70%'}} >
+                                        <FiBell className={` w-[100%] h-[100%] object-cover `}/>
+                              </Badge>
+                        </div>
                         <div id={'fullNameDiv'} className="flex gap-2  justify-between items-center w-[fit-content]">
                             <div
                                 className={` flex place-content-center  object-fit  bg-[#E0FDEB]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
