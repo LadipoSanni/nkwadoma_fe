@@ -37,7 +37,7 @@ const ResetPassword = () => {
 
             <div
                 id="resetPasswordComponent"
-                className={` px-3 w-[90vw] rounded-md h-[50vh] bg-white grid md:px-0 md:grid md:place-items-center  border-2 border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}
+                className={` px-3 w-[90vw] rounded-md h-[50vh] bg-white grid md:px-0 md:grid md:place-items-center  border-1 border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}
             >
                 <div
                     id={"resetPasswordInnerContainer"}
