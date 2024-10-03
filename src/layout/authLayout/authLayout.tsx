@@ -38,7 +38,7 @@ const AuthLayout: React.FC<props> = ({ children }) => {
                            Meedl serves as a nexus, connecting high net-worth individuals, financial institutions, and organizations seeking impactful investment avenues with the pressing need for accessible loans.
                        </div>
                     </div>
-                    <div className={`w-[98%]  md:w-[45%] md:grid md:justify-items-end `}>
+                    <div className={`w-[98%] md:w-[40%] md:grid md:justify-items-end `}>
                         {children}
                     </div>
                 </div>
