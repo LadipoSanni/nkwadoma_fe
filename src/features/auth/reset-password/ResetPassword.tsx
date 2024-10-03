@@ -34,13 +34,10 @@ const ResetPassword = () => {
 
 
     return (
-        // <div
-        //     id={"resetPasswordContainer"}
-        //     className={`h-[50vh] w-[50vw] grid place-self-center  place-content-center md:grid m bg-green-200 md:h-[99%] md:w-[99%]`}
-        // >
+
             <div
                 id="resetPasswordComponent"
-                className={`w-[50vw] h-[50vh] bg-white grid  md:grid md:place-items-center  border-2 border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}
+                className={` px-3 w-[90vw] rounded-md h-[50vh] bg-white grid md:px-0 md:grid md:place-items-center  border-2 border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}
             >
                 <div
                     id={"resetPasswordInnerContainer"}
@@ -98,7 +95,6 @@ const ResetPassword = () => {
                     </div>
                 </div>
             </div>
-        // </div>
 
     );
 };
