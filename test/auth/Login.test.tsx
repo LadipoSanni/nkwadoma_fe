@@ -16,9 +16,19 @@ describe('Login Component', () => {
         expect(login).not.toBeInTheDocument();
     })
 
-    it('should est that LoanEmptyState component exist', () => {
-        const {getByTestId} = render(<Login/>);
-        expect(getByTestId('parentDivId')).toBeInTheDocument();
+    it('should have the email input field', () => {
+        render(<Login />);
+
+        const emailInput = screen.getByTestId("loginEmailId");
+        expect(emailInput).toBeInTheDocument();
+    });
+
+
+    it('should have the password input field', () => {
+        render(<Login />);
+
+        const password = screen.getByTestId("password");
+        expect(password).toBeInTheDocument();
     });
 
 
