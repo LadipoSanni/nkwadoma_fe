@@ -1,6 +1,5 @@
 import React from 'react';
 import AuthInputField from "@/reuseable/Input/AuthInputField";
-import AuthButton from "@/reuseable/buttons/AuthButton";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {cabinetGrotesk} from "@/app/fonts";
 
