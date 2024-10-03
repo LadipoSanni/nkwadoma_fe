@@ -23,52 +23,49 @@ const Login: React.FC = () => {
 
     return (
 
-                // <div data-testid={`childDivId`} id={`childDivId`} className={` rounded-xl shadow flex items-center justify-center`}>
-                    <div
-                         className="w-full bg-[#FFFFFF] md:w-[99%] rounded-xl md:border border-2 border-gray-100">
-                        {/*className={` px-3 w-[90vw] rounded-md h-[50vh] bg-white grid md:px-0 md:grid md:place-items-center  border-1 border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}>*/}
-        <div data-testid={`loginDivId`} id={`loginDivId`}
-                             className="px-4 py-10">
-                            <h1 className=" font-sans text-[#1A1A1A] md:text-3xl text-2xl leading-5 ">Log in to your
-                                account</h1>
-                            {/* eslint-disable-next-line react/no-unescaped-entities */}
-                            <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
-                                 className="pt-10 space-y-5">
-                                <div data-testid={`emailId`} id={`emailId`}>
-                                    <AuthInputField label={"Email"} id={`email`}
-                                                    data-testid={`loginEmailId`}
-                                                    placeholder={`Enter email address`}
-                                                    type="email"
-                                                    value={email}
-                                                    onChange={handleEmail}
-                                    />
-                                </div>
-                                <div data-testid={`passwordId`} id={`passwordId`}>
-                                    <AuthInputField label={`Password`} id={'password'}
-                                                    data-testid={`password`}
-                                                    type={'password'}
-                                                    placeholder={`Enter password`}
-                                                    endAdornment={`show`}
-                                                    value={password}
-                                                    onChange={handlePassword}>
-                                    </AuthInputField>
-                                </div>
-                                <div id={"authButtonContainer"} className={`w-[100%]`}>
-                                    <AuthButton disable={!isFormValid} backgroundColor={'#0d9b48'} textColor={"white"}
-                                                id={"loginButton"}
-                                                buttonText={"Login"} width={"inherit"}
-                                                handleClick={handleReset}>
-                                    </AuthButton>
-                                </div>
-                                <p className="flex items-center justify-center text-sm text-[#101828] leading-4">
-                                    Forgot Password? <a href="/auth/reset-password"
-                                                        className="font-medium text-[#0D9B48] underline">Reset it
-                                    here</a>
-                                </p>
-                            </div>
-                        </div>
+        <div
+            className="w-full bg-[#FFFFFF] md:min-w-xl rounded-xl md:border border-2 border-gray-100">
+            <div data-testid={`loginDivId`} id={`loginDivId`}
+                 className="px-4 py-10">
+                <h1 className=" font-sans text-[#1A1A1A] md:text-3xl text-2xl leading-5 ">Log in to your
+                    account</h1>
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
+                <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
+                     className="pt-10 space-y-5">
+                    <div data-testid={`emailId`} id={`emailId`}>
+                        <AuthInputField label={"Email"} id={`email`}
+                                        data-testid={`loginEmailId`}
+                                        placeholder={`Enter email address`}
+                                        type="email"
+                                        value={email}
+                                        onChange={handleEmail}
+                        />
                     </div>
-                // </div>
+                    <div data-testid={`passwordId`} id={`passwordId`}>
+                        <AuthInputField label={`Password`} id={'password'}
+                                        data-testid={`password`}
+                                        type={'password'}
+                                        placeholder={`Enter password`}
+                                        endAdornment={`show`}
+                                        value={password}
+                                        onChange={handlePassword}>
+                        </AuthInputField>
+                    </div>
+                    <div id={"authButtonContainer"} className={`w-[100%]`}>
+                        <AuthButton disable={!isFormValid} backgroundColor={'#0d9b48'} textColor={"white"}
+                                    id={"loginButton"}
+                                    buttonText={"Login"} width={"inherit"}
+                                    handleClick={handleReset}>
+                        </AuthButton>
+                    </div>
+                    <p className="flex items-center justify-center text-sm text-[#101828] leading-4">
+                        Forgot Password? <a href="/auth/reset-password"
+                                            className="font-medium text-[#0D9B48] underline">Reset it
+                        here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
     )
 }
 export default Login
