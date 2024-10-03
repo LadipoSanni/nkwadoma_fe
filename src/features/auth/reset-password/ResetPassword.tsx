@@ -1,97 +1,67 @@
 "use client"
-import React, {ChangeEvent, useState} from 'react';
-import {InputAdornment, TextField} from "@mui/material";
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import React from 'react';
 import AuthButton from "@/reuseable/buttons/AuthButton";
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import AuthInput from "@/reuseable/Input/AuthInputField"
+
 
 const ResetPassword = () => {
 
-    const RESETPASSWORDHEADER: string = "Reset password?";
-    const RESETPASSWORDTEXT: string = "Let's get you a new password";
-    const EMAILHEADER: string = "Email";
-    const userEmail: string = "folashade@gmail.com"
-    const [hidePassword, setHidePassword] = useState(true)
-    const [newPassword, setNewPassword] = useState('new password')
+    const RESETPASSWORDHEADER: string = "Request password reset";
+    const RESETPASSWORDTEXT: string = "Enter the email address you registered with, we will send you a link to create a new password";
+    const EMAILHEADER: string = "Email address";
+    // const [hidePassword, setHidePassword] = useState(true)
+    // const [, setNewPassword] = useState('new password')
 
 
     const handleReset = () => {
     }
 
-    const handleChange = (event: ChangeEvent <HTMLTextAreaElement| HTMLInputElement > ) => {
-        event.stopPropagation()
-        setNewPassword(event.currentTarget.value)
-    }
+    // const handleChange = (event: ChangeEvent <HTMLTextAreaElement| HTMLInputElement > ) => {
+    //     event.stopPropagation()
+    //     setNewPassword(event.currentTarget.value)
+    // }
 
-    const changePasswordVisibility = () =>{
-        if (hidePassword){
-            setHidePassword(false)
-        }else{
-            setHidePassword(true)
-        }
-    }
+    // const changePasswordVisibility = () =>{
+    //     if (hidePassword){
+    //         setHidePassword(false)
+    //     }else{
+    //         setHidePassword(true)
+    //     }
+    // }
 
 
     return (
 
             <div
                 id="resetPasswordComponent"
-                className={` px-3 w-[90vw] rounded-md h-[50vh] bg-white grid md:px-0 md:grid md:place-items-center  border-1 border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}
+                className={` px-3 w-[90vw] rounded-md h-[50vh] bg-white grid md:px-2 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}
             >
                 <div
                     id={"resetPasswordInnerContainer"}
-                    className={`w-[92%] md:w-[96%] grid grid-rows-1 content-between  h-[98%] md:h-[90%]`}>
-                    <div id="resetPasswordHeaderContainer" className={` h-[3rem] grid gap-0 `}>
-                        <div id={"RESETPASSWORDHEADER"} className={`font-bold text-lg`}>{RESETPASSWORDHEADER}</div>
-                        <div id={"RESETPASSWORDTEXT"} className={` text-[#667085]`}>{RESETPASSWORDTEXT}</div>
+                    className={`w-[92%] md:w-[96%] grid grid-cols-1 content-between  h-[98%] md:h-[90%]`}>
+                    <div id="resetPasswordHeaderContainer" className={` h-fit grid gap-0 `}>
+                        <div id={"RESETPASSWORDHEADER"} className={`font-semi-bold text-2xl `}>{RESETPASSWORDHEADER}</div>
+                        <div id={"RESETPASSWORDTEXT"} className={` text-[#667085] text-xs w-[96%]`}>{RESETPASSWORDTEXT}</div>
                     </div>
                     <div
                         id="buttonsContainer"
-                        className={`h-[30%]  md:h-auto py-1 md:mb-10  md:mt-1 grid gap-4 md:grid md:gap-1 `}>
+                        className={`h-[30%]  md:h-auto py-1 md:  md:mt-1 grid gap-4 md:grid md:gap-1 `}>
                         <div className={`w-[100%] h-[5rem] grid gap-0 `}>
-                            <label className={`font-light`}>{EMAILHEADER}</label>
-                            <TextField
-                                id="resetEmailField"
-                                data-testid={"resetEmailField"}
-                                size='small'
-                                placeholder={userEmail}
-                                tabIndex={2}
-                                sx={{width: 'inherit', height: '3rem'}}
-                                disabled={true}
-                                // value={}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <MailOutlineIcon/>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                variant="outlined"
-                            />
-                        </div>
-                        <div className={`w-[100%] h-[5rem] grid gap-0  `}>
-                            <label className={`font-light`}>New Password</label>
-                            <TextField
-                              size={"small"}
-                               id="newPassWordContainer"
-                              data-testid={"newPassWordContainer"}
-                              onChange={(event)=> {handleChange(event)}}
-                               sx={{width: 'inherit', height: '2.7rem', '& .MuiOutlinedInput-root': { "&.Mui-focused fieldset": {borderColor: '#757575'}}, }}
-                               type={hidePassword ? 'password' : 'text'}
-                              value={newPassword}
-                               InputProps={{
-                                  endAdornment: (
-                                     <InputAdornment onClick={changePasswordVisibility}  position="end">
-                                        {hidePassword ? <VisibilityOffIcon/> : <VisibilityIcon/>}
-                                     </InputAdornment>
-                                  ),
-                               }}></TextField>
+                            <AuthInput label={EMAILHEADER} id={'resetEmailId'} ></AuthInput>
                         </div>
                     </div>
                     <div id={"authButtonContainer"} className={`w-[100%]`}>
-                        <AuthButton disable={true} backgroundColor={'#0d9b48'} textColor={"white"} id={"resetPasswordButton"}
-                                    buttonText={"Reset"} width={"inherit"} handleClick={handleReset}></AuthButton>
+                        <AuthButton disable={true} backgroundColor={'#0d9b48'} textColor={"white"}
+                                    id={"resetPasswordButton"}
+                                    buttonText={"Submit email"} width={"inherit"}
+                                    handleClick={handleReset}></AuthButton>
+                        <div className={`flex gap-2 place-self-center place-content-center  mt-1 `}>
+                            <div className={`text-[#667085] text-sm `}>Remember your password?</div>
+                            <u className={`text-[#0d9b48] text-sm bg-[#0d9b48] `}>
+                                Log in
+                                {/*<hr className={`bg-[#0d9b48]`}/>*/}
+                            </u>
+                        </div>
                     </div>
                 </div>
             </div>

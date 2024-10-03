@@ -1,7 +1,6 @@
 import "@testing-library/react"
 import ResetPassword from "@/features/auth/reset-password/ResetPassword";
 import {fireEvent, queryByAttribute, render, screen} from "@testing-library/react";
-import {userEvent} from "@testing-library/user-event";
 
 type TestElement = Document | Element | Window | Node
 
@@ -27,13 +26,13 @@ describe("test reset password", ()=> {
         expect(getById(view.container, "RESETPASSWORDTEXT")).toBeInTheDocument()
 
     });
-    it('should contain two input fields', () => {
-        const view = render(
-            <ResetPassword/>
-        )
-        expect(getById(view.container, "newPassWordContainer")).toBeInTheDocument()
-        expect(getById(view.container, 'resetEmailField')).toBeInTheDocument()
-    });
+    // it('should contain two input fields', () => {
+    //     const view = render(
+    //         <ResetPassword/>
+    //     )
+    //     expect(getById(view.container, "newPassWordContainer")).toBeInTheDocument()
+    //     expect(getById(view.container, 'resetEmailField')).toBeInTheDocument()
+    // });
     // it('should contain two input fields where one is and disabled and the other is not', () => {
     //      render(
     //         <ResetPassword/>
