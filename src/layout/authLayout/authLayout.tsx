@@ -28,7 +28,7 @@ const AuthLayout: React.FC<props> = ({ children }) => {
                     />
                 </div>
                 <div
-                    className={` md:flex md:justify-between md:content-between md:w-full md:h-[80%] `}
+                    className={`hidden md:flex md:justify-between md:content-between md:w-full md:h-[80%] `}
                 >
                     <div className={`w-[50%] h-[100%] `}>
                       <Image src={'/Revolutionizing financing and access to loans.svg'} alt={'Revolution'}
