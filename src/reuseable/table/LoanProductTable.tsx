@@ -37,10 +37,11 @@ interface Props<T extends TableRowData> {
     tableHeight?: number;
     sx?: string
     tableStyle?: string
-    staticColunm?: string
+    staticColunm?: string,
+    staticHeader?: string
 }
 
-function LoanProductTable<T extends TableRowData>({tableHeader, tableData, handleRowClick, tableHeight,sx,tableStyle,staticColunm }: Props<T>) {
+function LoanProductTable<T extends TableRowData>({tableHeader, tableData, handleRowClick, tableHeight,sx,tableStyle,staticColunm,staticHeader }: Props<T>) {
   const [page, setPage] = useState(1);
     const rowsPerPage = 10;
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
@@ -123,7 +124,7 @@ function LoanProductTable<T extends TableRowData>({tableHeader, tableData, handl
                         <TableHead id="dynamicTableHeadMobile" sx={{backgroundColor: '#e7e7e7',color:"#404653"}}>
                         <TableRow  id="dynamicTableHeadRowMobile" style={{ position: "sticky", top: 0, backgroundColor: "#fafbfc", zIndex: 1 }}>
                             <TableCell sx={{ backgroundColor: '#FAFBFC' }}>
-                          <h1 className=' w-28 text-[#404653] font-semibold text-sm'>Loan Product </h1>
+                          <h1 className=' w-28 text-[#404653] font-semibold text-sm'>{staticHeader}</h1>
                             </TableCell>
                             <TableCell sx={{ backgroundColor: '#FAFBFC' }}>
                              <FormControl fullWidth>

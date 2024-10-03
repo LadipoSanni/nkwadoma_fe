@@ -17,6 +17,8 @@ function LoanProductPage() {
     
 }
 
+
+
   const columns = [
       {
           title: 'Loan product name',
@@ -110,7 +112,7 @@ function LoanProductPage() {
           </Button>
         </div>
         <div  className={`w-[96%] bg-purple-300 mt-[1rem] h-[82%] mr-auto ml-auto`}>
-                        <LoanProductTable tableData={loanProductData}  handleRowClick={handleRowClick} tableHeader={columns} tableHeight={59} sx='cursor-pointer' staticColunm="loanProductName"/>
+                        <LoanProductTable tableData={loanProductData}  handleRowClick={handleRowClick} tableHeader={columns} tableHeight={59} sx='cursor-pointer' staticColunm="loanProductName" staticHeader="Loan Product"/>
                     </div>
       </div>
     </div>

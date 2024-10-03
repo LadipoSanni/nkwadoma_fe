@@ -51,6 +51,7 @@ function ViewAllLoanRequest() {
                             handleRowClick={handleRowClick}
                             sx='cursor-pointer'
                             staticColunm='traineeName'
+                            staticHeader='Trainee name'
                         />
                         
                     </div>
