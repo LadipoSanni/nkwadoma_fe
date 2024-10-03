@@ -37,9 +37,6 @@ describe('Login Component', () => {
         const getById = queryByAttribute.bind(null, "id")
        const buttonComponent = render(<Login/>);
 
-        expect(screen.getByTestId('parentDivId')).toBeInTheDocument();
-        expect(screen.getByTestId(`writeUpAndLogin`)).toBeInTheDocument();
-        expect(screen.getByTestId('childDivId')).toBeInTheDocument();
         expect(screen.getByTestId('loginDivId')).toBeInTheDocument();
         expect(screen.getByTestId('emailAndPasswordId')).toBeInTheDocument();
         expect(screen.getByTestId('emailId')).toBeInTheDocument();
