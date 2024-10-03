@@ -1,15 +1,16 @@
 import React from 'react';
+import AuthLayout from "@/layout/authLayout/authLayout";
 
 type props = {
     children: React.ReactNode;
 }
 
-const Layout = ({children}: props) => {
+const Layout: React.FC<props> = ({ children }) => {
     return (
-        <div>
+        <AuthLayout>
             {children}
-        </div>
-    );
+        </AuthLayout>
+    )
 };
 
 export default Layout;
