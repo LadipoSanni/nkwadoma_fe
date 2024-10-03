@@ -34,10 +34,10 @@ const AuthInputField: React.FC<ReusableInputProps> = ({ label, id, endAdornment,
 
     return (
         <div id={`custom-input-field-${id}`} className="flex flex-col gap-[6px]">
-            <label id={`label-${id}`} htmlFor={id} className="text-[#344054] text-[14px] font-medium leading-[20px]">
+            <label id={`label-${id}`} htmlFor={id} className="text-[#101828] leading-[20px] text-sm font-medium">
                 {label}
             </label>
-            <div id={`input-container-${id}`} className="flex p-[10px_14px] items-center w-[493px] gap-2 rounded-[var(--radius-xs,_4px)] border border-[#D0D5DD] bg-[#FFF] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]">
+            <div id={`input-container-${id}`} className="flex p-[10px_14px] items-center w-full gap-2 rounded-[var(--radius-xs,_4px)] border border-[#D0D5DD] bg-[#FFF] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]">
                 <input
                     id={id}
                     type={isPasswordVisible ? 'text' : type}
