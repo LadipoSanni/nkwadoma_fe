@@ -1,6 +1,7 @@
 import "@testing-library/react"
 import ResetPassword from "@/features/auth/reset-password/ResetPassword";
 import {fireEvent, queryByAttribute, render, screen} from "@testing-library/react";
+import {userEvent} from "@testing-library/user-event";
 
 type TestElement = Document | Element | Window | Node
 
@@ -26,24 +27,37 @@ describe("test reset password", ()=> {
         expect(getById(view.container, "RESETPASSWORDTEXT")).toBeInTheDocument()
 
     });
-    // it('should contain two input fields', () => {
-    //     const view = render(
-    //         <ResetPassword/>
-    //     )
-    //     expect(getById(view.container, "newPassWordContainer")).toBeInTheDocument()
-    //     expect(getById(view.container, 'resetEmailField')).toBeInTheDocument()
-    // });
-    // it('should contain two input fields where one is and disabled and the other is not', () => {
-    //      render(
-    //         <ResetPassword/>
-    //     )
-    //     const disabledInput = screen.getByTestId('resetEmailField' )
-    //     const Input = screen.getByTestId('newPassWordContainer' )
-    //     // fireEvent.change(disabledInput, {target: {value: "hello@gmail.com"}})
-    //     // fireEvent.change(Input, {target: {value: "hello@12.com"}})
-    //     // const input = screen.findByTestId("name-input");
-    //     userEvent.type(Input, "Jay");
-    //     expect(Input.ariaValueNow).toHaveValue("Jay")
-    //
-    // });
+    it('should contain email input field', () => {
+        const view = render(
+            <ResetPassword/>
+        )
+        expect(getById(view.container, "resetEmailInput")).toBeInTheDocument()
+    });
+    it('should contain email input field which ', () => {
+         render(
+            <ResetPassword/>
+        )
+        const emailInput = screen.getByRole('textbox' ,{name: /Email address/i})
+        expect(emailInput).toBeInTheDocument()
+        fireEvent.change(emailInput, {target: {value : "Jay"}});
+        expect(emailInput).toHaveValue("Jay")
+
+    });
+    it('should disable submit button if input field is empty ', () => {
+        render(
+            <ResetPassword/>
+        )
+        const button = screen.getByRole('button')
+        expect(button).toBeDisabled();
+    });
+    it('should able submit button if input field is not empty ', () => {
+        render(
+            <ResetPassword/>
+        )
+        const button = screen.getByRole('button')
+        const emailInput = screen.getByRole('textbox' ,{name: /Email address/i})
+        expect(emailInput).toBeInTheDocument()
+        fireEvent.change(emailInput, {target: {value : "Jay"}});
+        expect(button);
+    });
 })

@@ -53,7 +53,7 @@ const ResetPassword = () => {
                         id="buttonsContainer"
                         className={`h-[30%] w-[100%] md:h-auto py-1 md:  md:mt-1 grid gap-4 md:grid md:gap-1 `}>
                         <div className={`w-[100%] h-[5rem] grid gap-0 `}>
-                            <AuthInput label={EMAILHEADER} id={'resetEmailId'} onChange={handleChange}></AuthInput>
+                            <AuthInput value={email} data-testid={'resetEmailInput'} label={EMAILHEADER} id={'resetEmailInput'} onChange={handleChange} placeholder={'Enter email address'}></AuthInput>
                         </div>
                     </div>
                     <div id={"authButtonContainer"} className={`w-[100%]`}>
@@ -65,7 +65,7 @@ const ResetPassword = () => {
                             <div className={`text-[#667085] text-sm `}>Remember your password?</div>
                             <Link href="/auth/login">
                                 <div  className={`text-[#0d9b48] text-sm  `}>Log in</div>
-                                <hr style={{backgroundColor: '#0d9b48'}} className={`h-[1px]`}/>
+                                <hr style={{backgroundColor: '#0d9b48'}} className={`h-[2px]`}/>
                             </Link>
                         </div>
                     </div>
