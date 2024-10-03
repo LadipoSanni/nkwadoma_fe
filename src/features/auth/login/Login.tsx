@@ -22,22 +22,12 @@ const Login: React.FC = () => {
     const isFormValid = email && password
 
     return (
-        <section data-testid={`parentDivId`} id={`parentDivId`}
-                 className="flex flex-col bg-[#fafbfc] min-h-screen md:px-20 md:py-16 px-5 py-10 justify-evenly md:justify-center">
-            <p className={`text-[#0D9B48] text-3xl font-DM-Mono font-medium leading-10`}> Meedl</p>
-            <div data-testid={`writeUpAndLogin`} id={`writeUpAndLogin`} className={`flex flex-row items-center justify-between `}>
-                <div className={`hidden md:block`}>
-                    <p className={`text-[#101828] text-5xl font-bold font-sans`}>Revolutionizing financing <br/> and
-                        access to loans</p>
-                    <p className={`text-[#404653] text-sm font-normal pt-5`}>Middl serves as a nexus, connecting high
-                        net-worth individuals, financial <br/> institutions, and organizations seeking impactful
-                        investment avenues with the <br/> pressing need for accessible loans.</p>
-                </div>
 
-                <div data-testid={`childDivId`} id={`childDivId`} className={` rounded-xl md:shadow md:max-w-xl w-full flex items-center justify-center`}>
+                // <div data-testid={`childDivId`} id={`childDivId`} className={` rounded-xl shadow flex items-center justify-center`}>
                     <div
-                         className="w-full bg-[#FFFFFF] rounded-xl md:border border-2 border-gray-100">
-                        <div data-testid={`loginDivId`} id={`loginDivId`}
+                         className="w-full bg-[#FFFFFF] md:w-[99%] rounded-xl md:border border-2 border-gray-100">
+                        {/*className={` px-3 w-[90vw] rounded-md h-[50vh] bg-white grid md:px-0 md:grid md:place-items-center  border-1 border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}>*/}
+        <div data-testid={`loginDivId`} id={`loginDivId`}
                              className="px-4 py-10">
                             <h1 className=" font-sans text-[#1A1A1A] md:text-3xl text-2xl leading-5 ">Log in to your
                                 account</h1>
@@ -78,9 +68,7 @@ const Login: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
+                // </div>
     )
 }
 export default Login
