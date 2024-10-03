@@ -31,7 +31,7 @@ const AuthLayout: React.FC<props> = ({ children }) => {
                     className={` md:flex md:justify-between md:content-between md:w-full md:h-[80%] `}
                 >
                     <div className={`md:w-[50%] md:h-fit  md:flex md:flex-col md:gap-4 hidden`}>
-                      <div className={`font-bold text-5xl`}>
+                      <div className={`font-bold text-[#000000] text-5xl`}>
                           Revolutionizing financing and access to loans
                       </div>
                        <div className={`text-xs text-[#404653] w-[90%] leading-lose tracking-wide  `}>
