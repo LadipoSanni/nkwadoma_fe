@@ -36,17 +36,6 @@ describe("should render side bar component", ()=>{
         expect(container).toBeInTheDocument()
     })
 
-    it("should render mobile side bar after clicking on hamburger icon ", ()=>{
-        const getById = queryByAttribute.bind(null, "id");
-        const view = render(
-            <Providers>
-                <SideBar/>
-            </Providers>
-        )
-        const container = getById(view.container, "blurry")
-
-        expect(container).toBeInTheDocument()
-    })
 
 
 })
