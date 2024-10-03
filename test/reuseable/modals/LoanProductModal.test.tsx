@@ -1,10 +1,8 @@
 import LoanProductModal from "@/reuseable/modals/LoanProductModal"
 import { render, screen, fireEvent,cleanup,} from "@testing-library/react";
-import ReactModal from "react-modal";
 import Styles from "@/component/reuseable/modal/styles.module.css"
 import { TextField } from "@mui/material";
 
-ReactModal.setAppElement("body");
 
 
 
