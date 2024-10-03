@@ -60,8 +60,8 @@ const SelectLoanTab = () => {
             className={`flex bg-[#fafbfc] overflow-x-auto md:overflow-hidden  w-[98%] ml-1 mt-1 md:w-[55%] h-[9vh] md:h-[8vh] md:rounded rounded `}
         >
             {tabContent?.map((item, index) => (
-                // eslint-disable-next-line react/jsx-key
                 <div
+                    key={item?.name}
                     id={item.id}
                     className={`flex place-self-center w-auto  md:h-auto md:px-2 md:w-auto ml-2 mr-2`}
                 >
