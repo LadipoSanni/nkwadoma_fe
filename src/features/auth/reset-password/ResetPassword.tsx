@@ -34,17 +34,14 @@ const ResetPassword = () => {
 
 
     return (
-        <div
-            id={"resetPasswordContainer"}
-            className={`h-[100vh] w-[100vw] grid place-content-center md:grid md:place-content-center md:h-[100vh] md:w-[100vw]`}
-        >
+
             <div
                 id="resetPasswordComponent"
-                className={`w-[100vw] h-[100vh] bg-white  md:grid md:place-items-center md:shadow-md md:w-[30vw] md:h-[50vh] md:rounded`}
+                className={` px-3 w-[90vw] rounded-md h-[50vh] bg-white grid md:px-0 md:grid md:place-items-center  border-1 border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}
             >
                 <div
                     id={"resetPasswordInnerContainer"}
-                    className={`w-[92%] md:w-[80%] grid grid-rows-1 content-between px-2 h-[98%] md:h-[90%]`}>
+                    className={`w-[92%] md:w-[96%] grid grid-rows-1 content-between  h-[98%] md:h-[90%]`}>
                     <div id="resetPasswordHeaderContainer" className={` h-[3rem] grid gap-0 `}>
                         <div id={"RESETPASSWORDHEADER"} className={`font-bold text-lg`}>{RESETPASSWORDHEADER}</div>
                         <div id={"RESETPASSWORDTEXT"} className={` text-[#667085]`}>{RESETPASSWORDTEXT}</div>
@@ -98,7 +95,6 @@ const ResetPassword = () => {
                     </div>
                 </div>
             </div>
-        </div>
 
     );
 };
