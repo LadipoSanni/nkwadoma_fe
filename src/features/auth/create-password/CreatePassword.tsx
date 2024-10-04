@@ -1,35 +1,54 @@
-import React from 'react';
+'use client'
+import React, { useState } from 'react';
 import AuthInputField from "@/reuseable/Input/AuthInputField";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { cabinetGrotesk } from "@/app/fonts";
+import PasswordCriteria from "@/component/PasswordCriteria/PasswordCriteria";
+import AuthButton from "@/reuseable/buttons/AuthButton";
 
 const CreatePassword = () => {
+    const [password, setPassword] = useState('');
+    const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const validatePassword = (password: string) => {
+        const criteria = [
+            password.length >= 8,
+            /[!@#$%^&*(),.?":{}|<>]/.test(password),
+            /[A-Z]/.test(password),
+            /[a-z]/.test(password)
+        ];
+        setCriteriaStatus(criteria);
+    };
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+        validatePassword(newPassword);
+    };
+
+    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setConfirmPassword(e.target.value);
+    };
+
     return (
         <section id={'create-password-block'}
-                 className={'bg-[#fff] rounded-[8px] flex w-[533px] h-[418px] py-6 px-5 flex-col  gap-[98px]'}>
-            <form id={'create-password-form'} className={'grid gap-[99px]'}>
+                 className={'bg-[#fff] rounded-[8px] flex w-[33.3125rem] h-[473px] py-6 px-5 flex-col  gap-[28px]'}>
+            <h1 id={'create-password-title'}
+                className={`${cabinetGrotesk.className} antialiased text-[#1A1A1A] font-[500] text-[30px] leading-[145%] `}>Create your password</h1>
+            <form id={'create-password-form'} className={'grid gap-[28px]'}>
                 <main id={'create-password-main'} className={'grid gap-[24.14px]'}>
-                    <div id={'create-password-header'} className={'grid gap-1'}>
-                        <h1 id={'create-password-title'}
-                            className={'text-[#101828] text-[18px] font-extrabold leading-[20px]'}>Create Password</h1>
-                        <p id={'create-password-welcome'}
-                           className={'text-[#667085] text-[16px] font-normal leading-[20px]'}>Welcome Henry</p>
-                    </div>
                     <div id={'create-password-inputs'} className={'grid gap-4'}>
                         <AuthInputField label={'Password'} id={'password'} type={'password'} endAdornment={'Show'}
-                                        placeholder={'password'}/>
+                                        placeholder={'Enter password'} value={password} onChange={handlePasswordChange} />
+                        <PasswordCriteria id={'createPasswordCriteria'} criteriaStatus={criteriaStatus} />
                         <AuthInputField label={'Confirm Password'} id={'confirmPassword'} type={'password'}
-                                        endAdornment={<VisibilityOffIcon id={`visibility-icon`} style={{
-                                            color: '#000000',
-                                            width: '16px',
-                                            height: '16px'
-                                        }}/>} placeholder={'Enter password'}/>
+                                        endAdornment={'show'} placeholder={'Enter password'} value={confirmPassword} onChange={handleConfirmPasswordChange} />
                     </div>
                 </main>
-                {/*<button*/}
-                {/*    id={'create-password-button'}*/}
-                {/*    className={'flex w-[328px] p-[12px_8px] justify-center items-center gap-[8px] rounded-[4px] bg-[#0D9B48]'}>*/}
-                {/*    <p id={'create-password-button-text'} className={'text-[#fff] text-[16px] font-normal leading-[20px]'}>Create Password</p>*/}
-                {/*</button>*/}
+                <AuthButton
+                    backgroundColor={criteriaStatus.every(Boolean) && password === confirmPassword ? '#0D9B48' : '#D0D5DD'}
+                    buttonText={'Create password'}
+                    disable={!criteriaStatus.every(Boolean) || password !== confirmPassword}  handleClick={() => {}} id={"createPasswordButton"} textColor={'#FFFFFF'} width={'100%'}/>
             </form>
         </section>
     );
