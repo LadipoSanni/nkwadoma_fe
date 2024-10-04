@@ -64,7 +64,7 @@ describe('Login Component', () => {
 
         const emailInput = screen.getByPlaceholderText('Enter email address');
         const passwordInput = screen.getByPlaceholderText('Enter password');
-        const loginButton = screen.getByRole('button', { name: /login/i });
+        const loginButton = screen.getByRole('button', { name: /log in/i });
 
         expect(loginButton).toBeDisabled();
 
