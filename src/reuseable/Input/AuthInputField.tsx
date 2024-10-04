@@ -2,6 +2,7 @@
 
 import React, { useState, InputHTMLAttributes } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import {inter} from "@/app/fonts";
 
 interface ReusableInputProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string;
@@ -19,7 +20,7 @@ const AuthInputField: React.FC<ReusableInputProps> = ({ label, id, endAdornment,
     const renderEndAdornment = () => {
         if (typeof endAdornment === 'string') {
             return (
-                <span id={`end-adornment-${id}`} style={{ color: '#000000', cursor: 'pointer' }} onClick={handleToggleVisibility}>
+                <span id={`end-adornment-${id}`} className={'text-[#BDC2C9] cursor-pointer text-[14px] font-normal leading-[22px]'} onClick={handleToggleVisibility}>
                     {isPasswordVisible ? 'Hide' : 'Show'}
                 </span>
             );
@@ -33,11 +34,11 @@ const AuthInputField: React.FC<ReusableInputProps> = ({ label, id, endAdornment,
     };
 
     return (
-        <div id={`custom-input-field-${id}`} className="flex flex-col gap-[6px]">
-            <label id={`label-${id}`} htmlFor={id} className="text-[#344054] text-[14px] font-medium leading-[20px]">
+        <div id={`custom-input-field-${id}`} className={`${inter.className} flex flex-col gap-[6px]`}>
+            <label id={`label-${id}`} htmlFor={id} className="text-[#101828] text-[14px] font-normal leading-[22px]">
                 {label}
             </label>
-            <div id={`input-container-${id}`} className="flex p-[10px_14px] items-center w-[493px] gap-2 rounded-[var(--radius-xs,_4px)] border border-[#D0D5DD] bg-[#FFF] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]">
+            <div id={`input-container-${id}`} className="flex p-[10px_14px] items-center w-full gap-2 rounded-[var(--radius-xs,_4px)] border border-[#D0D5DD] bg-[#FFF] ">
                 <input
                     id={id}
                     type={isPasswordVisible ? 'text' : type}
