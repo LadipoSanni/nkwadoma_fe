@@ -1,15 +1,15 @@
 import "@testing-library/react"
 import ResetPassword from "@/features/auth/reset-password/ResetPassword";
 import {fireEvent, queryByAttribute, render, screen} from "@testing-library/react";
-import {userEvent} from "@testing-library/user-event";
 
-type TestElement = Document | Element | Window | Node
+
+// type TestElement = Document | Element | Window | Node
 
 describe("test reset password", ()=> {
     const getById = queryByAttribute.bind(null, "id")
-    function hasInput ( element:TestElement , testValue: string) {
-        return screen.getByDisplayValue(testValue) === element
-    }
+    // function hasInput ( element:TestElement , testValue: string) {
+    //     return screen.getByDisplayValue(testValue) === element
+    // }
 
 
     it('should display reset password component', () => {
@@ -60,4 +60,7 @@ describe("test reset password", ()=> {
         fireEvent.change(emailInput, {target: {value : "Jay"}});
         expect(button);
     });
+    // it("should route to login when log in is clicked", ()=> {
+    //     const history = createMemoryHistory({initialEntries : ['/auth/login']})
+    // })
 })

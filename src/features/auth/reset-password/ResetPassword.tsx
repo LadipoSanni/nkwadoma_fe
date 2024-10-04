@@ -3,6 +3,9 @@ import React, {ChangeEvent, useEffect, useState} from 'react';
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInput from "@/reuseable/Input/AuthInputField"
 import Link from 'next/link'
+import {store} from "@/redux/store";
+import {setEmail} from "@/redux/slice/auth/Resetpassword";
+
 
 const ResetPassword = () => {
 
@@ -10,8 +13,9 @@ const ResetPassword = () => {
     const RESETPASSWORDTEXT: string = "Enter the email address you registered with, we will send you a link to create a new password";
     const EMAILHEADER: string = "Email address";
     // const [hidePassword, setHidePassword] = useState(true)
-    const [email, setEmail] = useState('')
+    const [email, setEmailElement] = useState('')
     const [disableButton, setDisableButton] = useState(true)
+    // const router = useRouter()
 
     useEffect(() => {
         if (email === ''){
@@ -19,12 +23,14 @@ const ResetPassword = () => {
         }
     }, [email]);
     const handleReset = () => {
+      // router.replace('/auth/reset-password/step-2')
+        store.dispatch(setEmail(email))
     }
 
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement| HTMLInputElement > ) => {
         event.stopPropagation()
         setDisableButton(false)
-        setEmail(event.currentTarget.value)
+        setEmailElement(event.currentTarget.value)
     }
 
     // const changePasswordVisibility = () =>{
@@ -57,10 +63,12 @@ const ResetPassword = () => {
                         </div>
                     </div>
                     <div id={"authButtonContainer"} className={`w-[100%]`}>
-                        <AuthButton disable={disableButton} backgroundColor={'#0d9b48'} textColor={"white"}
-                                    id={"resetPasswordButton"}
-                                    buttonText={"Submit email"} width={"inherit"}
-                                    handleClick={handleReset}></AuthButton>
+                        <Link href={'/auth/reset-password/step-2'} className={`w-[100%]`}>
+                            <AuthButton disable={disableButton} backgroundColor={'#0d9b48'} textColor={"white"}
+                                        id={"resetPasswordButton"}
+                                        buttonText={"Submit email"} width={"inherit"}
+                                        handleClick={handleReset}></AuthButton>
+                        </Link>
                         <div className={`flex gap-2 place-self-center place-content-center  mt-1 `}>
                             <div className={`text-[#667085] text-sm `}>Remember your password?</div>
                             <Link href="/auth/login">
