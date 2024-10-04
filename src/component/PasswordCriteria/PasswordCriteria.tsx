@@ -1,5 +1,6 @@
 import React from 'react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import {inter} from "@/app/fonts";
 
 interface PasswordCriteriaProps {
     criteriaStatus: boolean[];
@@ -15,7 +16,7 @@ const PasswordCriteria: React.FC<PasswordCriteriaProps> = ({criteriaStatus, id}:
     ];
 
     return (
-        <div id={`${id}-container`} className={'flex items-center gap-5 py-0 px-1'}>
+        <div id={`${id}-container`} className={`${inter.className} flex items-center gap-5 py-0 px-1`}>
             <main id="password-criteria-main-1" className={'grid gap-3'}>
                 {criteria.slice(0, 2).map((text, index) => (
                     <div key={index} id={`password-criteria-item-${index}`} className={'flex gap-2 items-center'}>

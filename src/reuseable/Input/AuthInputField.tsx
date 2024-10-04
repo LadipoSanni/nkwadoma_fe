@@ -42,7 +42,7 @@ const AuthInputField: React.FC<ReusableInputProps> = ({ label, id, endAdornment,
                 <input
                     id={id}
                     type={isPasswordVisible ? 'text' : type}
-                    className="w-full bg-transparent text-[#101828] focus:outline-none focus:border-none"
+                    className={`${inter.className} w-full bg-transparent text-[#101828] text-[14px] font-normal leading-[22px] focus:outline-none focus:border-none`}
                     {...props}
                 />
                 {renderEndAdornment()}
