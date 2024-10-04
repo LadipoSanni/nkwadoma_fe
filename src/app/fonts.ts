@@ -1,4 +1,4 @@
-import { IBM_Plex_Sans } from 'next/font/google';
+import { IBM_Plex_Sans, Inter} from 'next/font/google';
 import localFont from "next/font/local";
 
 
@@ -9,6 +9,12 @@ export const ibmPlexSans = IBM_Plex_Sans({
     weight: '400',
 });
 
+export const inter = Inter({
+    subsets: ['latin'],
+    display: 'swap',
+    style: 'normal',
+    weight: '400',
+});
 
 export const cabinetGrotesk = localFont({
     src: "./fonts/CabinetGrotesk-Medium.woff",
