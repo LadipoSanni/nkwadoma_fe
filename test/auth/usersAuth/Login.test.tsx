@@ -4,8 +4,6 @@ import Login from '@/features/auth/usersAuth/login/Login';
 import {userEvent} from "@testing-library/user-event";
 import * as React from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const {expect, describe, it} = require("@jest/globals");
 
 describe('Login Component', () => {
     it("should test that login component does not exist", () => {
