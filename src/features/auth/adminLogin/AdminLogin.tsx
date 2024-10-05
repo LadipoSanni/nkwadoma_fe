@@ -25,12 +25,10 @@ const AdminLogin: React.FC = () => {
     return (
         <div className={` flex flex-col justify-center h-screen bg-white items-center`}>
             <p className={`text-[#0D9B48] font-medium text-2xl font-sans`}>Meedl</p>
-            {/*    className="md:max-w-md">*/}
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-10 md:max-w-md w-full">
                 <h1 className=" font-sarif font-medium text-[#0F1624] text-3xl flex justify-center items-center md:text-3xl leading-5 ">Welcome
                     back, Admin</h1>
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
                      className="pt-10 space-y-5">
                     <div data-testid={`emailId`} id={`emailId`}>
