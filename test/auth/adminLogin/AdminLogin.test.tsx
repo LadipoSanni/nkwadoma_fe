@@ -1,11 +1,9 @@
-import {render, screen, fireEvent, queryByAttribute} from '@testing-library/react';
+import {fireEvent, queryByAttribute, render, screen} from '@testing-library/react';
 import '@testing-library/react';
 import {userEvent} from "@testing-library/user-event";
 import * as React from "react";
 import AdminLogin from "@/features/auth/adminLogin/AdminLogin";
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const {expect, describe, it} = require("@jest/globals");
 
 describe('Login Component', () => {
     it("should test that login component does not exist", () => {
@@ -17,7 +15,7 @@ describe('Login Component', () => {
     })
 
     it('should have the email input field', () => {
-        render(<AdminLogin />);
+        render(<AdminLogin/>);
 
         const emailInput = screen.getByTestId("loginEmailId");
         expect(emailInput).toBeInTheDocument();
@@ -25,7 +23,7 @@ describe('Login Component', () => {
 
 
     it('should have the password input field', () => {
-        render(<AdminLogin />);
+        render(<AdminLogin/>);
 
         const password = screen.getByTestId("password");
         expect(password).toBeInTheDocument();
@@ -45,11 +43,11 @@ describe('Login Component', () => {
     });
 
     it('should test that login button is not disabled after email and password has been entered', async () => {
-        render(<AdminLogin />);
+        render(<AdminLogin/>);
 
         const emailInput = screen.getByPlaceholderText('Enter email address');
         const passwordInput = screen.getByPlaceholderText('Enter password');
-        const loginButton = screen.getByRole('button', { name: /log in/i });
+        const loginButton = screen.getByRole('button', {name: /log in/i});
 
         expect(loginButton).toBeDisabled();
 
@@ -60,16 +58,16 @@ describe('Login Component', () => {
     });
 
     it('enables the login button after email and password have been entered', () => {
-        render(<AdminLogin />);
+        render(<AdminLogin/>);
 
         const emailInput = screen.getByPlaceholderText('Enter email address');
         const passwordInput = screen.getByPlaceholderText('Enter password');
-        const loginButton = screen.getByRole('button', { name: /log in/i });
+        const loginButton = screen.getByRole('button', {name: /log in/i});
 
         expect(loginButton).toBeDisabled();
 
-        fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
-        fireEvent.change(passwordInput, { target: { value: 'password123' } });
+        fireEvent.change(emailInput, {target: {value: 'user@example.com'}});
+        fireEvent.change(passwordInput, {target: {value: 'password123'}});
 
         expect(loginButton).toBeEnabled();
     });
