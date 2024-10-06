@@ -1,10 +1,9 @@
-"use client"
+'use client'
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInput from "@/reuseable/Input/AuthInputField"
 import Link from 'next/link'
-import {store} from "@/redux/store";
-import {setEmail} from "@/redux/slice/auth/Resetpassword";
+// import { cookies } from 'next/headers'
 
 
 const ResetPassword = () => {
@@ -13,24 +12,25 @@ const ResetPassword = () => {
     const RESETPASSWORDTEXT: string = "Enter the email address you registered with, we will send you a link to create a new password";
     const EMAILHEADER: string = "Email address";
     // const [hidePassword, setHidePassword] = useState(true)
-    const [emailElement, setEmailElementElement] = useState('')
+    const [email, setEmail] = useState('')
     const [disableButton, setDisableButton] = useState(true)
     // const router = useRouter()
+    // const cookieStore = cookies()
 
     useEffect(() => {
-        if (emailElement === ''){
+        if (email === ''){
             setDisableButton(true)
         }
-    }, [emailElement]);
+    }, [email]);
     const handleReset = () => {
       // router.replace('/auth/reset-password/step-2')
-        store.dispatch(setEmail(emailElement))
+      //   cookieStore.set('resetPasswordEmail', email)?
     }
 
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement| HTMLInputElement > ) => {
         event.stopPropagation()
         setDisableButton(false)
-        setEmailElementElement(event.currentTarget.value)
+        setEmail(event.currentTarget.value)
     }
 
     // const changePasswordVisibility = () =>{
@@ -59,7 +59,7 @@ const ResetPassword = () => {
                         id="buttonsContainer"
                         className={`h-[30%] w-[100%] md:h-auto py-1 md:  md:mt-1 grid gap-4 md:grid md:gap-1 `}>
                         <div className={`w-[100%] h-[5rem] grid gap-0 `}>
-                            <AuthInput value={emailElement} data-testid={'resetEmailInput'} label={EMAILHEADER} id={'resetEmailInput'} onChange={handleChange} placeholder={'Enter email address'}></AuthInput>
+                            <AuthInput value={email} data-testid={'resetEmailInput'} label={EMAILHEADER} id={'resetEmailInput'} onChange={handleChange} placeholder={'Enter email address'}></AuthInput>
                         </div>
                     </div>
                     <div id={"authButtonContainer"} className={`w-[100%]`}>

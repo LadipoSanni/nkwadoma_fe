@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import ResetPassword from "@/features/auth/reset-password/ResetPassword";
 

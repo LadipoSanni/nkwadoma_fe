@@ -1,17 +1,15 @@
-"use client"
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import AuthEmail from "@/reuseable/modals/AuthEmail";
-import {useAppSelector} from "@/redux/store";
+import { cookies} from "next/headers"
 
 const Step2 = () => {
-    const userResetPasswordInput = useAppSelector(state => state.resetPassword.userEmail)
-    const [email, setEmail] = useState(` ${userResetPasswordInput}`)
-
+    const cookie = cookies()
+    const emailInput : string | undefined = cookie.get("resetPasswordEmail")?.value;
 
 
     return (
-        <div className={`w-[65%] h-[75%]`}>
-            <AuthEmail email={email} header='Email sent'/>
+        <div className={`md:w-[55%] md:h-[70%] w-[98%] `}>
+            <AuthEmail email={emailInput} header='Email sent'/>
         </div>
     );
 };
