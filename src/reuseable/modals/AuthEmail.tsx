@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/legacy/image'
+import Link from "next/link";
 
 interface props {
     header?: string,
@@ -38,11 +39,17 @@ const AuthEmail = ({header, text, email}: props) => {
                     {text}
                 </div>
                     :
-                    <div className={`text-xs text-[#6c7685] w-[80%]`}>
-                        We’ve sent a link to create a new password to<div className={`font-semibold text-[#6c7685] `}>{email} yuu</div>. If it’s not in your inbox, check your spam folder.
+                    <div className={`text-xs text-[#6c7685] flex leading-3 w-[80%]`}>
+                        We’ve sent a link to create a new password to<p className={`font-semibold bg-red-50 h-fit text-[#6c7685] `}>{email}</p>. If it’s not in your inbox, check your spam folder.
                     </div>
 
                 }
+            </div>
+            <div>
+                <Link href="/auth/login">
+                    <div  className={`text-[#0d9b48] text-sm  `}>Back to Log in</div>
+                    <hr style={{backgroundColor: '#0d9b48'}} className={`h-[2px]`}/>
+                </Link>
             </div>
 
         </div>

@@ -13,24 +13,24 @@ const ResetPassword = () => {
     const RESETPASSWORDTEXT: string = "Enter the email address you registered with, we will send you a link to create a new password";
     const EMAILHEADER: string = "Email address";
     // const [hidePassword, setHidePassword] = useState(true)
-    const [email, setEmailElement] = useState('')
+    const [emailElement, setEmailElementElement] = useState('')
     const [disableButton, setDisableButton] = useState(true)
     // const router = useRouter()
 
     useEffect(() => {
-        if (email === ''){
+        if (emailElement === ''){
             setDisableButton(true)
         }
-    }, [email]);
+    }, [emailElement]);
     const handleReset = () => {
       // router.replace('/auth/reset-password/step-2')
-        store.dispatch(setEmail(email))
+        store.dispatch(setEmail(emailElement))
     }
 
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement| HTMLInputElement > ) => {
         event.stopPropagation()
         setDisableButton(false)
-        setEmailElement(event.currentTarget.value)
+        setEmailElementElement(event.currentTarget.value)
     }
 
     // const changePasswordVisibility = () =>{
@@ -59,7 +59,7 @@ const ResetPassword = () => {
                         id="buttonsContainer"
                         className={`h-[30%] w-[100%] md:h-auto py-1 md:  md:mt-1 grid gap-4 md:grid md:gap-1 `}>
                         <div className={`w-[100%] h-[5rem] grid gap-0 `}>
-                            <AuthInput value={email} data-testid={'resetEmailInput'} label={EMAILHEADER} id={'resetEmailInput'} onChange={handleChange} placeholder={'Enter email address'}></AuthInput>
+                            <AuthInput value={emailElement} data-testid={'resetEmailInput'} label={EMAILHEADER} id={'resetEmailInput'} onChange={handleChange} placeholder={'Enter email address'}></AuthInput>
                         </div>
                     </div>
                     <div id={"authButtonContainer"} className={`w-[100%]`}>
