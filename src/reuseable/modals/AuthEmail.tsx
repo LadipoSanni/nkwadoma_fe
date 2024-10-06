@@ -1,6 +1,7 @@
+'use client'
 import React from 'react';
 import Image from 'next/legacy/image'
-import Link from "next/link";
+import { useRouter } from 'next/navigation'
 
 interface props {
     header?: string,
@@ -10,12 +11,13 @@ interface props {
 
 const AuthEmail = ({header, text, email}: props) => {
 
-    console.log("email: ", email)
+    const router = useRouter()
+
     return (
         <div id={'authEmailModal'} data-testid={'authEmailModal'}
-             className={`w-[100%] h-[100%] px-3 py-3 rounded-md bg-white grid grid-rows-3 border border-slate-200`}
+             className={`w-[100%] h-[100%] px-3 py-3 rounded-md bg-white grid grid-rows-3 place-self-center  border border-slate-200`}
         >
-            <div id={'successIconContainer'} data-testid={'successIconContainer'}>
+            <div id={'successIconContainer'} className={`bg-purple-200`} data-testid={'successIconContainer'}>
                 <Image
                  id={'successIcon'}
                  data-testid={'successIcon'}
@@ -39,17 +41,18 @@ const AuthEmail = ({header, text, email}: props) => {
                     {text}
                 </div>
                     :
-                    <div className={`text-xs text-[#6c7685] flex leading-3 w-[80%]`}>
-                        We’ve sent a link to create a new password to<p className={`font-semibold bg-red-50 h-fit text-[#6c7685] `}>{email}</p>. If it’s not in your inbox, check your spam folder.
+                    <div className={`text-xs inline-flex text-[#6c7685]  leading-3 w-[80%]`}>
+                        We’ve sent a link to create a new password to
+                        {email}. If it’s not in your inbox, check your spam folder.
                     </div>
 
                 }
             </div>
-            <div>
-                <Link href="/auth/login">
+            <div className={`h-[70%] bg-red-300 grid place-items-end`} id={'backTOLogin'}>
+                <div className={`w-fit`} onClick={() => router.push("/auth/login")}>
                     <div  className={`text-[#0d9b48] text-sm  `}>Back to Log in</div>
-                    <hr style={{backgroundColor: '#0d9b48'}} className={`h-[2px]`}/>
-                </Link>
+                    <hr style={{backgroundColor: '#0d9b48'}} className={`h-[2px] `}/>
+                </div>
             </div>
 
         </div>

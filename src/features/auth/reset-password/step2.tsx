@@ -5,12 +5,12 @@ import {useAppSelector} from "@/redux/store";
 
 const Step2 = () => {
     const userResetPasswordInput = useAppSelector(state => state.resetPassword.userEmail)
-    const [email, setEmail] = useState(userResetPasswordInput)
+    const [email, setEmail] = useState(` ${userResetPasswordInput}`)
 
 
 
     return (
-        <div className={`w-[70%] h-[80%]`}>
+        <div className={`w-[65%] h-[75%]`}>
             <AuthEmail email={email} header='Email sent'/>
         </div>
     );
