@@ -1,9 +1,9 @@
 import React from 'react';
-import AdminLogin from "@/features/auth/adminLogin/Index";
+import Step2 from "@/features/auth/usersAuth/reset-password/step2";
 
 const Page = () => {
     return (
-        <AdminLogin/>
+       <Step2/>
     );
 };
 
