@@ -15,7 +15,7 @@ describe('test step 3', () => {
         render(
             <Step3/>
         )
-        expect(screen.getByTestId("newPasswordOnResetPassword"))
-        expect(screen.getByTestId("confirmPasswordOnResetPassword"))
+        expect(screen.getByTestId("resetNewPasswordInput"))
+        expect(screen.getByTestId("resetConfirmPasswordInput"))
     })
 });

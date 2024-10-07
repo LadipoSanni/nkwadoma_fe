@@ -12,57 +12,57 @@ const Step3 = () => {
 
 
     useEffect(() => {
-        if (newPassword && confirmPassword === ''){
+        if (newPassword === "" && confirmPassword === "") {
             setDisableButton(true)
+        }
+        if (newPassword.length >= 1 && confirmPassword.length >= 1) {
+            setDisableButton(false)
         }
     }, [confirmPassword, newPassword]);
 
-    const changePassword = () =>{
+    const changePassword = () => {
 
     }
-    const handleChangeNewPassword = (event: ChangeEvent<HTMLTextAreaElement| HTMLInputElement > ) => {
+    const handleChangeNewPassword = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         event.stopPropagation()
-        setDisableButton(false)
-        setNewPassword(event.currentTarget.value)
+        setNewPassword(event.target.value)
     }
-    const handleChangeConfirmPassword = (event: ChangeEvent<HTMLTextAreaElement| HTMLInputElement > ) => {
+    const handleChangeConfirmPassword = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         event.stopPropagation()
-        setDisableButton(false)
-        setConfirmPassword(event.currentTarget.value)
+        setConfirmPassword(event.target.value)
     }
-
-
 
 
     return (
         <div
             id={'Step3Container'}
             data-testid={'Step3Container'}
-            className={` py-4 border border-slate-200 px-3 w-[90vw] rounded-md h-[40vh] bg-white grid md:px-2 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}
+            className={` py-4 border border-slate-200 px-3 w-[90vw] rounded-md h-[35vh] bg-white grid md:px-2 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}
         >
             <div
                 id={"resetPassword3StepInnerContainer"}
-                className={`w-[98%] md:w-[96%] grid grid-rows-3 content-between  h-[98%] md:h-[90%]`}>
-                <div id="resetPassword3HeaderContainer" className={`h-fit grid grid-2 md:h-fit md:grid md:gap-0 `}>
-                    <div id={"RESETPASSWORDStep3HEADER"} className={`font-semi-bold text-2xl `}>Reset your password</div>
-                </div>
-                <div
-                    id="buttonsContainer"
-                    className={`h-[30%] w-[100%] md:h-auto py-1 md:   grid gap-4 md:grid md:gap-1 `}>
-                    <div className={`w-[100%] h-[5rem] grid gap-0 `}>
-                        <AuthInput value={newPassword} data-testid={'resetEmailInput'} label={'New password'}
-                                   id={'resetPasswordInput'} onChange={handleChangeNewPassword}
-                                   placeholder={'Enter password'}></AuthInput>
-                        <AuthInput value={confirmPassword} data-testid={'resetEmailInput'} label={'Confirm password'}
-                                   id={'resetPasswordConfirmInput'} onChange={handleChangeConfirmPassword}
-                                   placeholder={'Enter password'}></AuthInput>
+                className={`w-[98%] md:w-[92%] grid grid-cols-1 gap-2 md:grid md:grid-cols-1 md:gap-0 content-between  h-[98%] md:h-[98%]`}>
+                <div id="resetPassword3HeaderContainer" className={`h-fit grid grid-2 md:h-[2rem] md:grid md:gap-0 `}>
+                    <div id={"RESETPASSWORDStep3HEADER"} className={`font-semi-bold text-2xl  `}>Reset your password
                     </div>
                 </div>
-                <div id={"authButtonContainer"} className={`w-[100%]`}>
+                <div className={`w-[100%] h-[5rem] grid gap-2 mb-16 md:mb-16 `}>
+                    <AuthInput value={newPassword} type={'email'} data-testid={'resetNewPasswordInput'}
+                               label={'New password'}
+                               id={'resetNewPasswordInput'} onChange={handleChangeNewPassword}
+                               endAdornment={'Hide'}
+                               placeholder={'Enter password'}></AuthInput>
+                    <AuthInput value={confirmPassword} type={'password'} data-testid={'resetConfirmPasswordInput'}
+                               label={'Confirm password'}
+                               id={'resetPasswordConfirmInput'} onChange={handleChangeConfirmPassword}
+                               endAdornment={'Hide'}
+                               placeholder={'Enter password'}></AuthInput>
+                </div>
+                <div className={`w-[100%]`}>
                     <Link href={'/auth/reset-password/step-2'} className={`w-[100%]`}>
                         <AuthButton disable={disableButton} backgroundColor={'#0d9b48'} textColor={"white"}
                                     id={"resetPasswordButton"}
-                                    buttonText={"Submit email"} width={"inherit"}
+                                    buttonText={"Reset password"} width={"inherit"}
                                     handleClick={changePassword}></AuthButton>
                     </Link>
                 </div>
