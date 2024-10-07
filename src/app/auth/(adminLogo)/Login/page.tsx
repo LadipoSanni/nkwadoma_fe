@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminLogin from "@/features/auth/adminLogin";
+import AdminLogin from '@/features/auth/adminLogin/Index';
 
 const Page = () => {
     return (
