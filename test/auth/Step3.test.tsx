@@ -1,6 +1,6 @@
 import "@testing-library/react"
 import {render, screen} from "@testing-library/react";
-import Step3 from "@/features/auth/reset-password/Step3";
+import Step3 from "@/features/auth/usersAuth/reset-password/Step3";
 
 describe('test step 3', () => {
 
