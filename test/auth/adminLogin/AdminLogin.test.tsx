@@ -8,16 +8,16 @@ import AdminLogin from "@/features/auth/adminLogin/AdminLogin";
 describe('Login Component', () => {
     it("should test that login component does not exist", () => {
         const {queryByTestId} = render(
-            <div></div>
+            <AdminLogin/>
         );
-        const login = queryByTestId('parentDivId');
-        expect(login).not.toBeInTheDocument();
+        const login = queryByTestId('superAdminLoginPage');
+        expect(login).toBeInTheDocument();
     })
 
     it('should have the email input field', () => {
         render(<AdminLogin/>);
 
-        const emailInput = screen.getByTestId("loginEmailId");
+        const emailInput = screen.getByTestId("adminEmail");
         expect(emailInput).toBeInTheDocument();
     });
 
@@ -25,7 +25,7 @@ describe('Login Component', () => {
     it('should have the password input field', () => {
         render(<AdminLogin/>);
 
-        const password = screen.getByTestId("password");
+        const password = screen.getByTestId("AdminPassword");
         expect(password).toBeInTheDocument();
     });
 
@@ -35,11 +35,11 @@ describe('Login Component', () => {
         const getById = queryByAttribute.bind(null, "id")
         const buttonComponent = render(<AdminLogin/>);
 
-        expect(screen.getByTestId('loginDivId')).toBeInTheDocument();
-        expect(screen.getByTestId('emailAndPasswordId')).toBeInTheDocument();
-        expect(screen.getByTestId('emailId')).toBeInTheDocument();
-        expect(screen.getByTestId('passwordId')).toBeInTheDocument();
-        expect(getById(buttonComponent.container, "loginButton")).toBeInTheDocument()
+        expect(screen.getByTestId('adminEmail')).toBeInTheDocument();
+        expect(screen.getByTestId('superAdminEmailAndPasswordId')).toBeInTheDocument();
+        expect(screen.getByTestId('adminEmail')).toBeInTheDocument();
+        expect(screen.getByTestId('AdminPassword')).toBeInTheDocument();
+        expect(getById(buttonComponent.container, "SuperAdminAuthButtonContainer")).toBeInTheDocument()
     });
 
     it('should test that login button is not disabled after email and password has been entered', async () => {
