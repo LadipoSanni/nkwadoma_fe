@@ -50,7 +50,7 @@ const ResetPassword = () => {
             >
                 <div
                     id={"resetPasswordInnerContainer"}
-                    className={`w-[98%] md:w-[96%] grid grid-cols-1 content-between  h-[98%] md:h-[90%]`}>
+                    className={`w-[98%] md:w-[86%] grid grid-cols-1 content-between  h-[98%] md:h-[90%]`}>
                     <div id="resetPasswordHeaderContainer" className={`h-fit grid grid-2 md:h-fit md:grid md:gap-0 `}>
                         <div id={"RESETPASSWORDHEADER"} className={`font-semi-bold text-2xl `}>{RESETPASSWORDHEADER}</div>
                         <div id={"RESETPASSWORDTEXT"} className={` text-[#667085] text-xs w-[96%]`}>{RESETPASSWORDTEXT}</div>

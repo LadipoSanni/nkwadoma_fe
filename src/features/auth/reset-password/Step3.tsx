@@ -37,7 +37,7 @@ const Step3 = () => {
         <div
             id={'Step3Container'}
             data-testid={'Step3Container'}
-            className={` py-4 border border-slate-200 px-3 w-[90vw] rounded-md h-[35vh] bg-white grid md:px-2 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}
+            className={` py-4 border border-slate-200 px-3 w-[90vw] rounded-md h-[35vh] bg-white grid md:px-2 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[86%] md:h-[98%] md:rounded`}
         >
             <div
                 id={"resetPassword3StepInnerContainer"}
@@ -47,7 +47,7 @@ const Step3 = () => {
                     </div>
                 </div>
                 <div className={`w-[100%] h-[5rem] grid gap-2 mb-16 md:mb-16 `}>
-                    <AuthInput value={newPassword} type={'email'} data-testid={'resetNewPasswordInput'}
+                    <AuthInput value={newPassword} type={'password'} data-testid={'resetNewPasswordInput'}
                                label={'New password'}
                                id={'resetNewPasswordInput'} onChange={handleChangeNewPassword}
                                endAdornment={'Hide'}
