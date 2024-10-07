@@ -2,7 +2,7 @@ import {fireEvent, queryByAttribute, render, screen} from '@testing-library/reac
 import '@testing-library/react';
 import {userEvent} from "@testing-library/user-event";
 import * as React from "react";
-import AdminLogin from "@/features/auth/adminLogin/AdminLogin";
+import AdminLogin from "@/features/auth/adminLogin/Index";
 
 
 describe('Login Component', () => {

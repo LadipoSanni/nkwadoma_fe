@@ -1,5 +1,5 @@
 import React from 'react';
-import ViewAllLoanRequest from "@/pages/portFolioManager/loan/ViewAllLoanRequest";
+import ViewAllLoanRequest from "@/pages/portFolioManager/loan/Index";
 
 const Page = () => {
     return (
