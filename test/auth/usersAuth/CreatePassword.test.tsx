@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import CreatePasswordForm from '@/app/auth/create-password/page';
+import CreatePasswordForm from '@/app/auth/usersAuth/create-password/page';
 
 describe('CreatePasswordForm', () => {
     test('renders Create Password form correctly', () => {

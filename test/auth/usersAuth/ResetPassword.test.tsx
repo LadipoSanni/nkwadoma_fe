@@ -1,5 +1,5 @@
 import "@testing-library/react"
-import ResetPassword from "@/features/auth/reset-password/ResetPassword";
+import ResetPassword from "@/features/auth/usersAuth/reset-password/ResetPassword";
 import {fireEvent, queryByAttribute, render, screen} from "@testing-library/react";
 
 
