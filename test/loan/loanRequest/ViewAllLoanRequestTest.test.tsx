@@ -4,9 +4,6 @@ import "@testing-library/react";
 // import ViewAllLoanRequest from "@/app/(Admin)/loan/(selectedLoan)/loanRequest/ViewAllLoanRequest";
 // import {LoanRequestTable} from "@/app/(Admin)/loan/(selectedLoan)/loanRequest/LoanRequestMockData";
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const {expect, describe, it} = require("@jest/globals");
-
 
 describe("ViewAllLoanRequest", ()=>{
     it("should test that viewAllLoanRequest does not exist", ()=>{

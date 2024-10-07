@@ -1,8 +1,8 @@
 "use client"
 import { useRouter } from 'next/navigation'
 import React from "react";
-import {LoanRequestTable} from "@/utils/LoanRequestMockData"
-import LoanEmptyState from "@/reuseable/emptyStates/LoanEmptyState";
+import {LoanRequestTable} from "@/utils/LoanRequestMockData/Index"
+import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import DynamicTable from "@/reuseable/table/LoanProductTable";
 
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import Login from "@/features/auth/login/Login";
+import AdminLogin from "@/features/auth/adminLogin/Index";
 
 const Page = () => {
     return (
-            <Login/>
+        <AdminLogin/>
     );
 };
 
