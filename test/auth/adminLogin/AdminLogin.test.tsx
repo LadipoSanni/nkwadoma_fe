@@ -1,33 +1,31 @@
-import {render, screen, fireEvent, queryByAttribute} from '@testing-library/react';
+import {fireEvent, queryByAttribute, render, screen} from '@testing-library/react';
 import '@testing-library/react';
-import Login from '@/features/auth/login/Login';
 import {userEvent} from "@testing-library/user-event";
 import * as React from "react";
+import AdminLogin from "@/features/auth/adminLogin/AdminLogin";
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const {expect, describe, it} = require("@jest/globals");
 
 describe('Login Component', () => {
     it("should test that login component does not exist", () => {
         const {queryByTestId} = render(
-            <div></div>
+            <AdminLogin/>
         );
-        const login = queryByTestId('parentDivId');
-        expect(login).not.toBeInTheDocument();
+        const login = queryByTestId('superAdminLoginPage');
+        expect(login).toBeInTheDocument();
     })
 
     it('should have the email input field', () => {
-        render(<Login />);
+        render(<AdminLogin/>);
 
-        const emailInput = screen.getByTestId("loginEmailId");
+        const emailInput = screen.getByTestId("adminEmail");
         expect(emailInput).toBeInTheDocument();
     });
 
 
     it('should have the password input field', () => {
-        render(<Login />);
+        render(<AdminLogin/>);
 
-        const password = screen.getByTestId("password");
+        const password = screen.getByTestId("AdminPassword");
         expect(password).toBeInTheDocument();
     });
 
@@ -35,21 +33,21 @@ describe('Login Component', () => {
     it('should render login component correctly', () => {
 
         const getById = queryByAttribute.bind(null, "id")
-       const buttonComponent = render(<Login/>);
+        const buttonComponent = render(<AdminLogin/>);
 
-        expect(screen.getByTestId('loginDivId')).toBeInTheDocument();
-        expect(screen.getByTestId('emailAndPasswordId')).toBeInTheDocument();
-        expect(screen.getByTestId('emailId')).toBeInTheDocument();
-        expect(screen.getByTestId('passwordId')).toBeInTheDocument();
-        expect(getById(buttonComponent.container, "loginButton")).toBeInTheDocument()
+        expect(screen.getByTestId('adminEmail')).toBeInTheDocument();
+        expect(screen.getByTestId('superAdminEmailAndPasswordId')).toBeInTheDocument();
+        expect(screen.getByTestId('adminEmail')).toBeInTheDocument();
+        expect(screen.getByTestId('AdminPassword')).toBeInTheDocument();
+        expect(getById(buttonComponent.container, "SuperAdminAuthButtonContainer")).toBeInTheDocument()
     });
 
     it('should test that login button is not disabled after email and password has been entered', async () => {
-        render(<Login />);
+        render(<AdminLogin/>);
 
         const emailInput = screen.getByPlaceholderText('Enter email address');
         const passwordInput = screen.getByPlaceholderText('Enter password');
-        const loginButton = screen.getByRole('button', { name: /login/i });
+        const loginButton = screen.getByRole('button', {name: /log in/i});
 
         expect(loginButton).toBeDisabled();
 
@@ -60,16 +58,16 @@ describe('Login Component', () => {
     });
 
     it('enables the login button after email and password have been entered', () => {
-        render(<Login />);
+        render(<AdminLogin/>);
 
         const emailInput = screen.getByPlaceholderText('Enter email address');
         const passwordInput = screen.getByPlaceholderText('Enter password');
-        const loginButton = screen.getByRole('button', { name: /login/i });
+        const loginButton = screen.getByRole('button', {name: /log in/i});
 
         expect(loginButton).toBeDisabled();
 
-        fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
-        fireEvent.change(passwordInput, { target: { value: 'password123' } });
+        fireEvent.change(emailInput, {target: {value: 'user@example.com'}});
+        fireEvent.change(passwordInput, {target: {value: 'password123'}});
 
         expect(loginButton).toBeEnabled();
     });
