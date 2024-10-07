@@ -58,7 +58,7 @@ const Login: React.FC = () => {
                         </AuthButton>
                     </div>
                     <p className="flex items-center justify-center text-sm text-[#101828] leading-4">
-                        Forgot Password? <a href="/auth/reset-password"
+                        Forgot Password? <a href="/auth/usersAuth/reset-password"
                                             className="font-medium text-[#0D9B48] underline">Reset it
                         here</a>
                     </p>

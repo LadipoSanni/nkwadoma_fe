@@ -1,7 +1,7 @@
 import "@testing-library/react"
 
 import {render, screen} from "@testing-library/react";
-import LoanEmptyState from "@/reuseable/emptyStates/LoanEmptyState";
+import LoanEmptyState from "@/reuseable/emptyStates/Index";
 
 
 describe("LoanEmptyState component", () => {
