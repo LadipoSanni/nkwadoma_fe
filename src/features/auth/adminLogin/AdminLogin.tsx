@@ -23,26 +23,26 @@ const AdminLogin: React.FC = () => {
     const isFormValid = email && password
 
     return (
-        <div className={` flex flex-col justify-center h-screen bg-white items-center`}>
+        <div className={` flex flex-col justify-center h-screen bg-white items-center`} id={`superAdminLoginPage`}  data-testid="superAdminLoginPage">
             <p className={`text-[#0D9B48] font-medium text-2xl font-sans`}>Meedl</p>
-            <div data-testid={`loginDivId`} id={`loginDivId`}
+            <div data-testid={`superAdminLoginDivId`} id={`superAdminLoginDivId`}
                  className="px-4 py-10 md:max-w-md w-full">
                 <h1 className=" font-sarif font-medium text-[#0F1624] text-3xl flex justify-center items-center md:text-3xl leading-5 ">Welcome
                     back, Admin</h1>
-                <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
+                <div data-testid={`superAdminEmailAndPasswordId`} id={`superAdminEmailAndPasswordId`}
                      className="pt-10 space-y-5">
-                    <div data-testid={`emailId`} id={`emailId`}>
-                        <AuthInputField label={"Email"} id={`email`}
-                                        data-testid={`loginEmailId`}
+                    <div data-testid={`superAdminEmailId`} id={`superAdminEmailId`}>
+                        <AuthInputField label={"Email"} id={`adminEmail`}
+                                        data-testid={`adminEmail`}
                                         placeholder={`Enter email address`}
                                         type="email"
                                         value={email}
                                         onChange={handleEmail}
                         />
                     </div>
-                    <div data-testid={`passwordId`} id={`passwordId`}>
-                        <AuthInputField label={`Password`} id={'password'}
-                                        data-testid={`password`}
+                    <div data-testid={`SuperAdminPasswordId`} id={`SuperAdminPasswordId`}>
+                        <AuthInputField label={`Password`} id={'AdminPassword'}
+                                        data-testid={`AdminPassword`}
                                         type={'password'}
                                         placeholder={`Enter password`}
                                         endAdornment={`show`}
@@ -50,9 +50,9 @@ const AdminLogin: React.FC = () => {
                                         onChange={handlePassword}>
                         </AuthInputField>
                     </div>
-                    <div id={"authButtonContainer"} className={`w-[100%]`}>
+                    <div id={"SuperAdminAuthButtonContainer"} className={`w-[100%]`}>
                         <AuthButton disable={!isFormValid} backgroundColor={'#0d9b48'} textColor={"white"}
-                                    id={"loginButton"}
+                                    id={"SuperAdminAuthButton"}
                                     buttonText={"Log in"} width={"inherit"}
                                     handleClick={handleReset}>
                         </AuthButton>
