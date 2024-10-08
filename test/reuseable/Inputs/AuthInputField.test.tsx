@@ -30,4 +30,20 @@ describe('CustomInputField', () => {
 
         expect(input).toHaveAttribute('type', 'text');
     });
+
+    test('renders the error message when provided', () => {
+        const errorMessage = 'Must contain one special character';
+        render(<AuthInputField label="Password" id="password" type="password" errorMessage={errorMessage} />);
+
+        const errorElement = screen.getByText(errorMessage);
+        expect(errorElement).toBeInTheDocument();
+        expect(errorElement).toHaveClass('text-[#E80000]');
+    });
+
+    test('does not render the error message when not provided', () => {
+        render(<AuthInputField label="Password" id="password" type="password" />);
+
+        const errorElement = screen.queryByText(/Must contain one special character/i);
+        expect(errorElement).not.toBeInTheDocument();
+    });
 });

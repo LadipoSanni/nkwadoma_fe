@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState, InputHTMLAttributes} from 'react';
+import React, { useState, InputHTMLAttributes } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {inter} from "@/app/fonts";
 
@@ -8,9 +8,10 @@ interface ReusableInputProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string;
     id: string;
     endAdornment?: React.ReactNode | string;
+    errorMessage?: string;
 }
 
-const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, type, ...props}) => {
+const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, type, errorMessage, ...props}) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const handleToggleVisibility = () => {
@@ -21,7 +22,7 @@ const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, 
         if (typeof endAdornment === 'string') {
             return (
                 <span id={`end-adornment-${id}`}
-                      className={'text-[#BDC2C9] cursor-pointer text-[14px] font-normal leading-[22px]'}
+                      className={'text-[#475467] cursor-pointer text-[14px] font-normal leading-[22px]'}
                       onClick={handleToggleVisibility}>
                     {isPasswordVisible ? 'Hide' : 'Show'}
                 </span>
@@ -37,20 +38,22 @@ const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, 
     };
 
     return (
-        <div id={`custom-input-field-${id}`} className={`${inter.className} flex flex-col gap-[6px]`}>
+        <div id={`custom-input-field-${id}`} className={`${inter.className} flex flex-col gap-[8px]`}>
             <label id={`label-${id}`} htmlFor={id} className="text-[#101828] text-[14px] font-normal leading-[22px]">
                 {label}
             </label>
             <div id={`input-container-${id}`}
-                 className="flex p-[10px_14px] items-center w-full gap-2 rounded-[var(--radius-xs,_4px)] border border-[#D0D5DD] bg-[#FFF] ">
+                 className="flex px-[14px] items-center h-[3.375rem] w-full gap-2 rounded-[var(--radius-xs,_4px)] border border-[#D0D5DD] bg-[#FFF]">
                 <input
                     id={id}
                     type={isPasswordVisible ? 'text' : type}
-                    className={`${inter.className} w-full bg-transparent text-[#101828] text-[14px] font-normal leading-[22px] focus:outline-none focus:border-none`}
+                    className={`${inter.className} w-full h-full text-[#101828] text-[14px] font-normal leading-[22px] focus:outline-none`}
                     {...props}
                 />
                 {renderEndAdornment()}
             </div>
+            {errorMessage && <div className={'flex px-4 items-center'}><p id={`error-message-${id}`} className="text-[#E80000] text-[14px] font-normal">{errorMessage}</p>
+            </div>}
         </div>
     );
 };
