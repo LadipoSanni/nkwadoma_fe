@@ -6,12 +6,13 @@ import { useRouter } from 'next/navigation'
 interface props {
     header?: string,
     text?: string,
-    email?: string,
+    email?: string | null,
 }
 
 const AuthEmail = ({header, email}: props) => {
 
     const router = useRouter()
+
 
     return (
         <div id={'authEmailModal'} data-testid={'authEmailModal'}
@@ -27,21 +28,24 @@ const AuthEmail = ({header, email}: props) => {
                  alt={'success icon'}
                 />
             </div>
-            <div >
+            <div className={`grid gap-3`}>
                 <div id={'modalHeaderText'} data-testid={'modalHeaderText'}
                      className={` text-lg  `}
                 >
                     {header}
                 </div>
-                <div className={`text-xs inline-flex text-[#6c7685]  leading-3 w-[96%]`}>
-                     We’ve sent a link to create a new password to
-                     {email}. If it’s not in your inbox, check your spam folder.
+                <div className={`text-xs  text-[#6c7685] grid gap-1 leading-3 w-[96%]`}>
+                    <div>We’ve sent a link to create a new password to</div>
+                    <div className={`flex w-[100%] break-words`}>
+                        <div  className={`text-[#6c7685] font-bold `}>{email}.</div>
+                        <div className={`break-words `}>If it’s not in your inbox, check</div>
+                    </div>
+                    <div> your spam folder.</div>
                 </div>
             </div>
             <div className={`h-[70%] flex justify-normal relative`} id={'backToLoginFromResetPasswordStep2'}>
                 <div className={`w-fit absolute bottom-0`} onClick={() => router.push("/auth/login")}>
-                    <div  className={`text-[#0d9b48] text-sm  `}>Back to Log in</div>
-                    <hr style={{backgroundColor: '#0d9b48'}} className={`h-[2px] `}/>
+                    <div  className={`text-[#0d9b48] text-sm underline `}>Back to Log in</div>
                 </div>
             </div>
 

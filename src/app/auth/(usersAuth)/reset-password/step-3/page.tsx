@@ -1,9 +1,9 @@
 import React from 'react';
-import Step3 from "@/features/auth/usersAuth/reset-password/Step3";
+import Index from "@/features/auth/usersAuth/reset-password/step3";
 
 const Page = () => {
     return (
-        <Step3/>
+        <Index/>
     );
 };
 

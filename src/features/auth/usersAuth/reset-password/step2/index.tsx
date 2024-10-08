@@ -1,10 +1,9 @@
+"use client"
 import React from 'react';
 import AuthEmail from "@/reuseable/modals/AuthEmail";
-import { cookies} from "next/headers"
 
-const Step2 = () => {
-    const cookie = cookies()
-    const emailInput : string | undefined = cookie.get("resetPasswordEmail")?.value;
+const Index = () => {
+    const emailInput : string | null   = sessionStorage.getItem("userEmailInputOnResetPassword")
 
 
     return (
@@ -14,4 +13,4 @@ const Step2 = () => {
     );
 };
 
-export default Step2;
+export default Index;

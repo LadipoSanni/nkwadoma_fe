@@ -3,19 +3,20 @@ import React, {ChangeEvent, useEffect, useState} from 'react';
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInput from "@/reuseable/Input/AuthInputField"
 import Link from 'next/link'
-// import { cookies } from 'next/headers'
+import {setItemToSessionStorage} from "@/utils/sessionStorage";
+import {useRouter} from "next/navigation";
 
 
-const ResetPassword = () => {
+const Index = () => {
 
     const RESETPASSWORDHEADER: string = "Request password reset";
     const RESETPASSWORDTEXT: string = "Enter the email address you registered with, we will send you a link to create a new password";
     const EMAILHEADER: string = "Email address";
-    // const [hidePassword, setHidePassword] = useState(true)
+    const router = useRouter()
+
     const [email, setEmail] = useState('')
     const [disableButton, setDisableButton] = useState(true)
-    // const router = useRouter()
-    // const cookieStore = cookies()
+
 
     useEffect(() => {
         if (email === ''){
@@ -23,8 +24,8 @@ const ResetPassword = () => {
         }
     }, [email]);
     const handleReset = () => {
-      // router.replace('/auth/reset-password/step-2')
-      //   cookieStore.set('resetPasswordEmail', email)?
+        setItemToSessionStorage("userEmailInputOnResetPassword", email)
+        router.push('/auth/reset-password/step-2')
     }
 
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement| HTMLInputElement > ) => {
@@ -33,13 +34,7 @@ const ResetPassword = () => {
         setEmail(event.currentTarget.value)
     }
 
-    // const changePasswordVisibility = () =>{
-    //     if (hidePassword){
-    //         setHidePassword(false)
-    //     }else{
-    //         setHidePassword(true)
-    //     }
-    // }
+
 
 
     return (
@@ -71,10 +66,11 @@ const ResetPassword = () => {
                         </Link>
                         <div className={`flex gap-2 place-self-center place-content-center  mt-1 `}>
                             <div className={`text-[#667085] text-sm `}>Remember your password?</div>
-                            <Link href="/auth/login">
-                                <div  className={`text-[#0d9b48] text-sm  `}>Log in</div>
-                                <hr style={{backgroundColor: '#0d9b48'}} className={`h-[2px]`}/>
-                            </Link>
+                            <div className={`h-fit md:h-fit`} onClick={() => {router.push("/auth/login")}}>
+                                <div className={`text-[#0d9b48] text-sm  underline`}>
+                                    Log in
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -83,4 +79,4 @@ const ResetPassword = () => {
     );
 };
 
-export default ResetPassword;
+export default Index;
