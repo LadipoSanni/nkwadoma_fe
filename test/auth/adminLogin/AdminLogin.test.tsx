@@ -5,7 +5,7 @@ import * as React from "react";
 import AdminLogin from "@/features/auth/adminLogin/Index";
 
 
-describe('Login Component', () => {
+describe('adminLogin Component', () => {
     it("should test that login component does not exist", () => {
         const {queryByTestId} = render(
             <AdminLogin/>

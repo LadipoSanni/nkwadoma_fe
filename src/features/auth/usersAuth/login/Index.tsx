@@ -3,6 +3,8 @@ import * as React from "react";
 import {useState} from "react";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInputField from "@/reuseable/Input/AuthInputField";
+import Link from 'next/link'
+
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -24,7 +26,7 @@ const Login: React.FC = () => {
     return (
 
         <div
-            className="w-full bg-[#FFFFFF] md:min-w-xl rounded-xl md:border border-2 border-gray-100">
+            className="w-full bg-[#FFFFFF] md:min-w-xl border border-slate-200 rounded-xl">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-10">
                 <h1 className=" font-sans text-[#1A1A1A] md:text-3xl text-2xl leading-5 ">Log in to your
@@ -58,9 +60,9 @@ const Login: React.FC = () => {
                         </AuthButton>
                     </div>
                     <p className="flex items-center justify-center text-sm text-[#101828] leading-4">
-                        Forgot Password? <a href="/auth/usersAuth/reset-password"
+                        Forgot Password? <Link href={"/auth/reset-password"}
                                             className="font-medium text-[#0D9B48] underline">Reset it
-                        here</a>
+                        here</Link>
                     </p>
                 </div>
             </div>
