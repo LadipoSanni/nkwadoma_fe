@@ -3,6 +3,7 @@ import * as React from "react";
 import {useState} from "react";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInputField from "@/reuseable/Input/AuthInputField";
+import Link from 'next/link'
 
 
 const AdminLogin: React.FC = () => {
@@ -58,9 +59,9 @@ const AdminLogin: React.FC = () => {
                         </AuthButton>
                     </div>
                     <p className="flex items-center justify-center text-sm text-[#101828] leading-4">
-                        Forgot Password? <a href="/auth/usersAuth/reset-password"
+                        Forgot Password? <Link href="/auth/usersAuth/reset-password"
                                             className="font-medium text-[#0D9B48] underline">Reset it
-                        here</a>
+                        here</Link>
                     </p>
                 </div>
             </div>
