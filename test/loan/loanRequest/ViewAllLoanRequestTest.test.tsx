@@ -2,22 +2,32 @@ import React from "react";
 import {render, screen, fireEvent,cleanup, } from "@testing-library/react";
 import "@testing-library/react";
 import { LoanRequestTable } from "@/utils/LoanRequestMockData/Index";
-import ViewAllLoanRequest from "@/pages/portFolioManager/loan/Index";;
+import ViewAllLoanRequest from "@/pages/portFolioManager/loan/Index";
+
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(),
+  }));
+  ;
 import { useRouter } from 'next/navigation';
+
+
+// jest.mock('next/navigation', () => ({
+//     useRouter: jest.fn(),
+//   }));
+  
 
 
 describe("ViewAllLoanRequest", ()=>{
     const mockPush = jest.fn();
 
+   
     beforeEach(() => {
+        jest.clearAllMocks();
+        cleanup();
 
         (useRouter as jest.Mock).mockReturnValue({
             push: mockPush,
           });
-    })
-    
-    beforeEach(() => {
-        cleanup()
     })
    
 
