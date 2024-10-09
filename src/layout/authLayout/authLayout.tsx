@@ -14,7 +14,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
         <Providers>
             <main id={'authLayoutContainer'} data-testid={'authLayoutContainer'}
                   className={` grid bg-[#fafbfc] h-screen px-5 py-7 md:px-16 md:py-16 md:h-screen `}>
-                <Image id={'meedlAuthLogo'} src={'/Meedl.svg'} alt={'meedl'} width={100} height={100}/>
+                <Image data-testid={`authLayoutOrganizationLogo`} id={'meedlAuthLogo'} src={'/Meedl.svg'} alt={'meedl'} width={100} height={100}/>
                 <div
                     className={` md:flex  md:justify-between md:content-between md:w-full  md:h-full `}
                 >
