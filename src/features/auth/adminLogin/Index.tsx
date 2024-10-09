@@ -59,7 +59,7 @@ const AdminLogin: React.FC = () => {
                         </AuthButton>
                     </div>
                     <p className="flex items-center justify-center text-sm text-[#101828] leading-4">
-                        Forgot Password? <Link href="/auth/usersAuth/reset-password"
+                        Forgot Password? <Link href="/auth/reset-password"
                                             className="font-medium text-[#0D9B48] underline">Reset it
                         here</Link>
                     </p>
