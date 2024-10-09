@@ -48,6 +48,15 @@ describe('LoanProductTable component', () => {
         });
     });
 
+    it('renders the table with correct headers', () => {
+        mockTableHeader.forEach(column => {
+            const headers = screen.getAllByText(column.title);
+           expect(headers.length).toBeGreaterThan(0);
+            
+        });
+    });
+
+
     test('renders the correct number of rows on the first page for both the large screen and mobile screen', () => {
         const rows = screen.getAllByRole('row');
         expect(rows).toHaveLength(22); 
