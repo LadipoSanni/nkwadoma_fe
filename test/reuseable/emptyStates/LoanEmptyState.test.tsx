@@ -1,12 +1,9 @@
 import "@testing-library/react"
 
 import {render, screen} from "@testing-library/react";
-import LoanEmptyState from "@/reuseable/emptyStates/LoanEmptyState";
+import LoanEmptyState from "@/reuseable/emptyStates/Index";
 
 
-
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const {expect, describe, it} = require("@jest/globals");
 describe("LoanEmptyState component", () => {
     it('should test that LoanEmptyState component does not exist', () => {
         const {queryByTestId} = render(<div></div>);

@@ -1,5 +1,5 @@
 import React from 'react'
-import LoanProductPage from '@/pages/portFolioManager/loanProduct/LoanProductPage'
+import LoanProductPage from '@/pages/portFolioManager/loanProduct'
 
 function page() {
   return (

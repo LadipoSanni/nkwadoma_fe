@@ -1,15 +1,9 @@
 import React from "react";
 import {render, screen, fireEvent,cleanup, } from "@testing-library/react";
 import "@testing-library/react";
-import { LoanRequestTable } from "@/utils/LoanRequestMockData";
-import ViewAllLoanRequest from "@/pages/portFolioManager/loan/ViewAllLoanRequest";
+import { LoanRequestTable } from "@/utils/LoanRequestMockData/Index";
+import ViewAllLoanRequest from "@/pages/portFolioManager/loan/Index";;
 import { useRouter } from 'next/navigation';
-
-const {expect, describe, it} = require("@jest/globals");
-
-jest.mock('next/navigation', () => ({
-    useRouter: jest.fn(),
-  }));
 
 
 describe("ViewAllLoanRequest", ()=>{

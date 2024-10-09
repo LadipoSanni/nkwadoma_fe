@@ -1,9 +1,9 @@
 import React from 'react';
-import Login from "@/features/auth/login/Login";
+import Step2 from "@/features/auth/usersAuth/reset-password/step2";
 
 const Page = () => {
     return (
-            <Login/>
+       <Step2/>
     );
 };
 

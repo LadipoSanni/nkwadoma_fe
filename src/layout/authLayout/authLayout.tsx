@@ -28,13 +28,14 @@ const AuthLayout: React.FC<props> = ({ children }) => {
                     />
                 </div>
                 <div
-                    className={` md:flex md:justify-between md:content-between md:w-full md:h-[80%] `}
+                    className={` md:flex  md:justify-between md:content-between md:w-full  md:h-[80%] `}
                 >
-                    <div className={`md:w-[50%] md:h-fit  md:flex md:flex-col md:gap-4 hidden`}>
-                      <div className={`font-bold text-5xl`}>
-                          Revolutionizing financing and access to loans
+                    <div className={`md:w-[50%] md:h-fit md:self-center   md:flex md:flex-col md:gap-4 hidden`}>
+                      <div className={`md:font-semibold md:w-[100%] md:grid md:gap-1 md: md:text-[#101828] md:text-5xl`}>
+                          <div>Revolutionizing financing</div>
+                          <div>and access to loans</div>
                       </div>
-                       <div className={`text-xs text-[#404653] w-[90%] leading-lose tracking-wide  `}>
+                       <div className={`text-sm text-[#404653] w-[75%] leading-lose tracking-wide  `}>
                            Meedl serves as a nexus, connecting high net-worth individuals, financial institutions, and organizations seeking impactful investment avenues with the pressing need for accessible loans.
                        </div>
                     </div>

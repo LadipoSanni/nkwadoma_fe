@@ -29,7 +29,6 @@ const Login: React.FC = () => {
                  className="px-4 py-10">
                 <h1 className=" font-sans text-[#1A1A1A] md:text-3xl text-2xl leading-5 ">Log in to your
                     account</h1>
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
                      className="pt-10 space-y-5">
                     <div data-testid={`emailId`} id={`emailId`}>
@@ -59,7 +58,7 @@ const Login: React.FC = () => {
                         </AuthButton>
                     </div>
                     <p className="flex items-center justify-center text-sm text-[#101828] leading-4">
-                        Forgot Password? <a href="/auth/reset-password"
+                        Forgot Password? <a href="/auth/usersAuth/reset-password"
                                             className="font-medium text-[#0D9B48] underline">Reset it
                         here</a>
                     </p>
