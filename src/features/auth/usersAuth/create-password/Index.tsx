@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import AuthInputField from "@/reuseable/Input/AuthInputField";
 import { cabinetGrotesk } from "@/app/fonts";
-import PasswordCriteria from "@/component/passwordCriteria/PasswordCriteria";
+import PasswordCriteria from "@/component/passwordCriteria/Index";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 
 const CreatePassword = () => {

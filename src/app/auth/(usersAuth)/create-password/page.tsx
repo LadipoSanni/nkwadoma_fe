@@ -1,4 +1,4 @@
-import CreatePassword from "@/features/auth/usersAuth/create-password/CreatePassword";
+import CreatePassword from "@/features/auth/usersAuth/create-password/Index";
 
 const page = () => {
     return (
