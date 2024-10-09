@@ -2,6 +2,7 @@ import "@testing-library/react"
 import Index from "@/features/auth/usersAuth/reset-password/step1";
 import {fireEvent, queryByAttribute, render, screen} from "@testing-library/react";
 import { useRouter } from 'next/router';
+import {awaitExpression} from "@babel/types";
 
 
 // type TestElement = Document | Element | Window | Node
@@ -72,14 +73,10 @@ describe("test reset password", ()=> {
     });
 
     // it("should route to login when log in is clicked", ()=> {
-    //     // useRouter.mockReturnValue({
-    //     //     pathname: '/auth/login'
-    //     // });
     //     render(<Index/>
     //     )
     //
-    //     fireEvent.click(screen.getByRole('button'))
-    //     expect(useRouter().push).toHaveBeenCalledTimes(1)
-    //     expect(useRouter().push).toHaveBeenCalledWith("/auth/login")
+    //     fireEvent.click(screen.getByRole('button', {name: /Reset password/i}))
+    //     awaitExpression() expect(screen.getAllByText(/Log in to your account/i)).toBeInTheDocument()
     // })
 })

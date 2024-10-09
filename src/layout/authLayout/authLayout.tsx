@@ -1,6 +1,7 @@
 import React from 'react';
 import {Providers} from "@/app/provider";
 import Image from 'next/image'
+import {cabinetGrotesk, inter} from "@/app/fonts";
 
 type props = {
     children: React.ReactNode;
@@ -31,11 +32,11 @@ const AuthLayout: React.FC<props> = ({ children }) => {
                     className={` md:flex  md:justify-between md:content-between md:w-full  md:h-[80%] `}
                 >
                     <div className={`md:w-[50%] md:h-fit md:self-center   md:flex md:flex-col md:gap-4 hidden`}>
-                      <div className={`md:font-semibold md:w-[100%] md:grid md:gap-1 md: md:text-[#101828] md:text-5xl`}>
+                      <div className={` ${cabinetGrotesk.className} md:w-[100%] md:grid md:gap-1 md: md:text-[#101828] md:text-5xl`}>
                           <div>Revolutionizing financing</div>
                           <div>and access to loans</div>
                       </div>
-                       <div className={`text-sm text-[#404653] w-[75%] leading-lose tracking-wide  `}>
+                       <div className={`${inter.className} text-sm text-[#404653] w-[75%] leading-lose tracking-wide  `}>
                            Meedl serves as a nexus, connecting high net-worth individuals, financial institutions, and organizations seeking impactful investment avenues with the pressing need for accessible loans.
                        </div>
                     </div>

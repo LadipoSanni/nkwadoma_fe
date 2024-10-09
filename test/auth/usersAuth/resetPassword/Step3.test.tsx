@@ -18,4 +18,5 @@ describe('test step 3', () => {
         expect(screen.getByTestId("resetNewPasswordInput"))
         expect(screen.getByTestId("resetConfirmPasswordInput"))
     })
+
 });

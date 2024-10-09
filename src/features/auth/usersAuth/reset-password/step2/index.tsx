@@ -3,7 +3,7 @@ import React from 'react';
 import AuthEmail from "@/reuseable/modals/AuthEmail";
 
 const Index = () => {
-    const emailInput : string | null   = sessionStorage.getItem("userEmailInputOnResetPassword")
+    const emailInput : string | null   = localStorage.getItem("userEmailInputOnResetPassword")
 
 
     return (
