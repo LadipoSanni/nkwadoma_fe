@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import AuthInputField from "@/reuseable/Input/AuthInputField";
 import { cabinetGrotesk } from "@/app/fonts";
-import PasswordCriteria from "@/component/passwordCriteria/PasswordCriteria";
+import PasswordCriteria from "@/component/passwordCriteria/Index";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 
 const CreatePassword = () => {
@@ -41,9 +41,9 @@ const CreatePassword = () => {
 
     return (
         <section id={'create-password-block'}
-                 className={'bg-[#fff] rounded-[8px] flex w-[33.3125rem] h-[473px] py-6 px-5 flex-col  gap-[28px]'}>
+                 className={'bg-[#fff] shadow-custom rounded-[12px] w-full h-full py-6 px-5 grid gap-[28px]'}>
             <h1 id={'create-password-title'}
-                className={`${cabinetGrotesk.className} antialiased text-[#1A1A1A] font-[500] text-[30px] leading-[145%] `}>Create your password</h1>
+                className={`${cabinetGrotesk.className} antialiased text-[#1A1A1A] font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
             <form id={'create-password-form'} className={'grid gap-[28px]'}>
                 <main id={'create-password-main'} className={'grid gap-[24.14px]'}>
                     <div id={'create-password-inputs'} className={'grid gap-4'}>

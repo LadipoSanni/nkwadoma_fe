@@ -1,13 +1,13 @@
 import React from 'react';
 import {Providers} from "@/app/provider";
 import Image from 'next/image'
-import {cabinetGrotesk, inter} from "@/app/fonts";
+import {inter, cabinetGroteskBold} from "@/app/fonts";
 
 type props = {
     children: React.ReactNode;
 }
 
-const AuthLayout: React.FC<props> = ({ children }) => {
+const AuthLayout: React.FC<props> = ({children}) => {
 
 
 
@@ -31,14 +31,15 @@ const AuthLayout: React.FC<props> = ({ children }) => {
                 <div
                     className={` md:flex  md:justify-between md:content-between md:w-full  md:h-[80%] `}
                 >
-                    <div className={`md:w-[50%] md:h-fit md:self-center   md:flex md:flex-col md:gap-4 hidden`}>
-                      <div className={` ${cabinetGrotesk.className} md:w-[100%] md:grid md:gap-1 md: md:text-[#101828] md:text-5xl`}>
-                          <div>Revolutionizing financing</div>
-                          <div>and access to loans</div>
-                      </div>
-                       <div className={`${inter.className} text-sm text-[#404653] w-[75%] leading-lose tracking-wide  `}>
-                           Meedl serves as a nexus, connecting high net-worth individuals, financial institutions, and organizations seeking impactful investment avenues with the pressing need for accessible loans.
-                       </div>
+                    <div className={`md:w-[50%] md:h-fit md:self-center   md:grid md:gap-4 hidden`}>
+                        <div className={`${cabinetGroteskBold.className} w-[80%] text-[#101828] text-5xl  `}>
+                            Revolutionizing financing and access to loans
+                        </div>
+                        <p className={`${inter.className} w-[80%] text-sm text-[#404653] leading- tracking-wide  `}>
+                            Meedl serves as a nexus, connecting high net-worth individuals, financial institutions, and
+                            organizations seeking impactful investment avenues with the pressing need for accessible
+                            loans.
+                        </p>
                     </div>
                     <div className={`w-[98%] md:w-[40%] md:grid md:justify-items-end `}>
                         {children}
