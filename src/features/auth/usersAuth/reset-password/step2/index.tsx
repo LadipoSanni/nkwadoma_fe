@@ -1,10 +1,16 @@
+"use client"
 import React from 'react';
 import AuthEmail from "@/reuseable/modals/AuthEmail";
-import { cookies} from "next/headers"
 
 const Step2 = () => {
-    const cookie = cookies()
-    const emailInput : string | undefined = cookie.get("resetPasswordEmail")?.value;
+
+
+    const emailInput  = React.useMemo(() => {
+        if (typeof window !== "undefined") {
+            return window.localStorage.getItem("userEmailInputOnResetPassword")
+        }
+    }, [])
+
 
 
     return (

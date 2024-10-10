@@ -1,10 +1,10 @@
 'use client'
 import React from 'react';
-import ResetPassword from "@/features/auth/usersAuth/reset-password/ResetPassword";
+import Step1 from "@/features/auth/usersAuth/reset-password/step1";
 
 const page = () => {
     return (
-           <ResetPassword/>
+           <Step1/>
     );
 };
 

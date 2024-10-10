@@ -10,25 +10,38 @@ type props = {
 const AuthLayout: React.FC<props> = ({children}) => {
 
 
+
     return (
         <Providers>
-            <main id={'authLayoutContainer'} data-testid={'authLayoutContainer'}
-                  className={` grid bg-[#fafbfc] h-screen px-5 py-7 md:px-16 md:py-16 md:h-screen `}>
-                <Image data-testid={`authLayoutOrganizationLogo`} id={'meedlAuthLogo'} src={'/Meedl.svg'} alt={'meedl'} width={100} height={100}/>
+            <main
+                id={'authLayoutContainer'}
+                data-testid={'authLayoutContainer'}
+                className={` grid bg-[#fafbfc] h-screen px-4 py-4 md:px-16 md:py-16 md:h-screen `}
+            >
                 <div
-                    className={` md:flex  md:justify-between md:content-between md:w-full  md:h-full `}
+                    id={'authLayoutOrganizationLogo'}
+                    data-testid={`authLayoutOrganizationLogo`}
+                    className={`text-[#0D9B48] font-mono object-cover`}
+                >
+                    <Image src={'/Meedl.svg'} alt={'meedl'}
+                           width={100}
+                           height={100}
+                    />
+                </div>
+                <div
+                    className={` md:flex  md:justify-between md:content-between md:w-full  md:h-[80%] `}
                 >
                     <div className={`md:w-[50%] md:h-fit md:self-center   md:grid md:gap-4 hidden`}>
-                        <h1 className={`${cabinetGroteskBold.className} text-[#101828] text-[50px] leading-tight`}>
+                        <div className={`${cabinetGroteskBold.className} w-[80%] text-[#101828] text-5xl  `}>
                             Revolutionizing financing and access to loans
-                        </h1>
-                        <p className={`${inter.className} w-auto text-sm text-[#404653] leading-lose tracking-wide  `}>
+                        </div>
+                        <p className={`${inter.className} w-[80%] text-sm text-[#404653] leading- tracking-wide  `}>
                             Meedl serves as a nexus, connecting high net-worth individuals, financial institutions, and
                             organizations seeking impactful investment avenues with the pressing need for accessible
                             loans.
                         </p>
                     </div>
-                    <div className={`w-[98%] md:w-[43%] md:grid`}>
+                    <div className={`w-[98%] md:w-[40%] md:grid md:justify-items-end `}>
                         {children}
                     </div>
                 </div>
