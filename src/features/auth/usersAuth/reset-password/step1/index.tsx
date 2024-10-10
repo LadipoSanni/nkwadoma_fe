@@ -3,7 +3,7 @@ import React, {ChangeEvent, useEffect, useState} from 'react';
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInput from "@/reuseable/Input/AuthInputField"
 import Link from 'next/link'
-import {setItemToLocalStorage} from "../../../../../utils/localStorage";
+import {setItemToLocalStorage} from "@/utils/localStorage";
 import {useRouter} from "next/navigation";
 
 
@@ -32,6 +32,9 @@ const Step1 = () => {
         event.stopPropagation()
         setDisableButton(false)
         setEmail(event.currentTarget.value)
+    }
+    const login = ()=> {
+        router.push("/auth/login")
     }
 
 
@@ -67,13 +70,11 @@ const Step1 = () => {
                             </Link>
                             <div className={`flex gap-2 place-self-center place-content-center  mt-1 `}>
                                 <div className={`text-[#667085] text-sm `}>Remember your password?</div>
-                                <div className={`h-fit md:h-fit`} onClick={() => {
-                                    router.push("/auth/login")
-                                }}>
-                                    <div className={`text-[#0d9b48] text-sm  underline`}>
+                                    <button
+                                        onClick={login}
+                                        className={ ` h-fit md:h-fit text-[#0d9b48] text-sm  underline`}>
                                         Log in
-                                    </div>
-                                </div>
+                                    </button>
                             </div>
                         </div>
                     </div>
