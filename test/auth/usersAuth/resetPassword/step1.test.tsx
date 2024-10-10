@@ -54,7 +54,7 @@ describe("test reset password", ()=> {
         render(
             <Step1/>
         )
-        const button = screen.getByRole('button')
+        const button = screen.getByRole('button', {name: /Submit email/i})
         expect(button).toBeDisabled();
     });
     it('should able submit button if input field is not empty ', () => {
