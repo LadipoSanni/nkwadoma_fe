@@ -38,7 +38,7 @@ MIME-Version: 1.0
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
     <div style="background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px; padding: 20px; margin-bottom: 20px;">
         <h1 style="color: #155724; margin-top: 0;">Fantastic! Successful Build</h1>
-        <p style="margin-bottom: 10px;">Congratulations, Your recent build in Enumverse Backend was successful.</p>
+        <p style="margin-bottom: 10px;">Congratulations, Your recent build in Nkwadoma frontend was successful.</p>
     </div>
 
     <div style="background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 5px; padding: 20px; margin-bottom: 20px;">
