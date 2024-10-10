@@ -5,16 +5,16 @@ import Step2 from "@/features/auth/usersAuth/reset-password/step2/index"
 
 const ResetPassword = () => {
 
-    const components  = [
-        {
-            name: 'emailCollection',
-            component: <Step1/>
-        },
-        {
-            name: 'emailModal',
-            component: <Step2/>
-        }
-    ]
+    // const components  = [
+    //     {
+    //         name: 'emailCollection',
+    //         component: <Step1/>
+    //     },
+    //     {
+    //         name: 'emailModal',
+    //         component: <Step2/>
+    //     }
+    // ]
 
     return (
         <div className={``}>
