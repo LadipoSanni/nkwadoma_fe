@@ -14,7 +14,10 @@ const config: Config = {
         secondary: "var(--secondary)",
         tertiary: "var(--tertiary)",
         logoColor: "var(--logoColor)",
-      }
+      },
+      boxShadow: {
+        'custom': '0px 0px 0px 1px rgba(18, 55, 105, 0.08)',
+      },
     },
   },
   plugins: [],
