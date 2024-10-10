@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 SMTP_SERVER=$1
@@ -11,7 +10,7 @@ BRANCH_NAME=$7
 
 COMMIT_AUTHOR=${8}
 SONARQUBE_URL=http://sonarqube.enum.africa/dashboard?id=EnumVerse
-AUTOMATION_TEST_URL=s3://semicolon-build-reports/enum/enum-frontend-tms/maven-report/automation-test-report/report-pytest-results.html
+
 
 # Debug output
 echo "Debug: COMMIT_MESSAGE received as: $COMMIT_MESSAGE"
