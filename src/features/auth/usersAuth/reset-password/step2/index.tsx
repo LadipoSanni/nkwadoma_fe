@@ -3,7 +3,7 @@ import React from 'react';
 import AuthEmail from "@/reuseable/modals/AuthEmail";
 
 const Step2 = () => {
-    // const emailInput : string | null   = window.localStorage.getItem("userEmailInputOnResetPassword")
+
 
     const emailInput  = React.useMemo(() => {
         if (typeof window !== "undefined") {
