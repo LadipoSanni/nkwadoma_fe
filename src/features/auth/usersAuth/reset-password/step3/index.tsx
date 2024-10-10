@@ -4,7 +4,7 @@ import AuthInput from "@/reuseable/Input/AuthInputField";
 import Link from "next/link";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 
-const Index = () => {
+const Step3 = () => {
 
     const [newPassword, setNewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
@@ -72,4 +72,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default Step3;

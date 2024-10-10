@@ -1,10 +1,10 @@
 'use client'
 import React from 'react';
-import Index from "@/features/auth/usersAuth/reset-password/step1";
+import Step1 from "@/features/auth/usersAuth/reset-password/step1";
 
 const page = () => {
     return (
-           <Index/>
+           <Step1/>
     );
 };
 

@@ -1,5 +1,5 @@
 import "@testing-library/react"
-import Index from "@/features/auth/usersAuth/reset-password/step1";
+import Step1 from "@/features/auth/usersAuth/reset-password/step1";
 import {fireEvent, queryByAttribute, render, screen} from "@testing-library/react";
 import { useRouter } from 'next/router';
 import {awaitExpression} from "@babel/types";
@@ -25,14 +25,14 @@ describe("test reset password", ()=> {
 
     it('should display reset password component', () => {
         const view = render(
-            <Index/>
+            <Step1/>
         )
         expect(getById(view.container, "resetPasswordComponent")).toBeInTheDocument()
     });
 
     it('should display reset password component display it headers', () => {
         const view = render(
-            <Index/>
+            <Step1/>
         )
         expect(getById(view.container, "RESETPASSWORDHEADER")).toBeInTheDocument()
         expect(getById(view.container, "RESETPASSWORDTEXT")).toBeInTheDocument()
@@ -40,13 +40,13 @@ describe("test reset password", ()=> {
     });
     it('should contain email input field', () => {
         const view = render(
-            <Index/>
+            <Step1/>
         )
         expect(getById(view.container, "resetEmailInput")).toBeInTheDocument()
     });
     it('should contain email input field which ', () => {
          render(
-            <Index/>
+            <Step1/>
         )
         const emailInput = screen.getByRole('textbox' ,{name: /Email address/i})
         expect(emailInput).toBeInTheDocument()
@@ -56,14 +56,14 @@ describe("test reset password", ()=> {
     });
     it('should disable submit button if input field is empty ', () => {
         render(
-            <Index/>
+            <Step1/>
         )
         const button = screen.getByRole('button')
         expect(button).toBeDisabled();
     });
     it('should able submit button if input field is not empty ', () => {
         render(
-            <Index/>
+            <Step1/>
         )
         const button = screen.getByRole('button')
         const emailInput = screen.getByRole('textbox' ,{name: /Email address/i})

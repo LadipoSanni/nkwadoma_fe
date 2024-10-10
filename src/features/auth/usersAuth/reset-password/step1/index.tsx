@@ -7,7 +7,7 @@ import {setItemToLocalStorage} from "../../../../../utils/localStorage";
 import {useRouter} from "next/navigation";
 
 
-const Index = () => {
+const Step1 = () => {
 
     const RESETPASSWORDHEADER: string = "Request password reset";
     const RESETPASSWORDTEXT: string = "Enter the email address you registered with, we will send you a link to create a new password";
@@ -83,4 +83,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default Step1;

@@ -2,7 +2,7 @@
 import React from 'react';
 import AuthEmail from "@/reuseable/modals/AuthEmail";
 
-const Index = () => {
+const Step2 = () => {
     const emailInput : string | null   = window.localStorage.getItem("userEmailInputOnResetPassword")
 
 
@@ -13,4 +13,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default Step2;
