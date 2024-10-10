@@ -1,12 +1,8 @@
 import "@testing-library/react"
 import Step1 from "@/features/auth/usersAuth/reset-password/step1";
 import {fireEvent, queryByAttribute, render, screen} from "@testing-library/react";
-import { useRouter } from 'next/router';
-import {awaitExpression} from "@babel/types";
 
 
-// type TestElement = Document | Element | Window | Node
-// Mock useRouter:
 jest.mock("next/navigation", () => ({
     useRouter() {
         return {
