@@ -8,12 +8,11 @@ TAG=$6
 BRANCH_NAME=$7
 COMMIT_AUTHOR=$8
 SONARQUBE_URL_SET=${9}
-MAVEN_REPORT_URL_SET=${10}
-AUTOMATION_TEST_URL_SET=${11}
+# MAVEN_REPORT_URL_SET=${10}
+# AUTOMATION_TEST_URL_SET=${11}
 COMMIT_MESSAGE=${12}
 ENGINEER_NAME=$(echo "$COMMIT_AUTHOR" | sed 's/ <.*//')
 SONARQUBE_URL=http://sonarqube.enum.africa/dashboard?id=Enumverse
-# AUTOMATION_TEST_URL=https://semicolon-build-reports.s3.eu-west-1.amazonaws.com/enum/enum-frontend-tms/maven-report/new-reports/report-pytest-results.html
 COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed 's/\\(/(/g; s/\\)/)/g; s/\\#/#/g')
 
 
