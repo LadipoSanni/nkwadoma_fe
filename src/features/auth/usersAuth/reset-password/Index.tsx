@@ -1,6 +1,6 @@
 import React from 'react';
-import Step1 from "@/features/auth/usersAuth/reset-password/step1/index"
-import Step2 from "@/features/auth/usersAuth/reset-password/step2/index"
+// import Step1 from "@/features/auth/usersAuth/reset-password/step1/index"
+// import Step2 from "@/features/auth/usersAuth/reset-password/step2/index"
 
 
 const ResetPassword = () => {
