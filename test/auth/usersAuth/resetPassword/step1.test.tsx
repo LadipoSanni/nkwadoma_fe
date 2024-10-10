@@ -65,11 +65,11 @@ describe("test reset password", ()=> {
         render(
             <Step1/>
         )
-        const button = screen.getByRole('button')
+        const button = screen.getByRole('button',{name: /Log in/i})
         const emailInput = screen.getByRole('textbox' ,{name: /Email address/i})
         expect(emailInput).toBeInTheDocument()
         fireEvent.change(emailInput, {target: {value : "Jay"}});
-        expect(button);
+        expect(button).toBeInTheDocument();
     });
 
     // it("should route to login when log in is clicked", ()=> {

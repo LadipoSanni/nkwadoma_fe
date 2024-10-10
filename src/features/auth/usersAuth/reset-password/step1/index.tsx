@@ -71,6 +71,8 @@ const Step1 = () => {
                             <div className={`flex gap-2 place-self-center place-content-center  mt-1 `}>
                                 <div className={`text-[#667085] text-sm `}>Remember your password?</div>
                                     <button
+                                        id={`loginOnResetPasswordStep1`}
+                                        data-testid={`loginOnResetPasswordStep1`}
                                         onClick={login}
                                         className={ ` h-fit md:h-fit text-[#0d9b48] text-sm  underline`}>
                                         Log in
