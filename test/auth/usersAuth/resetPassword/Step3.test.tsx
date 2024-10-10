@@ -8,15 +8,15 @@ describe('test step 3', () => {
         render(
             <Index/>
         )
-        expect(screen.getByTestId("Step3Container"))
+        expect(screen.getByTestId("Step3Container")).toBeInTheDocument()
     });
 
     it("should contain two input field", ()=> {
         render(
             <Index/>
         )
-        expect(screen.getByTestId("resetNewPasswordInput"))
-        expect(screen.getByTestId("resetConfirmPasswordInput"))
+        expect(screen.getByTestId("resetNewPasswordInput")).toBeInTheDocument()
+        expect(screen.getByTestId("resetConfirmPasswordInput")).toBeInTheDocument()
     })
 
 });
