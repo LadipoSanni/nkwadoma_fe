@@ -58,6 +58,7 @@ const config: Config = {
         success700: '#066727',
         success800: '#05501E',
         success900: '#043D17',
+        middelWhite: '#FFFFFF',
         warning50: '#FCF4E7',
         warning100: '#F4DDB4',
         warning200: '#EFCC90',
