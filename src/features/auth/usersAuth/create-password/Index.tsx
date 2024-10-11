@@ -43,7 +43,7 @@ const CreatePassword = () => {
         <section id={'create-password-block'}
                  className={'bg-[#fff] shadow-custom rounded-[12px] w-full h-full py-6 px-5 grid gap-[28px]'}>
             <h1 id={'create-password-title'}
-                className={`${cabinetGrotesk.className} antialiased text-[#1A1A1A] font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
+                className={`${cabinetGrotesk.className} antialiased text-grey900 font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
             <form id={'create-password-form'} className={'grid gap-[28px]'}>
                 <main id={'create-password-main'} className={'grid gap-[24.14px]'}>
                     <div id={'create-password-inputs'} className={'grid gap-4'}>
@@ -70,7 +70,7 @@ const CreatePassword = () => {
                     </div>
                 </main>
                 <AuthButton
-                    backgroundColor={criteriaStatus.every(Boolean) && password === confirmPassword ? '#0D9B48' : '#D0D5DD'}
+                    backgroundColor={criteriaStatus.every(Boolean) && password === confirmPassword ? '#142854' : '#D0D5DD'}
                     buttonText={'Create password'}
                     disable={!criteriaStatus.every(Boolean) || password !== confirmPassword}
                     handleClick={() => {}}
