@@ -23,9 +23,9 @@ const AuthLayout: React.FC<props> = ({children}) => {
                     data-testid={`authLayoutOrganizationLogo`}
                     className={`text-[#0D9B48] font-mono object-cover`}
                 >
-                    <Image src={'/Meedl.svg'} alt={'meedl'}
-                           width={100}
-                           height={100}
+                    <Image src={'/Meedle Logo Primary Main.svg'} alt={'meedl'}
+                           width={150}
+                           height={150}
                     />
                 </div>
                 <div
