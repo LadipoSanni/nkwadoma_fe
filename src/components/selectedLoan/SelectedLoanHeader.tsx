@@ -1,6 +1,6 @@
 import React from 'react';
-import SelectLoanTab from "@/component/selectedLoan/SelectLoanTab";
-import OrganizationAndFilter from "@/component/selectedLoan/OrganizationAndFilter";
+import SelectLoanTab from "@/components/selectedLoan/SelectLoanTab";
+import OrganizationAndFilter from "@/components/selectedLoan/OrganizationAndFilter";
 
 const SelectedLoanHeader = () => {
     return (

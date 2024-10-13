@@ -1,5 +1,5 @@
 import React from 'react';
-import SelectedLoan from "@/component/selectedLoan/SelectedLoan";
+import SelectedLoan from "@/components/selectedLoan/SelectedLoan";
 
 // type props = {
 //     children: React.ReactNode;
