@@ -37,7 +37,7 @@ describe('CustomInputField', () => {
 
         const errorElement = screen.getByText(errorMessage);
         expect(errorElement).toBeInTheDocument();
-        expect(errorElement).toHaveClass('text-[#E80000]');
+        expect(errorElement).toHaveClass('text-error600');
     });
 
     test('does not render the error message when not provided', () => {

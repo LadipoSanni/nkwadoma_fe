@@ -46,7 +46,7 @@ const Step3 = () => {
                     <div id={"RESETPASSWORDStep3HEADER"} className={`font-semi-bold text-2xl  `}>Reset your password
                     </div>
                 </div>
-                <div className={`w-[100%] h-[5rem] grid gap-2 mb-16 md:mb-16 `}>
+                <div className={`w-[100%] h-[5rem] grid gap-4 mb-16 md:mb-16 `}>
                     <AuthInput value={newPassword} type={'password'} data-testid={'resetNewPasswordInput'}
                                label={'New password'}
                                id={'resetNewPasswordInput'} onChange={handleChangeNewPassword}
@@ -58,7 +58,7 @@ const Step3 = () => {
                                endAdornment={'Hide'}
                                placeholder={'Enter password'}></AuthInput>
                 </div>
-                <div className={`w-[100%]`}>
+                <div className={`w-[100%] mt-8 `}>
                     <Link href={'/auth/reset-password/step-2'} className={`w-[100%]`}>
                         <AuthButton disable={disableButton} backgroundColor={'#0d9b48'} textColor={"white"}
                                     id={"resetPasswordButton"}
