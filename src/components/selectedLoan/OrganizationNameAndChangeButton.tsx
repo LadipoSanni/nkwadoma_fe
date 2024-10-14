@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import {Avatar} from "@mui/material";
+// import {Avatar} from "@mui/material";
 import styles from "./SelectedLoan.module.css"
 
 const OrganizationNameAndChangeButton = () => {
@@ -19,7 +19,7 @@ const OrganizationNameAndChangeButton = () => {
             id="organizationAndChangeButton"
             className={`flex gap-3`}>
             <div className={`grid mt-auto mb-auto`}>
-                <Avatar data-testid="OrganizationImage" id="OrganizationAvatar" src={'/OrganizationLogo.svg'} variant="square" sx={{width: 24, height: 24}}/>
+                {/*<Avatar data-testid="OrganizationImage" id="OrganizationAvatar" src={'/OrganizationLogo.svg'} variant="square" sx={{width: 24, height: 24}}/>*/}
             </div>
             <div data-testid="organizationNameContainer" id="organizationNameContainer" className={` mt-[auto] mb-[auto]`}>
                     <div id="instituteName" style={{marginTop: 'auto'}} className={` ${styles.organizationName}`}
