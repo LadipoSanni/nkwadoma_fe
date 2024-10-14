@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
-import { InputAdornment, TextField } from "@mui/material";
-import { SearchOutlined } from "@mui/icons-material";
-import Button from "@mui/material/Button";
+// import { InputAdornment, TextField } from "@mui/material";
+// import { SearchOutlined } from "@mui/icons-material";
+// import Button from "@mui/material/Button";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { loanProductData } from "@/utils/LoanProductMockData";
+import {Button} from "@/components/ui/button";
 
 function LoanProductPage() {
   // const [openModal, setOpenModal] = React.useState(false);
@@ -70,40 +71,40 @@ function LoanProductPage() {
           className={`mr-auto ml-auto w-[96%] bg-white  place-content-end gap-2   md:flex`} id="InputContainer"
         >
           <div className={`md:w-[30%] mt-[1rem] w-[100%]`}>
-            <TextField
-              size="small"
-              placeholder="Search"
-              tabIndex={2}
-              // onChange={(e) => handleSearch(e.target.value)}
-              id={"searchLoanProduct"}
-              fullWidth
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchOutlined fontSize="small" />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              variant="outlined"
-            />
+            {/*<TextField*/}
+            {/*  size="small"*/}
+            {/*  placeholder="Search"*/}
+            {/*  tabIndex={2}*/}
+            {/*  // onChange={(e) => handleSearch(e.target.value)}*/}
+            {/*  id={"searchLoanProduct"}*/}
+            {/*  fullWidth*/}
+            {/*  slotProps={{*/}
+            {/*    input: {*/}
+            {/*      startAdornment: (*/}
+            {/*        <InputAdornment position="start">*/}
+            {/*          <SearchOutlined fontSize="small" />*/}
+            {/*        </InputAdornment>*/}
+            {/*      ),*/}
+            {/*    },*/}
+            {/*  }}*/}
+            {/*  variant="outlined"*/}
+            {/*/>*/}
           </div>
           <Button
             id="CreateLoanProductButton"
             className=""
             // onClick={() => setOpenModal(true)}
-            sx={{
+            style={{
               backgroundColor: "#0D9B48",
               color: "white",
               width: "15%",
               height: "2.35rem",
-              "&:hover": { backgroundColor: "#0D9B48", color: "white" },
+              // "&:hover": { backgroundColor: "#0D9B48", color: "white" },
               marginTop: "1rem",
               textTransform: "none",
-              "@media (max-width: 800px)": {
-                width: "100%",
-              },
+              // "@media (max-width: 800px)": {
+              //   width: "100%",
+              // },
             }}
           >
             Create loan product
