@@ -4,6 +4,7 @@ import {useState} from "react";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInputField from "@/reuseable/Input/AuthInputField";
 import Link from 'next/link'
+import {cabinetGroteskBold} from "@/app/fonts";
 
 
 const Login: React.FC = () => {
@@ -29,7 +30,7 @@ const Login: React.FC = () => {
             className="w-full bg-meedlWhite md:min-w-xl border border-slate-200 rounded-xl">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-10">
-                <h1 className=" font-sans text-meedlBlue md:text-3xl text-2xl leading-5 ">Log in to your
+                <h1 className={`${cabinetGroteskBold.className} text-meedlBlue md:text-3xl text-2xl leading-5`}>Log in to your
                     account</h1>
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
                      className="pt-10 space-y-5">
