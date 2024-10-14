@@ -1,15 +1,23 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+// import Menu from '@mui/material/Menu';
+// import MenuItem from '@mui/material/MenuItem';
 import AllProgramsCard from "@/reuseable/cards/Index";
 
+// const mockMenu = (
+    // <Menu open={true}>
+    //     <MenuItem>Option 1</MenuItem>
+    //     <MenuItem>Option 2</MenuItem>
+    // </Menu>
+// );
 const mockMenu = (
-    <Menu open={true}>
-        <MenuItem>Option 1</MenuItem>
-        <MenuItem>Option 2</MenuItem>
-    </Menu>
-);
+    <div>
+        <div>Option 1</div>
+        <div>Option 2</div>
+
+    </div>
+)
+
 
 describe('AllProgramsCard Component', () => {
     const props = {

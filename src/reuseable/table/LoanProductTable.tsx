@@ -214,7 +214,7 @@ import React from 'react'
 
 const LoanProductTable = () => {
     return (
-        <div>
+        <div id={'datatable'} data-testid={'datatable'}>
 
         </div>
     );
