@@ -1,5 +1,5 @@
 import React from 'react';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
 const TraineeProfile = () => {
@@ -17,7 +17,7 @@ const TraineeProfile = () => {
                 <p className="text-[12px] font-normal leading-[120%] text-[var(--Foundation-Blue-blue-800,#72757A)]">Loanee</p>
             </main>
         </div>
-        <ExpandMoreIcon/>
+        {/*<ExpandMoreIcon/>*/}
     </main>);
 };
 

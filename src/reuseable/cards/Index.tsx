@@ -1,10 +1,10 @@
 "use client"
 import React, { useState } from 'react';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+// import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { inter } from "@/app/fonts";
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import PersonIcon from '@mui/icons-material/Person';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+// import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+// import PersonIcon from '@mui/icons-material/Person';
+// import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 interface CourseCardProps {
     title: string;
@@ -40,7 +40,7 @@ const AllProgramsCard: React.FC<CourseCardProps> = ({ title, description, traine
             <div id="header" data-testid="header" className="flex justify-between">
                 <h3 id="title" data-testid="title" className="text-[#101828] font-medium text-lg leading-7">{title}</h3>
                 <div id="menuIcon" data-testid="menuIcon" onClick={handleClick}>
-                    <MoreVertIcon sx={{ color: "black" }} />
+                    {/*<MoreVertIcon sx={{ color: "black" }} />*/}
                 </div>
                 {React.cloneElement(menu, {
                     anchorell: anchorel,
@@ -66,18 +66,18 @@ const AllProgramsCard: React.FC<CourseCardProps> = ({ title, description, traine
             <div id="details" data-testid="details" className="flex flex-col justify-start mt-4">
                 <div id="traineesAndMonths" data-testid="traineesAndMonths" className="flex flex-row space-x-2">
                     <span id="trainees" data-testid="trainees" className="py-1 px-2 mb-2 text-sm font-medium text-gray-900 bg-[#D0D5DD] rounded-full border border-slate-200 flex items-center space-x-2">
-                        <PersonIcon sx={{ color: "black", fontSize: "16px" }} />
+                        {/*<PersonIcon sx={{ color: "black", fontSize: "16px" }} />*/}
                         <span className={`${inter.className} text-[#142854] leading-5 text-base font-normal`}>{trainees} trainees</span>
                     </span>
                     <span id="months" data-testid="months" className="py-1 px-2 mb-2 text-sm font-medium text-gray-900 bg-[#D0D5DD] rounded-full border border-slate-200 flex items-center space-x-2">
-                        <CalendarMonthIcon sx={{ color: "black", fontSize: "16px" }} />
+                        {/*<CalendarMonthIcon sx={{ color: "black", fontSize: "16px" }} />*/}
                         <span className={`${inter.className} text-[#142854] leading-5 text-base font-normal`}>{months} months</span>
                     </span>
                 </div>
 
                 <div id="cohorts" data-testid="cohorts">
                     <span className="py-1 px-2 mb-2 text-sm font-medium text-gray-900 bg-[#D0D5DD] rounded-full border border-slate-200 items-center space-x-2">
-                        <PeopleAltIcon sx={{ color: "black", fontSize: "16px" }} />
+                        {/*<PeopleAltIcon sx={{ color: "black", fontSize: "16px" }} />*/}
                         <span className={`${inter.className} text-[#142854] leading-5 text-base font-normal`}>{cohorts} cohorts</span>
                     </span>
                 </div>
