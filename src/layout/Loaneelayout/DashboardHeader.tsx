@@ -15,9 +15,9 @@ const DashboardHeader = () => {
         return pathname;
     }
 
-    const toggleModal = () => {
-        setIsModalVisible(!isModalVisible);
-    }
+    // const toggleModal = () => {
+    //     setIsModalVisible(!isModalVisible);
+    // }
 
     const handleClickOutside = (event: MouseEvent) => {
         if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
