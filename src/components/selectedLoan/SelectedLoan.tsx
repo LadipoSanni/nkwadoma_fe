@@ -1,5 +1,5 @@
 import React from 'react';
-import SelectedLoanHeader from "@/component/selectedLoan/SelectedLoanHeader";
+import SelectedLoanHeader from "@/components/selectedLoan/SelectedLoanHeader";
 
 type props = {
     children: React.ReactNode;

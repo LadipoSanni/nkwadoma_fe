@@ -1,7 +1,7 @@
 import "@testing-library/react"
 import {Providers} from "@/app/provider";
 import {render, screen} from "@testing-library/react";
-import SelectLoanTab from "@/component/selectedLoan/SelectLoanTab";
+import SelectLoanTab from "@/components/selectedLoan/SelectLoanTab";
 
 
 // Mock useRouter:
