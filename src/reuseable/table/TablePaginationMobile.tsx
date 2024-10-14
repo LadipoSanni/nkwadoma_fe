@@ -1,7 +1,6 @@
 import React from 'react';
-import {Button} from "@mui/material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import {Button} from "@/components/ui/button";
+
 
 interface Props<T> {
     page: number;
@@ -17,8 +16,8 @@ function TablePaginationMobile<T>({ page, rowsPerPage, tableData,handleNextPage,
     <Button
         id="dynamicTablePreviousButton"
         onClick={handlePreviousPage}
-        startIcon={<ArrowBackIcon sx={{color: '#667085'}} />}
-        sx={{
+        // startIcon={<ArrowBackIcon sx={{color: '#667085'}} />}
+        style={{
             color: '#101828',
             borderRadius: 'var(--radius-xs, 4px)',
             border: '1px solid var(--Default-colors-Borders, #D0D5DD)',
@@ -34,8 +33,8 @@ function TablePaginationMobile<T>({ page, rowsPerPage, tableData,handleNextPage,
     <Button
         id="dynamicTableNextButton"
         onClick={handleNextPage}
-        endIcon={<ArrowForwardIcon sx={{color: '#667085'}}/>}
-        sx={{
+        // endIcon={<ArrowForwardIcon sx={{color: '#667085'}}/>}
+        style={{
             color: '#101828',
             borderRadius: 'var(--radius-xs, 4px)',
             border: '1px solid var(--Default-colors-Borders, #D0D5DD)',

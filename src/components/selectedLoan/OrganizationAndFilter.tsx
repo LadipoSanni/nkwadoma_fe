@@ -1,6 +1,6 @@
 import React from 'react';
-import OrganizationNameAndChangeButton from "@/component/selectedLoan/OrganizationNameAndChangeButton";
-import SearchAndFilterLoan from "@/component/selectedLoan/SearchAndFilterLoan";
+import OrganizationNameAndChangeButton from "@/components/selectedLoan/OrganizationNameAndChangeButton";
+import SearchAndFilterLoan from "@/components/selectedLoan/SearchAndFilterLoan";
 
 const OrganizationAndFilter = () => {
     return (

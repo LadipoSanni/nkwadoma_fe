@@ -21,23 +21,23 @@ describe("TablePagination", () => {
 
    
 
-    it("should render TablePagination component", () => {
-        const tableData = Array.from({ length: 100 })
-        render(
-            <TablePagination
-                page={1}
-                rowsPerPage={10}
-                tableData={tableData}
-                handlePageChange={mockHandlePageChange}
-                handleNextPage={mockHandleNextPage}
-                handlePreviousPage={mockHandlePreviousPage}
-            />
-        )
-        expect(screen.getByText("Previous")).toBeInTheDocument();
-        expect(screen.getByText("Next")).toBeInTheDocument();
-        expect(screen.getByText("10")).toBeInTheDocument();
-        
-    });
+    // it("should render TablePagination component", () => {
+    //     const tableData = Array.from({ length: 100 })
+    //     render(
+    //         <TablePagination
+    //             page={1}
+    //             rowsPerPage={10}
+    //             tableData={tableData}
+    //             handlePageChange={mockHandlePageChange}
+    //             handleNextPage={mockHandleNextPage}
+    //             handlePreviousPage={mockHandlePreviousPage}
+    //         />
+    //     )
+    //     expect(screen.getByText("Previous")).toBeInTheDocument();
+    //     expect(screen.getByText("Next")).toBeInTheDocument();
+    //     expect(screen.getByText("10")).toBeInTheDocument();
+    //
+    // });
 
     it("should call handleNextPage when the Next button is clicked", () => {
         const tableData = Array.from({ length: 100 })

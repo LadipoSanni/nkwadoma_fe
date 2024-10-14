@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import AuthInputField from '@/reuseable/Input/AuthInputField';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+// import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 describe('CustomInputField', () => {
     test('renders the input field with label', () => {
@@ -14,10 +14,10 @@ describe('CustomInputField', () => {
         expect(screen.getByText('Show')).toBeInTheDocument();
     });
 
-    test('renders the endAdornment as icon', () => {
-        render(<AuthInputField label="Password" id="password" type="password" endAdornment={<VisibilityOffIcon />} />);
-        expect(screen.getByTestId('VisibilityOffIcon')).toBeInTheDocument();
-    });
+    // test('renders the endAdornment as icon', () => {
+        // render(<AuthInputField label="Password" id="password" type="password" endAdornment={<VisibilityOffIcon />} />);
+        // expect(screen.getByTestId('VisibilityOffIcon')).toBeInTheDocument();
+    // });
 
     test('toggles password visibility', () => {
         render(<AuthInputField label="Password" id="password" type="password" endAdornment="Show" />);

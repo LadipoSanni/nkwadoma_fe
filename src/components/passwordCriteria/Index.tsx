@@ -1,5 +1,5 @@
 import React from 'react';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+// import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {inter} from "@/app/fonts";
 
 interface PasswordCriteriaProps {
@@ -20,11 +20,11 @@ const PasswordCriteria: React.FC<PasswordCriteriaProps> = ({criteriaStatus, id}:
             <main id="password-criteria-main-1" className={'grid gap-3'}>
                 {criteria.slice(0, 2).map((text, index) => (
                     <div key={index} id={`password-criteria-item-${index}`} className={'flex gap-2 items-center'}>
-                        <CheckCircleIcon id={`password-criteria-icon-${index}`} style={{
-                            color: criteriaStatus[index] ? '#142854' : '#D0D0D0',
-                            width: '16px',
-                            height: '16px'
-                        }}/>
+                        {/*<CheckCircleIcon id={`password-criteria-icon-${index}`} style={{*/}
+                        {/*    color: criteriaStatus[index] ? '#142854' : '#D0D0D0',*/}
+                        {/*    width: '16px',*/}
+                        {/*    height: '16px'*/}
+                        {/*}}/>*/}
                         <p id={`password-criteria-text-${index}`} className={`text-[14px] font-normal leading-[22px] ${criteriaStatus[index] ? 'text-grey800' : 'text-neutral900'}`}>{text}</p>
                     </div>
                 ))}
@@ -32,11 +32,11 @@ const PasswordCriteria: React.FC<PasswordCriteriaProps> = ({criteriaStatus, id}:
             <main id="password-criteria-main-2" className={'grid gap-3'}>
                 {criteria.slice(2).map((text, index) => (
                     <div key={index} id={`password-criteria-item-${index + 2}`} className={'flex gap-2 items-center'}>
-                        <CheckCircleIcon id={`password-criteria-icon-${index + 2}`} style={{
-                            color: criteriaStatus[index + 2] ? '#142854' : '#D0D0D0',
-                            width: '16px',
-                            height: '16px'
-                        }}/>
+                        {/*<CheckCircleIcon id={`password-criteria-icon-${index + 2}`} style={{*/}
+                        {/*    color: criteriaStatus[index + 2] ? '#142854' : '#D0D0D0',*/}
+                        {/*    width: '16px',*/}
+                        {/*    height: '16px'*/}
+                        {/*}}/>*/}
                         <p id={`password-criteria-text-${index + 2}`} className={`text-[14px] font-normal leading-[22px] ${criteriaStatus[index + 2] ? 'text-grey800' : 'text-neutral900'}`}>{text}</p>
                     </div>
                 ))}

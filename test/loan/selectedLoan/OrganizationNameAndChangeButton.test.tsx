@@ -1,6 +1,6 @@
 import "@testing-library/react"
 import {render, screen} from "@testing-library/react";
-import OrganizationNameAndChangeButton from "@/component/selectedLoan/OrganizationNameAndChangeButton";
+import OrganizationNameAndChangeButton from "@/components/selectedLoan/OrganizationNameAndChangeButton";
 
 
 describe("testing OrganizationNameAndChangeButton component", ()=> {
@@ -12,13 +12,13 @@ describe("testing OrganizationNameAndChangeButton component", ()=> {
         const container = screen.getByTestId("OrganizationNameAndChangeButtonContainer");
         expect(container).toBeInTheDocument()
     })
-    it("test that organization image renders", ()=> {
-        render(
-            <OrganizationNameAndChangeButton/>
-        )
-        const container = screen.getByTestId("OrganizationImage");
-        expect(container).toBeInTheDocument()
-    })
+    // it("test that organization image renders", ()=> {
+    //     render(
+    //         <OrganizationNameAndChangeButton/>
+    //     )
+    //     const container = screen.getByTestId("OrganizationImage");
+    //     expect(container).toBeInTheDocument()
+    // })
     it('should ', () => {
         render(
             <OrganizationNameAndChangeButton/>

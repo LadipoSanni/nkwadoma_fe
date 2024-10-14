@@ -3,7 +3,7 @@ import React from 'react';
 import {useRouter} from "next/navigation";
 import {store, useAppSelector} from "@/redux/store";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
-import {Avatar} from "@mui/material";
+// import {Avatar} from "@mui/material";
 
 
 const SideBar = () => {
@@ -24,14 +24,14 @@ const SideBar = () => {
                                 <div id={'fund'} onClick={() => router.push('')} className={`bg-red-200 w-[92%]`}>
                                     <div id={'SMLogo'}
                                          className=" w-[100%] bg-amber-100 flex gap-2 items-center  object-fit ">
-                                        <Avatar id={'Logo'} src={'/Group 48096834.svg'}
-                                               className={`bg-blue-200 object-fit w-[20%]`}
-                                                variant={"square"}
-                                               alt="learn-space-logo"/>
-                                        <Avatar id={'Letters'} src={'/learnSpaceLetters.svg'}
-                                               className={` bg-green-200 object-fit w-[78%]`}
-                                                variant={"square"}
-                                               alt="learn-space-logo"/>
+                                        {/*<Avatar id={'Logo'} src={'/Group 48096834.svg'}*/}
+                                        {/*       className={`bg-blue-200 object-fit w-[20%]`}*/}
+                                        {/*        variant={"square"}*/}
+                                        {/*       alt="learn-space-logo"/>*/}
+                                        {/*<Avatar id={'Letters'} src={'/learnSpaceLetters.svg'}*/}
+                                        {/*       className={` bg-green-200 object-fit w-[78%]`}*/}
+                                        {/*        variant={"square"}*/}
+                                        {/*       alt="learn-space-logo"/>*/}
 
                                     </div>
                                 </div>
@@ -58,10 +58,10 @@ const SideBar = () => {
                     <div className={`h-[100%] w-[98%] mr-auto ml-auto`}>
                         {/*<div id={'fund'}  className={``}>*/}
                             <div id={'Logo'} className=" w-[98%]  flex items-center  gap-2 object-fit  ">
-                                <Avatar id={'MeduimLogo'} src={'/logo.svg'}
-                                        className={` w-[80%]`}
-                                        variant="square"
-                                        alt="learn-space-logo"/>
+                                {/*<Avatar id={'MeduimLogo'} src={'/logo.svg'}*/}
+                                {/*        className={` w-[80%]`}*/}
+                                {/*        variant="square"*/}
+                                {/*        alt="learn-space-logo"/>*/}
 
                             </div>
                         {/*</div>*/}
