@@ -3,8 +3,8 @@ import React from "react";
 // import { InputAdornment, TextField } from "@mui/material";
 // import { SearchOutlined } from "@mui/icons-material";
 // import Button from "@mui/material/Button";
-import LoanProductTable from "@/reuseable/table/LoanProductTable";
-import { loanProductData } from "@/utils/LoanProductMockData";
+// import LoanProductTable from "@/reuseable/table/LoanProductTable";
+// import { loanProductData } from "@/utils/LoanProductMockData";
 import {Button} from "@/components/ui/button";
 
 function LoanProductPage() {
@@ -14,53 +14,53 @@ function LoanProductPage() {
   //   setOpenModal(false);
   // };
 
-  const handleRowClick = () => {
-    
-}
+//   const handleRowClick = () => {
+//
+// }
 
-  const columns = [
-      {
-          title: 'Loan product name',
-          sortable: true,
-          id: 'loanProductName'
-      },
-      {
-          title: 'Loan product sponsor',
-          sortable: true,
-          id: 'loanProductSponsor'
-      },
-      {
-          title: 'Tenor',
-          sortable: true,
-          id: 'tenor'
-      },
-      {
-          title: 'Interest rate (%)',
-          sortable: true,
-          id: "interestRate"
-      },{
-          title: 'Cost of funds',
-          sortable: true,
-          id: 'costOfFund'
-      },{
-          title: 'No. of loanees',
-          sortable: true,
-          id: 'noOfLoan'
-      },{
-          title: 'Amount disbursed',
-          sortable: true,
-          id: 'AmountDisbursed'
-      },{
-          title: 'Amount repaid',
-          sortable: true,
-          id: 'AmountRepaid'
-      },
-      {
-          title: 'Amount earned',
-          sortable: true,
-          id: 'AmountEarned'
-      },
-  ]
+  // const columns = [
+  //     {
+  //         title: 'Loan product name',
+  //         sortable: true,
+  //         id: 'loanProductName'
+  //     },
+  //     {
+  //         title: 'Loan product sponsor',
+  //         sortable: true,
+  //         id: 'loanProductSponsor'
+  //     },
+  //     {
+  //         title: 'Tenor',
+  //         sortable: true,
+  //         id: 'tenor'
+  //     },
+  //     {
+  //         title: 'Interest rate (%)',
+  //         sortable: true,
+  //         id: "interestRate"
+  //     },{
+  //         title: 'Cost of funds',
+  //         sortable: true,
+  //         id: 'costOfFund'
+  //     },{
+  //         title: 'No. of loanees',
+  //         sortable: true,
+  //         id: 'noOfLoan'
+  //     },{
+  //         title: 'Amount disbursed',
+  //         sortable: true,
+  //         id: 'AmountDisbursed'
+  //     },{
+  //         title: 'Amount repaid',
+  //         sortable: true,
+  //         id: 'AmountRepaid'
+  //     },
+  //     {
+  //         title: 'Amount earned',
+  //         sortable: true,
+  //         id: 'AmountEarned'
+  //     },
+  // ]
 
 
 
@@ -111,7 +111,7 @@ function LoanProductPage() {
           </Button>
         </div>
         <div  className={`w-[96%] bg-purple-300 mt-[1rem] h-[82%] mr-auto ml-auto`}>
-                        <LoanProductTable tableData={loanProductData}  handleRowClick={handleRowClick} tableHeader={columns} tableHeight={59} sx='cursor-pointer' staticColunm="loanProductName"/>
+                        {/*<LoanProductTable tableData={loanProductData}  handleRowClick={handleRowClick} tableHeader={columns} tableHeight={59} sx='cursor-pointer' staticColunm="loanProductName"/>*/}
                     </div>
       </div>
     </div>
