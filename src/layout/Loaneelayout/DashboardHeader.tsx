@@ -3,7 +3,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {usePathname} from 'next/navigation';
 import LoneeProfile from "@/reuseable/profile/LoneeProfile";
 import NotificationBar from "@/reuseable/notification/NotificationBar";
-import MenuIcon from '@mui/icons-material/Menu';
+// import MenuIcon from '@mui/icons-material/Menu';
 // import MobileNavigationSidebar from "./MobileNavigationSidebar";
 
 const DashboardHeader = () => {
@@ -36,7 +36,7 @@ const DashboardHeader = () => {
         <header id="dashboardHeaderTrainee"
                 className="bg-white p-5 flex items-center justify-between border-b border-gray-300">
             <div className={'flex gap-3'}>
-                <MenuIcon className={'md:hidden'} onClick={toggleModal} />
+                {/*<MenuIcon className={'md:hidden'} onClick={toggleModal} />*/}
                 <h1 id="headerTitleTrainee"
                     className="text-[16px] font-medium leading-[120%] text-[#101828]">{getHeaderTitle()}</h1>
             </div>
