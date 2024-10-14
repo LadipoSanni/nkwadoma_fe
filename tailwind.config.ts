@@ -17,6 +17,7 @@ const config: Config = {
         labelBlue: `#101828`,
         blue600: '#12244C',
         blue700: '#0E1C3C',
+        meedlWhite: '#FFFFFF',
         blue800: '#0B162E',
         blue900: '#081123',
         forgetPasswordBlue: `#475467`,
