@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, InputHTMLAttributes } from 'react';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import {inter} from "@/app/fonts";
 
 interface ReusableInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -30,8 +29,8 @@ const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, 
         } else {
             return (
                 <span id={`end-adornment-${id}`} style={{cursor: 'pointer'}} onClick={handleToggleVisibility}>
-                    {isPasswordVisible ?
-                        <VisibilityIcon style={{color: '#grey800', width: '16px', height: '16px'}}/> : endAdornment}
+                    {/*{isPasswordVisible ?*/}
+                    {/*    // <VisibilityIcon style={{color: '#grey800', width: '16px', height: '16px'}}/> : endAdornment}*/}
                 </span>
             );
         }
