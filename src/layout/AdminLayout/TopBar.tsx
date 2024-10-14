@@ -6,21 +6,21 @@ import {IoMdMenu} from "react-icons/io";
 import {store} from "@/redux/store";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 // import {Badge} from "@mui/material";
-import {FiBell} from "react-icons/fi";
+// import {FiBell} from "react-icons/fi";
 
 
 const TopBar = () => {
 
-    const [arrowToggled,setArrowToggle] = React.useState(false)
+    // const [arrowToggled,setArrowToggle] = React.useState(false)
 
 
-    const toggleArrow = ()=> {
-        if (arrowToggled){
-            setArrowToggle(false)
-        }else {
-            setArrowToggle(true)
-        }
-    }
+    // const toggleArrow = ()=> {
+    //     if (arrowToggled){
+    //         setArrowToggle(false)
+    //     }else {
+    //         setArrowToggle(true)
+    //     }
+    // }
     const openMobileSideBar = () => {
         store.dispatch(setShowMobileSideBar(true))
     }

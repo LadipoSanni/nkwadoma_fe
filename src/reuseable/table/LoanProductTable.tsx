@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React from 'react'
 
 // import {
 //   Table,
@@ -15,33 +15,33 @@ import React,{useState} from 'react'
 // import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
+//
+// interface ColumnProps<T> {
+//   title: string;
+//   id: string;
+//   selector?: (row: T) => React.ReactNode;
+//   sortable?: boolean;
+// }
+//
+// interface TableRowData {
+//   [key: string]: string | number | null | React.ReactNode;
+// }
 
-interface ColumnProps<T> {
-  title: string;
-  id: string;
-  selector?: (row: T) => React.ReactNode;
-  sortable?: boolean;
-}
-
-interface TableRowData {
-  [key: string]: string | number | null | React.ReactNode;
-}
 
 
-
-interface Props<T extends TableRowData> {
-   tableData: T[];
-    tableHeader: ColumnProps<T>[];
-    handleRowClick: (row: T) => void;
-    tableHeight?: number;
-    sx?: string
-    tableStyle?: string
-    staticColunm?: string
-}
-
-function LoanProductTable<T extends TableRowData>({tableHeader, tableData, handleRowClick, tableHeight,sx,tableStyle,staticColunm }: Props<T>) {
-  const [page, setPage] = useState(1);
-    const rowsPerPage = 10;
+// interface Props<T extends TableRowData> {
+//    tableData: T[];
+//     tableHeader: ColumnProps<T>[];
+//     handleRowClick: (row: T) => void;
+//     tableHeight?: number;
+//     sx?: string
+//     tableStyle?: string
+//     staticColunm?: string
+// }
+//
+// function LoanProductTable<T extends TableRowData>({tableHeader, tableData, handleRowClick, tableHeight,sx,tableStyle,staticColunm }: Props<T>) {
+//   const [page, setPage] = useState(1);
+//     const rowsPerPage = 10;
     // const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
     // const [dropdownOpen, setDropdownOpen] = useState(false);
     //
@@ -70,10 +70,8 @@ function LoanProductTable<T extends TableRowData>({tableHeader, tableData, handl
     //   };
     //
     // const paginatedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-    return (
-        <div>
+    // return (
 
-        </div>
       // <div id="loanProductTableContainer" className={`w-[100%] `}>
       //     <Paper  id="loanProductTablePaper" sx={{ width: '100%', overflow: 'hidden' }} elevation={0}>
       //         <div id="loanProductTableBorder" className='border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block'>
@@ -210,7 +208,18 @@ function LoanProductTable<T extends TableRowData>({tableHeader, tableData, handl
       //     </Paper>
       //
       // </div>
-  );
-}
+//   );
+// }
 
-export default LoanProductTable
+
+const LoanProductTable = () => {
+    return (
+        <div>
+
+        </div>
+    );
+};
+
+export default LoanProductTable;
+
+// export default LoanProductTable
