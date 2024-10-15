@@ -14,27 +14,39 @@ interface Props<T> {
 function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handleNextPage, handlePreviousPage }: Props<T>){
   const totalPages = Math.ceil(tableData.length / rowsPerPage);
 
-  // const getPages = () => {
-  //   const pages = [];
-
-
-  //   for (let i = 1; i <= Math.min(4, totalPages); i++) {
-  //     pages.push(i);
-  //   }
+  const renderPaginationItems = () => {
+    const items = [];
 
     
-  //   if (totalPages > 5) {
-  //     if (page > 4) {
-  //       pages.push(-1); 
-  //     }
-     
-  //     for (let i = Math.max(totalPages - 2, 5); i <= totalPages; i++) {
-  //       pages.push(i);
-  //     }
-  //   }
+    if (totalPages > 0) items.push(1);
+    if (totalPages > 1) items.push(2);
 
-  //   return pages;
-  // };
+    
+    if (totalPages > 5) {
+      if (page > 3) items.push('...'); 
+
+      
+      for (let i = Math.max(3, page - 1); i <= Math.min(totalPages - 2, page + 1); i++) {
+        items.push(i);
+      }
+
+      if (page < totalPages - 2) items.push('...'); 
+
+     
+      if (totalPages > 2) items.push(totalPages - 1);
+      if (totalPages > 3) items.push(totalPages);
+    } else {
+     
+      for (let i = 3; i <= totalPages; i++) {
+        items.push(i);
+      }
+    }
+
+    return items;
+  };
+
+  
+
   return (
     <div  data-testid="dynamicTablePagination" id="dynamicTablePagination" className={'flex items-center p-3 h-16 justify-between'}>
         <PaginationPrevious
@@ -55,12 +67,13 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
       />
         <div className='hidden md:block'>
         <Pagination>
-        <PaginationContent>
+          
+        {/* <PaginationContent>
           {Array.from({ length: totalPages }, (_, index) => (
             <PaginationItem key={index}>
               <Button
                 className={`${
-                  index + 1 === page ? "bg-green-100 text-gray-500 hover:bg-green-100 " : "bg-gray-50 text-gray-500 border-none shadow-none"
+                  index + 1 === page ? "bg-grey50 text-gray-500 hover:bg-gray50 " : "bg-gray-50 text-gray-500 border-none shadow-none"
                 } px-4 py-1 rounded-full`}
                 onClick={(e) => handlePageChange(e, index + 1)}
               >
@@ -70,28 +83,32 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
           ))}
 
           {totalPages > 5 && <PaginationEllipsis />}
-        </PaginationContent>
-         {/* <PaginationContent>
-            {getPages().map((pageNum, index) =>
-              pageNum === -1 ? (
-                <PaginationEllipsis key={index} />
-              ) : (
+        </PaginationContent> */}
+         <PaginationContent>
+            {renderPaginationItems().map((item, index) => {
+              if (item === '...') {
+                return (
+                  <PaginationEllipsis key={index} />
+                );
+              }
+              return (
                 <PaginationItem key={index}>
                   <Button
                     className={`${
-                      pageNum === page
-                        ? "bg-green-100 text-gray-500 hover:bg-green-100"
-                        : "bg-gray-50 text-gray-500 border-none shadow-none"
+                      item === page
+                        ? 'bg-grey50 text-gray-500 hover:bg-gray50 '
+                        : 'bg-gray-50 text-gray-500 border-none shadow-none'
                     } px-4 py-1 rounded-full`}
-                    onClick={(e) => handlePageChange(e, pageNum)}
+                    onClick={(e) => handlePageChange(e, Number(item))}
                   >
-                    {pageNum}
+                    {item}
                   </Button>
                 </PaginationItem>
-              )
-            )}
-          </PaginationContent> */}
-      </Pagination>
+              );
+            })}
+          </PaginationContent>
+        
+       </Pagination> 
 
       </div>
       

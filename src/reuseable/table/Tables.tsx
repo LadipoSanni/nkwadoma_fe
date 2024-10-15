@@ -66,13 +66,16 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
     <div id="loanProductTableContainer" className={`w-[100%] `}>
         <div id="loanProductTableBorder" className='border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block '>
             <TableContainer id="loanProductTableScrollbar" style={{ height: `${tableHeight}vh` ,overflow: 'auto'}}>
-                <Table id="dynamicTable" stickyHeader={true}>
-                    <TableHeader id="dynamicTableHead" className={`bg-[#e7e7e7] h-14 hover:bg-[#e7e7e7]`} sticky={true} >
-                        <TableRow id="dynamicTableHeadRow" className={` sticky top-0 bg-[#fafbfc] z-10 hover:bg-[#fafbfc]`}>
+                <Table id="dynamicTable">
+                    <TableHeader id="dynamicTableHead" className={`bg-[#e7e7e7] h-14 hover:bg-[#e7e7e7]`} >
+                        <TableRow id="dynamicTableHeadRow" className={` sticky top-0 bg-[#fafbfc] z-10 hover:bg-[#fafbfc]`}
+                         style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 100 }}
+                        >
                           {
                             tableHeader.map((column) => (
                                 <TableHead key={column.id} id={`dynamicTableHeadCell${column.id}`} 
                                 // className={`px-[12px] py-[10px] text-[#101828]`}
+                                style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 100 }}
                                 >
                                     <div id={`dynamicTableHeadCellDiv${column.id}`} className={`${Styles.tableHeaderItem}`}>
                                         {column.title}
@@ -126,11 +129,14 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
         </div>
         <div id="loanProductTableBorderMobile" className="border-[1px]  rounded-md md:hidden w-[100%]">
          <TableContainer id="loanProductTableBorderMobile" className="shadow-none border-none " style={{ height: `${tableHeight}vh` ,overflow: 'auto'}}>
-            <Table  id="dynamicTableMobile" stickyHeader={true} className='w-full'  
+            <Table  id="dynamicTableMobile" className='w-full'  
       >
-              <TableHeader id="dynamicTableHeadMobile" className={` h-14 hover:bg-[#e7e7e7] sticky`} sticky={true} >
+              <TableHeader id="dynamicTableHeadMobile" className={` h-14 hover:bg-[#e7e7e7] sticky`}  >
               <TableRow id="dynamicTableHeadRow" className={` sticky top-0 bg-[#fafbfc] z-10 hover:bg-[#fafbfc]`} >
-                 <TableHead style={{ backgroundColor: '#FAFBFC' }}>
+                 <TableHead 
+                 style={{ backgroundColor: '#FAFBFC' }}
+                 
+                 >
                  <h1 className='w-32 text-[#404653] font-semibold text-sm'>{staticHeader}</h1>
                  </TableHead>
                 <div>
