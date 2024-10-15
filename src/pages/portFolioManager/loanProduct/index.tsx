@@ -5,7 +5,7 @@ import React from "react";
 // import Button from "@mui/material/Button";
 // import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { loanProductData } from "@/utils/LoanProductMockData";
-import Tables from "@/reuseable/table/Tables";
+import Tables from "@/reuseable/table/LoanProductTable";
 // import { Button } from "@/components/ui/button";
 
 function LoanProductPage() {
