@@ -116,7 +116,7 @@ function LoanProductPage() {
                         <LoanProductTable tableData={loanProductData}  handleRowClick={handleRowClick} tableHeader={columns} tableHeight={59} sx='cursor-pointer' staticColunm="loanProductName" staticHeader="Loan Product"/>
           </div> */}
           <div  className={`w-[96%]  mt-[1rem] h-[82%] mr-auto ml-auto`}>
-                        <Tables tableData={loanProductData}  handleRowClick={handleRowClick} tableHeader={columns} tableHeight={59}  sx='cursor-pointer' staticColunm="loanProductName" staticHeader="Loan Product"/>
+                        <Tables tableData={loanProductData}  handleRowClick={handleRowClick} tableHeader={columns} tableHeight={59} sx='cursor-pointer' staticColunm="loanProductName" staticHeader="Loan Product"/>
           </div>
       </div>
       

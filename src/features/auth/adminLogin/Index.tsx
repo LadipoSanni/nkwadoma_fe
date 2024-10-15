@@ -4,6 +4,8 @@ import {useState} from "react";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInputField from "@/reuseable/Input/AuthInputField";
 import Link from 'next/link'
+import Image from "next/image";
+import {cabinetGroteskBold} from "@/app/fonts";
 
 
 const AdminLogin: React.FC = () => {
@@ -24,12 +26,21 @@ const AdminLogin: React.FC = () => {
     const isFormValid = email && password
 
     return (
-        <div className={` flex flex-col justify-center h-screen bg-white items-center`} id={`superAdminLoginPage`}  data-testid="superAdminLoginPage">
-            <p className={`text-[#0D9B48] font-medium text-2xl font-sans`}>Meedl</p>
+        <div className={` flex flex-col justify-center h-screen bg-[#D9EAFF] md:p-0 p-5 items-center`} id={`superAdminLoginPage`}
+             data-testid="superAdminLoginPage">
+            <div
+                id={'OrganizationAdminLogo'}
+                data-testid={`OrganizationAdminLogo`}
+                className={`text-meedlBlue font-mono mb-16 object-cover`}
+            >
+                <Image src={'/Meedle Logo Primary Main.svg'} alt={'meedl'}
+                       width={150}
+                       height={150}
+                />
+            </div>
             <div data-testid={`superAdminLoginDivId`} id={`superAdminLoginDivId`}
-                 className="px-4 py-10 md:max-w-md w-full">
-                <h1 className=" font-sarif font-medium text-[#0F1624] text-3xl flex justify-center items-center md:text-3xl leading-5 ">Welcome
-                    back, Admin</h1>
+                 className="px-4 py-10 md:max-w-md w-full rounded-xl bg-meedlWhite">
+                <h1 className={`${cabinetGroteskBold.className} text-labelBlue text-3xl flex justify-start items-center md:text-3xl leading-5`}>Login to your account</h1>
                 <div data-testid={`superAdminEmailAndPasswordId`} id={`superAdminEmailAndPasswordId`}
                      className="pt-10 space-y-5">
                     <div data-testid={`superAdminEmailId`} id={`superAdminEmailId`}>
@@ -52,15 +63,15 @@ const AdminLogin: React.FC = () => {
                         </AuthInputField>
                     </div>
                     <div id={"SuperAdminAuthButtonContainer"} className={`w-[100%]`}>
-                        <AuthButton disable={!isFormValid} backgroundColor={'#0d9b48'} textColor={"white"}
+                        <AuthButton disable={!isFormValid} backgroundColor={'#142854'} textColor={"white"}
                                     id={"SuperAdminAuthButton"}
                                     buttonText={"Log in"} width={"inherit"}
                                     handleClick={handleReset}>
                         </AuthButton>
                     </div>
-                    <p className="flex items-center justify-center text-sm text-[#101828] leading-4">
+                    <p className="flex items-center justify-center text-sm text-forgetPasswordBlue leading-4">
                         Forgot Password? <Link href="/auth/reset-password"
-                                            className="font-medium text-[#0D9B48] underline">Reset it
+                                               className="font-medium text-meedlBlue underline">Reset it
                         here</Link>
                     </p>
                 </div>
