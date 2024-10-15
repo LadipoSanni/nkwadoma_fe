@@ -64,7 +64,6 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
 
   return (
     <div id="loanProductTableContainer" className={`w-[100%] `}>
-     {/* <Paper   className={`w-[100%] overflow-hidden`} id="loanProductTablePaper"> */}
         <div id="loanProductTableBorder" className='border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block '>
             <TableContainer id="loanProductTableScrollbar" style={{ height: `${tableHeight}vh` ,overflow: 'auto'}}>
                 <Table id="dynamicTable" stickyHeader={true}>
@@ -215,7 +214,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
            
 
         </div>
-     {/* </Paper> */}
+     
         </div>
   )
 }
