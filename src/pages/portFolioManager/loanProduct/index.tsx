@@ -5,7 +5,8 @@ import React from "react";
 // import Button from "@mui/material/Button";
 // import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { loanProductData } from "@/utils/LoanProductMockData";
-import Tables from "@/reuseable/table/Tables";
+import Tables from "@/reuseable/table/LoanProductTable";
+// import { Button } from "@/components/ui/button";
 
 function LoanProductPage() {
   // const [openModal, setOpenModal] = React.useState(false);
@@ -68,9 +69,9 @@ function LoanProductPage() {
 
   return (
     <div className={`grid grid-cols-1  place-items-center   h-full`} id="loanProductPage">
-      <div className="grid rounded bg-white w-[100%] md:w-[80%] lg:fixed h-[85vh] " id='loanProductPageMainContainer'>
+      {/* <div className="grid rounded  w-[100%] md:w-[80%] lg:fixed h-[85vh] " id='loanProductPageMainContainer'> */}
         <div
-          className={`mr-auto ml-auto w-[96%] bg-white  place-content-end gap-2   md:flex`} id="InputContainer"
+          className={`mr-auto ml-auto w-[96%]   place-content-end gap-2   md:flex`} id="InputContainer"
         >
           <div className={`md:w-[30%] mt-[1rem] w-[100%]`}>
             {/* <TextField
@@ -118,7 +119,7 @@ function LoanProductPage() {
           <div  className={`w-[96%]  mt-[1rem] h-[82%] mr-auto ml-auto`}>
                         <Tables tableData={loanProductData}  handleRowClick={handleRowClick} tableHeader={columns} tableHeight={59} sx='cursor-pointer' staticColunm="loanProductName" staticHeader="Loan Product"/>
           </div>
-      </div>
+      {/* </div> */}
       
     </div>
   );
