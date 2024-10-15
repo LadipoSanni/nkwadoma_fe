@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, {useState} from 'react';
 import {IoMdMenu} from "react-icons/io";
 // import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -8,20 +8,21 @@ import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 // import {Badge} from "@mui/material";
 // import {FiBell} from "react-icons/fi";
 // import { FaceIcon, ImageIcon, SunIcon } from "@radix-ui/react-icons"
+import { ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons"
 
 
 const TopBar = () => {
 
-    // const [arrowToggled,setArrowToggle] = React.useState(false)
+    const [arrowToggled, setArrowToggled] = useState(false)
 
 
-    // const toggleArrow = ()=> {
-    //     if (arrowToggled){
-    //         setArrowToggle(false)
-    //     }else {
-    //         setArrowToggle(true)
-    //     }
-    // }
+    const toggleArrow = ()=> {
+        if (arrowToggled){
+            setArrowToggled(false)
+        }else {
+            setArrowToggled(true)
+        }
+    }
     const openMobileSideBar = () => {
         store.dispatch(setShowMobileSideBar(true))
     }
@@ -47,32 +48,30 @@ const TopBar = () => {
 
                     <div id="LayOutProfileAndNotification" className="flex items-center gap-5 md:gap-10">
                         <div id={'bellDiv'} className={` flex place-content-center object-fit h-[2.6rem]  w-[2.6rem] rounded-md mr-[1.7rem] `}>
-                           {/*<Notifications />*/}
-                           {/*   <Badge*/}
-                           {/*      badgeContent={'33'}*/}
-                           {/*      color="success" sx={{marginTop: 'auto', marginBottom: 'auto', height: '70%', width: '70%'}} >*/}
-                           {/*             <FiBell className={` w-[100%] h-[100%] object-cover `}/>*/}
-                           {/*   </Badge>*/}
+                            {/*<Notifications />*/}
+                            {/*   <Badge*/}
+                            {/*      badgeContent={'33'}*/}
+                            {/*      color="success" sx={{marginTop: 'auto', marginBottom: 'auto', height: '70%', width: '70%'}} >*/}
+                            {/*             <FiBell className={` w-[100%] h-[100%] object-cover `}/>*/}
+                            {/*   </Badge>*/}
                         </div>
                         <div id={'fullNameDiv'} className="flex gap-2  justify-between items-center w-[fit-content]">
                             <div
                                 className={` flex place-content-center  object-fit  bg-[#E0FDEB]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
                                 {/*<div*/}
                                 {/*    className={` grid place-content-center  mt-auto mb-auto  ${styles.avatarText}  w-[70%] h-[70%]   `}>*/}
-                                    {/*{getFirstLetterOfWord(fullName)}*/}
+                                {/*{getFirstLetterOfWord(fullName)}*/}
                                 {/*</div>*/}
                             </div>
                             <div className={` hidden md:grid md:gap-1  `}>
-                                {/*<p id={'fullNamePTag'}*/}
-                                {/*   className={styles.fullName}>{capitalizeFirstLetters(fullName)}</p>*/}
-                                {/*/!*<p id={'formatRoleUserRole'}*!/*/}
-                                {/*   // className={` flex ${styles.userRole} `}>{utils.formatRole(userRole)}</p>*/}
+
                             </div>
                             <div id={'toggleArrowDiv'} className={``}>
-                                {/*{arrowToggled ?*/}
-                                {/*    <ExpandLessIcon sx={{color: '#667085'}} onClick={toggleArrow}/> :*/}
-                                {/*    <ExpandMoreIcon sx={{color: '#667085'}} onClick={toggleArrow}/>*/}
-                                {/*}*/}
+                                {/*#66708*/}
+                                {arrowToggled ?
+                                    <ChevronUpIcon className={``} onClick={toggleArrow}/> :
+                                    <ChevronDownIcon className={``}  onClick={toggleArrow}/>
+                                }
                                 {/*{arrowToggled &&*/}
                                 {/*    <ProfileDropdown onLogoutClick={handleLogout} close={toggleArrow}/>}*/}
                             </div>

@@ -1,7 +1,7 @@
 import "@testing-library/react"
 import {queryByAttribute, render} from "@testing-library/react";
 import {Providers} from "@/app/provider";
-import SideBar from "@/layout/AdminLayout/SideBar";
+import SideBar from "@/components/sideBar/index";
 
 
 // Mock useRouter:
