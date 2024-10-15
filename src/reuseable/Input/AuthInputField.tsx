@@ -26,13 +26,6 @@ const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, 
                     {isPasswordVisible ? 'Hide' : 'Show'}
                 </span>
             );
-        } else {
-            return (
-                <span id={`end-adornment-${id}`} style={{cursor: 'pointer'}} onClick={handleToggleVisibility}>
-                    {/*{isPasswordVisible ?*/}
-                    {/*    // <VisibilityIcon style={{color: '#grey800', width: '16px', height: '16px'}}/> : endAdornment}*/}
-                </span>
-            );
         }
     };
 

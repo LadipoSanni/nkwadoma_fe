@@ -23,7 +23,6 @@ const Program = () => {
                     months={4}
                     title={'Design Thinking'}
                     trainees={50}
-                    menu={<div>ff</div>}
                 />
             </div>
         </main>
