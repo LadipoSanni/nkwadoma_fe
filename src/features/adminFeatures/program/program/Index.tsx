@@ -1,6 +1,6 @@
 "use client"
 import * as React from "react";
-import CreateProgramButton from "@/features/adminFeatures/program/CreateProgramButton";
+import CreateProgramButton from "@/features/adminFeatures/program/createProgramButton/Index";
 
 const Program = () => {
 

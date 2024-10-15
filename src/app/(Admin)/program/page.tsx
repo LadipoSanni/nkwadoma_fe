@@ -1,5 +1,5 @@
 import React from 'react'
-import Program from "@/features/adminFeatures/program/Program";
+import Program from "@/features/adminFeatures/program/program/Index";
 
 function page() {
     return (
