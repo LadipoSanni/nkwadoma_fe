@@ -1,0 +1,43 @@
+name: Build and Test on pull request
+
+on:
+  pull_request:
+    branches: [ "main", "dev", "prod-support" ]
+
+env:
+  EMAIL: 'ladipo@semicolon.africa'
+  # NEXT_PUBLIC_DEV_AUTH_URL: ${{ secrets.NEXT_PUBLIC_DEV_AUTH_URL }}
+  # VITE_APP_TMS_FRONTEND_URL: ${{ secrets.VITE_APP_TMS_FRONTEND_URL }}
+  # NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY: ${{ secrets.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY }}
+  # NEXT_PUBLIC_AWS_ACCESS_KEY: ${{ secrets.NEXT_PUBLIC_AWS_ACCESS_KEY }}
+  # NEXT_PUBLIC_AWS_REGION: ${{ secrets.NEXT_PUBLIC_AWS_REGION }}
+  # NEXT_PUBLIC_AWS_BUCKET: ${{ secrets.NEXT_PUBLIC_AWS_BUCKET }}
+  # NEXT_PUBLIC_LINKEDIN_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_LINKEDIN_CLIENT_ID }}
+  # NEXT_PUBLIC_LINKEDIN_STATE: ${{ secrets.NEXT_PUBLIC_LINKEDIN_STATE }}
+  # NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+  # NEXT_PUBLIC_KC_URL: ${{ secrets.NEXT_PUBLIC_KC_URL }}
+  # NEXT_PUBLIC_KC_REALM: ${{ secrets.NEXT_PUBLIC_KC_REALM }}
+  # NEXT_PUBLIC_KC_CLIENT_SECRET: ${{ secrets.NEXT_PUBLIC_KC_CLIENT_SECRET }}
+  # NEXT_PUBLIC_KC_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_KC_CLIENT_ID }}
+      
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install --force
+
+      - name: Build
+        run: npm run build
+
+      - name: Run Unit Tests
+        run: npm test
