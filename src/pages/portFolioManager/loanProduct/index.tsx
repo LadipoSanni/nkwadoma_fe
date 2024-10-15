@@ -6,7 +6,7 @@ import React from "react";
 // import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { loanProductData } from "@/utils/LoanProductMockData";
 import Tables from "@/reuseable/table/Tables";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 
 function LoanProductPage() {
   // const [openModal, setOpenModal] = React.useState(false);
