@@ -1,5 +1,5 @@
-import { render,screen } from "@testing-library/react";
-import LoanProductTable from "@/reuseable/table/LoanProductTable";
+// import { render,screen } from "@testing-library/react";
+// import LoanProductTable from "@/reuseable/table/LoanProductTable";
 
 const mockTableData = [
     { id: 1, name: 'Loan A', amount: 1000 },
