@@ -4,6 +4,7 @@ import {useRouter} from "next/navigation";
 import {store, useAppSelector} from "@/redux/store";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Image from "next/image"
 
 
 const SideBar = () => {
@@ -58,14 +59,17 @@ const SideBar = () => {
                 id={'adminMediumSideBar'}
                 className={`hidden md:grid md:bg-white md:w-[16vw]  md:px-4  md:border-r md:border-r-[blue300] md:z-10 md:h-[100vh]`}
             >
-                <div className={`md:h-[30%] md:w-full md:bg-grey-100 md:grid md:place-items-center  `}>
-                    <Avatar
-                        className={`inline-flex w-full h-[90%] `}
-                    >
-                        <AvatarImage
-                            className="size-full  object-cover"
-                            src={'/Meedle Logo Primary Yellow.svg'} alt={'meedleYellowLogo'}/>
-                    </Avatar>
+                <div className={`md:h-[30%] md:w-full md:bg-grey100 md:grid md:place-items-center  `}>
+                    {/*<div*/}
+                    {/*    className={`md:inline-flex md:w-full md:h-[90%] `}*/}
+                    {/*>*/}
+                        <Image
+                            width={200}
+                            height={100}
+                            // className="size-full  object-cover"
+                            src={'/Meedle Logo Primary Yellow.svg'} alt={'meedleYellowLogo'}
+                        />
+                    {/*</div>*/}
                 </div>
                 <div className={` hidden md:grid h-[100%] w-[98%] mr-auto ml-auto`}>
                     {/*<div id={'fund'}  className={``}>*/}
