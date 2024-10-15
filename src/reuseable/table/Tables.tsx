@@ -59,9 +59,9 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
         setDropdownOpen(!dropdownOpen);
       };
     
-      const handleDropdownClose = () => {
-        setDropdownOpen(false);
-      };
+      // const handleDropdownClose = () => {
+      //   setDropdownOpen(false);
+      // };
 
     const paginatedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
@@ -95,6 +95,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                                 key={rowIndex}
                                 // sx={{ cursor: '' }}
                                 onClick={() => handleRowClick(row)}
+                                className={`${sx}`}
                             >
                                 {
                                     tableHeader.map((column) => (
@@ -104,7 +105,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                                             className='h-14'
                                         >
-                                            <div>
+                                            <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`} className={`${Styles.tableBodyItem} ${tableStyle}`}>
                                             {column.selector? column.selector(row) : row[column.id]}
                                             </div>
                                         </TableCell>
@@ -188,6 +189,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                     <TableRow
                     key={index}
                     onClick={() => handleRowClick(row)}
+                    className={`${sx}`}
                     >
                       <TableCell
                       className='h-14'

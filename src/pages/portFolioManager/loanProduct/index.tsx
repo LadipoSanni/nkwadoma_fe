@@ -3,7 +3,7 @@ import React from "react";
 import { InputAdornment, TextField } from "@mui/material";
 import { SearchOutlined } from "@mui/icons-material";
 import Button from "@mui/material/Button";
-import LoanProductTable from "@/reuseable/table/LoanProductTable";
+// import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { loanProductData } from "@/utils/LoanProductMockData";
 import Tables from "@/reuseable/table/Tables";
 

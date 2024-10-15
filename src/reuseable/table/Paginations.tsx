@@ -14,27 +14,27 @@ interface Props<T> {
 function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handleNextPage, handlePreviousPage }: Props<T>){
   const totalPages = Math.ceil(tableData.length / rowsPerPage);
 
-  const getPages = () => {
-    const pages = [];
+  // const getPages = () => {
+  //   const pages = [];
 
 
-    for (let i = 1; i <= Math.min(4, totalPages); i++) {
-      pages.push(i);
-    }
+  //   for (let i = 1; i <= Math.min(4, totalPages); i++) {
+  //     pages.push(i);
+  //   }
 
     
-    if (totalPages > 5) {
-      if (page > 4) {
-        pages.push(-1); 
-      }
+  //   if (totalPages > 5) {
+  //     if (page > 4) {
+  //       pages.push(-1); 
+  //     }
      
-      for (let i = Math.max(totalPages - 2, 5); i <= totalPages; i++) {
-        pages.push(i);
-      }
-    }
+  //     for (let i = Math.max(totalPages - 2, 5); i <= totalPages; i++) {
+  //       pages.push(i);
+  //     }
+  //   }
 
-    return pages;
-  };
+  //   return pages;
+  // };
   return (
     <div  data-testid="dynamicTablePagination" id="dynamicTablePagination" className={'flex items-center p-3 h-16 justify-between'}>
         <PaginationPrevious
