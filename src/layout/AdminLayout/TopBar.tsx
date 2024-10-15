@@ -1,26 +1,27 @@
 "use client"
 import React from 'react';
 import {IoMdMenu} from "react-icons/io";
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {store} from "@/redux/store";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
-import {Badge} from "@mui/material";
-import {FiBell} from "react-icons/fi";
+// import {Badge} from "@mui/material";
+// import {FiBell} from "react-icons/fi";
+// import { FaceIcon, ImageIcon, SunIcon } from "@radix-ui/react-icons"
 
 
 const TopBar = () => {
 
-    const [arrowToggled,setArrowToggle] = React.useState(false)
+    // const [arrowToggled,setArrowToggle] = React.useState(false)
 
 
-    const toggleArrow = ()=> {
-        if (arrowToggled){
-            setArrowToggle(false)
-        }else {
-            setArrowToggle(true)
-        }
-    }
+    // const toggleArrow = ()=> {
+    //     if (arrowToggled){
+    //         setArrowToggle(false)
+    //     }else {
+    //         setArrowToggle(true)
+    //     }
+    // }
     const openMobileSideBar = () => {
         store.dispatch(setShowMobileSideBar(true))
     }
@@ -29,7 +30,7 @@ const TopBar = () => {
         <>
             <header
                 id="adminlayoutHeader"
-                className="bg-white md:border-b md:border-b-grey-400 flex items-center h-[8vh] w-full md:h-[10vh] md:w-[84vw] absolute md:static right-0 justify-between border-b border-gray-300"
+                className="bg-white  flex items-center h-[8vh] border-b border-b-[blue300] md:border-b md:border-b-[blue300] w-full md:h-[10vh] md:w-[84vw] absolute md:static right-0 justify-between "
             >
                 <div className={'flex  w-[96%]  mr-auto ml-auto  place-content-between'}>
                     <div className={`flex gap-2 h-[1rem] mt-auto mb-auto place-content-center `}>
@@ -47,11 +48,11 @@ const TopBar = () => {
                     <div id="LayOutProfileAndNotification" className="flex items-center gap-5 md:gap-10">
                         <div id={'bellDiv'} className={` flex place-content-center object-fit h-[2.6rem]  w-[2.6rem] rounded-md mr-[1.7rem] `}>
                            {/*<Notifications />*/}
-                              <Badge
-                                 badgeContent={'33'}
-                                 color="success" sx={{marginTop: 'auto', marginBottom: 'auto', height: '70%', width: '70%'}} >
-                                        <FiBell className={` w-[100%] h-[100%] object-cover `}/>
-                              </Badge>
+                           {/*   <Badge*/}
+                           {/*      badgeContent={'33'}*/}
+                           {/*      color="success" sx={{marginTop: 'auto', marginBottom: 'auto', height: '70%', width: '70%'}} >*/}
+                           {/*             <FiBell className={` w-[100%] h-[100%] object-cover `}/>*/}
+                           {/*   </Badge>*/}
                         </div>
                         <div id={'fullNameDiv'} className="flex gap-2  justify-between items-center w-[fit-content]">
                             <div
@@ -68,10 +69,10 @@ const TopBar = () => {
                                 {/*   // className={` flex ${styles.userRole} `}>{utils.formatRole(userRole)}</p>*/}
                             </div>
                             <div id={'toggleArrowDiv'} className={``}>
-                                {arrowToggled ?
-                                    <ExpandLessIcon sx={{color: '#667085'}} onClick={toggleArrow}/> :
-                                    <ExpandMoreIcon sx={{color: '#667085'}} onClick={toggleArrow}/>
-                                }
+                                {/*{arrowToggled ?*/}
+                                {/*    <ExpandLessIcon sx={{color: '#667085'}} onClick={toggleArrow}/> :*/}
+                                {/*    <ExpandMoreIcon sx={{color: '#667085'}} onClick={toggleArrow}/>*/}
+                                {/*}*/}
                                 {/*{arrowToggled &&*/}
                                 {/*    <ProfileDropdown onLogoutClick={handleLogout} close={toggleArrow}/>}*/}
                             </div>

@@ -1,7 +1,8 @@
 import React from 'react';
-import {Button, Pagination} from "@mui/material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import {Button} from "@/components/ui/button";
+// import {Button, Pagination} from "@mui/material";
+// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+// import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 interface Props<T> {
     page: number;
@@ -12,14 +13,14 @@ interface Props<T> {
     handlePreviousPage: () => void;
 }
 
-function TablePagination<T>({ page, rowsPerPage, tableData, handlePageChange, handleNextPage, handlePreviousPage }: Props<T>) {
+function TablePagination<T>({ page, rowsPerPage, tableData, handleNextPage, handlePreviousPage }: Props<T>) {
   return (
     <div data-testid="dynamicTablePagination" id="dynamicTablePagination" className={'flex items-center p-3 h-16 justify-between'}>
     <Button
         id="dynamicTablePreviousButton"
         onClick={handlePreviousPage}
-        startIcon={<ArrowBackIcon sx={{color: '#667085'}} />}
-        sx={{
+        // startIcon={<ArrowBackIcon sx={{color: '#667085'}} />}
+        style={{
             color: '#101828',
             borderRadius: 'var(--radius-xs, 4px)',
             border: '1px solid var(--Default-colors-Borders, #D0D5DD)',
@@ -31,37 +32,37 @@ function TablePagination<T>({ page, rowsPerPage, tableData, handlePageChange, ha
     >
         Previous
     </Button>
-    <Pagination
-        id="dynamicTablePaginationControl"
-        count={Math.ceil(tableData.length / rowsPerPage)}
-        page={page}
-        onChange={handlePageChange}
-        hideNextButton={true}
-        hidePrevButton={true}
-        sx={{
-            '& .MuiPaginationItem-root': {
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                textAlign: 'center',
-                fontFamily: 'Inter',
-                fontSize: '14px',
-                fontStyle: 'normal',
-                fontWeight: 500,
-                lineHeight: '20px',
-                color: 'var(--Foundation-Blue-blue-800, #72757A)',
-            },
-            '& .Mui-selected': {
-                color: 'var(--Default-colors-Body, #101828)',
-                backgroundColor: '#F0F2F4',
-            },
-        }}
-    />
+    {/*<Pagination*/}
+    {/*    id="dynamicTablePaginationControl"*/}
+    {/*    count={Math.ceil(tableData.length / rowsPerPage)}*/}
+    {/*    page={page}*/}
+    {/*    onChange={handlePageChange}*/}
+    {/*    hideNextButton={true}*/}
+    {/*    hidePrevButton={true}*/}
+    {/*    sx={{*/}
+    {/*        '& .MuiPaginationItem-root': {*/}
+    {/*            width: '40px',*/}
+    {/*            height: '40px',*/}
+    {/*            borderRadius: '50%',*/}
+    {/*            textAlign: 'center',*/}
+    {/*            fontFamily: 'Inter',*/}
+    {/*            fontSize: '14px',*/}
+    {/*            fontStyle: 'normal',*/}
+    {/*            fontWeight: 500,*/}
+    {/*            lineHeight: '20px',*/}
+    {/*            color: 'var(--Foundation-Blue-blue-800, #72757A)',*/}
+    {/*        },*/}
+    {/*        '& .Mui-selected': {*/}
+    {/*            color: 'var(--Default-colors-Body, #101828)',*/}
+    {/*            backgroundColor: '#F0F2F4',*/}
+    {/*        },*/}
+    {/*    }}*/}
+    {/*/>*/}
     <Button
         id="dynamicTableNextButton"
         onClick={handleNextPage}
-        endIcon={<ArrowForwardIcon sx={{color: '#667085'}}/>}
-        sx={{
+        // endIcon={<ArrowForwardIcon sx={{color: '#667085'}}/>}
+        style={{
             color: '#101828',
             borderRadius: 'var(--radius-xs, 4px)',
             border: '1px solid var(--Default-colors-Borders, #D0D5DD)',
