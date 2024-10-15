@@ -143,7 +143,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                  <Select
                 
                 value={selectedColumn}
-                onValueChange={(value: string) => {
+                onValueChange={(value: string ) => {
                     setSelectedColumn(value);
                   }}
                 onOpenChange={handleDropdownOpen}
