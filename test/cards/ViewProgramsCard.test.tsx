@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import AllProgramsCard from "@/reuseable/cards/Index";
+import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 
 describe('AllProgramsCard Component', () => {
     const props = {
