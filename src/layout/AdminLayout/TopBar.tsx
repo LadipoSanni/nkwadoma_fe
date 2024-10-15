@@ -7,6 +7,7 @@ import {store} from "@/redux/store";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 // import {Badge} from "@mui/material";
 // import {FiBell} from "react-icons/fi";
+// import { FaceIcon, ImageIcon, SunIcon } from "@radix-ui/react-icons"
 
 
 const TopBar = () => {
@@ -29,7 +30,7 @@ const TopBar = () => {
         <>
             <header
                 id="adminlayoutHeader"
-                className="bg-white md:border-b md:border-b-grey-400 flex items-center h-[8vh] w-full md:h-[10vh] md:w-[84vw] absolute md:static right-0 justify-between border-b border-gray-300"
+                className="bg-white  flex items-center h-[8vh] border-b border-b-[blue300] md:border-b md:border-b-[blue300] w-full md:h-[10vh] md:w-[84vw] absolute md:static right-0 justify-between "
             >
                 <div className={'flex  w-[96%]  mr-auto ml-auto  place-content-between'}>
                     <div className={`flex gap-2 h-[1rem] mt-auto mb-auto place-content-center `}>
