@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { InputAdornment, TextField } from "@mui/material";
-import { SearchOutlined } from "@mui/icons-material";
-import Button from "@mui/material/Button";
+// import { InputAdornment, TextField } from "@mui/material";
+// import { SearchOutlined } from "@mui/icons-material";
+// import Button from "@mui/material/Button";
 // import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { loanProductData } from "@/utils/LoanProductMockData";
 import Tables from "@/reuseable/table/Tables";
@@ -73,7 +73,7 @@ function LoanProductPage() {
           className={`mr-auto ml-auto w-[96%] bg-white  place-content-end gap-2   md:flex`} id="InputContainer"
         >
           <div className={`md:w-[30%] mt-[1rem] w-[100%]`}>
-            <TextField
+            {/* <TextField
               size="small"
               placeholder="Search"
               tabIndex={2}
@@ -90,9 +90,9 @@ function LoanProductPage() {
                 },
               }}
               variant="outlined"
-            />
+            /> */}
           </div>
-          <Button
+          {/* <Button
             id="CreateLoanProductButton"
             className=""
             // onClick={() => setOpenModal(true)}
@@ -110,7 +110,7 @@ function LoanProductPage() {
             }}
           >
             Create loan product
-          </Button>
+          </Button> */}
         </div>
         {/* <div  className={`w-[96%] bg-purple-300 mt-[1rem] h-[82%] mr-auto ml-auto`}>
                         <LoanProductTable tableData={loanProductData}  handleRowClick={handleRowClick} tableHeader={columns} tableHeight={59} sx='cursor-pointer' staticColunm="loanProductName" staticHeader="Loan Product"/>

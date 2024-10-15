@@ -3,8 +3,7 @@ import Styles from './styles.module.css'
 import { Table,TableRow,TableHead,TableCell,TableBody, TableHeader } from '@/components/ui/table'
 import TableContainer from './TableContainer'
 import Paginations from './Paginations'
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select'
-import { SelectGroup } from '@radix-ui/react-select'
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue,SelectGroup } from '@/components/ui/select'
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
 
@@ -59,9 +58,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
         setDropdownOpen(!dropdownOpen);
       };
     
-      // const handleDropdownClose = () => {
-      //   setDropdownOpen(false);
-      // };
+     
 
     const paginatedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
@@ -141,7 +138,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                  <Select
                 
                 value={selectedColumn}
-                onValueChange={(value) => {
+                onValueChange={(value: string) => {
                     setSelectedColumn(value);
                   }}
                 onOpenChange={handleDropdownOpen}
