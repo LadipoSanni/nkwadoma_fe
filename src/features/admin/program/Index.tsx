@@ -7,6 +7,7 @@ import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
+import CreateCohortModal from "@/reuseable/modals/CreateCohortModal";
 
 const Program = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -17,6 +18,7 @@ const Program = () => {
         title: string;
         trainees: number;
     }[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const ProgramHeader = [
         {
             title: "cohorts",
@@ -64,8 +66,7 @@ const Program = () => {
                 <h1 id="programTitle" className={"text-meedlBlack text-2xl font-medium leading-[120%]"}>Program</h1>
                 <div id="programControls" className={'md:flex md:justify-between gap-1 grid'}>
                     <SearchInput id={'ProgramSearchInput'}/>
-                    <AdminButton id={'createProgramButton'}>Create program</AdminButton>
-                </div>
+                    <AdminButton id={'createProgramButton'} onClick={() => setIsModalOpen(true)}>Create program</AdminButton>                </div>
             </section>
             <div id="programContent" className={'grid gap-4'}>
                 <DisplayOptions setView={setView} activeView={view}/>
@@ -102,6 +103,7 @@ const Program = () => {
                     </div>
                 )}
             </div>
+            {isModalOpen && <CreateCohortModal />}
         </main>
     );
 };
