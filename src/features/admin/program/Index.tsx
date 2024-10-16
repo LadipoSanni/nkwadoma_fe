@@ -1,0 +1,109 @@
+"use client"
+import React, {useState, useEffect} from 'react';
+import {cabinetGrotesk} from '@/app/fonts';
+import SearchInput from "@/reuseable/Input/SearchInput";
+import AdminButton from "@/reuseable/buttons/AdminButton";
+import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
+import DisplayOptions from "@/reuseable/display/DisplayOptions";
+import LoanProductTable from "@/reuseable/table/LoanProductTable";
+import {programData} from "@/utils/ProgramData";
+
+const Program = () => {
+    const [view, setView] = useState<'grid' | 'list'>('grid');
+    const [dummyData, setDummyData] = useState<{
+        cohorts: number;
+        description: string;
+        months: number;
+        title: string;
+        trainees: number;
+    }[]>([]);
+    const ProgramHeader = [
+        {
+            title: "cohorts",
+            sortable: true,
+            id: "cohorts"
+
+        },
+        {
+            title: "description",
+            sortable: true,
+            id: "description"
+
+        }, {
+            title: "months",
+            sortable: true,
+            id: "months"
+
+        }, {
+            title: "title",
+            sortable: true,
+            id: "title"
+
+        }
+        , {
+            title: "trainees",
+            sortable: true,
+            id: "trainees"
+
+        }
+    ]
+    useEffect(() => {
+        const data = Array.from({length: 24}, (_, index) => ({
+            cohorts: Math.floor(Math.random() * 20) + 1,
+            description: `Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes.${index + 1}`,
+            months: Math.floor(Math.random() * 12) + 1,
+            title: `Program Title ${index + 1}`,
+            trainees: Math.floor(Math.random() * 100) + 1,
+        }));
+        setDummyData(data);
+    }, []);
+
+    return (
+        <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 px-5 pt-7 bg-meedlWhite`}>
+            <section id="programSection" className={'grid gap-7 '}>
+                <h1 id="programTitle" className={"text-meedlBlack text-2xl font-medium leading-[120%]"}>Program</h1>
+                <div id="programControls" className={'md:flex md:justify-between gap-1 grid'}>
+                    <SearchInput id={'ProgramSearchInput'}/>
+                    <AdminButton id={'createProgramButton'}>Create program</AdminButton>
+                </div>
+            </section>
+            <div id="programContent" className={'grid gap-4'}>
+                <DisplayOptions setView={setView} activeView={view}/>
+                {view === 'grid' ? (
+                    <div
+                        id={'programGrid'}
+                        className={'grid gap-6 overflow-y-auto'}
+                        style={{
+                            height: '370px',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
+                        }}
+                    >
+                        {dummyData.map((program, index) => (
+                            <AllProgramsCard
+                                key={index}
+                                cohorts={program.cohorts}
+                                description={program.description}
+                                months={program.months}
+                                title={program.title}
+                                trainees={program.trainees}
+                             id={'program'}/>
+                        ))}
+                    </div>
+                ) : (
+                    <div
+                        id="programListView"
+                        className={'grid gap-6 overflow-y-auto'}
+                        style={{
+                            height: '370px',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
+                        }}
+                    >
+                        <LoanProductTable tableData={programData} tableHeader={ProgramHeader} staticHeader={"cohorts"} staticColunm={'cohorts'} tableHeight={40}  handleRowClick={() => {}} />
+                    </div>
+                )}
+            </div>
+        </main>
+    );
+};
+
+export default Program;

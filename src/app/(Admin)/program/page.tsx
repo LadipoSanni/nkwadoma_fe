@@ -1,13 +1,10 @@
-import React from 'react'
-import Program from "@/features/adminFeatures/program/program/Index";
+import React from 'react';
+import Program from '@/features/admin/program/Index'
 
-function page() {
+const Page = () => {
     return (
-        <div>
-            <Program/>
-        </div>
-    )
-}
+            <Program />
+    );
+};
 
-export default page
-
+export default Page;
