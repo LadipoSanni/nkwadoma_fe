@@ -60,7 +60,7 @@ const SideBar = () => {
                 id={'adminMediumSideBar'}
                 className={`hidden md:grid md:bg-white md:w-[16vw]  md:px-4  md:border-r md:border-r-[blue300] md:z-10 md:h-[100vh]`}
             >
-                <div className={`md:h-[30%] md:w-full  md:grid   `}>
+                <div className={`md:h-[30%] md:w-full md:bg-red-200 md:grid   `}>
                         <Image
                             id={'meddleMainLogoOnAdminLayout'}
                             data-testid={'meddleMainLogoOnAdminLayout'}
@@ -70,7 +70,7 @@ const SideBar = () => {
                             src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
                         />
                 </div>
-                <div className={` hidden md:grid md:h-fit md:w-full `}>
+                <div className={` hidden md:grid md:h-fit  md:w-full `}>
                     <NavbarItems navbarItems={NavbarItemsInitialState}/>
                 </div>
                 <div className={`md:grid md:bottom-0 md:h-[20%] md:w-full md:bg-yellow300`}>
