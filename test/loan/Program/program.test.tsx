@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import React from "react";
-import CreateProgramButton from "@/features/adminFeatures/program/createProgramButton/Index";
+import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
 
 
 describe('CreateProgramButton Component', () => {
@@ -45,43 +45,43 @@ describe('CreateProgramButton Component', () => {
         const triggerButton = screen.getByTestId('trigger-button');
         fireEvent.click(triggerButton);
 
-        // Fill in program name input
-        const programNameInput = screen.getByTestId('program-name-input');
+        // Fill in ProgramView name input
+        const programNameInput = screen.getByTestId('ProgramView-name-input');
         fireEvent.change(programNameInput, { target: { value: 'New Program' } });
         expect(programNameInput).toHaveValue('New Program');
 
         // Select Program Type
-        const programTypeTrigger = screen.getByTestId('program-type-trigger');
+        const programTypeTrigger = screen.getByTestId('ProgramView-type-trigger');
         fireEvent.click(programTypeTrigger);
-        const programTypeItem = screen.getByTestId('program-type-item-0');
+        const programTypeItem = screen.getByTestId('ProgramView-type-item-0');
         fireEvent.click(programTypeItem);
         expect(programTypeTrigger).toHaveTextContent('Type 1');
 
         // Select Program Delivery Type
-        const programDeliveryTypeTrigger = screen.getByTestId('program-delivery-type-trigger');
+        const programDeliveryTypeTrigger = screen.getByTestId('ProgramView-delivery-type-trigger');
         fireEvent.click(programDeliveryTypeTrigger);
-        const programDeliveryTypeItem = screen.getByTestId('program-delivery-type-item-0');
+        const programDeliveryTypeItem = screen.getByTestId('ProgramView-delivery-type-item-0');
         fireEvent.click(programDeliveryTypeItem);
         expect(programDeliveryTypeTrigger).toHaveTextContent('Delivery 1');
 
         // Select Program Mode
-        const programModeTrigger = screen.getByTestId('program-mode-trigger');
+        const programModeTrigger = screen.getByTestId('ProgramView-mode-trigger');
         fireEvent.click(programModeTrigger);
-        const programModeItem = screen.getByTestId('program-mode-item-0');
+        const programModeItem = screen.getByTestId('ProgramView-mode-item-0');
         fireEvent.click(programModeItem);
         expect(programModeTrigger).toHaveTextContent('Mode 1');
 
         // Select Program Duration
-        const programDurationTrigger = screen.getByTestId('program-duration-trigger');
+        const programDurationTrigger = screen.getByTestId('ProgramView-duration-trigger');
         fireEvent.click(programDurationTrigger);
-        const programDurationItem = screen.getByTestId('program-duration-item-0');
+        const programDurationItem = screen.getByTestId('ProgramView-duration-item-0');
         fireEvent.click(programDurationItem);
         expect(programDurationTrigger).toHaveTextContent('1 month');
 
-        // Fill in program description
-        const programDescription = screen.getByTestId('program-description');
-        fireEvent.change(programDescription, { target: { value: 'This is a program description' } });
-        expect(programDescription).toHaveValue('This is a program description');
+        // Fill in ProgramView description
+        const programDescription = screen.getByTestId('ProgramView-description');
+        fireEvent.change(programDescription, { target: { value: 'This is a ProgramView description' } });
+        expect(programDescription).toHaveValue('This is a ProgramView description');
     });
 
     // it('should close the dialog when Cancel button is clicked', () => {
