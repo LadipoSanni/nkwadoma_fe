@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen} from '@testing-library/react';
-import Program from '@/features/admin/program/Index';
+import ProgramView from '@/features/admin/program/ProgramView/Index';
 
 describe('Program Component', () => {
     test('renders Program component', () => {
-        render(<Program />);
+        render(<ProgramView />);
         expect(screen.getByText('Program')).toBeInTheDocument();
         expect(screen.getByText('Create program')).toBeInTheDocument();
     });
