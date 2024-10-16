@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 
+import tailwindcss_animate from "tailwindcss-animate";
+
 const config: Config = {
     darkMode: ["class"],
     content: [
@@ -90,21 +92,25 @@ const config: Config = {
   			neutral400: '#EAEAEA',
   			neutral500: '#E5E5E5',
   			neutral600: '#D0D0D0',
-  			neutral700: '#A3A3A3',
+            neutral650: '#D0D5DD',
+            neutral700: '#A3A3A3',
   			neutral800: '#7E7E7E',
   			neutral900: '#606060',
-			grey: `#F0F2F4`,
-			grey1: `#475467`,
+            neutral950: '#667085',
+            gray: `#F0F2F4`,
+			gray1: `#475467`,
   			grey50: '#E9E9E9',
   			grey100: '#BABABB',
   			grey200: '#98989B',
   			grey300: '#6A696D',
   			grey400: '#4D4C51',
-  			grey500: '#201F25',
+            grey450: '#475467',
+            grey500: '#201F25',
   			grey600: '#1D1C22',
   			grey700: '#17161A',
   			grey800: '#121114',
   			grey900: '#0D0D10',
+			meedlBlack: '#000000',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -156,6 +162,6 @@ const config: Config = {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcss_animate],
 };
 export default config;
