@@ -4,6 +4,7 @@ import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 
 describe('AllProgramsCard Component', () => {
     const props = {
+        id: "ProgramView card",
         title: 'Test Course',
         description: 'This is a very long description meant to test the truncation functionality.',
         trainees: 10,
@@ -34,6 +35,7 @@ describe('AllProgramsCard Component', () => {
 
     it('toggles description when "..." is clicked', () => {
         const props = {
+            id: "ProgramView card",
             title: "Test Course",
             description: "This is a very long description meant to test the truncation functionality. This should trigger the read more functionality.",
             trainees: 10,
