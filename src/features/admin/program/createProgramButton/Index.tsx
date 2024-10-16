@@ -66,7 +66,8 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                             />
                         </div>
 
-                        <div className={`grid grid-col`} id="selectInputsContainer" data-testid="select-inputs-container">
+                        <div className={`grid grid-col`} id="selectInputsContainer"
+                             data-testid="select-inputs-container">
                             <div id=" selectInputsContainer" data-testid="select-inputs-container">
                                 <Label
                                     htmlFor="programDeliveryType"
@@ -181,76 +182,145 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
 
 export default CreateProgramButton;
 
-                        {/*<div id="selectInputsContainer" data-testid="select-inputs-container" className="grid md:grid-cols-2 gap-5 pt-3">*/}
-                        {/*    <div id="leftColumn" data-testid="left-column">*/}
-                        {/*        <Label htmlFor="programType" id="programTypeLabel" data-testid="program-type-label">Program Type</Label>*/}
-                        {/*        <Select data-testid="program-type-select">*/}
-                        {/*            <SelectTrigger id="programTypeTrigger" data-testid="program-type-trigger">*/}
-                        {/*                <SelectValue className='text-meedlYellow' placeholder="Select type" />*/}
-                        {/*            </SelectTrigger>*/}
-                        {/*            <SelectContent id="programTypeContent" data-testid="program-type-content">*/}
-                        {/*                {programTypes.map((type, index) => (*/}
-                        {/*                    <SelectItem key={index} value={type} id={`programTypeItem-${index}`} data-testid={`program-type-item-${index}`}>{type}</SelectItem>*/}
-                        {/*                ))}*/}
-                        {/*            </SelectContent>*/}
-                        {/*        </Select>*/}
+{/*<div id="selectInputsContainer" data-testid="select-inputs-container" className="grid md:grid-cols-2 gap-5 pt-3">*/
+}
+{/*    <div id="leftColumn" data-testid="left-column">*/
+}
+{/*        <Label htmlFor="programType" id="programTypeLabel" data-testid="program-type-label">Program Type</Label>*/
+}
+{/*        <Select data-testid="program-type-select">*/
+}
+{/*            <SelectTrigger id="programTypeTrigger" data-testid="program-type-trigger">*/
+}
+{/*                <SelectValue className='text-meedlYellow' placeholder="Select type" />*/
+}
+{/*            </SelectTrigger>*/
+}
+{/*            <SelectContent id="programTypeContent" data-testid="program-type-content">*/
+}
+{/*                {programTypes.map((type, index) => (*/
+}
+{/*                    <SelectItem key={index} value={type} id={`programTypeItem-${index}`} data-testid={`program-type-item-${index}`}>{type}</SelectItem>*/
+}
+{/*                ))}*/
+}
+{/*            </SelectContent>*/
+}
+{/*        </Select>*/
+}
 
-                        {/*<Label*/}
-                        {/*    htmlFor="programDeliveryType"*/}
-                        {/*    id="programDeliveryTypeLabel"*/}
-                        {/*    data-testid="program-delivery-type-label"*/}
-                        {/*>*/}
-                        {/*    Program Delivery Type*/}
-                        {/*</Label>*/}
-                        {/*<Select data-testid="program-delivery-type-select">*/}
-                        {/*    <SelectTrigger id="programDeliveryTypeTrigger" data-testid="program-delivery-type-trigger">*/}
-                        {/*        <SelectValue placeholder="Select delivery type" />*/}
-                        {/*    </SelectTrigger>*/}
-                        {/*    <SelectContent id="programDeliveryTypeContent" data-testid="program-delivery-type-content">*/}
-                        {/*        {programDeliveryTypes.map((deliveryType, index) => (*/}
-                        {/*            <SelectItem key={index} value={deliveryType} id={`programDeliveryTypeItem-${index}`} data-testid={`program-delivery-type-item-${index}`}>*/}
-                        {/*                {deliveryType}*/}
-                        {/*            </SelectItem>*/}
-                        {/*        ))}*/}
-                        {/*    </SelectContent>*/}
-                        {/*</Select>*/}
-                        {/*    </div>*/}
+{/*<Label*/
+}
+{/*    htmlFor="programDeliveryType"*/
+}
+{/*    id="programDeliveryTypeLabel"*/
+}
+{/*    data-testid="program-delivery-type-label"*/
+}
+{/*>*/
+}
+{/*    Program Delivery Type*/
+}
+{/*</Label>*/
+}
+{/*<Select data-testid="program-delivery-type-select">*/
+}
+{/*    <SelectTrigger id="programDeliveryTypeTrigger" data-testid="program-delivery-type-trigger">*/
+}
+{/*        <SelectValue placeholder="Select delivery type" />*/
+}
+{/*    </SelectTrigger>*/
+}
+{/*    <SelectContent id="programDeliveryTypeContent" data-testid="program-delivery-type-content">*/
+}
+{/*        {programDeliveryTypes.map((deliveryType, index) => (*/
+}
+{/*            <SelectItem key={index} value={deliveryType} id={`programDeliveryTypeItem-${index}`} data-testid={`program-delivery-type-item-${index}`}>*/
+}
+{/*                {deliveryType}*/
+}
+{/*            </SelectItem>*/
+}
+{/*        ))}*/
+}
+{/*    </SelectContent>*/
+}
+{/*</Select>*/
+}
+{/*    </div>*/
+}
 
-                        {/*    <div id="rightColumn" data-testid="right-column">*/}
-                        {/*        <Label htmlFor="programMode" id="programModeLabel" data-testid="program-mode-label">Program Mode</Label>*/}
-                        {/*        <Select  data-testid="program-mode-select">*/}
-                        {/*            <SelectTrigger id="programModeTrigger" data-testid="program-mode-trigger">*/}
-                        {/*                <SelectValue placeholder="Select mode" />*/}
-                        {/*            </SelectTrigger>*/}
-                        {/*            <SelectContent id="programModeContent" data-testid="program-mode-content">*/}
-                        {/*                {programModes.map((mode, index) => (*/}
-                        {/*                    <SelectItem key={index} value={mode} id={`programModeItem-${index}`} data-testid={`program-mode-item-${index}`}>*/}
-                        {/*                        {mode}*/}
-                        {/*                    </SelectItem>*/}
-                        {/*                ))}*/}
-                        {/*            </SelectContent>*/}
-                        {/*        </Select>*/}
+{/*    <div id="rightColumn" data-testid="right-column">*/
+}
+{/*        <Label htmlFor="programMode" id="programModeLabel" data-testid="program-mode-label">Program Mode</Label>*/
+}
+{/*        <Select  data-testid="program-mode-select">*/
+}
+{/*            <SelectTrigger id="programModeTrigger" data-testid="program-mode-trigger">*/
+}
+{/*                <SelectValue placeholder="Select mode" />*/
+}
+{/*            </SelectTrigger>*/
+}
+{/*            <SelectContent id="programModeContent" data-testid="program-mode-content">*/
+}
+{/*                {programModes.map((mode, index) => (*/
+}
+{/*                    <SelectItem key={index} value={mode} id={`programModeItem-${index}`} data-testid={`program-mode-item-${index}`}>*/
+}
+{/*                        {mode}*/
+}
+{/*                    </SelectItem>*/
+}
+{/*                ))}*/
+}
+{/*            </SelectContent>*/
+}
+{/*        </Select>*/
+}
 
-                        {/*<Label*/}
-                        {/*    htmlFor="programDuration"*/}
-                        {/*    id="programDurationLabel"*/}
-                        {/*    data-testid="program-duration-label"*/}
-                        {/*    className=""*/}
-                        {/*>*/}
-                        {/*    Program Duration*/}
-                        {/*</Label>*/}
-                        {/*<Select data-testid="program-duration-select">*/}
-                        {/*    <SelectTrigger id="programDurationTrigger" data-testid="program-duration-trigger">*/}
-                        {/*        <SelectValue placeholder="Select duration" />*/}
-                        {/*    </SelectTrigger>*/}
-                        {/*    <SelectContent id="programDurationContent" data-testid="program-duration-content">*/}
-                        {/*        {programDurations.map((duration, index) => (*/}
-                        {/*            <SelectItem key={index} value={duration} id={`programDurationItem-${index}`} data-testid={`program-duration-item-${index}`}>*/}
-                        {/*                {duration}*/}
-                        {/*            </SelectItem>*/}
-                        {/*        ))}*/}
-                        {/*    </SelectContent>*/}
-                        {/*</Select>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
+{/*<Label*/
+}
+{/*    htmlFor="programDuration"*/
+}
+{/*    id="programDurationLabel"*/
+}
+{/*    data-testid="program-duration-label"*/
+}
+{/*    className=""*/
+}
+{/*>*/
+}
+{/*    Program Duration*/
+}
+{/*</Label>*/
+}
+{/*<Select data-testid="program-duration-select">*/
+}
+{/*    <SelectTrigger id="programDurationTrigger" data-testid="program-duration-trigger">*/
+}
+{/*        <SelectValue placeholder="Select duration" />*/
+}
+{/*    </SelectTrigger>*/
+}
+{/*    <SelectContent id="programDurationContent" data-testid="program-duration-content">*/
+}
+{/*        {programDurations.map((duration, index) => (*/
+}
+{/*            <SelectItem key={index} value={duration} id={`programDurationItem-${index}`} data-testid={`program-duration-item-${index}`}>*/
+}
+{/*                {duration}*/
+}
+{/*            </SelectItem>*/
+}
+{/*        ))}*/
+}
+{/*    </SelectContent>*/
+}
+{/*</Select>*/
+}
+{/*    </div>*/
+}
+{/*</div>*/
+}
 
