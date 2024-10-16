@@ -6,7 +6,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     id: string;
 };
 
-const ReusableButton: React.FC<ButtonProps> = ({className, children, id, ...props}) => {
+const AdminButton: React.FC<ButtonProps> = ({className, children, id, ...props}) => {
     return (
         <button
             className={`${inter.className} px-5 py-2 rounded-md bg-meedlBlue text-white h-[2.8125rem] text-[14px] font-semibold leading-[150%] ${className} ${props.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -18,4 +18,4 @@ const ReusableButton: React.FC<ButtonProps> = ({className, children, id, ...prop
     );
 };
 
-export default ReusableButton;
+export default AdminButton;
