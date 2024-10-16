@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import {cabinetGrotesk} from '@/app/fonts';
 import SearchInput from "@/reuseable/Input/SearchInput";
 import AdminButton from "@/reuseable/buttons/AdminButton";
-import AllProgramsCard from "@/reuseable/cards/Index";
+import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
@@ -86,7 +86,7 @@ const Program = () => {
                                 months={program.months}
                                 title={program.title}
                                 trainees={program.trainees}
-                            />
+                             id={'program'}/>
                         ))}
                     </div>
                 ) : (
