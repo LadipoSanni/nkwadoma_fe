@@ -54,7 +54,7 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
         onClick={handlePreviousPage}
         className={`${
           page === 1 ? "invisible" : "visible"
-        } gap-1 pl-2.5`}
+        } gap-1 pl-2.5 h-12`}
         style={{
           color: '#101828',
           borderRadius: 'var(--radius-xs, 4px)',
@@ -98,7 +98,7 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
                       item === page
                         ? 'bg-grey50 text-gray-500 hover:bg-gray50 '
                         : 'bg-gray-50 text-gray-500 border-none shadow-none'
-                    } px-4 py-1 rounded-full`}
+                    } px-5 py-1 rounded-full h-10`}
                     onClick={(e) => handlePageChange(e, Number(item))}
                   >
                     {item}
@@ -117,7 +117,7 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
         onClick={handleNextPage}
         className={`${
           page >= totalPages ? "invisible" : "visible"
-        } gap-1 pr-2.5`}
+        } gap-1 pr-2.5  h-12 w-24`}
         style={{
           color: '#101828',
           borderRadius: 'var(--radius-xs, 4px)',
