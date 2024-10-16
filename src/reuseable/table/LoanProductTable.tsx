@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import Styles from './styles.module.css'
 import { Table,TableRow,TableHead,TableCell,TableBody, TableHeader } from '@/components/ui/table'
 import TableContainer from './TableContainer'
@@ -37,6 +37,13 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
     const rowsPerPage = 10;
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+      setIsMounted(true);
+    }, []);
+  
+    if (!isMounted) return null;
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage);
@@ -86,13 +93,11 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                         </TableRow>
 
                     </TableHeader>
-                    <TableBody id="dynamicTableBody" className=''>
+                    <TableBody id="dynamicTableBody" data-testid="datatable"  className=''>
                         {paginatedData.map((row, rowIndex) => (
                             <TableRow
                                 id={`dynamicTableBodyRow${rowIndex}`}
-                                // hover={true}
                                 key={rowIndex}
-                                // sx={{ cursor: '' }}
                                 onClick={() => handleRowClick(row)}
                                 className={`${sx}`}
                             >
@@ -104,7 +109,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                                             className='h-14'
                                         >
-                                            <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`} className={`${Styles.tableBodyItem} ${tableStyle}`}>
+                                            <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}  className={`${Styles.tableBodyItem} ${tableStyle}`}>
                                             {column.selector? column.selector(row) : row[column.id]}
                                             </div>
                                         </TableCell>

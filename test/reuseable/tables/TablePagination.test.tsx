@@ -21,23 +21,25 @@ describe("TablePagination", () => {
 
    
 
-    // it("should render TablePagination component", () => {
-    //     const tableData = Array.from({ length: 100 })
-    //     render(
-    //         <TablePagination
-    //             page={1}
-    //             rowsPerPage={10}
-    //             tableData={tableData}
-    //             handlePageChange={mockHandlePageChange}
-    //             handleNextPage={mockHandleNextPage}
-    //             handlePreviousPage={mockHandlePreviousPage}
-    //         />
-    //     )
-    //     expect(screen.getByText("Previous")).toBeInTheDocument();
-    //     expect(screen.getByText("Next")).toBeInTheDocument();
-    //     expect(screen.getByText("10")).toBeInTheDocument();
-    //
-    // });
+    it("should render TablePagination component", () => {
+        const tableData = Array.from({ length: 100 })
+        render(
+            <TablePagination
+                page={1}
+                rowsPerPage={10}
+                tableData={tableData}
+                handlePageChange={mockHandlePageChange}
+                handleNextPage={mockHandleNextPage}
+                handlePreviousPage={mockHandlePreviousPage}
+            />
+        )
+        expect(screen.getByText("1")).toBeInTheDocument();
+        expect(screen.getByText("Next")).toBeInTheDocument();
+        expect(screen.getByText("Previous")).toBeInTheDocument();
+        expect(screen.getByText("10")).toBeInTheDocument();
+       
+    
+    });
 
     it("should call handleNextPage when the Next button is clicked", () => {
         const tableData = Array.from({ length: 100 })
@@ -77,28 +79,30 @@ describe("TablePagination", () => {
     })
 
 
-    // it("should hide Previous button when page is 1", () => {
-    //     const tableData = Array.from({ length: 100 })
-    //     render(
-    //         <TablePagination
-    //             page={1}
-    //             rowsPerPage={10}
-    //             tableData={tableData}
-    //             handlePageChange={mockHandlePageChange}
-    //             handleNextPage={mockHandleNextPage}
-    //             handlePreviousPage={mockHandlePreviousPage}
-    //         />
-    //     )
-    //     const prev = screen.getByText("Previous")
-    //     expect(prev).toBeInTheDocument(); 
-    //     expect(prev).toHaveStyle("visibility: hidden");
-    // })
+    it("should hide Previous button when page is 1", () => {
+        const tableData = Array.from({ length: 100 })
+        render(
+            <TablePagination
+                page={1}
+                rowsPerPage={10}
+                tableData={tableData}
+                handlePageChange={mockHandlePageChange}
+                handleNextPage={mockHandleNextPage}
+                handlePreviousPage={mockHandlePreviousPage}
+            />
+        )
+        const prev = screen.getByText("Previous")
+        expect(prev).toBeInTheDocument(); 
+        const hideNextButton = screen.getByTestId("dynamicTablePagination");
+        const previous = within(hideNextButton).queryByRole('button', { name: /Previous/ });
+        expect(previous).not.toBeInTheDocument(); 
+    })
 
     it("should hide Next button when page is equal to total number of pages", () => {
         const tableDatas = Array.from({ length: 10 })
         render(
             <TablePagination
-                page={1}
+                page={5}
                 rowsPerPage={10}
                 tableData={tableDatas}
                 handlePageChange={mockHandlePageChange}
