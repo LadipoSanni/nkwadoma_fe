@@ -1,31 +1,54 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import {render, screen, fireEvent,cleanup, } from "@testing-library/react";
 import "@testing-library/react";
-// import ViewAllLoanRequest from "@/app/(Admin)/loan/(selectedLoan)/loanRequest/ViewAllLoanRequest";
-// import {LoanRequestTable} from "@/app/(Admin)/loan/(selectedLoan)/loanRequest/LoanRequestMockData";
+import { LoanRequestTable } from "@/utils/LoanRequestMockData/Index";
+import ViewAllLoanRequest from "@/pages/portFolioManager/loan/Index";
+
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(),
+  }));
+  ;
+import { useRouter } from 'next/navigation';
+
+
+// jest.mock('next/navigation', () => ({
+//     useRouter: jest.fn(),
+//   }));
+  
 
 
 describe("ViewAllLoanRequest", ()=>{
-    it("should test that viewAllLoanRequest does not exist", ()=>{
-        const {queryByTestId} = render(
-            <div></div>
-        )
-        const emptyState = queryByTestId("mainDiv")
-        expect(emptyState).not.toBeInTheDocument();
-    });
+    const mockPush = jest.fn();
 
-    // it("should test that viewAllLoanRequest exist", ()=>{
-    //     const {queryByTestId} = render(<ViewAllLoanRequest/>)
-    //     const emptyState = queryByTestId("mainDiv")
-    //     expect(emptyState).toBeInTheDocument()
-    // })
-    //
-    // it('should render empty state when there are no loan requests', () => {
-    //     const originalLoanRequestTable = LoanRequestTable;
-    //     LoanRequestTable.length = 0;
-    //     render(<ViewAllLoanRequest />);
-    //     expect(screen.getByTestId('emptyStateDiv')).toBeInTheDocument();
-    //     expect(screen.getByText('Loan request will show here')).toBeInTheDocument();
-    //     LoanRequestTable.length = originalLoanRequestTable.length;
-    // });
+   
+    beforeEach(() => {
+        jest.clearAllMocks();
+        cleanup();
+
+        (useRouter as jest.Mock).mockReturnValue({
+            push: mockPush,
+          });
+    })
+   
+
+
+    beforeEach(() => {
+        render(<ViewAllLoanRequest />)
+    })
+
+   
+
+    it("should test that viewAllLoanRequest exist", ()=>{
+        const {queryByTestId} = render(<ViewAllLoanRequest/>)
+        const emptyState = screen.getAllByTestId('mainDivContainer')
+        expect(emptyState[0]).toBeInTheDocument();
+    })
+    
+    it('should render empty state when there are no loan requests', () => {
+        const originalLoanRequestTable = LoanRequestTable;
+        LoanRequestTable.length = 0;
+        render(<ViewAllLoanRequest />);
+        expect(screen.getByTestId('emptyStateDiv')).toBeInTheDocument();
+        LoanRequestTable.length = originalLoanRequestTable.length;
+    });
 })

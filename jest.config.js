@@ -10,7 +10,7 @@ const customJestConfig = {
     setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
     testEnvironment: "jsdom",
     moduleNameMapper: {
-        "^react-modal$": "<rootDir>/node_modules/react-modal", 
+        // "^react-modal$": "<rootDir>/node_modules/react-modal", 
         "^@/(.*)$": "<rootDir>/src/$1",
       },
     
