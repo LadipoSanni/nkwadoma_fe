@@ -37,12 +37,13 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                     id="triggerButton"
                     data-testid="trigger-button"
                     variant="secondary"
-                    className={`${inter.className} bg-meedlBlue text-meedlWhite text-sm font-semibold leading-5`}
+                    size={`lg`}
+                    className={`bg-meedlBlue h-12 text-meedlWhite text-sm font-semibold leading-5`}
                 >
                     {buttonText}
                 </Button>
             </DialogTrigger>
-            <DialogContent id="dialogContent" data-testid="dialog-content" className="sm:max-w-[425px]">
+            <DialogContent id="dialogContent" data-testid="dialog-content" className="max-w-[425px] md:max-w-lg">
                 <DialogHeader id="dialogHeader" data-testid="dialog-header">
                     <DialogTitle
                         id="dialogTitle"
@@ -54,20 +55,19 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                 </DialogHeader>
                 <DialogDescription id="dialogDescription" data-testid="dialog-description">
                     <div id="formContainer" data-testid="form-container" className="grid gap-4 py-4 flex-col text-labelBlue">
-                        {/* Program Name */}
                         <div id="programNameContainer" data-testid="program-name-container" className="grid items-center gap-2.5">
                             <Label htmlFor="programName" id="programNameLabel" data-testid="program-name-label">Program Name</Label>
                             <Input
                                 id="programNameInput"
                                 data-testid="program-name-input"
                                 placeholder="Enter name"
+                                className={`h-14`}
                             />
                         </div>
 
-                        <div id="selectInputsContainer" data-testid="select-inputs-container" className="grid grid-cols-2 gap-5">
-                            <div id="leftColumn" data-testid="left-column">
-                                {/* Program Type */}
-                                <Label htmlFor="programType" id="programTypeLabel" data-testid="program-type-label">Program Type</Label>
+                        <div id="selectInputsContainer" data-testid="select-inputs-container" className="grid grid-cols-2 gap-5 pt-3">
+                            <div id="leftColumn" data-testid="left-column" className={`space-y-3`}>
+                                <Label htmlFor="programType" id="programTypeLabel" data-testid="program-type-label" className={`mb-8`}>Program Type</Label>
                                 <Select data-testid="program-type-select">
                                     <SelectTrigger id="programTypeTrigger" data-testid="program-type-trigger">
                                         <SelectValue placeholder="Select type" />
@@ -77,13 +77,12 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                             <SelectItem key={index} value={type} id={`programTypeItem-${index}`} data-testid={`program-type-item-${index}`}>{type}</SelectItem>
                                         ))}
                                     </SelectContent>
-                                </Select>
+                                </Select>   
 
                                 <Label
                                     htmlFor="programDeliveryType"
                                     id="programDeliveryTypeLabel"
                                     data-testid="program-delivery-type-label"
-                                    className="pt-3"
                                 >
                                     Program Delivery Type
                                 </Label>
@@ -101,7 +100,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 </Select>
                             </div>
 
-                            <div id="rightColumn" data-testid="right-column">
+                            <div id="rightColumn" data-testid="right-column" className={`space-y-3`}>
                                 <Label htmlFor="programMode" id="programModeLabel" data-testid="program-mode-label">Program Mode</Label>
                                 <Select  data-testid="program-mode-select">
                                     <SelectTrigger id="programModeTrigger" data-testid="program-mode-trigger">
@@ -120,7 +119,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                     htmlFor="programDuration"
                                     id="programDurationLabel"
                                     data-testid="program-duration-label"
-                                    className="pt-3"
+                                    className=""
                                 >
                                     Program Duration
                                 </Label>
@@ -138,12 +137,13 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 </Select>
                             </div>
                         </div>
-
+                        <div className={`pt-3`}>
                         <Textarea
                             id="programDescription"
                             data-testid="program-description"
                             placeholder="Enter description"
                         />
+                        </div>
                     </div>
                 </DialogDescription>
 
@@ -152,7 +152,8 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                         id="cancelButton"
                         data-testid="cancel-button"
                         variant="outline"
-                        className="bg-meedlWhite text-grey800 text-sm font-semibold"
+                        size={`lg`}
+                        className="bg-meedlWhite h-14 text-grey800 text-sm font-semibold"
                     >
                         Cancel
                     </Button>
@@ -160,7 +161,8 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                         id="createButton"
                         data-testid="create-button"
                         variant="secondary"
-                        className="bg-meedlBlue text-meedlWhite text-sm font-semibold"
+                        size={`lg`}
+                        className="bg-meedlBlue h-14 text-meedlWhite text-sm font-semibold"
                     >
                         Create Program
                     </Button>
