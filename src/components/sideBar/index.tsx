@@ -3,8 +3,9 @@ import React from 'react';
 import {useRouter} from "next/navigation";
 import {store, useAppSelector} from "@/redux/store";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Image from "next/image"
+import NavbarItems from "@/reuseable/ui/navbarItems";
+import {NavbarItemsInitialState} from "@/utils/components/NavbarItems";
 
 
 const SideBar = () => {
@@ -59,39 +60,18 @@ const SideBar = () => {
                 id={'adminMediumSideBar'}
                 className={`hidden md:grid md:bg-white md:w-[16vw]  md:px-4  md:border-r md:border-r-[blue300] md:z-10 md:h-[100vh]`}
             >
-                <div className={`md:h-[30%] md:w-full md:bg-grey100 md:grid md:place-items-center  `}>
-                    {/*<div*/}
-                    {/*    className={`md:inline-flex md:w-full md:h-[90%] `}*/}
-                    {/*>*/}
+                <div className={`md:h-[30%] md:w-full  md:grid   `}>
                         <Image
-                            width={200}
-                            height={100}
-                            // className="size-full  object-cover"
-                            src={'/Meedle Logo Primary Yellow.svg'} alt={'meedleYellowLogo'}
+                            id={'meddleMainLogoOnAdminLayout'}
+                            data-testid={'meddleMainLogoOnAdminLayout'}
+                            width={120}
+                            height={70}
+                            style={{marginTop: 'auto', marginBottom: 'auto'}}
+                            src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
                         />
-                    {/*</div>*/}
                 </div>
-                <div className={` hidden md:grid h-[100%] w-[98%] mr-auto ml-auto`}>
-                    {/*<div id={'fund'}  className={``}>*/}
-                    <div id={'Logo'} className=" w-full  flex items-center  gap-2 object-fit  ">
-                        {/*<Avatar id={'MeduimLogo'} src={'/logo.svg'}*/}
-                        {/*        className={` w-[80%]`}*/}
-                        {/*        variant="square"*/}
-                        {/*        alt="learn-space-logo"/>*/}
-
-                    </div>
-                    {/*</div>*/}
-                    <div id={'SideNavButtonDiv'} className={`md:grid hidden w-full`}>
-                        {/*<SideNavButton*/}
-                        {/*    selectedName={selectedName}*/}
-                        {/*    barCollapse={barCollapse}*/}
-                        {/*/>*/}
-                        {/*cuycuy*/}
-                    </div>
-                    <div className={`hidden  md:grid md:w-[78%] md:mr-auto md:ml-auto `}>
-                        {/*<SideBarBottomLayer/>*/}
-                        {/*cycfhuycfhu*/}
-                    </div>
+                <div className={` hidden md:grid md:h-fit md:w-full `}>
+                    <NavbarItems navbarItems={NavbarItemsInitialState}/>
                 </div>
                 <div className={`md:grid md:bottom-0 md:h-[20%] md:w-full md:bg-yellow300`}>
 
