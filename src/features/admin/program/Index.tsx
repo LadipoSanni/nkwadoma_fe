@@ -59,9 +59,9 @@ const Program = () => {
     }, []);
 
     return (
-        <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 px-5 pt-7 bg-white`}>
+        <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 px-5 pt-7 bg-meedlWhite`}>
             <section id="programSection" className={'grid gap-7 '}>
-                <h1 id="programTitle" className={"text-black text-2xl font-medium leading-[120%]"}>Program</h1>
+                <h1 id="programTitle" className={"text-meedlBlack text-2xl font-medium leading-[120%]"}>Program</h1>
                 <div id="programControls" className={'md:flex md:justify-between gap-1 grid'}>
                     <SearchInput id={'ProgramSearchInput'}/>
                     <AdminButton id={'createProgramButton'}>Create program</AdminButton>

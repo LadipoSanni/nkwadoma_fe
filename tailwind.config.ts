@@ -110,6 +110,7 @@ const config: Config = {
   			grey700: '#17161A',
   			grey800: '#121114',
   			grey900: '#0D0D10',
+			meedlBlack: '#000000',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
