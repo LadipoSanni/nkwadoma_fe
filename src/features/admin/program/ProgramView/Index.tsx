@@ -2,13 +2,13 @@
 import React, {useState, useEffect} from 'react';
 import {cabinetGrotesk} from '@/app/fonts';
 import SearchInput from "@/reuseable/Input/SearchInput";
-import AdminButton from "@/reuseable/buttons/AdminButton";
 import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
+import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
 
-const Program = () => {
+const ProgramView = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
     const [dummyData, setDummyData] = useState<{
         cohorts: number;
@@ -64,7 +64,7 @@ const Program = () => {
                 <h1 id="programTitle" className={"text-meedlBlack text-2xl font-medium leading-[120%]"}>Program</h1>
                 <div id="programControls" className={'md:flex md:justify-between gap-1 grid'}>
                     <SearchInput id={'ProgramSearchInput'}/>
-                    <AdminButton id={'createProgramButton'}>Create program</AdminButton>
+                    <CreateProgramButton buttonText={"Create Program"} title={"Create Program"} programDeliveryTypes={["2years", "hgjfhgfgf"]} programModes={["2semesters", "uthuightuit"]} programDurations={["3years", "hgfrregfre"]}/>
                 </div>
             </section>
             <div id="programContent" className={'grid gap-4'}>
@@ -106,4 +106,4 @@ const Program = () => {
     );
 };
 
-export default Program;
+export default ProgramView;
