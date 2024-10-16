@@ -1,10 +1,15 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import Styles from './styles.module.css'
 import { Table,TableRow,TableHead,TableCell,TableBody, TableHeader } from '@/components/ui/table'
 import TableContainer from './TableContainer'
 import Paginations from './TablePagination'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue,SelectGroup } from '@/components/ui/select'
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import { DotsVerticalIcon } from '@radix-ui/react-icons'; 
+import { Button } from '@/components/ui/button'
+import { Menubar,MenubarTrigger,MenubarContent,MenubarMenu,MenubarItem} from '@/components/ui/menubar'
+
+
 
 
 interface ColumnProps<T> {
@@ -17,6 +22,11 @@ interface ColumnProps<T> {
   interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
   }
+
+  interface DropdownOption {
+    name: string;
+    id: string;
+  }
   
   
   
@@ -24,19 +34,42 @@ interface ColumnProps<T> {
      tableData: T[];
       tableHeader: ColumnProps<T>[];
       handleRowClick: (row: T) => void;
+      handleDropDownClick?: (id: string) => void;
       tableHeight?: number;
       sx?: string
       tableStyle?: string
       staticColunm?: string,
-      staticHeader?: string
+      staticHeader?: string,
+      showKirkBabel?: boolean ,
+      kirkBabDropdownOption?: DropdownOption[],
   }
   
 
-function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick, tableHeight,sx,tableStyle,staticColunm,staticHeader }: Props<T>) {
+function Tables<T extends TableRowData> ({
+                           tableHeader, 
+                           tableData, 
+                           handleRowClick, 
+                           tableHeight,
+                           sx,
+                           tableStyle,
+                           staticColunm,
+                           staticHeader, 
+                           showKirkBabel,
+                           kirkBabDropdownOption,
+                           handleDropDownClick
+}: Props<T>) {
     const [page, setPage] = useState(1);
     const rowsPerPage = 10;
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+   
+
+    useEffect(() => {
+      setIsMounted(true);
+    }, []);
+  
+    if (!isMounted) return null;
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
         setPage(newPage);
@@ -57,6 +90,8 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
     const handleDropdownOpen = () => {
         setDropdownOpen(!dropdownOpen);
       };
+    
+   
     
      
 
@@ -86,30 +121,71 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                         </TableRow>
 
                     </TableHeader>
-                    <TableBody id="dynamicTableBody" className=''>
+                    <TableBody id="dynamicTableBody" data-testid="datatable"  className=''>
                         {paginatedData.map((row, rowIndex) => (
                             <TableRow
                                 id={`dynamicTableBodyRow${rowIndex}`}
-                                // hover={true}
                                 key={rowIndex}
-                                // sx={{ cursor: '' }}
                                 onClick={() => handleRowClick(row)}
                                 className={`${sx}`}
                             >
                                 {
                                     tableHeader.map((column) => (
+                                       
                                         <TableCell
                                             key={`${column.id}${rowIndex}`}
                                             id={`dynamicTableCell${column.id}${rowIndex}`}
                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                                             className='h-14'
                                         >
-                                            <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`} className={`${Styles.tableBodyItem} ${tableStyle}`}>
+                                            <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}  className={`${Styles.tableBodyItem} ${tableStyle}`}>
                                             {column.selector? column.selector(row) : row[column.id]}
                                             </div>
+                                            
                                         </TableCell>
+                                       
+                                       
+                                      
+                                         
                                     ))
                                 }
+                                { showKirkBabel ? 
+                                <TableCell
+                                className="w-0 "
+                                >
+                                  {
+                                    <Menubar
+                                    // onClick={}
+                                    >
+                                    <MenubarMenu>
+                                    <MenubarTrigger asChild className='border-none shadow-none cursor-pointer'>
+                                    <Button className='border-none shadow-none' >
+                                      <DotsVerticalIcon className="w-5 h-6 text-grey500 font-extrabold" />
+                                      </Button>
+                                    </MenubarTrigger>
+                                    <MenubarContent
+                                     className="bg-white shadow-md rounded-md mr-11 relative bottom-6 min-w-[8rem]"
+                                    >
+                                      {
+                                        kirkBabDropdownOption?.map((option, index) => (
+                                          <MenubarItem 
+                                          key={index}
+                                          className='cursor-pointer'
+                                          onClick={()=> handleDropDownClick && handleDropDownClick(option.id)}
+                                          >
+                                            {option.name}
+                                          </MenubarItem>
+                                        ))
+                                      }
+                                     
+                                    </MenubarContent>
+                                   </MenubarMenu>
+                                    </Menubar>
+                                  
+                                  }
+
+                                </TableCell> : ""
+                              }
                             </TableRow>
                         ))}
 
@@ -137,7 +213,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                  style={{ backgroundColor: '#FAFBFC' }}
                  
                  >
-                 <h1 className='w-32 text-[#404653] font-semibold text-sm'>{staticHeader}</h1>
+                 <h1 className='w-[91px] text-[#404653] font-semibold text-sm'>{staticHeader}</h1>
                  </TableHead>
                 <div>
                  <Select
@@ -153,7 +229,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                
                 >
                 <SelectValue placeholder="" className=''/>
-                <div className='ml-5'>
+                <div className='ml-4'>
                 {dropdownOpen ? (
           <ChevronUpIcon className="h-4 w-5 font-semibold" />
         ) : (
