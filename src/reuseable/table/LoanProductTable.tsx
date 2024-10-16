@@ -5,6 +5,11 @@ import TableContainer from './TableContainer'
 import Paginations from './TablePagination'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue,SelectGroup } from '@/components/ui/select'
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import { DotsVerticalIcon } from '@radix-ui/react-icons'; 
+import { Button } from '@/components/ui/button'
+import { Menubar,MenubarTrigger,MenubarContent,MenubarMenu,MenubarItem} from '@/components/ui/menubar'
+
+
 
 
 interface ColumnProps<T> {
@@ -17,6 +22,11 @@ interface ColumnProps<T> {
   interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
   }
+
+  interface DropdownOption {
+    name: string;
+    id: string;
+  }
   
   
   
@@ -24,20 +34,36 @@ interface ColumnProps<T> {
      tableData: T[];
       tableHeader: ColumnProps<T>[];
       handleRowClick: (row: T) => void;
+      handleDropDownClick?: (id: string) => void;
       tableHeight?: number;
       sx?: string
       tableStyle?: string
       staticColunm?: string,
-      staticHeader?: string
+      staticHeader?: string,
+      showKirkBabel?: boolean ,
+      kirkBabDropdownOption?: DropdownOption[],
   }
   
 
-function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick, tableHeight,sx,tableStyle,staticColunm,staticHeader }: Props<T>) {
+function Tables<T extends TableRowData> ({
+                           tableHeader, 
+                           tableData, 
+                           handleRowClick, 
+                           tableHeight,
+                           sx,
+                           tableStyle,
+                           staticColunm,
+                           staticHeader, 
+                           showKirkBabel,
+                           kirkBabDropdownOption,
+                           handleDropDownClick
+}: Props<T>) {
     const [page, setPage] = useState(1);
     const rowsPerPage = 10;
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+    const [showKirkbab,setShowKirkbab] = useState(false);
 
     useEffect(() => {
       setIsMounted(true);
@@ -64,6 +90,10 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
     const handleDropdownOpen = () => {
         setDropdownOpen(!dropdownOpen);
       };
+    
+    const handleShowKirkbackup = () => {
+      setShowKirkbab( showKirkBabel ?? false)
+    }
     
      
 
@@ -103,6 +133,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                             >
                                 {
                                     tableHeader.map((column) => (
+                                       
                                         <TableCell
                                             key={`${column.id}${rowIndex}`}
                                             id={`dynamicTableCell${column.id}${rowIndex}`}
@@ -112,9 +143,49 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                                             <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}  className={`${Styles.tableBodyItem} ${tableStyle}`}>
                                             {column.selector? column.selector(row) : row[column.id]}
                                             </div>
+                                            
                                         </TableCell>
+                                       
+                                       
+                                      
+                                         
                                     ))
                                 }
+                                { showKirkBabel ? 
+                                <TableCell
+                                className="w-0 "
+                                >
+                                  {
+                                    <Menubar>
+                                    <MenubarMenu>
+                                    <MenubarTrigger asChild className='border-none shadow-none cursor-pointer'>
+                                    <Button className='border-none shadow-none' >
+                                      <DotsVerticalIcon className="w-5 h-6 text-gray-500 font-extrabold" />
+                                      </Button>
+                                    </MenubarTrigger>
+                                    <MenubarContent
+                                     className="bg-white shadow-md rounded-md mr-11 relative bottom-6 min-w-[8rem]"
+                                    >
+                                      {
+                                        kirkBabDropdownOption?.map((option, index) => (
+                                          <MenubarItem 
+                                          key={index}
+                                          className='cursor-pointer'
+                                          onClick={()=> handleDropDownClick && handleDropDownClick(option.id)}
+                                          >
+                                            {option.name}
+                                          </MenubarItem>
+                                        ))
+                                      }
+                                     
+                                    </MenubarContent>
+                                   </MenubarMenu>
+                                    </Menubar>
+                                  
+                                  }
+
+                                </TableCell> : ""
+                              }
                             </TableRow>
                         ))}
 
@@ -142,7 +213,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                  style={{ backgroundColor: '#FAFBFC' }}
                  
                  >
-                 <h1 className='w-32 text-[#404653] font-semibold text-sm'>{staticHeader}</h1>
+                 <h1 className=' text-[#404653] font-semibold text-sm'>{staticHeader}</h1>
                  </TableHead>
                 <div>
                  <Select
@@ -158,7 +229,7 @@ function Tables<T extends TableRowData> ({tableHeader, tableData, handleRowClick
                
                 >
                 <SelectValue placeholder="" className=''/>
-                <div className='ml-5'>
+                <div className='ml-4'>
                 {dropdownOpen ? (
           <ChevronUpIcon className="h-4 w-5 font-semibold" />
         ) : (
