@@ -18,6 +18,7 @@ const config: Config = {
   			blue400: '#435376',
   			meedlBlue: '#142854',
   			blue600: '#12244C',
+			labelBlue: '#101828',
   			blue700: '#0E1C3C',
             meedlWhite: '#FFFFFF',
             blue800: '#0B162E',
