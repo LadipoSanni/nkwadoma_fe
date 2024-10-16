@@ -63,7 +63,7 @@ function Tables<T extends TableRowData> ({
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
-    const [showKirkbab,setShowKirkbab] = useState(false);
+   
 
     useEffect(() => {
       setIsMounted(true);
@@ -91,9 +91,7 @@ function Tables<T extends TableRowData> ({
         setDropdownOpen(!dropdownOpen);
       };
     
-    const handleShowKirkbackup = () => {
-      setShowKirkbab( showKirkBabel ?? false)
-    }
+   
     
      
 
@@ -156,11 +154,13 @@ function Tables<T extends TableRowData> ({
                                 className="w-0 "
                                 >
                                   {
-                                    <Menubar>
+                                    <Menubar
+                                    // onClick={}
+                                    >
                                     <MenubarMenu>
                                     <MenubarTrigger asChild className='border-none shadow-none cursor-pointer'>
                                     <Button className='border-none shadow-none' >
-                                      <DotsVerticalIcon className="w-5 h-6 text-gray-500 font-extrabold" />
+                                      <DotsVerticalIcon className="w-5 h-6 text-grey500 font-extrabold" />
                                       </Button>
                                     </MenubarTrigger>
                                     <MenubarContent
@@ -213,7 +213,7 @@ function Tables<T extends TableRowData> ({
                  style={{ backgroundColor: '#FAFBFC' }}
                  
                  >
-                 <h1 className=' text-[#404653] font-semibold text-sm'>{staticHeader}</h1>
+                 <h1 className='w-[91px] text-[#404653] font-semibold text-sm'>{staticHeader}</h1>
                  </TableHead>
                 <div>
                  <Select
