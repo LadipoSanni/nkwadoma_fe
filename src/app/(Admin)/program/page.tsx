@@ -1,9 +1,9 @@
 import React from 'react';
-import Program from '@/features/admin/program/Index'
+import ProgramView from '@/features/admin/program/ProgramView/Index'
 
 const Page = () => {
     return (
-            <Program />
+            <ProgramView />
     );
 };
 
