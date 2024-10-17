@@ -30,6 +30,6 @@ describe('side test', ()=> {
     });
 
     it('should contain component router', () => {
-        expect(screen.getByTestId(/loan/i)).toBeInTheDocument()
+        expect(screen.getByTestId("loan")).toBeInTheDocument()
     });
 })

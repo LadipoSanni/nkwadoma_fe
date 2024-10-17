@@ -21,7 +21,7 @@ describe('test navbar item', ()=> {
         render(
             <Providers>
                 <NavbarRouter
-                    currentTab={0}
+                    currentTab={''}
                     handleClick={handleClick}
                     navbarItems={mockData}
                 />
@@ -32,14 +32,14 @@ describe('test navbar item', ()=> {
         expect(screen.getByTestId(/navBarItemsContainer/i)).toBeInTheDocument()
     })
     it('should contain nav items', () => {
-        expect(screen.getByTestId(/loan/i)).toBeInTheDocument()
-        expect(screen.getByTestId(/overview/i)).toBeInTheDocument()
-        expect(screen.getByTestId(/cohort/i)).toBeInTheDocument()
-        expect(screen.getByTestId(/program/i)).toBeInTheDocument()
+        expect(screen.getByTestId("loanRoute")).toBeInTheDocument()
+        expect(screen.getByTestId("overView")).toBeInTheDocument()
+        expect(screen.getByTestId("cohort")).toBeInTheDocument()
+        expect(screen.getByTestId("program")).toBeInTheDocument()
 
     });
     it('should called on click function when clicked', () => {
-        const button = screen.getByTestId(/overview/i)
+        const button = screen.getByTestId("overView")
         fireEvent.click(button)
         expect(handleClick).toHaveBeenCalled()
     });

@@ -43,9 +43,9 @@ describe("should render side bar component", ()=>{
         expect(container).toBeInTheDocument()
     })
     it('should contain navbar items ', () => {
-        expect(screen.getByTestId(/program/i)).toBeInTheDocument()
-        expect(screen.getByTestId(/loan/i)).toBeInTheDocument()
-        expect(screen.getByTestId(/cohort/i)).toBeInTheDocument()
+        expect(screen.getByTestId("program")).toBeInTheDocument()
+        expect(screen.getByTestId("loan")).toBeInTheDocument()
+        expect(screen.getByTestId("cohort")).toBeInTheDocument()
 
     });
 
