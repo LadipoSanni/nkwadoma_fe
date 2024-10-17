@@ -2,8 +2,8 @@ import React from 'react'
 import {navbarRouterItemsProps} from "@/types/Component.type";
 interface Props <T extends navbarRouterItemsProps> {
     navbarItems: T[],
-    currentTab: number,
-    handleClick: (name: string, index: number, id: string ) => void,
+    currentTab: string,
+    handleClick: (name: string,  id: string ) => void,
 }
 
 
@@ -23,15 +23,15 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                     key={item?.id + index}
                     id={item.id}
                     data-testid={item.id}
-                    className={`inline-flex h-fit py-2 gap-2 px-1 w-full ${(currentTab !== index ? `` : `rounded bg-neutral100 `)} `}
-                    onClick={() => {handleClick(item.name, index, item.id)}}
+                    className={`inline-flex h-fit py-2 gap-2 px-1 w-full ${(currentTab !== item.name ? `` : `rounded bg-neutral100 `)} `}
+                    onClick={() => {handleClick(item.name, item.id)}}
                 >
                     <div id={'navbarRouteIcon' + item.id}
                          data-testid={'navbarRouteIcon' + item.id}
                     >{item?.icon}</div>
                     <div id={'navbarRouterName' + item.id}
                          data-testid={`navbarRouteName` + item.id}
-                         className={`text-sm  ${(currentTab !== index  ? `text-grey100` : `text-meedlBlue`)} =`}>{item.name}</div>
+                         className={`text-sm  ${(currentTab !== item.name  ? `text-black300` : `text-meedlBlue`)} =`}>{item.name}</div>
 
                 </button>
                 ))}

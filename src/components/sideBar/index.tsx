@@ -11,15 +11,27 @@ import {GoPerson} from "react-icons/go";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
 import NavbarContainer from "@/reuseable/ui/Navbar";
 import {LuLogOut} from "react-icons/lu";
+import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
+// import { usePathname } from 'next/navigation'
+// import {removeContent, capitalizeFirstLetters} from "@/utils/GlobalMethods";
+
 
 const SideBar = () => {
     const router = useRouter();
+    // const path = usePathname()
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const currentNavbarItem = useAppSelector(state => state.adminLayout.currentNavbarItem)
-    const [currentTab, setCurrentTab] = React.useState(0)
+    // const [pathname ]= React.useState(removeContent("/",path))
+    const [currentTab, setCurrentTab] = React.useState(currentNavbarItem)
 
-    const clickNavbar = ( name: string, index: number, id: string ) => {
-        setCurrentTab(index)
+    // console.log("current tab:", pathname)
+    // useEffect(() => {
+    //     const route = capitalizeFirstLetters(currentTab);
+    //     setCurrentTab(route)
+    // }, []);
+
+    const clickNavbar = ( name: string,  id: string ) => {
+        setCurrentTab(name)
         store.dispatch(setCurrentNavbarItem(name))
         router.push("/"+id)
     }
@@ -28,17 +40,17 @@ const SideBar = () => {
     }
 
     const navbarRouterItems : navbarRouterItemsProps[] = [
-        {icon: <MdOutlineHome style={{height: '19', width: '19', color: `${currentNavbarItem === 'Overview' ? `#142854` : `#72757A`}` }}/> , id: 'Overview', name: 'Overview', route: '/overview'},
-        {id: 'program', name: 'Program', route: '/program', icon: <LuBook style={{height: '18', width: '18', color: `${currentNavbarItem  === 'Program' ?  `#142854` : `#72757A`}`}} />},
-        {id: 'cohort', name: 'Cohort', route: '/cohort', icon:<MdOutlinePeopleAlt style={{height: '17', width: '17', color: `${currentNavbarItem === 'Cohort' ? `#142854` : `#72757A`}` }} />},
-        {id: 'loan', name: 'Loan', route: '/loan', icon:<LuPanelTop style={{height: '17', width: '17' , color: `${currentNavbarItem === 'Loan' ? `#142854` : `#72757A`}` }} />},
-        {id: 'trainee', name: 'Trainee', route: '/trainee',icon:<GoPerson style={{height: '17', width: '17' , color: `${currentNavbarItem === 'Trainee' ? `#142854` : `#72757A`}`}} />},
+        {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem] ${(currentNavbarItem !== 'Overview' ? `text-navbarIconColor` : `text-meedleBlue`)} `}  /> , id: 'Overview', name: 'Overview', route: '/overview'},
+        {id: 'program', name: 'Program', route: '/program', icon: <LuBook className={` h-[1.2rem] w-[1.2rem] ${(currentNavbarItem !== 'Program' ? `text-navbarIconColor` : `text-meedleBlue`)} `} />},
+        {id: 'cohort', name: 'Cohort', route: '/cohort', icon:<MdOutlinePeopleAlt className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Cohort' ? `text-meedleBlue` : `text-navbarIconColor`} `}  />},
+        {id: 'loan', name: 'Loan', route: '/loan', icon:<LuPanelTop className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Loan' ? `text-meedleBlue` : `text-navbarIconColor`} `}  />},
+        {id: 'trainee', name: 'Trainee', route: '/trainee',icon:<GoPerson className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Trainee' ? `text-meedleBlue` : `text-navbarIconColor`} `}  />},
     ]
 
     const navbarConatainerItems : navbarItemsProps[] = [
-        {id: 'settings', name: 'Settings', icon: <LuBook className={`text-grey100 h-[18] `}/>, handleClick: handleClick},
-        {id: 'help&support', name: "Help & Support", icon: <LuBook/>, handleClick: handleClick},
-        {id: 'logout', name: 'Logout', icon: <LuLogOut/>, handleClick: handleClick},
+        {id: 'settings', name: 'Settings', icon: <GearIcon className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>, handleClick: handleClick},
+        {id: 'help&support', name: "Help & Support", icon: <QuestionMarkCircledIcon className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `} />, handleClick: handleClick},
+        {id: 'logout', name: 'Logout', icon: <LuLogOut className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `} />, handleClick: handleClick},
 
     ]
 
@@ -89,10 +101,10 @@ const SideBar = () => {
             <aside
                 id={'adminMediumSideBar'}
                 data-testid={'adminMediumSideBar'}
-                className={`hidden md:grid md:bg-white md:w-[16vw]  md:px-4  md:border-r md:border-r-[blue300] md:z-10 md:h-[100vh]`}
+                className={`hidden md:grid md:relative md:bg-white md:w-[16vw]  md:px-4  md:border-r md:border-r-[blue300] md:z-10 md:h-[100vh]`}
             >
                 <div className={`grid gap-4   h-fit `}>
-                    <div className={`md:h-fit py-5 md:w-full   md:grid   `}>
+                    <div className={`md:h-fit py-6 md:w-full   md:grid   `}>
                         <Image
                             id={'meddleMainLogoOnAdminLayout'}
                             data-testid={'meddleMainLogoOnAdminLayout'}
@@ -107,14 +119,25 @@ const SideBar = () => {
                     </div>
                 </div>
 
-                <div className={`md:grid md:bottom-0 md:h-fit md:w-full `}>
+                <div className={`md:absolute  md:bottom-0 gap-3  px-4 md:h-fit md:w-full `}>
                     <div  className={` hidden md:grid md:h-fit  md:w-full `}>
                         < NavbarContainer items={navbarConatainerItems}/>
                     </div>
                     <div
-                        className={``}
+                        className={`h-fit w-full border-t-2  border-t-navBorder`}
                     >
-
+                        <div
+                            className={`h-fit w-full flex gap-2 pt-4 pb-12`}
+                        >
+                            <div
+                                className={` md:grid  md:place-items-center md:object-fit md:text-black md:text-xs md:font-bold  md:bg-[#F7F7F7]   md:rounded-full w-[30px] h-[30px]  md:w-[3.5rem] md:h-[3.5rem] `}>
+                               <div className={`break-all w-[80%] `}>Alt ___ school</div>
+                            </div>
+                            <div className={`grid  mt-auto mb-auto h-[3rem]`}>
+                                <p className={`  text-black text-base`}>Alt school Africa </p>
+                                <p className={` text-gray1 text-sm `}>Education</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </aside>
