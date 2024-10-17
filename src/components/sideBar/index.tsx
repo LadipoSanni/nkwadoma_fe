@@ -2,19 +2,51 @@
 import React from 'react';
 import {useRouter} from "next/navigation";
 import {store, useAppSelector} from "@/redux/store";
-import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
+import {setCurrentNavbarItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import Image from "next/image"
-import NavbarItems from "@/reuseable/ui/navbarItems";
-import {NavbarItemsInitialState} from "@/utils/components/NavbarItems";
-
+import NavbarRouter from "../../reuseable/ui/navbarRouter";
+import {MdOutlineHome, MdOutlinePeopleAlt} from "react-icons/md";
+import {LuBook, LuPanelTop} from "react-icons/lu";
+import {GoPerson} from "react-icons/go";
+import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
+import NavbarContainer from "@/reuseable/ui/Navbar";
+import {LuLogOut} from "react-icons/lu";
 
 const SideBar = () => {
     const router = useRouter();
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
+    const currentNavbarItem = useAppSelector(state => state.adminLayout.currentNavbarItem)
+    const [currentTab, setCurrentTab] = React.useState(0)
+
+    const clickNavbar = ( name: string, index: number, id: string ) => {
+        setCurrentTab(index)
+        store.dispatch(setCurrentNavbarItem(name))
+        router.push("/"+id)
+    }
+    const handleClick = () => {
+
+    }
+
+    const navbarRouterItems : navbarRouterItemsProps[] = [
+        {icon: <MdOutlineHome style={{height: '19', width: '19', color: `${currentNavbarItem === 'Overview' ? `#142854` : `#72757A`}` }}/> , id: 'Overview', name: 'Overview', route: '/overview'},
+        {id: 'program', name: 'Program', route: '/program', icon: <LuBook style={{height: '18', width: '18', color: `${currentNavbarItem  === 'Program' ?  `#142854` : `#72757A`}`}} />},
+        {id: 'cohort', name: 'Cohort', route: '/cohort', icon:<MdOutlinePeopleAlt style={{height: '17', width: '17', color: `${currentNavbarItem === 'Cohort' ? `#142854` : `#72757A`}` }} />},
+        {id: 'loan', name: 'Loan', route: '/loan', icon:<LuPanelTop style={{height: '17', width: '17' , color: `${currentNavbarItem === 'Loan' ? `#142854` : `#72757A`}` }} />},
+        {id: 'trainee', name: 'Trainee', route: '/trainee',icon:<GoPerson style={{height: '17', width: '17' , color: `${currentNavbarItem === 'Trainee' ? `#142854` : `#72757A`}`}} />},
+    ]
+
+    const navbarConatainerItems : navbarItemsProps[] = [
+        {id: 'settings', name: 'Settings', icon: <LuBook className={`text-grey100 h-[18] `}/>, handleClick: handleClick},
+        {id: 'help&support', name: "Help & Support", icon: <LuBook/>, handleClick: handleClick},
+        {id: 'logout', name: 'Logout', icon: <LuLogOut/>, handleClick: handleClick},
+
+    ]
+
+
 
     return (
         <div>
-            {showMobileSideBar ?
+            {showMobileSideBar &&
                 <aside
                     id={'adminMobileSideBar'}
                     className={` w-[100vw] h-[100vh]  border-r-2 border-r-grey-200  flex z-10 md:hidden`}
@@ -53,28 +85,37 @@ const SideBar = () => {
                     ></div>
 
                 </aside>
-                :
-                null
             }
             <aside
                 id={'adminMediumSideBar'}
+                data-testid={'adminMediumSideBar'}
                 className={`hidden md:grid md:bg-white md:w-[16vw]  md:px-4  md:border-r md:border-r-[blue300] md:z-10 md:h-[100vh]`}
             >
-                <div className={`md:h-[30%] md:w-full md:bg-red-200 md:grid   `}>
+                <div className={`grid gap-4   h-fit `}>
+                    <div className={`md:h-fit py-5 md:w-full   md:grid   `}>
                         <Image
                             id={'meddleMainLogoOnAdminLayout'}
                             data-testid={'meddleMainLogoOnAdminLayout'}
-                            width={120}
-                            height={70}
+                            width={100}
+                            height={50}
                             style={{marginTop: 'auto', marginBottom: 'auto'}}
                             src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
                         />
+                    </div>
+                    <div className={` hidden md:grid md:h-fit  md:w-full `}>
+                        <NavbarRouter currentTab={currentTab} handleClick={clickNavbar} navbarItems={navbarRouterItems}/>
+                    </div>
                 </div>
-                <div className={` hidden md:grid md:h-fit  md:w-full `}>
-                    <NavbarItems navbarItems={NavbarItemsInitialState}/>
-                </div>
-                <div className={`md:grid md:bottom-0 md:h-[20%] md:w-full md:bg-yellow300`}>
 
+                <div className={`md:grid md:bottom-0 md:h-fit md:w-full `}>
+                    <div  className={` hidden md:grid md:h-fit  md:w-full `}>
+                        < NavbarContainer items={navbarConatainerItems}/>
+                    </div>
+                    <div
+                        className={``}
+                    >
+
+                    </div>
                 </div>
             </aside>
         </div>
