@@ -26,16 +26,16 @@ const AdminLogin: React.FC = () => {
     const isFormValid = email && password
 
     return (
-        <div className={` flex flex-col justify-center h-screen bg-[#D9EAFF] md:p-0 p-5 items-center`} id={`superAdminLoginPage`}
+        <div className={`grid justify-center h-screen bg-white md:p-0 p-5 items-center`} id={`superAdminLoginPage`}
              data-testid="superAdminLoginPage">
             <div
                 id={'OrganizationAdminLogo'}
                 data-testid={`OrganizationAdminLogo`}
-                className={`text-meedlBlue font-mono mb-16 object-cover`}
+                className={`text-meedlBlue font-mono  object-cover`}
             >
                 <Image src={'/Meedle Logo Primary Main.svg'} alt={'meedl'}
-                       width={150}
-                       height={150}
+                       width={100}
+                       height={80}
                 />
             </div>
             <div data-testid={`superAdminLoginDivId`} id={`superAdminLoginDivId`}

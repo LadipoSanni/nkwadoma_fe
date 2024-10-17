@@ -21,7 +21,7 @@ describe('test navbar item', ()=> {
         render(
             <Providers>
                 <NavbarRouter
-                    currentTab={0}
+                    currentTab={''}
                     handleClick={handleClick}
                     navbarItems={mockData}
                 />
