@@ -9,6 +9,7 @@ import {Formik,Form} from "formik"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue,SelectGroup } from '@/components/ui/select'
 import * as Yup from "yup";
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
+import {Icon} from "@iconify/react";
 
 
 export const initialFormValue = {
@@ -34,7 +35,7 @@ export const programData = {
 const Cohort = () => {
   const [isDropdown,setIsDropdown] = useState(false)
   const [selectProgram, setSelectProgram] = useState('')
-   const [isLoading, setIsLoading] = useState(false);
+   const [isLoading] = useState(false);
 
   
 
@@ -154,7 +155,15 @@ const Cohort = () => {
                        }
                         type='submit'
                         disabled={!isValid}
-                        >Filter</Button>
+                        >
+                           {isLoading ? (
+                                                <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">
+                                                    <Icon id={'Icon'} icon={loadingLoop} width={24} height={24}/>
+                                                </div>
+                                            ) : (
+                                                "Filter"
+                                            )}
+                          </Button>
                           </DropdownMenuItem>
                         
                       </div>
@@ -168,10 +177,10 @@ const Cohort = () => {
              <div className='createCohort'>
               <Button 
               type='button'
-              // className='text-meedlBlue h-12 font-bold ring-meedlBlue border-meedlBlue border-solid w-[80px]'
+              
               className='bg-meedlBlue h-12 hover:bg-meedlBlue cursor-pointer'
               >
-                Create Cohort
+                    Create Cohort
               </Button>
              </div>
           </div>
