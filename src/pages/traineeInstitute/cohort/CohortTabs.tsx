@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import Tables from '@/reuseable/table/LoanProductTable'
-import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
+// import Tables from '@/reuseable/table/LoanProductTable'
+// import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
 
 const CohortTabs = () => {
   const tabData = [
