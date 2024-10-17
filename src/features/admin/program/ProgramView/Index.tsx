@@ -52,7 +52,7 @@ const ProgramView = () => {
             cohorts: Math.floor(Math.random() * 20) + 1,
             description: `Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes.${index + 1}`,
             months: Math.floor(Math.random() * 12) + 1,
-            title: `Program Title ${index + 1}`,
+            title: `Program Thinking ${index + 1}`,
             trainees: Math.floor(Math.random() * 100) + 1,
         }));
         setDummyData(data);
