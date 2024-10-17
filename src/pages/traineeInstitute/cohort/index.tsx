@@ -10,6 +10,7 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue,SelectGro
 import * as Yup from "yup";
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
+import CohortTabs from './CohortTabs'
 
 
 export const initialFormValue = {
@@ -125,7 +126,7 @@ const Cohort = () => {
                         >
                           {Object.entries(programData).map(([key, value]) => (
                            <SelectItem key={key} value={value} className='hover:bg-blue-200'>
-                             {value}
+                             {value}cyuyuguPTYU
                            </SelectItem>
                           ))}
                         </SelectGroup>
@@ -139,6 +140,7 @@ const Cohort = () => {
                       <div className='flex justify-between items-center pt-7'>
                       
                         <Button 
+                        id='resetButton'
                         // type="reset"
                         variant={`outline`} 
                         className='text-meedlBlue h-[38px] font-bold ring-meedlBlue border-meedlBlue border-solid w-[80px]'
@@ -151,6 +153,7 @@ const Cohort = () => {
                         </Button>
                         <DropdownMenuItem>
                         <Button 
+                        id='filterButton'
                         className={`${!isValid? "bg-neutral650 cursor-not-allowed  h-[38px] " : "bg-meedlBlue h-[38px] cursor-pointer hover:bg-meedlBlue"}font-bold  w-[80px]  text-white`
                        }
                         type='submit'
@@ -177,13 +180,16 @@ const Cohort = () => {
              <div className='createCohort'>
               <Button 
               type='button'
-              
+              id='createCohortButton'
               className='bg-meedlBlue h-12 hover:bg-meedlBlue cursor-pointer'
               >
                     Create Cohort
               </Button>
              </div>
           </div>
+        </div>
+        <div>
+         <CohortTabs/>
         </div>
     </div>
   )
