@@ -117,21 +117,5 @@ describe("TablePagination", () => {
         
     })
 
-    // it('should show next button is responsive', () => {
-    //     const tableData = Array.from({ length: 100 })
-    //     render(
-    //         <TablePagination
-    //             page={1}
-    //             rowsPerPage={10}
-    //             tableData={tableData}
-    //             handlePageChange={mockHandlePageChange}
-    //             handleNextPage={mockHandleNextPage}
-    //             handlePreviousPage={mockHandlePreviousPage}
-    //         />
-    //     )
-    //     const nextButton = screen.getByRole('button', { name: /Next/i });
-    //     fireEvent.click(nextButton);
-       
-
-    // })
+   
 })

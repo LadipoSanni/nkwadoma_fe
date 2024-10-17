@@ -1,11 +1,12 @@
-import React from 'react';
+import React from 'react'
+import Cohort from '@/pages/traineeInstitute/cohort'
 
-const Page = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-};
+const page = () => {
+  return (
+    <>
+   <Cohort/>
+    </>
+  )
+}
 
-export default Page;
+export default page;
