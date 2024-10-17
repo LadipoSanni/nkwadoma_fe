@@ -44,7 +44,7 @@ const Cohort = () => {
   }, []);
 
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values:{selectProgram: string}) => {
     console.log('Form submitted', values)
     setIsDropdown(false)
 
@@ -96,7 +96,7 @@ const Cohort = () => {
                   validateOnMount={true}
                   validationSchema={validationSchema}
                   >
-                     {({values, errors, isValid, touched, setFieldValue,resetForm}) => (
+                     {({isValid,  setFieldValue,resetForm}) => (
                     <Form>
                       <Select
                       value={selectProgram}
