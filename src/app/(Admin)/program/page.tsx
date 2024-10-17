@@ -1,13 +1,10 @@
-import React from 'react'
-import Program from "@/features/adminFeatures/program/program/Index";
+import React from 'react';
+import ProgramView from '@/features/admin/program/ProgramView/Index'
 
-function page() {
+const Page = () => {
     return (
-        <div>
-            <Program/>
-        </div>
-    )
-}
+            <ProgramView />
+    );
+};
 
-export default page
-
+export default Page;

@@ -29,7 +29,7 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, trainee
         : description;
 
     return (
-        <Card id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full max-w-xs border border-grey50 shadow-md rounded-lg">
+        <Card id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full max-w-xs border border-grey50 rounded-lg">
             <CardHeader id={`header-${id}`} data-testid="header" className="flex flex-row justify-between items-center">
                 <CardTitle id={`title-${id}`} data-testid="title" className={`${cabinetGroteskBold.className} text-lg font-medium text-[#101828]`}>{title}</CardTitle>
                 <Button id={`menuIcon-${id}`} data-testid="menuIcon" variant="ghost" size="icon" className="text-gray-500">

@@ -29,6 +29,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
@@ -39,3 +40,6 @@ next-env.d.ts
 
 .idea/git_toolbox_blame.xml
 .idea/git_toolbox_prj.xml
+
+# JetBrains IDEs
+.idea/
