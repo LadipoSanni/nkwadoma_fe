@@ -11,7 +11,7 @@ type props = {
 const AdminLayout = ({children}: props) => {
     return (
         <Providers>
-            <div id={'AdminLayout'} className={`h-screen w-screen flex md:flex bg-meedlBlue md:w-screen md:h-screen`}
+            <div id={'AdminLayout'} className={`h-screen w-screen flex md:flex bg- md:w-screen md:h-screen`}
             >
                 <SideBar/>
                 <div id={'LayoutMainComponent'} className={`grid h-full w-full md:h-full bg-[#f0f2f4] md:place-self-end`}>
