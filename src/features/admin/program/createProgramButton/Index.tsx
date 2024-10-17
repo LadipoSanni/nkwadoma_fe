@@ -12,6 +12,8 @@ import {Input} from '@/components/ui/input'
 import {Label} from "@/components/ui/label"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Textarea} from "@/components/ui/textarea";
+import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
+import {useCallback, useState} from "react";
 
 interface CreateProgramProps {
     buttonText: string;
@@ -28,6 +30,12 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                                                programModes,
                                                                programDurations,
                                                            }) => {
+
+    const [isDropdown,setIsDropdown] = useState(false)
+    const toggleDropdown = useCallback(() => {
+        setIsDropdown((prev) => !prev);
+    }, []);
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -62,7 +70,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 id="programNameInput"
                                 data-testid="program-name-input"
                                 placeholder="Enter name"
-                                className={`h-14`}
+                                className={`h-14 focus:outline-none focus:ring-0  focus-visible:ring-0`}
                             />
                         </div>
 
@@ -76,10 +84,18 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 >
                                     Program Delivery Type
                                 </Label>
-                                <Select data-testid="program-delivery-type-select">
+                                <Select data-testid="program-delivery-type-select" onOpenChange={toggleDropdown}>
                                     <SelectTrigger id="programDeliveryTypeTrigger"
-                                                   data-testid="program-delivery-type-trigger">
+                                                   data-testid="program-delivery-type-trigger" className={`focus:outline-none focus:ring-0`}>
                                         <SelectValue placeholder="Select delivery type"/>
+                                        <div className={`ml-4`}>
+                                            {isDropdown ? (
+                                                <ChevronUpIcon className={`h-4 w-5 font-bold`}/>
+                                            ) : (
+                                                <ChevronDownIcon className={`h-4 w-5 font-bold`}/>
+                                            )}
+
+                                        </div>
                                     </SelectTrigger>
                                     <SelectContent id="programDeliveryTypeContent"
                                                    data-testid="program-delivery-type-content">
@@ -98,9 +114,17 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 <div>
                                     <Label htmlFor="programMode" id="programModeLabel" data-testid="program-mode-label">Program
                                         Mode</Label>
-                                    <Select data-testid="program-mode-select">
-                                        <SelectTrigger id="programModeTrigger" data-testid="program-mode-trigger">
+                                    <Select data-testid="program-mode-select" onOpenChange={toggleDropdown}>
+                                        <SelectTrigger id="programModeTrigger" data-testid="program-mode-trigger" className={`focus:outline-none focus:ring-0`}>
                                             <SelectValue placeholder="Select mode"/>
+                                            <div className={`ml-4`}>
+                                                {isDropdown ? (
+                                                    <ChevronUpIcon className={`h-4 w-5 font-bold`}/>
+                                                ) : (
+                                                    <ChevronDownIcon className={`h-4 w-5 font-bold`}/>
+                                                )}
+
+                                            </div>
                                         </SelectTrigger>
                                         <SelectContent id="programModeContent" data-testid="program-mode-content">
                                             {programModes.map((mode, index) => (
@@ -122,10 +146,18 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                     >
                                         Program Duration
                                     </Label>
-                                    <Select data-testid="program-duration-select">
+                                    <Select data-testid="program-duration-select" onOpenChange={toggleDropdown}>
                                         <SelectTrigger id="programDurationTrigger"
-                                                       data-testid="program-duration-trigger">
+                                                       data-testid="program-duration-trigger" className={`focus:outline-none focus:ring-0`}>
                                             <SelectValue placeholder="Select duration"/>
+                                            <div className={`ml-4`}>
+                                                {isDropdown ? (
+                                                    <ChevronUpIcon className={`h-4 w-5 font-bold`}/>
+                                                ) : (
+                                                    <ChevronDownIcon className={`h-4 w-5 font-bold`}/>
+                                                )}
+
+                                            </div>
                                         </SelectTrigger>
                                         <SelectContent id="programDurationContent"
                                                        data-testid="program-duration-content">
@@ -150,6 +182,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 id="programDescription"
                                 data-testid="program-description"
                                 placeholder="Enter description"
+                                className={`focus:outline-none focus:ring-0  focus-visible:ring-0`}
                             />
                         </div>
                     </div>
