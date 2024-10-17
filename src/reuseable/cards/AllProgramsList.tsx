@@ -1,12 +1,11 @@
 "use client"
 import React, {useState} from 'react';
 import { MdOutlinePeopleAlt } from "react-icons/md";
-import {FiMoreVertical} from "react-icons/fi";
 import {MdOutlineCalendarMonth} from "react-icons/md";
 import {Card, CardHeader, CardTitle, CardDescription, CardContent} from '@/components/ui/card';
-import {Button} from '@/components/ui/button';
 import {PersonIcon} from "@radix-ui/react-icons";
-import {cabinetGroteskBold} from "@/app/fonts";
+import {inter} from "@/app/fonts";
+import Kebab from "@/reuseable/Kebab/Kebab";
 
 interface ProgramList {
     id: string;
@@ -28,39 +27,59 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, trainee
         ? description.substring(0, 80)
         : description;
 
+    const dropdownOption = [
+        {
+            name: 'View Program',
+            id: "1",
+        },
+        {
+            name: 'Edit Program',
+            id: "2",
+        },{
+            name: 'Delete Program',
+            id: "3",
+        },
+    ];
+
+
     return (
-        <Card id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full max-w-xs border border-grey50 rounded-lg">
+        <Card id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full max-w-lg border border-grey50 rounded-lg">
             <CardHeader id={`header-${id}`} data-testid="header" className="flex flex-row justify-between items-center">
-                <CardTitle id={`title-${id}`} data-testid="title" className={`${cabinetGroteskBold.className} text-lg font-medium text-[#101828]`}>{title}</CardTitle>
-                <Button id={`menuIcon-${id}`} data-testid="menuIcon" variant="ghost" size="icon" className="text-gray-500">
-                    <FiMoreVertical className="w-5 h-5"/>
-                </Button>
+                <CardTitle id={`title-${id}`} data-testid="title" className={`${inter.className} text-lg font-medium text-[#101828]`}>{title}</CardTitle>
+                <div>
+                    <Kebab kebabOptions={dropdownOption} />
+                </div>
+                {/*<Button id={`menuIcon-${id}`} data-testid="menuIcon" variant="ghost" size="icon" className="text-gray-500" onClick={toggleDropdown}>*/}
+                {/*    <FiMoreVertical className="w-5 h-5"/>*/}
+                {/*</Button>*/}
+
             </CardHeader>
 
             <CardContent id={`contentId-${id}`} data-testid={`contentId`}>
-                <CardDescription id={`description-${id}`} data-testid="description" className="text-sm text-grey1">
+                <CardDescription id={`description-${id}`} data-testid="description" className={`${inter.className}  text-sm text-grey450`}>
                     {shortDescription}
                     {description.length > 90 && (
                         <span
                             id={`readMore-${id}`}
                             data-testid="readMore"
                             onClick={toggleDescription}
-                            className="text-blue-600 cursor-pointer ml-2"
+                            className="${inter.className} text-grey450 cursor-pointer ml-2"
                         >
+
               {isExpanded ? "...." : "...."}
             </span>
                     )}
                 </CardDescription>
 
-                <div id={`details-${id}`} data-testid="details" className="inline-flex flex-col justify-start mt-4 w-full space-y-2">
+                <div id={`details-${id}`} data-testid="details" className="inline-flex flex-col justify-start mt-4 w-full space-y-3">
                     <div id={`traineesAndMonths-${id}`} data-testid="traineesAndMonths" className="flex flex-row space-x-2">
                             <div>
                                 <span
                                     id={`trainees-${id}`}
                                     data-testid="trainees"
-                                    className="py-1 px-2 text-sm font-medium text-gray-900 w-28 bg-gray rounded-full border border-slate-200 flex items-center space-x-1">
+                                    className={`${inter.className}  py-1 px-2 text-sm font-medium text-meedlBlue w-30 bg-gray rounded-full border border-slate-200 flex items-center space-x-2`}>
                                     <PersonIcon className="w-4 h-4 text-black"/>
-                                    <span className="text-[#142854]">{trainees} trainees</span>
+                                    <span className={`${inter.className} text-meedlBlue`}>{trainees} trainees</span>
                                 </span>
                             </div>
 
@@ -68,9 +87,9 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, trainee
                             <span
                                 id={`months-${id}`}
                                 data-testid="months"
-                                className="py-1 px-2 text-sm font-medium w-28 text-gray-00 bg-gray rounded-full border border-slate-200 flex items-center space-x-1">
+                                className="py-1 px-2 text-sm font-medium w-28 text-meedlBlue bg-gray rounded-full border border-slate-200 flex items-center space-x-2">
                                   <MdOutlineCalendarMonth className="w-4 h-4 text-black"/>
-                                  <span className="text-[#142854]">{months} months</span>
+                                  <span className={`${inter.className} text-meedlBlue`}>{months} months</span>
                             </span>
                         </div>
                     </div>
@@ -78,9 +97,9 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, trainee
                         <span
                             id={`cohorts-${id}`}
                             data-testid="cohorts"
-                            className="py-1 px-2 text-sm w-28 font-medium text-gray-900 bg-gray rounded-full border border-slate-200 flex items-center space-x-1">
+                            className="py-1 px-2 text-sm w-28 font-medium text-meedlBlue bg-gray rounded-full border border-slate-200 flex items-center space-x-2">
                           <MdOutlinePeopleAlt className="w-4 h-4 text-black"/>
-                          <span className="text-[#142854]">{cohorts} cohorts</span>
+                          <span className={`${inter.className} text-meedlBlue`}>{cohorts} cohorts</span>
                         </span>
                     </div>
                 </div>
