@@ -28,20 +28,20 @@ const Step1 = () => {
         router.push('/auth/reset-password/step-2')
     }
 
-    const validateEmail = (email: string) => {
-        const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        if(email.match(validRegex)) {
-            return true
-        }
-       return false;
-    }
+    // const validateEmail = (email: string) => {
+    //     const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    //     if(email.match(validRegex)) {
+    //         return true
+    //     }
+    //    return false;
+    // }
 
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement| HTMLInputElement > ) => {
-        // event.stopPropagation()
-        if (validateEmail(event.currentTarget.value)) {
+        event.stopPropagation()
+        // if (validateEmail(event.currentTarget.value)) {
             setDisableButton(false)
             setEmail(event.currentTarget.value)
-        }
+        // }
     }
     const login = ()=> {
         router.push("/auth/login")
