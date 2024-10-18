@@ -13,7 +13,7 @@ describe('AllProgramsCard Component', () => {
     };
 
     it('renders the card component correctly', () => {
-        render(<AllProgramsCard {...props} />);
+        render(<AllProgramsCard dropdownOption={[]} {...props} />);
 
         expect(screen.getByTestId('allProgramsCard')).toBeInTheDocument();
         expect(screen.getByTestId('title')).toHaveTextContent('Test Course');
@@ -26,7 +26,7 @@ describe('AllProgramsCard Component', () => {
     it('truncates the description and shows "...." when too long', () => {
         const longDescription = 'This is a very long description meant to test the truncation functionality...'.repeat(5);
 
-        render(<AllProgramsCard {...props} description={longDescription} />);
+        render(<AllProgramsCard dropdownOption={[]} {...props} description={longDescription} />);
 
         expect(screen.getByTestId('description')).toHaveTextContent(longDescription.substring(0, 80));
 
@@ -43,24 +43,16 @@ describe('AllProgramsCard Component', () => {
             cohorts: 2,
         };
 
-        render(<AllProgramsCard {...props} />);
+        render(<AllProgramsCard dropdownOption={[]} {...props} />);
 
         const readMoreButton = screen.getByTestId('readMore');
         expect(readMoreButton).toBeInTheDocument();
 
         fireEvent.click(readMoreButton);
-        // expect(screen.getByText('.....')).toBeInTheDocument();
     expect(screen.getByTestId('description')).toHaveTextContent('This is a very long description meant to test the truncation functionality. This should trigger the read more functionality.');
 
     });
 
-    //
-    // it('displays menu when MoreVertIcon is clicked', () => {
-    //     render(<AllProgramsCard {...props} />);
-    //
-    //     fireEvent.click(screen.getByTestId('menuIcon'));
-    //     expect(screen.getByText('Option 1')).toBeInTheDocument();
-    // });
 });
 
 
