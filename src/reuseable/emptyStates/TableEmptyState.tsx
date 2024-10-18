@@ -11,6 +11,7 @@ function TableEmptyState({name,icon: Icon,className}: Props) {
     <div className='px-4'>
        <div>
         < Icon />
+        <div className={`${className}`}>{name}</div>
        </div>
     </div>
   )

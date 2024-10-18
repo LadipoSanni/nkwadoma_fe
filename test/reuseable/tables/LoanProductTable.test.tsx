@@ -56,16 +56,7 @@ describe('LoanProductTable component', () => {
     
     
     });
-    
-    // test('handles row click', () => {
-    //     const firstRow = screen.getByText('Loan A');
-    //     fireEvent.click(firstRow);
-    //     expect(mockHandleRowClick).toHaveBeenCalledWith(mockTableData[0]);
-    
-    //     const secondRow = screen.getByText('Loan B');
-    //     fireEvent.click(secondRow);
-    //     expect(mockHandleRowClick).toHaveBeenCalledWith(mockTableData[1]);
-    // });
+ 
     
     test('paginates correctly', () => {
     
@@ -75,40 +66,7 @@ describe('LoanProductTable component', () => {
         expect(screen.queryByText('Loan A')).not.toBeInTheDocument();
     });
     
-    // test('handles previous page button click', () => {
-    
-    //     const nextButton = screen.getAllByText( /next/i );
-    //     fireEvent.click(nextButton[0]);
-    
-    //     const prevButton = screen.getAllByText(/previous/i);
-    //     fireEvent.click(prevButton[1]);
-    
-    //     expect(screen.getByText('Loan A')).toBeInTheDocument();
-    //     expect(screen.queryByText('Loan K')).not.toBeInTheDocument();
-    // });
-  
-    // test('does not go beyond the last page', () => {
-    //     const nextButton = screen.getAllByRole('button', { name: /next/i });
-    //     fireEvent.click(nextButton[0]);
-    //     fireEvent.click(nextButton[0]);
-    //
-    //     expect(screen.getByText('Loan K')).toBeInTheDocument();
-    //     expect(screen.queryByText('Loan A')).not.toBeInTheDocument();
-    // });
-    //
-    // test('Loan K not available on  the first page', () => {
-    //     const nextButton = screen.getAllByRole('button', { name: /next/i });
-    //     fireEvent.click(nextButton[0]);
-    //
-    //     const prevButton = screen.getAllByRole('button', { name: /previous/i });
-    //     fireEvent.click(prevButton[1]);
-    //
-    //     expect(screen.getByText('Loan A')).toBeInTheDocument();
-    //     expect(screen.queryByText('Loan K')).not.toBeInTheDocument();
-    // });
-    //
-    //
-    //
+   
 
 
 })
