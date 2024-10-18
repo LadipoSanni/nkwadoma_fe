@@ -20,7 +20,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                 className={` flex  h-screen w-full md:w-full  md:h-screen `}
             >
                 <div
-                    className={` hidden md:pt-12 md:pl-16 md:grid md:gap-10 md:w-[30%]  md:h-[70%] `}
+                    className={` hidden md:pt-12 md:pl-24 md:grid md:gap-10  md:w-fit  md:h-[70%] `}
                 >
                     <div
                         id={'authLayoutOrganizationLogo'}
@@ -34,7 +34,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                     </div>
                     <div id={`Revolutionizing`}
                          data-testid={`Revolutionizing`}
-                         className={`${cabinetGroteskBold.className} w-[80%] h-fit text-meedlBlue text-5xl  `}>
+                         className={`${cabinetGroteskBold.className} md:w-fit bg-purple-100 h-fit text-meedlBlue text-6xl  `}>
                             Revolutionizing financing and <div className={` flex h-fit mt-auto mb-auto gap-2`}>
                         <div className={` h-fit w-fit py-1 bg-meedlYellow`}>access</div>
                         <div className={`  w-fit h-fit  py-1`} >to loans</div>
@@ -43,7 +43,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
 
                 </div>
                 <div
-                    className={` ${styles.authLayoutChildrenDiv} md:grid grid w-full md:w-[70%] py-6 px-4 h-full  md:px-8 md:h-full bg-authBg md:bg-authBg  `}
+                    className={` ${styles.authLayoutChildrenDiv} md:grid grid w-full md:w-[65%] py-6 px-4  h-full  md:px-8 md:h-full bg-authBg md:bg-authBg  `}
                 >
                     <div
                         id={'authLayoutOrganizationLogo'}
@@ -57,7 +57,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                     </div>
                     <div id={`authLayoutChildrenDiv`}
                          data-testid={`authLayoutChildrenDiv`}
-                         className={`   w-full h-fit md:w-fit  md:absolute md:grid md:justify-items-end md:right-10  md:mt-28 md:h-fit md:py-10 `}
+                         className={`   w-full h-fit md:w-fit   md:absolute md:grid md:justify-items-end md:right-10  md:mt-28 md:h-[60%]  `}
                     >
                         {children}
                     </div>
