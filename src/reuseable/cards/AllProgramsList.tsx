@@ -14,9 +14,10 @@ interface ProgramList {
     trainees: number;
     months: number;
     cohorts: number;
+    dropdownOption: { name: string, id: string }[];
 }
 
-const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, trainees, months, cohorts}) => {
+const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, trainees, months, cohorts, dropdownOption}) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleDescription = () => {
@@ -27,32 +28,11 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, trainee
         ? description.substring(0, 80)
         : description;
 
-    const dropdownOption = [
-        {
-            name: 'View Program',
-            id: "1",
-        },
-        {
-            name: 'Edit Program',
-            id: "2",
-        },{
-            name: 'Delete Program',
-            id: "3",
-        },
-    ];
-
-
     return (
         <Card id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full max-w-lg border border-grey50 rounded-lg">
             <CardHeader id={`header-${id}`} data-testid="header" className="flex flex-row justify-between items-center">
                 <CardTitle id={`title-${id}`} data-testid="title" className={`${inter.className} text-lg font-medium text-[#101828]`}>{title}</CardTitle>
-                <div>
                     <Kebab kebabOptions={dropdownOption} />
-                </div>
-                {/*<Button id={`menuIcon-${id}`} data-testid="menuIcon" variant="ghost" size="icon" className="text-gray-500" onClick={toggleDropdown}>*/}
-                {/*    <FiMoreVertical className="w-5 h-5"/>*/}
-                {/*</Button>*/}
-
             </CardHeader>
 
             <CardContent id={`contentId-${id}`} data-testid={`contentId`}>
