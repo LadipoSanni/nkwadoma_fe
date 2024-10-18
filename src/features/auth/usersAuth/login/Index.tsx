@@ -22,7 +22,7 @@ const Login: React.FC = () => {
     const handleReset = () => {
     }
 
-    const isFormValid = email && password
+    const isFormValid = email && password.length >= 8;
 
     return (
 
