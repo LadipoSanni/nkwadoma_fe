@@ -44,7 +44,6 @@ const ProgramView = () => {
             title: "trainees",
             sortable: true,
             id: "trainees"
-
         }
     ]
     useEffect(() => {
@@ -57,6 +56,12 @@ const ProgramView = () => {
         }));
         setDummyData(data);
     }, []);
+
+    const program1Options = [
+        { name: 'View Program', id: '1' },
+        { name: 'Edit Program', id: '2' },
+        { name: 'Delete Program', id: '3' }
+    ];
 
     return (
         <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 px-5 pt-7 bg-meedlWhite`}>
@@ -86,7 +91,7 @@ const ProgramView = () => {
                                 months={program.months}
                                 title={program.title}
                                 trainees={program.trainees}
-                             id={'program'}/>
+                             id={'program'} dropdownOption={program1Options}/>
                         ))}
                     </div>
                 ) : (
