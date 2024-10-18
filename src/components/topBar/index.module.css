@@ -1,0 +1,15 @@
+.fullName{
+    font-size: 12px;
+    font-weight: 550;
+    line-height: 18px;
+    text-align: left;
+    color: #101828;
+}
+
+.role{
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    text-align: left;
+    color: #101828;
+}

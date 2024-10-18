@@ -22,7 +22,7 @@ const Login: React.FC = () => {
     const handleReset = () => {
     }
 
-    const isFormValid = email && password
+    const isFormValid = email && password.length >= 8;
 
     return (
 
@@ -62,7 +62,7 @@ const Login: React.FC = () => {
                     </div>
                     <p className="flex items-center justify-center text-sm text-forgetPasswordBlue leading-4">
                         Forgot Password? <Link href={"/auth/reset-password"}
-                                            className="font-medium text-meedlBlue underline">Reset it
+                                            className="font-medium text-meedlBlue ml-1  underline">Reset it
                         here</Link>
                     </p>
                 </div>

@@ -47,7 +47,6 @@ const ProgramView = () => {
             title: "trainees",
             sortable: true,
             id: "trainees"
-
         }
     ]
     useEffect(() => {
@@ -55,11 +54,17 @@ const ProgramView = () => {
             cohorts: Math.floor(Math.random() * 20) + 1,
             description: `Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes.${index + 1}`,
             months: Math.floor(Math.random() * 12) + 1,
-            title: `Program Title ${index + 1}`,
+            title: `Program Thinking ${index + 1}`,
             trainees: Math.floor(Math.random() * 100) + 1,
         }));
         setDummyData(data);
     }, []);
+
+    const program1Options = [
+        { name: 'View Program', id: '1' },
+        { name: 'Edit Program', id: '2' },
+        { name: 'Delete Program', id: '3' }
+    ];
 
     return (
         <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 px-5 pt-7 bg-meedlWhite`}>
@@ -90,7 +95,7 @@ const ProgramView = () => {
                                 months={program.months}
                                 title={program.title}
                                 trainees={program.trainees}
-                             id={'program'}/>
+                             id={'program'} dropdownOption={program1Options}/>
                         ))}
                     </div>
                 ) : (
