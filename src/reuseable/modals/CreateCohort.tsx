@@ -1,6 +1,5 @@
 import React from 'react';
 import {cabinetGrotesk, inter} from '@/app/fonts';
-import {MdClose} from "react-icons/md";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {
@@ -13,7 +12,6 @@ import {
 import {Textarea} from "@/components/ui/textarea";
 import {MdKeyboardArrowDown} from "react-icons/md";
 import {format} from "date-fns";
-import {Calendar as CalendarIcon} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {Calendar} from "@/components/ui/calendar";
@@ -29,6 +27,8 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import {FiUploadCloud} from "react-icons/fi";
+import { MdOutlineDateRange } from "react-icons/md";
 
 const CreateCohort = () => {
     const [date, setDate] = React.useState<Date>();
@@ -66,7 +66,7 @@ const CreateCohort = () => {
                         Create Cohort
                     </DialogTitle>
                 </DialogHeader>
-                <form className="grid gap-5">
+                <form className={`grid gap-5 ${inter.className}`}>
                     <div className={'grid gap-2'}>
                         <Label htmlFor="cohortName" className="block text-sm font-medium text-labelBlue">Cohort
                             Name</Label>
@@ -90,19 +90,18 @@ const CreateCohort = () => {
                             </Select>
                         </div>
                         <div className={'grid gap-2 w-full'}>
-                            <Label htmlFor="date" className="block text-sm font-medium text-labelBlue">Start
-                                Date</Label>
+                            <Label htmlFor="date" className="block text-sm font-medium text-labelBlue">Select date</Label>
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <Button
                                         variant={"outline"}
                                         className={cn(
-                                            "justify-start text-left font-normal w-full h-[3.375rem]",
+                                            "flex justify-between p-4  font-normal w-full h-[3.375rem]",
                                             !date && "text-muted-foreground"
                                         )}
                                     >
-                                        <CalendarIcon className="mr-2 h-4 w-4"/>
-                                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                                        {date ? format(date, "MM/dd/yyyy") : <span>Pick a date</span>}
+                                        <MdOutlineDateRange className="text-navbarIconColor h-5 w-5"/>
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0">
@@ -119,13 +118,15 @@ const CreateCohort = () => {
                     <div>
                         <Label htmlFor="description"
                                className="block text-sm font-medium text-labelBlue">Description</Label>
-                        <Textarea id="description" name="description" placeholder="Description" className={'resize-none'}/>
+                        <Textarea id="description" name="description" placeholder="Description"
+                                  className={'resize-none'}/>
                     </div>
-                    <div>
-                        <Label htmlFor="dragAndDrop" className="block text-sm font-medium text-labelBlue">Cohort image</Label>
+                    <div className={'grid gap-2 w-full'}>
+                        <Label htmlFor="dragAndDrop" className="block text-sm font-medium text-labelBlue">Cohort image
+                            (Optional)</Label>
                         <div
                             id="dragAndDrop"
-                            className="border-dashed border border-neutral650 p-4 rounded-md bg-neutral100 cursor-pointer h-[100px]"
+                            className="grid gap-4 place-items-center border-dashed border border-neutral650 py-5 rounded-md bg-neutral100 cursor-pointer h-[147px]"
                             onDrop={handleDrop}
                             onDragOver={handleDragOver}
                             onClick={handleClick}
@@ -138,7 +139,15 @@ const CreateCohort = () => {
                                 onChange={handleFileChange}
                                 className={'h-full w-full'}
                             />
-                            <p>Drag 'n' drop some files here, or click to select files</p>
+                            <div className={'h-11 w-11 bg-meedlWhite flex justify-center items-center rounded-md'}>
+                                <FiUploadCloud className={'w-6 h-[22px]'}/>
+                            </div>
+                            <div className={'grid gap-1 place-items-center'}>
+                                <p className={'font-normal text-black400 text-[14px] leading-[150%]'}><span
+                                    className={'underline text-meedlBlue'}>Click to upload</span> or drag and drop</p>
+                                <p className={'text-grey250 leading-[150%] text-[14px] font-normal'}>SVG, PNG, JPG OR
+                                    GIF (max. 800x400px) </p>
+                            </div>
                         </div>
                     </div>
                 </form>
