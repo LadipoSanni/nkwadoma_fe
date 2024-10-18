@@ -2,10 +2,13 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
 interface adminLayoutState  {
-    showMobileSideBar: boolean;
+    showMobileSideBar: boolean,
+    currentNavbarItem: string,
 }
 const initialState: adminLayoutState = {
     showMobileSideBar: false,
+    currentNavbarItem: 'Overview',
+
 }
 
 export const adminLayoutSlice = createSlice({
@@ -14,9 +17,12 @@ export const adminLayoutSlice = createSlice({
     reducers:{
        setShowMobileSideBar: (state, action:PayloadAction<boolean>)=>{
             state.showMobileSideBar = action.payload;
+       },
+       setCurrentNavbarItem: (state, action:PayloadAction<string>) =>{
+           state.currentNavbarItem = action.payload;
        }
     }
 })
 
-export const {setShowMobileSideBar} = adminLayoutSlice.actions;
+export const {setShowMobileSideBar, setCurrentNavbarItem} = adminLayoutSlice.actions;
 export default adminLayoutSlice.reducer;
