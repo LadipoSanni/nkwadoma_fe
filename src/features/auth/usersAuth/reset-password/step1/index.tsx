@@ -28,10 +28,20 @@ const Step1 = () => {
         router.push('/auth/reset-password/step-2')
     }
 
+    // const validateEmail = (email: string) => {
+    //     const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    //     if(email.match(validRegex)) {
+    //         return true
+    //     }
+    //    return false;
+    // }
+
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement| HTMLInputElement > ) => {
         event.stopPropagation()
-        setDisableButton(false)
-        setEmail(event.currentTarget.value)
+        // if (validateEmail(event.currentTarget.value)) {
+            setDisableButton(false)
+            setEmail(event.currentTarget.value)
+        // }
     }
     const login = ()=> {
         router.push("/auth/login")
@@ -44,14 +54,14 @@ const Step1 = () => {
 
             <div
                 id="resetPasswordComponent"
-                className={` py-4 border border-slate-200 px-3 w-[90vw] rounded-md h-auto bg-white grid md:px-2 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[90%] md:h-[98%] md:rounded`}
+                className={` py-4 border border-slate-200 px-3 w-[90vw] rounded-md h-auto bg-white grid md:px-2.5 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[90%] md:h-fit md:rounded`}
             >
                 <div
                     id={"resetPasswordInnerContainer"}
-                    className={`w-[98%] md:w-[86%] grid grid-cols-1 content-between  h-[98%] md:h-[90%]`}>
-                    <div id="resetPasswordHeaderContainer" className={`h-fit grid grid-2 md:h-fit mb-[1rem] md:grid md:gap-0 `}>
+                    className={`w-[98%] md:w-full grid grid-cols-1 content-between  h-[98%] md:h-full`}>
+                    <div id="resetPasswordHeaderContainer" className={`h-fit grid grid-2 md:h-fit mb-[1rem] md:grid md:gap-2 `}>
                         <div id={"RESETPASSWORDHEADER"} className={`font-semi-bold text-2xl `}>{RESETPASSWORDHEADER}</div>
-                        <div id={"RESETPASSWORDTEXT"} className={` text-[#667085] text-xs w-[96%]`}>{RESETPASSWORDTEXT}</div>
+                        <div id={"RESETPASSWORDTEXT"} className={` text-[#667085] text-xs w-[90%]`}>{RESETPASSWORDTEXT}</div>
                     </div>
                     <div
                         id="buttonsContainer"
@@ -63,18 +73,18 @@ const Step1 = () => {
                         </div>
                         <div id={"authButtonContainer"} className={`w-[100%]`}>
                             <Link href={'/auth/reset-password/step-2'} className={`w-[100%]`}>
-                                <AuthButton disable={disableButton} backgroundColor={'#0d9b48'} textColor={"white"}
+                                <AuthButton disable={disableButton} backgroundColor={'#142854'} textColor={"white"}
                                             id={"resetPasswordSubmitEmailButton"}
                                             buttonText={"Submit email"} width={"inherit"}
                                             handleClick={handleReset}></AuthButton>
                             </Link>
                             <div className={`flex gap-2 place-self-center place-content-center  mt-1 `}>
-                                <div className={`text-[#667085] text-sm `}>Remember your password?</div>
+                                <div className={`text-grey1 text-sm `}>Remember your password?</div>
                                     <button
                                         id={`loginOnResetPasswordStep1`}
                                         data-testid={`loginOnResetPasswordStep1`}
                                         onClick={login}
-                                        className={ ` h-fit md:h-fit text-[#0d9b48] text-sm  underline`}>
+                                        className={ ` h-fit md:h-fit text-meedlBlue text-sm  underline`}>
                                         Log in
                                     </button>
                             </div>

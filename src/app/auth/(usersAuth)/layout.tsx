@@ -1,5 +1,5 @@
 import React from 'react';
-import AuthLayout from "@/layout/authLayout/authLayout";
+import Index from "@/layout/authLayout";
 
 type props = {
     children: React.ReactNode;
@@ -7,9 +7,9 @@ type props = {
 
 const Layout: React.FC<props> = ({ children }) => {
     return (
-        <AuthLayout>
+        <Index>
             {children}
-        </AuthLayout>
+        </Index>
     )
 };
 
