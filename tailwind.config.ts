@@ -97,6 +97,10 @@ const config: Config = {
   			neutral800: '#7E7E7E',
   			neutral900: '#606060',
             neutral950: '#667085',
+			navBorder: '#E0E3E8',
+			black300: '#6A6B6A',
+			black400: '#4D4E4D',
+			black500: '#212221',
             gray: `#F0F2F4`,
 			gray1: `#475467`,
   			grey50: '#E9E9E9',
@@ -111,6 +115,7 @@ const config: Config = {
   			grey800: '#121114',
   			grey900: '#0D0D10',
 			meedlBlack: '#000000',
+			navbarIconColor: '#667085',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

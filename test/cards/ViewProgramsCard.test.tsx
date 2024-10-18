@@ -20,7 +20,7 @@ describe('AllProgramsCard Component', () => {
         expect(screen.getByTestId('description')).toHaveTextContent('This is a very long description meant to test the truncation functionality.');
         expect(screen.getByTestId('trainees')).toHaveTextContent('10 trainees');
         expect(screen.getByTestId('months')).toHaveTextContent('6 months');
-        expect(screen.getByTestId('cohorts')).toHaveTextContent('2 cohorts');
+        expect(screen.getByTestId('cohorts')).toHaveTextContent('2 cohort');
     });
 
     it('truncates the description and shows "...." when too long', () => {
