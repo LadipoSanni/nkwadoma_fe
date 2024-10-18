@@ -43,6 +43,7 @@ const Cohort = () => {
 
    const toggleDropdown = useCallback(() => {
     setIsDropdown((prev) => !prev);
+    console.log(isDropdown)
   }, []);
 
 
@@ -64,7 +65,7 @@ const Cohort = () => {
     <div className='px-4'>
         <div id='cohortName'>
           <h1 className='mt-7 font-semibold text-lg mb-7'>Cohort</h1>
-          <div id='buttonFilterCreate' className='flex justify-between items-center'>
+          <div id='buttonFilterCreate' className='md:flex justify-between items-center'>
             <div id='buttonFilter' className='flex gap-4'> 
             <div className='relative'>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -73,13 +74,13 @@ const Cohort = () => {
             <Input
              id='CohortSearch'
               placeholder='Search'
-              className='w-96 h-12 focus-visible:ring-0  border-solid border-2 text-lg text-grey450 pl-10'
+              className='w-full lg:w-96 h-12 focus-visible:ring-0  border-solid border-2 text-lg text-grey450 pl-10'
               />
             </div>
-             <div>
+             <div className='z-10'>
               <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
-                  <Button className='text-black  bg-neutral650 h-12 border-1  hover:bg-neutral650 ring-1 ring-grey100 focus-visible:ring-grey100' >
+                  <Button variant={'default'} className=' text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-grey100 focus-visible:ring-grey100' >
                      Filter
                     <span className='ml-4'>
                       {isDropdown ? (
@@ -90,8 +91,8 @@ const Cohort = () => {
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className='mt-2 relative left-[-100px] px-4 pb-6'>
-                  <DropdownMenuLabel>Program</DropdownMenuLabel>
+                <DropdownMenuContent className='mt-2 relative left-[-30px] md:left-[-100px] px-4 pb-6 z-[1000rem]'>
+                  <DropdownMenuLabel  data-testid="program">Program</DropdownMenuLabel>
                   <Formik
                   initialValues={initialFormValue}
                   onSubmit={handleSubmit}
@@ -109,7 +110,7 @@ const Cohort = () => {
                       onOpenChange={toggleDropdown}
                       >
                       <SelectTrigger className='flex justify-between w-72  focus:ring-0 focus:outline-none text-forgetPasswordBlue'>
-                      <SelectValue placeholder="Select Program" className=''/>
+                      <SelectValue placeholder="Select Program" className='' data-testid='Select Program'/>
                       <div className='ml-4'>
                 {isDropdown ? (
           <ChevronUpIcon className="h-4 w-5 font-semibold" />
@@ -120,14 +121,14 @@ const Cohort = () => {
 
                       </SelectTrigger>
                       <SelectContent
-                      className='border-none border-[#FAFBFC] text-[#404653]  text-sm '
+                      className='border-none border-[#FAFBFC] text-[#404653]  text-sm z-50'
                       >
                         <SelectGroup
                           className=''
                         >
                           {Object.entries(programData).map(([key, value]) => (
                            <SelectItem key={key} value={value} className='hover:bg-blue-200'>
-                             {value}cyuyuguPTYU
+                             {value}
                            </SelectItem>
                           ))}
                         </SelectGroup>
@@ -152,9 +153,10 @@ const Cohort = () => {
                         >
                           Reset
                         </Button>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem className='hover:bg-none'>
                         <Button 
                         id='filterButton'
+                        variant={'default'}
                         className={`${!isValid? "bg-neutral650 cursor-not-allowed  h-[38px] " : "bg-meedlBlue h-[38px] cursor-pointer hover:bg-meedlBlue"}font-bold  w-[80px]  text-white`
                        }
                         type='submit'
@@ -190,9 +192,9 @@ const Cohort = () => {
              </div>
           </div>
         </div>
-        <div>
+        <>
          <CohortTabs/>
-        </div>
+        </>
     </div>
   )
 }
