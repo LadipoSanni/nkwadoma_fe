@@ -1,7 +1,7 @@
 import "@testing-library/react"
-import {queryByAttribute, render} from "@testing-library/react";
+import {cleanup, queryByAttribute,screen, render} from "@testing-library/react";
 import {Providers} from "@/app/provider";
-import SideBar from "@/layout/AdminLayout/SideBar";
+import SideBar from "@/components/sideBar/index";
 
 
 // Mock useRouter:
@@ -14,15 +14,22 @@ jest.mock("next/navigation", () => ({
 }));
 
 describe("should render side bar component", ()=>{
-    it('test that side bar component renders', ()=> {
-        const getById = queryByAttribute.bind(null, "id")
-        const view = render(
+    beforeEach(() => {
+        cleanup()
+    })
+    const handleClick = jest.fn()
+
+    beforeEach(()=> {
+        render(
             <Providers>
-                <SideBar/>
+                <Providers>
+                    <SideBar/>
+                </Providers>
             </Providers>
         )
-        const container = getById(view.container, "adminMediumSideBar")
-        expect(container).toBeInTheDocument()
+    })
+    it('test that side bar component renders', ()=> {
+        expect(screen.getByTestId(/adminMediumSideBar/i)).toBeInTheDocument()
     })
 
     it('test that project logo exist ', ()=> {
@@ -32,10 +39,15 @@ describe("should render side bar component", ()=>{
                 <SideBar/>
             </Providers>
         )
-        const container = getById(view.container, "Logo")
+        const container = getById(view.container, "meddleMainLogoOnAdminLayout")
         expect(container).toBeInTheDocument()
     })
+    it('should contain navbar items ', () => {
+        expect(screen.getByTestId("program")).toBeInTheDocument()
+        expect(screen.getByTestId("loan")).toBeInTheDocument()
+        expect(screen.getByTestId("cohort")).toBeInTheDocument()
 
+    });
 
 
 })
