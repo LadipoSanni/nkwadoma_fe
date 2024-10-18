@@ -34,7 +34,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                     </div>
                     <div id={`Revolutionizing`}
                          data-testid={`Revolutionizing`}
-                         className={`${cabinetGroteskBold.className} md:w-fit bg-purple-100 h-fit text-meedlBlue text-6xl  `}>
+                         className={`${cabinetGroteskBold.className} md:w-fit  h-fit text-meedlBlue text-6xl  `}>
                             Revolutionizing financing and <div className={` flex h-fit mt-auto mb-auto gap-2`}>
                         <div className={` h-fit w-fit py-1 bg-meedlYellow`}>access</div>
                         <div className={`  w-fit h-fit  py-1`} >to loans</div>
