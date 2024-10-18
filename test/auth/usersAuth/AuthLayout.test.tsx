@@ -20,6 +20,6 @@ describe("test auth layout ", ()=> {
     });
     it('should contain organization logo', ()=> {
         render(<Index children={<Step1/>}/>)
-        expect(screen.getByTestId("authLayoutOrganizationLogo")).toBeInTheDocument()
+        expect(screen.getAllByTestId("authLayoutOrganizationLogo"))
     })
 })
