@@ -7,8 +7,8 @@ import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
 import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
-import CreateCohortModal from "@/reuseable/modals/CreateCohortModal";
-import AdminButton from "@/reuseable/buttons/AdminButton";
+// import CreateCohort from "@/reuseable/modals/CreateCohort";
+// import AdminButton from "@/reuseable/buttons/AdminButton";
 
 const ProgramView = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -19,7 +19,7 @@ const ProgramView = () => {
         title: string;
         trainees: number;
     }[]>([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [isModalOpen, setIsModalOpen] = useState(false);
     const ProgramHeader = [
         {
             title: "cohorts",
@@ -72,8 +72,8 @@ const ProgramView = () => {
                 <h1 id="programTitle" className={"text-meedlBlack text-2xl font-medium leading-[120%]"}>Program</h1>
                 <div id="programControls" className={'md:flex md:justify-between gap-5 grid'}>
                     <SearchInput id={'ProgramSearchInput'}/>
-                    <AdminButton id={'createProgramButton'} onClick={() => setIsModalOpen(true)}>Create program</AdminButton>
-                {/*<CreateProgramButton buttonText={"Create Program"} title={"Create Program"} programDeliveryTypes={["2years", "hgjfhgfgf"]} programModes={["2semesters", "uthuightuit"]} programDurations={["3years", "hgfrregfre"]}/>*/}
+                    {/*<AdminButton id={'createProgramButton'} onClick={() => setIsModalOpen(true)}>Create program</AdminButton>*/}
+                <CreateProgramButton buttonText={"Create Program"} title={"Create Program"} programDeliveryTypes={["2years", "hgjfhgfgf"]} programModes={["2semesters", "uthuightuit"]} programDurations={["3years", "hgfrregfre"]}/>
                 </div>
             </section>
             <div id="programContent" className={'grid gap-4'}>
@@ -111,7 +111,7 @@ const ProgramView = () => {
                     </div>
                 )}
             </div>
-            {isModalOpen && <CreateCohortModal />}
+            {/*{isModalOpen && <CreateCohort />}*/}
         </main>
     );
 };
