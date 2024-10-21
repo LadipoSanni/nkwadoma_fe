@@ -7,6 +7,7 @@ import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
 import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
+import { Book } from 'lucide-react';
 
 const ProgramView = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -18,36 +19,42 @@ const ProgramView = () => {
         trainees: number;
     }[]>([]);
 
-    const ProgramHeader = [
-        {
-            title: 'Cohorts',
-            sortable: true,
-            id: "cohorts"
+    const handleRowClick = () => {
+    
+    }
 
+    const dropDownOption = [
+        {
+          name: "View Program",
+          id: "1"
         },
         {
-            title: 'Description',
-            sortable: true,
-            id: "description"
-
-        }, {
-            title: 'Months',
-            sortable: true,
-            id: "months"
-
-        }, {
-            title: 'Title',
-            sortable: true,
-            id: "title"
-
+          name: "Edit Program",
+          id: "2"
+        },
+        {
+          name: "Delete Program",
+          id: "3"
         }
-        , {
-            title: 'Trainees',
-            sortable: true,
-            id: "trainees"
-        },
-        
-    ]
+      ]
+
+    interface TableRowData {
+        [key: string]: string | number | null | React.ReactNode;
+       }
+       const ProgramHeader = [
+        { title: 'Programs', sortable: true, id: 'programs', selector: (row:TableRowData ) => row.programs },
+        { title: 'Status', sortable: true, id: 'status', selector: (row:TableRowData ) => <span className={`bg-error50 pt-1 pb-1 pr-3 pl-3 rounded-xl ${row.status === "Accepted"? "text-success600" : "text-error600"}`}>{row.status}</span>},
+        { title: 'No. of Cohorts', sortable: true, id: 'noOfCohorts', selector: (row: TableRowData) => row.noOfCohorts },
+        { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row:TableRowData) => row.noOfTrainees },
+        { title: 'Amount Disbursed', sortable: true, id: 'amountDisbursed', selector: (row:TableRowData) => row.amountDisbursed},
+        { title: 'Amount Repaired', sortable: true, id: 'amountRepaired', selector: (row:TableRowData) => row.amountRepaired },
+        { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) => row.amountOutstanding},
+
+       
+      ]
+    
+
+   
     useEffect(() => {
         const data = Array.from({length: 24}, (_, index) => ({
             cohorts: Math.floor(Math.random() * 20) + 1,
@@ -105,7 +112,19 @@ const ProgramView = () => {
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
-                        <LoanProductTable tableData={programData} tableHeader={ProgramHeader} staticHeader={"cohorts"} staticColunm={'cohorts'} tableHeight={42}  handleRowClick={() => {}} />
+                        <LoanProductTable 
+                        tableData={programData} 
+                        tableHeader={ProgramHeader} 
+                        staticHeader={"Programs"} 
+                        staticColunm={'programs'} 
+                        tableHeight={42}  
+                        handleRowClick={handleRowClick} 
+                        sx='cursor-pointer'
+                        showKirkBabel={true}
+                        kirkBabDropdownOption={dropDownOption}
+                        icon={Book}
+                        sideBarTabName='Program'
+                        />
                     </div>
                 )}
             </div>

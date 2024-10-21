@@ -73,6 +73,8 @@ function Tables<T extends TableRowData> ({
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+
+    console.log("The column: ",selectedColumn)
    
 
     useEffect(() => {
@@ -122,16 +124,18 @@ function Tables<T extends TableRowData> ({
                           {
                             tableHeader.map((column) => (
                                 <TableHead key={column.id} id={`dynamicTableHeadCell${column.id}`} 
+                                // className={`${Styles.tableHeaderItem} `}
                                 // className={`px-[12px] py-[10px] text-[#101828]`}
-                                className='bg-lightBlue100 h-14 hover:bg-lightBlue100'
-                                style={{ position: 'sticky', top: 0, background: '#fff', }}
+                                className='bg-gray h-14 hover:bg-gray'
+                               
                                 >
-                                    <TableCell  id={`dynamicTableHeadCellDiv${column.id}`} className={`${Styles.tableHeaderItem} `}>
+                                    <div  id={`dynamicTableHeadCellDiv${column.id}`} className={`${Styles.tableHeaderItem} `}>
                                         {column.title}
-                                    </TableCell>
+                                    </div>
                                 </TableHead>
                             ))
                           }
+                          { showKirkBabel? <TableHead  className='bg-gray h-14 hover:bg-gray'></TableHead> :''}
                         </TableRow>
 
                     </TableHeader>
@@ -152,9 +156,9 @@ function Tables<T extends TableRowData> ({
                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                                             className='h-14'
                                         >
-                                            <TableCell id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}  className={`${Styles.tableBodyItem} ${tableStyle}`}>
+                                            <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}  className={`${Styles.tableBodyItem} ${tableStyle} `}>
                                             {column.selector? column.selector(row) : row[column.id]}
-                                            </TableCell>
+                                            </div>
                                             
                                         </TableCell>
                                        
@@ -223,13 +227,14 @@ function Tables<T extends TableRowData> ({
       >
               <TableHeader id="dynamicTableHeadMobile" className={` hover:bg-[#e7e7e7]`}  >
               <TableRow id="dynamicTableHeadRow" className={` top-0 bg-[#fafbfc]  hover:bg-[#fafbfc]`} >
-                 <TableCell 
-                 style={{ backgroundColor: '#FAFBFC' }}
-                 
+                 <TableHead 
+                  className='bg-gray h-14 hover:bg-gray'
                  >
-                 <TableCell className='w-[91px] text-[#404653] font-semibold'>{staticHeader}</TableCell>
-                 </TableCell>
-                <TableCell>
+                 <div className='w-[91px] text-[#404653] font-semibold'>{staticHeader}</div>
+                 </TableHead>
+                <TableHead
+                 className='bg-gray h-14 hover:bg-gray'
+                >
                  <Select
                 
                 value={selectedColumn}
@@ -239,7 +244,7 @@ function Tables<T extends TableRowData> ({
                 onOpenChange={handleDropdownOpen}
                 >
                 <SelectTrigger 
-                className="h-4 border-none focus:ring-0 focus:outline-none  text-[15px] text-[#404653] font-semibold  bg-[#fafbfc] shadow-none  flex justify-center relative top-[7px]"
+                className="h-4 border-none focus:ring-0 focus:outline-none  text-[15px] text-[#404653] font-semibold  bg-gray hover:bg-gray shadow-none  flex justify-center relative top-[7px]"
                
                 >
                 <SelectValue placeholder="" className=''/>
@@ -272,27 +277,41 @@ function Tables<T extends TableRowData> ({
                 </SelectContent>
               
                 </Select> 
-                </TableCell>
+                </TableHead>
               </TableRow>
               </TableHeader>
               <TableBody id="dynamicTableBodyMobile" className='w-full'>
                 {
-                  paginatedData.map((row,index) => (
+                  paginatedData.map((row,rowIndex) => (
                     <TableRow
-                    key={index}
+                    key={rowIndex}
                     onClick={() => handleRowClick(row)}
                     className={`${sx}`}
                     >
                       <TableCell
                       className='h-14'
                       >
-                      <div className=''>{row[`${staticColunm}`]}</div>
+                      <div className=''>
+                        {/* {row[`${staticColunm}`]} */}
+                        {tableHeader.find((header) => header.id === staticColunm)?.selector
+            ? tableHeader.find((header) => header.id === staticColunm)?.selector!(row)
+            : row[`${staticColunm}`]}
+                        </div>
                       </TableCell>
+
                       <TableCell
                       className='h-14'
                       >
-                                <div className='flex justify-center'>{row[selectedColumn]}</div>
+                                <div 
+                                className={`flex justify-center `} 
+                                >
+                                  {/* {row[selectedColumn]} */}
+                                  {tableHeader.find((header) => header.id === selectedColumn)?.selector
+            ? tableHeader.find((header) => header.id === selectedColumn)?.selector!(row)
+            : row[selectedColumn]}
+                                </div>
                       </TableCell>
+                      {/* ${row[selectedColumn] === "Accepted"?"bg-error50 text-success600 pt-1 pb-1 pr-1 pl-1 rounded-xl w-24 relative ml-12 mr-12": row[selectedColumn] === "Declined"? 'text-error600 bg-error50 pt-1 pb-1 pr-1 pl-1 rounded-xl w-24 relative ml-12 mr-12 ': ""} */}
                     </TableRow>
                   ))
                 }
