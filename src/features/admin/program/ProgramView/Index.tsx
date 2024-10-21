@@ -19,32 +19,33 @@ const ProgramView = () => {
     }[]>([]);
     const ProgramHeader = [
         {
-            title: "cohorts",
+            title: <div className='text-base'>Cohorts</div>,
             sortable: true,
             id: "cohorts"
 
         },
         {
-            title: "description",
+            title: <div className='text-base'>Description</div>,
             sortable: true,
             id: "description"
 
         }, {
-            title: "months",
+            title: <div className='text-base'>Months</div>,
             sortable: true,
             id: "months"
 
         }, {
-            title: "title",
+            title: <div className='text-base'>Title</div>,
             sortable: true,
             id: "title"
 
         }
         , {
-            title: "trainees",
+            title: <div className='text-base'>Trainees</div>,
             sortable: true,
             id: "trainees"
-        }
+        },
+        
     ]
     useEffect(() => {
         const data = Array.from({length: 24}, (_, index) => ({
@@ -97,13 +98,13 @@ const ProgramView = () => {
                 ) : (
                     <div
                         id="programListView"
-                        className={'grid gap-6 overflow-y-auto'}
+                        className={'grid gap-6'}
                         style={{
                             height: '370px',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
-                        <LoanProductTable tableData={programData} tableHeader={ProgramHeader} staticHeader={"cohorts"} staticColunm={'cohorts'} tableHeight={40}  handleRowClick={() => {}} />
+                        <LoanProductTable tableData={programData} tableHeader={ProgramHeader} staticHeader={"cohorts"} staticColunm={'cohorts'} tableHeight={42}  handleRowClick={() => {}} />
                     </div>
                 )}
             </div>

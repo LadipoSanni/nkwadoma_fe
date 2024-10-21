@@ -12,9 +12,9 @@ import Cohort from "@/pages/traineeInstitute/cohort";
 describe('Cohort', () => {
     // const mockPush = jest.fn();
 
-    // beforeEach(() => {
-    //     cleanup()
-    // })
+    beforeEach(() => {
+        cleanup()
+    })
 
     // beforeEach(() => {
     //     jest.clearAllMocks();
@@ -51,7 +51,7 @@ describe('Cohort', () => {
       test('allows user to type in the search input field', () => {
         render(<Cohort />);
     
-        const searchInput = screen.getByPlaceholderText('Search') as HTMLInputElement; // Type assertion
+        const searchInput = screen.getByPlaceholderText('Search') as HTMLInputElement; 
     
         fireEvent.change(searchInput, { target: { value: 'Design Thinking' } });
         
