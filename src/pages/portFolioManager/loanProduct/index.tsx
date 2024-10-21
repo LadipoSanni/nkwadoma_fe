@@ -1,9 +1,5 @@
 "use client";
 import React from "react";
-// import { InputAdornment, TextField } from "@mui/material";
-// import { SearchOutlined } from "@mui/icons-material";
-// import Button from "@mui/material/Button";
-// import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { loanProductData } from "@/utils/LoanProductMockData";
 import Tables from "@/reuseable/table/LoanProductTable";
 // import { Button } from "@/components/ui/button";
@@ -65,17 +61,17 @@ function LoanProductPage() {
       },
   ]
 
-  const dropDownOption = [
+   const dropDownOption = [
     {
-      name: "Details",
+      name: "View Program",
       id: "1"
     },
     {
-      name: "Edit",
+      name: "Edit Program",
       id: "2"
     },
     {
-      name: "Delete",
+      name: "Delete Program",
       id: "3"
     }
   ]
