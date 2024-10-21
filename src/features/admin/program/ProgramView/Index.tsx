@@ -76,9 +76,10 @@ const ProgramView = () => {
         <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 px-5 pt-7 bg-meedlWhite`}>
             <section id="programSection" className={'grid gap-7 '}>
                 <h1 id="programTitle" className={"text-meedlBlack text-2xl font-medium leading-[120%]"}>Program</h1>
-                <div id="programControls" className={'md:flex md:justify-between gap-1 grid'}>
+                <div id="programControls" className={'md:flex md:justify-between gap-5 grid'}>
                     <SearchInput id={'ProgramSearchInput'}/>
-                    <CreateProgramButton buttonText={"Create Program"} title={"Create Program"} programDeliveryTypes={["2years", "hgjfhgfgf"]} programModes={["2semesters", "uthuightuit"]} programDurations={["3years", "hgfrregfre"]}/>
+                    {/*<AdminButton id={'createProgramButton'} onClick={() => setIsModalOpen(true)}>Create program</AdminButton>*/}
+                <CreateProgramButton buttonText={"Create Program"} title={"Create Program"} programDeliveryTypes={["2years", "hgjfhgfgf"]} programModes={["2semesters", "uthuightuit"]} programDurations={["3years", "hgfrregfre"]}/>
                 </div>
             </section>
             <div id="programContent" className={'grid gap-4'}>
@@ -128,6 +129,7 @@ const ProgramView = () => {
                     </div>
                 )}
             </div>
+            {/*{isModalOpen && <CreateCohort />}*/}
         </main>
     );
 };

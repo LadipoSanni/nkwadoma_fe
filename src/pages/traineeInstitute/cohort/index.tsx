@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
 import CohortTabs from './CohortTabs'
+import CreateCohort from "@/reuseable/modals/CreateCohort";
 
 
 export const initialFormValue = {
@@ -37,7 +38,6 @@ const Cohort = () => {
   const [isDropdown,setIsDropdown] = useState(false)
   const [selectProgram, setSelectProgram] = useState('')
    const [isLoading] = useState(false);
-   
 
   
 
@@ -180,14 +180,15 @@ const Cohort = () => {
               </DropdownMenu>
              </div>
             </div>
-             <div className=''>
-              <Button 
-              type='button'
-              id='createCohortButton'
-              className='bg-meedlBlue h-11 hover:bg-meedlBlue cursor-pointer md:mt-0 mt-4 w-full'
-              >
-                    Create Cohort
-              </Button>
+             <div className='createCohort'>
+              {/*<Button */}
+              {/*type='button'*/}
+              {/*id='createCohortButton'*/}
+              {/*className='bg-meedlBlue h-12 hover:bg-meedlBlue cursor-pointer'*/}
+              {/*>*/}
+              {/*      Create Cohort*/}
+              {/*</Button>*/}
+                 <CreateCohort />
              </div>
           </div>
         </div>
