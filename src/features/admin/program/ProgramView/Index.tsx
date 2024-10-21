@@ -17,31 +17,32 @@ const ProgramView = () => {
         title: string;
         trainees: number;
     }[]>([]);
+
     const ProgramHeader = [
         {
-            title: <div className='text-base'>Cohorts</div>,
+            title: 'Cohorts',
             sortable: true,
             id: "cohorts"
 
         },
         {
-            title: <div className='text-base'>Description</div>,
+            title: 'Description',
             sortable: true,
             id: "description"
 
         }, {
-            title: <div className='text-base'>Months</div>,
+            title: 'Months',
             sortable: true,
             id: "months"
 
         }, {
-            title: <div className='text-base'>Title</div>,
+            title: 'Title',
             sortable: true,
             id: "title"
 
         }
         , {
-            title: <div className='text-base'>Trainees</div>,
+            title: 'Trainees',
             sortable: true,
             id: "trainees"
         },
