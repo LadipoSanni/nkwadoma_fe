@@ -43,7 +43,7 @@ const Cohort = () => {
 
    const toggleDropdown = useCallback(() => {
     setIsDropdown((prev) => !prev);
-    console.log(isDropdown)
+    // console.log(isDropdown)
   }, []);
 
 
