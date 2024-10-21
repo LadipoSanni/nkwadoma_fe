@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import Image from "next/image"
@@ -12,28 +12,29 @@ import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
 import NavbarContainer from "@/reuseable/ui/Navbar";
 import {LuLogOut} from "react-icons/lu";
 import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
+import {capitalizeFirstLetters, removeContent} from "@/utils/GlobalMethods";
 // import { usePathname } from 'next/navigation'
 // import {removeContent, capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 
 const SideBar = () => {
     const router = useRouter();
-    // const path = usePathname()
+    const path = usePathname()
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const currentNavbarItem = useAppSelector(state => state.adminLayout.currentNavbarItem)
-    // const [pathname ]= React.useState(removeContent("/",path))
-    const [currentTab, setCurrentTab] = React.useState(currentNavbarItem)
+    const [pathname ]= React.useState(removeContent("/",path))
+    const [currentTab, setCurrentTab] = React.useState(capitalizeFirstLetters(pathname))
 
-    // console.log("current tab:", pathname)
+    console.log("current tab:", capitalizeFirstLetters(pathname))
     // useEffect(() => {
-    //     const route = capitalizeFirstLetters(currentTab);
-    //     setCurrentTab(route)
-    // }, []);
+    //     router.push('/' + currentNavbarItem.toLowerCase())
+    //
+    // }, [currentNavbarItem]);
 
-    const clickNavbar = ( name: string,  id: string ) => {
+    const clickNavbar = ( name: string ,  id: string ) => {
+        router.push("/"+id)
         setCurrentTab(name)
         store.dispatch(setCurrentNavbarItem(name))
-        router.push("/"+id)
     }
     const handleClick = () => {
 
@@ -66,35 +67,28 @@ const SideBar = () => {
                     <div
                         className={` w-[70vw] bg-white py-2 px-5 border border-r-grey-200 z-10 h-[100%] bg-learnSpaceWhite `}
                     >
+                        <div className={`md:h-fit py-6 md:w-full   md:grid   `}>
+                            <Image
+                                id={'meddleMainLogoOnAdminLayout'}
+                                data-testid={'meddleMainLogoOnAdminLayout'}
+                                width={100}
+                                height={50}
+                                style={{marginTop: 'auto', marginBottom: 'auto'}}
+                                src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
+                            />
+                        </div>
+                        <div className={` hidden md:grid md:h-fit  md:w-full `}>
+                            <NavbarRouter currentTab={currentTab} handleClick={clickNavbar}
+                                          navbarItems={navbarRouterItems}/>
+                        </div>
 
-                        {/*<div className={`h-[100%] w-[96%] bg-purple-200 `}>*/}
-                        {/*    <div id={'fund'} onClick={() => router.push('')} className={`bg-red-200 w-[92%]`}>*/}
-                        {/*        <div id={'SMLogo'}*/}
-                        {/*             className=" md:w-[100%] md:bg-amber-100 md:flex md:object-fit ">*/}
-                        {/*            <Avatar>*/}
-                        {/*                <AvatarImage src={'/Meedle Logo Primary Yellow.svg'} alt={'meedleYellowLogo'}/>*/}
-                        {/*            </Avatar>*/}
-                        {/*            /!*<Avatar id={'Letters'} src={'/learnSpaceLetters.svg'}*!/*/}
-                        {/*            /!*       className={` bg-green-200 object-fit w-[78%]`}*!/*/}
-                        {/*            /!*        variant={"square"}*!/*/}
-                        {/*            /!*       alt="learn-space-logo"/>*!/*/}
-
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*    <div id={'SideNavButtonDiv'} className={`w-full`}>*/}
-                        {/*        /!*<SideNavButton*!/*/}
-                        {/*        /!*    selectedName={selectedName}*!/*/}
-                        {/*        /!*    barCollapse={barCollapse}*!/*/}
-                        {/*        /!*//*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
                     </div>
-                    <div data-testid="blurry" id="sideBarblurBackground"
+                    <button data-testid="blurry" id="sideBarblurBackground"
                          className={` h-[100vh] w-[40vw] backdrop-blur-sm bg-[grey/30] `}
                          onClick={() => {
                              store.dispatch(setShowMobileSideBar(false))
                          }}
-                    ></div>
+                    ></button>
 
                 </aside>
             }

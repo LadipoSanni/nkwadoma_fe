@@ -2,7 +2,7 @@ import React from 'react'
 import {navbarRouterItemsProps} from "@/types/Component.type";
 interface Props <T extends navbarRouterItemsProps> {
     navbarItems: T[],
-    currentTab: string,
+    currentTab: string | undefined | string[],
     handleClick: (name: string,  id: string ) => void,
 }
 

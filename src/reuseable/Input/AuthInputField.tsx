@@ -8,6 +8,7 @@ interface ReusableInputProps extends InputHTMLAttributes<HTMLInputElement> {
     id: string;
     endAdornment?: React.ReactNode | string;
     errorMessage?: string;
+
 }
 
 const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, type, errorMessage, ...props}) => {
