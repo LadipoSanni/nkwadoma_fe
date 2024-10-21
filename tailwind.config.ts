@@ -38,7 +38,7 @@ const config: Config = {
   			lightBlue100: '#F3F8FF',
   			lightBlue200: '#EEF5FF',
   			lightBlue300: '#E6F1FF',
-  			lightBlue400: '#E1EEFF',
+  			authBg: '#E1EEFF',
   			lightBlue500: '#D9EAFF',
   			lightBlue600: '#C5D5E8',
   			lightBlue700: '#9AA6B5',
