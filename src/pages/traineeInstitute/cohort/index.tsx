@@ -184,7 +184,7 @@ const Cohort = () => {
               {/*<Button */}
               {/*type='button'*/}
               {/*id='createCohortButton'*/}
-              {/*className='bg-meedlBlue h-12 hover:bg-meedlBlue cursor-pointer'*/}
+              {/*className='bg-meedlBlue h-12 hover:bg-meedlBlue'*/}
               {/*>*/}
               {/*      Create Cohort*/}
               {/*</Button>*/}
