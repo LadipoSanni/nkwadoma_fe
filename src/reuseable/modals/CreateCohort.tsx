@@ -71,7 +71,7 @@ const CreateCohort = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className='bg-meedlBlue h-[2.8125rem] w-[8.375rem] hover:bg-meedlBlue cursor-pointer'>
+                <Button className='bg-meedlBlue h-[2.8125rem] md:w-[8.375rem] w-full hover:bg-meedlBlue cursor-pointer'>
                     Create Cohort
                 </Button>
             </DialogTrigger>
