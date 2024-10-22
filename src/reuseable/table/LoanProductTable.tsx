@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,ElementType } from 'react'
 import Styles from './styles.module.css'
 import { Table,TableRow,TableHead,TableCell,TableBody, TableHeader } from '@/components/ui/table'
 import TableContainer from './TableContainer'
@@ -8,6 +8,8 @@ import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { DotsVerticalIcon } from '@radix-ui/react-icons'; 
 import { Button } from '@/components/ui/button'
 import { Menubar,MenubarTrigger,MenubarContent,MenubarMenu,MenubarItem} from '@/components/ui/menubar'
+import TableEmptyState from '../emptyStates/TableEmptyState'
+
 
 
 
@@ -42,6 +44,10 @@ interface ColumnProps<T> {
       staticHeader?: string,
       showKirkBabel?: boolean ,
       kirkBabDropdownOption?: DropdownOption[],
+      sideBarTabName?: string,
+      emptyStateStyle?: string,
+      icon?:ElementType,
+      optionalFilterName?: string,
   }
   
 
@@ -56,13 +62,19 @@ function Tables<T extends TableRowData> ({
                            staticHeader, 
                            showKirkBabel,
                            kirkBabDropdownOption,
-                           handleDropDownClick
+                           handleDropDownClick,
+                           sideBarTabName,
+                           emptyStateStyle,
+                           icon,
+                           optionalFilterName
 }: Props<T>) {
     const [page, setPage] = useState(1);
     const rowsPerPage = 10;
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+
+    console.log("The column: ",selectedColumn)
    
 
     useEffect(() => {
@@ -99,26 +111,31 @@ function Tables<T extends TableRowData> ({
 
   return (
     <div id="loanProductTableContainer" className={`w-[100%] `}>
+      {
+        tableData.length === 0 ? <TableEmptyState icon={icon} name= {sideBarTabName} className={emptyStateStyle} optionalFilterName={optionalFilterName}/> : (
+        <div>
         <div id="loanProductTableBorder" className='border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block '>
             <TableContainer id="loanProductTableScrollbar" style={{ height: `${tableHeight}vh` ,overflow: 'auto'}}>
-                <Table id="dynamicTable">
-                    <TableHeader id="dynamicTableHead" className={`bg-lightBlue100 h-14 hover:bg-lightBlue100`} >
-                        <TableRow id="dynamicTableHeadRow" className={` sticky top-0 bg-lightBlue100 h-14 hover:bg-lightBlue100`}
+                <Table id="dynamicTable" className=''>
+                    <TableHeader id="dynamicTableHead" className={`bg-[#fafbfc]  hover:bg-[#fafbfc]`} >
+                        <TableRow id="dynamicTableHeadRow" className={` sticky top-0  h-14   bg-[#fafbfc]  hover:bg-[#fafbfc]`}
                          style={{ position: 'sticky', top: 0, background: '#fff', }}
                         >
                           {
                             tableHeader.map((column) => (
                                 <TableHead key={column.id} id={`dynamicTableHeadCell${column.id}`} 
+                                // className={`${Styles.tableHeaderItem} `}
                                 // className={`px-[12px] py-[10px] text-[#101828]`}
-                                className='bg-lightBlue100 h-14 hover:bg-lightBlue100'
-                                style={{ position: 'sticky', top: 0, background: '#fff', }}
+                                className='bg-gray h-14 hover:bg-gray'
+                               
                                 >
-                                    <div id={`dynamicTableHeadCellDiv${column.id}`} className={`${Styles.tableHeaderItem}`}>
+                                    <div  id={`dynamicTableHeadCellDiv${column.id}`} className={`${Styles.tableHeaderItem} `}>
                                         {column.title}
                                     </div>
                                 </TableHead>
                             ))
                           }
+                          { showKirkBabel? <TableHead  className='bg-gray h-14 hover:bg-gray'></TableHead> :''}
                         </TableRow>
 
                     </TableHeader>
@@ -139,7 +156,7 @@ function Tables<T extends TableRowData> ({
                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                                             className='h-14'
                                         >
-                                            <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}  className={`${Styles.tableBodyItem} ${tableStyle}`}>
+                                            <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}  className={`${Styles.tableBodyItem} ${tableStyle} `}>
                                             {column.selector? column.selector(row) : row[column.id]}
                                             </div>
                                             
@@ -165,7 +182,7 @@ function Tables<T extends TableRowData> ({
                                       </Button>
                                     </MenubarTrigger>
                                     <MenubarContent
-                                     className="bg-white shadow-md rounded-md mr-11 relative bottom-6 min-w-[8rem] mt-3 "
+                                     className="bg-white shadow-md rounded-md mr-11 relative bottom-6 min-w-[8rem] mt-3"
                                     >
                                       {
                                         kirkBabDropdownOption?.map((option, index) => (
@@ -208,15 +225,16 @@ function Tables<T extends TableRowData> ({
          <TableContainer id="loanProductTableBorderMobile" className="shadow-none border-none " style={{ height: `${tableHeight}vh` ,overflow: 'auto'}}>
             <Table  id="dynamicTableMobile" className='w-full'  
       >
-              <TableHeader id="dynamicTableHeadMobile" className={` h-14 hover:bg-[#e7e7e7]`}  >
+              <TableHeader id="dynamicTableHeadMobile" className={` hover:bg-[#e7e7e7]`}  >
               <TableRow id="dynamicTableHeadRow" className={` top-0 bg-[#fafbfc]  hover:bg-[#fafbfc]`} >
                  <TableHead 
-                 style={{ backgroundColor: '#FAFBFC' }}
-                 
+                  className='bg-gray h-14 hover:bg-gray'
                  >
-                 <h1 className='w-[91px] text-[#404653] font-semibold text-sm'>{staticHeader}</h1>
+                 <div className='w-[91px] text-[#404653] font-semibold'>{staticHeader}</div>
                  </TableHead>
-                <div>
+                <TableHead
+                 className='bg-gray h-14 hover:bg-gray'
+                >
                  <Select
                 
                 value={selectedColumn}
@@ -226,7 +244,7 @@ function Tables<T extends TableRowData> ({
                 onOpenChange={handleDropdownOpen}
                 >
                 <SelectTrigger 
-                className="border-none focus:ring-0 focus:outline-none  text-[15px] text-[#404653] font-semibold mt-[10px] bg-[#fafbfc] shadow-none w-56 flex justify-center"
+                className="h-4 border-none focus:ring-0 focus:outline-none  text-[15px] text-[#404653] font-semibold  bg-gray hover:bg-gray shadow-none  flex justify-center relative top-[7px]"
                
                 >
                 <SelectValue placeholder="" className=''/>
@@ -259,27 +277,41 @@ function Tables<T extends TableRowData> ({
                 </SelectContent>
               
                 </Select> 
-                </div>
+                </TableHead>
               </TableRow>
               </TableHeader>
               <TableBody id="dynamicTableBodyMobile" className='w-full'>
                 {
-                  paginatedData.map((row,index) => (
+                  paginatedData.map((row,rowIndex) => (
                     <TableRow
-                    key={index}
+                    key={rowIndex}
                     onClick={() => handleRowClick(row)}
                     className={`${sx}`}
                     >
                       <TableCell
                       className='h-14'
                       >
-                      <div className=''>{row[`${staticColunm}`]}</div>
+                      <div className=''>
+                        {/* {row[`${staticColunm}`]} */}
+                        {tableHeader.find((header) => header.id === staticColunm)?.selector
+            ? tableHeader.find((header) => header.id === staticColunm)?.selector!(row)
+            : row[`${staticColunm}`]}
+                        </div>
                       </TableCell>
+
                       <TableCell
                       className='h-14'
                       >
-                                <div className='flex justify-center'>{row[selectedColumn]}</div>
+                                <div 
+                                className={`flex justify-center `} 
+                                >
+                                  {/* {row[selectedColumn]} */}
+                                  {tableHeader.find((header) => header.id === selectedColumn)?.selector
+            ? tableHeader.find((header) => header.id === selectedColumn)?.selector!(row)
+            : row[selectedColumn]}
+                                </div>
                       </TableCell>
+                      {/* ${row[selectedColumn] === "Accepted"?"bg-error50 text-success600 pt-1 pb-1 pr-1 pl-1 rounded-xl w-24 relative ml-12 mr-12": row[selectedColumn] === "Declined"? 'text-error600 bg-error50 pt-1 pb-1 pr-1 pl-1 rounded-xl w-24 relative ml-12 mr-12 ': ""} */}
                     </TableRow>
                   ))
                 }
@@ -297,7 +329,9 @@ function Tables<T extends TableRowData> ({
            
 
         </div>
-     
+        </div>
+        )
+}
         </div>
   )
 }
