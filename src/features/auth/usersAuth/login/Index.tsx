@@ -32,7 +32,7 @@ const Login: React.FC = () => {
     return (
 
         <div
-            className="w-full md:w-[30%] pb-6 md:mr-24 md:h-fit bg-meedlWhite md:min-w-xl border border-slate-200 rounded-md">
+            className="w-full md:w-[55%] pb-6  md:h-fit bg-meedlWhite  border border-slate-200 rounded-md">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-4">
                 <h1 className={`${cabinetGrotesk.className} text-meedlBlue mt-3  text-2xl leading-5`}>Log in to your

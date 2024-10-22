@@ -41,7 +41,7 @@ const CreatePassword = () => {
 
     return (
         <section id={'create-password-block'}
-                 className={'bg-middelWhite shadow-custom rounded-[12px] w-full h-full py-6 px-5 grid gap-[28px]'}>
+                 className={'bg-middelWhite shadow-custom rounded-[12px] w-full md:w-fit md:h-fit h-full py-6 px-5 grid gap-[28px]'}>
             <h1 id={'create-password-title'}
                 className={`${cabinetGrotesk.className} antialiased text-meedlBlue font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
             <form id={'create-password-form'} className={'grid gap-[28px]'}>
