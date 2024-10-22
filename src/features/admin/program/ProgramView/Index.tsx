@@ -20,11 +20,6 @@ const ProgramView = () => {
         trainees: number;
     }[]>([]);
 
-    const ProgramHeader = [
-        {
-            title: "cohorts",
-            sortable: true,
-            id: "cohorts"
 
     const handleRowClick = () => {
 
@@ -122,15 +117,12 @@ const ProgramView = () => {
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
-                        <LoanProductTable tableData={programData} tableHeader={ProgramHeader} staticHeader={"cohorts"}
-                                          staticColunm={'cohorts'} tableHeight={45} handleRowClick={() => {
-                        }}/>
                         <LoanProductTable
                         tableData={programData}
                         tableHeader={ProgramHeader}
                         staticHeader={"Programs"}
                         staticColunm={'programs'}
-                        tableHeight={42}
+                        tableHeight={45}
                         handleRowClick={handleRowClick}
                         sx='cursor-pointer'
                         showKirkBabel={true}
