@@ -54,7 +54,7 @@ const Step1 = () => {
 
             <div
                 id="resetPasswordComponent"
-                className={` py-4 border border-slate-200 px-3 w-[90vw] rounded-md h-auto bg-white grid md:px-2.5 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[90%] md:h-fit md:rounded`}
+                className={` py-4 border border-slate-200 px-3 w-[90vw] rounded-md h-auto bg-white grid md:px-2.5 md:grid md:place-items-center  md:border md:border-slate-200 md:w-fit md:h-fit md:rounded`}
             >
                 <div
                     id={"resetPasswordInnerContainer"}
