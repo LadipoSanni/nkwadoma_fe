@@ -4,7 +4,8 @@ import {useState} from "react";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInputField from "@/reuseable/Input/AuthInputField";
 import Link from 'next/link'
-import {cabinetGrotesk, cabinetGroteskBold} from "@/app/fonts";
+import {cabinetGrotesk} from "@/app/fonts";
+import {    validateEmailInput}  from "@/utils/GlobalMethods"
 
 
 const Login: React.FC = () => {
@@ -12,7 +13,10 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState<string>('');
 
     const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value)
+        if(validateEmailInput(e.target.value)){
+            setEmail(e.target.value)
+        }
+
     }
 
     const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,24 +28,24 @@ const Login: React.FC = () => {
 
     const isFormValid = email && password.length >= 8;
 
+
     return (
 
         <div
-            className="w-full md:w-[30vw] md:h-fit bg-meedlWhite md:min-w-xl border border-slate-200 rounded-md">
+            className="w-full md:w-[30%] pb-6 md:mr-24 md:h-fit bg-meedlWhite md:min-w-xl border border-slate-200 rounded-md">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-4">
-                <h1 className={`${cabinetGrotesk.className} text-meedlBlue  text-2xl leading-5`}>Log in to your
+                <h1 className={`${cabinetGrotesk.className} text-meedlBlue mt-3  text-2xl leading-5`}>Log in to your
                     account</h1>
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
-                     className="pt-10 space-y-5">
+                     className="pt-5 space-y-5">
                     <div data-testid={`emailId`} id={`emailId`}>
-                        <AuthInputField label={"Email"} id={`email`}
+                        <AuthInputField label={"Email address"} id={`email`}
                                         data-testid={`loginEmailId`}
                                         placeholder={`Enter email address`}
                                         type="email"
                                         value={email}
                                         onChange={handleEmail}
-                                        height={`2rem`}
                         />
                     </div>
                     <div data-testid={`passwordId`} id={`passwordId`}>

@@ -43,7 +43,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
 
                 </div>
                 <div
-                    className={` ${styles.authLayoutChildrenDiv} md:grid grid w-full md:w-[65%] py-6 px-4  h-full  md:px-8 md:h-full bg-authBg md:bg-authBg  `}
+                    className={` ${styles.authLayoutChildrenDiv} md:grid grid w-full md:w-full py-6 px-4  h-full  md:px-8 md:h-full bg-authBg md:bg-authBg  `}
                 >
                     <div
                         id={'authLayoutOrganizationLogo'}
@@ -57,7 +57,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                     </div>
                     <div id={`authLayoutChildrenDiv`}
                          data-testid={`authLayoutChildrenDiv`}
-                         className={`   w-full h-fit md:w-fit   md:absolute md:grid md:justify-items-end md:right-10  md:mt-28 md:h-[60%]  `}
+                         className={`   w-full h-fit md:w-full md:absolute md:grid md:justify-items-end md:right-10  md:mt-28 md:h-[60%]  `}
                     >
                         {children}
                     </div>

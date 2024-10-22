@@ -21,26 +21,26 @@ const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, 
     const renderEndAdornment = () => {
         if (typeof endAdornment === 'string') {
             return (
-                <span id={`end-adornment-${id}`}
+                <button id={`end-adornment-${id}`}
                       className={'text-labelBlue cursor-pointer text-[14px] font-normal leading-[22px]'}
                       onClick={handleToggleVisibility}>
                     {isPasswordVisible ? 'Hide' : 'Show'}
-                </span>
+                </button>
             );
         }
     };
 
     return (
-        <div id={`custom-input-field-${id}`} className={`${inter.className} flex flex-col gap-[8px]`}>
-            <label id={`label-${id}`} htmlFor={id} className="text-labelBlue 0 text-[14px] font-normal leading-[22px]">
+        <div id={`custom-input-field-${id}`} className={`${inter.className} grid gap-0`}>
+            <label id={`label-${id}`} htmlFor={id} className="text-labelBlue 0 font-semibold text-sm  ">
                 {label}
             </label>
             <div id={`input-container-${id}`}
-                 className="flex px-[14px] items-center h-[3rem] w-full gap-2 rounded-[var(--radius-xs,_4px)] border neutral700 bg-neutral50">
+                 className={`flex px-[14px] items-center h-[2.7rem] w-full gap-2 rounded-md border-2 border-blue500 neutral700 `}>
                 <input
                     id={id}
                     type={isPasswordVisible ? 'text' : type}
-                    className={`${inter.className} w-full h-full text-grey900 text-[14px] font-normal leading-[22px] focus:outline-none`}
+                    className={`${inter.className} w-full h-full text-grey900 text-[14px] bg-white font-normal leading-[22px] focus:outline-none`}
                     {...props}
                 />
                 {renderEndAdornment()}

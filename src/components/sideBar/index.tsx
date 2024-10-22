@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {usePathname, useRouter} from "next/navigation";
 import {store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
@@ -12,7 +12,8 @@ import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
 import NavbarContainer from "@/reuseable/ui/Navbar";
 import {LuLogOut} from "react-icons/lu";
 import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
-import {capitalizeFirstLetters, removeContent} from "@/utils/GlobalMethods";
+import { removeContent} from "@/utils/GlobalMethods";
+import {setItemToLocalStorage} from "@/utils/localStorage";
 // import { usePathname } from 'next/navigation'
 // import {removeContent, capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
@@ -22,18 +23,26 @@ const SideBar = () => {
     const path = usePathname()
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const currentNavbarItem = useAppSelector(state => state.adminLayout.currentNavbarItem)
-    const [pathname ]= React.useState(removeContent("/",path))
-    const [currentTab, setCurrentTab] = React.useState(capitalizeFirstLetters(pathname))
+    // const [pathname ]= React.useState(removeContent("/",path))
 
-    console.log("current tab:", capitalizeFirstLetters(pathname))
-    // useEffect(() => {
-    //     router.push('/' + currentNavbarItem.toLowerCase())
-    //
-    // }, [currentNavbarItem]);
+    useEffect(() => {
+        const first = "Overview"
+        const pathname  = removeContent("/",path)
+        if(pathname != first) {
+            // setItemToLocalStorage("currentTabItem", path.replace("/",""))
+        }else{
+            setItemToLocalStorage("currentTabItem", "Overview")
+        }
+    }, [currentNavbarItem]);
+
+
+    const current = localStorage.getItem('currentTabItem')
+    const [currentTab, setCurrentTab] = React.useState(current)
 
     const clickNavbar = ( name: string ,  id: string ) => {
         router.push("/"+id)
         setCurrentTab(name)
+        setItemToLocalStorage("currentTabItem", name)
         store.dispatch(setCurrentNavbarItem(name))
     }
     const handleClick = () => {
