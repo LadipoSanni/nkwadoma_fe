@@ -43,7 +43,7 @@ const Cohort = () => {
 
    const toggleDropdown = useCallback(() => {
     setIsDropdown((prev) => !prev);
-    console.log(isDropdown)
+    // console.log(isDropdown)
   }, []);
 
 
@@ -62,10 +62,10 @@ const Cohort = () => {
  })
 
   return (
-    <div className='px-4'>
-        <div id='cohortName'>
-          <h1 className='mt-7 font-semibold text-lg mb-7'>Cohort</h1>
-          <div id='buttonFilterCreate' className='md:flex justify-between items-center'>
+    <div className=''>
+        <div id='cohortName' className='px-4'>
+          <h1 className='mt-7 font-semibold text-lg mb-4 normal-case z-50'>Cohort</h1>
+          <div id='buttonFilterCreate' className='md:flex justify-between items-center z-50'>
             <div id='buttonFilter' className='flex gap-4'> 
             <div className='relative'>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -74,13 +74,13 @@ const Cohort = () => {
             <Input
              id='CohortSearch'
               placeholder='Search'
-              className='w-full lg:w-96 h-12 focus-visible:ring-0  border-solid border-2 text-lg text-grey450 pl-10'
+              className='w-full lg:w-96 h-11 focus-visible:ring-0  border-solid border-2  text-grey450 pl-10'
               />
             </div>
              <div className='z-10'>
               <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
-                  <Button variant={'default'} className=' text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-grey100 focus-visible:ring-grey100' >
+                  <Button variant={'default'} className='w-full text-black  bg-neutral100 h-10 border-1  hover:bg-neutral100 ring-1 ring-grey100 focus-visible:ring-grey100' >
                      Filter
                     <span className='ml-4'>
                       {isDropdown ? (
@@ -192,9 +192,9 @@ const Cohort = () => {
              </div>
           </div>
         </div>
-        <>
+        <div className='mt-5 w-[96%]  mr-auto ml-auto'>
          <CohortTabs/>
-        </>
+        </div>
     </div>
   )
 }
