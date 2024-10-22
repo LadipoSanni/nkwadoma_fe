@@ -2,6 +2,7 @@ import React from 'react'
 import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
 import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
+import { MdOutlinePeople } from 'react-icons/md'
 
 const CohortTabs = () => {
   const tabData = [
@@ -57,17 +58,20 @@ const CohortTabs = () => {
   const dataTabs = [
     {
       value: 'incoming',
-      table: <div>
+      table: <div >
              <Tables
               tableData={cohortsData}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
-              tableHeight={50}
+              tableHeight={45}
               sx='cursor-pointer'
               staticColunm='cohort'
               staticHeader='Cohort'
               showKirkBabel={true}
               kirkBabDropdownOption={dropDownOption}
+              icon={MdOutlinePeople}
+              sideBarTabName='Cohort'
+              optionalFilterName='incoming'
              />
              </div>
     },
@@ -78,12 +82,15 @@ const CohortTabs = () => {
               tableData={cohortsData}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
-              tableHeight={50}
+              tableHeight={45}
               sx='cursor-pointer'
               staticColunm='cohort'
               staticHeader='Cohort'
               showKirkBabel={true}
               kirkBabDropdownOption={dropDownOption}
+              icon={MdOutlinePeople}
+              sideBarTabName='Cohort'
+              optionalFilterName='current'
              />
              </div>
     },
@@ -94,12 +101,15 @@ const CohortTabs = () => {
               tableData={cohortsData}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
-              tableHeight={50}
+              tableHeight={45}
               sx='cursor-pointer'
               staticColunm='cohort'
               staticHeader='Cohort'
               showKirkBabel={true}
               kirkBabDropdownOption={dropDownOption}
+              icon={MdOutlinePeople}
+              sideBarTabName='Cohort'
+              optionalFilterName='graduate'
              />
              </div>
     },
@@ -108,9 +118,9 @@ const CohortTabs = () => {
 
 
   return (
-    <div className='mt-8'>
+    <div className=''>
       <Tabs defaultValue='incoming'>
-        <TabsList>
+        <TabsList className='z-50'>
           {tabData.map((tab,index) => (
             <TabsTrigger data-testid={`tabName${tab.value}`}  value={tab.value} key={index}>
                 {tab.name}
