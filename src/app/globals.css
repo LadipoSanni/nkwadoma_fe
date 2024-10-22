@@ -107,12 +107,12 @@ body {
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: rgba(52, 64, 84, 0.70);
-    border-radius: 4px;
+    background-color: #D9D9D9;
   }
 
   ::-webkit-scrollbar-track {
-    background-color: #E5E5E5;
+    background-color: #F0F2F4;
+    border-radius: 12px;
   }
 
 }
