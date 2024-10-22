@@ -10,12 +10,13 @@ type Props = {
 const TableContainer: React.FC<Props>  = ({ children, className,style,...rest }) => {
   return (
     <div 
-    className={cn('overflow-auto border  rounded-md',className)}
+    className={cn('overflow-auto border  rounded-md ',className)}
     {...rest}
     style={{
       ...style,
-      scrollbarWidth: 'none', 
+      scrollbarWidth: 'none',
         msOverflowStyle: 'none', 
+        
     }}
     >
       <style jsx>{`
