@@ -1,7 +1,6 @@
 import React from "react";
 import Details from "@/reuseable/details/Details";
 import CohortDetailsImage from "../../../../../public/asset/Image/CohortDetailsImage.png"
-import {MdBook} from "react-icons/md";
 const CohortDetails = () =>{
     const dataList = [
         { label: "Start Date", value: "13, Dec 2023" },
