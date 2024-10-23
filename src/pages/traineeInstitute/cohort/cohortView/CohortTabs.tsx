@@ -3,8 +3,12 @@ import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
 import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
 import { MdOutlinePeople } from 'react-icons/md'
+import { useRouter } from 'next/navigation'
 
 const CohortTabs = () => {
+
+  const router = useRouter()
+
   const tabData = [
     {name:"Incoming",
       value: "incoming"
@@ -39,8 +43,21 @@ const CohortTabs = () => {
       [key: string]: string | number | null | React.ReactNode;
      }
 
-  const handleRowClick = () => {
+  const handleRowClick = (row: TableRowData) => {
+    // router.push('/program')
+    // console.log('The row: ',row)
     
+  }
+
+  const handleDropdownClick = (id:string,row: TableRowData) => {
+    if(id === "1") router.push('/program')
+    else if(id === "2") {
+     router.push('/Overview')
+     console.log('The row: ',row)
+    }
+    else {
+      router.push('/loan')
+    }
   }
   const ProgramHeader = [
     { title: 'Cohort', sortable: true, id: 'cohort', selector: (row:TableRowData ) => row.cohort },
@@ -48,9 +65,9 @@ const CohortTabs = () => {
     { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row: TableRowData) => row.noOfTrainees },
     { title: 'No. of Loanees', sortable: true, id: 'noOfLoan', selector: (row:TableRowData) => row.noOfLoan },
     { title: 'Tuition', sortable: true, id: 'tuition', selector: (row:TableRowData) => row.tuition},
-    { title: 'Amount recieved', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => row.amountRecieved },
-    { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => row.amountRequested },
-    { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) => row.amountOutstanding},
+    { title: 'Amount recieved', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='flex justify-center'>{row.amountRecieved}</div> },
+    { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='flex justify-center'>{row.amountRequested}</div> },
+    { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className='flex justify-center'>{row.amountOutstanding}</div> },
    
   ]
 
@@ -72,6 +89,7 @@ const CohortTabs = () => {
               icon={MdOutlinePeople}
               sideBarTabName='Cohort'
               optionalFilterName='incoming'
+              handleDropDownClick={handleDropdownClick}
              />
              </div>
     },

@@ -1,5 +1,5 @@
 import { render, screen, fireEvent,cleanup,waitFor} from "@testing-library/react";
-import Cohort from "@/pages/traineeInstitute/cohort";
+import Cohort from "@/pages/traineeInstitute/cohort/cohortView";
 
 // jest.mock('next/navigation', () => ({
 //     useRouter: jest.fn(),

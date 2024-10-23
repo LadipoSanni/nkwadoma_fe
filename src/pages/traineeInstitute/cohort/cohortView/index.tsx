@@ -34,7 +34,7 @@ export const programData = {
    "value 13" : "Product Management",
 }
 
-const Cohort = () => {
+const CohortView = () => {
   const [isDropdown,setIsDropdown] = useState(false)
   const [selectProgram, setSelectProgram] = useState('')
    const [isLoading] = useState(false);
@@ -180,14 +180,14 @@ const Cohort = () => {
               </DropdownMenu>
              </div>
             </div>
-             <div className='createCohort'>
-              {/*<Button */}
-              {/*type='button'*/}
-              {/*id='createCohortButton'*/}
-              {/*className='bg-meedlBlue h-12 hover:bg-meedlBlue'*/}
-              {/*>*/}
-              {/*      Create Cohort*/}
-              {/*</Button>*/}
+             <div className='md:mt-0 mt-4'>
+              {/* <Button
+              type='button'
+              id='createCohortButton'
+              className='bg-meedlBlue h-12 hover:bg-meedlBlue'
+              >
+                    Create Cohort
+              </Button> */}
                  <CreateCohort />
              </div>
           </div>
@@ -199,4 +199,4 @@ const Cohort = () => {
   )
 }
 
-export default Cohort
+export default CohortView
