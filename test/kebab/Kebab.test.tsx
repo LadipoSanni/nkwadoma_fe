@@ -28,14 +28,4 @@ describe('Kebab Component', () => {
         expect(kebabButton).toBeInTheDocument();
         expect(kebabIcon).toBeInTheDocument();
     });
-
-    // it('should trigger handleDropDownClick when an option is clicked', () => {
-    //     const kebabButton = screen.getByTestId('kebab-button');
-    //     fireEvent.click(kebabButton);
-    //
-    //     const menuItem = screen.getByTestId('menubar-item-2');
-    //     fireEvent.click(menuItem);
-    //
-    //     expect(mockHandleDropDownClick).toHaveBeenCalledWith('3');
-    // });
 });
