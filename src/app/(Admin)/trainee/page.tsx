@@ -1,10 +1,11 @@
 import React from 'react';
+import CohortDetails from "@/pages/traineeInstitute/cohort/CohortDetails/Index";
 
 const Page = () => {
     return (
-        <div>
-            
-        </div>
+        <>
+         <CohortDetails/>
+        </>
     );
 };
 
