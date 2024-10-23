@@ -1,32 +1,62 @@
 export const CohortTraineeData = [
     {
         trainee: "Trainee",
-        "Referral date": "Referral date",
+        referralDate: "Referral date",
         amountRequested: "Amount Requested",
     },
     {
         trainee: "Trainee",
-        "Referral date": "Referral date",
+        referralDate: "Referral date",
         amountRequested: "Amount Requested",
     },
     {
         trainee: "Trainee",
-        "Referral date": "Referral date",
+        referralDate: "Referral date",
         amountRequested: "Amount Requested",
     },
     {
         trainee: "Trainee",
-        "Referral date": "Referral date",
+        referralDate: "Referral date",
         amountRequested: "Amount Requested",
     },
     {
         trainee: "Trainee",
-        "Referral date": "Referral date",
+        referralDate: "Referral date",
         amountRequested: "Amount Requested",
     },
     {
         trainee: "Trainee",
-        "Referral date": "Referral date",
+        referralDate: "Referral date",
+        amountRequested: "Amount Requested",
+    },
+    {
+        trainee: "Trainee",
+        referralDate: "Referral date",
+        amountRequested: "Amount Requested",
+    },
+    {
+        trainee: "Trainee",
+        referralDate: "Referral date",
+        amountRequested: "Amount Requested",
+    },
+    {
+        trainee: "Trainee",
+        referralDate: "Referral date",
+        amountRequested: "Amount Requested",
+    },
+    {
+        trainee: "Trainee",
+        referralDate: "Referral date",
+        amountRequested: "Amount Requested",
+    },
+    {
+        trainee: "Trainee",
+        referralDate: "Referral date",
+        amountRequested: "Amount Requested",
+    },
+    {
+        trainee: "Trainee",
+        referralDate: "Referral date",
         amountRequested: "Amount Requested",
     },
 ];
