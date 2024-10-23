@@ -43,10 +43,14 @@ const CohortTabs = () => {
       [key: string]: string | number | null | React.ReactNode;
      }
 
-  const handleRowClick = (row: TableRowData) => {
-    // router.push('/program')
-    // console.log('The row: ',row)
+  // const handleRowClick = (row: TableRowData) => {
+  //   router.push('/program')
+  //   console.log('The row: ',row)
     
+  // }
+
+  const handleRowClick = () => {
+
   }
 
   const handleDropdownClick = (id:string,row: TableRowData) => {
