@@ -1,10 +1,10 @@
 import React from 'react'
-import Cohort from '@/pages/traineeInstitute/cohort'
+import CohortView from '@/pages/traineeInstitute/cohort/cohortView'
 
 const page = () => {
   return (
     <>
-   <Cohort/>
+   <CohortView/>
     </>
   )
 }

@@ -15,7 +15,7 @@ import TableEmptyState from '../emptyStates/TableEmptyState'
 
 
 interface ColumnProps<T> {
-    title: string;
+    title: string | React.ReactNode;
     id: string;
     selector?: (row: T) => React.ReactNode;
     sortable?: boolean;
@@ -36,7 +36,7 @@ interface ColumnProps<T> {
      tableData: T[];
       tableHeader: ColumnProps<T>[];
       handleRowClick: (row: T) => void;
-      handleDropDownClick?: (id: string) => void;
+      handleDropDownClick?: (id: string,row: TableRowData) => void;
       tableHeight?: number;
       sx?: string
       tableStyle?: string
@@ -74,7 +74,7 @@ function Tables<T extends TableRowData> ({
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
 
-    console.log("The column: ",selectedColumn)
+   
    
 
     useEffect(() => {
@@ -189,7 +189,7 @@ function Tables<T extends TableRowData> ({
                                           <MenubarItem 
                                           key={index}
                                           className={`cursor-pointer mt-2 pr-8  ${option.id === "3"?"text-error500 focus:text-error500" : ""}`}
-                                          onClick={()=> handleDropDownClick && handleDropDownClick(option.id)}
+                                          onClick={()=> handleDropDownClick && handleDropDownClick(option.id,row)}
                                           >
                                             {option.name}
                                           </MenubarItem>

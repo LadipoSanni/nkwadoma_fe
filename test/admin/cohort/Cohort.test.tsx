@@ -1,29 +1,26 @@
 import { render, screen, fireEvent,cleanup,waitFor} from "@testing-library/react";
-import Cohort from "@/pages/traineeInstitute/cohort";
+import Cohort from "@/pages/traineeInstitute/cohort/cohortView";
 
-// jest.mock('next/navigation', () => ({
-//     useRouter: jest.fn(),
-//   }));
-//   ;
-// import { useRouter } from 'next/navigation';
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(),
+  }));
+  ;
+import { useRouter } from 'next/navigation';
 
 
 
 describe('Cohort', () => {
-    // const mockPush = jest.fn();
+    const mockPush = jest.fn();
+
 
     beforeEach(() => {
-        cleanup()
+        jest.clearAllMocks();
+        cleanup();
+
+        (useRouter as jest.Mock).mockReturnValue({
+            push: mockPush,
+          });
     })
-
-    // beforeEach(() => {
-    //     jest.clearAllMocks();
-    //     cleanup();
-
-    //     (useRouter as jest.Mock).mockReturnValue({
-    //         push: mockPush,
-    //       });
-    // })
 
 
     it('renders the form correctly', () => {
