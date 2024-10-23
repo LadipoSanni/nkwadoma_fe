@@ -1,6 +1,7 @@
 import React from "react";
 import Details from "@/reuseable/details/Details";
 import CohortDetailsImage from "../../../../../public/asset/Image/CohortDetailsImage.png"
+import {MdBook} from "react-icons/md";
 const CohortDetails = () =>{
     const dataList = [
         { label: "Start Date", value: "13, Dec 2023" },
@@ -25,19 +26,11 @@ const CohortDetails = () =>{
         { title: "Feeding", amount: "200,000.00" },
         { title: "Total", amount: "300,500,000.00" },
     ];
-
-
-    const ProgramHeader = [
-        { label: "Trainee", key: "trainee" },
-        { label: "Referral date", key: "Referral date" },
-        { label: "Amount Requested", key: "amountRequested" },
-    ];
-
-
     return(
 
         <Details
             imageSrc={CohortDetailsImage.src}
+            // icon={MdBook}
             cohortTitle="Luminary"
             cohortDescription="Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
             traineesCount={50}
@@ -47,4 +40,4 @@ const CohortDetails = () =>{
         />
     );
 }
-export default CohortDetails
+export default CohortDetails;
