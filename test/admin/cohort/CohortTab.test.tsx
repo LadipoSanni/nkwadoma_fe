@@ -1,11 +1,25 @@
 import { render, screen, fireEvent,cleanup,} from "@testing-library/react";
 import CohortTabs from "@/pages/traineeInstitute/cohort/cohortView/CohortTabs";
 
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
+;
+import { useRouter } from 'next/navigation';
+
+
 
 
 describe("CohortTabs", () => {
+  const mockPush = jest.fn();
+  
     beforeEach(() => {
-        cleanup()
+      jest.clearAllMocks();
+        cleanup();
+
+        (useRouter as jest.Mock).mockReturnValue({
+          push: mockPush,
+        });
     })
 
    
