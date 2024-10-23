@@ -10,6 +10,9 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import Tables from "../table/LoanProductTable";
 import {CohortTraineeData} from "@/utils/cohort/cohortDetails/Index";
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible";
+import { BiArrowBack } from "react-icons/bi";
+import {useRouter} from 'next/navigation'
+
 
 interface detailsProps {
     imageSrc?: string;
@@ -44,10 +47,19 @@ const Details: React.FC<detailsProps> = ({
         {title: "Amount Requested", sortable: true, id: "amountRequested"},
     ];
 
+    const router = useRouter();
+    const handleCohortView =() =>{
+        router.push('/cohort')
+    }
+
     return (
         <main id="details-main" data-testid="details-main" className={`${inter.className} flex flex-row gap-8 md:p-6 p-4 justify-between`}>
 
             <div id="cohort-image-section" data-testid="cohort-image-section" className={`flex flex-col md:block hidden space-y-5 max-w-md`}>
+                <div className={`flex cursor-pointer items-center space-x-2 text-meedlBlue`} onClick={handleCohortView}>
+                    <BiArrowBack/>
+                    <h1>Back to cohort</h1>
+                </div>
                 <div id="cohort-image-card" data-testid="cohort-image-card" className={``}>
                     <Card className="rounded-lg">
                         {imageSrc ? (
