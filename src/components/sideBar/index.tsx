@@ -1,16 +1,15 @@
 "use client"
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {usePathname, useRouter} from "next/navigation";
 import {store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
 import {MdOutlineHome, MdOutlinePeopleAlt} from "react-icons/md";
-import {LuBook, LuPanelTop} from "react-icons/lu";
+import {LuBook, LuPanelTop, LuLogOut} from "react-icons/lu";
 import {GoPerson} from "react-icons/go";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
 import NavbarContainer from "@/reuseable/ui/Navbar";
-import {LuLogOut} from "react-icons/lu";
 import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
 import { removeContent} from "@/utils/GlobalMethods";
 import {setItemToLocalStorage} from "@/utils/localStorage";
@@ -49,12 +48,16 @@ const SideBar = () => {
 
     }
 
+    const currentTextLiterals = `text-meedleBlue`;
+    const textLiterals = `text-navbarIconColor`;
+
+
     const navbarRouterItems : navbarRouterItemsProps[] = [
-        {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem] ${(currentNavbarItem !== 'Overview' ? `text-navbarIconColor` : `text-meedleBlue`)} `}  /> , id: 'Overview', name: 'Overview', route: '/overview'},
-        {id: 'program', name: 'Program', route: '/program', icon: <LuBook className={` h-[1.2rem] w-[1.2rem] ${(currentNavbarItem !== 'Program' ? `text-navbarIconColor` : `text-meedleBlue`)} `} />},
-        {id: 'cohort', name: 'Cohort', route: '/cohort', icon:<MdOutlinePeopleAlt className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Cohort' ? `text-meedleBlue` : `text-navbarIconColor`} `}  />},
-        {id: 'loan', name: 'Loan', route: '/loan', icon:<LuPanelTop className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Loan' ? `text-meedleBlue` : `text-navbarIconColor`} `}  />},
-        {id: 'trainee', name: 'Trainee', route: '/trainee',icon:<GoPerson className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Trainee' ? `text-meedleBlue` : `text-navbarIconColor`} `}  />},
+        {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Overview' ?  currentTextLiterals : textLiterals} `}  /> , id: 'Overview', name: 'Overview', route: '/overview'},
+        {id: 'program', name: 'Program', route: '/program', icon: <LuBook className={` h-[1.2rem] w-[1.2rem] ${(currentNavbarItem !== 'Program' ? currentTextLiterals : textLiterals)} `} />},
+        {id: 'cohort', name: 'Cohort', route: '/cohort', icon:<MdOutlinePeopleAlt className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Cohort' ? currentTextLiterals : textLiterals} `}  />},
+        {id: 'loan', name: 'Loan', route: '/loan', icon:<LuPanelTop className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Loan' ? currentTextLiterals : textLiterals} `}  />},
+        {id: 'trainee', name: 'Trainee', route: '/trainee',icon:<GoPerson className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Trainee' ? currentTextLiterals : textLiterals} `}  />},
     ]
 
     const navbarConatainerItems : navbarItemsProps[] = [

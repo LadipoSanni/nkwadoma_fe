@@ -23,7 +23,7 @@ const AuthEmail = ({header, email}: props) => {
                     data-testid={'successIcon'}
                     width={50}
                     height={50}
-                    src={'/Icon - Success (1).svg'}
+                    src={'/Icon - Success (3).svg'}
                     alt={'success icon'}
                 />
             </div>
@@ -43,9 +43,9 @@ const AuthEmail = ({header, email}: props) => {
                 </div>
             </div>
             <div className={`h-[70%] flex justify-normal relative`} id={'backToLoginFromResetPasswordStep2'}>
-                <div className={`w-fit absolute bottom-0`} onClick={() => router.push("/auth/login")}>
-                    <div className={`text-[#0d9b48] text-sm underline `}>Back to Log in</div>
-                </div>
+                <button className={`w-fit absolute bottom-0`} onClick={() => router.push("/auth/login")}>
+                    <div className={`text-meedleBlue text-sm underline `}>Back to Log in</div>
+                </button>
             </div>
         </div>
     );

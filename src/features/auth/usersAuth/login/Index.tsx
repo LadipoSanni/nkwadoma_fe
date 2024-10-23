@@ -12,11 +12,17 @@ const Login: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
-    const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(validateEmailInput(e.target.value)){
-            setEmail(e.target.value)
-        }
+    const [ validEmail , setValidEmail ] = useState(false)
 
+
+    const validateEmail = (input: string) => {
+        const disable  = validateEmailInput(input);
+        setValidEmail(disable)
+    }
+
+    const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value)
+        validateEmail(e.target.value)
     }
 
     const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,13 +32,14 @@ const Login: React.FC = () => {
     const handleReset = () => {
     }
 
-    const isFormValid = email && password.length >= 8;
+
+    const isFormValid = validEmail  && password.length >= 8;
 
 
     return (
 
         <div
-            className="w-full md:w-[55%] pb-6  md:h-fit bg-meedlWhite  border border-slate-200 rounded-md">
+            className="w-full md:w-[75%]   md:h-fit bg-meedlWhite  border border-slate-200 rounded-md">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-4">
                 <h1 className={`${cabinetGrotesk.className} text-meedlBlue mt-3  text-2xl leading-5`}>Log in to your
