@@ -44,13 +44,13 @@ const Step3 = () => {
         <div
             id={'Step3Container'}
             data-testid={'Step3Container'}
-            className={` w-[92vw] h-fit md:w-[56%] md:h-fit px-3 py-4 bg-white md:bg-white rounded-md md:rounded-md border border-slate-200 md:border md:border-slate-200 `}
+            className={` w-[92vw] h-fit md:w-[52%] md:h-fit px-3 md:mr-20 py-4 bg-white md:bg-white rounded-md md:rounded-md border border-slate-200 md:border md:border-slate-200 `}
             // className={` py-4 border border-slate-200 px-3 w-[92vw] mr-auto ml-auto rounded-md h-fit bg-white grid md:px-2 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[56%] md:h-fit md:rounded`}
         >
             <div
                 id={"resetPassword3StepInnerContainer"}
                 className={`w-[98%] md:w-[97%] grid grid-cols-1 gap-2 md:grid md:grid-cols-1 md:gap-0 content-between  h-[98%] md:h-[98%]`}>
-                <div id="resetPassword3HeaderContainer" className={`h-fit grid grid-2 md:h-[2rem] md:grid md:gap-0 `}>
+                <div id="resetPassword3HeaderContainer" className={`h-fit grid grid-2 md:h-[2rem] md:mb-4 md:grid md:gap-0 `}>
                     <div id={"RESETPASSWORDStep3HEADER"} className={`font-semi-bold text-2xl  `}>Reset your password
                     </div>
                 </div>

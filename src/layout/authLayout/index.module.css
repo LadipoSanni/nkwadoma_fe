@@ -4,6 +4,21 @@
 
 }
 
+.authBgMainContainer{
+    background-color: white;
+    /*grid-template-columns: 40% 60%;*/
+}
+.revolunizing{
+    font-size: calc(3.5vw + 1vh);
+}
+
+@media only screen and (min-width: 768px){
+    .authBgMainContainer{
+        grid-template-columns: 35% 65%;
+
+    }
+}
+
 @media only screen  and (min-width: 768px){
     .authLayoutChildrenDiv{
         clip-path: polygon(25.2% 0%, 85% 0%, 100.1% 0%, 100.1% 100.3%, 85% 100%, 15% 100%, 0% 100.3%, 29% 54%);
