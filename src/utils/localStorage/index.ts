@@ -1,4 +1,7 @@
 export  const  setItemToLocalStorage = (name: string, item: string) => {
-   localStorage.setItem(name, item)
+   if (typeof window !== 'undefined') {
+      localStorage.setItem(name, item)
+
+   }
 }
 
