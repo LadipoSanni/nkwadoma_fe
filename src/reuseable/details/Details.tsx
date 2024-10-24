@@ -21,7 +21,7 @@ interface detailsProps {
     traineesCount: number;
     dropoutsCount: number;
     dataList: { label: string; value: string; }[];
-    breakDown: { title: string; amount: string; }[];
+    breakDown?: { title: string; amount: string; }[];
     icon?: ElementType
     goBackText: string
     handleBackClick: () => void
@@ -201,7 +201,7 @@ const Details: React.FC<detailsProps> = ({
                                         <CollapsibleContent className="bg-meedlWhite px-2"
                                                             id="tuition-breakdown-content"
                                                             data-testid="tuition-breakdown-content">
-                                            {breakDown.map((item, index) => (
+                                            {breakDown && breakDown.map((item, index) => (
                                                 <div id={`breakdown-item-${index}`}
                                                      data-testid={`breakdown-item-${index}`} key={index}
                                                      className="flex md:flex-row flex-col py-4 justify-between">
