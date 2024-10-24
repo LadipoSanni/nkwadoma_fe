@@ -11,8 +11,9 @@ import {GoPerson} from "react-icons/go";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
 import NavbarContainer from "@/reuseable/ui/Navbar";
 import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
-import { removeContent} from "@/utils/GlobalMethods";
-import {setItemToLocalStorage} from "@/utils/localStorage";
+// import { removeContent} from "@/utils/GlobalMethods";
+import {setItemToLocalStorage, getItemFromLocalStorage} from "@/utils/localStorage";
+import {removeContent} from "@/utils/GlobalMethods";
 // import { usePathname } from 'next/navigation'
 // import {removeContent, capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
@@ -27,15 +28,15 @@ const SideBar = () => {
     useEffect(() => {
         const first = "Overview"
         const pathname  = removeContent("/",path)
-        if(pathname != first) {
-            // setItemToLocalStorage("currentTabItem", path.replace("/",""))
+        if(pathname?.includes(first)){
+            setItemToLocalStorage("currentTabItem", pathname)
         }else{
             setItemToLocalStorage("currentTabItem", "Overview")
         }
     }, [currentNavbarItem, path]);
 
 
-    const current = localStorage.getItem('currentTabItem')
+    const current = getItemFromLocalStorage('currentTabItem')
     const [currentTab, setCurrentTab] = React.useState(current)
 
     const clickNavbar = ( name: string ,  id: string ) => {
@@ -60,7 +61,7 @@ const SideBar = () => {
         {id: 'trainee', name: 'Trainee', route: '/trainee',icon:<GoPerson className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Trainee' ? currentTextLiterals : textLiterals} `}  />},
     ]
 
-    const navbarConatainerItems : navbarItemsProps[] = [
+    const navbarContainerItems : navbarItemsProps[] = [
         {id: 'settings', name: 'Settings', icon: <GearIcon className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>, handleClick: handleClick},
         {id: 'help&support', name: "Help & Support", icon: <QuestionMarkCircledIcon className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `} />, handleClick: handleClick},
         {id: 'logout', name: 'Logout', icon: <LuLogOut className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `} />, handleClick: handleClick},
@@ -127,7 +128,7 @@ const SideBar = () => {
 
                 <div className={`md:absolute  md:bottom-0 gap-3  px-4 md:h-fit md:w-full `}>
                     <div  className={` hidden md:grid md:h-fit  md:w-full `}>
-                        < NavbarContainer items={navbarConatainerItems}/>
+                        < NavbarContainer items={navbarContainerItems}/>
                     </div>
                     <div
                         className={`h-fit w-full border-t-2  border-t-navBorder`}
