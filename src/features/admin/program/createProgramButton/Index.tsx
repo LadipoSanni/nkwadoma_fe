@@ -72,6 +72,49 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
     }
 
     return (
+        // <Dialog>
+        //     <DialogTrigger asChild>
+        //         <Button
+        //             id="triggerButton"
+        //             data-testid="trigger-button"
+        //             variant="secondary"
+        //             size={`lg`}
+        //             className={`${inter.className} bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
+        //         >
+        //             {buttonText}
+        //         </Button>
+        //     </DialogTrigger>
+        //     <DialogContent className="sm:max-w-[425px]">
+        //         <DialogHeader id="dialogHeader" data-testid="dialog-header" className={`flex flex-row justify-between`}>
+        //             <DialogTitle
+        //                 // id="dialogTitle"
+        //                 data-testid="dialog-title"
+        //                 className={`${cabinetGrotesk.className} text-2xl font-medium`}
+        //             >{title} </DialogTitle>
+        //             {/*<DialogDescription>*/}
+        //             {/*    Make changes to your profile here. Click save when you're done.*/}
+        //             {/*</DialogDescription>*/}
+        //         </DialogHeader>
+        //         <div className="grid gap-4 py-4">
+        //             <div className="grid grid-cols-4 items-center gap-4">
+        //                 <Label htmlFor="name" className="text-right">
+        //                     Name
+        //                 </Label>
+        //                 <Input id="name" value="Pedro Duarte" className="col-span-3" />
+        //             </div>
+        //             <div className="grid grid-cols-4 items-center gap-4">
+        //                 <Label htmlFor="username" className="text-right">
+        //                     Username
+        //                 </Label>
+        //                 <Input id="username" value="@peduarte" className="col-span-3" />
+        //             </div>
+        //         </div>
+        //         <DialogFooter>
+        //             <Button type="submit">Save changes</Button>
+        //         </DialogFooter>
+        //     </DialogContent>
+        // </Dialog>
+
         <Dialog open={isOpen}
             onOpenChange={(open) => {
                 setIsOpen(open);
@@ -91,16 +134,16 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                 </Button>
             </DialogTrigger>
             <DialogContent id="dialogContent" data-testid="dialog-content" className="max-w-[425px] md:max-w-lg">
-                <DialogHeader id="dialogHeader" data-testid="dialog-header">
+                <DialogHeader id="dialogHeader" data-testid="dialog-header" className={`flex flex-row justify-between`}>
                     <DialogTitle
-                        id="dialogTitle"
+                        // id="dialogTitle"
                         data-testid="dialog-title"
                         className={`${cabinetGrotesk.className} text-2xl font-medium`}
                     >
                         {title}
                     </DialogTitle>
                 </DialogHeader>
-                <DialogDescription id="dialogDescription" data-testid="dialog-description">
+                <DialogDescription data-testid="dialog-description">
                     <div id="formContainer" data-testid="form-container"
                          className="grid gap-4 py-4 flex-col text-labelBlue">
                         <div id="programNameContainer" data-testid="program-name-container"
