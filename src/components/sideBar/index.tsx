@@ -32,7 +32,7 @@ const SideBar = () => {
         }else{
             setItemToLocalStorage("currentTabItem", "Overview")
         }
-    }, [currentNavbarItem]);
+    }, [currentNavbarItem, path]);
 
 
     const current = localStorage.getItem('currentTabItem')
