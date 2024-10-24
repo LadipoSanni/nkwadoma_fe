@@ -11,6 +11,7 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
+			primary200: '#939CB0',
   			blue50: '#E8EAEE',
   			blue100: '#B6BCCA',
   			blue200: '#939CB0',

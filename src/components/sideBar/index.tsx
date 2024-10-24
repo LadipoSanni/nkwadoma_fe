@@ -5,9 +5,9 @@ import {store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
-import {MdOutlineHome, MdOutlinePeopleAlt} from "react-icons/md";
+import {MdOutlineHome, MdOutlinePeopleAlt, MdOutlinePersonOutline} from "react-icons/md";
 import {LuBook, LuPanelTop, LuLogOut} from "react-icons/lu";
-import {GoPerson} from "react-icons/go";
+// import {GoPerson} from "react-icons/go";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
 import NavbarContainer from "@/reuseable/ui/Navbar";
 import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
@@ -50,15 +50,14 @@ const SideBar = () => {
     }
 
     const currentTextLiterals = `text-meedleBlue`;
-    const textLiterals = `text-navbarIconColor`;
-
+    const textLiterals = `text-primary200`;
 
     const navbarRouterItems : navbarRouterItemsProps[] = [
         {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Overview' ?  currentTextLiterals : textLiterals} `}  /> , id: 'Overview', name: 'Overview', route: '/overview'},
         {id: 'program', name: 'Program', route: '/program', icon: <LuBook className={` h-[1.2rem] w-[1.2rem] ${(currentNavbarItem !== 'Program' ? currentTextLiterals : textLiterals)} `} />},
         {id: 'cohort', name: 'Cohort', route: '/cohort', icon:<MdOutlinePeopleAlt className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Cohort' ? currentTextLiterals : textLiterals} `}  />},
         {id: 'loan', name: 'Loan', route: '/loan', icon:<LuPanelTop className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Loan' ? currentTextLiterals : textLiterals} `}  />},
-        {id: 'trainee', name: 'Trainee', route: '/trainee',icon:<GoPerson className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Trainee' ? currentTextLiterals : textLiterals} `}  />},
+        {id: 'loanee', name: 'Loanee', route: '/trainee',icon:<MdOutlinePersonOutline className={` h-[1.2rem] w-[1.2rem] ${currentNavbarItem === 'Trainee' ? currentTextLiterals : textLiterals} `}  />},
     ]
 
     const navbarContainerItems : navbarItemsProps[] = [
