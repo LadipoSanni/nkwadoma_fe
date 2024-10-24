@@ -82,7 +82,7 @@ const ProgramView = () => {
                     <SearchInput id={'ProgramSearchInput'}/>
                     <CreateProgramButton buttonText={"Create Program"} title={"Create Program"}
                                          programDeliveryTypes={["Full-time", "Part-time"]}
-                                         programModes={["Online", "OnSite"]}
+                                         programModes={["Online", "Physical"]}
                                          programDurations={["3years", "4years"]}/>
                 </div>
             </section>
