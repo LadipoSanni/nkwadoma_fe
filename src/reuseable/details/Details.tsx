@@ -12,6 +12,7 @@ import {CohortTraineeData} from "@/utils/cohort/cohortDetails/Index";
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible";
 import { BiArrowBack } from "react-icons/bi";
 import { IoEllipsisHorizontal } from "react-icons/io5";
+import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
 
 
 interface detailsProps {
@@ -65,7 +66,6 @@ const Details: React.FC<detailsProps> = ({
             <div className={`flex flex-row justify-between py-4 `}>
             <div id="cohort-image-section" data-testid="cohort-image-section"
                  className={`flex flex-col md:block hidden space-y-5 max-w-sm`}>
-
                 <div id="cohort-image-card" data-testid="cohort-image-card" className={``}>
                     <Card className="rounded-lg">
                         {imageSrc ? (
@@ -120,8 +120,12 @@ const Details: React.FC<detailsProps> = ({
                     </div>
 
                     <div className={`flex flex-row space-x-3 pt-5`}>
-                        <Button size={"lg"} variant={"outline"} className="w-96 font-bold text-meedlBlack">Edit
-                            cohort</Button>
+                        <CreateProgramButton  buttonText={"Edit program"} title={"Edit Cohort"}
+                                              programDeliveryTypes={["Full-time", "Part-time"]}
+                                              programModes={["Online", "Physical"]}
+                                              programDurations={["3years", "4years"]} useSecondaryButton={false} submitButtonText={"Save Cohort"}/>
+                        {/*<Button size={"lg"} variant={"outline"} className="w-96 font-bold text-meedlBlack">Edit*/}
+                        {/*    cohort</Button>*/}
                         <Button size={"lg"} variant={"outline"}>
                             <IoEllipsisHorizontal/>
                         </Button>
