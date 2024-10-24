@@ -1,7 +1,22 @@
 
 .authLayoutChildrenDiv {
-    height: 100%;
+    background-color: #E1EEFF;
 
+}
+
+.authBgMainContainer{
+    background-color: white;
+    /*grid-template-columns: 40% 60%;*/
+}
+.revolunizing{
+    font-size: calc(3.5vw + 1vh);
+}
+
+@media only screen and (min-width: 768px){
+    .authBgMainContainer{
+        grid-template-columns: 35% 65%;
+
+    }
 }
 
 @media only screen  and (min-width: 768px){

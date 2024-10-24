@@ -4,15 +4,25 @@ import {useState} from "react";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInputField from "@/reuseable/Input/AuthInputField";
 import Link from 'next/link'
-import {cabinetGroteskBold} from "@/app/fonts";
+import {cabinetGrotesk} from "@/app/fonts";
+import {    validateEmailInput}  from "@/utils/GlobalMethods"
 
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
+    const [ validEmail , setValidEmail ] = useState(false)
+
+
+    const validateEmail = (input: string) => {
+        const disable  = validateEmailInput(input);
+        setValidEmail(disable)
+    }
+
     const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
+        validateEmail(e.target.value)
     }
 
     const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,20 +32,22 @@ const Login: React.FC = () => {
     const handleReset = () => {
     }
 
-    const isFormValid = email && password.length >= 8;
+
+    const isFormValid = validEmail  && password.length >= 8;
+
 
     return (
 
         <div
-            className="w-full bg-meedlWhite md:min-w-xl border border-slate-200 rounded-xl">
+            className="w-full md:w-[52%] md:mr-20 h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-md">
             <div data-testid={`loginDivId`} id={`loginDivId`}
-                 className="px-4 py-10">
-                <h1 className={`${cabinetGroteskBold.className} text-meedlBlue md:text-3xl text-2xl leading-5`}>Log in to your
+                 className="px-4 py-4">
+                <h1 className={`${cabinetGrotesk.className} text-meedlBlue mt-3  text-2xl leading-5`}>Log in to your
                     account</h1>
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
-                     className="pt-10 space-y-5">
+                     className="pt-5 space-y-5">
                     <div data-testid={`emailId`} id={`emailId`}>
-                        <AuthInputField label={"Email"} id={`email`}
+                        <AuthInputField label={"Email address"} id={`email`}
                                         data-testid={`loginEmailId`}
                                         placeholder={`Enter email address`}
                                         type="email"

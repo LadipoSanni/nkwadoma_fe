@@ -41,12 +41,12 @@ const CreatePassword = () => {
 
     return (
         <section id={'create-password-block'}
-                 className={'bg-middelWhite shadow-custom rounded-[12px] w-full h-full py-6 px-5 grid gap-[28px]'}>
+                 className={'bg-middelWhite shadow-custom rounded-md w-full md:w-[60%] md:mr-10 md:bg-meedlWhite md:ml-40 md:h-fit h-full py-6 px-5 grid gap-[28px]'}>
             <h1 id={'create-password-title'}
                 className={`${cabinetGrotesk.className} antialiased text-meedlBlue font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
             <form id={'create-password-form'} className={'grid gap-[28px]'}>
                 <main id={'create-password-main'} className={'grid gap-[24.14px]'}>
-                    <div id={'create-password-inputs'} className={'grid gap-4'}>
+                    <div id={'create-password-inputs'} className={'grid  gap-4'}>
                         <AuthInputField
                             label={'Password'}
                             id={'password'}
