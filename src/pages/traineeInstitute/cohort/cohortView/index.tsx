@@ -12,6 +12,7 @@ import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
 import CohortTabs from './CohortTabs'
 import CreateCohort from "@/reuseable/modals/CreateCohort";
+import { cabinetGrotesk } from '@/app/fonts'
 
 
 export const initialFormValue = {
@@ -63,9 +64,9 @@ const CohortView = () => {
 
   return (
     <div className=''>
-        <div id='cohortName' className='px-4'>
-          <h1 className='mt-7 font-semibold text-lg mb-4 normal-case z-50'>Cohort</h1>
-          <div id='buttonFilterCreate' className='md:flex justify-between items-center z-50'>
+        <div id='cohortName' className='md:px-8 px-4'>
+          <h1 className={`mt-5 font-semibold text-2xl mb-4 normal-case z-50 ${cabinetGrotesk.className}`}>Cohort</h1>
+          <div id='buttonFilterCreate' className={`md:flex justify-between items-center z-50 relative bottom-2 ${cabinetGrotesk.className}`}>
             <div id='buttonFilter' className='flex gap-4'> 
             <div className='relative'>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -74,14 +75,14 @@ const CohortView = () => {
             <Input
              id='CohortSearch'
               placeholder='Search'
-              className='w-full lg:w-96 h-11 focus-visible:ring-0  border-solid border-2  text-grey450 pl-10'
+              className='w-full lg:w-96 h-11 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
               />
             </div>
              <div className='z-10'>
               <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
-                  <Button variant={'default'} className='w-full text-black  bg-neutral100 h-10 border-1  hover:bg-neutral100 ring-1 ring-grey100 focus-visible:ring-grey100' >
-                     Filter
+                  <Button variant={'default'} className='w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none' >
+                     Program
                     <span className='ml-4'>
                       {isDropdown ? (
           <ChevronUpIcon className="h-4 w-5 font-semibold" />
@@ -181,18 +182,12 @@ const CohortView = () => {
              </div>
             </div>
              <div className='md:mt-0 mt-4'>
-              {/* <Button
-              type='button'
-              id='createCohortButton'
-              className='bg-meedlBlue h-12 hover:bg-meedlBlue'
-              >
-                    Create Cohort
-              </Button> */}
+             
                  <CreateCohort />
              </div>
           </div>
         </div>
-        <div className='mt-5 w-[96%]  mr-auto ml-auto'>
+        <div className='mt-4 w-[96%]  mr-auto ml-auto relative '>
          <CohortTabs/>
         </div>
     </div>
