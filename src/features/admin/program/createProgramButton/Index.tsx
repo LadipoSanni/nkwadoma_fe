@@ -7,7 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import {cabinetGrotesk, inter} from "@/app/fonts";
+import {cabinetGrotesk} from "@/app/fonts";
 import {Input} from '@/components/ui/input'
 import {Label} from "@/components/ui/label"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
@@ -21,6 +21,8 @@ interface CreateProgramProps {
     programDeliveryTypes: string[];
     programModes: string[];
     programDurations: string[];
+    useSecondaryButton: boolean;
+    submitButtonText: string;
 }
 
 const CreateProgramButton: React.FC<CreateProgramProps> = ({
@@ -29,6 +31,8 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                                                programDeliveryTypes,
                                                                programModes,
                                                                programDurations,
+                                                               useSecondaryButton,
+                                                               submitButtonText
                                                            }) => {
 
     const [isDropdown, setIsDropdown] = useState(false)
@@ -45,7 +49,6 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
         setIsOpen(false);
         resetFormFields();
     };
-
     const resetFormFields = () => {
         setProgramName('');
         setProgramDeliveryType('');
@@ -72,71 +75,49 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
     }
 
     return (
-        // <Dialog>
-        //     <DialogTrigger asChild>
-        //         <Button
-        //             id="triggerButton"
-        //             data-testid="trigger-button"
-        //             variant="secondary"
-        //             size={`lg`}
-        //             className={`${inter.className} bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
-        //         >
-        //             {buttonText}
-        //         </Button>
-        //     </DialogTrigger>
-        //     <DialogContent className="sm:max-w-[425px]">
-        //         <DialogHeader id="dialogHeader" data-testid="dialog-header" className={`flex flex-row justify-between`}>
-        //             <DialogTitle
-        //                 // id="dialogTitle"
-        //                 data-testid="dialog-title"
-        //                 className={`${cabinetGrotesk.className} text-2xl font-medium`}
-        //             >{title} </DialogTitle>
-        //             {/*<DialogDescription>*/}
-        //             {/*    Make changes to your profile here. Click save when you're done.*/}
-        //             {/*</DialogDescription>*/}
-        //         </DialogHeader>
-        //         <div className="grid gap-4 py-4">
-        //             <div className="grid grid-cols-4 items-center gap-4">
-        //                 <Label htmlFor="name" className="text-right">
-        //                     Name
-        //                 </Label>
-        //                 <Input id="name" value="Pedro Duarte" className="col-span-3" />
-        //             </div>
-        //             <div className="grid grid-cols-4 items-center gap-4">
-        //                 <Label htmlFor="username" className="text-right">
-        //                     Username
-        //                 </Label>
-        //                 <Input id="username" value="@peduarte" className="col-span-3" />
-        //             </div>
-        //         </div>
-        //         <DialogFooter>
-        //             <Button type="submit">Save changes</Button>
-        //         </DialogFooter>
-        //     </DialogContent>
-        // </Dialog>
-
         <Dialog open={isOpen}
             onOpenChange={(open) => {
                 setIsOpen(open);
                 if (!open) resetFormFields();
             }}
-
         >
             <DialogTrigger asChild>
-                <Button
-                    id="triggerButton"
-                    data-testid="trigger-button"
-                    variant="secondary"
-                    size={`lg`}
-                    className={`${inter.className} bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
-                >
-                    {buttonText}
-                </Button>
+                {useSecondaryButton ? (
+                    <Button
+                        id="triggerButton"
+                        data-testid="trigger-button"
+                        variant="secondary"
+                        size="lg"
+                        className={`bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
+                    >
+                        {buttonText}
+                    </Button>
+                ) : (
+                    <Button
+                        id="triggerButton"
+                        data-testid="trigger-button"
+                        variant="outline"
+                        size="lg"
+                        className={`h-11 text-meedlBlue w-full md:mt-0 mt-3 text-sm font-semibold leading-5`}
+                    >
+                        {buttonText}
+                    </Button>
+                )}
+
+
+                {/*<Button*/}
+                {/*    id="triggerButton"*/}
+                {/*    data-testid="trigger-button"*/}
+                {/*    variant="secondary"*/}
+                {/*    size={`lg`}*/}
+                {/*    className={`${inter.className} bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}*/}
+                {/*>*/}
+                {/*    {buttonText}*/}
+                {/*</Button>*/}
             </DialogTrigger>
             <DialogContent id="dialogContent" data-testid="dialog-content" className="max-w-[425px] md:max-w-lg">
                 <DialogHeader id="dialogHeader" data-testid="dialog-header" className={`flex flex-row justify-between`}>
                     <DialogTitle
-                        // id="dialogTitle"
                         data-testid="dialog-title"
                         className={`${cabinetGrotesk.className} text-2xl font-medium`}
                     >
@@ -155,7 +136,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 data-testid="program-name-input"
                                 placeholder="Enter name"
                                 onChange={(e) => setProgramName(e.target.value)}
-                                className={`h-14 focus:outline-none focus:ring-0  focus-visible:ring-0`}
+                                className={`h-14 focus:outline-none focus:ring-0 focus-visible:ring-0`}
                             />
                         </div>
 
@@ -173,7 +154,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                         onValueChange={setProgramDeliveryType}>
                                     <SelectTrigger id="programDeliveryTypeTrigger"
                                                    data-testid="program-delivery-type-trigger"
-                                                   className={`focus:outline-none focus:ring-0`}>
+                                                   className={`focus:outline-none focus:ring-0 shadow-none`}>
                                         <SelectValue placeholder="Select delivery type"/>
                                         <div className={`ml-4`}>
                                             {isDropdown ? (
@@ -204,7 +185,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                     <Select data-testid="program-mode-select" onOpenChange={toggleDropdown}
                                             onValueChange={setProgramMode}>
                                         <SelectTrigger id="programModeTrigger" data-testid="program-mode-trigger"
-                                                       className={`focus:outline-none focus:ring-0`}>
+                                                       className={`focus:outline-none focus:ring-0 shadow-none`}>
                                             <SelectValue placeholder="Select mode"/>
                                             <div className={`ml-4`}>
                                                 {isDropdown ? (
@@ -239,7 +220,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                             onValueChange={setProgramDuration}>
                                         <SelectTrigger id="programDurationTrigger"
                                                        data-testid="program-duration-trigger"
-                                                       className={`focus:outline-none focus:ring-0`}>
+                                                       className={`focus:outline-none focus:ring-0 shadow-none`}>
                                             <SelectValue placeholder="Select duration"/>
                                             <div className={`ml-4`}>
                                                 {isDropdown ? (
@@ -300,7 +281,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                         disabled={!isFormValid}
                         onClick={submit}
                     >
-                        Create Program
+                        {submitButtonText}
                     </Button>
                 </DialogFooter>
             </DialogContent>
