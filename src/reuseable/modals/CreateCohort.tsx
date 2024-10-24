@@ -77,7 +77,7 @@ const CreateCohort = () => {
                     Create Cohort
                 </Button>
             </DialogTrigger>
-            <DialogContent id="createCohortDialogContent" className="max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-8 p-5">
+            <DialogContent id="createCohortDialogContent" className="max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-8 py-5 pl-5 pr-2">
                 <DialogHeader id="createCohortDialogHeader">
                     <DialogTitle
                         id="createCohortDialogTitle"
@@ -91,7 +91,7 @@ const CreateCohort = () => {
                     </DialogClose>
                 </DialogHeader>
                 {!isFormSubmitted ? (
-                    <form id="cohortForm" className={`grid gap-5 ${inter.className} hover:overflow-y-scroll overflow-y-auto h-[500px]`}>
+                    <form id="cohortForm" className={`grid gap-5 ${inter.className} pr-2 hover:overflow-y-scroll overflow-y-auto h-[500px]`}>
                         <div id="cohortNameContainer" className={'grid gap-2'}>
                             <Label htmlFor="cohortName" className="block text-sm font-medium text-labelBlue">Cohort
                                 Name</Label>
