@@ -36,7 +36,7 @@ const Kebab = ({ handleDropDownClick, kebabOptions, className }: Props) => {
                     <MenubarContent
                         id="menubarContent"
                         data-testid="menubar-content"
-                        className={`${inter.className} bg-white gap-3 shadow-grey100 z-0 rounded-md min-w-[10rem] right-[-20px] absolute w-full md:min-w-[10rem]`}
+                        className={`${inter.className} bg-white gap-3 shadow-grey100 z-0 rounded-md min-w-[10rem] right-[-30px] absolute w-full md:min-w-[12rem]`}
                     >
                         {
                             kebabOptions?.map((option, index) => (

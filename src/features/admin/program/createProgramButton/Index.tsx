@@ -7,7 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import {cabinetGrotesk} from "@/app/fonts";
+import {cabinetGrotesk, inter} from "@/app/fonts";
 import {Input} from '@/components/ui/input'
 import {Label} from "@/components/ui/label"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
@@ -85,7 +85,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                     data-testid="trigger-button"
                     variant="secondary"
                     size={`lg`}
-                    className={`bg-meedlBlue h-12 text-meedlWhite text-sm font-semibold leading-5`}
+                    className={`${inter.className} bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
                 >
                     {buttonText}
                 </Button>
