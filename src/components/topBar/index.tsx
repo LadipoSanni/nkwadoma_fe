@@ -7,12 +7,15 @@ import {inter} from"@/app/fonts"
 import { ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons"
 import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods"
 import styles from "@/components/topBar/index.module.css"
+import {getItemFromLocalStorage} from "@/utils/localStorage";
 
 
 const TopBar = () => {
 
     const [arrowToggled, setArrowToggled] = useState(false)
-    const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem)
+    const currentTab = getItemFromLocalStorage('currentTabItem')
+
+    // const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem)
 
 
     const toggleArrow = ()=> {
