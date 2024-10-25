@@ -3,6 +3,7 @@ import React from "react";
 import Details from "@/reuseable/details/Details";
 import CohortDetailsImage from "../../../../../public/asset/Image/CohortDetailsImage.png"
 import {useRouter} from "next/navigation";
+// import { MdBook } from "react-icons/md";
 
 const CohortDetails = () => {
     const dataList = [
