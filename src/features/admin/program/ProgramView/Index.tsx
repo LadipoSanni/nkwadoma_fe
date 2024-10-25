@@ -76,15 +76,15 @@ const ProgramView = () => {
     ];
 
     return (
-        <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 px-5 pt-7 bg-meedlWhite`}>
+        <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 pl-5 pr-2 pt-7 bg-meedlWhite`}>
             <section id="programSection" className={'grid gap-7 '}>
                 <h1 id="programTitle" className={"text-meedlBlack text-2xl font-medium leading-[120%]"}>Program</h1>
-                <div id="programControls" className={'md:flex md:justify-between gap-5 grid'}>
+                <div id="programControls" className={'md:flex pr-2 md:justify-between gap-5 grid'}>
                     <SearchInput id={'ProgramSearchInput'}/>
                     <CreateProgramButton buttonText={"Create Program"} title={"Create Program"}
-                                         programDeliveryTypes={["2years", "hgjfhgfgf"]}
-                                         programModes={["2semesters", "uthuightuit"]}
-                                         programDurations={["3years", "hgfrregfre"]}/>
+                                         programDeliveryTypes={["Full-time", "Part-time"]}
+                                       programModes={["Online", "Physical"]} useSecondaryButton={true}
+                                         programDurations={["3years", "4years"]} submitButtonText={"Create Program"} />
                 </div>
             </section>
             <div id="programContent" className={'grid gap-4 relative bottom-3'}>
@@ -92,7 +92,7 @@ const ProgramView = () => {
                 {view === 'grid' ? (
                     <div
                         id={'programGrid'}
-                        className={'grid gap-6 overflow-y-auto'}
+                        className={'grid gap-6 pr-2 overflow-y-auto'}
                         style={{
                             height: '55vh',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
