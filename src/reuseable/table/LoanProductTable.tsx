@@ -111,6 +111,8 @@ function Tables<T extends TableRowData> ({
      
 
     const paginatedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+    const totalPages = Math.ceil(tableData.length / rowsPerPage);
+    const isLastPage = page === totalPages;
 
   return (
     <div id="loanProductTableContainer" className={`w-[100%] `}>
@@ -157,7 +159,8 @@ function Tables<T extends TableRowData> ({
                                             key={`${column.id}${rowIndex}`}
                                             id={`dynamicTableCell${column.id}${rowIndex}`}
                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
-                                            className='h-1'
+                                            className={`h-1 ${
+                                              isLastPage ? 'border-b border-solid ' : ''}`}
                                         >
                                             <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}  className={`${Styles.tableBodyItem} ${tableStyle} `}>
                                             {column.selector? column.selector(row) : row[column.id]}
@@ -172,14 +175,15 @@ function Tables<T extends TableRowData> ({
                                 }
                                 { showKirkBabel ? 
                                 <TableCell
-                                className="w-0"
+                                className={`w-0 ${
+                                      isLastPage ? 'border-b border-solid' : ''}`}
                                 >
                                   {
                                     <Menubar
                                     // onClick={}
                                     >
                                     <MenubarMenu>
-                                    <MenubarTrigger asChild className='border-none shadow-none cursor-pointer hover:bg-b'>
+                                    <MenubarTrigger asChild className={`border-none shadow-none cursor-pointer hover:bg-b`}>
                                     <Button className='border-none shadow-none' >
                                       <DotsVerticalIcon className="w-5 h-6 text-grey500 font-extrabold" />
                                       </Button>
@@ -292,7 +296,7 @@ function Tables<T extends TableRowData> ({
                     className={`${sx}`}
                     >
                       <TableCell
-                      className='h-14'
+                      className='h-14 '
                       >
                       <div className=''>
                         {/* {row[`${staticColunm}`]} */}
@@ -301,7 +305,7 @@ function Tables<T extends TableRowData> ({
             : row[`${staticColunm}`]}
                         </div>
                       </TableCell>
-
+                          
                       <TableCell
                       className='h-14'
                       >
