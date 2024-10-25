@@ -84,6 +84,7 @@ const config: Config = {
   			error200: '#E69693',
   			error300: '#DA6662',
   			error400: '#D34843',
+			error450: '#D42620',
   			error500: '#C81A14',
   			error600: '#B61812',
   			error700: '#8E120E',

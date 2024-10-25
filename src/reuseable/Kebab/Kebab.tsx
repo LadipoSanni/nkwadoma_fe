@@ -18,7 +18,7 @@ const Kebab = ({ handleDropDownClick, kebabOptions, className }: Props) => {
                     <MenubarTrigger
                         asChild
                         className="border-none shadow-none cursor-pointer focus:ring-0 focus-visible:ring-0"
-                        id="menubarTrigger"
+                        id="menubarTfrigger"
                         data-testid="menubar-trigger"
                     >
                         <Button

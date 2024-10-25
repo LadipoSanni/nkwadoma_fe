@@ -7,7 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import {cabinetGrotesk, inter} from "@/app/fonts";
+import {cabinetGrotesk} from "@/app/fonts";
 import {Input} from '@/components/ui/input'
 import {Label} from "@/components/ui/label"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
@@ -21,6 +21,8 @@ interface CreateProgramProps {
     programDeliveryTypes: string[];
     programModes: string[];
     programDurations: string[];
+    useSecondaryButton: boolean;
+    submitButtonText: string;
 }
 
 const CreateProgramButton: React.FC<CreateProgramProps> = ({
@@ -29,6 +31,8 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                                                programDeliveryTypes,
                                                                programModes,
                                                                programDurations,
+                                                               useSecondaryButton,
+                                                               submitButtonText
                                                            }) => {
 
     const [isDropdown, setIsDropdown] = useState(false)
@@ -39,13 +43,14 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
     const [programDescription, setProgramDescription] = useState('');
     const [isOpen, setIsOpen] = useState(false);
 
-    const isFormValid = programName && programDeliveryType && programMode && programDuration && programDescription;
+    const isProgramNameValid = /^[A-Za-z\s]+$/.test(programName);
+    const isDescriptionValid = programDescription.length >= 10;
+    const isFormValid = isProgramNameValid && programDeliveryType && programMode && programDuration && isDescriptionValid;
 
     const closeDialog = () => {
         setIsOpen(false);
         resetFormFields();
     };
-
     const resetFormFields = () => {
         setProgramName('');
         setProgramDeliveryType('');
@@ -60,13 +65,6 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
 
     function submit() {
         if (isFormValid) {
-            console.log({
-                programName,
-                programDeliveryType,
-                programMode,
-                programDuration,
-                programDescription
-            });
             closeDialog();
         }
     }
@@ -77,30 +75,40 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                 setIsOpen(open);
                 if (!open) resetFormFields();
             }}
-
         >
             <DialogTrigger asChild>
-                <Button
-                    id="triggerButton"
-                    data-testid="trigger-button"
-                    variant="secondary"
-                    size={`lg`}
-                    className={`${inter.className} bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
-                >
-                    {buttonText}
-                </Button>
+                {useSecondaryButton ? (
+                    <Button
+                        id="triggerButton"
+                        data-testid="trigger-button"
+                        variant="secondary"
+                        size="lg"
+                        className={`bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
+                    >
+                        {buttonText}
+                    </Button>
+                ) : (
+                    <Button
+                        id="triggerButton"
+                        data-testid="trigger-button"
+                        variant="outline"
+                        size="lg"
+                        className={`h- text-meedlBlue w-full md:mt-0 mt-3 text-sm font-semibold leading-5`}
+                    >
+                        {buttonText}
+                    </Button>
+                )}
             </DialogTrigger>
             <DialogContent id="dialogContent" data-testid="dialog-content" className="max-w-[425px] md:max-w-lg">
-                <DialogHeader id="dialogHeader" data-testid="dialog-header">
+                <DialogHeader id="dialogHeader" data-testid="dialog-header" className={`flex flex-row justify-between`}>
                     <DialogTitle
-                        id="dialogTitle"
                         data-testid="dialog-title"
                         className={`${cabinetGrotesk.className} text-2xl font-medium`}
                     >
                         {title}
                     </DialogTitle>
                 </DialogHeader>
-                <DialogDescription id="dialogDescription" data-testid="dialog-description">
+                <DialogDescription data-testid="dialog-description">
                     <div id="formContainer" data-testid="form-container"
                          className="grid gap-4 py-4 flex-col text-labelBlue">
                         <div id="programNameContainer" data-testid="program-name-container"
@@ -112,8 +120,11 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 data-testid="program-name-input"
                                 placeholder="Enter name"
                                 onChange={(e) => setProgramName(e.target.value)}
-                                className={`h-14 focus:outline-none focus:ring-0  focus-visible:ring-0`}
+                                className={`h-14 focus:outline-none focus:ring-0 focus-visible:ring-0`}
                             />
+                            {!isProgramNameValid && programName && (
+                                <p className="text-red-500 text-sm">Name must contain only letters.</p>
+                            )}
                         </div>
 
                         <div className={`grid grid-col`} id="selectInputsContainer"
@@ -130,7 +141,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                         onValueChange={setProgramDeliveryType}>
                                     <SelectTrigger id="programDeliveryTypeTrigger"
                                                    data-testid="program-delivery-type-trigger"
-                                                   className={`focus:outline-none focus:ring-0`}>
+                                                   className={`focus:outline-none focus:ring-0 shadow-none`}>
                                         <SelectValue placeholder="Select delivery type"/>
                                         <div className={`ml-4`}>
                                             {isDropdown ? (
@@ -161,7 +172,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                     <Select data-testid="program-mode-select" onOpenChange={toggleDropdown}
                                             onValueChange={setProgramMode}>
                                         <SelectTrigger id="programModeTrigger" data-testid="program-mode-trigger"
-                                                       className={`focus:outline-none focus:ring-0`}>
+                                                       className={`focus:outline-none focus:ring-0 shadow-none`}>
                                             <SelectValue placeholder="Select mode"/>
                                             <div className={`ml-4`}>
                                                 {isDropdown ? (
@@ -196,7 +207,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                             onValueChange={setProgramDuration}>
                                         <SelectTrigger id="programDurationTrigger"
                                                        data-testid="program-duration-trigger"
-                                                       className={`focus:outline-none focus:ring-0`}>
+                                                       className={`focus:outline-none focus:ring-0 shadow-none`}>
                                             <SelectValue placeholder="Select duration"/>
                                             <div className={`ml-4`}>
                                                 {isDropdown ? (
@@ -233,6 +244,9 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 onChange={(e) => setProgramDescription(e.target.value)}
                                 className={`focus:outline-none focus:ring-0  focus-visible:ring-0`}
                             />
+                            {!isDescriptionValid && programDescription && (
+                                <p className="text-red-500 text-sm">Description must be at least 10 characters long.</p>
+                            )}
                         </div>
                     </div>
                 </DialogDescription>
@@ -257,7 +271,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                         disabled={!isFormValid}
                         onClick={submit}
                     >
-                        Create Program
+                        {submitButtonText}
                     </Button>
                 </DialogFooter>
             </DialogContent>

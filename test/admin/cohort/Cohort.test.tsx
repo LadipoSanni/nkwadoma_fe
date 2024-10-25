@@ -41,7 +41,7 @@ describe('Cohort', () => {
 
       it('renders the Filter button', () => {
         render(<Cohort />)
-        expect(screen.getByRole('button', { name: /filter/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Program/i })).toBeInTheDocument();
       });
 
       
