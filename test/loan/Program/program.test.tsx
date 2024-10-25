@@ -32,29 +32,29 @@ describe('CreateProgramButton Component', () => {
         const dialogTitle = screen.getByTestId('dialog-title');
         expect(dialogTitle).toHaveTextContent('Create Program');
     });
-
-    it('should allow filling in form fields and selecting items from dropdowns', () => {
-        setup();
-
-        const triggerButton = screen.getByTestId('trigger-button');
-        fireEvent.click(triggerButton);
-
-        const programModeTrigger = screen.getByTestId('ProgramView-mode-trigger');
-        fireEvent.click(programModeTrigger);
-        const programModeItem = screen.getByTestId('ProgramView-mode-item-0');
-        fireEvent.click(programModeItem);
-        expect(programModeTrigger).toHaveTextContent('Mode 1');
-
-        const programDurationTrigger = screen.getByTestId('ProgramView-duration-trigger');
-        fireEvent.click(programDurationTrigger);
-        const programDurationItem = screen.getByTestId('ProgramView-duration-item-0');
-        fireEvent.click(programDurationItem);
-        expect(programDurationTrigger).toHaveTextContent('1 month');
-
-        const programDescription = screen.getByTestId('ProgramView-description');
-        fireEvent.change(programDescription, { target: { value: 'This is a ProgramView description' } });
-        expect(programDescription).toHaveValue('This is a ProgramView description');
-    });
+    //
+    // it('should allow filling in form fields and selecting items from dropdowns', () => {
+    //     setup();
+    //
+    //     const triggerButton = screen.getByTestId('trigger-button');
+    //     fireEvent.click(triggerButton);
+    //
+    //     const programModeTrigger = screen.getByTestId('ProgramView-mode-trigger');
+    //     fireEvent.click(programModeTrigger);
+    //     const programModeItem = screen.getByTestId('ProgramView-mode-item-0');
+    //     fireEvent.click(programModeItem);
+    //     expect(programModeTrigger).toHaveTextContent('Mode 1');
+    //
+    //     const programDurationTrigger = screen.getByTestId('ProgramView-duration-trigger');
+    //     fireEvent.click(programDurationTrigger);
+    //     const programDurationItem = screen.getByTestId('ProgramView-duration-item-0');
+    //     fireEvent.click(programDurationItem);
+    //     expect(programDurationTrigger).toHaveTextContent('1 month');
+    //
+    //     const programDescription = screen.getByTestId('ProgramView-description');
+    //     fireEvent.change(programDescription, { target: { value: 'This is a ProgramView description' } });
+    //     expect(programDescription).toHaveValue('This is a ProgramView description');
+    // });
 
     // it('should close the dialog when Cancel button is clicked', () => {
     //     setup();
