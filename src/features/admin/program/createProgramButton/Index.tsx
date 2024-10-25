@@ -43,7 +43,9 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
     const [programDescription, setProgramDescription] = useState('');
     const [isOpen, setIsOpen] = useState(false);
 
-    const isFormValid = programName && programDeliveryType && programMode && programDuration && programDescription;
+    const isProgramNameValid = /^[A-Za-z\s]+$/.test(programName);
+    const isDescriptionValid = programDescription.length >= 10;
+    const isFormValid = isProgramNameValid && programDeliveryType && programMode && programDuration && isDescriptionValid;
 
     const closeDialog = () => {
         setIsOpen(false);
@@ -63,13 +65,6 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
 
     function submit() {
         if (isFormValid) {
-            console.log({
-                programName,
-                programDeliveryType,
-                programMode,
-                programDuration,
-                programDescription
-            });
             closeDialog();
         }
     }
@@ -98,22 +93,11 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                         data-testid="trigger-button"
                         variant="outline"
                         size="lg"
-                        className={`h-11 text-meedlBlue w-full md:mt-0 mt-3 text-sm font-semibold leading-5`}
+                        className={`h- text-meedlBlue w-full md:mt-0 mt-3 text-sm font-semibold leading-5`}
                     >
                         {buttonText}
                     </Button>
                 )}
-
-
-                {/*<Button*/}
-                {/*    id="triggerButton"*/}
-                {/*    data-testid="trigger-button"*/}
-                {/*    variant="secondary"*/}
-                {/*    size={`lg`}*/}
-                {/*    className={`${inter.className} bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}*/}
-                {/*>*/}
-                {/*    {buttonText}*/}
-                {/*</Button>*/}
             </DialogTrigger>
             <DialogContent id="dialogContent" data-testid="dialog-content" className="max-w-[425px] md:max-w-lg">
                 <DialogHeader id="dialogHeader" data-testid="dialog-header" className={`flex flex-row justify-between`}>
@@ -138,6 +122,9 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 onChange={(e) => setProgramName(e.target.value)}
                                 className={`h-14 focus:outline-none focus:ring-0 focus-visible:ring-0`}
                             />
+                            {!isProgramNameValid && programName && (
+                                <p className="text-red-500 text-sm">Name must contain only letters.</p>
+                            )}
                         </div>
 
                         <div className={`grid grid-col`} id="selectInputsContainer"
@@ -257,6 +244,9 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 onChange={(e) => setProgramDescription(e.target.value)}
                                 className={`focus:outline-none focus:ring-0  focus-visible:ring-0`}
                             />
+                            {!isDescriptionValid && programDescription && (
+                                <p className="text-red-500 text-sm">Description must be at least 10 characters long.</p>
+                            )}
                         </div>
                     </div>
                 </DialogDescription>
