@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import {render, screen, fireEvent} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import React from "react";
 import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
@@ -14,8 +14,7 @@ describe('CreateProgramButton Component', () => {
             programModes: ['Mode 1', 'Mode 2'],
             programDurations: ['1 month', '2 months'],
         };
-
-        return render(<CreateProgramButton {...props} />);
+        return render(<CreateProgramButton useSecondaryButton={false} submitButtonText={''} {...props} />);
     };
 
     it('should render the trigger button and open the dialog on click', () => {
@@ -40,21 +39,21 @@ describe('CreateProgramButton Component', () => {
         const triggerButton = screen.getByTestId('trigger-button');
         fireEvent.click(triggerButton);
 
-        // const programModeTrigger = screen.getByTestId('ProgramView-mode-trigger');
-        // fireEvent.click(programModeTrigger);
-        // const programModeItem = screen.getByTestId('ProgramView-mode-item-0');
-        // fireEvent.click(programModeItem);
-        // expect(programModeTrigger).toHaveTextContent('Mode 1');
+        const programModeTrigger = screen.getByTestId('ProgramView-mode-trigger');
+        fireEvent.click(programModeTrigger);
+        const programModeItem = screen.getByTestId('ProgramView-mode-item-0');
+        fireEvent.click(programModeItem);
+        expect(programModeTrigger).toHaveTextContent('Mode 1');
 
-        // const programDurationTrigger = screen.getByTestId('ProgramView-duration-trigger');
-        // fireEvent.click(programDurationTrigger);
-        // const programDurationItem = screen.getByTestId('ProgramView-duration-item-0');
-        // fireEvent.click(programDurationItem);
-        // expect(programDurationTrigger).toHaveTextContent('1 month');
+        const programDurationTrigger = screen.getByTestId('ProgramView-duration-trigger');
+        fireEvent.click(programDurationTrigger);
+        const programDurationItem = screen.getByTestId('ProgramView-duration-item-0');
+        fireEvent.click(programDurationItem);
+        expect(programDurationTrigger).toHaveTextContent('1 month');
 
-        // const programDescription = screen.getByTestId('ProgramView-description');
-        // fireEvent.change(programDescription, { target: { value: 'This is a ProgramView description' } });
-        // expect(programDescription).toHaveValue('This is a ProgramView description');
+        const programDescription = screen.getByTestId('ProgramView-description');
+        fireEvent.change(programDescription, { target: { value: 'This is a ProgramView description' } });
+        expect(programDescription).toHaveValue('This is a ProgramView description');
     });
 
     // it('should close the dialog when Cancel button is clicked', () => {
