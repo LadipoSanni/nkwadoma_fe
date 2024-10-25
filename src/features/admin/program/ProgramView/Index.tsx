@@ -7,6 +7,7 @@ import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
 import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
+import { formatAmount } from '@/utils/Format'
 
 import { Book } from 'lucide-react';
 
@@ -45,12 +46,12 @@ const ProgramView = () => {
        }
        const ProgramHeader = [
         { title: 'Programs', sortable: true, id: 'programs', selector: (row:TableRowData ) => row.programs },
-        { title: 'Status', sortable: true, id: 'status', selector: (row:TableRowData ) => <span className={` pt-1 pb-1 pr-3 pl-3 rounded-xl ${row.status === "Accepted"? "text-success600 bg-success50" : "text-error600 bg-error50"}`}>{row.status}</span>},
+        { title: 'Status', sortable: true, id: 'status', selector: (row:TableRowData ) => <span className={` pt-1 pb-1 pr-3 pl-3 rounded-xl ${row.status === "Accepted"? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"}`}>{row.status}</span>},
         { title: 'No. of Cohorts', sortable: true, id: 'noOfCohorts', selector: (row: TableRowData) => row.noOfCohorts },
         { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row:TableRowData) => row.noOfTrainees },
-        { title: 'Amount Disbursed', sortable: true, id: 'amountDisbursed', selector: (row:TableRowData) => row.amountDisbursed},
-        { title: 'Amount Repaired', sortable: true, id: 'amountRepaired', selector: (row:TableRowData) => row.amountRepaired },
-        { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) => row.amountOutstanding},
+        { title: 'Amount Disbursed', sortable: true, id: 'amountDisbursed', selector: (row:TableRowData) => formatAmount(row.amountDisbursed)},
+        { title: 'Amount Repaired', sortable: true, id: 'amountRepaired', selector: (row:TableRowData) =>  formatAmount(row.amountRepaired) },
+        { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) => formatAmount(row.amountOutstanding)},
 
 
       ]
@@ -86,7 +87,7 @@ const ProgramView = () => {
                                          programDurations={["3years", "4years"]} submitButtonText={"Create Program"} />
                 </div>
             </section>
-            <div id="programContent" className={'grid gap-4'}>
+            <div id="programContent" className={'grid gap-4 relative bottom-3'}>
                 <DisplayOptions setView={setView} activeView={view}/>
                 {view === 'grid' ? (
                     <div
@@ -122,7 +123,7 @@ const ProgramView = () => {
                         tableHeader={ProgramHeader}
                         staticHeader={"Programs"}
                         staticColunm={'programs'}
-                        tableHeight={45}
+                        tableHeight={47}
                         handleRowClick={handleRowClick}
                         sx='cursor-pointer'
                         showKirkBabel={true}

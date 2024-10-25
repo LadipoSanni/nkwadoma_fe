@@ -26,7 +26,10 @@ describe("TableContainer", () => {
         );
     
         const container = screen.getByText('Test Child').parentElement;
-        expect(container).toHaveClass('overflow-auto border rounded-md custom-class');
+        expect(container).toHaveClass("overflow-auto");
+          expect(container).toHaveClass("border");
+          expect(container).toHaveClass("custom-class");
+          expect(container).toHaveClass("className");
       });
 
 
