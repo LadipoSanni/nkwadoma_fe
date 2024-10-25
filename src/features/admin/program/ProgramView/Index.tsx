@@ -45,7 +45,7 @@ const ProgramView = () => {
        }
        const ProgramHeader = [
         { title: 'Programs', sortable: true, id: 'programs', selector: (row:TableRowData ) => row.programs },
-        { title: 'Status', sortable: true, id: 'status', selector: (row:TableRowData ) => <span className={`bg-error50 pt-1 pb-1 pr-3 pl-3 rounded-xl ${row.status === "Accepted"? "text-success600" : "text-error600"}`}>{row.status}</span>},
+        { title: 'Status', sortable: true, id: 'status', selector: (row:TableRowData ) => <span className={` pt-1 pb-1 pr-3 pl-3 rounded-xl ${row.status === "Accepted"? "text-success600 bg-success50" : "text-error600 bg-error50"}`}>{row.status}</span>},
         { title: 'No. of Cohorts', sortable: true, id: 'noOfCohorts', selector: (row: TableRowData) => row.noOfCohorts },
         { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row:TableRowData) => row.noOfTrainees },
         { title: 'Amount Disbursed', sortable: true, id: 'amountDisbursed', selector: (row:TableRowData) => row.amountDisbursed},
@@ -81,9 +81,9 @@ const ProgramView = () => {
                 <div id="programControls" className={'md:flex pr-2 md:justify-between gap-5 grid'}>
                     <SearchInput id={'ProgramSearchInput'}/>
                     <CreateProgramButton buttonText={"Create Program"} title={"Create Program"}
-                                         programDeliveryTypes={["2years", "hgjfhgfgf"]}
-                                         programModes={["2semesters", "uthuightuit"]}
-                                         programDurations={["3years", "hgfrregfre"]}/>
+                                         programDeliveryTypes={["Full-time", "Part-time"]}
+                                       programModes={["Online", "Physical"]} useSecondaryButton={true}
+                                         programDurations={["3years", "4years"]} submitButtonText={"Create Program"} />
                 </div>
             </section>
             <div id="programContent" className={'grid gap-4'}>

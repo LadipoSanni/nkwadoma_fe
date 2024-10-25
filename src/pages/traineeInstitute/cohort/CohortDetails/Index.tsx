@@ -1,6 +1,8 @@
+"use client"
 import React from "react";
 import Details from "@/reuseable/details/Details";
 import CohortDetailsImage from "../../../../../public/asset/Image/CohortDetailsImage.png"
+import {useRouter} from "next/navigation";
 const CohortDetails = () =>{
     const dataList = [
         { label: "Start Date", value: "13, Dec 2023" },
@@ -25,6 +27,11 @@ const CohortDetails = () =>{
         { title: "Feeding", amount: "200,000.00" },
         { title: "Total", amount: "300,500,000.00" },
     ];
+
+    const router = useRouter();
+    const handleBackClick =() =>{
+        router.push('/cohort')
+    }
     return(
 
         <Details
@@ -36,7 +43,8 @@ const CohortDetails = () =>{
             dropoutsCount={10}
             dataList={dataList}
             breakDown={breakDown}
-        />
+            goBackText={"Back to Cohort"}
+            handleBackClick={handleBackClick}/>
     );
 }
 export default CohortDetails;
