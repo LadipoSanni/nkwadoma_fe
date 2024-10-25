@@ -14,7 +14,7 @@ import {BiArrowBack} from "react-icons/bi";
 import {IoEllipsisHorizontal} from "react-icons/io5";
 import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
 import {DropdownMenuSeparator} from "@/components/ui/dropdown-menu";
-import { formatAmount } from '@/utils/Format';
+import {formatAmount} from '@/utils/Format';
 
 
 interface detailsProps {
@@ -30,7 +30,7 @@ interface detailsProps {
     handleBackClick: () => void
 }
 
-interface TableRowData{
+interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
@@ -56,7 +56,12 @@ const Details: React.FC<detailsProps> = ({
     const ProgramHeader = [
         {title: "Trainee", sortable: true, id: "trainee"},
         {title: "Referral Date", sortable: true, id: "referralDate"},
-        {title: "Amount Requested", sortable: true, id: "amountRequested", selector: (row:TableRowData) =>row.amountRequested && formatAmount(row.amountRequested)},
+        {
+            title: "Amount Requested",
+            sortable: true,
+            id: "amountRequested",
+            selector: (row: TableRowData) => row.amountRequested && formatAmount(row.amountRequested)
+        },
     ];
 
 
@@ -83,7 +88,8 @@ const Details: React.FC<detailsProps> = ({
                                     data-testid="cohort-image"
                                 />
                             ) : Icon ? (
-                                <div className="w-34 h-34 flex justify-center items-center bg-lightBlue500 rounded-full">
+                                <div
+                                    className="w-34 h-34 flex justify-center items-center bg-lightBlue500 rounded-full">
                                     <Icon className="text-6xl text-meedlBlue"/>
                                 </div>
                             ) : null}
@@ -240,7 +246,8 @@ const Details: React.FC<detailsProps> = ({
                                         staticHeader={'Trainee'}
                                         staticColunm={'trainee'}
                                         tableHeight={53}
-                                        handleRowClick={() => {}}
+                                        handleRowClick={() => {
+                                        }}
                                         optionalRowsPerPage={9}
                                     />
                                 </TabsContent>
