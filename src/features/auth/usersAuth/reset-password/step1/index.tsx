@@ -1,10 +1,11 @@
 'use client'
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInput from "@/reuseable/Input/AuthInputField"
 import Link from 'next/link'
 import {setItemToLocalStorage} from "@/utils/localStorage";
 import {useRouter} from "next/navigation";
+import {validateEmailInput} from "@/utils/GlobalMethods";
 
 
 const Step1 = () => {
@@ -18,30 +19,31 @@ const Step1 = () => {
     const [disableButton, setDisableButton] = useState(true)
 
 
-    useEffect(() => {
-        if (email === ''){
-            setDisableButton(true)
-        }
-    }, [email]);
+    // useEffect(() => {
+    //     if (email === ''){
+    //         setDisableButton(true)
+    //     }
+    // }, [email]);
     const handleReset = () => {
         setItemToLocalStorage("userEmailInputOnResetPassword", email)
         router.push('/auth/reset-password/step-2')
     }
 
-    // const validateEmail = (email: string) => {
-    //     const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    //     if(email.match(validRegex)) {
-    //         return true
-    //     }
-    //    return false;
-    // }
+    const validateEmail = (input: string) => {
+        const isValid  = validateEmailInput(input);
+        if (isValid){
+            setDisableButton(false)
+        }else{
+            setDisableButton(true)
+        }
+
+    }
 
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement| HTMLInputElement > ) => {
         event.stopPropagation()
-        // if (validateEmail(event.currentTarget.value)) {
-            setDisableButton(false)
-            setEmail(event.currentTarget.value)
-        // }
+        setEmail(event.currentTarget.value)
+        validateEmail(event.currentTarget.value)
+
     }
     const login = ()=> {
         router.push("/auth/login")
@@ -54,7 +56,7 @@ const Step1 = () => {
 
             <div
                 id="resetPasswordComponent"
-                className={` py-4 border border-slate-200 px-3 w-[90vw] rounded-md h-auto bg-white grid md:px-2.5 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[90%] md:h-fit md:rounded`}
+                className={` py-4 border border-slate-200 px-3 w-[90vw] md:mr-20 rounded-md h-auto bg-white grid md:px-2.5 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[50%] md:h-fit md:rounded`}
             >
                 <div
                     id={"resetPasswordInnerContainer"}
