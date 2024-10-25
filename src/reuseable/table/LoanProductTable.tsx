@@ -48,6 +48,7 @@ interface ColumnProps<T> {
       emptyStateStyle?: string,
       icon?:ElementType,
       optionalFilterName?: string,
+      optionalRowsPerPage?: number; 
   }
   
 
@@ -66,10 +67,12 @@ function Tables<T extends TableRowData> ({
                            sideBarTabName,
                            emptyStateStyle,
                            icon,
-                           optionalFilterName
+                           optionalFilterName,
+                          optionalRowsPerPage = 7,
+                           
 }: Props<T>) {
     const [page, setPage] = useState(1);
-    const rowsPerPage = 10;
+    const rowsPerPage = optionalRowsPerPage;
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
@@ -108,6 +111,8 @@ function Tables<T extends TableRowData> ({
      
 
     const paginatedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+    const totalPages = Math.ceil(tableData.length / rowsPerPage);
+    const isLastPage = page === totalPages;
 
   return (
     <div id="loanProductTableContainer" className={`w-[100%] `}>
@@ -117,8 +122,8 @@ function Tables<T extends TableRowData> ({
         <div id="loanProductTableBorder" className='border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block '>
             <TableContainer id="loanProductTableScrollbar" style={{ height: `${tableHeight}vh` ,overflow: 'auto'}}>
                 <Table id="dynamicTable" className=''>
-                    <TableHeader id="dynamicTableHead" className={`bg-[#fafbfc]  hover:bg-[#fafbfc]`} >
-                        <TableRow id="dynamicTableHeadRow" className={` sticky top-0  h-14   bg-[#fafbfc]  hover:bg-[#fafbfc]`}
+                    <TableHeader id="dynamicTableHead" className={`bg-[#F0F2F4]  hover:bg-[#F0F2F4]`} >
+                        <TableRow id="dynamicTableHeadRow" className={` sticky top-0     bg-[#F0F2F4]  hover:bg-[#fafbfc]`}
                          style={{ position: 'sticky', top: 0, background: '#fff', }}
                         >
                           {
@@ -126,7 +131,7 @@ function Tables<T extends TableRowData> ({
                                 <TableHead key={column.id} id={`dynamicTableHeadCell${column.id}`} 
                                 // className={`${Styles.tableHeaderItem} `}
                                 // className={`px-[12px] py-[10px] text-[#101828]`}
-                                className='bg-gray h-14 hover:bg-gray'
+                                className='bg-[#F0F2F4] h-14 hover:bg-[#F0F2F4]'
                                
                                 >
                                     <div  id={`dynamicTableHeadCellDiv${column.id}`} className={`${Styles.tableHeaderItem} `}>
@@ -144,17 +149,19 @@ function Tables<T extends TableRowData> ({
                             <TableRow
                                 id={`dynamicTableBodyRow${rowIndex}`}
                                 key={rowIndex}
-                                onClick={() => handleRowClick(row)}
+                                // onClick={() => handleRowClick(row)}
                                 className={`${sx}`}
                             >
                                 {
                                     tableHeader.map((column) => (
                                        
                                         <TableCell
+                                            onClick={() => handleRowClick(row)}
                                             key={`${column.id}${rowIndex}`}
                                             id={`dynamicTableCell${column.id}${rowIndex}`}
                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
-                                            className='h-14'
+                                            className={`h-1 ${
+                                              isLastPage ? 'border-b border-solid ' : ''}`}
                                         >
                                             <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}  className={`${Styles.tableBodyItem} ${tableStyle} `}>
                                             {column.selector? column.selector(row) : row[column.id]}
@@ -169,14 +176,15 @@ function Tables<T extends TableRowData> ({
                                 }
                                 { showKirkBabel ? 
                                 <TableCell
-                                className="w-0"
+                                className={`w-0 ${
+                                      isLastPage ? 'border-b border-solid' : ''}`}
                                 >
                                   {
                                     <Menubar
                                     // onClick={}
                                     >
                                     <MenubarMenu>
-                                    <MenubarTrigger asChild className='border-none shadow-none cursor-pointer hover:bg-b'>
+                                    <MenubarTrigger asChild className={`border-none shadow-none cursor-pointer hover:bg-b`}>
                                     <Button className='border-none shadow-none' >
                                       <DotsVerticalIcon className="w-5 h-6 text-grey500 font-extrabold" />
                                       </Button>
@@ -289,7 +297,7 @@ function Tables<T extends TableRowData> ({
                     className={`${sx}`}
                     >
                       <TableCell
-                      className='h-14'
+                      className='h-14 '
                       >
                       <div className=''>
                         {/* {row[`${staticColunm}`]} */}
@@ -298,7 +306,7 @@ function Tables<T extends TableRowData> ({
             : row[`${staticColunm}`]}
                         </div>
                       </TableCell>
-
+                          
                       <TableCell
                       className='h-14'
                       >

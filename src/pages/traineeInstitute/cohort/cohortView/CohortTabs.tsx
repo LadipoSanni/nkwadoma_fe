@@ -4,6 +4,9 @@ import Tables from '@/reuseable/table/LoanProductTable'
 import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
 import { MdOutlinePeople } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
+import { cabinetGrotesk } from '@/app/fonts'
+import { formatAmount } from '@/utils/Format'
+import { formatDate } from '@/utils/Format'
 
 const CohortTabs = () => {
 
@@ -52,7 +55,7 @@ const CohortTabs = () => {
 
 
   const handleDropdownClick = (id:string,row: TableRowData) => {
-    if(id === "1") router.push('/program')
+    if(id === "1") router.push('/cohortDetail')
     else if(id === "2") {
      router.push('/Overview')
      console.log('The row: ',row)
@@ -63,13 +66,13 @@ const CohortTabs = () => {
   }
   const ProgramHeader = [
     { title: 'Cohort', sortable: true, id: 'cohort', selector: (row:TableRowData ) => row.cohort },
-    { title: 'End date', sortable: true, id: 'endDate', selector: (row:TableRowData ) => row.endDate},
+    { title: 'End date', sortable: true, id: 'endDate', selector: (row:TableRowData ) => formatDate(row?.endDate)},
     { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row: TableRowData) => row.noOfTrainees },
     { title: 'No. of Loanees', sortable: true, id: 'noOfLoan', selector: (row:TableRowData) => row.noOfLoan },
-    { title: 'Tuition', sortable: true, id: 'tuition', selector: (row:TableRowData) => row.tuition},
-    { title: 'Amount recieved', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='flex justify-center'>{row.amountRecieved}</div> },
-    { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='flex justify-center'>{row.amountRequested}</div> },
-    { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className='flex justify-center'>{row.amountOutstanding}</div> },
+    { title: 'Tuition', sortable: true, id: 'tuition', selector: (row:TableRowData) => formatAmount(row.tuition)},
+    { title: 'Amount recieved', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-8'>{formatAmount(row.amountRecieved)}</div> },
+    { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='ml-8'>{formatAmount(row.amountRequested)}</div> },
+    { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountOutstanding)}</div> },
    
   ]
 
@@ -82,7 +85,7 @@ const CohortTabs = () => {
               tableData={cohortsData}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
-              tableHeight={45}
+              tableHeight={47}
               sx='cursor-pointer'
               staticColunm='cohort'
               staticHeader='Cohort'
@@ -92,6 +95,7 @@ const CohortTabs = () => {
               sideBarTabName='Cohort'
               optionalFilterName='incoming'
               handleDropDownClick={handleDropdownClick}
+              
              />
              </div>
     },
@@ -102,7 +106,7 @@ const CohortTabs = () => {
               tableData={cohortsData}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
-              tableHeight={45}
+              tableHeight={47}
               sx='cursor-pointer'
               staticColunm='cohort'
               staticHeader='Cohort'
@@ -121,7 +125,7 @@ const CohortTabs = () => {
               tableData={cohortsData}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
-              tableHeight={45}
+              tableHeight={47}
               sx='cursor-pointer'
               staticColunm='cohort'
               staticHeader='Cohort'
@@ -140,7 +144,7 @@ const CohortTabs = () => {
   return (
     <div className=''>
       <Tabs defaultValue='incoming'>
-        <TabsList className='z-50'>
+        <TabsList className= {`z-50 ${cabinetGrotesk.className}`}>
           {tabData.map((tab,index) => (
             <TabsTrigger data-testid={`tabName${tab.value}`}  value={tab.value} key={index}>
                 {tab.name}

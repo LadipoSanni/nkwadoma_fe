@@ -5,6 +5,9 @@ import { MdOutlinePeople } from 'react-icons/md'
 describe("TableEmptyState", () => {
     beforeEach(() => {
         cleanup()
+        jest.spyOn(console,'log').mockReturnValue()
+        jest.spyOn(console,'warn').mockReturnValue()
+        jest.spyOn(console,'error').mockReturnValue()
     })
 
 
