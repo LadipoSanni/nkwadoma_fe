@@ -13,6 +13,7 @@ import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/
 import { BiArrowBack } from "react-icons/bi";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
+import {DropdownMenuSeparator} from "@/components/ui/dropdown-menu";
 
 
 interface detailsProps {
@@ -124,8 +125,6 @@ const Details: React.FC<detailsProps> = ({
                                               programDeliveryTypes={["Full-time", "Part-time"]}
                                               programModes={["Online", "Physical"]}
                                               programDurations={["3years", "4years"]} useSecondaryButton={false} submitButtonText={"Save Cohort"}/>
-                        {/*<Button size={"lg"} variant={"outline"} className="w-96 font-bold text-meedlBlack">Edit*/}
-                        {/*    cohort</Button>*/}
                         <Button size={"lg"} variant={"outline"}>
                             <IoEllipsisHorizontal/>
                         </Button>
@@ -206,16 +205,21 @@ const Details: React.FC<detailsProps> = ({
                                                             id="tuition-breakdown-content"
                                                             data-testid="tuition-breakdown-content">
                                             {breakDown && breakDown.map((item, index) => (
-                                                <div id={`breakdown-item-${index}`}
-                                                     data-testid={`breakdown-item-${index}`} key={index}
-                                                     className="flex md:flex-row flex-col py-4 justify-between">
-                                                    <div className="text-black300">
-                                                        <p>{item.title}</p>
+                                                <React.Fragment key={index}>
+                                                    <div id={`breakdown-item-${index}`}
+                                                         data-testid={`breakdown-item-${index}`}
+                                                         className="flex md:flex-row flex-col py-4 justify-between">
+                                                        <div className="text-black300">
+                                                            <p>{item.title}</p>
+                                                        </div>
+                                                        <div className="text-meedlBlack">
+                                                            <p>{item.amount}</p>
+                                                           </div>
                                                     </div>
-                                                    <div className="text-meedlBlack">
-                                                        <p>{item.amount}</p>
-                                                    </div>
-                                                </div>
+                                                    {index === 3 && index < breakDown.length - 1 && (
+                                                        <DropdownMenuSeparator className="border-b" />
+                                                    )}
+                                                </React.Fragment>
                                             ))}
                                         </CollapsibleContent>
                                     </Collapsible>
