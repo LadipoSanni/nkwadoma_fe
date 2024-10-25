@@ -149,13 +149,14 @@ function Tables<T extends TableRowData> ({
                             <TableRow
                                 id={`dynamicTableBodyRow${rowIndex}`}
                                 key={rowIndex}
-                                onClick={() => handleRowClick(row)}
+                                // onClick={() => handleRowClick(row)}
                                 className={`${sx}`}
                             >
                                 {
                                     tableHeader.map((column) => (
                                        
                                         <TableCell
+                                            onClick={() => handleRowClick(row)}
                                             key={`${column.id}${rowIndex}`}
                                             id={`dynamicTableCell${column.id}${rowIndex}`}
                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}

@@ -55,7 +55,7 @@ const CohortTabs = () => {
 
 
   const handleDropdownClick = (id:string,row: TableRowData) => {
-    if(id === "1") router.push('/program')
+    if(id === "1") router.push('/cohortDetail')
     else if(id === "2") {
      router.push('/Overview')
      console.log('The row: ',row)
