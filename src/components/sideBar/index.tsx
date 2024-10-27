@@ -74,7 +74,8 @@ const SideBar = () => {
             name: 'Loan',
             route: '/loan',
             icon: <Icon icon="material-symbols:money-bag-outline"
-                        color={current === 'Loan' ? currentTextLiterals : textLiterals}
+                        // style={current === 'Loan' ? currentTextLiterals : textLiterals}
+                        className={` color-${current === 'Loan' ? currentTextLiterals : textLiterals } `}
                         height={"1.2rem"}
                         width={"1.3rem"}
             ></Icon>
