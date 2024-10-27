@@ -19,11 +19,7 @@ const Step1 = () => {
     const [disableButton, setDisableButton] = useState(true)
 
 
-    // useEffect(() => {
-    //     if (email === ''){
-    //         setDisableButton(true)
-    //     }
-    // }, [email]);
+
     const handleReset = () => {
         setItemToLocalStorage("userEmailInputOnResetPassword", email)
         router.push('/auth/reset-password/step-2')
@@ -56,7 +52,7 @@ const Step1 = () => {
 
             <div
                 id="resetPasswordComponent"
-                className={` py-4 border border-slate-200 px-3 w-[90vw] md:mr-20 rounded-md h-auto bg-white grid md:px-2.5 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[50%] md:h-fit md:rounded`}
+                className={` py-4 border border-slate-200 px-3 w-[90vw] md:mr-20 rounded-md h-fit mb-60 bg-white grid md:px-2.5 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[50%] md:h-fit md:rounded`}
             >
                 <div
                     id={"resetPasswordInnerContainer"}
