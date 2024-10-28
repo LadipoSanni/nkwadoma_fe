@@ -15,6 +15,7 @@ import {Icon} from "@iconify/react";
 
 
 
+
 const SideBar = () => {
     const router = useRouter();
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
@@ -42,7 +43,7 @@ const SideBar = () => {
     const navbarRouterItems: navbarRouterItemsProps[] = [
         {
             icon: <MdOutlineHome
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Overview' ? currentTextLiterals : textLiterals} `}/>,
+                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}/>,
             id: 'Overview',
             name: 'Overview',
             route: '/overview'
@@ -53,14 +54,12 @@ const SideBar = () => {
             route: '/program',
             icon: <Icon
                 icon="mynaui:book"
-                color={current === 'Program' ? currentTextLiterals : textLiterals}
+                color={current === 'Loan' ? '#142854' : '#667085'}
                 height={"1.2rem"}
                 width={"1.3rem"}
             >
 
             </Icon>
-            // icon: <LuBook
-            //     className={` h-[1.2rem] w-[1.2rem] ${(current === 'Program' ? currentTextLiterals : textLiterals)} `}/>
         },
         {
             id: 'cohort',
@@ -74,14 +73,11 @@ const SideBar = () => {
             name: 'Loan',
             route: '/loan',
             icon: <Icon icon="material-symbols:money-bag-outline"
-                        // style={current === 'Loan' ? currentTextLiterals : textLiterals}
-                        className={` color-${current === 'Loan' ? currentTextLiterals : textLiterals } `}
                         height={"1.2rem"}
                         width={"1.3rem"}
-            ></Icon>
-            // icon: <CiBag1
-            //     className={` h-[1.2rem] w-[1.2rem] ${current === 'Loan' ? currentTextLiterals : textLiterals} `}/>
-        // <iconify-icon icon="mdi:home"></iconify-icon>
+                        color={current === 'Loan' ? '#142854' : '#667085'}
+            ></Icon >
+
         },
         {
             id: 'loanee',

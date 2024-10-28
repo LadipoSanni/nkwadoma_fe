@@ -44,7 +44,7 @@ const TopBar = () => {
                                       id={'LayOutHamburger'}/>
                         </div>
                         <div className={` relative flex place-items-center `}>
-                            <div className={` ${inter.className} text-sm font-bold text-[#212221]  `}>{currentTab}</div>
+                            <div className={` ${inter.className} text-sm font-bold text-black500  `}>{currentTab}</div>
                         </div>
                     </div>
 
