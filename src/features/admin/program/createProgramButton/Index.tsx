@@ -1,7 +1,8 @@
 import {Button} from "@/components/ui/button"
 import {
     Dialog,
-    DialogContent, DialogDescription,
+    DialogContent,
+    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -71,10 +72,10 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
 
     return (
         <Dialog open={isOpen}
-            onOpenChange={(open) => {
-                setIsOpen(open);
-                if (!open) resetFormFields();
-            }}
+                onOpenChange={(open) => {
+                    setIsOpen(open);
+                    if (!open) resetFormFields();
+                }}
         >
             <DialogTrigger asChild>
                 {useSecondaryButton ? (
