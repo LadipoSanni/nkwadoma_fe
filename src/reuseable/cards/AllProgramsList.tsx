@@ -6,6 +6,7 @@ import {Card, CardHeader, CardTitle, CardDescription, CardContent} from '@/compo
 import {PersonIcon} from "@radix-ui/react-icons";
 import {inter} from "@/app/fonts";
 import Kebab from "@/reuseable/Kebab/Kebab";
+import { FiMoreVertical } from 'react-icons/fi';
 
 interface ProgramList {
     id: string;
@@ -32,7 +33,7 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, trainee
         <Card id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full md:max-w-lg  border border-grey50 rounded-lg">
             <CardHeader id={`header-${id}`} data-testid="header" className="flex flex-row justify-between items-center">
                 <CardTitle id={`title-${id}`} data-testid="title" className={`${inter.className} text-lg font-medium text-[#101828]`}>{title}</CardTitle>
-                    <Kebab kebabOptions={dropdownOption} />
+                    <Kebab kebabOptions={dropdownOption} icon={FiMoreVertical} />
             </CardHeader>
 
             <CardContent id={`contentId-${id}`} data-testid={`contentId`}>
