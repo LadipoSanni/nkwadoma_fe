@@ -10,6 +10,11 @@ interface Props <T extends navbarRouterItemsProps> {
 function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClick, currentTab}: Readonly<Props<T>>) {
 
 
+    const currentTabStyle =  'rounded bg-neutral100';
+    const currentTabNameStyle =  `text-meedleBlue`
+    const tabNameStyle =  `text-layoutBlue800`;
+    const noStyle = ``;
+
 
 
     return(
@@ -23,7 +28,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                     key={item?.id + index}
                     id={item.id}
                     data-testid={item.id}
-                    className={`inline-flex h-fit py-2 gap-2 px-1 w-full ${(currentTab !== item.name ? `` : `rounded bg-neutral100 `)} `}
+                    className={`inline-flex h-fit py-2 gap-2 px-1 w-full ${(currentTab === item.name ?currentTabStyle : noStyle  )} `}
                     onClick={() => {handleClick(item.name, item.id)}}
                 >
                     <div id={'navbarRouteIcon' + item.id}
@@ -31,7 +36,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                     >{item?.icon}</div>
                     <div id={'navbarRouterName' + item.id}
                          data-testid={`navbarRouteName` + item.id}
-                         className={`text-sm  ${(currentTab !== item.name  ? `text-black300` : `text-meedlBlue`)} =`}>{item.name}</div>
+                         className={`text-sm tracking-wide  ${(currentTab !== item.name  ? tabNameStyle : currentTabNameStyle)} `}>{item.name}</div>
 
                 </button>
                 ))}

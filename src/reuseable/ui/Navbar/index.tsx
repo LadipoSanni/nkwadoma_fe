@@ -24,7 +24,7 @@ const NavbarContainer = ({items}: Props) => {
                     >{item?.icon}</div>
                     <div id={'navbarItemName' + item.id}
                          data-testid={`navbarItemName` + item.id}
-                         className={`text-sm text-blue800`}>{item.name}</div>
+                         className={`text-sm text-layoutBlue800`}>{item.name}</div>
 
                 </button>
                 ))}
