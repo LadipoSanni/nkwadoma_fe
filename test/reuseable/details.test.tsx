@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import Details from "@/reuseable/details/Details";
+import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {userEvent} from "@testing-library/user-event";
 
 const mockProps = {
@@ -20,14 +20,20 @@ const mockProps = {
 describe("render details reusable component", ()=>{
     it("should test that details component exist ", ()=>{
         const {queryByTestId} = render(
-            <Details {...mockProps}/>
+            <DetailsImageSection tagCount={0} tagText={''} tagButtonIcon={'symbol'} tagButtonStyle={''} goBackText={''}
+                                 handleBackClick={function (): void {
+                                     throw new Error('Function not implemented.');
+                                 }} {...mockProps}/>
         )
         const details = queryByTestId('details-main');
         expect(details).toBeInTheDocument();
     });
 
     it('renders two sections on the page', () => {
-        render(<Details {...mockProps} />);
+        render(<DetailsImageSection tagCount={0} tagText={''} tagButtonIcon={'symbol'} tagButtonStyle={''}
+                                    goBackText={''} handleBackClick={function (): void {
+            throw new Error('Function not implemented.');
+        }} {...mockProps} />);
 
         const imageSection = screen.getByTestId('cohort-image-section');
         expect(imageSection).toBeInTheDocument();
@@ -37,7 +43,10 @@ describe("render details reusable component", ()=>{
     });
 
     it('renders the image section with two subsections', () => {
-        render(<Details {...mockProps} />);
+        render(<DetailsImageSection tagCount={0} tagText={''} tagButtonIcon={'symbol'} tagButtonStyle={''}
+                                    goBackText={''} handleBackClick={function (): void {
+            throw new Error('Function not implemented.');
+        }} {...mockProps} />);
 
         const imageSection = screen.getByTestId('cohort-image-section');
         expect(imageSection).toBeInTheDocument();
@@ -50,7 +59,10 @@ describe("render details reusable component", ()=>{
     });
 
     it("renders the cohort details tab", ()=>{
-        render(<Details {...mockProps} />);
+        render(<DetailsImageSection tagCount={0} tagText={''} tagButtonIcon={'symbol'} tagButtonStyle={''}
+                                    goBackText={''} handleBackClick={function (): void {
+            throw new Error('Function not implemented.');
+        }} {...mockProps} />);
         const tabs = screen.getByTestId('cohort-tabs');
         expect(tabs).toBeInTheDocument();
 
@@ -62,7 +74,10 @@ describe("render details reusable component", ()=>{
     });
 
     it('renders the dataList items correctly', () => {
-        render(<Details {...mockProps} />);
+        render(<DetailsImageSection tagCount={0} tagText={''} tagButtonIcon={'symbol'} tagButtonStyle={''}
+                                    goBackText={''} handleBackClick={function (): void {
+            throw new Error('Function not implemented.');
+        }} {...mockProps} />);
 
         mockProps.dataList.forEach(item => {
             expect(screen.getByText(item.label)).toBeInTheDocument();
@@ -71,7 +86,10 @@ describe("render details reusable component", ()=>{
     });
 
     it('renders the cohort title, description, and stats', () => {
-        render(<Details {...mockProps} />);
+        render(<DetailsImageSection tagCount={0} tagText={''} tagButtonIcon={'symbol'} tagButtonStyle={''}
+                                    goBackText={''} handleBackClick={function (): void {
+            throw new Error('Function not implemented.');
+        }} {...mockProps} />);
 
         expect(screen.getByText('Cohort 2024')).toBeInTheDocument();
 
@@ -82,7 +100,10 @@ describe("render details reusable component", ()=>{
     });
 
     it('should toggle tuition breakdown content on button click', () => {
-        render(<Details {...mockProps}  />);
+        render(<DetailsImageSection tagCount={0} tagText={''} tagButtonIcon={'symbol'} tagButtonStyle={''}
+                                    goBackText={''} handleBackClick={function (): void {
+            throw new Error('Function not implemented.');
+        }} {...mockProps}  />);
 
         const triggerButton = screen.getByTestId('tuition-breakdown-trigger');
         expect(triggerButton).toBeInTheDocument();
@@ -100,7 +121,10 @@ describe("render details reusable component", ()=>{
     });
 
     it('should render two tabs and display content based on the selected tab', () => {
-        render(<Details {...mockProps} />);
+        render(<DetailsImageSection tagCount={0} tagText={''} tagButtonIcon={'symbol'} tagButtonStyle={''}
+                                    goBackText={''} handleBackClick={function (): void {
+            throw new Error('Function not implemented.');
+        }} {...mockProps} />);
 
         const cohortDetailsTab = screen.getByTestId('cohort-details-tab');
         const traineesTab = screen.getByTestId('trainees-tab');
