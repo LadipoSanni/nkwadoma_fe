@@ -1,18 +1,22 @@
 "use client"
 import React, {useState} from 'react';
 import {IoMdMenu} from "react-icons/io";
-import {store, useAppSelector} from "@/redux/store";
+// import {store} from "@/redux/store";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import {inter} from"@/app/fonts"
 import { ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons"
 import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods"
 import styles from "@/components/topBar/index.module.css"
+import {getItemFromLocalStorage} from "@/utils/localStorage";
+import {store} from "@/redux/store";
 
 
 const TopBar = () => {
 
     const [arrowToggled, setArrowToggled] = useState(false)
-    const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem)
+    const currentTab = getItemFromLocalStorage('currentTabItem')
+
+    // const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem)
 
 
     const toggleArrow = ()=> {
@@ -40,7 +44,7 @@ const TopBar = () => {
                                       id={'LayOutHamburger'}/>
                         </div>
                         <div className={` relative flex place-items-center `}>
-                            <div className={` ${inter.className} text-sm font-bold text-[#212221]  `}>{currentTab}</div>
+                            <div className={` ${inter.className} text-sm font-bold text-black500  `}>{currentTab}</div>
                         </div>
                     </div>
 
