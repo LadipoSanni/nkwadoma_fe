@@ -23,7 +23,7 @@ interface CreateProgramProps {
     programModes: string[];
     programDurations: string[];
     submitButtonText: string;
-    triggerButtonStyle: string;
+    triggerButtonStyle:string;
 }
 
 const CreateProgramButton: React.FC<CreateProgramProps> = ({
@@ -33,7 +33,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                                                programModes,
                                                                programDurations,
                                                                submitButtonText,
-                                                               triggerButtonStyle
+                                                               triggerButtonStyle,
                                                            }) => {
 
     const [isDropdown, setIsDropdown] = useState(false)
@@ -44,8 +44,8 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
     const [programDescription, setProgramDescription] = useState('');
     const [isOpen, setIsOpen] = useState(false);
 
-    const isProgramNameValid = /^[A-Za-z\s]+$/.test(programName);
-    const isDescriptionValid = programDescription.length >= 10;
+    const isProgramNameValid = /^(?!\s)(?!\d)(?!.\d.[a-zA-Z].|\d.[a-zA-Z].*\d)[a-zA-Z\s]+$/.test(programName);
+    const isDescriptionValid = /^(?!\s)(?!\d)(?!.\d.[a-zA-Z].|\d.[a-zA-Z].*\d)[a-zA-Z\s]+$/.test(programDescription);
     const isFormValid = isProgramNameValid && programDeliveryType && programMode && programDuration && isDescriptionValid;
 
     const closeDialog = () => {
@@ -83,7 +83,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                         data-testid="trigger-button"
                         variant="secondary"
                         size="lg"
-                        className={`${triggerButtonStyle}bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
+                        className={`${triggerButtonStyle} bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
                     >
                         {buttonText}
                     </Button>
@@ -234,7 +234,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                 className={`focus:outline-none focus:ring-0  focus-visible:ring-0`}
                             />
                             {!isDescriptionValid && programDescription && (
-                                <p className="text-red-500 text-sm">Description must be at least 10 characters long.</p>
+                                <p className="text-red-500 text-sm">description must contain only letters.</p>
                             )}
                         </div>
                     </div>
