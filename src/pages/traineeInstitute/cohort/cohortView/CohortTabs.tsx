@@ -47,11 +47,11 @@ const CohortTabs = () => {
         [key: string]: string | number | null | React.ReactNode;
     }
 
-    const handleRowClick = (row: TableRowData) => {
-        router.push('/cohortDetail')
-        console.log('The row: ', row)
-
-    }
+  const handleRowClick = (row: TableRowData) => {
+    router.push('/cohort-details')
+    console.log('The row: ',row)
+    
+  }
 
 
     const handleDropdownClick = (id: string, row: TableRowData) => {
