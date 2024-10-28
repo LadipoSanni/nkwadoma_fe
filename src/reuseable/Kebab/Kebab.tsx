@@ -1,8 +1,8 @@
 import React from 'react';
-import { Menubar, MenubarTrigger, MenubarContent, MenubarMenu, MenubarItem } from '@/components/ui/menubar';
-import { Button } from '@/components/ui/button';
-import { FiMoreVertical } from "react-icons/fi";
-import { inter } from "@/app/fonts";
+import {Menubar, MenubarTrigger, MenubarContent, MenubarMenu, MenubarItem} from '@/components/ui/menubar';
+import {Button} from '@/components/ui/button';
+import {FiMoreVertical} from "react-icons/fi";
+import {inter} from "@/app/fonts";
 
 interface Props {
     handleDropDownClick?: (id: string) => void;
@@ -10,7 +10,7 @@ interface Props {
     className?: string;
 }
 
-const Kebab = ({ handleDropDownClick, kebabOptions, className }: Props) => {
+const Kebab = ({handleDropDownClick, kebabOptions, className}: Props) => {
     return (
         <div id="kebabWrapper" data-testid="kebab-wrapper" className="relative">
             <Menubar id="menubar" data-testid="menubar">
@@ -18,7 +18,7 @@ const Kebab = ({ handleDropDownClick, kebabOptions, className }: Props) => {
                     <MenubarTrigger
                         asChild
                         className="border-none shadow-none cursor-pointer focus:ring-0 focus-visible:ring-0"
-                        id="menubarTrigger"
+                        id="menubarTfrigger"
                         data-testid="menubar-trigger"
                     >
                         <Button
