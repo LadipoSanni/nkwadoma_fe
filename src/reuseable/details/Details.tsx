@@ -235,6 +235,8 @@ const Details: React.FC<detailsProps> = ({
                                     tableHeight={53}
                                     handleRowClick={() => {
                                     }}
+                                    tableCellStyle={'h-14'}
+                                    optionalRowsPerPage={10}
                                 />
                             </TabsContent>
                         </Tabs>

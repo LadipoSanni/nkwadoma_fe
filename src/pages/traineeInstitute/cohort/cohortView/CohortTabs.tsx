@@ -7,8 +7,14 @@ import { useRouter } from 'next/navigation'
 import { cabinetGrotesk } from '@/app/fonts'
 import { formatAmount } from '@/utils/Format'
 import { formatDate } from '@/utils/Format'
+import TableModal from '@/reuseable/modals/TableModal'
+import { Cross2Icon } from "@radix-ui/react-icons";
+
+
 
 const CohortTabs = () => {
+  const [programId, setProgramId] =  React.useState("")
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const router = useRouter()
 
@@ -42,6 +48,9 @@ const CohortTabs = () => {
     }
   ]
 
+  programId
+  isOpen
+
   interface TableRowData {
       [key: string]: string | number | null | React.ReactNode;
      }
@@ -57,13 +66,16 @@ const CohortTabs = () => {
   const handleDropdownClick = (id:string,row: TableRowData) => {
     if(id === "1") router.push('/cohortDetail')
     else if(id === "2") {
-     router.push('/Overview')
-     console.log('The row: ',row)
+      setProgramId(String(row.id))
+      setIsOpen(true)
+    
     }
     else {
       router.push('/loan')
     }
   }
+
+ 
   const ProgramHeader = [
     { title: 'Cohort', sortable: true, id: 'cohort', selector: (row:TableRowData ) => row.cohort },
     { title: 'End date', sortable: true, id: 'endDate', selector: (row:TableRowData ) => formatDate(row?.endDate)},
@@ -160,6 +172,18 @@ const CohortTabs = () => {
         }
        
       </Tabs>
+      <div>
+        <TableModal
+        isOpen={isOpen}
+        closeModal={() => setIsOpen(false)}
+        closeOnOverlayClick={true}
+        headerTitle='Edit Cohort'
+        className='w-100%'
+        icon={Cross2Icon}
+        >
+          hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+        </TableModal>
+      </div>
     </div>
   )
 }

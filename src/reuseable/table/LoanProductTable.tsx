@@ -49,6 +49,7 @@ interface ColumnProps<T> {
       icon?:ElementType,
       optionalFilterName?: string,
       optionalRowsPerPage?: number; 
+      tableCellStyle?: string
   }
   
 
@@ -69,6 +70,8 @@ function Tables<T extends TableRowData> ({
                            icon,
                            optionalFilterName,
                           optionalRowsPerPage = 7,
+                          tableCellStyle
+
                            
 }: Props<T>) {
     const [page, setPage] = useState(1);
@@ -160,7 +163,7 @@ function Tables<T extends TableRowData> ({
                                             key={`${column.id}${rowIndex}`}
                                             id={`dynamicTableCell${column.id}${rowIndex}`}
                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
-                                            className={`h-1 ${
+                                            className={`h-1 ${tableCellStyle} ${
                                               isLastPage ? 'border-b border-solid ' : ''}`}
                                         >
                                             <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}  className={`${Styles.tableBodyItem} ${tableStyle} `}>
