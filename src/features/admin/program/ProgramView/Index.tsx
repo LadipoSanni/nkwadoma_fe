@@ -7,9 +7,8 @@ import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
 import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
-import { formatAmount } from '@/utils/Format'
-
-import { Book } from 'lucide-react';
+import {formatAmount} from '@/utils/Format'
+import {Book} from 'lucide-react';
 
 const ProgramView = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -28,34 +27,60 @@ const ProgramView = () => {
 
     const dropDownOption = [
         {
-          name: "View Program",
-          id: "1"
+            name: "View Program",
+            id: "1"
         },
         {
-          name: "Edit Program",
-          id: "2"
+            name: "Edit Program",
+            id: "2"
         },
         {
-          name: "Delete Program",
-          id: "3"
+            name: "Delete Program",
+            id: "3"
         }
-      ]
+    ]
 
     interface TableRowData {
         [key: string]: string | number | null | React.ReactNode;
-       }
-       const ProgramHeader = [
-        { title: 'Programs', sortable: true, id: 'programs', selector: (row:TableRowData ) => row.programs },
-        { title: 'Status', sortable: true, id: 'status', selector: (row:TableRowData ) => <span className={` pt-1 pb-1 pr-3 pl-3 rounded-xl ${row.status === "Accepted"? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"}`}>{row.status}</span>},
-        { title: 'No. of Cohorts', sortable: true, id: 'noOfCohorts', selector: (row: TableRowData) => row.noOfCohorts },
-        { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row:TableRowData) => row.noOfTrainees },
-        { title: 'Amount Disbursed', sortable: true, id: 'amountDisbursed', selector: (row:TableRowData) => formatAmount(row.amountDisbursed)},
-        { title: 'Amount Repaired', sortable: true, id: 'amountRepaired', selector: (row:TableRowData) =>  formatAmount(row.amountRepaired) },
-        { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) => formatAmount(row.amountOutstanding)},
+    }
+
+    const ProgramHeader = [
+        {title: 'Programs', sortable: true, id: 'programs', selector: (row: TableRowData) => row.programs},
+        {
+            title: 'Status',
+            sortable: true,
+            id: 'status',
+            selector: (row: TableRowData) => <span
+                className={` pt-1 pb-1 pr-3 pl-3 rounded-xl ${row.status === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"}`}>{row.status}</span>
+        },
+        {title: 'No. of Cohorts', sortable: true, id: 'noOfCohorts', selector: (row: TableRowData) => row.noOfCohorts},
+        {
+            title: 'No. of Trainees',
+            sortable: true,
+            id: 'noOfTrainees',
+            selector: (row: TableRowData) => row.noOfTrainees
+        },
+        {
+            title: 'Amount Disbursed',
+            sortable: true,
+            id: 'amountDisbursed',
+            selector: (row: TableRowData) => formatAmount(row.amountDisbursed)
+        },
+        {
+            title: 'Amount Repaired',
+            sortable: true,
+            id: 'amountRepaired',
+            selector: (row: TableRowData) => formatAmount(row.amountRepaired)
+        },
+        {
+            title: 'Amount Outstanding',
+            sortable: true,
+            id: 'amountOutstanding',
+            selector: (row: TableRowData) => formatAmount(row.amountOutstanding)
+        },
 
 
-      ]
-
+    ]
 
 
     useEffect(() => {
@@ -70,9 +95,9 @@ const ProgramView = () => {
     }, []);
 
     const program1Options = [
-        { name: 'View Program', id: '1' },
-        { name: 'Edit Program', id: '2' },
-        { name: 'Delete Program', id: '3' }
+        {name: 'View Program', id: '1'},
+        {name: 'Edit Program', id: '2'},
+        {name: 'Delete Program', id: '3'}
     ];
 
     return (
@@ -82,8 +107,8 @@ const ProgramView = () => {
                     <SearchInput id={'ProgramSearchInput'}/>
                     <CreateProgramButton buttonText={"Create Program"} title={"Create Program"}
                                          programDeliveryTypes={["Full-time", "Part-time"]}
-                                       programModes={["Online", "Physical"]} useSecondaryButton={true}
-                                         programDurations={["3years", "4years"]} submitButtonText={"Create Program"} />
+                                         programModes={["Online", "Physical"]} useSecondaryButton={true}
+                                         programDurations={["3years", "4years"]} submitButtonText={"Create Program"}/>
                 </div>
             </section>
             <div id="programContent" className={'grid gap-4 relative bottom-3 overflow-hidden'}>
@@ -105,7 +130,7 @@ const ProgramView = () => {
                                 months={program.months}
                                 title={program.title}
                                 trainees={program.trainees}
-                             id={'program'} dropdownOption={program1Options}/>
+                                id={'program'} dropdownOption={program1Options}/>
                         ))}
                     </div>
                 ) : (
