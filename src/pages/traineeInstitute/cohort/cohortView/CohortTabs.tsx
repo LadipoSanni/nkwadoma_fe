@@ -48,8 +48,7 @@ const CohortTabs = () => {
     }
   ]
 
-  programId
-  isOpen
+
 
   interface TableRowData {
       [key: string]: string | number | null | React.ReactNode;
@@ -68,6 +67,7 @@ const CohortTabs = () => {
     else if(id === "2") {
       setProgramId(String(row.id))
       setIsOpen(true)
+      console.log(programId)
     
     }
     else {

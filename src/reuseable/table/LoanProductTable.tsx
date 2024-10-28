@@ -158,11 +158,11 @@ function Tables<T extends TableRowData> ({
 
                                                         <TableCell
                                                             onClick={() => handleRowClick(row)}
-                                                            key={`${column.id}${rowIndex}`}
+                                                            key={`${column.id}${rowIndex} `}
                                                             id={`dynamicTableCell${column.id}${rowIndex}`}
                                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                                                             className={`h-1 ${
-                                                                isLastPage ? 'border-b border-solid ' : ''}`}
+                                                                isLastPage ? 'border-b border-solid ' : ''} ${tableCellStyle}`}
                                                         >
                                                             <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
                                                                  className={`${Styles.tableBodyItem} ${tableStyle} `}>
