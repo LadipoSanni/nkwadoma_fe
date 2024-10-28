@@ -22,8 +22,8 @@ interface CreateProgramProps {
     programDeliveryTypes: string[];
     programModes: string[];
     programDurations: string[];
-    useSecondaryButton: boolean;
     submitButtonText: string;
+    triggerButtonStyle: string;
 }
 
 const CreateProgramButton: React.FC<CreateProgramProps> = ({
@@ -32,8 +32,8 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                                                                programDeliveryTypes,
                                                                programModes,
                                                                programDurations,
-                                                               useSecondaryButton,
-                                                               submitButtonText
+                                                               submitButtonText,
+                                                               triggerButtonStyle
                                                            }) => {
 
     const [isDropdown, setIsDropdown] = useState(false)
@@ -78,27 +78,15 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                 }}
         >
             <DialogTrigger asChild>
-                {useSecondaryButton ? (
                     <Button
                         id="triggerButton"
                         data-testid="trigger-button"
                         variant="secondary"
                         size="lg"
-                        className={`bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
+                        className={`${triggerButtonStyle}bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
                     >
                         {buttonText}
                     </Button>
-                ) : (
-                    <Button
-                        id="triggerButton"
-                        data-testid="trigger-button"
-                        variant="outline"
-                        size="lg"
-                        className={`h- text-meedlBlue w-full md:mt-0 mt-3 text-sm font-semibold leading-5`}
-                    >
-                        {buttonText}
-                    </Button>
-                )}
             </DialogTrigger>
             <DialogContent id="dialogContent" data-testid="dialog-content" className="max-w-[425px] md:max-w-lg">
                 <DialogHeader id="dialogHeader" data-testid="dialog-header" className={`flex flex-row justify-between`}>
