@@ -76,9 +76,8 @@ const ProgramView = () => {
     ];
 
     return (
-        <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 pl-5 pr-2 pt-7 bg-meedlWhite`}>
+        <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 pl-5 pr-2 pt-7 bg-meedlWhite overflow-hidden`}>
             <section id="programSection" className={'grid gap-7 '}>
-                <h1 id="programTitle" className={"text-meedlBlack text-2xl font-medium leading-[120%]"}>Program</h1>
                 <div id="programControls" className={'md:flex pr-2 md:justify-between gap-5 grid'}>
                     <SearchInput id={'ProgramSearchInput'}/>
                     <CreateProgramButton buttonText={"Create Program"} title={"Create Program"}
@@ -87,14 +86,14 @@ const ProgramView = () => {
                                          programDurations={["3years", "4years"]} submitButtonText={"Create Program"} />
                 </div>
             </section>
-            <div id="programContent" className={'grid gap-4 relative bottom-3'}>
+            <div id="programContent" className={'grid gap-4 relative bottom-3 overflow-hidden'}>
                 <DisplayOptions setView={setView} activeView={view}/>
                 {view === 'grid' ? (
                     <div
                         id={'programGrid'}
                         className={'grid gap-6 pr-2 overflow-y-auto'}
                         style={{
-                            height: '55vh',
+                            height: '62vh',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
@@ -114,7 +113,7 @@ const ProgramView = () => {
                         id="programListView"
                         className={'grid gap-6'}
                         style={{
-                            height: '55vh',
+                            height: '62vh',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
@@ -123,7 +122,7 @@ const ProgramView = () => {
                         tableHeader={ProgramHeader}
                         staticHeader={"Programs"}
                         staticColunm={'programs'}
-                        tableHeight={47}
+                        tableHeight={52}
                         handleRowClick={handleRowClick}
                         sx='cursor-pointer'
                         showKirkBabel={true}
