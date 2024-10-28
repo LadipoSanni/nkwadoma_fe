@@ -12,12 +12,13 @@ interface Props {
     style?: React.CSSProperties;
     closeOnOverlayClick?: boolean;
     headerTitle?: string;
-    icon?: ElementType
+    icon?: ElementType;
+    description?: string;
 }
 
 
 
-export default function TableModal({isOpen, children, closeModal, closeOnOverlayClick,className,style, headerTitle,icon:Icon}: Props) {
+export default function TableModal({isOpen, children, closeModal, closeOnOverlayClick,className,style, headerTitle,icon:Icon,description}: Props) {
   return (
     <Dialog.Root
     open={isOpen}
@@ -48,6 +49,11 @@ export default function TableModal({isOpen, children, closeModal, closeOnOverlay
             </button>
           </Dialog.Close>
         </div>
+        <Dialog.Description>
+      <p className="">
+       {description}
+      </p>
+    </Dialog.Description>
          <div className="mt-2">
          {children}
          </div>
