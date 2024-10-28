@@ -107,8 +107,8 @@ const ProgramView = () => {
                     <SearchInput id={'ProgramSearchInput'}/>
                     <CreateProgramButton buttonText={"Create Program"} title={"Create Program"}
                                          programDeliveryTypes={["Full-time", "Part-time"]}
-                                         programModes={["Online", "Physical"]} useSecondaryButton={true}
-                                         programDurations={["3years", "4years"]} submitButtonText={"Create Program"}/>
+                                         programModes={["Online", "Physical"]}
+                                         programDurations={["3years", "4years"]} submitButtonText={"Create Program"} triggerButtonStyle={``}/>
                 </div>
             </section>
             <div id="programContent" className={'grid gap-4 relative bottom-3 overflow-hidden'}>
