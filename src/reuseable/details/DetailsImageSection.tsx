@@ -5,42 +5,42 @@ import {Card} from "@/components/ui/card";
 import Image from 'next/image';
 import {Button} from "@/components/ui/button";
 import {BiArrowBack} from "react-icons/bi";
-import {IoEllipsisHorizontal} from "react-icons/io5";
 import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
-import {TagButton} from "../../../test/reuseable/tagButton/TagButton";
+import {TagButton} from "@/reuseable/tagButton/TagButton";
+import Kebab from "@/reuseable/Kebab/Kebab";
+import {IoEllipsisHorizontalSharp} from "react-icons/io5";
+import CreateCohort from "@/reuseable/modals/CreateCohort";
 
 interface detailsProps {
     imageSrc?: string;
     cohortTitle: string;
     cohortDescription: string;
-    tagCount: number;
-    tagText: string;
     icon?: ElementType;
-    tagButtonIcon: ElementType;
-    tagButtonStyle: string;
     goBackText: string;
     handleBackClick: () => void;
+    dropdownOption: { name: string, id: string }[];
+    handleDeleteClick: () => void;
+    useProgramButton: boolean;
+    tagButtonData: { tagIcon: ElementType, tagCount: number, tagButtonStyle: string, tagText: string }[];
 }
 
 const DetailsImageSection: React.FC<detailsProps> = ({
-                                             imageSrc,
-                                             cohortTitle,
-                                             cohortDescription,
-                                             tagButtonIcon: tagIcon,
-                                             tagCount,
-                                             tagText,
-                                             tagButtonStyle,
-                                             icon: Icon,
-                                             goBackText: GoBackText,
-                                             handleBackClick: HandleBackClick,
-                                         }) => {
-
-
-
+                                                         imageSrc,
+                                                         cohortTitle,
+                                                         cohortDescription,
+                                                         icon: Icon,
+                                                         goBackText: GoBackText,
+                                                         handleBackClick: HandleBackClick,
+                                                         dropdownOption,
+                                                         handleDeleteClick,
+                                                         useProgramButton,
+                                                         tagButtonData
+                                                     }) => {
 
     return (
         <main id="details-main" data-testid="details-main">
-            <div className={`flex cursor-pointer items-center space-x-2 text-meedlBlue`} onClick={HandleBackClick}>
+            <div className={`flex cursor-pointer items-center space-x-2 text-meedlBlue`} id={`backClick`}
+                 data-testid={`backClick`} onClick={HandleBackClick}>
                 <BiArrowBack/>
                 <h1>{GoBackText}</h1>
             </div>
@@ -78,26 +78,27 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         </p>
 
                         <div id="cohort-stats" data-testid="cohort-stats" className={`flex flex-row space-x-3`}>
-                            <div id="trainees-count" data-testid="trainees-count">
-                                <TagButton tagIcon={tagIcon} tagText={tagText} tagButtonStyle={tagButtonStyle}
-                                           tagCount={tagCount}/>
-                            </div>
-
-                            <div id="dropouts-count" data-testid="dropouts-count">
-                                <TagButton tagText={tagText} tagButtonStyle={tagButtonStyle} tagCount={tagCount}
-                                           tagIcon={tagIcon}/>
-                            </div>
+                            {tagButtonData.map((tagProps, index) => (
+                                <TagButton key={index} {...tagProps} />
+                            ))}
                         </div>
 
                         <div className={`flex flex-row space-x-3 pt-5`}>
-                            <CreateProgramButton buttonText={"Edit Cohort"} title={"Edit Cohort"}
-                                                 programDeliveryTypes={["Full-time", "Part-time"]}
-                                                 programModes={["Online", "Physical"]}
-                                                 programDurations={["3years", "4years"]}
-                                                 submitButtonText={"Save Cohort"} triggerButtonStyle={`w-full`}/>
-                            <Button size={"lg"} variant={"outline"}
-                                    className={`w-8 h-9 flex justify-center items-center rounded-full`}>
-                                <IoEllipsisHorizontal className={`text-meedlBlack`}/>
+                            {useProgramButton ? (
+                                <CreateProgramButton buttonText={"Edit Cohort"} title={"Edit Cohort"}
+                                                     programDeliveryTypes={["Full-time", "Part-time"]}
+                                                     programModes={["Online", "Physical"]}
+                                                     programDurations={["3years", "4years"]}
+                                                     submitButtonText={"Save Cohort"} triggerButtonStyle={`w-full`}
+                                />
+                            ) : (
+                                <CreateCohort triggerButtonStyle={`w-full`}/>
+                            )
+                            }
+                            <Button variant={"outline"}
+                                    className={`w-12 h-12 flex justify-center items-center rounded-full`}>
+                                <Kebab kebabOptions={dropdownOption} handleDropDownClick={handleDeleteClick}
+                                       icon={IoEllipsisHorizontalSharp}/>
                             </Button>
                         </div>
                     </div>
