@@ -3,6 +3,12 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import CreateCohort from '@/reuseable/modals/CreateCohort';
 
 describe('CreateCohort Component', () => {
+    beforeEach(() => {
+      jest.spyOn(console, 'error').mockReturnValue()
+        jest.spyOn(console, 'warn').mockReturnValue()
+        jest.spyOn(console, 'log').mockReturnValue()
+
+    })
     test('renders CreateCohort component', () => {
         render(<CreateCohort />);
         expect(screen.getByText('Create Cohort')).toBeInTheDocument();
