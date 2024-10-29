@@ -44,8 +44,7 @@ const Step3 = () => {
         <div
             id={'Step3Container'}
             data-testid={'Step3Container'}
-            className={` w-[92vw] h-fit md:w-[52%] md:h-fit px-3 md:mr-20 py-4 bg-white md:bg-white rounded-md md:rounded-md border border-slate-200 md:border md:border-slate-200 `}
-            // className={` py-4 border border-slate-200 px-3 w-[92vw] mr-auto ml-auto rounded-md h-fit bg-white grid md:px-2 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[56%] md:h-fit md:rounded`}
+            className={` w-[92vw] h-fit mb-60 md:w-[52%] md:h-fit px-3 md:mr-20 py-4 bg-white md:bg-white rounded-md md:rounded-md border border-slate-200 md:border md:border-slate-200 `}
         >
             <div
                 id={"resetPassword3StepInnerContainer"}

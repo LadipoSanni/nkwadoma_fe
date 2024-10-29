@@ -1,6 +1,6 @@
 import "@testing-library/react"
 import {render, screen} from "@testing-library/react";
-import Step1 from "@/features/auth/usersAuth/reset-password/step1/index";
+import Step1 from "@/features/auth/usersAuth/reset-password/enter-email-component/index";
 import Index from "@/layout/authLayout";
 
 

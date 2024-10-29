@@ -15,7 +15,7 @@ const AuthEmail = ({header, email}: props) => {
 
     return (
         <div id={'authEmailModal'} data-testid={'authEmailModal'}
-             className={`w-[100%] h-[100%] px-3 md:mt-7 md:pr-10  py-3 rounded-md bg-white grid grid-rows-3 place-self-center  border border-slate-200`}
+             className={`w-[100vw] mr-3 h-[100%] px-3 md:mt-7 md:pr-10  py-3 rounded-md bg-white grid grid-rows-3 place-self-center  border border-slate-200`}
         >
             <div id={'successIconContainer'} className={``} data-testid={'successIconContainer'}>
                 <Image

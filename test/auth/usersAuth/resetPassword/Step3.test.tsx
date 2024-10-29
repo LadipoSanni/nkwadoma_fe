@@ -1,6 +1,6 @@
 import "@testing-library/react"
 import {render, screen} from "@testing-library/react";
-import Index from "@/features/auth/usersAuth/reset-password/step3";
+import Index from "../../../../src/features/auth/usersAuth/reset-password/change-password";
 
 jest.mock("next/navigation", () => ({
     useRouter() {

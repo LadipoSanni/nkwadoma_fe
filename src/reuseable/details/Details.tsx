@@ -75,7 +75,7 @@ const Details: React.FC<detailsProps> = ({
 
             <div className={`flex flex-row justify-between py-4 `}>
                 <div id="cohort-image-section" data-testid="cohort-image-section"
-                     className={`flex flex-col md:block sm:hidden space-y-4 max-w-md`}>
+                     className={`flex flex-col md:block sm:hidden space-y-4 max-w-sm`}>
                     <div id="cohort-image-card" data-testid="cohort-image-card">
                         <Card className="rounded-lg">
                             {imageSrc ? (
