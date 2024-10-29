@@ -88,7 +88,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                         {buttonText}
                     </Button>
             </DialogTrigger>
-            <DialogContent  className="max-w-[425px] md:max-w-lg">
+            <DialogContent data-testid="dialog-content" className="max-w-[425px] md:max-w-lg">
                 <DialogHeader id="dialogHeader" data-testid="dialog-header" className={`flex flex-row justify-between`}>
                     <DialogTitle
                         data-testid="dialog-title"
