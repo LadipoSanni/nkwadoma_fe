@@ -1,24 +1,20 @@
 import React from 'react';
-// import Step1 from "@/features/auth/usersAuth/reset-password/step1/index"
-// import Step2 from "@/features/auth/usersAuth/reset-password/step2/index"
+import Step1 from "@/features/auth/usersAuth/reset-password/enter-email-component/index"
+import Step2 from "@/features/auth/usersAuth/reset-password/email-sent-modal/index"
+import {getItemFromLocalStorage} from "@/utils/localStorage";
 
 
 const ResetPassword = () => {
+    const isEmailEntered = getItemFromLocalStorage("userEmailInputOnResetPassword")
 
-    // const components  = [
-    //     {
-    //         name: 'emailCollection',
-    //         component: <Step1/>
-    //     },
-    //     {
-    //         name: 'emailModal',
-    //         component: <Step2/>
-    //     }
-    // ]
 
     return (
-        <div className={``}>
-
+        <div className={`md:w-full md:h-full w-full h-full grid content-start md:flex place-content-end`} >
+            {isEmailEntered?.length ?
+                <Step1/>
+                :
+                <Step2/>
+            }
         </div>
     );
 };

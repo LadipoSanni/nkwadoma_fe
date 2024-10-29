@@ -10,7 +10,10 @@ import FormButtons from "@/reuseable/buttons/FormButtons";
 import {FeeBreakdownHeader, InitialItem, ItemList, AddItemSection} from "@/reuseable/feeBreakdown";
 import {CohortNameInput, FileUpload} from "@/reuseable/Input";
 
-const CreateCohort = () => {
+interface createCohortProps {
+    triggerButtonStyle: string
+}
+const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
     const [date, setDate] = useState<Date>();
     const [cohortName, setCohortName] = useState('');
     const [description, setDescription] = useState('');
@@ -74,7 +77,8 @@ const CreateCohort = () => {
             <DialogTrigger asChild>
                 <Button
                     id="createCohortButton"
-                    className='shadow-none bg-meedlBlue h-[2.8125rem] md:w-[8.375rem] w-full hover:bg-meedlBlue cursor-pointer'>
+                    size={'lg'}
+                    className={`${triggerButtonStyle} h-12 shadow-none bg-meedlBlue hover:bg-meedlBlue cursor-pointer text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}>
                     Create Cohort
                 </Button>
             </DialogTrigger>

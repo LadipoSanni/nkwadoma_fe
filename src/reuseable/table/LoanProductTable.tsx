@@ -25,48 +25,52 @@ interface TableRowData {
 interface DropdownOption {
     name: string;
     id: string;
-}
+  }
+  
+  
+  
+  interface Props<T extends TableRowData> {
+     tableData: T[];
+      tableHeader: ColumnProps<T>[];
+      handleRowClick: (row: T) => void;
+      handleDropDownClick?: (id: string,row: TableRowData) => void;
+      tableHeight?: number;
+      sx?: string
+      tableStyle?: string
+      staticColunm?: string,
+      staticHeader?: string,
+      showKirkBabel?: boolean ,
+      kirkBabDropdownOption?: DropdownOption[],
+      sideBarTabName?: string,
+      emptyStateStyle?: string,
+      icon?:ElementType,
+      optionalFilterName?: string,
+      optionalRowsPerPage?: number; 
+      tableCellStyle?: string
+  }
+  
 
+function Tables<T extends TableRowData> ({
+                           tableHeader, 
+                           tableData, 
+                           handleRowClick, 
+                           tableHeight,
+                           sx,
+                           tableStyle,
+                           staticColunm,
+                           staticHeader, 
+                           showKirkBabel,
+                           kirkBabDropdownOption,
+                           handleDropDownClick,
+                           sideBarTabName,
+                           emptyStateStyle,
+                           icon,
+                           optionalFilterName,
+                          optionalRowsPerPage = 7,
+                          tableCellStyle
 
-interface Props<T extends TableRowData> {
-    tableData: T[];
-    tableHeader: ColumnProps<T>[];
-    handleRowClick: (row: T) => void;
-    handleDropDownClick?: (id: string, row: TableRowData) => void;
-    tableHeight?: number;
-    sx?: string
-    tableStyle?: string
-    staticColunm?: string,
-    staticHeader?: string,
-    showKirkBabel?: boolean,
-    kirkBabDropdownOption?: DropdownOption[],
-    sideBarTabName?: string,
-    emptyStateStyle?: string,
-    icon?: ElementType,
-    optionalFilterName?: string,
-    optionalRowsPerPage?: number;
-}
-
-
-function Tables<T extends TableRowData>({
-                                            tableHeader,
-                                            tableData,
-                                            handleRowClick,
-                                            tableHeight,
-                                            sx,
-                                            tableStyle,
-                                            staticColunm,
-                                            staticHeader,
-                                            showKirkBabel,
-                                            kirkBabDropdownOption,
-                                            handleDropDownClick,
-                                            sideBarTabName,
-                                            emptyStateStyle,
-                                            icon,
-                                            optionalFilterName,
-                                            optionalRowsPerPage = 7,
-
-                                        }: Props<T>) {
+                           
+}: Props<T>) {
     const [page, setPage] = useState(1);
     const rowsPerPage = optionalRowsPerPage;
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
@@ -154,11 +158,11 @@ function Tables<T extends TableRowData>({
 
                                                         <TableCell
                                                             onClick={() => handleRowClick(row)}
-                                                            key={`${column.id}${rowIndex}`}
+                                                            key={`${column.id}${rowIndex} `}
                                                             id={`dynamicTableCell${column.id}${rowIndex}`}
                                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                                                             className={`h-1 ${
-                                                                isLastPage ? 'border-b border-solid ' : ''}`}
+                                                                isLastPage ? 'border-b border-solid ' : ''} ${tableCellStyle}`}
                                                         >
                                                             <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
                                                                  className={`${Styles.tableBodyItem} ${tableStyle} `}>
