@@ -7,6 +7,7 @@ import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import {DropdownMenuSeparator} from "@/components/ui/dropdown-menu";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {CohortTraineeData} from "@/utils/cohort/cohortDetails/Index";
+import {MdOutlinePerson} from "react-icons/md";
 
 interface detailContainerProps {
     dataList: { label: string; value: string; }[];
@@ -120,9 +121,13 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
                                 tableHeader={ProgramHeader}
                                 staticHeader={'Trainee'}
                                 staticColunm={'trainee'}
-                                tableHeight={53}
+                                tableHeight={51}
+                                icon={MdOutlinePerson}
+                                sideBarTabName={"Trainee"}
                                 handleRowClick={() => {
                                 }}
+                                optionalRowsPerPage={10}
+                                tableCellStyle={'h-12'}
                             />
                         </TabsContent>
                     </Tabs>
