@@ -55,7 +55,7 @@ const CohortTabs = () => {
      }
 
   const handleRowClick = (row: TableRowData) => {
-    router.push('/cohort-details')
+    router.push('/cohort/cohort-details')
     console.log('The row: ',row)
 
   }
