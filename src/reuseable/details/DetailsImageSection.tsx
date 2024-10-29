@@ -5,7 +5,7 @@ import {Card} from "@/components/ui/card";
 import Image from 'next/image';
 import {Button} from "@/components/ui/button";
 import {BiArrowBack} from "react-icons/bi";
-import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
+import CreateProgramButton from "@/features/admin/program/create-program-button/Index";
 import {TagButton} from "@/reuseable/tagButton/TagButton";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import {IoEllipsisHorizontalSharp} from "react-icons/io5";
@@ -77,7 +77,12 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             {cohortDescription}
                         </p>
 
-                        <div id="cohort-stats" data-testid="cohort-stats" className={`flex flex-row space-x-3`}>
+
+                        <div
+                            id={`details`}
+                            data-testid="details"
+                            className="grid grid-cols-3 gap-3 w-fit mt-3"
+                        >
                             {tagButtonData.map((tagProps, index) => (
                                 <TagButton key={index} {...tagProps} />
                             ))}
