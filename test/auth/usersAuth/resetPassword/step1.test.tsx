@@ -1,5 +1,5 @@
 import "@testing-library/react"
-import Step1 from "@/features/auth/usersAuth/reset-password/step1";
+import Step1 from "../../../../src/features/auth/usersAuth/reset-password/enter-email-component";
 import {fireEvent, queryByAttribute, render, screen} from "@testing-library/react";
 
 
