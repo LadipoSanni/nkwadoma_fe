@@ -35,15 +35,15 @@ const CohortTabs = () => {
 
   const dropDownOption = [
     {
-      name: "View Program",
+      name: "View Cohort",
       id: "1"
     },
     {
-      name: "Edit Program",
+      name: "Edit Cohort",
       id: "2"
     },
     {
-      name: "Delete Program",
+      name: "Delete Cohort",
       id: "3"
     }
   ]
