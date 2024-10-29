@@ -1,24 +1,20 @@
 "use client"
-import React, {useState} from 'react';
-import { MdOutlinePeopleAlt } from "react-icons/md";
-import {MdOutlineCalendarMonth} from "react-icons/md";
+import React, {ElementType, useState} from 'react';
 import {Card, CardHeader, CardTitle, CardDescription, CardContent} from '@/components/ui/card';
-import {PersonIcon} from "@radix-ui/react-icons";
 import {inter} from "@/app/fonts";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import { FiMoreVertical } from 'react-icons/fi';
+import {TagButton} from "@/reuseable/tagButton/TagButton";
 
 interface ProgramList {
     id: string;
     title: string;
     description: string;
-    trainees: number;
-    months: number;
-    cohorts: number;
+    tagButtonData: { tagIcon: ElementType, tagCount: number, tagButtonStyle: string, tagText: string }[];
     dropdownOption: { name: string, id: string }[];
 }
 
-const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, trainees, months, cohorts, dropdownOption}) => {
+const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButtonData, dropdownOption}) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleDescription = () => {
@@ -37,7 +33,8 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, trainee
             </CardHeader>
 
             <CardContent id={`contentId-${id}`} data-testid={`contentId`}>
-                <CardDescription id={`description-${id}`} data-testid="description" className={`${inter.className}  text-sm text-grey450`}>
+                <CardDescription id={`description-${id}`} data-testid="description"
+                                 className={`${inter.className}  text-sm text-grey450`}>
                     {shortDescription}
                     {description.length > 90 && (
                         <span
@@ -46,44 +43,21 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, trainee
                             onClick={toggleDescription}
                             className="${inter.className} text-grey450 cursor-pointer ml-2"
                         >
-
               {isExpanded ? "...." : "...."}
             </span>
                     )}
                 </CardDescription>
 
-                <div id={`details-${id}`} data-testid="details" className="inline-flex flex-col justify-start mt-4 w-full space-y-3">
-                    <div id={`traineesAndMonths-${id}`} data-testid="traineesAndMonths" className="flex flex-row space-x-2">
-                            <div>
-                                <span
-                                    id={`trainees-${id}`}
-                                    data-testid="trainees"
-                                    className={`${inter.className}  py-1 px-2 text-sm font-medium text-meedlBlue w-30 bg-gray rounded-full border border-slate-200 flex items-center space-x-2`}>
-                                    <PersonIcon className="w-4 h-4 text-black"/>
-                                    <span className={`${inter.className} text-meedlBlue`}>{trainees} trainees</span>
-                                </span>
-                            </div>
-
-                        <div>
-                            <span
-                                id={`months-${id}`}
-                                data-testid="months"
-                                className="py-1 px-2 text-sm font-medium w-28 text-meedlBlue bg-gray rounded-full border border-slate-200 flex items-center space-x-2">
-                                  <MdOutlineCalendarMonth className="w-4 h-4 text-black"/>
-                                  <span className={`${inter.className} text-meedlBlue`}>{months} months</span>
-                            </span>
-                        </div>
-                    </div>
-                    <div>
-                        <span
-                            id={`cohorts-${id}`}
-                            data-testid="cohorts"
-                            className="py-1 px-2 text-sm w-28 font-medium text-meedlBlue bg-gray rounded-full border border-slate-200 flex items-center space-x-2">
-                          <MdOutlinePeopleAlt className="w-4 h-4 text-black"/>
-                          <span className={`${inter.className} text-meedlBlue`}>{cohorts} cohorts</span>
-                        </span>
-                    </div>
+                <div
+                    id={`details-${id}`}
+                    data-testid="details"
+                    className="grid grid-cols-2 gap-3 w-fit mt-4"
+                >
+                    {tagButtonData.map((tagProps, index) => (
+                        <TagButton key={index} {...tagProps} />
+                    ))}
                 </div>
+
             </CardContent>
         </Card>
     );
