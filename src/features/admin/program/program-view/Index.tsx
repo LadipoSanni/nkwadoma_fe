@@ -6,9 +6,11 @@ import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
-import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
+import CreateProgramButton from "@/features/admin/program/create-program-button/Index";
 import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
+import {MdOutlineCalendarMonth, MdOutlinePeopleAlt} from "react-icons/md";
+import {PersonIcon} from "@radix-ui/react-icons";
 
 const ProgramView = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -100,6 +102,12 @@ const ProgramView = () => {
         {name: 'Delete Program', id: '3'}
     ];
 
+    const tagButtonData = [
+        {tagIcon: PersonIcon, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees"},
+        {tagIcon: MdOutlineCalendarMonth, tagCount: 50, tagButtonStyle: "bg-lightBlue100", tagText: "cohorts"},
+        {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-lightBlue100", tagText: "cohorts"},
+    ];
+
     return (
         <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 pl-5 pr-2 pt-7 bg-meedlWhite overflow-hidden`}>
             <section id="programSection" className={'grid gap-7 '}>
@@ -125,12 +133,9 @@ const ProgramView = () => {
                         {dummyData.map((program, index) => (
                             <AllProgramsCard
                                 key={index}
-                                cohorts={program.cohorts}
                                 description={program.description}
-                                months={program.months}
                                 title={program.title}
-                                trainees={program.trainees}
-                                id={'program'} dropdownOption={program1Options}/>
+                                id={'program'} dropdownOption={program1Options} tagButtonData={tagButtonData}/>
                         ))}
                     </div>
                 ) : (
