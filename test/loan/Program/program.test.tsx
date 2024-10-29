@@ -1,7 +1,7 @@
 import {render, screen, fireEvent, cleanup} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import React from "react";
-import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
+import CreateProgramButton from "@/features/admin/program/create-program-button/Index";
 
 
 describe('CreateProgramButton Component', () => {
