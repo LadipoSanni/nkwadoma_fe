@@ -14,11 +14,11 @@ interface DatePickerProps {
 
 const DatePicker: React.FC<DatePickerProps> = ({ date, setDate }) => (
     <div id="dateContainer" className={'grid gap-2 w-full'}>
-        <Label htmlFor="date" className="block text-sm font-medium text-labelBlue">Select date</Label>
+        <Label htmlFor="date" className="block text-sm font-medium text-labelBlue">Start date</Label>
         <Popover>
             <PopoverTrigger asChild>
-                <Button id="dateButton" variant={"outline"} className={cn("flex justify-between p-4 border border-solid border-neutral650 font-normal w-full h-[3.375rem]", !date && "text-muted-foreground")}>
-                    {date ? format(date, "MM/dd/yyyy") : <span>Pick a date</span>}
+                <Button id="dateButton" variant={"outline"} className={cn("flex justify-between text-black500 p-4 border border-solid border-neutral650 font-normal w-full h-[3.375rem]", !date && "text-muted-foreground")}>
+                    {date ? format(date, "MM/dd/yyyy") : <span className={"text-black300"}>Select date</span>}
                     <MdOutlineDateRange className="text-navbarIconColor h-5 w-5"/>
                 </Button>
             </PopoverTrigger>

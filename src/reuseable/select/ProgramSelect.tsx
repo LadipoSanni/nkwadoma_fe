@@ -14,8 +14,8 @@ const ProgramSelect: React.FC<ProgramSelectProps> = ({ selectedProgram, setSelec
     <div id="programContainer" className={'grid gap-2 w-full'}>
         <Label htmlFor="program" className="block text-[14px] font-medium leading-[22px] text-labelBlue">Program</Label>
         <Select onValueChange={(value) => setSelectedProgram(value)} onOpenChange={(open) => setIsSelectOpen(open)}>
-            <SelectTrigger id="programSelectTrigger" className={'mt-0 mb-0 h-[3.375rem] w-full border border-solid border-neutral650 '}>
-                <SelectValue placeholder="Select Program" className={selectedProgram ? "placeholder:text-[#6A6B6A] text-[#212221]" : "text-[#6A6B6A]"}>{selectedProgram || "Select Program"}</SelectValue>
+            <SelectTrigger id="programSelectTrigger" className={`${selectedProgram ? 'text-black500' : 'text-black300'} mt-0 mb-0 h-[3.375rem] w-full border border-solid border-neutral650 `}>
+                <SelectValue placeholder="Select Program">{selectedProgram || "Select program"}</SelectValue>
                 {isSelectOpen ? <MdKeyboardArrowUp className="h-[22px] w-[22px] text-neutral950"/> : <MdKeyboardArrowDown className="h-[22px] w-[22px] text-neutral950"/>}
             </SelectTrigger>
             <SelectContent id="programSelectContent">

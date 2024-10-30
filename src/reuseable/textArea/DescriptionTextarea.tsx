@@ -14,7 +14,7 @@ const DescriptionTextarea: React.FC<DescriptionTextareaProps> = ({ description, 
             id="description"
             name="description"
             placeholder="Enter description"
-            className={'resize-none placeholder:text-grey150 focus-visible:outline-0 ring-transparent focus-visible:ring-transparent'}
+            className={'resize-none placeholder:text-grey250 focus-visible:outline-0 ring-transparent focus-visible:ring-transparent'}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
         />
