@@ -83,7 +83,7 @@ const CreateProgramButton: React.FC<CreateProgramProps> = ({
                         data-testid="trigger-button"
                         variant="secondary"
                         size="lg"
-                        className={`${triggerButtonStyle} bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
+                        className={`${triggerButtonStyle} ${inter.className} bg-meedlBlue h-12 text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
                     >
                         {buttonText}
                     </Button>
