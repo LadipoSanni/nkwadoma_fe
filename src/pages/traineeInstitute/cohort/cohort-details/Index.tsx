@@ -55,7 +55,7 @@ const CohortDetails = () =>{
     }
     return (
         <main className={`${inter.className}  py-2 px-8`}>
-            <div className={`flex cursor-pointer p-5 space-x-1 text-meedlBlue`} id={`backClick`}
+            <div className={`flex cursor-pointer py-5 px-2 space-x-1 text-meedlBlue`} id={`backClick`}
                  data-testid={`backClick`} onClick={handleBackClick}>
                 <BiArrowBack className={`mt-1`}/>
                 <h1 id={`backClickText`} data-testid={`backClickText`}>Back to cohort</h1>
