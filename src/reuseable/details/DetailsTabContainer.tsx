@@ -52,7 +52,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
                                 {dataList.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
-                                         className="flex md:flex-row flex-col w-full justify-between ">
+                                         className={`${inter.className} flex md:flex-row text-sm font-normal flex-col w-full justify-between`}>
                                         <div className="text-black300">
                                             <p>{item.label}</p>
                                         </div>
