@@ -114,7 +114,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
         validationSchema={validationSchema}
         >
          {
-          ({values, errors, isValid, touched, setFieldValue,resetForm}) => (
+          ({values, errors, isValid, touched, setFieldValue}) => (
             <Form className={`${inter.className}`}>
               <div className='grid grid-cols-1 gap-y-4'>
               <div className=''>
