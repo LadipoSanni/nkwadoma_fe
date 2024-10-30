@@ -183,7 +183,7 @@ const CohortView = () => {
             </div>
              <div className='md:mt-0 mt-4'>
              
-                 <CreateCohort />
+                 <CreateCohort  triggerButtonStyle={`w-full`}/>
              </div>
           </div>
         </div>

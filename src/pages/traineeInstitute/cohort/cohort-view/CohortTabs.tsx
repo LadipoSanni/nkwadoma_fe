@@ -32,7 +32,7 @@ const CohortTabs = () => {
       name:"Graduated",
       value: "graduate"
     },
-    
+
   ]
 
   const dropDownOption = [
@@ -57,15 +57,15 @@ const CohortTabs = () => {
      }
 
   const handleRowClick = (row: TableRowData) => {
-    router.push('/cohortDetail')
+    router.push('/cohort/cohort-details')
     console.log('The row: ',row)
-    
+
   }
 
 
 
   const handleDropdownClick = (id:string,row: TableRowData) => {
-    if(id === "1") router.push('/cohortDetail')
+    if(id === "1") router.push('/cohort/cohort-details')
     else if(id === "2") {
       setCohortId(String(row.id))
       setIsOpen(true)
@@ -77,10 +77,7 @@ const CohortTabs = () => {
     }
   }
   
-  const handleDateChange = (date: Date) => {
-    console.log('Date selected: ', date)
-  }
- 
+  
   const ProgramHeader = [
     { title: 'Cohort', sortable: true, id: 'cohort', selector: (row:TableRowData ) => row.cohort },
     { title: 'End date', sortable: true, id: 'endDate', selector: (row:TableRowData ) => formatDate(row?.endDate)},
@@ -90,7 +87,7 @@ const CohortTabs = () => {
     { title: 'Amount recieved', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-8'>{formatAmount(row.amountRecieved)}</div> },
     { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='ml-8'>{formatAmount(row.amountRequested)}</div> },
     { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountOutstanding)}</div> },
-   
+
   ]
 
   // const IncomingData = cohortsData.filter((data) => data.Cohort === 'Cohort 1')
@@ -112,7 +109,7 @@ const CohortTabs = () => {
               sideBarTabName='Cohort'
               optionalFilterName='incoming'
               handleDropDownClick={handleDropdownClick}
-              
+
              />
              </div>
     },
@@ -175,9 +172,9 @@ const CohortTabs = () => {
             <TabsContent key={index} value={tab.value}  className='mt-5'>
                 {tab.table}
             </TabsContent>
-          ))  
+          ))
         }
-       
+
       </Tabs>
       <div>
         <TableModal
