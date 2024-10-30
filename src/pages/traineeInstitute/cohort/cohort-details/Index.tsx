@@ -7,6 +7,7 @@ import CohortDetailsImage from "../../../../../public/asset/Image/CohortDetailsI
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import { MdOutlinePerson } from "react-icons/md";
+import {BiArrowBack} from "react-icons/bi";
 
 
 const CohortDetails = () =>{
@@ -53,13 +54,27 @@ const CohortDetails = () =>{
 
     }
     return (
-        <main  className={`${inter.className}  gap-8 md:p-6 p-4 flex md:flex-row md:justify-between flex-col `}>
-            <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
-                    cohortDescription="Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
-                                 goBackText={"Back to Cohort"}
-                                 handleBackClick={handleBackClick}
-             dropdownOption={program1Options} handleDeleteClick={handleDeleteClick} useProgramButton={false} tagButtonData={tagButtonData}/>
-            <DetailsTabContainer dataList={dataList} breakDown={breakDown}/>
+        <main className={`${inter.className}  py-2 px-8`}>
+            <div className={`flex cursor-pointer p-5 space-x-1 text-meedlBlue`} id={`backClick`}
+                 data-testid={`backClick`} onClick={handleBackClick}>
+                <BiArrowBack className={`mt-1`}/>
+                <h1 id={`backClickText`} data-testid={`backClickText`}>Back to cohort</h1>
+            </div>
+
+            <div className={`p-2 flex justify-between`}>
+                <div>
+                    <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
+                         cohortDescription="Design thinking is a process for creative problem solving.
+                         Design thinking has a human-centered core. It encourages organizations to focus on the
+                          people they're creating for, which leads to better products, services, and internal processes."
+                         dropdownOption={program1Options} handleDeleteClick={handleDeleteClick}
+                         useProgramButton={false} tagButtonData={tagButtonData}/>
+                </div>
+
+                <div className={`md:w-6/12 w-full h-[96%]`}>
+                    <DetailsTabContainer dataList={dataList} breakDown={breakDown}/>
+                </div>
+            </div>
         </main>
     );
 }

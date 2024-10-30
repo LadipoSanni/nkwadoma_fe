@@ -4,7 +4,6 @@ import {cabinetGrotesk, inter} from "@/app/fonts";
 import {Card} from "@/components/ui/card";
 import Image from 'next/image';
 import {Button} from "@/components/ui/button";
-import {BiArrowBack} from "react-icons/bi";
 import CreateProgramButton from "@/features/admin/program/create-program-button/Index";
 import {TagButton} from "@/reuseable/tagButton/TagButton";
 import Kebab from "@/reuseable/Kebab/Kebab";
@@ -16,8 +15,6 @@ interface detailsProps {
     cohortTitle: string;
     cohortDescription: string;
     icon?: ElementType;
-    goBackText: string;
-    handleBackClick: () => void;
     dropdownOption: { name: string, id: string }[];
     handleDeleteClick: () => void;
     useProgramButton: boolean;
@@ -29,8 +26,6 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                                          cohortTitle,
                                                          cohortDescription,
                                                          icon: Icon,
-                                                         goBackText: GoBackText,
-                                                         handleBackClick: HandleBackClick,
                                                          dropdownOption,
                                                          handleDeleteClick,
                                                          useProgramButton,
@@ -39,14 +34,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
 
     return (
         <main id="details-main" data-testid="details-main">
-            <div className={`flex cursor-pointer items-center space-x-2 text-meedlBlue`} id={`backClick`}
-                 data-testid={`backClick`} onClick={HandleBackClick}>
-                <BiArrowBack/>
-                <h1>{GoBackText}</h1>
-            </div>
-
-            <div className={`flex flex-row justify-between py-4 `}>
-                <div id="cohort-image-section" data-testid="cohort-image-section"
+             <div id="cohort-image-section" data-testid="cohort-image-section"
                      className={`flex md:flex-col flex-row md:block space-y-5 max-w-sm`}>
                     <div id="cohort-image-card" data-testid="cohort-image-card">
                         <Card className="rounded-lg">
@@ -88,7 +76,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             ))}
                         </div>
 
-                        <div className={`flex flex-row space-x-3 pt-5`}>
+                        <div className={`flex flex-row space-x-3 pt-7`}>
                             {useProgramButton ? (
                                 <CreateProgramButton buttonText={"Edit Cohort"} title={"Edit Cohort"}
                                                      programDeliveryTypes={["Full-time", "Part-time"]}
@@ -107,8 +95,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             </Button>
                         </div>
                     </div>
-                </div>
-            </div>
+             </div>
         </main>
     );
 };

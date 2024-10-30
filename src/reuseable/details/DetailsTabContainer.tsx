@@ -30,7 +30,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
 
     return(
         <div id="cohort-details" data-testid="cohort-details"
-             className={`${inter.className} md:w-6/12 w-xs md:border md:border-slate-200 h-[96%] w-full md:rounded-md`}>
+             className={`${inter.className} md:border md:border-slate-200 md:rounded-md`}>
             <div id="tabs-section" data-testid="tabs-section" className={`md:p-4 p-2 `}>
                 <div className={`w-full`}>
                     <Tabs
@@ -46,7 +46,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
                         </TabsList>
 
                         <TabsContent value={"cohortDetails"} id="cohort-details-content"
-                                     data-testid="cohort-details-content">
+                                     data-testid="cohort-details-content" className={`py-3`}>
                             <div
                                 className="bg-grey105 p-4 space-y-8 md:h-[450px] w-full h-96 overflow-y-auto rounded-sm">
                                 {dataList.map((item, index) => (
@@ -115,7 +115,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
                             </div>
                         </TabsContent>
 
-                        <TabsContent value={"trainee"} id="trainee-content" data-testid="trainee-content">
+                        <TabsContent value={"trainee"} id="trainee-content" data-testid="trainee-content" className={`py-3`}>
                             <Tables
                                 tableData={CohortTraineeData}
                                 tableHeader={ProgramHeader}
