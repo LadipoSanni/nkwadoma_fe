@@ -69,7 +69,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
                                     id="tuition-breakdown-collapsible"
                                     data-testid="tuition-breakdown-collapsible"
                                 >
-                                    <CollapsibleTrigger asChild className={`border-b`}
+                                    <CollapsibleTrigger asChild className={`border-b w-fit md:w-full`}
                                                         id="tuition-breakdown-trigger"
                                                         data-testid="tuition-breakdown-trigger">
                                         <Button variant="ghost" size="lg"

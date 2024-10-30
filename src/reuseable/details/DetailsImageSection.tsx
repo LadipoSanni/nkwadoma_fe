@@ -33,9 +33,9 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                                      }) => {
 
     return (
-        <main id="details-main" data-testid="details-main">
+        <main id="details-main" data-testid="details-main" className={``}>
              <div id="cohort-image-section" data-testid="cohort-image-section"
-                     className={`flex md:flex-col flex-row md:block space-y-5 max-w-sm`}>
+                     className={`flex md:flex-col flex-col md:block space-y-5 md:max-w-sm ma-w-xs`}>
                     <div id="cohort-image-card" data-testid="cohort-image-card">
                         <Card className="rounded-lg">
                             {imageSrc ? (
@@ -69,14 +69,14 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         <div
                             id={`details`}
                             data-testid="details"
-                            className="grid grid-cols-3 gap-3 w-fit mt-3"
+                            className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit mt-3"
                         >
                             {tagButtonData.map((tagProps, index) => (
                                 <TagButton key={index} {...tagProps} />
                             ))}
                         </div>
 
-                        <div className={`flex flex-row space-x-3 pt-7`}>
+                        <div className={`flex flex-row md:space-x-3 space-x-2 pt-5 w-full`}>
                             {useProgramButton ? (
                                 <CreateProgramButton buttonText={"Edit Cohort"} title={"Edit Cohort"}
                                                      programDeliveryTypes={["Full-time", "Part-time"]}

@@ -53,25 +53,28 @@ const CohortDetails = () =>{
     const handleDeleteClick =() =>{
 
     }
-    return (
-        <main className={`${inter.className}  py-2 px-8`}>
+
+    const description= "Design thinking is a process for creative problem solving." +
+        "Design thinking has a human-centered core. It encourages organizations to focus on " +
+        "thepeople they're creating for, which leads to better products, services, and internal processes."
+
+        return (
+        <main className={`${inter.className}  py-2 md:px-8 px-2 w-fit md:w-full`}>
             <div className={`flex cursor-pointer py-5 px-2 space-x-1 text-meedlBlue`} id={`backClick`}
                  data-testid={`backClick`} onClick={handleBackClick}>
                 <BiArrowBack className={`mt-1`}/>
                 <h1 id={`backClickText`} data-testid={`backClickText`}>Back to cohort</h1>
             </div>
 
-            <div className={`p-2 flex justify-between`}>
+            <div className={`p-2 flex md:flex-row flex-col md:justify-between`}>
                 <div>
                     <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
-                         cohortDescription="Design thinking is a process for creative problem solving.
-                         Design thinking has a human-centered core. It encourages organizations to focus on the
-                          people they're creating for, which leads to better products, services, and internal processes."
+                         cohortDescription={description}
                          dropdownOption={program1Options} handleDeleteClick={handleDeleteClick}
                          useProgramButton={false} tagButtonData={tagButtonData}/>
                 </div>
 
-                <div className={`md:w-6/12 w-full h-[96%]`}>
+                <div className={`md:w-6/12 pt-5 md:pt-0 h-[96%]`}>
                     <DetailsTabContainer dataList={dataList} breakDown={breakDown}/>
                 </div>
             </div>
