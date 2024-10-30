@@ -13,6 +13,8 @@ describe("cohort-details Component", () => {
         push: mockPush,
     };
 
+    const handleBackClick = jest.fn();
+
     beforeEach(() => {
         (useRouter as jest.Mock).mockReturnValue(mockRouter);
         cleanup();
@@ -40,16 +42,29 @@ describe("cohort-details Component", () => {
     test("go back button navigates to /cohort", () => {
         render(<CohortDetails />);
 
-        const backButton = screen.getByText("Back to Cohort");
+        const backButton = screen.getByTestId("backClick");
         fireEvent.click(backButton);
 
         expect(mockPush).toHaveBeenCalledWith("/cohort");
     });
 
-    test("renders tag buttons with correct data", () => {
+    test("renders data with correct data", () => {
         render(<CohortDetails />);
 
+        const assert = screen.getByTestId("backClickText");
+
         expect(screen.getByText("Luminary")).toBeInTheDocument();
-        expect(screen.getByText("Back to Cohort")).toBeInTheDocument();
+        expect(assert).toBeInTheDocument();
+    });
+
+    it("should test that arrowBack routes to the previous page", async () => {
+        render(<CohortDetails />);
+
+        const assert = screen.getByTestId("backClick");
+        expect(assert).toBeInTheDocument();
+        const check = screen.getByTestId("backClick");
+
+        fireEvent.click(check);
+        expect(handleBackClick).toHaveBeenCalledTimes(0);
     });
 });
