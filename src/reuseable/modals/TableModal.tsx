@@ -30,7 +30,7 @@ export default function TableModal({isOpen, children, closeModal, closeOnOverlay
       onClick={!closeOnOverlayClick ? closeModal : undefined}
       >
       <Dialog.DialogContent
-       className={`${styles.body} ${className || ""} md:block px-5 `}
+       className={`${styles.body} ${className || ""} px-5`}
        style={{ ...style }}
       >
         <div className="mt-3 ">
@@ -54,7 +54,7 @@ export default function TableModal({isOpen, children, closeModal, closeOnOverlay
        {description}
       </p>
     </Dialog.Description>
-         <div className="mt-2">
+         <div className="mt-2 w-full">
          {children}
          </div>
       </Dialog.DialogContent>

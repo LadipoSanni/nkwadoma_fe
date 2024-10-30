@@ -1,7 +1,7 @@
 .tableHeaderItem{
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 16px;
+    font-size: 14px;
+    /* font-weight: 600; */
+    line-height: 14px;
     text-align: left;
     color: #404653;
     display: flex;
@@ -9,9 +9,9 @@
 }
 
 .tableBodyItem{
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 18px;
+    line-height: 10px;
     text-align: left;
     color: #101828;
 
