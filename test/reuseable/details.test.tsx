@@ -3,7 +3,6 @@ import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import React from "react";
 import { CiLaptop } from "react-icons/ci";
 import { MdOutlinePerson } from "react-icons/md";
-import {userEvent} from "@testing-library/user-event";
 
 jest.mock('../../public/asset/Image/CohortDetailsImage.png', () => ({
     default: { src: '/cohort-image.jpg' }
@@ -34,7 +33,6 @@ const tagButtonData = [
     { tagIcon: MdOutlinePerson, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "cohorts" },
 ];
 
-const handleBackClick = jest.fn();
 const handleDeleteClick = jest.fn();
 
 describe("DetailsImageSection Component and that it exist", () => {
@@ -49,8 +47,6 @@ describe("DetailsImageSection Component and that it exist", () => {
                 imageSrc={mockProps.imageSrc}
                 cohortTitle={mockProps.cohortTitle}
                 cohortDescription={mockProps.cohortDescription}
-                goBackText={mockProps.goBackText}
-                handleBackClick={handleBackClick}
                 dropdownOption={program1Options}
                 handleDeleteClick={handleDeleteClick}
                 useProgramButton={false}
@@ -64,17 +60,6 @@ describe("DetailsImageSection Component and that it exist", () => {
     it("renders main container", () => {
         const detailsMain = screen.getByTestId("details-main");
         expect(detailsMain).toBeInTheDocument();
-    });
-
-    it("should test that arrowBack routes to the previous page", async () => {
-        const check = screen.getByTestId("backClick");
-
-        expect(handleBackClick).not.toHaveBeenCalled();
-
-        await userEvent.click(check);
-
-        expect(handleBackClick).toHaveBeenCalled();
-        expect(handleBackClick).toHaveBeenCalledTimes(1);
     });
 
     it("should test that detailsImageSection component renders image correctly", ()=>{
