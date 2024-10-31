@@ -1,6 +1,6 @@
 "use client"
 import React, {ElementType} from "react";
-import {cabinetGrotesk, inter} from "@/app/fonts";
+import {inter} from "@/app/fonts";
 import {Card} from "@/components/ui/card";
 import Image from 'next/image';
 import {Button} from "@/components/ui/button";
@@ -35,7 +35,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                                      }) => {
     const [isOpen, setIsOpen] = React.useState(false);
 
-    const handleModalOpen = () =>{
+    const handleModalOpen = () => {
         setIsOpen(true)
     }
 
@@ -64,7 +64,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
 
                 <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col`}>
                     <h1 id="cohort-title" data-testid="cohort-title"
-                        className={`${cabinetGrotesk.className} text-3xl font-medium text-black`}>
+                        className={`${inter.className} text-3xl font-medium text-black`}>
                         {cohortTitle}
                     </h1>
                     <p id="cohort-description" data-testid="cohort-description"

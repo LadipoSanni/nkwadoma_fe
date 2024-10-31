@@ -60,13 +60,13 @@ const CohortDetails = () =>{
 
         return (
         <main className={`${inter.className}  py-2 md:px-8 px-2 w-fit md:w-full`}>
-            <div className={`flex cursor-pointer py-5 px-2 space-x-1 text-meedlBlue`} id={`backClick`}
+            <div className={`flex cursor-pointer py-2 px-2 space-x-1 text-meedlBlue`} id={`backClick`}
                  data-testid={`backClick`} onClick={handleBackClick}>
                 <BiArrowBack className={`mt-1`}/>
                 <h1 id={`backClickText`} data-testid={`backClickText`}>Back to cohort</h1>
             </div>
 
-            <div className={`p-2 flex md:flex-row flex-col md:justify-between`}>
+            <div className={`p- flex md:flex-row flex-col md:justify-between`}>
                 <div>
                     <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
                          cohortDescription={description}
@@ -74,7 +74,7 @@ const CohortDetails = () =>{
                          useProgramButton={false} tagButtonData={tagButtonData}/>
                 </div>
 
-                <div className={`md:w-6/12 pt-5 md:pt-0 h-[96%]`}>
+                <div className={`md:w-6/12 pt- md:pt-0 h-[96%]`}>
                     <DetailsTabContainer dataList={dataList} breakDown={breakDown}/>
                 </div>
             </div>
