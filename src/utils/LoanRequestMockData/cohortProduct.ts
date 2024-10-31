@@ -8,7 +8,8 @@ export const cohortsData = [
     tuition: 5000,
     amountRecieved: 200000,
     amountRequested: 250000,
-    amountOutstanding: 50000
+    amountOutstanding: 50000,
+    
   },
   {
     id: 2,
