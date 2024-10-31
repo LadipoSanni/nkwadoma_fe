@@ -66,7 +66,7 @@ function Tables<T extends TableRowData> ({
                            emptyStateStyle,
                            icon,
                            optionalFilterName,
-                          optionalRowsPerPage = 7,
+                          optionalRowsPerPage = 8,
                           tableCellStyle
 
                            
@@ -130,7 +130,7 @@ function Tables<T extends TableRowData> ({
                                                     <TableHead key={column.id} id={`dynamicTableHeadCell${column.id}`}
                                                         // className={`${Styles.tableHeaderItem} `}
                                                         // className={`px-[12px] py-[10px] text-[#101828]`}
-                                                               className='bg-[#F0F2F4] h-14 hover:bg-[#F0F2F4]'
+                                                               className='bg-[#F0F2F4] h-10 hover:bg-[#F0F2F4]'
 
                                                     >
                                                         <div id={`dynamicTableHeadCellDiv${column.id}`}
@@ -141,7 +141,7 @@ function Tables<T extends TableRowData> ({
                                                 ))
                                             }
                                             {showKirkBabel ?
-                                                <TableHead className='bg-gray h-14 hover:bg-gray'></TableHead> : ''}
+                                                <TableHead className='bg-gray h-12 hover:bg-gray'></TableHead> : ''}
                                         </TableRow>
 
                                     </TableHeader>
