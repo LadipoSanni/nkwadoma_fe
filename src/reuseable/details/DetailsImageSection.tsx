@@ -114,7 +114,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             className={"w-100%"}
                             icon={Cross2Icon}
                 >
-                    ggggggggg
+                    ADD TRAINEE DIALOG
                 </TableModal>
             </div>
         </main>
