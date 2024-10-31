@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import {inter} from "@/app/fonts";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
@@ -28,7 +29,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
         {title: "Amount Requested", sortable: true, id: "amountRequested"},
     ];
 
-    return(
+    return (
         <div id="cohort-details" data-testid="cohort-details"
              className={`${inter.className} md:border md:border-slate-200 md:rounded-md`}>
             <div id="tabs-section" data-testid="tabs-section" className={`md:p-3 p-2 `}>
