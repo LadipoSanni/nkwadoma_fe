@@ -26,10 +26,18 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen}) => {
     }
     return (
         <div>
-            <Image src={DeleteIcon} alt={"deleteIcon"} className={`w-[5rem] h-[5rem]`}
-                   width={200}
-                   height={200}
+            <Image
+                src={DeleteIcon}
+                alt="deleteIcon"
+                className="w-[200px] h-[200px]"
+                width={200}
+                height={200}
             />
+
+            {/*<Image src={DeleteIcon} alt={"deleteIcon"} className={`w-[5rem] h-[5rem]`}*/}
+            {/*//        width={200}*/}
+            {/*//        height={200}*/}
+            {/*// />*/}
             <div className={`pt-3`}>
                 <h1 className={`${cabinetGrotesk.className} text-2xl font-medium leading-7 text-meedlBlack`}>Delete
                     Cohort <br/></h1>
