@@ -123,7 +123,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                 <Field
               id="editCohortName"
               name="cohortName"
-              className="w-full p-3 border rounded focus:outline-none mt-3"
+              className="w-full p-3 border rounded focus:outline-none mt-2"
               placeholder="Enter cohort name"
             />
               
@@ -144,7 +144,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                  <DatePickerInput
                     selectedDate={parseISO(values.startDate)}
                      onDateChange={(date) => setFieldValue('startDate', format(date, 'yyyy-MM-dd'))}
-                     className='p-6 mt-3'
+                     className='p-6 mt-2'
                      disabledDate={(date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)}
                  />
                    {
@@ -162,7 +162,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                  <DatePickerInput
                     selectedDate={parseISO(values.endDate)}
                      onDateChange={(date) => setFieldValue('endDate', format(date, 'yyyy-MM-dd'))}
-                     className='p-6 mt-3'
+                     className='p-6 mt-2'
                      disabledDate={
                       // (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
                       (date) =>
@@ -187,7 +187,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                  as="textarea"
                 id="editCohortDescription"
                 name="cohortDescription"
-                className="w-full p-3 border rounded focus:outline-none mt-3 resize-none "
+                className="w-full p-3 border rounded focus:outline-none mt-2 resize-none "
                 placeholder="Enter cohort description"
                 rows={4}
                 />
@@ -203,7 +203,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
               </div>
               <div>
                 <Label htmlFor='cohortImage'>Cohort Image (Optional)</Label>
-                <div>
+                <div className='mt-2'>
                   
                       <div className='relative border border-solid h-24 rounded flex items-center justify-between px-4'>
                       {image? ( <div   className='flex items-center'> <img data-testid="image"  src={image} alt="Cohort" className="w-24 h-16 object-cover rounded-md" /> 
@@ -262,7 +262,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                   
                 </div>
               </div>
-              <div className='md:flex gap-4 justify-end'>
+              <div className='md:flex gap-4 justify-end mt-2'>
                 <Button 
                 variant={'outline'} 
                 type='reset'
