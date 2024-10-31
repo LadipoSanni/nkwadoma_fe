@@ -1,4 +1,4 @@
-import EditCohortForm from "@/pages/traineeInstitute/cohort/cohort-view/EditCohortForm";
+import EditCohortForm from "@/components/cohort/EditCohortForm";
 import { render, fireEvent, screen,cleanup, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
