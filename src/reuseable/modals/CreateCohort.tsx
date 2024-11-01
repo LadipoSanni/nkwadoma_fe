@@ -65,7 +65,7 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
                 <Button
                     id="createCohortButton"
                     size={'lg'}
-                    className={`${triggerButtonStyle} h-12 shadow-none bg-meedlBlue hover:bg-meedlBlue cursor-pointer text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}>
+                    className={`${triggerButtonStyle} ${inter.className} h-12 shadow-none bg-meedlBlue hover:bg-meedlBlue cursor-pointer text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}>
                     Create Cohort
                 </Button>
             </DialogTrigger>
