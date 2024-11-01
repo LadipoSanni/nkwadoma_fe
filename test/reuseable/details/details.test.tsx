@@ -4,7 +4,7 @@ import React from "react";
 import { CiLaptop } from "react-icons/ci";
 import { MdOutlinePerson } from "react-icons/md";
 
-jest.mock('../../public/asset/Image/CohortDetailsImage.png', () => ({
+jest.mock('../../../public/asset/Image/CohortDetailsImage.png', () => ({
     default: { src: '/cohort-image.jpg' }
 }));
 
@@ -48,7 +48,7 @@ describe("DetailsImageSection Component and that it exist", () => {
                 cohortTitle={mockProps.cohortTitle}
                 cohortDescription={mockProps.cohortDescription}
                 dropdownOption={program1Options}
-                handleDeleteClick={handleDeleteClick}
+                handleDropdownClicked={handleDeleteClick}
                 useProgramButton={false}
                 tagButtonData={tagButtonData}
             />

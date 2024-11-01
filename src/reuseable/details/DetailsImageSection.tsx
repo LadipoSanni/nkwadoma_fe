@@ -18,7 +18,7 @@ interface detailsProps {
     cohortDescription: string;
     icon?: ElementType;
     dropdownOption: { name: string, id: string }[];
-    handleDeleteClick: () => void;
+    handleDropdownClicked: (id: string) => void;
     useProgramButton: boolean;
     tagButtonData: { tagIcon: ElementType, tagCount: number, tagButtonStyle: string, tagText: string }[];
 }
@@ -29,7 +29,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                                          cohortDescription,
                                                          icon: Icon,
                                                          dropdownOption,
-                                                         handleDeleteClick,
+                                                         handleDropdownClicked,
                                                          useProgramButton,
                                                          tagButtonData
                                                      }) => {
@@ -98,11 +98,11 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                     onClick={handleModalOpen}>Add Trainee</Button>
                         )
                         }
-                        <Button variant={"outline"}
-                                className={`w-12 h-12 flex justify-center items-center rounded-full`}>
-                            <Kebab kebabOptions={dropdownOption} handleDropDownClick={handleDeleteClick}
+                        <div role={"button"}
+                                className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
+                            <Kebab kebabOptions={dropdownOption} handleDropDownClick={handleDropdownClicked}
                                    icon={IoEllipsisHorizontalSharp}/>
-                        </Button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -120,4 +120,5 @@ const DetailsImageSection: React.FC<detailsProps> = ({
         </main>
     );
 };
+
 export default DetailsImageSection;
