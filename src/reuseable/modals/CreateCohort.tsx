@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {cabinetGrotesk, inter} from '@/app/fonts';
 import {Button} from "@/components/ui/button";
 import {Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger,} from "@/components/ui/dialog";
@@ -17,7 +17,6 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
     const [date, setDate] = useState<Date>();
     const [cohortName, setCohortName] = useState('');
     const [description, setDescription] = useState('');
-    const fileInputRef = useRef<HTMLInputElement>(null);
     const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -45,24 +44,12 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
-        // Handle file drop logic here
     };
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
     };
 
-    const handleClick = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
-        }
-    };
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
-            console.log(event.target.files);
-        }
-    };
 
     const handleSelectClick = () => {
         setItems([{name: '', amount: ''}, ...items]);
@@ -101,14 +88,13 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
                     {!isFormSubmitted ? (
                             <>
                                 <CohortNameInput cohortName={cohortName} setCohortName={setCohortName}/>
-                                <div id="programDateContainer" className={'flex gap-5 w-full items-center'}>
+                                <div id="programDateContainer" className={'md:flex grid gap-5 w-full items-center'}>
                                     <ProgramSelect selectedProgram={selectedProgram} setSelectedProgram={setSelectedProgram}
                                                    isSelectOpen={isSelectOpen} setIsSelectOpen={setIsSelectOpen}/>
                                     <DatePicker date={date} setDate={setDate}/>
                                 </div>
                                 <DescriptionTextarea description={description} setDescription={setDescription}/>
-                                <FileUpload handleDrop={handleDrop} handleDragOver={handleDragOver}
-                                            handleClick={handleClick} handleFileChange={handleFileChange}/>
+                                <FileUpload handleDrop={handleDrop} handleDragOver={handleDragOver}/>
                                 <FormButtons isButtonDisabled={isButtonDisabled} setIsFormSubmitted={setIsFormSubmitted}/>
                             </>
                         ) : (
@@ -119,14 +105,14 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
                                 <div id={'Step2stickyContainer'} className={'sticky bottom-0 bg-meedlWhite'}>
                                     <AddItemSection handleSelectClick={handleSelectClick}/>
                                     <section id="Step2formButtonsContainer"
-                                             className={'flex gap-5 mt-3 justify-end items-end bg-meedlWhite'}>
+                                             className={'md:flex grid gap-5 mt-3 md:justify-end md:items-end bg-meedlWhite'}>
                                         <Button id="Step2cancelButton"
-                                                className={'border-meedlBlue font-bold text-meedlBlue w-[8.75rem] h-[3.5625rem] border border-solid'}
+                                                className={'border-meedlBlue font-bold text-meedlBlue w-full md:w-[8.75rem] h-[3.5625rem] border border-solid'}
                                                 asChild>
                                             <DialogClose>Cancel</DialogClose>
                                         </Button>
                                         <Button id="CreateCohortButton"
-                                                className={`text-meedlWhite font-bold ${isButtonDisabled ? 'bg-neutral650' : 'bg-meedlBlue hover:bg-meedlBlue'} w-[8.75rem] h-[3.5625rem]`}
+                                                className={`text-meedlWhite font-bold ${isButtonDisabled ? 'bg-neutral650' : 'bg-meedlBlue hover:bg-meedlBlue'} w-full md:w-[8.75rem] h-[3.5625rem]`}
                                                 disabled={isButtonDisabled} onClick={() => setIsFormSubmitted(true)}>
                                             Create cohort
                                         </Button>
