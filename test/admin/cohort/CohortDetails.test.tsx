@@ -1,7 +1,7 @@
 import {render, screen, fireEvent, cleanup} from "@testing-library/react";
 import { useRouter } from "next/navigation";
 import "@testing-library/jest-dom";
-import CohortDetails from "@/pages/traineeInstitute/cohort/cohort-details/Index";
+import CohortDetails from "@/pages/admin/cohort/cohort-details/Index";
 
 jest.mock("next/navigation", () => ({
     useRouter: jest.fn(),

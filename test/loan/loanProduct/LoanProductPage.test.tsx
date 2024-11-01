@@ -1,4 +1,4 @@
-import LoanProductPage from "@/pages/portFolioManager/loanProduct/index";
+import LoanProductPage from "@/pages/admin/loanProduct/index";
 import { render, screen, cleanup,} from "@testing-library/react";
 
 

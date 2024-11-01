@@ -8,9 +8,18 @@ import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import { MdOutlinePerson } from "react-icons/md";
 import {BiArrowBack} from "react-icons/bi";
+import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
+import TableModal from "@/reuseable/modals/TableModal";
+import {Cross2Icon} from "@radix-ui/react-icons";
+import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
+import EditCohortForm from "@/components/cohort/EditCohortForm";
 
 
 const CohortDetails = () =>{
+    const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
+    const [isEditOpen, setEditOpen] = React.useState(false);
+    const id = "1";
+
     const dataList = [
         { label: "Start Date", value: "13, Dec 2023" },
         { label: "End Date", value: "15, Jan 2024" },
@@ -34,10 +43,16 @@ const CohortDetails = () =>{
         { title: "Feeding", amount: "200,000.00" },
         { title: "Total", amount: "300,500,000.00" },
     ];
+
     const program1Options = [
-        {name: 'Edit Cohort', id: '1'},
-        {name: 'Delete Cohort', id: '3'},
-    ];
+        { name: 'Edit Cohort', id: '1' },
+        traineeData.length > 0
+            ?
+                { name: 'Refer Cohort', id: '2' }
+            :
+                { name: 'Delete Cohort', id: '3' },
+    ]
+
 
     const tagButtonData = [
         { tagIcon: CiLaptop, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees" },
@@ -50,8 +65,14 @@ const CohortDetails = () =>{
         router.push('/cohort')
     }
 
-    const handleDeleteClick =() =>{
-
+    const handleDropdownClick =(id: string) =>{
+          if(id === "1") {
+              setEditOpen(true)
+          } else if(id === "2") {
+              // setIsOpen(true)
+          } else {
+              setIsDeleteOpen(true)
+          }
     }
 
     const description= "Design thinking is a process for creative problem solving." +
@@ -70,7 +91,7 @@ const CohortDetails = () =>{
                 <div>
                     <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
                          cohortDescription={description}
-                         dropdownOption={program1Options} handleDeleteClick={handleDeleteClick}
+                         dropdownOption={program1Options} handleDropdownClicked={handleDropdownClick}
                          useProgramButton={false} tagButtonData={tagButtonData}/>
                 </div>
 
@@ -78,7 +99,30 @@ const CohortDetails = () =>{
                     <DetailsTabContainer dataList={dataList} breakDown={breakDown}/>
                 </div>
             </div>
+            <div>
+                <TableModal
+                 isOpen={isDeleteOpen}
+                 closeModal={() => setIsDeleteOpen(false)}
+                 closeOnOverlayClick={true}
+                 icon={Cross2Icon}
+
+                >
+                    <DeleteCohort  setIsOpen={()=>setIsDeleteOpen(false)}/>
+                </TableModal>
+            </div>
+
+                <div className={`md:max-w-sm w-full`}>
+                    <TableModal
+                        isOpen={isEditOpen}
+                        closeModal={() => setEditOpen(false)}
+                        closeOnOverlayClick={true}
+                        headerTitle={`Edit Cohort`}
+                        icon={Cross2Icon}
+                    >
+                        <EditCohortForm cohortId={id} setIsOpen={()=> setEditOpen(false)}/>
+                    </TableModal>
+                </div>
         </main>
-    );
+        );
 }
 export default CohortDetails;

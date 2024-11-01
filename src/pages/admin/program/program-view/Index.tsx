@@ -6,7 +6,7 @@ import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
-import CreateProgramButton from "@/features/admin/program/create-program-button/Index";
+import CreateProgramButton from "@/components/program/create-program-button/Index";
 import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
 import {MdOutlineCalendarMonth, MdOutlinePeopleAlt} from "react-icons/md";

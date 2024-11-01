@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen} from '@testing-library/react';
-import ProgramView from '@/features/admin/program/program-view/Index';
+import ProgramView from '@/pages/admin/program/program-view/Index';
 
 describe('program-view Component', () => {
     test('renders program-view component', () => {
