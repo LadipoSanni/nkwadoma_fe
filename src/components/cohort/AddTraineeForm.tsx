@@ -70,8 +70,12 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
 };
 
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required('First name is required'),
-    lastName: Yup.string().required('Last name is required'),
+    firstName: Yup.string()
+    .trim()
+    .required('First name is required'),
+    lastName: Yup.string()
+    .trim()
+    .required('Last name is required'),
     emailAddress: Yup.string()
     .email('Invalid email address')
     .required('Email address is required'),

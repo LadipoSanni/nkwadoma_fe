@@ -82,7 +82,9 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
    
   const validationSchema = Yup.object().shape({
-    cohortName: Yup.string().required('Cohort name is required'),
+    cohortName: Yup.string()
+     .trim()
+    .required('Cohort name is required'),
     startDate: Yup.date()
                 .required('Start date is required')
                 .nullable(),
@@ -96,7 +98,9 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
         : schema;
     })
     ,
-    cohortDescription: Yup.string().required('Cohort Description is required'),
+    cohortDescription: Yup.string()
+     .trim()
+    .required('Cohort Description is required'),
   });
   
   const handleSubmit = (values: typeof initialFormValue) => {
