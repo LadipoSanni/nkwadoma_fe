@@ -10,12 +10,12 @@ describe('CreateCohort Component', () => {
 
     })
     test('renders CreateCohort component', () => {
-        render(<CreateCohort />);
-        expect(screen.getByText('Create Cohort')).toBeInTheDocument();
+        render(<CreateCohort  triggerButtonStyle={''}/>);
+        expect(screen.getByText('Create cohort')).toBeInTheDocument();
     });
 
     test('Create Cohort button is disabled when required fields are not filled', () => {
-        render(<CreateCohort />);
+        render(<CreateCohort  triggerButtonStyle={''}/>);
         const createButton = screen.getByText('Create cohort');
         fireEvent.click(createButton);
 
