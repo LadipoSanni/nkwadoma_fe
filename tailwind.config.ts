@@ -115,6 +115,7 @@ const config: Config = {
   			grey200: '#98989B',
 			grey250: '#999999',
   			grey300: '#6A696D',
+			grey350: '#F6F6F6',
   			grey400: '#4D4C51',
             grey450: '#475467',
 			MeedlDarkBlueGrey: 'rgba(52,64,84,0.70)',
