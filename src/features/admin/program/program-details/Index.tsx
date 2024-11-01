@@ -1,12 +1,9 @@
 "use client"
 import React from "react";
 import {useRouter} from "next/navigation";
-import {CiLaptop} from "react-icons/ci";
 import {inter, cabinetGrotesk} from "@/app/fonts";
-import CohortDetailsImage from "../../../../../public/asset/Image/CohortDetailsImage.png"
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
-import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
-import {MdOutlinePerson, MdOutlinePeopleAlt, MdOutlineDateRange, MdPersonOutline} from "react-icons/md";
+import {MdOutlinePeopleAlt, MdOutlineDateRange, MdPersonOutline} from "react-icons/md";
 import {BiArrowBack} from "react-icons/bi";
 import {FiBook} from "react-icons/fi";
 import {TagButton} from "@/reuseable/tagButton/TagButton";
@@ -37,10 +34,10 @@ const ProgramDetails = () => {
         {title: "Feeding", amount: "200,000.00"},
         {title: "Total", amount: "300,500,000.00"},
     ];
-    const program1Options = [
-        {name: 'Edit Cohort', id: '1'},
-        {name: 'Delete Cohort', id: '3'},
-    ];
+    // const program1Options = [
+    //     {name: 'Edit Cohort', id: '1'},
+    //     {name: 'Delete Cohort', id: '3'},
+    // ];
 
     const tagButtonData = [
         {tagIcon: MdOutlineDateRange, tagCount: 4, tagButtonStyle: "bg-lightBlue100", tagText: "months"},
@@ -54,9 +51,6 @@ const ProgramDetails = () => {
         router.push('/cohort')
     }
 
-    const handleDeleteClick = () => {
-
-    }
 
     const description = "Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
 
