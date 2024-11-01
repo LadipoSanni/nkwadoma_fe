@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
-			primary200: '#939CB0',
+  			primary200: '#939CB0',
   			blue50: '#E8EAEE',
   			blue100: '#B6BCCA',
   			blue200: '#939CB0',
@@ -19,13 +19,13 @@ const config: Config = {
   			blue400: '#435376',
   			meedlBlue: '#142854',
   			blue600: '#12244C',
-			labelBlue: '#101828',
+  			labelBlue: '#101828',
   			blue700: '#0E1C3C',
-            meedlWhite: '#FFFFFF',
-            blue800: '#0B162E',
+  			meedlWhite: '#FFFFFF',
+  			blue800: '#0B162E',
   			blue900: '#081123',
-            forgetPasswordBlue: `#475467`,
-            yellow50: '#FFFEF4',
+  			forgetPasswordBlue: '`#475467`',
+  			yellow50: '#FFFEF4',
   			yellow100: '#FEFDDD',
   			yellow200: '#FEFCCD',
   			yellow300: '#FDFBB6',
@@ -41,14 +41,14 @@ const config: Config = {
   			lightBlue300: '#E6F1FF',
   			authBg: '#E1EEFF',
   			lightBlue500: '#D9EAFF',
-			lightBlue550: '#D9D9D9',
+  			lightBlue550: '#D9D9D9',
   			lightBlue600: '#C5D5E8',
   			lightBlue700: '#9AA6B5',
   			lightBlue800: '#77818C',
   			lightBlue900: '#5B626B',
-			lightBlue950: '#5F646F',
-			foundationBlue800:"#72757A",
-			layoutBlue800: '#72757A',
+  			lightBlue950: '#5F646F',
+  			foundationBlue800: '#72757A',
+  			layoutBlue800: '#72757A',
   			green50: '#E6F2EA',
   			green100: '#B2D5BE',
   			green200: '#8CC19E',
@@ -84,7 +84,7 @@ const config: Config = {
   			error200: '#E69693',
   			error300: '#DA6662',
   			error400: '#D34843',
-			error450: '#D42620',
+  			error450: '#D42620',
   			error500: '#C81A14',
   			error600: '#B61812',
   			error700: '#8E120E',
@@ -97,35 +97,35 @@ const config: Config = {
   			neutral400: '#EAEAEA',
   			neutral500: '#E5E5E5',
   			neutral600: '#D0D0D0',
-            neutral650: '#D0D5DD',
-            neutral700: '#A3A3A3',
+  			neutral650: '#D0D5DD',
+  			neutral700: '#A3A3A3',
   			neutral800: '#7E7E7E',
   			neutral900: '#606060',
-            neutral950: '#667085',
-			navBorder: '#E0E3E8',
-			black300: '#6A6B6A',
-			black400: '#4D4E4D',
-			black500: '#212221',
-            gray: `#F0F2F4`,
-			gray1: `#475467`,
-			greyBase200: "#F6F6F6",
+  			neutral950: '#667085',
+  			navBorder: '#E0E3E8',
+  			black300: '#6A6B6A',
+  			black400: '#4D4E4D',
+  			black500: '#212221',
+  			gray: '`#F0F2F4`',
+  			gray1: '`#475467`',
+  			greyBase200: '#F6F6F6',
   			grey50: '#E9E9E9',
   			grey100: '#BABABB',
-			grey105: `#F9F9F9`,
-			grey150: '#BDC2C9',
+  			grey105: '`#F9F9F9`',
+  			grey150: '#BDC2C9',
   			grey200: '#98989B',
-			grey250: '#999999',
+  			grey250: '#999999',
   			grey300: '#6A696D',
   			grey400: '#4D4C51',
-            grey450: '#475467',
-			MeedlDarkBlueGrey: 'rgba(52,64,84,0.70)',
-            grey500: '#201F25',
+  			grey450: '#475467',
+  			MeedlDarkBlueGrey: 'rgba(52,64,84,0.70)',
+  			grey500: '#201F25',
   			grey600: '#1D1C22',
   			grey700: '#17161A',
   			grey800: '#121114',
   			grey900: '#0D0D10',
-			meedlBlack: '#000000',
-			navbarIconColor: '#667085',
+  			meedlBlack: '#000000',
+  			navbarIconColor: '#667085',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -174,6 +174,28 @@ const config: Config = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		keyframes: {
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
+  			}
+  		},
+  		animation: {
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
   	}
   },
