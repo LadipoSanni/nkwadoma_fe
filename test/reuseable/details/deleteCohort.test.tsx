@@ -6,7 +6,7 @@ describe("DeleteCohort", ()=> {
     it('should render DeleteCohort component with default props', () => {
         const { getByText, getByAltText } = render(<DeleteCohort />);
         expect(getByAltText('deleteIcon')).toBeInTheDocument();
-        expect(getByText('Delete Cohort')).toBeInTheDocument();
+        expect(getByText('Delete cohort')).toBeInTheDocument();
         expect(getByText("Are you sure you want to delete this cohort? This action can't be undone")).toBeInTheDocument();
         expect(getByText('Cancel')).toBeInTheDocument();
         expect(getByText('Delete')).toBeInTheDocument();
@@ -15,7 +15,7 @@ describe("DeleteCohort", ()=> {
     it('should render correctly when cohortId is undefined', () => {
         const { getByText, getByAltText } = render(<DeleteCohort cohortId={undefined} />);
         expect(getByAltText('deleteIcon')).toBeInTheDocument();
-        expect(getByText('Delete Cohort')).toBeInTheDocument();
+        expect(getByText('Delete cohort')).toBeInTheDocument();
         expect(getByText("Are you sure you want to delete this cohort? This action can't be undone")).toBeInTheDocument();
         expect(getByText('Cancel')).toBeInTheDocument();
         expect(getByText('Delete')).toBeInTheDocument();
@@ -40,7 +40,7 @@ describe("DeleteCohort", ()=> {
         const setIsOpen = jest.fn();
         const { getByText, getByAltText } = render(<DeleteCohort setIsOpen={setIsOpen} />);
         expect(getByAltText('deleteIcon')).toBeInTheDocument();
-        expect(getByText('Delete Cohort')).toBeInTheDocument();
+        expect(getByText('Delete cohort')).toBeInTheDocument();
         expect(getByText("Are you sure you want to delete this cohort? This action can't be undone")).toBeInTheDocument();
         expect(getByText('Cancel')).toBeInTheDocument();
         expect(getByText('Delete')).toBeInTheDocument();
@@ -49,7 +49,7 @@ describe("DeleteCohort", ()=> {
     it('should handle missing setIsOpen function gracefully', () => {
         const { getByText, getByAltText } = render(<DeleteCohort />);
         expect(getByAltText('deleteIcon')).toBeInTheDocument();
-        expect(getByText('Delete Cohort')).toBeInTheDocument();
+        expect(getByText('Delete cohort')).toBeInTheDocument();
         expect(getByText("Are you sure you want to delete this cohort? This action can't be undone")).toBeInTheDocument();
         expect(getByText('Cancel')).toBeInTheDocument();
         expect(getByText('Delete')).toBeInTheDocument();
