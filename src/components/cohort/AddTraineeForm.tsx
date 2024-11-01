@@ -109,7 +109,7 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
         validateOnMount={true}
       >
        {
-         ({values, errors, isValid, touched}) => (
+         ({errors, isValid, touched}) => (
           <Form className={`${inter.className}`}>
               <div 
               className='grid grid-cols-1 gap-y-4 md:max-h-[520px] overflow-y-auto'
