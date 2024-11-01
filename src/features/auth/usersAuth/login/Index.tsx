@@ -68,6 +68,7 @@ const Login: React.FC = () => {
                     <div id={"authButtonContainer"} className={`w-[100%]`}>
                         <AuthButton disable={!isFormValid} backgroundColor={'#142854'} textColor={"white"}
                                     id={"loginButton"}
+                                    data-testid={`loginButton`}
                                     buttonText={"Login"} width={"inherit"}
                                     handleClick={handleReset}>
                         </AuthButton>
