@@ -9,7 +9,7 @@ const ResetPassword = () => {
 
 
     return (
-        <div className={`md:w-full md:h-full w-full bg-red-200 h-full grid content-start md:flex place-content-end`} >
+        <div className={`md:w-full md:h-full w-fit bg-red-200 h-full grid content-start md:flex place-content-end`} >
             {isEmailEntered?.length === 0  ?
                 <Step1/>
                 :
