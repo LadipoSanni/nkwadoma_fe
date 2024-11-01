@@ -1,4 +1,4 @@
-export const CohortTraineeData = [
+export const traineeData = [
     {
         trainee: "Oluwadamilola Olowookere",
         referralDate: "13 Dec, 2023",
