@@ -71,10 +71,6 @@ const ProgramDetails = () => {
 
             <section className={`p- flex md:flex-row flex-col md:justify-between`}>
                 <div className={'flex flex-col gap-10'}>
-                    {/*<DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}*/}
-                    {/*                     cohortDescription={description}*/}
-                    {/*                     dropdownOption={program1Options} handleDeleteClick={handleDeleteClick}*/}
-                    {/*                     useProgramButton={false} tagButtonData={tagButtonData}/>*/}
                     <div className={'grid place-items-center h-[7.5rem] w-[7.5rem] bg-lightBlue500 rounded-full'}>
                         <FiBook className={'h-[50px] w-[50px] text-meedlBlue'}/>
                     </div>

@@ -66,7 +66,7 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
                     id="createCohortButton"
                     size={'lg'}
                     className={`${triggerButtonStyle} ${inter.className} h-12 shadow-none bg-meedlBlue hover:bg-meedlBlue cursor-pointer text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}>
-                    Create Cohort
+                    Create cohort
                 </Button>
             </DialogTrigger>
             <DialogContent id="createCohortDialogContent"
@@ -74,7 +74,7 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
                 <DialogHeader id="createCohortDialogHeader">
                     <DialogTitle
                         className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>
-                        Create Cohort
+                        Create cohort
                     </DialogTitle>
                     <DialogClose asChild>
                         <button id="createCohortDialogCloseButton" className="absolute right-5">
