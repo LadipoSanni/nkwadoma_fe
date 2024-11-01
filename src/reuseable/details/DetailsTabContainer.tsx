@@ -7,7 +7,7 @@ import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import {DropdownMenuSeparator} from "@/components/ui/dropdown-menu";
 import Tables from "@/reuseable/table/LoanProductTable";
-import {CohortTraineeData} from "@/utils/cohort/cohortDetails/Index";
+import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import {MdOutlinePerson} from "react-icons/md";
 
 interface detailContainerProps {
@@ -37,16 +37,16 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
                     <Tabs
                         id="cohort-tabs"
                         data-testid="cohort-tabs"
-                        defaultValue={"cohortDetails"}
+                        defaultValue={"trainee-details-mock-data"}
                         className={`shadow-none`}
                     >
                         <TabsList id="tabs-list" data-testid="tabs-list" className={`px-1 py-1`}>
-                            <TabsTrigger value={"cohortDetails"} data-testid="cohort-details-tab ">Cohort
+                            <TabsTrigger value={"trainee-details-mock-data"} data-testid="cohort-details-tab ">Cohort
                                 details</TabsTrigger>
                             <TabsTrigger value={"trainee"} data-testid="trainees-tab">Trainees</TabsTrigger>
                         </TabsList>
 
-                        <TabsContent value={"cohortDetails"} id="cohort-details-content"
+                        <TabsContent value={"trainee-details-mock-data"} id="cohort-details-content"
                                      data-testid="cohort-details-content" className={`py-2`}>
                             <div
                                 className="bg-grey105 px-4 md:h-[450px] w-full h-96 py-2 overflow-y-auto rounded-sm">
@@ -118,7 +118,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
 
                         <TabsContent value={"trainee"} id="trainee-content" data-testid="trainee-content" className={`py-2`}>
                             <Tables
-                                tableData={CohortTraineeData}
+                                tableData={traineeData}
                                 tableHeader={ProgramHeader}
                                 staticHeader={'Trainee'}
                                 staticColunm={'trainee'}

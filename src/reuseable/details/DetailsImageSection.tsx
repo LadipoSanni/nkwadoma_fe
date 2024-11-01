@@ -4,7 +4,7 @@ import {inter} from "@/app/fonts";
 import {Card} from "@/components/ui/card";
 import Image from 'next/image';
 import {Button} from "@/components/ui/button";
-import CreateProgramButton from "@/features/admin/program/create-program-button/Index";
+import CreateProgramButton from "@/components/program/create-program-button/Index";
 import {TagButton} from "@/reuseable/tagButton/TagButton";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import {IoEllipsisHorizontalSharp} from "react-icons/io5";
