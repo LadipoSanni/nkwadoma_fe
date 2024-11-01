@@ -1,4 +1,4 @@
-import React, { useRef, useState,useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { FiUploadCloud } from "react-icons/fi";
 import { Label } from "@/components/ui/label";
 import { MdOutlineDelete, MdOutlineEdit, MdCheck } from "react-icons/md";
@@ -17,7 +17,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver }) =
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [fileName, setFileName] = React.useState("");
+    const [fileName, setFileName] = useState("");
 
     useEffect(() => {
         if (file) {
@@ -51,7 +51,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver }) =
         }
     };
 
-
     const onDrop = async (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         const droppedFile = event.dataTransfer.files?.[0];
@@ -72,7 +71,6 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver }) =
         }
     };
 
-
     const onClick = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
@@ -85,7 +83,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver }) =
 
     return (
         <div id="dragAndDropContainer" className={'grid gap-2 w-full'}>
-            <Label htmlFor="dragAndDrop" className="block text-sm font-medium text-black500">Cohort image (Optional)</Label>
+            <Label htmlFor="fileInput" className="block text-sm font-medium text-black500">Cohort image (Optional)</Label>
             <div
                 id="dragAndDrop"
                 className={`${file ? 'p-3 bg-meedlWhite h-[4.25rem] border-[0.5px] border-solid border-neutral650 flex items-center justify-between' : 'grid gap-4 place-items-center border-dashed border border-neutral650 py-5 rounded-md bg-neutral100 cursor-pointer h-[147px]'}`}
@@ -93,15 +91,15 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver }) =
                 onDragOver={file ? undefined : handleDragOver}
                 onClick={file ? undefined : onClick}
             >
-
-                    <input
-                        type="file"
-                        accept=".svg,.png,.jpg,.jpeg,.gif"
-                        style={{ display: 'none' }}
-                        ref={fileInputRef}
-                        onChange={onFileChange}
-                        className={'h-full w-full'}
-                    />
+                <input
+                    id="fileInput"
+                    type="file"
+                    accept=".svg,.png,.jpg,.jpeg,.gif"
+                    style={{ display: 'none' }}
+                    ref={fileInputRef}
+                    onChange={onFileChange}
+                    className={'h-full w-full'}
+                />
 
                 {file ? (
                     <>
@@ -122,8 +120,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver }) =
                                 ) : error ? (
                                     <p className={'text-red-500 font-normal text-[12px] leading-[150%]'}>{error}</p>
                                 ) : (
-                                    <p className={'text-green-500 font-normal text-[12px] leading-[150%]'}>Uploaded
-                                        successfully</p>
+                                    <p className={'text-green-500 font-normal text-[12px] leading-[150%]'}>Uploaded successfully</p>
                                 )}
                             </div>
                         </div>
@@ -153,7 +150,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver }) =
                         </div>
                     </>
                 )}
-
+                {error && (
+                    <p className="text-red-500 font-normal text-[12px] leading-[150%]">
+                        {error}
+                    </p>
+                )}
             </div>
         </div>
     );
