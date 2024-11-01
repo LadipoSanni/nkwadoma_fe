@@ -1,3 +1,4 @@
+"use client"
 import React, {ElementType} from 'react';
 import {Menubar, MenubarTrigger, MenubarContent, MenubarMenu, MenubarItem} from '@/components/ui/menubar';
 import {Button} from '@/components/ui/button';
