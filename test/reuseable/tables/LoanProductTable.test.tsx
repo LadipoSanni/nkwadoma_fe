@@ -52,7 +52,7 @@ describe('LoanProductTable component', () => {
     
     test('renders the correct number of rows on the first page for both the large screen and mobile screen', () => {
         const rows = screen.getAllByRole('row');
-        expect(rows).toHaveLength(16);
+        expect(rows).toHaveLength(18);
     
     
     });

@@ -108,6 +108,7 @@ const config: Config = {
 			black500: '#212221',
             gray: `#F0F2F4`,
 			gray1: `#475467`,
+			greyBase200: "#F6F6F6",
   			grey50: '#E9E9E9',
   			grey100: '#BABABB',
 			grey105: `#F9F9F9`,

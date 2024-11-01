@@ -30,8 +30,8 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
 
     return(
         <div id="cohort-details" data-testid="cohort-details"
-             className={`${inter.className} md:w-6/12 w-xs md:border md:border-slate-200 h-[96%] w-full md:rounded-md`}>
-            <div id="tabs-section" data-testid="tabs-section" className={`md:p-4 p-2 `}>
+             className={`${inter.className} md:border md:border-slate-200 md:rounded-md`}>
+            <div id="tabs-section" data-testid="tabs-section" className={`md:p-3 p-2 `}>
                 <div className={`w-full`}>
                     <Tabs
                         id="cohort-tabs"
@@ -46,13 +46,13 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
                         </TabsList>
 
                         <TabsContent value={"cohortDetails"} id="cohort-details-content"
-                                     data-testid="cohort-details-content">
+                                     data-testid="cohort-details-content" className={`py-2`}>
                             <div
-                                className="bg-grey105 p-4 space-y-8 md:h-[450px] w-full h-96 overflow-y-auto rounded-sm">
+                                className="bg-grey105 px-4 md:h-[450px] w-full h-96 py-2 overflow-y-auto rounded-sm">
                                 {dataList.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
-                                         className="flex md:flex-row flex-col w-full justify-between ">
+                                         className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
                                         <div className="text-black300">
                                             <p>{item.label}</p>
                                         </div>
@@ -69,7 +69,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
                                     id="tuition-breakdown-collapsible"
                                     data-testid="tuition-breakdown-collapsible"
                                 >
-                                    <CollapsibleTrigger asChild className={`border-b`}
+                                    <CollapsibleTrigger asChild className={`border-b w-fit md:w-full`}
                                                         id="tuition-breakdown-trigger"
                                                         data-testid="tuition-breakdown-trigger">
                                         <Button variant="ghost" size="lg"
@@ -97,7 +97,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
                                             <React.Fragment key={index}>
                                                 <div id={`breakdown-item-${index}`}
                                                      data-testid={`breakdown-item-${index}`}
-                                                     className="flex md:flex-row flex-col py-4 justify-between">
+                                                     className="flex md:flex-row flex-col py-5 justify-between">
                                                     <div className="text-black300">
                                                         <p>{item.title}</p>
                                                     </div>
@@ -115,7 +115,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
                             </div>
                         </TabsContent>
 
-                        <TabsContent value={"trainee"} id="trainee-content" data-testid="trainee-content">
+                        <TabsContent value={"trainee"} id="trainee-content" data-testid="trainee-content" className={`py-2`}>
                             <Tables
                                 tableData={CohortTraineeData}
                                 tableHeader={ProgramHeader}

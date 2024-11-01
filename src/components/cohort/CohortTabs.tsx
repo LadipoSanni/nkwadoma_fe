@@ -4,16 +4,17 @@ import Tables from '@/reuseable/table/LoanProductTable'
 import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
 import { MdOutlinePeople } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
-import { cabinetGrotesk } from '@/app/fonts'
 import { formatAmount } from '@/utils/Format'
 import { formatDate } from '@/utils/Format'
 import TableModal from '@/reuseable/modals/TableModal'
 import { Cross2Icon } from "@radix-ui/react-icons";
+import EditCohortForm from './EditCohortForm'
+import { inter } from '@/app/fonts'
 
 
 
 const CohortTabs = () => {
-  const [programId, setProgramId] =  React.useState("")
+  const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
 
   const router = useRouter()
@@ -65,17 +66,17 @@ const CohortTabs = () => {
   const handleDropdownClick = (id:string,row: TableRowData) => {
     if(id === "1") router.push('/cohort/cohort-details')
     else if(id === "2") {
-      setProgramId(String(row.id))
+      setCohortId(String(row.id))
       setIsOpen(true)
-      console.log(programId)
-
+      
+    
     }
     else {
       router.push('/loan')
     }
   }
-
-
+  
+  
   const ProgramHeader = [
     { title: 'Cohort', sortable: true, id: 'cohort', selector: (row:TableRowData ) => row.cohort },
     { title: 'End date', sortable: true, id: 'endDate', selector: (row:TableRowData ) => formatDate(row?.endDate)},
@@ -97,7 +98,7 @@ const CohortTabs = () => {
               tableData={cohortsData}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
-              tableHeight={47}
+              tableHeight={52}
               sx='cursor-pointer'
               staticColunm='cohort'
               staticHeader='Cohort'
@@ -118,7 +119,7 @@ const CohortTabs = () => {
               tableData={cohortsData}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
-              tableHeight={47}
+              tableHeight={52}
               sx='cursor-pointer'
               staticColunm='cohort'
               staticHeader='Cohort'
@@ -127,6 +128,7 @@ const CohortTabs = () => {
               icon={MdOutlinePeople}
               sideBarTabName='Cohort'
               optionalFilterName='current'
+              handleDropDownClick={handleDropdownClick}
              />
              </div>
     },
@@ -137,7 +139,7 @@ const CohortTabs = () => {
               tableData={cohortsData}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
-              tableHeight={47}
+              tableHeight={52}
               sx='cursor-pointer'
               staticColunm='cohort'
               staticHeader='Cohort'
@@ -146,6 +148,7 @@ const CohortTabs = () => {
               icon={MdOutlinePeople}
               sideBarTabName='Cohort'
               optionalFilterName='graduate'
+              handleDropDownClick={handleDropdownClick}
              />
              </div>
     },
@@ -154,9 +157,9 @@ const CohortTabs = () => {
 
 
   return (
-    <div className=''>
+    <div >
       <Tabs defaultValue='incoming'>
-        <TabsList className= {`z-50 ${cabinetGrotesk.className}`}>
+        <TabsList className= {`z-50 ${inter.className}`}>
           {tabData.map((tab,index) => (
             <TabsTrigger data-testid={`tabName${tab.value}`}  value={tab.value} key={index}>
                 {tab.name}
@@ -178,11 +181,13 @@ const CohortTabs = () => {
         closeModal={() => setIsOpen(false)}
         closeOnOverlayClick={true}
         headerTitle='Edit Cohort'
-        className='w-100%'
+        className='w-100% pb-1'
         icon={Cross2Icon}
         >
-          hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+          <EditCohortForm cohortId={cohortId} setIsOpen={()=>setIsOpen(false)}/>  
+         
         </TableModal>
+       
       </div>
     </div>
   )
