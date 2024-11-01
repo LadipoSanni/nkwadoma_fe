@@ -10,9 +10,9 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue,SelectGro
 import * as Yup from "yup";
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
-import CohortTabs from './CohortTabs'
+import CohortTabs from '../../../../components/cohort/CohortTabs'
 import CreateCohort from "@/reuseable/modals/CreateCohort";
-import { cabinetGrotesk } from '@/app/fonts'
+import { inter } from '@/app/fonts'
 
 
 export const initialFormValue = {
@@ -65,8 +65,8 @@ const CohortView = () => {
   return (
     <div className=''>
         <div id='cohortName' className='md:px-8 px-4'>
-          <h1 className={`mt-5 font-semibold text-2xl mb-4 normal-case z-50 ${cabinetGrotesk.className}`}>Cohort</h1>
-          <div id='buttonFilterCreate' className={`md:flex justify-between items-center z-50 relative bottom-2 ${cabinetGrotesk.className}`}>
+          {/* <h1 className={`mt-5 font-semibold text-2xl mb-4 normal-case z-50 ${cabinetGrotesk.className}`}>Cohort</h1> */}
+          <div id='buttonFilterCreate' className={`md:flex justify-between items-center z-50 relative top-6 bottom-2 ${inter.className}`}>
             <div id='buttonFilter' className='flex gap-4'> 
             <div className='relative'>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -183,11 +183,11 @@ const CohortView = () => {
             </div>
              <div className='md:mt-0 mt-4'>
              
-                 <CreateCohort />
+                 <CreateCohort  triggerButtonStyle={`w-full`}/>
              </div>
           </div>
         </div>
-        <div className='mt-4 w-[96%]  mr-auto ml-auto relative '>
+        <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
          <CohortTabs/>
         </div>
     </div>

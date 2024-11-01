@@ -6,9 +6,11 @@ import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
-import CreateProgramButton from "@/features/admin/program/createProgramButton/Index";
+import CreateProgramButton from "@/features/admin/program/create-program-button/Index";
 import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
+import {MdOutlineCalendarMonth, MdOutlinePeopleAlt} from "react-icons/md";
+import {PersonIcon} from "@radix-ui/react-icons";
 
 const ProgramView = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -100,39 +102,40 @@ const ProgramView = () => {
         {name: 'Delete Program', id: '3'}
     ];
 
+    const tagButtonData = [
+        {tagIcon: PersonIcon, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees"},
+        {tagIcon: MdOutlineCalendarMonth, tagCount: 50, tagButtonStyle: "bg-lightBlue100", tagText: "cohorts"},
+        {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-lightBlue100", tagText: "cohorts"},
+    ];
+
     return (
-        <main id="programMain"
-              className={`${cabinetGrotesk.className} flex flex-col gap-8 pl-5 pr-2 pt-7 bg-meedlWhite`}>
+        <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 pl-5 pr-2 pt-7 bg-meedlWhite overflow-hidden`}>
             <section id="programSection" className={'grid gap-7 '}>
-                <h1 id="programTitle" className={"text-meedlBlack text-2xl font-medium leading-[120%]"}>Program</h1>
                 <div id="programControls" className={'md:flex pr-2 md:justify-between gap-5 grid'}>
                     <SearchInput id={'ProgramSearchInput'}/>
                     <CreateProgramButton buttonText={"Create Program"} title={"Create Program"}
                                          programDeliveryTypes={["Full-time", "Part-time"]}
-                                         programModes={["Online", "Physical"]} useSecondaryButton={true}
-                                         programDurations={["3years", "4years"]} submitButtonText={"Create Program"}/>
+                                         programModes={["Online", "Physical"]}
+                                         programDurations={["3years", "4years"]} submitButtonText={"Create Program"} triggerButtonStyle={``}/>
                 </div>
             </section>
-            <div id="programContent" className={'grid gap-4 relative bottom-3'}>
+            <div id="programContent" className={'grid gap-4 relative bottom-3 overflow-hidden'}>
                 <DisplayOptions setView={setView} activeView={view}/>
                 {view === 'grid' ? (
                     <div
                         id={'programGrid'}
                         className={'grid gap-6 pr-2 overflow-y-auto'}
                         style={{
-                            height: '55vh',
+                            height: '62vh',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
                         {dummyData.map((program, index) => (
                             <AllProgramsCard
                                 key={index}
-                                cohorts={program.cohorts}
                                 description={program.description}
-                                months={program.months}
                                 title={program.title}
-                                trainees={program.trainees}
-                                id={'program'} dropdownOption={program1Options}/>
+                                id={'program'} dropdownOption={program1Options} tagButtonData={tagButtonData}/>
                         ))}
                     </div>
                 ) : (
@@ -140,22 +143,22 @@ const ProgramView = () => {
                         id="programListView"
                         className={'grid gap-6'}
                         style={{
-                            height: '55vh',
+                            height: '62vh',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
                         <LoanProductTable
-                            tableData={programData}
-                            tableHeader={ProgramHeader}
-                            staticHeader={"Programs"}
-                            staticColunm={'programs'}
-                            tableHeight={47}
-                            handleRowClick={handleRowClick}
-                            sx='cursor-pointer'
-                            showKirkBabel={true}
-                            kirkBabDropdownOption={dropDownOption}
-                            icon={Book}
-                            sideBarTabName='Program'
+                        tableData={programData}
+                        tableHeader={ProgramHeader}
+                        staticHeader={"Programs"}
+                        staticColunm={'programs'}
+                        tableHeight={52}
+                        handleRowClick={handleRowClick}
+                        sx='cursor-pointer'
+                        showKirkBabel={true}
+                        kirkBabDropdownOption={dropDownOption}
+                        icon={Book}
+                        sideBarTabName='Program'
                         />
                     </div>
                 )}
