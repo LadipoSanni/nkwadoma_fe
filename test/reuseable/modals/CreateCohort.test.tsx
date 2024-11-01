@@ -16,7 +16,7 @@ describe('CreateCohort Component', () => {
 
     test('Create Cohort button is disabled when required fields are not filled', () => {
         render(<CreateCohort />);
-        const createButton = screen.getByText('Create Cohort');
+        const createButton = screen.getByText('Create cohort');
         fireEvent.click(createButton);
 
         const submitButton = screen.getByRole('button', { name: 'Continue' });
