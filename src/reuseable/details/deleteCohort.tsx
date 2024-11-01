@@ -26,21 +26,14 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen}) => {
     }
     return (
         <div>
-            <Image
-                src={DeleteIcon}
-                alt="deleteIcon"
-                className="w-[200px] h-[200px]"
-                width={200}
-                height={200}
-            />
 
-            {/*<Image src={DeleteIcon} alt={"deleteIcon"} className={`w-[5rem] h-[5rem]`}*/}
-            {/*//        width={200}*/}
-            {/*//        height={200}*/}
-            {/*// />*/}
+            <Image src={DeleteIcon} alt={"deleteIcon"} className={`md:w-[5rem] w-[4rem] md:h-[5rem] h-[4rem]`}
+                   width={200}
+                   height={200}
+            />
             <div className={`pt-3`}>
                 <h1 className={`${cabinetGrotesk.className} text-2xl font-medium leading-7 text-meedlBlack`}>Delete
-                    Cohort <br/></h1>
+                    cohort <br/></h1>
 
                 <p className={`pt-3 text-sm font-normal leading-6 text-grey450`}>Are you sure you want to delete this
                     cohort? This action can&#39;t be undone </p>
