@@ -1,5 +1,5 @@
 import React from "react";
-import {DeleteCohort} from "@/reuseable/details/deleteCohort";
+import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
 import {fireEvent, render, screen} from "@testing-library/react";
 
 describe("DeleteCohort", ()=> {

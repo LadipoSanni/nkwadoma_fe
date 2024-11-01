@@ -8,10 +8,10 @@ import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import { MdOutlinePerson } from "react-icons/md";
 import {BiArrowBack} from "react-icons/bi";
-import {CohortTraineeData} from "@/utils/cohort/cohortDetails/Index";
+import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {DeleteCohort} from "@/reuseable/details/deleteCohort";
+import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
 import EditCohortForm from "@/components/cohort/EditCohortForm";
 
 
@@ -46,7 +46,7 @@ const CohortDetails = () =>{
 
     const program1Options = [
         { name: 'Edit Cohort', id: '1' },
-        CohortTraineeData.length > 0
+        traineeData.length > 0
             ?
                 { name: 'Refer Cohort', id: '2' }
             :

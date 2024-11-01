@@ -1,5 +1,5 @@
 import React from 'react';
-import CohortDetails from "@/pages/traineeInstitute/cohort/cohort-details/Index";
+import CohortDetails from "@/pages/admin/cohort/cohort-details/Index";
 
 const Page = () => {
     return (
