@@ -83,8 +83,8 @@ const CohortTabs = () => {
     { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row: TableRowData) => row.noOfTrainees },
     { title: 'No. of Loanees', sortable: true, id: 'noOfLoan', selector: (row:TableRowData) => row.noOfLoan },
     { title: 'Tuition', sortable: true, id: 'tuition', selector: (row:TableRowData) => formatAmount(row.tuition)},
-    { title: 'Amount recieved', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-8'>{formatAmount(row.amountRecieved)}</div> },
-    { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='ml-8'>{formatAmount(row.amountRequested)}</div> },
+    { title: 'Amount recieved', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRecieved)}</div> },
+    { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountRequested)}</div> },
     { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountOutstanding)}</div> },
 
   ]
@@ -181,8 +181,9 @@ const CohortTabs = () => {
         closeModal={() => setIsOpen(false)}
         closeOnOverlayClick={true}
         headerTitle='Edit Cohort'
-        className='w-100% pb-1'
+        className='pb-1'
         icon={Cross2Icon}
+       
         >
           <EditCohortForm cohortId={cohortId} setIsOpen={()=>setIsOpen(false)}/>  
          
