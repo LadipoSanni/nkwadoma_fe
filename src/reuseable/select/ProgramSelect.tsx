@@ -12,7 +12,7 @@ interface ProgramSelectProps {
 
 const ProgramSelect: React.FC<ProgramSelectProps> = ({ selectedProgram, setSelectedProgram, isSelectOpen, setIsSelectOpen }) => (
     <div id="programContainer" className={'grid gap-2 w-full'}>
-        <Label htmlFor="program" className="block text-[14px] font-medium leading-[22px] text-labelBlue">Program</Label>
+        <Label htmlFor="program"  className="block text-[14px] font-medium leading-[22px] text-labelBlue">Program</Label>
         <Select onValueChange={(value) => setSelectedProgram(value)} onOpenChange={(open) => setIsSelectOpen(open)}>
             <SelectTrigger id="programSelectTrigger" className={`${selectedProgram ? 'text-black500' : 'text-black300'} mt-0 mb-0 h-[3.375rem] w-full border border-solid border-neutral650 `}>
                 <SelectValue placeholder="Select Program">{selectedProgram || "Select program"}</SelectValue>

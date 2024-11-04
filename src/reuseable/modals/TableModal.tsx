@@ -14,11 +14,14 @@ interface Props {
     headerTitle?: string;
     icon?: ElementType;
     description?: string;
-}
+    width?: string;
+}   
 
 
 
-export default function TableModal({isOpen, children, closeModal, closeOnOverlayClick,className,style, headerTitle,icon:Icon,description}: Props) {
+export default function TableModal({isOpen, children, closeModal, closeOnOverlayClick,className,style, headerTitle,icon:Icon,description,width}: Props) {
+
+  
   return (
     <Dialog.Root
     open={isOpen}
@@ -31,28 +34,26 @@ export default function TableModal({isOpen, children, closeModal, closeOnOverlay
       >
       <Dialog.DialogContent
        className={`${styles.body} ${className || ""} px-5`}
-       style={{ ...style }}
+       style={{ ...style, "--modal-width": width } as React.CSSProperties}
       >
         <div className="mt-3 ">
         <Dialog.DialogTitle>
-          {headerTitle? <h1 className={`text-[28px] font-bold text-gray-900 ${cabinetGrotesk.className}`}>{headerTitle}</h1> : null}  
+          {headerTitle? <span role="button" className={`text-[28px] font-bold text-gray-900 ${cabinetGrotesk.className}`}>{headerTitle}</span> : null}  
         </Dialog.DialogTitle>
          <Dialog.Close asChild>
-            <button
-              className="absolute top-6 right-5 text-gray-500 hover:text-gray-800 border-none"
+            <div
+              className="absolute top-6 right-5 text-gray-500 hover:text-gray-800 border-none cursor-pointer"
               onClick={closeModal}
             >
              { 
               Icon && <Icon className="h-5 w-5 text-grey400" />
               
              } 
-            </button>
+            </div>
           </Dialog.Close>
         </div>
-        <Dialog.Description>
-      <p className="">
+      <Dialog.Description>
        {description}
-      </p>
     </Dialog.Description>
          <div className="mt-2 w-full">
          {children}
