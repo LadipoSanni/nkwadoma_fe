@@ -44,7 +44,6 @@ const Kebab = ({handleDropDownClick, kebabOptions, className, icon: Icon}: Props
                         id="menubarContent"
                         data-testid="menubar-content"
                         className={`${inter.className} bg-meedlWhite gap-3 shadow-grey100 rounded-md w-full right-full`}
-                        // className={`${inter.className} bg-meedlWhite gap-3 shadow-grey100 rounded-md w-full`}
                         style={{ right: "auto", left: 0 }}
                     >
                         {
