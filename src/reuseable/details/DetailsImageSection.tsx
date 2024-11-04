@@ -10,6 +10,7 @@ import Kebab from "@/reuseable/Kebab/Kebab";
 import {IoEllipsisHorizontalSharp} from "react-icons/io5";
 import TableModal from '@/reuseable/modals/TableModal'
 import {Cross2Icon} from "@radix-ui/react-icons";
+import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 
 
 interface detailsProps {
@@ -36,8 +37,10 @@ const DetailsImageSection: React.FC<detailsProps> = ({
     const [isOpen, setIsOpen] = React.useState(false);
 
     const handleModalOpen = () => {
-        setIsOpen(true)
+        setIsOpen(!isOpen)
     }
+
+    const cohortId = "1"
 
     return (
         <main id="details-main" data-testid="details-main" className={``}>
@@ -111,10 +114,12 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             closeModal={() => setIsOpen(false)}
                             closeOnOverlayClick={true}
                             headerTitle={"Add trainee"}
-                            className={"w-100%"}
+                            className={"md:w-full pb-1"}
                             icon={Cross2Icon}
+                           
                 >
-                    ADD TRAINEE DIALOG
+                    
+                    <AddTraineeForm cohortId={cohortId} setIsOpen={handleModalOpen}/>
                 </TableModal>
             </div>
         </main>
