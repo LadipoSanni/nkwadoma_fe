@@ -114,8 +114,9 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             closeModal={() => setIsOpen(false)}
                             closeOnOverlayClick={true}
                             headerTitle={"Add trainee"}
-                            className={"w-100% pb-1"}
+                            className={"md:w-full pb-1"}
                             icon={Cross2Icon}
+                           
                 >
                     
                     <AddTraineeForm cohortId={cohortId} setIsOpen={handleModalOpen}/>

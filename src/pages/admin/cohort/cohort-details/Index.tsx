@@ -105,7 +105,7 @@ const CohortDetails = () =>{
                  closeModal={() => setIsDeleteOpen(false)}
                  closeOnOverlayClick={true}
                  icon={Cross2Icon}
-
+                 width="auto"
                 >
                     <DeleteCohort  setIsOpen={()=>setIsDeleteOpen(false)}/>
                 </TableModal>
@@ -118,6 +118,8 @@ const CohortDetails = () =>{
                         closeOnOverlayClick={true}
                         headerTitle={`Edit Cohort`}
                         icon={Cross2Icon}
+                       
+                        
                     >
                         <EditCohortForm cohortId={id} setIsOpen={()=> setEditOpen(false)}/>
                     </TableModal>

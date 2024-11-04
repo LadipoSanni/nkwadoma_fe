@@ -80,7 +80,6 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
     .email('Invalid email address')
     .required('Email address is required'),
     initialDeposit: Yup.number()
-    // .min(1, "Interest rate must not be less than 1")
     .positive('Initial deposit must be a positive number')
     .required('Initial deposit is required')
     .transform((value) => (isNaN(value) || value === null || value === undefined) ? 0 : value)

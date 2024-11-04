@@ -14,11 +14,14 @@ interface Props {
     headerTitle?: string;
     icon?: ElementType;
     description?: string;
-}
+    width?: string;
+}   
 
 
 
-export default function TableModal({isOpen, children, closeModal, closeOnOverlayClick,className,style, headerTitle,icon:Icon,description}: Props) {
+export default function TableModal({isOpen, children, closeModal, closeOnOverlayClick,className,style, headerTitle,icon:Icon,description,width}: Props) {
+
+  
   return (
     <Dialog.Root
     open={isOpen}
@@ -31,7 +34,7 @@ export default function TableModal({isOpen, children, closeModal, closeOnOverlay
       >
       <Dialog.DialogContent
        className={`${styles.body} ${className || ""} px-5`}
-       style={{ ...style }}
+       style={{ ...style, "--modal-width": width } as React.CSSProperties}
       >
         <div className="mt-3 ">
         <Dialog.DialogTitle>

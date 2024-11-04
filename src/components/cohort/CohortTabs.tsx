@@ -181,8 +181,9 @@ const CohortTabs = () => {
         closeModal={() => setIsOpen(false)}
         closeOnOverlayClick={true}
         headerTitle='Edit Cohort'
-        className='w-100% pb-1'
+        className='pb-1'
         icon={Cross2Icon}
+       
         >
           <EditCohortForm cohortId={cohortId} setIsOpen={()=>setIsOpen(false)}/>  
          
