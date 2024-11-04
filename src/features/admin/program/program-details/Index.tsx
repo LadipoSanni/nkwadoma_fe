@@ -48,7 +48,7 @@ const ProgramDetails = () => {
 
     const router = useRouter();
     const handleBackClick = () => {
-        router.push('/cohort')
+        router.push('/program')
     }
 
 
