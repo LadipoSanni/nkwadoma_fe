@@ -7,7 +7,7 @@ const InitialItem: React.FC = () => (
     <div id="initialItemContainer" className="flex gap-5">
         <div className="grid gap-2">
             <Label htmlFor={`itemName`} className="block text-sm font-medium text-labelBlue">Item Name</Label>
-            <Input type="text" id={`itemName`} name={`itemName`} placeholder="Item Name" value="Tuition" readOnly className="bg-grey105 p-4 focus-visible:outline-0 w-[231px] shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"/>
+            <Input type="text" id={`itemName`} name={`itemName`} placeholder="Item Name" value="Tuition" readOnly className="bg-grey105 p-4 focus-visible:outline-0 md:w-[14.4375rem] w-[6.25rem] shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"/>
         </div>
         <div className="grid gap-2">
             <Label htmlFor={`itemAmount`} className="block text-sm font-medium text-labelBlue">Item Amount</Label>
@@ -20,7 +20,7 @@ const InitialItem: React.FC = () => (
                         <SelectItem value="NGN">NGN</SelectItem>
                     </SelectContent>
                 </Select>
-                <Input type="text" id={`itemAmount-`} name={`itemAmount`} placeholder="Amount" value="2,000,000" readOnly className="bg-grey105 p-4 focus-visible:outline-0 w-[132px] shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"/>
+                <Input type="text" id={`itemAmount-`} name={`itemAmount`} placeholder="Amount" value="2,000,000" readOnly className="bg-grey105 p-4 focus-visible:outline-0 w-[6.25rem] md:w-[8.25rem] shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"/>
             </div>
         </div>
     </div>
