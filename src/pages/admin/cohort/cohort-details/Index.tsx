@@ -80,14 +80,14 @@ const CohortDetails = () =>{
         "thepeople they're creating for, which leads to better products, services, and internal processes."
 
         return (
-        <main className={`${inter.className}  py-2 md:px-8 px-2 w-fit md:w-full`}>
-            <div className={`flex cursor-pointer py-2 px-2 space-x-1 text-meedlBlue`} id={`backClick`}
+        <main className={`${inter.className}  py-3 px-8 w-fit md:w-full`}>
+            <div className={`flex cursor-pointer py-2 space-x-1 text-meedlBlue`} id={`backClick`}
                  data-testid={`backClick`} onClick={handleBackClick}>
                 <BiArrowBack className={`mt-1`}/>
                 <h1 id={`backClickText`} data-testid={`backClickText`}>Back to cohort</h1>
             </div>
 
-            <div className={`p- flex md:flex-row flex-col md:justify-between`}>
+            <div className={`py-3 flex md:flex-row flex-col md:justify-between`}>
                 <div>
                     <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
                          cohortDescription={description}
