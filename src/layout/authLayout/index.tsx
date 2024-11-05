@@ -20,7 +20,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                 data-testid={'authLayoutContainer'}
                 className={`flex   `}
             >
-            
+
                 <div
                     id={`authBgMainContainer`}
                     data-testid={`authBgMainContainer`}

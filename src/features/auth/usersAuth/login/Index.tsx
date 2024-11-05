@@ -6,6 +6,7 @@ import AuthInputField from "@/reuseable/Input/AuthInputField";
 import Link from 'next/link'
 import {cabinetGrotesk} from "@/app/fonts";
 import {    validateEmailInput}  from "@/utils/GlobalMethods"
+import {useLoginMutation} from "@/service/auths/api"
 
 
 const Login: React.FC = () => {
@@ -13,6 +14,7 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState<string>('');
 
     const [ validEmail , setValidEmail ] = useState(false)
+    const [login] = useLoginMutation()
 
 
     const validateEmail = (input: string) => {
@@ -30,6 +32,7 @@ const Login: React.FC = () => {
     };
 
     const handleReset = () => {
+        login
     }
 
 
@@ -68,6 +71,7 @@ const Login: React.FC = () => {
                     <div id={"authButtonContainer"} className={`w-[100%]`}>
                         <AuthButton disable={!isFormValid} backgroundColor={'#142854'} textColor={"white"}
                                     id={"loginButton"}
+                                    data-testid={`loginButton`}
                                     buttonText={"Login"} width={"inherit"}
                                     handleClick={handleReset}>
                         </AuthButton>

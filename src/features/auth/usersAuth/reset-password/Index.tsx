@@ -9,12 +9,13 @@ const ResetPassword = () => {
 
 
     return (
-        <div className={`md:w-full md:h-full w-full h-full grid content-start md:flex place-content-end`} >
-            {isEmailEntered?.length ?
+        <div className={`md:w-full md:h-full w-fit mb-20 h-full grid content-start md:flex place-content-end`} >
+            {isEmailEntered?.length === 0  ?
                 <Step1/>
                 :
                 <Step2/>
             }
+
         </div>
     );
 };

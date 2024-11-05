@@ -141,7 +141,7 @@ function Tables<T extends TableRowData> ({
                                                 ))
                                             }
                                             {showKirkBabel ?
-                                                <TableHead className='bg-gray h-12 hover:bg-gray'></TableHead> : ''}
+                                                <TableHead className='bg-[#F0F2F4] h-12 hover:bg-[#F0F2F4]'></TableHead> : ''}
                                         </TableRow>
 
                                     </TableHeader>
