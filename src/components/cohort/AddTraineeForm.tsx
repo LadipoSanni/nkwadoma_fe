@@ -8,6 +8,7 @@ import {Icon} from "@iconify/react";
 import {inter} from "@/app/fonts"
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import {Accordion, AccordionContent,AccordionItem,AccordionTrigger,} from "@/components/ui/accordion"
+import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 
 
 interface idProps {
@@ -86,13 +87,18 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
 
   })
 
+  const toastPopUp = ToastPopUp({
+    description: "Cohort Trainee successfully added.",
+  });
+  
+
   const handleSubmit = (values: typeof initialFormValue) => {
     const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
     const formattedValues = {
       ...values,
       initialDeposit: formattedDeposit,
     };
-
+    toastPopUp.showToast();
     console.log(formattedValues);
 
     if (setIsOpen) {

@@ -10,12 +10,14 @@ import TableModal from '@/reuseable/modals/TableModal'
 import { Cross2Icon } from "@radix-ui/react-icons";
 import EditCohortForm from './EditCohortForm'
 import { inter } from '@/app/fonts'
+import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 
 
 
 const CohortTabs = () => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
 
   const router = useRouter()
 
@@ -72,7 +74,7 @@ const CohortTabs = () => {
     
     }
     else {
-      router.push('/loan')
+      setIsDeleteOpen(true)
     }
   }
   
@@ -187,6 +189,16 @@ const CohortTabs = () => {
         >
           <EditCohortForm cohortId={cohortId} setIsOpen={()=>setIsOpen(false)}/>  
          
+        </TableModal>
+           
+        <TableModal
+        isOpen={isDeleteOpen}
+        closeModal={() => setIsDeleteOpen(false)}
+        closeOnOverlayClick={true}
+        icon={Cross2Icon}
+        width='auto'
+        >
+        <DeleteCohort setIsOpen={()=> setIsDeleteOpen(false)}/>
         </TableModal>
        
       </div>

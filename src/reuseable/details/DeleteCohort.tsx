@@ -3,6 +3,7 @@ import DeleteIcon from '../../../public/Icon - Delete.png'
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {inter, cabinetGrotesk} from "@/app/fonts";
+import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 
 interface deleteCohortProps {
     cohortId?: string,
@@ -12,6 +13,11 @@ interface deleteCohortProps {
 
 export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen}) => {
 
+    const toastPopUp = ToastPopUp({
+    description: "Cohort successfully deleted.",
+  });
+  
+
 
     const handleCanCelCohort = () => {
         if (setIsOpen) {
@@ -20,6 +26,7 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen}) => {
     }
 
     const handleDeleteCohort = () => {
+         toastPopUp.showToast();
         if (setIsOpen) {
             setIsOpen(false)
         }

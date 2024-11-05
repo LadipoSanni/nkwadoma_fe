@@ -9,6 +9,10 @@ import {    validateEmailInput}  from "@/utils/GlobalMethods"
 
 
 const Login: React.FC = () => {
+    
+    const fetchUrl =  "https://api-systest.learnspace.africa/api/v1/auth/login"
+    
+
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
@@ -32,6 +36,36 @@ const Login: React.FC = () => {
     const handleReset = () => {
     }
 
+    const handleLogin =  async(e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault(); 
+        //  console.log('Login successful:', {email,password});
+
+          try {
+            const response = await fetch(fetchUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to log in');
+            }
+
+            const data = await response.json();
+            console.log('Login successful:', data);
+            
+          
+        } catch (err: any) {
+            
+            console.error('Login failed:', err);
+        } finally {
+           
+        }
+        
+    };
 
     const isFormValid = validEmail  && password.length >= 8;
 
@@ -44,6 +78,7 @@ const Login: React.FC = () => {
                  className="px-4 py-4">
                 <h1 className={`${cabinetGrotesk.className} text-meedlBlue mt-3  text-2xl leading-5`}>Log in to your
                     account</h1>
+                       <form onSubmit={handleLogin} data-testid={`email&PasswordId`} id={`emailAndPasswordId`} >
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
                      className="pt-5 space-y-5">
                     <div data-testid={`emailId`} id={`emailId`}>
@@ -69,15 +104,19 @@ const Login: React.FC = () => {
                         <AuthButton disable={!isFormValid} backgroundColor={'#142854'} textColor={"white"}
                                     id={"loginButton"}
                                     buttonText={"Login"} width={"inherit"}
-                                    handleClick={handleReset}>
+                                    handleClick={
+                                        handleReset}>
                         </AuthButton>
+                      
                     </div>
+                    
                     <p className="flex items-center justify-center text-sm text-forgetPasswordBlue leading-4">
                         Forgot Password? <Link href={"/auth/reset-password"}
                                             className="font-medium text-meedlBlue ml-1  underline">Reset it
                         here</Link>
                     </p>
                 </div>
+                </form>
             </div>
         </div>
     )
