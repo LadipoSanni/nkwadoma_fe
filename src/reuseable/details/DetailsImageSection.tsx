@@ -4,7 +4,7 @@ import {inter} from "@/app/fonts";
 import {Card} from "@/components/ui/card";
 import Image from 'next/image';
 import {Button} from "@/components/ui/button";
-import CreateProgramButton from "@/components/program/create-program-button/Index";
+// import CreateProgramButton from "@/components/program/create-program/Index";
 import {TagButton} from "@/reuseable/tagButton/TagButton";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import {IoEllipsisHorizontalSharp} from "react-icons/io5";
@@ -20,7 +20,7 @@ interface detailsProps {
     icon?: ElementType;
     dropdownOption: { name: string, id: string }[];
     handleDropdownClicked: (id: string) => void;
-    useProgramButton: boolean;
+    buttonText: string;
     tagButtonData: { tagIcon: ElementType, tagCount: number, tagButtonStyle: string, tagText: string }[];
 }
 
@@ -31,7 +31,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                                          icon: Icon,
                                                          dropdownOption,
                                                          handleDropdownClicked,
-                                                         useProgramButton,
+                                                         buttonText,
                                                          tagButtonData
                                                      }) => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -87,20 +87,10 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                     </div>
 
                     <div className={`flex flex-row md:space-x-3 space-x-2 pt-5 w-full`}>
-                        {useProgramButton ? (
-                            <CreateProgramButton buttonText={"Edit Cohort"} title={"Edit Cohort"}
-                                                 programDeliveryTypes={["Full-time", "Part-time"]}
-                                                 programModes={["Online", "Physical"]}
-                                                 programDurations={["3years", "4years"]}
-                                                 submitButtonText={"Save Cohort"} triggerButtonStyle={`w-full`}
-                            />
-                        ) : (
                             <Button variant={"secondary"}
                                     size={"lg"}
                                     className={`bg-meedlBlue text-meedlWhite w-full h-12 flex justify-center items-center`}
-                                    onClick={handleModalOpen}>Add Trainee</Button>
-                        )
-                        }
+                                    onClick={handleModalOpen}>{buttonText}</Button>
                         <div role={"button"}
                                 className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
                             <Kebab kebabOptions={dropdownOption} handleDropDownClick={handleDropdownClicked}
