@@ -7,10 +7,13 @@ import {inter, cabinetGrotesk} from "@/app/fonts";
 interface deleteCohortProps {
     cohortId?: string,
     setIsOpen?: (e: boolean | undefined) => void,
+    headerTitle: string,
+    title: string,
+
 }
 
 
-export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen}) => {
+export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title}) => {
 
 
     const handleCanCelCohort = () => {
@@ -32,11 +35,10 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen}) => {
                    height={200}
             />
             <div className={`pt-3`}>
-                <h1 className={`${cabinetGrotesk.className} text-2xl font-medium leading-7 text-meedlBlack`}>Delete
-                    cohort <br/></h1>
+                <h1 className={`${cabinetGrotesk.className} text-2xl font-medium leading-7 text-meedlBlack`}>{headerTitle}
+                    <br/></h1>
 
-                <p className={`pt-3 text-sm font-normal leading-6 text-grey450`}>Are you sure you want to delete this
-                    cohort? This action can&#39;t be undone </p>
+                <p className={`pt-3 text-sm font-normal leading-6 text-grey450`}>Are you sure you want to delete this {title}? This action can&#39;t be undone </p>
             </div>
 
             <div className={`flex flex-row justify-end gap-3 py-5`}>
