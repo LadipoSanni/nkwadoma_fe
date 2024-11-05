@@ -65,8 +65,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                                        height={90}
                                 />
                             </div>
-                          {/*{children}*/}
-                        fjrg8ur89gu9g8tu8g
+                          {children}
                     </div>
                 </div>
             </main>
