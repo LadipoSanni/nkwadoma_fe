@@ -10,8 +10,6 @@ import {Button} from "@/components/ui/button";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import {IoEllipsisHorizontalSharp} from "react-icons/io5";
 import {ProgramTab} from "@/reuseable/details/ProgramTab";
-import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
-
 
 const ProgramDetails = () => {
 
