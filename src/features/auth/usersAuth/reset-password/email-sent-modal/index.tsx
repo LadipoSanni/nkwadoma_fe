@@ -1,20 +1,17 @@
 "use client"
 import React from 'react';
 import AuthEmail from "@/reuseable/modals/AuthEmail";
+import {useAppSelector} from "@/redux/store";
 
 const Step2 = () => {
 
 
-    const emailInput  = React.useMemo(() => {
-        if (typeof window !== "undefined") {
-            return window.localStorage.getItem("userEmailInputOnResetPassword")
-        }
-    }, [])
+    const emailInput  = useAppSelector(state => state.authSlice.resetPasswordUserInput)
 
 
 
     return (
-        <div className={`md:w-fit  md:mr-20 h-fit md:h-[40%] w-full `}>
+        <div className={`md:w-fit md:mr-20 h-fit md:h-[40%] w-fit `}>
             <AuthEmail email={emailInput} header='Email sent'/>
         </div>
     );

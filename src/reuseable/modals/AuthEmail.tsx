@@ -2,6 +2,7 @@
 import React from 'react';
 import Image from 'next/legacy/image'
 import {useRouter} from 'next/navigation'
+import {inter} from "@/app/fonts";
 
 interface props {
     header?: string,
@@ -12,12 +13,16 @@ const AuthEmail = ({header, email}: props) => {
 
     const router = useRouter()
 
+    const goToLogin = () => {
+        router.push("/auth/login")
+    }
+
 
     return (
         <div id={'authEmailModal'} data-testid={'authEmailModal'}
-             className={`w-[100vw] mr-3 h-[100%] px-3 md:mt-7 md:pr-10  py-3 rounded-md bg-white grid grid-rows-3 place-self-center  border border-slate-200`}
+             className={`w-[90vw] h-fit px-3 md:mt-7 md:pr-10 gap-2  py-3 rounded-md bg-white grid place-self-center  border border-slate-200`}
         >
-            <div id={'successIconContainer'} className={``} data-testid={'successIconContainer'}>
+            <div id={'successIconContainer'} className={`h-fit`} data-testid={'successIconContainer'}>
                 <Image
                     id={'successIcon'}
                     data-testid={'successIcon'}
@@ -25,9 +30,10 @@ const AuthEmail = ({header, email}: props) => {
                     height={50}
                     src={'/Icon - Success (3).svg'}
                     alt={'success icon'}
+                    priority={true}
                 />
             </div>
-            <div className={`grid gap-3`}>
+            <div className={`grid h-fit  gap-3`}>
                 <div id={'modalHeaderText'} data-testid={'modalHeaderText'}
                      className={` text-lg  `}
                 >
@@ -42,9 +48,9 @@ const AuthEmail = ({header, email}: props) => {
                     <div> check your spam folder.</div>
                 </div>
             </div>
-            <div className={`h-[70%] flex justify-normal relative`} id={'backToLoginFromResetPasswordStep2'}>
-                <button className={`w-fit absolute bottom-0`} onClick={() => router.push("/auth/login")}>
-                    <div className={`text-meedleBlue text-sm underline `}>Back to Log in</div>
+            <div className={`h-fit flex justify-normal `} id={'backToLoginFromResetPasswordStep2'}>
+                <button className={`w-fit h-fit`} onClick={goToLogin}>
+                    <div className={`${inter.className} text-meedleBlue text-sm font-light underline `}>Back to Log in</div>
                 </button>
             </div>
         </div>
