@@ -2,38 +2,31 @@
 import React from "react";
 import {useRouter} from "next/navigation";
 import {inter, cabinetGrotesk} from "@/app/fonts";
-import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import {MdOutlinePeopleAlt, MdOutlineDateRange, MdPersonOutline} from "react-icons/md";
 import {BiArrowBack} from "react-icons/bi";
 import {FiBook} from "react-icons/fi";
 import {TagButton} from "@/reuseable/tagButton/TagButton";
 import {Button} from "@/components/ui/button";
+import Kebab from "@/reuseable/Kebab/Kebab";
+import {IoEllipsisHorizontalSharp} from "react-icons/io5";
+import {ProgramTab} from "@/reuseable/details/ProgramTab";
 
 
 const ProgramDetails = () => {
+
     const dataList = [
-        {label: "Start Date", value: "13, Dec 2023"},
-        {label: "End Date", value: "15, Jan 2024"},
-        {label: "Cohort status", value: "10"},
-        {label: "Number of Dropouts", value: "10"},
-        {label: "Dropout rate", value: "0.5%"},
-        {label: "Number employed", value: "38"},
-        {label: "Employment rate", value: "38%"},
-        {label: "Average starting salary", value: "3,000,000.00"},
-        {label: "Total amount disbursed", value: "3,000,000.00"},
-        {label: "Total amount repaid", value: "3,000,000.00"},
-        {label: "Total amount outstanding", value: "3,000,000.00"},
-        {label: "Repayment rate", value: "70%"},
-        {label: "Tuition amount", value: "3,500,000.00"},
+        {label: "Program mode", value: "Online"},
+        {label: "Program delivery type", value: "Full-time"},
+        {label: "Completion rate", value: "88%"},
+        {label: "Employment rate", value: "78%"},
+        {label: "Average starting income", value: "₦3,000,000.00"},
+        {label: "Repayment rate", value: "40%"},
+        {label: "Debt percentage", value: "55.5%"},
+        {label: "Total loan amount disbursed", value: "₦3,000,000.00"},
+        {label: "Total loan amount repaid", value: "₦3,000,000.00"},
+        {label: "Total loan amount outstanding", value: "₦3,000,000.00"},
     ];
 
-    const breakDown = [
-        {title: "Tuition", amount: "200,000,000.00"},
-        {title: "Device", amount: "600,000,000.00"},
-        {title: "Accommodation", amount: "200,000,000.00"},
-        {title: "Feeding", amount: "200,000.00"},
-        {title: "Total", amount: "300,500,000.00"},
-    ];
     // const program1Options = [
     //     {name: 'Edit Cohort', id: '1'},
     //     {name: 'Delete Cohort', id: '3'},
@@ -83,12 +76,20 @@ const ProgramDetails = () => {
                             </div>
                         </div>
                     </div>
-                    <Button className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit program</Button>
+                    <div className={'flex justify-between'}>
+                        <Button
+                            className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
+                            program</Button>
+                        <div role={"button"}
+                             className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
+                            <Kebab icon={IoEllipsisHorizontalSharp}/>
+                        </div>
+                    </div>
 
                 </div>
 
                 <div className={`md:w-6/12 h-[96%] md:pt-0 pt-0`}>
-                    <DetailsTabContainer dataList={dataList} breakDown={breakDown}/>
+                    <ProgramTab dataList={dataList} />
                 </div>
             </section>
         </main>
