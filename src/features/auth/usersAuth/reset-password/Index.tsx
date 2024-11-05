@@ -1,11 +1,11 @@
 import React from 'react';
 import Step1 from "@/features/auth/usersAuth/reset-password/enter-email-component/index"
 import Step2 from "@/features/auth/usersAuth/reset-password/email-sent-modal/index"
-import {getItemFromLocalStorage} from "@/utils/localStorage";
+import {useAppSelector} from "@/redux/store";
 
 
 const ResetPassword = () => {
-    const isEmailEntered = getItemFromLocalStorage("userEmailInputOnResetPassword")
+    const isEmailEntered = useAppSelector(state => state.authSlice.resetPasswordUserInput)
 
 
     return (
@@ -15,6 +15,7 @@ const ResetPassword = () => {
                 :
                 <Step2/>
             }
+
 
         </div>
     );

@@ -4,9 +4,8 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 // import { getUserToken } from '@/services/storage';
 // import fetch from 'node-fetch'; // Import node-fetch for SSR
 
-const baseUrl = `https://api-systest.learnspace.africa/api/v1/auth/login`;
+const baseUrl = process.env.APP_DEV_AUTH_URL;
 
-console.log("base: ", baseUrl)
 
 export const customFetchBaseQuery = fetchBaseQuery({
     baseUrl,

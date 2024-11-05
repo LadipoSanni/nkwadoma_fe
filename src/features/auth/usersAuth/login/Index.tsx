@@ -6,6 +6,7 @@ import AuthInputField from "@/reuseable/Input/AuthInputField";
 import Link from 'next/link'
 import {cabinetGrotesk} from "@/app/fonts";
 import {    validateEmailInput}  from "@/utils/GlobalMethods"
+import {useLoginMutation} from "@/service/auths/api"
 
 
 const Login: React.FC = () => {
@@ -13,6 +14,7 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState<string>('');
 
     const [ validEmail , setValidEmail ] = useState(false)
+    const [login, {data}] = useLoginMutation()
 
 
     const validateEmail = (input: string) => {
@@ -29,8 +31,9 @@ const Login: React.FC = () => {
         setPassword(e.target.value)
     };
 
-    const handleReset = () => {
-        
+    const handleReset = async () => {
+        const response = await login({email, password})
+        console.log("data: ", data, "response: ",response)
     }
 
 
