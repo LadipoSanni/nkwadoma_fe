@@ -14,10 +14,10 @@ const Step3 = () => {
     const router = useRouter()
 
     useEffect(() => {
-        if (newPassword.length < 8 && confirmPassword.length < 8) {
+        if (newPassword !== confirmPassword ) {
             setDisableButton(true)
         }
-        if (newPassword.length >= 8 && confirmPassword.length >= 8) {
+        if (newPassword === confirmPassword) {
             setDisableButton(false)
         }
     }, [confirmPassword, newPassword]);
@@ -53,7 +53,7 @@ const Step3 = () => {
                     <div id={"RESETPASSWORDStep3HEADER"} className={`font-semi-bold text-2xl  `}>Reset your password
                     </div>
                 </div>
-                <div className={`w-[100%] h-[5rem] grid gap-4 mb-16 md:mb-16 `}>
+                <div className={`w-[100%] h-[5rem] grid gap-4 mt-4  mb-16 md:mb-16 `}>
                     <AuthInput value={newPassword} type={'password'} data-testid={'resetNewPasswordInput'}
                                label={'New password'}
                                id={'resetNewPasswordInput'} onChange={handleChangeNewPassword}
@@ -65,7 +65,7 @@ const Step3 = () => {
                                endAdornment={'Hide'}
                                placeholder={'Enter password'}></AuthInput>
                 </div>
-                <div className={`w-[100%] mt-8 `}>
+                <div className={`w-[100%] mt-4 `}>
                     <Link href={'/auth/reset-password/step-2'} className={`w-[100%]`}>
                         <AuthButton disable={disableButton} backgroundColor={'#142854'} textColor={"white"}
                                     id={"resetPasswordButton"}
