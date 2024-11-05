@@ -43,9 +43,9 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
             />
             <div className={`pt-3`}>
                 <h1 className={`${cabinetGrotesk.className} text-2xl font-medium leading-7 text-meedlBlack`}>{headerTitle}
-                    <br/></h1>
+                    </h1>
 
-                <p className={`pt-3 text-sm font-normal leading-6 text-grey450`}>Are you sure you want to delete this {title}? This action can&#39;t be undone </p>
+                <p className={`pt-3 text-sm font-normal leading-6 text-grey450 md:w-[22rem]`}>Are you sure you want to delete this {title}? This <br/>action can&#39;t be undone </p>
             </div>
 
             <div className={`flex flex-row justify-end gap-3 py-5`}>
