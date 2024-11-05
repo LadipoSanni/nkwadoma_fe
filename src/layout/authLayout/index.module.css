@@ -12,6 +12,12 @@
     font-size: calc(3.5vw + 1vh);
 }
 
+@media only  screen and (min-width: 834px) {
+    .authBgMainContaine{
+        visibility: hidden;
+    }
+}
+
 @media only screen and (min-width: 768px){
     .authBgMainContainer{
         grid-template-columns: 35% 65%;
@@ -21,13 +27,8 @@
 
 @media only screen  and (min-width: 768px){
     .authLayoutChildrenDiv{
+        width: 100%;
         clip-path: polygon(25.2% 0%, 85% 0%, 100.1% 0%, 100.1% 100.3%, 85% 100%, 15% 100%, 0% 100.3%, 29% 54%);
-        /*clip-path: polygon(25.2% 0%, 85% 0%, 100.1% 0%, 100.1% 100.3%, 85% 100%, 15% 100%, 10.8% 100.3%, 29% 54%);*/
-        /*clip-path: polygon(25.2% 0%, 85% 0%, 100.1% 0%, 100.1% 100.3%, 85% 100%, 15% 100%, 12.3% 100.3%, 29% 54%);*/
-        /*clip-path: polygon(27.1% 0%, 85% 0%, 100.1% 0%, 100.1% 100.3%, 85% 100%, 15% 100%, 12.3% 100.3%, 29% 54%);*/
-        /*clip-path: polygon(7.9% 0%, 85% 0%, 99.9% 0.3%, 99.9% 100.3%, 85% 100%, 0% 100.3%, 14.5% 58.8%, 12% 0%);*/
-        /*clip-path: polygon(7.9% 0%, 85% 0%, 99.9% 0.3%, 99.9% 100.3%, 85% 100%, 0% 100.3%, 14.5% 59.8%, 8.5% 0%);*/
-        /*clip-path: polygon(0% 0%, 85% 0%, 99.9% 0.3%, 99.9% 100.3%, 85% 100%, 0% 100.3%, 14.5% 59.8%, 10.3% 0.3%);*/
     }
 
 }

@@ -1,7 +1,6 @@
 'use client'
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import AuthInput from "@/reuseable/Input/AuthInputField";
-import Link from "next/link";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import {useRouter} from "next/navigation";
 
@@ -14,10 +13,10 @@ const Step3 = () => {
     const router = useRouter()
 
     useEffect(() => {
-        if (newPassword !== confirmPassword ) {
+        if (newPassword !== confirmPassword && confirmPassword.length < 8 ) {
             setDisableButton(true)
         }
-        if (newPassword === confirmPassword) {
+        if (newPassword === confirmPassword && confirmPassword.length >= 8 ) {
             setDisableButton(false)
         }
     }, [confirmPassword, newPassword]);
@@ -66,7 +65,7 @@ const Step3 = () => {
                                placeholder={'Enter password'}></AuthInput>
                 </div>
                 <div className={`w-[100%] mt-4 `}>
-                    <Link href={'/auth/reset-password/step-2'} className={`w-[100%]`}>
+                    <div className={`w-[100%]`}>
                         <AuthButton disable={disableButton} backgroundColor={'#142854'} textColor={"white"}
                                     id={"resetPasswordButton"}
                                     buttonText={"Reset password"} width={"inherit"}
@@ -80,7 +79,7 @@ const Step3 = () => {
                                 Log in
                             </button>
                         </div>
-                    </Link>
+                    </div>
                 </div>
             </div>
 

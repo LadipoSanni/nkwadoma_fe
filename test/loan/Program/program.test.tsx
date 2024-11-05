@@ -1,50 +1,83 @@
-import {render, screen, fireEvent, cleanup} from '@testing-library/react';
-import '@testing-library/jest-dom';
-import React from "react";
-import CreateProgramButton from "@/components/program/create-program-button/Index";
+import { render, screen, fireEvent } from "@testing-library/react";
+import CreateProgram from "@/components/program/create-program/Index";
 
+const setup = (props = {}) => {
+    const defaultProps = {
+        programDeliveryTypes: ["Online", "In-person"],
+        programModes: ["Full-time", "Part-time"],
+        programDurations: ["1 month", "3 months"],
+        submitButtonText: "Create Program",
+        setIsOpen: jest.fn(),
+        ...props,
+    };
+    return render(<CreateProgram {...defaultProps} />);
+};
 
-describe('CreateProgramButton Component', () => {
-    beforeEach(() => {
-        cleanup();
-        jest.spyOn(console, 'log').mockReturnValue();
-        jest.spyOn(console, 'warn').mockReturnValue();
-        jest.spyOn(console, 'error').mockReturnValue();
-        const {queryByTestId} = render(
-            <CreateProgramButton
-                buttonText="Create Program"
-                title="Program Details"
-                programDeliveryTypes={['Online', 'Offline']}
-                programModes={['Full-time', 'Part-time']}
-                programDurations={['1 month', '3 months']}
-                submitButtonText="Submit"
-                triggerButtonStyle="custom-style"
-            />
-        )
-        const assert = queryByTestId("trigger-button");
-        expect(assert).toBeInTheDocument();
-
-    });
-    it('should open the dialog when the trigger button is clicked', () => {
-        const triggerButton = screen.getByTestId('trigger-button');
-        fireEvent.click(triggerButton);
-        const dialogContent = screen.getByTestId('dialog-content');
-        expect(dialogContent).toBeVisible();
+describe("CreateProgram component", () => {
+    test("renders all input labels and placeholders correctly", () => {
+        setup();
+        expect(screen.getByTestId("program-name-label")).toHaveTextContent("Program Name");
+        expect(screen.getByPlaceholderText("Enter name")).toBeInTheDocument();
+        expect(screen.getByTestId("program-delivery-type-label")).toHaveTextContent("Program Delivery Type");
+        expect(screen.getByTestId("program-duration-label")).toHaveTextContent("Program Duration");
+        expect(screen.getByPlaceholderText("Enter description")).toBeInTheDocument();
     });
 
-    it('should keep the dialog closed if the trigger button is not clicked', () => {
-        const dialogContent = screen.queryByTestId('dialog-content');
-        expect(dialogContent).toBeNull();
+    test("validates program name input and shows error if invalid", () => {
+        setup();
+
+        const programNameInput = screen.getByTestId("program-name-input");
+        fireEvent.change(programNameInput, { target: { value: "1234" } });
+        expect(screen.getByText("Name must contain only letters.")).toBeInTheDocument();
     });
 
-    it('should close the dialog when the closeDialog function is called', () => {
-        const triggerButton = screen.getByTestId('trigger-button');
-        fireEvent.click(triggerButton);
-        const dialogContent = screen.getByTestId('dialog-content');
-        expect(dialogContent).toBeVisible();
+    test("validates program description input and shows error if invalid", () => {
+        setup();
 
-        const closeButton = screen.getByTestId('cancel-button');
-        fireEvent.click(closeButton);
-        expect(dialogContent).not.toBeVisible();
+        const programDescriptionInput = screen.getByTestId("program-description");
+        fireEvent.change(programDescriptionInput, { target: { value: "1234" } });
+        expect(screen.getByText("Description must contain only letters.")).toBeInTheDocument();
+    });
+
+    test("disables 'Create Program' button if form is invalid", () => {
+        setup();
+
+        const createButton = screen.getByTestId("create-button");
+        expect(createButton).toBeDisabled();
+    });
+
+    test("closes dialog and resets fields on 'Cancel' click", () => {
+        const setIsOpen = jest.fn();
+        setup({ setIsOpen });
+
+        const cancelButton = screen.getByTestId("cancel-button");
+        fireEvent.click(cancelButton);
+
+        expect(setIsOpen).toHaveBeenCalledWith(false);
+        expect(screen.getByTestId("program-name-input")).toHaveValue("");
+        expect(screen.getByTestId("program-description")).toHaveValue("");
+    });
+
+    test("submits form if all fields are valid", () => {
+        const setIsOpen = jest.fn();
+        setup({ setIsOpen });
+
+        fireEvent.change(screen.getByTestId("program-name-input"), { target: { value: "React" } });
+        fireEvent.change(screen.getByTestId("program-description"), { target: { value: "A course on React" } });
+
+        fireEvent.click(screen.getByTestId("program-delivery-type-trigger"));
+        fireEvent.click(screen.getByTestId("program-delivery-type-item-0"));
+
+        fireEvent.click(screen.getByTestId("program-mode-trigger"));
+        fireEvent.click(screen.getByTestId("program-mode-item-0"));
+
+        fireEvent.click(screen.getByTestId("program-duration-trigger"));
+        fireEvent.click(screen.getByTestId("program-duration-item-0"));
+
+        const createButton = screen.getByTestId("create-button");
+        expect(createButton).not.toBeDisabled();
+        fireEvent.click(createButton);
+
+        expect(setIsOpen).toHaveBeenCalledWith(false);
     });
 });

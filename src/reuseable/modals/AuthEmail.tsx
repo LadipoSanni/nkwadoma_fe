@@ -20,7 +20,7 @@ const AuthEmail = ({header, email}: props) => {
 
     return (
         <div id={'authEmailModal'} data-testid={'authEmailModal'}
-             className={`w-[90vw] mb-20  h-fit px-3 md:mt-7 md:pr-10 gap-2  py-3 rounded-md bg-white grid place-self-center  border border-slate-200`}
+             className={`w-[90vw] h-fit px-3 md:mt-7 md:pr-10 gap-2  py-3 rounded-md bg-white grid place-self-center  border border-slate-200`}
         >
             <div id={'successIconContainer'} className={`h-fit`} data-testid={'successIconContainer'}>
                 <Image
@@ -30,6 +30,7 @@ const AuthEmail = ({header, email}: props) => {
                     height={50}
                     src={'/Icon - Success (3).svg'}
                     alt={'success icon'}
+                    priority={true}
                 />
             </div>
             <div className={`grid h-fit  gap-3`}>

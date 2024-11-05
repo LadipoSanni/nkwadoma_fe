@@ -2,10 +2,10 @@
 import React, {ChangeEvent, useState} from 'react';
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInput from "@/reuseable/Input/AuthInputField"
-import Link from 'next/link'
-import {setItemToLocalStorage} from "@/utils/localStorage";
 import {useRouter} from "next/navigation";
 import {validateEmailInput} from "@/utils/GlobalMethods";
+import {store} from "@/redux/store";
+import {setUserPasswordInput} from "@/redux/slice/auth/slice";
 
 
 const Step1 = () => {
@@ -20,7 +20,7 @@ const Step1 = () => {
 
 
     const handleReset = () => {
-        setItemToLocalStorage("userEmailInputOnResetPassword", email)
+        store.dispatch(setUserPasswordInput(email))
     }
 
     const validateEmail = (input: string) => {
@@ -48,7 +48,7 @@ const Step1 = () => {
 
         <div
             id="resetPasswordComponent"
-            className={` py-4 border border-slate-200 px-3 w-[90vw] md:mr-20 rounded-md h-fit mb-60 bg-white grid md:px-2.5 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[50%] md:h-fit md:rounded-md`}
+            className={` py-4 border border-slate-200 px-3 w-[90vw] md:mr-20 rounded-md h-fit  bg-white grid md:px-2.5 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[50%] md:h-fit md:rounded-md`}
         >
             <div
                 id={"resetPasswordInnerContainer"}
@@ -68,12 +68,12 @@ const Step1 = () => {
                                    placeholder={'Enter email address'}></AuthInput>
                     </div>
                     <div id={"authButtonContainer"} className={`w-[100%]`}>
-                        <Link href={'/auth/reset-password/step-2'} className={`w-[100%]`}>
+                        <div className={`w-[100%]`}>
                             <AuthButton disable={disableButton} backgroundColor={'#142854'} textColor={"white"}
                                         id={"resetPasswordSubmitEmailButton"}
                                         buttonText={"Submit email"} width={"inherit"}
                                         handleClick={handleReset}></AuthButton>
-                        </Link>
+                        </div>
                         <div className={`flex gap-2 place-self-center place-content-center  mt-1 `}>
                             <div className={`text-grey1 text-sm `}>Remember your password?</div>
                             <button
