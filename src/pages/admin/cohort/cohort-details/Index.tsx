@@ -92,7 +92,7 @@ const CohortDetails = () =>{
                     <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
                          cohortDescription={description}
                          dropdownOption={program1Options} handleDropdownClicked={handleDropdownClick}
-                         useProgramButton={false} tagButtonData={tagButtonData}/>
+                                         buttonText={"Edit Cohort"} tagButtonData={tagButtonData}/>
                 </div>
 
                 <div className={`md:w-6/12 pt- md:pt-0 h-[96%]`}>
@@ -107,7 +107,7 @@ const CohortDetails = () =>{
                  icon={Cross2Icon}
                  width="auto"
                 >
-                    <DeleteCohort  setIsOpen={()=>setIsDeleteOpen(false)}/>
+                    <DeleteCohort  setIsOpen={()=>setIsDeleteOpen(false)} headerTitle={"Delete cohort"} title={"cohort"}/>
                 </TableModal>
             </div>
 
