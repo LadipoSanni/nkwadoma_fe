@@ -4,8 +4,9 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 // import { getUserToken } from '@/services/storage';
 // import fetch from 'node-fetch'; // Import node-fetch for SSR
 
-const baseUrl = process.env.APP_DEV_AUTH_URL
+const baseUrl = `https://api-systest.learnspace.africa/api/v1/auth/login`;
 
+console.log("base: ", baseUrl)
 
 export const customFetchBaseQuery = fetchBaseQuery({
     baseUrl,
@@ -15,7 +16,7 @@ export const customFetchBaseQuery = fetchBaseQuery({
     //     : undefined, // Use browser's fetch in client-side environments
     prepareHeaders: (headers) => {
         // const token = getUserToken();
-        // headers.set('Access-Control-Allow-Origin', 'http://localhost:3000')
+        console.log("base: ", baseUrl)
 
         // if (token) {
         //     headers.set('authorization', Bearer ${token});
