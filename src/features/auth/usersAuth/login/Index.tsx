@@ -62,7 +62,7 @@ const Login: React.FC = () => {
             console.log('Login successful:', data);
             
           
-        } catch (err: any) {
+        } catch (err) {
             
             console.error('Login failed:', err);
         } finally {
