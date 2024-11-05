@@ -10,6 +10,7 @@ import {Button} from "@/components/ui/button";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import {IoEllipsisHorizontalSharp} from "react-icons/io5";
 import {ProgramTab} from "@/reuseable/details/ProgramTab";
+import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 
 
 const ProgramDetails = () => {
@@ -41,7 +42,7 @@ const ProgramDetails = () => {
 
     const router = useRouter();
     const handleBackClick = () => {
-        router.push('/cohort')
+        router.push('/program')
     }
 
 
@@ -89,6 +90,7 @@ const ProgramDetails = () => {
                 </div>
 
                 <div className={`md:w-6/12 h-[96%] md:pt-0 pt-0`}>
+                    {/*<DetailsTabContainer dataList={dataList}  tabTitle1={"Program details"} tabTitle2={"Cohorts"}/>*/}
                     <ProgramTab dataList={dataList} />
                 </div>
             </section>

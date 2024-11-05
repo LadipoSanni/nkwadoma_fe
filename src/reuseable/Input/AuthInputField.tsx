@@ -31,8 +31,8 @@ const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, 
     };
 
     return (
-        <div id={`custom-input-field-${id}`} className={`${inter.className} grid gap-0`}>
-            <label id={`label-${id}`} htmlFor={id} className="text-labelBlue 0 font-semibold text-sm  ">
+        <div id={`custom-input-field-${id}`} className={`${inter.className} grid gap-1`}>
+            <label id={`label-${id}`} htmlFor={id} className="text-labelBlue font-normal leading-4 text-sm  ">
                 {label}
             </label>
             <div id={`input-container-${id}`}

@@ -4,7 +4,7 @@ import CohortTabs from "@/components/cohort/CohortTabs";
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
-;
+
 import { useRouter } from 'next/navigation';
 
 

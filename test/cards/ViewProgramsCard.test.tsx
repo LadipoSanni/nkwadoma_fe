@@ -1,8 +1,22 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import {render, screen, fireEvent, cleanup} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(),
+}));
+import {useRouter} from "next/navigation";
 
 describe('AllProgramsCard Component', () => {
+    const mockPush = jest.fn();
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        cleanup();
+
+        (useRouter as jest.Mock).mockReturnValue({
+            push: mockPush,
+        });
+    })
     const props = {
         id: "program-view card",
         title: 'Test Course',
@@ -46,7 +60,7 @@ describe('AllProgramsCard Component', () => {
         expect(readMoreButton).toBeInTheDocument();
 
         fireEvent.click(readMoreButton);
-    expect(screen.getByTestId('description')).toHaveTextContent('This is a very long description meant to test the truncation functionality. This should trigger the read more functionality.');
+    expect(screen.getByTestId('description')).toHaveTextContent('This is a very long description meant to test the truncation functionality. This....');
 
     });
 

@@ -13,9 +13,11 @@ import {MdOutlinePerson} from "react-icons/md";
 interface detailContainerProps {
     dataList: { label: string; value: string; }[];
     breakDown?: { title: string; amount: string; }[];
+    tabTitle1: string;
+    tabTitle2: string;
 }
 export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
-                                                                        breakDown, }) => {
+                                                                        breakDown, tabTitle1, tabTitle2}) => {
     const [isDropdown, setIsDropdown] = React.useState(false);
     const [isOpen, setIsOpen] = React.useState(false);
     const handleOpen = () => {
@@ -41,15 +43,15 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({dataList,
                         className={`shadow-none`}
                     >
                         <TabsList id="tabs-list" data-testid="tabs-list" className={`px-1 py-1`}>
-                            <TabsTrigger value={"trainee-details-mock-data"} data-testid="cohort-details-tab ">Cohort
-                                details</TabsTrigger>
-                            <TabsTrigger value={"trainee"} data-testid="trainees-tab">Trainees</TabsTrigger>
+                            <TabsTrigger value={"trainee-details-mock-data"} data-testid="cohort-details-tab ">{tabTitle1}
+                                </TabsTrigger>
+                            <TabsTrigger value={"trainee"} data-testid="trainees-tab">{tabTitle2}</TabsTrigger>
                         </TabsList>
 
                         <TabsContent value={"trainee-details-mock-data"} id="cohort-details-content"
                                      data-testid="cohort-details-content" className={`py-2`}>
                             <div
-                                className="bg-grey105 px-4 md:h-[450px] w-full h-96 py-2 overflow-y-auto rounded-sm">
+                                className="bg-[#F9F9F9] px-4 md:h-[450px] w-full h-96 py-2 overflow-y-auto rounded-sm">
                                 {dataList.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
