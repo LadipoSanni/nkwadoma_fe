@@ -32,7 +32,7 @@ const Login: React.FC = () => {
     };
 
     const handleReset = () => {
-        login
+
     }
 
 
