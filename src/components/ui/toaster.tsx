@@ -9,11 +9,8 @@ import {
   ToastTitle,
   ToastViewport,
 } from "@/components/ui/toast"
-import ImageIcon from "../../../public/checkIcon.png"
-import Image from "next/image"
 import { Separator } from "./separator"
 import { MdOutlineCheck } from "react-icons/md"
-import { MdOutlineError } from "react-icons/md"
 import { Cross2Icon } from "@radix-ui/react-icons"
 
 export function Toaster() {
