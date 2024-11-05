@@ -5,6 +5,6 @@ import ProgramView from '@/pages/admin/program/program-view/Index';
 describe('program-view Component', () => {
     test('renders program-view component', () => {
         render(<ProgramView />);
-        expect(screen.getByText('Create Program')).toBeInTheDocument();
+        expect(screen.getByText('Create program')).toBeInTheDocument();
     });
 });
