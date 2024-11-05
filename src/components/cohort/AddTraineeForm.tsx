@@ -89,6 +89,7 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
 
   const toastPopUp = ToastPopUp({
     description: "Cohort Trainee successfully added.",
+    status:"success"
   });
   
 

@@ -18,6 +18,7 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
 
     const toastPopUp = ToastPopUp({
     description: "Cohort successfully deleted.",
+    status:"success"
   });
   
 

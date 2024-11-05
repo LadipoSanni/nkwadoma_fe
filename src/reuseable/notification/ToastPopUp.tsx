@@ -6,9 +6,10 @@ type Props = {
   description: string;
   className?: string;
   action?: React.ReactElement;
+  status?: "success" | "error";
 }
 
-function ToastPopUp({title,description,className,action}: Props) {
+function ToastPopUp({title,description,className,action,status = "success"}: Props) {
   const { toast } = useToast();
 
   const showToast = () => {
@@ -16,7 +17,8 @@ function ToastPopUp({title,description,className,action}: Props) {
       title,
       description,
       action,
-      className
+      className,
+      status
     });
   };
   return { showToast };

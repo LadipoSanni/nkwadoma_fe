@@ -165,6 +165,8 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
    const toastPopUp = ToastPopUp({
     description: "Cohorts details successfully updated.",
+    status:"success"
+    
   });
   
   const handleSubmit = (values: typeof initialFormValue) => {
