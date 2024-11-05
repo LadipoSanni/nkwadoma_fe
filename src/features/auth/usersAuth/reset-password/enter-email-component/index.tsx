@@ -2,7 +2,6 @@
 import React, {ChangeEvent, useState} from 'react';
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInput from "@/reuseable/Input/AuthInputField"
-import Link from 'next/link'
 import {useRouter} from "next/navigation";
 import {validateEmailInput} from "@/utils/GlobalMethods";
 import {store} from "@/redux/store";

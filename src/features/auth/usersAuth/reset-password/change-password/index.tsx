@@ -1,7 +1,6 @@
 'use client'
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import AuthInput from "@/reuseable/Input/AuthInputField";
-import Link from "next/link";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import {useRouter} from "next/navigation";
 
