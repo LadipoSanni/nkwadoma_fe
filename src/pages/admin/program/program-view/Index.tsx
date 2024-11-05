@@ -1,16 +1,18 @@
 "use client"
 import React, {useState, useEffect} from 'react';
-import {cabinetGrotesk} from '@/app/fonts';
+import {cabinetGrotesk, inter} from '@/app/fonts';
 import SearchInput from "@/reuseable/Input/SearchInput";
 import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
-import CreateProgramButton from "@/components/program/create-program-button/Index";
+import CreateProgram from "@/components/program/create-program/Index";
 import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
 import {MdOutlineCalendarMonth, MdOutlinePeopleAlt} from "react-icons/md";
-import {PersonIcon} from "@radix-ui/react-icons";
+import {Cross2Icon, PersonIcon} from "@radix-ui/react-icons";
+import {Button} from "@/components/ui/button";
+import TableModal from "@/reuseable/modals/TableModal";
 
 const ProgramView = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -27,20 +29,6 @@ const ProgramView = () => {
 
     }
 
-    const dropDownOption = [
-        {
-            name: "View Program",
-            id: "1"
-        },
-        {
-            name: "Edit Program",
-            id: "2"
-        },
-        {
-            name: "Delete Program",
-            id: "3"
-        }
-    ]
 
     interface TableRowData {
         [key: string]: string | number | null | React.ReactNode;
@@ -96,7 +84,7 @@ const ProgramView = () => {
         setDummyData(data);
     }, []);
 
-    const program1Options = [
+    const dropDownOption = [
         {name: 'View Program', id: '1'},
         {name: 'Edit Program', id: '2'},
         {name: 'Delete Program', id: '3'}
@@ -108,15 +96,37 @@ const ProgramView = () => {
         {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-lightBlue100", tagText: "cohorts"},
     ];
 
+    const [isOpen, setIsOpen] = React.useState(false);
+
+    const handleModalOpen = () => {
+        setIsOpen(!isOpen)
+    }
+
     return (
-        <main id="programMain" className={`${cabinetGrotesk.className} flex flex-col gap-8 pl-5 pr-2 pt-7 bg-meedlWhite overflow-hidden`}>
+        <main id="programMain"
+              className={`${cabinetGrotesk.className} flex flex-col gap-8 pl-5 pr-2 pt-7 bg-meedlWhite overflow-hidden`}>
             <section id="programSection" className={'grid gap-7 '}>
                 <div id="programControls" className={'md:flex pr-2 md:justify-between gap-5 grid'}>
                     <SearchInput id={'ProgramSearchInput'}/>
-                    <CreateProgramButton buttonText={"Create Program"} title={"Create Program"}
-                                         programDeliveryTypes={["Full-time", "Part-time"]}
-                                         programModes={["Online", "Physical"]}
-                                         programDurations={["3years", "4years"]} submitButtonText={"Create Program"} triggerButtonStyle={``}/>
+                    <Button variant={"secondary"}
+                            size={"lg"}
+                            className={`${inter.className} bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center`}
+                            onClick={handleModalOpen}>Create program</Button>
+
+                    <TableModal isOpen={isOpen}
+                                closeModal={() => setIsOpen(false)}
+                                closeOnOverlayClick={true}
+                                headerTitle={"Create program"}
+                                className={"md:w-full pb-1"}
+                                icon={Cross2Icon}
+                    >
+                        <CreateProgram setIsOpen={setIsOpen}
+                                             programDeliveryTypes={["Full-time", "Part-time"]}
+                                             programModes={["Online", "Physical"]}
+                                             programDurations={["3years", "4years"]}
+                                             submitButtonText={"Create Program"}/>
+
+                    </TableModal>
                 </div>
             </section>
             <div id="programContent" className={'grid gap-4 relative bottom-3 overflow-hidden'}>
@@ -135,7 +145,7 @@ const ProgramView = () => {
                                 key={index}
                                 description={program.description}
                                 title={program.title}
-                                id={'program'} dropdownOption={program1Options} tagButtonData={tagButtonData}/>
+                                id={'program'} dropdownOption={dropDownOption} tagButtonData={tagButtonData}/>
                         ))}
                     </div>
                 ) : (
@@ -148,21 +158,22 @@ const ProgramView = () => {
                         }}
                     >
                         <LoanProductTable
-                        tableData={programData}
-                        tableHeader={ProgramHeader}
-                        staticHeader={"Programs"}
-                        staticColunm={'programs'}
-                        tableHeight={52}
-                        handleRowClick={handleRowClick}
-                        sx='cursor-pointer'
-                        showKirkBabel={true}
-                        kirkBabDropdownOption={dropDownOption}
-                        icon={Book}
-                        sideBarTabName='Program'
+                            tableData={programData}
+                            tableHeader={ProgramHeader}
+                            staticHeader={"Programs"}
+                            staticColunm={'programs'}
+                            tableHeight={52}
+                            handleRowClick={handleRowClick}
+                            sx='cursor-pointer'
+                            showKirkBabel={true}
+                            kirkBabDropdownOption={dropDownOption}
+                            icon={Book}
+                            sideBarTabName='Program'
                         />
                     </div>
                 )}
             </div>
+
         </main>
     );
 };
