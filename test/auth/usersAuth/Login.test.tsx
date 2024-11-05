@@ -1,8 +1,9 @@
-import {render, screen, fireEvent, queryByAttribute} from '@testing-library/react';
+import {render, screen, fireEvent} from '@testing-library/react';
 import '@testing-library/react';
 import Login from '@/features/auth/usersAuth/login/Index';
 import {userEvent} from "@testing-library/user-event";
 import * as React from "react";
+import {Providers} from "@/app/provider";
 
 
 describe('Login Component', () => {
@@ -14,40 +15,41 @@ describe('Login Component', () => {
         expect(login).not.toBeInTheDocument();
     })
 
-    it('should have the email input field', () => {
-        render(<Login />);
+    beforeEach(() => {
+        render(<Providers>
+            <Login/>
+        </Providers>)
 
-        const emailInput = screen.getByTestId("loginEmailId");
+    })
+
+
+    it('should have the email input field', () => {
+
+        const emailInput = screen.getByTestId("emailId");
         expect(emailInput).toBeInTheDocument();
     });
 
 
     it('should have the password input field', () => {
-        render(<Login />);
-
-        const password = screen.getByTestId("password");
+        const password = screen.getByTestId("passwordId");
         expect(password).toBeInTheDocument();
     });
 
 
     it('should render login component correctly', () => {
 
-        const getById = queryByAttribute.bind(null, "id")
-       const buttonComponent = render(<Login/>);
 
         expect(screen.getByTestId('loginDivId')).toBeInTheDocument();
         expect(screen.getByTestId('emailAndPasswordId')).toBeInTheDocument();
         expect(screen.getByTestId('emailId')).toBeInTheDocument();
         expect(screen.getByTestId('passwordId')).toBeInTheDocument();
-        expect(getById(buttonComponent.container, "loginButton")).toBeInTheDocument()
     });
 
     it('should test that login button is not disabled after email and password has been entered', async () => {
-        render(<Login />);
 
         const emailInput = screen.getByPlaceholderText('Enter email address');
         const passwordInput = screen.getByPlaceholderText('Enter password');
-        const loginButton = screen.getByRole('button', { name: /login/i });
+        const loginButton = screen.getByRole('button', {name: 'Login'});
 
         expect(loginButton).toBeDisabled();
 
@@ -58,16 +60,15 @@ describe('Login Component', () => {
     });
 
     it('enables the login button after email and password have been entered', () => {
-        render(<Login />);
 
         const emailInput = screen.getByPlaceholderText('Enter email address');
         const passwordInput = screen.getByPlaceholderText('Enter password');
-        const loginButton = screen.getByRole('button', { name: /login/i });
+        const loginButton = screen.getByRole('button', {name: 'Login'});
 
         expect(loginButton).toBeDisabled();
 
-        fireEvent.change(emailInput, { target: { value: 'user@example.com' } });
-        fireEvent.change(passwordInput, { target: { value: 'password123' } });
+        fireEvent.change(emailInput, {target: {value: 'user@example.com'}});
+        fireEvent.change(passwordInput, {target: {value: 'password123'}});
 
         expect(loginButton).toBeEnabled();
     });

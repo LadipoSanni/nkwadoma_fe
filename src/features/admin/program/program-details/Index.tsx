@@ -48,7 +48,7 @@ const ProgramDetails = () => {
 
     const router = useRouter();
     const handleBackClick = () => {
-        router.push('/cohort')
+        router.push('/program')
     }
 
 
@@ -88,7 +88,7 @@ const ProgramDetails = () => {
                 </div>
 
                 <div className={`md:w-6/12 h-[96%] md:pt-0 pt-0`}>
-                    <DetailsTabContainer dataList={dataList} breakDown={breakDown}/>
+                    <DetailsTabContainer dataList={dataList} breakDown={breakDown} tabTitle1={"Program details"} tabTitle2={"Cohorts"}/>
                 </div>
             </section>
         </main>
