@@ -3,13 +3,13 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { useDispatch,useSelector, type TypedUseSelectorHook } from "react-redux";
 import selectedLoanReducer from "@/redux/slice/SelectedLoan";
 import adminLayoutReducer from "@/redux/slice/layout/adminLayout";
-import authSlice from "@/redux/slice/auth/slice"
+import authSliceReducer from "@/redux/slice/auth/slice"
 
 export const store = configureStore({
   reducer: {
     adminLayout: adminLayoutReducer,
     selectedLoan: selectedLoanReducer,
-    // authSlice: authSliceReducer,
+    authSlice: authSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

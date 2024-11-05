@@ -54,11 +54,11 @@ const AuthLayout: React.FC<props> = ({children}) => {
                             </div>
                         </div>
                     </div>
-                    <div className={` ${styles.authLayoutChildrenDiv} md:flex grid md:pr-18 md:pl-10 px-4 py-4 bg-authBg w-[100vw] h-[100vh] md:h-[100vh] md:w-[100%] md:pt-40 md:justify-end  md:bg-authBg `}>
+                    <div className={` ${styles.authLayoutChildrenDiv} md:flex grid gap-0 md:pr-18 md:pl-10 px-4 py-4 bg-authBg w-[100vw] h-[100vh] md:h-[100vh] md:w-[100%] md:pt-40 md:justify-end  md:bg-authBg `}>
                             <div
                                 id={'authLayoutOrganizationLogo'}
                                 data-testid={`authLayoutOrganizationLogo`}
-                                className={` md:hidden grid object-cover`}
+                                className={` md:hidden h-fit w-fit grid object-cover`}
                             >
                                 <Image src={'/Meedle Logo Primary Main.svg'} alt={'meedl'}
                                        width={130}
