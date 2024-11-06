@@ -11,7 +11,6 @@ import {useLoginMutation} from "@/service/auths/api"
 
 const Login: React.FC = () => {
     
-    const fetchUrl =  "https://api-systest.learnspace.africa/api/v1/auth/login"
     
 
     const [email, setEmail] = useState<string>('');
@@ -37,39 +36,9 @@ const Login: React.FC = () => {
 
     const handleReset = async () => {
         const response = await login({email, password})
-        console.log("data: ", data, "response: ",response)
     }
 
-    const handleLogin =  async(e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault(); 
-        //  console.log('Login successful:', {email,password});
-
-          try {
-            const response = await fetch(fetchUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to log in');
-            }
-
-            const data = await response.json();
-            console.log('Login successful:', data);
-            
-          
-        } catch (err) {
-            
-            console.error('Login failed:', err);
-        } finally {
-           
-        }
-        
-    };
+  
 
     const isFormValid = validEmail  && password.length >= 8;
 
@@ -82,7 +51,7 @@ const Login: React.FC = () => {
                  className="px-4 py-4">
                 <h1 className={`${cabinetGrotesk.className} text-meedlBlue mt-3  text-2xl leading-5`}>Log in to your
                     account</h1>
-                       <form onSubmit={handleLogin} data-testid={`email&PasswordId`} id={`emailAndPasswordId`} >
+                      
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
                      className="pt-5 space-y-5">
                     <div data-testid={`emailId`} id={`emailId`}>
@@ -121,7 +90,7 @@ const Login: React.FC = () => {
                         here</Link>
                     </p>
                 </div>
-                </form>
+               
             </div>
         </div>
     )
