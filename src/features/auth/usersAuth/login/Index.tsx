@@ -6,15 +6,18 @@ import AuthInputField from "@/reuseable/Input/AuthInputField";
 import Link from 'next/link'
 import {cabinetGrotesk} from "@/app/fonts";
 import {    validateEmailInput}  from "@/utils/GlobalMethods"
-import {useLoginMutation} from "@/service/auths/api"
+// import {useLoginMutation} from "@/service/auths/api"
 
 
 const Login: React.FC = () => {
+    
+    
+
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
     const [ validEmail , setValidEmail ] = useState(false)
-    const [login, {data}] = useLoginMutation()
+    // const [login, {data}] = useLoginMutation()
 
 
     const validateEmail = (input: string) => {
@@ -32,10 +35,10 @@ const Login: React.FC = () => {
     };
 
     const handleReset = async () => {
-        const response = await login({email, password})
-        console.log("data: ", data, "response: ",response)
+        // const response = await login({email, password})
     }
 
+  
 
     const isFormValid = validEmail  && password.length >= 8;
 
@@ -48,6 +51,7 @@ const Login: React.FC = () => {
                  className="px-4 py-4">
                 <h1 className={`${cabinetGrotesk.className} text-meedlBlue mt-3  text-2xl leading-5`}>Log in to your
                     account</h1>
+                      
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
                      className="pt-5 space-y-5">
                     <div data-testid={`emailId`} id={`emailId`}>
@@ -74,15 +78,19 @@ const Login: React.FC = () => {
                                     id={"loginButton"}
                                     data-testid={`loginButton`}
                                     buttonText={"Login"} width={"inherit"}
-                                    handleClick={handleReset}>
+                                    handleClick={
+                                        handleReset}>
                         </AuthButton>
+                      
                     </div>
+                    
                     <p className="flex items-center justify-center text-sm text-forgetPasswordBlue leading-4">
                         Forgot Password? <Link href={"/auth/reset-password"}
                                             className="font-medium text-meedlBlue ml-1  underline">Reset it
                         here</Link>
                     </p>
                 </div>
+               
             </div>
         </div>
     )

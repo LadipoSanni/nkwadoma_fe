@@ -28,7 +28,7 @@ function DatePickerInput({selectedDate, onDateChange,className, placeholder = "S
     >
     <PopoverTrigger asChild>
       <Button 
-      data-testId="calenderButton"
+      data-testid="calenderButton"
       className={cn("w-full flex justify-between  border rounded text-left text-black p-5 shadow-none ",className)} 
       onClick={() => setIsOpen(true)}
       >
@@ -38,7 +38,7 @@ function DatePickerInput({selectedDate, onDateChange,className, placeholder = "S
             <span className="text-grey400">{placeholder}</span> 
           )}
            
-            <MdOutlineDateRange data-testId="MdOutlineDateRange" className="w-5 h-5 ml-2 text-neutral950"/>
+            <MdOutlineDateRange data-testid="MdOutlineDateRange" className="w-5 h-5 ml-2 text-neutral950"/>
       
       </Button>
     </PopoverTrigger>
