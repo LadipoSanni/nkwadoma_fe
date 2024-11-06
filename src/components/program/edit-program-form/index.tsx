@@ -1,7 +1,7 @@
 import React from 'react'
 import { Formik, } from 'formik'
 import * as Yup from 'yup';
-import {inter} from "@/app/fonts"
+// import {inter} from "@/app/fonts"
 // import { Input } from '@/components/ui/input';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 // import { Label } from '@/components/ui/label';
