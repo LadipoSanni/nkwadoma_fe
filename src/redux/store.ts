@@ -1,20 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { useDispatch,useSelector, type TypedUseSelectorHook } from "react-redux";
-import selectedLoanReducer from "@/redux/slice/SelectedLoan";
-import adminLayoutReducer from "@/redux/slice/layout/adminLayout";
-import authSliceReducer from "@/redux/slice/auth/slice"
+import appReducer from "@/redux/reducer";
+import {authApi} from "@/service/auths/api"
 
 export const store = configureStore({
-  reducer: {
-    adminLayout: adminLayoutReducer,
-    selectedLoan: selectedLoanReducer,
-    authSlice: authSliceReducer,
-  },
+  reducer: appReducer,
+
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }).concat([
+        authApi.middleware,
     ]),
 });
 
