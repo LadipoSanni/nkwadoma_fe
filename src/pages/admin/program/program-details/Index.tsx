@@ -2,14 +2,23 @@
 import React from "react";
 import {useRouter} from "next/navigation";
 import {inter, cabinetGrotesk} from "@/app/fonts";
-import {MdOutlinePeopleAlt, MdOutlineDateRange, MdPersonOutline} from "react-icons/md";
-import {BiArrowBack} from "react-icons/bi";
+import {
+    MdOutlinePeopleAlt,
+    MdOutlineDateRange,
+    MdPersonOutline,
+    MdOutlineArrowBack,
+    MdOutlinePerson
+} from "react-icons/md";
 import {FiBook} from "react-icons/fi";
 import {TagButton} from "@/reuseable/tagButton/TagButton";
 import {Button} from "@/components/ui/button";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import {IoEllipsisHorizontalSharp} from "react-icons/io5";
 import {ProgramTab} from "@/reuseable/details/ProgramTab";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import SearchInput from "@/reuseable/Input/SearchInput";
+import Tables from "@/reuseable/table/LoanProductTable";
+import {cohortDataDetails} from "@/utils/LoanRequestMockData/cohortProduct"
 
 const ProgramDetails = () => {
 
@@ -19,22 +28,31 @@ const ProgramDetails = () => {
         {label: "Completion rate", value: "88%"},
         {label: "Employment rate", value: "78%"},
         {label: "Average starting income", value: "₦3,000,000.00"},
+    ];
+
+    const loanDetail = [
         {label: "Repayment rate", value: "40%"},
         {label: "Debt percentage", value: "55.5%"},
         {label: "Total loan amount disbursed", value: "₦3,000,000.00"},
         {label: "Total loan amount repaid", value: "₦3,000,000.00"},
         {label: "Total loan amount outstanding", value: "₦3,000,000.00"},
-    ];
 
-    // const program1Options = [
-    //     {name: 'Edit Cohort', id: '1'},
-    //     {name: 'Delete Cohort', id: '3'},
-    // ];
+    ]
+
 
     const tagButtonData = [
         {tagIcon: MdOutlineDateRange, tagCount: 4, tagButtonStyle: "bg-lightBlue100", tagText: "months"},
         {tagIcon: MdOutlinePeopleAlt, tagCount: 10, tagButtonStyle: "bg-warning80", tagText: "cohorts"},
         {tagIcon: MdPersonOutline, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "trainees"},
+    ];
+    const ProgramHeader = [
+        {title: "Cohort", sortable: true, id: "cohort"},
+        {title: "No of trainees", sortable: true, id: "noOfTrainees"},
+        {title: "Tuition", sortable: true, id: "tuition"},
+        {title: "Amount Requested", sortable: true, id: "amountRequested"},
+        {title: "Amount Received", sortable: true, id: "amountReceived"},
+        {title: "Amount Outstanding", sortable: true, id: "amountOutstanding"},
+
     ];
 
 
@@ -47,51 +65,65 @@ const ProgramDetails = () => {
     const description = "Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
 
     return (
-        <main className={`${inter.className} grid gap-10  pt-6 md:px-10 px-2 w-full`}>
-            <div className={`flex gap-2 items-center cursor-pointer text-meedlBlue`} id={`backClick`}
-                 data-testid={`backClick`} onClick={handleBackClick}>
-                <BiArrowBack className={'h-5 w-5 text-meedlBlue'}/>
-                <h1 id={`backClickText`} className={'text-meedlBlue text-[14px] font-medium leading-[21px]'}
-                    data-testid={`backClickText`}>Back to programs</h1>
-            </div>
+        <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`}>
+                <div className={`flex gap-2 items-center cursor-pointer text-meedlBlue`} id={`backClick`}
+                     data-testid={`backClick`} onClick={handleBackClick}>
+                    <MdOutlineArrowBack className={'h-5 w-5 text-meedlBlue'}/>
+                    <h1 id={`backClickText`} className={'text-meedlBlue text-[14px] font-medium leading-[21px]'}
+                        data-testid={`backClickText`}>Back to programs</h1>
+                </div>
 
-            <section className={`p- flex md:flex-row flex-col md:justify-between`}>
-                <div className={'flex flex-col gap-10'}>
-                    <div className={'grid place-items-center h-[7.5rem] w-[7.5rem] bg-lightBlue500 rounded-full'}>
-                        <FiBook className={'h-[50px] w-[50px] text-meedlBlue'}/>
-                    </div>
-                    <div className={'flex flex-col gap-3'}>
-                        <h1 className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>Product Design</h1>
-                        <div className={'grid gap-5'}>
-                            <p className={'text-sm font-normal text-black400 w-[351px]'}>{description}</p>
-                            <div
-                                id={`details`}
-                                data-testid="details"
-                                className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit"
-                            >
-                                {tagButtonData.map((tagProps, index) => (
-                                    <TagButton key={index} {...tagProps} />
-                                ))}
+            <Tabs defaultValue="details">
+                <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'}>
+                    <TabsTrigger value="details" className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] w-[3.875rem] data-[state=active]:shadow-custom'}>Details</TabsTrigger>
+                    <TabsTrigger value="cohorts" className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom'}>Cohorts</TabsTrigger>
+                </TabsList>
+                <TabsContent value="details" className={'mt-4'}>
+                    <section className={`p- flex md:flex-row flex-col md:justify-between`}>
+                        <div className={'flex flex-col gap-10'}>
+                            <div className={'grid place-items-center h-[7.5rem] w-[7.5rem] bg-lightBlue500 rounded-full'}>
+                                <FiBook className={'h-[50px] w-[50px] text-meedlBlue'} />
+                            </div>
+                            <div className={'flex flex-col gap-3'}>
+                                <h1 className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>Product Design</h1>
+                                <div className={'grid gap-5'}>
+                                    <p className={'text-sm font-normal text-black400 w-[351px]'}>{description}</p>
+                                    <div id={`details`} data-testid="details" className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
+                                        {tagButtonData.map((tagProps, index) => (
+                                            <TagButton key={index} {...tagProps} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={'flex justify-between'}>
+                                <Button className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit program</Button>
+                                <div role={"button"} className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
+                                    <Kebab icon={IoEllipsisHorizontalSharp} />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className={'flex justify-between'}>
-                        <Button
-                            className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
-                            program</Button>
-                        <div role={"button"}
-                             className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
-                            <Kebab icon={IoEllipsisHorizontalSharp}/>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div className={`md:w-6/12 h-[96%] md:pt-0 pt-0`}>
-                    {/*<DetailsTabContainer dataList={dataList}  tabTitle1={"Program details"} tabTitle2={"Cohorts"}/>*/}
-                    <ProgramTab dataList={dataList} />
-                </div>
-            </section>
+                            <div className={`md:w-6/12 md:pt-0 pt-0`}>
+                                <ProgramTab dataList={dataList} loanDetail={loanDetail} />
+                            </div>
+                    </section>
+                </TabsContent>
+                <TabsContent value="cohorts" className={'mt-4 grid gap-7'}>
+                    <SearchInput  id={'programCohortSearch'}/>
+                    <Tables
+                        tableData={cohortDataDetails}
+                        tableHeader={ProgramHeader}
+                        staticHeader={'Trainee'}
+                        staticColunm={'trainee'}
+                        tableHeight={45}
+                        icon={MdOutlinePerson}
+                        sideBarTabName={"Trainee"}
+                        handleRowClick={() => {
+                        }}
+                        optionalRowsPerPage={10}
+                        tableCellStyle={'h-12'}
+                    />
+                </TabsContent>
+            </Tabs>
         </main>
     );
 }
