@@ -14,7 +14,7 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState<string>('');
 
     const [ validEmail , setValidEmail ] = useState(false)
-    const [login, {data}] = useLoginMutation()
+    const [login] = useLoginMutation()
 
 
     const validateEmail = (input: string) => {
@@ -32,8 +32,8 @@ const Login: React.FC = () => {
     };
 
     const handleReset = async () => {
-        const response = await login({email, password})
-        console.log("data: ", data, "response: ",response)
+        await login({email, password})
+        // console.log("data: ", data, "response: ",response)
     }
 
 

@@ -11,6 +11,7 @@ import {Icon} from "@iconify/react";
 import { MdDeleteOutline } from 'react-icons/md';
 import { MdOutlineEdit } from 'react-icons/md';
 import { Input } from '@/components/ui/input';
+import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 
 
  interface idProps {
@@ -36,29 +37,88 @@ const EditCohortForm = ({cohortId,setIsOpen}: idProps) => {
 
   const [isLoading] = useState(false);
   const [image, setImage] = useState(initialFormValue.cohortImage);
-
-  // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files && e.target.files[0]) {
-  //     const file = e.target.files[0];
-  //     setImage(URL.createObjectURL(file)); 
-  //   }
-  // };
-
+  // const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  // const [uploading, setUploading] = useState(false); 
+  // const [uploadError, setUploadError] = useState(false); 
   const [uploadedFile, setUploadedFile] = useState<File | null>(null); 
+  // const [isImageUploaded, setIsImageUploaded] = useState(false)
+  
+  
+  const supportedTypes = [
+    "image/svg+xml",
+    "image/png",
+    "image/jpg",
+    "image/jpeg",
+    "image/gif",
+    "image/webp",
+    "image/bmp",
+    "image/tiff",
+    "image/x-icon",
+    "image/heif",
+    "image/heic"
+  ];
+
 
 const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // setUploadError(false); 
   if (e.target.files && e.target.files[0]) {
     const file = e.target.files[0];
-    setUploadedFile(file); 
-    setImage(URL.createObjectURL(file)); 
+   
+
+    if (supportedTypes.includes(file.type)) {
+      // setUploadError(false); 
+      // setIsImageUploaded(true); 
+      setUploadedFile(file); 
+      setImage(URL.createObjectURL(file)); 
+
+      setTimeout(() => {
+        // setUploading(false);
+        // setShowSuccessMessage(true);
+        // setIsImageUploaded(true);
+      }, 2000);
+  } else {
+      // setUploadError(true);
+      return;
+     
   }
+    
+  }
+
+  
 };
+
+// const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+//   e.preventDefault();
+//   setUploadError(false);
+//   const file = e.dataTransfer.files[0];
+//   if (supportedTypes.includes(file.type)) {
+//     setUploadedFile(file);
+//     setImage(URL.createObjectURL(file));
+//     setUploading(true);
+
+//     setTimeout(() => {
+//       setUploadError(false); 
+//       setUploading(false);
+//       setShowSuccessMessage(true);
+//       setIsImageUploaded(true);
+//     }, 2000);
+//   } else {
+//     setUploadError(true);
+//   }
+// }
+
+// const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+//   e.preventDefault();
+// };
 
 const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const handleImageDelete = () => {
     setImage('')
     setUploadedFile(null); 
+    // setIsImageUploaded(false);
+    // setShowSuccessMessage(false);
+    // setUploadError(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = ''; 
   };
@@ -77,7 +137,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
     }
   }
 
-  
+ 
 
 
    
@@ -102,9 +162,16 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
      .trim()
     .required('Cohort Description is required'),
   });
+
+   const toastPopUp = ToastPopUp({
+    description: "Cohorts details successfully updated.",
+    status:"success"
+    
+  });
   
   const handleSubmit = (values: typeof initialFormValue) => {
     console.log(values);
+    toastPopUp.showToast();
     if (setIsOpen) {
       setIsOpen(false);
     }
@@ -230,8 +297,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                          
                          </Button> ) : (
                           <div>
-                         
-                           
+ 
                          </div>
                          )
                         }
@@ -266,7 +332,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                   
                 </div>
               </div>
-              <div className='md:flex gap-4 justify-end mt-2'>
+              <div className='md:flex gap-4 justify-end mt-2 mb-4 md:mb-0'>
                 <Button 
                 variant={'outline'} 
                 type='reset'

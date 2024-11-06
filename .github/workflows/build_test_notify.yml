@@ -49,60 +49,60 @@ jobs:
           echo "COMMIT_AUTHOR=${{ env.COMMIT_AUTHOR }}"
           echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}"
 
-  send_notification:
-    name: Send Email Notification
-    needs: [build]
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  # send_notification:
+  #   name: Send Email Notification
+  #   needs: [build]
+  #   runs-on: ubuntu-latest
+  #   if: always()
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Set environment variables
-        run: |
-          if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
-            BRANCH_NAME="${GITHUB_HEAD_REF}"
-          else
-            BRANCH_NAME=$(git symbolic-ref --short -q HEAD || echo "$GITHUB_REF_NAME")
-          fi
+  #     - name: Set environment variables
+  #       run: |
+  #         if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+  #           BRANCH_NAME="${GITHUB_HEAD_REF}"
+  #         else
+  #           BRANCH_NAME=$(git symbolic-ref --short -q HEAD || echo "$GITHUB_REF_NAME")
+  #         fi
 
-          echo "TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
-          echo "COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an <%ae>')" >> $GITHUB_ENV
+  #         echo "TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+  #         echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
+  #         echo "COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an <%ae>')" >> $GITHUB_ENV
 
-          COMMIT_MESSAGE=$(git log -1 --pretty=%B | tr -d '\r' | sed ':a;N;$!ba;s/\n/\\n/g')
-          echo "COMMIT_MESSAGE<<EOF" >> $GITHUB_ENV
-          echo "$COMMIT_MESSAGE" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+  #         COMMIT_MESSAGE=$(git log -1 --pretty=%B | tr -d '\r' | sed ':a;N;$!ba;s/\n/\\n/g')
+  #         echo "COMMIT_MESSAGE<<EOF" >> $GITHUB_ENV
+  #         echo "$COMMIT_MESSAGE" >> $GITHUB_ENV
+  #         echo "EOF" >> $GITHUB_ENV
 
-      - name: Debug - Print environment variables
-        run: |
-          echo "TAG: ${{ env.TAG }}"
-          echo "BRANCH_NAME: ${{ env.BRANCH_NAME }}"
-          echo "COMMIT_AUTHOR: ${{ env.COMMIT_AUTHOR }}"
-          echo "COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}"
+  #     - name: Debug - Print environment variables
+  #       run: |
+  #         echo "TAG: ${{ env.TAG }}"
+  #         echo "BRANCH_NAME: ${{ env.BRANCH_NAME }}"
+  #         echo "COMMIT_AUTHOR: ${{ env.COMMIT_AUTHOR }}"
+  #         echo "COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}"
 
-      - name: Send build success email notification
-        if: >
-          success() &&
-          needs.build.result == 'success'
-        env:
-          SMTP_SERVER: semicolon.africa
-          SMTP_PORT: 465
-          SMTP_USERNAME: builds@semicolon.africa
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-        run: |
-          chmod +x .github/workflows/scripts/send_success_email.sh
-          .github/workflows/scripts/send_success_email.sh \
-            "$SMTP_SERVER" \
-            "$SMTP_PORT" \
-            "$SMTP_USERNAME" \
-            "$SMTP_PASSWORD" \
-            "${{ env.EMAILS }}" \
-            "${{ env.TAG }}" \
-            "${{ env.BRANCH_NAME }}" \
-            "${{ env.COMMIT_AUTHOR }}" \
-            "${{ env.COMMIT_MESSAGE }}"
+  #     - name: Send build success email notification
+  #       if: >
+  #         success() &&
+  #         needs.build.result == 'success'
+  #       env:
+  #         SMTP_SERVER: semicolon.africa
+  #         SMTP_PORT: 465
+  #         SMTP_USERNAME: builds@semicolon.africa
+  #         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+  #       run: |
+  #         chmod +x .github/workflows/scripts/send_success_email.sh
+  #         .github/workflows/scripts/send_success_email.sh \
+  #           "$SMTP_SERVER" \
+  #           "$SMTP_PORT" \
+  #           "$SMTP_USERNAME" \
+  #           "$SMTP_PASSWORD" \
+  #           "${{ env.EMAILS }}" \
+  #           "${{ env.TAG }}" \
+  #           "${{ env.BRANCH_NAME }}" \
+  #           "${{ env.COMMIT_AUTHOR }}" \
+  #           "${{ env.COMMIT_MESSAGE }}"
 
       - name: Send build failure email notification
         if: >
