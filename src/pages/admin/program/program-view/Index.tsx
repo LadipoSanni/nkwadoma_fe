@@ -13,6 +13,10 @@ import {MdOutlineCalendarMonth, MdOutlinePeopleAlt} from "react-icons/md";
 import {Cross2Icon, PersonIcon} from "@radix-ui/react-icons";
 import {Button} from "@/components/ui/button";
 import TableModal from "@/reuseable/modals/TableModal";
+import { useRouter } from 'next/navigation'
+import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
+import EditProgramForm from '@/components/program/edit-program-form';
+
 
 const ProgramView = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -23,16 +27,22 @@ const ProgramView = () => {
         title: string;
         trainees: number;
     }[]>([]);
+    const router = useRouter()
 
-
-    const handleRowClick = () => {
-
-    }
+    const [programId, setProgramId] =  React.useState("")
+    const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
+    const [editOpen, setEditOpen] = useState(false);
 
 
     interface TableRowData {
         [key: string]: string | number | null | React.ReactNode;
     }
+
+    const handleRowClick = (row:TableRowData) => {
+        router.push('/program/details')
+       
+    }
+
 
     const ProgramHeader = [
         {title: 'Programs', sortable: true, id: 'programs', selector: (row: TableRowData) => row.programs},
@@ -89,6 +99,23 @@ const ProgramView = () => {
         {name: 'Edit Program', id: '2'},
         {name: 'Delete Program', id: '3'}
     ];
+
+    const handleDropdownClick = (id:string,row: TableRowData) => {
+        if(id === "1") {
+            router.push('/program/details')
+          
+        }
+        else if(id === "2") {
+          setProgramId(String(row.id))
+          setEditOpen(true)
+          
+        
+        }
+        else {
+          setIsDeleteOpen(true)
+          setProgramId(String(row.id))
+        }
+      }
 
     const tagButtonData = [
         {tagIcon: PersonIcon, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees"},
@@ -169,9 +196,30 @@ const ProgramView = () => {
                             kirkBabDropdownOption={dropDownOption}
                             icon={Book}
                             sideBarTabName='Program'
+                            handleDropDownClick={handleDropdownClick}
                         />
                     </div>
                 )}
+            </div>
+            <div>
+                <TableModal
+                isOpen={editOpen}
+                closeOnOverlayClick={true}
+                closeModal={() => setEditOpen(false)}
+                icon={Cross2Icon}
+                headerTitle='Edit Cohort'
+                >
+                    <EditProgramForm programId={programId} setIsOpen={setEditOpen}/>
+                </TableModal>
+                <TableModal
+                isOpen={isDeleteOpen}
+                closeOnOverlayClick={true}
+                closeModal={() => setIsDeleteOpen(false)}
+                icon={Cross2Icon}
+                width='auto'
+                >
+                   <DeleteCohort setIsOpen={()=> setIsDeleteOpen(false)} headerTitle='Delete Program' title='program'/>
+                </TableModal>
             </div>
 
         </main>
