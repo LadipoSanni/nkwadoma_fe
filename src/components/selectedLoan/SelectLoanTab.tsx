@@ -2,7 +2,7 @@
 import React from 'react';
 import {store} from "@/redux/store";
 import styles from "./SelectedLoan.module.css"
-import {setCurrentTab} from "@/redux/slice/SelectedLoan";
+import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation"
 
 interface type {
