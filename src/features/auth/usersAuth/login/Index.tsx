@@ -33,7 +33,7 @@ const Login: React.FC = () => {
 
     const handleReset = async () => {
         const response = await login({email, password})
-        console.log("data: ", data, "response: ",response)
+        // console.log("data: ", data, "response: ",response)
     }
 
 
