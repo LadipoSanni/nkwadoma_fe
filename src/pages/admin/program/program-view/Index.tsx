@@ -178,7 +178,7 @@ const ProgramView = () => {
                 ) : (
                     <div
                         id="programListView"
-                        className={'grid gap-6'}
+                        className={'grid -6'}
                         style={{
                             height: '62vh',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'

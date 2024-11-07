@@ -21,7 +21,7 @@ interface CreateProgramProps {
 const CreateProgram: React.FC<CreateProgramProps> = ({
                                                                programDeliveryTypes,
                                                                programModes,
-                                                               programDurations,
+                                                                 programDurations,
                                                                submitButtonText,
                                                                setIsOpen
                                                            }) => {

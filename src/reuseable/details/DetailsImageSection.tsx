@@ -86,15 +86,15 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         ))}
                     </div>
 
-                    <div className={`flex flex-row md:space-x-3 space-x-2 pt-5 w-full`}>
+                    <div className={`flex flex-row md:space-x-3 space-x-2 md:pt-5 pt-8 w-full`}>
                             <Button variant={"secondary"}
                                     size={"lg"}
                                     className={`bg-meedlBlue text-meedlWhite w-full h-12 flex justify-center items-center`}
                                     onClick={handleModalOpen}>{buttonText}</Button>
                         <div role={"button"}
-                                className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
+                                className={`w-14 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
                             <Kebab kebabOptions={dropdownOption} handleDropDownClick={handleDropdownClicked}
-                                   icon={IoEllipsisHorizontalSharp}/>
+                                   icon={IoEllipsisHorizontalSharp} className={``}/>
                         </div>
                     </div>
                 </div>
