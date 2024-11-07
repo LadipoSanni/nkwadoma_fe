@@ -7,7 +7,13 @@ import Link from 'next/link'
 import {cabinetGrotesk} from "@/app/fonts";
 import {    validateEmailInput}  from "@/utils/GlobalMethods"
 import {useLoginMutation} from "@/service/auths/api"
-import ToastPopUp from "@/reuseable/notification/ToastPopUp";
+// import ToastPopUp from "@/reuseable/notification/ToastPopUp";
+import {useToast} from "@/hooks/use-toast"
+// import {jwtDecode} from "jwt-decode";
+import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
+import {useRouter} from "next/navigation";
+import {jwtDecode} from "jwt-decode";
+// import {router} from "next/client";
 
 
 const Login: React.FC = () => {
@@ -15,7 +21,8 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState<string>('');
 
     const [ validEmail , setValidEmail ] = useState(false)
-    const [login, {data, isError, isSuccess, error}] = useLoginMutation()
+    const router = useRouter()
+    const [login] = useLoginMutation()
 
 
     const validateEmail = (input: string) => {
@@ -32,26 +39,28 @@ const Login: React.FC = () => {
         setPassword(e.target.value)
     };
 
-    const handleReset = async () => {
+
+    const {toast} = useToast()
+    const handleLogin = async () => {
         const response = await login({email, password})
-        console.log("res:: ",response,"data: ", data, "isError ", isError, "isSucess: ", isSuccess, "error :", error)
-        if (response?.error ){
-            console.log("error: iririroiowhuifhnur", error)
-            const toastPopUp = ToastPopUp({
-                description: "testing ",
-                status:"success"
-
-            });
-            toastPopUp.showToast()
+        console.log("response: ", response)
+        if (response?.error){
+            toast({
+                description: response?.error?.data?.message,
+                status: "error",
+            })
         }
-        if (isSuccess){
-            const toastPopUp = ToastPopUp({
-                description: "Cohorts details successfully updated.",
-                status:"success"
+        if (response?.data){
+            const access_token = response?.data?.data?.access_token
+            const decode_access_token = jwtDecode(access_token)
+            const user_email = decode_access_token?.email
+            const user_role = decode_access_token?.realm_access?.roles[0]
+            await storeUserDetails(access_token,user_email, user_role)
+            router.push("/Overview")
 
-            });
-            toastPopUp.showToast()
         }
+
+
     }
 
 
@@ -92,7 +101,7 @@ const Login: React.FC = () => {
                                     id={"loginButton"}
                                     data-testid={`loginButton`}
                                     buttonText={"Login"} width={"inherit"}
-                                    handleClick={handleReset}>
+                                    handleClick={handleLogin}>
                         </AuthButton>
                     </div>
                     <p className="flex items-center justify-center text-sm text-forgetPasswordBlue leading-4">
