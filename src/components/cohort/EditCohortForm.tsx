@@ -12,7 +12,7 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { MdOutlineEdit } from 'react-icons/md';
 import { Input } from '@/components/ui/input';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
-import { useToast } from '@/hooks/use-toast';
+
 
 
 
@@ -61,7 +61,7 @@ const EditCohortForm = ({cohortId,setIsOpen}: idProps) => {
     "image/heic"
   ];
 
-  const { toast } = useToast()
+  
 
 
 const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
