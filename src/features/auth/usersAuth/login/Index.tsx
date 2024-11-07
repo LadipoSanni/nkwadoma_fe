@@ -7,6 +7,7 @@ import Link from 'next/link'
 import {cabinetGrotesk} from "@/app/fonts";
 import {    validateEmailInput}  from "@/utils/GlobalMethods"
 import {useLoginMutation} from "@/service/auths/api"
+import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 
 
 const Login: React.FC = () => {
@@ -14,7 +15,7 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState<string>('');
 
     const [ validEmail , setValidEmail ] = useState(false)
-    const [login] = useLoginMutation()
+    const [login, {data, isError, isSuccess, error}] = useLoginMutation()
 
 
     const validateEmail = (input: string) => {
@@ -32,8 +33,25 @@ const Login: React.FC = () => {
     };
 
     const handleReset = async () => {
-        await login({email, password})
-        // console.log("data: ", data, "response: ",response)
+        const response = await login({email, password})
+        console.log("res:: ",response,"data: ", data, "isError ", isError, "isSucess: ", isSuccess, "error :", error)
+        if (response?.error ){
+            console.log("error: iririroiowhuifhnur", error)
+            const toastPopUp = ToastPopUp({
+                description: "testing ",
+                status:"success"
+
+            });
+            toastPopUp.showToast()
+        }
+        if (isSuccess){
+            const toastPopUp = ToastPopUp({
+                description: "Cohorts details successfully updated.",
+                status:"success"
+
+            });
+            toastPopUp.showToast()
+        }
     }
 
 
