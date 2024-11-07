@@ -73,17 +73,32 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
     .trim()
-    .required('First name is required'),
+    .required('First name is required')
+    .matches(/^\S*$/, 'First name should not contain spaces'),
     lastName: Yup.string()
     .trim()
+    .matches(/^\S*$/, 'Last name should not contain spaces')
     .required('Last name is required'),
     emailAddress: Yup.string()
     .email('Invalid email address')
+    .matches(/^\S*$/, 'Email address should not contain spaces')
     .required('Email address is required'),
-    initialDeposit: Yup.number()
-    .positive('Initial deposit must be a positive number')
+    initialDeposit: Yup.string()
     .required('Initial deposit is required')
-    .transform((value) => (isNaN(value) || value === null || value === undefined) ? 0 : value)
+    .matches(/^[1-9]\d*$/, 'Initial deposit must be a positive number and cannot start with zero')
+    .test('positive-number', 'Initial deposit must be a positive number', (value) => {
+        return value !== undefined && Number(value) > 0;
+    })
+  //   initialDeposit: Yup.number()
+  //   .positive('Initial deposit must be greater than zero')
+  //   .required('Initial deposit is required')
+  //   .test(
+  //     'no-leading-zero',
+  //     'Initial deposit should not start with a leading zero',
+  //     (value) => value === undefined || /^[1-9]\d*$/.test(value.toString())
+  // )
+  //   .transform((value) => (isNaN(value) || value === null || value === undefined) ? 0 : value)
+    
 
   })
 
@@ -119,7 +134,7 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
         validateOnMount={true}
       >
        {
-         ({errors, isValid, touched}) => (
+         ({errors, isValid, touched,setFieldValue}) => (
           <Form className={`${inter.className}`}>
               <div 
               className='grid grid-cols-1 gap-y-4 md:max-h-[520px] overflow-y-auto'
@@ -136,7 +151,7 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
               name="firstName"
               className="w-full p-3 border rounded focus:outline-none mt-2"
               placeholder="Enter first name"
-              
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("firstName", e.target.value.replace(/\s+/g, ''))}
             />
               
              {
@@ -156,6 +171,7 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
                   name="lastName"
                   className="w-full p-3 border rounded focus:outline-none mt-2"
                   placeholder="Enter last name"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("lastName", e.target.value.replace(/\s+/g, ''))}
                  />
               
                    {
@@ -175,6 +191,7 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
                   name="emailAddress"
                   className="w-full p-3 border rounded focus:outline-none mt-2"
                   placeholder="Enter email address"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("emailAddress", e.target.value.replace(/\s+/g, ''))}
                  />
               
                    {
@@ -198,9 +215,15 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
                   <Field
                   id="initialDeposit"
                   name="initialDeposit"
-                  type="number"
+                  type="text"
                   placeholder="Enter Initial Deposit"
                   className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none "
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
+                    if (/^\d*$/.test(value)) {
+                        setFieldValue("initialDeposit", value);
+                    }
+                }}
                   />
                  
                   </div>

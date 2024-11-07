@@ -13,6 +13,10 @@ import {MdOutlineCalendarMonth, MdOutlinePeopleAlt} from "react-icons/md";
 import {Cross2Icon, PersonIcon} from "@radix-ui/react-icons";
 import {Button} from "@/components/ui/button";
 import TableModal from "@/reuseable/modals/TableModal";
+import { useRouter } from 'next/navigation'
+import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
+import EditProgramForm from '@/components/program/edit-program-form';
+
 
 const ProgramView = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -22,17 +26,29 @@ const ProgramView = () => {
         months: number;
         title: string;
         trainees: number;
+        programId: string;
     }[]>([]);
+    const router = useRouter()
 
-
-    const handleRowClick = () => {
-
-    }
+    const [programId, setProgramId] =  React.useState("")
+    const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
+    const [editOpen, setEditOpen] = useState(false);
 
 
     interface TableRowData {
         [key: string]: string | number | null | React.ReactNode;
     }
+
+    const handleRowClick = () => {
+        router.push('/program/details')
+       
+    }
+
+    const handleProgramDetailsOnclick= (id:string) => {
+        router.push('/program/details')
+        setProgramId(id)
+    }
+
 
     const ProgramHeader = [
         {title: 'Programs', sortable: true, id: 'programs', selector: (row: TableRowData) => row.programs},
@@ -73,6 +89,8 @@ const ProgramView = () => {
     ]
 
 
+    
+
     useEffect(() => {
         const data = Array.from({length: 9}, (_, index) => ({
             cohorts: Math.floor(Math.random() * 20) + 1,
@@ -80,6 +98,7 @@ const ProgramView = () => {
             months: Math.floor(Math.random() * 12) + 1,
             title: `Program Thinking ${index + 1}`,
             trainees: Math.floor(Math.random() * 100) + 1,
+            programId: `${index + 1}`
         }));
         setDummyData(data);
     }, []);
@@ -89,6 +108,48 @@ const ProgramView = () => {
         {name: 'Edit Program', id: '2'},
         {name: 'Delete Program', id: '3'}
     ];
+
+    const handleDropdownClick = (id:string,row: TableRowData) => {
+        if(id === "1") {
+            router.push('/program/details')
+          
+        }
+        else if(id === "2") {
+          setProgramId(String(row.cohortId))
+          setEditOpen(true)
+          
+        
+        }
+        else {
+          setIsDeleteOpen(true)
+          setProgramId(String(row.id))
+        }
+      }
+
+      const handleCardDropDownClick = (optionId: string, id: string) => {
+        if (optionId === "1") {
+            router.push(`/program/details`);
+        } else if (optionId === "2") {
+            setProgramId(id);
+            setEditOpen(true);
+        } else if (optionId === "3") {
+            setProgramId(id);
+            setIsDeleteOpen(true);
+        }
+    };
+
+      const handleEditProgram = (id: string) => {
+        setProgramId(id);
+        setEditOpen(true);
+    };
+
+    const handleDeleteProgram = (id: string) => {
+        setProgramId(id);
+        setIsDeleteOpen(true)
+    };
+
+
+    
 
     const tagButtonData = [
         {tagIcon: PersonIcon, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees"},
@@ -145,7 +206,13 @@ const ProgramView = () => {
                                 key={index}
                                 description={program.description}
                                 title={program.title}
-                                id={'program'} dropdownOption={dropDownOption} tagButtonData={tagButtonData}/>
+                                id={program.programId} dropdownOption={dropDownOption} 
+                                tagButtonData={tagButtonData}
+                                onEdit={handleEditProgram}
+                                onDelete={handleDeleteProgram}
+                                handleCardDropDownClick={(optionId:string) => handleCardDropDownClick(optionId, program.programId)}
+                                handleProgramDetails={()=> handleProgramDetailsOnclick(program.programId)}                   
+                                />
                         ))}
                     </div>
                 ) : (
@@ -169,9 +236,31 @@ const ProgramView = () => {
                             kirkBabDropdownOption={dropDownOption}
                             icon={Book}
                             sideBarTabName='Program'
+                            handleDropDownClick={handleDropdownClick}
                         />
                     </div>
                 )}
+            </div>
+            <div>
+                <TableModal
+                isOpen={editOpen}
+                closeOnOverlayClick={true}
+                closeModal={() => setEditOpen(false)}
+                icon={Cross2Icon}
+                headerTitle='Edit Program'
+                >
+                    <EditProgramForm programId={programId} setIsOpen={setEditOpen}/>
+                </TableModal>
+                
+                <TableModal
+                isOpen={isDeleteOpen}
+                closeOnOverlayClick={true}
+                closeModal={() => setIsDeleteOpen(false)}
+                icon={Cross2Icon}
+                width='auto'
+                >
+                   <DeleteCohort setIsOpen={()=> setIsDeleteOpen(false)} headerTitle='Program' title='program'/>
+                </TableModal>
             </div>
 
         </main>

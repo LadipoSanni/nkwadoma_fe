@@ -92,7 +92,7 @@ const CohortDetails = () =>{
                     <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
                          cohortDescription={description}
                          dropdownOption={program1Options} handleDropdownClicked={handleDropdownClick}
-                                         buttonText={"Edit Cohort"} tagButtonData={tagButtonData}/>
+                                         buttonText={"Add Trainee"} tagButtonData={tagButtonData}/>
                 </div>
 
                 <div className={`md:w-6/12 pt- md:pt-0 h-[96%]`}>

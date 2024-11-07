@@ -12,6 +12,8 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { MdOutlineEdit } from 'react-icons/md';
 import { Input } from '@/components/ui/input';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
+import { useToast } from '@/hooks/use-toast';
+
 
 
  interface idProps {
@@ -42,6 +44,7 @@ const EditCohortForm = ({cohortId,setIsOpen}: idProps) => {
   // const [uploadError, setUploadError] = useState(false); 
   const [uploadedFile, setUploadedFile] = useState<File | null>(null); 
   // const [isImageUploaded, setIsImageUploaded] = useState(false)
+  const maxChars = 1500;
   
   
   const supportedTypes = [
@@ -57,6 +60,8 @@ const EditCohortForm = ({cohortId,setIsOpen}: idProps) => {
     "image/heif",
     "image/heic"
   ];
+
+  const { toast } = useToast()
 
 
 const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,7 +149,8 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const validationSchema = Yup.object().shape({
     cohortName: Yup.string()
      .trim()
-    .required('Cohort name is required'),
+     .matches(/^\S*$/, 'Cohort name should not contain spaces')
+     .required('Cohort name is required'),
     startDate: Yup.date()
                 .required('Start date is required')
                 .nullable(),
@@ -160,18 +166,19 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
     ,
     cohortDescription: Yup.string()
      .trim()
-    .required('Cohort Description is required'),
+    .required('Cohort Description is required')
+    .max(1500, 'Cohort description must be 1500 characters or less')
   });
 
-   const toastPopUp = ToastPopUp({
-    description: "Cohorts details successfully updated.",
-    status:"success"
-    
-  });
-  
+  const toastPopUp =  ToastPopUp({
+      description: "Cohorts details successfully updated.",
+      status:"success"
+      
+    })
+
   const handleSubmit = (values: typeof initialFormValue) => {
     console.log(values);
-    toastPopUp.showToast();
+     toastPopUp.showToast();
     if (setIsOpen) {
       setIsOpen(false);
     }
@@ -196,6 +203,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
               name="cohortName"
               className="w-full p-3 border rounded focus:outline-none mt-2"
               placeholder="Enter cohort name"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("cohortName", e.target.value.replace(/\s+/g, ''))}
             />
               
              {
@@ -261,6 +269,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                 className="w-full p-3 border rounded focus:outline-none mt-2 resize-none "
                 placeholder="Enter cohort description"
                 rows={4}
+                maxLength={maxChars}
                 />
              {
               errors.cohortDescription && touched.cohortDescription &&  (

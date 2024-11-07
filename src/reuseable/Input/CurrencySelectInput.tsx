@@ -8,7 +8,7 @@ interface Props {
     className?: string,
 }
 
-const currencyOptions = ['NGN', 'USD', 'GBP']
+const currencyOptions = ['NGN', 'USD', 'GBP',]
 
 function CurrencySelectInput({selectedcurrency,setSelectedCurrency,className}: Props) {
   const [dropdownOpen, setDropdownOpen] = useState(false);

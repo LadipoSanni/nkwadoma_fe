@@ -198,7 +198,7 @@ const CohortTabs = () => {
         icon={Cross2Icon}
         width='auto'
         >
-        <DeleteCohort setIsOpen={()=> setIsDeleteOpen(false)} headerTitle='Delete Cohort' title='cohort'/>
+        <DeleteCohort setIsOpen={()=> setIsDeleteOpen(false)} headerTitle='Cohort' title='cohort'/>
         </TableModal>
        
       </div>
