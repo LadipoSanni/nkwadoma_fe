@@ -15,8 +15,6 @@ export const customFetchBaseQuery = fetchBaseQuery({
     //     : undefined, // Use browser's fetch in client-side environments
     prepareHeaders: (headers) => {
         // const token = getUserToken();
-        console.log("base: ", baseUrl)
-
         // if (token) {
         //     headers.set('authorization', Bearer ${token});
         //     headers.set('Content-type', 'application/json');
