@@ -22,7 +22,7 @@ const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, 
         if (typeof endAdornment === 'string') {
             return (
                 <span id={`end-adornment-${id}`}
-                      className={'text-labelBlue cursor-pointer text-[14px] font-normal leading-[22px]'}
+                      className={'text-labelBlue cursor-pointer text-[14px] font-normal leading-[22px] select-none'}
                       onClick={handleToggleVisibility}>
                     {isPasswordVisible ? 'Hide' : 'Show'}
                 </span>
