@@ -40,8 +40,12 @@ const Login: React.FC = () => {
     const {toast} = useToast()
     const handleLogin = async () => {
         const response = await login({email, password})
+        console.log('sdd: ', response)
         if (response?.error){
+            // console.log("error: ", error)
             toast({
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-expect-error
                 description: response?.error?.data?.message,
                 status: "error",
             })
@@ -49,7 +53,11 @@ const Login: React.FC = () => {
         if (response?.data){
             const access_token = response?.data?.data?.access_token
             const decode_access_token = jwtDecode(access_token)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
             const user_email = decode_access_token?.email
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
             const user_role = decode_access_token?.realm_access?.roles[0]
             await storeUserDetails(access_token,user_email, user_role)
             router.push("/Overview")
