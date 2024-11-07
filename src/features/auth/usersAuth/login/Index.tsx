@@ -7,13 +7,10 @@ import Link from 'next/link'
 import {cabinetGrotesk} from "@/app/fonts";
 import {    validateEmailInput}  from "@/utils/GlobalMethods"
 import {useLoginMutation} from "@/service/auths/api"
-// import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 import {useToast} from "@/hooks/use-toast"
-// import {jwtDecode} from "jwt-decode";
 import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {useRouter} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
-// import {router} from "next/client";
 
 
 const Login: React.FC = () => {
@@ -43,7 +40,6 @@ const Login: React.FC = () => {
     const {toast} = useToast()
     const handleLogin = async () => {
         const response = await login({email, password})
-        console.log("response: ", response)
         if (response?.error){
             toast({
                 description: response?.error?.data?.message,
