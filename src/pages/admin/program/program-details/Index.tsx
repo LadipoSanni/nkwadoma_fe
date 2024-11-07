@@ -14,11 +14,11 @@ import {TagButton} from "@/reuseable/tagButton/TagButton";
 import {Button} from "@/components/ui/button";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import {IoEllipsisHorizontalSharp} from "react-icons/io5";
-import {ProgramTab} from "@/reuseable/details/ProgramTab";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {cohortDataDetails} from "@/utils/LoanRequestMockData/cohortProduct"
+import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 
 const ProgramDetails = () => {
 
@@ -30,14 +30,14 @@ const ProgramDetails = () => {
         {label: "Average starting income", value: "₦3,000,000.00"},
     ];
 
-    const loanDetail = [
-        {label: "Repayment rate", value: "40%"},
-        {label: "Debt percentage", value: "55.5%"},
-        {label: "Total loan amount disbursed", value: "₦3,000,000.00"},
-        {label: "Total loan amount repaid", value: "₦3,000,000.00"},
-        {label: "Total loan amount outstanding", value: "₦3,000,000.00"},
-
-    ]
+    // const loanDetail = [
+    //     {label: "Repayment rate", value: "40%"},
+    //     {label: "Debt percentage", value: "55.5%"},
+    //     {label: "Total loan amount disbursed", value: "₦3,000,000.00"},
+    //     {label: "Total loan amount repaid", value: "₦3,000,000.00"},
+    //     {label: "Total loan amount outstanding", value: "₦3,000,000.00"},
+    //
+    // ]
 
 
     const tagButtonData = [
@@ -103,7 +103,7 @@ const ProgramDetails = () => {
                             </div>
                         </div>
                             <div className={`md:w-6/12 md:pt-0 pt-0`}>
-                                <ProgramTab dataList={dataList} loanDetail={loanDetail} />
+                                <DetailsTabContainer dataList={dataList} tabTitle1={"Program details"} tabTitle2={"Loan details"}/>
                             </div>
                     </section>
                 </TabsContent>
