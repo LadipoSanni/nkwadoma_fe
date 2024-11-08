@@ -124,6 +124,7 @@ const config: Config = {
   			MeedlDarkBlueGrey: 'rgba(52,64,84,0.70)',
   			grey500: '#201F25',
   			grey600: '#1D1C22',
+			tagButtonColor: `#D0D4DD33`,
   			grey700: '#17161A',
   			grey800: '#121114',
   			grey900: '#0D0D10',

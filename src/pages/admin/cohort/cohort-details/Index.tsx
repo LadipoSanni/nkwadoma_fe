@@ -1,12 +1,12 @@
 "use client"
 import React from "react";
 import {useRouter} from "next/navigation";
-import {CiLaptop} from "react-icons/ci";
+import { FiBook } from "react-icons/fi";
 import {inter} from "@/app/fonts";
 import CohortDetailsImage from "../../../../../public/asset/Image/CohortDetailsImage.png"
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
-import {MdOutlinePerson} from "react-icons/md";
+import { MdPersonOutline } from "react-icons/md";
 import {BiArrowBack} from "react-icons/bi";
 import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import TableModal from "@/reuseable/modals/TableModal";
@@ -35,17 +35,6 @@ const CohortDetails = () => {
         {label: "Tuition amount", value: "3,500,000.00"},
     ];
 
-    const isNotTableDataList = [
-        {detail: "Start Date", value: "13, Dec 2023"},
-        {detail: "End Date", value: "15, Jan 2024"},
-        {detail: "Cohort status", value: "10"},
-        {detail: "Number of Dropouts", value: "10"},
-        {detail: "Dropout rate", value: "0.5%"},
-        {detail: "Number employed", value: "38"},
-        {detail: "Number employed", value: "38"},
-        {detail: "Number employed", value: "38"},
-    ];
-
     const breakDown = [
         {title: "Tuition", amount: "200,000,000.00"},
         {title: "Device", amount: "600,000,000.00"},
@@ -65,8 +54,8 @@ const CohortDetails = () => {
 
 
     const tagButtonData = [
-        {tagIcon: CiLaptop, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees"},
-        {tagIcon: MdOutlinePerson, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "cohorts"},
+        {tagIcon: FiBook, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees"},
+        {tagIcon: MdPersonOutline, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "cohorts"},
     ];
 
 

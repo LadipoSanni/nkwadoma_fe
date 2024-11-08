@@ -32,7 +32,7 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
         <Card id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full md:max-w-lg border border-grey50 rounded-lg px-5">
             <CardHeader id={`header-${id}`} data-testid="header" className="flex flex-row justify-between px-0 items-center">
                 <CardTitle id={`title-${id}`} data-testid="title" className={`${inter.className} text-lg font-medium text-[#101828]`}>{title}</CardTitle>
-                    <Kebab kebabOptions={dropdownOption} icon={FiMoreVertical} className={`px-0 py-0`} />
+                    <Kebab kebabOptions={dropdownOption} icon={FiMoreVertical}/>
             </CardHeader>
 
             <CardContent id={`contentId-${id}`} data-testid={`contentId`} onClick={handleProgramDetails} className={`px-0`}>

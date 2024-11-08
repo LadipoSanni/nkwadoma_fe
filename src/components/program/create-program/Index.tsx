@@ -67,11 +67,11 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
         <div>
             <div data-testid="dialog-description">
                 <div id="formContainer" data-testid="form-container"
-                     className="grid gap-4 py-4 flex-col text-labelBlue">
+                     className="grid py-3 flex-col text-labelBlue">
                     <div id="programNameContainer" data-testid="program-name-container"
                          className="grid items-center gap-2.5">
                         <Label htmlFor="programName" id="programNameLabel" data-testid="program-name-label"
-                               className={`${inter.className} text-meedlBlack font-bold`}>Program
+                               className={`${inter.className} text-meedlBlack font-bold pb-1`}>Program
                             Name</Label>
                         <Input
                             id="programNameInput"
@@ -87,7 +87,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
 
                     <div className={`grid grid-col`} id="selectInputsContainer"
                          data-testid="select-inputs-container">
-                        <div id=" selectInputsContainer" data-testid="select-inputs-container">
+                        <div id=" selectInputsContainer" data-testid="select-inputs-container" className={`pt-4`}>
                             <Label
                                 htmlFor="programDeliveryType"
                                 id="programDeliveryTypeLabel"
@@ -127,7 +127,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                             </Select>
                         </div>
                         <div id="leftColumn" data-testid="left-column"
-                             className="grid md:grid-cols-2 gap-5 ">
+                             className="grid md:grid-cols-2 gap-7 ">
                             <div>
                                 <Label htmlFor="programMode" id="programModeLabel" data-testid="program-mode-label"
                                        className={`${inter.className} text-meedlBlack font-bold`}>Program
@@ -228,7 +228,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                     data-testid="cancel-button"
                     variant="outline"
                     size={`lg`}
-                    className={`${inter.className}  bg-meedlWhite h-14 text-grey800 text-sm font-semibold`}
+                    className={`${inter.className}  bg-meedlWhite h-14 text-grey800 text-sm font-semibold `}
                     onClick={closeDialog}
                 >
                     Cancel
@@ -238,7 +238,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                     data-testid="create-button"
                     variant="secondary"
                     size={`lg`}
-                    className={`${inter.className} bg-meedlBlue h-14 text-meedlWhite text-sm font-semibold`}
+                    className={`${inter.className} bg-meedlBlue h-14 text-meedlWhite text-sm font-semibold `}
                     disabled={!isFormValid}
                     onClick={submit}
                 >
