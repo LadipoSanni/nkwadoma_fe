@@ -1,4 +1,4 @@
-To run the Nkwadoma Frontend application on your local machine, you must pull the Nkwadoma backend application from the AWS private ecr.
+To run the Nkwadoma Frontend application on your local machine, you must pull the Nkwadoma backend application from the AWS private ecr Repo.
 And Run these commands:
 aws configure (PS : You need to have aws cli configured on your local machine to run this command);
 which prompt you to input these credentials to connect to the AWS Account 
