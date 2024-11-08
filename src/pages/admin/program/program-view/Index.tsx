@@ -26,6 +26,7 @@ const ProgramView = () => {
         months: number;
         title: string;
         trainees: number;
+        programId: string;
     }[]>([]);
     const router = useRouter()
 
@@ -41,6 +42,11 @@ const ProgramView = () => {
     const handleRowClick = () => {
         router.push('/program/details')
        
+    }
+
+    const handleProgramDetailsOnclick= (id:string) => {
+        router.push('/program/details')
+        setProgramId(id)
     }
 
 
@@ -83,6 +89,8 @@ const ProgramView = () => {
     ]
 
 
+    
+
     useEffect(() => {
         const data = Array.from({length: 9}, (_, index) => ({
             cohorts: Math.floor(Math.random() * 20) + 1,
@@ -90,6 +98,7 @@ const ProgramView = () => {
             months: Math.floor(Math.random() * 12) + 1,
             title: `Program Thinking ${index + 1}`,
             trainees: Math.floor(Math.random() * 100) + 1,
+            programId: `${index + 1}`
         }));
         setDummyData(data);
     }, []);
@@ -106,7 +115,7 @@ const ProgramView = () => {
           
         }
         else if(id === "2") {
-          setProgramId(String(row.id))
+          setProgramId(String(row.cohortId))
           setEditOpen(true)
           
         
@@ -116,6 +125,31 @@ const ProgramView = () => {
           setProgramId(String(row.id))
         }
       }
+
+      const handleCardDropDownClick = (optionId: string, id: string) => {
+        if (optionId === "1") {
+            router.push(`/program/details`);
+        } else if (optionId === "2") {
+            setProgramId(id);
+            setEditOpen(true);
+        } else if (optionId === "3") {
+            setProgramId(id);
+            setIsDeleteOpen(true);
+        }
+    };
+
+      const handleEditProgram = (id: string) => {
+        setProgramId(id);
+        setEditOpen(true);
+    };
+
+    const handleDeleteProgram = (id: string) => {
+        setProgramId(id);
+        setIsDeleteOpen(true)
+    };
+
+
+    
 
     const tagButtonData = [
         {tagIcon: PersonIcon, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees"},
@@ -172,7 +206,13 @@ const ProgramView = () => {
                                 key={index}
                                 description={program.description}
                                 title={program.title}
-                                id={'program'} dropdownOption={dropDownOption} tagButtonData={tagButtonData}/>
+                                id={program.programId} dropdownOption={dropDownOption} 
+                                tagButtonData={tagButtonData}
+                                onEdit={handleEditProgram}
+                                onDelete={handleDeleteProgram}
+                                handleCardDropDownClick={(optionId:string) => handleCardDropDownClick(optionId, program.programId)}
+                                handleProgramDetails={()=> handleProgramDetailsOnclick(program.programId)}                   
+                                />
                         ))}
                     </div>
                 ) : (
@@ -207,10 +247,11 @@ const ProgramView = () => {
                 closeOnOverlayClick={true}
                 closeModal={() => setEditOpen(false)}
                 icon={Cross2Icon}
-                headerTitle='Edit Cohort'
+                headerTitle='Edit Program'
                 >
                     <EditProgramForm programId={programId} setIsOpen={setEditOpen}/>
                 </TableModal>
+                
                 <TableModal
                 isOpen={isDeleteOpen}
                 closeOnOverlayClick={true}
@@ -218,7 +259,7 @@ const ProgramView = () => {
                 icon={Cross2Icon}
                 width='auto'
                 >
-                   <DeleteCohort setIsOpen={()=> setIsDeleteOpen(false)} headerTitle='Delete Program' title='program'/>
+                   <DeleteCohort setIsOpen={()=> setIsDeleteOpen(false)} headerTitle='Program' title='program'/>
                 </TableModal>
             </div>
 
