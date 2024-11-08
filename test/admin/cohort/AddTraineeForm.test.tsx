@@ -69,13 +69,13 @@ describe("AddTraineeForm", () => {
       fireEvent.change(getByLabelText('First name'), { target: { value: 'John' } });
       fireEvent.change(getByLabelText('Last name'), { target: { value: 'Doe' } });
       fireEvent.change(getByLabelText('Email address'), { target: { value: 'invalid-email' } });
-      fireEvent.change(getByLabelText('Initial Deposit'), { target: { value: -100 } });
+      fireEvent.change(getByLabelText('Initial Deposit'), { target: { value: "" } });
   
       fireEvent.click(getByRole('button', { name: 'Add' }));
   
       await waitFor(() => {
       expect(getByText('Invalid email address')).toBeInTheDocument();
-      expect(getByText('Initial deposit must be a positive number')).toBeInTheDocument();
+      expect(getByText('Initial deposit is required')).toBeInTheDocument();
     })
     });
 

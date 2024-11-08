@@ -11,7 +11,7 @@ type Props = {
 
 function ToastPopUp({title,description,className,action,status = "success"}: Props) {
   const { toast } = useToast();
-
+  
   const showToast = () => {
     toast({
       title,
@@ -21,7 +21,12 @@ function ToastPopUp({title,description,className,action,status = "success"}: Pro
       status
     });
   };
-  return { showToast };
+
+  
+
+  
+  
+  return {showToast}
  
 }
 
