@@ -114,25 +114,25 @@ jobs:
   #           "${{ env.COMMIT_AUTHOR }}" \
   #           "${{ env.COMMIT_MESSAGE }}"
 
-      - name: Send build failure email notification
-        if: >
-          failure() ||
-          needs.build.result == 'failure'
-        env:
-          SMTP_SERVER: semicolon.africa
-          SMTP_PORT: 465
-          SMTP_USERNAME: builds@semicolon.africa
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-        run: |
-          chmod +x .github/workflows/scripts/send_failure_email.sh
-          .github/workflows/scripts/send_failure_email.sh \
-            "$SMTP_SERVER" \
-            "$SMTP_PORT" \
-            "$SMTP_USERNAME" \
-            "$SMTP_PASSWORD" \
-            "${{ env.EMAILS }}" \
-            "${{ env.TAG }}" \
-            "${{ env.BRANCH_NAME }}" \
-            "${{ env.COMMIT_AUTHOR }}" \
-            "${{ env.COMMIT_MESSAGE }}"
+      # - name: Send build failure email notification
+      #   if: >
+      #     failure() ||
+      #     needs.build.result == 'failure'
+      #   env:
+      #     SMTP_SERVER: semicolon.africa
+      #     SMTP_PORT: 465
+      #     SMTP_USERNAME: builds@semicolon.africa
+      #     SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      #   run: |
+      #     chmod +x .github/workflows/scripts/send_failure_email.sh
+      #     .github/workflows/scripts/send_failure_email.sh \
+      #       "$SMTP_SERVER" \
+      #       "$SMTP_PORT" \
+      #       "$SMTP_USERNAME" \
+      #       "$SMTP_PASSWORD" \
+      #       "${{ env.EMAILS }}" \
+      #       "${{ env.TAG }}" \
+      #       "${{ env.BRANCH_NAME }}" \
+      #       "${{ env.COMMIT_AUTHOR }}" \
+      #       "${{ env.COMMIT_MESSAGE }}"
 
