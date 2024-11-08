@@ -74,10 +74,12 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
     firstName: Yup.string()
     .trim()
     .required('First name is required')
-    .matches(/^\S*$/, 'First name should not contain spaces'),
+    .matches(/^\S*$/, 'First name should not contain spaces')
+    .matches(/^[A-Za-z]+$/, 'First name should only contain letters'),
     lastName: Yup.string()
     .trim()
     .matches(/^\S*$/, 'Last name should not contain spaces')
+    .matches(/^[A-Za-z]+$/, 'Last name should only contain letters')
     .required('Last name is required'),
     emailAddress: Yup.string()
     .email('Invalid email address')
@@ -151,7 +153,7 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
               name="firstName"
               className="w-full p-3 border rounded focus:outline-none mt-2"
               placeholder="Enter first name"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("firstName", e.target.value.replace(/\s+/g, ''))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("firstName", e.target.value.replace(/[^A-Za-z]/g, ''))}
             />
               
              {
@@ -171,7 +173,7 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
                   name="lastName"
                   className="w-full p-3 border rounded focus:outline-none mt-2"
                   placeholder="Enter last name"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("lastName", e.target.value.replace(/\s+/g, ''))}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("lastName", e.target.value.replace(/[^A-Za-z]/g, ''))}
                  />
               
                    {
