@@ -83,7 +83,8 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                 }}
                                 optionalRowsPerPage={10}
                                 tableCellStyle={'h-12'}
-                            /> :
+                            />
+                                :
                                     <div
                                         className="bg-[#F9F9F9] px-5 w-full h-96 p-5 overflow-y-auto rounded-sm">
                                         {isNotTableDataList?.map((item, index) => (

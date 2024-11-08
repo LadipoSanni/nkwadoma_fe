@@ -4,7 +4,6 @@ import {inter} from "@/app/fonts";
 import {Card} from "@/components/ui/card";
 import Image from 'next/image';
 import {Button} from "@/components/ui/button";
-// import CreateProgramButton from "@/components/program/create-program/Index";
 import {TagButton} from "@/reuseable/tagButton/TagButton";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import {IoEllipsisHorizontalSharp} from "react-icons/io5";
@@ -111,9 +110,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             headerTitle={"Add trainee"}
                             className={"md:w-full pb-1"}
                             icon={Cross2Icon}
-
                 >
-                    
                     <AddTraineeForm cohortId={cohortId} setIsOpen={handleModalOpen}/>
                 </TableModal>
             </div>
