@@ -79,7 +79,7 @@ const CohortDetails = () => {
         "thepeople they're creating for, which leads to better products, services, and internal processes."
 
     return (
-        <main className={`${inter.className}  py-3 px-10 w-fit md:w-full`}>
+        <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`}>
             <div className={`flex cursor-pointer py-2 space-x-1 text-meedlBlue`} id={`backClick`}
                  data-testid={`backClick`} onClick={handleBackClick}>
                 <BiArrowBack className={`mt-1`}/>

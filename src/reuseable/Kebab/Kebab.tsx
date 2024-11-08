@@ -43,8 +43,7 @@ const Kebab = ({handleDropDownClick, kebabOptions, className, icon: Icon}: Props
                     <MenubarContent
                         id="menubarContent"
                         data-testid="menubar-content"
-                        className={`${inter.className} pr-8 px-2 mt-0 bg-meedlWhite gap-3 shadow-grey100 rounded-md w-full relative z-10`}
-                        style={{ right: "auto", left: "-98%", position: "relative"}}
+                        className={`${inter.className} pr-8 px-2 mt-0 bg-meedlWhite gap-3 shadow-grey100 rounded-md w-full absolute left-auto right-[-18px] z-10`}
                     >
                         {kebabOptions?.map((option, index) => (
                             <MenubarItem

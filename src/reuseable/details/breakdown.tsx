@@ -5,6 +5,7 @@ import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/
 import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import {DropdownMenuSeparator} from "@/components/ui/dropdown-menu";
+import {Accordion, AccordionItem, AccordionTrigger} from "@/components/ui/accordion";
 
 
 interface breakdownProps {
@@ -20,23 +21,34 @@ export const Breakdown: React.FC<breakdownProps> = ({breakDown}) => {
     };
 
     return (
+        // <Accordion type={`single`} collapsible className={`w-full`}>
+        //     <AccordionItem value={`item`}>
+        //         <AccordionTrigger>
+        //
+        //
+        //         </AccordionTrigger>
+        //
+        //     </AccordionItem>
+        //
+        // </Accordion>
         <Collapsible
             open={isOpen}
             onOpenChange={handleOpen}
-            className="space-y-2 w-full bg-meedlWhite rounded-md"
+            className="space-y-2  md:w-full bg-meedlWhite rounded-md"
             id="tuition-breakdown-collapsible"
             data-testid="tuition-breakdown-collapsible"
         >
-            <CollapsibleTrigger asChild className={`border-b w-fit md:w-full`}
+            <CollapsibleTrigger
+            asChild className={`border-b w-full`}
                                 id="tuition-breakdown-trigger"
                                 data-testid="tuition-breakdown-trigger">
                 <Button variant="ghost" size="lg"
-                        className={`w-full focus:outline-none px-6 focus:ring-0  focus-visible:ring-0`}>
+                        className={`w-full focus:outline-none px-6 focus:ring-0 focus-visible:ring-0`}>
                     <div
-                        className="flex justify-center gap-2 bg-meedlWhite w-full">
-                        <h4 className={`${inter.className} text-sm text-black300 flex items-center justify-between`}>
-                            {isOpen ? "Collapse to hide the tuition breakdown" : "Expand to see the tuition breakdown"}
-                        </h4>
+                        className="flex justify-center items-center gap-2 bg-meedlWhite">
+                        <div className={`${inter.className} text-sm text-black300 md:w-full`}>
+                            {isOpen ? <p > Collapse to hide <br/> the tuition breakdown </p>: <p > Expand to see <br/> the tuition breakdown </p>}
+                        </div>
                         <div>
                             {isDropdown ? (
                                 <ChevronUpIcon className={`h-5 w-5 font-bold`}/>

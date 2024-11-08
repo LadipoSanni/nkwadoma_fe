@@ -45,7 +45,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
     return (
         <main id="details-main" data-testid="details-main" className={``}>
             <div id="cohort-image-section" data-testid="cohort-image-section"
-                 className={`flex md:flex-col flex-col md:block space-y-5 md:max-w-sm ma-w-xs`}>
+                 className={`flex md:flex-col flex-col md:block space-y-5 md:max-w-sm w-full`}>
                 <div id="cohort-image-card" data-testid="cohort-image-card">
                     <Card className="rounded-lg">
                         {imageSrc ? (

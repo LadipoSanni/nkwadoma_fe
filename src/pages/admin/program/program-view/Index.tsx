@@ -146,8 +146,9 @@ const ProgramView = () => {
                                 closeModal={() => setIsOpen(false)}
                                 closeOnOverlayClick={true}
                                 headerTitle={"Create program"}
-                                className={"md:max-w-xs pb-1 px-5"}
+                                className={"w-full"}
                                 icon={Cross2Icon}
+                                width={`32%`}
                     >
                         <CreateProgram setIsOpen={setIsOpen}
                                              programDeliveryTypes={["Full-time", "Part-time"]}
