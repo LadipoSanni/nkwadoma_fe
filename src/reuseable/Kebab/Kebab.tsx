@@ -43,8 +43,8 @@ const Kebab = ({handleDropDownClick, kebabOptions, className, icon: Icon}: Props
                     <MenubarContent
                         id="menubarContent"
                         data-testid="menubar-content"
-                        className={`${inter.className} pr-8 px-2 bg-meedlWhite gap-3 shadow-grey100 rounded-md w-max absolute top-full left-0 mt-2 z-10`}
-                        style={{ right: "100%", left: "auto" }}
+                        className={`${inter.className} pr-8 px-2 mt-0 bg-meedlWhite gap-3 shadow-grey100 rounded-md w-full relative z-10`}
+                        style={{ right: "auto", left: "-98%", position: "relative"}}
                     >
                         {kebabOptions?.map((option, index) => (
                             <MenubarItem
@@ -60,27 +60,6 @@ const Kebab = ({handleDropDownClick, kebabOptions, className, icon: Icon}: Props
                             </MenubarItem>
                         ))}
                     </MenubarContent>
-
-                    {/*<MenubarContent*/}
-                    {/*    id="menubarContent"*/}
-                    {/*    data-testid="menubar-content"*/}
-                    {/*    className={`${inter.className} pr-8 px-2 bg-meedlWhite gap-3 shadow-grey100 rounded-md w-full relative`}*/}
-                    {/*    style={{ right: "85%", left: "auto" }}*/}
-                    {/*>*/}
-                    {/*    {kebabOptions?.map((option, index) => (*/}
-                    {/*        <MenubarItem*/}
-                    {/*            key={index}*/}
-                    {/*            id={`menubarItem-${index}`}*/}
-                    {/*            data-testid={`menubar-item-${index}`}*/}
-                    {/*            className={`cursor-pointer mt-2 ${className} ${*/}
-                    {/*                option.id === "3" ? "text-error500 focus:text-error500 focus:bg-error50 hover:bg-error50" : ""*/}
-                    {/*            }`}*/}
-                    {/*            onClick={() => handleDropDownClick && handleDropDownClick(option.id)}*/}
-                    {/*        >*/}
-                    {/*            {option.name}*/}
-                    {/*        </MenubarItem>*/}
-                    {/*    ))}*/}
-                    {/*</MenubarContent>*/}
 
                     {/*<MenubarContent*/}
                     {/*    id="menubarContent"*/}
