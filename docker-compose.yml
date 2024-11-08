@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Service
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Keycloak Service
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/postgres
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+    command: ["start-dev"]
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+
+  # SonarQube Service
+  sonarqube:
+    image: sonarqube:latest
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://postgres:5432/postgres
+      SONAR_JDBC_USERNAME: postgres
+      SONAR_JDBC_PASSWORD: postgres
+    ports:
+      - "9000:9000"
+    depends_on:
+      - postgres
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+
+  # Backend Service
+  backend:
+    image: 357586184453.dkr.ecr.us-east-1.amazonaws.com/nkwadoma
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      KEYCLOAK_URL: http://keycloak:8080
+      SONARQUBE_URL: http://sonarqube:9000
+    ports:
+      - "8081:8081"  # Change this port if your backend uses a different one
+    depends_on:
+      - postgres
+      - keycloak
+      - sonarqube
+
+volumes:
+  postgres_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
