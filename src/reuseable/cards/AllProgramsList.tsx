@@ -5,7 +5,7 @@ import {inter} from "@/app/fonts";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import { FiMoreVertical } from 'react-icons/fi';
 import {TagButton} from "@/reuseable/tagButton/TagButton";
-import {useRouter} from "next/navigation";
+
 
 interface ProgramList {
     id: string;
@@ -13,15 +13,23 @@ interface ProgramList {
     description: string;
     tagButtonData: { tagIcon: ElementType, tagCount: number, tagButtonStyle: string, tagText: string }[];
     dropdownOption: { name: string, id: string }[];
+    onEdit: (id: string) => void;
+    onDelete: (id: string) => void;
+    handleCardDropDownClick: (optionId: string) => void;
+    handleProgramDetails?: (optionId: string) => void;
 }
 
-const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButtonData, dropdownOption}) => {
+const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButtonData, dropdownOption, handleCardDropDownClick,handleProgramDetails}) => {
 
-    const router = useRouter();
 
-    const handleProgramDetails = () => {
-        router.push(`/program/details`)
+
+    const handleProgramDetailsOnclick = (optionId: string) => {
+        if(handleProgramDetails){
+            handleProgramDetails(optionId);
+        }
     };
+
+
 
     const shortDescription = description.length > 90
         ? description.substring(0, 80)
@@ -29,15 +37,15 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
 
 
     return (
-        <Card id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full md:max-w-lg border border-grey50 rounded-lg px-5">
-            <CardHeader id={`header-${id}`} data-testid="header" className="flex flex-row justify-between px-0 items-center">
+        <Card  id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full md:max-w-lg  border border-grey50 rounded-lg cursor-pointer" >
+            <CardHeader id={`header-${id}`} data-testid="header" className="flex flex-row justify-between items-center">
                 <CardTitle id={`title-${id}`} data-testid="title" className={`${inter.className} text-lg font-medium text-[#101828]`}>{title}</CardTitle>
-                    <Kebab kebabOptions={dropdownOption} icon={FiMoreVertical}/>
+                    <Kebab kebabOptions={dropdownOption} icon={FiMoreVertical} handleDropDownClick={handleCardDropDownClick}/>
             </CardHeader>
 
-            <CardContent id={`contentId-${id}`} data-testid={`contentId`} onClick={handleProgramDetails} className={`px-0`}>
+            <CardContent id={`contentId-${id}`} data-testid={`contentId`} onClick={() => handleProgramDetailsOnclick(id)}>
                 <CardDescription id={`description-${id}`} data-testid="description"
-                                 className={`${inter.className}  text-sm text-grey450 cursor-pointer px-0`}>
+                                 className={`${inter.className}  text-sm text-grey450 `}>
                     {shortDescription}
                     {description.length > 90 && (
                         <span

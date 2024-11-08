@@ -5,7 +5,13 @@ import {userEvent} from "@testing-library/user-event";
 import * as React from "react";
 import {Providers} from "@/app/provider";
 
-
+jest.mock("next/navigation", () => ({
+    useRouter() {
+        return {
+            prefetch: () => null
+        };
+    }
+}));
 describe('Login Component', () => {
     it("should test that login component does not exist", () => {
         const {queryByTestId} = render(

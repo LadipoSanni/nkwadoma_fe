@@ -54,8 +54,8 @@ const CohortDetails = () => {
 
 
     const tagButtonData = [
-        {tagIcon: FiBook, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees"},
-        {tagIcon: MdPersonOutline, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "cohorts"},
+        { tagIcon: FiBook, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees" },
+        { tagIcon: MdPersonOutline, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "cohorts" },
     ];
 
 

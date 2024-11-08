@@ -253,3 +253,191 @@ export const cohortsData = [
     amountOutstanding: 70000
   }
 ];
+
+
+export const cohortDataDetails = [
+  {
+    cohort: "Cohort 1",
+    noOfTrainees: 25,
+    tuition: "₦2,000,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,200,000.00",
+    amountOutstanding: "₦300,000.00"
+  },
+  {
+    cohort: "Cohort 2",
+    noOfTrainees: 30,
+    tuition: "₦2,500,000.00",
+    amountRequested: "₦2,000,000.00",
+    amountReceived: "₦1,800,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  },
+  {
+    cohort: "Cohort 3",
+    noOfTrainees: 20,
+    tuition: "₦1,800,000.00",
+    amountRequested: "₦1,500,000.00",
+    amountReceived: "₦1,300,000.00",
+    amountOutstanding: "₦200,000.00"
+  }
+];

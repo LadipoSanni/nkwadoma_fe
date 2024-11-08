@@ -31,8 +31,8 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
 
     return (
         <div id="cohort-details" data-testid="cohort-details"
-             className={`${inter.className} border border-slate-200 md:rounded-md p-3`}>
-            <div id="tabs-section" data-testid="tabs-section" className={`p-3 `}>
+             className={`${inter.className} border border-slate-200 rounded-md md:p-3 px-2 py-3`}>
+            <div id="tabs-section" data-testid="tabs-section" className={`md:p-3 px-2 py-3 `}>
                 <div className={`w-full rounded-md`}>
                     <Tabs
                         id="cohort-tabs"
@@ -69,7 +69,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         </TabsContent>
 
                         <TabsContent value={"trainee"} id="trainee-content" data-testid="trainee-content"
-                                     className={`py-2`}>
+                                     className={`py-3 w-full `}>
                             {isTable?
                                 <Tables
                                 tableData={traineeData}
@@ -83,9 +83,9 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                 }}
                                 optionalRowsPerPage={10}
                                 tableCellStyle={'h-12'}
-                            /> : <div>
+                            /> :
                                     <div
-                                        className="bg-[#F9F9F9] px-5 w-full h-96 py-2 overflow-y-auto rounded-sm">
+                                        className="bg-[#F9F9F9] px-5 w-full h-96 p-5 overflow-y-auto rounded-sm">
                                         {isNotTableDataList?.map((item, index) => (
                                             <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                                  key={index}
@@ -98,7 +98,6 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                                 </div>
                                             </div>
                                         ))}
-                                    </div>
                                 </div>
                             }
 

@@ -5,7 +5,6 @@ import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/
 import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import {DropdownMenuSeparator} from "@/components/ui/dropdown-menu";
-import {Accordion, AccordionItem, AccordionTrigger} from "@/components/ui/accordion";
 
 
 interface breakdownProps {
@@ -21,16 +20,6 @@ export const Breakdown: React.FC<breakdownProps> = ({breakDown}) => {
     };
 
     return (
-        // <Accordion type={`single`} collapsible className={`w-full`}>
-        //     <AccordionItem value={`item`}>
-        //         <AccordionTrigger>
-        //
-        //
-        //         </AccordionTrigger>
-        //
-        //     </AccordionItem>
-        //
-        // </Accordion>
         <Collapsible
             open={isOpen}
             onOpenChange={handleOpen}
@@ -46,9 +35,13 @@ export const Breakdown: React.FC<breakdownProps> = ({breakDown}) => {
                         className={`w-full focus:outline-none px-6 focus:ring-0 focus-visible:ring-0`}>
                     <div
                         className="flex justify-center items-center gap-2 bg-meedlWhite">
-                        <div className={`${inter.className} text-sm text-black300 md:w-full`}>
+                        <div className={`${inter.className} text-sm text-black300 md:w-full md:block hidden`}>
+                            {isOpen ? <p > Collapse to hide the tuition breakdown </p>: <p > Expand to see the tuition breakdown </p>}
+                        </div>
+                        <div className={`${inter.className} text-sm text-black300 md:w-full md:hidden block`}>
                             {isOpen ? <p > Collapse to hide <br/> the tuition breakdown </p>: <p > Expand to see <br/> the tuition breakdown </p>}
                         </div>
+
                         <div>
                             {isDropdown ? (
                                 <ChevronUpIcon className={`h-5 w-5 font-bold`}/>

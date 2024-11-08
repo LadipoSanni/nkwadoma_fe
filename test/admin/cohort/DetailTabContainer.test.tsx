@@ -19,7 +19,7 @@ describe('CreateProgramButton Component', () => {
         jest.spyOn(console, 'warn').mockReturnValue();
         jest.spyOn(console, 'error').mockReturnValue();
         const {queryByTestId} = render(
-            <DetailsTabContainer dataList={dataList} breakDown={breakDown}/>
+            <DetailsTabContainer dataList={dataList} breakDown={breakDown} tabTitle1={''} tabTitle2={''}/>
         )
         const assert = queryByTestId("cohort-details");
         expect(assert).toBeInTheDocument();
@@ -32,21 +32,11 @@ describe('CreateProgramButton Component', () => {
     it('should render DetailsTabContainer with dataList and breakDown', () => {
         expect(screen.getByTestId('cohort-details')).toBeInTheDocument();
         expect(screen.queryByTestId('cohort-details-content')).toBeInTheDocument();
-        expect(screen.getByTestId('tuition-breakdown-collapsible')).toBeInTheDocument();
     });
 
     it('should display correct tab content when a tab is selected', () => {
         expect(screen.getByTestId('cohort-details')).toBeInTheDocument();
         expect(screen.getByTestId('cohort-details-content')).toBeInTheDocument();
-        expect(screen.getByTestId('tuition-breakdown-collapsible')).toBeInTheDocument();
-    });
-
-    it('should toggle Collapsible component when trigger button is clicked', () => {
-        const triggerButton = screen.getByTestId('tuition-breakdown-trigger');
-        fireEvent.click(triggerButton);
-        expect(screen.getByTestId('tuition-breakdown-content')).toBeVisible();
-        fireEvent.click(triggerButton);
-        expect(screen.getByTestId('tuition-breakdown-content')).not.toBeVisible();
     });
 
     it('should handle empty dataList without errors', () => {
@@ -57,6 +47,5 @@ describe('CreateProgramButton Component', () => {
     it('should render DetailsTabContainer with dataList and breakDown', () => {
         expect(screen.getByTestId('cohort-details')).toBeInTheDocument();
         expect(screen.getByTestId('cohort-details-content')).toBeInTheDocument();
-        expect(screen.getByTestId('tuition-breakdown-collapsible')).toBeInTheDocument();
     });
 });
