@@ -21,11 +21,11 @@ const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, 
     const renderEndAdornment = () => {
         if (typeof endAdornment === 'string') {
             return (
-                <button id={`end-adornment-${id}`}
-                      className={'text-labelBlue cursor-pointer text-[14px] font-normal leading-[22px]'}
+                <span id={`end-adornment-${id}`}
+                      className={'text-labelBlue cursor-pointer text-[14px] font-normal leading-[22px] select-none'}
                       onClick={handleToggleVisibility}>
                     {isPasswordVisible ? 'Hide' : 'Show'}
-                </button>
+                </span>
             );
         }
     };
