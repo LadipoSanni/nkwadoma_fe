@@ -23,7 +23,10 @@ services:
       KC_DB_URL: jdbc:postgresql://postgres:5432/postgres
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: postgres
-    command: ["start-dev"]
+      PROFILE: dev  # set dev profile
+    volumes:
+      - ./keycloak-setup.sh:/opt/keycloak-setup.sh
+    command: ["/opt/keycloak-setup.sh"]
     ports:
       - "8082:8082"
     depends_on:
