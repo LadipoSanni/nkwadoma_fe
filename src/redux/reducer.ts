@@ -3,7 +3,7 @@ import adminLayoutReducer from "@/redux/slice/layout/adminLayout";
 import selectedLoanReducer from "@/redux/slice/loan/selected-loan";
 import authSliceReducer from "@/redux/slice/auth/slice";
 import {authApi} from "@/service/auths/api"
-
+import { programApi } from "@/service/portfolio_manager/program_query";
 
 const appReducer = combineReducers({
 
@@ -11,6 +11,7 @@ const appReducer = combineReducers({
     selectedLoan: selectedLoanReducer,
     authSlice: authSliceReducer,
     [authApi.reducerPath]: authApi.reducer,
+    [programApi.reducerPath]: programApi.reducer 
 })
 
 export default appReducer;
