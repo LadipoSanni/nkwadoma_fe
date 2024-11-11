@@ -30,14 +30,14 @@ const ProgramDetails = () => {
         {label: "Average starting income", value: "₦3,000,000.00"},
     ];
 
-    // const loanDetail = [
-    //     {label: "Repayment rate", value: "40%"},
-    //     {label: "Debt percentage", value: "55.5%"},
-    //     {label: "Total loan amount disbursed", value: "₦3,000,000.00"},
-    //     {label: "Total loan amount repaid", value: "₦3,000,000.00"},
-    //     {label: "Total loan amount outstanding", value: "₦3,000,000.00"},
-    //
-    // ]
+    const loanDetail = [
+        {detail: "Repayment rate", value: "40%"},
+        {detail: "Debt percentage", value: "55.5%"},
+        {detail: "Total loan amount disbursed", value: "₦3,000,000.00"},
+        {detail: "Total loan amount repaid", value: "₦3,000,000.00"},
+        {detail: "Total loan amount outstanding", value: "₦3,000,000.00"},
+
+    ]
 
 
     const tagButtonData = [
@@ -103,7 +103,7 @@ const ProgramDetails = () => {
                             </div>
                         </div>
                             <div className={`md:w-6/12 md:pt-0 pt-0`}>
-                                <DetailsTabContainer dataList={dataList} tabTitle1={"Program details"} tabTitle2={"Loan details"}/>
+                                <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail} dataList={dataList} tabTitle1={"Program details"} tabTitle2={"Loan details"}/>
                             </div>
                     </section>
                 </TabsContent>
