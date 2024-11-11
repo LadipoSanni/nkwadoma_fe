@@ -3,6 +3,8 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { useDispatch,useSelector, type TypedUseSelectorHook } from "react-redux";
 import appReducer from "@/redux/reducer";
 import {authApi} from "@/service/auths/api"
+import { programApi } from "@/service/admin/program_query";
+
 
 export const store = configureStore({
   reducer: appReducer,
@@ -12,6 +14,7 @@ export const store = configureStore({
       serializableCheck: false,
     }).concat([
         authApi.middleware,
+        programApi.middleware,
     ]),
 });
 
