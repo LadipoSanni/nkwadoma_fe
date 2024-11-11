@@ -9,8 +9,10 @@ import {programData} from "@/utils/ProgramData";
 import CreateProgram from "@/components/program/create-program/Index";
 import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
-import {MdOutlineCalendarMonth, MdOutlinePeopleAlt} from "react-icons/md";
-import {Cross2Icon, PersonIcon} from "@radix-ui/react-icons";
+import {MdOutlineDateRange, MdOutlinePeopleAlt, MdPersonOutline} from "react-icons/md";
+import {Cross2Icon} from "@radix-ui/react-icons";
+
+
 import {Button} from "@/components/ui/button";
 import TableModal from "@/reuseable/modals/TableModal";
 import { useRouter } from 'next/navigation'
@@ -169,9 +171,9 @@ const ProgramView = () => {
     
 
     const tagButtonData = [
-        {tagIcon: PersonIcon, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees"},
-        {tagIcon: MdOutlineCalendarMonth, tagCount: 50, tagButtonStyle: "bg-lightBlue100", tagText: "cohorts"},
-        {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-lightBlue100", tagText: "cohorts"},
+        {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
+        {tagIcon: MdOutlineDateRange, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
+        {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "cohorts"},
     ];
 
     const [isOpen, setIsOpen] = React.useState(false);
@@ -195,14 +197,15 @@ const ProgramView = () => {
                                 closeModal={() => setIsOpen(false)}
                                 closeOnOverlayClick={true}
                                 headerTitle={"Create program"}
-                                className={"md:w-full pb-1"}
+                                className={"w-full"}
                                 icon={Cross2Icon}
+                                width={`32%`}
                     >
                         <CreateProgram setIsOpen={setIsOpen}
                                              programDeliveryTypes={["Full-time", "Part-time"]}
                                              programModes={["Online", "Physical"]}
                                              programDurations={["3years", "4years"]}
-                                             submitButtonText={"Create Program"}/>
+                                             submitButtonText={"Create"}/>
 
                     </TableModal>
                 </div>
@@ -235,7 +238,7 @@ const ProgramView = () => {
                 ) : (
                     <div
                         id="programListView"
-                        className={'grid gap-6'}
+                        className={'grid -6'}
                         style={{
                             height: '62vh',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'

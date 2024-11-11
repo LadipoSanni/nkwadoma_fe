@@ -13,15 +13,15 @@ interface ProgramList {
     description: string;
     tagButtonData: { tagIcon: ElementType, tagCount: number, tagButtonStyle: string, tagText: string }[];
     dropdownOption: { name: string, id: string }[];
-    onEdit: (id: string) => void; 
-    onDelete: (id: string) => void; 
-    handleCardDropDownClick: (optionId: string) => void; 
+    onEdit: (id: string) => void;
+    onDelete: (id: string) => void;
+    handleCardDropDownClick: (optionId: string) => void;
     handleProgramDetails?: (optionId: string) => void;
 }
 
 const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButtonData, dropdownOption, handleCardDropDownClick,handleProgramDetails}) => {
 
-   
+
 
     const handleProgramDetailsOnclick = (optionId: string) => {
         if(handleProgramDetails){
@@ -29,7 +29,7 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
         }
     };
 
-    
+
 
     const shortDescription = description.length > 90
         ? description.substring(0, 80)
