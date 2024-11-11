@@ -24,13 +24,13 @@ import { getUserDetails } from '@/features/auth/usersAuth/login/action';
 
 const ProgramDetails = () => {
     const id = "139f4d05-3a0e-4f77-adc1-d9245236ac12"
-    const { data, isLoading, isError } = useGetProgramByIdQuery({id})
+    const { data } = useGetProgramByIdQuery({id})
 
     useEffect(()=> {
         if(data?.data ){
             console.log(data.data)
         }
-    },[])
+    },[data])
 
     const dataList = [
         {label: "Program mode", value: "Online"},
