@@ -68,13 +68,13 @@ const Login: React.FC = () => {
             if (response?.data) {
                 const access_token = response?.data?.access_token
                 const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-                console.log(decode_access_token)
-                console.log(access_token)
+                // console.log(decode_access_token)
+                // console.log(access_token)
                
                 const user_email = decode_access_token?.email
-                console.log(user_email)
+                // console.log(user_email)
                 const user_role = decode_access_token?.realm_access?.roles[0]
-                console.log(user_role)
+                // console.log(user_role)
                 storeUserDetails(access_token, user_email, user_role)
                 router.push("/Overview")
 

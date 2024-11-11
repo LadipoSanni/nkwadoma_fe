@@ -11,6 +11,7 @@ export const customFetchBaseQuery = fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers) => {
         const { storedAccessToken } = getUserDetails();
+        // console.log("confirmed: ",storedAccessToken)
         if (storedAccessToken) {
             headers.set('authorization', `Bearer ${storedAccessToken}`);
             headers.set('Content-type', 'application/json');
