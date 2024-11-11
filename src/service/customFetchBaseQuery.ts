@@ -1,7 +1,7 @@
 
 
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
-// import { getUserToken } from '@/services/storage';
+import {getItemSessionStorage} from "@/utils/storage";
 // import fetch from 'node-fetch'; // Import node-fetch for SSR
 
 const baseUrl = process.env.APP_DEV_AUTH_URL;
@@ -14,11 +14,11 @@ export const customFetchBaseQuery = fetchBaseQuery({
     //     ? (fetch as unknown as typeof globalThis.fetch) // Use node-fetch for SSR but cast to global fetch type
     //     : undefined, // Use browser's fetch in client-side environments
     prepareHeaders: (headers) => {
-        // const token = getUserToken();
-        // if (token) {
-        //     headers.set('authorization', Bearer ${token});
-        //     headers.set('Content-type', 'application/json');
-        // }
+        const token = getItemSessionStorage('access_token');
+        if (token) {
+            headers.set('authorization', `Bearer ${token}`);
+            headers.set('Content-type', 'application/json');
+        }
 
         return headers;
     },

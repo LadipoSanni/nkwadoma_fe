@@ -1,5 +1,5 @@
 "use server"
-import {setItemSessionStorage} from "@/utils/localStorage";
+import {setItemSessionStorage} from "../../../../utils/storage";
 
 
 

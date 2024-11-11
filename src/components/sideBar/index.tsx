@@ -10,7 +10,6 @@ import { LuLogOut} from "react-icons/lu";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
 import NavbarContainer from "@/reuseable/ui/Navbar";
 import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
-import {setItemToLocalStorage, getItemFromLocalStorage} from "@/utils/localStorage";
 import {Icon} from "@iconify/react";
 
 
@@ -19,15 +18,15 @@ import {Icon} from "@iconify/react";
 const SideBar = () => {
     const router = useRouter();
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
+    const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
 
 
 
-    const current = getItemFromLocalStorage('currentTabItem')
+
     const [currentTab, setCurrentTab] = React.useState(current)
 
     const clickNavbar = (name: string, id: string) => {
         setCurrentTab(name)
-        setItemToLocalStorage("currentTabItem", name)
         store.dispatch(setCurrentNavbarItem(name))
         router.push("/" + id)
 

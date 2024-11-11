@@ -4,11 +4,15 @@ import AuthInputField from "@/reuseable/Input/AuthInputField";
 import { cabinetGrotesk } from "@/app/fonts";
 import PasswordCriteria from "@/components/passwordCriteria/Index";
 import AuthButton from "@/reuseable/buttons/AuthButton";
+import { useRouter} from "next/router";
 
 const CreatePassword = () => {
     const [password, setPassword] = useState('');
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
     const [confirmPassword, setConfirmPassword] = useState('');
+    const router = useRouter()
+    const token = router.query.token;
+
 
     const criteriaMessages = [
         "Must be at least 8 characters",
