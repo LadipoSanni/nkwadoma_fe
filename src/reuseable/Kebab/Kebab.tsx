@@ -24,7 +24,7 @@ const Kebab = ({handleDropDownClick, kebabOptions, className, icon: Icon}: Props
                 <MenubarMenu data-testid="menubar-menu">
                     <MenubarTrigger
                         asChild
-                        className="border-none shadow-none cursor-pointer focus:ring-0 focus-visible:ring-0"
+                        className="border-none shadow-none cursor-pointer focus:ring-0 focus-visible:ring-0 px-0 items-center"
                         id="menubarTfrigger"
                         data-testid="menubar-trigger"
                     >
@@ -43,23 +43,43 @@ const Kebab = ({handleDropDownClick, kebabOptions, className, icon: Icon}: Props
                     <MenubarContent
                         id="menubarContent"
                         data-testid="menubar-content"
-                        className={`${inter.className} bg-meedlWhite gap-3 shadow-grey100 rounded-md w-full right-full`}
-                        style={{ right: "auto", left: 0 }}
+                        className={`${inter.className} pr-8 px-2 mt-0 bg-meedlWhite gap-3 shadow-grey100 rounded-md w-full absolute left-auto right-[-18px] z-10`}
                     >
-                        {
-                            kebabOptions?.map((option, index) => (
-                                <MenubarItem
-                                    key={index}
-                                    id={`menubarItem-${index}`}
-                                    data-testid={`menubar-item-${index}`}
-                                    className={`cursor-pointer pr-8 mt-2 ${className} ${option.id === '3' && 'text-error500 focus:text-error500 focus:bg-error50 hover:bg-error50'} `}
-                                    onClick={() => handleDropDownClick && handleDropDownClick(option.id)}
-                                >
-                                    {option.name}
-                                </MenubarItem>
-                            ))
-                        }
+                        {kebabOptions?.map((option, index) => (
+                            <MenubarItem
+                                key={index}
+                                id={`menubarItem-${index}`}
+                                data-testid={`menubar-item-${index}`}
+                                className={`cursor-pointer mt-2 ${className} ${
+                                    option.id === "3" ? "text-error500 focus:text-error500 focus:bg-error50 hover:bg-error50" : ""
+                                }`}
+                                onClick={() => handleDropDownClick && handleDropDownClick(option.id)}
+                            >
+                                {option.name}
+                            </MenubarItem>
+                        ))}
                     </MenubarContent>
+
+                    {/*<MenubarContent*/}
+                    {/*    id="menubarContent"*/}
+                    {/*    data-testid="menubar-content"*/}
+                    {/*    className={`${inter.className} pr-8 px-2 bg-meedlWhite gap-3 shadow-grey100 right-full rounded-md w-full relative`}*/}
+                    {/*    style={{ right: "auto", left: 0 }}*/}
+                    {/*>*/}
+                    {/*    {*/}
+                    {/*        kebabOptions?.map((option, index) => (*/}
+                    {/*            <MenubarItem*/}
+                    {/*                key={index}*/}
+                    {/*                id={`menubarItem-${index}`}*/}
+                    {/*                data-testid={`menubar-item-${index}`}*/}
+                    {/*                className={`cursor-pointer mt-2 ${className} ${option.id === '3' && 'text-error500 focus:text-error500 focus:bg-error50 hover:bg-error50'} `}*/}
+                    {/*                onClick={() => handleDropDownClick && handleDropDownClick(option.id)}*/}
+                    {/*            >*/}
+                    {/*                {option.name}*/}
+                    {/*            </MenubarItem>*/}
+                    {/*        ))*/}
+                    {/*    }*/}
+                    {/*</MenubarContent>*/}
                 </MenubarMenu>
             </Menubar>
 

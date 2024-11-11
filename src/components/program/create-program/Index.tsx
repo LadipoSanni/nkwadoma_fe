@@ -19,12 +19,12 @@ interface CreateProgramProps {
 }
 
 const CreateProgram: React.FC<CreateProgramProps> = ({
-                                                               programDeliveryTypes,
-                                                               programModes,
-                                                               programDurations,
-                                                               submitButtonText,
-                                                               setIsOpen
-                                                           }) => {
+                                                         programDeliveryTypes,
+                                                         programModes,
+                                                         programDurations,
+                                                         submitButtonText,
+                                                         setIsOpen
+                                                     }) => {
 
     const [isDropdown, setIsDropdown] = useState(false)
     const [programName, setProgramName] = useState('');
@@ -64,44 +64,78 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
     }
 
     return (
-        <div>
-            <div data-testid="dialog-description">
-                <div id="formContainer" data-testid="form-container"
-                     className="grid gap-4 py-4 flex-col text-labelBlue">
-                    <div id="programNameContainer" data-testid="program-name-container"
-                         className="grid items-center gap-2.5">
-                        <Label htmlFor="programName" id="programNameLabel" data-testid="program-name-label"
-                               className={`${inter.className} text-meedlBlack font-bold`}>Program
-                            Name</Label>
-                        <Input
-                            id="programNameInput"
-                            data-testid="program-name-input"
-                            placeholder="Enter name"
-                            onChange={(e) => setProgramName(e.target.value)}
-                            className={`h-14 focus:outline-none focus:ring-0 focus-visible:ring-0`}
-                        />
-                        {!isProgramNameValid && programName && (
-                            <p className="text-red-500 text-sm">Name must contain only letters.</p>
-                        )}
-                    </div>
+        <form data-testid="dialog-description" className={`w-full md:px-0 px-3`}>
+            <div id="formContainer" data-testid="form-container"
+                 className="grid py-3 flex-col text-labelBlue">
+                <div id="programNameContainer" data-testid="program-name-container"
+                     className="">
+                    <Label htmlFor="programName" id="programNameLabel" data-testid="program-name-label"
+                           className={`${inter.className} text-meedlBlack font-bold pb-1`}>Program
+                        Name</Label>
+                    <Input
+                        id="programNameInput"
+                        data-testid="program-name-input"
+                        placeholder="Enter name"
+                        onChange={(e) => setProgramName(e.target.value)}
+                        className={`h-14 focus:outline-none focus:ring-0 focus-visible:ring-0`}
+                    />
+                    {!isProgramNameValid && programName && (
+                        <p className="text-red-500 text-sm">Name must contain only letters.</p>
+                    )}
+                </div>
 
-                    <div className={`grid grid-col`} id="selectInputsContainer"
-                         data-testid="select-inputs-container">
-                        <div id=" selectInputsContainer" data-testid="select-inputs-container">
-                            <Label
-                                htmlFor="programDeliveryType"
-                                id="programDeliveryTypeLabel"
-                                data-testid="program-delivery-type-label"
-                                className={`${inter.className} text-meedlBlack font-bold`}
-                            >
-                                Program Delivery Type
-                            </Label>
-                            <Select data-testid="program-delivery-type-select" onOpenChange={toggleDropdown}
-                                    onValueChange={setProgramDeliveryType}>
-                                <SelectTrigger id="programDeliveryTypeTrigger"
-                                               data-testid="program-delivery-type-trigger"
-                                               className={`focus:outline-none focus:ring-0 shadow-none`}>
-                                    <SelectValue placeholder="Select delivery type"/>
+                <div className={`grid grid-col`} id="selectInputsContainer"
+                     data-testid="select-inputs-container">
+                    <div id=" selectInputsContainer" data-testid="select-inputs-container" className={`pt-4`}>
+                        <Label
+                            htmlFor="programDeliveryType"
+                            id="programDeliveryTypeLabel"
+                            data-testid="program-delivery-type-label"
+                            className={`${inter.className} text-meedlBlack font-bold`}
+                        >
+                            Program Delivery Type
+                        </Label>
+                        <Select data-testid="program-delivery-type-select" onOpenChange={toggleDropdown}
+                                onValueChange={setProgramDeliveryType}>
+                            <SelectTrigger id="programDeliveryTypeTrigger"
+                                           data-testid="program-delivery-type-trigger"
+                                           className={`focus:outline-none focus:ring-0 shadow-none`}>
+                                <SelectValue placeholder="Select delivery type"/>
+                                <div className={`ml-4`}>
+                                    {isDropdown ? (
+                                        <ChevronUpIcon className={`h-4 w-5 font-bold`}/>
+                                    ) : (
+                                        <ChevronDownIcon className={`h-4 w-5 font-bold`}/>
+                                    )}
+
+                                </div>
+                            </SelectTrigger>
+                            <SelectContent id="programDeliveryTypeContent"
+                                           style={{
+                                               zIndex: 1000
+                                           }}
+                                           data-testid="program-delivery-type-content">
+                                {programDeliveryTypes.map((deliveryType, index) => (
+                                    <SelectItem key={index} value={deliveryType}
+                                                id={`programDeliveryTypeItem-${index}`}
+                                                data-testid={`program-delivery-type-item-${index}`}>
+                                        {deliveryType}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div id="leftColumn" data-testid="left-column"
+                         className="grid md:grid-cols-2 gap-5 ">
+                        <div>
+                            <Label htmlFor="programMode" id="programModeLabel" data-testid="program-mode-label"
+                                   className={`${inter.className} text-meedlBlack font-bold`}>Program
+                                Mode</Label>
+                            <Select data-testid="program-mode-select" onOpenChange={toggleDropdown}
+                                    onValueChange={setProgramMode}>
+                                <SelectTrigger id="programModeTrigger" data-testid="program-mode-trigger"
+                                               className={`focus:outline-none focus:ring-0 shadow-none min-w-0 w-full`}>
+                                    <SelectValue placeholder="Select mode"/>
                                     <div className={`ml-4`}>
                                         {isDropdown ? (
                                             <ChevronUpIcon className={`h-4 w-5 font-bold`}/>
@@ -111,114 +145,78 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
 
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent id="programDeliveryTypeContent"
+                                <SelectContent id="programModeContent" data-testid="program-mode-content"
                                                style={{
                                                    zIndex: 1000
                                                }}
-                                               data-testid="program-delivery-type-content">
-                                    {programDeliveryTypes.map((deliveryType, index) => (
-                                        <SelectItem key={index} value={deliveryType}
-                                                    id={`programDeliveryTypeItem-${index}`}
-                                                    data-testid={`program-delivery-type-item-${index}`}>
-                                            {deliveryType}
+                                >
+                                    {programModes.map((mode, index) => (
+                                        <SelectItem key={index} value={mode} id={`programModeItem-${index}`}
+                                                    data-testid={`program-mode-item-${index}`}>
+                                            {mode}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div id="leftColumn" data-testid="left-column"
-                             className="grid md:grid-cols-2 gap-5 ">
-                            <div>
-                                <Label htmlFor="programMode" id="programModeLabel" data-testid="program-mode-label"
-                                       className={`${inter.className} text-meedlBlack font-bold`}>Program
-                                    Mode</Label>
-                                <Select data-testid="program-mode-select" onOpenChange={toggleDropdown}
-                                        onValueChange={setProgramMode}>
-                                    <SelectTrigger id="programModeTrigger" data-testid="program-mode-trigger"
-                                                   className={`focus:outline-none focus:ring-0 shadow-none`}>
-                                        <SelectValue placeholder="Select mode"/>
-                                        <div className={`ml-4`}>
-                                            {isDropdown ? (
-                                                <ChevronUpIcon className={`h-4 w-5 font-bold`}/>
-                                            ) : (
-                                                <ChevronDownIcon className={`h-4 w-5 font-bold`}/>
-                                            )}
 
-                                        </div>
-                                    </SelectTrigger>
-                                    <SelectContent id="programModeContent" data-testid="program-mode-content"
-                                                   style={{
-                                                       zIndex: 1000
-                                                   }}
-                                    >
-                                        {programModes.map((mode, index) => (
-                                            <SelectItem key={index} value={mode} id={`programModeItem-${index}`}
-                                                        data-testid={`program-mode-item-${index}`}>
-                                                {mode}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                        <div>
+                            <Label
+                                htmlFor="programDuration"
+                                id="programDurationLabel"
+                                data-testid="program-duration-label"
+                                className={`${inter.className} text-meedlBlack font-bold`}>
+                                Program Duration
+                            </Label>
+                            <Select data-testid="program-duration-select" onOpenChange={toggleDropdown}
+                                    onValueChange={setProgramDuration}>
+                                <SelectTrigger id="programDurationTrigger"
+                                               data-testid="program-duration-trigger"
+                                               className={`focus:outline-none focus:ring-0 shadow-none min-w-0 w-full`}>
+                                    <SelectValue placeholder="Select duration"/>
+                                    <div className={`ml-4`}>
+                                        {isDropdown ? (
+                                            <ChevronUpIcon className={`h-4 w-5 font-bold`}/>
+                                        ) : (
+                                            <ChevronDownIcon className={`h-4 w-5 font-bold`}/>
+                                        )}
 
-                            <div>
-                                <Label
-                                    htmlFor="programDuration"
-                                    id="programDurationLabel"
-                                    data-testid="program-duration-label"
-                                    className={`${inter.className} text-meedlBlack font-bold`}>
-                                    Program Duration
-                                </Label>
-                                <Select data-testid="program-duration-select" onOpenChange={toggleDropdown}
-                                        onValueChange={setProgramDuration}>
-                                    <SelectTrigger id="programDurationTrigger"
-                                                   data-testid="program-duration-trigger"
-                                                   className={`focus:outline-none focus:ring-0 shadow-none`}>
-                                        <SelectValue placeholder="Select duration"/>
-                                        <div className={`ml-4`}>
-                                            {isDropdown ? (
-                                                <ChevronUpIcon className={`h-4 w-5 font-bold`}/>
-                                            ) : (
-                                                <ChevronDownIcon className={`h-4 w-5 font-bold`}/>
-                                            )}
-
-                                        </div>
-                                    </SelectTrigger>
-                                    <SelectContent id="programDurationContent"
-                                                   data-testid="program-duration-content"
-                                                   style={{
-                                                       zIndex: 1000
-                                                   }}
-                                    >
-                                        {programDurations.map((duration, index) => (
-                                            <SelectItem key={index} value={duration}
-                                                        id={`programDurationItem-${index}`}
-                                                        data-testid={`program-duration-item-${index}`}>
-                                                {duration}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
+                                    </div>
+                                </SelectTrigger>
+                                <SelectContent id="programDurationContent"
+                                               data-testid="program-duration-content"
+                                               style={{
+                                                   zIndex: 1000
+                                               }}
+                                >
+                                    {programDurations.map((duration, index) => (
+                                        <SelectItem key={index} value={duration}
+                                                    id={`programDurationItem-${index}`}
+                                                    data-testid={`program-duration-item-${index}`}>
+                                            {duration}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
 
                     </div>
-                    <div id="rightColumn" data-testid="right-column">
-                        <Label htmlFor="programDescription" id="programDescriptionLabel"
-                               data-testid="program-mode-label"
-                               className={`${inter.className} text-meedlBlack font-bold`}>Program description</Label>
-                        <Textarea
-                            id="programDescription"
-                            data-testid="program-description"
-                            placeholder="Enter description"
-                            onChange={(e) => setProgramDescription(e.target.value)}
-                            className={`focus:outline-none focus:ring-0  focus-visible:ring-0 resize-none`}
-                        />
-                        {!isDescriptionValid && programDescription && (
-                            <p className="text-red-500 text-sm">Description must contain only letters.</p>
-                        )}
-                    </div>
+
+                </div>
+                <div id="rightColumn" data-testid="right-column">
+                    <Label htmlFor="programDescription" id="programDescriptionLabel"
+                           data-testid="program-mode-label"
+                           className={`${inter.className} text-meedlBlack font-bold`}>Program description</Label>
+                    <Textarea
+                        id="programDescription"
+                        data-testid="program-description"
+                        placeholder="Enter description"
+                        onChange={(e) => setProgramDescription(e.target.value)}
+                        className={`focus:outline-none focus:ring-0  focus-visible:ring-0 resize-none`}
+                    />
+                    {!isDescriptionValid && programDescription && (
+                        <p className="text-red-500 text-sm">Description must contain only letters.</p>
+                    )}
                 </div>
             </div>
 
@@ -228,7 +226,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                     data-testid="cancel-button"
                     variant="outline"
                     size={`lg`}
-                    className={`${inter.className}  bg-meedlWhite h-14 text-grey800 text-sm font-semibold`}
+                    className={`${inter.className}  bg-meedlWhite h-14 text-grey800 text-sm font-semibold `}
                     onClick={closeDialog}
                 >
                     Cancel
@@ -238,14 +236,14 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                     data-testid="create-button"
                     variant="secondary"
                     size={`lg`}
-                    className={`${inter.className} bg-meedlBlue h-14 text-meedlWhite text-sm font-semibold`}
+                    className={`${inter.className} bg-meedlBlue h-14 text-meedlWhite text-sm font-semibold `}
                     disabled={!isFormValid}
                     onClick={submit}
                 >
                     {submitButtonText}
                 </Button>
             </DialogFooter>
-        </div>
+        </form>
     )
 }
 
