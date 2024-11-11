@@ -16,7 +16,7 @@ import TableModal from "@/reuseable/modals/TableModal";
 import { useRouter } from 'next/navigation'
 import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 import EditProgramForm from '@/components/program/edit-program-form';
-import { useGetAllProgramsQuery } from '@/service/admin/program_query';
+// import { useGetAllProgramsQuery } from '@/service/admin/program_query';
 
 
 const ProgramView = () => {
