@@ -6,6 +6,7 @@ import PasswordCriteria from "@/components/passwordCriteria/Index";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import {useCreatePasswordMutation} from "@/service/auths/api";
 import { useSearchParams } from 'next/navigation'
+import { useToast} from "@/hooks/use-toast";
 
 
 const CreatePassword = () => {
@@ -14,8 +15,8 @@ const CreatePassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     // const router = useRouter()
     const searchParams = useSearchParams()
-    const [token ] = useState('token')
-    const [createPassword] = useCreatePasswordMutation()
+    const [token ] = useState('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZXhpamlrOTU0QGluaWthbGUuY29tIiwiaWF0IjoxNzMxMzMzMDEzLCJleHAiOjE4MTc3MzMwMTN9.2iRLhm_zCu3xghz5vrTJZg_5-zSVLprwKJYftRmnNWo')
+    const [createPassword,{error, isError,data, isSuccess}] = useCreatePasswordMutation()
 
     // useEffect(()=> {
     //     if (searchParams){
@@ -66,10 +67,25 @@ const CreatePassword = () => {
     }
 
 
+    const {toast} = useToast()
+
     const handleCreatePassword = async () => {
-        const tooken = getUserToken()
-        if (tooken){
-             await createPassword({token: tooken, password: password})
+        // const tooken = getUserToken()
+        // if (token){
+            const response = await createPassword({token: token, password: password})
+            console.log("responsebhybyuihiuhuihiu : ", response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            if (response?.error){
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-expect-error
+                console.log("errorxnb: ", response?.error?.data?.message)
+                    toast({
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        //@ts-expect-error
+                        description: response?.error?.data?.message,
+                        status: "error",
+                    })
+            }
             // if (response?.error?.data?.message){
             //     console.log("message: ", response?.error?.message)
             //     toast({
@@ -78,10 +94,10 @@ const CreatePassword = () => {
             //         status: "error",
             //     })
             // }
-        }
+        // }
 
-        const response = await createPassword({token: token, password: password})
-        console.log("response: ", response)
+        // const response = await createPassword({token: token, password: password})
+        // console.log("response: kbkiuhkihih", response)
     }
 
     return (

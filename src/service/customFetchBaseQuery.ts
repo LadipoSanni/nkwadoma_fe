@@ -10,9 +10,9 @@ const baseUrl = process.env.APP_DEV_AUTH_URL;
 export const customFetchBaseQuery = fetchBaseQuery({
     baseUrl,
     // mode: 'no-cors',
-    // fetchFn: typeof window === 'undefined'
-    //     ? (fetch as unknown as typeof globalThis.fetch) // Use node-fetch for SSR but cast to global fetch type
-    //     : undefined, // Use browser's fetch in client-side environments
+    fetchFn: typeof window === 'undefined'
+        ? (fetch as unknown as typeof globalThis.fetch) // Use node-fetch for SSR but cast to global fetch type
+        : undefined, // Use browser's fetch in client-side environments
     prepareHeaders: (headers) => {
         const token = getItemSessionStorage('access_token');
         if (token) {
