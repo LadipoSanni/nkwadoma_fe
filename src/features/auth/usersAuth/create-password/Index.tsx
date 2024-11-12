@@ -15,7 +15,7 @@ const CreatePassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     // const router = useRouter()
     // const searchParams = useSearchParams()
-    const [token ] = useState('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZXhpamlrOTU0QGluaWthbGUuY29tIiwiaWF0IjoxNzMxMzMzMDEzLCJleHAiOjE4MTc3MzMwMTN9.2iRLhm_zCu3xghz5vrTJZg_5-zSVLprwKJYftRmnNWo')
+    const [token ] = useState('')
     const [createPassword,{error, isError,data, isSuccess}] = useCreatePasswordMutation()
 
     // useEffect(()=> {
