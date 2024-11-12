@@ -80,10 +80,14 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                 };
                 const response = await createProgram(newProgram).unwrap();
                 if (response) {
-                    if (setIsOpen) setIsOpen(false);
+                    toast({
+                        description: 'Program created successfully',
+                        status: 'success',
+                    })
+                    // if (setIsOpen) setIsOpen(false);
                 }
             } catch (error) {
-                setError(error instanceof Error ? error.message : 'An unknown error occurred');
+                setError(error instanceof Error ? error.message : 'An error occurred');
             }
         }
     };
@@ -267,6 +271,9 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                     {submitButtonText}
                 </Button>
             </DialogFooter>
+            {
+                <div className={`text-error500 flex justify-center items-center`}>{error}</div>
+            }
         </form>
     )
 }
