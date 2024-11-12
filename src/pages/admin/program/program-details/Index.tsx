@@ -19,6 +19,9 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {cohortDataDetails} from "@/utils/LoanRequestMockData/cohortProduct"
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
+import { useSearchParams } from 'next/navigation';
+import {useGetProgramByIdQuery} from "@/service/program/programDetailsApi";
+
 
 const ProgramDetails = () => {
 
@@ -57,6 +60,13 @@ const ProgramDetails = () => {
 
 
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const id = searchParams ? searchParams.get('id') : null
+    const { data: program, error, isLoading } = useGetProgramByIdQuery(id);
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error loading program details</div>;
+
     const handleBackClick = () => {
         router.push('/program')
     }
@@ -85,7 +95,9 @@ const ProgramDetails = () => {
                                 <FiBook className={'h-[50px] w-[50px] text-meedlBlue'} />
                             </div>
                             <div className={'flex flex-col gap-3'}>
-                                <h1 className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>Product Design</h1>
+                                <h1 className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>
+                                    {/*Product Design*/}{program.name}
+                                </h1>
                                 <div className={'grid gap-5'}>
                                     <p className={'text-sm font-normal text-black400 w-[351px]'}>{description}</p>
                                     <div id={`details`} data-testid="details" className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
