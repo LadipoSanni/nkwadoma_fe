@@ -92,7 +92,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
     };
 
     return (
-        <div data-testid="dialog-description" className={`w-full md:px-0 px-3`}>
+        <form data-testid="dialog-description" className={`w-full md:px-0 px-3`} onSubmit={handleSubmit}>
             <div id="formContainer" data-testid="form-container"
                  className="grid py-3 flex-col text-labelBlue">
                 <div id="programNameContainer" data-testid="program-name-container"
@@ -266,12 +266,11 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                     className={`${inter.className} bg-meedlBlue h-14 text-meedlWhite text-sm font-semibold `}
                     disabled={!isFormValid}
                     type={"submit"}
-                    onClick={handleSubmit}
                 >
                     {submitButtonText}
                 </Button>
             </DialogFooter>
-        </div>
+        </form>
     )
 }
 
