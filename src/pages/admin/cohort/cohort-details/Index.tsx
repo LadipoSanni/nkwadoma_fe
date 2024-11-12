@@ -1,12 +1,12 @@
 "use client"
 import React from "react";
 import {useRouter} from "next/navigation";
-import { FiBook } from "react-icons/fi";
+import {FiBook} from "react-icons/fi";
 import {inter} from "@/app/fonts";
 import CohortDetailsImage from "../../../../../public/asset/Image/CohortDetailsImage.png"
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
-import { MdPersonOutline } from "react-icons/md";
+import {MdPersonOutline} from "react-icons/md";
 import {BiArrowBack} from "react-icons/bi";
 import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import TableModal from "@/reuseable/modals/TableModal";
@@ -54,8 +54,8 @@ const CohortDetails = () => {
 
 
     const tagButtonData = [
-        { tagIcon: FiBook, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees" },
-        { tagIcon: MdPersonOutline, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "cohorts" },
+        {tagIcon: FiBook, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees"},
+        {tagIcon: MdPersonOutline, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "cohorts"},
     ];
 
 
@@ -80,10 +80,12 @@ const CohortDetails = () => {
 
     return (
         <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`}>
-            <div className={`flex cursor-pointer py-2 space-x-1 text-meedlBlue`} id={`backClick`}
-                 data-testid={`backClick`} onClick={handleBackClick}>
-                <BiArrowBack className={`mt-1`}/>
-                <h1 id={`backClickText`} data-testid={`backClickText`}>Back to cohort</h1>
+            <div className={` `}>
+                <div className={`flex py-2 space-x-1 text-meedlBlue`} id={`backClick`}
+                     data-testid={`backClick `}>
+                    <BiArrowBack className={`mt-1 cursor-pointer`}/>
+                    <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}  onClick={handleBackClick}>Back to cohort</h1>
+                </div>
             </div>
 
             <div className={`py-3 flex md:flex-row flex-col md:justify-between`}>
@@ -96,7 +98,7 @@ const CohortDetails = () => {
 
                 <div className={`md:w-6/12 pt-8 md:pt-0 h-[96%]`}>
                     <DetailsTabContainer dataList={dataList} breakDown={breakDown} tabTitle1={"cohort details"}
-                                         tabTitle2={"trainee"} useBreakdown={true} />
+                                         tabTitle2={"trainee"} useBreakdown={true}/>
                 </div>
             </div>
             <div>
