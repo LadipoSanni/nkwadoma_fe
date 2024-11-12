@@ -3,7 +3,6 @@ import React, {ChangeEvent,  useState} from 'react';
 import AuthInput from "@/reuseable/Input/AuthInputField";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import {useRouter} from "next/navigation";
-import PasswordCriteria from "@/components/passwordCriteria/Index";
 
 const Step3 = () => {
 
