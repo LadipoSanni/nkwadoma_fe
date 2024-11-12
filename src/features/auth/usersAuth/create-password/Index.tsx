@@ -16,7 +16,7 @@ const CreatePassword = () => {
     // const router = useRouter()
     // const searchParams = useSearchParams()
     const [token ] = useState('')
-    const [createPassword] = useCreatePasswordMutation()
+    const [createPassword, {error, isError, isSuccess, data}] = useCreatePasswordMutation()
 
     // useEffect(()=> {
     //     if (searchParams){
@@ -75,13 +75,14 @@ const CreatePassword = () => {
         // const tooken = getUserToken()
         // if (token){
             const response = await createPassword({token: token, password: password})
-            // console.log("responsebhybyuihiuhuihiu : ", response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            console.log("responsebhybyuihiuhuihiu : ", response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             if (response?.error){
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // console.log("errorxnb: ", response?.error?.data?.message)
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-expect-error
+                console.log("errorxnb: ", response?.error?.data?.message)
                     toast({
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         //@ts-expect-error
                         description: response?.error?.data?.message,
                         status: "error",
