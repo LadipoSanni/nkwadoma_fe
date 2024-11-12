@@ -19,10 +19,8 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {cohortDataDetails} from "@/utils/LoanRequestMockData/cohortProduct"
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
-// import { useGetProgramByIdQuery } from "@/service/admin/program_query";
-// import { getUserDetails } from '@/features/auth/usersAuth/login/action';
-import { useSearchParams } from 'next/navigation';
-import {useGetProgramByIdQuery} from "@/service/program/programDetailsApi";
+// import { useSearchParams } from 'next/navigation';
+// import {useGetProgramByIdQuery} from "@/service/program/programDetailsApi";
 
 
 const ProgramDetails = () => {
@@ -70,11 +68,11 @@ const ProgramDetails = () => {
 
 
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const id = searchParams ? searchParams.get('id') : null
-    const { data: program, error, isLoading } = useGetProgramByIdQuery(id);
+    // const searchParams = useSearchParams();
+    // const id = searchParams ? searchParams.get('id') : null
+    // const { data: program, error, isLoading } = useGetProgramByIdQuery(id);
 
-    if (isLoading) return <div>Loading...</div>;
+    // if (isLoading) return <div>Loading...</div>;
     // if (error) return <div>Error loading program details</div>;
 
     const handleBackClick = () => {
