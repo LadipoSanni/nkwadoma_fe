@@ -17,14 +17,6 @@ export const authApi = createApi({
             }),
             // invalidatesTags: ['authentication']
         }),
-        createProgram: builder.mutation({
-            query:(data) => ({
-                url: '/program',
-                method: 'POST',
-                body: data
-            }),
-        })
-
     })
 })
 
