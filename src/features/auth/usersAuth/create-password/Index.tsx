@@ -10,7 +10,7 @@ import { useToast} from "@/hooks/use-toast";
 
 
 const CreatePassword = () => {
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXZva2U2NTcwQGVkZWN0dXMuY29tIiwiaWF0IjoxNzMxNDI0NjY3LCJleHAiOjE4MTc4MjQ2Njd9.D5AE088VhSjkj-L9nQEDeR0mP9ajILjTxrXUR5SCfXg');
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false, false]);
     const [confirmPassword, setConfirmPassword] = useState('');
     // const router = useRouter()
@@ -72,34 +72,23 @@ const CreatePassword = () => {
     const {toast} = useToast()
 
     const handleCreatePassword = async () => {
-        // const tooken = getUserToken()
-        // if (token){
-            const response = await createPassword({token: token, password: password})
-            console.log("responsebhybyuihiuhuihiu : ", response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
-            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            if (response?.error){
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //@ts-expect-error
-                console.log("errorxnb: ", response?.error?.data?.message)
-                    toast({
-                        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        //@ts-expect-error
-                        description: response?.error?.data?.message,
-                        status: "error",
-                    })
-            }
-            // if (response?.error?.data?.message){
-            //     console.log("message: ", response?.error?.message)
-            //     toast({
-            //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //         description: response?.data?.error?.message,
-            //         status: "error",
-            //     })
-            // }
-        // }
 
-        // const response = await createPassword({token: token, password: password})
-        // console.log("response: kbkiuhkihih", response)
+        try {
+            const response = await createPassword({token: token, password: password}).unwrap()
+            console.log("responsebhybyuihiuhuihiu : ", response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
+
+        }catch (error){
+            console.log("error: ", error)
+
+            toast({
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: error?.data?.token?.message,
+                status: "error",
+            })
+
+            }
+
     }
 
     return (
