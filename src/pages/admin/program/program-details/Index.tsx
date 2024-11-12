@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React,{useState} from "react";
 import {useRouter} from "next/navigation";
 import {inter, cabinetGrotesk} from "@/app/fonts";
 import {
@@ -19,11 +19,18 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {cohortDataDetails} from "@/utils/LoanRequestMockData/cohortProduct"
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
+import TableModal from "@/reuseable/modals/TableModal";
+import {Cross2Icon} from "@radix-ui/react-icons";
+import EditProgramForm from "@/components/program/edit-program-form";
+import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
+
 // import { useSearchParams } from 'next/navigation';
 // import {useGetProgramByIdQuery} from "@/service/program/programDetailsApi";
 
 
 const ProgramDetails = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     // const id = "139f4d05-3a0e-4f77-adc1-d9245236ac12"
     // const { data } = useGetProgramByIdQuery({id})
 
@@ -65,7 +72,12 @@ const ProgramDetails = () => {
         {title: "Amount Outstanding", sortable: true, id: "amountOutstanding"},
 
     ];
-
+    const programOptions = [
+            {name: 'Delete program', id: '3'},
+    ]
+    const handleDropdownClick = (id: string) => {
+        if (id === "3") setIsDeleteOpen(true)
+    }
 
     const router = useRouter();
     // const searchParams = useSearchParams();
@@ -79,41 +91,15 @@ const ProgramDetails = () => {
         router.push('/program')
     }
 
+    const  handleModalClick = () => {
+        setIsOpen(true)
+    }
+
 
     const description = "Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
-    // console.log("The user:",getUserDetails().storedAccessToken)
-    // const fetchProgramDetails = async (id:string) => {
-
-    //   const url =`https://api-systest.learnspace.africa/api/v1/program/${id}`
-    //     try {
-    //       const response = await fetch(url, {
-    //         method: 'GET',
-    //         headers: {
-    //           'Authorization': `Bearer ${getUserDetails().storedAccessToken}`,
-    //           'Content-Type': 'application/json',
-    //         },
-    //       });
-
-    //       if (!response.ok) {
-    //         throw new Error(`Error: ${response.statusText}`);
-    //       }
-
-    //       const data = await response.json();
-    //       return data;
-    //     } catch (error) {
-    //       console.error('Error fetching program details:', error);
-    //       throw error;
-    //     }
-    //   };
-
-
-    //   fetchProgramDetails(id)
-    //     .then(data => console.log('Program Data:', data))
-    //     .catch(error => console.error('Failed to fetch program:', error));
-
     return (
         <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`}>
-                <div className={`flex gap-2 items-center cursor-pointer text-meedlBlue`} id={`backClick`}
+                <div className={`flex gap-2 w-[9.2rem] items-center cursor-pointer text-meedlBlue`} id={`backClick`}
                      data-testid={`backClick`} onClick={handleBackClick}>
                     <MdOutlineArrowBack className={'h-5 w-5 text-meedlBlue'}/>
                     <h1 id={`backClickText`} className={'text-meedlBlue text-[14px] font-medium leading-[21px]'}
@@ -145,9 +131,9 @@ const ProgramDetails = () => {
                                 </div>
                             </div>
                             <div className={'flex justify-between'}>
-                                <Button className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit program</Button>
+                                <Button onClick={handleModalClick} className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit program</Button>
                                 <div role={"button"} className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
-                                    <Kebab icon={IoEllipsisHorizontalSharp} />
+                                    <Kebab kebabOptions={programOptions} icon={IoEllipsisHorizontalSharp} handleDropDownClick={handleDropdownClick} />
                                 </div>
                             </div>
                         </div>
@@ -173,6 +159,30 @@ const ProgramDetails = () => {
                     />
                 </TabsContent>
             </Tabs>
+            {
+                <>
+                <TableModal
+                    isOpen={isOpen}
+                    closeModal={()=> setIsOpen(false)}
+                    closeOnOverlayClick={true}
+                    headerTitle={"Edit program"}
+                    icon={Cross2Icon}
+                    >
+                    <EditProgramForm programId={'EditProgram'} setIsOpen={setIsOpen}/>
+                </TableModal>
+
+                    <TableModal
+                        isOpen={isDeleteOpen}
+                        closeModal={()=> setIsDeleteOpen(false)}
+                        closeOnOverlayClick={true}
+                        icon={Cross2Icon}
+                    >
+                        <DeleteCohort   setIsOpen={()=> setIsDeleteOpen(false)} headerTitle={'Program'} title={'program'}/>
+                    </TableModal>
+                </>
+
+
+                }
         </main>
     );
 }
