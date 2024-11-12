@@ -13,6 +13,16 @@ import {useRouter} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
 
 
+
+interface CustomJwtPayload {
+    email: string;
+    realm_access: {
+        roles: string[];
+    };
+   
+}
+
+
 const Login: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -46,10 +56,8 @@ const Login: React.FC = () => {
                 status: "error",
             })
         }else {
-            const response = await login({email, password})
+            const response = await login({email, password}).unwrap()
             if (isError) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //@ts-expect-error
                 setErrorMessage(response?.error?.data?.message)
                 toast({
                     description: errorMessage,
@@ -57,15 +65,16 @@ const Login: React.FC = () => {
                 })
             }
             if (response?.data) {
-                const access_token = response?.data?.data?.access_token
-                const decode_access_token = jwtDecode(access_token)
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //@ts-expect-error
+                const access_token = response?.data?.access_token
+                const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+                // console.log(decode_access_token)
+                // console.log(access_token)
+               
                 const user_email = decode_access_token?.email
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //@ts-expect-error
+                // console.log(user_email)
                 const user_role = decode_access_token?.realm_access?.roles[0]
-                await storeUserDetails(access_token, user_email, user_role)
+                // console.log(user_role)
+                storeUserDetails(access_token, user_email, user_role)
                 router.push("/Overview")
 
             }
@@ -81,10 +90,10 @@ const Login: React.FC = () => {
     return (
 
         <div
-            className="w-full md:w-[52%] md:mr-20 h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-md">
+            className="w-full md:w-[35rem] md:mr-20 h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-4">
-                <h1 className={`${cabinetGrotesk.className} text-meedlBlue mt-3  text-2xl leading-5`}>Log in to your
+                <h1 className={`${cabinetGrotesk.className} text-[#1A1A1A] mt-3  text-2xl leading-5`}>Log in to your
                     account</h1>
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
                      className="pt-5 space-y-5">

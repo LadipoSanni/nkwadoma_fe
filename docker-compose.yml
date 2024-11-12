@@ -1,0 +1,131 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Service
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Keycloak Service
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command: [ 'start-dev' ]
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/postgres
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+      PROFILE: dev  # Set dev profile
+    volumes:
+      - ./keycloak-setup.sh:/opt/keycloak-setup.sh
+#    entrypoint: /bin/bash -c "/opt/keycloak-setup.sh && /opt/keycloak/bin/kc.sh start-dev"
+    ports:
+      - "8082:8080"  # Keycloak exposed port
+    depends_on:
+      - postgres
+
+  # SonarQube Service
+  sonarqube:
+    image: sonarqube:latest
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://postgres:5432/postgres
+      SONAR_JDBC_USERNAME: postgres
+      SONAR_JDBC_PASSWORD: postgres
+    ports:
+      - "9000:9000"
+    depends_on:
+      - postgres
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+
+  # Backend Service
+  backend:
+    image: 357586184453.dkr.ecr.us-east-1.amazonaws.com/nkwadoma
+    env_file:
+      - .env
+    environment:
+      # Database Configuration
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_APPLICATION_NAME: nkwadoma
+      SERVER_PORT: 8081
+
+      # Keycloak Configuration
+      KEYCLOAK_SERVER_URL: http://keycloak:8082  # Adjusted to match Keycloak port
+      KEYCLOAK_AUTH_PASSWORD: admin
+      KEYCLOAK_AUTH_USER: admin
+      KEYCLOAK_REALM: nkwadoma
+      KEYCLOAK_CLIENT_ID: nkwadoma-client
+#      KEYCLOAK_CLIENT_SECRET: ${CLIENT_SECRET}  # Ensure CLIENT_SECRET is set
+
+      # Spring Security OAuth2 Configuration
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
+      KEYCLOAK_PRINCIPAL_ATTRIBUTE: preferred_username
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8082/realms/nkwadoma  # Adjusted to match Keycloak port
+
+      # Logging Configuration
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
+
+      # External Service URLs
+      FRONTEND_URL: ${FRONTEND_BASE_URL}
+      PREMBLY_URL: ${PREMBLY_BASE_URL}
+      PREMBLY_APP_ID: ${PREMBLY_LIVE_APP_ID}
+      PREMBLY_APP_KEY: ${PREMBLY_LIVE_APP_KEY}
+
+      # Email Configuration
+      MAIL_HOST: ${EMAIL_HOST}
+      MAIL_PORT: ${EMAIL_PORT}
+      MAIL_USERNAME: ${EMAIL_USERNAME}
+      MAIL_PASSWORD: ${EMAIL_PASSWORD}
+      MAIL_SENDER: ${EMAIL_SENDER}
+
+      # JWT Configuration
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+
+      # Super Admin Information
+      SUPERADMIN_FIRSTNAME: ${SUPER_ADMIN_FIRST_NAME}
+      SUPERADMIN_LASTNAME: ${SUPER_ADMIN_LAST_NAME}
+      SUPERADMIN_EMAIL: ${SUPER_ADMIN_EMAIL}
+      SUPERADMIN_CREATEDBY: ${CREATED_BY}
+
+      # Swagger Configuration
+      SPRINGDOC_SWAGGER_UI_CONFIG_URL: /v3/api-docs/swagger-config
+      SPRINGDOC_API_DOCS_PATH: /v3/api-docs
+      SPRINGDOC_SWAGGER_UI_DISABLE_SWAGGER_DEFAULT_URL: true
+      SPRINGDOC_SWAGGER_UI_OPERATIONS_SORTER: alpha
+      SPRINGDOC_SWAGGER_UI_TAGS_SORTER: alpha
+      SPRINGDOC_SWAGGER_UI_PATH: /swagger-ui.html
+      SPRINGDOC_SWAGGER_UI_FILTER: true
+      SPRINGDOC_SWAGGER_UI_URL: /v3/api-docs
+
+      PROFILE: dev  # Set dev profile
+
+    ports:
+      - "8081:8080"  # Change this port if your backend uses a different one
+    depends_on:
+      - postgres
+      - keycloak
+      - sonarqube
+
+volumes:
+  postgres_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
