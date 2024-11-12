@@ -7,7 +7,7 @@ import AuthButton from "@/reuseable/buttons/AuthButton";
 
 const CreatePassword = () => {
     const [password, setPassword] = useState('');
-    const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
+    const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false, false]);
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const criteriaMessages = [
