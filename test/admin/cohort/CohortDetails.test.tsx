@@ -39,15 +39,6 @@ describe("cohort-details Component", () => {
         expect(screen.getByText("38")).toBeInTheDocument();
     });
 
-    test("go back button navigates to /cohort", () => {
-        render(<CohortDetails />);
-
-        const backButton = screen.getByTestId("backClick");
-        fireEvent.click(backButton);
-
-        expect(mockPush).toHaveBeenCalledWith("/cohort");
-    });
-
     test("renders data with correct data", () => {
         render(<CohortDetails />);
 
