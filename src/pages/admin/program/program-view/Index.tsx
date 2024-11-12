@@ -16,7 +16,7 @@ import TableModal from "@/reuseable/modals/TableModal";
 import { useRouter } from 'next/navigation'
 import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 import EditProgramForm from '@/components/program/edit-program-form';
-import { useGetAllProgramsQuery } from '@/service/admin/program_query';
+// import { useGetAllProgramsQuery } from '@/service/admin/program_query';
 
 
 const ProgramView = () => {
@@ -34,23 +34,23 @@ const ProgramView = () => {
     const [programId, setProgramId] =  React.useState("")
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [editOpen, setEditOpen] = useState(false);
-    const [page, setPage] = useState(0);
-    const size = 10;
-    const instiuteId = "6dbc5d46-e96c-4421-8e92-9747b4fc0ad1"
+    // const [page, setPage] = useState(0);
+    // const size = 10;
+    // const instiuteId = "6dbc5d46-e96c-4421-8e92-9747b4fc0ad1"
     
 
-    const { data, isLoading, isError } = useGetAllProgramsQuery({
-        organizationId:instiuteId,
-        pageSize:size,
-        pageNumber:page
+    // const { data, isLoading, isError } = useGetAllProgramsQuery({
+    //     organizationId:instiuteId,
+    //     pageSize:size,
+    //     pageNumber:page
 
-    })
+    // })
 
-    useEffect(() => {
-        if(data) {
-            setDummyData(data.program)
-        }
-    },[])
+    // useEffect(() => {
+    //     if(data) {
+    //         setDummyData(data.program)
+    //     }
+    // },[])
 
     interface TableRowData {
         [key: string]: string | number | null | React.ReactNode;
