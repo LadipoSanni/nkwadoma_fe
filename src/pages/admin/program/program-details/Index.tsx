@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from "react";
+import React,{useState} from "react";
 import {useRouter} from "next/navigation";
 import {inter, cabinetGrotesk} from "@/app/fonts";
 import {
@@ -19,10 +19,18 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {cohortDataDetails} from "@/utils/LoanRequestMockData/cohortProduct"
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
-// import { useGetProgramByIdQuery } from "@/service/admin/program_query";
-// import { getUserDetails } from '@/features/auth/usersAuth/login/action';
+import TableModal from "@/reuseable/modals/TableModal";
+import {Cross2Icon} from "@radix-ui/react-icons";
+import EditProgramForm from "@/components/program/edit-program-form";
+import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
+
+// import { useSearchParams } from 'next/navigation';
+// import {useGetProgramByIdQuery} from "@/service/program/programDetailsApi";
+
 
 const ProgramDetails = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     // const id = "139f4d05-3a0e-4f77-adc1-d9245236ac12"
     // const { data } = useGetProgramByIdQuery({id})
 
@@ -40,14 +48,14 @@ const ProgramDetails = () => {
         {label: "Average starting income", value: "₦3,000,000.00"},
     ];
 
-    // const loanDetail = [
-    //     {label: "Repayment rate", value: "40%"},
-    //     {label: "Debt percentage", value: "55.5%"},
-    //     {label: "Total loan amount disbursed", value: "₦3,000,000.00"},
-    //     {label: "Total loan amount repaid", value: "₦3,000,000.00"},
-    //     {label: "Total loan amount outstanding", value: "₦3,000,000.00"},
-    //
-    // ]
+    const loanDetail = [
+        {detail: "Repayment rate", value: "40%"},
+        {detail: "Debt percentage", value: "55.5%"},
+        {detail: "Total loan amount disbursed", value: "₦3,000,000.00"},
+        {detail: "Total loan amount repaid", value: "₦3,000,000.00"},
+        {detail: "Total loan amount outstanding", value: "₦3,000,000.00"},
+
+    ]
 
 
     const tagButtonData = [
@@ -64,11 +72,27 @@ const ProgramDetails = () => {
         {title: "Amount Outstanding", sortable: true, id: "amountOutstanding"},
 
     ];
-
+    const programOptions = [
+            {name: 'Delete program', id: '3'},
+    ]
+    const handleDropdownClick = (id: string) => {
+        if (id === "3") setIsDeleteOpen(true)
+    }
 
     const router = useRouter();
+    // const searchParams = useSearchParams();
+    // const id = searchParams ? searchParams.get('id') : null
+    // const { data: program, error, isLoading } = useGetProgramByIdQuery(id);
+
+    // if (isLoading) return <div>Loading...</div>;
+    // if (error) return <div>Error loading program details</div>;
+
     const handleBackClick = () => {
         router.push('/program')
+    }
+
+    const  handleModalClick = () => {
+        setIsOpen(true)
     }
 
 
@@ -105,7 +129,7 @@ const ProgramDetails = () => {
 
     return (
         <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`}>
-                <div className={`flex gap-2 items-center cursor-pointer text-meedlBlue`} id={`backClick`}
+                <div className={`flex gap-2 w-[9.2rem] items-center cursor-pointer text-meedlBlue`} id={`backClick`}
                      data-testid={`backClick`} onClick={handleBackClick}>
                     <MdOutlineArrowBack className={'h-5 w-5 text-meedlBlue'}/>
                     <h1 id={`backClickText`} className={'text-meedlBlue text-[14px] font-medium leading-[21px]'}
@@ -124,7 +148,9 @@ const ProgramDetails = () => {
                                 <FiBook className={'h-[50px] w-[50px] text-meedlBlue'} />
                             </div>
                             <div className={'flex flex-col gap-3'}>
-                                <h1 className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>Product Design</h1>
+                                <h1 className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>
+                                    Product Design
+                                </h1>
                                 <div className={'grid gap-5'}>
                                     <p className={'text-sm font-normal text-black400 w-[351px]'}>{description}</p>
                                     <div id={`details`} data-testid="details" className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
@@ -135,14 +161,14 @@ const ProgramDetails = () => {
                                 </div>
                             </div>
                             <div className={'flex justify-between'}>
-                                <Button className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit program</Button>
+                                <Button onClick={handleModalClick} className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit program</Button>
                                 <div role={"button"} className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
-                                    <Kebab icon={IoEllipsisHorizontalSharp} />
+                                    <Kebab kebabOptions={programOptions} icon={IoEllipsisHorizontalSharp} handleDropDownClick={handleDropdownClick} />
                                 </div>
                             </div>
                         </div>
                             <div className={`md:w-6/12 md:pt-0 pt-0`}>
-                                <DetailsTabContainer dataList={dataList} tabTitle1={"Program details"} tabTitle2={"Loan details"}/>
+                                <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail} dataList={dataList} tabTitle1={"Program details"} tabTitle2={"Loan details"}/>
                             </div>
                     </section>
                 </TabsContent>
@@ -163,6 +189,30 @@ const ProgramDetails = () => {
                     />
                 </TabsContent>
             </Tabs>
+            {
+                <>
+                <TableModal
+                    isOpen={isOpen}
+                    closeModal={()=> setIsOpen(false)}
+                    closeOnOverlayClick={true}
+                    headerTitle={"Edit program"}
+                    icon={Cross2Icon}
+                    >
+                    <EditProgramForm programId={'EditProgram'} setIsOpen={setIsOpen}/>
+                </TableModal>
+
+                    <TableModal
+                        isOpen={isDeleteOpen}
+                        closeModal={()=> setIsDeleteOpen(false)}
+                        closeOnOverlayClick={true}
+                        icon={Cross2Icon}
+                    >
+                        <DeleteCohort   setIsOpen={()=> setIsDeleteOpen(false)} headerTitle={'Program'} title={'program'}/>
+                    </TableModal>
+                </>
+
+
+                }
         </main>
     );
 }

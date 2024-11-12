@@ -11,7 +11,7 @@ const Step2 = () => {
 
 
     return (
-        <div className={`md:w-fit md:mr-20 h-fit md:h-[40%] w-fit `}>
+        <div className={`md:w-full md:mr-20 h-fit md:h-[40%] w-fit `}>
             <AuthEmail email={emailInput} header='Email sent'/>
         </div>
     );
