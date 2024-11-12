@@ -17,13 +17,20 @@ const Step1 = () => {
 
     const [email, setEmail] = useState('')
     const [disableButton, setDisableButton] = useState(true)
+    const [criteriaStatus, setCriteriaStatus] = useState(false);
 
 
     const handleReset = () => {
         store.dispatch(setUserPasswordInput(email))
     }
+    const criteriaMessages = [
+        "Email must not contain space",
+
+    ];
 
     const validateEmail = (input: string) => {
+        const criteria = /\s/g.test(input)
+        setCriteriaStatus(criteria);
         const isValid = validateEmailInput(input);
         if (isValid) {
             setDisableButton(false)
@@ -43,12 +50,15 @@ const Step1 = () => {
         router.push("/auth/login")
     }
 
+    // const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
+
+
 
     return (
 
         <div
             id="resetPasswordComponent"
-            className={` py-4 border border-slate-200 px-3 w-[90vw] md:mr-20 rounded-md h-fit  bg-white grid md:px-2.5 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[50%] md:h-fit md:rounded-md`}
+            className={` py-4 border border-slate-200 px-3 w-[90vw] md:mr-20 rounded-xl h-fit  bg-white grid md:px-3 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[40%] md:h-fit md:rounded-xl`}
         >
             <div
                 id={"resetPasswordInnerContainer"}
@@ -65,6 +75,7 @@ const Step1 = () => {
                     <div className={`w-[100%] h-[5rem] grid gap-0 `}>
                         <AuthInput value={email} type={'email'} data-testid={'resetEmailInput'} label={EMAILHEADER}
                                    id={'resetEmailInput'} onChange={handleChange}
+                                   errorMessage={criteriaStatus ? criteriaMessages[0] : ''}
                                    placeholder={'Enter email address'}></AuthInput>
                     </div>
                     <div id={"authButtonContainer"} className={`w-[100%]`}>
