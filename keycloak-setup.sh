@@ -27,7 +27,7 @@ echo "Successfully logged in to Keycloak."
 echo "Realm 'nkwadoma' created."
 
 /opt/keycloak/bin/kcadm.sh create clients -r nkwadoma -s clientId=nkwadoma-client -s enabled=true
-echo "Client 'nkwadoma-client' created in realm 'nkwadoma2'."
+echo "Client 'nkwadoma-client' created in realm 'nkwadoma'."
 
 # Retrieve and export the client secret
 CLIENT_SECRET=$(/opt/keycloak/bin/kcadm.sh get clients -r nkwadoma -q clientId=nkwadoma-client | jq -r '.[0].secret')
