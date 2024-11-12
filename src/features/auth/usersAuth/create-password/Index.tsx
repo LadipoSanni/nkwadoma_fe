@@ -5,16 +5,16 @@ import { cabinetGrotesk } from "@/app/fonts";
 import PasswordCriteria from "@/components/passwordCriteria/Index";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import {useCreatePasswordMutation} from "@/service/auths/api";
-import { useSearchParams } from 'next/navigation'
+// import { useSearchParams } from 'next/navigation'
 import { useToast} from "@/hooks/use-toast";
 
 
 const CreatePassword = () => {
     const [password, setPassword] = useState('');
-    const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
+    const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false, false]);
     const [confirmPassword, setConfirmPassword] = useState('');
     // const router = useRouter()
-    const searchParams = useSearchParams()
+    // const searchParams = useSearchParams()
     const [token ] = useState('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzZXhpamlrOTU0QGluaWthbGUuY29tIiwiaWF0IjoxNzMxMzMzMDEzLCJleHAiOjE4MTc3MzMwMTN9.2iRLhm_zCu3xghz5vrTJZg_5-zSVLprwKJYftRmnNWo')
     const [createPassword,{error, isError,data, isSuccess}] = useCreatePasswordMutation()
 
@@ -32,7 +32,8 @@ const CreatePassword = () => {
         "Must be at least 8 characters",
         "Must contain one special character",
         "Must contain one uppercase character",
-        "Must contain one lowercase character"
+        "Must contain one lowercase character",
+        "Must contain one digit"
     ];
 
     const validatePassword = (password: string) => {
@@ -40,7 +41,8 @@ const CreatePassword = () => {
             password.length >= 8,
             /[!@#$%^&*(),.?":{}|<>]/.test(password),
             /[A-Z]/.test(password),
-            /[a-z]/.test(password)
+            /[a-z]/.test(password),
+            /\d/.test(password)
         ];
         setCriteriaStatus(criteria);
     };
@@ -57,14 +59,14 @@ const CreatePassword = () => {
 
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
-    const getUserToken = () => {
-            if (searchParams){
-                const pathVariable = searchParams.get("token")
-                if (pathVariable){
-                    return pathVariable
-                }
-            }
-    }
+    // const getUserToken = () => {
+    //         if (searchParams){
+    //             const pathVariable = searchParams.get("token")
+    //             if (pathVariable){
+    //                 return pathVariable
+    //             }
+    //         }
+    // }
 
 
     const {toast} = useToast()
