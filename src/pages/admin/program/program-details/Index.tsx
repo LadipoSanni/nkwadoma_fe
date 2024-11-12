@@ -75,7 +75,7 @@ const ProgramDetails = () => {
     const { data: program, error, isLoading } = useGetProgramByIdQuery(id);
 
     if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error loading program details</div>;
+    // if (error) return <div>Error loading program details</div>;
 
     const handleBackClick = () => {
         router.push('/program')
@@ -83,7 +83,7 @@ const ProgramDetails = () => {
 
 
     const description = "Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
-    // console.log("The user: ",getUserDetails().storedAccessToken)
+    // console.log("The user:",getUserDetails().storedAccessToken)
     // const fetchProgramDetails = async (id:string) => {
 
     //   const url =`https://api-systest.learnspace.africa/api/v1/program/${id}`
@@ -135,7 +135,7 @@ const ProgramDetails = () => {
                             </div>
                             <div className={'flex flex-col gap-3'}>
                                 <h1 className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>
-                                    {/*Product Design*/}{program.name}
+                                    Product Design
                                 </h1>
                                 <div className={'grid gap-5'}>
                                     <p className={'text-sm font-normal text-black400 w-[351px]'}>{description}</p>

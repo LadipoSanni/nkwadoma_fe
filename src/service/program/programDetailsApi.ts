@@ -1,10 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-const baseUrl = process.env.APP_DEV_AUTH_URL;
+import { createApi } from '@reduxjs/toolkit/query/react';
+import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 
 export const programDetailsApi = createApi({
     reducerPath: 'programApi',
-    baseQuery: fetchBaseQuery({ baseUrl }),
+    baseQuery: customFetchBaseQuery,
     endpoints: (builder) => ({
         getProgramById: builder.query({
             query: (id) => `program/${id}`,
