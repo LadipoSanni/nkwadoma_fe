@@ -13,7 +13,7 @@ echo "Keycloak is up and running."
 
 # Log in to Keycloak server with admin credentials
 /opt/keycloak/bin/kcadm.sh config credentials --server http://localhost:8082/auth \
-  --realm master --user admin --password admin
+  --realm nkwadoma --user admin --password admin
 
 # Check if login was successful
 if [ $? -ne 0 ]; then
@@ -23,14 +23,14 @@ fi
 echo "Successfully logged in to Keycloak."
 
 # Set up Keycloak realm and client
-/opt/keycloak/bin/kcadm.sh create realms -s realm=nkwadoma2 -s enabled=true
-echo "Realm 'nkwadoma2' created."
+/opt/keycloak/bin/kcadm.sh create realms -s realm=nkwadoma -s enabled=true
+echo "Realm 'nkwadoma' created."
 
-/opt/keycloak/bin/kcadm.sh create clients -r nkwadoma2 -s clientId=nkwadoma-client -s enabled=true
+/opt/keycloak/bin/kcadm.sh create clients -r nkwadoma -s clientId=nkwadoma-client -s enabled=true
 echo "Client 'nkwadoma-client' created in realm 'nkwadoma2'."
 
 # Retrieve and export the client secret
-CLIENT_SECRET=$(/opt/keycloak/bin/kcadm.sh get clients -r nkwadoma2 -q clientId=nkwadoma-client | jq -r '.[0].secret')
+CLIENT_SECRET=$(/opt/keycloak/bin/kcadm.sh get clients -r nkwadoma -q clientId=nkwadoma-client | jq -r '.[0].secret')
 
 # Check if the client secret retrieval was successful
 if [ -z "$CLIENT_SECRET" ]; then
