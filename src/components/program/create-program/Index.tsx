@@ -9,6 +9,8 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {Textarea} from "@/components/ui/textarea";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import React, {useCallback, useState} from "react";
+import {useCreateProgramMutation} from "@/service/admin/program_query";
+import {toast} from "@/hooks/use-toast";
 
 interface CreateProgramProps {
     programDeliveryTypes: string[];
@@ -32,12 +34,13 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
     const [programMode, setProgramMode] = useState('');
     const [programDuration, setProgramDuration] = useState('');
     const [programDescription, setProgramDescription] = useState('');
+    const [createProgram] = useCreateProgramMutation();
 
     const isProgramNameValid = /^(?!\s)(?!\d)(?!.\d.[a-zA-Z].|\d.[a-zA-Z].*\d)[a-zA-Z\s]+$/.test(programName);
     const isDescriptionValid = /^(?!\s)(?!\d)(?!.\d.[a-zA-Z].|\d.[a-zA-Z].*\d)[a-zA-Z\s]+$/.test(programDescription);
     const isFormValid = isProgramNameValid && programDeliveryType && programMode && programDuration && isDescriptionValid;
 
-    const closeDialog = () => {
+    const handleCancelButton = () => {
         if (setIsOpen) {
             setIsOpen(false);
         }
@@ -55,16 +58,41 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
         setIsDropdown((prev) => !prev);
     }, []);
 
-    function submit() {
-        if (isFormValid) {
-            if (setIsOpen) {
-                setIsOpen(false);
+    const instituteId = "06fd45a1-364c-464e-b3de-c3432e72bd03";
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log(programName, programDeliveryType, programMode, programDuration, programDescription);
+        if (!isFormValid) {
+            toast({
+                description: 'Please fill in all the required fields',
+                status: 'error',
+            });
+        } else {
+            try {
+                const newProgram = {
+                     programName: programName,
+                    instituteId: instituteId,
+                    programDescription: programDescription,
+                    programDuration: programDuration,
+                    deliveryType: programDeliveryType,
+                    programMode: programMode,
+                };
+                const response = await createProgram(newProgram).unwrap();
+                if (response) {
+                    alert('Program created successfully');
+                    console.log(response);
+                    if (setIsOpen) setIsOpen(false);
+                }
+
+            } catch (error) {
+                console.error('Failed to create program:', error);
             }
         }
-    }
+    };
 
     return (
-        <form data-testid="dialog-description" className={`w-full md:px-0 px-3`}>
+        <div data-testid="dialog-description" className={`w-full md:px-0 px-3`}>
             <div id="formContainer" data-testid="form-container"
                  className="grid py-3 flex-col text-labelBlue">
                 <div id="programNameContainer" data-testid="program-name-container"
@@ -180,7 +208,6 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                                         ) : (
                                             <ChevronDownIcon className={`h-4 w-5 font-bold`}/>
                                         )}
-
                                     </div>
                                 </SelectTrigger>
                                 <SelectContent id="programDurationContent"
@@ -227,7 +254,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                     variant="outline"
                     size={`lg`}
                     className={`${inter.className}  bg-meedlWhite h-14 text-grey800 text-sm font-semibold `}
-                    onClick={closeDialog}
+                    onClick={handleCancelButton}
                 >
                     Cancel
                 </Button>
@@ -238,12 +265,13 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                     size={`lg`}
                     className={`${inter.className} bg-meedlBlue h-14 text-meedlWhite text-sm font-semibold `}
                     disabled={!isFormValid}
-                    onClick={submit}
+                    type={"submit"}
+                    onClick={handleSubmit}
                 >
                     {submitButtonText}
                 </Button>
             </DialogFooter>
-        </form>
+        </div>
     )
 }
 
