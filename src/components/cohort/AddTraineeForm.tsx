@@ -9,6 +9,7 @@ import {inter} from "@/app/fonts"
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import {Accordion, AccordionContent,AccordionItem,AccordionTrigger,} from "@/components/ui/accordion"
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
+import { getUserDetails } from '@/features/auth/usersAuth/login/action';
 
 
 interface idProps {
@@ -20,6 +21,8 @@ interface idProps {
 
 
 function AddTraineeForm({cohortId,setIsOpen}: idProps) {
+  const { storedAccessToken } = getUserDetails();
+  console.log("stored: ",storedAccessToken )
 
   const details = [
     {
@@ -306,6 +309,7 @@ function AddTraineeForm({cohortId,setIsOpen}: idProps) {
           </Form>
          )
        } 
+      
 
       </Formik>
 
