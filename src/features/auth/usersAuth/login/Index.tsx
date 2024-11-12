@@ -59,7 +59,6 @@ const Login: React.FC = () => {
             const response = await login({email, password}).unwrap()
             if (isError) {
                 setErrorMessage(response?.error?.data?.message)
-               
                 toast({
                     description: errorMessage,
                     status: "error",
