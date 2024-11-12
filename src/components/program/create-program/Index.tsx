@@ -34,6 +34,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
     const [programMode, setProgramMode] = useState('');
     const [programDuration, setProgramDuration] = useState('');
     const [programDescription, setProgramDescription] = useState('');
+    const [error, setError] =  useState('');
     const [createProgram] = useCreateProgramMutation();
 
     const isProgramNameValid = /^(?!\s)(?!\d)(?!.\d.[a-zA-Z].|\d.[a-zA-Z].*\d)[a-zA-Z\s]+$/.test(programName);
@@ -62,7 +63,6 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(programName, programDeliveryType, programMode, programDuration, programDescription);
         if (!isFormValid) {
             toast({
                 description: 'Please fill in all the required fields',
@@ -80,13 +80,10 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                 };
                 const response = await createProgram(newProgram).unwrap();
                 if (response) {
-                    alert('Program created successfully');
-                    console.log(response);
                     if (setIsOpen) setIsOpen(false);
                 }
-
             } catch (error) {
-                console.error('Failed to create program:', error);
+                setError(error instanceof Error ? error.message : 'An unknown error occurred');
             }
         }
     };
