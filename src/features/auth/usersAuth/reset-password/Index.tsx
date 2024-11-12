@@ -15,8 +15,6 @@ const ResetPassword = () => {
                 :
                 <Step2/>
             }
-
-
         </div>
     );
 };
