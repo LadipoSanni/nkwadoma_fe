@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent,cleanup } from "@testing-library/react";
 import CreateProgram from "@/components/program/create-program/Index";
 
 const setup = (props = {}) => {
@@ -14,6 +14,14 @@ const setup = (props = {}) => {
 };
 
 describe("CreateProgram component", () => {
+    beforeEach(() => {
+        cleanup()
+        jest.spyOn(console,'log').mockReturnValue()
+        jest.spyOn(console,'warn').mockReturnValue()
+        jest.spyOn(console,'error').mockReturnValue()
+    })
+
+
     test("renders all input labels and placeholders correctly", () => {
         setup();
         expect(screen.getByTestId("program-name-label")).toHaveTextContent("Program Name");

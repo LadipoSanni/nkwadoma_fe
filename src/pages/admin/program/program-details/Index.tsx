@@ -1,5 +1,5 @@
 "use client"
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import {useRouter} from "next/navigation";
 import {inter, cabinetGrotesk} from "@/app/fonts";
 import {
@@ -23,22 +23,22 @@ import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import EditProgramForm from "@/components/program/edit-program-form";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
-
 // import { useSearchParams } from 'next/navigation';
 // import {useGetProgramByIdQuery} from "@/service/program/programDetailsApi";
+import { useGetProgramByIdQuery } from "@/service/admin/program_query";
 
 
 const ProgramDetails = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    // const id = "139f4d05-3a0e-4f77-adc1-d9245236ac12"
-    // const { data } = useGetProgramByIdQuery({id})
+    const id = "ee3bf539-26b7-4bf4-808a-36a1d95a81e8"
+    const { data } = useGetProgramByIdQuery({id})
 
-    // useEffect(()=> {
-    //     if(data?.data ){
-    //         console.log(data.data)
-    //     }
-    // },[data])
+    useEffect(()=> {
+        if(data?.data ){
+            console.log(data.data)
+        }
+    },[data])
 
     const dataList = [
         {label: "Program mode", value: "Online"},

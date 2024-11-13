@@ -38,22 +38,20 @@ const ProgramView = () => {
     const [editOpen, setEditOpen] = useState(false);
     // const [page] = useState(0);
     // const size = 10;
-    // const instiuteId = "6dbc5d46-e96c-4421-8e92-9747b4fc0ad1"
     
 
-    // const { data } = useGetAllProgramsQuery({
-    //     organizationId:instiuteId,
-    //     pageSize:size,
-    //     pageNumber:page
+    // const { data } = useGetAllProgramsQuery({ pageSize:size, pageNumber:page })
 
-    // })
+    // console.log("program data: ",data?.data)
 
     // useEffect(() => {
     //     if(data) {
-    //         setDummyData(data.program)
+    //         setDummyData(data?.data)
     //     }
+       
     // },[])
 
+   
     interface TableRowData {
         [key: string]: string | number | null | React.ReactNode;
     }
