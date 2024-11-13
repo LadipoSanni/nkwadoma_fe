@@ -16,8 +16,7 @@ export const authApi = createApi({
                 body: data
             }),
             // invalidatesTags: ['authentication']
-        })
-
+        }),
     })
 })
 
