@@ -3,7 +3,7 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { getUserDetails } from '@/features/auth/usersAuth/login/action';
 
-import {getItemSessionStorage} from "@/utils/storage";
+// import {getItemSessionStorage} from "@/utils/storage";
 // import fetch from 'node-fetch'; // Import node-fetch for SSR
 
 const baseUrl = process.env.APP_DEV_AUTH_URL;

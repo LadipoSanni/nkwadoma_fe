@@ -17,7 +17,6 @@ const CreatePassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const router = useRouter()
     const searchParams = useSearchParams()
-    const token  = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmb3NpdDQyOTEzQGxpbmVhY3IuY29tIiwiaWF0IjoxNzMxNTY5ODI2LCJleHAiOjE4MTc5Njk4MjZ9.NwCu-dOg_YQBtiu6DbNaQ5s99c9xrMvs-Zq1NMd_09U";
     const [createPassword, {error, isError, isSuccess, data}] = useCreatePasswordMutation()
 
 
@@ -65,7 +64,6 @@ const CreatePassword = () => {
 
 
     const {toast} = useToast()
-     const rr = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXBzb2plZnlpQGd1ZnVtLmNvbSIsImlhdCI6MTczMTU4Mzg1MSwiZXhwIjoxODE3OTgzODUxfQ.D9JehQF0gd-izmlyi-LXJCrJGOyoSDf6ZsJaFmL82h0"
 
 
     interface CustomJwtPayload {
@@ -80,7 +78,8 @@ const CreatePassword = () => {
         console.log("token: ", token)
 
         try {
-            const response = await createPassword({token: rr, password: password}).unwrap()
+            const response = await createPassword({token: token
+                , password: password}).unwrap()
             console.log("responsebhybyuihiuhuihiu : ",response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
             const access_token = response?.data?.access_token
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)

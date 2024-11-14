@@ -3,6 +3,23 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import {Providers} from "@/app/provider";
 import CreatePassword from "@/features/auth/usersAuth/create-password/Index";
 
+
+// Mock useRouter:
+jest.mock("next/navigation", () => ({
+    useRouter() {
+        return {
+            prefetch: () => null
+        };
+    },
+    useSearchParams: jest.fn().mockImplementation(() => {
+        return new URLSearchParams(window.location.search);
+    }),
+    usePathname: jest.fn().mockImplementation((pathArg) => {
+        return pathArg;
+    })
+
+}));
+
 describe('CreatePasswordForm', () => {
 
     beforeEach(() => {

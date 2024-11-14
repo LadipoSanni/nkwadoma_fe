@@ -2,7 +2,7 @@
 import React from 'react';
 import {useRouter} from "next/navigation";
 import {store, useAppSelector} from "@/redux/store";
-import {setCurrentNavbarItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
+import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
 import {MdOutlineHome, MdOutlinePeopleAlt, MdOutlinePersonOutline} from "react-icons/md";
@@ -11,7 +11,7 @@ import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
 import NavbarContainer from "@/reuseable/ui/Navbar";
 import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
 import {Icon} from "@iconify/react";
-import styles  from "@//components/side-bar/index.module.css"
+// import styles  from "@//components/side-bar/index.module.css"
 
 
 
