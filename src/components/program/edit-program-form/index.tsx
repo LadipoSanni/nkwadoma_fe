@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { Formik,Form,Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup';
 import {inter} from "@/app/fonts"
@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
 import CustomSelect from '@/reuseable/Input/Custom-select';
+import { useGetProgramByIdQuery } from '@/service/admin/program_query';
+
 
 
 type Props = {
@@ -16,6 +18,15 @@ type Props = {
 }
 
 function EditProgramForm({programId,setIsOpen}: Props) {
+  const { data: program, error, isLoading } = useGetProgramByIdQuery({id:programId});
+  console.log("programDEtails: ", program);
+  useEffect(()=> {
+    if(program?.data ){
+      // setInitialFormValue({...initialFormValue,...data.data})
+    }
+  },[program])
+
+  
 
     const initialFormValue = {
         programId: programId,
@@ -26,7 +37,7 @@ function EditProgramForm({programId,setIsOpen}: Props) {
         programDescription: 'This is a new program',
     }
 
-    const [isLoading] = useState(false);
+    const [isButtonLoading] = useState(false);
     const maxChars = 1500;
 
     const programDeliveryTypes = ["Full Time", "Part Time"];
@@ -202,7 +213,7 @@ function EditProgramForm({programId,setIsOpen}: Props) {
                 type='submit'
                 disabled={!isValid}
                 >
-                  {isLoading ? (
+                  {isButtonLoading ? (
                                                 <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">
                                                     <Icon id={'Icon'} icon={loadingLoop} width={34} height={32}  style={{
                                                 animation: 'spin 1s linear infinite',

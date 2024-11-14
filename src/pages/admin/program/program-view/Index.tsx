@@ -18,7 +18,24 @@ import TableModal from "@/reuseable/modals/TableModal";
 import { useRouter } from 'next/navigation'
 import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 import EditProgramForm from '@/components/program/edit-program-form';
-// import { useGetAllProgramsQuery } from '@/service/admin/program_query';
+import { useGetAllProgramsQuery } from '@/service/admin/program_query';
+import { useDeleteProgramMutation } from '@/service/admin/program_query';
+
+
+interface viewAllProgramProps {
+    id?: string;
+    programDescription?: string;
+    name?: string;
+    durationType?: string;
+    programStartDate?: string;
+    duration?: number;
+    mode?: string;
+    deliveryType?: string;
+    totalAmountRepaid?: number;
+    totalAmountDisbursed?: number;
+    totalAmountOutstanding?: number
+ }
+
 
 
 const ProgramView = () => {
@@ -33,24 +50,28 @@ const ProgramView = () => {
     }[]>([]);
     const router = useRouter()
 
+    const [programView, setProgramView] = useState<viewAllProgramProps[]>([])
+
     const [programId, setProgramId] =  React.useState("")
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [editOpen, setEditOpen] = useState(false);
-    // const [page] = useState(0);
-    // const size = 10;
+    const [page] = useState(0);
+    const size = 10;
     
 
-    // const { data } = useGetAllProgramsQuery({ pageSize:size, pageNumber:page })
+    const { data,isLoading } = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true })
+    const [deleteItem] = useDeleteProgramMutation()
+    
 
-    // console.log("program data: ",data?.data)
-
-    // useEffect(() => {
-    //     if(data) {
-    //         setDummyData(data?.data)
-    //     }
+    useEffect(() => {
+        if(data && data?.data ) {
+            const programs = data?.data?.body
+            setProgramView(programs)
+        }
        
-    // },[])
-
+    },[data])
+   
+    console.log("program dataS: ",programView)
    
     interface TableRowData {
         [key: string]: string | number | null | React.ReactNode;
@@ -65,6 +86,8 @@ const ProgramView = () => {
         router.push('/program/details')
         setProgramId(id)
     }
+
+    
 
 
     const ProgramHeader = [
@@ -143,7 +166,7 @@ const ProgramView = () => {
         }
       }
 
-      const handleCardDropDownClick = (optionId: string, id: string) => {
+      const handleCardDropDownClick =  (optionId: string, id: string) => {
         if (optionId === "1") {
             router.push(`/program/details`);
         } else if (optionId === "2") {
@@ -152,8 +175,11 @@ const ProgramView = () => {
         } else if (optionId === "3") {
             setProgramId(id);
             setIsDeleteOpen(true);
+           
         }
     };
+
+    console.log("The id: ",programId)
 
       const handleEditProgram = (id: string) => {
         setProgramId(id);
@@ -165,9 +191,18 @@ const ProgramView = () => {
         setIsDeleteOpen(true)
     };
 
+    const handleDeleteAProgram = async (id: string) => {
+       
+        try{
+            await deleteItem({id}).unwrap();
+            setProgramView((prevData) => prevData.filter((item) => item.id !== id))
+        }catch(error){
+            console.error("Error deleting program: ", error);
+        }
+    }
 
-    
 
+   
     const tagButtonData = [
         {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
         {tagIcon: MdOutlineDateRange, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
@@ -200,9 +235,9 @@ const ProgramView = () => {
                                 width={`32%`}
                     >
                         <CreateProgram setIsOpen={setIsOpen}
-                                             programDeliveryTypes={["Full-time", "Part-time"]}
-                                             programModes={["Online", "Physical"]}
-                                             programDurations={["3years", "4years"]}
+                                             programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
+                                             programModes={["PART_TIME", "FULL_TIME"]}
+                                             programDurations={["3", "4"]}
                                              submitButtonText={"Create"}/>
 
                     </TableModal>
@@ -219,17 +254,17 @@ const ProgramView = () => {
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
-                        {dummyData.map((program, index) => (
+                        {programView.map((program, index) => (
                             <AllProgramsCard
                                 key={index}
-                                description={program.description}
-                                title={program.title}
-                                id={program.programId} dropdownOption={dropDownOption} 
+                                description={program.programDescription ?? ''}
+                                title={program.name ?? ''}
+                                id={program.id ?? ""} dropdownOption={dropDownOption} 
                                 tagButtonData={tagButtonData}
                                 onEdit={handleEditProgram}
                                 onDelete={handleDeleteProgram}
-                                handleCardDropDownClick={(optionId:string) => handleCardDropDownClick(optionId, program.programId)}
-                                handleProgramDetails={()=> handleProgramDetailsOnclick(program.programId)}                   
+                                handleCardDropDownClick={(optionId:string) => handleCardDropDownClick(optionId, program.id ?? '')}
+                                handleProgramDetails={()=> handleProgramDetailsOnclick(program.id ?? '')}                   
                                 />
                         ))}
                     </div>
@@ -277,7 +312,13 @@ const ProgramView = () => {
                 icon={Cross2Icon}
                 width='auto'
                 >
-                   <DeleteCohort setIsOpen={()=> setIsDeleteOpen(false)} headerTitle='Program' title='program'/>
+                   <DeleteCohort 
+                   setIsOpen={()=> setIsDeleteOpen(false)} 
+                   headerTitle='Program' 
+                   title='program' 
+                   handleDelete={handleDeleteAProgram}
+                   id={programId}
+                   />
                 </TableModal>
             </div>
 

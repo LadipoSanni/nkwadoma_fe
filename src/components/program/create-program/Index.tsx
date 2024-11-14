@@ -20,6 +20,41 @@ interface CreateProgramProps {
     setIsOpen?: (isOpen: boolean) => void
 }
 
+ interface viewAllProgramProps {
+    id: string;
+    programDescription: string;
+    name: string;
+    durationType: string;
+    programStartDate: string;
+    duration: string;
+    mode: string;
+    deliveryType: string;
+    totalAmountRepaid: number;
+    totalAmountDisbursed: number;
+    totalAmount
+ }
+
+// {
+//     "id": "77886f5f-e32e-420d-91b6-9ab96390fcdd",
+//     "programDescription": "hfddddddddddhb gggggbbcb hhh hhhhhhh",
+//     "name": "Critical thinking",
+//     "objectives": null,
+//     "durationType": "MONTHS",
+//     "programStartDate": "2024-11-14",
+//     "duration": 1,
+//     "mode": "PART_TIME",
+//     "deliveryType": "HYBRID",
+//     "programStatus": null,
+//     "createdAt": "2024-11-14T08:42:24.928791",
+//     "updatedAt": "2024-11-14T08:42:24.928867",
+//     "createdBy": "925c8d05-2d58-4bdd-a3f6-8a91c76843e4",
+//     "updatedBy": null,
+//     "organizationId": null,
+//     "totalAmountRepaid": 0,
+//     "totalAmountDisbursed": 0,
+//     "totalAmountOutstanding": 0
+// },
+
 const CreateProgram: React.FC<CreateProgramProps> = ({
                                                          programDeliveryTypes,
                                                          programModes,
@@ -30,7 +65,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
 
     const [isDropdown, setIsDropdown] = useState(false)
     const [programName, setProgramName] = useState('');
-    const [programDeliveryType, setProgramDeliveryType] = useState('');
+    const [deliveryType, setDeliveryType] = useState('');
     const [programMode, setProgramMode] = useState('');
     const [programDuration, setProgramDuration] = useState('');
     const [programDescription, setProgramDescription] = useState('');
@@ -39,7 +74,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
 
     const isProgramNameValid = /^(?!\s)(?!\d)(?!.\d.[a-zA-Z].|\d.[a-zA-Z].*\d)[a-zA-Z\s]+$/.test(programName);
     const isDescriptionValid = /^(?!\s)(?!\d)(?!.\d.[a-zA-Z].|\d.[a-zA-Z].*\d)[a-zA-Z\s]+$/.test(programDescription);
-    const isFormValid = isProgramNameValid && programDeliveryType && programMode && programDuration && isDescriptionValid;
+    const isFormValid = isProgramNameValid && deliveryType && programMode && programDuration && isDescriptionValid;
 
     const handleCancelButton = () => {
         if (setIsOpen) {
@@ -49,7 +84,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
     };
     const resetFormFields = () => {
         setProgramName('');
-        setProgramDeliveryType('');
+        setDeliveryType('');
         setProgramMode('');
         setProgramDuration('');
         setProgramDescription('');
@@ -59,7 +94,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
         setIsDropdown((prev) => !prev);
     }, []);
 
-    const instituteId = "06fd45a1-364c-464e-b3de-c3432e72bd03";
+    // const instituteId = "06fd45a1-364c-464e-b3de-c3432e72bd03";
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -72,10 +107,9 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
             try {
                 const newProgram = {
                      programName: programName,
-                    instituteId: instituteId,
                     programDescription: programDescription,
                     programDuration: programDuration,
-                    deliveryType: programDeliveryType,
+                    deliveryType: deliveryType,
                     programMode: programMode,
                 };
                 const response = await createProgram(newProgram).unwrap();
@@ -125,7 +159,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
                             Program Delivery Type
                         </Label>
                         <Select data-testid="program-delivery-type-select" onOpenChange={toggleDropdown}
-                                onValueChange={setProgramDeliveryType}>
+                                onValueChange={setDeliveryType}>
                             <SelectTrigger id="programDeliveryTypeTrigger"
                                            data-testid="program-delivery-type-trigger"
                                            className={`focus:outline-none focus:ring-0 shadow-none`}>

@@ -41,7 +41,6 @@ export const programApi = createApi({
         createProgram: builder.mutation({
             query: (formData: {
                 programName: string,
-                instituteId: string,
                 programDescription: string,
                 programDuration: string,
                 deliveryType: string,
@@ -52,8 +51,17 @@ export const programApi = createApi({
                 formData,
             }),
         }),
+        updateProgram: builder.mutation({
+            query: ({ id, data }) => ({
+                url: `/program/${id}`,
+                method: "PATCH",
+                body: data,
+            }),
+            invalidatesTags: ['program'],  
+        }),
+    
     }),
 })
 
 
-export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery, useCreateProgramMutation } = programApi;
+export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery, useCreateProgramMutation, useUpdateProgramMutation} = programApi;
