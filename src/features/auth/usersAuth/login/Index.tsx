@@ -22,6 +22,14 @@ interface CustomJwtPayload {
    
 }
 
+interface ApiError {
+    status: number;
+    data: {
+        message: string;
+    };
+}
+
+
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -55,11 +63,12 @@ const Login: React.FC = () => {
                 description: "No internet connection",
                 status: "error",
             })
-        }else {
+        }
+        else {
+            try {
             const response = await login({email, password}).unwrap()
             if (isError) {
                 setErrorMessage(response?.error?.data?.message)
-               
                 toast({
                     description: errorMessage,
                     status: "error",
@@ -68,6 +77,10 @@ const Login: React.FC = () => {
             if (response?.data) {
                 const access_token = response?.data?.access_token
                 const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+                // toast({
+                //     description: response?.message,
+                //     status: "success",
+                // })
                 // console.log(decode_access_token)
                 // console.log(access_token)
                
@@ -78,23 +91,32 @@ const Login: React.FC = () => {
                 storeUserDetails(access_token, user_email, user_role)
                 router.push("/Overview")
 
-            }
-        }
+            }}
+            catch (error) {
+                const err = error as ApiError;
+                if (err?.data?.message) {
+                    setErrorMessage(err?.data?.message);
+                    toast({
+                        description: errorMessage,
+                        status: "error",
+                    });
 
 
     }
+}
+        }}
 
-
+  
     const isFormValid = validEmail && password.length >= 8;
 
 
     return (
 
         <div
-            className="w-full md:w-[52%] md:mr-20 h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-md">
+            className="w-full md:w-[35rem] md:mr-20 h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-4">
-                <h1 className={`${cabinetGrotesk.className} text-meedlBlue mt-3  text-2xl leading-5`}>Log in to your
+                <h1 className={`${cabinetGrotesk.className} text-[#1A1A1A] mt-3  text-2xl leading-5`}>Log in to your
                     account</h1>
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
                      className="pt-5 space-y-5">

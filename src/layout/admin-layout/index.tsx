@@ -1,5 +1,5 @@
 import React from 'react';
-import SideBar from "@/components/sideBar/index";
+import SideBar from "@/components/side-bar/index";
 import TopBar from "@/components/topBar/index";
 import {Providers} from "@/app/provider";
 

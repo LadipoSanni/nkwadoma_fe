@@ -7,14 +7,14 @@ export const programApi = createApi({
     tagTypes: ['program'],
     endpoints: (builder) => ({
         getAllPrograms: builder.query({
-            query: (body: {
-                organizationId: string;
+            query: (param: {
                 pageSize?: number;
                 pageNumber?: number;
             }) => ({
-                url: '/program/all',
+                url: '/program/programs/all',
                 method: "GET",
-                body,
+                params: param,
+  
             }),
         }),
         getProgramById: builder.query({
@@ -38,8 +38,22 @@ export const programApi = createApi({
       }),
     //    transformResponse: (response) => response.data, 
     }),
+        createProgram: builder.mutation({
+            query: (formData: {
+                programName: string,
+                instituteId: string,
+                programDescription: string,
+                programDuration: string,
+                deliveryType: string,
+                programMode: string,
+            }) => ({
+                url: '/program',
+                method: "POST",
+                formData,
+            }),
+        }),
     }),
 })
 
 
-export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery } = programApi;
+export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery, useCreateProgramMutation } = programApi;

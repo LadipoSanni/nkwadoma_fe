@@ -28,9 +28,9 @@ const AuthLayout: React.FC<props> = ({children}) => {
                 >
                     <div
                         id={``}
-                        className={` hidden md:grid md:bg-meedleWhite`}>
+                        className={` hidden md:grid md:h-full md:bg-meedleWhite`}>
                         <div
-                            className={`hidden md:pt-12 md:pl-24 md:grid md:w-fit md:h-fit `}
+                            className={`hidden md:pt-12 md:pl-24   md:grid md:w-fit md:h-[70%] `}
                         >
                             <div
                                 id={'authLayoutOrganizationLogo'}
@@ -44,7 +44,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                             </div>
                             <div id={`Revolutionizing`}
                                  data-testid={`Revolutionizing`}
-                                 className={`${cabinetGroteskBold.className} ${styles.revolunizing} md:w-fit md:mt-40 h-fit text-meedlBlue text-6xl  `}>
+                                 className={`${cabinetGroteskBold.className} ${styles.revolunizing} md:w-fit  md:mt-40 h-fit text-meedlBlue text-6xl  `}>
                                     Revolutionizing
                                 <div>financing and</div>
                                 <div className={` flex h-fit mt-auto mb-auto gap-2`}>
@@ -54,7 +54,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                             </div>
                         </div>
                     </div>
-                    <div className={` ${styles.authLayoutChildrenDiv} md:flex grid gap-0 md:pr-18 md:pl-10 px-4 py-4 bg-authBg w-[100vw] h-[100vh] md:h-[100vh] md:w-[100%] md:pt-40 md:justify-end  md:bg-authBg `}>
+                    <div className={` ${styles.authLayoutChildrenDiv} md:grid md:content-center grid gap-0  px-4 py-4 bg-authBg w-[100vw] h-[100vh] md:h-[100vh] md:w-[100%]  md:bg-authBg `}>
                             <div
                                 id={'authLayoutOrganizationLogo'}
                                 data-testid={`authLayoutOrganizationLogo`}
@@ -65,7 +65,9 @@ const AuthLayout: React.FC<props> = ({children}) => {
                                        height={90}
                                 />
                             </div>
-                          {children}
+                        <div className={`md:flex w-full md:justify-end h-full md:w-full md:h-full`}>
+                            {children}
+                        </div>
                     </div>
                 </div>
             </main>

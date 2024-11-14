@@ -12,11 +12,12 @@ const PasswordCriteria: React.FC<PasswordCriteriaProps> = ({criteriaStatus, id}:
         "At least 8 characters",
         "At least one special character",
         "At least one uppercase character",
-        "At least one lowercase character"
+        "At least one lowercase character",
+        "At least one digit"
     ];
 
     return (
-        <div id={`${id}Container`} className={`${inter.className} grid md:flex items-center gap-3 md:gap-5 py-0 px-1`}>
+        <div id={`${id}Container`} className={`${inter.className} grid  md:flex items-center gap-3 md:gap-5 py-0 px-1`}>
             <main id="passwordCriteriaMain-1" className={'grid gap-3'}>
                 {criteria.slice(0, 2).map((text, index) => (
                     <div key={index} id={`passwordCriteriaItem${index}`} className={'flex gap-2 items-center'}>
