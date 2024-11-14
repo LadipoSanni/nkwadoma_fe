@@ -11,6 +11,7 @@ import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
 import NavbarContainer from "@/reuseable/ui/Navbar";
 import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
 import {Icon} from "@iconify/react";
+import styles  from "@//components/side-bar/index.module.css"
 
 
 
@@ -113,12 +114,13 @@ const SideBar = () => {
     return (
         <div>
             {showMobileSideBar &&
-                <aside
+                <div
                     id={'adminMobileSideBar'}
-                    className={` w-[100vw] h-[100vh]  border-r-2 border-r-grey-200  flex z-10 md:hidden`}
+                    className={` z-10 w-[99vw] overflow-hidden h-[99vh] bg-red-200 border-r-2 border-r-grey-200  flex md:hidden`}
                 >
+
                     <div
-                        className={` w-[70vw] bg-white py-2 px-5 border border-r-grey-200 z-10 h-[100%] bg-learnSpaceWhite `}
+                        className={` w-[70vw] bg-white py-2 px-5 border border-r-grey-200 z-10 h-[99%] bg-learnSpaceWhite `}
                     >
                         <div className={`md:h-fit py-6 md:w-full   md:grid   `}>
                             <Image
@@ -136,14 +138,14 @@ const SideBar = () => {
                         </div>
 
                     </div>
-                    <button data-testid="blurry" id="sideBarblurBackground"
-                            className={` h-[100vh] w-[40vw] backdrop-blur-sm bg-[grey/30] `}
-                            onClick={() => {
-                                store.dispatch(setShowMobileSideBar(false))
-                            }}
-                    ></button>
+                    {/*<button data-testid="blurry" id="sideBarblurBackground"*/}
+                    {/*        className={` ${styles.blurryContainer} h-[99%] w-[40vw] z-10 `}*/}
+                    {/*        onClick={() => {*/}
+                    {/*            store.dispatch(setShowMobileSideBar(false))*/}
+                    {/*        }}*/}
+                    {/*></button>*/}
 
-                </aside>
+                </div>
             }
             <aside
                 id={'adminMediumSideBar'}

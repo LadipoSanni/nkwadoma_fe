@@ -7,6 +7,8 @@ import AuthButton from "@/reuseable/buttons/AuthButton";
 import {useCreatePasswordMutation} from "@/service/auths/api";
 import {useRouter, useSearchParams} from 'next/navigation'
 import { useToast} from "@/hooks/use-toast";
+import {jwtDecode} from "jwt-decode";
+import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
 
 
 const CreatePassword = () => {
@@ -70,9 +72,16 @@ const CreatePassword = () => {
 
 
     const {toast} = useToast()
-     const rr = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmb3NpdDQyOTEzQGxpbmVhY3IuY29tIiwiaWF0IjoxNzMxNTY5ODI2LCJleHAiOjE4MTc5Njk4MjZ9.NwCu-dOg_YQBtiu6DbNaQ5s99c9xrMvs-Zq1NMd_09U"
+     const rr = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXBzb2plZnlpQGd1ZnVtLmNvbSIsImlhdCI6MTczMTU4Mzg1MSwiZXhwIjoxODE3OTgzODUxfQ.D9JehQF0gd-izmlyi-LXJCrJGOyoSDf6ZsJaFmL82h0"
 
 
+    interface CustomJwtPayload {
+        email: string;
+        realm_access: {
+            roles: string[];
+        };
+
+    }
     const handleCreatePassword = async () => {
         // const token = getUserToken()
         // console.log("token: ", token)
@@ -80,6 +89,20 @@ const CreatePassword = () => {
         try {
             const response = await createPassword({token: rr, password: password}).unwrap()
             console.log("responsebhybyuihiuhuihiu : ",response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
+            console.log("data: ", data, "response; ", response)
+            const access_token = response?.data?.access_token
+            const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+            const user_email = decode_access_token?.email
+            console.log("user email: ",user_email)
+            const user_role = decode_access_token?.realm_access?.roles[0]
+            console.log("user role: ",user_role)
+            storeUserDetails(access_token, user_email, user_role)
+            router.push("/Overview")
+            toast({
+                description: response?.message,
+                status: "error",
+            })
+
 
         }catch (error){
             console.log("error: ", error)
