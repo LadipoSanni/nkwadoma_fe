@@ -22,6 +22,14 @@ interface CustomJwtPayload {
    
 }
 
+interface ApiError {
+    status: number;
+    data: {
+        message: string;
+    };
+}
+
+
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -55,7 +63,9 @@ const Login: React.FC = () => {
                 description: "No internet connection",
                 status: "error",
             })
-        }else {
+        }
+        else {
+            try {
             const response = await login({email, password}).unwrap()
             if (isError) {
                 setErrorMessage(response?.error?.data?.message)
@@ -67,6 +77,10 @@ const Login: React.FC = () => {
             if (response?.data) {
                 const access_token = response?.data?.access_token
                 const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+                // toast({
+                //     description: response?.message,
+                //     status: "success",
+                // })
                 // console.log(decode_access_token)
                 // console.log(access_token)
                
@@ -77,13 +91,22 @@ const Login: React.FC = () => {
                 storeUserDetails(access_token, user_email, user_role)
                 router.push("/Overview")
 
-            }
-        }
+            }}
+            catch (error) {
+                const err = error as ApiError;
+                if (err?.data?.message) {
+                    setErrorMessage(err?.data?.message);
+                    toast({
+                        description: errorMessage,
+                        status: "error",
+                    });
 
 
     }
+}
+        }}
 
-
+  
     const isFormValid = validEmail && password.length >= 8;
 
 

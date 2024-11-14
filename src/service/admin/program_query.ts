@@ -7,14 +7,14 @@ export const programApi = createApi({
     tagTypes: ['program'],
     endpoints: (builder) => ({
         getAllPrograms: builder.query({
-            query: (body: {
-                organizationId: string;
+            query: (param: {
                 pageSize?: number;
                 pageNumber?: number;
             }) => ({
-                url: '/program/all',
+                url: '/program/programs/all',
                 method: "GET",
-                body,
+                params: param,
+  
             }),
         }),
         getProgramById: builder.query({

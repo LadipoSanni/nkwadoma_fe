@@ -23,15 +23,15 @@ import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import EditProgramForm from "@/components/program/edit-program-form";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
-
 // import { useSearchParams } from 'next/navigation';
 // import {useGetProgramByIdQuery} from "@/service/program/programDetailsApi";
+// import { useGetProgramByIdQuery } from "@/service/admin/program_query";
 
 
 const ProgramDetails = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    // const id = "139f4d05-3a0e-4f77-adc1-d9245236ac12"
+    // const id = "ee3bf539-26b7-4bf4-808a-36a1d95a81e8"
     // const { data } = useGetProgramByIdQuery({id})
 
     // useEffect(()=> {
@@ -97,6 +97,36 @@ const ProgramDetails = () => {
 
 
     const description = "Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
+    // console.log("The user: ",getUserDetails().storedAccessToken)
+    // const fetchProgramDetails = async (id:string) => {
+      
+    //   const url =`https://api-systest.learnspace.africa/api/v1/program/${id}`
+    //     try {
+    //       const response = await fetch(url, {
+    //         method: 'GET',  
+    //         headers: {
+    //           'Authorization': `Bearer ${getUserDetails().storedAccessToken}`,  
+    //           'Content-Type': 'application/json',  
+    //         },
+    //       });
+         
+    //       if (!response.ok) {
+    //         throw new Error(`Error: ${response.statusText}`);
+    //       }
+         
+    //       const data = await response.json();  
+    //       return data;  
+    //     } catch (error) {
+    //       console.error('Error fetching program details:', error);
+    //       throw error;  
+    //     }
+    //   };
+      
+     
+    //   fetchProgramDetails(id)
+    //     .then(data => console.log('Program Data:', data))
+    //     .catch(error => console.error('Failed to fetch program:', error));
+
     return (
         <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`}>
                 <div className={`flex gap-2 w-[9.2rem] items-center cursor-pointer text-meedlBlue`} id={`backClick`}
