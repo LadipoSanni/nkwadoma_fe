@@ -5,17 +5,17 @@ import { cabinetGrotesk } from "@/app/fonts";
 import PasswordCriteria from "@/components/passwordCriteria/Index";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import {useCreatePasswordMutation} from "@/service/auths/api";
-// import { useSearchParams } from 'next/navigation'
+import {useRouter, useSearchParams} from 'next/navigation'
 import { useToast} from "@/hooks/use-toast";
 
 
 const CreatePassword = () => {
-    const [password, setPassword] = useState('eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXZva2U2NTcwQGVkZWN0dXMuY29tIiwiaWF0IjoxNzMxNDI0NjY3LCJleHAiOjE4MTc4MjQ2Njd9.D5AE088VhSjkj-L9nQEDeR0mP9ajILjTxrXUR5SCfXg');
+    const [password, setPassword] = useState('');
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false, false]);
     const [confirmPassword, setConfirmPassword] = useState('');
-    // const router = useRouter()
-    // const searchParams = useSearchParams()
-    const [token ] = useState('')
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const token  = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmb3NpdDQyOTEzQGxpbmVhY3IuY29tIiwiaWF0IjoxNzMxNTY5ODI2LCJleHAiOjE4MTc5Njk4MjZ9.NwCu-dOg_YQBtiu6DbNaQ5s99c9xrMvs-Zq1NMd_09U";
     const [createPassword, {error, isError, isSuccess, data}] = useCreatePasswordMutation()
 
     // useEffect(()=> {
@@ -59,23 +59,27 @@ const CreatePassword = () => {
 
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
-    // const getUserToken = () => {
-    //         if (searchParams){
-    //             const pathVariable = searchParams.get("token")
-    //             if (pathVariable){
-    //                 return pathVariable
-    //             }
-    //         }
-    // }
+    const getUserToken = () => {
+            if (searchParams){
+                const pathVariable = searchParams.get("token")
+                if (pathVariable){
+                    return pathVariable
+                }
+            }
+    }
 
 
     const {toast} = useToast()
+     const rr = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmb3NpdDQyOTEzQGxpbmVhY3IuY29tIiwiaWF0IjoxNzMxNTY5ODI2LCJleHAiOjE4MTc5Njk4MjZ9.NwCu-dOg_YQBtiu6DbNaQ5s99c9xrMvs-Zq1NMd_09U"
+
 
     const handleCreatePassword = async () => {
+        // const token = getUserToken()
+        // console.log("token: ", token)
 
         try {
-            const response = await createPassword({token: token, password: password}).unwrap()
-            console.log("responsebhybyuihiuhuihiu : ", response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
+            const response = await createPassword({token: rr, password: password}).unwrap()
+            console.log("responsebhybyuihiuhuihiu : ",response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
 
         }catch (error){
             console.log("error: ", error)
