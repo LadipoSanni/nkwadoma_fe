@@ -59,7 +59,7 @@ const CreateProgram: React.FC<CreateProgramProps> = ({
         setIsDropdown((prev) => !prev);
     }, []);
 
-    const instituteId = "06fd45a1-364c-464e-b3de-c3432e72bd03";
+    const instituteId = "b50df2b5-7dcb-4d91-9aab-fa4f87b75d92";
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
