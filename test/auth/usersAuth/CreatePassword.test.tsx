@@ -1,10 +1,35 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import CreatePasswordForm from '@/app/auth/(usersAuth)/create-password/page';
+import {Providers} from "@/app/provider";
+import CreatePassword from "@/features/auth/usersAuth/create-password/Index";
+
+
+// Mock useRouter:
+jest.mock("next/navigation", () => ({
+    useRouter() {
+        return {
+            prefetch: () => null
+        };
+    },
+    useSearchParams: jest.fn().mockImplementation(() => {
+        return new URLSearchParams(window.location.search);
+    }),
+    usePathname: jest.fn().mockImplementation((pathArg) => {
+        return pathArg;
+    })
+
+}));
 
 describe('CreatePasswordForm', () => {
+
+    beforeEach(() => {
+        render(
+            <Providers>
+                <CreatePassword/>
+            </Providers>
+        )
+    })
     test('renders Create Password form correctly', () => {
-        render(<CreatePasswordForm />);
 
         const titleElement = screen.getByRole('heading', { name: /Create your password/i });
         expect(titleElement).toBeInTheDocument();
@@ -12,7 +37,6 @@ describe('CreatePasswordForm', () => {
     });
 
     test('updates password and criteria status on password change', () => {
-        render(<CreatePasswordForm />);
 
         const passwordInputs = screen.getAllByLabelText(/Password/i);
         const passwordInput = passwordInputs[0];
@@ -26,7 +50,6 @@ describe('CreatePasswordForm', () => {
     });
 
     test('updates confirm password on change', () => {
-        render(<CreatePasswordForm />);
 
         const confirmPasswordInput = screen.getByLabelText(/Confirm Password/i) as HTMLInputElement;
         fireEvent.change(confirmPasswordInput, { target: { value: 'Test@123' } });

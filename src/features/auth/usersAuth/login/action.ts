@@ -1,10 +1,5 @@
 // "use server"
-import {setItemSessionStorage,getItemSessionStorage} from "@/utils/localStorage";
-
-
-
-
-
+import {setItemSessionStorage,getItemSessionStorage} from "@/utils/storage";
 
 
 export  function storeUserDetails (access_token: string, user_email: string, user_role: string) {
