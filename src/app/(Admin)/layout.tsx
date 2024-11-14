@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminLayout from "@/layout/AdminLayout/index";
+import AdminLayout from "@/layout/admin-layout/index";
 
 
 type props = {
