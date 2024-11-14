@@ -20,14 +20,7 @@ const CreatePassword = () => {
     const token  = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmb3NpdDQyOTEzQGxpbmVhY3IuY29tIiwiaWF0IjoxNzMxNTY5ODI2LCJleHAiOjE4MTc5Njk4MjZ9.NwCu-dOg_YQBtiu6DbNaQ5s99c9xrMvs-Zq1NMd_09U";
     const [createPassword, {error, isError, isSuccess, data}] = useCreatePasswordMutation()
 
-    // useEffect(()=> {
-    //     if (searchParams){
-    //         const pathVariable = searchParams.get("token")
-    //         if (pathVariable){
-    //             setToken(pathVariable)
-    //         }
-    //     }
-    // }, [searchParams])
+
 
 
     const criteriaMessages = [
@@ -83,13 +76,12 @@ const CreatePassword = () => {
 
     }
     const handleCreatePassword = async () => {
-        // const token = getUserToken()
-        // console.log("token: ", token)
+        const token = getUserToken()
+        console.log("token: ", token)
 
         try {
             const response = await createPassword({token: rr, password: password}).unwrap()
             console.log("responsebhybyuihiuhuihiu : ",response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
-            console.log("data: ", data, "response; ", response)
             const access_token = response?.data?.access_token
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
@@ -105,7 +97,7 @@ const CreatePassword = () => {
 
 
         }catch (error){
-            console.log("error: ", error)
+            // console.log("error: ", error)
 
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
