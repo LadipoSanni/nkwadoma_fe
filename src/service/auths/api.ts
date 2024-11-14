@@ -17,7 +17,15 @@ export const authApi = createApi({
             }),
             // invalidatesTags: ['authentication']
         }),
+        createPassword: builder.mutation({
+            query: (data)=> ({
+                url: '/auth/password/create',
+                method: 'POST',
+                body: data
+            }),
+        })
+
     })
 })
 
-export const {useLoginMutation} = authApi;
+export const {useLoginMutation, useCreatePasswordMutation} = authApi;
