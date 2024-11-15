@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import SideBar from "@/components/sideBar";
+import SideBar from "@/components/side-bar";
 import TopBar from "@/components/topBar";
 
 interface LoaneeLayoutProps {
@@ -9,14 +9,15 @@ interface LoaneeLayoutProps {
 const LoaneeLayoutComponent: React.FC<LoaneeLayoutProps> = ({children}) => {
     return (
         <main data-testid="AcceptedTraineeDashboardMain" id="AccepTrMain"
-              className="flex h-screen bg-LearnSpaceAthensGray">
+              className="flex bg-LearnSpaceAthensGray">
             <SideBar/>
             <div data-testid={"AcceptedTraineeDashboardContainer"} id={"AcceptTrContainer"}
                  className="flex flex-col flex-grow bg-gray">
                 <TopBar/>
-                <div className={'px-5 pt-7 pb-6 h-full w-full'}>
+                <div id={'TopBarAndCenterComponent'}
+                     className={` w-full absolute bottom-0 px-5 md:pt-7 py-4 pb-6  h-[92vh]  grid  md:w-[84vw] md:h-[90vh] `}>
                     <div data-testid="AcceptedTraineeDashboardContent" id="AcceptTrContent"
-                         className="px-10 py-5 h-full rounded-md bg-meedlWhite">
+                         className="md:px-10 px-3 md:py-5 pt-3 h-full rounded-md bg-meedlWhite">
                         {children}
                     </div>
                 </div>

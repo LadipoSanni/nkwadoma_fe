@@ -114,7 +114,7 @@ const config: Config = {
   			greyBase200: '#F6F6F6',
   			grey50: '#E9E9E9',
   			grey100: '#BABABB',
-  			grey105: '`#F9F9F9`',
+  			grey105: '#F9F9F9',
   			grey150: '#BDC2C9',
   			grey200: '#98989B',
   			grey250: '#999999',
