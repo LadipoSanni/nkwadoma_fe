@@ -1,7 +1,10 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react';
+import { Collapsible,CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import {cabinetGrotesk, inter} from '@/app/fonts'
 import Connector from "@/components/common/Connector";
 import {Button} from "@/components/ui/button";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 
 const steps = [
     'Loan application details',
@@ -11,6 +14,7 @@ const steps = [
 ]
 
 const LoanApplicationDetails = () => {
+    const [isOpen, setIsOpen] = useState(false);
     return (
         <div className={`grid md:gap-[58px] gap-6 ${inter.className}`}>
             <header className={'flex items-start border-b-lightBlue250 border-b border-solid w-full  py-5'}>
@@ -48,6 +52,34 @@ const LoanApplicationDetails = () => {
                             <h3 className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Deposit</h3>
                             <p className={`text-black500 text-[14px] leading-[150%]`}>₦35,000</p>
                         </div>
+                        <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+                            <CollapsibleTrigger asChild>
+                                <div className={'flex justify-center items-center py-4 px-7 gap-1 w-full bg-meedlWhite md:px-0 md:h-14 h-[4.625rem] cursor-pointer select-none'}>
+                                    <p className={'font-normal text-[14px] leading-[150%] text-black300'}>{isOpen ? 'Collapse to hide the tuition breakdown' : 'Expand to see the tuition breakdown'}</p>
+                                    {isOpen ? <MdKeyboardArrowUp className={'h-6 w-6 text-primary200'} /> : <MdKeyboardArrowDown className={'h-6 w-6 text-primary200'} />}
+                                </div>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent>
+                                <div className={'rounded-md grid gap-9 p-5 bg-grey105'}>
+                                    <div className={'md:flex md:justify-between grid gap-3'}>
+                                        <h3 className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Tuition amount</h3>
+                                        <p className={`text-black500 text-[14px] leading-[150%]`}>₦3,500,000.00</p>
+                                    </div>
+                                    <div className={'md:flex md:justify-between grid gap-3'}>
+                                        <h3 className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Start date</h3>
+                                        <p className={`text-black500 text-[14px] leading-[150%]`}>13 Dec, 2023</p>
+                                    </div>
+                                    <div className={'md:flex md:justify-between grid gap-3'}>
+                                        <h3 className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Loan amount requested</h3>
+                                        <p className={`text-black500 text-[14px] leading-[150%]`}>₦3,000,000.00</p>
+                                    </div>
+                                    <div className={'md:flex md:justify-between grid gap-3'}>
+                                        <h3 className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Deposit</h3>
+                                        <p className={`text-black500 text-[14px] leading-[150%]`}>₦35,000</p>
+                                    </div>
+                                </div>
+                            </CollapsibleContent>
+                        </Collapsible>
                     </div>
                     <Button
                         className={'bg-meedlBlue rounded-md h-[45px] w-[102px] self-end justify-self-end hover:bg-meedlBlue focus:bg-meedlBlue'}>Continue</Button>
