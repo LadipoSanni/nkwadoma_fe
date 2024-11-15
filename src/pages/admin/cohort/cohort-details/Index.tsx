@@ -98,7 +98,7 @@ const CohortDetails = () => {
     const items = ["Referred", "Not referred"]
 
     const handleSelected = ()=>{
-        setIsReferred()
+        setIsReferred(isReferred)
     }
     const handleAddTrainee = () => {
         setAddTrainee(true)
@@ -153,7 +153,7 @@ const CohortDetails = () => {
                     <TabsContent value={"trainee"} className={`mt-4 grid `}>
                         <div className={`space-y-5`}>
                             <div className={`flex md:flex-row flex-col md:justify-between`}>
-                                <div className={`flex md:flex-row gap-4`}>
+                                <div className={`flex md:flex-row gap-4 items-center`}>
                                     <div className="max-w-md mx-auto">
                                         <div className="relative">
                                             <div
@@ -161,18 +161,18 @@ const CohortDetails = () => {
                                                 <MdSearch className="h-5 w-5 text-grey200"/>
                                             </div>
                                             <Input
-                                                className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10' type="search" required/>
+                                                className='w-full lg:w-80 h-11 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10' type="search" required/>
                                         </div>
                                     </div>
                                     <div className='w-32'>
                                         <CustomSelect value={isReferred} onChange={handleSelected}
                                                       selectContent={items}
-                                                      className={`w-10px w-full text-black  bg-neutral100 h-11 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
+                                                      className={`w-full text-black  bg-neutral100 h-11 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
                                                       placeHolder={`referred`}/>
                                     </div>
                                 </div>
 
-                                <div className={`flex md:flex-row flex-col gap-4`}>
+                                <div className={`flex md:flex-row flex-col gap-4 items-center`}>
                                     <div className={`md:block hidden`}>
                                         <Button variant={"outline"}
                                                 size={"lg"}
