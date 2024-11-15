@@ -95,7 +95,7 @@ const CohortDetails = () => {
         {title: "Amount received", sortable: true, id: "AmountReceived"},
     ]
 
-    const items = ["referred", "Not referred"]
+    const items = ["Referred", "Not referred"]
 
     const handleSelected = ()=>{
         setIsReferred()
@@ -167,7 +167,7 @@ const CohortDetails = () => {
                                     <div className='w-32'>
                                         <CustomSelect value={isReferred} onChange={handleSelected}
                                                       selectContent={items}
-                                                      className={`w-10px w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650`}
+                                                      className={`w-10px w-full text-black  bg-neutral100 h-11 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
                                                       placeHolder={`referred`}/>
                                     </div>
                                 </div>
