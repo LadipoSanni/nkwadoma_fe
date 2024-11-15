@@ -441,3 +441,67 @@ export const cohortDataDetails = [
     amountOutstanding: "₦200,000.00"
   }
 ];
+
+export const CohortTrainees = [
+  {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  },
+]
