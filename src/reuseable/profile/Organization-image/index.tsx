@@ -1,0 +1,28 @@
+import React from 'react';
+import Image from "next/image";
+
+interface props {
+    src: string;
+    alt: string;
+    id: string;
+
+}
+
+const OrganizationImage = ({src, alt, id}: props) => {
+    return (
+        <div
+            className={` md:grid  md:place-items-center px-3 py-3 md:object-fit md:text-black md:text-xs md:font-bold  md:bg-[#F7F7F7]   md:rounded-full w-[30px] h-[30px]  md:w-[3.5rem] md:h-[3.5rem] `}>
+            <Image
+                id={id}
+                data-testid={id}
+                width={100}
+                height={100}
+                style={{marginTop: 'auto', marginBottom: 'auto'}}
+                src={src}
+                alt={alt}
+            />
+        </div>
+    );
+};
+
+export default OrganizationImage;
