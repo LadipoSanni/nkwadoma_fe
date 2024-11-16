@@ -1,5 +1,5 @@
 import React from 'react';
-import SelectedLoan from "@/components/selectedLoan/SelectedLoan";
+import SelectedLoan from "@/components/selected-loan/SelectedLoan";
 
 
 
