@@ -8,7 +8,7 @@ type props = {
 const SelectedLoan = ({children}: props) => {
     return (
         <div>
-            <div id={'selectedLoanLayout'} className={`grid bg-blue-300  h-[100%] w-[100%] `}>
+            <div id={'selectedLoanLayout'} className={`grid  h-[100%] w-[100%] `}>
                 <div id={'selectedLoanContainer'}
                      className={` grid gap-2 `}>
                     <SelectedLoanHeader/>
