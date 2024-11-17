@@ -1,6 +1,5 @@
 import React from 'react';
 import OrganizationNameAndChangeButton from "@/components/selected-loan/OrganizationNameAndChangeButton";
-import SearchAndFilterLoan from "@/components/selected-loan/SearchAndFilterLoan";
 
 const OrganizationAndFilter = () => {
     return (
