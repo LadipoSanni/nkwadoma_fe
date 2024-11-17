@@ -174,7 +174,7 @@ const ProgramDetails = () => {
                     </section>
                 </TabsContent>
                 <TabsContent value="cohorts" className={'mt-4 grid gap-7'}>
-                    <SearchInput  id={'programCohortSearch'}/>
+                    <SearchInput  id={'programCohortSearch'} value="search" onChange={()=> {}}/>
                     <Tables
                         tableData={cohortDataDetails}
                         tableHeader={ProgramHeader}

@@ -6,7 +6,7 @@ import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
-// import CreateProgram from "@/components/program/create-program/Index";
+import CreateProgram from "@/components/program/create-program";
 import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
 import {MdOutlineDateRange, MdOutlinePeopleAlt, MdPersonOutline} from "react-icons/md";
@@ -291,11 +291,11 @@ const ProgramView = () => {
                                 width={`32%`}
                     >
                         create Cohort
-                        {/* <CreateProgram setIsOpen={setIsOpen}
+                        <CreateProgram setIsOpen={setIsOpen}
                                              programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
                                              programModes={["PART_TIME", "FULL_TIME"]}
                                              programDurations={["3", "4"]}
-                                             submitButtonText={"Create"}/> */}
+                                             submitButtonText={"Create"}/>
 
                     </TableModal>
                 </div>
