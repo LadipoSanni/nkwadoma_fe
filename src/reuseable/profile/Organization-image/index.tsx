@@ -11,7 +11,7 @@ interface props {
 const OrganizationImage = ({src, alt, id}: props) => {
     return (
         <div
-            className={` md:grid  md:place-items-center px-3 py-3 md:object-fit md:text-black md:text-xs md:font-bold  md:bg-[#F7F7F7]   md:rounded-full w-[30px] h-[30px]  md:w-[3.5rem] md:h-[3.5rem] `}>
+            className={` md:grid  md:place-items-center px-2 py-3 md:object-fit bg-[#F7F7F7] md:bg-[#F7F7F7] object-fit rounded-full  md:rounded-full w-[3rem] h-[3rem]  md:w-[2.5 bnnrem] md:h-[2.5rem] `}>
             <Image
                 id={id}
                 data-testid={id}
