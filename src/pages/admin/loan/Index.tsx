@@ -35,26 +35,15 @@ function ViewAllLoanRequest() {
 
     return (
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`} 
-        className={`flex flex-col h-full md:py-[20px] md:px-[40px]`}
+        className={`flex flex-col h-full `}
         >
-            {
-                LoanRequestTable.length < 1 ?
-                    <div data-testid={`emptyStateDiv`}>
-                        <LoanEmptyState title={'Loan REQUEST will show here'} />
-                    </div>
-                    :
-                    <div data-testid={`tableDiv`}>
-                        {/*<DynamicTable*/}
-                        {/*    // tableHeight={52}*/}
-                        {/*    tableHeader={columns}*/}
-                        {/*    tableData={LoanRequestTable}*/}
-                        {/*    handleRowClick={handleRowClick}*/}
-                        {/*    sx='cursor-pointer'*/}
-                        {/*    staticColunm='traineeName'*/}
-                        {/*/>*/}
-                        
-                    </div>
-            }
+            {/*{*/}
+            {/*    LoanRequestTable.length < 1 ?*/}
+            {/*        <div data-testid={`emptyStateDiv`}>*/}
+                        <LoanEmptyState title={'Loan request will show here'} description={`There are no loan requests available yet`} />
+                    {/*</div>*/}
+
+            {/*}*/}
         </div>
     );
 }
