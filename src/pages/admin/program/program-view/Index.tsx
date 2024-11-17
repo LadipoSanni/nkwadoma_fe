@@ -20,6 +20,9 @@ import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 import EditProgramForm from '@/components/program/edit-program-form';
 import { useGetAllProgramsQuery } from '@/service/admin/program_query';
 import { useDeleteProgramMutation } from '@/service/admin/program_query';
+import { useGetProgramByIdQuery } from '@/service/admin/program_query';
+// import { saveObjectItemToSessionStorage } from '@/utils/storage';
+import { useSearchProgramQuery } from '@/service/admin/program_query';
 
 
 interface viewAllProgramProps {
@@ -40,17 +43,32 @@ interface viewAllProgramProps {
 
 const ProgramView = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
-    const [dummyData, setDummyData] = useState<{
-        cohorts: number;
-        description: string;
-        months: number;
-        title: string;
-        trainees: number;
-        programId: string;
-    }[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    // const [dummyData, setDummyData] = useState<{
+    //     cohorts: number;
+    //     description: string;
+    //     months: number;
+    //     title: string;
+    //     trainees: number;
+    //     programId: string;
+    // }[]>([]);
     const router = useRouter()
 
     const [programView, setProgramView] = useState<viewAllProgramProps[]>([])
+    const [progamDetail, setProgramDetail] = useState({
+    id: "",
+    programDescription: "",
+    name: "",
+    durationType: "",
+    programStartDate: "",
+    duration: 0,
+    mode: "",
+    deliveryType: "",
+    totalAmountRepaid: 0,
+    totalAmountDisbursed: 0,
+    totalAmountOutstanding: 0,
+ }
+)
 
     const [programId, setProgramId] =  React.useState("")
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
@@ -59,9 +77,9 @@ const ProgramView = () => {
     const size = 10;
     
 
-    const { data,isLoading } = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true })
+    const { data,isLoading } = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true, })
     const [deleteItem] = useDeleteProgramMutation()
-    
+    const { data: searchResults } = useSearchProgramQuery(searchTerm, { skip: !searchTerm });
 
     useEffect(() => {
         if(data && data?.data ) {
@@ -71,7 +89,6 @@ const ProgramView = () => {
        
     },[data])
    
-    console.log("program dataS: ",programView)
    
     interface TableRowData {
         [key: string]: string | number | null | React.ReactNode;
@@ -87,7 +104,22 @@ const ProgramView = () => {
         setProgramId(id)
     }
 
-    
+    useEffect(() => { 
+        if (searchTerm && searchResults && searchResults.data) { 
+            const programs = [searchResults.data]; 
+            setProgramView(programs); 
+        } 
+           
+      else if 
+    (data && data?.data ) {
+        const programs = data?.data?.body
+        setProgramView(programs)
+    }
+        }, [searchTerm, searchResults,data]);
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
+        setSearchTerm(event.target.value);
+     };
 
 
     const ProgramHeader = [
@@ -126,22 +158,19 @@ const ProgramView = () => {
         },
 
 
-    ]
+    ] 
 
-
-    
-
-    useEffect(() => {
-        const data = Array.from({length: 9}, (_, index) => ({
-            cohorts: Math.floor(Math.random() * 20) + 1,
-            description: `Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes.${index + 1}`,
-            months: Math.floor(Math.random() * 12) + 1,
-            title: `Program Thinking ${index + 1}`,
-            trainees: Math.floor(Math.random() * 100) + 1,
-            programId: `${index + 1}`
-        }));
-        setDummyData(data);
-    }, []);
+    // useEffect(() => {
+    //     const data = Array.from({length: 9}, (_, index) => ({
+    //         cohorts: Math.floor(Math.random() * 20) + 1,
+    //         description: `Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes.${index + 1}`,
+    //         months: Math.floor(Math.random() * 12) + 1,
+    //         title: `Program Thinking ${index + 1}`,
+    //         trainees: Math.floor(Math.random() * 100) + 1,
+    //         programId: `${index + 1}`
+    //     }));
+    //     setDummyData(data);
+    // }, []);
 
     const dropDownOption = [
         {name: 'View Program', id: '1'},
@@ -179,7 +208,7 @@ const ProgramView = () => {
         }
     };
 
-    console.log("The id: ",programId)
+   
 
       const handleEditProgram = (id: string) => {
         setProgramId(id);
@@ -201,7 +230,30 @@ const ProgramView = () => {
         }
     }
 
+    const { data: program} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
+ 
+    useEffect(()=> {
+    if(program?.data ){
+        const detail = program?.data
+        setProgramDetail({
+            id: detail?.id || "",
+            programDescription: detail?.programDescription || "",
+            name: detail?.name || "",
+            durationType: detail?.durationType || "",
+            programStartDate: detail?.programStartDate || "",
+            duration: detail?.duration || 0,
+            mode: detail?.mode || "",
+            deliveryType: detail?.deliveryType || "",
+            totalAmountRepaid: detail?.totalAmountRepaid || 0,
+            totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
+            totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
+        });
+    }
+   // saveObjectItemToSessionStorage("programDetail",progamDetail)
 
+  },[program])
+
+    console.log("Stored program details:", progamDetail);
    
     const tagButtonData = [
         {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
@@ -220,7 +272,11 @@ const ProgramView = () => {
               className={`${cabinetGrotesk.className} flex flex-col gap-8 pl-5 pr-2 pt-7 bg-meedlWhite overflow-hidden`}>
             <section id="programSection" className={'grid gap-7 '}>
                 <div id="programControls" className={'md:flex pr-2 md:justify-between gap-5 grid'}>
-                    <SearchInput id={'ProgramSearchInput'}/>
+                    <SearchInput 
+                    id={'ProgramSearchInput'} 
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    />
                     <Button variant={"secondary"}
                             size={"lg"}
                             className={`${inter.className} bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center`}
@@ -302,7 +358,11 @@ const ProgramView = () => {
                 icon={Cross2Icon}
                 headerTitle='Edit Program'
                 >
-                    <EditProgramForm programId={programId} setIsOpen={setEditOpen}/>
+                    <EditProgramForm 
+                    programId={programId} 
+                    setIsOpen={setEditOpen}
+                    programDetail={progamDetail}
+                    />
                 </TableModal>
                 
                 <TableModal

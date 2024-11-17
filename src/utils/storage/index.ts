@@ -1,3 +1,22 @@
+// interface DetailData {
+//    [key: string]: string | number | null | boolean;
+// }
+
+
+// interface viewAllProgramProps {
+//    id?: string;
+//    programDescription?: string;
+//    name?: string;
+//    durationType?: string;
+//    programStartDate?: string;
+//    duration?: number;
+//    mode?: string;
+//    deliveryType?: string;
+//    totalAmountRepaid?: number;
+//    totalAmountDisbursed?: number;
+//    totalAmountOutstanding?: number
+// }
+
 export  const  setItemToLocalStorage = (name: string, item: string) => {
    if (typeof window !== 'undefined') {
       localStorage.setItem(name, item)
@@ -22,3 +41,17 @@ export const getItemSessionStorage = (name: string) => {
    }
 }
 
+
+// export const saveObjectItemToSessionStorage = (key: string, data: DetailData) => {
+//    if (typeof window !== 'undefined') {
+//     return sessionStorage.setItem(key, JSON.stringify(data));
+//    }
+// };
+
+// export const getObjectItemFromSessionStorage = (key: string)  => {
+//    if (typeof window !== 'undefined') {
+//       const data = sessionStorage.getItem(key);
+//       return data ? (JSON.parse(data) as viewAllProgramProps) : null;
+//    }
+   
+// };

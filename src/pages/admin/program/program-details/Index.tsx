@@ -28,6 +28,7 @@ import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
 // import { useGetProgramByIdQuery } from "@/service/admin/program_query";
 
 
+
 const ProgramDetails = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
