@@ -15,11 +15,11 @@ const SelectLoanTab = () => {
     const router = useRouter()
 
     const tabContent = [
-        {name: "loan referrals", id: "loanReferrals", route: 'loanReferral'},
-        {name: "loan requests", id: "loanRequests", route: "loanRequest"},
-        {name: 'loan offers', id: 'loanOffers', route: "loanOffer"},
-        {name: 'loan disbursal', id: "loanDisbursal", route: 'loanDisbursal'},
-        {name: 'loan books', id: "loanBooks", route: "loanBook"},
+        {name: "Loan referrals", id: "loanReferrals", route: 'loan-referral'},
+        {name: "Loan requests", id: "loanRequests", route: "loan-request"},
+        {name: 'Loan offers', id: 'loanOffers', route: "loan-offer"},
+        {name: 'Loan disbursal', id: "loanDisbursal", route: 'loan-disbursal'},
+        {name: 'Loan books', id: "loanBooks", route: "loan-book"},
 
     ]
 
@@ -38,7 +38,7 @@ const SelectLoanTab = () => {
                 id="loanStatusBox"
                 data-testid="loanStatusBox"
                 style={{textTransform: 'none', color: 'black'}}
-                className={`py-1  flex place-self-center mr-auto ml-auto text-sm ${currentTab === index ? ` shadow ring-grey-100 ${styles.selectedLoan}` : ``}`}
+                className={` py-1 flex px-2 place-self-center mr-auto ml-auto text-sm ${currentTab === index ? `  rounded-md border px-2 border-[#e5e8ec] ${styles.selectedLoan}` : `text-black300`}`}
                 onClick={(event) => {
                     handleChange(event, index)
                 }}
@@ -46,7 +46,7 @@ const SelectLoanTab = () => {
                 <div
                     data-testid={name}
                     id={"loanStatusText"}
-                    className={`flex text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
+                    className={`flex gap-2 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
                 >{name}</div>
 
             </div>
@@ -57,13 +57,13 @@ const SelectLoanTab = () => {
         <div
             id="selectLoanTabContainer"
             data-testid="selectLoanContainer"
-            className={`flex bg-[#fafbfc] overflow-x-auto md:overflow-hidden  w-[98%] ml-1 mt-1 md:w-[55%] h-[9vh] md:h-[8vh] md:rounded rounded `}
+            className={` ${styles.tab} flex bg-[#fafbfc]   w-auto ml-1 mt-1 md:w-fit h-fit md:h-fit md:rounded-md rounded-md `}
         >
             {tabContent?.map((item, index) => (
                 <div
                     key={item?.name}
                     id={item.id}
-                    className={`flex place-self-center w-auto  md:h-auto md:px-2 md:w-auto ml-2 mr-2`}
+                    className={`flex place-self-center w-auto  md:h-auto md:px-2 md:w-auto `}
                 >
                     <MenuItem name={item.name} index={index}/>
                 </div>
