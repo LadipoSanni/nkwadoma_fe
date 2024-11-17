@@ -19,13 +19,15 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
-import SelectableTable from "@/reuseable/table/SelectedTable";
+import SelectableTable from "@/reuseable/table/SelectableTable";
 
 const CohortDetails = () => {
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [isEditOpen, setEditOpen] = React.useState(false);
     const [isReferred, setIsReferred] = React.useState(``);
     const [addTrainee, setAddTrainee] = React.useState(false);
+    const [isRowSelected, setIsRowSelected] = React.useState(false);
+
 
     const id = "1";
 
@@ -97,16 +99,21 @@ const CohortDetails = () => {
 
     const items = ["Referred", "Not referred"]
 
-    const handleSelected = ()=>{
-        setIsReferred()
+    const handleSelected = () => {
+        setIsReferred(isReferred)
     }
     const handleAddTrainee = () => {
         setAddTrainee(true)
     }
 
-    const handleRefer =()=>{
+    const handleRefer = () => {
 
     }
+    const handleRowClick = (row: any) => {
+        setIsRowSelected(isRowSelected);
+        console.log('Row clicked:', row);
+    };
+
     return (
         <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`}>
             <div className={` `}>
@@ -122,7 +129,7 @@ const CohortDetails = () => {
                 id={"detailsAndTraineeTab"}
                 data-test-id={"detailsAndTraineeTab"}
                 defaultValue={"details"}
-                className={`pt-1`}
+                className={`pt-3`}
             >
                 <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'}>
                     <TabsTrigger value="details"
@@ -150,34 +157,35 @@ const CohortDetails = () => {
                         </div>
                     </TabsContent>
 
-                    <TabsContent value={"trainee"} className={`mt-4 grid `}>
-                        <div className={`space-y-5`}>
+                    <TabsContent value={"trainee"}>
+                        <div className={`pb-4`}>
                             <div className={`flex md:flex-row flex-col md:justify-between`}>
-                                <div className={`flex md:flex-row gap-4`}>
-                                    <div className="max-w-md mx-auto">
+                                <div className={`flex md:flex-row gap-4 md:items-center`}>
+                                    <div className="max-w-md mx-auto ">
                                         <div className="relative">
                                             <div
                                                 className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                                 <MdSearch className="h-5 w-5 text-grey200"/>
                                             </div>
                                             <Input
-                                                className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10' type="search" required/>
+                                                className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
+                                                type="search" required/>
                                         </div>
                                     </div>
-                                    <div className='w-32'>
+                                    <div className='w-32 pt-2'>
                                         <CustomSelect value={isReferred} onChange={handleSelected}
                                                       selectContent={items}
-                                                      className={`w-10px w-full text-black  bg-neutral100 h-11 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
+                                                      className={` w-full text-black  bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
                                                       placeHolder={`referred`}/>
                                     </div>
                                 </div>
 
-                                <div className={`flex md:flex-row flex-col gap-4`}>
+                                <div className={`flex md:flex-row flex-col gap-4 md:items-center`}>
                                     <div className={`md:block hidden`}>
                                         <Button variant={"outline"}
                                                 size={"lg"}
                                                 className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
-                                                onClick={handleRefer}>Refer</Button>
+                                                onClick={handleRefer} disabled={!isRowSelected}>Refer</Button>
                                     </div>
                                     <div>
                                         <Button variant={"secondary"}
@@ -196,19 +204,17 @@ const CohortDetails = () => {
                             </div>
 
                             <div>
-
                                 <SelectableTable
                                     tableData={CohortTrainees}
                                     tableHeader={TraineeHeader}
-                                    staticHeader={'Trainee'}
-                                    staticColunm={'trainee'}
+                                    staticHeader={"Trainee"}
+                                    staticColunm={"trainee"}
                                     tableHeight={45}
                                     icon={MdOutlinePerson}
                                     sideBarTabName={"Trainee"}
-                                    handleRowClick={() => {
-                                    }}
+                                    handleRowClick={(row) => handleRowClick(row)}
                                     optionalRowsPerPage={10}
-                                    tableCellStyle={'h-12'}
+                                    tableCellStyle={"h-12"}
                                     enableRowSelection={true}
                                 />
                             </div>
