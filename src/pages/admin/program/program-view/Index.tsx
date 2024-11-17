@@ -77,7 +77,7 @@ const ProgramView = () => {
     const size = 10;
     
 
-    const { data,isLoading } = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true, })
+    const { data} = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true, })
     const [deleteItem] = useDeleteProgramMutation()
     const { data: searchResults } = useSearchProgramQuery(searchTerm, { skip: !searchTerm });
 

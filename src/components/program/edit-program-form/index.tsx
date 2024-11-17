@@ -38,7 +38,7 @@ type Props = {
 
 
 function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
-  const [updateProgram, { isLoading, isError, error }] = useUpdateProgramMutation();
+  const [updateProgram, { isLoading }] = useUpdateProgramMutation();
   const queryClient = useQueryClient();
 
     const initialFormValue = {
@@ -50,12 +50,12 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
         programDescription: programDetail?.programDescription,
     }
 
-    const [isButtonLoading] = useState(false);
+    // const [isButtonLoading] = useState(false);
     const maxChars = 1500;
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
     const programModes=["FULL_TIME", "PART_TIME"]
-    const programDurations=[1,3,4,5,6]
+    // const programDurations=[1,3,4,5,6]
 
     const validationSchema = Yup.object().shape({
       name: Yup.string()
