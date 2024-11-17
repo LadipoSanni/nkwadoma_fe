@@ -1,18 +1,10 @@
 "use client"
 import React from 'react';
-// import {Avatar} from "@mui/material";
-// import styles from "./SelectedLoan.module.css"
 import OrganizationImage from "@/reuseable/profile/Organization-image";
 import {cabinetGroteskRegular, inter} from "@/app/fonts";
 
 const OrganizationNameAndChangeButton = () => {
 
-    const [openInstitutionModal, setOpenInstitutionModal] = React.useState(false)
- 
-    const  handleOpenInstitutionModal = () => {
-        setOpenInstitutionModal(true) 
-        
-    }
     
 
     return (
@@ -24,7 +16,7 @@ const OrganizationNameAndChangeButton = () => {
             <div data-testid="organizationNameContainer" id="organizationNameContainer" className={`${cabinetGroteskRegular.className} flex `}>
                 AltSchool Africa
             </div>
-            <div id="changeOrganizationText" className={` ${inter.className} text-blue300 underline w-fit h-fit px-1 bg-blue500 rounded `}>Change</div>
+            <div id="changeOrganizationButton" data-testid={'changeOrganizationButton'} className={` ${inter.className} text-blue300 pt-0.5 underline w-fit h-fit md:text-xs md:font-light px-1 bg-blue500 rounded `}>Change</div>
         </div>
     );
 };
