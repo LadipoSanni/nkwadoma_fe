@@ -5,10 +5,14 @@ import OrganizationNameAndChangeButton from "@/components/selected-loan/Organiza
 
 describe("testing OrganizationNameAndChangeButton component", ()=> {
 
-    it('test that component renders', ()=> {
+
+    beforeEach(() => {
         render(
             <OrganizationNameAndChangeButton/>
         )
+    })
+
+    it('test that component renders', ()=> {
         const container = screen.getByTestId("OrganizationNameAndChangeButtonContainer");
         expect(container).toBeInTheDocument()
     })
@@ -20,10 +24,11 @@ describe("testing OrganizationNameAndChangeButton component", ()=> {
     //     expect(container).toBeInTheDocument()
     // })
     it('should ', () => {
-        render(
-            <OrganizationNameAndChangeButton/>
-        )
         const container = screen.getByTestId('organizationNameContainer')
         expect(container).toBeInTheDocument()
+    });
+    it('should contain change Organization Button', () => {
+        const button = screen.getByTestId('changeOrganizationButton')
+        expect(button).toBeInTheDocument()
     });
 })
