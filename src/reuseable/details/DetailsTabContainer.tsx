@@ -2,7 +2,6 @@
 import React from 'react';
 import {inter} from "@/app/fonts";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import Tables from "@/reuseable/table/LoanProductTable";
 import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import {MdOutlinePerson} from "react-icons/md";
 import {Breakdown} from "@/reuseable/details/breakdown";
