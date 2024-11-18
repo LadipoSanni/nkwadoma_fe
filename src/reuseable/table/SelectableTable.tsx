@@ -156,9 +156,10 @@ function SelectableTable<T extends TableRowData> ({
                                                 <TableHead>
                                                     <input
                                                         type="checkbox"
+                                                        id={`selectAll`}
                                                         checked={selectAll}
                                                         onChange={handleSelectAll}
-                                                        className="checkbox"
+                                                        className="bg-red-500"
                                                     />
                                                 </TableHead>
                                             )}
@@ -194,9 +195,10 @@ function SelectableTable<T extends TableRowData> ({
                                                     <TableCell>
                                                         <input
                                                             type="checkbox"
+                                                            id={`rowCheckBox`}
                                                             checked={selectedRows.has((page - 1) * rowsPerPage + rowIndex)}
                                                             onChange={() => handleRowSelect((page - 1) * rowsPerPage + rowIndex)}
-                                                            className="checkbox"
+                                                            className="bg-error500"
                                                         />
                                                     </TableCell>
                                                 )}
