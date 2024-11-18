@@ -27,7 +27,13 @@ describe('AllProgramsCard Component', () => {
     };
 
     it('renders the card component correctly', () => {
-        render(<AllProgramsCard tagButtonData={[]} dropdownOption={[]} {...props} />);
+        render(<AllProgramsCard onEdit={function (id: string): void {
+            throw new Error('Function not implemented.');
+        }} onDelete={function (id: string): void {
+            throw new Error('Function not implemented.');
+        }} handleCardDropDownClick={function (optionId: string): void {
+            throw new Error('Function not implemented.');
+        }} tagButtonData={[]} dropdownOption={[]} {...props} />);
 
         expect(screen.getByTestId('allProgramsCard')).toBeInTheDocument();
         expect(screen.getByTestId('title')).toHaveTextContent('Test Course');
@@ -37,7 +43,13 @@ describe('AllProgramsCard Component', () => {
     it('truncates the description and shows "...." when too long', () => {
         const longDescription = 'This is a very long description meant to test the truncation functionality...'.repeat(5);
 
-        render(<AllProgramsCard tagButtonData={[]} dropdownOption={[]} {...props} description={longDescription} />);
+        render(<AllProgramsCard onEdit={function (id: string): void {
+            throw new Error('Function not implemented.');
+        }} onDelete={function (id: string): void {
+            throw new Error('Function not implemented.');
+        }} handleCardDropDownClick={function (optionId: string): void {
+            throw new Error('Function not implemented.');
+        }} tagButtonData={[]} dropdownOption={[]} {...props} description={longDescription} />);
 
         expect(screen.getByTestId('description')).toHaveTextContent(longDescription.substring(0, 80));
 
@@ -54,7 +66,13 @@ describe('AllProgramsCard Component', () => {
             cohorts: 2,
         };
 
-        render(<AllProgramsCard tagButtonData={[]} dropdownOption={[]} {...props} />);
+        render(<AllProgramsCard onEdit={function (id: string): void {
+            throw new Error('Function not implemented.');
+        }} onDelete={function (id: string): void {
+            throw new Error('Function not implemented.');
+        }} handleCardDropDownClick={function (optionId: string): void {
+            throw new Error('Function not implemented.');
+        }} tagButtonData={[]} dropdownOption={[]} {...props} />);
 
         const readMoreButton = screen.getByTestId('readMore');
         expect(readMoreButton).toBeInTheDocument();
