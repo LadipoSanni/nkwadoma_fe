@@ -1,4 +1,5 @@
 import React from 'react';
+import {cabinetGroteskRegular} from "@/app/fonts";
 
 
 interface EmptyStateProps {
@@ -20,8 +21,8 @@ const LoanEmptyState: React.FC<EmptyStateProps> = ({title, description, icon, ic
             <footer id={'loanEmptyStateFooter'} data-testid="loanEmptyStateFooter"
                     className={`grid gap-2 `}
             >
-                <span id={`loanEmptyStateTitle`} data-testid={'loanEmptyStateTitle'} className={` mr-auto ml-auto text-sm text-black500 `}>{title}</span>
-                <span data-testid={'loanEmptyStateDescription'} id={'loanEmptyStateDescription'} className={` text-xs text-blue900 `}>{description}</span>
+                <span id={`loanEmptyStateTitle`} data-testid={'loanEmptyStateTitle'} className={` ${cabinetGroteskRegular.className} mr-auto ml-auto  text-black500 `}>{title}</span>
+                <span data-testid={'loanEmptyStateDescription'} id={'loanEmptyStateDescription'} className={` md:text-xs text-xs text-[#57595D] md:text-[#57595D] `}>{description}</span>
             </footer>
         </section>
     );

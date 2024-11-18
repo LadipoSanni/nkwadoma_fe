@@ -13,7 +13,7 @@ const SelectedLoan = ({children}: props) => {
                     <SelectedLoanHeader/>
                     <div id={'childrenOnLoan'}
                          data-testid={'childrenOnLoan'}
-                         className={` relative bottom-0 overflow-auto md:overflow-auto md:px-3 md:pt-1  md:bg-pink-50 md:w-full mr-auto ml-auto h-auto  w-[97%]  rounded `}
+                         className={` relative bottom-0 overflow-auto md:overflow-auto md:px-3 md:mt-4  md:w-full mr-auto ml-auto h-auto  w-[97%]  rounded `}
                     >
                         {children}
 
