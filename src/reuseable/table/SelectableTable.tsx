@@ -9,6 +9,7 @@ import {DotsVerticalIcon} from '@radix-ui/react-icons';
 import {Button} from '@/components/ui/button'
 import {Menubar, MenubarTrigger, MenubarContent, MenubarMenu, MenubarItem} from '@/components/ui/menubar'
 import TableEmptyState from '../emptyStates/TableEmptyState'
+import {Checkbox} from "@/components/ui/checkbox";
 
 
 interface ColumnProps<T> {
@@ -154,13 +155,26 @@ function SelectableTable<T extends TableRowData> ({
                                         >
                                             {enableRowSelection && (
                                                 <TableHead>
-                                                    <input
-                                                        type="checkbox"
-                                                        id={`selectAll`}
+                                                    <Checkbox
+                                                        id="selectAll"
                                                         checked={selectAll}
                                                         onChange={handleSelectAll}
-                                                        className="bg-red-500"
+                                                        className={`w-6 h-6 border-2 border-gray-400 rounded-sm ${
+                                                            selectAll ? 'bg-red-500' : 'bg-white'
+                                                        }`}
                                                     />
+
+                                                    {/*<Checkbox*/}
+                                                    {/*    type="checkbox"*/}
+                                                    {/*    id={`selectAll`}*/}
+                                                    {/*    checked={selectAll}*/}
+                                                    {/*    onChange={handleSelectAll}*/}
+                                                    {/*    className={`w-6 h-6 border-2 border-gray-400 rounded-sm ${*/}
+                                                    {/*        selectAll ? 'bg-red-500' : 'bg-white'*/}
+                                                    {/*    }`}*/}
+
+                                                    {/*    className={` border-2 border-white rounded-sm`}*/}
+                                                    {/*/>*/}
                                                 </TableHead>
                                             )}
                                             {
@@ -193,13 +207,22 @@ function SelectableTable<T extends TableRowData> ({
                                             >
                                                 {enableRowSelection && (
                                                     <TableCell>
-                                                        <input
-                                                            type="checkbox"
-                                                            id={`rowCheckBox`}
-                                                            checked={selectedRows.has((page - 1) * rowsPerPage + rowIndex)}
-                                                            onChange={() => handleRowSelect((page - 1) * rowsPerPage + rowIndex)}
-                                                            className="bg-error500"
+                                                        <Checkbox
+                                                            id="selectAll"
+                                                            checked={selectAll}
+                                                            onChange={handleSelectAll}
+                                                            className={`w-4 h-4 border-2 border-gray-400 rounded-sm ${
+                                                                selectAll ? 'bg-red-500' : 'bg-white'
+                                                            }`}
                                                         />
+
+                                                        {/*<input*/}
+                                                        {/*    type="checkbox"*/}
+                                                        {/*    id={`rowCheckBox`}*/}
+                                                        {/*    checked={selectedRows.has((page - 1) * rowsPerPage + rowIndex)}*/}
+                                                        {/*    onChange={() => handleRowSelect((page - 1) * rowsPerPage + rowIndex)}*/}
+                                                        {/*    className="bg-error500"*/}
+                                                        {/*/>*/}
                                                     </TableCell>
                                                 )}
                                                 {

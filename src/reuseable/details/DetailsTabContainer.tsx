@@ -6,6 +6,7 @@ import Tables from "@/reuseable/table/LoanProductTable";
 import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import {MdOutlinePerson} from "react-icons/md";
 import {Breakdown} from "@/reuseable/details/breakdown";
+import SelectableTable from "@/reuseable/table/SelectableTable";
 
 interface detailContainerProps {
     dataList?: { label: string; value: string; }[];
@@ -71,7 +72,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         <TabsContent value={"trainee"} id="trainee-content" data-testid="trainee-content"
                                      className={`py-3 w-full `}>
                             {isTable?
-                                <Tables
+                                <SelectableTable
                                 tableData={traineeData}
                                 tableHeader={ProgramHeader}
                                 staticHeader={'Trainee'}
@@ -83,6 +84,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                 }}
                                 optionalRowsPerPage={10}
                                 tableCellStyle={'h-12'}
+                                enableRowSelection={false}
                             />
                                 :
                                     <div

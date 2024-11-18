@@ -21,6 +21,11 @@ import CustomSelect from "@/reuseable/Input/Custom-select";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 import SelectableTable from "@/reuseable/table/SelectableTable";
 
+
+interface TableRowData {
+    [key: string]: string | number | null | React.ReactNode;
+}
+
 const CohortDetails = () => {
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [isEditOpen, setEditOpen] = React.useState(false);
@@ -109,7 +114,8 @@ const CohortDetails = () => {
     const handleRefer = () => {
 
     }
-    const handleRowClick = (row: any) => {
+
+    const handleRowClick = (row: TableRowData) => {
         setIsRowSelected(isRowSelected);
         console.log('Row clicked:', row);
     };
@@ -151,7 +157,7 @@ const CohortDetails = () => {
                             </div>
                             <div className={`md:w-6/12 pt-8 md:pt-0 h-[96%]`} id={`secondSection`}>
                                 <DetailsTabContainer dataList={dataList} breakDown={breakDown}
-                                                     tabTitle1={"cohort details"}
+                                                     tabTitle1={"cohort details"} isTable={false}
                                                      tabTitle2={"trainee"} useBreakdown={true}/>
                             </div>
                         </div>
