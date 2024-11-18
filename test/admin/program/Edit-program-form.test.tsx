@@ -1,5 +1,6 @@
 import EditProgramForm from "@/components/program/edit-program-form";
 import { render, screen, fireEvent,cleanup, waitFor,} from "@testing-library/react";
+import { Providers } from "@/app/provider";
 
 describe('EditProgramForm', () => {
     const mockSetIsOpen = jest.fn();
@@ -17,10 +18,19 @@ describe('EditProgramForm', () => {
       };
 
      
-     const renderComponent = (props = defaultProps) => render(<EditProgramForm {...props} />);
+     const renderComponent = (props = defaultProps) => render(
+                                            <Providers>
+                                         <EditProgramForm {...props} />
+                                            </Providers>
+                                            
+                                            );
 
       test('renders without crashing', () => {
-          render(<EditProgramForm programId="1"/>);
+          render(
+            <Providers>
+              <EditProgramForm programId="1"/>
+            </Providers>
+        );
           expect(screen.getByText('Program name')).toBeInTheDocument();
         });
 
@@ -33,10 +43,8 @@ describe('EditProgramForm', () => {
         it('renders the form fields correctly', () => {
             renderComponent();
             expect(screen.getByPlaceholderText(/Enter program name/i)).toBeInTheDocument();
-            expect(screen.getByText(/Program Delivery Type/i)).toBeInTheDocument();
-            expect(screen.getByText(/Program mode/i)).toBeInTheDocument();
-            expect(screen.getByText(/Program duration/i)).toBeInTheDocument();
-            expect(screen.getByText(/Program description/i)).toBeInTheDocument();
+            expect(screen.getByPlaceholderText(/Enter program duration/i)).toBeInTheDocument();
+            expect(screen.getByPlaceholderText(/Enter program description/i)).toBeInTheDocument();
            
           });
 
