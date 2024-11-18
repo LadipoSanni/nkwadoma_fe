@@ -83,7 +83,7 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
                     </DialogClose>
                 </DialogHeader>
                 <form id="cohortForm"
-                      className={`grid gap-5 ${inter.className} pr-2 overflow-y-auto overflow-x-hidden max-h-[500px]`}
+                      className={`grid gap-5 ${inter.className} pr-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`}
                       style={{scrollbarGutter: 'stable both-edge'}}>
                     {!isFormSubmitted ? (
                             <>

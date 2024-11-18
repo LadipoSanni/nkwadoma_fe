@@ -1,5 +1,5 @@
 import React from 'react';
-import {LoanApplicationDetails} from "@/components/onboarding";
+import LoanApplicationDetails from "@/components/onboarding/loanApplicationDetails/Index";
 
 const Page = () => {
     return (
