@@ -115,11 +115,11 @@ const CohortDetails = () => {
     };
 
     return (
-        <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`}>
-            <div className={` `}>
+        <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
+            <div className={` `} id={   `backClickContainer`}>
                 <div className={`flex py-2 space-x-1 text-meedlBlue`} id={`backClick`}
                      data-testid={`backClick `}>
-                    <BiArrowBack className={`mt-1 cursor-pointer`}/>
+                    <BiArrowBack className={`mt-1 cursor-pointer`} id={ `backClickIcon`}/>
                     <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
                         onClick={handleBackClick}>Back to cohort</h1>
                 </div>
@@ -131,17 +131,17 @@ const CohortDetails = () => {
                 defaultValue={"details"}
                 className={`pt-3`}
             >
-                <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'}>
+                <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'} id={`tabsList`}>
                     <TabsTrigger value="details"
-                                 className={'py-1 px-2 gap-1 items-center rounded-md'}>Details</TabsTrigger>
+                                 className={'py-1 px-2 gap-1 items-center rounded-md'} id={`tabsTrigger1`}>Details</TabsTrigger>
                     <TabsTrigger value="trainee"
-                                 className={'py-1 px-2 gap-1 items-center rounded-md'}>Trainees</TabsTrigger>
+                                 className={'py-1 px-2 gap-1 items-center rounded-md'} id={`tabsTrigger2`}>Trainees</TabsTrigger>
                 </TabsList>
 
-                <div>
-                    <TabsContent value="details" className={'mt-4'}>
-                        <div className={`py-1 flex md:flex-row flex-col md:justify-between`}>
-                            <div>
+                <div id={`tabsContentDiv`}>
+                    <TabsContent value="details" className={'mt-4'} id={`tabsContent`}>
+                        <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
+                            <div id={`firstSection`}>
                                 <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
                                                      cohortDescription={description}
                                                      dropdownOption={program1Options}
@@ -149,7 +149,7 @@ const CohortDetails = () => {
                                                      buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
                                                      isEditButton={false}/>
                             </div>
-                            <div className={`md:w-6/12 pt-8 md:pt-0 h-[96%]`}>
+                            <div className={`md:w-6/12 pt-8 md:pt-0 h-[96%]`} id={`secondSection`}>
                                 <DetailsTabContainer dataList={dataList} breakDown={breakDown}
                                                      tabTitle1={"cohort details"}
                                                      tabTitle2={"trainee"} useBreakdown={true}/>
@@ -157,22 +157,22 @@ const CohortDetails = () => {
                         </div>
                     </TabsContent>
 
-                    <TabsContent value={"trainee"}>
-                        <div className={`pb-4`}>
-                            <div className={`flex md:flex-row flex-col md:justify-between`}>
-                                <div className={`flex md:flex-row gap-4 md:items-center`}>
-                                    <div className="max-w-md mx-auto ">
-                                        <div className="relative">
+                    <TabsContent value={"trainee"} id={`traineeId`}>
+                        <div className={`pb-4`} id={`searchReferAddTraineeAndTable`}>
+                            <div className={`flex md:flex-row flex-col md:justify-between`} id={`searchReferAndAddTrainee`}>
+                                <div className={`flex md:flex-row gap-4 md:items-center items-center`} id={`searchId`}>
+                                    <div className="max-w-md mx-auto" id={`searchInput`}>
+                                        <div className="relative" id={`searchDiv`}>
                                             <div
-                                                className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none" id={`searchIcon`}>
                                                 <MdSearch className="h-5 w-5 text-grey200"/>
                                             </div>
                                             <Input
                                                 className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
-                                                type="search" required/>
+                                                type="search" id={`search`} required/>
                                         </div>
                                     </div>
-                                    <div className='w-32 pt-2'>
+                                    <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
                                         <CustomSelect value={isReferred} onChange={handleSelected}
                                                       selectContent={items}
                                                       className={` w-full text-black  bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
@@ -180,20 +180,20 @@ const CohortDetails = () => {
                                     </div>
                                 </div>
 
-                                <div className={`flex md:flex-row flex-col gap-4 md:items-center`}>
-                                    <div className={`md:block hidden`}>
+                                <div className={`flex md:flex-row flex-col gap-4 md:items-center`} id={`ReferAndTraineeDiv`}>
+                                    <div className={`md:block hidden`} id={`largerScreenReferButton`}>
                                         <Button variant={"outline"}
                                                 size={"lg"}
                                                 className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
                                                 onClick={handleRefer} disabled={!isRowSelected}>Refer</Button>
                                     </div>
-                                    <div>
+                                    <div id={`addTraineeButton`}>
                                         <Button variant={"secondary"}
                                                 size={"lg"}
                                                 className={`bg-meedlBlue text-meedlWhite w-full h-12 flex justify-center items-center`}
                                                 onClick={handleAddTrainee}>Add Trainee</Button>
                                     </div>
-                                    <div className={`md:hidden block`}>
+                                    <div className={`md:hidden block`} id={ `smallScreenReferButton`}>
                                         <Button variant={"outline"}
                                                 size={"lg"}
                                                 className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
@@ -203,12 +203,12 @@ const CohortDetails = () => {
                                 </div>
                             </div>
 
-                            <div>
+                            <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
                                 <SelectableTable
                                     tableData={CohortTrainees}
                                     tableHeader={TraineeHeader}
                                     staticHeader={"Trainee"}
-                                    staticColunm={"trainee"}
+                                    staticColunm={"Trainee"}
                                     tableHeight={45}
                                     icon={MdOutlinePerson}
                                     sideBarTabName={"Trainee"}
@@ -225,7 +225,7 @@ const CohortDetails = () => {
                 </div>
 
             </Tabs>
-            <div>
+            <div id={`deleteModal`}>
                 <TableModal
                     isOpen={isDeleteOpen}
                     closeModal={() => setIsDeleteOpen(false)}
@@ -238,7 +238,7 @@ const CohortDetails = () => {
                 </TableModal>
             </div>
 
-            <div className={`md:max-w-sm w-full`}>
+            <div className={`md:max-w-sm w-full`} id={`editCohortModal`}>
                 <TableModal
                     isOpen={isEditOpen}
                     closeModal={() => setEditOpen(false)}
@@ -250,7 +250,7 @@ const CohortDetails = () => {
                 </TableModal>
             </div>
 
-            <div className={`md:max-w-sm w-full`}>
+            <div className={`md:max-w-sm w-full`} id={`AddTraineeDiv`}>
                 <TableModal
                     isOpen={addTrainee}
                     closeModal={() => setAddTrainee(false)}
