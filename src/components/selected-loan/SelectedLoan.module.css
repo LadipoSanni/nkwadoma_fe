@@ -1,13 +1,19 @@
+.tab{
+    display: flex;
+    grid-template-columns: max-content;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+
 .selectedLoan{
     display: flex;
     width: auto;
-    height:33px;
-    padding: 8px 12px 8px 12px;
-    border: 1px solid #dbdfe6;
-    border-radius: 5px ;
+    height:auto;
     background-color: #FFFFFF;
-    font-weight: bold;
-    color: #101828;
+    /*font-weight: bold;*/
+    color: black;
 }
 .filter{
     font-size: 14px;

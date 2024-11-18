@@ -17,6 +17,7 @@ const config: Config = {
   			blue200: '#939CB0',
   			blue300: '#626F8C',
   			blue400: '#435376',
+			blue500: '#D9EAFF',
   			meedlBlue: '#142854',
   			blue600: '#12244C',
   			labelBlue: '#101828',
