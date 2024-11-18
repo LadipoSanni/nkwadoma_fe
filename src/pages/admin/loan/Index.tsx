@@ -39,7 +39,7 @@ function ViewAllLoanRequest() {
 
     return (
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`} 
-        className={`grid md:py-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
+        className={`grid md:bg-pink-300 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {
                 loanRequestData.length > 0 ?
