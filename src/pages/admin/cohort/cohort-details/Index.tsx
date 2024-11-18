@@ -157,7 +157,7 @@ const CohortDetails = () => {
                             </div>
                             <div className={`md:w-6/12 pt-8 md:pt-0 h-[96%]`} id={`secondSection`}>
                                 <DetailsTabContainer dataList={dataList} breakDown={breakDown}
-                                                     tabTitle1={"cohort details"} isTable={false}
+                                                     tabTitle1={"cohort details"} isTable={true}
                                                      tabTitle2={"trainee"} useBreakdown={true}/>
                             </div>
                         </div>
