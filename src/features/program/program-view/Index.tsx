@@ -94,8 +94,10 @@ const ProgramView = () => {
         [key: string]: string | number | null | React.ReactNode;
     }
 
-    const handleRowClick = () => {
+    const handleRowClick = (row: TableRowData) => {
         router.push('/program/details')
+        console.log('The row: ',row)
+
        
     }
 
