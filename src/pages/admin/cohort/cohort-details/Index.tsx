@@ -155,7 +155,7 @@ const CohortDetails = () => {
                                                      buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
                                                      isEditButton={false}/>
                             </div>
-                            <div className={`md:w-6/12 pt-8 md:pt-0 h-[96%]`} id={`secondSection`}>
+                            <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
                                 <DetailsTabContainer dataList={dataList} breakDown={breakDown}
                                                      tabTitle1={"cohort details"} isTable={true}
                                                      tabTitle2={"trainee"} useBreakdown={true}/>
