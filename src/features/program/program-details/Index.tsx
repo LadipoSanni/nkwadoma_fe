@@ -24,7 +24,7 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import EditProgramForm from "@/components/program/edit-program-form";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
 // import { useSearchParams } from 'next/navigation';
-import { useGetProgramByIdQuery } from "@/service/admin/program_query";
+// import { useGetProgramByIdQuery } from "@/service/admin/program_query";
 
 
 
