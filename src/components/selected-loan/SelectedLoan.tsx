@@ -10,12 +10,10 @@ const SelectedLoan = ({children}: props) => {
     return (
         <div>
             <div id={'selectedLoanLayout'} className={` ${styles.layout} grid absolute gap-1 h-[100%] w-[100%] md:h-[100%] md:w-[100%] `}>
-                {/*<div id={'selectedLoanContainer'}*/}
-                {/*     className={` grid gap-2 `}>*/}
                     <SelectedLoanHeader/>
                     <div id={'childrenOnLoan'}
                          data-testid={'childrenOnLoan'}
-                         className={`bg-pink-50 relative bottom-0 overflow-auto md:overflow-auto md:px-2  md:bg-pink-50 md:w-full mr-auto ml-auto h-auto  w-[97%]  rounded `}
+                         className={` relative bottom-0 overflow-auto md:overflow-auto md:px-3 md:pt-1  md:bg-pink-50 md:w-full mr-auto ml-auto h-auto  w-[97%]  rounded `}
                     >
                         {children}
 

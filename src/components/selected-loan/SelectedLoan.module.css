@@ -9,7 +9,7 @@
 .layout{
     display: grid;
     /*gap: ;*/
-    grid-auto-rows: 30% 69%;
+    grid-auto-rows: 30% 70%;
 }
 .selectedLoan{
     display: flex;

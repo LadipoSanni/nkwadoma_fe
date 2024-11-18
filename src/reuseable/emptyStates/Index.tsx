@@ -4,30 +4,24 @@ import React from 'react';
 interface EmptyStateProps {
     title: string,
     description: string,
+    icon: string|React.ReactElement| JSX.Element,
+    iconBg: string,
 }
 
-const LoanEmptyState: React.FC<EmptyStateProps> = ({title, description}) => {
-    const blocks = [
-        {borderColor: '#D0D5DD'},
-        {borderColor: '#0D9B48'},
-        {borderColor: '#D0D5DD'}
-    ];
-
+const LoanEmptyState: React.FC<EmptyStateProps> = ({title, description, icon, iconBg}) => {
 
     return (
-        <section data-testid="loanEmptyState" id={`loanEmptyState`} className="flex flex-col justify-center items-center gap-8 h-fit">
-            <article data-testid="emptyStateBlocks" id={`emptyStateBlocks`} className="grid gap-4 place-content-center">
-jikuhiojoiijiojojojoi
+        <section data-testid="loanEmptyState" id={`loanEmptyState`} className="grid md:grid justify-center items-center w-fit md:w-fit md:h-fit gap-8 h-fit">
+            <article
+                style={{backgroundColor: iconBg}}
+                data-testid="emptyStateBlocks" id={`emptyStateBlocks`} className={`grid place-items-center gap-4 h-[6rem] w-[6rem] md:h-[6rem] md:w-[6rem] rounded-full mr-auto ml-auto bg-${iconBg} place-content-center`}>
+                {icon}
             </article>
-            <footer data-testid="emptyStateFooter" id={`emptyStateFooter`} className="grid place-content-center gap-3 h-fit w-fit">
-                <h1 data-testid="emptyStateTitle" id={`emptyStateTitle`}
-                    className="text-xs text-center font-['IBM_Plex_Sans'] font-medium leading-[1.2] text-[#101828]">
-                    {title.toLowerCase()}
-                </h1>
-                <p data-testid="emptyStateDescription" id={`emptyStateDescription`}
-                   className="text-[0.875rem] text-center font-['IBM_Plex_Sans'] font-normal leading-[1.2] text-[#57595D]">
-                    {description}
-                </p>
+            <footer id={'loanEmptyStateFooter'} data-testid="loanEmptyStateFooter"
+                    className={`grid gap-2 `}
+            >
+                <span id={`loanEmptyStateTitle`} data-testid={'loanEmptyStateTitle'} className={` mr-auto ml-auto text-sm text-black500 `}>{title}</span>
+                <span data-testid={'loanEmptyStateDescription'} id={'loanEmptyStateDescription'} className={` text-xs text-blue900 `}>{description}</span>
             </footer>
         </section>
     );

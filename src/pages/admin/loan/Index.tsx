@@ -3,6 +3,7 @@
 import React from "react";
 import {LoanRequestTable} from "@/utils/LoanRequestMockData/Index"
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
+import {Icon} from "@iconify/react";
 // import DynamicTable from "@/reuseable/table/LoanProductTable";
 
 
@@ -35,12 +36,16 @@ function ViewAllLoanRequest() {
 
     return (
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`} 
-        className={`flex flex-col h-full `}
+        className={`grid place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {/*{*/}
             {/*    LoanRequestTable.length < 1 ?*/}
             {/*        <div data-testid={`emptyStateDiv`}>*/}
-                        <LoanEmptyState title={'Loan request will show here'} description={`There are no loan requests available yet`} />
+            <LoanEmptyState icon={<Icon icon="material-symbols:money-bag-outline"
+                                        height={"2rem"}
+                                        width={"2em"}
+                                        color={'#142854'}
+            ></Icon >} iconBg={'#D9EAFF'} title={'Loan request will show here'} description={`There are no loan requests available yet`} />
                     {/*</div>*/}
 
             {/*}*/}
