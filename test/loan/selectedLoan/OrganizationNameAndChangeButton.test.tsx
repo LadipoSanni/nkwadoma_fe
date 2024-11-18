@@ -1,6 +1,6 @@
 import "@testing-library/react"
 import {render, screen} from "@testing-library/react";
-import OrganizationNameAndChangeButton from "@/components/selectedLoan/OrganizationNameAndChangeButton";
+import OrganizationNameAndChangeButton from "@/components/selected-loan/OrganizationNameAndChangeButton";
 
 
 describe("testing OrganizationNameAndChangeButton component", ()=> {
