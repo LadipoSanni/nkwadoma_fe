@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import LoanApplicationDetails from '@/components/onboarding/loanApplicationDetails/Index';
+import LoanApplicationDetails from '@/features/onboarding/stepContent/loanApplicationDetails/Index';
 
 describe('LoanApplicationDetails', () => {
     it('renders the header correctly', () => {
