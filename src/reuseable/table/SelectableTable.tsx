@@ -159,7 +159,7 @@ function SelectableTable<T extends TableRowData> ({
                                                         id={`selectAll`}
                                                         checked={selectAll}
                                                         onChange={handleSelectAll}
-                                                        className="bg-red-500"
+                                                        className={`border-2 border-[#D7D7D7] rounded-md`}
                                                     />
                                                 </TableHead>
                                             )}
@@ -198,7 +198,7 @@ function SelectableTable<T extends TableRowData> ({
                                                             id={`rowCheckBox`}
                                                             checked={selectedRows.has((page - 1) * rowsPerPage + rowIndex)}
                                                             onChange={() => handleRowSelect((page - 1) * rowsPerPage + rowIndex)}
-                                                            className="bg-error500"
+                                                            className={`border-2 border-[#D7D7D7] rounded-md`}
                                                         />
                                                     </TableCell>
                                                 )}
@@ -292,7 +292,7 @@ function SelectableTable<T extends TableRowData> ({
                                                         type="checkbox"
                                                         checked={selectAll}
                                                         onChange={handleSelectAll}
-                                                        className="checkbox"
+                                                        className={`border-2 border-[#D7D7D7] rounded-md`}
                                                     />
                                                 </TableHead>
                                             )}
@@ -364,7 +364,7 @@ function SelectableTable<T extends TableRowData> ({
                                                                 type="checkbox"
                                                                 checked={selectedRows.has((page - 1) * rowsPerPage + rowIndex)}
                                                                 onChange={() => handleRowSelect((page - 1) * rowsPerPage + rowIndex)}
-                                                                className="checkbox"
+                                                                className={`border-2 border-[#D7D7D7] rounded-md`}
                                                             />
                                                         </TableCell>
                                                     )}
