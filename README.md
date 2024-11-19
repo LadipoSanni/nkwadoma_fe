@@ -28,6 +28,7 @@ This will start keycloak on http://localhost:8082, username is "admin" and passw
 -login with the username provided in the docker compose file
 -create the realm = nkwadoma
 -create the client = nkwadoma-client
+-while creating the client switch the client authentication on.
 -navigate to the created nkwadoma realm, click on it.
 -navigate to the client you created and click, on the tabs you'd see a tab for credentials bar, click on it.
 -in this credentials there's a hidden client secret, copy this secret
