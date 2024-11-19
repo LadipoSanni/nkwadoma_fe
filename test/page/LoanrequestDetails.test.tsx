@@ -23,4 +23,12 @@ describe("test loan request details page component", ()=> {
         const component = screen.getByTestId("loanRequestDetails")
         expect(component).toBeInTheDocument()
     })
+
+    test("must contain user  profile picture and details component", ()=> {
+        const userImage = screen.getByTestId("loanRequestDetailsComponent")
+        const component = screen.getByTestId('ImageComponentOnLoanRequestDetails')
+        expect(userImage).toBeInTheDocument()
+        expect(component).toBeInTheDocument()
+
+    })
 })
