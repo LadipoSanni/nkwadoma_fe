@@ -1,9 +1,9 @@
 import React from 'react';
-import ViewAllLoanRequest from "@/pages/admin/loan/Index";
+import LoanDetails from "../../../pages/admin/loan-request-details";
 
 const Page = () => {
     return (
-            <ViewAllLoanRequest/>
+        <LoanDetails/>
     );
 };
 

@@ -2,10 +2,10 @@
 import React from 'react';
 import {inter} from "@/app/fonts";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import Tables from "@/reuseable/table/LoanProductTable";
 import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import {MdOutlinePerson} from "react-icons/md";
 import {Breakdown} from "@/reuseable/details/breakdown";
+import Tables from "@/reuseable/table/LoanProductTable";
 
 interface detailContainerProps {
     dataList?: { label: string; value: string; }[];
@@ -50,7 +50,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         <TabsContent value={"trainee-details-mock-data"} id="cohort-details-content"
                                      data-testid="cohort-details-content" className={`py-2`}>
                             <div
-                                className="bg-[#F9F9F9] px-5 md:h-[450px] w-full h-96 py-2 overflow-y-auto rounded-sm">
+                                className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
@@ -76,7 +76,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                 tableHeader={ProgramHeader}
                                 staticHeader={'Trainee'}
                                 staticColunm={'trainee'}
-                                tableHeight={51}
+                                tableHeight={41.5}
                                 icon={MdOutlinePerson}
                                 sideBarTabName={"Trainee"}
                                 handleRowClick={() => {
@@ -86,7 +86,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                             />
                                 :
                                     <div
-                                        className="bg-[#F9F9F9] px-5 w-full h-96 p-5 overflow-y-auto rounded-sm">
+                                        className="bg-[#F9F9F9] px-5 w-full py-2 overflow-y-auto rounded-sm">
                                         {isNotTableDataList?.map((item, index) => (
                                             <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                                  key={index}
