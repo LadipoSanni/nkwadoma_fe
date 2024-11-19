@@ -1,28 +1,29 @@
-After cloning this project, please run docker-compose up --build to initialize the Docker containers. This command will automatically spin up:
+After cloning this project, run this command in your terminal: 
+  Set-ExecutionPolicy RemoteSigned -Scope CurrentUser ./InstallAWSCLI.ps1
 
+please run docker-compose up --build to initialize the Docker containers. This command will automatically spin up
 Dockerized Postgres database
 Keycloak server
-sonarqube for code quality check
 Nkwadoma Backend application
-This ensures a seamless development environment. Thank you!
-
-If you already are on the project and you need to develop and run locally, Pull the new code from the VCS, and please run docker-compose up --build to initialize the Docker containers. This command will automatically spin up:
-Dockerized Postgres database
-Keycloak server
-sonarqube for code quality check
-Nkwadoma Backend application
-To pull the Nkwadoma Backend Apllication:
-You'll need to Run these commands:
-aws configure (PS : You need to have aws cli configured on your local machine to run this command, if you don't have please download and install);
-which prompts you to input these credentials to connect to the AWS Account 
-a1. AWS Access Key ID :
-a2. AWS Secret Access Key =
-a3. Default region name =
-a4. Default output format =
-PS : these credentials will be provided by the Cloud Team.
-aws ecr get-login-password --region us-east-1  
-docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
-There are other service included in the docker-compose.yml file, Which include the postgres DB, sonarqube, and one of them is keycloak.
-The keycloak will run on the port specified in the docker-compose file. you can copy this link and paste in your browser, login into the keycloak ui,
-navigate to the realm of the nkwadoma application, then navigate to the credentials then copy the client secret and paste it in your text editor for use when required.
-This ensures a seamless development environment. Thank you!
+PS: The backend application will exit at first docker compose up run, and you'll need the keycloak server up and running to restart it.
+The keycloak server will run on http//localhost:8082
+-go to your browser and paste the keycloak url http//localhost:8082
+-login with the username provided in the docker compose file
+-create the realm = nkwadoma
+-create the client = nkwadoma-client
+-navigate to the created nkwadoma realm, click on it.
+-navigate to the the credentials bar, click on it.
+-in this credentails there's a hidden client secret, copy this secret
+-go back to your project, and open the .env file.
+-there are 2 keys:
+KEYCLOAK_CLIENT_ID
+KEYCLOAK_CLIENT_SECRET
+-paste the copied client secret as the value for the KEYCLOAK_CLIENT_SECRET, and copy the client id and paste as the value for KEYCLOAK_CLIENT_ID
+After followiwng the above instructions, run docker-compose up -d backend to restart the backend application.
+PS: please stop any application running on this port 8081.
+The backend application will run on http//localhost:8081. 
+The swagger ui will run the backend APIs on http://localhost:8081/swagger-ui/index.html#/
+-Try the application health endpoint http://localhost:8081/actuator/health to check the backend app health
+ you will get a json response with "UP" 
+This ensures a seamless development environment.
+You can start your local developmment.  Thank you!!
