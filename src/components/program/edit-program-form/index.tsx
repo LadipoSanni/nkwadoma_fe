@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React from 'react'
 import { Formik,Form,Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup';
 import {inter} from "@/app/fonts"
@@ -8,40 +8,64 @@ import { Button } from '@/components/ui/button';
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
 import CustomSelect from '@/reuseable/Input/Custom-select';
+import { useUpdateProgramMutation } from '@/service/admin/program_query';
+import { useQueryClient } from '@tanstack/react-query';
+
+interface ProgramDetail {
+    id: string;
+    programDescription: string;
+    name: string;
+    durationType: string;
+    programStartDate: string;
+    duration: number;
+    mode: string;
+    deliveryType: string;
+    totalAmountRepaid: number;
+    totalAmountDisbursed: number;
+    totalAmountOutstanding: number;
+}
+
+
+
 
 
 type Props = {
     programId : string;
    setIsOpen? : (e:boolean) => void;
+   programDetail?: ProgramDetail
 }
 
-function EditProgramForm({programId,setIsOpen}: Props) {
+
+
+function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
+  const [updateProgram, { isLoading }] = useUpdateProgramMutation();
+  const queryClient = useQueryClient();
 
     const initialFormValue = {
-        programId: programId,
-        programName: 'New Program',
-        programDeliveryType: 'Full Time',
-        programMode: 'Online',
-        programDuration: '3years',
-        programDescription: 'This is a new program',
+        id: programDetail?.id,
+        name: programDetail?.name,
+        deliveryType: programDetail?.deliveryType,
+        mode: programDetail?.mode,
+        duration: programDetail?.duration,
+        programDescription: programDetail?.programDescription,
     }
 
-    const [isLoading] = useState(false);
+    // const [isButtonLoading] = useState(false);
     const maxChars = 1500;
 
-    const programDeliveryTypes = ["Full Time", "Part Time"];
-    const programModes=["Online", "Physical"]
-    const programDurations=["3years", "4years"]
+    const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
+    const programModes=["FULL_TIME", "PART_TIME"]
+    // const programDurations=[1,3,4,5,6]
 
     const validationSchema = Yup.object().shape({
-      programName: Yup.string()
+      name: Yup.string()
        .trim()
       .required('Program name is required'),
-      programDeliveryType:Yup.string()
+      deliveryType:Yup.string()
       .required('Program delivery type is required'),
-      programMode:Yup.string()
+      mode:Yup.string()
       .required('Program Mode is required'),
-      programDuration:  Yup.string()
+      duration:  Yup.string()
       .required('Program duration is required'),
       programDescription: Yup.string()
        .trim()
@@ -62,14 +86,26 @@ function EditProgramForm({programId,setIsOpen}: Props) {
         }
       }
     
-  function handleSubmit(values: typeof initialFormValue) {
-    console.log(values);
-    toastPopUp.showToast();
-    if (setIsOpen) {
-      setIsOpen(false);
+    async function handleSubmit  (values: typeof initialFormValue) {
+    // console.log(values);
+    // toastPopUp.showToast();
+    // if (setIsOpen) {
+    //   setIsOpen(false);
+    // }
+    try {
+      await updateProgram({ id:programId, data: values }).unwrap();
+     queryClient.invalidateQueries({ queryKey: ['program'] });
+      toastPopUp.showToast();
+      if (setIsOpen) {
+        setIsOpen(false);
+      }
+    } catch (err) {
+      console.error('Failed to update program:', err);
     }
-   
   }
+
+   
+   
 
   return (
     <div>
@@ -89,14 +125,14 @@ function EditProgramForm({programId,setIsOpen}: Props) {
                   <Label htmlFor="programName">Program name</Label>
                   <Field
                   id="programName"
-                  name="programName"
+                  name="name"
                   className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
                   placeholder="Enter program name"
                   /> 
                   {
-                    errors.programName && touched.programName &&  (
+                    errors.name && touched.name &&  (
                        <ErrorMessage
-                    name="programName"
+                    name="name"
                     component="div"
                     className="text-red-500 text-sm"
                     />
@@ -109,15 +145,15 @@ function EditProgramForm({programId,setIsOpen}: Props) {
                   
                     <CustomSelect
                       selectContent={programDeliveryTypes}
-                      value={values.programDeliveryType} 
-                      onChange={(value) => setFieldValue("programDeliveryType", value)} 
-                      name="programDeliveryType"
+                      value={values.deliveryType} 
+                      onChange={(value) => setFieldValue("deliveryType", value)} 
+                      name="deliveryType"
                       placeHolder='Select a program Delivery Type'
                     />
                      {
-                    errors.programDeliveryType && touched.programDeliveryType &&  (
+                    errors.deliveryType && touched.deliveryType &&  (
                        <ErrorMessage
-                    name="programDeliveryType"
+                    name="deliveryType"
                     component="div"
                     className="text-red-500 text-sm"
                     />
@@ -129,36 +165,44 @@ function EditProgramForm({programId,setIsOpen}: Props) {
                     <Label htmlFor="programMode">Program mode</Label>
                     <CustomSelect
                       selectContent={programModes}
-                      value={values.programMode} 
-                      onChange={(value) => setFieldValue("programMode", value)} 
-                      name="programMode"
+                      value={values.mode} 
+                      onChange={(value) => setFieldValue("mode", value)} 
+                      name="mode"
                       placeHolder='Select a program Mode'
                      
                     />
                      {
-                    errors.programMode && touched.programMode &&  (
+                    errors.mode && touched.mode &&  (
                        <ErrorMessage
-                    name="programMode"
+                    name="mode"
                     component="div"
                     className="text-red-500 text-sm"
                     />
                     )
                    }
                   </div>
-                   <div>
-                    <Label htmlFor="programDuration">Program duration</Label>
-                    <CustomSelect
+                   <div className='md:mt-1'>
+                    <Label htmlFor="duration">Program duration</Label>
+                    {/* <CustomSelect
                       selectContent={programDurations}
-                      value={values.programDuration} 
-                      onChange={(value) => setFieldValue("programDuration", value)} 
-                      name="programDuration"
+                      value={values.duration} 
+                      onChange={(value) => setFieldValue("duration", value)} 
+                      name="duration"
                       placeHolder='Select a program Duration'
                      
-                    />
+                    /> */}
+                      <Field
+                        id="duration"
+                        name="duration"
+                        type="number"
+                        className="w-full p-3 md:h-[3.2rem] border rounded focus:outline-none mt-2 text-sm"
+                        placeholder="Enter program duration"
+                        /> 
+
                      {
-                    errors.programDuration && touched.programDuration &&  (
+                    errors.duration && touched.duration &&  (
                        <ErrorMessage
-                    name="programDuration"
+                    name="duration"
                     component="div"
                     className="text-red-500 text-sm"
                     />
