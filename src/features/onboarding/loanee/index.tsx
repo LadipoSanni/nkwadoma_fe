@@ -4,9 +4,7 @@ import { cabinetGrotesk, inter } from '@/app/fonts';
 import Connector from "@/components/common/Connector";
 import { Button } from "@/components/ui/button";
 import StepContent from '@/features/onboarding/stepContent/Index';
-
-
-
+import SmartCameraWrapper from '@/components/SmartCameraWrapper/Index';
 
 const steps = [
     'Loan application details',
@@ -15,8 +13,50 @@ const steps = [
     'Confirm loan application'
 ];
 
+interface PublishData {
+    partner_params: {
+        libraryVersion: string;
+        permissionGranted: boolean;
+    };
+    images: {
+        file: string;
+        image_type_id: number;
+        image: string;
+    }[];
+}
+
 const LoaneeOnboarding = () => {
     const [currentStep, setCurrentStep] = useState(0);
+    const [showCamera, setShowCamera] = useState(false);
+
+    const handlePublish = async (data: PublishData) => {
+        try {
+            const response = await postContent(data);
+            console.log('Liveness check result:', response);
+            setCurrentStep((prevStep) => (prevStep + 1) % steps.length);
+            setShowCamera(false);
+        } catch (error) {
+            console.error('Liveness check failed:', error);
+        }
+    };
+
+    const postContent = async (data: PublishData) => {
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        };
+
+        try {
+            const response = await fetch("/", options);
+            const json = await response.json();
+            return json;
+        } catch (e) {
+            throw e;
+        }
+    };
 
     return (
         <div id="loanApplicationDetailsContainer"
@@ -53,9 +93,10 @@ const LoaneeOnboarding = () => {
                         {currentStep === 3 && 'Confirm loan referral acceptance'}
                     </h2>
                     <StepContent step={currentStep}/>
+                    {currentStep === 1 && showCamera && <SmartCameraWrapper onPublish={handlePublish} onClose={() => setShowCamera(false)} />}
                     <Button id="continueButton"
                             className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem]  hover:bg-meedlBlue focus:bg-meedlBlue'}
-                            onClick={() => setCurrentStep((prevStep) => (prevStep + 1) % steps.length)}>
+                            onClick={() => currentStep === 1 ? setShowCamera(true) : setCurrentStep((prevStep) => (prevStep + 1) % steps.length)}>
                         {currentStep === 1 ? 'Start identity verification' : 'Continue'}
                     </Button>
                 </section>
