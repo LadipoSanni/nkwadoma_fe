@@ -1,11 +1,12 @@
 'use client'
 import React, { useState } from 'react';
-// import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { cabinetGrotesk, inter } from '@/app/fonts';
 import Connector from "@/components/common/Connector";
 import { Button } from "@/components/ui/button";
-// import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import StepContent from '@/features/onboarding/stepContent/Index';
+
+
+
 
 const steps = [
     'Loan application details',
@@ -15,7 +16,6 @@ const steps = [
 ];
 
 const LoaneeOnboarding = () => {
-    // const [isOpen, setIsOpen] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
 
     return (
@@ -32,9 +32,13 @@ const LoaneeOnboarding = () => {
                     {
                         steps.map((step, index) => (
                             <div key={index} id={`loanApplicationStep${index}`} className={'flex gap-2'}>
-                                <Connector showLine={index < steps.length - 1}/>
+                                <Connector
+                                    showLine={index < steps.length - 1}
+                                    isActive={index === currentStep}
+                                    isCompleted={index < currentStep}
+                                />
                                 <p id={`loanApplicationStepText${index}`}
-                                   className={'text-meedlBlue text-[14px] leading-[150%]'}>{step}</p>
+                                   className={`text-[14px] leading-[150%] ${index <= currentStep ? 'text-meedlBlue' : 'text-blue300'}`}>{step}</p>
                             </div>
                         ))
                     }
@@ -42,13 +46,17 @@ const LoaneeOnboarding = () => {
                 <section id="loanApplicationDetailsSection"
                          className={'grid md:p-5 py-5 px-3 md:gap-[22px] gap-5 md:w-[43vw] w-full md:max-h-[calc(100vh-19rem)] md:overflow-y-auto rounded-md border border-lightBlue250 '}>
                     <h2 id="loanApplicationDetailsTitle"
-                        className={`${cabinetGrotesk.className} text-labelBlue md:text-[20px] text-[16px] leading-[120%]`}>Loan
-                        application details</h2>
-                        <StepContent step={currentStep} />
+                        className={`${cabinetGrotesk.className} text-labelBlue md:text-[20px] text-[16px] leading-[120%]`}>
+                        {currentStep === 0 && 'Loan application details'}
+                        {currentStep === 1 && 'Verify your identity'}
+                        {currentStep === 2 && 'Additional information'}
+                        {currentStep === 3 && 'Confirm loan referral acceptance'}
+                    </h2>
+                    <StepContent step={currentStep}/>
                     <Button id="continueButton"
-                            className={'bg-meedlBlue rounded-md  h-[2.8125rem] w-[6.375rem] self-end justify-self-end hover:bg-meedlBlue focus:bg-meedlBlue'}
+                            className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem]  hover:bg-meedlBlue focus:bg-meedlBlue'}
                             onClick={() => setCurrentStep((prevStep) => (prevStep + 1) % steps.length)}>
-                        Continue
+                        {currentStep === 1 ? 'Start identity verification' : 'Continue'}
                     </Button>
                 </section>
             </div>
@@ -57,4 +65,3 @@ const LoaneeOnboarding = () => {
 };
 
 export default LoaneeOnboarding;
-// LoaneeOnboarding

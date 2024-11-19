@@ -23,12 +23,10 @@ const IdentityVerification = () => {
                 <h2 className={'text-black500 text-[14px] font-medium leading-[150%]'}>
                     Instructions
                 </h2>
-                <ul className={'list-disc list-inside'}>
-                    <li>Ensure there is proper lighting in your environment, and ensure your selfie is clear and not
-                        blurred.
-                    </li>
-                    <li>Verify that your ID is still valid and has not expired.</li>
-                    <li>Complete a liveness capture as part of the verification process.</li>
+                <ul className={'list-disc list-inside grid gap-7 px-2 pt-1.5 text-black400'}>
+                    <li className={'text-black400 font-family-Inter text-[14px] font-normal leading-[150%]'}>Ensure there is proper lighting in your environment, and ensure your selfie is clear and not blurred.</li>
+                    <li className={'text-black400 font-family-Inter text-[14px] font-normal leading-[150%]'}>Verify that your ID is still valid and has not expired.</li>
+                    <li className={'text-black400 font-family-Inter text-[14px] font-normal leading-[150%]'}>Complete a liveness capture as part of the verification process.</li>
                 </ul>
             </div>
 
