@@ -13,7 +13,7 @@ describe("test button component" , () => {
         expect(component).toBeInTheDocument()
     })
      test("test that component display test passed into the component", ()=> {
-         const text = screen.getAllByText("backto loan")
+         const text = screen.getByText(/backto loan/)
          expect(text).toBeInTheDocument()
      })
 })
