@@ -38,14 +38,14 @@ This will start keycloak on http://localhost:8082, username is "admin" and passw
 - The client-id and realm you created must match the one in your env
 - Also replace the SUPERADMIN_EMAIL to your personal email
 - Still on keycloak, search for realm roles under the realm you created and create the following roles:
-  LOANEE
-  SPONSOR
-  ORGANIZATION_ADMIN
-  ADMIN
-  DONOR
-  ENDOWER
-  INVESTOR
-  PORTFOLIO_MANAGER
+  LOANEE, 
+  SPONSOR, 
+  ORGANIZATION_ADMIN, 
+  ADMIN, 
+  DONOR, 
+  ENDOWER, 
+  INVESTOR 
+  PORTFOLIO_MANAGER. 
 After followiwng the above instructions, run docker-compose up -d to start the backend application and other services.
 PS: Ensure you run all these commands at the root of the application,
 The backend application will run on http//localhost:8081.
