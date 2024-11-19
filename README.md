@@ -1,4 +1,15 @@
-After cloning this project, run this command in your terminal to install and configure AWS CLI: 
+After cloning this project, run this command in your terminal to install Docker, and Docker compose on your linux system:
+chmod +x install_docker.sh
+sudo ./install_docker.sh
+
+Install Docker for Windows:
+Install (WSL) Windows Subsystem for Linux on your local machine.
+Open PowerShell.
+-run this command: ./install_docker_desktop.ps1
+Wait for the download and installation to complete.
+To check if the download and installation is successful run: docker --version, docker-compose --version
+
+Then, run this command in your terminal to install and configure AWS CLI:
 For Windows:
   Set-ExecutionPolicy RemoteSigned -Scope CurrentUser ./InstallAWSCLI.ps1
 
@@ -6,13 +17,14 @@ For Linux:
   run:
     chmod +x start.sh
     ./start.sh
+    
 To start up the backend application with its other services:
 run:
   docker-compose -f keycloak-docker-compose.yml up
 
 This will start keycloak on http://localhost:8082, username is "admin" and password is "admin"
 
-please run docker-compose up --build to initialize the Docker containers. This command will automatically spin up
+please run docker-compose up to initialize the Docker containers. This command will automatically spin up
 Dockerized Postgres database
 Keycloak server
 Nkwadoma Backend application
@@ -26,7 +38,7 @@ The keycloak server will run on http//localhost:8082
 -navigate to the client you created and click, on the tabs you'd see a tab for credentials bar, click on it.
 -in this credentials there's a hidden client secret, copy this secret
 -go back to your project, and open the .env file.
--paste the secret you copied to this key:
+-paste the secret key you copied to this key:
   KEYCLOAK_CLIENT_SECRET
 - The client-id and realm you created must match the one in your env
 - Still on keycloak, search for realm roles under the realm you created and create the following roles:
