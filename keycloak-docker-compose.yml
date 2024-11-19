@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command: ['start-dev']
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak-setup.sh:/opt/keycloak-setup.sh
+    ports:
+      - "8082:8080"
