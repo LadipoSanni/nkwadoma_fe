@@ -46,7 +46,7 @@ This will start keycloak on http://localhost:8082, username is "admin" and passw
   ENDOWER, 
   INVESTOR 
   PORTFOLIO_MANAGER. 
-After followiwng the above instructions, run docker-compose up -d to start the backend application and other services.
+After followiwng the above instructions, run docker-compose up to start the backend application and other services.
 PS: Ensure you run all these commands at the root of the application,
 The backend application will run on http//localhost:8081.
 The swagger ui will run the backend APIs on http://localhost:8081/swagger-ui/index.html#/
