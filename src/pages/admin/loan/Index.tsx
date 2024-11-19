@@ -7,6 +7,7 @@ import {Icon} from "@iconify/react";
 import { loanRequestData} from "@/utils/LoanRequestMockData/cohortProduct";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/LoanProductTable";
+import {useRouter} from "next/navigation";
 // import DynamicTable from "@/reuseable/table/LoanProductTable";
 
 
@@ -15,7 +16,7 @@ interface TableRowData {
   }
 
 function ViewAllLoanRequest() {
-    // const router = useRouter();
+    const router = useRouter();
     // const [counter] = useState(0);
     // const [data, setData] = useState({ pageNumber: counter, pageSize: 10 });
 
@@ -34,12 +35,12 @@ function ViewAllLoanRequest() {
     ];
 
     const handleRowClick = () => {
-        // router.push(`/loan`);
+        router.push(`/loan-request-details`);
     };
 
     return (
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`} 
-        className={`grid md:bg-pink-300 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
+        className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {
                 loanRequestData.length > 0 ?
