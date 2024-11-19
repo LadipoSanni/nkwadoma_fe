@@ -24,12 +24,6 @@ run:
 
 This will start keycloak on http://localhost:8082, username is "admin" and password is "admin"
 
-please run docker-compose up to initialize the Docker containers. This command will automatically spin up
-Dockerized Postgres database
-Keycloak server
-Nkwadoma Backend application
-PS: The backend application will exit at first docker compose up run, and you'll need the keycloak server up and running to restart it.
-The keycloak server will run on http//localhost:8082
 -go to your browser and paste the keycloak url http//localhost:8082
 -login with the username provided in the docker compose file
 -create the realm = nkwadoma
@@ -41,6 +35,7 @@ The keycloak server will run on http//localhost:8082
 -paste the secret key you copied to this key:
   KEYCLOAK_CLIENT_SECRET
 - The client-id and realm you created must match the one in your env
+- Also replace the SUPERADMIN_EMAIL to your personal email
 - Still on keycloak, search for realm roles under the realm you created and create the following roles:
   LOANEE
   SPONSOR
@@ -50,12 +45,14 @@ The keycloak server will run on http//localhost:8082
   ENDOWER
   INVESTOR
   PORTFOLIO_MANAGER
-After followiwng the above instructions, run docker-compose up -d backend to start the backend application and other services.
+After followiwng the above instructions, run docker-compose up -d to start the backend application and other services.
 PS: Ensure you run all these commands at the root of the application,
 The backend application will run on http//localhost:8081.
 The swagger ui will run the backend APIs on http://localhost:8081/swagger-ui/index.html#/
 -Try the application health endpoint http://localhost:8081/actuator/health to check the backend app health
  you will get a json response with "UP"
+Note: Remember to change your DEV_AUTH_URL to http//localhost:8081/api/v1
+
 
 To stop all running container
   run: docker-compose down
