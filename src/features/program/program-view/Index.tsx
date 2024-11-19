@@ -6,7 +6,7 @@ import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {programData} from "@/utils/ProgramData";
-import CreateProgram from "@/components/program/create-program/Index";
+import CreateProgram from "@/components/program/create-program";
 import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
 import {MdOutlineDateRange, MdOutlinePeopleAlt, MdPersonOutline} from "react-icons/md";
@@ -18,46 +18,86 @@ import TableModal from "@/reuseable/modals/TableModal";
 import { useRouter } from 'next/navigation'
 import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 import EditProgramForm from '@/components/program/edit-program-form';
-// import { useGetAllProgramsQuery } from '@/service/admin/program_query';
+import { useGetAllProgramsQuery } from '@/service/admin/program_query';
+import { useDeleteProgramMutation } from '@/service/admin/program_query';
+import { useGetProgramByIdQuery } from '@/service/admin/program_query';
+// import { saveObjectItemToSessionStorage } from '@/utils/storage';
+import { useSearchProgramQuery } from '@/service/admin/program_query';
+
+
+interface viewAllProgramProps {
+    id?: string;
+    programDescription?: string;
+    name?: string;
+    durationType?: string;
+    programStartDate?: string;
+    duration?: number;
+    mode?: string;
+    deliveryType?: string;
+    totalAmountRepaid?: number;
+    totalAmountDisbursed?: number;
+    totalAmountOutstanding?: number
+ }
+
 
 
 const ProgramView = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
-    const [dummyData, setDummyData] = useState<{
-        cohorts: number;
-        description: string;
-        months: number;
-        title: string;
-        trainees: number;
-        programId: string;
-    }[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    // const [dummyData, setDummyData] = useState<{
+    //     cohorts: number;
+    //     description: string;
+    //     months: number;
+    //     title: string;
+    //     trainees: number;
+    //     programId: string;
+    // }[]>([]);
     const router = useRouter()
+
+    const [programView, setProgramView] = useState<viewAllProgramProps[]>([])
+    const [progamDetail, setProgramDetail] = useState({
+    id: "",
+    programDescription: "",
+    name: "",
+    durationType: "",
+    programStartDate: "",
+    duration: 0,
+    mode: "",
+    deliveryType: "",
+    totalAmountRepaid: 0,
+    totalAmountDisbursed: 0,
+    totalAmountOutstanding: 0,
+ }
+)
 
     const [programId, setProgramId] =  React.useState("")
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [editOpen, setEditOpen] = useState(false);
-    // const [page] = useState(0);
-    // const size = 10;
+    const [page] = useState(0);
+    const size = 10;
     
 
-    // const { data } = useGetAllProgramsQuery({ pageSize:size, pageNumber:page })
+    const { data} = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true, })
+    const [deleteItem] = useDeleteProgramMutation()
+    const { data: searchResults } = useSearchProgramQuery(searchTerm, { skip: !searchTerm });
 
-    // console.log("program data: ",data?.data)
-
-    // useEffect(() => {
-    //     if(data) {
-    //         setDummyData(data?.data)
-    //     }
+    useEffect(() => {
+        if(data && data?.data ) {
+            const programs = data?.data?.body
+            setProgramView(programs)
+        }
        
-    // },[])
-
+    },[data])
+   
    
     interface TableRowData {
         [key: string]: string | number | null | React.ReactNode;
     }
 
-    const handleRowClick = () => {
+    const handleRowClick = (row: TableRowData) => {
         router.push('/program/details')
+        console.log('The row: ',row)
+
        
     }
 
@@ -65,6 +105,23 @@ const ProgramView = () => {
         router.push('/program/details')
         setProgramId(id)
     }
+
+    useEffect(() => { 
+        if (searchTerm && searchResults && searchResults.data) { 
+            const programs = [searchResults.data]; 
+            setProgramView(programs); 
+        } 
+           
+      else if 
+    (data && data?.data ) {
+        const programs = data?.data?.body
+        setProgramView(programs)
+    }
+        }, [searchTerm, searchResults,data]);
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
+        setSearchTerm(event.target.value);
+     };
 
 
     const ProgramHeader = [
@@ -103,22 +160,19 @@ const ProgramView = () => {
         },
 
 
-    ]
+    ] 
 
-
-    
-
-    useEffect(() => {
-        const data = Array.from({length: 9}, (_, index) => ({
-            cohorts: Math.floor(Math.random() * 20) + 1,
-            description: `Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes.${index + 1}`,
-            months: Math.floor(Math.random() * 12) + 1,
-            title: `Program Thinking ${index + 1}`,
-            trainees: Math.floor(Math.random() * 100) + 1,
-            programId: `${index + 1}`
-        }));
-        setDummyData(data);
-    }, []);
+    // useEffect(() => {
+    //     const data = Array.from({length: 9}, (_, index) => ({
+    //         cohorts: Math.floor(Math.random() * 20) + 1,
+    //         description: `Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes.${index + 1}`,
+    //         months: Math.floor(Math.random() * 12) + 1,
+    //         title: `Program Thinking ${index + 1}`,
+    //         trainees: Math.floor(Math.random() * 100) + 1,
+    //         programId: `${index + 1}`
+    //     }));
+    //     setDummyData(data);
+    // }, []);
 
     const dropDownOption = [
         {name: 'View Program', id: '1'},
@@ -143,7 +197,7 @@ const ProgramView = () => {
         }
       }
 
-      const handleCardDropDownClick = (optionId: string, id: string) => {
+      const handleCardDropDownClick =  (optionId: string, id: string) => {
         if (optionId === "1") {
             router.push(`/program/details`);
         } else if (optionId === "2") {
@@ -152,8 +206,11 @@ const ProgramView = () => {
         } else if (optionId === "3") {
             setProgramId(id);
             setIsDeleteOpen(true);
+           
         }
     };
+
+   
 
       const handleEditProgram = (id: string) => {
         setProgramId(id);
@@ -165,9 +222,41 @@ const ProgramView = () => {
         setIsDeleteOpen(true)
     };
 
+    const handleDeleteAProgram = async (id: string) => {
+       
+        try{
+            await deleteItem({id}).unwrap();
+            setProgramView((prevData) => prevData.filter((item) => item.id !== id))
+        }catch(error){
+            console.error("Error deleting program: ", error);
+        }
+    }
 
-    
+    const { data: program} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
+ 
+    useEffect(()=> {
+    if(program?.data ){
+        const detail = program?.data
+        setProgramDetail({
+            id: detail?.id || "",
+            programDescription: detail?.programDescription || "",
+            name: detail?.name || "",
+            durationType: detail?.durationType || "",
+            programStartDate: detail?.programStartDate || "",
+            duration: detail?.duration || 0,
+            mode: detail?.mode || "",
+            deliveryType: detail?.deliveryType || "",
+            totalAmountRepaid: detail?.totalAmountRepaid || 0,
+            totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
+            totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
+        });
+    }
+   // saveObjectItemToSessionStorage("programDetail",progamDetail)
 
+  },[program])
+
+    console.log("Stored program details:", progamDetail);
+   
     const tagButtonData = [
         {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
         {tagIcon: MdOutlineDateRange, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
@@ -185,7 +274,11 @@ const ProgramView = () => {
               className={`${cabinetGrotesk.className} flex flex-col gap-8 pl-5 pr-2 pt-7 bg-meedlWhite overflow-hidden`}>
             <section id="programSection" className={'grid gap-7 '}>
                 <div id="programControls" className={'md:flex pr-2 md:justify-between gap-5 grid'}>
-                    <SearchInput id={'ProgramSearchInput'}/>
+                    <SearchInput 
+                    id={'ProgramSearchInput'} 
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    />
                     <Button variant={"secondary"}
                             size={"lg"}
                             className={`${inter.className} bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center`}
@@ -199,10 +292,11 @@ const ProgramView = () => {
                                 icon={Cross2Icon}
                                 width={`32%`}
                     >
+                        create Cohort
                         <CreateProgram setIsOpen={setIsOpen}
-                                             programDeliveryTypes={["Full-time", "Part-time"]}
-                                             programModes={["Online", "Physical"]}
-                                             programDurations={["3years", "4years"]}
+                                             programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
+                                             programModes={["PART_TIME", "FULL_TIME"]}
+                                             programDurations={["3", "4"]}
                                              submitButtonText={"Create"}/>
 
                     </TableModal>
@@ -219,17 +313,17 @@ const ProgramView = () => {
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
-                        {dummyData.map((program, index) => (
+                        {programView.map((program, index) => (
                             <AllProgramsCard
                                 key={index}
-                                description={program.description}
-                                title={program.title}
-                                id={program.programId} dropdownOption={dropDownOption} 
+                                description={program.programDescription ?? ''}
+                                title={program.name ?? ''}
+                                id={program.id ?? ""} dropdownOption={dropDownOption} 
                                 tagButtonData={tagButtonData}
                                 onEdit={handleEditProgram}
                                 onDelete={handleDeleteProgram}
-                                handleCardDropDownClick={(optionId:string) => handleCardDropDownClick(optionId, program.programId)}
-                                handleProgramDetails={()=> handleProgramDetailsOnclick(program.programId)}                   
+                                handleCardDropDownClick={(optionId:string) => handleCardDropDownClick(optionId, program.id ?? '')}
+                                handleProgramDetails={()=> handleProgramDetailsOnclick(program.id ?? '')}                   
                                 />
                         ))}
                     </div>
@@ -267,7 +361,11 @@ const ProgramView = () => {
                 icon={Cross2Icon}
                 headerTitle='Edit Program'
                 >
-                    <EditProgramForm programId={programId} setIsOpen={setEditOpen}/>
+                    <EditProgramForm 
+                    programId={programId} 
+                    setIsOpen={setEditOpen}
+                    programDetail={progamDetail}
+                    />
                 </TableModal>
                 
                 <TableModal
@@ -277,7 +375,13 @@ const ProgramView = () => {
                 icon={Cross2Icon}
                 width='auto'
                 >
-                   <DeleteCohort setIsOpen={()=> setIsDeleteOpen(false)} headerTitle='Program' title='program'/>
+                   <DeleteCohort 
+                   setIsOpen={()=> setIsDeleteOpen(false)} 
+                   headerTitle='Program' 
+                   title='program' 
+                   handleDelete={handleDeleteAProgram}
+                   id={programId}
+                   />
                 </TableModal>
             </div>
 

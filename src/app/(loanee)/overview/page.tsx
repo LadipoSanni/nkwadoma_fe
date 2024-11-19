@@ -1,10 +1,9 @@
 import React from 'react';
+import LoanApplicationDetails from "@/components/onboarding/loanApplicationDetails/Index";
 
 const Page = () => {
     return (
-        <div className={'font-normal'}>
-            Overview
-        </div>
+        <LoanApplicationDetails/>
     );
 };
 

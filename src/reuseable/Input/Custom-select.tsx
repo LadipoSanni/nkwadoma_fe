@@ -5,7 +5,7 @@ import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 
 
 type Props = {
-    value: string,
+    value?: string ,
     onChange: (value: string) => void,
     className?: string,
     selectContent: Array<string | number>,
