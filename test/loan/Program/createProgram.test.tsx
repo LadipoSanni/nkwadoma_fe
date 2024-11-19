@@ -1,5 +1,5 @@
 import { render, screen, fireEvent,cleanup } from "@testing-library/react";
-import CreateProgram from "@/components/program/create-program/Index";
+import CreateProgram from "@/components/program/create-program";
 import {Providers} from "@/app/provider";
 
 const setup = (props = {}) => {
