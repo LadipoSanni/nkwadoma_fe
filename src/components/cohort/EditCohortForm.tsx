@@ -12,6 +12,8 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { MdOutlineEdit } from 'react-icons/md';
 import { Input } from '@/components/ui/input';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
+import Image from 'next/image';
+
 
 
 
@@ -286,7 +288,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                 <div className='mt-2'>
                   
                       <div className='relative border border-solid h-24 rounded flex items-center justify-between px-4'>
-                      {image? ( <div   className='flex items-center'> <img data-testid="image"  src={image} alt="Cohort" className="w-24 h-16 object-cover rounded-md" /> 
+                      {image? ( <div   className='flex items-center'> <Image width={250} height={250} data-testid="image" src={image} alt="Cohort" className="w-24 h-16 object-cover rounded-md" />
                        <span className="ml-4 text-sm text-gray-600">
                        {uploadedFile ? uploadedFile.name : "Existing Image"}
                      </span> </div>
