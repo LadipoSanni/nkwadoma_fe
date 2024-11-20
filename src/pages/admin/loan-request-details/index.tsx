@@ -73,7 +73,7 @@ const LoanDetails = () => {
                     </div>
                 </div>
                 <div
-                    className={`w-[100%]  md:w-fit px-2 py-4 h-fit border border-gray500 rounded-md `}
+                    className={` ${styles.mainDetails} w-[100%] overflow-x-auto  md:w-fit px-2 py-4 h-fit border border-gray500 rounded-md `}
                 >
                     <div
                         className={` w-[70%] ${styles.tabConnector}   `}
