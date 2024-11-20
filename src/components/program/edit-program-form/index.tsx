@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { Formik,Form,Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup';
 import {inter} from "@/app/fonts"
@@ -40,6 +40,7 @@ type Props = {
 function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
   const [updateProgram, { isLoading }] = useUpdateProgramMutation();
   const queryClient = useQueryClient();
+  const [error, setError] =  useState('');
 
     const initialFormValue = {
         id: programDetail?.id,
@@ -66,7 +67,11 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
       mode:Yup.string()
       .required('Program Mode is required'),
       duration:  Yup.string()
-      .required('Program duration is required'),
+      .required('Program duration is required')
+      .matches(/^[1-9]\d*$/, 'Program duration must be a positive number and cannot start with zero')
+      .test('positive-number', 'Program duration must be a positive number', (value) => {
+          return value !== undefined && Number(value) > 0;
+      }),
       programDescription: Yup.string()
        .trim()
        .required('Program Description is required')
@@ -100,7 +105,8 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
         setIsOpen(false);
       }
     } catch (err) {
-      console.error('Failed to update program:', err);
+      // console.error('Failed to update program:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred try again later');
     }
   }
 
@@ -194,9 +200,15 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                       <Field
                         id="duration"
                         name="duration"
-                        type="number"
+                        // type="number"
                         className="w-full p-3 md:h-[3.2rem] border rounded focus:outline-none mt-2 text-sm"
                         placeholder="Enter program duration"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          const value = e.target.value;
+                          if (/^\d*$/.test(value)) {
+                              setFieldValue("duration", value);
+                          }
+                      }}
                         /> 
 
                      {
@@ -262,7 +274,9 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
               </div>
 
                 </div>
-
+                {
+                <div className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
+            }
               </Form>
             )
          }

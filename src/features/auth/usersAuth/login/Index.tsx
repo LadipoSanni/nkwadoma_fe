@@ -14,6 +14,8 @@ import {jwtDecode} from "jwt-decode";
 
 
 
+
+
 interface CustomJwtPayload {
     email: string;
     realm_access: {
@@ -37,7 +39,7 @@ const Login: React.FC = () => {
     const [validEmail, setValidEmail] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const router = useRouter()
-    const [login, {isError}] = useLoginMutation()
+    const [login, {isError,isLoading}] = useLoginMutation()
 
 
     const validateEmail = (input: string) => {
@@ -68,13 +70,13 @@ const Login: React.FC = () => {
             try {
             const response = await login({email, password}).unwrap()
             if (isError) {
-                setErrorMessage(response?.error?.data?.message)
+                // setErrorMessage(response?.error?.data?.message)
                 toast({
                     description: errorMessage,
                     status: "error",
                 })
             }
-            if (response?.data) {
+            if(response?.data) {
                 const access_token = response?.data?.access_token
                 const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
                 // toast({
@@ -85,9 +87,7 @@ const Login: React.FC = () => {
                 // console.log(access_token)
                
                 const user_email = decode_access_token?.email
-                // console.log(user_email)
                 const user_role = decode_access_token?.realm_access?.roles[0]
-                // console.log(user_role)
                 storeUserDetails(access_token, user_email, user_role)
                 router.push("/Overview")
 
@@ -97,10 +97,9 @@ const Login: React.FC = () => {
                 if (err?.data?.message) {
                     setErrorMessage(err?.data?.message);
                     toast({
-                        description: errorMessage,
+                        description: "Invalid email or password",
                         status: "error",
                     });
-
 
     }
 }
@@ -144,6 +143,7 @@ const Login: React.FC = () => {
                                     id={"loginButton"}
                                     data-testid={`loginButton`}
                                     buttonText={"Login"} width={"inherit"}
+                                    isLoading={isLoading}
                                     handleClick={handleLogin}>
                         </AuthButton>
                     </div>
