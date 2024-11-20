@@ -3,8 +3,8 @@ import React,{useState} from 'react';
 import {Input} from '@/components/ui/input'
 import OrganizationNameAndChangeButton from "@/components/selected-loan/OrganizationNameAndChangeButton";
 import {MdSearch} from "react-icons/md";
-import {Button} from "@/components/ui/button";
-import {ChevronDownIcon} from "@radix-ui/react-icons";
+// import {Button} from "@/components/ui/button";
+// import {ChevronDownIcon} from "@radix-ui/react-icons";
 import ProductFilter from '../loan/selected-loan/loan-request/Product-filter';
 import Tables from '@/reuseable/table/LoanProductTable';
 import { loanRequestData } from '@/utils/LoanRequestMockData/cohortProduct';

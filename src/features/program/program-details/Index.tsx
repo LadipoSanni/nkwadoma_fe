@@ -55,7 +55,7 @@ const ProgramDetails = () => {
         if(programId){
             setProgramId(programId)
         }
-    })
+    },[])
 
     console.log(`handleProgram details: `,programId)
 

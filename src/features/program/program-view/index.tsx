@@ -77,8 +77,8 @@ const ProgramView = () => {
     const [programId, setProgramId] =  React.useState("")
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [editOpen, setEditOpen] = useState(false);
-    const [page,setPage] = useState(0);
-    const [totalPage, setTotalPage] = useState(0);
+    const [page] = useState(0);
+    // const [totalPage, setTotalPage] = useState(0);
     const size = 8;
     
 
@@ -90,7 +90,7 @@ const ProgramView = () => {
         if(data && data?.data ) {
             const programs = data?.data?.body
             setProgramView(programs)
-            setTotalPage(data?.data?.totalPages)
+            // setTotalPage(data?.data?.totalPages)
         }
        
     },[data])

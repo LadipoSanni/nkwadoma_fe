@@ -306,7 +306,6 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import Isloading from '@/reuseable/display/Isloading';
 import CustomSelect from '@/reuseable/Input/Custom-select';
-import { useUpdateProgramMutation } from '@/service/admin/program_query';
 import { useQueryClient } from '@tanstack/react-query';
 import {useCreateProgramMutation} from "@/service/admin/program_query";
 
