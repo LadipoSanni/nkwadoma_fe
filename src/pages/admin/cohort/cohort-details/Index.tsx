@@ -14,7 +14,7 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
 import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-// import {CohortTrainees} from "@/utils/LoanRequestMockData/cohortProduct";
+import {CohortTrainees} from "@/utils/LoanRequestMockData/cohortProduct";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import CustomSelect from "@/reuseable/Input/Custom-select";

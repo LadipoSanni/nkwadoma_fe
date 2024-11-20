@@ -474,3 +474,246 @@ export const loanRequestData = [
   { loanee: "Philip Obi", program: "Product design", cohort: "Visionaries", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦550,000.00", amountRequested: "₦3,000,000.00" },
   { loanee: "Angela Obasi", program: "Product management", cohort: "Trailblazers", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦500,000.00", amountRequested: "₦3,000,000.00" },
 ];
+export const CohortTrainees = [
+  {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  }, {
+    Trainee: "Margret Ezeoke",
+    InitialDeposit: "300,000.00",
+    AmountRequested:"300,000.00",
+    AmountReceived: "3000,000.00"
+  },
+]
+export const loanRequestDatas = [
+  {
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },
+  {
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    endDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    endDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    endDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    endDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },{
+    loanee: "Peter ezike",
+    program: "Software Engineering",
+    cohort: "luminary",
+    startDate: "12 Dec, 2021",
+    requestDate: "12 Jan, 2022",
+    initialDeposit: "₦1,200,000.00",
+    amountRequested: "₦1,500,000.00",
+  },
+]
