@@ -44,7 +44,7 @@ const LoanDetails = () => {
                 <div
                     id={`ImageComponentOnLoanRequestDetails`}
                     data-testid={`ImageComponentOnLoanRequestDetails`}
-                    className={` grid gap-3 md:grid md:gap-3 `}
+                    className={` grid gap-3 md:grid md:gap-6 `}
                 >
 
                     <Avatar id={'loaneeImageOnLoanRequestDetails'} data-testid={'loaneeImageOnLoanRequestDetails'} className={`h-[8rem] w-[8rem] md:w-[8rem] md:h-[8rem] `}>
