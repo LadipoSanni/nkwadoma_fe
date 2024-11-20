@@ -25,10 +25,16 @@ describe("test loan request details page component", ()=> {
     })
 
     test("must contain user  profile picture and details component", ()=> {
-        const userImage = screen.getByTestId("loanRequestDetailsComponent")
-        const component = screen.getByTestId('ImageComponentOnLoanRequestDetails')
-        expect(userImage).toBeInTheDocument()
-        expect(component).toBeInTheDocument()
+        const loaneeImage = screen.getByTestId("loaneeImageOnLoanRequestDetails")
+        // const component = screen.getByTestId('ImageComponentOnLoanRequestDetails')
+        const loaneeName = screen.getByTestId('loaneeNameOnLoanRequestDetails')
+        const loaneeProgram = screen.getByTestId('loaneeProgramOnLoanRequestDetails')
+        const checkCreadit = screen.getByTestId('loaneeCheckCreditScoreOnLoanRequestDetails')
+        expect(loaneeImage).toBeInTheDocument()
+        expect(loaneeName).toBeInTheDocument()
+        expect(loaneeProgram).toBeInTheDocument()
+        expect(checkCreadit).toBeInTheDocument()
+
 
     })
 })

@@ -1,3 +1,10 @@
+.tabConnector{
+    display: flex;
+    grid-template-columns: max-content;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
 .detailsMainComponent{
     background: white;
 }
