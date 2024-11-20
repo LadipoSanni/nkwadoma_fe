@@ -49,9 +49,7 @@ describe("DetailsImageSection Component and that it exist", () => {
                 cohortDescription={mockProps.cohortDescription}
                 dropdownOption={program1Options}
                 handleDropdownClicked={handleDeleteClick}
-                useProgramButton={false}
-                tagButtonData={tagButtonData}
-            />
+                tagButtonData={tagButtonData} buttonText={' Edit Cohort'} isEditButton={false}            />
         );
         const assert = queryByTestId("details-main");
         expect(assert).toBeInTheDocument();
