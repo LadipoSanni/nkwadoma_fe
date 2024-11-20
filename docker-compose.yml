@@ -81,6 +81,7 @@ services:
       # Logging Configuration
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
 
+
       
     ports:
       - "8081:8081"
