@@ -79,7 +79,7 @@ const ProgramView = () => {
     const [editOpen, setEditOpen] = useState(false);
     const [page] = useState(0);
     // const [totalPage, setTotalPage] = useState(0);
-    const size = 8;
+    const size = 100;
     
 
     const { data,isLoading} = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true, })
@@ -115,7 +115,7 @@ const ProgramView = () => {
     
     useEffect(() => { 
         if (searchTerm && searchResults && searchResults.data) { 
-            const programs = [searchResults.data]; 
+            const programs =searchResults.data; 
             setProgramView(programs); 
         } 
            
@@ -331,7 +331,7 @@ const ProgramView = () => {
                         icon={Book}
                         name='program'
                         />
-                    )   : (programView.map((program, index) => (
+                    )   : (programView.slice().reverse().map((program, index) => (
                             <AllProgramsCard
                                 key={index}
                                 description={program.programDescription ?? ''}
@@ -357,7 +357,7 @@ const ProgramView = () => {
                         }}
                     >
                         <LoanProductTable
-                            tableData={programView}
+                            tableData={programView.slice().reverse()}
                             tableHeader={ProgramHeader}
                             staticHeader={"Programs"}
                             staticColunm={'name'}
@@ -369,6 +369,7 @@ const ProgramView = () => {
                             icon={Book}
                             sideBarTabName='Program'
                             handleDropDownClick={handleDropdownClick}
+                            optionalRowsPerPage={10}
                         />
                     </div>
                 )}
