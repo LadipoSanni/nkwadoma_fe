@@ -20,7 +20,7 @@ const TabConnector = ({tabNames}:props) => {
                     <div
                         data-testid={"tab" + tab}
                         id={"tab" + tab}
-                        className={` border md:border border-meedlBlue md:border-meedlBlue rounded-full w-fit h-auto md:w-auto md:h-fit md:rounded-full text-sm bg-[#eef5ff] px-2 py-1   `}
+                        className={` border md:border border-meedlBlue md:border-meedlBlue rounded-full w-fit h-auto md:w-auto md:h-fit md:rounded-full text-sm ${index === 0 ? `bg-[#eef5ff]` : `bg-[#eef5ff]` } bg-[#eef5ff] px-2 py-1   `}
                     >
                         <span className={`flex gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}>{tab}</span>
                     </div>

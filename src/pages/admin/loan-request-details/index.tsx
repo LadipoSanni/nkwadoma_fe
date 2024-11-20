@@ -31,7 +31,7 @@ const LoanDetails = () => {
         <div
             id={"loanRequestDetails"}
             data-testid={"loanRequestDetails"}
-            className={` w-[100%] h-[100%] md:px-8 px-4 pt-4 md:pt-4 `}
+            className={`  md:px-8 px-4 pt-4 md:pt-4 `}
             // className={`w-full h-full md:grid grid gap-2 md:px-8 px-4 pt-4 md:pt-4  md:w-full md:h-full  `}
         >
             <BackButton handleClick={backToLoanRequest} iconRight={true} text={"Back to loan request"} id={"loanRequestDetailsBackButton"} textColor={'#142854'}  />
@@ -73,10 +73,10 @@ const LoanDetails = () => {
                     </div>
                 </div>
                 <div
-                    className={`w-[100%] bg-red-300 md:w-fit px-2 py-4 h-fit border border-gray500 rounded-md `}
+                    className={`w-[100%]  md:w-fit px-2 py-4 h-fit border border-gray500 rounded-md `}
                 >
                     <div
-                        className={` w-[70%] ${styles.tabConnector}  bg-purple-300 `}
+                        className={` w-[70%] ${styles.tabConnector}   `}
                     >
                         <TabConnector tabNames={loanRequestDetailsTab}/>
 
