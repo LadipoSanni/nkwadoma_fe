@@ -1,0 +1,6 @@
+.detailsMainComponent{
+    background: white;
+}
+.detailsMainComponent::-webkit-scrollbar-track{
+    background: white;
+}
