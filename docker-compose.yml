@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -60,6 +60,26 @@ services:
       # JWT Configuration
       JWT_SECRET: ${JWT_SECRET}
       EXPIRATION: ${EXPIRATION}
+
+
+      # Swagger Configuration
+      SPRINGDOC_SWAGGER_UI_CONFIG_URL: /v3/api-docs/swagger-config
+      SPRINGDOC_API_DOCS_PATH: /v3/api-docs
+      SPRINGDOC_SWAGGER_UI_DISABLE_SWAGGER_DEFAULT_URL: true
+      SPRINGDOC_SWAGGER_UI_OPERATIONS_SORTER: alpha
+      SPRINGDOC_SWAGGER_UI_TAGS_SORTER: alpha
+      SPRINGDOC_SWAGGER_UI_PATH: /swagger-ui.html
+      SPRINGDOC_SWAGGER_UI_FILTER: true
+      SPRINGDOC_SWAGGER_UI_URL: /v3/api-docs
+
+      # Spring Security OAuth2 Configuration
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-${KEYCLOAK_CLIENT_ID}}
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-${KEYCLOAK_CLIENT_SECRET}}
+      KEYCLOAK_PRINCIPAL_ATTRIBUTE: preferred_username
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/nkwadoma
+
+      # Logging Configuration
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
 
 
       
