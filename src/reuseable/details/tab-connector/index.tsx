@@ -3,10 +3,11 @@ import React from 'react';
 
 interface props {
     tabNames: string[],
+    currentTab?: number,
 
 }
 
-const TabConnector = ({tabNames}:props) => {
+const TabConnector = ({tabNames, currentTab}:props) => {
     return (
         <div
             id={`tabConnectContainer`}
@@ -20,13 +21,13 @@ const TabConnector = ({tabNames}:props) => {
                     <div
                         data-testid={"tab" + tab}
                         id={"tab" + tab}
-                        className={` border md:border border-meedlBlue md:border-meedlBlue rounded-full w-fit h-auto md:w-auto md:h-fit md:rounded-full text-sm ${index === 0 ? `bg-[#eef5ff]` : `bg-[#eef5ff]` } bg-[#eef5ff] px-2 py-1   `}
+                        className={` border md:border border-meedlBlue md:border-meedlBlue rounded-full w-fit h-auto md:w-auto md:h-fit md:rounded-full text-sm ${currentTab === index ? `bg-[#eef5ff]` : `bg-meedlWhite` } bg-[#eef5ff] px-2 py-1   `}
                     >
                         <span className={`flex gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}>{tab}</span>
                     </div>
                     {index +1 < tabNames.length &&
                         <span
-                            className={` w-[20px] md:w-[6rem] h-[2px] md:h-[1px] ${index === 1 ? `bg-grey500` :`bg-[#142854]` } `}></span>
+                            className={` w-[20px] md:w-[6rem] h-[2px] md:h-[1px] ${currentTab === index ? `bg-[#142854]` :`bg-[#ECECEC]` } `}></span>
                     }
                 </div>
 
