@@ -46,7 +46,7 @@ const SelectLoanTab = () => {
                 <div
                     data-testid={name}
                     id={"loanStatusText"}
-                    className={`flex gap-2 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
+                    className={`flex gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
                 >{name}</div>
 
             </div>
@@ -57,7 +57,7 @@ const SelectLoanTab = () => {
         <div
             id="selectLoanTabContainer"
             data-testid="selectLoanContainer"
-            className={` ${styles.tab} flex bg-[#fafbfc]   w-auto ml-1 mt-1 md:w-fit h-fit md:h-fit md:rounded-md rounded-md `}
+            className={` ${styles.tab} flex bg-[#fafbfc]  w-auto ml-1 mt-1 md:w-fit h-fit md:h-fit md:rounded-md rounded-md `}
         >
             {tabContent?.map((item, index) => (
                 <div

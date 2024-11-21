@@ -40,7 +40,7 @@ const CohortView = () => {
   const [selectProgram, setSelectProgram] = useState('')
    const [isLoading] = useState(false);
 
-  
+
 
    const toggleDropdown = useCallback(() => {
     setIsDropdown((prev) => !prev);
@@ -67,11 +67,11 @@ const CohortView = () => {
         <div id='cohortName' className='md:px-8 px-4'>
           {/* <h1 className={`mt-5 font-semibold text-2xl mb-4 normal-case z-50 ${cabinetGrotesk.className}`}>Cohort</h1> */}
           <div id='buttonFilterCreate' className={`md:flex justify-between items-center z-50 relative top-6 bottom-2 ${inter.className}`}>
-            <div id='buttonFilter' className='flex gap-4'> 
+            <div id='buttonFilter' className='flex gap-4'>
             <div className='relative'>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-        <MdSearch className="h-6 w-6 text-grey200" />
-      </span>
+              <MdSearch className="h-6 w-6 text-grey200" />
+            </span>
             <Input
              id='CohortSearch'
               placeholder='Search'
@@ -141,11 +141,11 @@ const CohortView = () => {
                         {errors.selectProgram && touched.selectProgram && ( <div className='text-red-500'>{errors.selectProgram}</div>)}
                       </div> */}
                       <div className='flex justify-between items-center pt-7'>
-                      
-                        <Button 
+
+                        <Button
                         id='resetButton'
                         // type="reset"
-                        variant={`outline`} 
+                        variant={`outline`}
                         className='text-meedlBlue h-[38px] font-bold ring-meedlBlue border-meedlBlue border-solid w-[80px]'
                         onClick={()=> {
                           resetForm();
@@ -155,7 +155,7 @@ const CohortView = () => {
                           Reset
                         </Button>
                         <DropdownMenuItem className='hover:bg-none'>
-                        <Button 
+                        <Button
                         id='filterButton'
                         variant={'default'}
                         className={`${!isValid? "bg-neutral650 cursor-not-allowed  h-[38px] " : "bg-meedlBlue h-[38px] cursor-pointer hover:bg-meedlBlue"}font-bold  w-[80px]  text-white`
@@ -172,7 +172,7 @@ const CohortView = () => {
                                             )}
                           </Button>
                           </DropdownMenuItem>
-                        
+
                       </div>
                     </Form>
                )}
@@ -182,7 +182,7 @@ const CohortView = () => {
              </div>
             </div>
              <div className='md:mt-0 mt-4'>
-             
+
                  <CreateCohort  triggerButtonStyle={`w-full`}/>
              </div>
           </div>

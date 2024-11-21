@@ -6,22 +6,23 @@ import {inter, cabinetGrotesk} from "@/app/fonts";
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 
 interface deleteCohortProps {
-    cohortId?: string,
+    id?: string,
     setIsOpen?: (e: boolean | undefined) => void,
     headerTitle: string,
     title: string,
+    handleDelete?: (id: string) => void;
 
 }
 
 
-export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title}) => {
+export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id}) => {
 
     const toastPopUp = ToastPopUp({
-    description: `${headerTitle} successfully deleted.`,
+    description: `${headerTitle} deleted successfully.`,
     status:"success"
   });
   
-
+  
 
     const handleCanCelCohort = () => {
         if (setIsOpen) {
@@ -30,11 +31,15 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
     }
 
     const handleDeleteCohort = () => {
-         toastPopUp.showToast();
-        if (setIsOpen) {
-            setIsOpen(false)
+        if(handleDelete){
+            handleDelete(id ?? "");
+            toastPopUp.showToast();
+           if (setIsOpen) setIsOpen(false)
+
         }
+     
     }
+
     return (
         <div>
 

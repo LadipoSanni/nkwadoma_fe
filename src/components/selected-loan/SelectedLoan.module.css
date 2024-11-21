@@ -6,7 +6,11 @@
     scrollbar-width: none;
 }
 
-
+.layout{
+    display: grid;
+    /*gap: ;*/
+    grid-auto-rows: 30% 70%;
+}
 .selectedLoan{
     display: flex;
     width: auto;

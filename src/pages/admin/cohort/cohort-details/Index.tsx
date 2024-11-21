@@ -6,17 +6,34 @@ import {inter} from "@/app/fonts";
 import CohortDetailsImage from "../../../../../public/asset/Image/CohortDetailsImage.png"
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
-import {MdPersonOutline} from "react-icons/md";
+import {MdOutlinePerson, MdPersonOutline, MdSearch} from "react-icons/md";
 import {BiArrowBack} from "react-icons/bi";
 import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
 import EditCohortForm from "@/components/cohort/EditCohortForm";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {CohortTrainees} from "@/utils/LoanRequestMockData/cohortProduct";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import CustomSelect from "@/reuseable/Input/Custom-select";
+import AddTraineeForm from "@/components/cohort/AddTraineeForm";
+import SelectableTable from "@/reuseable/table/SelectableTable";
+
+
+interface TableRowData {
+    [key: string]: string | number | null | React.ReactNode;
+}
 
 const CohortDetails = () => {
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [isEditOpen, setEditOpen] = React.useState(false);
+    const [isReferred, setIsReferred] = React.useState(``);
+    const [addTrainee, setAddTrainee] = React.useState(false);
+    const [isRowSelected, setIsRowSelected] = React.useState(false);
+
+
     const id = "1";
 
     const dataList = [
@@ -78,30 +95,143 @@ const CohortDetails = () => {
         "Design thinking has a human-centered core. It encourages organizations to focus on " +
         "thepeople they're creating for, which leads to better products, services, and internal processes."
 
+    const TraineeHeader = [
+        {title: "Trainee", sortable: true, id: "Trainee"},
+        {title: "Initial deposit", sortable: true, id: "InitialDeposit"},
+        {title: "Amount requested", sortable: true, id: "AmountRequested"},
+        {title: "Amount received", sortable: true, id: "AmountReceived"},
+    ]
+
+    const items = ["Referred", "Not referred"]
+
+    const handleSelected = () => {
+        setIsReferred(isReferred)
+    }
+    const handleAddTrainee = () => {
+        setAddTrainee(true)
+    }
+
+    const handleRefer = () => {
+
+    }
+
+    const handleRowClick = (row: TableRowData) => {
+        setIsRowSelected(isRowSelected);
+        console.log('Row clicked:', row);
+    };
+
     return (
-        <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`}>
-            <div className={` `}>
+        <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
+            <div className={` `} id={   `backClickContainer`}>
                 <div className={`flex py-2 space-x-1 text-meedlBlue`} id={`backClick`}
                      data-testid={`backClick `}>
-                    <BiArrowBack className={`mt-1 cursor-pointer`}/>
-                    <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}  onClick={handleBackClick}>Back to cohort</h1>
+                    <BiArrowBack className={`mt-1 cursor-pointer`} id={ `backClickIcon`}/>
+                    <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
+                        onClick={handleBackClick}>Back to cohort</h1>
                 </div>
             </div>
 
-            <div className={`py-3 flex md:flex-row flex-col md:justify-between`}>
-                <div>
-                    <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
-                                         cohortDescription={description}
-                                         dropdownOption={program1Options} handleDropdownClicked={handleDropdownClick}
-                                         buttonText={"Edit Cohort"} tagButtonData={tagButtonData}/>
+            <Tabs
+                id={"detailsAndTraineeTab"}
+                data-test-id={"detailsAndTraineeTab"}
+                defaultValue={"details"}
+                className={`pt-3`}
+            >
+                <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'} id={`tabsList`}>
+                    <TabsTrigger value="details"
+                                 className={'py-1 px-2 gap-1 items-center rounded-md'} id={`tabsTrigger1`}>Details</TabsTrigger>
+                    <TabsTrigger value="trainee"
+                                 className={'py-1 px-2 gap-1 items-center rounded-md'} id={`tabsTrigger2`}>Trainees</TabsTrigger>
+                </TabsList>
+
+                <div id={`tabsContentDiv`}>
+                    <TabsContent value="details" className={'mt-4'} id={`tabsContent`}>
+                        <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
+                            <div id={`firstSection`}>
+                                <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
+                                                     cohortDescription={description}
+                                                     dropdownOption={program1Options}
+                                                     handleDropdownClicked={handleDropdownClick}
+                                                     buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
+                                                     isEditButton={false}/>
+                            </div>
+                            <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
+                                <DetailsTabContainer dataList={dataList} breakDown={breakDown}
+                                                     tabTitle1={"cohort details"} isTable={true}
+                                                     tabTitle2={"trainee"} useBreakdown={true}/>
+                            </div>
+                        </div>
+                    </TabsContent>
+
+                    <TabsContent value={"trainee"} id={`traineeId`}>
+                        <div className={`pb-4`} id={`searchReferAddTraineeAndTable`}>
+                            <div className={`flex md:flex-row flex-col md:justify-between`} id={`searchReferAndAddTrainee`}>
+                                <div className={`flex md:flex-row gap-4 md:items-center items-center`} id={`searchId`}>
+                                    <div className="max-w-md mx-auto" id={`searchInput`}>
+                                        <div className="relative" id={`searchDiv`}>
+                                            <div
+                                                className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none" id={`searchIcon`}>
+                                                <MdSearch className="h-5 w-5 text-grey200"/>
+                                            </div>
+                                            <Input
+                                                className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
+                                                type="search" id={`search`} required/>
+                                        </div>
+                                    </div>
+                                    <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
+                                        <CustomSelect value={isReferred} onChange={handleSelected}
+                                                      selectContent={items}
+                                                      className={` w-full text-black  bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
+                                                      placeHolder={`referred`}/>
+                                    </div>
+                                </div>
+
+                                <div className={`flex md:flex-row flex-col gap-4 md:items-center`} id={`ReferAndTraineeDiv`}>
+                                    <div className={`md:block hidden`} id={`largerScreenReferButton`}>
+                                        <Button variant={"outline"}
+                                                size={"lg"}
+                                                className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
+                                                onClick={handleRefer} disabled={!isRowSelected}>Refer</Button>
+                                    </div>
+                                    <div id={`addTraineeButton`}>
+                                        <Button variant={"secondary"}
+                                                size={"lg"}
+                                                className={`bg-meedlBlue text-meedlWhite w-full h-12 flex justify-center items-center`}
+                                                onClick={handleAddTrainee}>Add Trainee</Button>
+                                    </div>
+                                    <div className={`md:hidden block`} id={ `smallScreenReferButton`}>
+                                        <Button variant={"outline"}
+                                                size={"lg"}
+                                                className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
+                                                onClick={handleRefer}>Refer</Button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
+                                <SelectableTable
+                                    tableData={CohortTrainees}
+                                    tableHeader={TraineeHeader}
+                                    staticHeader={"Trainee"}
+                                    staticColunm={"Trainee"}
+                                    tableHeight={45}
+                                    icon={MdOutlinePerson}
+                                    sideBarTabName={"Trainee"}
+                                    handleRowClick={(row) => handleRowClick(row)}
+                                    optionalRowsPerPage={10}
+                                    tableCellStyle={"h-12"}
+                                    enableRowSelection={true}
+                                />
+                            </div>
+                        </div>
+
+                    </TabsContent>
+
                 </div>
 
-                <div className={`md:w-6/12 pt-8 md:pt-0 h-[96%]`}>
-                    <DetailsTabContainer dataList={dataList} breakDown={breakDown} tabTitle1={"cohort details"}
-                                         tabTitle2={"trainee"} useBreakdown={true}/>
-                </div>
-            </div>
-            <div>
+            </Tabs>
+            <div id={`deleteModal`}>
                 <TableModal
                     isOpen={isDeleteOpen}
                     closeModal={() => setIsDeleteOpen(false)}
@@ -114,7 +244,7 @@ const CohortDetails = () => {
                 </TableModal>
             </div>
 
-            <div className={`md:max-w-sm w-full`}>
+            <div className={`md:max-w-sm w-full`} id={`editCohortModal`}>
                 <TableModal
                     isOpen={isEditOpen}
                     closeModal={() => setEditOpen(false)}
@@ -124,6 +254,20 @@ const CohortDetails = () => {
                 >
                     <EditCohortForm cohortId={id} setIsOpen={() => setEditOpen(false)}/>
                 </TableModal>
+            </div>
+
+            <div className={`md:max-w-sm w-full`} id={`AddTraineeDiv`}>
+                <TableModal
+                    isOpen={addTrainee}
+                    closeModal={() => setAddTrainee(false)}
+                    closeOnOverlayClick={true}
+                    icon={Cross2Icon}
+                    headerTitle={`Add Trainee`}
+                    width="auto"
+                >
+                    <AddTraineeForm cohortId={id} setIsOpen={() => setAddTrainee(false)}/>
+                </TableModal>
+
             </div>
         </main>
     );

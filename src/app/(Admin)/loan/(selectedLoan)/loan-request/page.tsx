@@ -3,9 +3,7 @@ import ViewAllLoanRequest from "@/pages/admin/loan/Index";
 
 const Page = () => {
     return (
-        <div>
             <ViewAllLoanRequest/>
-        </div>
     );
 };
 

@@ -16,19 +16,21 @@ export const programApi = createApi({
                 params: param,
   
             }),
+            providesTags: ['program'],
         }),
         getProgramById: builder.query({
             query: ({id}) => ({
                 url: `/program/${id}`,
                 method: "GET",
               }),
+              providesTags: (result, error, arg) => [{ type: 'program', id: arg.id }],
         }),
         deleteProgram:  builder.mutation({
           query: ({id}) => ({
               url: `/program/delete/${id}`,
               method: "DELETE",
             }),
-            invalidatesTags: ['program'],
+            invalidatesTags:  ({ id }) => [{ type: 'program', id }],
         }),
         searchProgram: builder.query({
             query: (name) => ({
@@ -41,7 +43,6 @@ export const programApi = createApi({
         createProgram: builder.mutation({
             query: (formData: {
                 programName: string,
-                instituteId: string,
                 programDescription: string,
                 programDuration: string,
                 deliveryType: string,
@@ -51,9 +52,19 @@ export const programApi = createApi({
                 method: "POST",
                 formData,
             }),
+            invalidatesTags: ['program'],
         }),
+        updateProgram: builder.mutation({
+            query: ({ id, data }) => ({
+                url: `/program/${id}`,
+                method: "PATCH",
+                body: data,
+            }),
+            invalidatesTags:  ({ id }) => [{ type: 'program', id }],  
+        }),
+    
     }),
 })
 
 
-export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery, useCreateProgramMutation } = programApi;
+export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery, useCreateProgramMutation, useUpdateProgramMutation} = programApi;
