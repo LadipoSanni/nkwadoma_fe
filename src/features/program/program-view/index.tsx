@@ -23,6 +23,7 @@ import { useGetProgramByIdQuery } from '@/service/admin/program_query';
 import SkeletonForGrid from '@/reuseable/Skeleton-loading-state/Skeleton-for-grid';
 import { useSearchProgramQuery } from '@/service/admin/program_query';
 import TableEmptyState from '@/reuseable/emptyStates/TableEmptyState';
+import { setTimeout } from 'timers';
 
 
 interface TableRowData {
@@ -181,6 +182,7 @@ const ProgramView = () => {
     //     }));
     //     setDummyData(data);
     // }, []);
+    const { data: program, isLoading: loading,refetch} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
 
     const dropDownOption = [
         {name: 'View Program', id: '1'},
@@ -188,7 +190,7 @@ const ProgramView = () => {
         {name: 'Delete Program', id: '3'}
     ];
 
-    const handleDropdownClick = (id:string,row: TableRowData) => {
+    const handleDropdownClick = async (id:string,row: TableRowData) => {
         if(id === "1") {
             router.push('/program/details')
             setItemSessionStorage("programId",String(row.id))
@@ -197,7 +199,8 @@ const ProgramView = () => {
         }
         else if(id === "2") {
           setProgramId(String(row.id))
-          setEditOpen(true)
+           await refetch()
+           setTimeout(()=>{ setEditOpen(true)},1000)
           
         
         }
@@ -207,13 +210,14 @@ const ProgramView = () => {
         }
       }
 
-      const handleCardDropDownClick =  (optionId: string, id: string) => {
+      const handleCardDropDownClick = async (optionId: string, id: string) => {
         if (optionId === "1") {
             router.push(`/program/details`);
             setItemSessionStorage("programId",id)
         } else if (optionId === "2") {
-            setProgramId(id);
-            setEditOpen(true);
+             setProgramId(id);
+            await refetch()
+            setTimeout(()=>{ setEditOpen(true)},1000)
         } else if (optionId === "3") {
             setProgramId(id);
             setIsDeleteOpen(true);
@@ -243,10 +247,10 @@ const ProgramView = () => {
         }
     }
 
-    const { data: program} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
+    
  
     useEffect(()=> {
-    if(program?.data ){
+    if(editOpen && program?.data ){
         const detail = program?.data
         setProgramDetail({
             id: detail?.id || "",
@@ -260,13 +264,13 @@ const ProgramView = () => {
             totalAmountRepaid: detail?.totalAmountRepaid || 0,
             totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
             totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
-        });
+        }); 
     }
    // saveObjectItemToSessionStorage("programDetail",progamDetail)
 
-  },[program])
+  },[editOpen, program])
 
-    // console.log("Stored program details:", progamDetail);
+    
    
     const tagButtonData = [
         {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
@@ -331,7 +335,7 @@ const ProgramView = () => {
                         icon={Book}
                         name='program'
                         />
-                    )   : (programView.slice().reverse().map((program, index) => (
+                    )   : (programView.map((program, index) => (
                             <AllProgramsCard
                                 key={index}
                                 description={program.programDescription ?? ''}
@@ -375,10 +379,11 @@ const ProgramView = () => {
                 )}
             </div>
             <div>
+                { loading ? "" : (
                 <TableModal
                 isOpen={editOpen}
                 closeOnOverlayClick={true}
-                closeModal={() => setEditOpen(false)}
+                closeModal={() => setEditOpen(!editOpen)}
                 icon={Cross2Icon}
                 headerTitle='Edit Program'
                 >
@@ -387,8 +392,8 @@ const ProgramView = () => {
                     setIsOpen={setEditOpen}
                     programDetail={progamDetail}
                     />
-                </TableModal>
-                
+                </TableModal>) 
+                  }
                 <TableModal
                 isOpen={isDeleteOpen}
                 closeOnOverlayClick={true}
