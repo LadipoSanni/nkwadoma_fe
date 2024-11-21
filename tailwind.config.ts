@@ -96,6 +96,7 @@ const config: Config = {
   			neutral50: '#FCFCFC',
   			neutral100: '#F7F7F7',
   			neutral200: '#F3F3F3',
+			neutral250: '#FAFBFC',
   			neutral300: '#EEEEEE',
   			neutral400: '#EAEAEA',
   			neutral500: '#E5E5E5',

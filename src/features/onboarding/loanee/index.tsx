@@ -4,7 +4,8 @@ import { cabinetGrotesk, inter } from '@/app/fonts';
 import Connector from "@/components/common/Connector";
 import { Button } from "@/components/ui/button";
 import StepContent from '@/features/onboarding/stepContent/Index';
-import SmartCameraWrapper from '@/components/SmartCameraWrapper/Index';
+// import SmartCameraWrapper from '@/components/SmartCameraWrapper/Index';
+import IdentityVerificationModal from '@/reuseable/modals/IdentityVerificationModal';
 
 const steps = [
     'Loan application details',
@@ -27,14 +28,16 @@ interface PublishData {
 
 const LoaneeOnboarding = () => {
     const [currentStep, setCurrentStep] = useState(0);
-    const [showCamera, setShowCamera] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    // const [showCamera, setShowCamera] = useState(false);
 
     const handlePublish = async (data: PublishData) => {
         try {
             const response = await postContent(data);
             console.log('Liveness check result:', response);
             setCurrentStep((prevStep) => (prevStep + 1) % steps.length);
-            setShowCamera(false);
+            // setShowCamera(false);
+            setShowModal(false);
         } catch (error) {
             console.error('Liveness check failed:', error);
         }
@@ -93,10 +96,11 @@ const LoaneeOnboarding = () => {
                         {currentStep === 3 && 'Confirm loan referral acceptance'}
                     </h2>
                     <StepContent step={currentStep}/>
-                    {currentStep === 1 && showCamera && <SmartCameraWrapper onPublish={handlePublish} onClose={() => setShowCamera(false)} />}
+                    {/* {currentStep === 1 && showCamera && <SmartCameraWrapper onPublish={handlePublish} onClose={() => setShowCamera(false)} />} */}
+                    {currentStep === 1 && <IdentityVerificationModal isOpen={showModal} onClose={() => setShowModal(false)} />}
                     <Button id="continueButton"
                             className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem]  hover:bg-meedlBlue focus:bg-meedlBlue'}
-                            onClick={() => currentStep === 1 ? setShowCamera(true) : setCurrentStep((prevStep) => (prevStep + 1) % steps.length)}>
+                            onClick={() => currentStep === 1 ? setShowModal(true) : setCurrentStep((prevStep) => (prevStep + 1) % steps.length)}>
                         {currentStep === 1 ? 'Start identity verification' : 'Continue'}
                     </Button>
                 </section>
