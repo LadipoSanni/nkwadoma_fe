@@ -41,16 +41,18 @@ export const programApi = createApi({
     //    transformResponse: (response) => response.data, 
     }),
         createProgram: builder.mutation({
-            query: (formData: {
+            query: (formData:
+                 {
                 programName: string,
                 programDescription: string,
                 programDuration: string,
                 deliveryType: string,
                 programMode: string,
-            }) => ({
+            }
+        ) => ({
                 url: '/program',
                 method: "POST",
-                formData,
+                body:formData,
             }),
             invalidatesTags: ['program'],
         }),

@@ -1,5 +1,5 @@
 import React from 'react';
-import ProgramView from '@/features/program/program-view/Index'
+import ProgramView from '@/features/program/program-view'
 
 const Page = () => {
     return (
