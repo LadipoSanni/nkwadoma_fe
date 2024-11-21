@@ -1,28 +1,44 @@
 'use client'
 import React, {useState} from 'react';
 import {Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogOverlay} from '@/components/ui/dialog';
-import {Form, FormProvider, useForm} from 'react-hook-form';
+import { FormProvider, useForm} from 'react-hook-form';
 import {Label} from '@/components/ui/label';
 import {Input} from '@/components/ui/input';
 import {cabinetGrotesk, inter} from "@/app/fonts";
 import {MdClose, MdOutlineAdd, MdHorizontalRule, MdOutlineCameraAlt} from "react-icons/md";
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible";
 import {Button} from "@/components/ui/button";
+import { SubmitHandler } from 'react-hook-form';
+
 
 interface IdentityVerificationModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
+type FormData = {
+    bvn: number;
+    nin: number;
+};
+
 
 const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({isOpen, onClose}) => {
-    const methods = useForm();
+    const methods = useForm<FormData>();
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
 
-    const onSubmit = () => {
-        onClose();
-        setIsSecondModalOpen(true);
+    const onSubmit: SubmitHandler<FormData> = (data) => {
+        try {
+            const formData: FormData = {
+                bvn: Number(data.bvn),
+                nin: Number(data.nin)
+            };
+            console.log(formData);
+            onClose();
+            setIsSecondModalOpen(true);
+        } catch (error) {
+            console.error("Error while submitting form:", error);
+        }
     };
 
     return (
@@ -41,7 +57,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({is
                         </DialogClose>
                     </DialogHeader>
                     <FormProvider {...methods}>
-                        <Form className={`${inter.className}`} onSubmit={methods.handleSubmit(onSubmit)}>
+                        <form className={`${inter.className}`} onSubmit={methods.handleSubmit(onSubmit)}>
                             <main className={'grid gap-5'}>
                                 <div className={'grid gap-2'}>
                                     <Label htmlFor="bvn" className="block text-sm font-medium text-labelBlue">Bank
@@ -112,7 +128,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({is
                                     </Button>
                                 </div>
                             </main>
-                        </Form>
+                        </form>
                     </FormProvider>
                 </DialogContent>
             </Dialog>
