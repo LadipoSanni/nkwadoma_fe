@@ -50,7 +50,7 @@ const LoanDetails = () => {
         <div
             id={"loanRequestDetails"}
             data-testid={"loanRequestDetails"}
-            className={` ${styles.container}  md:px-8 w-full h-full overflow-y-scroll px-4 pt-4 md:pt-4 `}
+            className={` ${styles.container}  md:px-8 w-full h-full overflow-y-scroll md:overflow-y-hidden px-4 pt-4 md:pt-4 `}
             // className={`w-full h-full md:grid grid gap-2 md:px-8 px-4 pt-4 md:pt-4  md:w-full md:h-full  `}
         >
             <BackButton handleClick={backToLoanRequest} iconRight={true} text={"Back to loan request"} id={"loanRequestDetailsBackButton"} textColor={'#142854'}  />
@@ -63,8 +63,8 @@ const LoanDetails = () => {
                 <div
                     id={`ImageComponentOnLoanRequestDetails`}
                     data-testid={`ImageComponentOnLoanRequestDetails`}
-                    className={` grid gap-3 md:grid md:gap-6  `}
-                >
+                    className={` grid gap-3 md:grid md:gap-6 md:w-fit md:h-fit   `}
+                 >
 
                     <Avatar id={'loaneeImageOnLoanRequestDetails'} data-testid={'loaneeImageOnLoanRequestDetails'} className={`h-[8rem] w-[8rem] md:w-[8rem] md:h-[8rem] `}>
                         <AvatarImage  src={`/234d70b3-ec71-4d68-8696-5f427a617fb7.jpeg`} alt="@shadcn" />
@@ -95,7 +95,7 @@ const LoanDetails = () => {
                     className={`  overflow-x-hidden overflow-y-auto md:w-fit w-full md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 px-3 py-3 grid gap-1 md:grid `}
                 >
                    <div
-                       className={` overflow-x-auto  scrollbar scrollbar-thumb-purple-900 scrollbar-track-purple-100 md:w-fit w-full bg-purple-300 h-[10px] md:h-fit  flex md:flex `}
+                       className={` overflow-x-auto  scrollbar scrollbar-thumb-purple-900 scrollbar-track-purple-100 md:w-fit w-full h-[10px] md:h-fit  flex md:flex `}
                    >
                       <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab}/>
                    </div>
