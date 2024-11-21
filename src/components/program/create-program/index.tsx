@@ -297,7 +297,7 @@
 // }
 
 // export default CreateProgram;
-import React from 'react'
+import React,{useState} from 'react'
 import { Formik,Form,Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup';
 import {inter} from "@/app/fonts"
@@ -316,6 +316,15 @@ type Props = {
    
 }
 
+interface ApiError {
+  status: number;
+  data: {
+      message: string;
+  };
+}
+
+
+
 
 
 
@@ -324,6 +333,7 @@ type Props = {
 function CreateProgram({setIsOpen}:Props) {
   const queryClient = useQueryClient();
   const [createProgram,{isLoading}] = useCreateProgramMutation();
+  const [error, setError] =  useState('');
 
     const initialFormValue = {
         programName: "",
@@ -361,6 +371,12 @@ function CreateProgram({setIsOpen}:Props) {
       status:"success"
       
     });
+
+    const networkPopUp =  ToastPopUp({
+      description: "No internet connection",
+      status: "error",
+      
+    });
     
 
     const handleCloseModal = () => {
@@ -370,6 +386,13 @@ function CreateProgram({setIsOpen}:Props) {
       }
     
     async function handleSubmit  (values: typeof initialFormValue) {
+      if (!navigator.onLine) {
+        networkPopUp.showToast();
+        if (setIsOpen) {
+          setIsOpen(false);
+        }
+        return 
+    }
     
     const payload = {
     programName: values.programName,
@@ -378,7 +401,7 @@ function CreateProgram({setIsOpen}:Props) {
     deliveryType: values.deliveryType,
     programMode: values.programMode,
   };
-    try {
+    try { 
     
      const create = await createProgram(payload).unwrap();
      if(create) {
@@ -387,8 +410,10 @@ function CreateProgram({setIsOpen}:Props) {
       if (setIsOpen) {
         setIsOpen(false);
       }
+     
     }} catch (err) {
-      console.error('Failed to update program:', err);
+      const error = err as ApiError;
+      setError(error ? error?.data?.message : "Error occured" );
     }
   }
 
@@ -542,6 +567,9 @@ function CreateProgram({setIsOpen}:Props) {
               </div>
 
                 </div>
+                {
+                <div className={`text-error500 flex justify-center items-center`}>{error}</div>
+                 }
 
               </Form>
             )

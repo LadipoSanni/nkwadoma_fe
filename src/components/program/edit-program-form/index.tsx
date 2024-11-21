@@ -35,6 +35,14 @@ type Props = {
    programDetail?: ProgramDetail
 }
 
+interface ApiError {
+  status: number;
+  data: {
+      message: string;
+  };
+}
+
+
 
 
 function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
@@ -83,6 +91,12 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
       status:"success"
       
     });
+
+    const networkPopUp =  ToastPopUp({
+      description: "No internet connection",
+      status: "error",
+      
+    });
     
 
     const handleCloseModal = () => {
@@ -92,11 +106,14 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
       }
     
     async function handleSubmit  (values: typeof initialFormValue) {
-    // console.log(values);
-    // toastPopUp.showToast();
-    // if (setIsOpen) {
-    //   setIsOpen(false);
-    // }
+      if (!navigator.onLine) {
+        networkPopUp.showToast();
+        if (setIsOpen) {
+          setIsOpen(false);
+        }
+        return 
+    }
+    
     try {
       await updateProgram({ id:programId, data: values }).unwrap();
      queryClient.invalidateQueries({ queryKey: ['program'] });
@@ -105,8 +122,9 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
         setIsOpen(false);
       }
     } catch (err) {
-      // console.error('Failed to update program:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred try again later');
+      const error = err as ApiError;
+      setError(error?.data?.message );
+      // setError(err instanceof Error ? err.message : 'An error occurred try again later');
     }
   }
 

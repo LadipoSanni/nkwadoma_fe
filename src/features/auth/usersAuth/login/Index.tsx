@@ -65,6 +65,7 @@ const Login: React.FC = () => {
                 description: "No internet connection",
                 status: "error",
             })
+            return 
         }
         else {
             try {

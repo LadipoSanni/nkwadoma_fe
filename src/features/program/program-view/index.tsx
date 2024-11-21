@@ -26,6 +26,7 @@ import TableEmptyState from '@/reuseable/emptyStates/TableEmptyState';
 import { setTimeout } from 'timers';
 
 
+
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
@@ -200,7 +201,7 @@ const ProgramView = () => {
         else if(id === "2") {
           setProgramId(String(row.id))
            await refetch()
-           setTimeout(()=>{ setEditOpen(true)},1000)
+           setTimeout(()=>{ setEditOpen(true)},500)
           
         
         }
@@ -217,7 +218,7 @@ const ProgramView = () => {
         } else if (optionId === "2") {
              setProgramId(id);
             await refetch()
-            setTimeout(()=>{ setEditOpen(true)},1000)
+            setTimeout(()=>{ setEditOpen(true)},500)
         } else if (optionId === "3") {
             setProgramId(id);
             setIsDeleteOpen(true);
@@ -307,7 +308,7 @@ const ProgramView = () => {
                                 icon={Cross2Icon}
                                 width={`32%`}
                     >
-                        create Cohort
+                        
                         <CreateProgram setIsOpen={setIsOpen}
                                             //  programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
                                             //  programModes={["PART_TIME", "FULL_TIME"]}
@@ -335,7 +336,7 @@ const ProgramView = () => {
                         icon={Book}
                         name='program'
                         />
-                    )   : (programView.map((program, index) => (
+                    )   : (programView.slice().reverse().map((program, index) => (
                             <AllProgramsCard
                                 key={index}
                                 description={program.programDescription ?? ''}
@@ -387,13 +388,15 @@ const ProgramView = () => {
                 icon={Cross2Icon}
                 headerTitle='Edit Program'
                 >
+                   
                     <EditProgramForm 
                     programId={programId} 
                     setIsOpen={setEditOpen}
                     programDetail={progamDetail}
-                    />
-                </TableModal>) 
-                  }
+                    /> 
+                </TableModal>
+                ) 
+                }
                 <TableModal
                 isOpen={isDeleteOpen}
                 closeOnOverlayClick={true}
