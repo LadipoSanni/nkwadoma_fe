@@ -442,6 +442,38 @@ export const cohortDataDetails = [
   }
 ];
 
+
+
+export const loanRequestData = [
+  { loanee: "Peter Ezike", program: "Software engineering", cohort: "Luminary", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦500,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Andrew Babalola", program: "Product design", cohort: "Xplorers", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦450,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Mary Maiwada", program: "Product management", cohort: "Maven", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦400,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "David Olanrewaju", program: "Quality assurance", cohort: "Sages", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦550,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Sarah Akinyemi", program: "Product marketing", cohort: "Alphas", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦300,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Esther Erekosima", program: "Product design", cohort: "Gadans", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦600,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Victoria Ezemma", program: "Software engineering", cohort: "Elites", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦550,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Joshua Ovunda", program: "Quality assurance", cohort: "Pathfinders", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦450,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Grace Ijeoma", program: "Software engineering", cohort: "Eagles", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦500,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "John Doe", program: "Product marketing", cohort: "Innovators", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦600,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Jane Smith", program: "Quality assurance", cohort: "Trailblazers", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦400,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Michael Johnson", program: "Product design", cohort: "Creators", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦550,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Emily Davis", program: "Product management", cohort: "Strategists", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦500,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Chris Osei", program: "Software engineering", cohort: "Innovators", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦300,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Lucy Wanjiru", program: "Quality assurance", cohort: "Visionaries", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦600,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Faith Olu", program: "Product marketing", cohort: "Thinkers", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦400,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Samuel Eze", program: "Software engineering", cohort: "Elites", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦500,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Ibrahim Musa", program: "Product management", cohort: "Visionaries", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦450,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Aisha Bello", program: "Product design", cohort: "Creators", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦400,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Abdul Malik", program: "Quality assurance", cohort: "Sages", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦550,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Elizabeth Mba", program: "Software engineering", cohort: "Innovators", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦600,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Daniel Ike", program: "Product marketing", cohort: "Creators", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦500,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Tobi Akintola", program: "Product design", cohort: "Elites", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦450,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Ruth Odili", program: "Product management", cohort: "Thinkers", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦300,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Victor Ekene", program: "Software engineering", cohort: "Trailblazers", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦600,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Monica Udo", program: "Quality assurance", cohort: "Pathfinders", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦400,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Philip Obi", program: "Product design", cohort: "Visionaries", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦550,000.00", amountRequested: "₦3,000,000.00" },
+  { loanee: "Angela Obasi", program: "Product management", cohort: "Trailblazers", start: "15 Dec, 2021", request: "15 Dec, 2021", deposit: "₦3,000,000.00", initialDeposit: "₦500,000.00", amountRequested: "₦3,000,000.00" },
+];
 export const CohortTrainees = [
   {
     Trainee: "Margret Ezeoke",
@@ -505,7 +537,7 @@ export const CohortTrainees = [
     AmountReceived: "3000,000.00"
   },
 ]
-export const loanRequestData = [
+export const loanRequestDatas = [
   {
     loanee: "Peter ezike",
     program: "Software Engineering",

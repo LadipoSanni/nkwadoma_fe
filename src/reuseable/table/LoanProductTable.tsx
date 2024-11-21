@@ -46,7 +46,8 @@ interface DropdownOption {
       icon?:ElementType,
       optionalFilterName?: string,
       optionalRowsPerPage?: number; 
-      tableCellStyle?: string
+      tableCellStyle?: string;
+    //   totalPages?: number;
   }
   
 

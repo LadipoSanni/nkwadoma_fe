@@ -5,14 +5,13 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
-import {programData} from "@/utils/ProgramData";
+// import {programData} from "@/utils/ProgramData";
 import CreateProgram from "@/components/program/create-program";
 import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
 import {MdOutlineDateRange, MdOutlinePeopleAlt, MdPersonOutline} from "react-icons/md";
 import {Cross2Icon} from "@radix-ui/react-icons";
-
-
+import { setItemSessionStorage } from '@/utils/storage';
 import {Button} from "@/components/ui/button";
 import TableModal from "@/reuseable/modals/TableModal";
 import { useRouter } from 'next/navigation'
@@ -21,11 +20,18 @@ import EditProgramForm from '@/components/program/edit-program-form';
 import { useGetAllProgramsQuery } from '@/service/admin/program_query';
 import { useDeleteProgramMutation } from '@/service/admin/program_query';
 import { useGetProgramByIdQuery } from '@/service/admin/program_query';
-// import { saveObjectItemToSessionStorage } from '@/utils/storage';
+import SkeletonForGrid from '@/reuseable/Skeleton-loading-state/Skeleton-for-grid';
 import { useSearchProgramQuery } from '@/service/admin/program_query';
+import TableEmptyState from '@/reuseable/emptyStates/TableEmptyState';
+import { setTimeout } from 'timers';
 
 
-interface viewAllProgramProps {
+
+interface TableRowData {
+    [key: string]: string | number | null | React.ReactNode;
+}
+
+interface viewAllProgramProps extends TableRowData  {
     id?: string;
     programDescription?: string;
     name?: string;
@@ -74,10 +80,11 @@ const ProgramView = () => {
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [page] = useState(0);
-    const size = 10;
+    // const [totalPage, setTotalPage] = useState(0);
+    const size = 100;
     
 
-    const { data} = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true, })
+    const { data,isLoading} = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true, })
     const [deleteItem] = useDeleteProgramMutation()
     const { data: searchResults } = useSearchProgramQuery(searchTerm, { skip: !searchTerm });
 
@@ -85,18 +92,16 @@ const ProgramView = () => {
         if(data && data?.data ) {
             const programs = data?.data?.body
             setProgramView(programs)
+            // setTotalPage(data?.data?.totalPages)
         }
        
     },[data])
    
-   
-    interface TableRowData {
-        [key: string]: string | number | null | React.ReactNode;
-    }
 
     const handleRowClick = (row: TableRowData) => {
         router.push('/program/details')
-        console.log('The row: ',row)
+        console.log('The row: ',row.id)
+        setItemSessionStorage("programId",String(row.id))
 
        
     }
@@ -104,11 +109,15 @@ const ProgramView = () => {
     const handleProgramDetailsOnclick= (id:string) => {
         router.push('/program/details')
         setProgramId(id)
+        setItemSessionStorage("programId",id)
+       
     }
 
+   
+    
     useEffect(() => { 
         if (searchTerm && searchResults && searchResults.data) { 
-            const programs = [searchResults.data]; 
+            const programs =searchResults.data; 
             setProgramView(programs); 
         } 
            
@@ -116,6 +125,7 @@ const ProgramView = () => {
     (data && data?.data ) {
         const programs = data?.data?.body
         setProgramView(programs)
+        // setSearchTerm("")
     }
         }, [searchTerm, searchResults,data]);
 
@@ -125,38 +135,38 @@ const ProgramView = () => {
 
 
     const ProgramHeader = [
-        {title: 'Programs', sortable: true, id: 'programs', selector: (row: TableRowData) => row.programs},
+        {title: 'Programs', sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
         {
-            title: 'Status',
+            title: <div className='relative md:right-4 md:left-4'>Status</div>,
             sortable: true,
-            id: 'status',
+            id: 'programStatus',
             selector: (row: TableRowData) => <span
-                className={` pt-1 pb-1 pr-3 pl-3 rounded-xl ${row.status === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"}`}>{row.status}</span>
+                className={` pt-1 pb-1 pr-3 pl-3  rounded-xl ${row.programStatus === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"} `}>{row.programStatus ?? "Declined"}</span>
         },
-        {title: 'No. of Cohorts', sortable: true, id: 'noOfCohorts', selector: (row: TableRowData) => row.noOfCohorts},
+        {title: 'No. of Cohorts', sortable: true, id: 'noOfCohorts', selector: (row: TableRowData) => row.noOfCohorts ?? "0"},
         {
             title: 'No. of Trainees',
             sortable: true,
             id: 'noOfTrainees',
-            selector: (row: TableRowData) => row.noOfTrainees
+            selector: (row: TableRowData) => row.noOfTrainees ?? "0"
         },
         {
             title: 'Amount Disbursed',
             sortable: true,
-            id: 'amountDisbursed',
-            selector: (row: TableRowData) => formatAmount(row.amountDisbursed)
+            id: 'totalAmountDisbursed',
+            selector: (row: TableRowData) => formatAmount(row.totalAmountDisbursed)
         },
         {
             title: 'Amount Repaired',
             sortable: true,
-            id: 'amountRepaired',
-            selector: (row: TableRowData) => formatAmount(row.amountRepaired)
+            id: 'totalAmountRepaid',
+            selector: (row: TableRowData) => formatAmount(row.totalAmountRepaid)
         },
         {
             title: 'Amount Outstanding',
             sortable: true,
-            id: 'amountOutstanding',
-            selector: (row: TableRowData) => formatAmount(row.amountOutstanding)
+            id: 'totalAmountOutstanding',
+            selector: (row: TableRowData) => formatAmount(row.totalAmountOutstanding)
         },
 
 
@@ -173,6 +183,7 @@ const ProgramView = () => {
     //     }));
     //     setDummyData(data);
     // }, []);
+    const { data: program, isLoading: loading,refetch} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
 
     const dropDownOption = [
         {name: 'View Program', id: '1'},
@@ -180,14 +191,17 @@ const ProgramView = () => {
         {name: 'Delete Program', id: '3'}
     ];
 
-    const handleDropdownClick = (id:string,row: TableRowData) => {
+    const handleDropdownClick = async (id:string,row: TableRowData) => {
         if(id === "1") {
             router.push('/program/details')
+            setItemSessionStorage("programId",String(row.id))
+
           
         }
         else if(id === "2") {
-          setProgramId(String(row.cohortId))
-          setEditOpen(true)
+          setProgramId(String(row.id))
+           await refetch()
+           setTimeout(()=>{ setEditOpen(true)},500)
           
         
         }
@@ -197,12 +211,14 @@ const ProgramView = () => {
         }
       }
 
-      const handleCardDropDownClick =  (optionId: string, id: string) => {
+      const handleCardDropDownClick = async (optionId: string, id: string) => {
         if (optionId === "1") {
             router.push(`/program/details`);
+            setItemSessionStorage("programId",id)
         } else if (optionId === "2") {
-            setProgramId(id);
-            setEditOpen(true);
+             setProgramId(id);
+            await refetch()
+            setTimeout(()=>{ setEditOpen(true)},500)
         } else if (optionId === "3") {
             setProgramId(id);
             setIsDeleteOpen(true);
@@ -232,10 +248,10 @@ const ProgramView = () => {
         }
     }
 
-    const { data: program} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
+    
  
     useEffect(()=> {
-    if(program?.data ){
+    if(editOpen && program?.data ){
         const detail = program?.data
         setProgramDetail({
             id: detail?.id || "",
@@ -249,13 +265,13 @@ const ProgramView = () => {
             totalAmountRepaid: detail?.totalAmountRepaid || 0,
             totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
             totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
-        });
+        }); 
     }
    // saveObjectItemToSessionStorage("programDetail",progamDetail)
 
-  },[program])
+  },[editOpen, program])
 
-    console.log("Stored program details:", progamDetail);
+    
    
     const tagButtonData = [
         {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
@@ -292,12 +308,13 @@ const ProgramView = () => {
                                 icon={Cross2Icon}
                                 width={`32%`}
                     >
-                        create Cohort
+                        
                         <CreateProgram setIsOpen={setIsOpen}
-                                             programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
-                                             programModes={["PART_TIME", "FULL_TIME"]}
-                                             programDurations={["3", "4"]}
-                                             submitButtonText={"Create"}/>
+                                            //  programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
+                                            //  programModes={["PART_TIME", "FULL_TIME"]}
+                                            //  programDurations={["3", "4"]}
+                                            //  submitButtonText={"Create"}
+                                             />
 
                     </TableModal>
                 </div>
@@ -313,7 +330,13 @@ const ProgramView = () => {
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
-                        {programView.map((program, index) => (
+                    { isLoading ? (<SkeletonForGrid/> ) :
+                      ( programView.length === 0 ?  (
+                        <TableEmptyState
+                        icon={Book}
+                        name='program'
+                        />
+                    )   : (programView.slice().reverse().map((program, index) => (
                             <AllProgramsCard
                                 key={index}
                                 description={program.programDescription ?? ''}
@@ -325,7 +348,9 @@ const ProgramView = () => {
                                 handleCardDropDownClick={(optionId:string) => handleCardDropDownClick(optionId, program.id ?? '')}
                                 handleProgramDetails={()=> handleProgramDetailsOnclick(program.id ?? '')}                   
                                 />
-                        ))}
+                        )
+                        )) )}
+                       
                     </div>
                 ) : (
                     <div
@@ -337,10 +362,10 @@ const ProgramView = () => {
                         }}
                     >
                         <LoanProductTable
-                            tableData={programData}
+                            tableData={programView.slice().reverse()}
                             tableHeader={ProgramHeader}
                             staticHeader={"Programs"}
-                            staticColunm={'programs'}
+                            staticColunm={'name'}
                             tableHeight={52}
                             handleRowClick={handleRowClick}
                             sx='cursor-pointer'
@@ -349,25 +374,29 @@ const ProgramView = () => {
                             icon={Book}
                             sideBarTabName='Program'
                             handleDropDownClick={handleDropdownClick}
+                            optionalRowsPerPage={10}
                         />
                     </div>
                 )}
             </div>
             <div>
+                { loading ? "" : (
                 <TableModal
                 isOpen={editOpen}
                 closeOnOverlayClick={true}
-                closeModal={() => setEditOpen(false)}
+                closeModal={() => setEditOpen(!editOpen)}
                 icon={Cross2Icon}
                 headerTitle='Edit Program'
                 >
+                   
                     <EditProgramForm 
                     programId={programId} 
                     setIsOpen={setEditOpen}
                     programDetail={progamDetail}
-                    />
+                    /> 
                 </TableModal>
-                
+                ) 
+                }
                 <TableModal
                 isOpen={isDeleteOpen}
                 closeOnOverlayClick={true}

@@ -1,5 +1,5 @@
 "use client"
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import {useRouter} from "next/navigation";
 import {inter, cabinetGrotesk} from "@/app/fonts";
 import {
@@ -24,43 +24,85 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import EditProgramForm from "@/components/program/edit-program-form";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
 // import { useSearchParams } from 'next/navigation';
-// import { useGetProgramByIdQuery } from "@/service/admin/program_query";
+import { useGetProgramByIdQuery } from "@/service/admin/program_query";
+import { getItemSessionStorage } from "@/utils/storage";
+import {formatAmount} from '@/utils/Format'
+import { useDeleteProgramMutation } from '@/service/admin/program_query';
 
 
 
 const ProgramDetails = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    // const { data: program} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
-    // const id = "ee3bf539-26b7-4bf4-808a-36a1d95a81e8"
-    // const { data } = useGetProgramByIdQuery({id})
+    const [programId, setProgramId] = useState('');
+    const [progamDetail, setProgramDetail] = useState({
+        id: "",
+        programDescription: "",
+        name: "",
+        durationType: "",
+        programStartDate: "",
+        duration: 0,
+        mode: "",
+        deliveryType: "",
+        totalAmountRepaid: 0,
+        totalAmountDisbursed: 0,
+        totalAmountOutstanding: 0,
+     }
+    )
 
-    // useEffect(()=> {
-    //     if(data?.data ){
-    //         console.log(data.data)
-    //     }
-    // },[data])
+    useEffect(() =>{
+        const programId = getItemSessionStorage("programId")
+        if(programId){
+            setProgramId(programId)
+        }
+    },[])
+
+    console.log(`handleProgram details: `,programId)
+
+    const { data: program} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
+    const [deleteItem,{isLoading}] = useDeleteProgramMutation()
+    
+
+    useEffect(()=> {
+        if(program?.data ){
+            console.log( program.data)
+            const detail = program?.data
+            setProgramDetail({
+                id: detail?.id || "",
+                programDescription: detail?.programDescription || "",
+                name: detail?.name || "",
+                durationType: detail?.durationType || "",
+                programStartDate: detail?.programStartDate || "",
+                duration: detail?.duration || 0,
+                mode: detail?.mode || "",
+                deliveryType: detail?.deliveryType || "",
+                totalAmountRepaid: detail?.totalAmountRepaid || 0,
+                totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
+                totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
+            });
+        }
+    },[program])
 
     const dataList = [
-        {label: "Program mode", value: "Online"},
-        {label: "Program delivery type", value: "Full-time"},
-        {label: "Completion rate", value: "88%"},
-        {label: "Employment rate", value: "78%"},
-        {label: "Average starting income", value: "₦3,000,000.00"},
+        {label: "Program mode", value: progamDetail.mode},
+        {label: "Program delivery type", value: progamDetail.deliveryType},
+        {label: "Completion rate", value: "0%"},
+        {label: "Employment rate", value: "0%"},
+        {label: "Average starting income", value: formatAmount(0)},
     ];
 
     const loanDetail = [
-        {detail: "Repayment rate", value: "40%"},
-        {detail: "Debt percentage", value: "55.5%"},
-        {detail: "Total loan amount disbursed", value: "₦3,000,000.00"},
-        {detail: "Total loan amount repaid", value: "₦3,000,000.00"},
-        {detail: "Total loan amount outstanding", value: "₦3,000,000.00"},
+        {detail: "Repayment rate", value: "0%"},
+        {detail: "Debt percentage", value: "0%"},
+        {detail: "Total loan amount disbursed", value: formatAmount(progamDetail.totalAmountDisbursed)},
+        {detail: "Total loan amount repaid", value: formatAmount(progamDetail.totalAmountRepaid)},
+        {detail: "Total loan amount outstanding", value: formatAmount(progamDetail.totalAmountOutstanding)},
 
     ]
 
 
     const tagButtonData = [
-        {tagIcon: MdOutlineDateRange, tagCount: 4, tagButtonStyle: "bg-lightBlue100", tagText: "months"},
+        {tagIcon: MdOutlineDateRange, tagCount: progamDetail.duration, tagButtonStyle: "bg-lightBlue100", tagText: "months"},
         {tagIcon: MdOutlinePeopleAlt, tagCount: 10, tagButtonStyle: "bg-warning80", tagText: "cohorts"},
         {tagIcon: MdPersonOutline, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "trainees"},
     ];
@@ -81,12 +123,20 @@ const ProgramDetails = () => {
     }
 
     const router = useRouter();
-    // const searchParams = useSearchParams();
-    // const id = searchParams ? searchParams.get('id') : null
-    // const { data: program, error, isLoading } = useGetProgramByIdQuery(id);
 
-    // if (isLoading) return <div>Loading...</div>;
-    // if (error) return <div>Error loading program details</div>;
+    const handleDeleteAProgram = async (id: string) => {
+       
+        try{
+           const itemDeleted = await deleteItem({id}).unwrap();
+           if(itemDeleted){
+               setIsDeleteOpen(false)
+               router.push('/program')
+           }
+           
+        }catch(error){
+            console.error("Error deleting program: ", error);
+        }
+    }
 
     const handleBackClick = () => {
         router.push('/program')
@@ -97,7 +147,7 @@ const ProgramDetails = () => {
     }
 
 
-    const description = "Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
+    // const description = "Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
    
     return (
         <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`}>
@@ -121,10 +171,10 @@ const ProgramDetails = () => {
                             </div>
                             <div className={'flex flex-col gap-3'}>
                                 <h1 className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>
-                                    Product Design
+                                {progamDetail.name}
                                 </h1>
                                 <div className={'grid gap-5'}>
-                                    <p className={'text-sm font-normal text-black400 w-[351px]'}>{description}</p>
+                                    <p className={'text-sm font-normal text-black400 w-[351px]'}>{progamDetail.programDescription}</p>
                                     <div id={`details`} data-testid="details" className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
                                         {tagButtonData.map((tagProps, index) => (
                                             <TagButton key={index} {...tagProps} />
@@ -170,7 +220,11 @@ const ProgramDetails = () => {
                     headerTitle={"Edit program"}
                     icon={Cross2Icon}
                     >
-                    <EditProgramForm programId={'EditProgram'} setIsOpen={setIsOpen}/>
+                    <EditProgramForm 
+                    programId={'EditProgram'} 
+                    setIsOpen={setIsOpen}
+                    programDetail={progamDetail}
+                    />
                 </TableModal>
 
                     <TableModal
@@ -178,8 +232,16 @@ const ProgramDetails = () => {
                         closeModal={()=> setIsDeleteOpen(false)}
                         closeOnOverlayClick={true}
                         icon={Cross2Icon}
+                        width='auto'
                     >
-                        <DeleteCohort   setIsOpen={()=> setIsDeleteOpen(false)} headerTitle={'Program'} title={'program'}/>
+                        <DeleteCohort   
+                        setIsOpen={()=> setIsDeleteOpen(false)} 
+                        headerTitle={'Program'} 
+                        title={'program'}
+                        handleDelete={handleDeleteAProgram}
+                        id={programId}
+                        isLoading={isLoading}
+                        />
                     </TableModal>
                 </>
 

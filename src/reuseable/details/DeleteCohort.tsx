@@ -4,6 +4,7 @@ import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {inter, cabinetGrotesk} from "@/app/fonts";
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
+import Isloading from "../display/Isloading";
 
 interface deleteCohortProps {
     id?: string,
@@ -11,11 +12,12 @@ interface deleteCohortProps {
     headerTitle: string,
     title: string,
     handleDelete?: (id: string) => void;
+    isLoading?: boolean
 
 }
 
 
-export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id}) => {
+export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading}) => {
 
     const toastPopUp = ToastPopUp({
     description: `${headerTitle} deleted successfully.`,
@@ -33,7 +35,9 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
     const handleDeleteCohort = () => {
         if(handleDelete){
             handleDelete(id ?? "");
-            toastPopUp.showToast();
+            setTimeout(() => {
+                toastPopUp.showToast(); 
+            }, 1000); 
            if (setIsOpen) setIsOpen(false)
 
         }
@@ -60,7 +64,11 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
                         onClick={handleCanCelCohort}>Cancel</Button>
                 <Button size={'lg'} variant={'secondary'}
                         className={`${inter.className} h-12 bg-error450 text-sm font-semibold leading-6 text-meedlWhite`}
-                        onClick={handleDeleteCohort}>Delete</Button>
+                        onClick={handleDeleteCohort}>
+                            {
+                                isLoading? <Isloading /> : 'Delete'
+                            }
+                            </Button>
             </div>
         </div>
     )
