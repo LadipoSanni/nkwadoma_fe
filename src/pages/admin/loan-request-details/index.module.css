@@ -2,15 +2,19 @@
     background-color: white;
 }
 .container{
-
+  height: 100%;
+    background-color: chocolate;
 }
 .tabConnector{
     display: grid;
 }
 
+.componentDivision{
+    background-color: white;
+}
 
 
-@media only screen and (max-width: 200px){
+@media only screen and (max-width: 600px){
     .tabConnector{
         display: flex;
         grid-template-columns: max-content;
@@ -24,6 +28,11 @@
         overflow-x: auto;
         -ms-overflow-style: none;
         scrollbar-width: none;
+    }
+    .componentDivision{
+        display: grid;
+        background-color: #976868;
+        grid-template-rows: 10% 45% 45%;
     }
 }
 
