@@ -16,7 +16,7 @@ import LoanDetailsCard from "@/reuseable/cards/loan-details-card";
 
 const LoanDetails = () => {
     const router = useRouter()
-    const [currentTab, setCurrentTab] = useState(0)
+    const [currentTab] = useState(0)
 
     const backToLoanRequest = () => {
         router.push("/loan/loan-request")
@@ -38,15 +38,15 @@ const LoanDetails = () => {
 
     ];
 
-    const component = [
-        {
-            "basicDetails": <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
-                                             backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>
-        },
-        {"AdditionalDetails": <LoanDetailsCard id={"basicDetailsOnLoanDetails"}/>},
-        {"LoanDetails": <LoanDetailsCard id={"basicDetailsOnLoanDetails"}/>}
-
-    ]
+    // const component = [
+    //     {
+    //         "basicDetails": <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
+    //                                          backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>
+    //     },
+    //     {"AdditionalDetails": <LoanDetailsCard id={"basicDetailsOnLoanDetails"}/>},
+    //     {"LoanDetails": <LoanDetailsCard id={"basicDetailsOnLoanDetails"}/>}
+    //
+    // ]
 
     return (
         <div
