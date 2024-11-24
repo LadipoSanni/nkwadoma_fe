@@ -62,7 +62,7 @@ const LoanDetails = () => {
             <div
                 id={`ImageComponentOnLoanRequestDetails`}
                 data-testid={`ImageComponentOnLoanRequestDetails`}
-                className={`  mt-4 mb-4 grid md:flex gap-3 h-fit md:justify-between md:gap-6 md:w-full md:bg-yellow-100 md:h-fit   `}
+                className={`  mt-4 mb-4 grid md:flex gap-3 h-fit md:justify-between md:gap-6 md:w-full  md:h-fit   `}
             >
 
                 <div>
