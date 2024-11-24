@@ -6,7 +6,7 @@ describe("test loan details component", ()=> {
 
     it('should contain the main container', () => {
         render(
-            <LoanDetailsCard/>
+            <LoanDetailsCard id={'testing '} />
         )
         const component = screen.getByTestId("loanDetailsCardMainComponent")
         expect(component).toBeInTheDocument()

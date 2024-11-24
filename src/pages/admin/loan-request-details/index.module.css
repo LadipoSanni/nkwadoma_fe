@@ -1,11 +1,8 @@
 .mainDetails{
     background-color: white;
 }
-.container{
-  height: 100%;
-    background-color: chocolate;
-    overflow-y: hidden;
-}
+
+
 .tabConnector{
     display: grid;
 }
@@ -33,7 +30,7 @@
     }
     .componentDivision{
         display: grid;
-        background-color: #f1c61b;
+        /*background-color: #f1c61b;*/
         grid-template-rows:  45% 55%;
         overflow-y: auto;
     }
