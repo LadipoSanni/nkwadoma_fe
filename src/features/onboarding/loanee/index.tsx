@@ -14,52 +14,12 @@ const steps = [
     'Confirm loan application'
 ];
 
-// interface PublishData {
-//     partner_params: {
-//         libraryVersion: string;
-//         permissionGranted: boolean;
-//     };
-//     images: {
-//         file: string;
-//         image_type_id: number;
-//         image: string;
-//     }[];
-// }
-
 const LoaneeOnboarding = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [showModal, setShowModal] = useState(false);
     // const [showCamera, setShowCamera] = useState(false);
 
-    // const handlePublish = async (data: PublishData) => {
-    //     try {
-    //         const response = await postContent(data);
-    //         console.log('Liveness check result:', response);
-    //         setCurrentStep((prevStep) => (prevStep + 1) % steps.length);
-    //         // setShowCamera(false);
-    //         setShowModal(false);
-    //     } catch (error) {
-    //         console.error('Liveness check failed:', error);
-    //     }
-    // };
 
-    // const postContent = async (data: PublishData) => {
-    //     const options = {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(data),
-    //     };
-    //
-    //     try {
-    //         const response = await fetch("/", options);
-    //         const json = await response.json();
-    //         return json;
-    //     } catch (e) {
-    //         throw e;
-    //     }
-    // };
 
     return (
         <div id="loanApplicationDetailsContainer"
