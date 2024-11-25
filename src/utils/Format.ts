@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import dayjs from "dayjs";
 
 interface TableRowData {
-  [key: string]: string | number | null | ReactNode;
+  [key: string]: string | number | null | ReactNode | object;
 }
 
 export const formatAmount = (price: TableRowData[keyof TableRowData]) => {

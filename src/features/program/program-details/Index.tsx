@@ -28,13 +28,39 @@ import { useGetProgramByIdQuery } from "@/service/admin/program_query";
 import { getItemSessionStorage } from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
 import { useDeleteProgramMutation } from '@/service/admin/program_query';
+import { useGetAllCohortByAParticularProgramQuery } from "@/service/admin/program_query";
 
 
+interface loanDetails {
+    totalAmountRepaid?: number;
+   totalAmountDisbursed?: number;
+   totalAmountOutstanding?: number;
+   totalAmountRecieved?: number;
+   totalAmountRequested?: number;
+}
+
+interface TableRowData {
+    [key: string]: string | number | null | React.ReactNode | loanDetails;
+}
+
+interface viewAllProgramProps  {
+    programId?: string;
+    cohortDescription?: string;
+    name?: string;
+   tuitionAmount?: string;
+    loanDetails ?: loanDetails
+ }
+
+
+ type ViewAllProgramProps = viewAllProgramProps & TableRowData;
+ 
 
 const ProgramDetails = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [programId, setProgramId] = useState('');
+    const [page] = useState(0);
+    const size = 100;
     const [progamDetail, setProgramDetail] = useState({
         id: "",
         programDescription: "",
@@ -49,6 +75,7 @@ const ProgramDetails = () => {
         totalAmountOutstanding: 0,
      }
     )
+    const [cohorts,setCohorts] = useState<ViewAllProgramProps[]>([])
 
     useEffect(() =>{
         const programId = getItemSessionStorage("programId")
@@ -61,6 +88,7 @@ const ProgramDetails = () => {
 
     const { data: program} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
     const [deleteItem,{isLoading}] = useDeleteProgramMutation()
+    const { data: cohortsByProgram,isLoading:loading} = useGetAllCohortByAParticularProgramQuery({programId: programId,pageSize: size,pageNumber: page},{ refetchOnMountOrArgChange: true });
     
 
     useEffect(()=> {
@@ -82,6 +110,14 @@ const ProgramDetails = () => {
             });
         }
     },[program])
+
+     useEffect(()=> {
+        if(cohortsByProgram?.data ){
+            setCohorts(cohortsByProgram.data.body)
+        }
+     },[cohortsByProgram])
+
+     console.log("The cohorts: ",cohorts)
 
     const dataList = [
         {label: "Program mode", value: progamDetail.mode},
@@ -107,12 +143,12 @@ const ProgramDetails = () => {
         {tagIcon: MdPersonOutline, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "trainees"},
     ];
     const ProgramHeader = [
-        {title: "Cohort", sortable: true, id: "cohort"},
+        {title: "Cohort", sortable: true, id: "name"},
         {title: "No of trainees", sortable: true, id: "noOfTrainees"},
-        {title: "Tuition", sortable: true, id: "tuition"},
+        {title: "Tuition", sortable: true, id: " tuitionAmount"},
         {title: "Amount Requested", sortable: true, id: "amountRequested"},
         {title: "Amount Received", sortable: true, id: "amountReceived"},
-        {title: "Amount Outstanding", sortable: true, id: "amountOutstanding"},
+        {title: "Amount Outstanding", sortable: true, id: "totalAmountOutstanding"},
 
     ];
     const programOptions = [
@@ -221,7 +257,7 @@ const ProgramDetails = () => {
                     icon={Cross2Icon}
                     >
                     <EditProgramForm 
-                    programId={'EditProgram'} 
+                    programId={programId} 
                     setIsOpen={setIsOpen}
                     programDetail={progamDetail}
                     />
