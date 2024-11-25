@@ -6,6 +6,7 @@ import { inter } from '@/app/fonts'
 import InvestmentActionBar from '@/components/portfolio-manager/Investment-action-bar'
 import { fund } from '@/utils/LoanRequestMockData/Index';
 import { formatAmount, formatDate } from '@/utils/Format';
+import { MdOutlinePayments } from 'react-icons/md';
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -30,6 +31,7 @@ const handleDraftClick = () => {
 }
 const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
   // setSearchTerm(event.target.value);
+  console.log(event)
 };
 
 const fundHeader = [
@@ -67,6 +69,9 @@ const tabContent = [
           optionalRowsPerPage={10}
           staticHeader={'Vehicle'}
          staticColunm={'vehicle'}
+         icon={MdOutlinePayments}
+         sideBarTabName='Fund'
+         optionalFilterName='Commercial'
       />
     </div>
   },
@@ -91,6 +96,9 @@ const tabContent = [
          staticHeader={'Vehicle'}
          staticColunm={'vehicle'}
           tableCellStyle={'h-12'}
+          icon={MdOutlinePayments}
+          sideBarTabName='Fund'
+          optionalFilterName='Endowment'
       />
     </div>
   }

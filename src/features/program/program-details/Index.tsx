@@ -88,7 +88,7 @@ const ProgramDetails = () => {
 
     const { data: program} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
     const [deleteItem,{isLoading}] = useDeleteProgramMutation()
-    const { data: cohortsByProgram,isLoading:loading} = useGetAllCohortByAParticularProgramQuery({programId: programId,pageSize: size,pageNumber: page},{ refetchOnMountOrArgChange: true });
+    const { data: cohortsByProgram} = useGetAllCohortByAParticularProgramQuery({programId: programId,pageSize: size,pageNumber: page},{ refetchOnMountOrArgChange: true });
     
 
     useEffect(()=> {
