@@ -4,7 +4,6 @@ import { cabinetGrotesk, inter } from '@/app/fonts';
 import Connector from "@/components/common/Connector";
 import { Button } from "@/components/ui/button";
 import StepContent from '@/features/onboarding/stepContent/Index';
-// import SmartCameraWrapper from '@/components/SmartCameraWrapper/Index';
 import IdentityVerificationModal from '@/reuseable/modals/IdentityVerificationModal';
 
 const steps = [
@@ -17,7 +16,6 @@ const steps = [
 const LoaneeOnboarding = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [showModal, setShowModal] = useState(false);
-    // const [showCamera, setShowCamera] = useState(false);
 
 
 
@@ -56,7 +54,6 @@ const LoaneeOnboarding = () => {
                         {currentStep === 3 && 'Confirm loan referral acceptance'}
                     </h2>
                     <StepContent step={currentStep}/>
-                    {/* {currentStep === 1 && showCamera && <SmartCameraWrapper onPublish={handlePublish} onClose={() => setShowCamera(false)} />} */}
                     {currentStep === 1 && <IdentityVerificationModal isOpen={showModal} onClose={() => setShowModal(false)} />}
                     <Button id="continueButton"
                             className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem]  hover:bg-meedlBlue focus:bg-meedlBlue'}

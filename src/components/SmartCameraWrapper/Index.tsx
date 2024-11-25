@@ -23,9 +23,7 @@ const SmartCameraWrapper: React.FC<SmartCameraWrapperProps> = ({ onPublish }) =>
     }, [onPublish]);
 
     return (
-        <div>
             <smart-camera-web capture-id></smart-camera-web>
-        </div>
     );
 };
 

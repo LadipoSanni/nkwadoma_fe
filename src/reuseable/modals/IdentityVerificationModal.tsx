@@ -66,36 +66,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({ i
             console.error('Liveness check failed:', error);
         }
     };
-    // const postContent = async (data: PublishData) => {
-    //     const options = {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(data),
-    //     };
-    //
-    //     try {
-    //         const response = await fetch("/", options);
-    //         const contentType = response.headers.get("content-type");
-    //
-    //         if (!response.ok) {
-    //             const errorText = await response.text();
-    //             throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
-    //         }
-    //
-    //         if (contentType && contentType.includes("application/json")) {
-    //             const json = await response.json();
-    //             return json;
-    //         } else {
-    //             const text = await response.text();
-    //             throw new Error(`Unexpected content-type: ${contentType}, response: ${text}`);
-    //         }
-    //     } catch (e) {
-    //         console.error('Error posting content:', e.message || e);
-    //         throw e;
-    //     }
-    // };
+
     const onSubmit: SubmitHandler<FormData> = (data) => {
         try {
             const formData: FormData = {
