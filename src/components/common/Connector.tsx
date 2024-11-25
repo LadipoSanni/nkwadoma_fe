@@ -1,16 +1,26 @@
 import React from 'react';
-import { IoEllipseOutline } from "react-icons/io5";
+import {IoEllipseOutline} from "react-icons/io5";
+import {MdCheckCircle} from "react-icons/md";
 
 interface ConnectorProps {
-    showLine: boolean;
-
+    showLine?: boolean;
+    isActive?: boolean;
+    isCompleted?: boolean;
 }
 
-const Connector = ({ showLine } : ConnectorProps) => {
+const Connector = ({showLine, isActive, isCompleted}: ConnectorProps) => {
     return (
         <div className="flex flex-col items-center gap-0.5">
-            <IoEllipseOutline className={'h-5 w-5 stroke-1 stroke-meedlBlue'} />
-            {showLine && <div className="rounded-[2px] h-8 w-px bg-blue100"></div>}
+            {
+                isCompleted ? <MdCheckCircle className={'h-5 w-5 text-meedlBlue'}/>
+                    : <IoEllipseOutline
+                        className={`h-5 w-5 stroke-1 ${isActive || isCompleted ? 'stroke-meedlBlue' : 'stroke-blue100'}`}/>
+
+            }
+            {/*<IoEllipseOutline className={`h-5 w-5 stroke-1 ${isActive || isCompleted ? 'stroke-meedlBlue' : 'stroke-blue100'}`} />*/}
+            {/*<MdCheckCircle className={'h-5 w-5 text-meedlBlue'} />*/}
+            {showLine &&
+                <div className={`rounded-[2px] h-8 w-px ${isCompleted ? 'bg-meedlBlue' : 'bg-blue100 '}`}></div>}
         </div>
     );
 };
