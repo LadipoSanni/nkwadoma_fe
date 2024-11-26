@@ -4,6 +4,7 @@ import { useDispatch,useSelector, type TypedUseSelectorHook } from "react-redux"
 import appReducer from "@/redux/reducer";
 import {authApi} from "@/service/auths/api"
 import { programApi } from "@/service/admin/program_query";
+import { cohortApi } from "@/service/admin/cohort_query";
 
 
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
     }).concat([
         authApi.middleware,
         programApi.middleware,
+        cohortApi.middleware,
     ]),
 });
 
