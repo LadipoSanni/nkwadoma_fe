@@ -7,6 +7,7 @@ export interface AuthButtonPropsType {
     backgroundColor: string,
     disable: boolean,
     handleClick: ()=> void;
+    isLoading?: boolean;
 }
 
 

@@ -1,3 +1,50 @@
+.mainDetails{
+    background-color: white;
+}
+
+
+.tabConnector{
+    display: grid;
+}
+
+.componentDivision{
+    height: 97%;
+    background-color: white;
+}
+
+
+@media only screen and (max-width: 600px){
+    .tabConnector{
+        display: flex;
+        grid-template-columns: max-content;
+        overflow-x: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .mainDetails{
+        /*display: grid;*/
+        grid-template-columns: max-content;
+        overflow-x: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .componentDivision{
+        display: grid;
+        /*background-color: #f1c61b;*/
+        grid-template-rows:  45% 55%;
+        overflow-y: auto;
+    }
+    .componentDivision::-webkit-scrollbar-track{
+        width: 2px;
+        background-color: #F0F2F4;
+
+    }
+    .componentDivision::-webkit-scrollbar-thumb{
+        width: 2px;
+        background-color: #D9D9D9;
+    }
+}
+
 .detailsMainComponent{
     background: white;
 }

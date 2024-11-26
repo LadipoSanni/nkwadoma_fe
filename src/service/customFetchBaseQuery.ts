@@ -14,10 +14,10 @@ export const customFetchBaseQuery = fetchBaseQuery({
     // mode: 'no-cors',
     fetchFn: typeof window === 'undefined'
         ? (fetch as unknown as typeof globalThis.fetch) // Use node-fetch for SSR but cast to global fetch type
-        : undefined, // Use browser's fetch in client-side environments
+        : undefined, 
     prepareHeaders: (headers) => {
         const { storedAccessToken } = getUserDetails();
-        // console.log("confirmed: ",storedAccessToken)
+        console.log("confirmed: ",baseUrl)
         if (storedAccessToken) {
             headers.set('authorization', `Bearer ${storedAccessToken}`);
             headers.set('Content-type', 'application/json');
