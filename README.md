@@ -11,6 +11,7 @@ For Windows:
 - if this command shows error, move to the next instruction
 - folow this link https://awscli.amazonaws.com/AWSCLIV2.msi to download the awscli.msi installation package
 - after the download is complete, copy, paste, and run this command in your terminal :  powershell -ExecutionPolicy Bypass -File .\InstallAWSCLI.ps1
+- if the file  .\InstallAWSCLI.ps1 is not found, look for .\InstallAWSCLI.ps1 in this project, right-click on it then check for copy as path or copy as file path, then add the file path to this command  powershell -ExecutionPolicy Bypass -File <replace-with-your-installAWSCLI.ps1-path-here>
 
 For Linux: run: chmod +x start.sh ./start.sh
 
