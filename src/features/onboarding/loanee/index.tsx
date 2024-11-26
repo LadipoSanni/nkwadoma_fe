@@ -1,10 +1,15 @@
-'use client'
+'use client';
+
 import React, { useState } from 'react';
 import { cabinetGrotesk, inter } from '@/app/fonts';
-import Connector from "@/components/common/Connector";
-import { Button } from "@/components/ui/button";
+import Connector from '@/components/common/Connector';
+import { Button } from '@/components/ui/button';
 import StepContent from '@/features/onboarding/stepContent/Index';
-import IdentityVerificationModal from '@/reuseable/modals/IdentityVerificationModal';
+import dynamic from 'next/dynamic';
+
+const DynamicIdentityVerificationModal = dynamic(() => import('@/reuseable/modals/IdentityVerificationModal'), {
+    ssr: false
+});
 
 const steps = [
     'Loan application details',
@@ -17,7 +22,10 @@ const LoaneeOnboarding = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [showModal, setShowModal] = useState(false);
 
-
+    const handleThirdStepContinue = () => {
+        setShowModal(false);
+        setCurrentStep(2);
+    };
 
     return (
         <div id="loanApplicationDetailsContainer"
@@ -30,19 +38,19 @@ const LoaneeOnboarding = () => {
             </header>
             <div id="loanApplicationStepsContainer" className={'md:flex md:justify-between grid gap-5 md:gap-0'}>
                 <aside id="loanApplicationStepsAside" className={'inline-flex flex-col items-start gap-1'}>
-                    {
-                        steps.map((step, index) => (
-                            <div key={index} id={`loanApplicationStep${index}`} className={'flex gap-2'}>
-                                <Connector
-                                    showLine={index < steps.length - 1}
-                                    isActive={index === currentStep}
-                                    isCompleted={index < currentStep}
-                                />
-                                <p id={`loanApplicationStepText${index}`}
-                                   className={`text-[14px] leading-[150%] ${index <= currentStep ? 'text-meedlBlue' : 'text-blue300'}`}>{step}</p>
-                            </div>
-                        ))
-                    }
+                    {steps.map((step, index) => (
+                        <div key={index} id={`loanApplicationStep${index}`} className={'flex gap-2'}>
+                            <Connector
+                                showLine={index < steps.length - 1}
+                                isActive={index === currentStep}
+                                isCompleted={index < currentStep}
+                            />
+                            <p id={`loanApplicationStepText${index}`}
+                               className={`text-[14px] leading-[150%] ${index <= currentStep ? 'text-meedlBlue' : 'text-blue300'}`}>
+                                {step}
+                            </p>
+                        </div>
+                    ))}
                 </aside>
                 <section id="loanApplicationDetailsSection"
                          className={'grid md:p-5 py-5 px-3 md:gap-[22px] gap-5 md:w-[43vw] w-full md:max-h-[calc(100vh-19rem)] md:overflow-y-auto rounded-md border border-lightBlue250 '}>
@@ -53,11 +61,23 @@ const LoaneeOnboarding = () => {
                         {currentStep === 2 && 'Additional information'}
                         {currentStep === 3 && 'Confirm loan referral acceptance'}
                     </h2>
-                    <StepContent step={currentStep}/>
-                    {currentStep === 1 && <IdentityVerificationModal isOpen={showModal} onClose={() => setShowModal(false)} />}
+                    <StepContent step={currentStep} />
+                    {currentStep === 1 && (
+                        <DynamicIdentityVerificationModal
+                            isOpen={showModal}
+                            onClose={() => setShowModal(false)}
+                            onThirdStepContinue={handleThirdStepContinue}
+                        />
+                    )}
                     <Button id="continueButton"
                             className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem]  hover:bg-meedlBlue focus:bg-meedlBlue'}
-                            onClick={() => currentStep === 1 ? setShowModal(true) : setCurrentStep((prevStep) => (prevStep + 1) % steps.length)}>
+                            onClick={() => {
+                                if (currentStep === 1) {
+                                    setShowModal(true);
+                                } else {
+                                    setCurrentStep((prevStep) => prevStep + 1);
+                                }
+                            }}>
                         {currentStep === 1 ? 'Start identity verification' : 'Continue'}
                     </Button>
                 </section>
