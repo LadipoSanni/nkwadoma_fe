@@ -1,19 +1,21 @@
 "use client"
 import React, {useState} from 'react';
 import {IoMdMenu} from "react-icons/io";
-// import {store} from "@/redux/store";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import {inter} from"@/app/fonts"
 import { ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons"
 import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods"
 import styles from "@/components/topBar/index.module.css"
 import {store, useAppSelector} from "@/redux/store";
+import {getUserDetailsFromStorage} from "@/components/topBar/action";
 
 
 const TopBar = () => {
 
     const [arrowToggled, setArrowToggled] = useState(false)
     const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem)
+    const user_role = getUserDetailsFromStorage('user_role')
+    const user_name = getUserDetailsFromStorage("")
 
 
     const toggleArrow = ()=> {
