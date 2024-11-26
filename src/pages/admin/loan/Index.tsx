@@ -59,6 +59,7 @@ function ViewAllLoanRequest() {
                 optionalFilterName='graduate'
                 // handleDropDownClick={handleDropdownClick}
             />
+
                     :
                     <LoanEmptyState
                         id={'LoanRequestEmptyState'}
