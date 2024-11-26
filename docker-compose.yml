@@ -16,7 +16,7 @@ services:
 
   # Backend Service
   backend:
-    image: 357586184453.dkr.ecr.us-east-1.amazonaws.com/nkwadoma
+    image: 357586184453.dkr.ecr.us-east-1.amazonaws.com/nkwadoma:alpha
     environment:
       PROFILE: dev
       PORT: 8081
