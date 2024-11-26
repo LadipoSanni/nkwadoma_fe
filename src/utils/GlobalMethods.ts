@@ -36,6 +36,8 @@ export function removeContent(content:string ,word: string| null ){
     }
 }
 
+
+
 export const validateEmailInput = (input: string ) => {
     const validRegex  = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     return !!RegExp(validRegex).exec(input);

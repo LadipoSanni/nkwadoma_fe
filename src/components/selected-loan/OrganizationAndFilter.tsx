@@ -3,13 +3,8 @@ import React,{useState} from 'react';
 import {Input} from '@/components/ui/input'
 import OrganizationNameAndChangeButton from "@/components/selected-loan/OrganizationNameAndChangeButton";
 import {MdSearch} from "react-icons/md";
-// import {Button} from "@/components/ui/button";
-// import {ChevronDownIcon} from "@radix-ui/react-icons";
 import ProductFilter from '../loan/selected-loan/loan-request/Product-filter';
-import Tables from '@/reuseable/table/LoanProductTable';
-import { loanRequestData } from '@/utils/LoanRequestMockData/cohortProduct';
-import { formatAmount, formatDate } from '@/utils/Format';
-import { useRouter } from 'next/navigation'
+
 
 export const initialFormValue = {
     selectedProgram:""
@@ -17,7 +12,6 @@ export const initialFormValue = {
 
 const OrganizationAndFilter = () => {
     const [selectProgram, setSelectProgram] = useState('')
-    const router = useRouter()
 
     const handleSubmit = async (values:{selectedProgram: string}) => {
         console.log('Form submitted', values)
@@ -44,28 +38,10 @@ const OrganizationAndFilter = () => {
         "UX/UI Designer",
       ]
 
-      interface TableRowData {
-        [key: string]: string | number | null | React.ReactNode;
-       }
+
   
 
-      const loanRequestHeader = [
-        { title: 'Loanee', sortable: true, id: 'loanee', selector: (row:TableRowData ) => row.loanee },
-        { title: 'Program', sortable: true, id: 'program', selector: (row:TableRowData ) => row?.program},
-        { title: 'Cohort', sortable: true, id: 'cohort', selector: (row:TableRowData ) => row.cohort },
-        { title: 'Start date', sortable: true, id: 'start', selector: (row:TableRowData ) => formatDate(row?.start)},
-        { title: 'Request date', sortable: true, id: 'request', selector: (row:TableRowData ) => formatDate(row?.request)},
-        { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div> },
-        { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountRequested)}</div> },
-       
-    
-      ]
 
-      const handleRowClick = (row: TableRowData) => {
-        router.push('/cohort/cohort-details')
-        console.log('The row: ',row)
-    
-      }
     return (
         <div className='md:px-3'>
         <div
@@ -109,18 +85,6 @@ const OrganizationAndFilter = () => {
                     />
                 </div>
             </div>
-        </div>
-        <div className='mt-5'>
-          <Tables
-           tableData={loanRequestData}
-           handleRowClick={handleRowClick}
-           tableHeader={loanRequestHeader}
-           tableHeight={47}
-           sx='cursor-pointer'
-           staticColunm='loanee'
-           staticHeader='Loanee'
-           tableCellStyle={'h-12'}
-          />
         </div>
         </div>
     );

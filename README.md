@@ -1,4 +1,4 @@
-After cloning this project, run this command in your terminal to install Docker, and Docker compose on your linux system: chmod +x install_docker.sh sudo ./install_docker.sh
+  After cloning this project, run this command in your terminal to install Docker, and Docker compose on your linux system: chmod +x install_docker.sh sudo ./install_docker.sh
 
 Install Docker for Windows: Install (WSL) Windows Subsystem for Linux on your local machine. Open PowerShell. -run this command: ./install_docker_desktop.ps1 Wait for the download and installation to complete. To check if the download and installation is successful run: docker --version, docker-compose --version
 
