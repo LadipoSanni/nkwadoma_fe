@@ -15,7 +15,8 @@ const TopBar = () => {
     const [arrowToggled, setArrowToggled] = useState(false)
     const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const user_role = getUserDetailsFromStorage('user_role')
-    const user_name = getUserDetailsFromStorage("")
+    const user_name = getUserDetailsFromStorage("user_name")
+    // const user_
 
 
     const toggleArrow = ()=> {
@@ -61,12 +62,12 @@ const TopBar = () => {
                                 className={` flex place-content-center  object-fit  bg-[#E0FDEB]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
                                 <div
                                     className={` grid place-content-center  mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `}>
-                                {getFirstLetterOfWord("Hannaah Emmanuel")}
+                                {getFirstLetterOfWord(user_name)}
                                 </div>
                             </div>
                             <div className={` hidden md:grid md:gap-1  w-fit object-contain  `}>
-                                <p className={` text-black500 ${styles.fullName}`}>{capitalizeFirstLetters("hannaah emmamuel")}</p>
-                                <p className={` text-black500 ${styles.role}`}>Organization Admin</p>
+                                <p className={` text-black500 ${styles.fullName}`}>{capitalizeFirstLetters(user_name)}</p>
+                                <p className={` text-black500 ${styles.role}`}>{user_role}</p>
                             </div>
                             <div id={'toggleArrowDiv'} className={``}>
                                 {/*#66708*/}

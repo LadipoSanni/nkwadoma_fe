@@ -2,11 +2,10 @@
 import {setItemSessionStorage,getItemSessionStorage} from "@/utils/storage";
 
 
-export  function storeUserDetails (access_token: string, user_email: string, user_role: string, userId: string, user_name: string ) {
+export  function storeUserDetails (access_token: string, user_email: string, user_role: string,  user_name: string ) {
     setItemSessionStorage("access_token", access_token)
     setItemSessionStorage("user_email", user_email)
     setItemSessionStorage("user_role", user_role)
-    setItemSessionStorage("user_id", userId)
     setItemSessionStorage("user_name",user_name )
 }
 

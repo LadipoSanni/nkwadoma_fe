@@ -1,4 +1,4 @@
-export  function capitalizeFirstLetters  (word: undefined | string ) {
+export  function capitalizeFirstLetters(word: string | null| undefined) {
     if (word) {
         return word
             .toLowerCase()
@@ -8,7 +8,7 @@ export  function capitalizeFirstLetters  (word: undefined | string ) {
 
 }
 
-export  function  getFirstLetterOfWord (word : undefined | string) {
+export  function  getFirstLetterOfWord (word : undefined | string| null) {
     let ans = '';
 
     if (word) {

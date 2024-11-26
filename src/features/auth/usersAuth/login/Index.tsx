@@ -96,7 +96,7 @@ const Login: React.FC = () => {
                 const user_email = decode_access_token?.email
                 const user_role = decode_access_token?.realm_access?.roles[0]
                 storeUserDetails(access_token, user_email, user_role, userName)
-                // router.push("/Overview")
+                router.push("/Overview")
 
             }}
             catch (error) {
