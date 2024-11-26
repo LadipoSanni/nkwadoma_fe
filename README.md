@@ -2,7 +2,7 @@ After cloning this project, run this command in your terminal to install Docker,
 
 Install Docker for Windows: Install (WSL) Windows Subsystem for Linux on your local machine. Open PowerShell. -run this command: ./install_docker_desktop.ps1 Wait for the download and installation to complete. To check if the download and installation is successful run: docker --version, docker-compose --version
 
-Then, run this command in your terminal to install and configure AWS CLI: For Windows: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser ./InstallAWSCLI.ps1
+Then, run this command in your terminal to install and configure AWS CLI: For Windows: powershell -ExecutionPolicy Bypass -File .\InstallAWSCLI.ps1
 
 For Linux: run: chmod +x start.sh ./start.sh
 
