@@ -47,6 +47,7 @@ const config: Config = {
   			lightBlue600: '#C5D5E8',
   			lightBlue700: '#9AA6B5',
   			lightBlue800: '#77818C',
+			lightBlue850: '#57595D',
   			lightBlue900: '#5B626B',
   			lightBlue950: '#5F646F',
   			foundationBlue800: '#72757A',
