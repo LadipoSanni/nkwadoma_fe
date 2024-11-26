@@ -9,19 +9,51 @@ import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
 import FormButtons from "@/reuseable/buttons/FormButtons";
 import {FeeBreakdownHeader, InitialItem, ItemList, AddItemSection} from "@/reuseable/feeBreakdown";
 import {CohortNameInput, FileUpload} from "@/reuseable/Input";
+// import {useCreateCohortMutation} from "@/service/admin/cohort_query";
+import { useGetAllProgramsQuery } from '@/service/admin/program_query';
+import { DialogDescription } from '@radix-ui/react-dialog';
 
 interface createCohortProps {
     triggerButtonStyle: string
 }
+
+
+
+interface viewAllProgramProps {
+    id?: string;
+    name: string;
+  
+ }
+ 
 const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
     const [date, setDate] = useState<Date>();
+    const[programId, setProgramId] = useState("")
     const [cohortName, setCohortName] = useState('');
     const [description, setDescription] = useState('');
     const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-    const [items, setItems] = useState<{ name: string, amount: string }[]>([]);
+    const [loanBreakdowns, setLoanBreakdowns] = useState<{ itemName: string, amount: string, currency: string }[]>([]);
+    const [programView, setProgramView] = useState<viewAllProgramProps[]>([])
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [page] = useState(0);
+    const size = 200;
+
+
+    const { data} = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true, })
+
+    useEffect(() => {
+        if(data && data?.data ) {
+            const programs = data?.data?.body
+            setProgramView(programs)
+            
+        }
+       
+    },[data])
+
+    
+    console.log("The id: ",programId)
 
     useEffect(() => {
         if (cohortName && selectedProgram && date && description) {
@@ -31,6 +63,17 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
         }
     }, [cohortName, selectedProgram, date, description]);
 
+    useEffect(() => {
+        console.log("Form Data:", {
+          cohortName,
+          selectedProgram,
+          programId,
+          date,
+          description,
+          loanBreakdowns,
+        });
+      }, [cohortName, selectedProgram, programId, date, description, loanBreakdowns]);
+
     const resetForm = () => {
         setDate(undefined);
         setCohortName('');
@@ -39,8 +82,30 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
         setIsSelectOpen(false);
         setIsButtonDisabled(true);
         setIsFormSubmitted(false);
-        setItems([]);
+        setLoanBreakdowns([]);
     };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault(); 
+        if (!isButtonDisabled) {
+            const formData = {
+                cohortName,
+                programId,
+                date,
+                description,
+                loanBreakdowns,
+            };
+            setIsFormSubmitted(true)
+            setIsModalOpen(false); 
+            console.log("Submitting Form Data:", formData);
+
+           
+
+            resetForm(); 
+    };
+}
+
+    // const selectOption = ["Design thinking", "Software engineering", "Product design", "Product marketing", "Product management"]
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
@@ -52,15 +117,15 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
 
 
     const handleSelectClick = () => {
-        setItems([{name: '', amount: ''}, ...items]);
+        setLoanBreakdowns([{itemName: '', amount: '', currency: ''}, ...loanBreakdowns]);
     };
 
     const handleDeleteItem = (index: number) => {
-        setItems(items.filter((_, i) => i !== index));
+        setLoanBreakdowns(loanBreakdowns.filter((_, i) => i !== index));
     };
 
     return (
-        <Dialog onOpenChange={(open) => !open && resetForm()}>
+        <Dialog open={isModalOpen} onOpenChange={(open) => setIsModalOpen(open)}>
             <DialogTrigger asChild>
                 <Button
                     id="createCohortButton"
@@ -82,15 +147,24 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
                         </button>
                     </DialogClose>
                 </DialogHeader>
+                <div className='hidden'><DialogDescription></DialogDescription></div>
+                
                 <form id="cohortForm"
                       className={`grid gap-5 ${inter.className} pr-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`}
-                      style={{scrollbarGutter: 'stable both-edge'}}>
+                      style={{scrollbarGutter: 'stable both-edge'}}
+                      onSubmit={handleSubmit}
+                      >
                     {!isFormSubmitted ? (
                             <>
                                 <CohortNameInput cohortName={cohortName} setCohortName={setCohortName}/>
                                 <div id="programDateContainer" className={'md:flex grid gap-5 w-full items-center'}>
-                                    <ProgramSelect selectedProgram={selectedProgram} setSelectedProgram={setSelectedProgram}
-                                                   isSelectOpen={isSelectOpen} setIsSelectOpen={setIsSelectOpen}/>
+                                    <ProgramSelect 
+                                    selectedProgram={selectedProgram} 
+                                    setSelectedProgram={setSelectedProgram}
+                                    isSelectOpen={isSelectOpen} setIsSelectOpen={setIsSelectOpen} 
+                                    selectOptions={programView}
+                                    setId={setProgramId}
+                                    />
                                     <DatePicker date={date} setDate={setDate}/>
                                 </div>
                                 <DescriptionTextarea description={description} setDescription={setDescription}/>
@@ -101,7 +175,7 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
                             <main id="feeBreakdownContainer" className={'grid gap-5'}>
                                 <FeeBreakdownHeader/>
                                 <InitialItem/>
-                                <ItemList items={items} setItems={setItems} handleDeleteItem={handleDeleteItem}/>
+                                <ItemList items={loanBreakdowns} setItems={setLoanBreakdowns} handleDeleteItem={handleDeleteItem}/>
                                 <div id={'Step2stickyContainer'} className={'sticky bottom-0 bg-meedlWhite'}>
                                     <AddItemSection handleSelectClick={handleSelectClick}/>
                                     <section id="Step2formButtonsContainer"
@@ -110,11 +184,14 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
                                                 className={'border-meedlBlue font-bold text-meedlBlue w-full md:w-[8.75rem] h-[3.5625rem] border border-solid'}
                                                 asChild>
                                             <DialogClose>Cancel</DialogClose>
-                                        </Button>
+                                             </Button>
                                         <Button id="CreateCohortButton"
                                                 className={`text-meedlWhite font-bold ${isButtonDisabled ? 'bg-neutral650' : 'bg-meedlBlue hover:bg-meedlBlue'} w-full md:w-[8.75rem] h-[3.5625rem]`}
-                                                disabled={isButtonDisabled} onClick={() => setIsFormSubmitted(true)}>
-                                            Create cohort
+                                                disabled={isButtonDisabled} 
+                                                // onClick={() => setIsFormSubmitted(true)}
+                                                type='submit'
+                                                >
+                                            Create cohort 
                                         </Button>
                                     </section>
                                 </div>

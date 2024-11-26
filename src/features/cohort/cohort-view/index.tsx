@@ -10,7 +10,7 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue,SelectGro
 import * as Yup from "yup";
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
-import CohortTabs from '../../../../components/cohort/CohortTabs'
+import CohortTabs from '../../../components/cohort/CohortTabs'
 import CreateCohort from "@/reuseable/modals/CreateCohort";
 import { inter } from '@/app/fonts'
 

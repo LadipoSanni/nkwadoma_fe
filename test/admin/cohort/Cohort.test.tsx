@@ -1,5 +1,6 @@
 import { render, screen, fireEvent,cleanup,waitFor} from "@testing-library/react";
-import Cohort from "@/pages/admin/cohort/cohort-view";
+import Cohort from "@/features/cohort/cohort-view";
+import { Providers } from '@/app/provider';
 
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
@@ -24,29 +25,49 @@ describe('Cohort', () => {
 
 
     it('renders the form correctly', () => {
-        render(<Cohort />)
+        render(
+          <Providers>
+            <Cohort />
+          </Providers>
+       
+      )
     })
 
     it('renders the cohort title', () => {
-        render(<Cohort />)
+        render(
+          <Providers>
+          <Cohort />
+        </Providers>
+      );
+     
         expect(screen.getAllByText(/cohort/i)[0]).toBeInTheDocument();
       });
 
     
       it('renders the search input', () => {
-        render(<Cohort />)
+        render(
+          <Providers>
+          <Cohort />
+        </Providers>
+      );
         expect(screen.getByPlaceholderText(/search/i)).toBeInTheDocument();
       });
 
 
       it('renders the Filter button', () => {
-        render(<Cohort />)
+        render( <Providers>
+          <Cohort />
+        </Providers>
+      );
         expect(screen.getByRole('button', { name: /Program/i })).toBeInTheDocument();
       });
 
       
       test('allows user to type in the search input field', () => {
-        render(<Cohort />);
+        render( <Providers>
+          <Cohort />
+        </Providers>
+      );
     
         const searchInput = screen.getByPlaceholderText('Search') as HTMLInputElement; 
     
@@ -57,7 +78,10 @@ describe('Cohort', () => {
 
 
       test('renders the Create Cohort button', () => {
-        render(<Cohort />);
+        render( <Providers>
+          <Cohort />
+        </Providers>
+      );
         
       
         const createCohortButton = screen.getByRole('button', { name: /create cohort/i });
