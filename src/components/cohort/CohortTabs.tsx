@@ -68,7 +68,7 @@ const CohortTabs = () => {
   const handleDropdownClick = (id:string,row: TableRowData) => {
     if(id === "1") router.push('/cohort/cohort-details')
     else if(id === "2") {
-      setCohortId(String(row.id))
+      // setCohortId(String(row.id))
       setIsOpen(true)
       
     
