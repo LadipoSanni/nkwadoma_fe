@@ -9,7 +9,7 @@ import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
 import FormButtons from "@/reuseable/buttons/FormButtons";
 import {FeeBreakdownHeader, InitialItem, ItemList, AddItemSection} from "@/reuseable/feeBreakdown";
 import {CohortNameInput, FileUpload} from "@/reuseable/Input";
-import {useCreateCohortMutation} from "@/service/admin/cohort_query";
+// import {useCreateCohortMutation} from "@/service/admin/cohort_query";
 import { useGetAllProgramsQuery } from '@/service/admin/program_query';
 import { DialogDescription } from '@radix-ui/react-dialog';
 
@@ -41,7 +41,7 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
     const size = 200;
 
 
-    const { data,isLoading} = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true, })
+    const { data} = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true, })
 
     useEffect(() => {
         if(data && data?.data ) {
