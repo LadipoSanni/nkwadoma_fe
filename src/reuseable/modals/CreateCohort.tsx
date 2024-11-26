@@ -52,6 +52,7 @@ const CreateCohort: React.FC<createCohortProps> = ({triggerButtonStyle}) => {
        
     },[data])
 
+    
     console.log("The id: ",programId)
 
     useEffect(() => {
