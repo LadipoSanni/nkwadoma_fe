@@ -11,7 +11,7 @@ const NavbarContainer = ({items, current}: Props) => {
         <div
             id={`navBarItemsContainer`}
             data-testid={'navBarItemsContainer'}
-            className={`md:w-full  md:h-auto md:py-3 md:grid md:gap-2 md: `}
+            className={`md:w-full w-full h-auto py-3 grid gap-2  md:h-auto md:py-3 md:grid md:gap-2 md: `}
         >
             {items?.map((item, index) => (
                 <button

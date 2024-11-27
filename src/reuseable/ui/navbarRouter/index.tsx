@@ -3,7 +3,7 @@ import {navbarRouterItemsProps} from "@/types/Component.type";
 // import styles from "./index.module.css"
 import {inter} from "@/app/fonts";
 interface Props <T extends navbarRouterItemsProps> {
-    navbarItems: T[],
+    navbarItems: T[] | undefined,
     currentTab: string | undefined | string[] | null,
     handleClick: (name: string,  id: string ) => void,
 }
@@ -23,7 +23,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
         <div
             id={`navBarItemsContainer`}
             data-testid={'navBarItemsContainer'}
-            className={`md:w-full  md:h-auto md:py-3 md:grid md:gap-2 md: `}
+            className={` w-full h-auto grid gap-2 py-3 md:w-full  md:h-auto md:py-3 md:grid md:gap-2 md: `}
         >
             {navbarItems?.map((item, index) => (
                 <button

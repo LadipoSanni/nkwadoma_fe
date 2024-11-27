@@ -34,11 +34,11 @@ const TopBar = () => {
 
             <header
                 id="adminlayoutHeader"
-                className="bg-white  flex items-center h-[8vh] px-4 md:px-4 border-b border-b-[blue300] md:border-b md:border-b-[blue300] w-full md:h-[10vh] md:w-[84vw] absolute md:static right-0 justify-between "
+                className="bg-meedlWhite md:bg-meedlWhite  flex items-center h-[8vh] px-4 md:px-4 border-b border-b-[blue300] md:border-b md:border-b-[blue300] w-full md:h-[10vh] md:w-[84vw] absolute md:static right-0 justify-between "
             >
                 <div className={'flex  w-full  mr-auto ml-auto  place-content-between'}>
                     <div className={`flex gap-2 h-[1rem] mt-auto mb-auto place-content-center `}>
-                        <div id={'buttonsDiv'} className={`relative flex place-items-center md:hidden`}>
+                        <div id={'buttonsDiv'} className={`relative  flex place-items-center md:hidden`}>
                             <IoMdMenu color='#667085' style={{height: '1rem', width: '1rem'}}
                                       onClick={openMobileSideBar}
                                       id={'LayOutHamburger'}/>
