@@ -37,7 +37,11 @@ describe("cohort-details Component", () => {
     });
 
     test("displays the correct cohort details data", () => {
-        render(<CohortDetails />);
+        render(
+            <Providers>
+                <CohortDetails/>
+            </Providers>
+        );
 
         expect(screen.getByText("Start Date")).toBeInTheDocument();
         expect(screen.getByText("13, Dec 2023")).toBeInTheDocument();
@@ -46,7 +50,11 @@ describe("cohort-details Component", () => {
     });
 
     test("renders data with correct data", () => {
-        render(<CohortDetails />);
+        render(
+            <Providers>
+                <CohortDetails />
+            </Providers>
+        );
 
         const assert = screen.getByTestId("backClickText");
 
@@ -55,7 +63,11 @@ describe("cohort-details Component", () => {
     });
 
     it("should test that arrowBack routes to the previous page", async () => {
-        render(<CohortDetails />);
+        render(
+            <Providers>
+                <CohortDetails />
+            </Providers>
+        );
 
         const assert = screen.getByTestId("backClick");
         expect(assert).toBeInTheDocument();
