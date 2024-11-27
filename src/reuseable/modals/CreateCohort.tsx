@@ -14,11 +14,11 @@ import ProgramSelect from "@/reuseable/select/ProgramSelect";
 import DatePicker from "@/reuseable/date/DatePicker";
 import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
 import FormButtons from "@/reuseable/buttons/FormButtons";
-import ItemList from "../feeBreakdown/Item-list";
 import {
   FeeBreakdownHeader,
   InitialItem,
   AddItemSection,
+  ItemList
 } from "@/reuseable/feeBreakdown";
 import { CohortNameInput, FileUpload } from "@/reuseable/Input";
 import { useCreateCohortMutation } from "@/service/admin/cohort_query";
