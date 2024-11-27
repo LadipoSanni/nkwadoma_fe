@@ -1,4 +1,3 @@
-'use client'
 import React, { useState } from 'react';
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogOverlay } from '@/components/ui/dialog';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -9,8 +8,8 @@ import { MdClose, MdOutlineAdd, MdHorizontalRule, MdOutlineCameraAlt } from "rea
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import { SubmitHandler } from 'react-hook-form';
-import SmartCameraWrapper from '@/components/SmartCameraWrapper/Index';
-import Image from "next/legacy/image";
+import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
+import VerificationSuccessDialog from '@/reuseable/modals/VerificationSuccessDialog/Index';
 
 interface IdentityVerificationModalProps {
     isOpen: boolean;
@@ -29,51 +28,12 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({ i
     const [isNINOpen, setIsNINOpen] = useState(false);
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
     const [showCamera, setShowCamera] = useState(false);
-    const [thirdStep, setThirdStep] = useState(false);
+    const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
-    const postContent = async (data: {
-        partner_params: { libraryVersion: string; permissionGranted: boolean };
-        images: { file: string; image_type_id: number; image: string }[]
-    }) => {
-        const options = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        };
-
-        try {
-            const response = await fetch("/", options);
-
-            if (!response.ok) {
-                const text = await response.text();
-                console.error(`Request failed with status ${response.status}:`, text);
-                throw new Error(`Request failed with status ${response.status}`);
-            }
-            return;
-
-        } catch (e) {
-            console.error('Error during postContent:', e);
-            throw e;
-        }
-    };
-
-    const handlePublish = async (data: { partner_params: { libraryVersion: string; permissionGranted: boolean }; images: { file: string; image_type_id: number; image: string }[] }) => {
-        try {
-            const response = await postContent(data);
-            console.log('Liveness check result:', response);
-
-            setShowCamera(false);
-            setIsSecondModalOpen(false);
-            setThirdStep(true);
-        } catch (error) {
-            console.error('Liveness check failed:', error);
-
-            setShowCamera(false);
-            setIsSecondModalOpen(false);
-            setThirdStep(false);
-        }
+    const handleCapture = (imageSrc: string | null) => {
+        console.log('Captured image:', imageSrc);
+        setIsSecondModalOpen(false);
+        setShowSuccessDialog(true);
     };
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
@@ -195,7 +155,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({ i
                 </DialogContent>
             </Dialog>
 
-            <Dialog open={isSecondModalOpen} onOpenChange={setIsSecondModalOpen}>
+            <Dialog open={isSecondModalOpen && !showSuccessDialog} onOpenChange={setIsSecondModalOpen}>
                 <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]" />
                 <DialogContent className={'max-w-[425px] md:max-w-[460px] [&>button]:hidden gap-6 py-5 px-5'}>
                     <DialogHeader className={'flex py-3'} id="secondModalHeader">
@@ -205,7 +165,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({ i
                     </DialogHeader>
                     <div className={`${inter.className} grid gap-5`}>
                         {showCamera ? (
-                            <SmartCameraWrapper onPublish={handlePublish} />
+                            <CapturePhotoWithTips onCapture={handleCapture} />
                         ) : (
                             <>
                                 <div className={'h-20 w-20 rounded-full grid place-content-center bg-lightBlue500'}>
@@ -240,41 +200,11 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({ i
                 </DialogContent>
             </Dialog>
 
-            <Dialog open={thirdStep} onOpenChange={setThirdStep}>
-                <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]" />
-                <DialogContent className={'max-w-[425px] md:max-w-[460px] [&>button]:hidden gap-5 py-5 px-5'}>
-                    <DialogHeader>
-                        <DialogTitle
-                            className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>
-                            <Image
-                                id={'successIcon'}
-                                data-testid={'successIcon'}
-                                width={70}
-                                height={70}
-                                src={'/Icon - Success (1).svg'}
-                                alt={'success icon'}
-                                priority={true}
-                            />
-                        </DialogTitle>
-                    </DialogHeader>
-                    <section className={'grid gap-7'}>
-                        <div className={`${inter.className} grid gap-2`}>
-                            <h1 className={`${cabinetGrotesk.className} text-black500 text-[24px] leading-[120%] font-medium`}>Verification
-                                successful</h1>
-                            <p className={'text-gray1 text-[14px] leading-[150%] font-normal'}>Congratulations! You’ve
-                                successfully completed the verification process</p>
-                        </div>
-                        <div className="flex justify-end">
-                            <Button
-                                className="h-[3.5625rem] w-[8.75rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md"
-                                onClick={onThirdStepContinue}
-                            >
-                                Continue
-                            </Button>
-                        </div>
-                    </section>
-                </DialogContent>
-            </Dialog>
+            <VerificationSuccessDialog
+                open={showSuccessDialog}
+                onClose={() => setShowSuccessDialog(false)}
+                onContinue={onThirdStepContinue}
+            />
         </>
     );
 };
