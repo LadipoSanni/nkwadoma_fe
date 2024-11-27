@@ -14,9 +14,22 @@ export const cohortApi = createApi({
               body: data,
             }),
             invalidatesTags: ['cohort'],
-        })
+        }),
+
+        viewAllLoanee: builder.query({
+            query: (data: {
+                cohortId?: string,
+                pageNumber?: number;
+                pageSize?: number;
+            }) => ({
+                url: '/cohort/all/loanee',
+                method: "GET",
+                params: data,
+            }),
+            providesTags: ['cohort'],
+        }),
     })
 })
 
-export const { useCreateCohortMutation } = cohortApi;
+export const { useCreateCohortMutation, useViewAllLoaneeQuery } = cohortApi;
 
