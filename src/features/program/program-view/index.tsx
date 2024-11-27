@@ -32,7 +32,7 @@ interface TableRowData {
 }
 
 interface rowData {
-    [key: string]: string | number | null | React.ReactNode | Object ;
+    [key: string]: string | number | null | React.ReactNode | object ;
 }
 
 interface viewAllProgramProps extends TableRowData  {

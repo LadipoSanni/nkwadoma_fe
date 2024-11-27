@@ -17,7 +17,7 @@ import {IoEllipsisHorizontalSharp} from "react-icons/io5";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import Tables from "@/reuseable/table/LoanProductTable";
-import {cohortDataDetails} from "@/utils/LoanRequestMockData/cohortProduct"
+// import {cohortDataDetails} from "@/utils/LoanRequestMockData/cohortProduct"
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";

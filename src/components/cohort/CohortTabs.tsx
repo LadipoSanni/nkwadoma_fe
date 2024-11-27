@@ -56,6 +56,11 @@ const CohortTabs = () => {
   interface TableRowData {
       [key: string]: string | number | null | React.ReactNode;
      }
+    
+
+     interface rowData {
+      [key: string]: string | number | null | React.ReactNode | object;
+     }
 
   const handleRowClick = (row: TableRowData) => {
     router.push('/cohort/cohort-details')
@@ -65,7 +70,7 @@ const CohortTabs = () => {
 
 
 
-  const handleDropdownClick = (id:string,row: TableRowData) => {
+  const handleDropdownClick = (id:string,row: rowData) => {
     if(id === "1") router.push('/cohort/cohort-details')
     else if(id === "2") {
       setCohortId(String(row.id))
