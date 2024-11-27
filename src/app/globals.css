@@ -115,4 +115,10 @@ body {
     border-radius: 12px;
   }
 
+  .progress-circle {
+    transition: stroke-dashoffset 0.35s;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+
 }
