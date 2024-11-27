@@ -2,10 +2,12 @@ name: Build and Test on pull request
 
 on:
   pull_request:
-    branches: [ "main", "dev", "prod-support" ]
+    branches: [ "main", "dev", "prod-support", "prod" ]
 
 env:
   EMAIL: 'ladipo@semicolon.africa'
+  NEXT_PUBLIC_UPLOAD_PRESET: ${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}
+  NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
   # NEXT_PUBLIC_DEV_AUTH_URL: ${{ secrets.NEXT_PUBLIC_DEV_AUTH_URL }}
   # VITE_APP_TMS_FRONTEND_URL: ${{ secrets.VITE_APP_TMS_FRONTEND_URL }}
   # NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY: ${{ secrets.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY }}
