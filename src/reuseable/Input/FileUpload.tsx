@@ -2,22 +2,25 @@ import React, { useRef, useState, useEffect } from 'react';
 import { FiUploadCloud } from "react-icons/fi";
 import { Label } from "@/components/ui/label";
 import { MdOutlineDelete, MdOutlineEdit, MdCheck } from "react-icons/md";
+import { uploadImageToCloudinary } from '@/utils/UploadToCloudinary';
 
 interface FileUploadProps {
     handleDrop: (event: React.DragEvent<HTMLDivElement>) => void;
     handleDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
+    setUploadedImageUrl: (url: string | null) => void;
 }
 
 const truncateFileName = (name: string, length: number) => {
     return name.length > length ? name.substring(0, length) + "..." : name;
 };
 
-const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setUploadedImageUrl }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [fileName, setFileName] = useState("");
+    // const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
 
     useEffect(() => {
         if (file) {
@@ -46,7 +49,15 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver }) =
             setLoading(true);
             setFile(selectedFile);
             setError(null); // Clear any previous error
-            await new Promise(resolve => setTimeout(resolve, 2000));
+           
+            try { 
+                const uploadedFileUrl = await uploadImageToCloudinary(selectedFile); 
+                setUploadedImageUrl(uploadedFileUrl); 
+            } catch (uploadError) 
+            { setError("Failed to upload image"); 
+            console.error(uploadError); 
+        }
+        await new Promise(resolve => setTimeout(resolve, 2000));
             setLoading(false);
         }
     };
@@ -66,6 +77,14 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver }) =
             setFile(droppedFile);
             setError(null); // Clear any previous error
             handleDrop(event);
+            try { 
+                const uploadedFileUrl = await uploadImageToCloudinary(droppedFile); 
+                setUploadedImageUrl(uploadedFileUrl);  
+            } 
+            catch (uploadError) { 
+                setError("Failed to upload image"); 
+                console.error(uploadError); 
+            }
             await new Promise(resolve => setTimeout(resolve, 2000));
             setLoading(false);
         }

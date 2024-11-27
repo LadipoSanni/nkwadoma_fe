@@ -1,6 +1,8 @@
 import { createApi  } from '@reduxjs/toolkit/query/react'
 import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 
+interface LoanBreakdown { itemName: string; itemAmount: string; currency: string; }
+
 
 export const cohortApi = createApi({
     reducerPath: 'cohortApi',
@@ -8,13 +10,29 @@ export const cohortApi = createApi({
     tagTypes: ['cohort'],
     endpoints: (builder) => ({
         createCohort: builder.mutation({
-            query:({data}) => ({
-              url: `cohort/create`,
+            query:(formData:{
+                programId: string,
+                name: string,
+                startDate: string,
+                cohortDescription: string,
+                imageUrl: string | null,
+                loanBreakdowns:LoanBreakdown[]
+
+            }) => ({
+              url: 'cohort/create',
               method: "POST",
-              body: data,
+              body: formData,
             }),
             invalidatesTags: ['cohort'],
         }),
+
+        deleteProgram:  builder.mutation({
+            query: ({id}) => ({
+                url: `/delete/${id}`,
+                method: "DELETE",
+              }),
+              invalidatesTags:  ({ id }) => [{ type: 'cohort', id }],
+          }),
 
         viewAllLoanee: builder.query({
             query: (data: {

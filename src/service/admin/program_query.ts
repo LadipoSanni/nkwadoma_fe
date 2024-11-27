@@ -77,9 +77,21 @@ export const programApi = createApi({
             }),
             providesTags: ['program'],
         }),
+
+        searchCohortsInAParticularProgram: builder.query({
+            query: (param:{
+                cohortNames?: string;
+                programId?: string
+
+            }) => ({
+                url: '/searchCohort', 
+                method: 'GET',
+                params: param, 
+            })
+        })
     
     }),
 })
 
 
-export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery, useCreateProgramMutation, useUpdateProgramMutation, useGetAllCohortByAParticularProgramQuery} = programApi;
+export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery, useCreateProgramMutation, useUpdateProgramMutation, useGetAllCohortByAParticularProgramQuery, useSearchCohortsInAParticularProgramQuery} = programApi;
