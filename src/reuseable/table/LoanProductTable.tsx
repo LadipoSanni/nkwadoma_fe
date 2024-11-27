@@ -19,7 +19,7 @@ interface ColumnProps<T> {
 }
 
 interface TableRowData {
-    [key: string]: string | number | null | React.ReactNode ;
+    [key: string]: string | number | null | React.ReactNode ; 
 }
 
 interface DropdownOption {
