@@ -8,7 +8,7 @@ interface CapturePhotoWithTipsProps {
 
 const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }) => {
     const webcamRef = useRef<Webcam>(null);
-    const [imageSrc, setImageSrc] = useState<string | null>(null);
+    const [, setImageSrc] = useState<string | null>(null);
     const [progress, setProgress] = useState<number>(0);
 
     const capture = useCallback(() => {
