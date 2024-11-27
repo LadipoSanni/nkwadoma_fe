@@ -3,7 +3,7 @@ import React from "react";
 import {useRouter} from "next/navigation";
 import {FiBook} from "react-icons/fi";
 import {inter} from "@/app/fonts";
-import CohortDetailsImage from "../../../../../public/asset/Image/CohortDetailsImage.png"
+import CohortDetailsImage from "../../../../public/asset/Image/CohortDetailsImage.png"
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {MdOutlinePerson, MdPersonOutline, MdSearch} from "react-icons/md";
