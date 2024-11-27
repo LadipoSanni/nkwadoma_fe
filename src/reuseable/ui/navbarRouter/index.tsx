@@ -23,7 +23,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
         <div
             id={`navBarItemsContainer`}
             data-testid={'navBarItemsContainer'}
-            className={` w-full h-auto grid gap-2 py-3 md:w-full  md:h-auto md:py-3 md:grid md:gap-2 md: `}
+            className={` w-full h-auto grid gap-4 py-3 md:w-full  md:h-auto md:py-3 md:grid md:gap-2 md: `}
         >
             {navbarItems?.map((item, index) => (
                 <button
