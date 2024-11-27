@@ -26,12 +26,15 @@ const SideBar = () => {
     const router = useRouter();
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
-    let content: navbarRouterItemsProps[] = []
-    const [navbarContent, setNavbarContent] = useState(content)
 
+    const [role, setRole] = useState('')
     const user_role = getUserDetailsFromStorage('user_role')
 
-
+    useEffect(() => {
+        if (user_role){
+            setRole(user_role)
+        }
+    }, []);
 
 
     const [currentTab, setCurrentTab] = React.useState(current)
@@ -55,8 +58,9 @@ const SideBar = () => {
     const textLiterals = `text-navbarIconColor`;
 
 
-    const portfolioManagerNavbarItems : navbarRouterItemsProps[] = [
+    const PORTFOLIO_MANAGER : navbarRouterItemsProps[] = [
         {
+
             icon: <MdOutlineHome
                 color={current === 'Overview' ? '#142854' : '#939cb0'}
                 className={` h-[1.2rem] w-[1.2em] `}/>,
@@ -126,7 +130,7 @@ const SideBar = () => {
     ]
 
 
-    const instituteNavbarRouterItems: navbarRouterItemsProps[] = [
+    const INSTITUTION_ADMIN: navbarRouterItemsProps[] = [
         {
             icon: <MdOutlineHome
                 className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}/>,
@@ -201,11 +205,20 @@ const SideBar = () => {
         },
 
     ]
-    useEffect(()=> {
-        if (user_role === 'PORTFOLIO_MANAGER'){
-            setNavbarContent(portfolioManagerNavbarItems)
+   const ll = [
+       {name: "PORTFOLIO_MANAGER" , value :  PORTFOLIO_MANAGER},
+       {name:"INSTITUTION_ADMIN", value : INSTITUTION_ADMIN}
+   ]
+
+    const getUserSideBarByRole = (userrole: string) => {
+        for (let i = 0; i< ll.length; i++){
+            if (ll.at(i)?.name === userrole){
+                if(ll.at(i)?.value){
+                    return ll.at(i)?.value as navbarRouterItemsProps[]
+                }
+            }
         }
-    })
+    }
 
 
     return (
@@ -231,7 +244,7 @@ const SideBar = () => {
                         </div>
                         <div className={` hidden md:grid md:h-fit  md:w-full `}>
                             <NavbarRouter currentTab={currentTab} handleClick={clickNavbar}
-                                          navbarItems={instituteNavbarRouterItems}/>
+                                          navbarItems={PORTFOLIO_MANAGER}/>
                         </div>
 
                     </div>
@@ -262,7 +275,7 @@ const SideBar = () => {
                     </div>
                     <div className={` hidden md:grid md:h-fit  md:w-full `}>
                         <NavbarRouter currentTab={currentTab} handleClick={clickNavbar}
-                                      navbarItems={portfolioManagerNavbarItems}/>
+                                      navbarItems={getUserSideBarByRole(role)}/>
                     </div>
                 </div>
 
