@@ -78,6 +78,7 @@ const Login: React.FC = () => {
                 })
             }
             if(response?.data) {
+                console.log("response: ", response)
                 const access_token = response?.data?.access_token
                 const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
                 // toast({
@@ -86,10 +87,15 @@ const Login: React.FC = () => {
                 // })
                 // console.log(decode_access_token)
                 // console.log(access_token)
+                console.log("access: ", decode_access_token)
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                const userName = decode_access_token?.name
+                console.log("name: ", userName)
                
                 const user_email = decode_access_token?.email
                 const user_role = decode_access_token?.realm_access?.roles[0]
-                storeUserDetails(access_token, user_email, user_role)
+                storeUserDetails(access_token, user_email, user_role, userName)
                 router.push("/Overview")
 
             }}
