@@ -67,8 +67,6 @@ const CohortDetails = () => {
             setAllLoanee(result)
         }
     },[data])
-    console.log("result", allLoanee)
-
 
 
     const id = "1";
@@ -154,7 +152,7 @@ const CohortDetails = () => {
 
     const handleRowClick = (row: TableRowData) => {
         setIsRowSelected(isRowSelected);
-        console.log('Row clicked:', row);
+        // console.log('Row clicked:', row);
     };
 
     return (
