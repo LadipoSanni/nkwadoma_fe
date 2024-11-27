@@ -152,7 +152,7 @@ const CohortDetails = () => {
 
     const handleRowClick = (row: TableRowData) => {
         setIsRowSelected(isRowSelected);
-        // console.log('Row clicked:', row);
+        console.log('Row clicked:', row);
     };
 
     return (
