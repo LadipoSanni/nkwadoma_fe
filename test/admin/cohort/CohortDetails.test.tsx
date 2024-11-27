@@ -2,6 +2,7 @@ import {render, screen, fireEvent, cleanup} from "@testing-library/react";
 import { useRouter } from "next/navigation";
 import "@testing-library/jest-dom";
 import CohortDetails from "@/features/cohort/cohort-details/Index";
+import {Providers} from "@/app/provider";
 
 jest.mock("next/navigation", () => ({
     useRouter: jest.fn(),
@@ -24,7 +25,12 @@ describe("cohort-details Component", () => {
     });
 
     test("renders cohort title and description", () => {
-        render(<CohortDetails />);
+        render(
+            <Providers>
+                <CohortDetails />
+            </Providers>
+
+        );
 
         expect(screen.getByText("Luminary")).toBeInTheDocument();
         expect(screen.getByText(/Design thinking is a process/i)).toBeInTheDocument();
