@@ -17,7 +17,7 @@ const tableData = [
 ];
 
 const tableHeader = [
-    { title: 'fund', id: 'funds' },
+    { title: 'funds', id: 'funds' },
     { title: 'product', id: 'product'},
     { title: 'disburse', id: 'disburse'},
 ];
@@ -73,7 +73,7 @@ describe('LoanProductTable component', () => {
     });
 
         it('should render table with provided data and headers when tableData is not empty', () => {
-            expect(screen.getByText('fund')).toBeInTheDocument();
+            expect(screen.getByText('funds')).toBeInTheDocument();
             expect(screen.getByText('disburse')).toBeInTheDocument();
     });
 })

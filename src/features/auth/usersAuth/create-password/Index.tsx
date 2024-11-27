@@ -27,7 +27,7 @@ const CreatePassword = () => {
         "Must contain one special character",
         "Must contain one uppercase character",
         "Must contain one lowercase character",
-        "Must contain one digit"
+        // "Must contain one digit"
     ];
 
     const validatePassword = (password: string) => {
@@ -36,7 +36,7 @@ const CreatePassword = () => {
             /[!@#$%^&*(),.?":{}|<>]/.test(password),
             /[A-Z]/.test(password),
             /[a-z]/.test(password),
-            /\d/.test(password)
+            // /\d/.test(password)
         ];
         setCriteriaStatus(criteria);
     };
@@ -84,10 +84,11 @@ const CreatePassword = () => {
             const access_token = response?.data?.access_token
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
-            console.log("user email: ",user_email)
+            const user_id = response?.data?.id
+            console.log("user email: ",user_email, "user_id: ", user_id)
             const user_role = decode_access_token?.realm_access?.roles[0]
             console.log("user role: ",user_role)
-            storeUserDetails(access_token, user_email, user_role)
+            storeUserDetails(access_token, user_email, user_role, user_id)
             router.push("/Overview")
             toast({
                 description: response?.message,
@@ -96,7 +97,10 @@ const CreatePassword = () => {
 
 
         }catch (error){
-            // console.log("error: ", error)
+            console.log("error: ", error)
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            console.log("eerr: ",error?.data?.token?.message)
 
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment

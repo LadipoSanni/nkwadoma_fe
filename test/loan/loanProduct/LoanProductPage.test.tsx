@@ -11,7 +11,7 @@ describe("TablePagination", () => {
         render(<LoanProductPage />)
     })
 
-    it("renders loanProduct and create button", () => {
+    it("renders loan-product and create button", () => {
     // const createButton = screen.getByText('Create loan product');
     // expect(createButton).toBeInTheDocument();
 

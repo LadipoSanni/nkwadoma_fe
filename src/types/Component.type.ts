@@ -12,5 +12,5 @@ export  interface navbarItemsProps {
     id: string,
     name: string,
     icon?:string|React.ReactElement| JSX.Element;
-    handleClick: ()=> void
+    handleClick: (id?:string, name?: string)=> void
 }
