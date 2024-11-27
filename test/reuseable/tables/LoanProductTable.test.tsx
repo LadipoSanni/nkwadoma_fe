@@ -17,7 +17,7 @@ const mockTableData = [
 ];
 
 const mockTableHeader = [
-    { title: 'fund', id: 'funds', selector: (row: any) => row.fund },
+    { title: 'funds', id: 'funds', selector: (row: any) => row.fund },
     { title: 'product', id: 'product', selector: (row: any) => row.product },
     { title: 'disburse', id: 'disburse', selector: (row: any) => row.disburse},
 ];

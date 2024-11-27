@@ -16,7 +16,7 @@ services:
 
   # Backend Service
   backend:
-    image: 357586184453.dkr.ecr.us-east-1.amazonaws.com/nkwadoma
+    image: 357586184453.dkr.ecr.us-east-1.amazonaws.com/nkwadoma:alpha
     environment:
       PROFILE: dev
       PORT: 8081
@@ -25,7 +25,12 @@ services:
       DATABASE_URL: jdbc:postgresql://postgres:5432/postgres
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
-  
+
+      CREDIT_REGISTRY_EMAIL: ${CREDIT_REGISTRY_EMAIL}
+      CREDIT_REGISTRY_SUBSCRIBER_ID: ${CREDIT_REGISTRY_SUBSCRIBER_ID}
+      CREDIT_REGISTRY_PASSWORD: ${CREDIT_REGISTRY_PASSWORD}
+      CREDIT_REGISTRY_BASE_URL: ${CREDIT_REGISTRY_BASE_URL}
+      TEST_BVN: ${TEST_BVN}
 
       # Application Configuration
       SPRING_APPLICATION_NAME: nkwadoma
