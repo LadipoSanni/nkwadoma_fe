@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {FiBook} from "react-icons/fi";
 import {inter} from "@/app/fonts";
@@ -14,24 +14,61 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
 import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import {CohortTrainees} from "@/utils/LoanRequestMockData/cohortProduct";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
+import {useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
+import {formatAmount} from "@/utils/Format";
 import SelectableTable from "@/reuseable/table/SelectableTable";
 
 
-interface TableRowData {
-    [key: string]: string | number | null | React.ReactNode;
+interface userIdentity {
+    firstName: string;
+    lastName: string;
 }
 
+interface loaneeLoanDetail {
+    initialDeposit: number;
+    amountRequested: number
+}
+
+interface viewAllLoanee {
+    userIdentity: userIdentity;
+    loaneeLoanDetails: loaneeLoanDetail;
+}
+
+interface TableRowData {
+    [key: string]: string | number | null | React.ReactNode | userIdentity | loaneeLoanDetail;
+}
+
+type viewAllLoanees = viewAllLoanee & TableRowData;
+
 const CohortDetails = () => {
+    const [allLoanee, setAllLoanee] = useState<viewAllLoanees[]>([]);
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [isEditOpen, setEditOpen] = React.useState(false);
     const [isReferred, setIsReferred] = React.useState(``);
     const [addTrainee, setAddTrainee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
+    const size = 100;
+    const [page] = useState(0);
+    const cohortId = "220ce57a-7275-411d-be63-b974bf55fe7a"
+    const { data } = useViewAllLoaneeQuery({
+        cohortId: cohortId,
+        pageSize:size,
+        pageNumber:page
+    }, { refetchOnMountOrArgChange: true, })
+
+
+    useEffect(() => {
+        if(data && data?.data ) {
+            const result = data?.data?.body
+            setAllLoanee(result)
+        }
+    },[data])
+    console.log("result", allLoanee)
+
 
 
     const id = "1";
@@ -96,9 +133,9 @@ const CohortDetails = () => {
         "thepeople they're creating for, which leads to better products, services, and internal processes."
 
     const TraineeHeader = [
-        {title: "Trainee", sortable: true, id: "Trainee"},
-        {title: "Initial deposit", sortable: true, id: "InitialDeposit"},
-        {title: "Amount requested", sortable: true, id: "AmountRequested"},
+        {title: "Trainee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row. userIdentity?.firstName + " " + row.userIdentity?.lastName},
+        {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.initialDeposit)},
+        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)},
         {title: "Amount received", sortable: true, id: "AmountReceived"},
     ]
 
@@ -175,7 +212,7 @@ const CohortDetails = () => {
                                             </div>
                                             <Input
                                                 className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
-                                                type="search" id={`search`} required/>
+                                                type="search" id={`search`} placeholder={"Search"} required/>
                                         </div>
                                     </div>
                                     <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
@@ -211,10 +248,10 @@ const CohortDetails = () => {
 
                             <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
                                 <SelectableTable
-                                    tableData={CohortTrainees}
+                                    tableData={allLoanee}
                                     tableHeader={TraineeHeader}
                                     staticHeader={"Trainee"}
-                                    staticColunm={"Trainee"}
+                                    staticColunm={"firstName"}
                                     tableHeight={45}
                                     icon={MdOutlinePerson}
                                     sideBarTabName={"Trainee"}
