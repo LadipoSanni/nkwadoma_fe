@@ -28,7 +28,11 @@ import { setTimeout } from 'timers';
 
 
 interface TableRowData {
-    [key: string]: string | number | null | React.ReactNode;
+    [key: string]: string | number | null | React.ReactNode ;
+}
+
+interface rowData {
+    [key: string]: string | number | null | React.ReactNode | object ;
 }
 
 interface viewAllProgramProps extends TableRowData  {
@@ -191,7 +195,7 @@ const ProgramView = () => {
         {name: 'Delete Program', id: '3'}
     ];
 
-    const handleDropdownClick = async (id:string,row: TableRowData) => {
+    const handleDropdownClick = async (id:string,row: rowData) => {
         if(id === "1") {
             router.push('/program/details')
             setItemSessionStorage("programId",String(row.id))
@@ -225,6 +229,7 @@ const ProgramView = () => {
            
         }
     };
+
 
    
 
