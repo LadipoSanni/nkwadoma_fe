@@ -19,13 +19,15 @@ interface ColumnProps<T> {
 }
 
 interface TableRowData {
-    [key: string]: string | number | null | React.ReactNode ; 
+    [key: string]: string | number | null | React.ReactNode | Object; 
 }
 
 interface DropdownOption {
     name: string;
     id: string;
   }
+
+  
   
   
   
@@ -105,6 +107,13 @@ function Tables<T extends TableRowData> ({
         setDropdownOpen(!dropdownOpen);
     };
 
+    const renderCellContent = (value: string | number | boolean | React.ReactNode | object | null | undefined) => { 
+        if (React.isValidElement(value)) { return value; } 
+        if (typeof value === 'object' && value !== null) { 
+            return JSON.stringify(value); 
+        } 
+        return value; };
+
 
     const paginatedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
     const totalPages = Math.ceil(tableData.length / rowsPerPage);
@@ -167,7 +176,8 @@ function Tables<T extends TableRowData> ({
                                                         >
                                                             <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
                                                                  className={`${Styles.tableBodyItem} ${tableStyle} `}>
-                                                                {column.selector ? column.selector(row) : row[column.id]}
+                                                                {/* {column.selector ? column.selector(row) : row[column.id]} */}
+                                                                {renderCellContent(column.selector ? column.selector(row) : row[column.id])}
                                                             </div>
 
                                                         </TableCell>
@@ -305,9 +315,9 @@ function Tables<T extends TableRowData> ({
                                                     >
                                                         <div className=''>
                                                             {/* {row[`${staticColunm}`]} */}
-                                                            {tableHeader.find((header) => header.id === staticColunm)?.selector
+                                                            {renderCellContent(tableHeader.find((header) => header.id === staticColunm)?.selector
                                                                 ? tableHeader.find((header) => header.id === staticColunm)?.selector!(row)
-                                                                : row[`${staticColunm}`]}
+                                                                : row[`${staticColunm}`])}
                                                         </div>
                                                     </TableCell>
 
@@ -318,9 +328,9 @@ function Tables<T extends TableRowData> ({
                                                             className={`flex justify-center `}
                                                         >
                                                             {/* {row[selectedColumn]} */}
-                                                            {tableHeader.find((header) => header.id === selectedColumn)?.selector
+                                                            {renderCellContent(tableHeader.find((header) => header.id === selectedColumn)?.selector
                                                                 ? tableHeader.find((header) => header.id === selectedColumn)?.selector!(row)
-                                                                : row[selectedColumn]}
+                                                                : row[selectedColumn])}
                                                         </div>
                                                     </TableCell>
                                                     {/* ${row[selectedColumn] === "Accepted"?"bg-error50 text-success600 pt-1 pb-1 pr-1 pl-1 rounded-xl w-24 relative ml-12 mr-12": row[selectedColumn] === "Declined"? 'text-error600 bg-error50 pt-1 pb-1 pr-1 pl-1 rounded-xl w-24 relative ml-12 mr-12 ': ""} */}

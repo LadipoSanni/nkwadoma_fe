@@ -29,6 +29,7 @@ import { getItemSessionStorage } from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
 import { useDeleteProgramMutation } from '@/service/admin/program_query';
 import { useGetAllCohortByAParticularProgramQuery } from "@/service/admin/program_query";
+// import { useSearchCohortsInAParticularProgramQuery } from "@/service/admin/program_query";
 
 
 interface loanDetails {
@@ -47,7 +48,7 @@ interface viewAllProgramProps  {
     programId?: string;
     cohortDescription?: string;
     name?: string;
-   tuitionAmount?: string;
+   tuitionAmount?: number;
     loanDetails ?: loanDetails
  }
 
@@ -78,9 +79,9 @@ const ProgramDetails = () => {
     const [cohorts,setCohorts] = useState<ViewAllProgramProps[]>([])
 
     useEffect(() =>{
-        const programId = getItemSessionStorage("programId")
-        if(programId){
-            setProgramId(programId)
+        const id = getItemSessionStorage("programId")
+        if(id){
+            setProgramId(id)
         }
     },[])
 
@@ -89,6 +90,7 @@ const ProgramDetails = () => {
     const { data: program} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
     const [deleteItem,{isLoading}] = useDeleteProgramMutation()
     const { data: cohortsByProgram} = useGetAllCohortByAParticularProgramQuery({programId: programId,pageSize: size,pageNumber: page},{ refetchOnMountOrArgChange: true });
+
     
 
     useEffect(()=> {
@@ -145,10 +147,13 @@ const ProgramDetails = () => {
     const ProgramHeader = [
         {title: "Cohort", sortable: true, id: "name"},
         {title: "No of trainees", sortable: true, id: "noOfTrainees"},
-        {title: "Tuition", sortable: true, id: " tuitionAmount"},
-        {title: "Amount Requested", sortable: true, id: "amountRequested"},
-        {title: "Amount Received", sortable: true, id: "amountReceived"},
-        {title: "Amount Outstanding", sortable: true, id: "totalAmountOutstanding"},
+        {title: "Tuition", sortable: true, id: "tuitionAmount", selector: (row: ViewAllProgramProps) => formatAmount(row.tuitionAmount)},
+        // {title: "Amount Requested", sortable: true, id: "amountRequested"},
+        // {title: "Amount Received", sortable: true, id: "amountReceived"},
+        // {title: "Amount Outstanding", sortable: true, id: "totalAmountOutstanding"},
+        { title: "Amount Requested", sortable: true, id: "amountRequested", selector: (row: ViewAllProgramProps) => row.loanDetails?.totalAmountRequested }, 
+        { title: "Amount Received", sortable: true, id: "amountReceived", selector: (row: ViewAllProgramProps) => row.loanDetails?.totalAmountRecieved }, 
+        { title: "Amount Outstanding", sortable: true, id: "totalAmountOutstanding", selector: (row: ViewAllProgramProps) => row.loanDetails?.totalAmountOutstanding },
 
     ];
     const programOptions = [
@@ -233,13 +238,13 @@ const ProgramDetails = () => {
                 <TabsContent value="cohorts" className={'mt-4 grid gap-7'}>
                     <SearchInput  id={'programCohortSearch'} value="search" onChange={()=> {}}/>
                     <Tables
-                        tableData={cohortDataDetails}
+                        tableData={cohorts}
                         tableHeader={ProgramHeader}
-                        staticHeader={'Trainee'}
-                        staticColunm={'trainee'}
+                        staticHeader={'Cohort'}
+                        staticColunm={'name'}
                         tableHeight={45}
                         icon={MdOutlinePerson}
-                        sideBarTabName={"Trainee"}
+                        sideBarTabName={"Cohort"}
                         handleRowClick={() => {
                         }}
                         optionalRowsPerPage={10}
