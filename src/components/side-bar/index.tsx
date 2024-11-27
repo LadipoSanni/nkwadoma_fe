@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useRouter} from "next/navigation";
 import {store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
@@ -26,7 +26,8 @@ const SideBar = () => {
     const router = useRouter();
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
-    const [navbarContent, setNavbarContent] = useState()
+    let content: navbarRouterItemsProps[] = []
+    const [navbarContent, setNavbarContent] = useState(content)
 
     const user_role = getUserDetailsFromStorage('user_role')
 
@@ -41,18 +42,24 @@ const SideBar = () => {
         router.push("/" + id)
 
     }
-    const handleClick = () => {
+    const handleClick = (name?: string, id?: string) => {
+        if (name && id){
+            if (name !== 'Logout' && name !== "Help & Support"){
+                clickNavbar(name, id)
+            }
+        }
 
     }
 
-    const currentTextLiterals = `text-meedleBlue`;
+    const currentTextLiterals = `text-[#626F8C]`;
     const textLiterals = `text-navbarIconColor`;
 
 
-    const porfolioManagerNavbarItems : navbarRouterItemsProps[] = [
+    const portfolioManagerNavbarItems : navbarRouterItemsProps[] = [
         {
             icon: <MdOutlineHome
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}/>,
+                color={current === 'Overview' ? '#142854' : '#939cb0'}
+                className={` h-[1.2rem] w-[1.2em] `}/>,
             id: 'Overview',
             name: 'Overview',
             route: '/overview'
@@ -63,8 +70,8 @@ const SideBar = () => {
             route: '/loan',
             icon: <Icon icon="material-symbols:money-bag-outline"
                         height={"1.2rem"}
-                        width={"1.3rem"}
-                        color={current === 'Loan' ? '#142854' : '#667085'}
+                        width={"1.2rem"}
+                        color={current === 'Loan' ? '#142854' : '#939cb0'}
             ></Icon >
 
         },
@@ -73,10 +80,10 @@ const SideBar = () => {
             name: 'Loan Product',
             route: '/loan-product',
             icon: <MdOutlineInventory2
-                        height={"1.2rem"}
-                        width={"1.3rem"}
-                        color={current === 'Loan' ? '#142854' : '#667085'}
-            ></MdOutlineInventory2 >
+
+                        color={current === 'Loan Product' ? '#142854' : '#939CB0'}
+                        className={` h-[1.2rem] w-[1.2rem]  `}
+        ></MdOutlineInventory2 >
 
         },
         {
@@ -84,9 +91,8 @@ const SideBar = () => {
             name: 'Organizations',
             route: '/organizations',
             icon: <MdOutlineAccountBalance
-                        height={"1.2rem"}
-                        width={"1.3rem"}
-                        color={current === 'Loan' ? '#142854' : '#667085'}
+                className={` h-[1.2rem] w-[1.2em]  `}
+                        color={current === 'Organizations' ? '#142854' : '#939CB0'}
             ></MdOutlineAccountBalance >
 
         },
@@ -95,14 +101,16 @@ const SideBar = () => {
             name: 'Loanee',
             route: '/loanee',
             icon: <MdOutlinePersonOutline
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Organizations' ? currentTextLiterals : textLiterals} `}/>
+                color={current === 'Loanee' ? '#142854' : '#939CB0'}
+                className={` h-[1.2rem] w-[1.2rem]   `}/>
         },
         {
             id: 'funds',
             name: 'Funds',
             route: '/funds',
             icon: <MdOutlinePayments
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Loanee' ? currentTextLiterals : textLiterals} `}/>
+                color={current === 'Funds' ? '#142854' : '#939CB0'}
+                className={` h-[1.2rem] w-[1.2rem]  `}/>
         },
         {
 
@@ -110,7 +118,8 @@ const SideBar = () => {
             name: 'Investors',
             route: '/investors',
             icon: <MdOutlineBusinessCenter
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Loanee' ? currentTextLiterals : textLiterals} `}/>
+                color={current === 'Investors' ? '#142854' : '#939CB0'}
+                className={` h-[1.2rem] w-[1.2rem]  `}/>
         },
 
 
@@ -169,23 +178,34 @@ const SideBar = () => {
         {
             id: 'settings',
             name: 'Settings',
-            icon: <GearIcon className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
+            icon: <GearIcon
+                color={current === 'Settings' ? '#142854' : '#939CB0'}
+                className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
             handleClick: handleClick
         },
         {
             id: 'help&support',
             name: "Help & Support",
-            icon: <QuestionMarkCircledIcon className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
+            icon: <QuestionMarkCircledIcon
+                color={current === "Help & Support" ? '#142854' : '#939CB0'}
+                className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
             handleClick: handleClick
         },
         {
             id: 'logout',
             name: 'Logout',
-            icon: <LuLogOut className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
+            icon: <LuLogOut
+                color={current === "Logout" ? '#142854' : '#939CB0'}
+                className={` h-[1.2rem] w-[1.2rem] `}/>,
             handleClick: handleClick
         },
 
     ]
+    useEffect(()=> {
+        if (user_role === 'PORTFOLIO_MANAGER'){
+            setNavbarContent(portfolioManagerNavbarItems)
+        }
+    })
 
 
     return (
@@ -242,7 +262,7 @@ const SideBar = () => {
                     </div>
                     <div className={` hidden md:grid md:h-fit  md:w-full `}>
                         <NavbarRouter currentTab={currentTab} handleClick={clickNavbar}
-                                      navbarItems={porfolioManagerNavbarItems}/>
+                                      navbarItems={portfolioManagerNavbarItems}/>
                     </div>
                 </div>
 
