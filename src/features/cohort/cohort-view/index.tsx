@@ -76,7 +76,7 @@ const CohortView = () => {
    const [page] = useState(0);
    const size = 200;
 
-   const { data: cohortData,isLoading:isloading } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
+   const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
    const { data: searchData } = useSearchCohortByOrganisationQuery(searchTerm, { skip:!searchTerm })
    const { data: programDatas, } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
   //  const { data: cohortsByProgram} = useGetAllCohortByAParticularProgramQuery({programId: programId,pageSize: size,pageNumber: page},{ refetchOnMountOrArgChange: true });
@@ -98,7 +98,7 @@ const CohortView = () => {
         const result = cohortData?.data?.body
       setOrganisationCohort(result)
     }
-   },[searchTerm,searchTerm,cohortData])
+   },[searchTerm,searchData,cohortData])
 
    useEffect(() => {
     if( programDatas &&  programDatas?.data ) {

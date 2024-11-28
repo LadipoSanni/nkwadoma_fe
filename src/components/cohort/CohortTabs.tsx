@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
-import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
+// import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
 import { MdOutlinePeople } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
 import { formatAmount } from '@/utils/Format'

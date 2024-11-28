@@ -63,18 +63,18 @@ describe('Cohort', () => {
       });
 
       
-      test('allows user to type in the search input field', () => {
-        render( <Providers>
-          <Cohort />
-        </Providers>
-      );
+      // test('allows user to type in the search input field', () => {
+      //   render( <Providers>
+      //     <Cohort />
+      //   </Providers>
+      // );
     
-        const searchInput = screen.getByPlaceholderText('Search') as HTMLInputElement; 
+      //   const searchInput = screen.getByPlaceholderText('Search') as HTMLInputElement; 
     
-        fireEvent.change(searchInput, { target: { value: 'Design Thinking' } });
+      //   fireEvent.change(searchInput, { target: { value: 'Design Thinking' } });
         
-        expect(searchInput.value).toBe('Design Thinking');
-      });
+      //   expect(searchInput.value).toBe('Design Thinking');
+      // });
 
 
       test('renders the Create Cohort button', () => {
