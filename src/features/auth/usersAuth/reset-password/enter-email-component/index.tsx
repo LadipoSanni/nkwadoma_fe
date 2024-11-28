@@ -23,9 +23,10 @@ const Step1 = () => {
 
 
 
-    const handleReset = () => {
-        sendEmail(email)
-        store.dispatch(setUserPasswordInput(email))
+    const handleReset = async () => {
+        const response  = await sendEmail(email)
+        console.log("response: ", response )
+        // store.dispatch(setUserPasswordInput(email))
     }
 
     const validateEmail = (input: string) => {
