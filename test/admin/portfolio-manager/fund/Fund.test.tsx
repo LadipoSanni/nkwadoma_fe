@@ -70,7 +70,7 @@ describe("Portfolio Manager", () => {
         const mockHandleDraftClick = jest.fn();
         const draftsButton = screen.getByText("Drafts");
         fireEvent.click(draftsButton);
-        expect(mockHandleDraftClick).toHaveBeenCalledTimes(0); // Mock is unused, ensure no error.
+        expect(mockHandleDraftClick).toHaveBeenCalledTimes(0); 
     });
 
 
@@ -79,7 +79,7 @@ describe("Portfolio Manager", () => {
         
         const createButton = screen.getByText("Create investment vehicle");
         fireEvent.click(createButton);
-        expect(mockHandleCreateInvestmentVehicleClick).toHaveBeenCalledTimes(0); // Mock is unused, ensure no error.
+        expect(mockHandleCreateInvestmentVehicleClick).toHaveBeenCalledTimes(0); 
     });
    
     

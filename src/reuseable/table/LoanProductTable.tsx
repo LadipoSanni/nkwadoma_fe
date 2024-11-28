@@ -49,6 +49,7 @@ interface DropdownOption {
       optionalFilterName?: string,
       optionalRowsPerPage?: number; 
       tableCellStyle?: string;
+      condition?:boolean
     //   totalPages?: number;
   }
   
@@ -70,7 +71,8 @@ function Tables<T extends TableRowData> ({
                            icon,
                            optionalFilterName,
                           optionalRowsPerPage = 8,
-                          tableCellStyle
+                          tableCellStyle,
+                          condition
 
                            
 }: Props<T>) {
@@ -123,7 +125,7 @@ function Tables<T extends TableRowData> ({
         <div id="loanProductTableContainer" className={`w-[100%] `}>
             {
                 tableData.length === 0 ? <TableEmptyState icon={icon} name={sideBarTabName} className={emptyStateStyle}
-                                                          optionalFilterName={optionalFilterName}/> : (
+                                                          optionalFilterName={optionalFilterName} condition={condition}/> : (
                     <div>
                         <div id="loanProductTableBorder"
                              className='border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block '>
