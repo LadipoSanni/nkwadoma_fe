@@ -2,6 +2,7 @@ import {render, screen, fireEvent, cleanup} from "@testing-library/react";
 import { useRouter } from "next/navigation";
 import "@testing-library/jest-dom";
 import CohortDetails from "@/features/cohort/cohort-details/Index";
+import {Providers} from "@/app/provider";
 
 jest.mock("next/navigation", () => ({
     useRouter: jest.fn(),
@@ -24,14 +25,23 @@ describe("cohort-details Component", () => {
     });
 
     test("renders cohort title and description", () => {
-        render(<CohortDetails />);
+        render(
+            <Providers>
+                <CohortDetails />
+            </Providers>
+
+        );
 
         expect(screen.getByText("Luminary")).toBeInTheDocument();
         expect(screen.getByText(/Design thinking is a process/i)).toBeInTheDocument();
     });
 
     test("displays the correct cohort details data", () => {
-        render(<CohortDetails />);
+        render(
+            <Providers>
+                <CohortDetails/>
+            </Providers>
+        );
 
         expect(screen.getByText("Start Date")).toBeInTheDocument();
         expect(screen.getByText("13, Dec 2023")).toBeInTheDocument();
@@ -40,7 +50,11 @@ describe("cohort-details Component", () => {
     });
 
     test("renders data with correct data", () => {
-        render(<CohortDetails />);
+        render(
+            <Providers>
+                <CohortDetails />
+            </Providers>
+        );
 
         const assert = screen.getByTestId("backClickText");
 
@@ -49,7 +63,11 @@ describe("cohort-details Component", () => {
     });
 
     it("should test that arrowBack routes to the previous page", async () => {
-        render(<CohortDetails />);
+        render(
+            <Providers>
+                <CohortDetails />
+            </Providers>
+        );
 
         const assert = screen.getByTestId("backClick");
         expect(assert).toBeInTheDocument();

@@ -1,7 +1,9 @@
 import React from 'react'
 import {navbarRouterItemsProps} from "@/types/Component.type";
+// import styles from "./index.module.css"
+import {inter} from "@/app/fonts";
 interface Props <T extends navbarRouterItemsProps> {
-    navbarItems: T[],
+    navbarItems: T[] | undefined,
     currentTab: string | undefined | string[] | null,
     handleClick: (name: string,  id: string ) => void,
 }
@@ -10,9 +12,9 @@ interface Props <T extends navbarRouterItemsProps> {
 function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClick, currentTab}: Readonly<Props<T>>) {
 
 
-    const currentTabStyle =  'rounded bg-neutral100';
+    const currentTabStyle =  'rounded bg-[#f6f6f8]';
     const currentTabNameStyle =  `text-meedleBlue`
-    const tabNameStyle =  `text-layoutBlue800`;
+    const tabNameStyle =  `text-[#626F8C]`;
     const noStyle = ``;
 
 
@@ -21,7 +23,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
         <div
             id={`navBarItemsContainer`}
             data-testid={'navBarItemsContainer'}
-            className={`md:w-full  md:h-auto md:py-3 md:grid md:gap-2 md: `}
+            className={` w-full h-auto grid gap-2 py-3 md:w-full  md:h-auto md:py-3 md:grid md:gap-2 md: `}
         >
             {navbarItems?.map((item, index) => (
                 <button
@@ -31,15 +33,17 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                     className={`inline-flex h-fit py-2 gap-2 px-1 w-full ${(currentTab === item.name ?currentTabStyle : noStyle  )} `}
                     onClick={() => {handleClick(item.name, item.id)}}
                 >
-                    <div id={'navbarRouteIcon' + item.id}
-                         data-testid={'navbarRouteIcon' + item.id}
-                    >{item?.icon}</div>
-                    <div id={'navbarRouterName' + item.id}
-                         data-testid={`navbarRouteName` + item.id}
-                         className={`text-sm tracking-wide  ${(currentTab !== item.name  ? tabNameStyle : currentTabNameStyle)} `}>{item.name}</div>
+                    <div className={` flex gap-2`}>
+                        <div id={'navbarRouteIcon' + item.id}
+                             data-testid={'navbarRouteIcon' + item.id}
+                        >{item?.icon}</div>
+                        <span id={'navbarRouterName' + item.id}
+                              data-testid={`navbarRouteName` + item.id}
+                              className={`text-xs mt-auto mb-auto font-thin   ${inter.className}  ${(currentTab !== item.name ? tabNameStyle : currentTabNameStyle)} `}>{item.name}</span>
 
+                    </div>
                 </button>
-                ))}
+            ))}
 
         </div>
     )

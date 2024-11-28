@@ -16,16 +16,16 @@ describe("Portfolio Manager", () => {
       });
 
       test("renders InvestmentVehicle without crashing", () => {
-        expect(screen.getByText("Commercial fund")).toBeInTheDocument();
+        expect(screen.getByText("Commercial funds")).toBeInTheDocument();
     });
 
     test("renders all tab triggers correctly", () => {
        
-        expect(screen.getByText("Commercial fund")).toBeInTheDocument();
-        expect(screen.getByText("Endowment fund")).toBeInTheDocument();
+        expect(screen.getByText("Commercial funds")).toBeInTheDocument();
+        expect(screen.getByText("Endowment funds")).toBeInTheDocument();
     });
     
-    test("renders action bar for Commercial fund", () => {
+    test("renders action bar for Commercial funds", () => {
        
         const input = screen.getByRole("textbox");
         const draftsButton = screen.getByText("Drafts");
@@ -35,7 +35,7 @@ describe("Portfolio Manager", () => {
         expect(createButton).toBeInTheDocument();
     });
 
-    test("renders action bar for Endowment fund after tab switch", () => {
+    test("renders action bar for Endowment funds after tab switch", () => {
      
         fireEvent.click(screen.getByTestId("tabDataNameendowmentFund"));
         const input = screen.getByRole("textbox");
@@ -46,7 +46,7 @@ describe("Portfolio Manager", () => {
         expect(createButton).toBeInTheDocument();
     });
 
-    test("renders table for Endowment fund after tab switch", () => {
+    test("renders table for Endowment funds after tab switch", () => {
        
         fireEvent.click(screen.getByTestId("tabDataNameendowmentFund"));
         const allVehicles = screen.getAllByText("Vehicle");
@@ -55,7 +55,7 @@ describe("Portfolio Manager", () => {
         expect(allStartDate[0]).toBeInTheDocument(); 
     });
 
-    test("renders table headers for Commercial fund", () => {
+    test("renders table headers for Commercial funds", () => {
         
         fireEvent.click(screen.getByTestId("tabDataNameendowmentFund"));
         const allVehicles = screen.getAllByText("Vehicle");

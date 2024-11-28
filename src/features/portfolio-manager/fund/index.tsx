@@ -14,11 +14,11 @@ interface TableRowData {
 
 
 const tabData = [
-  {name:"Commercial fund",
+  {name:"Commercial funds",
       value: "commercialFund"
     },
     {
-      name:"Endowment fund",
+      name:"Endowment funds",
       value: "endowmentFund"
     },
 ]
