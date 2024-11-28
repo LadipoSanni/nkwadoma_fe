@@ -25,14 +25,13 @@ export const authApi = createApi({
             }),
         }),
         sendEmailToResetPassword: builder.mutation({
-           query: (data) => ({
-               url: '/auth/forgetpassword',
+           query: (email) => ({
+               url: `/auth/forgotPassword/${email}`,
                method: 'POST',
-               body:data
            })
         }),
 
     })
 })
 
-export const {useLoginMutation, useCreatePasswordMutation} = authApi;
+export const {useLoginMutation, useSendEmailToResetPasswordMutation, useCreatePasswordMutation} = authApi;
