@@ -2,6 +2,7 @@ import React from 'react';
 import LoanApplicationDetails from "@/features/onboarding/stepContent/loanApplicationDetails/Index";
 import IdentityVerification from "@/features/onboarding/stepContent/identityVerification/Index";
 import AdditionalInformation from "@/features/onboarding/stepContent/additionalInformation/Index";
+import ConfirmLoanReferralAcceptance from "@/features/onboarding/stepContent/confirmLoanReferralAcceptance/Index";
 
 interface StepContentProps {
     step: number;
@@ -16,7 +17,7 @@ const StepContent: React.FC<StepContentProps> = ({ step }) => {
         case 2:
             return <AdditionalInformation/>;
         case 3:
-            return <div>Content for Confirm loan application (4)</div>;
+            return <ConfirmLoanReferralAcceptance />;
         default:
             return null;
     }
