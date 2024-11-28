@@ -1,18 +1,18 @@
 "use client"
 import React from 'react';
-import {store} from "@/redux/store";
+import {store, useAppSelector} from "@/redux/store";
 import styles from "./SelectedLoan.module.css"
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation"
 
-interface type {
+interface menuItemsProps {
     name: string,
     index: number,
 }
 
 const SelectLoanTab = () => {
-    const [currentTab, setCurrentTabs] = React.useState(0)
     const router = useRouter()
+    const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
 
     const tabContent = [
         {name: "Loan referrals", id: "loanReferrals", route: 'loan-referral'},
@@ -25,20 +25,20 @@ const SelectLoanTab = () => {
 
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setCurrentTabs(newValue)
+        // setCurrentTabs(newValue)
         store.dispatch(setCurrentTab(tabContent[newValue].name))
         router.push(`/loan/${tabContent[newValue].route}`)
 
     }
 
-    function  MenuItem(props: type) {
+    function  MenuItem(props: menuItemsProps) {
         const {name, index} = props
         return (
-            <div
+            <button
                 id="loanStatusBox"
                 data-testid="loanStatusBox"
                 style={{textTransform: 'none', color: 'black'}}
-                className={` py-1 flex px-2 place-self-center mr-auto ml-auto text-sm ${currentTab === index ? `  rounded-md border px-2 border-[#e5e8ec] ${styles.selectedLoan}` : `text-black300`}`}
+                className={` py-1 flex px-2 place-self-center mr-auto ml-auto text-sm ${currentTab === name ? `  rounded-md border px-2 border-[#e5e8ec] ${styles.selectedLoan}` : `text-black300`}`}
                 onClick={(event) => {
                     handleChange(event, index)
                 }}
@@ -49,7 +49,7 @@ const SelectLoanTab = () => {
                     className={`flex gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
                 >{name}</div>
 
-            </div>
+            </button>
         )
     }
 

@@ -302,7 +302,7 @@ const SideBar = () => {
                     className={`hidden md:grid  md:bg-meedlWhite md:w-[16vw]  md:px-4  md:border-r md:border-r-[blue300] md:z-0 md:h-[100%]`}
                 >
                     <div className={` md:grid md:gap-4   md:h-fit `}>
-                        <div className={`md:h-fit py-6 md:w-full   md:grid   `}>
+                        <div className={`md:h-[10vh] md:mt-auto md:mb-auto md:w-full   md:grid   `}>
                             <Image
                                 id={'meddleMainLogoOnAdminLayout'}
                                 data-testid={'meddleMainLogoOnAdminLayout'}
