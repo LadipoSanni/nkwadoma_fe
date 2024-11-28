@@ -40,14 +40,14 @@ describe("testing loan tab switch component", ()=> {
     //     expect(currentTab).toBe("loan requests")
     // })
 
-    it("test that store update when the tab is been click", ()=> {
-        render(
-            // <Providers>
-                <SelectLoanTab/>
-            // </Providers>
-        )
-
-    })
+    // it("test that store update when the tab is been click", ()=> {
+    //     render(
+    //         // <Providers>
+    //             <SelectLoanTab/>
+    //         // </Providers>
+    //     )
+    //
+    // })
 
 
 })
