@@ -258,33 +258,67 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
                                                 className='border rounded '
                                             >
                                                 {details.map((detail, index) => (
-                                                    <div key={index}
-                                                         className={`p-4 ${detail.item === "Total amount requested" ? "border-t h-10" : ""}`}>
+                                                    <div
+                                                        key={index}
+                                                        className={`p-4 ${detail.item === "Total amount requested" ? "border-t" : ""}`}
+                                                    >
                                                         <Label htmlFor={`detail-${index}`}>{detail.item}</Label>
-                                                        <div className="flex items-center gap-2">
-                                                            <CurrencySelectInput
-                                                                selectedcurrency={selectCurrency}
-                                                                setSelectedCurrency={setSelectCurrency}
-                                                            />
-                                                            <div className="w-full mb-2">
-                                                                <Field
-                                                                    id={`detail-${index}`}
-                                                                    name={`detail-${index}`}
-                                                                    type="text"
-                                                                    defaultValue={detail.amount || ""}
-                                                                    placeholder={`Enter ${detail.item}`}
-                                                                    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                        const value = e.target.value;
-                                                                        if (/^\d*$/.test(value)) {
-                                                                            setFieldValue(`detail-${index}`, value);
-                                                                        }
-                                                                    }}
-                                                                />
+                                                        {/*<div className="flex items-center gap-2">*/}
+                                                            <div className="w-full">
+                                                                {detail.item === "Tuition" ? (
+                                                                    <div className={`flex items-center gap-2`}>
+                                                                        <div>
+                                                                            <CurrencySelectInput
+                                                                                readOnly={true}
+                                                                                selectedcurrency={selectCurrency}
+                                                                                setSelectedCurrency={setSelectCurrency}
+                                                                            />
+                                                                        </div>
+
+                                                                        <div className={`w-full mb-2`}>
+                                                                            <Field
+                                                                                id={`detail-${index}`}
+                                                                                name={`detail-${index}`}
+                                                                                type="text"
+                                                                                defaultValue={detail.amount || ""}
+                                                                                readOnly
+                                                                                className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div className={`flex items-center`}>
+                                                                        <div>
+                                                                            <CurrencySelectInput
+                                                                                readOnly={false}
+                                                                                selectedcurrency={selectCurrency}
+                                                                                setSelectedCurrency={setSelectCurrency}
+                                                                            />
+                                                                        </div>
+
+                                                                        <div className={`flex w-full flex-row items-center justify-between mb-2 px-3 text-black300 ${detail.item === "Total amount requested" ? "border-t h-10" : ""}`}>
+                                                                            <Field
+                                                                                id={`detail-${index}`}
+                                                                                name={`detail-${index}`}
+                                                                                type="text"
+                                                                                defaultValue={detail.amount || ""}
+                                                                                placeholder={`Enter ${detail.item}`}
+                                                                                className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+                                                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                                                    const value = e.target.value;
+                                                                                    if (/^\d*$/.test(value)) {
+                                                                                        setFieldValue(`detail-${index}`, value);
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                )}
                                                             </div>
-                                                        </div>
+                                                        {/*</div>*/}
                                                     </div>
                                                 ))}
+
 
                                                 {/*{*/}
                                                 {/*    details.map((detail, index) => (*/}
