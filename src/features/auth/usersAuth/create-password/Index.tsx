@@ -9,6 +9,7 @@ import {useRouter, useSearchParams} from 'next/navigation'
 import { useToast} from "@/hooks/use-toast";
 import {jwtDecode} from "jwt-decode";
 import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
+import {ADMIN_ROLES} from "@/types/roles";
 
 
 const CreatePassword = () => {
@@ -17,7 +18,7 @@ const CreatePassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const router = useRouter()
     const searchParams = useSearchParams()
-    const [createPassword, {error, isError, isSuccess, data}] = useCreatePasswordMutation()
+    const [createPassword, { isLoading}] = useCreatePasswordMutation()
 
 
 
@@ -62,6 +63,18 @@ const CreatePassword = () => {
             }
     }
 
+    const getUserRoles = (returnsRole: string) => {
+        if (returnsRole) {
+            // ADMIN_ROLES.filter(returnsRole)
+            for (let i = 0; i < ADMIN_ROLES.length; i++) {
+                if (ADMIN_ROLES.at(i) === returnsRole) {
+                    return ADMIN_ROLES.at(i)
+                }
+            }
+
+        }
+    }
+
 
     const {toast} = useToast()
 
@@ -75,33 +88,35 @@ const CreatePassword = () => {
     }
     const handleCreatePassword = async () => {
         const token = getUserToken()
-        console.log("token: ", token)
+        // console.log("token: ", token)
 
         try {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
-            console.log("responsebhybyuihiuhuihiu : ",response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
+            // console.log("responsebhybyuihiuhuihiu : ",response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
             const access_token = response?.data?.access_token
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
-            const user_id = response?.data?.id
-            console.log("user email: ",user_email, "user_id: ", user_id)
-            const user_role = decode_access_token?.realm_access?.roles[0]
-            console.log("user role: ",user_role)
-            storeUserDetails(access_token, user_email, user_role, user_id)
-            router.push("/Overview")
-            toast({
-                description: response?.message,
-                status: "error",
-            })
+            // const user_id = response?.data?.id
+            // console.log("user email: ",user_email, "user_id: ", user_id)
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            const userName = decode_access_token?.name
+            // const user_email = decode_access_token?.email
+            const user_roles = decode_access_token?.realm_access?.roles
+            const user_role = user_roles.filter(getUserRoles).at(0)
+            if (user_role) {
+                storeUserDetails(access_token, user_email, user_role, userName)
+                if (user_role === 'LOANEE') {
+                    router.push("/overview")
+                } else {
+                    router.push("/Overview")
+                }
+
+            }
 
 
         }catch (error){
-            console.log("error: ", error)
-            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            console.log("eerr: ",error?.data?.token?.message)
-
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
@@ -150,6 +165,7 @@ const CreatePassword = () => {
                     id={"createPasswordButton"}
                     textColor={'#FFFFFF'}
                     width={'100%'}
+                    isLoading={isLoading}
                 />
         </section>
     );
