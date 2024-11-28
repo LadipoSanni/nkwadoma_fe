@@ -1,5 +1,5 @@
 "use client"
-import React,{useState,useCallback} from 'react'
+import React,{useState,useCallback,useEffect} from 'react'
 import { Input } from '@/components/ui/input'
 import { MdSearch } from 'react-icons/md'
 import { DropdownMenu, DropdownMenuContent,DropdownMenuTrigger,DropdownMenuItem,DropdownMenuLabel} from '@/components/ui/dropdown-menu'
@@ -13,11 +13,19 @@ import {Icon} from "@iconify/react";
 import CohortTabs from '../../../components/cohort/CohortTabs'
 import CreateCohort from "@/reuseable/modals/CreateCohort";
 import { inter } from '@/app/fonts'
-
+import { useGetAllCohortsByOrganisationQuery } from '@/service/admin/cohort_query'
+import { useSearchCohortByOrganisationQuery } from '@/service/admin/cohort_query'
+import { debounce } from 'lodash';
+import { useGetAllCohortByAParticularProgramQuery } from '@/service/admin/program_query'
+import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 
 export const initialFormValue = {
   selectProgram:""
 }
+
+interface TableRowData {
+  [key: string]: string | number | null | React.ReactNode;
+ }
 
 export const programData = {
   "value 1" : "Design Thinking",
@@ -35,32 +43,118 @@ export const programData = {
    "value 13" : "Product Management",
 }
 
+
+
+interface allCohortsProps extends TableRowData {
+   name:string,
+   cohortDescriptions:string,
+   startDate:string,
+   expectedEndDate:string,
+   totalCohortFee:number,
+   imageUrl:string,
+   cohortStatus: string,
+   tuitionAmount: number
+   id:string
+}
+
+interface viewAllProgramProps extends TableRowData  {
+  id?: string;
+  name: string;
+  
+}
+
+
 const CohortView = () => {
   const [isDropdown,setIsDropdown] = useState(false)
   const [selectProgram, setSelectProgram] = useState('')
+  const [organisationCohort,setOrganisationCohort] = useState<allCohortsProps[]>([])
+  // const [originalCohortData, setOriginalCohortData] = useState<allCohortsProps[]>([]);
+  const [listOfPrograms, setListOfPrograms] = useState<viewAllProgramProps[]>([])
+  const [searchTerm, setSearchTerm] = useState('');
+  const [programId, setProgramId] = useState('');
    const [isLoading] = useState(false);
+   const [page] = useState(0);
+   const size = 200;
 
+   const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
+   const { data: searchData } = useSearchCohortByOrganisationQuery(searchTerm, { skip:!searchTerm })
+   const { data: programDatas, } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
+  //  const { data: cohortsByProgram} = useGetAllCohortByAParticularProgramQuery({programId: programId,pageSize: size,pageNumber: page},{ refetchOnMountOrArgChange: true });
+  const { data: cohortsByProgram, refetch } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
+   
+
+   useEffect(() => { 
+    if (cohortData && cohortData?.data) { 
+      const result = cohortData?.data?.body; setOrganisationCohort(result); 
+      // setOriginalCohortData(result);  
+    } }, [cohortData]);
+
+   useEffect(() => {
+    if(searchTerm && searchData && searchData?.data) {
+      const result = searchData?.data
+      setOrganisationCohort(result)
+    }
+    else if(!searchTerm && cohortData && cohortData?.data) {
+        const result = cohortData?.data?.body
+      setOrganisationCohort(result)
+    }
+   },[searchTerm,searchData,cohortData])
+
+   useEffect(() => {
+    if( programDatas &&  programDatas?.data ) {
+        const programs =  programDatas?.data?.body
+        setListOfPrograms(programs)
+       
+    }
+   
+},[programDatas])
+
+   useEffect(() => { 
+    if (cohortsByProgram && cohortsByProgram?.data) { 
+      const result = cohortsByProgram?.data?.body; 
+      setOrganisationCohort(result);
+     } }, [cohortsByProgram]);
+
+
+  console.log("The organisationCohort: ",listOfPrograms)
+  console.log("The organisationCohort: ", organisationCohort);
 
 
    const toggleDropdown = useCallback(() => {
     setIsDropdown((prev) => !prev);
-    // console.log(isDropdown)
+    
   }, []);
 
 
   const handleSubmit = async (values:{selectProgram: string}) => {
     console.log('Form submitted', values)
     setIsDropdown(false)
+    if (programId) { refetch(); }
 
   }
 
   const handleSelectProgram = (programType: string) => {
-       setSelectProgram(programType)
+       setSelectProgram(programType) 
+       const selectedProgram = listOfPrograms.find(program => program.name === programType); 
+       if (selectedProgram) { 
+        setProgramId(selectedProgram.id || '');
+       }
   }
+
+  console.log("The hhhid: ",programId)
 
  const validationSchema = Yup.object().shape({
    selectProgram: Yup.string().required('Program is required'),
  })
+
+ const debouncedSearch = useCallback( debounce((term) => { 
+  setSearchTerm(term);
+ }, 300), [] );
+
+ const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
+  debouncedSearch(event.target.value);
+};
+
 
   return (
     <div className=''>
@@ -76,6 +170,8 @@ const CohortView = () => {
              id='CohortSearch'
               placeholder='Search'
               className='w-full lg:w-96 h-11 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
+              value={searchTerm}
+              onChange={handleSearchChange}
               />
             </div>
              <div className='z-10'>
@@ -127,9 +223,9 @@ const CohortView = () => {
                         <SelectGroup
                           className=''
                         >
-                          {Object.entries(programData).map(([key, value]) => (
-                           <SelectItem key={key} value={value} className='hover:bg-blue-200'>
-                             {value}
+                          {listOfPrograms.map((value) => (
+                           <SelectItem key={value.id} value={value.name} className='hover:bg-blue-200'>
+                             {value.name}
                            </SelectItem>
                           ))}
                         </SelectGroup>
@@ -150,6 +246,7 @@ const CohortView = () => {
                         onClick={()=> {
                           resetForm();
                           setSelectProgram("")
+                          setProgramId("")
                         }}
                         >
                           Reset
@@ -188,7 +285,7 @@ const CohortView = () => {
           </div>
         </div>
         <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
-         <CohortTabs/>
+         <CohortTabs listOfCohorts={organisationCohort}/>
         </div>
     </div>
   )
