@@ -122,8 +122,8 @@ const ProgramDetails = () => {
      },[cohortsByProgram])
 
       useEffect(() => {
-        if(searchTerm && searchResults && programId && searchResults.data) {
-            const cohorts = [searchResults.data];
+        if(searchTerm && searchResults &&  searchResults.data) {
+            const cohorts = searchResults.data;
              setCohorts(cohorts);
         }
         else if (cohortsByProgram && cohortsByProgram?.data) {

@@ -4,7 +4,6 @@ import { Formik,Form,Field,ErrorMessage } from 'formik'
 import * as Yup from 'yup';
 import { Label } from '@/components/ui/label';
 import {inter} from "@/app/fonts"
-import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import CustomSelect from '@/reuseable/Input/Custom-select';
 import { FileUpload } from '@/reuseable/Input';
 import Isloading from '@/reuseable/display/Isloading';
@@ -40,7 +39,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
       }
     }
    
-    const [isloading, setIsLoading] = useState(false)
+    const [isloading] = useState(false)
 
     const validationSchema = Yup.object().shape({
         name:Yup.string()
@@ -73,7 +72,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
         .required('Admin email address is required')
         .test(
             'email-different', 'Admin email address must be different from company email address', 
-            function (value) { 
+            function () { 
                 const { emailAddress, adminEmailAddress } = this.parent; return emailAddress !== adminEmailAddress;
              })
     })
