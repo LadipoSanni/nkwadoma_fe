@@ -88,23 +88,24 @@ const CreatePassword = () => {
     }
     const handleCreatePassword = async () => {
         const token = getUserToken()
-        // console.log("token: ", token)
+        console.log("token: ", token)
 
         try {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
-            // console.log("responsebhybyuihiuhuihiu : ",response, "isError: ", isError, "isSuccesss: ", isSuccess, "error: ", error, "data: ", data)
+            console.log("responsebhybyuihiuhuihiu : ",response)
             const access_token = response?.data?.access_token
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
-            // const user_id = response?.data?.id
-            // console.log("user email: ",user_email, "user_id: ", user_id)
+            const user_id = response?.data?.id
+            console.log("user email: ",user_email, "user_id: ", user_id)
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             const userName = decode_access_token?.name
             // const user_email = decode_access_token?.email
             const user_roles = decode_access_token?.realm_access?.roles
             const user_role = user_roles.filter(getUserRoles).at(0)
+            console.log("userName: ", userName,"user_role; ", user_role )
             if (user_role) {
                 storeUserDetails(access_token, user_email, user_role, userName)
                 if (user_role === 'LOANEE') {
@@ -117,10 +118,11 @@ const CreatePassword = () => {
 
 
         }catch (error){
+            console.log("error: ", error)
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                description: error?.data?.token?.message,
+                description: error?.data?.message,
                 status: "error",
             })
 
@@ -130,7 +132,7 @@ const CreatePassword = () => {
 
     return (
         <section id={'create-password-block'}
-                 className={'bg-white shadow-custom h-fit rounded-md w-full md:w-[60%] md:mr-10 md:bg-meedlWhite md:ml-40 md:h-fit mb-10 py-6 px-5 grid gap-3 '}>
+                 className={'bg-white shadow-custom h-fit rounded-xl w-full md:w-[60%] md:mr-10 md:bg-meedlWhite md:ml-40 md:h-fit mb-10 py-6 px-5 grid gap-3 '}>
             <h1 id={'create-password-title'}
                 className={`${cabinetGrotesk.className} antialiased text-meedlBlue font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
                 <main id={'create-password-main'} className={'grid gap-[24.14px]'}>

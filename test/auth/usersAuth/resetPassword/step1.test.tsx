@@ -1,6 +1,7 @@
 import "@testing-library/react"
 import Step1 from "../../../../src/features/auth/usersAuth/reset-password/enter-email-component";
 import {fireEvent, queryByAttribute, render, screen} from "@testing-library/react";
+import {Providers} from "@/app/provider";
 
 
 jest.mock("next/navigation", () => ({
@@ -21,14 +22,18 @@ describe("test reset password", ()=> {
 
     it('should display reset password component', () => {
         const view = render(
-            <Step1/>
+            <Providers>
+                <Step1/>
+            </Providers>
         )
         expect(getById(view.container, "resetPasswordComponent")).toBeInTheDocument()
     });
 
     it('should display reset password component display it headers', () => {
         const view = render(
-            <Step1/>
+            <Providers>
+                <Step1/>
+            </Providers>
         )
         expect(getById(view.container, "RESETPASSWORDHEADER")).toBeInTheDocument()
         expect(getById(view.container, "RESETPASSWORDTEXT")).toBeInTheDocument()
@@ -36,14 +41,17 @@ describe("test reset password", ()=> {
     });
     it('should contain email input field', () => {
         const view = render(
-            <Step1/>
+            <Providers>
+                <Step1/>
+            </Providers>
         )
         expect(getById(view.container, "resetEmailInput")).toBeInTheDocument()
     });
     it('should contain email input field which ', () => {
          render(
-            <Step1/>
-        )
+             <Providers>
+                 <Step1/>
+             </Providers>        )
         const emailInput = screen.getByRole('textbox' ,{name: /Email address/i})
         expect(emailInput).toBeInTheDocument()
         fireEvent.change(emailInput, {target: {value : "Jay"}});
@@ -52,15 +60,17 @@ describe("test reset password", ()=> {
     });
     it('should disable submit button if input field is empty ', () => {
         render(
-            <Step1/>
-        )
+            <Providers>
+                <Step1/>
+            </Providers>        )
         const button = screen.getByRole('button', {name: /Submit email/i})
         expect(button).toBeDisabled();
     });
     it('should able submit button if input field is not empty ', () => {
         render(
-            <Step1/>
-        )
+            <Providers>
+                <Step1/>
+            </Providers>        )
         const button = screen.getByRole('button',{name: /Log in/i})
         const emailInput = screen.getByRole('textbox' ,{name: /Email address/i})
         expect(emailInput).toBeInTheDocument()

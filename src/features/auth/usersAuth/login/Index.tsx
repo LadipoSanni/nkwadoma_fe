@@ -37,11 +37,21 @@ const Login: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState("")
     const router = useRouter()
     const [login, { isLoading}] = useLoginMutation()
+    const [showEmailMessage, setShowEmailMessage] = useState(false)
+
 
 
     const validateEmail = (input: string) => {
-        const disable = validateEmailInput(input);
-        setValidEmail(disable)
+        const isValid = validateEmailInput(input);
+        if (isValid){
+            setValidEmail(true)
+            setShowEmailMessage(false)
+        }else{
+            setValidEmail(false)
+            setShowEmailMessage(true)
+        }
+
+
     }
 
     const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,10 +124,11 @@ const Login: React.FC = () => {
     const isFormValid = validEmail && password.length >= 8;
 
 
+
     return (
 
         <div
-            className="w-full md:w-fit md:  h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
+            className="w-full md:w-[50%] md:mr-10  h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-4">
                 <h1 className={`${cabinetGrotesk.className} text-[#1A1A1A] mt-3  text-2xl leading-5`}>Log in to your
@@ -125,7 +136,7 @@ const Login: React.FC = () => {
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
                      className="pt-5 space-y-5">
                     <div data-testid={`emailId`}
-                         className={` md:min-w-[20rem] `}
+                         className={`  `}
                          id={`emailId`}>
                         <AuthInputField label={"Email address"} id={`email`}
                                         data-testid={`loginEmailId`}
@@ -134,6 +145,7 @@ const Login: React.FC = () => {
                                         value={email}
                                         onChange={handleEmail}
                         />
+                        {showEmailMessage && <div className={`text-sm mt-2 mr-2 text-[#72757A]`}>Please enter a valid email</div>}
                     </div>
                     <div data-testid={`passwordId`} id={`passwordId`}>
                         <AuthInputField label={`Password`} id={'password'}

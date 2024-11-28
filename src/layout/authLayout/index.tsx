@@ -65,7 +65,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                                        height={90}
                                 />
                             </div>
-                        <div className={`md:flex  md:pr-24 w-full md:justify-end h-full md:w-full md:h-full`}>
+                        <div className={`md:flex md:pr-10 w-full md:justify-end h-full md:w-full md:h-full`}>
                             {children}
                         </div>
                     </div>
