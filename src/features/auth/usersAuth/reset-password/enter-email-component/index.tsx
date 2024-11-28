@@ -4,8 +4,8 @@ import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInput from "@/reuseable/Input/AuthInputField"
 import {useRouter} from "next/navigation";
 import {validateEmailInput} from "@/utils/GlobalMethods";
-import {store} from "@/redux/store";
-import {setUserPasswordInput} from "@/redux/slice/auth/slice";
+// import {store} from "@/redux/store";
+// import {setUserPasswordInput} from "@/redux/slice/auth/slice";
 import {useSendEmailToResetPasswordMutation} from "@/service/auths/api";
 
 
