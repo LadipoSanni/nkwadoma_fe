@@ -122,10 +122,10 @@ const CohortDetails = () => {
 
     return (
         <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
-            <div className={` `} id={   `backClickContainer`}>
+            <div className={` `} id={`backClickContainer`}>
                 <div className={`flex py-2 space-x-1 text-meedlBlue`} id={`backClick`}
                      data-testid={`backClick `}>
-                    <BiArrowBack className={`mt-1 cursor-pointer`} id={ `backClickIcon`}/>
+                    <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`}/>
                     <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
                         onClick={handleBackClick}>Back to cohort</h1>
                 </div>
@@ -137,11 +137,14 @@ const CohortDetails = () => {
                 defaultValue={"details"}
                 className={`pt-3`}
             >
-                <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'} id={`tabsList`}>
+                <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'}
+                          id={`tabsList`}>
                     <TabsTrigger value="details"
-                                 className={'py-1 px-2 gap-1 items-center rounded-md'} id={`tabsTrigger1`}>Details</TabsTrigger>
+                                 className={'py-1 px-2 gap-1 items-center rounded-md'}
+                                 id={`tabsTrigger1`}>Details</TabsTrigger>
                     <TabsTrigger value="trainee"
-                                 className={'py-1 px-2 gap-1 items-center rounded-md'} id={`tabsTrigger2`}>Trainees</TabsTrigger>
+                                 className={'py-1 px-2 gap-1 items-center rounded-md'}
+                                 id={`tabsTrigger2`}>Trainees</TabsTrigger>
                 </TabsList>
 
                 <div id={`tabsContentDiv`}>
@@ -165,12 +168,14 @@ const CohortDetails = () => {
 
                     <TabsContent value={"trainee"} id={`traineeId`}>
                         <div className={`pb-4`} id={`searchReferAddTraineeAndTable`}>
-                            <div className={`flex md:flex-row flex-col md:justify-between`} id={`searchReferAndAddTrainee`}>
+                            <div className={`flex md:flex-row flex-col md:justify-between`}
+                                 id={`searchReferAndAddTrainee`}>
                                 <div className={`flex md:flex-row gap-4 md:items-center items-center`} id={`searchId`}>
                                     <div className="max-w-md mx-auto" id={`searchInput`}>
                                         <div className="relative" id={`searchDiv`}>
                                             <div
-                                                className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none" id={`searchIcon`}>
+                                                className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                                                id={`searchIcon`}>
                                                 <MdSearch className="h-5 w-5 text-grey200"/>
                                             </div>
                                             <Input
@@ -186,7 +191,8 @@ const CohortDetails = () => {
                                     </div>
                                 </div>
 
-                                <div className={`flex md:flex-row flex-col gap-4 md:items-center`} id={`ReferAndTraineeDiv`}>
+                                <div className={`flex md:flex-row flex-col gap-4 md:items-center`}
+                                     id={`ReferAndTraineeDiv`}>
                                     <div className={`md:block hidden`} id={`largerScreenReferButton`}>
                                         <Button variant={"outline"}
                                                 size={"lg"}
@@ -199,7 +205,7 @@ const CohortDetails = () => {
                                                 className={`bg-meedlBlue text-meedlWhite w-full h-12 flex justify-center items-center`}
                                                 onClick={handleAddTrainee}>Add Trainee</Button>
                                     </div>
-                                    <div className={`md:hidden block`} id={ `smallScreenReferButton`}>
+                                    <div className={`md:hidden block`} id={`smallScreenReferButton`}>
                                         <Button variant={"outline"}
                                                 size={"lg"}
                                                 className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
@@ -256,14 +262,14 @@ const CohortDetails = () => {
                 </TableModal>
             </div>
 
-            <div className={`md:max-w-sm w-full`} id={`AddTraineeDiv`}>
+            <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
                 <TableModal
                     isOpen={addTrainee}
                     closeModal={() => setAddTrainee(false)}
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
                     headerTitle={`Add Trainee`}
-                    width="auto"
+                    width="30%"
                 >
                     <AddTraineeForm cohortId={id} setIsOpen={() => setAddTrainee(false)}/>
                 </TableModal>
