@@ -46,8 +46,29 @@ export const cohortApi = createApi({
             }),
             providesTags: ['cohort'],
         }),
+
+        getAllCohortsByOrganisation: builder.query({
+            query: (param: {
+                pageSize?: number;
+                pageNumber?: number;
+            }) => ({
+                url: '/organization-cohort/all',
+                method: "GET",
+                params: param,
+  
+            }),
+            providesTags: ['cohort'],
+        }),
+        searchCohortByOrganisation: builder.query({
+            query: (cohortName) => ({
+        url: '/searchCohort', 
+        method: 'GET',
+        params: {cohortName}, 
+      }),
+
+    }),
     })
 })
 
-export const { useCreateCohortMutation, useViewAllLoaneeQuery } = cohortApi;
+export const { useCreateCohortMutation, useViewAllLoaneeQuery, useGetAllCohortsByOrganisationQuery,useSearchCohortByOrganisationQuery } = cohortApi;
 

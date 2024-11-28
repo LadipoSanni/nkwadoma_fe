@@ -104,7 +104,7 @@ const ProgramView = () => {
 
     const handleRowClick = (row: TableRowData) => {
         router.push('/program/details')
-        console.log('The row: ',row.id)
+        // console.log('The row: ',row.id)
         setItemSessionStorage("programId",String(row.id))
 
        

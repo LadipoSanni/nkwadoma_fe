@@ -21,6 +21,7 @@ import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 import {useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
 import {formatAmount} from "@/utils/Format";
 import SelectableTable from "@/reuseable/table/SelectableTable";
+import { getItemSessionStorage } from "@/utils/storage";
 
 
 interface userIdentity {
@@ -51,11 +52,12 @@ const CohortDetails = () => {
     const [isReferred, setIsReferred] = React.useState(``);
     const [addTrainee, setAddTrainee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
+    const [cohortsId,setCohortId] = React.useState("")
     const size = 100;
     const [page] = useState(0);
-    const cohortId = "220ce57a-7275-411d-be63-b974bf55fe7a"
+    // const cohortId = "220ce57a-7275-411d-be63-b974bf55fe7a"
     const { data } = useViewAllLoaneeQuery({
-        cohortId: cohortId,
+        cohortId: cohortsId,
         pageSize:size,
         pageNumber:page
     }, { refetchOnMountOrArgChange: true, })
@@ -68,7 +70,15 @@ const CohortDetails = () => {
         }
     },[data])
 
+    useEffect(() =>{
+        const idOfCohort = getItemSessionStorage("cohortId")
+        if(idOfCohort){
+            setCohortId(idOfCohort)
+        }
+    },[])
+    console.log("The id of cohort:", cohortsId)
 
+    
     const id = "1";
 
     const dataList = [
