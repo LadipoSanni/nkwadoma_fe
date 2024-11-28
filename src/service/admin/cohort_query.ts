@@ -17,7 +17,7 @@ export const cohortApi = createApi({
                 cohortDescription: string,
                 imageUrl: string | null,
                 loanBreakdowns:LoanBreakdown[]
-              
+
             }) => ({
               url: 'cohort/create',
               method: "POST",
@@ -33,8 +33,21 @@ export const cohortApi = createApi({
               }),
               invalidatesTags:  ({ id }) => [{ type: 'cohort', id }],
           }),
+
+        viewAllLoanee: builder.query({
+            query: (data: {
+                cohortId?: string,
+                pageNumber?: number;
+                pageSize?: number;
+            }) => ({
+                url: '/cohort/all/loanee',
+                method: "GET",
+                params: data,
+            }),
+            providesTags: ['cohort'],
+        }),
     })
 })
 
-export const { useCreateCohortMutation } = cohortApi;
+export const { useCreateCohortMutation, useViewAllLoaneeQuery } = cohortApi;
 
