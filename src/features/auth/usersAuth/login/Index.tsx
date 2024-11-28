@@ -117,7 +117,7 @@ const Login: React.FC = () => {
     return (
 
         <div
-            className="w-full md:w-fit md: md:mr-10 h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
+            className="w-full md:w-fit md:  h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-4">
                 <h1 className={`${cabinetGrotesk.className} text-[#1A1A1A] mt-3  text-2xl leading-5`}>Log in to your
@@ -125,7 +125,7 @@ const Login: React.FC = () => {
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
                      className="pt-5 space-y-5">
                     <div data-testid={`emailId`}
-                         className={`md:w-[30rem] md:min-w-[20rem] `}
+                         className={` md:min-w-[20rem] `}
                          id={`emailId`}>
                         <AuthInputField label={"Email address"} id={`email`}
                                         data-testid={`loginEmailId`}
