@@ -130,7 +130,7 @@ const CreatePassword = () => {
 
     return (
         <section id={'create-password-block'}
-                 className={'bg-white shadow-custom h-fit rounded-md w-full md:w-[60%] md:mr-10 md:bg-meedlWhite md:ml-40 md:h-fit mb-10 py-6 px-5 grid gap-3 '}>
+                 className={'bg-white shadow-custom h-fit rounded-xl w-full md:w-[60%] md:mr-10 md:bg-meedlWhite md:ml-40 md:h-fit mb-10 py-6 px-5 grid gap-3 '}>
             <h1 id={'create-password-title'}
                 className={`${cabinetGrotesk.className} antialiased text-meedlBlue font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
                 <main id={'create-password-main'} className={'grid gap-[24.14px]'}>
