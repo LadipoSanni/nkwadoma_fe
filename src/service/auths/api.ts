@@ -30,7 +30,7 @@ export const authApi = createApi({
   // -d ''
         sendEmailToResetPassword: builder.mutation({
            query: (email) => ({
-               url: `/auth/password/forgotPassword/${email}`,
+               url: `/auth/password/forgotPassword?email=${email}`,
                method: 'POST',
            })
         }),

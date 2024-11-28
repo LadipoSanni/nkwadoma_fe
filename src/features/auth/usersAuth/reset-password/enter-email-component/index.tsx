@@ -7,6 +7,9 @@ import {validateEmailInput} from "@/utils/GlobalMethods";
 // import {store} from "@/redux/store";
 // import {setUserPasswordInput} from "@/redux/slice/auth/slice";
 import {useSendEmailToResetPasswordMutation} from "@/service/auths/api";
+import {useToast} from "@/hooks/use-toast"
+import {setUserPasswordInput} from "@/redux/slice/auth/slice";
+import {store} from "@/redux/store";
 
 
 const Step1 = () => {
@@ -23,10 +26,31 @@ const Step1 = () => {
 
 
 
+    const {toast} = useToast()
+
     const handleReset = async () => {
-        const response  = await sendEmail(email)
-        console.log("response: ", response )
-        // store.dispatch(setUserPasswordInput(email))
+        if (!navigator.onLine) {
+            toast({
+                description: "No internet connection",
+                status: "error",
+            })
+        }else{
+            try {
+                const response = await sendEmail(email).unwrap()
+                l
+                if(response?.data){
+                    store.dispatch(setUserPasswordInput(email))
+                }
+            }catch(error){
+                toast({
+                    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-expect-error
+                    description: error?.data?.message,
+                    status: "error",
+                })
+            }
+        }
+
     }
 
     const validateEmail = (input: string) => {
