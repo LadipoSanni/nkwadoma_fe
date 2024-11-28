@@ -1,9 +1,9 @@
 "use client"
-import React, {useState} from 'react';
+import React from 'react';
 import {IoMdMenu} from "react-icons/io";
 import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import {inter} from"@/app/fonts"
-import { ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons"
+// import { ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons"
 import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods"
 import styles from "@/components/topBar/index.module.css"
 import {store, useAppSelector} from "@/redux/store";
@@ -12,20 +12,20 @@ import {getUserDetailsFromStorage} from "@/components/topBar/action";
 
 const TopBar = () => {
 
-    const [arrowToggled, setArrowToggled] = useState(false)
+    // const [arrowToggled, setArrowToggled] = useState(false)
     const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const user_role = getUserDetailsFromStorage('user_role')
     const user_name = getUserDetailsFromStorage("user_name")
     // const user_
 
 
-    const toggleArrow = ()=> {
-        if (arrowToggled){
-            setArrowToggled(false)
-        }else {
-            setArrowToggled(true)
-        }
-    }
+    // const toggleArrow = ()=> {
+    //     if (arrowToggled){
+    //         setArrowToggled(false)
+    //     }else {
+    //         setArrowToggled(true)
+    //     }
+    // }
     const openMobileSideBar = () => {
         store.dispatch(setShowMobileSideBar(true))
     }
@@ -67,14 +67,14 @@ const TopBar = () => {
                             </div>
                             <div className={` hidden md:grid md:gap-1  w-fit object-contain  `}>
                                 <p className={` text-black500 ${styles.fullName}`}>{capitalizeFirstLetters(user_name)}</p>
-                                <p className={` text-black500 ${styles.role}`}>{user_role}</p>
+                                <p className={` text-black500 ${styles.role}`}>{capitalizeFirstLetters(user_role?.replace("_", "  "))}</p>
                             </div>
                             <div id={'toggleArrowDiv'} className={``}>
                                 {/*#66708*/}
-                                {arrowToggled ?
-                                    <ChevronUpIcon className={``} onClick={toggleArrow}/> :
-                                    <ChevronDownIcon className={``}  onClick={toggleArrow}/>
-                                }
+                                {/*{arrowToggled ?*/}
+                                {/*    <ChevronUpIcon className={``} onClick={toggleArrow}/> :*/}
+                                {/*    <ChevronDownIcon className={``}  onClick={toggleArrow}/>*/}
+                                {/*}*/}
                                 {/*{arrowToggled &&*/}
                                 {/*    <ProfileDropdown onLogoutClick={handleLogout} close={toggleArrow}/>}*/}
                             </div>
