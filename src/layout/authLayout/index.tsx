@@ -28,7 +28,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                 >
                     <div
                         id={``}
-                        className={` hidden md:grid md:h-full md:bg-meedleWhite`}>
+                        className={` ${styles.whiteBackground} hidden md:grid md:h-full md:bg-meedleWhite`}>
                         <div
                             className={`hidden md:pt-12 md:pl-24   md:grid md:w-fit md:h-[70%] `}
                         >
@@ -65,7 +65,7 @@ const AuthLayout: React.FC<props> = ({children}) => {
                                        height={90}
                                 />
                             </div>
-                        <div className={`md:flex w-full md:justify-end h-full md:w-full md:h-full`}>
+                        <div className={`md:flex  md:pr-24 w-full md:justify-end h-full md:w-full md:h-full`}>
                             {children}
                         </div>
                     </div>

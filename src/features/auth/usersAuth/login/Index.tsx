@@ -11,9 +11,7 @@ import {useToast} from "@/hooks/use-toast"
 import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {useRouter} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
-
-
-
+import {ADMIN_ROLES} from "@/types/roles";
 
 
 interface CustomJwtPayload {
@@ -21,7 +19,7 @@ interface CustomJwtPayload {
     realm_access: {
         roles: string[];
     };
-   
+
 }
 
 interface ApiError {
@@ -32,14 +30,13 @@ interface ApiError {
 }
 
 
-
 const Login: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [validEmail, setValidEmail] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const router = useRouter()
-    const [login, {isError,isLoading}] = useLoginMutation()
+    const [login, { isLoading}] = useLoginMutation()
 
 
     const validateEmail = (input: string) => {
@@ -56,6 +53,17 @@ const Login: React.FC = () => {
         setPassword(e.target.value)
     };
 
+    const getUserRoles = (returnsRole: string) => {
+        if (returnsRole) {
+            // ADMIN_ROLES.filter(returnsRole)
+            for (let i = 0; i < ADMIN_ROLES.length; i++) {
+                if (ADMIN_ROLES.at(i) === returnsRole) {
+                    return ADMIN_ROLES.at(i)
+                }
+            }
+
+        }
+    }
 
 
     const {toast} = useToast()
@@ -65,68 +73,60 @@ const Login: React.FC = () => {
                 description: "No internet connection",
                 status: "error",
             })
-            return 
-        }
-        else {
+        } else {
             try {
-            const response = await login({email, password}).unwrap()
-            if (isError) {
-                // setErrorMessage(response?.error?.data?.message)
-                toast({
-                    description: errorMessage,
-                    status: "error",
-                })
-            }
-            if(response?.data) {
-                console.log("response: ", response)
-                const access_token = response?.data?.access_token
-                const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-                // toast({
-                //     description: response?.message,
-                //     status: "success",
-                // })
-                // console.log(decode_access_token)
-                // console.log(access_token)
-                console.log("access: ", decode_access_token)
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                const userName = decode_access_token?.name
-                console.log("name: ", userName)
-               
-                const user_email = decode_access_token?.email
-                const user_role = decode_access_token?.realm_access?.roles[0]
-                storeUserDetails(access_token, user_email, user_role, userName)
-                router.push("/Overview")
+                const response = await login({email, password}).unwrap()
+                if (response?.data) {
+                    // console.log("response: ", response)
+                    const access_token = response?.data?.access_token
+                    const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+                    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-expect-error
+                    const userName = decode_access_token?.name
+                    const user_email = decode_access_token?.email
+                    const user_roles = decode_access_token?.realm_access?.roles
+                    const user_role = user_roles.filter(getUserRoles).at(0)
+                    if (user_role) {
+                        storeUserDetails(access_token, user_email, user_role, userName)
+                        if (user_role === 'LOANEE') {
+                            router.push("/overview")
+                        } else {
+                            router.push("/Overview")
+                        }
 
-            }}
-            catch (error) {
+                    }
+                }
+            } catch (error) {
                 const err = error as ApiError;
                 if (err?.data?.message) {
                     setErrorMessage(err?.data?.message);
                     toast({
-                        description: "Invalid email or password",
+                        description: errorMessage,
                         status: "error",
                     });
 
+                }
+            }
+        }
     }
-}
-        }}
 
-  
+
     const isFormValid = validEmail && password.length >= 8;
 
 
     return (
 
         <div
-            className="w-full md:w-[35rem] md:mr-20 h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
+            className="w-full md:w-fit md:  h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-4">
                 <h1 className={`${cabinetGrotesk.className} text-[#1A1A1A] mt-3  text-2xl leading-5`}>Log in to your
                     account</h1>
                 <div data-testid={`emailAndPasswordId`} id={`emailAndPasswordId`}
                      className="pt-5 space-y-5">
-                    <div data-testid={`emailId`} id={`emailId`}>
+                    <div data-testid={`emailId`}
+                         className={` md:min-w-[20rem] `}
+                         id={`emailId`}>
                         <AuthInputField label={"Email address"} id={`email`}
                                         data-testid={`loginEmailId`}
                                         placeholder={`Enter email address`}

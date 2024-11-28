@@ -19,7 +19,7 @@ interface ColumnProps<T> {
 }
 
 interface TableRowData {
-    [key: string]: string | number | null | React.ReactNode;
+    [key: string]: string | number | null | React.ReactNode | object;
 }
 
 interface DropdownOption {
@@ -131,6 +131,13 @@ function SelectableTable<T extends TableRowData> ({
         setSelectAll(updatedSelectedRows.size === paginatedData.length);
     };
 
+    const renderCellContent = (value: string | number | boolean | React.ReactNode | object | null | undefined) => {
+        if (React.isValidElement(value)) { return value; }
+        if (typeof value === 'object' && value !== null) {
+            return JSON.stringify(value);
+        }
+        return value; };
+
 
     const paginatedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
     const totalPages = Math.ceil(tableData.length / rowsPerPage);
@@ -215,7 +222,8 @@ function SelectableTable<T extends TableRowData> ({
                                                         >
                                                             <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
                                                                  className={`${Styles.tableBodyItem} ${tableStyle} `}>
-                                                                {column.selector ? column.selector(row) : row[column.id]}
+                                                                {/* {column.selector ? column.selector(row) : row[column.id]} */}
+                                                                {renderCellContent(column.selector ? column.selector(row) : row[column.id])}
                                                             </div>
 
                                                         </TableCell>
@@ -283,9 +291,11 @@ function SelectableTable<T extends TableRowData> ({
                                             style={{height: `${tableHeight}vh`, overflow: 'auto'}}>
                                 <Table id="dynamicTableMobile" className='w-full'
                                 >
-                                    <TableHeader id="dynamicTableHeadMobile" className={` hover:bg-[#e7e7e7]`}>
+                                    <TableHeader id="dynamicTableHead" className={`bg-[#F0F2F4]  hover:bg-[#F0F2F4]`}>
                                         <TableRow id="dynamicTableHeadRow"
-                                                  className={` top-0 bg-[#fafbfc]  hover:bg-[#fafbfc]`}>
+                                                  className={` sticky top-0     bg-[#F0F2F4] `}
+                                                  style={{position: 'sticky', top: 0}}
+                                        >
                                             {enableRowSelection && (
                                                 <TableHead>
                                                     <input
@@ -300,7 +310,7 @@ function SelectableTable<T extends TableRowData> ({
                                                 className='bg-gray h-14 hover:bg-gray'
                                             >
                                                 <div
-                                                    className='w-[91px] text-[#404653] font-semibold'>{staticHeader}</div>
+                                                    className='w-[100px] text-[#404653] font-semibold'>{staticHeader}</div>
                                             </TableHead>
                                             <TableHead
                                                 className='bg-gray h-14 hover:bg-gray'
@@ -373,22 +383,20 @@ function SelectableTable<T extends TableRowData> ({
                                                     >
                                                         <div className=''>
                                                             {/* {row[`${staticColunm}`]} */}
-                                                            {tableHeader.find((header) => header.id === staticColunm)?.selector
+                                                            {renderCellContent(tableHeader.find((header) => header.id === staticColunm)?.selector
                                                                 ? tableHeader.find((header) => header.id === staticColunm)?.selector!(row)
-                                                                : row[`${staticColunm}`]}
+                                                                : row[`${staticColunm}`])}
                                                         </div>
                                                     </TableCell>
 
                                                     <TableCell
                                                         className='h-14'
                                                     >
-                                                        <div
-                                                            className={`flex justify-center `}
-                                                        >
-                                                            {/* {row[selectedColumn]} */}
-                                                            {tableHeader.find((header) => header.id === selectedColumn)?.selector
-                                                                ? tableHeader.find((header) => header.id === selectedColumn)?.selector!(row)
-                                                                : row[selectedColumn]}
+                                                        <div className=''>
+                                                            {/* {row[`${staticColunm}`]} */}
+                                                            {renderCellContent(tableHeader.find((header) => header.id === staticColunm)?.selector
+                                                                ? tableHeader.find((header) => header.id === staticColunm)?.selector!(row)
+                                                                : row[`${staticColunm}`])}
                                                         </div>
                                                     </TableCell>
                                                     {/* ${row[selectedColumn] === "Accepted"?"bg-error50 text-success600 pt-1 pb-1 pr-1 pl-1 rounded-xl w-24 relative ml-12 mr-12": row[selectedColumn] === "Declined"? 'text-error600 bg-error50 pt-1 pb-1 pr-1 pl-1 rounded-xl w-24 relative ml-12 mr-12 ': ""} */}
