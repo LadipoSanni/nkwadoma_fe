@@ -26,7 +26,7 @@ export const cohortApi = createApi({
             invalidatesTags: ['cohort'],
         }),
 
-        deleteProgram:  builder.mutation({
+        deleteCohort:  builder.mutation({
             query: ({id}) => ({
                 url: `/delete/${id}`,
                 method: "DELETE",

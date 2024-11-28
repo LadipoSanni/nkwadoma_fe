@@ -29,7 +29,7 @@ import { getItemSessionStorage } from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
 import { useDeleteProgramMutation } from '@/service/admin/program_query';
 import { useGetAllCohortByAParticularProgramQuery } from "@/service/admin/program_query";
-// import { useSearchCohortsInAParticularProgramQuery } from "@/service/admin/program_query";
+import { useSearchCohortsInAParticularProgramQuery } from "@/service/admin/program_query";
 
 
 interface loanDetails {
@@ -77,6 +77,7 @@ const ProgramDetails = () => {
      }
     )
     const [cohorts,setCohorts] = useState<ViewAllProgramProps[]>([])
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() =>{
         const id = getItemSessionStorage("programId")
@@ -85,11 +86,12 @@ const ProgramDetails = () => {
         }
     },[])
 
-    console.log(`handleProgram details: `,programId)
+    // console.log(`handleProgram details: `,programId)
 
     const { data: program} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
     const [deleteItem,{isLoading}] = useDeleteProgramMutation()
     const { data: cohortsByProgram} = useGetAllCohortByAParticularProgramQuery({programId: programId,pageSize: size,pageNumber: page},{ refetchOnMountOrArgChange: true });
+    const { data: searchResults } = useSearchCohortsInAParticularProgramQuery( { cohortName: searchTerm, programId: programId }, { skip: !searchTerm || !programId })
 
     
 
@@ -119,7 +121,20 @@ const ProgramDetails = () => {
         }
      },[cohortsByProgram])
 
-     console.log("The cohorts: ",cohorts)
+      useEffect(() => {
+        if(searchTerm && searchResults && programId && searchResults.data) {
+            const cohorts = [searchResults.data];
+             setCohorts(cohorts);
+        }
+        else if (cohortsByProgram && cohortsByProgram?.data) {
+            const cohorts = cohortsByProgram.data.body;
+            setCohorts(cohorts);
+
+        }
+
+      },[searchTerm, searchResults,cohortsByProgram])
+
+    //  console.log("The cohorts: ",cohorts)
 
     const dataList = [
         {label: "Program mode", value: progamDetail.mode},
@@ -187,6 +202,10 @@ const ProgramDetails = () => {
         setIsOpen(true)
     }
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
+        setSearchTerm(event.target.value);
+     };
+
 
     // const description = "Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
    
@@ -236,7 +255,7 @@ const ProgramDetails = () => {
                     </section>
                 </TabsContent>
                 <TabsContent value="cohorts" className={'mt-4 grid gap-7'}>
-                    <SearchInput  id={'programCohortSearch'} value="search" onChange={()=> {}}/>
+                    <SearchInput  id={'programCohortSearch'} value={searchTerm} onChange={handleSearchChange}/>
                     <Tables
                         tableData={cohorts}
                         tableHeader={ProgramHeader}

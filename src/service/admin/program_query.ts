@@ -80,7 +80,7 @@ export const programApi = createApi({
 
         searchCohortsInAParticularProgram: builder.query({
             query: (param:{
-                cohortNames?: string;
+                cohortName?: string;
                 programId?: string
 
             }) => ({

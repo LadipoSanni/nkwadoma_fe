@@ -250,6 +250,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                 handleDrop={handleDrop}
                 handleDragOver={handleDragOver}
                 setUploadedImageUrl={setUploadedUrl}
+                labelName="Cohort image (optional)"
               />
               <FormButtons
                 isButtonDisabled={isButtonDisabled}
