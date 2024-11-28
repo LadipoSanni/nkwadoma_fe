@@ -61,7 +61,7 @@ const TopBar = () => {
                             <div
                                 className={` flex place-content-center  object-fit  bg-[#E0FDEB]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
                                 <div
-                                    className={` grid place-content-center md:text-sm mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `}>
+                                    className={` grid place-content-center  mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `}>
                                 {getFirstLetterOfWord(user_name)}
                                 </div>
                             </div>
