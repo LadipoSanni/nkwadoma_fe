@@ -22,7 +22,7 @@ const Step1 = () => {
     const [email, setEmail] = useState('')
     const [disableButton, setDisableButton] = useState(true)
     const [showEmailMessage, setShowEmailMessage] = useState(false)
-    const [sendEmail] = useSendEmailToResetPasswordMutation()
+    const [sendEmail, {isLoading}] = useSendEmailToResetPasswordMutation()
 
 
 
@@ -37,9 +37,12 @@ const Step1 = () => {
         }else{
             try {
                 const response = await sendEmail(email).unwrap()
-                l
-                if(response?.data){
+                if(response?.message){
                     store.dispatch(setUserPasswordInput(email))
+                    toast({
+                        description: response?.message,
+                        status: "success",
+                    })
                 }
             }catch(error){
                 toast({
@@ -109,6 +112,7 @@ const Step1 = () => {
                         <div className={`w-[100%]`}>
                             <AuthButton disable={disableButton} backgroundColor={'#142854'} textColor={"white"}
                                         id={"resetPasswordSubmitEmailButton"}
+                                        isLoading={isLoading}
                                         buttonText={"Submit email"} width={"inherit"}
                                         handleClick={handleReset}></AuthButton>
                         </div>
