@@ -84,7 +84,7 @@ export const programApi = createApi({
                 programId?: string
 
             }) => ({
-                url: '/searchCohort', 
+                url: '/program/searchCohort', 
                 method: 'GET',
                 params: param, 
             })
