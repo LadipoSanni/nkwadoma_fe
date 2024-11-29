@@ -37,10 +37,13 @@ jobs:
         run: npm install --force
 
       - name: Build Project
+        run: |
+          npm install
+          npm run build
         env:
           NEXT_PUBLIC_UPLOAD_PRESET: ${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}
           NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
-        run: npm run build
+        
 
       - name: Run Unit Tests
         run: npm test -- --ci
