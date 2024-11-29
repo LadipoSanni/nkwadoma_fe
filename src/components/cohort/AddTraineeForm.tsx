@@ -1,15 +1,15 @@
-import React, {useState} from 'react'
-import {ErrorMessage, Field, Form, Formik} from 'formik'
+import React, {useState} from 'react';
+import {ErrorMessage, Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import {Label} from '@/components/ui/label';
 import {Button} from '@/components/ui/button';
-import loadingLoop from "@iconify/icons-line-md/loading-loop";
-import {Icon} from "@iconify/react";
-import {inter} from "@/app/fonts"
+import loadingLoop from '@iconify/icons-line-md/loading-loop';
+import {Icon} from '@iconify/react';
+import {inter} from '@/app/fonts';
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import {getUserDetails} from '@/features/auth/usersAuth/login/action';
-
+import {MdOutlineDelete} from "react-icons/md";
 
 interface idProps {
     cohortId: string;
@@ -19,52 +19,30 @@ interface idProps {
 
 function AddTraineeForm({cohortId, setIsOpen}: idProps) {
     const {storedAccessToken} = getUserDetails();
-    console.log("stored: ", storedAccessToken)
+    console.log('stored: ', storedAccessToken);
 
     const details = [
-        {
-            "item": "Tuition",
-            "amount": "₦2,000,000.00"
-        },
-        {
-            "item": "Devices",
-            "amount": "₦600,000.00"
-        },
-        {
-            "item": "Accommodation",
-            "amount": "₦600,000.00"
-        },
-        {
-            "item": "Feeding",
-            "amount": "₦300,000.00"
-        },
-        {
-            "item": "Total amount requested",
-            "amount": "₦3,500,000.00"
-        }
-    ]
+        {item: 'Tuition', amount: '₦2,000,000.00'},
+        {item: 'Devices', amount: '₦600,000.00'},
+        {item: 'Accommodation', amount: '₦600,000.00'},
+        {item: 'Feeding', amount: '₦300,000.00'},
+        {item: 'Total amount requested', amount: '₦3,500,000.00'},
+    ];
 
-
-    const initialFormValue = {
-        cohortId: cohortId,
-        firstName: "",
-        lastName: "",
-        emailAddress: "",
-        initialDeposit: '',
-
-    }
-
+    const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
-
-    const handleCloseModal = () => {
-        if (setIsOpen) {
-            setIsOpen(false);
-        }
-    }
-
     const [isLoading] = useState(false);
+    const [inputValue, setInputValue] = useState(``);
+    const [loanBreakdowns, setLoanBreakdowns] = useState<
+        { itemName: string; itemAmount: string; currency: string }[]
+    >([]);
 
-    const validationSchema = Yup.object().shape({
+    const handleNewValue = (newValue: string, index: number) => {
+        setInputValue(newValue);
+        console.log(`New value for detail-${index}:`, newValue);
+    };
+
+    const validationSchemaStep1 = Yup.object().shape({
         firstName: Yup.string()
             .trim()
             .required('First name is required')
@@ -81,84 +59,77 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
             .required('Email address is required'),
         initialDeposit: Yup.string()
             .required('Initial deposit is required')
-            .matches(/^[1-9]\d*$/, 'Initial deposit must be a positive number and cannot start with zero')
-            .test('positive-number', 'Initial deposit must be a positive number', (value) => {
-                return value !== undefined && Number(value) > 0;
-            })
-        //   initialDeposit: Yup.number()
-        //   .positive('Initial deposit must be greater than zero')
-        //   .required('Initial deposit is required')
-        //   .test(
-        //     'no-leading-zero',
-        //     'Initial deposit should not start with a leading zero',
-        //     (value) => value === undefined || /^[1-9]\d*$/.test(value.toString())
-        // )
-        //   .transform((value) => (isNaN(value) || value === null || value === undefined) ? 0 : value)
-
-
-    })
-
-    const toastPopUp = ToastPopUp({
-        description: "Cohort Trainee successfully added.",
-        status: "success"
+            .matches(/^[1-9]\d*$/, 'Initial deposit must be a positive number and cannot start with zero'),
     });
 
+    const initialFormValue = {
+        cohortId,
+        firstName: '',
+        lastName: '',
+        emailAddress: '',
+        initialDeposit: '',
+    };
 
-    const handleSubmit = (values: typeof initialFormValue) => {
+    const toastPopUp = ToastPopUp({
+        description: 'Cohort Trainee successfully added.',
+        status: 'success',
+    });
+
+    const handleCloseModal = () => {
+        if (setIsOpen) {
+            setIsOpen(false);
+        }
+    };
+
+    const handleSubmitStep1 = () => {
+        setStep(2);
+    };
+
+    const handleFinalSubmit = (values: typeof initialFormValue) => {
         const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
-        const formattedValues = {
-            ...values,
-            initialDeposit: formattedDeposit,
-        };
+        const formattedValues = {...values, initialDeposit: formattedDeposit};
         toastPopUp.showToast();
         console.log(formattedValues);
 
         if (setIsOpen) {
             setIsOpen(false);
         }
+    };
 
-    }
-
+    const handleDeleteItem = (index: number) => {
+        setLoanBreakdowns(loanBreakdowns.filter((_, i) => i !== index));
+    };
 
     return (
-        <div id='addTraineeForm'>
+        <div id="addTraineeForm">
             <Formik
                 initialValues={initialFormValue}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-                validateOnMount={true}
+                validationSchema={step === 1 ? validationSchemaStep1 : undefined}
+                onSubmit={step === 1 ? handleSubmitStep1 : handleFinalSubmit}
+                validateOnMount
             >
-                {
-                    ({errors, isValid, touched, setFieldValue}) => (
-                        <Form className={`${inter.className}`}>
-                            <div
-                                className='grid grid-cols-1 gap-y-4 md:max-h-[520px] overflow-y-auto'
-                                style={{
-                                    scrollbarWidth: 'none',
-                                    msOverflowStyle: 'none',
-
-                                }}
-                            >
-                                <div className=''>
+                {({errors, isValid, touched, setFieldValue}) => (
+                    <Form className={`${inter.className}`}>
+                        {step === 1 ? (
+                            <div className="grid grid-cols-1 gap-y-4 md:max-h-[520px] overflow-y-auto">
+                                {/* Step 1 Fields */}
+                                <div>
                                     <Label htmlFor="firstName">First name</Label>
                                     <Field
                                         id="firstName"
                                         name="firstName"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
                                         placeholder="Enter first name"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("firstName", e.target.value.replace(/[^A-Za-z]/g, ''))}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                            setFieldValue('firstName', e.target.value.replace(/[^A-Za-z]/g, ''))
+                                        }
                                     />
-
-                                    {
-                                        errors.firstName && touched.firstName && (
-                                            <ErrorMessage
-                                                name="firstName"
-                                                component="div"
-                                                className="text-red-500 text-sm"
-                                            />
-                                        )
-                                    }
+                                    {errors.firstName && touched.firstName && (
+                                        <ErrorMessage name="firstName" component="div"
+                                                      className="text-red-500 text-sm"/>
+                                    )}
                                 </div>
+
                                 <div className=''>
                                     <Label htmlFor="lastName">Last name</Label>
                                     <Field
@@ -234,141 +205,131 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
                                             />)}
                                 </div>
 
-                                <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>
+
+                                <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
-                                        variant={'outline'}
-                                        type='reset'
-                                        className='w-full md:w-36 h-[57px] mb-4'
+                                        variant="outline"
+                                        type="reset"
+                                        className="w-full md:w-36 h-[57px] mb-4"
                                         onClick={handleCloseModal}
                                     >
                                         Cancel
                                     </Button>
                                     <Button
-                                        id='continueLoanee'
-                                        variant={'default'}
-                                        className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-neutral650 cursor-not-allowed " : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
+                                        variant="default"
+                                        className={`w-full md:w-36 h-[57px] ${!isValid ? 'bg-neutral650 cursor-not-allowed ' : 'hover:bg-meedlBlue bg-meedlBlue cursor-pointer'}`}
                                         disabled={!isValid}
+                                    >
+                                        Continue
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className={`py-5 ${inter.className}`}>
+                                {details.map((detail, index) => (
+                                    <div
+                                        key={index}
+                                        className={`${detail.item === 'Total amount requested' ? `` : ''}`}
+                                    >
+                                        <Label htmlFor={`detail-${index}`}>{detail.item}</Label>
+                                        <div className="w-full">
+                                            {detail.item === 'Tuition' ? (
+                                                <div className="flex items-center gap-2">
+                                                    <CurrencySelectInput
+                                                        readOnly
+                                                        selectedcurrency={selectCurrency}
+                                                        setSelectedCurrency={setSelectCurrency}
+                                                    />
+                                                    <div
+                                                        className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>
+                                                        <Field
+                                                            id={`detail-${index}`}
+                                                            name={`detail-${index}`}
+                                                            type="text"
+                                                            defaultValue={detail.amount || ''}
+                                                            readOnly
+                                                            className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className={`flex items-center w-full gap-2`}>
+                                                    <div>
+                                                        <CurrencySelectInput
+                                                            readOnly={false}
+                                                            selectedcurrency={selectCurrency}
+                                                            setSelectedCurrency={setSelectCurrency}
+                                                        />
+                                                    </div>
 
+                                                    <div
+                                                        className={`flex w-full flex-row items-center justify-between mb-2 text-black300 ${detail.item === "Total amount requested" ? "" : ""}`}
+                                                    >
+                                                        <Field
+                                                            id={`detail-${index}`}
+                                                            name={`detail-${index}`}
+                                                            type="text"
+                                                            value={inputValue}
+                                                            placeholder={`Enter ${detail.item}`}
+                                                            className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                                const value = e.target.value;
+                                                                if (/^\d*$/.test(value)) {
+                                                                    setFieldValue(`detail-${index}`, value);
+                                                                    handleNewValue(value, index);
+                                                                }
+                                                            }}
+
+                                                        />
+                                                        <MdOutlineDelete id={`deleteItemButton${index}`}
+                                                                         className={'text-blue200 h-4 w-4 cursor-pointer'}
+                                                                         onClick={() => handleDeleteItem(index)}/>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                                <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
+                                    <Button
+                                        variant="outline"
+                                        type="reset"
+                                        className="w-full md:w-36 h-[57px] mb-4"
+                                        onClick={handleCloseModal}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        variant="default"
+                                        className="w-full md:w-36 h-[57px] hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
+                                        type="submit"
                                     >
                                         {isLoading ? (
-                                            <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">
-                                                <Icon id={'Icon'} icon={loadingLoop} width={34} height={32} style={{
-                                                    animation: 'spin 1s linear infinite',
-                                                    strokeWidth: 6,
-                                                    display: 'block',
-                                                }}/>
+                                            <div id="loadingLoopIconDiv" className="flex items-center justify-center">
+                                                <Icon
+                                                    id="Icon"
+                                                    icon={loadingLoop}
+                                                    width={34}
+                                                    height={32}
+                                                    style={{
+                                                        animation: 'spin 1s linear infinite',
+                                                        strokeWidth: 6,
+                                                        display: 'block',
+                                                    }}
+                                                />
                                             </div>
                                         ) : (
-                                            "Continue"
+                                            'Add'
                                         )}
                                     </Button>
                                 </div>
                             </div>
-
-
-                            {/*<div>*/}
-                            {/*    <div className=' '>*/}
-                            {/*        {details.map((detail, index) => (*/}
-                            {/*            <div*/}
-                            {/*                key={index}*/}
-                            {/*                className={`${detail.item === "Total amount requested" ? "border-t" : ""}`}*/}
-                            {/*            >*/}
-                            {/*                <Label htmlFor={`detail-${index}`}>{detail.item}</Label>*/}
-                            {/*                <div className="w-full">*/}
-                            {/*                    {detail.item === "Tuition" ? (*/}
-                            {/*                        <div className={`flex items-center gap-2`}>*/}
-                            {/*                            <div>*/}
-                            {/*                                <CurrencySelectInput*/}
-                            {/*                                    readOnly={true}*/}
-                            {/*                                    selectedcurrency={selectCurrency}*/}
-                            {/*                                    setSelectedCurrency={setSelectCurrency}*/}
-                            {/*                                />*/}
-                            {/*                            </div>*/}
-
-                            {/*                            <div className={`w-full mb-2`}>*/}
-                            {/*                                <Field*/}
-                            {/*                                    id={`detail-${index}`}*/}
-                            {/*                                    name={`detail-${index}`}*/}
-                            {/*                                    type="text"*/}
-                            {/*                                    defaultValue={detail.amount || ""}*/}
-                            {/*                                    readOnly*/}
-                            {/*                                    className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"*/}
-                            {/*                                />*/}
-                            {/*                            </div>*/}
-                            {/*                        </div>*/}
-                            {/*                    ) : (*/}
-                            {/*                        <div className={`flex items-center`}>*/}
-                            {/*                            <div>*/}
-                            {/*                                <CurrencySelectInput*/}
-                            {/*                                    readOnly={false}*/}
-                            {/*                                    selectedcurrency={selectCurrency}*/}
-                            {/*                                    setSelectedCurrency={setSelectCurrency}*/}
-                            {/*                                />*/}
-                            {/*                            </div>*/}
-
-                            {/*                            <div*/}
-                            {/*                                className={`flex w-full flex-row items-center justify-between mb-2 px-3 text-black300 ${detail.item === "Total amount requested" ? "border-t h-10" : ""}`}>*/}
-                            {/*                                <Field*/}
-                            {/*                                    id={`detail-${index}`}*/}
-                            {/*                                    name={`detail-${index}`}*/}
-                            {/*                                    type="text"*/}
-                            {/*                                    defaultValue={detail.amount || ""}*/}
-                            {/*                                    placeholder={`Enter ${detail.item}`}*/}
-                            {/*                                    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"*/}
-                            {/*                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
-                            {/*                                        const value = e.target.value;*/}
-                            {/*                                        if (/^\d*$/.test(value)) {*/}
-                            {/*                                            setFieldValue(`detail-${index}`, value);*/}
-                            {/*                                        }*/}
-                            {/*                                    }}*/}
-                            {/*                                />*/}
-                            {/*                            </div>*/}
-                            {/*                        </div>*/}
-                            {/*                    )}*/}
-                            {/*                </div>*/}
-                            {/*            </div>*/}
-                            {/*        ))}*/}
-                            {/*    </div>*/}
-
-                            {/*    <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>*/}
-                            {/*        <Button*/}
-                            {/*            variant={'outline'}*/}
-                            {/*            type='reset'*/}
-                            {/*            className='w-full md:w-36 h-[57px] mb-4'*/}
-                            {/*            onClick={handleCloseModal}*/}
-                            {/*        >*/}
-                            {/*            Cancel*/}
-                            {/*        </Button>*/}
-                            {/*        <Button*/}
-                            {/*            id='submitTrainee'*/}
-                            {/*            variant={'default'}*/}
-                            {/*            className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-neutral650 cursor-not-allowed " : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}*/}
-                            {/*            type='submit'*/}
-                            {/*            disabled={!isValid}*/}
-
-                            {/*        >*/}
-                            {/*            {isLoading ? (*/}
-                            {/*                <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">*/}
-                            {/*                    <Icon id={'Icon'} icon={loadingLoop} width={34} height={32} style={{*/}
-                            {/*                        animation: 'spin 1s linear infinite',*/}
-                            {/*                        strokeWidth: 6,*/}
-                            {/*                        display: 'block',*/}
-                            {/*                    }}/>*/}
-                            {/*                </div>*/}
-                            {/*            ) : (*/}
-                            {/*                "Continue"*/}
-                            {/*            )}*/}
-                            {/*        </Button>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-
-                        </Form>
-                    )
-                }
+                        )}
+                    </Form>
+                )}
             </Formik>
-
         </div>
-    )
+    );
 }
 
-export default AddTraineeForm
+export default AddTraineeForm;
