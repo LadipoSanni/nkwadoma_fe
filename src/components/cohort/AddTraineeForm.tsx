@@ -7,7 +7,6 @@ import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
 import {inter} from "@/app/fonts"
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
-import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import {getUserDetails} from '@/features/auth/usersAuth/login/action';
 
@@ -63,12 +62,7 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
         }
     }
 
-    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isLoading] = useState(false);
-
-    const handleDropdownOpen = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string()
@@ -239,164 +233,138 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
                                                 className="text-red-500 text-sm"
                                             />)}
                                 </div>
-                                <div className='relative bottom-9 '>
-                                    <Accordion
-                                        type="single"
-                                        collapsible
-                                        className="w-full"
+
+                                <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>
+                                    <Button
+                                        variant={'outline'}
+                                        type='reset'
+                                        className='w-full md:w-36 h-[57px] mb-4'
+                                        onClick={handleCloseModal}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        id='continueLoanee'
+                                        variant={'default'}
+                                        className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-neutral650 cursor-not-allowed " : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
+                                        disabled={!isValid}
 
                                     >
-                                        <AccordionItem value='item'>
-                                            <AccordionTrigger
-                                                onClick={handleDropdownOpen}
-                                                className='border rounded shadow-none text-black300'
-                                            >
-                                                {!dropdownOpen ? (<div>Expand to see the tuition breakdown</div>) : (
-                                                    <div>Collapse to hide the tuition breakdown</div>)}
-                                            </AccordionTrigger>
-                                            <AccordionContent
-                                                className='border rounded '
-                                            >
-                                                {details.map((detail, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className={`p-4 ${detail.item === "Total amount requested" ? "border-t" : ""}`}
-                                                    >
-                                                        <Label htmlFor={`detail-${index}`}>{detail.item}</Label>
-                                                        {/*<div className="flex items-center gap-2">*/}
-                                                            <div className="w-full">
-                                                                {detail.item === "Tuition" ? (
-                                                                    <div className={`flex items-center gap-2`}>
-                                                                        <div>
-                                                                            <CurrencySelectInput
-                                                                                readOnly={true}
-                                                                                selectedcurrency={selectCurrency}
-                                                                                setSelectedCurrency={setSelectCurrency}
-                                                                            />
-                                                                        </div>
-
-                                                                        <div className={`w-full mb-2`}>
-                                                                            <Field
-                                                                                id={`detail-${index}`}
-                                                                                name={`detail-${index}`}
-                                                                                type="text"
-                                                                                defaultValue={detail.amount || ""}
-                                                                                readOnly
-                                                                                className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                ) : (
-                                                                    <div className={`flex items-center`}>
-                                                                        <div>
-                                                                            <CurrencySelectInput
-                                                                                readOnly={false}
-                                                                                selectedcurrency={selectCurrency}
-                                                                                setSelectedCurrency={setSelectCurrency}
-                                                                            />
-                                                                        </div>
-
-                                                                        <div className={`flex w-full flex-row items-center justify-between mb-2 px-3 text-black300 ${detail.item === "Total amount requested" ? "border-t h-10" : ""}`}>
-                                                                            <Field
-                                                                                id={`detail-${index}`}
-                                                                                name={`detail-${index}`}
-                                                                                type="text"
-                                                                                defaultValue={detail.amount || ""}
-                                                                                placeholder={`Enter ${detail.item}`}
-                                                                                className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                                    const value = e.target.value;
-                                                                                    if (/^\d*$/.test(value)) {
-                                                                                        setFieldValue(`detail-${index}`, value);
-                                                                                    }
-                                                                                }}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        {/*</div>*/}
-                                                    </div>
-                                                ))}
-
-
-                                                {/*{*/}
-                                                {/*    details.map((detail, index) => (*/}
-                                                {/*        <div key={index} className={`p-4  ${detail.item === "Total amount requested" ? "border-t h-10" : ""}`}>*/}
-                                                {/*            <Label htmlFor="initialDeposit">{detail.item}</Label>*/}
-                                                {/*            <div className='flex items-center gap-2'>*/}
-                                                {/*                <CurrencySelectInput*/}
-                                                {/*                    selectedcurrency={selectCurrency}*/}
-                                                {/*                    setSelectedCurrency={setSelectCurrency}*/}
-                                                {/*                />*/}
-                                                {/*                <div className='w-full mb-2'>*/}
-                                                {/*                    <Field*/}
-                                                {/*                        id="initialDeposit"*/}
-                                                {/*                        name="initialDeposit"*/}
-                                                {/*                        type="text"*/}
-                                                {/*                        placeholder="Enter Initial Deposit"*/}
-                                                {/*                        className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none "*/}
-                                                {/*                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
-                                                {/*                            const value = e.target.value;*/}
-                                                {/*                            if (/^\d*$/.test(value)) {*/}
-                                                {/*                                setFieldValue("initialDeposit", value);*/}
-                                                {/*                            }*/}
-                                                {/*                        }}*/}
-                                                {/*                    />*/}
-
-                                                {/*                </div>*/}
-                                                {/*            </div>*/}
-                                                {/*        </div>*/}
-                                                {/*        // <div key={index}*/}
-                                                {/*        //      className={`flex flex-row items-center justify-between mt-6 px-3 text-black300 ${detail.item === "Total amount requested" ? "border-t h-10" : ""}`}>*/}
-                                                {/*        //     <div>{detail.item}</div>*/}
-                                                {/*        //     <div>{detail.amount}</div>*/}
-                                                {/*        // </div>*/}
-                                                {/*    ))*/}
-                                                {/*}*/}
-                                            </AccordionContent>
-                                        </AccordionItem>
-
-                                    </Accordion>
+                                        {isLoading ? (
+                                            <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">
+                                                <Icon id={'Icon'} icon={loadingLoop} width={34} height={32} style={{
+                                                    animation: 'spin 1s linear infinite',
+                                                    strokeWidth: 6,
+                                                    display: 'block',
+                                                }}/>
+                                            </div>
+                                        ) : (
+                                            "Continue"
+                                        )}
+                                    </Button>
                                 </div>
-
                             </div>
-                            <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>
-                                <Button
-                                    variant={'outline'}
-                                    type='reset'
-                                    className='w-full md:w-36 h-[57px] mb-4'
-                                    onClick={handleCloseModal}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    id='submitTrainee'
-                                    variant={'default'}
-                                    className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-neutral650 cursor-not-allowed " : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
-                                    type='submit'
-                                    disabled={!isValid}
 
-                                >
-                                    {isLoading ? (
-                                        <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">
-                                            <Icon id={'Icon'} icon={loadingLoop} width={34} height={32} style={{
-                                                animation: 'spin 1s linear infinite',
-                                                strokeWidth: 6,
-                                                display: 'block',
-                                            }}/>
-                                        </div>
-                                    ) : (
-                                        "Add"
-                                    )}
 
-                                </Button>
-                            </div>
+                            {/*<div>*/}
+                            {/*    <div className=' '>*/}
+                            {/*        {details.map((detail, index) => (*/}
+                            {/*            <div*/}
+                            {/*                key={index}*/}
+                            {/*                className={`${detail.item === "Total amount requested" ? "border-t" : ""}`}*/}
+                            {/*            >*/}
+                            {/*                <Label htmlFor={`detail-${index}`}>{detail.item}</Label>*/}
+                            {/*                <div className="w-full">*/}
+                            {/*                    {detail.item === "Tuition" ? (*/}
+                            {/*                        <div className={`flex items-center gap-2`}>*/}
+                            {/*                            <div>*/}
+                            {/*                                <CurrencySelectInput*/}
+                            {/*                                    readOnly={true}*/}
+                            {/*                                    selectedcurrency={selectCurrency}*/}
+                            {/*                                    setSelectedCurrency={setSelectCurrency}*/}
+                            {/*                                />*/}
+                            {/*                            </div>*/}
+
+                            {/*                            <div className={`w-full mb-2`}>*/}
+                            {/*                                <Field*/}
+                            {/*                                    id={`detail-${index}`}*/}
+                            {/*                                    name={`detail-${index}`}*/}
+                            {/*                                    type="text"*/}
+                            {/*                                    defaultValue={detail.amount || ""}*/}
+                            {/*                                    readOnly*/}
+                            {/*                                    className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"*/}
+                            {/*                                />*/}
+                            {/*                            </div>*/}
+                            {/*                        </div>*/}
+                            {/*                    ) : (*/}
+                            {/*                        <div className={`flex items-center`}>*/}
+                            {/*                            <div>*/}
+                            {/*                                <CurrencySelectInput*/}
+                            {/*                                    readOnly={false}*/}
+                            {/*                                    selectedcurrency={selectCurrency}*/}
+                            {/*                                    setSelectedCurrency={setSelectCurrency}*/}
+                            {/*                                />*/}
+                            {/*                            </div>*/}
+
+                            {/*                            <div*/}
+                            {/*                                className={`flex w-full flex-row items-center justify-between mb-2 px-3 text-black300 ${detail.item === "Total amount requested" ? "border-t h-10" : ""}`}>*/}
+                            {/*                                <Field*/}
+                            {/*                                    id={`detail-${index}`}*/}
+                            {/*                                    name={`detail-${index}`}*/}
+                            {/*                                    type="text"*/}
+                            {/*                                    defaultValue={detail.amount || ""}*/}
+                            {/*                                    placeholder={`Enter ${detail.item}`}*/}
+                            {/*                                    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"*/}
+                            {/*                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
+                            {/*                                        const value = e.target.value;*/}
+                            {/*                                        if (/^\d*$/.test(value)) {*/}
+                            {/*                                            setFieldValue(`detail-${index}`, value);*/}
+                            {/*                                        }*/}
+                            {/*                                    }}*/}
+                            {/*                                />*/}
+                            {/*                            </div>*/}
+                            {/*                        </div>*/}
+                            {/*                    )}*/}
+                            {/*                </div>*/}
+                            {/*            </div>*/}
+                            {/*        ))}*/}
+                            {/*    </div>*/}
+
+                            {/*    <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>*/}
+                            {/*        <Button*/}
+                            {/*            variant={'outline'}*/}
+                            {/*            type='reset'*/}
+                            {/*            className='w-full md:w-36 h-[57px] mb-4'*/}
+                            {/*            onClick={handleCloseModal}*/}
+                            {/*        >*/}
+                            {/*            Cancel*/}
+                            {/*        </Button>*/}
+                            {/*        <Button*/}
+                            {/*            id='submitTrainee'*/}
+                            {/*            variant={'default'}*/}
+                            {/*            className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-neutral650 cursor-not-allowed " : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}*/}
+                            {/*            type='submit'*/}
+                            {/*            disabled={!isValid}*/}
+
+                            {/*        >*/}
+                            {/*            {isLoading ? (*/}
+                            {/*                <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">*/}
+                            {/*                    <Icon id={'Icon'} icon={loadingLoop} width={34} height={32} style={{*/}
+                            {/*                        animation: 'spin 1s linear infinite',*/}
+                            {/*                        strokeWidth: 6,*/}
+                            {/*                        display: 'block',*/}
+                            {/*                    }}/>*/}
+                            {/*                </div>*/}
+                            {/*            ) : (*/}
+                            {/*                "Continue"*/}
+                            {/*            )}*/}
+                            {/*        </Button>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
+
                         </Form>
                     )
                 }
-
-
             </Formik>
 
         </div>
