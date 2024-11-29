@@ -153,7 +153,7 @@ const CohortView = () => {
 
  const debouncedSearch = useCallback( debounce((term) => { 
   setSearchTerm(term);
- }, 300), [] );
+ }, 300), [setSearchTerm, debounce] );
 
  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
   debouncedSearch(event.target.value);

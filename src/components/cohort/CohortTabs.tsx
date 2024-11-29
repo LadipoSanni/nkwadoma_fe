@@ -274,7 +274,7 @@ useEffect(() => {
         icon={Cross2Icon}
        
         >
-          <EditCohortForm cohortId={cohortId} setIsOpen={()=>setIsOpen(false)}/>  
+          <EditCohortForm cohortId={cohortId} setIsOpen={()=>setIsOpen(false)} cohortDetail={details}/>  
          
         </TableModal>
            
