@@ -123,7 +123,9 @@ const CohortDetails = () => {
     const dataList = [
         {label: "Start Date", value: details.startDate},
         {label: "End Date", value: details.expectedEndDate},
-        {label: "Cohort status", value: details.cohortStatus},
+        {label: "Cohort status", value: <div className={`rounded-2xl px-2 py-1 ${details.cohortStatus === "ACTIVE"? "bg-[#E7F5EC] text-[#0B6B2B]" : "bg-[#FEF6E8] text-[#66440A]"}`}>
+                {details.cohortStatus}
+        </div>},
         {label: "Number of Dropouts", value: "10"},
         {label: "Dropout rate", value: "0.5%"},
         {label: "Number employed", value: "38"},
