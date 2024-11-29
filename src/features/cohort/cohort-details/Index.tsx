@@ -21,6 +21,8 @@ import {useReferLoaneeMutation, useViewAllLoaneeQuery, useViewCohortDetailsQuery
 import SelectableTable from "@/reuseable/table/SelectableTable";
 import {getItemSessionStorage} from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
+import {useToast} from "@/hooks/use-toast"
+import Isloading from "@/reuseable/display/Isloading";
 
 
 interface userIdentity {
@@ -32,11 +34,12 @@ interface loaneeLoanDetail {
     initialDeposit: number;
     amountRequested: number
 }
-
 interface viewAllLoanee {
     userIdentity: userIdentity;
     loaneeLoanDetails: loaneeLoanDetail;
 }
+
+
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode | userIdentity | loaneeLoanDetail;
@@ -55,6 +58,7 @@ const CohortDetails = () => {
     const [programId, setProgramId] = React.useState("")
     const size = 100;
     const [page] = useState(0);
+    const {toast} = useToast()
     const [referLoanee, { isLoading, isError }] = useReferLoaneeMutation()
     const {data} = useViewAllLoaneeQuery({
         cohortId: cohortsId,
@@ -208,13 +212,17 @@ const CohortDetails = () => {
     const handleAddTrainee = () => {
         setAddTrainee(true)
     }
-    const handleRefer = () => {
-        // console.log("loanee reffered ... ")
+    const handleRefer = async () => {
         const loaneeId = "8919744e-f248-47a1-a6d0-8edf0b6f8a32"
-        const data = referLoanee({ id: loaneeId })
-        console.log("data value : "+data)
-        console.log("data value : "+data.data)
+        const response  = await referLoanee(loaneeId)
+        console.log("data value : ", response.data.message)
+        toast({
+            description: response.data.message,
+            status: "success",
+        });
+
     }
+
 
     const handleRowClick = (row: TableRowData) => {
         setIsRowSelected(isRowSelected);
@@ -233,7 +241,8 @@ const CohortDetails = () => {
                 <Button variant={"outline"}
                         size={"lg"}
                         className={`bg-red-500 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
-                        onClick={handleRefer} >Refer</Button>
+                        onClick={handleRefer} >{isLoading ? <Isloading/> : "Refer"}</Button>
+
             </div>
 
             <Tabs
