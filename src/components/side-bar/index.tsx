@@ -62,7 +62,7 @@ const SideBar = () => {
          console.log("resr: ", response)
      }catch (error){
          console.log("error: ", error)
-
+          redirect("/auth/login")
 
      }
     }

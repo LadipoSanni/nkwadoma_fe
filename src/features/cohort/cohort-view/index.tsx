@@ -141,7 +141,6 @@ const CohortView = () => {
        }
   }
 
-  console.log("The hhhid: ",programId)
 
  const validationSchema = Yup.object().shape({
    selectProgram: Yup.string().required('Program is required'),
