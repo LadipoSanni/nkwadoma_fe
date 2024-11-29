@@ -10,8 +10,7 @@ type Props = {
     className?: string,
     selectContent: Array<string | number>,
     name?: string,
-    placeHolder?: string,
-
+    placeHolder?: string
 }
 
 function CustomSelect({value,onChange,className,selectContent,name,placeHolder}: Props) {
@@ -24,7 +23,6 @@ function CustomSelect({value,onChange,className,selectContent,name,placeHolder}:
   return (
     <div>
       <Select
-          key={name}
        name={name}
        value={value}
         onValueChange={(val:string) => {onChange(val)}}
@@ -48,9 +46,7 @@ function CustomSelect({value,onChange,className,selectContent,name,placeHolder}:
          className='border-none  border-[#FAFBFC] text-[#404653]  text-sm'
          style={{zIndex:1000}}
          >
-          <SelectGroup
-              key={selectContent.at(0)}
-              className=''>
+          <SelectGroup className=''>
             {selectContent.map((content) => (
               <SelectItem key={content}  value={String(content)}  className=''>
                 {content}
