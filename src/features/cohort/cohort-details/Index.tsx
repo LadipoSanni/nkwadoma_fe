@@ -17,7 +17,7 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
-import {useViewAllLoaneeQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
+import {useReferLoaneeMutation, useViewAllLoaneeQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import SelectableTable from "@/reuseable/table/SelectableTable";
 import {getItemSessionStorage} from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
@@ -55,6 +55,7 @@ const CohortDetails = () => {
     const [programId, setProgramId] = React.useState("")
     const size = 100;
     const [page] = useState(0);
+    const [referLoanee, { isLoading, isError }] = useReferLoaneeMutation()
     const {data} = useViewAllLoaneeQuery({
         cohortId: cohortsId,
         pageSize: size,
@@ -205,9 +206,12 @@ const CohortDetails = () => {
     const handleAddTrainee = () => {
         setAddTrainee(true)
     }
-
     const handleRefer = () => {
-
+        // console.log("loanee reffered ... ")
+        const loaneeId = "8919744e-f248-47a1-a6d0-8edf0b6f8a32"
+        const data = referLoanee({ id: loaneeId })
+        console.log("data value : "+data)
+        console.log("data value : "+data.data)
     }
 
     const handleRowClick = (row: TableRowData) => {
@@ -224,6 +228,10 @@ const CohortDetails = () => {
                     <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
                         onClick={handleBackClick}>Back to cohort</h1>
                 </div>
+                <Button variant={"outline"}
+                        size={"lg"}
+                        className={`bg-red-500 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
+                        onClick={handleRefer} >Refer</Button>
             </div>
 
             <Tabs
