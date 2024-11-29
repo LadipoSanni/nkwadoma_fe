@@ -31,10 +31,12 @@ interface TableRowData {
 
 interface cohortList {
   listOfCohorts: allCohortsProps[]
+  handleDelete?: (id: string) => void;
+ 
 }
 
 
-const CohortTabs = ({listOfCohorts = []}:cohortList) => {
+const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
@@ -100,6 +102,7 @@ const CohortTabs = ({listOfCohorts = []}:cohortList) => {
     
     }
     else {
+      setCohortId(String(row.id))
       setIsDeleteOpen(true)
     }
   }
@@ -232,7 +235,13 @@ const CohortTabs = ({listOfCohorts = []}:cohortList) => {
         icon={Cross2Icon}
         width='auto'
         >
-        <DeleteCohort setIsOpen={()=> setIsDeleteOpen(false)} headerTitle='Cohort' title='cohort'/>
+        <DeleteCohort 
+        setIsOpen={()=> setIsDeleteOpen(false)} 
+        headerTitle='Cohort' 
+        title='cohort'
+        handleDelete={handleDelete}
+        id={cohortId}
+        />
         </TableModal>
        
       </div>

@@ -67,8 +67,16 @@ export const cohortApi = createApi({
       }),
 
     }),
+        editCohort: builder.mutation({
+          query: ({data}) => ({
+                 url: "cohort/edit" ,
+                method: "POST",
+                body: data,
+         }),
+          invalidatesTags: ['cohort'],
+        })
     })
 })
 
-export const { useCreateCohortMutation, useViewAllLoaneeQuery, useGetAllCohortsByOrganisationQuery,useSearchCohortByOrganisationQuery } = cohortApi;
+export const { useCreateCohortMutation, useViewAllLoaneeQuery, useGetAllCohortsByOrganisationQuery,useSearchCohortByOrganisationQuery, useDeleteCohortMutation, useEditCohortMutation} = cohortApi;
 

@@ -12,20 +12,37 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { MdOutlineEdit } from 'react-icons/md';
 import { Input } from '@/components/ui/input';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
+import { useEditCohortMutation } from '@/service/admin/cohort_query';
 // import Image from 'next/image';
 
 
-
+interface cohortDetails {
+  id: string,
+   programId: string,
+   organizationId: String,
+   cohortDescription: String,
+   name: String,
+   activationStatus: String,
+   cohortStatus: String,
+   tuitionAmount: number,
+   totalCohortFee: number,
+   imageUrl: string,
+   startDate: string,
+   expectedEndDate: string
+}
 
 
  interface idProps {
    cohortId : string;
    setIsOpen? : (e:boolean | undefined) => void;
+   cohortDetail?: cohortDetails
  }
 
 
 
-const EditCohortForm = ({cohortId,setIsOpen}: idProps) => {
+
+
+const EditCohortForm = ({cohortId,setIsOpen,cohortDetail}: idProps) => {
 
   const initialFormValue = {
     cohortId: cohortId,
@@ -38,6 +55,8 @@ const EditCohortForm = ({cohortId,setIsOpen}: idProps) => {
 
 
 }
+
+console.log("The cohortId: ",cohortId)
 
   const [isLoading] = useState(false);
   const [image, setImage] = useState(initialFormValue.cohortImage);

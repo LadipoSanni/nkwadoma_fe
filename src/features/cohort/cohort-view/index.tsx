@@ -18,6 +18,8 @@ import { useSearchCohortByOrganisationQuery } from '@/service/admin/cohort_query
 import { debounce } from 'lodash';
 import { useGetAllCohortByAParticularProgramQuery } from '@/service/admin/program_query'
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
+import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
+
 
 export const initialFormValue = {
   selectProgram:""
@@ -68,7 +70,7 @@ const CohortView = () => {
   const [isDropdown,setIsDropdown] = useState(false)
   const [selectProgram, setSelectProgram] = useState('')
   const [organisationCohort,setOrganisationCohort] = useState<allCohortsProps[]>([])
-  // const [originalCohortData, setOriginalCohortData] = useState<allCohortsProps[]>([]);
+  const [originalCohortData, setOriginalCohortData] = useState<allCohortsProps[]>([]);
   const [listOfPrograms, setListOfPrograms] = useState<viewAllProgramProps[]>([])
   const [searchTerm, setSearchTerm] = useState('');
   const [programId, setProgramId] = useState('');
@@ -79,13 +81,14 @@ const CohortView = () => {
    const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
    const { data: searchData } = useSearchCohortByOrganisationQuery(searchTerm, { skip:!searchTerm })
    const { data: programDatas, } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
-  //  const { data: cohortsByProgram} = useGetAllCohortByAParticularProgramQuery({programId: programId,pageSize: size,pageNumber: page},{ refetchOnMountOrArgChange: true });
   const { data: cohortsByProgram, refetch } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
+  const [deleteItem] = useDeleteCohortMutation()
    
 
    useEffect(() => { 
     if (cohortData && cohortData?.data) { 
-      const result = cohortData?.data?.body; setOrganisationCohort(result); 
+      const result = cohortData?.data?.body; 
+      setOrganisationCohort(result); 
       // setOriginalCohortData(result);  
     } }, [cohortData]);
 
@@ -154,6 +157,16 @@ const CohortView = () => {
  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
   debouncedSearch(event.target.value);
 };
+
+const handleDeleteCohortByOrganisation = async (id: string) => {
+       
+    try{
+        await deleteItem({id}).unwrap();
+        setOrganisationCohort((prevData) => prevData.filter((item) => item.id !== id))
+    }catch(error){
+        console.error("Error deleting program: ", error);
+    }
+}
 
 
   return (
@@ -285,7 +298,7 @@ const CohortView = () => {
           </div>
         </div>
         <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
-         <CohortTabs listOfCohorts={organisationCohort}/>
+         <CohortTabs listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation}/>
         </div>
     </div>
   )
