@@ -361,14 +361,14 @@ const CohortDetails = () => {
                 </TableModal>
             </div>
 
-            <div className={`md:max-w-sm w-full`} id={`AddTraineeDiv`}>
+            <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
                 <TableModal
                     isOpen={addTrainee}
                     closeModal={() => setAddTrainee(false)}
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
                     headerTitle={`Add Trainee`}
-                    width="auto"
+                    width="30%"
                 >
                     <AddTraineeForm cohortId={id} setIsOpen={() => setAddTrainee(false)}/>
                 </TableModal>
