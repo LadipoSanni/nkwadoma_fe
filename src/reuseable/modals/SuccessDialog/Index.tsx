@@ -8,13 +8,16 @@ interface VerificationSuccessDialogProps {
     open: boolean;
     onClose: () => void;
     onContinue: () => void;
+    title: string
+    message: string
+    buttonText: string
 }
 
-const VerificationSuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ open, onClose, onContinue  }) => {
+const SuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ open, onClose, onContinue, title, message, buttonText }) => {
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]" />
-            <DialogContent className={'max-w-[425px] md:max-w-[460px] [&>button]:hidden gap-5 py-5 px-5'}>
+            <DialogContent className={'max-w-[350px] md:max-w-[416px] [&>button]:hidden gap-5 py-5 px-5'}>
                 <DialogHeader>
                     <DialogTitle
                         className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>
@@ -29,21 +32,19 @@ const VerificationSuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ o
                         />
                     </DialogTitle>
                 </DialogHeader>
-                <section className={'grid gap-7'}>
-                    <div className={`${inter.className} grid gap-2`}>
-                        <h1 className={`${cabinetGrotesk.className} text-black500 text-[24px] leading-[120%] font-medium`}>Verification
-                            successful</h1>
-                        <p className={'text-gray1 text-[14px] leading-[150%] font-normal'}>Congratulations! You’ve
-                            successfully completed the verification process</p>
+                <section className={`${inter.className}  grid gap-7`}>
+                    <div className={`grid gap-2`}>
+                        <h1 className={`${cabinetGrotesk.className} text-black500 text-[24px] leading-[120%] font-medium`}>{title}</h1>
+                        <p className={'text-gray1 text-[14px] leading-[150%] font-normal'}>{message}</p>
                     </div>
                     <div className="flex justify-end">
                         <Button
-                            className="h-[3.5625rem] w-[8.75rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md"
+                            className="h-[3.5625rem] text-[14px] font-semibold leading-[150%] w-[8.75rem] px-5 py-3 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md"
                             onClick={() => {
                                 onContinue();
                             }}
                         >
-                            Continue
+                            {buttonText}
                         </Button>
                     </div>
                 </section>
@@ -52,4 +53,4 @@ const VerificationSuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ o
     );
 };
 
-export default VerificationSuccessDialog;
+export default SuccessDialog;
