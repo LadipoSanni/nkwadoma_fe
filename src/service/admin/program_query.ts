@@ -80,11 +80,11 @@ export const programApi = createApi({
 
         searchCohortsInAParticularProgram: builder.query({
             query: (param:{
-                cohortNames?: string;
+                cohortName?: string;
                 programId?: string
 
             }) => ({
-                url: '/searchCohort', 
+                url: '/program/searchCohort', 
                 method: 'GET',
                 params: param, 
             })

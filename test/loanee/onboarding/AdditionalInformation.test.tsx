@@ -1,9 +1,16 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen,cleanup } from '@testing-library/react';
 import AdditionalInformation from '@/features/onboarding/stepContent/additionalInformation/Index';
 import { Providers } from '@/app/provider';
 
 describe('AdditionalInformation Component', () => {
+    beforeEach(() => {
+        cleanup()
+    
+          jest.spyOn(console,'log').mockReturnValue()
+          jest.spyOn(console,'warn').mockReturnValue()
+          jest.spyOn(console,'error').mockReturnValue()
+      });
     test('renders additional information component', () => {
         render(
             <Providers>

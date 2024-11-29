@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
-import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
+// import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
 import { MdOutlinePeople } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
 import { formatAmount } from '@/utils/Format'
@@ -11,13 +11,77 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import EditCohortForm from './EditCohortForm'
 import { inter } from '@/app/fonts'
 import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
+import { setItemSessionStorage,getItemSessionStorage } from '@/utils/storage';
+import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
+
+interface allCohortsProps extends TableRowData {
+  name:string,
+  cohortDescriptions:string,
+  startDate:string,
+  expectedEndDate:string,
+  totalCohortFee:number,
+  imageUrl:string,
+  cohortStatus: string,
+  tuitionAmount: number
+  id:string
+  programId: string
+}
+
+interface TableRowData {
+      [key: string]: string | number | null | React.ReactNode;
+     }
+
+interface cohortList {
+  listOfCohorts: allCohortsProps[]
+  handleDelete?: (id: string) => void;
+ 
+}
 
 
-
-const CohortTabs = () => {
+const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
+  const [programId, setProgramId] = React.useState("")
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
+  const [details, setDetails] = React.useState({
+    id: "",
+    programId: "",
+    organizationId: "",
+    cohortDescription: "",
+    name: "",
+    activationStatus: "",
+    cohortStatus: "",
+    tuitionAmount: 0,
+    totalCohortFee: 0,
+    imageUrl: "",
+    startDate: "",
+    expectedEndDate: "",
+})
+
+const {data: cohortDetails} = useViewCohortDetailsQuery({
+  programId: programId,
+  cohortId: cohortId
+}, {refetchOnMountOrArgChange: true});
+
+useEffect(() => {
+  if (cohortDetails && cohortDetails?.data) {
+      const details = cohortDetails.data
+      setDetails({
+          id: details?.id || "",
+          programId: details?.programId || "",
+          organizationId: details?.organizationId || "",
+          cohortDescription: details?.cohortDescription || "",
+          name: details?.name || "",
+          activationStatus: details?.activationStatus || "",
+          cohortStatus: details?.cohortStatus || "",
+          tuitionAmount: details?.tuitionAmount || "",
+          totalCohortFee: details?.totalCohortFee || "",
+          imageUrl: details?.imageUrl || "",
+          startDate: details?.startDate || "",
+          expectedEndDate: details?.expectedEndDate || "",
+      })
+  }
+}, [cohortDetails]);
 
   const router = useRouter()
 
@@ -53,9 +117,7 @@ const CohortTabs = () => {
 
 
 
-  interface TableRowData {
-      [key: string]: string | number | null | React.ReactNode;
-     }
+  
     
 
      interface rowData {
@@ -64,7 +126,9 @@ const CohortTabs = () => {
 
   const handleRowClick = (row: TableRowData) => {
     router.push('/cohort/cohort-details')
-    console.log('The row: ',row)
+    console.log('The row: ',row.id)
+     setItemSessionStorage("cohortId",String(row.id))
+     setItemSessionStorage("programsId", String(row.programId))
 
   }
 
@@ -74,35 +138,48 @@ const CohortTabs = () => {
     if(id === "1") router.push('/cohort/cohort-details')
     else if(id === "2") {
       setCohortId(String(row.id))
-      setIsOpen(true)
+      setItemSessionStorage("programsId", String(row.programId))
+      
       
     
     }
     else {
+      setCohortId(String(row.id))
       setIsDeleteOpen(true)
     }
   }
+
+  useEffect(()=> {
+    const id = getItemSessionStorage("programsId")
+    if (id) {
+      setProgramId(id)
+    }
+  },[])
+
   
   
   const ProgramHeader = [
-    { title: 'Cohort', sortable: true, id: 'cohort', selector: (row:TableRowData ) => row.cohort },
-    { title: 'End date', sortable: true, id: 'endDate', selector: (row:TableRowData ) => formatDate(row?.endDate)},
-    { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row: TableRowData) => row.noOfTrainees },
-    { title: 'No. of Loanees', sortable: true, id: 'noOfLoan', selector: (row:TableRowData) => row.noOfLoan },
-    { title: 'Tuition', sortable: true, id: 'tuition', selector: (row:TableRowData) => formatAmount(row.tuition)},
+    { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => row.name },
+    { title: 'End date', sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatDate(row?.expectedEndDate)},
+    // { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row: TableRowData) => row.noOfTrainees },
+    { title: 'No. of Loanees', sortable: true, id: 'noOfLoanees', selector: (row:TableRowData) => row.noOfLoanees || 0 },
+    { title: 'Tuition', sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => formatAmount(row.tuitionAmount)},
     { title: 'Amount recieved', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRecieved)}</div> },
     { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountRequested)}</div> },
     { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountOutstanding)}</div> },
 
   ]
 
-  // const IncomingData = cohortsData.filter((data) => data.Cohort === 'Cohort 1')
+  const incomingCohorts = listOfCohorts.filter(cohort => cohort.cohortStatus === 'INCOMING'); 
+  const currentCohorts = listOfCohorts.filter(cohort => cohort.cohortStatus === 'CURRENT'); 
+  const graduatedCohorts = listOfCohorts.filter(cohort => cohort.cohortStatus === 'GRADUATED');
+
   const dataTabs = [
     {
       value: 'incoming',
       table: <div >
              <Tables
-              tableData={cohortsData}
+              tableData={incomingCohorts.slice().reverse()}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
               tableHeight={52}
@@ -115,6 +192,7 @@ const CohortTabs = () => {
               sideBarTabName='Cohort'
               optionalFilterName='incoming'
               handleDropDownClick={handleDropdownClick}
+              optionalRowsPerPage={10}
 
              />
              </div>
@@ -123,7 +201,7 @@ const CohortTabs = () => {
       value: 'current',
       table: <div>
              <Tables
-              tableData={cohortsData}
+              tableData={currentCohorts.slice().reverse()}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
               tableHeight={52}
@@ -136,6 +214,8 @@ const CohortTabs = () => {
               sideBarTabName='Cohort'
               optionalFilterName='current'
               handleDropDownClick={handleDropdownClick}
+              optionalRowsPerPage={10}
+              condition={true}
              />
              </div>
     },
@@ -143,7 +223,7 @@ const CohortTabs = () => {
       value: 'graduate',
       table: <div>
              <Tables
-              tableData={cohortsData}
+              tableData={graduatedCohorts.slice().reverse()}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
               tableHeight={52}
@@ -156,6 +236,8 @@ const CohortTabs = () => {
               sideBarTabName='Cohort'
               optionalFilterName='graduate'
               handleDropDownClick={handleDropdownClick}
+               optionalRowsPerPage={10}
+               condition={true}
              />
              </div>
     },
@@ -192,7 +274,7 @@ const CohortTabs = () => {
         icon={Cross2Icon}
        
         >
-          <EditCohortForm cohortId={cohortId} setIsOpen={()=>setIsOpen(false)}/>  
+          <EditCohortForm cohortId={cohortId} setIsOpen={()=>setIsOpen(false)} cohortDetail={details}/>  
          
         </TableModal>
            
@@ -203,7 +285,13 @@ const CohortTabs = () => {
         icon={Cross2Icon}
         width='auto'
         >
-        <DeleteCohort setIsOpen={()=> setIsDeleteOpen(false)} headerTitle='Cohort' title='cohort'/>
+        <DeleteCohort 
+        setIsOpen={()=> setIsDeleteOpen(false)} 
+        headerTitle='Cohort' 
+        title='cohort'
+        handleDelete={handleDelete}
+        id={cohortId}
+        />
         </TableModal>
        
       </div>

@@ -8,13 +8,14 @@ interface FileUploadProps {
     handleDrop: (event: React.DragEvent<HTMLDivElement>) => void;
     handleDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
     setUploadedImageUrl: (url: string | null) => void;
+    labelName?: string
 }
 
 const truncateFileName = (name: string, length: number) => {
     return name.length > length ? name.substring(0, length) + "..." : name;
 };
 
-const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setUploadedImageUrl }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setUploadedImageUrl,labelName}) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -102,7 +103,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
 
     return (
         <div id="dragAndDropContainer" className={'grid gap-2 w-full'}>
-            <Label htmlFor="fileInput" className="block text-sm font-medium text-black500">Cohort image (Optional)</Label>
+            <Label htmlFor="fileInput" className="block text-sm font-medium text-black500">{labelName}</Label>
             <div
                 id="dragAndDrop"
                 className={`${file ? 'p-3 bg-meedlWhite h-[4.25rem] border-[0.5px] border-solid border-neutral650 flex items-center justify-between' : 'grid gap-4 place-items-center border-dashed border border-neutral650 py-5 rounded-md bg-neutral100 cursor-pointer h-[147px]'}`}

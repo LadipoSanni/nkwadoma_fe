@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {FiBook} from "react-icons/fi";
 import {inter} from "@/app/fonts";
-import CohortDetailsImage from "../../../../public/asset/Image/CohortDetailsImage.png"
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {MdOutlinePerson, MdPersonOutline, MdSearch} from "react-icons/md";
@@ -18,9 +17,10 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
-import {useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
-import {formatAmount} from "@/utils/Format";
+import {useViewAllLoaneeQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import SelectableTable from "@/reuseable/table/SelectableTable";
+import {getItemSessionStorage} from "@/utils/storage";
+import {formatAmount} from '@/utils/Format'
 
 
 interface userIdentity {
@@ -51,30 +51,81 @@ const CohortDetails = () => {
     const [isReferred, setIsReferred] = React.useState(``);
     const [addTrainee, setAddTrainee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
+    const [cohortsId, setCohortId] = React.useState("")
+    const [programId, setProgramId] = React.useState("")
     const size = 100;
     const [page] = useState(0);
-    const cohortId = "220ce57a-7275-411d-be63-b974bf55fe7a"
-    const { data } = useViewAllLoaneeQuery({
-        cohortId: cohortId,
-        pageSize:size,
-        pageNumber:page
-    }, { refetchOnMountOrArgChange: true, })
+    const {data} = useViewAllLoaneeQuery({
+        cohortId: cohortsId,
+        pageSize: size,
+        pageNumber: page
+    }, {refetchOnMountOrArgChange: true,})
+    const {data: cohortDetails} = useViewCohortDetailsQuery({
+        programId: programId,
+        cohortId: cohortsId
+    }, {refetchOnMountOrArgChange: true});
 
+    const [details, setDetails] = useState({
+        id: "",
+        programId: "",
+        organizationId: "",
+        cohortDescription: "",
+        name: "",
+        activationStatus: "",
+        cohortStatus: "",
+        tuitionAmount: 0,
+        totalCohortFee: 0,
+        imageUrl: "",
+        startDate: "",
+        expectedEndDate: "",
+    })
 
     useEffect(() => {
-        if(data && data?.data ) {
+        if (data && data?.data) {
             const result = data?.data?.body
             setAllLoanee(result)
         }
-    },[data])
+    }, [data])
 
+    useEffect(() => {
+        if (cohortDetails && cohortDetails?.data) {
+            const details = cohortDetails.data
+            setDetails({
+                id: details?.id || "",
+                programId: details?.programId || "",
+                organizationId: details?.organizationId || "",
+                cohortDescription: details?.cohortDescription || "",
+                name: details?.name || "",
+                activationStatus: details?.activationStatus || "",
+                cohortStatus: details?.cohortStatus || "",
+                tuitionAmount: details?.tuitionAmount || "",
+                totalCohortFee: details?.totalCohortFee || "",
+                imageUrl: details?.imageUrl || "",
+                startDate: details?.startDate || "",
+                expectedEndDate: details?.expectedEndDate || "",
+            })
+        }
+    }, [cohortDetails]);
+
+    useEffect(() => {
+        const idOfCohort = getItemSessionStorage("cohortId")
+        const programsId = getItemSessionStorage("programsId")
+        if (idOfCohort) {
+            setCohortId(idOfCohort)
+        }
+        if (programsId) {
+            setProgramId(programsId)
+        }
+    }, [])
 
     const id = "1";
 
     const dataList = [
-        {label: "Start Date", value: "13, Dec 2023"},
-        {label: "End Date", value: "15, Jan 2024"},
-        {label: "Cohort status", value: "10"},
+        {label: "Start Date", value: details.startDate},
+        {label: "End Date", value: details.expectedEndDate},
+        {label: "Cohort status", value: <div className={`rounded-2xl px-2 py-1 ${details.cohortStatus === "ACTIVE"? "bg-[#E7F5EC] text-[#0B6B2B]" : "bg-[#FEF6E8] text-[#66440A]"}`}>
+                {details.cohortStatus}
+        </div>},
         {label: "Number of Dropouts", value: "10"},
         {label: "Dropout rate", value: "0.5%"},
         {label: "Number employed", value: "38"},
@@ -84,7 +135,7 @@ const CohortDetails = () => {
         {label: "Total amount repaid", value: "3,000,000.00"},
         {label: "Total amount outstanding", value: "3,000,000.00"},
         {label: "Repayment rate", value: "70%"},
-        {label: "Tuition amount", value: "3,500,000.00"},
+        {label: "Tuition amount", value: formatAmount(details.tuitionAmount)},
     ];
 
     const breakDown = [
@@ -126,14 +177,25 @@ const CohortDetails = () => {
         }
     }
 
-    const description = "Design thinking is a process for creative problem solving." +
-        "Design thinking has a human-centered core. It encourages organizations to focus on " +
-        "thepeople they're creating for, which leads to better products, services, and internal processes."
-
     const TraineeHeader = [
-        {title: "Trainee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row. userIdentity?.firstName + " " + row.userIdentity?.lastName},
-        {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.initialDeposit)},
-        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)},
+        {
+            title: "Trainee",
+            sortable: true,
+            id: "firstName",
+            selector: (row: viewAllLoanees) => row.userIdentity?.firstName + " " + row.userIdentity?.lastName
+        },
+        {
+            title: "Initial deposit",
+            sortable: true,
+            id: "InitialDeposit",
+            selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.initialDeposit)
+        },
+        {
+            title: "Amount requested",
+            sortable: true,
+            id: "AmountRequested",
+            selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)
+        },
         {title: "Amount received", sortable: true, id: "AmountReceived"},
     ]
 
@@ -157,10 +219,10 @@ const CohortDetails = () => {
 
     return (
         <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
-            <div className={` `} id={   `backClickContainer`}>
+            <div className={` `} id={`backClickContainer`}>
                 <div className={`flex py-2 space-x-1 text-meedlBlue`} id={`backClick`}
                      data-testid={`backClick `}>
-                    <BiArrowBack className={`mt-1 cursor-pointer`} id={ `backClickIcon`}/>
+                    <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`}/>
                     <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
                         onClick={handleBackClick}>Back to cohort</h1>
                 </div>
@@ -172,23 +234,28 @@ const CohortDetails = () => {
                 defaultValue={"details"}
                 className={`pt-3`}
             >
-                <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'} id={`tabsList`}>
+                <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'}
+                          id={`tabsList`}>
                     <TabsTrigger value="details"
-                                 className={'py-1 px-2 gap-1 items-center rounded-md'} id={`tabsTrigger1`}>Details</TabsTrigger>
+                                 className={'py-1 px-2 gap-1 items-center rounded-md'}
+                                 id={`tabsTrigger1`}>Details</TabsTrigger>
                     <TabsTrigger value="trainee"
-                                 className={'py-1 px-2 gap-1 items-center rounded-md'} id={`tabsTrigger2`}>Trainees</TabsTrigger>
+                                 className={'py-1 px-2 gap-1 items-center rounded-md'}
+                                 id={`tabsTrigger2`}>Trainees</TabsTrigger>
                 </TabsList>
 
                 <div id={`tabsContentDiv`}>
                     <TabsContent value="details" className={'mt-4'} id={`tabsContent`}>
                         <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
                             <div id={`firstSection`}>
-                                <DetailsImageSection imageSrc={CohortDetailsImage.src} cohortTitle={"Luminary"}
-                                                     cohortDescription={description}
+                                <DetailsImageSection imageSrc={details.imageUrl} cohortTitle={details.name}
+                                                     cohortDescription={details.cohortDescription}
                                                      dropdownOption={program1Options}
                                                      handleDropdownClicked={handleDropdownClick}
                                                      buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
-                                                     isEditButton={false}/>
+                                                     isEditButton={false}
+                                                     icon={FiBook}
+                                />
                             </div>
                             <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
                                 <DetailsTabContainer dataList={dataList} breakDown={breakDown}
@@ -200,12 +267,14 @@ const CohortDetails = () => {
 
                     <TabsContent value={"trainee"} id={`traineeId`}>
                         <div className={`pb-4`} id={`searchReferAddTraineeAndTable`}>
-                            <div className={`flex md:flex-row flex-col md:justify-between`} id={`searchReferAndAddTrainee`}>
+                            <div className={`flex md:flex-row flex-col md:justify-between`}
+                                 id={`searchReferAndAddTrainee`}>
                                 <div className={`flex md:flex-row gap-4 md:items-center items-center`} id={`searchId`}>
                                     <div className="max-w-md mx-auto" id={`searchInput`}>
                                         <div className="relative" id={`searchDiv`}>
                                             <div
-                                                className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none" id={`searchIcon`}>
+                                                className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                                                id={`searchIcon`}>
                                                 <MdSearch className="h-5 w-5 text-grey200"/>
                                             </div>
                                             <Input
@@ -221,7 +290,8 @@ const CohortDetails = () => {
                                     </div>
                                 </div>
 
-                                <div className={`flex md:flex-row flex-col gap-4 md:items-center`} id={`ReferAndTraineeDiv`}>
+                                <div className={`flex md:flex-row flex-col gap-4 md:items-center`}
+                                     id={`ReferAndTraineeDiv`}>
                                     <div className={`md:block hidden`} id={`largerScreenReferButton`}>
                                         <Button variant={"outline"}
                                                 size={"lg"}
@@ -234,7 +304,7 @@ const CohortDetails = () => {
                                                 className={`bg-meedlBlue text-meedlWhite w-full h-12 flex justify-center items-center`}
                                                 onClick={handleAddTrainee}>Add Trainee</Button>
                                     </div>
-                                    <div className={`md:hidden block`} id={ `smallScreenReferButton`}>
+                                    <div className={`md:hidden block`} id={`smallScreenReferButton`}>
                                         <Button variant={"outline"}
                                                 size={"lg"}
                                                 className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
@@ -291,14 +361,14 @@ const CohortDetails = () => {
                 </TableModal>
             </div>
 
-            <div className={`md:max-w-sm w-full`} id={`AddTraineeDiv`}>
+            <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
                 <TableModal
                     isOpen={addTrainee}
                     closeModal={() => setAddTrainee(false)}
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
                     headerTitle={`Add Trainee`}
-                    width="auto"
+                    width="30%"
                 >
                     <AddTraineeForm cohortId={id} setIsOpen={() => setAddTrainee(false)}/>
                 </TableModal>

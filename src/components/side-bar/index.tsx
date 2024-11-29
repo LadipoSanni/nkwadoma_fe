@@ -13,6 +13,7 @@ import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
 import {Icon} from "@iconify/react";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {MdOutlineAccountBalance, MdOutlineInventory2,MdOutlineReceiptLong, MdOutlinePayments, MdOutlineBusinessCenter,MdOutlinePersonOutline, MdOutlinePeopleAlt,MdOutlineHome} from "react-icons/md";
+import {useLogoutMutation} from "@/service/users/api";
 // import { MdOutlineReceiptLong } from "react-icons/md";
 
 
@@ -24,6 +25,8 @@ const SideBar = () => {
     const router = useRouter();
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
+    const [logout] = useLogoutMutation()
+
 
     const [role, setRole] = useState('')
     const user_role = getUserDetailsFromStorage('user_role')
@@ -52,6 +55,16 @@ const SideBar = () => {
             }
         }
 
+    }
+    const handleLogout =  async () => {
+     try{
+         const response  = await logout({})
+         console.log("resr: ", response)
+     }catch (error){
+         console.log("error: ", error)
+          // redirect("/auth/login")
+
+     }
     }
 
     const currentTextLiterals = `text-[#626F8C]`;
@@ -232,7 +245,7 @@ const SideBar = () => {
             icon: <LuLogOut
                 color={current === "Logout" ? '#142854' : '#939CB0'}
                 className={` h-[1.2rem] w-[1.2rem] `}/>,
-            handleClick: handleClick
+            handleClick: handleLogout
         },
 
     ]
