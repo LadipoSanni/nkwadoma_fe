@@ -7,8 +7,12 @@ import {MdOutlinePerson} from "react-icons/md";
 import {Breakdown} from "@/reuseable/details/breakdown";
 import Tables from "@/reuseable/table/LoanProductTable";
 
+interface TableRowData {
+    [key: string]: string | number | null | React.ReactNode;
+}
+
 interface detailContainerProps {
-    dataList?: { label: string; value: string; }[];
+    dataList?: { label: string; value: string | React.ReactNode; }[];
     isNotTableDataList?: {detail: string; value: string}[]
     breakDown?: { title: string; amount: string; }[];
     tabTitle1: string;
