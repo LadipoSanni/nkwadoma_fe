@@ -7,7 +7,7 @@ import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 
 interface AdditionalInformationProps {
-    setCurrentStep: (step: number) => void;
+    setCurrentStep?: (step: number) => void;
 }
 
 const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrentStep}) => {
