@@ -1,5 +1,4 @@
-'use client'
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {MdClose, MdPersonOutline} from "react-icons/md";
 import {cabinetGrotesk, inter} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
@@ -7,78 +6,194 @@ import {Dialog, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogC
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 
-const AdditionalInformation: React.FC = () => {
+interface AdditionalInformationProps {
+    setCurrentStep: (step: number) => void;
+}
+
+const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrentStep}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [alternateEmail, setAlternateEmail] = useState('');
+    const [alternatePhone, setAlternatePhone] = useState('');
+    const [alternateAddress, setAlternateAddress] = useState('');
+    const [nextOfKinFirstName, setNextOfKinFirstName] = useState('');
+    const [nextOfKinEmail, setNextOfKinEmail] = useState('');
+    const [nextOfKinPhone, setNextOfKinPhone] = useState('');
+    const [nextOfKinRelationship, setNextOfKinRelationship] = useState('');
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+
+    useEffect(() => {
+        const isFormValid = alternateEmail && alternatePhone && alternateAddress && nextOfKinFirstName && nextOfKinEmail && nextOfKinPhone && nextOfKinRelationship;
+        setIsButtonDisabled(!isFormValid);
+    }, [alternateEmail, alternatePhone, alternateAddress, nextOfKinFirstName, nextOfKinEmail, nextOfKinPhone, nextOfKinRelationship]);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsFormSubmitted(true);
+        setIsModalOpen(false);
+    };
+
+    const handleContinueClick = () => {
+        if (isFormSubmitted) {
+            setCurrentStep(3);
+        }
+    };
+
     return (
         <>
-            <div
-                className={` ${inter.className} bg-grey105 w-full h-[22rem] gap-8 flex flex-col items-center justify-center`}>
-                <div className={'md:h-20 md:w-20 h-[60px] w-[60px] bg-blue500 rounded-full grid place-content-center'}>
-                    <MdPersonOutline className={'h-8 w-8 text-meedlBlue'}/>
-                </div>
-                <div className={'grid place-content-center place-items-center text-center gap-2'}>
-                    <h1 className={`${cabinetGrotesk.className} md:w-[20.875rem] w-[13.75rem] md:text-[20px] text-[18px] leading-[120%] font-medium text-meedlBlack`}>Additional
-                        information will appear here</h1>
-                    <p className={'text-[14px] font-normal leading-[150%] text-#57595D w-[13.75rem] md:w-[317px]'}>To
-                        add
-                        your additional information,
-                        click on the <span className={'font-semibold '}>add additional information</span> button</p>
-                    <Button
-                        className={'h-[2.8125rem] w-[13.75rem] mt-5 px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md'}
-                        onClick={() => setIsModalOpen(true)}>Add additional information</Button>
-                </div>
-            </div>
+            <main className={'grid gap-[22px]'}>
+                {!isFormSubmitted ? (
+                    <div
+                        className={` ${inter.className} bg-grey105 w-full h-[22rem] gap-8 flex flex-col items-center justify-center`}>
+                        <div
+                            className={'md:h-20 md:w-20 h-[60px] w-[60px] bg-blue500 rounded-full grid place-content-center'}>
+                            <MdPersonOutline className={'h-8 w-8 text-meedlBlue'}/>
+                        </div>
+                        <div className={'grid place-content-center place-items-center text-center gap-2'}>
+                            <h1 className={`${cabinetGrotesk.className} md:w-[20.875rem] w-[13.75rem] md:text-[20px] text-[18px] leading-[120%] font-medium text-meedlBlack`}>Additional
+                                information will appear here</h1>
+                            <p className={'text-[14px] font-normal leading-[150%] text-#57595D w-[13.75rem] md:w-[317px]'}>To
+                                add your additional information, click on the <span className={'font-semibold '}>add additional information</span> button
+                            </p>
+                            <Button
+                                className={'h-[2.8125rem] w-[13.75rem] mt-5 px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md'}
+                                onClick={() => setIsModalOpen(true)}>Add additional information</Button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className={'bg-grey105 p-5  grid gap-9 rounded-md'}>
+                        <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate email
+                                address</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{alternateEmail}</p>
+                        </div>
+                        <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate phone
+                                number</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{alternatePhone}</p>
+                        </div>
+                        <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate residential
+                                address</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{alternateAddress}</p>
+                        </div>
+                        <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
+                                first
+                                name</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{nextOfKinFirstName}</p>
+                        </div>
+                        <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
+                                email
+                                address</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{nextOfKinEmail}</p>
+                        </div>
+                        <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
+                                phone
+                                number</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{nextOfKinPhone}</p>
+                        </div>
+                        <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
+                                relationship</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{nextOfKinRelationship}</p>
+                        </div>
+
+                    </div>
+                )}
+                <Button
+                    id="continueButton"
+                    className={`text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem] ${isFormSubmitted ? 'bg-meedlBlue hover:bg-meedlBlue focus:bg-meedlBlue' : 'bg-neutral650'}`}
+                    disabled={!isFormSubmitted}
+                    onClick={handleContinueClick}
+                >
+                    Continue
+                </Button>
+            </main>
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]"/>
-                <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6 py-5 px-5'}>
+                <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6  py-5 pl-5 pr-2'}>
                     <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
                         <DialogTitle
-                            className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Additional information</DialogTitle>
+                            className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Additional
+                            information</DialogTitle>
                         <DialogClose asChild>
                             <button id="createCohortDialogCloseButton" className="absolute right-5">
                                 <MdClose id={'createCohortCloseIcon'} className="h-6 w-6 text-neutral950"/>
                             </button>
                         </DialogClose>
                     </DialogHeader>
-                        <form className={`${inter.className}`}>
-                            <main className={'grid gap-5'}>
-                                <div className={'grid gap-2'}>
-                                    <Label htmlFor="bvn" className="block text-sm font-medium text-labelBlue">Alternate email address</Label>
-                                    <Input
-                                        type="email"
-                                        id="alternateEmail"
-                                        placeholder="Enter email adress"
-                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                    />
-
-                                </div>
-
-                                <div className={'grid gap-2'}>
-                                    <Label htmlFor="nin" className="block text-sm font-medium text-labelBlue">National
-                                        identification number</Label>
-                                    <Input
-                                        type="text"
-                                        id="firstName"
-                                        placeholder="Enter first name"
-                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                    />
-                                            </div>
-                                <div className="flex justify-end gap-5 mt-3">
-                                    <Button type="button"
-                                            className="h-[3.5625rem] w-[8.75rem]  border border-meedlBlue text-meedlBlue px-4 py-2 bg-gray-300 rounded-md">Cancel
-                                    </Button>
-                                    <Button type="submit"
-                                            className={`h-[3.5625rem] w-[8.75rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md`}
-                                           >Continue
-                                    </Button>
-                                </div>
-                            </main>
-                        </form>
+                    <form
+                        className={`${inter.className}  pr-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`}
+                        onSubmit={handleSubmit}>
+                        <main className={'grid gap-5'}>
+                            <div className={'grid gap-2'}>
+                                <Label htmlFor="alternateEmail" className="block text-sm font-medium text-labelBlue">Alternate
+                                    email address</Label>
+                                <Input type="email" id="alternateEmail" placeholder="Enter email address"
+                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
+                                       value={alternateEmail} onChange={(e) => setAlternateEmail(e.target.value)}/>
+                            </div>
+                            <div className={'grid gap-2'}>
+                                <Label htmlFor="alternatePhone" className="block text-sm font-medium text-labelBlue">Alternate
+                                    phone number</Label>
+                                <Input type="tel" id="alternatePhone" placeholder="Enter phone number"
+                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
+                                       value={alternatePhone} onChange={(e) => setAlternatePhone(e.target.value)}/>
+                            </div>
+                            <div className={'grid gap-2'}>
+                                <Label htmlFor="alternateAddress" className="block text-sm font-medium text-labelBlue">Alternate
+                                    residential address</Label>
+                                <Input type="text" id="alternateAddress" placeholder="Enter residential address"
+                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
+                                       value={alternateAddress} onChange={(e) => setAlternateAddress(e.target.value)}/>
+                            </div>
+                            <div className={'grid gap-2'}>
+                                <Label htmlFor="nextOfKinFirstName"
+                                       className="block text-sm font-medium text-labelBlue">Alternate next of Kin&#39;s
+                                    first name</Label>
+                                <Input type="text" id="nextOfKinFirstName" placeholder="Enter first name"
+                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
+                                       value={nextOfKinFirstName}
+                                       onChange={(e) => setNextOfKinFirstName(e.target.value)}/>
+                            </div>
+                            <div className={'grid gap-2'}>
+                                <Label htmlFor="nextOfKinEmail" className="block text-sm font-medium text-labelBlue">Alternate
+                                    next of Kin&#39;s email address</Label>
+                                <Input type="email" id="nextOfKinEmail" placeholder="Enter email address"
+                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
+                                       value={nextOfKinEmail} onChange={(e) => setNextOfKinEmail(e.target.value)}/>
+                            </div>
+                            <div className={'grid gap-2'}>
+                                <Label htmlFor="nextOfKinPhone" className="block text-sm font-medium text-labelBlue">Alternate
+                                    next of Kin&#39;s phone number</Label>
+                                <Input type="tel" id="nextOfKinPhone" placeholder="Enter phone number"
+                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
+                                       value={nextOfKinPhone} onChange={(e) => setNextOfKinPhone(e.target.value)}/>
+                            </div>
+                            <div className={'grid gap-2'}>
+                                <Label htmlFor="nextOfKinRelationship"
+                                       className="block text-sm font-medium text-labelBlue">Alternate next of Kin&#39;s
+                                    relationship</Label>
+                                <Input type="text" id="nextOfKinRelationship" placeholder="Enter relationship"
+                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
+                                       value={nextOfKinRelationship}
+                                       onChange={(e) => setNextOfKinRelationship(e.target.value)}/>
+                            </div>
+                            <div className="flex justify-end gap-5 mt-3">
+                                <Button type="button"
+                                        className="h-[3.5625rem] w-[8.75rem] border border-meedlBlue text-meedlBlue px-4 py-2 bg-gray-300 rounded-md">Cancel</Button>
+                                <Button type="submit"
+                                        className={`h-[3.5625rem] w-[8.75rem] px-4 py-2 ${isButtonDisabled ? 'bg-neutral650' : 'bg-meedlBlue'} hover:bg-meedlBlue text-white rounded-md`}
+                                        disabled={isButtonDisabled}>Continue</Button>
+                            </div>
+                        </main>
+                    </form>
                 </DialogContent>
             </Dialog>
-
-
         </>
     );
 };
