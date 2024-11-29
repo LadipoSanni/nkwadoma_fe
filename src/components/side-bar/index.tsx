@@ -58,11 +58,11 @@ const SideBar = () => {
     }
     const handleLogout =  async () => {
      try{
-         const response  = await logout
+         const response  = await logout({})
          console.log("resr: ", response)
      }catch (error){
          console.log("error: ", error)
-          redirect("/auth/login")
+          // redirect("/auth/login")
 
      }
     }
