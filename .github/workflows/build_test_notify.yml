@@ -36,13 +36,15 @@ jobs:
       - name: Install dependencies
         run: npm install --force
 
-      - name: Build Project
+      - name: Create .env file
+        run: |
+          echo "NEXT_PUBLIC_UPLOAD_PRESET=${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}" > .env
+          echo "NEXT_PUBLIC_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}" >> .env
+
+      - name: Install and build the app
         run: |
           npm install
           npm run build
-        env:
-          NEXT_PUBLIC_UPLOAD_PRESET: ${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}
-          NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
         
 
       - name: Run Unit Tests
