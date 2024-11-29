@@ -30,8 +30,18 @@ interface props {
 
 function InviteOrganizationForm({setIsOpen}: props) {
 
-    const industries = ["Artificial Intelligence","Cloud Computing","Cybersecurity","Health Tech","Robotics"]
-    const serviceOfferings = ["AI Consulting","AI Development","AI Solutions","AI Support"]
+    const industries = ["Manufacturing", "Insurance", "Logistic", "Telecommunication", "Real estate", "Automobile", "Fashion", "Aviation", "Agriculture",
+    "Education", "Healthcare", "Entertainment", "Hospitality", "FMCG", "Technology", "Finance"]
+
+    const serviceOfferings = [
+      "Financial Advisory", "Insurance Services", "Loan Services", "Accounting and Bookkeeping", "Investment Advisory", "Risk Management", "Corporate Finance", "Tax Services",
+      "Banking Services", "Cryptocurrency Services", "Software Development", "Web Development", "Cloud Services", "Cybersecurity Services", "IT Support and Consulting", "Database Management", "AI and Machine Learning",
+      "Business Intelligence", "Devops Services", "Blockchain Services", "Distribution Services", "Marketing and Branding", "Sales Services", "Logistic and Supply Chain Management",
+      "Customer Service and Support", "Sustainability Services", "Regulatory Compliance and Legal Services", "Consumer Engagement and Loyalty", "Technology and Innovation", "Hotel Services",
+      "Restaurant Services", "Event Planning", "Travel and Tour Services", "Corporate Retreats", "Spa and wellness", "Transportation", "Conference & Meeting Facilities", "Film and Television",
+      "Music", "Theatre", "Sports and Fitness", "Gaming", "Event and Parties", 'Telecommunication', 'Photography', 'Training',
+    ];
+    
 
     const handleCloseModal = () => {
       if (setIsOpen) {
