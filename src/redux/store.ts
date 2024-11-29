@@ -7,6 +7,7 @@ import appReducer from "@/redux/reducer";
 import { authApi } from "@/service/auths/api";
 import { programApi } from "@/service/admin/program_query";
 import { cohortApi } from "@/service/admin/cohort_query";
+import {userApi} from "@/service/users/api";
 
 
 
@@ -31,6 +32,7 @@ export const store = configureStore({
             authApi.middleware,
             programApi.middleware,
             cohortApi.middleware,
+            userApi.middleware,
         ]),
 });
 export const persistor = persistStore(store);

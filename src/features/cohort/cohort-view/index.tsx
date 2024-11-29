@@ -57,6 +57,7 @@ interface allCohortsProps extends TableRowData {
    cohortStatus: string,
    tuitionAmount: number
    id:string
+   programId: string
 }
 
 interface viewAllProgramProps extends TableRowData  {
@@ -74,6 +75,7 @@ const CohortView = () => {
   const [listOfPrograms, setListOfPrograms] = useState<viewAllProgramProps[]>([])
   const [searchTerm, setSearchTerm] = useState('');
   const [programId, setProgramId] = useState('');
+  const [pendingProgramId, setPendingProgramId] = useState('');
    const [isLoading] = useState(false);
    const [page] = useState(0);
    const size = 200;
@@ -89,7 +91,7 @@ const CohortView = () => {
     if (cohortData && cohortData?.data) { 
       const result = cohortData?.data?.body; 
       setOrganisationCohort(result); 
-      // setOriginalCohortData(result);  
+      setOriginalCohortData(result);  
     } }, [cohortData]);
 
    useEffect(() => {
@@ -119,8 +121,8 @@ const CohortView = () => {
      } }, [cohortsByProgram]);
 
 
-  console.log("The organisationCohort: ",listOfPrograms)
-  console.log("The organisationCohort: ", organisationCohort);
+  // console.log("The organisationCohort: ",listOfPrograms)
+  // console.log("The organisationCohort: ", organisationCohort);
 
 
    const toggleDropdown = useCallback(() => {
@@ -129,18 +131,17 @@ const CohortView = () => {
   }, []);
 
 
-  const handleSubmit = async (values:{selectProgram: string}) => {
-    console.log('Form submitted', values)
+  const handleSubmit = async () => {
+    setProgramId(pendingProgramId);
+    refetch(); 
     setIsDropdown(false)
-    if (programId) { refetch(); }
-
   }
 
   const handleSelectProgram = (programType: string) => {
        setSelectProgram(programType) 
        const selectedProgram = listOfPrograms.find(program => program.name === programType); 
        if (selectedProgram) { 
-        setProgramId(selectedProgram.id || '');
+        setPendingProgramId(selectedProgram.id || '');
        }
   }
 
@@ -260,6 +261,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                           resetForm();
                           setSelectProgram("")
                           setProgramId("")
+                          setPendingProgramId("") 
+                          setOrganisationCohort(originalCohortData);
                         }}
                         >
                           Reset

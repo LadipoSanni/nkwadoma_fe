@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
 // import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
@@ -11,7 +11,8 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import EditCohortForm from './EditCohortForm'
 import { inter } from '@/app/fonts'
 import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
-import { setItemSessionStorage } from '@/utils/storage';
+import { setItemSessionStorage,getItemSessionStorage } from '@/utils/storage';
+import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
 
 interface allCohortsProps extends TableRowData {
   name:string,
@@ -23,6 +24,7 @@ interface allCohortsProps extends TableRowData {
   cohortStatus: string,
   tuitionAmount: number
   id:string
+  programId: string
 }
 
 interface TableRowData {
@@ -39,9 +41,47 @@ interface cohortList {
 const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
+  const [programId, setProgramId] = React.useState("")
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
+  const [details, setDetails] = React.useState({
+    id: "",
+    programId: "",
+    organizationId: "",
+    cohortDescription: "",
+    name: "",
+    activationStatus: "",
+    cohortStatus: "",
+    tuitionAmount: 0,
+    totalCohortFee: 0,
+    imageUrl: "",
+    startDate: "",
+    expectedEndDate: "",
+})
 
-  console.log("The props: ", listOfCohorts)
+const {data: cohortDetails} = useViewCohortDetailsQuery({
+  programId: programId,
+  cohortId: cohortId
+}, {refetchOnMountOrArgChange: true});
+
+useEffect(() => {
+  if (cohortDetails && cohortDetails?.data) {
+      const details = cohortDetails.data
+      setDetails({
+          id: details?.id || "",
+          programId: details?.programId || "",
+          organizationId: details?.organizationId || "",
+          cohortDescription: details?.cohortDescription || "",
+          name: details?.name || "",
+          activationStatus: details?.activationStatus || "",
+          cohortStatus: details?.cohortStatus || "",
+          tuitionAmount: details?.tuitionAmount || "",
+          totalCohortFee: details?.totalCohortFee || "",
+          imageUrl: details?.imageUrl || "",
+          startDate: details?.startDate || "",
+          expectedEndDate: details?.expectedEndDate || "",
+      })
+  }
+}, [cohortDetails]);
 
   const router = useRouter()
 
@@ -88,6 +128,7 @@ const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
     router.push('/cohort/cohort-details')
     console.log('The row: ',row.id)
      setItemSessionStorage("cohortId",String(row.id))
+     setItemSessionStorage("programsId", String(row.programId))
 
   }
 
@@ -97,7 +138,8 @@ const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
     if(id === "1") router.push('/cohort/cohort-details')
     else if(id === "2") {
       setCohortId(String(row.id))
-      setIsOpen(true)
+      setItemSessionStorage("programsId", String(row.programId))
+      
       
     
     }
@@ -106,6 +148,14 @@ const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
       setIsDeleteOpen(true)
     }
   }
+
+  useEffect(()=> {
+    const id = getItemSessionStorage("programsId")
+    if (id) {
+      setProgramId(id)
+    }
+  },[])
+
   
   
   const ProgramHeader = [
