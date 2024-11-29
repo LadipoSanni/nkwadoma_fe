@@ -30,15 +30,19 @@ interface props {
 
 function InviteOrganizationForm({setIsOpen}: props) {
 
-    const industries = ["Artificial Intelligence","Cloud Computing","Cybersecurity","Health Tech","Robotics"]
-    const serviceOfferings = ["AI Consulting","AI Development","AI Solutions","AI Support"]
+    const industries = ["Manufacturing","Insurance","Logistic","Telecommunication","Real estate", "Automobile", "Fashion", "Aviation", "Agriculture",
+        "Education", "Healthcare", "Entertainment", "Hospitality", "FMCG", "Technology", "Finance"
+    ]
+    const serviceOfferings = [
+
+        "Artificial Intelligence","Cloud Computing","Cybersecurity","Health Tech","Robotics"]
 
     const handleCloseModal = () => {
       if (setIsOpen) {
         setIsOpen(false);
       }
     }
-   
+
     const [isloading] = useState(false)
 
     const validationSchema = Yup.object().shape({
@@ -71,8 +75,8 @@ function InviteOrganizationForm({setIsOpen}: props) {
         .matches(/^\S*$/, 'Email address should not contain spaces')
         .required('Admin email address is required')
         .test(
-            'email-different', 'Admin email address must be different from company email address', 
-            function () { 
+            'email-different', 'Admin email address must be different from company email address',
+            function () {
                 const { emailAddress, adminEmailAddress } = this.parent; return emailAddress !== adminEmailAddress;
              })
     })
@@ -82,7 +86,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
       if (setIsOpen) {
         setIsOpen(false);
       }
-     
+
     }
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -108,8 +112,8 @@ function InviteOrganizationForm({setIsOpen}: props) {
           className='grid grid-cols-1 gap-y-4 md:max-h-[600px] overflow-y-auto'
           style={{
             scrollbarWidth: 'none',
-              msOverflowStyle: 'none', 
-              
+              msOverflowStyle: 'none',
+
           }}
         >
             <div className=''>
@@ -120,9 +124,9 @@ function InviteOrganizationForm({setIsOpen}: props) {
               className="w-full p-3 border rounded focus:outline-none mt-2"
               placeholder="Enter Name"
             //   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("name", e.target.value.replace(/[^A-Za-z]/g, ''))}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
-                const value = e.target.value; 
-                const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, ''); 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const value = e.target.value;
+                const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, '');
                 setFieldValue("name", formattedValue); }}
             />
               {
@@ -131,12 +135,12 @@ function InviteOrganizationForm({setIsOpen}: props) {
                  name="name"
                  component="div"
                  className="text-red-500 text-sm"
-               /> 
-                 ) 
+               />
+                 )
               }
             </div>
             <div>
-            <Label htmlFor="emailAddress">Email Address </Label> 
+            <Label htmlFor="emailAddress">Email Address </Label>
             <Field
                   id="emailAddress"
                   name="emailAddress"
@@ -144,19 +148,19 @@ function InviteOrganizationForm({setIsOpen}: props) {
                   placeholder="Enter email address"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("emailAddress", e.target.value.replace(/\s+/g, ''))}
                  />
-              
+
                    {
               errors.emailAddress && touched.emailAddress &&  (
                  <ErrorMessage
               name="emailAddress"
               component="div"
               className="text-red-500 text-sm"
-            /> 
+            />
               )
              }
             </div>
             <div>
-            <Label htmlFor="website">Website (optional)</Label>  
+            <Label htmlFor="website">Website (optional)</Label>
             <Field
                   id="website"
                   name="website"
@@ -166,11 +170,11 @@ function InviteOrganizationForm({setIsOpen}: props) {
             </div>
             <div className='grid md:grid-cols-2 gap-4 w-full'>
              <div>
-             <Label htmlFor="industry">Industry</Label> 
+             <Label htmlFor="industry">Industry</Label>
              <CustomSelect
               selectContent={industries}
               value={values.industry}
-              onChange={(value) => setFieldValue("industry", value)} 
+              onChange={(value) => setFieldValue("industry", value)}
               name="industry"
               placeHolder='Select industry'
              />
@@ -180,16 +184,16 @@ function InviteOrganizationForm({setIsOpen}: props) {
               name="industry"
               component="div"
               className="text-red-500 text-sm"
-            /> 
+            />
               )
              }
              </div>
              <div>
-             <Label htmlFor="serviceOffering:">Service Offering:</Label> 
+             <Label htmlFor="serviceOffering:">Service Offering:</Label>
              <CustomSelect
               selectContent={serviceOfferings}
               value={values.serviceOffering}
-              onChange={(value) => setFieldValue("serviceOffering", value)} 
+              onChange={(value) => setFieldValue("serviceOffering", value)}
               name="serviceOffering"
               placeHolder='Select service'
              />
@@ -199,7 +203,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
               name="serviceOffering"
               component="div"
               className="text-red-500 text-sm"
-            /> 
+            />
               )
              }
              </div>
@@ -212,9 +216,9 @@ function InviteOrganizationForm({setIsOpen}: props) {
                   name="rcNumber"
                   className="w-full p-3 border rounded focus:outline-none mt-3"
                   placeholder="Enter registration number"
-                //   onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
-                //     const value = e.target.value; 
-                //     const formattedValue = value.replace(/[^0-9]/g, ''); 
+                //   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                //     const value = e.target.value;
+                //     const formattedValue = value.replace(/[^0-9]/g, '');
                 //     setFieldValue("rcNumber", formattedValue);
                 //    }}
                   />
@@ -224,7 +228,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
               name="rcNumber"
               component="div"
               className="text-red-500 text-sm"
-            /> 
+            />
               )
              }
               </div>
@@ -235,9 +239,9 @@ function InviteOrganizationForm({setIsOpen}: props) {
                   name="taxNumber"
                   className="w-full p-3 border rounded focus:outline-none mt-3"
                   placeholder="Enter tax number"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
-                    const value = e.target.value; 
-                    const formattedValue = value.replace(/[^A-Za-z0-9-]/g, '').replace(/^-/, ''); 
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
+                    const formattedValue = value.replace(/[^A-Za-z0-9-]/g, '').replace(/^-/, '');
                     setFieldValue("taxNumber", formattedValue);
                    }}
                   />
@@ -247,7 +251,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
               name="taxNumber"
               component="div"
               className="text-red-500 text-sm"
-            /> 
+            />
               )
              }
               </div>
@@ -259,9 +263,9 @@ function InviteOrganizationForm({setIsOpen}: props) {
                 name="adminFullName"
                 className="w-full p-3 border rounded focus:outline-none mt-3"
                 placeholder="Enter admin full name"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
-                  const value = e.target.value; 
-                  const formattedValue = value.replace(/^[^A-Za-z]+|[^A-Za-z\s]/g, ''); 
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  const formattedValue = value.replace(/^[^A-Za-z]+|[^A-Za-z\s]/g, '');
                  setFieldValue("adminFullName", formattedValue); }}
               />
               {
@@ -311,30 +315,30 @@ function InviteOrganizationForm({setIsOpen}: props) {
             setUploadedImageUrl={(url: string | null) => setFieldValue("coverImage",url)}
             />
              </div>
-            
+
              </div>
-            
+
              <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>
-                <Button 
-                variant={'outline'} 
+                <Button
+                variant={'outline'}
                 type='reset'
                 className='w-full md:w-36 h-[57px] mb-4 border-solid border-[#142854] text-[#142854]'
                 onClick={handleCloseModal}
                 >
                     Cancel
                 </Button>
-                <Button 
+                <Button
                 id='submitTrainee'
-                variant={'default'} 
+                variant={'default'}
                 className={`w-full md:w-36 h-[57px] ${!isValid? "bg-neutral650 cursor-not-allowed " :"hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
                 type='submit'
                 disabled={!isValid}
-                
+
                 >
                   {isloading ? ( <Isloading/> ) : (
                                                 "Invite"
                                             )}
-                  
+
                  </Button>
               </div>
         </div>
