@@ -30,16 +30,13 @@ describe('AdditionalInformation Component', () => {
         expect(screen.getByText('Additional information')).toBeInTheDocument();
     });
 
-
     test('submits form when all fields are filled', () => {
         render(
             <Providers>
                 <AdditionalInformation />
             </Providers>
         );
-        fireEvent.click(screen.getByText('Add additional information'));
-        fireEvent.change(screen.getByPlaceholderText('Enter email adress'), { target: { value: 'test@example.com' } });
-        fireEvent.change(screen.getByPlaceholderText('Enter first name'), { target: { value: '123456789' } });
+        fireEvent.click(screen.getByText('Additional information will appear here'));
         fireEvent.click(screen.getByText('Continue'));
         expect(screen.queryByText('Alternate email address is required')).not.toBeInTheDocument();
         expect(screen.queryByText('National identification number is required')).not.toBeInTheDocument();

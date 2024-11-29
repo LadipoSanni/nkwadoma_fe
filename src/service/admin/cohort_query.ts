@@ -92,9 +92,18 @@ export const cohortApi = createApi({
 
         }),
 
-    }),
-
+        editCohort: builder.mutation({
+          query: ({data}) => ({
+                 url: "cohort/edit" ,
+                method: "POST",
+                body: data,
+         }),
+          invalidatesTags: ['cohort'],
+        })
+    })
 })
+
+
 
 export const {
     useCreateCohortMutation,
@@ -102,6 +111,7 @@ export const {
     useGetAllCohortsByOrganisationQuery,
     useSearchCohortByOrganisationQuery,
     useViewCohortDetailsQuery,
+    useDeleteCohortMutation, useEditCohortMutation,
     useReferLoaneeMutation,
 } = cohortApi;
 
