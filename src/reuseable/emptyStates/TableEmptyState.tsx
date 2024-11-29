@@ -4,10 +4,12 @@ type Props = {
     name?:string,
     icon?: ElementType,
     className?:string ,
-    optionalFilterName?:string
+    optionalFilterName?:string,
+    condition?: boolean,
+
 }
 
-function TableEmptyState({name,icon: Icon,className, optionalFilterName}: Props) {
+function TableEmptyState({name,icon: Icon,className, optionalFilterName,condition}: Props) {
   // const lowercaseName = name?.charAt(0).toLowerCase() 
   // const remainingPart = name?.slice(1);
   // const title = `${lowercaseName}${remainingPart}`;
@@ -25,7 +27,7 @@ function TableEmptyState({name,icon: Icon,className, optionalFilterName}: Props)
          </div>
          <h1 id='titleId' className='font-semibold mb-2 capitalize'>{name}s will show here</h1> 
         
-         <p id='bodyMessageId' className='text-foundationBlue800 md:w-96 w-72 lowercase'>There are no {optionalFilterName} {name}s available yet. To create a  <span className='lowercase'>{name}</span>, click on the  <span className='font-semibold lowercase'>create {name}</span> button</p> 
+         <p id='bodyMessageId' className='text-foundationBlue800 md:w-96 w-72 lowercase'>There are no {optionalFilterName} {name}s available yet. { !condition?<span> To create a  <span className='lowercase'>{name}</span>, click on the  <span className='font-semibold lowercase'>create {name}</span>  </span>: ""}</p> 
           </div>
        </div>
     </div>

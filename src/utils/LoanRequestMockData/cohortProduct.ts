@@ -717,3 +717,241 @@ export const loanRequestDatas = [
     amountRequested: "₦1,500,000.00",
   },
 ]
+
+
+export const organizationList = [
+  {
+    name: "Decagon",
+    noOfLoanees: 1000,
+    historicalDebt: "₦80,510,000.00",
+    repaymentRate: 80,
+    debtRepaid: "₦39,000,000.00",
+    currentDebt: "₦41,510,000.00"
+  },
+  {
+    name: "Semicolon Africa",
+    noOfLoanees: 90,
+    historicalDebt: "₦92,500,000.00",
+    repaymentRate: 50.3,
+    debtRepaid: "₦78,000,000.00",
+    currentDebt: "₦14,500,000.00"
+  },
+  {
+    name: "Altschool Africa",
+    noOfLoanees: 200,
+    historicalDebt: "₦142,000,000.00",
+    repaymentRate: 10,
+    debtRepaid: "₦103,000,000.00",
+    currentDebt: "₦39,000,000.00"
+  },
+  {
+    name: "Perxels Design School",
+    noOfLoanees: 27,
+    historicalDebt: "₦117,320,000.00",
+    repaymentRate: 20,
+    debtRepaid: "₦98,390,000.00",
+    currentDebt: "₦19,390,000.00"
+  },
+  {
+    name: "Gomycode",
+    noOfLoanees: 75,
+    historicalDebt: "₦102,500,000.00",
+    repaymentRate: 34,
+    debtRepaid: "₦93,000,000.00",
+    currentDebt: "₦9,000,000.00"
+  },
+  {
+    name: "Geneza School of Design",
+    noOfLoanees: 100000,
+    historicalDebt: "₦302,000,000.00",
+    repaymentRate: 77.2,
+    debtRepaid: "₦201,000,000.00",
+    currentDebt: "₦101,000,000.00"
+  },
+  {
+    name: "Ingressive for Good",
+    noOfLoanees: 90,
+    historicalDebt: "₦60,000,000.00",
+    repaymentRate: 26,
+    debtRepaid: "₦3,000,000.00",
+    currentDebt: "₦57,000,000.00"
+  },
+  {
+    name: "Techstudio Academy",
+    noOfLoanees: 5,
+    historicalDebt: "₦19,400,000.00",
+    repaymentRate: 7,
+    debtRepaid: "₦800,000.00",
+    currentDebt: "₦11,400,000.00"
+  },
+  {
+    name: "Semicolon Africa",
+    noOfLoanees: 5,
+    historicalDebt: "₦24,000,000.00",
+    repaymentRate: 50.3,
+    debtRepaid: "₦3,000,000.00",
+    currentDebt: "₦21,000,000.00"
+  },
+  {
+    name: "Code School Hub",
+    noOfLoanees: 120,
+    historicalDebt: "₦75,000,000.00",
+    repaymentRate: 60,
+    debtRepaid: "₦45,000,000.00",
+    currentDebt: "₦30,000,000.00"
+  },
+  {
+    name: "Bright Academy",
+    noOfLoanees: 500,
+    historicalDebt: "₦200,000,000.00",
+    repaymentRate: 90,
+    debtRepaid: "₦180,000,000.00",
+    currentDebt: "₦20,000,000.00"
+  },
+  {
+    name: "Future Innovators",
+    noOfLoanees: 50,
+    historicalDebt: "₦50,000,000.00",
+    repaymentRate: 35,
+    debtRepaid: "₦17,500,000.00",
+    currentDebt: "₦32,500,000.00"
+  },
+  {
+    name: "NextGen Tech",
+    noOfLoanees: 75,
+    historicalDebt: "₦150,000,000.00",
+    repaymentRate: 25,
+    debtRepaid: "₦37,500,000.00",
+    currentDebt: "₦112,500,000.00"
+  },
+  {
+    name: "Innovation Hub",
+    noOfLoanees: 100,
+    historicalDebt: "₦120,000,000.00",
+    repaymentRate: 85,
+    debtRepaid: "₦102,000,000.00",
+    currentDebt: "₦18,000,000.00"
+  },
+  {
+    name: "Startup Lab",
+    noOfLoanees: 40,
+    historicalDebt: "₦70,000,000.00",
+    repaymentRate: 50,
+    debtRepaid: "₦35,000,000.00",
+    currentDebt: "₦35,000,000.00"
+  },
+  {
+    name: "Global Coders",
+    noOfLoanees: 20,
+    historicalDebt: "₦10,000,000.00",
+    repaymentRate: 45,
+    debtRepaid: "₦4,500,000.00",
+    currentDebt: "₦5,500,000.00"
+  },
+  {
+    name: "TechPioneers",
+    noOfLoanees: 600,
+    historicalDebt: "₦500,000,000.00",
+    repaymentRate: 70,
+    debtRepaid: "₦350,000,000.00",
+    currentDebt: "₦150,000,000.00"
+  },
+  {
+    name: "Skill Academy",
+    noOfLoanees: 350,
+    historicalDebt: "₦320,000,000.00",
+    repaymentRate: 60,
+    debtRepaid: "₦192,000,000.00",
+    currentDebt: "₦128,000,000.00"
+  },
+  {
+    name: "Knowledge Base",
+    noOfLoanees: 80,
+    historicalDebt: "₦48,000,000.00",
+    repaymentRate: 40,
+    debtRepaid: "₦19,200,000.00",
+    currentDebt: "₦28,800,000.00"
+  },
+  {
+    name: "Learning Haven",
+    noOfLoanees: 10,
+    historicalDebt: "₦20,000,000.00",
+    repaymentRate: 75,
+    debtRepaid: "₦15,000,000.00",
+    currentDebt: "₦5,000,000.00"
+  },
+  {
+    name: "EduTech Academy",
+    noOfLoanees: 45,
+    historicalDebt: "₦110,000,000.00",
+    repaymentRate: 62,
+    debtRepaid: "₦68,200,000.00",
+    currentDebt: "₦41,800,000.00"
+  },
+  {
+    name: "Startup Edge",
+    noOfLoanees: 250,
+    historicalDebt: "₦300,000,000.00",
+    repaymentRate: 68,
+    debtRepaid: "₦204,000,000.00",
+    currentDebt: "₦96,000,000.00"
+  },
+  {
+    name: "Tech Academy",
+    noOfLoanees: 700,
+    historicalDebt: "₦450,000,000.00",
+    repaymentRate: 55,
+    debtRepaid: "₦247,500,000.00",
+    currentDebt: "₦202,500,000.00"
+  },
+  {
+    name: "Design Pros",
+    noOfLoanees: 30,
+    historicalDebt: "₦72,000,000.00",
+    repaymentRate: 43,
+    debtRepaid: "₦30,960,000.00",
+    currentDebt: "₦41,040,000.00"
+  },
+  {
+    name: "SkillBox",
+    noOfLoanees: 50,
+    historicalDebt: "₦98,000,000.00",
+    repaymentRate: 72,
+    debtRepaid: "₦70,560,000.00",
+    currentDebt: "₦27,440,000.00"
+  },
+  {
+    name: "CodeUp",
+    noOfLoanees: 60,
+    historicalDebt: "₦180,000,000.00",
+    repaymentRate: 30,
+    debtRepaid: "₦54,000,000.00",
+    currentDebt: "₦126,000,000.00"
+  },
+  {
+    name: "LearnSmart",
+    noOfLoanees: 85,
+    historicalDebt: "₦110,000,000.00",
+    repaymentRate: 67,
+    debtRepaid: "₦73,700,000.00",
+    currentDebt: "₦36,300,000.00"
+  },
+  {
+    name: "Bright Future Academy",
+    noOfLoanees: 95,
+    historicalDebt: "₦250,000,000.00",
+    repaymentRate: 78,
+    debtRepaid: "₦195,000,000.00",
+    currentDebt: "₦55,000,000.00"
+  },
+  {
+    name: "NextLevel Coders",
+    noOfLoanees: 150,
+    historicalDebt: "₦500,000,000.00",
+    repaymentRate: 20,
+    debtRepaid: "₦100,000,000.00",
+    currentDebt: "₦400,000,000.00"
+  }
+]
+
+

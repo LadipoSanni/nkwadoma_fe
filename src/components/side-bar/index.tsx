@@ -12,7 +12,10 @@ import NavbarContainer from "@/reuseable/ui/Navbar";
 import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
 import {Icon} from "@iconify/react";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
-import {MdOutlineAccountBalance, MdOutlineInventory2, MdOutlinePayments, MdOutlineBusinessCenter,MdOutlinePersonOutline, MdOutlinePeopleAlt,MdOutlineHome} from "react-icons/md";
+import {MdOutlineAccountBalance, MdOutlineInventory2,MdOutlineReceiptLong, MdOutlinePayments, MdOutlineBusinessCenter,MdOutlinePersonOutline, MdOutlinePeopleAlt,MdOutlineHome} from "react-icons/md";
+import {useLogoutMutation} from "@/service/users/api";
+// import { MdOutlineReceiptLong } from "react-icons/md";
+
 
 
 // import styles  from "@//components/side-bar/index.module.css"
@@ -22,6 +25,8 @@ const SideBar = () => {
     const router = useRouter();
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
+    const [logout] = useLogoutMutation()
+
 
     const [role, setRole] = useState('')
     const user_role = getUserDetailsFromStorage('user_role')
@@ -50,6 +55,16 @@ const SideBar = () => {
             }
         }
 
+    }
+    const handleLogout =  async () => {
+     try{
+         const response  = await logout({})
+         console.log("resr: ", response)
+     }catch (error){
+         console.log("error: ", error)
+          // redirect("/auth/login")
+
+     }
     }
 
     const currentTextLiterals = `text-[#626F8C]`;
@@ -127,6 +142,37 @@ const SideBar = () => {
 
     ]
 
+    const LOANEE : navbarRouterItemsProps[] = [
+        {
+            icon: <MdOutlineHome
+                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
+            />,
+            id: 'overview',
+            name: "Overview",
+            route: '/overview'
+        },
+        {
+            icon: <MdOutlineReceiptLong
+                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
+            />,
+            id: 'transaction',
+            name: "Transaction",
+            route: '/transaction'
+        },
+        {
+            icon: <Icon
+                icon='iconoir:hand-cash'
+                color={current === 'Loan' ? '#142854' : '#667085'}
+                height={"1.2rem"}
+                width={"1.3rem"}
+            />,
+            id: 'repayment',
+            name: "Repayment",
+            route: '/repayment'
+        },
+
+
+    ]
 
     const INSTITUTION_ADMIN: navbarRouterItemsProps[] = [
         {
@@ -134,7 +180,7 @@ const SideBar = () => {
                 className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}/>,
             id: 'Overview',
             name: 'Overview',
-            route: '/overview'
+            route: '/Overview'
         },
         {
             id: 'program',
@@ -199,20 +245,22 @@ const SideBar = () => {
             icon: <LuLogOut
                 color={current === "Logout" ? '#142854' : '#939CB0'}
                 className={` h-[1.2rem] w-[1.2rem] `}/>,
-            handleClick: handleClick
+            handleClick: handleLogout
         },
 
     ]
-    const ll = [
+
+    const sideBarContent = [
         {name: "PORTFOLIO_MANAGER", value: PORTFOLIO_MANAGER},
-        {name: "INSTITUTION_ADMIN", value: INSTITUTION_ADMIN}
+        {name: "ORGANIZATION_ADMIN", value: INSTITUTION_ADMIN},
+        {name: 'LOANEE', value: LOANEE }
     ]
 
     const getUserSideBarByRole = (userrole: string): navbarRouterItemsProps[] | undefined => {
-        for (let i = 0; i < ll.length; i++) {
-            if (ll.at(i)?.name === userrole) {
-                if (ll.at(i)?.value) {
-                    return ll.at(i)?.value as navbarRouterItemsProps[]
+        for (let i = 0; i < sideBarContent.length; i++) {
+            if (sideBarContent.at(i)?.name === userrole) {
+                if (sideBarContent.at(i)?.value) {
+                    return sideBarContent.at(i)?.value as navbarRouterItemsProps[]
                 }
             }
         }
@@ -267,7 +315,7 @@ const SideBar = () => {
                     className={`hidden md:grid  md:bg-meedlWhite md:w-[16vw]  md:px-4  md:border-r md:border-r-[blue300] md:z-0 md:h-[100%]`}
                 >
                     <div className={` md:grid md:gap-4   md:h-fit `}>
-                        <div className={`md:h-fit py-6 md:w-full   md:grid   `}>
+                        <div className={`md:h-[10vh] md:mt-auto md:mb-auto md:w-full   md:grid   `}>
                             <Image
                                 id={'meddleMainLogoOnAdminLayout'}
                                 data-testid={'meddleMainLogoOnAdminLayout'}
@@ -283,8 +331,8 @@ const SideBar = () => {
                         </div>
                     </div>
 
-                    <div className={`md:absolute md:grid  md:bottom-0 gap-3  px-4 md:h-fit md:w-full `}>
-                        <div className={` hidden md:grid md:h-fit  md:w-full `}>
+                    <div className={`md:absolute md:grid  md:bottom-5 gap-3  md:h-fit md:w-full `}>
+                        <div className={` hidden md:grid  md:h-fit  md:w-full `}>
                             < NavbarContainer items={navbarContainerItems}/>
                         </div>
                         {/*<div*/}

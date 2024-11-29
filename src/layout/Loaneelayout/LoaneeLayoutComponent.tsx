@@ -9,7 +9,7 @@ interface LoaneeLayoutProps {
 const LoaneeLayoutComponent: React.FC<LoaneeLayoutProps> = ({children}) => {
     return (
         <main data-testid="AcceptedTraineeDashboardMain" id="AccepTrMain"
-              className="flex bg-gray">
+              className="h-screen w-screen grid md:flex md:overflow-hidden md:relative md:w-screen md:h-screen">
             <SideBar/>
             <div data-testid={"AcceptedTraineeDashboardContainer"} id={"AcceptTrContainer"}
                  className="flex flex-col flex-grow bg-gray">

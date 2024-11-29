@@ -13,7 +13,6 @@ const PasswordCriteria: React.FC<PasswordCriteriaProps> = ({criteriaStatus, id}:
         "At least one special character",
         "At least one uppercase character",
         "At least one lowercase character",
-        "At least one digit"
     ];
 
     return (

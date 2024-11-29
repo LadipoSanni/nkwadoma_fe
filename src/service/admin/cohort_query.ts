@@ -1,7 +1,11 @@
-import { createApi  } from '@reduxjs/toolkit/query/react'
+import {createApi} from '@reduxjs/toolkit/query/react'
 import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 
-interface LoanBreakdown { itemName: string; itemAmount: string; currency: string; }
+interface LoanBreakdown {
+    itemName: string;
+    itemAmount: string;
+    currency: string;
+}
 
 
 export const cohortApi = createApi({
@@ -10,29 +14,29 @@ export const cohortApi = createApi({
     tagTypes: ['cohort'],
     endpoints: (builder) => ({
         createCohort: builder.mutation({
-            query:(formData:{
+            query: (formData: {
                 programId: string,
                 name: string,
                 startDate: string,
                 cohortDescription: string,
                 imageUrl: string | null,
-                loanBreakdowns:LoanBreakdown[]
+                loanBreakdowns: LoanBreakdown[]
 
             }) => ({
-              url: 'cohort/create',
-              method: "POST",
-              body: formData,
+                url: 'cohort/create',
+                method: "POST",
+                body: formData,
             }),
             invalidatesTags: ['cohort'],
         }),
 
-        deleteProgram:  builder.mutation({
+        deleteCohort: builder.mutation({
             query: ({id}) => ({
                 url: `/delete/${id}`,
                 method: "DELETE",
-              }),
-              invalidatesTags:  ({ id }) => [{ type: 'cohort', id }],
-          }),
+            }),
+            invalidatesTags: ({id}) => [{type: 'cohort', id}],
+        }),
 
         viewAllLoanee: builder.query({
             query: (data: {
@@ -46,8 +50,59 @@ export const cohortApi = createApi({
             }),
             providesTags: ['cohort'],
         }),
+
+        viewCohortDetails: builder.query({
+            query: (param: {
+                programId: string
+                cohortId: string,
+            }) => ({
+                url: `/cohort-details`,
+                method: "GET",
+                params: param
+            }),
+            providesTags: [`cohort`]
+        }),
+
+        getAllCohortsByOrganisation: builder.query({
+            query: (param: {
+                pageSize?: number;
+                pageNumber?: number;
+            }) => ({
+                url: '/organization-cohort/all',
+                method: "GET",
+                params: param,
+            }),
+            providesTags: ['cohort'],
+        }),
+
+        searchCohortByOrganisation: builder.query({
+            query: (cohortName) => ({
+                url: '/searchCohort',
+                method: 'GET',
+                params: {cohortName},
+            }),
+
+        }),
+
+        editCohort: builder.mutation({
+          query: ({data}) => ({
+                 url: "cohort/edit" ,
+                method: "POST",
+                body: data,
+         }),
+          invalidatesTags: ['cohort'],
+        })
     })
 })
 
-export const { useCreateCohortMutation, useViewAllLoaneeQuery } = cohortApi;
+
+
+export const {
+    useCreateCohortMutation,
+    useViewAllLoaneeQuery,
+    useGetAllCohortsByOrganisationQuery,
+    useSearchCohortByOrganisationQuery,
+    useViewCohortDetailsQuery,
+    useDeleteCohortMutation, useEditCohortMutation
+} = cohortApi;
 
