@@ -35,7 +35,9 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
 
     const handleContinueClick = () => {
         if (isFormSubmitted) {
-            setCurrentStep(3);
+            if (setCurrentStep) {
+                setCurrentStep(3);
+            }
         }
     };
 
