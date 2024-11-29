@@ -182,7 +182,27 @@ function Organization() {
                                 {tab.actionBar}
                             </div>
                             <div className='mt-6'>
-                                {tab.table}
+                                {isLoading ?
+                                    <div>
+                                    </div>
+                                    :
+                                    <Tables
+                                        tableData={data?.data?.body}
+                                        tableHeader={organizationHeader}
+                                        tableHeight={52}
+                                        sx='cursor-pointer'
+                                        handleRowClick={() => {
+                                        }}
+                                        tableCellStyle={'h-12'}
+                                        optionalRowsPerPage={10}
+                                        staticHeader='Name'
+                                        staticColunm='name'
+                                        sideBarTabName='Organization'
+                                        optionalFilterName='Deactivated'
+                                        condition={true}
+                                        icon={MdOutlineAccountBalance}
+                                    />
+                                }
                             </div>
                         </TabsContent>
                     ))

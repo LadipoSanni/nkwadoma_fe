@@ -10,9 +10,18 @@ export const organizationApi = createApi({
             query: (data) => ({
                 url: `/organization/all?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}`,
                 method: 'GET'
-            })
+            }),
+            providersTag: ['invite', "organization"]
+        }),
+        inviteOrganization: builder.mutation({
+            query: (data) => ({
+                url : `/organization/invite`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['invite', "organization"]
         })
     })
 })
 
-export const { useViewAllOrganizationsQuery} = organizationApi
+export const { useViewAllOrganizationsQuery, useInviteOrganizationMutation} = organizationApi
