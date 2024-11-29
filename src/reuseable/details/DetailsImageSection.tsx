@@ -33,7 +33,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                                          handleDropdownClicked,
                                                          buttonText,
                                                          tagButtonData,
-                                                        isEditButton = true,
+                                                         isEditButton = true,
                                                      }) => {
     const [isOpen, setIsOpen] = React.useState(false);
 
@@ -59,7 +59,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                 data-testid="cohort-image"
                             />
                         ) : Icon ? (
-                            <div className="w-full h-72 flex justify-center items-center">
+                            <div className="w-32 h-32 flex bg-[#D9EAFF] rounded-full justify-center items-center">
                                 <Icon className="text-6xl text-meedlBlue"/>
                             </div>
                         ) : null}
@@ -89,7 +89,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
 
                     <div className={`flex flex-row md:space-x-3 space-x-2 md:pt-5 pt-8 w-full`}>
                         {
-                            isEditButton? <div>
+                            isEditButton ? <div>
                                 <Button variant={"secondary"}
                                         size={"lg"}
                                         className={`bg-meedlBlue text-meedlWhite w-full h-12 flex justify-center items-center`}
