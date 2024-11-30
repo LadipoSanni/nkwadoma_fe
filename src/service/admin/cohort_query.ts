@@ -43,19 +43,17 @@ export const cohortApi = createApi({
                 cohortId?: string,
                 pageNumber?: number;
                 pageSize?: number;
-            }) => {
-                console.log(data, 'view all loanee');
-                return ({
-                    url: '/cohort/all/loanee',
-                    method: "GET",
-                    params: data,
-                })
-            },
+            }) => ({
+                url: '/cohort/all/loanee',
+                method: "GET",
+                params: data,
+            }),
             providesTags: ['cohort'],
         }),
 
         viewCohortDetails: builder.query({
             query: (param: {
+                programId: string
                 cohortId: string,
             }) => ({
                 url: `/cohort-details`,
@@ -87,15 +85,16 @@ export const cohortApi = createApi({
         }),
 
         editCohort: builder.mutation({
-            query: ({data}) => ({
-                url: "cohort/edit",
+          query: ({data}) => ({
+                 url: "cohort/edit" ,
                 method: "POST",
                 body: data,
-            }),
-            invalidatesTags: ['cohort'],
+         }),
+          invalidatesTags: ['cohort'],
         })
     })
 })
+
 
 
 export const {
