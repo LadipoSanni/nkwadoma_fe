@@ -213,16 +213,19 @@ const CohortDetails = () => {
         setAddTrainee(true)
     }
     const handleRefer = async () => {
-        const loaneeId = "8919744e-f248-47a1-a6d0-8edf0b6f8a32"
-        const response  = await referLoanee(loaneeId)
-        console.log("data value : ", response.data.message)
+        const loaneeId = "create a list and pass the list of selected loanee (i.e, loanee ids)"
+        const cohortId = "get the cohort id from the selected cohort"
+        const formData ={
+            "cohortId": cohortId,
+            "loaneeIds": [loaneeId]
+        }
+        const response  = await referLoanee(formData)
         toast({
             description: response.data.message,
             status: "success",
         });
 
     }
-
 
     const handleRowClick = (row: TableRowData) => {
         setIsRowSelected(isRowSelected);
@@ -238,10 +241,6 @@ const CohortDetails = () => {
                     <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
                         onClick={handleBackClick}>Back to cohort</h1>
                 </div>
-                <Button variant={"outline"}
-                        size={"lg"}
-                        className={`bg-red-500 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
-                        onClick={handleRefer} >{isLoading ? <Isloading/> : "Refer"}</Button>
 
             </div>
 
@@ -313,7 +312,7 @@ const CohortDetails = () => {
                                         <Button variant={"outline"}
                                                 size={"lg"}
                                                 className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
-                                                onClick={handleRefer} disabled={!isRowSelected}>Refer</Button>
+                                                onClick={handleRefer} disabled={!isRowSelected}>{isLoading ? <Isloading/> : "Refer"}</Button>
                                     </div>
                                     <div id={`addTraineeButton`}>
                                         <Button variant={"secondary"}

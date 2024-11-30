@@ -39,13 +39,13 @@ export const cohortApi = createApi({
         }),
 
         referLoanee: builder.mutation({
-            query: (param: {
+            query: (formData: {
                 cohortId: string
-                loaneeIds: [],
+                loaneeIds: string[]
             }) => ({
-                url: `/cohort/loanee/refer?cohortId`,
+                url: `/cohort/loanee/refer`,
                 method: "POST",
-                params: param
+                body: formData
             }),
             invalidatesTags: ({id}) => [{type: 'cohort', id}],
         }),
