@@ -343,7 +343,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                 id="adminFirstName"
                 name="adminFirstName"
                 className="w-full p-3 border rounded focus:outline-none mt-3"
-                placeholder="Enter admin full name"
+                placeholder="Enter admin first name"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value;
                   const formattedValue = value.replace(/[^A-Za-z]/g, '');
