@@ -288,9 +288,7 @@
 //                     {submitButtonText}
 //                 </Button>
 //             </DialogFooter>
-//             {
-//                 <div className={`text-error500 flex justify-center items-center`}>{error}</div>
-//             }
+//            
 //         </form>
         
 //     )
