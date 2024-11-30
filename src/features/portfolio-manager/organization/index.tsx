@@ -1,186 +1,248 @@
 "use client";
-import React,{useState} from 'react'
-import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import React, {useEffect, useState} from 'react'
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
-import { inter } from '@/app/fonts'
+import {inter} from '@/app/fonts'
 import OrganizationActionBar from '@/components/portfolio-manager/Organization-action-bar'
-import { organizationList } from '@/utils/LoanRequestMockData/cohortProduct';
-import { MdOutlineAccountBalance } from 'react-icons/md';
+// import {organizationList} from '@/utils/LoanRequestMockData/cohortProduct';
+import {MdOutlineAccountBalance} from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
 import InviteOrganizationForm from '@/components/portfolio-manager/Invite-organization-form';
-import { Cross2Icon } from "@radix-ui/react-icons";
+import {Cross2Icon} from "@radix-ui/react-icons";
+import {useViewAllOrganizationsQuery} from "@/service/admin/organization";
+import { formatAmount } from '@/utils/Format';
+import { useSearchOrganisationByNameQuery } from '@/service/admin/organization';
 
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
-   }
+}
 
 
 const tabData = [
-    {name:"Active",
+    {
+        name: "Active",
         value: "active"
-      },
-      {
-        name:"Invited",
+    },
+    {
+        name: "Invited",
         value: "invite"
-      },
-      {
-        name:"Deactivated",
+    },
+    {
+        name: "Deactivated",
         value: "deactivate"
-      }
-  ]
+    }
+]
 
-  
+interface organizationListPros extends TableRowData{
+    name:string,
+    rcNumber: string,
+    totalDebtRepaid:string,
+    totalCurrentDebt:string,
+    totalHistoricalDebt:string,
+    repaymentRate:number,
+    phoneNumber:string,
+    numberOfPrograms: number,
+    tin:string,
+    invitedDate:string,
+    numberOfLoanees:string
+
+}
+
+
 
 function Organization() {
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
-        // setSearchTerm(event.target.value);
-        console.log(event)
-      };
+   
 
-      const [isOpen,setIsOpen] =  useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-      const handleInviteOrganizationClick = () => {
-         setIsOpen(!isOpen);
-      }
 
-      const organizationHeader = [
-        { title: <div >Name</div> , sortable: true, id: 'name', selector: (row:TableRowData ) => row.name},
-        { title: "No. of loanees" , sortable: true, id: 'noOfLoanees', selector: (row:TableRowData ) => row.noOfLoanees},
-        { title: "Historical debt" , sortable: true, id: 'historicalDebt', selector: (row:TableRowData ) => row.historicalDebt},
-        { title: "Repayment rate(%)" , sortable: true, id: 'repaymentRate', selector: (row:TableRowData ) => row.historicalDebt},
-        { title: "Debt repaid" , sortable: true, id: 'debtRepaid', selector: (row:TableRowData ) => row.historicalDebt},
-          { title: "Current debt" , sortable: true, id: 'currentDebt', selector: (row:TableRowData ) => row.currentDebt},
-      ]
-      
+    const handleInviteOrganizationClick = () => {
+        setIsOpen(!isOpen);
+    }
+    const dataElement = {
+        pageNumber: 0,
+        pageSize: 200
+    }
+    const [searchTerm, setSearchTerm] = useState('');
+    const [organizationList, setOrganizationList] = useState<organizationListPros[]>([]);
+
+    const {data} = useViewAllOrganizationsQuery(dataElement)
+    const { data: searchResults } = useSearchOrganisationByNameQuery(searchTerm, { skip: !searchTerm });
+
+    // console.log("data: ", organizationList)
+
+  
+
+    useEffect(()=> {
+        if (searchTerm && searchResults && searchResults.data) {
+            const organizations = searchResults.data;
+            setOrganizationList(organizations);
+        } else if (!searchTerm && data && data?.data) {
+            const organizations = data?.data?.body;
+            setOrganizationList(organizations);
+           
+        }
+    },[searchTerm,searchResults,data])
+
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+        console.log("the eventsearch: ",event)
+    };
+    
+
+    
+  
+    const organizationHeader = [
+        {title: <div>Name</div>, sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
+        {title: "No. of loanees", sortable: true, id: 'numberOfLoanees', selector: (row: TableRowData) => row.numberOfLoanees},
+        {
+            title: "Historical debt",
+            sortable: true,
+            id: 'totalHistoricalDebt',
+            selector: (row: TableRowData) => formatAmount(row.totalHistoricalDebt)},
+        {
+            title: "Repayment rate(%)",
+            sortable: true,
+            id: 'repaymentRate',
+            selector: (row: TableRowData) => row.repaymentRate
+        },
+        {title: "Debt repaid", sortable: true, id: 'totalDebtRepaid', selector: (row: TableRowData) => formatAmount(row.totalDebtRepaid)},
+        {title: "Current debt", sortable: true, id: 'totalCurrentDebt', selector: (row: TableRowData) => formatAmount(row.totalCurrentDebt)},
+    ]
+
 
     const tabContent = [
         {
             actionBar: <div>
-                <OrganizationActionBar 
-                  id='activeId'
-                  value=''
-                  onChange={handleSearchChange}
-                  handleInviteOrganizationClick={handleInviteOrganizationClick}
+                <OrganizationActionBar
+                    id='activeId'
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    handleInviteOrganizationClick={handleInviteOrganizationClick}
                 />
             </div>,
-            value:"active",
+            value: "active",
             table: <div>
                 <Tables
-                tableData={organizationList}
-                tableHeader={organizationHeader}
-                tableHeight={52}
-                sx='cursor-pointer'
-                handleRowClick={() => {}}
-                tableCellStyle={'h-12'}
-                optionalRowsPerPage={10}
-                staticHeader='Name'
-                staticColunm='name'
-                sideBarTabName='Organization'
-                optionalFilterName='Active'
-                condition={true}
-                icon={MdOutlineAccountBalance}
+                    tableData={organizationList.slice().reverse()}
+                    tableHeader={organizationHeader}
+                    tableHeight={52}
+                    sx='cursor-pointer'
+                    handleRowClick={() => {
+                    }}
+                    tableCellStyle={'h-12'}
+                    optionalRowsPerPage={10}
+                    staticHeader='Name'
+                    staticColunm='name'
+                    sideBarTabName='Organization'
+                    optionalFilterName='Active'
+                    condition={true}
+                    icon={MdOutlineAccountBalance}
                 />
             </div>
         },
         {
             actionBar: <div>
-                 <OrganizationActionBar 
-                  id='inviteId'
-                  value=''
-                  onChange={handleSearchChange}
-                  handleInviteOrganizationClick={handleInviteOrganizationClick}
+                <OrganizationActionBar
+                    id='inviteId'
+                    value=''
+                    onChange={handleSearchChange}
+                    handleInviteOrganizationClick={handleInviteOrganizationClick}
                 />
             </div>,
-            value:"invite",
+            value: "invite",
             table: <div>
-               <Tables
-                tableData={organizationList}
-                tableHeader={organizationHeader}
-                tableHeight={52}
-                sx='cursor-pointer'
-                handleRowClick={() => {}}
-                tableCellStyle={'h-12'}
-                optionalRowsPerPage={10}
-                staticHeader='Name'
-                staticColunm='name'
-                sideBarTabName='Organization'
-                optionalFilterName='Invited'
-                icon={MdOutlineAccountBalance}
-                condition={true}
-               
+                <Tables
+                    tableData={organizationList.slice().reverse()}
+                    tableHeader={organizationHeader}
+                    tableHeight={52}
+                    sx='cursor-pointer'
+                    handleRowClick={() => {
+                    }}
+                    tableCellStyle={'h-12'}
+                    optionalRowsPerPage={10}
+                    staticHeader='Name'
+                    staticColunm='name'
+                    sideBarTabName='Organization'
+                    optionalFilterName='Invited'
+                    icon={MdOutlineAccountBalance}
+                    condition={true}
+
                 />
             </div>
         },
         {
             actionBar: <div>
-                 <OrganizationActionBar 
-                  id='deactivateId'
-                  value=''
-                  onChange={handleSearchChange}
-                  handleInviteOrganizationClick={handleInviteOrganizationClick}
+                <OrganizationActionBar
+                    id='deactivateId'
+                    value=''
+                    onChange={handleSearchChange}
+                    handleInviteOrganizationClick={handleInviteOrganizationClick}
                 />
             </div>,
-            value:"deactivate",
+            value: "deactivate",
             table: <div>
-               <Tables
-                tableData={organizationList}
-                tableHeader={organizationHeader}
-                tableHeight={52}
-                sx='cursor-pointer'
-                handleRowClick={() => {}}
-                tableCellStyle={'h-12'}
-                optionalRowsPerPage={10}
-                staticHeader='Name'
-                staticColunm='name'
-                sideBarTabName='Organization'
-                optionalFilterName='Deactivated'
-                condition={true}
-                icon={MdOutlineAccountBalance}
+                <Tables
+                    tableData={organizationList.slice().reverse()}
+                    tableHeader={organizationHeader}
+                    tableHeight={52}
+                    sx='cursor-pointer'
+                    handleRowClick={() => {
+                    }}
+                    tableCellStyle={'h-12'}
+                    optionalRowsPerPage={10}
+                    staticHeader='Name'
+                    staticColunm='name'
+                    sideBarTabName='Organization'
+                    optionalFilterName='Deactivated'
+                    condition={true}
+                    icon={MdOutlineAccountBalance}
                 />
             </div>
         }
-      ]
-  return (
-    <div className={`px-6 py-5 ${inter.className}`}>
-        <Tabs defaultValue='active'>
-        <TabsList className= {`z-50 `}>
-      {tabData.map((tab,index) => (
-            <TabsTrigger data-testid={`tabDataName${tab.value}`}  value={tab.value} key={index}>
-                {tab.name}
-          </TabsTrigger>
-          ))}
-      </TabsList>
-      {
-          tabContent.map((tab, index) => (
-            <TabsContent key={index} value={tab.value}  className='mt-5'>
-                <div className='mt-8'>
-                  {tab.actionBar}
-                </div>
-                <div className='mt-6'>
-                  {tab.table}
-                </div>
-            </TabsContent>
-          ))
-        }
-        </Tabs>
-        <div>
-          <TableModal
-            isOpen={isOpen}
-            closeModal={() => setIsOpen(false)}
-            className='pb-1'
-            headerTitle='Invite organization'
-            closeOnOverlayClick={true}
-            icon={Cross2Icon}
-          >
-            <InviteOrganizationForm
-               setIsOpen={setIsOpen}
-            />
-          </TableModal>
+    ]
+    return (
+        <div className={`px-6 py-5 ${inter.className}`}>
+            <Tabs defaultValue='active'>
+                <TabsList className={`z-50 `}>
+                    {tabData.map((tab, index) => (
+                        <TabsTrigger data-testid={`tabDataName${tab.value}`} value={tab.value} key={index}>
+                            {tab.name}
+                        </TabsTrigger>
+                    ))}
+                </TabsList>
+                {
+                    tabContent.map((tab, index) => (
+                        <TabsContent key={index} value={tab.value} className='mt-5'>
+                            <div className='mt-8'>
+                                {tab.actionBar}
+                            </div>
+                            <div className='mt-6'>
+                               {tab.table}
+                            </div>
+                        </TabsContent>
+                    ))
+                }
+            </Tabs>
+            <div>
+                <TableModal
+                    isOpen={isOpen}
+                    closeModal={() => setIsOpen(false)}
+                    className='pb-1'
+                    headerTitle='Invite organization'
+                    closeOnOverlayClick={true}
+                    icon={Cross2Icon}
+                >
+                    <InviteOrganizationForm
+                        setIsOpen={setIsOpen}
+                    />
+                </TableModal>
+            </div>
         </div>
-    </div>
-  )
+    )
 }
 
 export default Organization

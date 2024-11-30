@@ -61,7 +61,7 @@ const LoaneeOnboarding = () => {
                         {currentStep === 2 && 'Additional information'}
                         {currentStep === 3 && 'Confirm loan referral acceptance'}
                     </h2>
-                    <StepContent step={currentStep} />
+                    <StepContent step={currentStep} setCurrentStep={setCurrentStep} />
                     {currentStep === 1 && (
                         <DynamicIdentityVerificationModal
                             isOpen={showModal}
@@ -69,17 +69,21 @@ const LoaneeOnboarding = () => {
                             onThirdStepContinue={handleThirdStepContinue}
                         />
                     )}
-                    <Button id="continueButton"
-                            className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem]  hover:bg-meedlBlue focus:bg-meedlBlue'}
+                    {(currentStep === 0 || currentStep === 1) && (
+                        <Button
+                            id="continueButton"
+                            className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem] hover:bg-meedlBlue focus:bg-meedlBlue'}
                             onClick={() => {
                                 if (currentStep === 1) {
                                     setShowModal(true);
                                 } else {
-                                    setCurrentStep((prevStep) => prevStep + 1);
+                                    setCurrentStep(currentStep + 1);
                                 }
-                            }}>
-                        {currentStep === 1 ? 'Start identity verification' : 'Continue'}
-                    </Button>
+                            }}
+                        >
+                            {currentStep === 1 ? 'Start identity verification' : 'Continue'}
+                        </Button>
+                    )}
                 </section>
             </div>
         </div>
