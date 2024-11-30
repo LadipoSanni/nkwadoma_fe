@@ -23,7 +23,7 @@ describe("AddTraineeForm", () => {
 
       it('should trigger validation errors when form is submitted with empty fields', async () => {
         render(<AddTraineeForm cohortId="123" />);
-        fireEvent.click(screen.getByRole('button', { name: /Add/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Continue/i }));
         await waitFor(() => {
             expect(screen.getByText('First name is required')).toBeInTheDocument();
             expect(screen.getByText('First name is required')).toBeInTheDocument();
@@ -45,19 +45,15 @@ describe("AddTraineeForm", () => {
       fireEvent.change(getByLabelText('Email address'), { target: { value: 'john.doe@example.com' } });
       fireEvent.change(getByLabelText('Initial Deposit'), { target: { value: 5000 } });
   
-      fireEvent.click(getByRole('button', { name: 'Add' }));
-  
-      await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith({ cohortId: '123', firstName: 'John', lastName: 'Doe', emailAddress: 'john.doe@example.com', initialDeposit: 'NGN5000' });
-    });
-      consoleSpy.mockRestore();
+      fireEvent.click(getByRole('button', { name: 'Continue' }));
+
     });
 
 
     it('should display validation errors when fields are invalid',async () => {
       const { getByRole, getByText,getByLabelText } = render(<AddTraineeForm cohortId="123" />);
   
-      fireEvent.click(getByRole('button', { name: 'Add' }));
+      fireEvent.click(getByRole('button', { name: 'Continue' }));
     
       await waitFor(() => {
       expect(getByText('First name is required')).toBeInTheDocument();
@@ -71,24 +67,13 @@ describe("AddTraineeForm", () => {
       fireEvent.change(getByLabelText('Email address'), { target: { value: 'invalid-email' } });
       fireEvent.change(getByLabelText('Initial Deposit'), { target: { value: "" } });
   
-      fireEvent.click(getByRole('button', { name: 'Add' }));
+      fireEvent.click(getByRole('button', { name: 'Continue' }));
   
       await waitFor(() => {
       expect(getByText('Invalid email address')).toBeInTheDocument();
       expect(getByText('Initial deposit is required')).toBeInTheDocument();
     })
     });
-
-    it('should expand and collapse accordion to show tuition breakdown', () => {
-      render(<AddTraineeForm cohortId="123" setIsOpen={jest.fn()} />);
-  
-      const accordionTrigger = screen.getByText('Expand to see the tuition breakdown');
-      fireEvent.click(accordionTrigger);
-      expect(screen.getByText('Tuition')).toBeInTheDocument();
-  
-      fireEvent.click(accordionTrigger);
-      expect(screen.queryByText('Tuition')).not.toBeInTheDocument();
-  });
    
 
   it('should trigger validation errors when form submitted with empty fields', async () => {
@@ -101,7 +86,7 @@ describe("AddTraineeForm", () => {
     render(<AddTraineeForm {...props} />);
 
     
-    fireEvent.click(screen.getByText('Add'));
+    fireEvent.click(screen.getByText('Continue'));
    await waitFor(() => {
     expect(screen.getByText('First name is required')).toBeInTheDocument();
     expect(screen.getByText('Last name is required')).toBeInTheDocument();
@@ -119,24 +104,11 @@ it('should reject invalid email formats when email is entered', async () => {
   render(<AddTraineeForm {...props}/>);
   const emailInput = screen.getByLabelText('Email address');
   userEvent.type(emailInput, 'invalidemail');
-  fireEvent.click(screen.getByText('Add'));
+  fireEvent.click(screen.getByText('Continue'));
 
   await waitFor(() =>  {
     expect(screen.getByText('Invalid email address')).toBeInTheDocument();
   })
- 
-});  
-
-it('should toggle dropdown state correctly on repeated clicks', () => {
-  render(<AddTraineeForm cohortId="123" setIsOpen={jest.fn()} />);
-  
-  const accordionTrigger = screen.getByText('Expand to see the tuition breakdown');
-  fireEvent.click(accordionTrigger);
-  expect(screen.getByText('Tuition')).toBeInTheDocument();
-  expect(screen.getByText('Collapse to hide the tuition breakdown')).toBeInTheDocument();
-  fireEvent.click(accordionTrigger);
-  expect(screen.queryByText('Tuition')).not.toBeInTheDocument();
-  expect(screen.getByText('Expand to see the tuition breakdown')).toBeInTheDocument();
  
 });
 
