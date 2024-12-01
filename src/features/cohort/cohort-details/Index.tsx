@@ -62,9 +62,11 @@ const CohortDetails = () => {
         pageNumber: page
     }, {refetchOnMountOrArgChange: true,})
 
+
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortsId
     }, {refetchOnMountOrArgChange: true});
+
 
     useEffect(() => {
         if (data && data?.data) {
