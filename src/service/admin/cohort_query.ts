@@ -53,7 +53,6 @@ export const cohortApi = createApi({
 
         viewCohortDetails: builder.query({
             query: (param: {
-                programId: string
                 cohortId: string,
             }) => ({
                 url: `/cohort-details`,
