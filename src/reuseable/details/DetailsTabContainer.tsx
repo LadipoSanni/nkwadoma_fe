@@ -24,7 +24,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                                                     }) => {
 
     const ProgramHeader = [
-        {title: "Trainee", sortable: true, id: "trainee"},
+        {title: "Loanee", sortable: true, id: "trainee"},
         {title: "Referral Date", sortable: true, id: "referralDate"},
         {title: "Amount Requested", sortable: true, id: "amountRequested"},
     ];
