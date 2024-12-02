@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { Providers } from '@/app/provider';
-// import { store } from '@/store';
 import InviteAdminDialog from '@/reuseable/modals/InviteAdminDialog/Index';
 
 describe('InviteAdminDialog Component', () => {
