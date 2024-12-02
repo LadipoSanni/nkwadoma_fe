@@ -60,7 +60,7 @@ export const LoaneeInCohortView = () => {
 
     const TraineeHeader = [
         {
-            title: "LoaneeInCohortView",
+            title: "Loanee",
             sortable: true,
             id: "firstName",
             selector: (row: viewAllLoanees) => row.userIdentity?.firstName + " " + row.userIdentity?.lastName
