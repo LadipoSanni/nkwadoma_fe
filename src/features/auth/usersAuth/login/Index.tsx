@@ -111,7 +111,7 @@ const Login: React.FC = () => {
                 if (err?.data?.message) {
                     setErrorMessage(err?.data?.message);
                     toast({
-                        description: errorMessage,
+                        description: errorMessage || "Invalid email or password",
                         status: "error",
                     });
 

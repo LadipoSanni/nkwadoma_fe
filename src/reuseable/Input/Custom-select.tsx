@@ -5,6 +5,7 @@ import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 
 
 type Props = {
+  id?: string
     value?: string ,
     onChange: (value: string) => void,
     className?: string,
@@ -13,7 +14,7 @@ type Props = {
     placeHolder?: string
 }
 
-function CustomSelect({value,onChange,className,selectContent,name,placeHolder}: Props) {
+function CustomSelect({value,onChange,className,selectContent,name,placeHolder,id}: Props) {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -47,8 +48,13 @@ function CustomSelect({value,onChange,className,selectContent,name,placeHolder}:
          style={{zIndex:1000}}
          >
           <SelectGroup className=''>
-            {selectContent.map((content) => (
-              <SelectItem key={content}  value={String(content)}  className=''>
+            {selectContent.map((content,index) => (
+              <SelectItem 
+              key={`${content}-${index}`} 
+              id={`${id}-item-${index}`}
+              value={String(content)}  
+              className=''
+              >
                 {content}
               </SelectItem>
             ))}

@@ -52,13 +52,10 @@ export const cohortApi = createApi({
         }),
 
         viewCohortDetails: builder.query({
-            query: (param: {
-                programId: string
-                cohortId: string,
-            }) => ({
+            query: ( cohortId ) => ({
                 url: `/cohort-details`,
                 method: "GET",
-                params: param
+                params: cohortId
             }),
             providesTags: [`cohort`]
         }),
@@ -91,6 +88,13 @@ export const cohortApi = createApi({
                 body: data,
          }),
           invalidatesTags: ['cohort'],
+        }),
+        getCohortDetails: builder.query({
+            query: (cohortId:{id: string}) => ({
+                url: `/cohort-details`,
+                method: "GET",
+                params: cohortId
+            }),
         })
     })
 })
@@ -103,6 +107,7 @@ export const {
     useGetAllCohortsByOrganisationQuery,
     useSearchCohortByOrganisationQuery,
     useViewCohortDetailsQuery,
-    useDeleteCohortMutation, useEditCohortMutation
+    useDeleteCohortMutation, useEditCohortMutation,
+    useGetCohortDetailsQuery
 } = cohortApi;
 
