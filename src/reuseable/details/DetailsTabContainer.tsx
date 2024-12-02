@@ -86,7 +86,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                             />
                                 :
                                     <div
-                                        className="bg-[#F9F9F9] px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                        className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
                                         {isNotTableDataList?.map((item, index) => (
                                             <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                                  key={index}

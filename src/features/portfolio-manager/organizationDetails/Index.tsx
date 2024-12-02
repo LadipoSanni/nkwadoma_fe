@@ -1,7 +1,7 @@
-'use client';
+'use client'
 import React, {useState, useEffect} from 'react';
 import {inter, cabinetGrotesk} from '@/app/fonts';
-import {MdClose, MdOutlineArrowBack} from 'react-icons/md';
+import {MdOutlineArrowBack} from 'react-icons/md';
 import {IoGlobeOutline} from "react-icons/io5";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import Image from "next/image";
@@ -10,9 +10,7 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import {Button} from "@/components/ui/button";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import {Book} from "lucide-react";
-import {Dialog, DialogClose, DialogContent, DialogHeader, DialogOverlay, DialogTitle} from '@/components/ui/dialog';
-import {Label} from "@/components/ui/label";
-import {Input} from "@/components/ui/input";
+import InviteAdminDialog from "@/reuseable/modals/InviteAdminDialog/Index";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -22,72 +20,88 @@ interface viewAllProgramProps extends TableRowData {
     id?: string;
     name?: string;
     email?: string;
-    programStatus?: string;
+    adminStatus?: string;
 }
 
 const OrganizationDetails = () => {
     const [adminView, setAdminView] = useState<viewAllProgramProps[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [fullName, setFullName] = useState('');
-    const [email, setEmail] = useState('');
 
     const handleInviteClick = () => {
         setIsModalOpen(true);
     };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Handle form submission logic here
-        setIsModalOpen(false);
-    };
+    const details = {cohortStatus: "Active"};
 
     const dataList = [
-        {label: "Program mode", value: "Full-time"},
-        {label: "Program delivery type", value: ""},
-        {label: "Completion rate", value: "0%"},
-        {label: "Employment rate", value: "0%"},
-        {label: "Average starting income", value: ""},
-    ]
-    const loanDetail = [
-        {detail: "Repayment rate", value: "0%"},
-        {detail: "Debt percentage", value: "0%"},
-        {detail: "Total loan amount disbursed", value: ""},
-        {detail: "Total loan amount repaid", value: ""},
-        {detail: "Total loan amount outstanding", value: ""},
-    ]
+        {label: "Phone number", value: "+2349000021111"},
+        {
+            label: "Status",
+            value: <span
+                className={`rounded-[32px] h-[21px] w-[58px] flex items-center justify-center ${details.cohortStatus === "Active" ? "bg-[#E7F5EC] text-[#063F1A]" : "bg-[#FEF6E8] text-[#66440A]"}`}>
+                {details.cohortStatus}
+            </span>
+        },
+        {label: "Address", value: "312, Herbert Macaulay Way, Alagomeji, Yaba."},
+        {label: "Number of programs", value: "20"},
+        {label: "Number of cohorts", value: "30"},
+        {label: "Number of trainees", value: "2,000"},
+        {label: "Still in training", value: "57"},
 
+
+    ];
+    const loanDetail = [
+        {detail: "Number of loan requests", value: "200,000"},
+        {detail: "Pending loan offers", value: "1,000"},
+        {detail: "Number of performing loans", value: "120,000"},
+        {detail: "Number of non-performing loans", value: "5"},
+        {detail: "Historical debt", value: "₦92,500,000.00"},
+        {detail: "Amount repaid (in percent)", value: "₦59,500,000.00 (50.3%)"},
+        {detail: "Amount outstanding", value: "₦33,000,000.00"},
+        {detail: "Moratorium (in percent)", value: "₦10,000,000.00 (30.8%)"},
+
+
+    ];
 
     const adminsHeader = [
-        {title: 'Full name', sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
-        {title: 'Email', sortable: true, id: 'email', selector: (row: TableRowData) => row.email},
+        { title: 'Full name', sortable: true, id: 'name', selector: (row: TableRowData) => row.name },
+        { title: 'Email', sortable: true, id: 'email', selector: (row: TableRowData) => row.email },
         {
             title: <div className='relative md:right-4 md:left-4'>Status</div>,
             sortable: true,
-            id: 'programStatus',
-            selector: (row: TableRowData) => <span
-                className={`pt-1 pb-1 pr-3 pl-3 rounded-xl ${row.programStatus === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"}`}>{row.programStatus ?? "Declined"}</span>
+            id: 'adminStatus',
+            selector: (row: TableRowData) => (
+                <span
+                    className={`pt-1 pb-1 pr-3 pl-3 rounded-xl ${
+                        row.adminStatus === "Active"
+                            ? "text-[#063F1A] bg-[#E7F5EC]"
+                            : row.adminStatus === "Invited"
+                                ? "text-[#142854] bg-[#F3F8FF]"
+                                : "text-[#59100D] bg-[#FBE9E9]"
+                    }`}
+                >
+                {row.adminStatus ?? "Deactivated"}
+            </span>
+            ),
         },
     ];
 
     useEffect(() => {
         const mockData: viewAllProgramProps[] = [
-            {id: '1', name: 'John Doe', email: 'john.doe@example.com', programStatus: 'Accepted'},
-            {id: '2', name: 'Jane Smith', email: 'jane.smith@example.com', programStatus: 'Declined'},
-            {id: '3', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '4', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '5', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '6', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '7', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '8', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '9', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '10', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '11', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '12', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '13', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '14', name: 'Alice Johnson', email: 'alice.johnson@example.com', programStatus: 'Accepted'},
-            {id: '15', name: 'Jane Smith', email: 'jane.smith@example.com', programStatus: 'Declined'},
-
-
+            { id: '1', name: 'John Doe', email: 'john.doe@example.com', adminStatus: 'Active' },
+            { id: '2', name: 'Jane Smith', email: 'jane.smith@example.com', adminStatus: 'Deactivated' },
+            { id: '3', name: 'Alice Johnson', email: 'alice.johnson@example.com', adminStatus: 'Active' },
+            { id: '4', name: 'Bob Brown', email: 'bob.brown@example.com', adminStatus: 'Invited' },
+            { id: '5', name: 'Charlie Davis', email: 'charlie.davis@example.com', adminStatus: 'Active' },
+            { id: '6', name: 'Diana Evans', email: 'diana.evans@example.com', adminStatus: 'Deactivated' },
+            { id: '7', name: 'Eve Foster', email: 'eve.foster@example.com', adminStatus: 'Invited' },
+            { id: '8', name: 'Frank Green', email: 'frank.green@example.com', adminStatus: 'Active' },
+            { id: '9', name: 'Grace Harris', email: 'grace.harris@example.com', adminStatus: 'Deactivated' },
+            { id: '10', name: 'Hank Irving', email: 'hank.irving@example.com', adminStatus: 'Invited' },
+            { id: '11', name: 'Ivy Johnson', email: 'ivy.johnson@example.com', adminStatus: 'Active' },
+            { id: '12', name: 'Jack King', email: 'jack.king@example.com', adminStatus: 'Deactivated' },
+            { id: '13', name: 'Karen Lee', email: 'karen.lee@example.com', adminStatus: 'Invited' },
+            { id: '14', name: 'Leo Martin', email: 'leo.martin@example.com', adminStatus: 'Active' },
+            { id: '15', name: 'Mona Nelson', email: 'mona.nelson@example.com', adminStatus: 'Deactivated' },
         ];
 
         setAdminView(mockData);
@@ -107,7 +121,7 @@ const OrganizationDetails = () => {
                                  className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom'}>Admins</TabsTrigger>
                 </TabsList>
                 <TabsContent value="details">
-                    <div className={'mt-10 grid md:flex  md:justify-between'}>
+                    <div className={'mt-10 grid gap-9 md:gap-0 md:flex  md:justify-between'}>
                         <section className={'relative'}>
                             <Image src={'/asset/Image/Banner.svg'} alt={'banner'} height={134} width={351}/>
                             <div
@@ -157,61 +171,7 @@ const OrganizationDetails = () => {
                         />
                     </div>
 
-
-                    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                        <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]" />
-                        <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6 py-5 pl-5 pr-2'}>
-                            <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
-                                <DialogTitle className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Invite admin</DialogTitle>
-                                <DialogClose asChild>
-                                    <button id="createCohortDialogCloseButton" className="absolute right-5">
-                                        <MdClose id={'createCohortCloseIcon'} className="h-6 w-6 text-neutral950" />
-                                    </button>
-                                </DialogClose>
-                            </DialogHeader>
-                            <form className={`${inter.className} pr-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`} onSubmit={handleSubmit}>
-                                <main className={'grid gap-5'}>
-                                    <div className={'grid gap-2'}>
-                                        <Label htmlFor="fullName" className="block text-sm font-medium text-labelBlue">Full Name</Label>
-                                        <Input
-                                            type="text"
-                                            id="fullName"
-                                            placeholder="Enter Full name"
-                                            className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650'}
-                                            value={fullName}
-                                            onChange={(e) => setFullName(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className={'grid gap-2'}>
-                                        <Label htmlFor="email" className="block text-sm font-medium text-labelBlue">Email Address</Label>
-                                        <Input
-                                            type="email"
-                                            id="email"
-                                            placeholder="Enter email address"
-                                            className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650'}
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="flex justify-end gap-5 mt-3">
-                                        <Button
-                                            type="button"
-                                            className="h-[3.5625rem] w-[8.75rem] border border-meedlBlue text-meedlBlue px-4 py-2 bg-gray-300 rounded-md"
-                                            onClick={() => setIsModalOpen(false)}
-                                        >
-                                            Cancel
-                                        </Button>
-                                        <Button
-                                            type="submit"
-                                            className={`h-[3.5625rem] w-[8.75rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md`}
-                                        >
-                                            Continue
-                                        </Button>
-                                    </div>
-                                </main>
-                            </form>
-                        </DialogContent>
-                    </Dialog>
+                    <InviteAdminDialog isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
 
                 </TabsContent>
             </Tabs>
