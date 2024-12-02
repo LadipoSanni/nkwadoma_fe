@@ -193,7 +193,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
              <div className='z-10'>
               <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
-                  <Button variant={'default'} className='w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none' >
+                  <Button id='cohortInProgram' variant={'default'} className='w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none' >
                      Program
                     <span className='ml-4'>
                       {isDropdown ? (
@@ -222,8 +222,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                       }}
                       onOpenChange={toggleDropdown}
                       >
-                      <SelectTrigger className='flex justify-between w-72  focus:ring-0 focus:outline-none text-forgetPasswordBlue'>
-                      <SelectValue placeholder="Select Program" className='' data-testid='Select Program'/>
+                      <SelectTrigger id='cohortInProgramSelectTrigger' className='flex justify-between w-72  focus:ring-0 focus:outline-none text-forgetPasswordBlue'>
+                      <SelectValue  placeholder="Select Program" className='' data-testid='Select Program'/>
                       <div className='ml-4'>
                 {isDropdown ? (
           <ChevronUpIcon className="h-4 w-5 font-semibold" />
@@ -239,8 +239,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                         <SelectGroup
                           className=''
                         >
-                          {listOfPrograms.map((value) => (
-                           <SelectItem key={value.id} value={value.name} className='hover:bg-blue-200'>
+                          {listOfPrograms.map((value,index) => (
+                           <SelectItem key={value.id} id={`${value}-${index}`} value={value.name} className='hover:bg-blue-200'>
                              {value.name}
                            </SelectItem>
                           ))}

@@ -102,7 +102,7 @@ export const cohortApi = createApi({
           invalidatesTags: ['cohort'],
         }),
         getCohortDetails: builder.query({
-            query: (cohortId:{id: string}) => ({
+            query: (cohortId:{cohortId: string}) => ({
                 url: `/cohort-details`,
                 method: "GET",
                 params: cohortId

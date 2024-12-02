@@ -274,9 +274,11 @@ const ProgramDetails = () => {
                             </div>
                             <div className={'flex justify-between'}>
                                 <Button onClick={handleModalClick}
+                                 id="editButton"
                                         className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
                                     program</Button>
                                 <div role={"button"}
+                                     id="kebabId"
                                      className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
                                     <Kebab kebabOptions={programOptions} icon={IoEllipsisHorizontalSharp}
                                            handleDropDownClick={handleDropdownClick}/>
