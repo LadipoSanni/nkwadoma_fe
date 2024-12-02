@@ -59,7 +59,7 @@ const CohortDetails = () => {
     const size = 100;
     const [page] = useState(0);
     const {toast} = useToast()
-    const [referLoanee, { isLoading, isError }] = useReferLoaneeMutation()
+    const [referLoanee, { isLoading }] = useReferLoaneeMutation()
     const {data} = useViewAllLoaneeQuery({
         cohortId: cohortsId,
         pageSize: size,
