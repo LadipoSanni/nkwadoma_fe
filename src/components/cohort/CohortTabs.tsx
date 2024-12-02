@@ -13,6 +13,7 @@ import { inter } from '@/app/fonts'
 import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 import { setItemSessionStorage,getItemSessionStorage } from '@/utils/storage';
 import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
+// import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 
 interface allCohortsProps extends TableRowData {
   name:string,
@@ -62,6 +63,8 @@ const {data: cohortDetails} = useViewCohortDetailsQuery({
   programId: programId,
   cohortId: cohortId
 }, {refetchOnMountOrArgChange: true});
+
+// const {data:cohortInfo} = useViewCohortDetailsQuery({})
 
 useEffect(() => {
   if (cohortDetails && cohortDetails?.data) {
