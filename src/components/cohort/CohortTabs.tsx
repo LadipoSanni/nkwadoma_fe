@@ -12,8 +12,8 @@ import EditCohortForm from './EditCohortForm'
 import { inter } from '@/app/fonts'
 import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 import { setItemSessionStorage,getItemSessionStorage } from '@/utils/storage';
-import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
-// import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
+// import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
+import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 
 interface allCohortsProps extends TableRowData {
   name:string,
@@ -42,7 +42,7 @@ interface cohortList {
 const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
-  const [programId, setProgramId] = React.useState("")
+  // const [programId, setProgramId] = React.useState("")
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
   const [details, setDetails] = React.useState({
     id: "",
@@ -59,12 +59,12 @@ const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
     expectedEndDate: "",
 })
 
-const {data: cohortDetails} = useViewCohortDetailsQuery({
-  programId: programId,
+const {data: cohortDetails} = useGetCohortDetailsQuery({
   cohortId: cohortId
-}, {refetchOnMountOrArgChange: true});
+}, {skip: !cohortId,refetchOnMountOrArgChange: true});
 
 // const {data:cohortInfo} = useViewCohortDetailsQuery({})
+console.log("The cohortId: ",cohortId)
 
 useEffect(() => {
   if (cohortDetails && cohortDetails?.data) {
@@ -142,6 +142,7 @@ useEffect(() => {
     else if(id === "2") {
       setCohortId(String(row.id))
       setItemSessionStorage("programsId", String(row.programId))
+      setIsOpen(true)
       
       
     
@@ -152,12 +153,12 @@ useEffect(() => {
     }
   }
 
-  useEffect(()=> {
-    const id = getItemSessionStorage("programsId")
-    if (id) {
-      setProgramId(id)
-    }
-  },[])
+  // useEffect(()=> {
+  //   const id = getItemSessionStorage("programsId")
+  //   if (id) {
+  //     setProgramId(id)
+  //   }
+  // },[])
 
   
   
@@ -253,7 +254,7 @@ useEffect(() => {
       <Tabs defaultValue='incoming'>
         <TabsList className= {`z-50 ${inter.className}`}>
           {tabData.map((tab,index) => (
-            <TabsTrigger data-testid={`tabName${tab.value}`}  value={tab.value} key={index}>
+            <TabsTrigger id={`${tab.name}-${index}`} data-testid={`tabName${tab.value}`}  value={tab.value} key={index}>
                 {tab.name}
           </TabsTrigger>
           ))}

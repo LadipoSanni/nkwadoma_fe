@@ -12,7 +12,7 @@ describe("DeleteCohort", ()=> {
     });
 
     it('should render correctly when cohortId is undefined', () => {
-        const { getByText, getByAltText } = render(<DeleteCohort cohortId={undefined} headerTitle={"Cohort cohort"} title={"cohort"}/>);
+        const { getByText, getByAltText } = render(<DeleteCohort  headerTitle={"Cohort cohort"} title={"cohort"}/>);
         expect(getByAltText('deleteIcon')).toBeInTheDocument();
         expect(getByText("Are you sure you want to delete this cohort? This action can't be undone")).toBeInTheDocument();
         expect(getByText('Cancel')).toBeInTheDocument();
