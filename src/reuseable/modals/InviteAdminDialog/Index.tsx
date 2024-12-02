@@ -5,6 +5,7 @@ import { MdClose } from "react-icons/md";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useInviteAdminMutation } from '@/service/admin/organization';
 
 interface InviteAdminDialogProps {
     isModalOpen: boolean;
@@ -18,6 +19,7 @@ const InviteAdminDialog: React.FC<InviteAdminDialogProps> = ({ isModalOpen, setI
     const [errors, setErrors] = useState({ firstName: '', lastName: '', email: '' });
     const [isFormValid, setIsFormValid] = useState(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [inviteAdmin] = useInviteAdminMutation();
 
     const resetForm = () => {
         setFirstName('');
@@ -53,28 +55,42 @@ const InviteAdminDialog: React.FC<InviteAdminDialogProps> = ({ isModalOpen, setI
         setIsButtonDisabled(!valid);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (isFormValid) {
-            setIsModalOpen(false);
-            resetForm();
+            try {
+                await inviteAdmin({
+                    email,
+                    firstName,
+                    lastName,
+                    organizationDomain: 'EDUCATION',
+                    createdBy: '0e1e93ee-3392-4de4-90f0-2f29b9c6a7dc',
+                    role: 'PORTFOLIO_MANAGER'
+                }).unwrap();
+                console.log('Admin invited successfully');
+                setIsModalOpen(false);
+                resetForm();
+            } catch (error) {
+                console.error('Failed to invite admin:', error);
+            }
         }
     };
 
     const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFirstName(e.target.value);
-        validateForm();
     };
 
     const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setLastName(e.target.value);
-        validateForm();
     };
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
-        validateForm();
     };
+
+    useEffect(() => {
+        validateForm();
+    }, [firstName, lastName, email]);
 
     useEffect(() => {
         if (isModalOpen) {
