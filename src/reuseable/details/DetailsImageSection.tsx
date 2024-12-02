@@ -55,7 +55,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                 alt="Cohort DetailsImageSection"
                                 width={300}
                                 height={300}
-                                className="w-full h-auto object-cover"
+                                className="w-96 h-96 object-cover flex-shrink-0"
                                 data-testid="cohort-image"
                             />
                         ) : Icon ? (
