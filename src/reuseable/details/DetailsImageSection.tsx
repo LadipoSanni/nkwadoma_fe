@@ -48,14 +48,14 @@ const DetailsImageSection: React.FC<detailsProps> = ({
             <div id="cohort-image-section" data-testid="cohort-image-section"
                  className={`flex md:flex-col flex-col md:block space-y-3 md:max-w-sm w-full`}>
                 <div id="cohort-image-card" data-testid="cohort-image-card">
-                    <Card className="rounded-lg">
+                    <Card className="rounded-lg md:max-w-sm">
                         {imageSrc ? (
                             <Image
                                 src={imageSrc}
                                 alt="Cohort DetailsImageSection"
                                 width={300}
                                 height={300}
-                                className="w-96 h-96 object-cover flex-shrink-0"
+                                className="w-full h-96 object-cover flex-shrink-0"
                                 data-testid="cohort-image"
                             />
                         ) : Icon ? (
