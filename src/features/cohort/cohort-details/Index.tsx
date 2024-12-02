@@ -19,7 +19,6 @@ import CustomSelect from "@/reuseable/Input/Custom-select";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 import {useReferLoaneeMutation, useViewAllLoaneeQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import SelectableTable from "@/reuseable/table/SelectableTable";
-import {getItemSessionStorage} from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
 import {useToast} from "@/hooks/use-toast"
 import Isloading from "@/reuseable/display/Isloading";
@@ -39,8 +38,6 @@ interface viewAllLoanee {
     loaneeLoanDetails: loaneeLoanDetail;
 }
 
-
-
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode | userIdentity | loaneeLoanDetail;
 }
@@ -54,21 +51,30 @@ const CohortDetails = () => {
     const [isReferred, setIsReferred] = React.useState(``);
     const [addTrainee, setAddTrainee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
-    const [cohortsId, setCohortId] = React.useState("")
-    const [programId, setProgramId] = React.useState("")
     const size = 100;
     const [page] = useState(0);
     const {toast} = useToast()
     const [referLoanee, { isLoading }] = useReferLoaneeMutation()
+
+
+    const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
+
     const {data} = useViewAllLoaneeQuery({
         cohortId: cohortsId,
         pageSize: size,
         pageNumber: page
     }, {refetchOnMountOrArgChange: true,})
     const {data: cohortDetails} = useViewCohortDetailsQuery({
-        programId: programId,
         cohortId: cohortsId
     }, {refetchOnMountOrArgChange: true});
+
+
+    useEffect(() => {
+        if (data && data?.data) {
+            const result = data?.data?.body
+            setAllLoanee(result)
+        }
+    }, [data])
 
     const [details, setDetails] = useState({
         id: "",
@@ -84,13 +90,6 @@ const CohortDetails = () => {
         startDate: "",
         expectedEndDate: "",
     })
-
-    useEffect(() => {
-        if (data && data?.data) {
-            const result = data?.data?.body
-            setAllLoanee(result)
-        }
-    }, [data])
 
     useEffect(() => {
         if (cohortDetails && cohortDetails?.data) {
@@ -112,25 +111,18 @@ const CohortDetails = () => {
         }
     }, [cohortDetails]);
 
-    useEffect(() => {
-        const idOfCohort = getItemSessionStorage("cohortId")
-        const programsId = getItemSessionStorage("programsId")
-        if (idOfCohort) {
-            setCohortId(idOfCohort)
-        }
-        if (programsId) {
-            setProgramId(programsId)
-        }
-    }, [])
-
     const id = "1";
 
     const dataList = [
         {label: "Start Date", value: details.startDate},
         {label: "End Date", value: details.expectedEndDate},
-        {label: "Cohort status", value: <div className={`rounded-2xl px-2 py-1 ${details.cohortStatus === "ACTIVE"? "bg-[#E7F5EC] text-[#0B6B2B]" : "bg-[#FEF6E8] text-[#66440A]"}`}>
+        {
+            label: "Cohort status",
+            value: <div
+                className={`rounded-2xl px-2 py-1 ${details.cohortStatus === "ACTIVE" ? "bg-[#E7F5EC] text-[#0B6B2B]" : "bg-[#FEF6E8] text-[#66440A]"}`}>
                 {details.cohortStatus}
-        </div>},
+            </div>
+        },
         {label: "Number of Dropouts", value: "10"},
         {label: "Dropout rate", value: "0.5%"},
         {label: "Number employed", value: "38"},
@@ -241,7 +233,6 @@ const CohortDetails = () => {
                     <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
                         onClick={handleBackClick}>Back to cohort</h1>
                 </div>
-
             </div>
 
             <Tabs

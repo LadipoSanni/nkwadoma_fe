@@ -17,11 +17,17 @@ export const setItemSessionStorage = (name: string, item: string) => {
    }
 }
 
-export const getItemSessionStorage = (name: string) => {
+export const getItemSessionStorage = (name: string): string | undefined => {
    if (typeof window !== 'undefined') {
-      return sessionStorage.getItem(name)
+      return sessionStorage.getItem(name) ?? undefined;
    }
-}
+   return undefined;
+};
+// export const getItemSessionStorage = (name: string) => {
+//    if (typeof window !== 'undefined') {
+//       return sessionStorage.getItem(name)
+//    }
+// }
 
 
 // export const saveObjectItemToSessionStorage = (key: string, data: DetailData) => {
