@@ -52,13 +52,10 @@ export const cohortApi = createApi({
         }),
 
         viewCohortDetails: builder.query({
-            query: (param: {
-                programId: string
-                cohortId: string,
-            }) => ({
+            query: ( cohortId ) => ({
                 url: `/cohort-details`,
                 method: "GET",
-                params: param
+                params: cohortId
             }),
             providesTags: [`cohort`]
         }),
