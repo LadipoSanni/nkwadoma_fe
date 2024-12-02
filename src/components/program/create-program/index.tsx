@@ -455,6 +455,7 @@ function CreateProgram({setIsOpen}:Props) {
                     <Label htmlFor="programDeliveryType">Program delivery type</Label>
                   
                     <CustomSelect
+                      id="deliveryTypeSelect"
                       selectContent={programDeliveryTypes}
                       value={values.deliveryType} 
                       onChange={(value) => setFieldValue("deliveryType", value)} 
@@ -475,6 +476,7 @@ function CreateProgram({setIsOpen}:Props) {
                   <div>
                     <Label htmlFor="programMode">Program mode</Label>
                     <CustomSelect
+                      id="programModalSelect"
                       selectContent={programModes}
                       value={values.programMode} 
                       onChange={(value) => setFieldValue("programMode", value)} 

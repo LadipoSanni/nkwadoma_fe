@@ -172,7 +172,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
 ({errors, isValid, touched,setFieldValue,values}) => (
     <Form className={`${inter.className}`}>
         <div
-          className='grid grid-cols-1 gap-y-4 md:max-h-[600px] overflow-y-auto'
+          className='grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto'
           style={{
             scrollbarWidth: 'none',
               msOverflowStyle: 'none',
@@ -398,7 +398,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
               />
               )}
              </div>
-             <div className='relative bottom-5'>
+             {/* <div className='relative bottom-5'>
              <Label htmlFor="logoImage">Logo Image (optional)</Label>
              <div className='mt-2'>
             <FileUpload
@@ -407,9 +407,9 @@ function InviteOrganizationForm({setIsOpen}: props) {
             setUploadedImageUrl={(url: string | null) => setFieldValue("logoImage",url)}
             />
              </div>
-             </div>
+             </div> */}
 
-             <div className='relative bottom-5'>
+             {/* <div className='relative bottom-5'>
              <Label htmlFor="coverImage">Cover Image (optional)</Label>
              <div className='mt-2'>
             <FileUpload
@@ -419,7 +419,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
             />
              </div>
 
-             </div>
+             </div> */}
 
              <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>
                 <Button
@@ -445,7 +445,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                  </Button>
               </div>
               {
-                <div className={`text-error500 flex justify-center items-center text-center`}>{error}</div>
+                <div className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>
                  }
         </div>
     </Form>

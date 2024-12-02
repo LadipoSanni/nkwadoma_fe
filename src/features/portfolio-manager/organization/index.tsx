@@ -45,7 +45,8 @@ interface organizationListPros extends TableRowData{
     numberOfPrograms: number,
     tin:string,
     invitedDate:string,
-    numberOfLoanees:string
+    numberOfLoanees:string,
+    status: string
 
 }
 
@@ -91,7 +92,11 @@ function Organization() {
         setSearchTerm(event.target.value);
         console.log("the eventsearch: ",event)
     };
-    
+      
+
+    const activeOrganization = organizationList.filter(organization => organization.status === 'ACTIVE');
+    const invitedOrganization = organizationList.filter(organization => organization.status === 'INVITED');
+    const deactivatedOrganization = organizationList.filter(organization => organization.status === 'DEACTIVED');
 
     
   
@@ -127,7 +132,7 @@ function Organization() {
             value: "active",
             table: <div>
                 <Tables
-                    tableData={organizationList.slice().reverse()}
+                    tableData={activeOrganization.slice().reverse()}
                     tableHeader={organizationHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
@@ -148,7 +153,7 @@ function Organization() {
             actionBar: <div>
                 <OrganizationActionBar
                     id='inviteId'
-                    value=''
+                    value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
                 />
@@ -156,7 +161,7 @@ function Organization() {
             value: "invite",
             table: <div>
                 <Tables
-                    tableData={organizationList.slice().reverse()}
+                    tableData={invitedOrganization.slice().reverse()}
                     tableHeader={organizationHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
@@ -178,7 +183,7 @@ function Organization() {
             actionBar: <div>
                 <OrganizationActionBar
                     id='deactivateId'
-                    value=''
+                    value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
                 />
@@ -186,7 +191,7 @@ function Organization() {
             value: "deactivate",
             table: <div>
                 <Tables
-                    tableData={organizationList.slice().reverse()}
+                    tableData={deactivatedOrganization.slice().reverse()}
                     tableHeader={organizationHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
