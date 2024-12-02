@@ -1,7 +1,7 @@
 import {render, screen, fireEvent, cleanup} from "@testing-library/react";
 import {useRouter} from "next/navigation";
 import "@testing-library/jest-dom";
-import CohortDetails from "@/features/cohort/cohort-details/Index";
+import CohortDetails from "../../../src/features/cohort/cohort-details/details/Index";
 import {Providers} from "@/app/provider";
 
 jest.mock("next/navigation", () => ({
@@ -24,7 +24,7 @@ describe("cohort-details Component", () => {
         jest.spyOn(console, 'error').mockReturnValue();
     });
 
-    test("renders cohort title and description", () => {
+    test("renders cohort-details title and description", () => {
         render(
             <Providers>
                 <CohortDetails/>
@@ -32,7 +32,7 @@ describe("cohort-details Component", () => {
         );
     });
 
-    test("displays the correct cohort details data", () => {
+    test("displays the correct cohort-details details data", () => {
         render(
             <Providers>
                 <CohortDetails/>
