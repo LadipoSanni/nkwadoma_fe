@@ -12,7 +12,7 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { MdOutlineEdit } from 'react-icons/md';
 import { Input } from '@/components/ui/input';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
-import { useEditCohortMutation } from '@/service/admin/cohort_query';
+// import { useEditCohortMutation } from '@/service/admin/cohort_query';
 // import Image from 'next/image';
 
 
