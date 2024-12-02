@@ -6,7 +6,8 @@ export const ADMIN_ROLES = [
     "ADMIN",
     "DONOR",
     "ENDOWER",
-    "INVESTOR"
+    "INVESTOR",
+    "LOANEE"
 ]
 
 export const USER = [

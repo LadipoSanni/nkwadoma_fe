@@ -17,9 +17,11 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
-import {useViewAllLoaneeQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
+import {useReferLoaneeMutation, useViewAllLoaneeQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import SelectableTable from "@/reuseable/table/SelectableTable";
 import {formatAmount} from '@/utils/Format'
+import {useToast} from "@/hooks/use-toast"
+import Isloading from "@/reuseable/display/Isloading";
 
 
 interface userIdentity {
@@ -31,7 +33,6 @@ interface loaneeLoanDetail {
     initialDeposit: number;
     amountRequested: number
 }
-
 interface viewAllLoanee {
     userIdentity: userIdentity;
     loaneeLoanDetails: loaneeLoanDetail;
@@ -52,6 +53,8 @@ const CohortDetails = () => {
     const [isRowSelected, setIsRowSelected] = React.useState(false);
     const size = 100;
     const [page] = useState(0);
+    const {toast} = useToast()
+    const [referLoanee, { isLoading }] = useReferLoaneeMutation()
 
 
     const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
@@ -61,8 +64,6 @@ const CohortDetails = () => {
         pageSize: size,
         pageNumber: page
     }, {refetchOnMountOrArgChange: true,})
-
-
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortsId
     }, {refetchOnMountOrArgChange: true});
@@ -203,8 +204,18 @@ const CohortDetails = () => {
     const handleAddTrainee = () => {
         setAddTrainee(true)
     }
-
-    const handleRefer = () => {
+    const handleRefer = async () => {
+        const loaneeId = "create a list and pass the list of selected loanee (i.e, loanee ids)"
+        const cohortId = "get the cohort id from the selected cohort"
+        const formData ={
+            "cohortId": cohortId,
+            "loaneeIds": [loaneeId]
+        }
+        const response  = await referLoanee(formData)
+        toast({
+            description: response.data.message,
+            status: "success",
+        });
 
     }
 
@@ -292,7 +303,7 @@ const CohortDetails = () => {
                                         <Button variant={"outline"}
                                                 size={"lg"}
                                                 className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
-                                                onClick={handleRefer} disabled={!isRowSelected}>Refer</Button>
+                                                onClick={handleRefer} disabled={!isRowSelected}>{isLoading ? <Isloading/> : "Refer"}</Button>
                                     </div>
                                     <div id={`addTraineeButton`}>
                                         <Button variant={"secondary"}
