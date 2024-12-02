@@ -116,8 +116,8 @@ function Tables<T extends TableRowData> ({
         } 
         return value; };
 
-
-    const paginatedData = tableData.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+     
+    const paginatedData = tableData?.slice((page - 1) * rowsPerPage, page * rowsPerPage);
     const totalPages = Math.ceil(tableData.length / rowsPerPage);
     const isLastPage = page === totalPages;
 

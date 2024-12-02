@@ -1,15 +1,17 @@
 "use client";
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
 import {inter} from '@/app/fonts'
 import OrganizationActionBar from '@/components/portfolio-manager/Organization-action-bar'
-import {organizationList} from '@/utils/LoanRequestMockData/cohortProduct';
+// import {organizationList} from '@/utils/LoanRequestMockData/cohortProduct';
 import {MdOutlineAccountBalance} from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
 import InviteOrganizationForm from '@/components/portfolio-manager/Invite-organization-form';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {useViewAllOrganizationsQuery} from "@/service/admin/organization";
+import { formatAmount } from '@/utils/Format';
+import { useSearchOrganisationByNameQuery } from '@/service/admin/organization';
 
 
 interface TableRowData {
@@ -32,13 +34,27 @@ const tabData = [
     }
 ]
 
+interface organizationListPros extends TableRowData{
+    name:string,
+    rcNumber: string,
+    totalDebtRepaid:string,
+    totalCurrentDebt:string,
+    totalHistoricalDebt:string,
+    repaymentRate:number,
+    phoneNumber:string,
+    numberOfPrograms: number,
+    tin:string,
+    invitedDate:string,
+    numberOfLoanees:string,
+    status: string
+
+}
+
+
 
 function Organization() {
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // setSearchTerm(event.target.value);
-        console.log(event)
-    };
+   
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -47,31 +63,59 @@ function Organization() {
         setIsOpen(!isOpen);
     }
     const dataElement = {
-        pageNumber: 10,
-        pageSize: 10
+        pageNumber: 0,
+        pageSize: 200
     }
+    const [searchTerm, setSearchTerm] = useState('');
+    const [organizationList, setOrganizationList] = useState<organizationListPros[]>([]);
 
-    const {data, isError, isLoading} = useViewAllOrganizationsQuery(dataElement)
+    const {data} = useViewAllOrganizationsQuery(dataElement)
+    const { data: searchResults } = useSearchOrganisationByNameQuery(searchTerm, { skip: !searchTerm });
 
-    console.log("data: ", data, "isError: ", isError, "isLoading:: ", isLoading)
+    // console.log("data: ", organizationList)
 
+  
+
+    useEffect(()=> {
+        if (searchTerm && searchResults && searchResults.data) {
+            const organizations = searchResults.data;
+            setOrganizationList(organizations);
+        } else if (!searchTerm && data && data?.data) {
+            const organizations = data?.data?.body;
+            setOrganizationList(organizations);
+           
+        }
+    },[searchTerm,searchResults,data])
+
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+        console.log("the eventsearch: ",event)
+    };
+      
+
+    const activeOrganization = organizationList.filter(organization => organization.status === 'ACTIVE');
+    const invitedOrganization = organizationList.filter(organization => organization.status === 'INVITED');
+    const deactivatedOrganization = organizationList.filter(organization => organization.status === 'DEACTIVED');
+
+    
+  
     const organizationHeader = [
         {title: <div>Name</div>, sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
-        {title: "No. of loanees", sortable: true, id: 'noOfLoanees', selector: (row: TableRowData) => row.noOfLoanees},
+        {title: "No. of loanees", sortable: true, id: 'numberOfLoanees', selector: (row: TableRowData) => row.numberOfLoanees},
         {
             title: "Historical debt",
             sortable: true,
-            id: 'historicalDebt',
-            selector: (row: TableRowData) => row.historicalDebt
-        },
+            id: 'totalHistoricalDebt',
+            selector: (row: TableRowData) => formatAmount(row.totalHistoricalDebt)},
         {
             title: "Repayment rate(%)",
             sortable: true,
             id: 'repaymentRate',
-            selector: (row: TableRowData) => row.historicalDebt
+            selector: (row: TableRowData) => row.repaymentRate
         },
-        {title: "Debt repaid", sortable: true, id: 'debtRepaid', selector: (row: TableRowData) => row.historicalDebt},
-        {title: "Current debt", sortable: true, id: 'currentDebt', selector: (row: TableRowData) => row.currentDebt},
+        {title: "Debt repaid", sortable: true, id: 'totalDebtRepaid', selector: (row: TableRowData) => formatAmount(row.totalDebtRepaid)},
+        {title: "Current debt", sortable: true, id: 'totalCurrentDebt', selector: (row: TableRowData) => formatAmount(row.totalCurrentDebt)},
     ]
 
 
@@ -80,7 +124,7 @@ function Organization() {
             actionBar: <div>
                 <OrganizationActionBar
                     id='activeId'
-                    value=''
+                    value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
                 />
@@ -88,7 +132,7 @@ function Organization() {
             value: "active",
             table: <div>
                 <Tables
-                    tableData={organizationList}
+                    tableData={activeOrganization.slice().reverse()}
                     tableHeader={organizationHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
@@ -109,7 +153,7 @@ function Organization() {
             actionBar: <div>
                 <OrganizationActionBar
                     id='inviteId'
-                    value=''
+                    value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
                 />
@@ -117,7 +161,7 @@ function Organization() {
             value: "invite",
             table: <div>
                 <Tables
-                    tableData={organizationList}
+                    tableData={invitedOrganization.slice().reverse()}
                     tableHeader={organizationHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
@@ -139,7 +183,7 @@ function Organization() {
             actionBar: <div>
                 <OrganizationActionBar
                     id='deactivateId'
-                    value=''
+                    value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
                 />
@@ -147,7 +191,7 @@ function Organization() {
             value: "deactivate",
             table: <div>
                 <Tables
-                    tableData={organizationList}
+                    tableData={deactivatedOrganization.slice().reverse()}
                     tableHeader={organizationHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
@@ -182,27 +226,7 @@ function Organization() {
                                 {tab.actionBar}
                             </div>
                             <div className='mt-6'>
-                                {isLoading ?
-                                    <div>
-                                    </div>
-                                    :
-                                    <Tables
-                                        tableData={data?.data?.body}
-                                        tableHeader={organizationHeader}
-                                        tableHeight={52}
-                                        sx='cursor-pointer'
-                                        handleRowClick={() => {
-                                        }}
-                                        tableCellStyle={'h-12'}
-                                        optionalRowsPerPage={10}
-                                        staticHeader='Name'
-                                        staticColunm='name'
-                                        sideBarTabName='Organization'
-                                        optionalFilterName='Deactivated'
-                                        condition={true}
-                                        icon={MdOutlineAccountBalance}
-                                    />
-                                }
+                               {tab.table}
                             </div>
                         </TabsContent>
                     ))

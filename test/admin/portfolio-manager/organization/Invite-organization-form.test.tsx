@@ -21,7 +21,7 @@ describe("InviteOrganizationForm", () => {
         expect(screen.getByPlaceholderText("Enter website")).toBeInTheDocument(); 
         expect(screen.getByPlaceholderText("Enter registration number")).toBeInTheDocument(); 
         expect(screen.getByPlaceholderText("Enter tax number")).toBeInTheDocument(); 
-        expect(screen.getByPlaceholderText("Enter admin full name")).toBeInTheDocument(); 
+        expect(screen.getByPlaceholderText("Enter admin first name")).toBeInTheDocument(); 
         expect(screen.getByPlaceholderText("Enter admin email address")).toBeInTheDocument(); 
     });
 
@@ -39,7 +39,7 @@ describe("InviteOrganizationForm", () => {
      expect(await screen.findByText("Service is required")).toBeInTheDocument(); 
      expect(await screen.findByText("Registration number is required")).toBeInTheDocument(); 
      expect(await screen.findByText("Tax number is required")).toBeInTheDocument(); 
-     expect(await screen.findByText("Admin full name is required")).toBeInTheDocument(); 
+     expect(await screen.findByText("Admin first name is required")).toBeInTheDocument(); 
      expect(await screen.findByText("Admin email address is required")).toBeInTheDocument(); 
     });
 

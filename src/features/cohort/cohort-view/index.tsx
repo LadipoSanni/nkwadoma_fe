@@ -21,6 +21,7 @@ import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
 
 
+
 export const initialFormValue = {
   selectProgram:""
 }
@@ -87,12 +88,12 @@ const CohortView = () => {
   const [deleteItem] = useDeleteCohortMutation()
    
 
-   useEffect(() => { 
-    if (cohortData && cohortData?.data) { 
-      const result = cohortData?.data?.body; 
-      setOrganisationCohort(result); 
-      setOriginalCohortData(result);  
-    } }, [cohortData]);
+  //  useEffect(() => { 
+  //   if (cohortData && cohortData?.data) { 
+  //     const result = cohortData?.data?.body; 
+  //     setOrganisationCohort(result); 
+  //     setOriginalCohortData(result);  
+  //   } }, [cohortData]);
 
    useEffect(() => {
     if(searchTerm && searchData && searchData?.data) {
@@ -102,6 +103,7 @@ const CohortView = () => {
     else if(!searchTerm && cohortData && cohortData?.data) {
         const result = cohortData?.data?.body
       setOrganisationCohort(result)
+      setOriginalCohortData(result);  
     }
    },[searchTerm,searchData,cohortData])
 
@@ -153,7 +155,7 @@ const CohortView = () => {
 
  const debouncedSearch = useCallback( debounce((term) => { 
   setSearchTerm(term);
- }, 300), [setSearchTerm, debounce] );
+ }, 300), [setSearchTerm] );
 
  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
   debouncedSearch(event.target.value);

@@ -5,23 +5,34 @@ import * as Yup from 'yup';
 import { Label } from '@/components/ui/label';
 import {inter} from "@/app/fonts"
 import CustomSelect from '@/reuseable/Input/Custom-select';
-import { FileUpload } from '@/reuseable/Input';
+// import { FileUpload } from '@/reuseable/Input';
 import Isloading from '@/reuseable/display/Isloading';
+import { useInviteOrganizationMutation } from '@/service/admin/organization';
+import { useToast } from "@/hooks/use-toast";
+import { useQueryClient } from '@tanstack/react-query';
 
+interface ApiError {
+  status: number;
+  data: {
+    message: string;
+  };
+}
 
 
 const initialFormValue = {
     name: "",
-    emailAddress: "",
-    website: "",
+    email: "",
+    websiteAddress: "",
     industry: "",
     serviceOffering: "",
     rcNumber: "",
-    taxNumber: "",
-    adminFullName: "",
-    adminEmailAddress: "",
+    tin: "",
+    adminFirstName: "",
+    adminLastName:"",
+    adminEmail: "",
     logoImage: "",
-    coverImage: ""
+    coverImage: "",
+    phoneNumber: "",
 }
 
 interface props {
@@ -29,13 +40,15 @@ interface props {
 }
 
 function InviteOrganizationForm({setIsOpen}: props) {
+     const queryClient = useQueryClient();
+    //  const industries = [ "MANUFACTURING", "INSURANCE", "LOGISTIC", "TELECOMMUNICATION", "REAL ESTATE", "AUTOMOBILE", "FASHION", "AVIATION", "AGRICULTURE", "EDUCATION", "HEALTHCARE", "ENTERTAINMENT", "HOSPITALITY", "FMCG", "TECHNOLOGY", "FINANCE" ];
+    const industries =   ["EDUCATION","BANKING"]
+    const serviceOfferings = [ "FINANCIAL ADVISORY", "INSURANCE SERVICES", "LOAN SERVICES", "ACCOUNTING AND BOOKKEEPING", "INVESTMENT ADVISORY", "RISK MANAGEMENT", "CORPORATE FINANCE", "TAX SERVICES", "BANKING SERVICES", "CRYPTOCURRENCY SERVICES", "SOFTWARE DEVELOPMENT", "WEB DEVELOPMENT", "CLOUD SERVICES", "CYBERSECURITY SERVICES", "IT SUPPORT AND CONSULTING", "DATABASE MANAGEMENT", "AI AND MACHINE LEARNING", "BUSINESS INTELLIGENCE", "DEVOPS SERVICES", "BLOCKCHAIN SERVICES", "DISTRIBUTION SERVICES", "MARKETING AND BRANDING", "SALES SERVICES", "LOGISTIC AND SUPPLY CHAIN MANAGEMENT", "CUSTOMER SERVICE AND SUPPORT", "SUSTAINABILITY SERVICES", "REGULATORY COMPLIANCE AND LEGAL SERVICES", "CONSUMER ENGAGEMENT AND LOYALTY", "TECHNOLOGY AND INNOVATION", "HOTEL SERVICES", "RESTAURANT SERVICES", "EVENT PLANNING", "TRAVEL AND TOUR SERVICES", "CORPORATE RETREATS", "SPA AND WELLNESS", "TRANSPORTATION", "CONFERENCE AND MEETING FACILITIES", "FILM AND TELEVISION", "MUSIC", "THEATRE", "SPORTS AND FITNESS", "GAMING", "EVENT AND PARTIES", "TELECOMMUNICATION", "PHOTOGRAPHY", "TRAINING", ];
 
-    const industries = ["Manufacturing","Insurance","Logistic","Telecommunication","Real estate", "Automobile", "Fashion", "Aviation", "Agriculture",
-        "Education", "Healthcare", "Entertainment", "Hospitality", "FMCG", "Technology", "Finance"
-    ]
-    const serviceOfferings = [
+    const [error, setError] = useState("");
 
-        "Artificial Intelligence","Cloud Computing","Cybersecurity","Health Tech","Robotics"]
+    const [inviteOrganization,{isLoading}] = useInviteOrganizationMutation()
+    const { toast } = useToast();
 
     const handleCloseModal = () => {
       if (setIsOpen) {
@@ -43,14 +56,14 @@ function InviteOrganizationForm({setIsOpen}: props) {
       }
     }
 
-    const [isloading] = useState(false)
+    
 
     const validationSchema = Yup.object().shape({
         name:Yup.string()
         .trim()
         .required('Name is required')
         .matches(/^[^0-9]*$/, 'Numbers are not allowed'),
-        emailAddress: Yup.string()
+        email: Yup.string()
         .email('Invalid email address')
         .matches(/^\S*$/, 'Email address should not contain spaces')
         .required('Email address is required'),
@@ -62,40 +75,90 @@ function InviteOrganizationForm({setIsOpen}: props) {
         .trim()
         .required('Registration number is required')
         .matches(/^RC\d{7}$/, 'RC Number must start with "RC" followed by 7 digits'),
-        taxNumber: Yup.string()
+        tin: Yup.string()
         .trim()
         .required('Tax number is required')
         .min(9, 'Tax number must be at least 9 characters long')
         .matches(/^[A-Za-z0-9-]*$/, 'Tax number can only contain letters, numbers, and hyphens, and must not start with a hyphen'),
-        adminFullName: Yup.string()
+        adminFirstName: Yup.string()
         .trim()
-        .required('Admin full name is required'),
-        adminEmailAddress: Yup.string()
+        .required('Admin first name is required'),
+        adminLastName: Yup.string()
+        .trim()
+        .required('Admin last name is required'),
+        phoneNumber: Yup.string()
+         .required('Phone number is required') 
+        .matches(/^(0)(70|71|80|81|90|91)\d{8}$/,'Invalid phone number'),
+        adminEmail: Yup.string()
         .email('Invalid email address')
         .matches(/^\S*$/, 'Email address should not contain spaces')
         .required('Admin email address is required')
         .test(
             'email-different', 'Admin email address must be different from company email address',
             function () {
-                const { emailAddress, adminEmailAddress } = this.parent; return emailAddress !== adminEmailAddress;
+                const { email, adminEmail } = this.parent; return email !== adminEmail;
              })
     })
 
-    const handleSubmit = (values: typeof initialFormValue) => {
-      console.log('The values: ',values);
-      if (setIsOpen) {
+    const handleSubmit = async (values: typeof initialFormValue) => {
+      // console.log('The values: ',values);
+      if (!navigator.onLine) {
+      toast({
+        description: "No internet connection",
+        status: "error",
+      });
+      return;
+    }
+      const formData = {
+        name: values.name,
+        email: values.email,
+        websiteAddress: values.websiteAddress,
+        rcNumber: values.rcNumber,
+        tin: values.tin,
+        adminFirstName: values.adminFirstName,
+        adminLastName: values.adminLastName,
+        adminEmail: values.adminEmail,
+        phoneNumber: values.phoneNumber,
+        adminRole: "ORGANIZATION_ADMIN",
+        serviceOfferings: [
+           {
+            industry: values.industry,
+            name:"Service",
+            transactionLowerBound: "3000",
+            transactionUpperBound: "5000"
+           }
+        ]
+      }
+      console.log("the forms: ", formData)
+     try{
+      const result = await inviteOrganization(formData).unwrap();
+      if(result){
+        queryClient.invalidateQueries({ queryKey: ['invite'] });
+        toast({
+          description: result.message,
+          status: "success",
+        });
+          if (setIsOpen) {
         setIsOpen(false);
       }
+      }
+
+     } catch (err) {
+        const error = err as ApiError;
+        setError(error?.data?.message);
+        
+      }
+    
 
     }
 
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault();
-    };
+    // const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    //   event.preventDefault();
+    // };
 
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault();
-    };
+    // const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    //   event.preventDefault();
+    // };
 
   return (
     <div id='inviteOrganizationForm'>
@@ -109,7 +172,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
 ({errors, isValid, touched,setFieldValue,values}) => (
     <Form className={`${inter.className}`}>
         <div
-          className='grid grid-cols-1 gap-y-4 md:max-h-[600px] overflow-y-auto'
+          className='grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto'
           style={{
             scrollbarWidth: 'none',
               msOverflowStyle: 'none',
@@ -139,20 +202,37 @@ function InviteOrganizationForm({setIsOpen}: props) {
                  )
               }
             </div>
+            <div className=''> 
+            <Label htmlFor="phoneNumber">Phone Number</Label> 
+            <Field 
+            id="phoneNumber" 
+            name="phoneNumber" 
+            className="w-full p-3 border rounded focus:outline-none mt-2" 
+            placeholder="Enter Phone Number" 
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+               const value = e.target.value; const formattedValue = value.replace(/[^0-9]/g, '');  
+               setFieldValue("phoneNumber", formattedValue); }}
+                />
+                {errors.phoneNumber && touched.phoneNumber && ( 
+                <ErrorMessage 
+                name="phoneNumber" 
+                component="div" 
+                className="text-red-500 text-sm" /> )} 
+                </div>
             <div>
-            <Label htmlFor="emailAddress">Email Address </Label>
+            <Label htmlFor="email">Email Address </Label>
             <Field
-                  id="emailAddress"
-                  name="emailAddress"
+                  id="email"
+                  name="email"
                   className="w-full p-3 border rounded focus:outline-none mt-2"
                   placeholder="Enter email address"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("emailAddress", e.target.value.replace(/\s+/g, ''))}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("email", e.target.value.replace(/\s+/g, ''))}
                  />
 
                    {
-              errors.emailAddress && touched.emailAddress &&  (
+              errors.email && touched.email &&  (
                  <ErrorMessage
-              name="emailAddress"
+              name="email"
               component="div"
               className="text-red-500 text-sm"
             />
@@ -160,10 +240,10 @@ function InviteOrganizationForm({setIsOpen}: props) {
              }
             </div>
             <div>
-            <Label htmlFor="website">Website (optional)</Label>
+            <Label htmlFor="websiteAddress">Website (optional)</Label>
             <Field
                   id="website"
-                  name="website"
+                  name="websiteAddress"
                   className="w-full p-3 border rounded focus:outline-none mt-2"
                   placeholder="Enter website"
                   />
@@ -233,22 +313,22 @@ function InviteOrganizationForm({setIsOpen}: props) {
              }
               </div>
               <div>
-                <Label htmlFor="taxNumber">Tax Number</Label>
+                <Label htmlFor="tin">Tax Number</Label>
                 <Field
-                  id="taxNumber"
-                  name="taxNumber"
+                  id="tin"
+                  name="tin"
                   className="w-full p-3 border rounded focus:outline-none mt-3"
                   placeholder="Enter tax number"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const value = e.target.value;
                     const formattedValue = value.replace(/[^A-Za-z0-9-]/g, '').replace(/^-/, '');
-                    setFieldValue("taxNumber", formattedValue);
+                    setFieldValue("tin", formattedValue);
                    }}
                   />
                     {
-              errors.taxNumber && touched.taxNumber &&  (
+              errors.tin && touched.tin &&  (
                  <ErrorMessage
-              name="taxNumber"
+              name="tin"
               component="div"
               className="text-red-500 text-sm"
             />
@@ -256,46 +336,69 @@ function InviteOrganizationForm({setIsOpen}: props) {
              }
               </div>
              </div>
-             <div className='relative bottom-5'>
-              <Label htmlFor="adminFullName">Admin Full Name</Label>
+              <div className='grid md:grid-cols-2 gap-4 w-full relative'>
+                  <div className='relative bottom-5'>
+              <Label htmlFor="adminFirstName">Admin First Name</Label>
               <Field
-                id="adminFullName"
-                name="adminFullName"
+                id="adminFirstName"
+                name="adminFirstName"
                 className="w-full p-3 border rounded focus:outline-none mt-3"
-                placeholder="Enter admin full name"
+                placeholder="Enter admin first name"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value;
-                  const formattedValue = value.replace(/^[^A-Za-z]+|[^A-Za-z\s]/g, '');
-                 setFieldValue("adminFullName", formattedValue); }}
+                  const formattedValue = value.replace(/[^A-Za-z]/g, '');
+                 setFieldValue("adminFirstName", formattedValue); }}
               />
               {
-              errors.adminFullName && touched.adminFullName &&  (
+              errors.adminFirstName && touched.adminFirstName &&  (
                  <ErrorMessage
-              name="adminFullName"
+              name="adminFirstName"
               component="div"
               className="text-red-500 text-sm"
               />
               )}
              </div>
              <div className='relative bottom-5'>
-              <Label htmlFor="adminEmailAddress">Admin Email Address</Label>
+              <Label htmlFor="adminLastName">Admin Last Name</Label>
               <Field
-                id="adminEmailAddress"
-                name="adminEmailAddress"
+                id="adminLastName"
+                name="adminLastName"
+                className="w-full p-3 border rounded focus:outline-none mt-3"
+                placeholder="Enter admin Last name"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  const formattedValue = value.replace(/[^A-Za-z]/g, '');
+                 setFieldValue("adminLastName", formattedValue); }}
+              />
+              {
+              errors.adminLastName && touched.adminLastName &&  (
+                 <ErrorMessage
+              name="adminLastName"
+              component="div"
+              className="text-red-500 text-sm"
+              />
+              )}
+             </div>
+             </div>
+             <div className='relative bottom-5'>
+              <Label htmlFor="adminEmail">Admin Email Address</Label>
+              <Field
+                id="adminEmail"
+                name="adminEmail"
                 className="w-full p-3 border rounded focus:outline-none mt-3"
                 placeholder="Enter admin email address"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("adminEmailAddress", e.target.value.replace(/\s+/g, ''))}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("adminEmail", e.target.value.replace(/\s+/g, ''))}
               />
               {
-              errors.adminEmailAddress && touched.adminEmailAddress &&  (
+              errors.adminEmail && touched.adminEmail &&  (
                  <ErrorMessage
-              name="adminEmailAddress"
+              name="adminEmail"
               component="div"
               className="text-red-500 text-sm"
               />
               )}
              </div>
-             <div className='relative bottom-5'>
+             {/* <div className='relative bottom-5'>
              <Label htmlFor="logoImage">Logo Image (optional)</Label>
              <div className='mt-2'>
             <FileUpload
@@ -304,9 +407,9 @@ function InviteOrganizationForm({setIsOpen}: props) {
             setUploadedImageUrl={(url: string | null) => setFieldValue("logoImage",url)}
             />
              </div>
-             </div>
+             </div> */}
 
-             <div className='relative bottom-5'>
+             {/* <div className='relative bottom-5'>
              <Label htmlFor="coverImage">Cover Image (optional)</Label>
              <div className='mt-2'>
             <FileUpload
@@ -316,7 +419,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
             />
              </div>
 
-             </div>
+             </div> */}
 
              <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>
                 <Button
@@ -335,12 +438,15 @@ function InviteOrganizationForm({setIsOpen}: props) {
                 disabled={!isValid}
 
                 >
-                  {isloading ? ( <Isloading/> ) : (
+                  {isLoading ? ( <Isloading/> ) : (
                                                 "Invite"
                                             )}
 
                  </Button>
               </div>
+              {
+                <div className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>
+                 }
         </div>
     </Form>
 )
