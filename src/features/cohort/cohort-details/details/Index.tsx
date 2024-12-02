@@ -24,13 +24,6 @@ const CohortDetails = () => {
 
 
     const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
-
-
-    const {data} = useViewAllLoaneeQuery({
-        cohortId: cohortsId,
-        pageSize: size,
-        pageNumber: page
-    }, {refetchOnMountOrArgChange: true,})
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortsId
     }, {refetchOnMountOrArgChange: true});
