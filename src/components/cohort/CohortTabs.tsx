@@ -11,7 +11,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import EditCohortForm from './EditCohortForm'
 import { inter } from '@/app/fonts'
 import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
-import { setItemSessionStorage,getItemSessionStorage } from '@/utils/storage';
+import { setItemSessionStorage } from '@/utils/storage';
 // import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
 import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 
