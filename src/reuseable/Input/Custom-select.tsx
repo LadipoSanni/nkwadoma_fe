@@ -11,10 +11,11 @@ type Props = {
     className?: string,
     selectContent: Array<string | number>,
     name?: string,
-    placeHolder?: string
+    placeHolder?: string,
+    triggerId?: string
 }
 
-function CustomSelect({value,onChange,className,selectContent,name,placeHolder,id}: Props) {
+function CustomSelect({value,onChange,className,selectContent,name,placeHolder,id,triggerId}: Props) {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -28,9 +29,9 @@ function CustomSelect({value,onChange,className,selectContent,name,placeHolder,i
        value={value}
         onValueChange={(val:string) => {onChange(val)}}
         onOpenChange={handleDropdownOpen}
-
+        
       >
-          <SelectTrigger className={`min-w-0 h-[3.2rem] w-full border  focus:ring-0 focus:outline-none  shadow-none  flex justify-between ${className}`}
+          <SelectTrigger  id={triggerId} className={`min-w-0 h-[3.2rem] w-full border  focus:ring-0 focus:outline-none  shadow-none  flex justify-between ${className}`}
         role='button'
 
         >

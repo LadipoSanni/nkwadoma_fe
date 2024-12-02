@@ -451,10 +451,11 @@ function CreateProgram({setIsOpen}:Props) {
                    }
               
                   </div>
-                  <div>
+                  <div >
                     <Label htmlFor="programDeliveryType">Program delivery type</Label>
                   
                     <CustomSelect
+                     triggerId='deliveryTypeTriggerId'
                       id="deliveryTypeSelect"
                       selectContent={programDeliveryTypes}
                       value={values.deliveryType} 
@@ -476,6 +477,7 @@ function CreateProgram({setIsOpen}:Props) {
                   <div>
                     <Label htmlFor="programMode">Program mode</Label>
                     <CustomSelect
+                     triggerId='programModeTriggerId'
                       id="programModalSelect"
                       selectContent={programModes}
                       value={values.programMode} 
@@ -546,6 +548,7 @@ function CreateProgram({setIsOpen}:Props) {
                 </div>
                 <div className='md:flex gap-4 justify-end mt-2 mb-4 md:mb-0'>
                 <Button 
+                id='createProgramCancelButton'
                 variant={'outline'} 
                 type='reset'
                 className='w-full md:w-36 h-[57px] mb-4'
@@ -554,6 +557,7 @@ function CreateProgram({setIsOpen}:Props) {
                     Cancel
                 </Button>
                 <Button 
+                id='createProgramButton'
                 variant={'default'} 
                 className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-neutral650 cursor-not-allowed " :"hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
                 type='submit'
