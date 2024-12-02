@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Label } from '@/components/ui/label';
 import {inter} from "@/app/fonts"
 import CustomSelect from '@/reuseable/Input/Custom-select';
-import { FileUpload } from '@/reuseable/Input';
+// import { FileUpload } from '@/reuseable/Input';
 import Isloading from '@/reuseable/display/Isloading';
 import { useInviteOrganizationMutation } from '@/service/admin/organization';
 import { useToast } from "@/hooks/use-toast";
