@@ -100,6 +100,13 @@ export const cohortApi = createApi({
                 body: data,
          }),
           invalidatesTags: ['cohort'],
+        }),
+        getCohortDetails: builder.query({
+            query: (cohortId:{id: string}) => ({
+                url: `/cohort-details`,
+                method: "GET",
+                params: cohortId
+            }),
         })
     })
 })
@@ -113,6 +120,6 @@ export const {
     useSearchCohortByOrganisationQuery,
     useViewCohortDetailsQuery,
     useDeleteCohortMutation, useEditCohortMutation,
-    useReferLoaneeMutation,
+    useGetCohortDetailsQuery, useReferLoaneeMutation
 } = cohortApi;
 
