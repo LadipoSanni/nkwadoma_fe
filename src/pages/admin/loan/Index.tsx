@@ -25,7 +25,7 @@ function ViewAllLoanRequest() {
     // }, [counter]);
 
     const loanRequestHeader = [
-        { title: 'Loanee', sortable: true, id: 'loanee', selector: (row: TableRowData) => row.loanee },
+        { title: 'LoaneeInCohortView', sortable: true, id: 'loanee', selector: (row: TableRowData) => row.loanee },
         { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.program },
         { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort },
         { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => row.startDate },
