@@ -64,7 +64,8 @@ const {data: cohortDetails} = useGetCohortDetailsQuery({
 }, {skip: !cohortId,refetchOnMountOrArgChange: true});
 
 // const {data:cohortInfo} = useViewCohortDetailsQuery({})
-console.log("The cohortId: ",cohortId)
+console.log("The cohortIds: ",cohortId)
+console.log("the data: ",details)
 
 useEffect(() => {
   if (cohortDetails && cohortDetails?.data) {
