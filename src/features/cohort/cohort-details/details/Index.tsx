@@ -5,7 +5,7 @@ import {FiBook} from "react-icons/fi";
 import {inter} from "@/app/fonts";
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
-import {MdPersonOutline} from "react-icons/md";
+import { MdPersonOutline} from "react-icons/md";
 import {BiArrowBack} from "react-icons/bi";
 import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import TableModal from "@/reuseable/modals/TableModal";
@@ -26,6 +26,11 @@ const CohortDetails = () => {
     const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
 
 
+    const {data} = useViewAllLoaneeQuery({
+        cohortId: cohortsId,
+        pageSize: size,
+        pageNumber: page
+    }, {refetchOnMountOrArgChange: true,})
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortsId
     }, {refetchOnMountOrArgChange: true});
@@ -192,7 +197,7 @@ const CohortDetails = () => {
                     icon={Cross2Icon}
                     width="auto"
                 >
-                    <DeleteCohort setIsOpen={() => setIsDeleteOpen(false)} headerTitle={"Delete cohort-details"}
+                    <DeleteCohort setIsOpen={() => setIsDeleteOpen(false)} headerTitle={"Delete cohort"}
                                   title={"cohort"}/>
                 </TableModal>
             </div>
