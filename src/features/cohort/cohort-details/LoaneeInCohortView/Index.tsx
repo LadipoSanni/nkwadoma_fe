@@ -51,10 +51,8 @@ export const LoaneeInCohortView = () => {
         pageNumber: page
     }, {refetchOnMountOrArgChange: true,})
 
-    const {data: searchResults, isFetching, error} = useSearchForLoaneeInACohortQuery( { loneeName:loaneeName, cohortId: cohortsId },
+    const {data: searchResults, isFetching, error, isLoading:isLoading} = useSearchForLoaneeInACohortQuery( { loneeName:loaneeName, cohortId: cohortsId },
         { skip: !loaneeName || !cohortsId })
-    console.log(loaneeName, "this is loaneeeeee")
-    console.log(searchResults, "uuigruigyeuirurgufiguyy")
 
 
     useEffect(() => {
@@ -156,7 +154,6 @@ export const LoaneeInCohortView = () => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                    {isFetching && <div>Loading...</div>}
                     {error && <div>Error loading search results</div>}
                     {!isFetching && (
                         <SelectableTable
@@ -171,6 +168,8 @@ export const LoaneeInCohortView = () => {
                             optionalRowsPerPage={10}
                             tableCellStyle="h-12"
                             enableRowSelection={true}
+                            isLoading={isLoading}
+                            condition={true}
                         />
                     )}
                 </div>
