@@ -11,6 +11,7 @@ import {SubmitHandler} from 'react-hook-form';
 import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
 // import CryptoJS from "crypto-js";
+import {useVerifyIdentityMutation} from "@/service/admin/cohort_query";
 
 
 interface IdentityVerificationModalProps {
@@ -20,8 +21,9 @@ interface IdentityVerificationModalProps {
 }
 
 type FormData = {
-    bvn: number;
-    nin: number;
+    bvn: string;
+    nin: string;
+    loanReferralId: string|null;
 };
 
 const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
@@ -35,6 +37,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
     const [showCamera, setShowCamera] = useState(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+    const [verifyIdentity] = useVerifyIdentityMutation();
 
     const handleCapture = (imageSrc: string | null) => {
         console.log('Captured image:', imageSrc);
@@ -43,20 +46,23 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     };
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
-        const secretKey = "your-secret-key";
-        const value = "2387389728934";
+        // const secretKey = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
-        const encryptedValue = CryptoJS.AES.encrypt(value, secretKey).toString();
-        console.log('encryptedValue: ', encryptedValue);
-        const bytes = CryptoJS.AES.decrypt(encryptedValue, secretKey);
-        const decryptedValue = bytes.toString(CryptoJS.enc.Utf8);
-        console.log("decryptedValue: ",decryptedValue);
+        // const encryptedBvn = CryptoJS.AES.encrypt(data.bvn, secretKey).toString();
+        // const encryptedNin = CryptoJS.AES.encrypt(data.nin, secretKey).toString();
+        const loanReferralIdInStorage = sessionStorage.getItem('loanReferralId');
+        const loaneeBvn = data.bvn
+        const loaneeNin = data.nin
+
         try {
             const formData: FormData = {
-                bvn: Number(data.bvn),
-                nin: Number(data.nin)
+                bvn: loaneeBvn,
+                nin: loaneeNin,
+                loanReferralId : loanReferralIdInStorage
             };
             console.log(formData);
+            const data = verifyIdentity(formData);
+            console.log("Response from backend: ",data);
             onClose();
             setIsSecondModalOpen(true);
         } catch (error) {

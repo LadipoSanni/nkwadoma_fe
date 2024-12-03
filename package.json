@@ -39,6 +39,7 @@
     "@types/react-query": "^1.2.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
     "formik": "^2.4.6",
