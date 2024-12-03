@@ -1,6 +1,6 @@
 import { render, screen, fireEvent,cleanup} from "@testing-library/react";
 import { Providers } from "@/app/provider";
-import InviteOrganizationForm from "@/components/portfolio-manager/Invite-organization-form";
+import InviteOrganizationForm from "@/components/portfolio-manager/organization/Invite-organization-form";
 
 
 describe("InviteOrganizationForm", () => {

@@ -12,7 +12,11 @@ import { MdDeleteOutline } from 'react-icons/md';
 import { MdOutlineEdit } from 'react-icons/md';
 import { Input } from '@/components/ui/input';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
-// import { useEditCohortMutation } from '@/service/admin/cohort_query';
+import { useEditCohortMutation } from '@/service/admin/cohort_query';
+import { useQueryClient } from '@tanstack/react-query';
+// import data from '@iconify/icons-line-md/loading-loop';
+// import { uploadImageToCloudinary } from '@/utils/UploadToCloudinary';
+
 // import Image from 'next/image';
 
 
@@ -33,32 +37,43 @@ interface cohortDetails {
 
 
  interface idProps {
-   cohortId : string;
+   cohortId? : string;
    setIsOpen? : (e:boolean | undefined) => void;
    cohortDetail?: cohortDetails
  }
 
+ interface ApiError {
+  status: number;
+  data: {
+      message: string;
+  };
+}
 
 
 
 
-const EditCohortForm = ({cohortId,setIsOpen,cohortDetail}: idProps) => {
+
+const EditCohortForm = ({setIsOpen,cohortDetail}: idProps) => {
+  const [editCohort, {isLoading}] = useEditCohortMutation();
+  const queryClient = useQueryClient();
+  const [error, setError] =  useState('');
 
   const initialFormValue = {
-    cohortId: cohortId,
-    cohortName: 'Luminary',
-    startDate: '2023-12-18',
-    endDate: '2024-12-24',
-    cohortDescription:
-      'Luminary is a dynamic cohort of visionary thinkers and creators, pursuing excellence in product design.',
-    cohortImage: 'https://www.thoughtco.com/thmb/gvFwQROKdUKVqquJ7a1t79S1qC4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-10194740-58b885703df78c353cbe18bc.jpg',
+    id: cohortDetail?.id,
+    name: cohortDetail?.name,
+    startDate: cohortDetail?.startDate,
+    expectedEndDate: cohortDetail?.expectedEndDate,
+    cohortDescription: cohortDetail?.cohortDescription,  
+    cohortImage: cohortDetail?.imageUrl,
+
+//  'https://www.thoughtco.com/thmb/gvFwQROKdUKVqquJ7a1t79S1qC4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-10194740-58b885703df78c353cbe18bc.jpg'
 
 
 }
 
-console.log("The cohortId: ",cohortDetail)
 
-  const [isLoading] = useState(false);
+
+  
   const [image, setImage] = useState(initialFormValue.cohortImage);
   // const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   // const [uploading, setUploading] = useState(false); 
@@ -168,14 +183,14 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
    
   const validationSchema = Yup.object().shape({
-    cohortName: Yup.string()
+    name: Yup.string()
      .trim()
      .matches(/^\S*$/, 'Cohort name should not contain spaces')
      .required('Cohort name is required'),
     startDate: Yup.date()
                 .required('Start date is required')
                 .nullable(),
-    endDate: Yup.date()
+     expectedEndDate: Yup.date()
     .required('End date is required')
     .nullable()
     .when('startDate', (startDate, schema) => {
@@ -197,12 +212,36 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
       
     })
 
-  const handleSubmit = (values: typeof initialFormValue) => {
-    console.log(values);
-     toastPopUp.showToast();
+    const networkPopUp =  ToastPopUp({
+      description: "No internet connection",
+      status: "error",
+      
+    });
+
+  const handleSubmit = async (values: typeof initialFormValue) => {
+     console.log("values: ",values);
+    if (!navigator.onLine) {
+      networkPopUp.showToast();
+      if (setIsOpen) {
+        setIsOpen(false);
+      }
+      return 
+  }
+  try{
+    await editCohort({data: values}).unwrap();
+    queryClient.invalidateQueries({ queryKey: ['cohort'] });
+    toastPopUp.showToast();
     if (setIsOpen) {
       setIsOpen(false);
     }
+  }
+  catch (err) {
+    const error = err as ApiError;
+    setError(error?.data?.message );
+   
+  }
+
+   
    
   };
 
@@ -221,16 +260,16 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                 <Label htmlFor="cohortName">Cohort name</Label>
                 <Field
               id="editCohortName"
-              name="cohortName"
+              name="name"
               className="w-full p-3 border rounded focus:outline-none mt-2"
               placeholder="Enter cohort name"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("cohortName", e.target.value.replace(/\s+/g, ''))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("name", e.target.value.replace(/\s+/g, ''))}
             />
               
              {
-              errors.cohortName && touched.cohortName &&  (
+              errors.name && touched.name &&  (
                  <ErrorMessage
-              name="cohortName"
+              name="name"
               component="div"
               className="text-red-500 text-sm"
             /> 
@@ -242,7 +281,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                 <div className=''>
                   <Label htmlFor="startDate">Start date</Label>
                  <DatePickerInput
-                    selectedDate={parseISO(values.startDate)}
+                    selectedDate={parseISO(values.startDate ?? "")}
                      onDateChange={(date) => setFieldValue('startDate', format(date, 'yyyy-MM-dd'))}
                      className='p-6 mt-2'
                      disabledDate={(date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)}
@@ -258,10 +297,10 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
              }
                 </div>
                 <div className=''>
-                  <Label htmlFor="startDate">End date</Label>
+                  <Label htmlFor="endDate">End date</Label>
                  <DatePickerInput
-                    selectedDate={parseISO(values.endDate)}
-                     onDateChange={(date) => setFieldValue('endDate', format(date, 'yyyy-MM-dd'))}
+                    selectedDate={parseISO(values.expectedEndDate?? "")}
+                     onDateChange={(date) => setFieldValue('expectedEndDate', format(date, 'yyyy-MM-dd'))}
                      className='p-6 mt-2'
                      disabledDate={
                       // (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
@@ -271,9 +310,9 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                      
                  />
                    {
-              errors.endDate && touched.endDate &&  (
+              errors.expectedEndDate && touched.expectedEndDate &&  (
                  <ErrorMessage
-              name="endDate"
+              name="expectedEndDate"
               component="div"
               className="text-red-500 text-sm"
             /> 
@@ -393,6 +432,9 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                 </Button>
               </div>
                </div>
+               {
+                <div className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
+            }
             </Form>
 
           )
