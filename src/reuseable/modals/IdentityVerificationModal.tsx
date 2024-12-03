@@ -10,6 +10,8 @@ import {Button} from '@/components/ui/button';
 import {SubmitHandler} from 'react-hook-form';
 import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
+// import CryptoJS from "crypto-js";
+
 
 interface IdentityVerificationModalProps {
     isOpen: boolean;
@@ -41,6 +43,14 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     };
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
+        const secretKey = "your-secret-key";
+        const value = "2387389728934";
+
+        const encryptedValue = CryptoJS.AES.encrypt(value, secretKey).toString();
+        console.log('encryptedValue: ', encryptedValue);
+        const bytes = CryptoJS.AES.decrypt(encryptedValue, secretKey);
+        const decryptedValue = bytes.toString(CryptoJS.enc.Utf8);
+        console.log("decryptedValue: ",decryptedValue);
         try {
             const formData: FormData = {
                 bvn: Number(data.bvn),
