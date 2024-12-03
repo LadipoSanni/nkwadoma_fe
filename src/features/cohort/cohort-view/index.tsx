@@ -19,7 +19,7 @@ import { debounce } from 'lodash';
 import { useGetAllCohortByAParticularProgramQuery } from '@/service/admin/program_query'
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
-import SkeletonForTable from '@/reuseable/Skeleton-loading-state/Skeleton-for-table'
+
 
 
 

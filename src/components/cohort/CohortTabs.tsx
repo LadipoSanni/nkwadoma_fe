@@ -14,7 +14,7 @@ import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 import { setItemSessionStorage } from '@/utils/storage';
 // import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
 import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
-import { boolean } from 'yup'
+
 
 
 interface allCohortsProps extends TableRowData {
@@ -291,7 +291,7 @@ useEffect(() => {
         icon={Cross2Icon}
        
         >
-          <EditCohortForm cohortId={cohortId} setIsOpen={()=>{setIsOpen(false); setCohortId("")}} cohortDetail={details}/>  
+          <EditCohortForm setIsOpen={()=>{setIsOpen(false); setCohortId("")}} cohortDetail={details}/>  
          
         </TableModal>
         )

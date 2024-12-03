@@ -14,8 +14,8 @@ import { Input } from '@/components/ui/input';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import { useEditCohortMutation } from '@/service/admin/cohort_query';
 import { useQueryClient } from '@tanstack/react-query';
-import data from '@iconify/icons-line-md/loading-loop';
-import { uploadImageToCloudinary } from '@/utils/UploadToCloudinary';
+// import data from '@iconify/icons-line-md/loading-loop';
+// import { uploadImageToCloudinary } from '@/utils/UploadToCloudinary';
 
 // import Image from 'next/image';
 
@@ -37,7 +37,7 @@ interface cohortDetails {
 
 
  interface idProps {
-   cohortId : string;
+   cohortId? : string;
    setIsOpen? : (e:boolean | undefined) => void;
    cohortDetail?: cohortDetails
  }
@@ -53,7 +53,7 @@ interface cohortDetails {
 
 
 
-const EditCohortForm = ({cohortId,setIsOpen,cohortDetail}: idProps) => {
+const EditCohortForm = ({setIsOpen,cohortDetail}: idProps) => {
   const [editCohort, {isLoading}] = useEditCohortMutation();
   const queryClient = useQueryClient();
   const [error, setError] =  useState('');
