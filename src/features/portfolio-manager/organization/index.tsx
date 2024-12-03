@@ -3,11 +3,11 @@ import React, {useEffect, useState} from 'react'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
 import {inter} from '@/app/fonts'
-import OrganizationActionBar from '@/components/portfolio-manager/Organization-action-bar'
+import OrganizationActionBar from '@/components/portfolio-manager/organization/Organization-action-bar'
 // import {organizationList} from '@/utils/LoanRequestMockData/cohortProduct';
 import {MdOutlineAccountBalance} from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
-import InviteOrganizationForm from '@/components/portfolio-manager/Invite-organization-form';
+import InviteOrganizationForm from '@/components/portfolio-manager/organization/Invite-organization-form';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {useViewAllOrganizationsQuery} from "@/service/admin/organization";
 import { formatAmount } from '@/utils/Format';

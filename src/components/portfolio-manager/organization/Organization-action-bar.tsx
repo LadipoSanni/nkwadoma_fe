@@ -1,7 +1,7 @@
 "use client";
 import React from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 
 interface props {
     id: string,
