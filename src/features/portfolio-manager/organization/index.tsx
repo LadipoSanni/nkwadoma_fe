@@ -3,11 +3,11 @@ import React, {useEffect, useState} from 'react'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
 import {inter} from '@/app/fonts'
-import OrganizationActionBar from '@/components/portfolio-manager/Organization-action-bar'
+import OrganizationActionBar from '@/components/portfolio-manager/organization/Organization-action-bar'
 // import {organizationList} from '@/utils/LoanRequestMockData/cohortProduct';
 import {MdOutlineAccountBalance} from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
-import InviteOrganizationForm from '@/components/portfolio-manager/Invite-organization-form';
+import InviteOrganizationForm from '@/components/portfolio-manager/organization/Invite-organization-form';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {useViewAllOrganizationsQuery} from "@/service/admin/organization";
 import { formatAmount } from '@/utils/Format';
@@ -90,7 +90,7 @@ function Organization() {
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
-        console.log("the eventsearch: ",event)
+        // console.log("the eventsearch: ",event)
     };
       
 
@@ -124,6 +124,7 @@ function Organization() {
             actionBar: <div>
                 <OrganizationActionBar
                     id='activeId'
+                    inviteButton='active'
                     value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
@@ -153,6 +154,7 @@ function Organization() {
             actionBar: <div>
                 <OrganizationActionBar
                     id='inviteId'
+                    inviteButton='invited'
                     value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
@@ -183,6 +185,7 @@ function Organization() {
             actionBar: <div>
                 <OrganizationActionBar
                     id='deactivateId'
+                    inviteButton='deactivated'
                     value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
@@ -214,7 +217,7 @@ function Organization() {
             <Tabs defaultValue='active'>
                 <TabsList className={`z-50 `}>
                     {tabData.map((tab, index) => (
-                        <TabsTrigger data-testid={`tabDataName${tab.value}`} value={tab.value} key={index}>
+                        <TabsTrigger id={`${tab.name}-${index}`} data-testid={`tabDataName${tab.value}`} value={tab.value} key={index}>
                             {tab.name}
                         </TabsTrigger>
                     ))}
