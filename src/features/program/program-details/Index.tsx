@@ -22,13 +22,11 @@ import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import EditProgramForm from "@/components/program/edit-program-form";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
-import {useGetProgramByIdQuery} from "@/service/admin/program_query";
+import {useGetProgramByIdQuery, useSearchCohortsInAParticularProgramQuery} from "@/service/admin/program_query";
 import {getItemSessionStorage} from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
 import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/program_query";
-import {useSearchCohortsInAParticularProgramQuery} from "@/service/admin/program_query";
-
 
 interface loanDetails {
     totalAmountRepaid?: number;
