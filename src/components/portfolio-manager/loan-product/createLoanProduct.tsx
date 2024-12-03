@@ -2,9 +2,9 @@ import React from "react";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 
-interface Props {
-    setIsOpen?: (e: boolean | undefined) => void;
-}
+// interface Props {
+//     setIsOpen?: (e: boolean | undefined) => void;
+// }
 
 
 export const CreateLoanProduct = () => {
