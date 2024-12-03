@@ -111,7 +111,7 @@ export const cohortApi = createApi({
 
         searchForLoaneeInACohort: builder.query({
             query: (param:{
-                loneeName: string,
+                loaneeName: string,
                 cohortId?: string,
             }) => ({
                 url: '/cohort/searchForLoanee',

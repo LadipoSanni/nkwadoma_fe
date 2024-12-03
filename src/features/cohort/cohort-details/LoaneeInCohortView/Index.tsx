@@ -1,12 +1,12 @@
 "use client";
-import React from 'react'
+import React,{useEffect} from 'react'
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {Input} from "@/components/ui/input";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import {Button} from "@/components/ui/button";
 import SelectableTable from "@/reuseable/table/SelectableTable";
 import {formatAmount} from "@/utils/Format";
-import {useEffect, useState} from "react";
+import { useState} from "react";
 import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
@@ -49,20 +49,23 @@ export const LoaneeInCohortView = () => {
         cohortId: cohortsId,
         pageSize: size,
         pageNumber: page
-    }, {refetchOnMountOrArgChange: true,})
+    })
 
-    const {data: searchResults, isFetching, error, isLoading:isLoading} = useSearchForLoaneeInACohortQuery( { loneeName:loaneeName, cohortId: cohortsId },
-        { skip: !loaneeName || !cohortsId })
+    const {data: searchResults, isLoading:isLoading} = useSearchForLoaneeInACohortQuery( { loaneeName:loaneeName, cohortId: cohortsId },
+        { skip: !loaneeName || !cohortsId})
 
 
     useEffect(() => {
-        if (data && data?.data) {
+        if (loaneeName && searchResults && searchResults?.data) {
+            const result = searchResults?.data
+            setAllLoanee(result)
+        } else if(!loaneeName && data && data?.data) {
             const result = data?.data?.body
             setAllLoanee(result)
         }
-    }, [data])
+    }, [data,loaneeName,searchResults ])
 
-    const TraineeHeader = [
+    const loanProduct = [
         {
             title: "Loanee",
             sortable: true,
@@ -117,8 +120,8 @@ export const LoaneeInCohortView = () => {
                                 </div>
                                 <Input
                                     className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
-                                    type="search" id={`search`} placeholder={"Search"} onChange={(e) => setLoaneeName(e.target.value)}
-                                    required/>
+                                    type="search" value={loaneeName} id={`search`} placeholder={"Search"} onChange={(e) => setLoaneeName(e.target.value)}
+                                    />
                             </div>
                         </div>
                         <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
@@ -154,11 +157,10 @@ export const LoaneeInCohortView = () => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                    {error && <div>Error loading search results</div>}
-                    {!isFetching && (
+                    {!isLoading && (
                         <SelectableTable
-                            tableData={searchResults?.data || allLoanee}
-                            tableHeader={TraineeHeader}
+                            tableData={allLoanee}
+                            tableHeader={loanProduct}
                             staticHeader="Trainee"
                             staticColunm="firstName"
                             tableHeight={45}
