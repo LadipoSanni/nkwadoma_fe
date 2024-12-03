@@ -1,148 +1,136 @@
 "use client";
 import React from "react";
-import { loanProductData } from "@/utils/LoanProductMockData";
+import {loanProductData} from "@/utils/LoanProductMockData";
 import Tables from "@/reuseable/table/LoanProductTable";
-// import { Button } from "@/components/ui/button";
+import {MdSearch} from "react-icons/md";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import TableModal from "@/reuseable/modals/TableModal";
+import {Cross2Icon} from "@radix-ui/react-icons";
+import {CreateLoanProduct} from "@/components/portfolio-manager/loan-product/createLoanProduct";
 
 function LoanProductPage() {
-  // const [openModal, setOpenModal] = React.useState(false);
-  // const skeletonLoader = false;
-  // const handleCloseCreateModal = () => {
-  //   setOpenModal(false);
-  // };
 
-  const handleRowClick = () => {
-    
-}
-
-
-
-  const columns = [
-      {
-          title: 'Loan product name',
-          sortable: true,
-          id: 'loanProductName'
-      },
-      {
-          title: 'Loan product sponsor',
-          sortable: true,
-          id: 'loanProductSponsor'
-      },
-      {
-          title: 'Tenor',
-          sortable: true,
-          id: 'tenor'
-      },
-      {
-          title: 'Interest rate (%)',
-          sortable: true,
-          id: "interestRate"
-      },{
-          title: 'Cost of funds',
-          sortable: true,
-          id: 'costOfFund'
-      },{
-          title: 'No. of loanees',
-          sortable: true,
-          id: 'noOfLoan'
-      },{
-          title: 'Amount disbursed',
-          sortable: true,
-          id: 'AmountDisbursed'
-      },{
-          title: 'Amount repaid',
-          sortable: true,
-          id: 'AmountRepaid'
-      },
-      {
-          title: 'Amount earned',
-          sortable: true,
-          id: 'AmountEarned'
-      },
-  ]
-
-   const dropDownOption = [
-    {
-      name: "View Program",
-      id: "1"
-    },
-    {
-      name: "Edit Program",
-      id: "2"
-    },
-    {
-      name: "Delete Program",
-      id: "3"
+const [createProduct, setCreateProduct] = React.useState(false)
+    const handleCreateButton = () => {
+              setCreateProduct(true)
     }
-  ]
+
+    const handleRowClick =()=>{
+
+    }
 
 
+    const columns = [
+        {
+            title: 'Loan product',
+            sortable: true,
+            id: 'loanProductName'
+        },
+        {
+            title: 'Loan product ',
+            sortable: true,
+            id: 'loanProductSponsor'
+        },
+        {
+            title: 'Interest rate (%)',
+            sortable: true,
+            id: "interestRate"
+        },
+        {
+            title: 'No. of loanees',
+            sortable: true,
+            id: 'noOfLoan'
+        },
+        {
+            title: 'Cost of funds',
+            sortable: true,
+            id: 'costOfFund'
+        },
+        {
+            title: 'Amount disbursed',
+            sortable: true,
+            id: 'AmountDisbursed'
+        },
+        {
+            title: 'Amount repaid',
+            sortable: true,
+            id: 'AmountRepaid'
+        },
+        {
+            title: 'Amount earned',
+            sortable: true,
+            id: 'AmountEarned'
+        },
+    ]
 
-  return (
-    <div className={`grid grid-cols-1  place-items-center   h-full`} id="loanProductPage">
-      {/* <div className="grid rounded  w-[100%] md:w-[80%] lg:fixed h-[85vh] " id='loanProductPageMainContainer'> */}
-        <div
-          className={`mr-auto ml-auto w-[96%]   place-content-end gap-2   md:flex`} id="InputContainer"
-        >
-          <div className={`md:w-[30%] mt-[1rem] w-[100%]`}>
-            {/* <TextField
-              size="small"
-              placeholder="Search"
-              tabIndex={2}
-              // onChange={(e) => handleSearch(e.target.value)}
-              id={"searchLoanProduct"}
-              fullWidth
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchOutlined fontSize="small" />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              variant="outlined"
-            /> */}
-          </div>
-          {/* <Button
-            id="CreateLoanProductButton"
-            className=""
-            // onClick={() => setOpenModal(true)}
-            sx={{
-              backgroundColor: "#0D9B48",
-              color: "white",
-              width: "15%",
-              height: "2.35rem",
-              "&:hover": { backgroundColor: "#0D9B48", color: "white" },
-              marginTop: "1rem",
-              textTransform: "none",
-              "@media (max-width: 800px)": {
-                width: "100%",
-              },
-            }}
-          >
-            Create loan product
-          </Button> */}
-        </div>
-        {/* <div  className={`w-[96%] bg-purple-300 mt-[1rem] h-[82%] mr-auto ml-auto`}>
-                        <LoanProductTable tableData={loanProductData}  handleRowClick={handleRowClick} tableHeader={columns} tableHeight={59} sx='cursor-pointer' staticColunm="loanProductName" staticHeader="Loan Product"/>
-          </div> */}
-          <div  className={`w-[96%]  mt-[1rem] h-[82%] mr-auto ml-auto`}>
-             <Tables 
-             tableData={loanProductData}  
-             handleRowClick={handleRowClick} 
-             tableHeader={columns} tableHeight={59} 
-             sx='cursor-pointer' 
-             staticColunm="loanProductName" 
-             staticHeader="Loan Product" 
-             showKirkBabel={true}
-             kirkBabDropdownOption={dropDownOption}
-             />
-          </div>
-      {/* </div> */}
-      
-    </div>
-  );
+    const dropDownOption = [
+        {
+            name: "View Program",
+            id: "1"
+        },
+        {
+            name: "Edit Program",
+            id: "2"
+        },
+        {
+            name: "Delete Program",
+            id: "3"
+        }
+    ]
+
+
+    return (
+        <main id={`mainDiv`} className={`px-5 py-6`}>
+            <div id={`searchAndCreateProduct`} className={`flex md:flex-row md:justify-between flex-col gap-5 `}>
+                <div className="relative" id={`searchDiv`}>
+                    <div
+                        className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                        id={`searchIcon`}>
+                        <MdSearch className="h-5 w-5 text-grey200"/>
+                    </div>
+                    <Input
+                        className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
+                        type="search" id={`search`} placeholder={"Search"} required/>
+                </div>
+                <div id={`createProduct`}>
+                    <Button variant={"secondary"}
+                            size={"lg"}
+                            className={`bg-meedlBlue h-12 py-5 px-6 hover:bg-meedlBlue focus-visible:ring-0 shadow-none`}
+                            onClick={handleCreateButton}>Create loan product</Button>
+                </div>
+            </div>
+
+            <div id={`table`} className={`pt-8`}>
+                <Tables
+                    tableData={loanProductData}
+                    handleRowClick={handleRowClick}
+                    tableHeader={columns}
+                    tableHeight={52}
+                    sx='cursor-pointer'
+                    staticColunm="loanProductName"
+                    staticHeader="Loan Product"
+                    showKirkBabel={false}
+                    kirkBabDropdownOption={dropDownOption}
+                    tableCellStyle={"h-12"}
+                    optionalRowsPerPage={10}
+                />
+            </div>
+            <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
+                <TableModal
+                    isOpen={createProduct}
+                    closeModal={() => setCreateProduct(false)}
+                    closeOnOverlayClick={true}
+                    icon={Cross2Icon}
+                    headerTitle={`Create loan Product`}
+                    width="30%"
+                >
+                    <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>
+                </TableModal>
+
+            </div>
+        </main>
+    );
 }
 
 export default LoanProductPage;
