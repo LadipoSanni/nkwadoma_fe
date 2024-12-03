@@ -2,7 +2,8 @@
 import React, {ChangeEvent,  useState} from 'react';
 import AuthInput from "@/reuseable/Input/AuthInputField";
 import AuthButton from "@/reuseable/buttons/AuthButton";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useResetPasswordMutation} from "@/service/auths/api";
 
 const Step3 = () => {
 
@@ -10,6 +11,8 @@ const Step3 = () => {
     const [confirmPassword, setConfirmPassword] = useState("")
     // const [disableButton, setDisableButton] = useState(true)
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
+    const searchParams = useSearchParams()
+    const [resetPassword, {isError, isSuccess}] = useResetPasswordMutation()
 
     const criteriaMessages = [
         "Must be at least 8 characters",
@@ -21,10 +24,21 @@ const Step3 = () => {
 
     const router = useRouter()
 
-
+    const getUserToken = () => {
+        if (searchParams){
+            const pathVariable = searchParams.get("token")
+            if (pathVariable){
+                return pathVariable
+            }
+        }
+    }
 
     const changePassword = () => {
+        const token = getUserToken()
 
+
+        const response = resetPassword({token: token, password: newPassword})
+        console.log("response: ", response)
     }
 
     const login = ()=> {
