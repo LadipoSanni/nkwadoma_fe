@@ -90,7 +90,7 @@ function Organization() {
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
-        console.log("the eventsearch: ",event)
+        // console.log("the eventsearch: ",event)
     };
       
 

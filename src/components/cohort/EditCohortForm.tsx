@@ -71,7 +71,7 @@ const EditCohortForm = ({setIsOpen,cohortDetail}: idProps) => {
 
 }
 
-console.log("The cohortId:: ",cohortDetail)
+
 
   
   const [image, setImage] = useState(initialFormValue.cohortImage);

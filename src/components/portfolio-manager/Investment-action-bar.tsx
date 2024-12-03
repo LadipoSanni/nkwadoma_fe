@@ -1,7 +1,8 @@
 "use client";
-import React from 'react'
+import React,{useState} from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
 import { Button } from '../ui/button';
+
 
 interface props {
     id: string,
@@ -13,7 +14,9 @@ interface props {
 }
 
 function InvestmentActionBar({id,value,onChange,handleDraftClick,handleCreateInvestmentVehicleClick}:props) {
+    const [showModal, setShowModal] = useState(false);
 
+  const handleOpenModal = () => setShowModal(true);
    
   return (
     <div className='md:flex justify-between items-center'>
