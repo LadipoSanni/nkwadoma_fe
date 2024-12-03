@@ -5,16 +5,14 @@ import Tables from "@/reuseable/table/LoanProductTable";
 import {MdSearch} from "react-icons/md";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
-import TableModal from "@/reuseable/modals/TableModal";
-import {Cross2Icon} from "@radix-ui/react-icons";
-import {CreateLoanProduct} from "@/components/portfolio-manager/loan-product/createLoanProduct";
+
 
 function LoanProductPage() {
 
-const [createProduct, setCreateProduct] = React.useState(false)
-    const handleCreateButton = () => {
-              setCreateProduct(true)
-    }
+// const [createProduct, setCreateProduct] = React.useState(false)
+//     const handleCreateButton = () => {
+//               setCreateProduct(true)
+//     }
 
     const handleRowClick =()=>{
 
@@ -97,7 +95,7 @@ const [createProduct, setCreateProduct] = React.useState(false)
                     <Button variant={"secondary"}
                             size={"lg"}
                             className={`bg-meedlBlue h-12 py-5 px-6 hover:bg-meedlBlue focus-visible:ring-0 shadow-none`}
-                            onClick={handleCreateButton}>Create loan product</Button>
+                            >Create loan product</Button>
                 </div>
             </div>
 
