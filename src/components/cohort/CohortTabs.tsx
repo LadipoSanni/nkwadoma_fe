@@ -15,6 +15,8 @@ import { setItemSessionStorage } from '@/utils/storage';
 // import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
 import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 
+
+
 interface allCohortsProps extends TableRowData {
   name:string,
   cohortDescriptions:string,
@@ -35,11 +37,11 @@ interface TableRowData {
 interface cohortList {
   listOfCohorts: allCohortsProps[]
   handleDelete?: (id: string) => void;
- 
+  isLoading?: boolean
 }
 
 
-const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
+const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
   // const [programId, setProgramId] = React.useState("")
@@ -59,13 +61,11 @@ const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
     expectedEndDate: "",
 })
 
-const {data: cohortDetails} = useGetCohortDetailsQuery({
+const {data: cohortDetails, isLoading: loading, refetch} = useGetCohortDetailsQuery({
   cohortId: cohortId
 }, {skip: !cohortId,refetchOnMountOrArgChange: true});
 
 // const {data:cohortInfo} = useViewCohortDetailsQuery({})
-console.log("The cohortIds: ",cohortId)
-console.log("the data: ",details)
 
 useEffect(() => {
   if (cohortDetails && cohortDetails?.data) {
@@ -138,13 +138,17 @@ useEffect(() => {
 
 
 
-  const handleDropdownClick = (id:string,row: rowData) => {
-    if(id === "1") router.push('/cohort/cohort-details')
+  const handleDropdownClick = async (id:string,row: rowData) => {
+    if(id === "1") {router.push('/cohort/cohort-details')
+      setItemSessionStorage("programsId", String(row.programId))
+  }
     else if(id === "2") {
       setCohortId(String(row.id))
-      setItemSessionStorage("programsId", String(row.programId))
-      setIsOpen(true)
-      
+      if(cohortId){
+        await refetch()
+        setTimeout(()=>{ setIsOpen(true)},800)
+      }
+      setTimeout(()=>{ setIsOpen(true)},800)
       
     
     }
@@ -198,7 +202,7 @@ useEffect(() => {
               optionalFilterName='incoming'
               handleDropDownClick={handleDropdownClick}
               optionalRowsPerPage={10}
-
+              isLoading={isLoading}
              />
              </div>
     },
@@ -221,6 +225,7 @@ useEffect(() => {
               handleDropDownClick={handleDropdownClick}
               optionalRowsPerPage={10}
               condition={true}
+              isLoading={isLoading}
              />
              </div>
     },
@@ -243,6 +248,7 @@ useEffect(() => {
               handleDropDownClick={handleDropdownClick}
                optionalRowsPerPage={10}
                condition={true}
+               isLoading={isLoading}
              />
              </div>
     },
@@ -270,19 +276,24 @@ useEffect(() => {
 
       </Tabs>
       <div>
+        { loading ? "" : (
         <TableModal
         isOpen={isOpen}
-        closeModal={() => setIsOpen(false)}
+        closeModal={() => {
+          setIsOpen(false)
+          setCohortId('')
+        }}
         closeOnOverlayClick={true}
         headerTitle='Edit Cohort'
         className='pb-1'
         icon={Cross2Icon}
        
         >
-          <EditCohortForm cohortId={cohortId} setIsOpen={()=>setIsOpen(false)} cohortDetail={details}/>  
+          <EditCohortForm setIsOpen={()=>{setIsOpen(false); setCohortId("")}} cohortDetail={details}/>  
          
         </TableModal>
-           
+        )
+           }
         <TableModal
         isOpen={isDeleteOpen}
         closeModal={() => setIsDeleteOpen(false)}
@@ -298,7 +309,7 @@ useEffect(() => {
         id={cohortId}
         />
         </TableModal>
-       
+
       </div>
     </div>
   )

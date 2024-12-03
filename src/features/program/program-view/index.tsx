@@ -187,7 +187,7 @@ const ProgramView = () => {
     //     }));
     //     setDummyData(data);
     // }, []);
-    const { data: program, isLoading: loading,refetch} = useGetProgramByIdQuery({id:programId},{ refetchOnMountOrArgChange: true });
+    const { data: program, isLoading: loading,refetch} = useGetProgramByIdQuery({id:programId},{ skip: !programId, refetchOnMountOrArgChange: true });
 
     const dropDownOption = [
         {name: 'View Program', id: '1'},
@@ -204,8 +204,11 @@ const ProgramView = () => {
         }
         else if(id === "2") {
           setProgramId(String(row.id))
-           await refetch()
-           setTimeout(()=>{ setEditOpen(true)},500)
+          if(programId){
+            await refetch();
+            setTimeout(()=>{ setEditOpen(true)},700)
+         }
+           setTimeout(()=>{ setEditOpen(true)},700)
           
         
         }
@@ -221,8 +224,11 @@ const ProgramView = () => {
             setItemSessionStorage("programId",id)
         } else if (optionId === "2") {
              setProgramId(id);
-            await refetch()
-            setTimeout(()=>{ setEditOpen(true)},500)
+             if(programId){
+                await refetch();
+                setTimeout(()=>{ setEditOpen(true)},700)
+             }
+            setTimeout(()=>{ setEditOpen(true)},700)
         } else if (optionId === "3") {
             setProgramId(id);
             setIsDeleteOpen(true);
@@ -383,6 +389,7 @@ const ProgramView = () => {
                             sideBarTabName='Program'
                             handleDropDownClick={handleDropdownClick}
                             optionalRowsPerPage={10}
+                            isLoading={isLoading}
                         />
                     </div>
                 )}
