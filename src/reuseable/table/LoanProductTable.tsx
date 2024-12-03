@@ -9,6 +9,7 @@ import {DotsVerticalIcon} from '@radix-ui/react-icons';
 import {Button} from '@/components/ui/button'
 import {Menubar, MenubarTrigger, MenubarContent, MenubarMenu, MenubarItem} from '@/components/ui/menubar'
 import TableEmptyState from '../emptyStates/TableEmptyState'
+import SkeletonForTable from '../Skeleton-loading-state/Skeleton-for-table'
 
 
 interface ColumnProps<T> {
@@ -51,6 +52,7 @@ interface DropdownOption {
       tableCellStyle?: string;
       condition?:boolean
     //   totalPages?: number;
+     isLoading?: boolean
   }
   
 
@@ -72,7 +74,8 @@ function Tables<T extends TableRowData> ({
                            optionalFilterName,
                           optionalRowsPerPage = 8,
                           tableCellStyle,
-                          condition
+                          condition,
+                          isLoading
 
                            
 }: Props<T>) {
@@ -123,8 +126,9 @@ function Tables<T extends TableRowData> ({
 
     return (
         <div id="loanProductTableContainer" className={`w-[100%] `}>
-            {
-                tableData.length === 0 ? <TableEmptyState icon={icon} name={sideBarTabName} className={emptyStateStyle}
+            { 
+              isLoading ? (<SkeletonForTable/>) :
+               ( tableData.length === 0 ? <TableEmptyState icon={icon} name={sideBarTabName} className={emptyStateStyle}
                                                           optionalFilterName={optionalFilterName} condition={condition}/> : (
                     <div>
                         <div id="loanProductTableBorder"
@@ -355,6 +359,7 @@ function Tables<T extends TableRowData> ({
                         </div>
                     </div>
                 )
+            )
             }
         </div>
     )
