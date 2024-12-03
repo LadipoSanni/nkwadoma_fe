@@ -7,8 +7,7 @@ interface Props {
 }
 
 
-export const CreateLoanProduct = ({setIsOpen}: Props) => {
-    // const [openModal, setOpenModal] = React.useState(false);
+export const CreateLoanProduct = () => {
     return (
         <form >
             <div>
