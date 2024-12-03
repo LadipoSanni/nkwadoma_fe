@@ -117,16 +117,16 @@ const [createProduct, setCreateProduct] = React.useState(false)
                 />
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
-                <TableModal
-                    isOpen={createProduct}
-                    closeModal={() => setCreateProduct(false)}
-                    closeOnOverlayClick={true}
-                    icon={Cross2Icon}
-                    headerTitle={`Create loan Product`}
-                    width="30%"
-                >
-                    <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>
-                </TableModal>
+                {/*<TableModal*/}
+                {/*    isOpen={createProduct}*/}
+                {/*    closeModal={() => setCreateProduct(false)}*/}
+                {/*    closeOnOverlayClick={true}*/}
+                {/*    icon={Cross2Icon}*/}
+                {/*    headerTitle={`Create loan Product`}*/}
+                {/*    width="30%"*/}
+                {/*>*/}
+                {/*    <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>*/}
+                {/*</TableModal>*/}
 
             </div>
         </main>

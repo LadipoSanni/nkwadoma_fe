@@ -1,16 +1,23 @@
 import React from "react";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-
-// interface Props {
-//     setIsOpen?: (e: boolean | undefined) => void;
-// }
+import {Button} from "@/components/ui/button";
 
 
-export const CreateLoanProduct = () => {
+interface CreateLoanProductProps {
+    setIsOpen?: (b: boolean) => void
+}
+
+export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
+
+    const handleModalClose = () => {
+        if (setIsOpen) {
+            setIsOpen(false);
+        }
+    };
     return (
-        <form >
-            <div>
+        <form id={`formDiv`}>
+            <div id={`nameDiv`}>
                 <Label htmlFor="productName">Loan product name</Label>
                 <Input
                     id="productName"
@@ -21,6 +28,9 @@ export const CreateLoanProduct = () => {
                     placeholder="Enter name"
                 />
             </div>
+            <Button onClick={handleModalClose}>
+                Cancel
+            </Button>
         </form>
 
     )
