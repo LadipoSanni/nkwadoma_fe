@@ -124,6 +124,7 @@ function Organization() {
             actionBar: <div>
                 <OrganizationActionBar
                     id='activeId'
+                    inviteButton='active'
                     value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
@@ -153,6 +154,7 @@ function Organization() {
             actionBar: <div>
                 <OrganizationActionBar
                     id='inviteId'
+                    inviteButton='invited'
                     value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
@@ -183,6 +185,7 @@ function Organization() {
             actionBar: <div>
                 <OrganizationActionBar
                     id='deactivateId'
+                    inviteButton='deactivated'
                     value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
@@ -214,7 +217,7 @@ function Organization() {
             <Tabs defaultValue='active'>
                 <TabsList className={`z-50 `}>
                     {tabData.map((tab, index) => (
-                        <TabsTrigger data-testid={`tabDataName${tab.value}`} value={tab.value} key={index}>
+                        <TabsTrigger id={`${tab.name}-${index}`} data-testid={`tabDataName${tab.value}`} value={tab.value} key={index}>
                             {tab.name}
                         </TabsTrigger>
                     ))}

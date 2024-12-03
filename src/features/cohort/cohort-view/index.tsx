@@ -19,6 +19,7 @@ import { debounce } from 'lodash';
 import { useGetAllCohortByAParticularProgramQuery } from '@/service/admin/program_query'
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
+import SkeletonForTable from '@/reuseable/Skeleton-loading-state/Skeleton-for-table'
 
 
 
@@ -77,13 +78,13 @@ const CohortView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [programId, setProgramId] = useState('');
   const [pendingProgramId, setPendingProgramId] = useState('');
-   const [isLoading] = useState(false);
+   const [isLoadings] = useState(false);
    const [page] = useState(0);
    const size = 200;
 
    const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
    const { data: searchData } = useSearchCohortByOrganisationQuery(searchTerm, { skip:!searchTerm })
-   const { data: programDatas, } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
+   const { data: programDatas, isLoading } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
   const { data: cohortsByProgram, refetch } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
    
@@ -278,7 +279,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                         type='submit'
                         disabled={!isValid}
                         >
-                           {isLoading ? (
+                           {isLoadings ? (
                                                 <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">
                                                     <Icon id={'Icon'} icon={loadingLoop} width={24} height={24}/>
                                                 </div>
@@ -303,7 +304,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
           </div>
         </div>
         <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
-         <CohortTabs listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation}/>
+         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation}/>
+         
         </div>
     </div>
   )
