@@ -1,11 +1,10 @@
 "use client"
 import React, {useEffect, useState} from 'react';
 import {redirect, useRouter} from "next/navigation";
-import {store, useAppSelector} from "@/redux/store";
-import {setCurrentNavbarItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
+import {persistor, store, useAppSelector} from "@/redux/store";
+import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
-// import {MdOutlineHome, MdOutlinePeopleAlt, MdOutlinePersonOutline} from "react-icons/md";
 import {LuLogOut} from "react-icons/lu";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
 import NavbarContainer from "@/reuseable/ui/Navbar";
@@ -14,17 +13,16 @@ import {Icon} from "@iconify/react";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {MdOutlineAccountBalance, MdOutlineInventory2,MdOutlineReceiptLong, MdOutlinePayments, MdOutlineBusinessCenter,MdOutlinePersonOutline, MdOutlinePeopleAlt,MdOutlineHome} from "react-icons/md";
 import {useLogoutMutation} from "@/service/users/api";
-// import { MdOutlineReceiptLong } from "react-icons/md";
 
 
 
-// import styles  from "@//components/side-bar/index.module.css"
 
 
 const SideBar = () => {
     const router = useRouter();
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
+    const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
     const [logout] = useLogoutMutation()
 
 
@@ -44,12 +42,15 @@ const SideBar = () => {
 
     const clickNavbar = (name: string, id: string) => {
         setCurrentTab(name)
+        store.dispatch(setCurrentNavBottomItem(name))
         store.dispatch(setCurrentNavbarItem(name))
         router.push("/" + id)
 
     }
     const handleClick = (name?: string, id?: string) => {
         if (name && id) {
+            store.dispatch(setCurrentNavBottomItem(name))
+            store.dispatch(setCurrentNavbarItem(""))
             if (name !== 'Logout' && name !== "Help & Support") {
                 clickNavbar(name, id)
             }
@@ -57,12 +58,15 @@ const SideBar = () => {
 
     }
     const handleLogout =  async () => {
+        store.dispatch(setCurrentNavBottomItem("Logout"))
+        await persistor.purge();
+        localStorage.removeItem('persist:root');
      try{
-         const response  = await logout({})
-         console.log("resr: ", response)
+          await logout({})
+         redirect("/auth/login")
      }catch (error){
          console.log("error: ", error)
-          // redirect("/auth/login")
+          redirect("/auth/login")
 
      }
     }
@@ -227,7 +231,7 @@ const SideBar = () => {
             id: 'settings',
             name: 'Settings',
             icon: <GearIcon
-                color={current === 'Settings' ? '#142854' : '#939CB0'}
+                color={currentNavBottom === 'Settings' ? '#142854' : '#939CB0'}
                 className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
             handleClick: handleClick
         },
@@ -235,7 +239,7 @@ const SideBar = () => {
             id: 'help&support',
             name: "Help & Support",
             icon: <QuestionMarkCircledIcon
-                color={current === "Help & Support" ? '#142854' : '#939CB0'}
+                color={currentNavBottom === "Help & Support" ? '#142854' : '#939CB0'}
                 className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
             handleClick: handleClick
         },
@@ -243,7 +247,7 @@ const SideBar = () => {
             id: 'logout',
             name: 'Logout',
             icon: <LuLogOut
-                color={current === "Logout" ? '#142854' : '#939CB0'}
+                color={currentNavBottom === "Logout" ? '#142854' : '#939CB0'}
                 className={` h-[1.2rem] w-[1.2rem] `}/>,
             handleClick: handleLogout
         },
@@ -293,7 +297,7 @@ const SideBar = () => {
                             <NavbarRouter currentTab={currentTab} handleClick={clickNavbar}
                                           navbarItems={getUserSideBarByRole(role)}/>
                             {/*<div className={` grid w-full h-fit md:hidden md:h-fit  md:w-full `}>*/}
-                                < NavbarContainer items={navbarContainerItems}/>
+                                < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
                             {/*</div>*/}
 
                         </div>
@@ -314,7 +318,7 @@ const SideBar = () => {
                     data-testid={'adminMediumSideBar'}
                     className={`hidden md:grid  md:bg-meedlWhite md:w-[16vw]  md:px-4  md:border-r md:border-r-[blue300] md:z-0 md:h-[100%]`}
                 >
-                    <div className={` md:grid md:gap-4   md:h-fit `}>
+                    <div className={`  md:grid md:gap-4    md:h-fit `}>
                         <div className={`md:h-[10vh] md:mt-auto md:mb-auto md:w-full   md:grid   `}>
                             <Image
                                 id={'meddleMainLogoOnAdminLayout'}
@@ -331,9 +335,9 @@ const SideBar = () => {
                         </div>
                     </div>
 
-                    <div className={`md:absolute md:grid  md:bottom-5 gap-3  md:h-fit md:w-full `}>
+                    <div className={`md:absolute md:grid m md:bottom-5 gap-3  md:h-fit `}>
                         <div className={` hidden md:grid  md:h-fit  md:w-full `}>
-                            < NavbarContainer items={navbarContainerItems}/>
+                            < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
                         </div>
                         {/*<div*/}
                         {/*    className={`h-fit w-full border-t-2  border-t-navBorder`}*/}
