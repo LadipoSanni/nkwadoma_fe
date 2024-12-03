@@ -7,7 +7,7 @@ import {Button} from "@/components/ui/button";
 import SelectableTable from "@/reuseable/table/SelectableTable";
 import {formatAmount} from "@/utils/Format";
 import {useEffect, useState} from "react";
-import {useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
+import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
@@ -38,6 +38,7 @@ export const LoaneeInCohortView = () => {
     const [isReferred, setIsReferred] = React.useState(``);
     const [addLoanee, setAddLoanee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
+    const [loaneeName, setLoaneeName] = React.useState("");
 
     const id = "1";
     const size = 100;
@@ -49,6 +50,11 @@ export const LoaneeInCohortView = () => {
         pageSize: size,
         pageNumber: page
     }, {refetchOnMountOrArgChange: true,})
+
+    const {data: searchResults, isFetching, error} = useSearchForLoaneeInACohortQuery( { loneeName:loaneeName, cohortId: cohortsId },
+        { skip: !loaneeName || !cohortsId })
+    console.log(loaneeName, "this is loaneeeeee")
+    console.log(searchResults, "uuigruigyeuirurgufiguyy")
 
 
     useEffect(() => {
@@ -113,7 +119,8 @@ export const LoaneeInCohortView = () => {
                                 </div>
                                 <Input
                                     className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
-                                    type="search" id={`search`} placeholder={"Search"} required/>
+                                    type="search" id={`search`} placeholder={"Search"} onChange={(e) => setLoaneeName(e.target.value)}
+                                    required/>
                             </div>
                         </div>
                         <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
@@ -149,19 +156,23 @@ export const LoaneeInCohortView = () => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                    <SelectableTable
-                        tableData={allLoanee}
-                        tableHeader={TraineeHeader}
-                        staticHeader={"LoaneeInCohortView"}
-                        staticColunm={"firstName"}
-                        tableHeight={45}
-                        icon={MdOutlinePerson}
-                        sideBarTabName={"LoaneeInCohortView"}
-                        handleRowClick={(row) => handleRowClick(row)}
-                        optionalRowsPerPage={10}
-                        tableCellStyle={"h-12"}
-                        enableRowSelection={true}
-                    />
+                    {isFetching && <div>Loading...</div>}
+                    {error && <div>Error loading search results</div>}
+                    {!isFetching && (
+                        <SelectableTable
+                            tableData={searchResults?.data || allLoanee}
+                            tableHeader={TraineeHeader}
+                            staticHeader="Trainee"
+                            staticColunm="firstName"
+                            tableHeight={45}
+                            icon={MdOutlinePerson}
+                            sideBarTabName="Trainee"
+                            handleRowClick={(row) => handleRowClick(row)}
+                            optionalRowsPerPage={10}
+                            tableCellStyle="h-12"
+                            enableRowSelection={true}
+                        />
+                    )}
                 </div>
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
