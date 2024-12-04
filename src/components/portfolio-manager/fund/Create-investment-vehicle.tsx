@@ -21,7 +21,7 @@ import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
     fundManager: "",
     minimumAmount:"",
     mandate: "",
-    tenure:"",
+    tenor:"",
     vehicleSize: "",
     rate:"",
     bankPartner: "",
@@ -63,8 +63,14 @@ function CreateInvestmentVehicle() {
        minimumAmount:Yup.string()
        .required('Vehicle size is required')
        .matches(/^[1-9]\d*$/, 'Vehicle size must be a positive number and cannot start with zero'),
-
-       
+       tenor:Yup.string()
+       .trim()
+       .required('tenor size is required')
+       .matches(/^[1-9]\d*$/, 'Tenor must be a positive number and cannot start with zero.'),
+      rate: Yup.number() 
+      .min(1, 'Rate must be at least 1.') 
+      .max(100, 'Rate must be at most 100.') 
+      .required('Rate is required'),
       })
 
      const handleSubmit = () => {
@@ -159,7 +165,7 @@ function CreateInvestmentVehicle() {
                 </div>
                 <div className='grid md:grid-cols-2 gap-4 w-full'>
                     <div>
-                    <div>
+                  
                     <Label htmlFor="vehicleSize">Vehicle size</Label> 
                     <div className='flex gap-2 items-center justify-center'>
                         <CurrencySelectInput
@@ -191,10 +197,12 @@ function CreateInvestmentVehicle() {
                  )
                 }
                 </div>
-                    </div>  
+                    
                     </div>
                     <div>
-                    <Label htmlFor=" minimumAmount">Minimum investment amount</Label>  
+                    <Label htmlFor=" minimumAmount"
+                    style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'inline-block', maxWidth: '100%', }}
+                    >Minimum investment amount</Label>  
                     <div className='flex gap-2 items-center justify-center'>
                     <CurrencySelectInput
                          selectedcurrency={selectCurrency}
@@ -226,6 +234,48 @@ function CreateInvestmentVehicle() {
                 }   
                 </div>
                     </div>
+                </div>
+                <div className='grid md:grid-cols-2 gap-4 w-full relative bottom-4'>
+                <div>
+                    <Label htmlFor="rate">Interest rate (%)</Label>
+                    <Field
+                      id="rate"
+                      name="rate"
+                      placeholder="0"
+                      type="number"
+                      className="w-full p-3 border rounded focus:outline-none mt-2"
+                       style={{ WebkitAppearance: 'none', MozAppearance: 'textfield', }}
+                    />
+                     {
+                 errors.rate && touched.rate &&  (
+                    <ErrorMessage
+                    name="rate"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                 )
+                }
+                </div>
+                <div>
+                <Label htmlFor="tenor">Tenor (months)</Label>
+                    <Field
+                      id="tenor"
+                      name="tenor"
+                      placeholder="0"
+                      
+                      className="w-full p-3 border rounded focus:outline-none mt-2"
+                      // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("tenor", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                    /> 
+                    {
+                 errors.tenor && touched.tenor &&  (
+                    <ErrorMessage
+                    name="tenor"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                 )
+                }
+                </div>
                 </div>
               </div>
             </Form>

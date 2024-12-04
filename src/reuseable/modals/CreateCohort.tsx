@@ -172,7 +172,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
 
   const handleSelectClick = () => {
     setLoanBreakdowns([
-      { itemName: "", itemAmount: "", currency: "" },
+      { itemName: "", itemAmount: "", currency: "NGN" },
       ...loanBreakdowns,
     ]);
   };
