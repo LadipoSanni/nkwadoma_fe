@@ -202,7 +202,7 @@ useEffect(() => {
               optionalFilterName='incoming'
               handleDropDownClick={handleDropdownClick}
               optionalRowsPerPage={10}
-              isLoading={isLoading}
+              isLoading={loading}
              />
              </div>
     },
@@ -225,7 +225,7 @@ useEffect(() => {
               handleDropDownClick={handleDropdownClick}
               optionalRowsPerPage={10}
               condition={true}
-              isLoading={isLoading}
+              isLoading={loading}
              />
              </div>
     },
@@ -248,7 +248,7 @@ useEffect(() => {
               handleDropDownClick={handleDropdownClick}
                optionalRowsPerPage={10}
                condition={true}
-               isLoading={isLoading}
+               isLoading={loading}
              />
              </div>
     },

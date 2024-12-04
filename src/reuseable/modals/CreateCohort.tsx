@@ -245,6 +245,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
               <DescriptionTextarea
                 description={cohortDescription}
                 setDescription={setDescription}
+                maximumDescription={2500}
               />
               <FileUpload
                 handleDrop={handleDrop}

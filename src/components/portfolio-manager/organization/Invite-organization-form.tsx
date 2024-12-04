@@ -129,7 +129,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
            }
         ]
       }
-      console.log("the forms: ", formData)
+      // console.log("the forms: ", formData)
      try{
       const result = await inviteOrganization(formData).unwrap();
       if(result){
