@@ -12,7 +12,7 @@ import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {useRouter} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
 import {ADMIN_ROLES} from "@/types/roles";
-import {store} from "@/redux/store";
+import {persistor, store} from "@/redux/store";
 import {setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 
@@ -100,6 +100,8 @@ const Login: React.FC = () => {
                     const user_roles = decode_access_token?.realm_access?.roles
                     const user_role = user_roles.filter(getUserRoles).at(0)
                     clearData()
+                    await persistor.purge();
+                    localStorage.removeItem('persist:root');
                     if (user_role) {
                         storeUserDetails(access_token, user_email, user_role, userName)
                         if (user_role === 'LOANEE') {
