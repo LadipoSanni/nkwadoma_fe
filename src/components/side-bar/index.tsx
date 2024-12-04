@@ -62,10 +62,10 @@ const SideBar = () => {
         await persistor.purge();
      try{
           await logout({})
-         redirect("/auth/login")
+         router.push("/auth/login")
      }catch (error){
          console.log("error: ", error)
-          redirect("/auth/login")
+         router.push("/auth/login")
 
      }
     }
