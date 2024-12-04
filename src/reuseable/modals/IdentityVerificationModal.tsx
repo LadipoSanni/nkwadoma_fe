@@ -40,9 +40,9 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const [verifyIdentity] = useVerifyIdentityMutation();
 
     const handleCapture = (imageSrc: string | null) => {
-        console.log('Captured image:', imageSrc);
         setIsSecondModalOpen(false);
         setShowSuccessDialog(true);
+        console.log(imageSrc)
     };
 
     const onSubmit: SubmitHandler<FormData> = (data) => {

@@ -162,19 +162,17 @@ const ProgramDetails = () => {
     ];
     const ProgramHeader = [
         {title: "Cohort", sortable: true, id: "name"},
-        {title: "No of trainees", sortable: true, id: "noOfTrainees",
-        selector: (row: ViewAllProgramProps) => row.tuitionAmount
+        {
+            title: "No of trainees", sortable: true, id: "noOfTrainees",
+            selector: (row: ViewAllProgramProps) => row.tuitionAmount
         },
-        
+
         {
             title: "Tuition",
             sortable: true,
             id: "tuitionAmount",
             selector: (row: ViewAllProgramProps) => formatAmount(row.tuitionAmount)
         },
-        // {title: "Amount Requested", sortable: true, id: "amountRequested"},
-        // {title: "Amount Received", sortable: true, id: "amountReceived"},
-        // {title: "Amount Outstanding", sortable: true, id: "totalAmountOutstanding"},
         {
             title: "Amount Requested",
             sortable: true,
@@ -231,8 +229,6 @@ const ProgramDetails = () => {
     };
 
 
-    // const description = "Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
-
     return (
         <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`} id={"mainDiv"}>
             <div className={`flex gap-2 w-[9.2rem] items-center cursor-pointer text-meedlBlue`} id={`backClick`}
@@ -244,9 +240,9 @@ const ProgramDetails = () => {
 
             <Tabs defaultValue="details">
                 <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'}>
-                    <TabsTrigger value="details" id = {`tabTrigger1`}
+                    <TabsTrigger value="details" id={`tabTrigger1`}
                                  className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] w-[3.875rem] data-[state=active]:shadow-custom'}>Details</TabsTrigger>
-                    <TabsTrigger value="cohorts" id = {`tabTrigger2`}
+                    <TabsTrigger value="cohorts" id={`tabTrigger2`}
                                  className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom'}>Cohorts</TabsTrigger>
                 </TabsList>
                 <TabsContent value="details" className={'mt-4'} id={`content`}>
@@ -258,11 +254,13 @@ const ProgramDetails = () => {
                                 <FiBook id={`book`} className={'h-[50px] w-[50px] text-meedlBlue'}/>
                             </div>
                             <div className={'flex flex-col gap-3'} id={`tagDiv`}>
-                                <h1 id={`name`} className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>
+                                <h1 id={`name`}
+                                    className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>
                                     {progamDetail.name}
                                 </h1>
                                 <div className={'grid gap-5'} id={`tagButtonDiv`}>
-                                    <p id={`details`} className={'text-sm font-normal text-black400 w-[351px]'}>{progamDetail.programDescription}</p>
+                                    <p id={`details`}
+                                       className={'text-sm font-normal text-black400 w-[351px]'}>{progamDetail.programDescription}</p>
                                     <div id={`details`} data-testid="details"
                                          className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
                                         {tagButtonData.map((tagProps, index) => (
@@ -273,7 +271,7 @@ const ProgramDetails = () => {
                             </div>
                             <div id={`buttons`} className={'flex justify-between'}>
                                 <Button onClick={handleModalClick}
-                                 id="editButton"
+                                        id="editButton"
                                         className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
                                     program</Button>
                                 <div role={"button"}
@@ -340,8 +338,6 @@ const ProgramDetails = () => {
                         />
                     </TableModal>
                 </>
-
-
             }
         </main>
     );

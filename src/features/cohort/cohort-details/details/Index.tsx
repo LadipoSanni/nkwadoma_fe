@@ -5,7 +5,7 @@ import {FiBook} from "react-icons/fi";
 import {inter} from "@/app/fonts";
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
-import { MdPersonOutline} from "react-icons/md";
+import {MdPersonOutline} from "react-icons/md";
 import {BiArrowBack} from "react-icons/bi";
 import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import TableModal from "@/reuseable/modals/TableModal";
@@ -82,10 +82,6 @@ const CohortDetails = () => {
         {label: "Number employed", value: "38"},
         {label: "Employment rate", value: "38%"},
         {label: "Average starting salary", value: "3,000,000.00"},
-        {label: "Total amount disbursed", value: "3,000,000.00"},
-        {label: "Total amount repaid", value: "3,000,000.00"},
-        {label: "Total amount outstanding", value: "3,000,000.00"},
-        {label: "Repayment rate", value: "70%"},
         {label: "Tuition amount", value: formatAmount(details.tuitionAmount)},
     ];
 
@@ -96,6 +92,14 @@ const CohortDetails = () => {
         {title: "Feeding", amount: "200,000.00"},
         {title: "Total", amount: "300,500,000.00"},
     ];
+
+
+    const loanDetail = [
+        {detail: "Total amount disbursed", value: "3,000,000.00"},
+        {detail: "Total amount repaid", value: "3,000,000.00"},
+        {detail: "Total amount outstanding", value: "3,000,000.00"},
+        {detail: "Repayment rate", value: "70%"},
+    ]
 
     const program1Options = [
         {name: 'Edit Cohort', id: '1'},
@@ -170,9 +174,9 @@ const CohortDetails = () => {
                                 />
                             </div>
                             <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
-                                <DetailsTabContainer dataList={dataList} breakDown={breakDown}
-                                                     tabTitle1={"Cohort details"} isTable={true}
-                                                     tabTitle2={"Loanee details"} useBreakdown={true}/>
+                                <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail} dataList={dataList}
+                                                     tabTitle1={"Cohort details"} tabTitle2={"Loan details"}
+                                                     useBreakdown={true} breakDown={breakDown}/>
                             </div>
                         </div>
                     </TabsContent>
