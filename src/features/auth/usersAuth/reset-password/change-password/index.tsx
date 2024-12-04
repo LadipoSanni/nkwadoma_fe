@@ -36,13 +36,13 @@ const Step3 = () => {
     const {toast} = useToast()
 
 
-    const changePassword = () => {
+    const changePassword = async() => {
         const token = getUserToken()
         // console.log("token: ", token)
 
         try{
 
-            const response = resetPassword({token: token, password: newPassword}).unwrap()
+            await resetPassword({token: token, password: newPassword}).unwrap()
             // console.log("response: ", response,"isError:: ", isError, "isSuccess:: ", isSuccess, "data: ", data)
             if(data?.message){
                 toast({

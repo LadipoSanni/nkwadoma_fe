@@ -305,7 +305,7 @@ const SideBar = () => {
 
                     </div>
                     <button data-testid="blurry" id="sideBarblurBackground"
-                            className={`  h-[100%] w-[40 %] z-10 bg-[#717987] opacity-20 `}
+                            className={`  h-[100%] w-[40 %] z-10 bg-[#717987] opacity-30 `}
                             onClick={() => {
                                 store.dispatch(setShowMobileSideBar(false))
                             }}
