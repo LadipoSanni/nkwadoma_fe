@@ -49,10 +49,31 @@ export const organizationApi = createApi({
                 method: 'GET',
                 params: {name},
             }),
-
+        }),
+        inviteAdmin: builder.mutation({
+            query: (data: {
+                email: string;
+                firstName: string;
+                lastName: string;
+                organizationDomain: string;
+                createdBy: string;
+                role: string;
+            }) => ({
+                url: `auth/colleague/invite`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['invite', "organization"]
+        }),
+        viewAllAdminsInOrganization: builder.query({
+            query: (data) => ({
+                url: `/organization/employees/${data.organizationId}?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}`,
+                method: 'GET'
+            }),
+            providesTags: ['invite', "organization"]
         }),
 
     })
 })
 
-export const { useViewAllOrganizationsQuery, useInviteOrganizationMutation, useSearchOrganisationByNameQuery} = organizationApi
+export const { useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery} = organizationApi
