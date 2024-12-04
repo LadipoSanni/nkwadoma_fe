@@ -17,6 +17,7 @@ const CreatePassword = () => {
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false, false]);
     const [confirmPassword, setConfirmPassword] = useState('');
     const router = useRouter()
+    const searchParams = useSearchParams()
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
 
 
