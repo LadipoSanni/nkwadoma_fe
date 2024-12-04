@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import StepContent from '@/features/onboarding/stepContent/Index';
 import dynamic from 'next/dynamic';
 import {useIsIdentityVerifiedQuery} from "@/service/users/Loanee_query";
+import {getItemSessionStorage, setItemSessionStorage} from "@/utils/storage";
 
 const DynamicIdentityVerificationModal = dynamic(() => import('@/reuseable/modals/IdentityVerificationModal'), {
     ssr: false
@@ -22,7 +23,7 @@ const steps = [
 const LoaneeOnboarding = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [showModal, setShowModal] = useState(false);
-    const loanReferralId = sessionStorage.getItem('loanReferralId');
+    const loanReferralId = getItemSessionStorage('loanReferralId');
     const {data} = useIsIdentityVerifiedQuery({ "loanReferralId" : loanReferralId} );
 
     useEffect(() => {

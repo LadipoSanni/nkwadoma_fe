@@ -9,7 +9,7 @@ export const loaneeApi = createApi({
     endpoints: (builder) => ({
         isIdentityVerified: builder.query({
             query: (param: {
-                loanReferralId: string|null
+                loanReferralId: string|undefined
             }) => ({
                 url: `/identity/verification/is-verified`,
                 method: "POST",
