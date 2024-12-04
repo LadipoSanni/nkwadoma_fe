@@ -234,7 +234,7 @@ const ProgramDetails = () => {
     // const description = "Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
 
     return (
-        <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`}>
+        <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`} id={"mainDiv"}>
             <div className={`flex gap-2 w-[9.2rem] items-center cursor-pointer text-meedlBlue`} id={`backClick`}
                  data-testid={`backClick`} onClick={handleBackClick}>
                 <MdOutlineArrowBack className={'h-5 w-5 text-meedlBlue'}/>
@@ -244,24 +244,25 @@ const ProgramDetails = () => {
 
             <Tabs defaultValue="details">
                 <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'}>
-                    <TabsTrigger value="details"
+                    <TabsTrigger value="details" id = {`tabTrigger1`}
                                  className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] w-[3.875rem] data-[state=active]:shadow-custom'}>Details</TabsTrigger>
-                    <TabsTrigger value="cohorts"
+                    <TabsTrigger value="cohorts" id = {`tabTrigger2`}
                                  className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom'}>Cohorts</TabsTrigger>
                 </TabsList>
-                <TabsContent value="details" className={'mt-4'}>
-                    <section className={`p- flex md:flex-row flex-col md:justify-between`}>
-                        <div className={'flex flex-col gap-10'}>
+                <TabsContent value="details" className={'mt-4'} id={`content`}>
+                    <section className={`p- flex md:flex-row flex-col md:justify-between`} id={`section`}>
+                        <div className={'flex flex-col gap-10'} id={`status`}>
                             <div
+                                id={`fibookIcon`}
                                 className={'grid place-items-center h-[7.5rem] w-[7.5rem] bg-lightBlue500 rounded-full'}>
-                                <FiBook className={'h-[50px] w-[50px] text-meedlBlue'}/>
+                                <FiBook id={`book`} className={'h-[50px] w-[50px] text-meedlBlue'}/>
                             </div>
-                            <div className={'flex flex-col gap-3'}>
-                                <h1 className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>
+                            <div className={'flex flex-col gap-3'} id={`tagDiv`}>
+                                <h1 id={`name`} className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>
                                     {progamDetail.name}
                                 </h1>
-                                <div className={'grid gap-5'}>
-                                    <p className={'text-sm font-normal text-black400 w-[351px]'}>{progamDetail.programDescription}</p>
+                                <div className={'grid gap-5'} id={`tagButtonDiv`}>
+                                    <p id={`details`} className={'text-sm font-normal text-black400 w-[351px]'}>{progamDetail.programDescription}</p>
                                     <div id={`details`} data-testid="details"
                                          className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
                                         {tagButtonData.map((tagProps, index) => (
@@ -270,7 +271,7 @@ const ProgramDetails = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className={'flex justify-between'}>
+                            <div id={`buttons`} className={'flex justify-between'}>
                                 <Button onClick={handleModalClick}
                                  id="editButton"
                                         className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
@@ -283,13 +284,13 @@ const ProgramDetails = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className={`md:w-6/12 md:pt-0 pt-0`}>
+                        <div id={`container`} className={`md:w-6/12 md:pt-0 pt-0`}>
                             <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail} dataList={dataList}
                                                  tabTitle1={"Program details"} tabTitle2={"Loan details"}/>
                         </div>
                     </section>
                 </TabsContent>
-                <TabsContent value="cohorts" className={'mt-4 grid gap-7'}>
+                <TabsContent id={`tab2`} value="cohorts" className={'mt-4 grid gap-7'}>
                     <SearchInput id={'programCohortSearch'} value={searchTerm} onChange={handleSearchChange}/>
                     <Tables
                         tableData={cohorts}
