@@ -9,6 +9,7 @@ import { programApi } from "@/service/admin/program_query";
 import { cohortApi } from "@/service/admin/cohort_query";
 import {userApi} from "@/service/users/api";
 import {organizationApi} from "@/service/admin/organization";
+import {loaneeApi} from "@/service/users/Loanee_query";
 
 
 
@@ -32,6 +33,7 @@ export const store = configureStore({
         }).concat([
             authApi.middleware,
             programApi.middleware,
+            loaneeApi.middleware,
             cohortApi.middleware,
             userApi.middleware,
             organizationApi.middleware,
