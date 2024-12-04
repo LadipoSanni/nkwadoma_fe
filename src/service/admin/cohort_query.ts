@@ -143,8 +143,7 @@ export const {
     useViewCohortDetailsQuery,
     useDeleteCohortMutation, useEditCohortMutation,
     useGetCohortDetailsQuery, useReferLoaneeMutation,
-    useVerifyIdentityMutation
-    useGetCohortDetailsQuery, useReferLoaneeMutation,
+    useVerifyIdentityMutation,
     useSearchForLoaneeInACohortQuery
 } = cohortApi;
 
