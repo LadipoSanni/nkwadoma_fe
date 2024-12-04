@@ -7,6 +7,7 @@ import { programApi } from "@/service/admin/program_query";
 import { cohortApi } from "@/service/admin/cohort_query";
 import { userApi } from "@/service/users/api";
 import {organizationApi} from "@/service/admin/organization";
+import {loaneeApi} from "@/service/users/Loanee_query";
 
 
 const appReducer = combineReducers({
@@ -18,6 +19,7 @@ const appReducer = combineReducers({
     [programApi.reducerPath]: programApi.reducer,
     [cohortApi.reducerPath]: cohortApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [loaneeApi.reducerPath]: loaneeApi.reducer,
     [organizationApi.reducerPath] : organizationApi.reducer,
 })
 

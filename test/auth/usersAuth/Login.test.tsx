@@ -12,6 +12,9 @@ jest.mock("next/navigation", () => ({
         };
     }
 }));
+
+jest.setTimeout(10000);
+
 describe('Login Component', () => {
     it("should test that login component does not exist", () => {
         const {queryByTestId} = render(

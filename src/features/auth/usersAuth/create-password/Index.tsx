@@ -17,6 +17,7 @@ const CreatePassword = () => {
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false, false]);
     const [confirmPassword, setConfirmPassword] = useState('');
     const router = useRouter()
+    const searchParams = useSearchParams()
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
 
 
@@ -49,7 +50,7 @@ const CreatePassword = () => {
 
     const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setConfirmPassword(e.target.value);
-    };    const searchParams = useSearchParams()
+    };
 
 
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
@@ -92,7 +93,7 @@ const CreatePassword = () => {
         try {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
-            const access_token = response?.data?.access_token
+            const access_token = response?.data?.accessToken
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment

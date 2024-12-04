@@ -114,6 +114,18 @@ export const cohortApi = createApi({
                method: "GET",
            })
         }),
+        }),
+
+        searchForLoaneeInACohort: builder.query({
+            query: (param:{
+                loaneeName: string,
+                cohortId?: string,
+            }) => ({
+                url: '/cohort/searchForLoanee',
+                method: 'GET',
+                params: param,
+            })
+        })
     })
 })
 
@@ -127,6 +139,7 @@ export const {
     useSearchCohortByOrganisationQuery,
     useViewCohortDetailsQuery,
     useDeleteCohortMutation, useEditCohortMutation,
-    useGetCohortDetailsQuery, useReferLoaneeMutation
+    useGetCohortDetailsQuery, useReferLoaneeMutation,
+    useSearchForLoaneeInACohortQuery
 } = cohortApi;
 
