@@ -12,8 +12,6 @@ import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWi
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
 // import CryptoJS from "crypto-js";
 import {useVerifyIdentityMutation} from "@/service/admin/cohort_query";
-import {getItemSessionStorage} from "@/utils/storage";
-
 
 interface IdentityVerificationModalProps {
     isOpen: boolean;
@@ -52,8 +50,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
 
         // const encryptedBvn = CryptoJS.AES.encrypt(data.bvn, secretKey).toString();
         // const encryptedNin = CryptoJS.AES.encrypt(data.nin, secretKey).toString();
-
-
 
         const loaneeBvn = data.bvn
         const loaneeNin = data.nin
