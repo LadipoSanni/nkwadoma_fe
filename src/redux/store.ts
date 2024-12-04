@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { useDispatch, useSelector, type TypedUseSelectorHook } from "react-redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import appReducer from "@/redux/reducer";
@@ -10,6 +9,7 @@ import { cohortApi } from "@/service/admin/cohort_query";
 import {userApi} from "@/service/users/api";
 import {organizationApi} from "@/service/admin/organization";
 import {loaneeApi} from "@/service/users/Loanee_query";
+import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 
 
 
