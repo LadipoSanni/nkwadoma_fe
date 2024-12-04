@@ -114,8 +114,6 @@ export const cohortApi = createApi({
                method: "GET",
            })
         }),
-        }),
-
         searchForLoaneeInACohort: builder.query({
             query: (param:{
                 loaneeName: string,
