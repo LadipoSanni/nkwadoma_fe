@@ -92,7 +92,7 @@ const CreatePassword = () => {
         try {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
-            const access_token = response?.data?.access_token
+            const access_token = response?.data?.accessToken
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
