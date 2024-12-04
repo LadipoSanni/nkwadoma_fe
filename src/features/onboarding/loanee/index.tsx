@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { cabinetGrotesk, inter } from '@/app/fonts';
 import Connector from '@/components/common/Connector';
 import { Button } from '@/components/ui/button';
 import StepContent from '@/features/onboarding/stepContent/Index';
 import dynamic from 'next/dynamic';
+import {useIsIdentityVerifiedQuery} from "@/service/users/Loanee_query";
 
 const DynamicIdentityVerificationModal = dynamic(() => import('@/reuseable/modals/IdentityVerificationModal'), {
     ssr: false
@@ -21,12 +22,33 @@ const steps = [
 const LoaneeOnboarding = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [showModal, setShowModal] = useState(false);
+    const loanReferralId = sessionStorage.getItem('loanReferralId');
+    const {data} = useIsIdentityVerifiedQuery({ "loanReferralId" : loanReferralId} );
 
+    useEffect(() => {
+        if (data?.data === "Identity Not Verified"){
+            console.log(data.data)
+        }
+    }, [data]);
     const handleThirdStepContinue = () => {
         setShowModal(false);
         setCurrentStep(2);
     };
+    const handleAcceptLoanReferral = () =>{
+        console.log(loanReferralId)
+    }
+    const handleNext = ()=>{
+        console.log("currentStep : ", currentStep);
+        if (currentStep === 0){
+            handleAcceptLoanReferral()
+        }
+        if (currentStep === 1) {
+            setShowModal(true);
+        } else {
+            setCurrentStep(currentStep + 1);
+        }
 
+    }
     return (
         <div id="loanApplicationDetailsContainer"
              className={`md:overflow-visible overflow-y-auto h-[calc(100vh-8rem)] md:h-auto grid pr-1.5 md:gap-[58px] gap-6 ${inter.className}`}>
@@ -73,13 +95,7 @@ const LoaneeOnboarding = () => {
                         <Button
                             id="continueButton"
                             className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem] hover:bg-meedlBlue focus:bg-meedlBlue'}
-                            onClick={() => {
-                                if (currentStep === 1) {
-                                    setShowModal(true);
-                                } else {
-                                    setCurrentStep(currentStep + 1);
-                                }
-                            }}
+                            onClick={handleNext}
                         >
                             {currentStep === 1 ? 'Start identity verification' : 'Continue'}
                         </Button>
