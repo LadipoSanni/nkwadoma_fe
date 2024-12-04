@@ -50,7 +50,7 @@ const CreatePassword = () => {
 
     const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setConfirmPassword(e.target.value);
-    };    const searchParams = useSearchParams()
+    };
 
 
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
