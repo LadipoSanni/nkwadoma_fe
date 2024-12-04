@@ -13,7 +13,7 @@ import {useRouter} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
 import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
-import {setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
+import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 
 
@@ -109,10 +109,10 @@ const Login: React.FC = () => {
                     if (user_role) {
                         storeUserDetails(access_token, user_email, user_role, userName)
                         if (user_role === 'LOANEE') {
-                            store.dispatch(setCurrentNavBottomItem("overview"))
+                            store.dispatch(setCurrentNavbarItem("overview"))
                             router.push("/overview")
                         } else {
-                            store.dispatch(setCurrentNavBottomItem("Overview"))
+                            store.dispatch(setCurrentNavbarItem("Overview"))
                             router.push("/Overview")
                         }
 
