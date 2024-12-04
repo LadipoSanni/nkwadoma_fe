@@ -33,7 +33,8 @@ function DatePickerInput({selectedDate, onDateChange,className, placeholder = "S
       onClick={() => setIsOpen(true)}
       >
          {selectedDate ? (
-            format(selectedDate, 'dd-MM-yyyy') 
+            // format(selectedDate, 'dd-MM-yyyy') 
+            !isNaN(selectedDate.getTime()) ? format(selectedDate, 'dd-MM-yyyy') : placeholder
           ) : (
             <span className="text-grey400">{placeholder}</span> 
           )}

@@ -252,6 +252,8 @@ function InviteOrganizationForm({setIsOpen}: props) {
              <div>
              <Label htmlFor="industry">Industry</Label>
              <CustomSelect
+             triggerId='industryTriggerId'
+              id='industryId'
               selectContent={industries}
               value={values.industry}
               onChange={(value) => setFieldValue("industry", value)}
@@ -271,6 +273,8 @@ function InviteOrganizationForm({setIsOpen}: props) {
              <div>
              <Label htmlFor="serviceOffering:">Service Offering:</Label>
              <CustomSelect
+             triggerId='serviceOfferingTriggerId'
+              id='serviceOffering'
               selectContent={serviceOfferings}
               value={values.serviceOffering}
               onChange={(value) => setFieldValue("serviceOffering", value)}
@@ -427,11 +431,12 @@ function InviteOrganizationForm({setIsOpen}: props) {
                 type='reset'
                 className='w-full md:w-36 h-[57px] mb-4 border-solid border-[#142854] text-[#142854]'
                 onClick={handleCloseModal}
+                id='CancelInviteOrganization'
                 >
                     Cancel
                 </Button>
                 <Button
-                id='submitTrainee'
+                id='inviteOrganization'
                 variant={'default'}
                 className={`w-full md:w-36 h-[57px] ${!isValid? "bg-neutral650 cursor-not-allowed " :"hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
                 type='submit'

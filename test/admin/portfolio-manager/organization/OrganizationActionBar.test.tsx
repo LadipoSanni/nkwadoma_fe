@@ -1,5 +1,5 @@
 import { render, screen, fireEvent,cleanup} from "@testing-library/react";
-import OrganizationActionBar from "@/components/portfolio-manager/Organization-action-bar";
+import OrganizationActionBar from "@/components/portfolio-manager/organization/Organization-action-bar";
 
 
 describe("OrganizationActionBar", () => {
