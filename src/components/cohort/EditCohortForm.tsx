@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import { useEditCohortMutation } from '@/service/admin/cohort_query';
 import { useQueryClient } from '@tanstack/react-query';
+import Image from 'next/image';
 // import data from '@iconify/icons-line-md/loading-loop';
 // import { uploadImageToCloudinary } from '@/utils/UploadToCloudinary';
 
@@ -342,9 +343,8 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
               <div>
                 <Label htmlFor='cohortImage'>Cohort Image (Optional)</Label>
                 <div className='mt-2'>
-                  
                       <div className='relative border border-solid h-24 rounded flex items-center justify-between px-4'>
-                      {image? ( <div   className='flex items-center'> <img  data-testid="image" src={image} alt="Cohort" className="w-24 h-16 object-cover rounded-md" />
+                      {image? ( <div   className='flex items-center'> <Image  data-testid="image" width={500} height={500} src={image} alt="Cohort" className="w-24 h-16 object-cover rounded-md" />
                        <span className="ml-4 text-sm text-gray-600">
                        {uploadedFile ? uploadedFile.name : "Existing Image"}
                      </span> </div>
