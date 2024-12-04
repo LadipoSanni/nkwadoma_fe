@@ -43,6 +43,8 @@ const CohortDetails = () => {
         expectedEndDate: "",
     })
 
+    console.log("cohort details: ", cohortDetails)
+
     useEffect(() => {
         if (cohortDetails && cohortDetails?.data) {
             const details = cohortDetails.data
@@ -180,7 +182,7 @@ const CohortDetails = () => {
                     </TabsContent>
 
                     <TabsContent value={"loanees"} id={`traineeId`}>
-                        <LoaneeInCohortView/>
+                        <LoaneeInCohortView cohortFee={cohortDetails?.data?.totalCohortFee}/>
                     </TabsContent>
 
                 </div>

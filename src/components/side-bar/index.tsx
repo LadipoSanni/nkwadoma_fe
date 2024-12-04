@@ -60,13 +60,12 @@ const SideBar = () => {
     const handleLogout =  async () => {
         store.dispatch(setCurrentNavBottomItem("Logout"))
         await persistor.purge();
-        localStorage.removeItem('persist:root');
      try{
           await logout({})
-         redirect("/auth/login")
+         router.push("/auth/login")
      }catch (error){
          console.log("error: ", error)
-          redirect("/auth/login")
+         router.push("/auth/login")
 
      }
     }
@@ -269,11 +268,18 @@ const SideBar = () => {
             }
         }
     }
+    const closeSideBar = () => {
+        console.log("it's gets here:: ")
+        store.dispatch(setShowMobileSideBar(false))
+        console.log("it's gets afteree:: ")
+
+    }
+
 
 
     return (
         <div className={` absolute bottom-0 grid md:static   `}>
-            {showMobileSideBar ?
+            {showMobileSideBar &&
                 <div
                     id={'adminMobileSideBar'}
                     className={` z-40 w-[100vw] overflow-hidden h-[100vh]  border-r-2 border-r-grey-200  flex md:hidden`}
@@ -296,23 +302,15 @@ const SideBar = () => {
                         <div className={`  grid h-fit  w-full `}>
                             <NavbarRouter currentTab={currentTab} handleClick={clickNavbar}
                                           navbarItems={getUserSideBarByRole(role)}/>
-                            {/*<div className={` grid w-full h-fit md:hidden md:h-fit  md:w-full `}>*/}
-                                < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
-                            {/*</div>*/}
-
+                            < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
                         </div>
-                        {/*<div className={`md:absolute md:grid  md:bottom-0 gap-3  px-4 md:h-fit md:w-full `}>*/}
-
-
                     </div>
                     <button data-testid="blurry" id="sideBarblurBackground"
-                            className={`  h-[100%] w-[40%] z-10 bg-[#717987] opacity-20 `}
-                            onClick={() => {
-                                store.dispatch(setShowMobileSideBar(false))
-                            }}
+                            className={` grid md:hidden   h-[100%] w-[40%] z-10 bg-[#717987] opacity-30 `}
+                            onClick={closeSideBar}
                     ></button>
                 </div>
-                :
+            }
                 <aside
                     id={'adminMediumSideBar'}
                     data-testid={'adminMediumSideBar'}
@@ -364,7 +362,7 @@ const SideBar = () => {
                         {/*</div>*/}
                     </div>
                 </aside>
-            }
+
 
         </div>
     );
