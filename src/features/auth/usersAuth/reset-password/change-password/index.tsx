@@ -13,7 +13,7 @@ const Step3 = () => {
     // const [disableButton, setDisableButton] = useState(true)
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
     const searchParams = useSearchParams()
-    const [resetPassword, {isError, isSuccess, data}] = useResetPasswordMutation()
+    const [resetPassword, { data}] = useResetPasswordMutation()
 
     const criteriaMessages = [
         "Must be at least 8 characters",
@@ -38,12 +38,12 @@ const Step3 = () => {
 
     const changePassword = () => {
         const token = getUserToken()
-        console.log("token: ", token)
+        // console.log("token: ", token)
 
         try{
 
             const response = resetPassword({token: token, password: newPassword}).unwrap()
-            console.log("response: ", response,"isError:: ", isError, "isSuccess:: ", isSuccess, "data: ", data)
+            // console.log("response: ", response,"isError:: ", isError, "isSuccess:: ", isSuccess, "data: ", data)
             if(data?.message){
                 toast({
                     description: data?.message,
@@ -51,7 +51,7 @@ const Step3 = () => {
                 })
             }
         }catch(error){
-            console.log("error: ", error)
+            // console.log("error: ", error)
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
