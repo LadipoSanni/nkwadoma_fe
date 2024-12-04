@@ -9,6 +9,7 @@ import { formatAmount, formatDate } from '@/utils/Format';
 import { MdOutlinePayments } from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
+import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -141,11 +142,11 @@ const InvestmentVehicle = () => {
            isOpen={isModalOpen}
            closeModal={()=> setIsModalOpen(false)}
            className='pb-1'
-           headerTitle='Create Investment Vehicle'
+           headerTitle='Create Investment'
            closeOnOverlayClick={true}
            icon={Cross2Icon}
           >
-            create
+            <CreateInvestmentVehicle />
           </TableModal>
         }
       </div>
