@@ -60,7 +60,6 @@ const SideBar = () => {
     const handleLogout =  async () => {
         store.dispatch(setCurrentNavBottomItem("Logout"))
         await persistor.purge();
-        localStorage.removeItem('persist:root');
      try{
           await logout({})
          redirect("/auth/login")
@@ -273,7 +272,7 @@ const SideBar = () => {
 
     return (
         <div className={` absolute bottom-0 grid md:static   `}>
-            {showMobileSideBar ?
+            {showMobileSideBar &&
                 <div
                     id={'adminMobileSideBar'}
                     className={` z-40 w-[100vw] overflow-hidden h-[100vh]  border-r-2 border-r-grey-200  flex md:hidden`}
@@ -312,7 +311,7 @@ const SideBar = () => {
                             }}
                     ></button>
                 </div>
-                :
+            }
                 <aside
                     id={'adminMediumSideBar'}
                     data-testid={'adminMediumSideBar'}
@@ -364,7 +363,7 @@ const SideBar = () => {
                         {/*</div>*/}
                     </div>
                 </aside>
-            }
+
 
         </div>
     );

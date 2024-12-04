@@ -79,6 +79,7 @@ const Login: React.FC = () => {
     }
 
 
+
     const {toast} = useToast()
     const handleLogin = async () => {
         if (!navigator.onLine) {
@@ -101,7 +102,10 @@ const Login: React.FC = () => {
                     const user_role = user_roles.filter(getUserRoles).at(0)
                     clearData()
                     await persistor.purge();
-                    localStorage.removeItem('persist:root');
+                    toast({
+                        description: "Login successfully",
+                        status: "success",
+                    });
                     if (user_role) {
                         storeUserDetails(access_token, user_email, user_role, userName)
                         if (user_role === 'LOANEE') {
