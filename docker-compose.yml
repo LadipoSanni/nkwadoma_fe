@@ -18,6 +18,8 @@ services:
   backend:
     image: 357586184453.dkr.ecr.us-east-1.amazonaws.com/nkwadoma:alpha
     environment:
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: ${FLYWAY_BASELINE_ON_MIGRATE}
+      SPRING_FLYWAY_BASELINE_VERSION: ${FLYWAY_BASELINE_VERSION}
       PROFILE: dev
       PORT: 8081
 
