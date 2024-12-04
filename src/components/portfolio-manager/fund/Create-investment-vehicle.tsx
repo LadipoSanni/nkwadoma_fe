@@ -31,9 +31,9 @@ import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
     
   }
 
-  interface props {
-    setIsOpen? : (e:boolean) => void;
-  }
+  // interface props {
+  //   setIsOpen? : (e:boolean) => void;
+  // }
 function CreateInvestmentVehicle() {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
 
