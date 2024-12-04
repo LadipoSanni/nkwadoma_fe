@@ -33,7 +33,11 @@ interface TableRowData {
 
 type viewAllLoanees = viewAllLoanee & TableRowData;
 
-export const LoaneeInCohortView = () => {
+interface props {
+    cohortFee?: string,
+}
+
+export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [allLoanee, setAllLoanee] = useState<viewAllLoanees[]>([]);
     const [isReferred, setIsReferred] = React.useState(``);
     const [addLoanee, setAddLoanee] = React.useState(false);
@@ -185,7 +189,7 @@ export const LoaneeInCohortView = () => {
                     headerTitle={`Add Loanee`}
                     width="30%"
                 >
-                    <AddTraineeForm cohortId={id} setIsOpen={() => setAddLoanee(false)}/>
+                    <AddTraineeForm tuitionFee={cohortFee} cohortId={id} setIsOpen={() => setAddLoanee(false)}/>
                 </TableModal>
 
             </div>
