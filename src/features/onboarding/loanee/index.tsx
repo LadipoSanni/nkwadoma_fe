@@ -7,8 +7,7 @@ import { Button } from '@/components/ui/button';
 import StepContent from '@/features/onboarding/stepContent/Index';
 import dynamic from 'next/dynamic';
 import {useIsIdentityVerifiedQuery, useViewLoanReferralDetailsQuery} from "@/service/users/Loanee_query";
-import {getItemSessionStorage} from "@/utils/storage";
-import isloading from "@/reuseable/display/Isloading";
+
 
 const DynamicIdentityVerificationModal = dynamic(() => import('@/reuseable/modals/IdentityVerificationModal'), {
     ssr: false
@@ -37,7 +36,6 @@ const LoaneeOnboarding = () => {
                 return data.data.id || prevId;
             });
         }
-        console.log("loaneeLoan detail : " , data)
         if (data?.statusCode === "OK" && data?.data?.loanee?.loaneeLoanDetail) {
             const backendDetails = data.data.loanee.loaneeLoanDetail;
             setLoaneeLoanDetail(prevState => {
@@ -83,7 +81,6 @@ const LoaneeOnboarding = () => {
         }
 
     }
-    // console.log("loaneeLoan detail : " , loaneeLoanDetail)
     return (
         <div id="loanApplicationDetailsContainer"
              className={`md:overflow-visible overflow-y-auto h-[calc(100vh-8rem)] md:h-auto grid pr-1.5 md:gap-[58px] gap-6 ${inter.className}`}>

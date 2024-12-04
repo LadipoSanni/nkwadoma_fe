@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import LoanApplicationDetails from "@/features/onboarding/stepContent/loanApplicationDetails/Index";
 import IdentityVerification from "@/features/onboarding/stepContent/identityVerification/Index";
 import AdditionalInformation from "@/features/onboarding/stepContent/additionalInformation/Index";
