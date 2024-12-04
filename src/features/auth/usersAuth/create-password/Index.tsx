@@ -88,12 +88,10 @@ const CreatePassword = () => {
     }
     const handleCreatePassword = async () => {
         const token = getUserToken()
-        console.log("token: ", token)
 
         try {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
-            console.log("responsebhybyuihiuhuihiu : ",response)
             const access_token = response?.data?.access_token
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
@@ -105,7 +103,6 @@ const CreatePassword = () => {
             // const user_email = decode_access_token?.email
             const user_roles = decode_access_token?.realm_access?.roles
             const user_role = user_roles.filter(getUserRoles).at(0)
-            console.log("userName: ", userName,"user_role; ", user_role )
             if (user_role) {
                 storeUserDetails(access_token, user_email, user_role, userName)
                 if (user_role === 'LOANEE') {
@@ -118,7 +115,6 @@ const CreatePassword = () => {
 
 
         }catch (error){
-            console.log("error: ", error)
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
