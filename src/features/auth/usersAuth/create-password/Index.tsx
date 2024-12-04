@@ -17,6 +17,7 @@ const CreatePassword = () => {
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false, false]);
     const [confirmPassword, setConfirmPassword] = useState('');
     const router = useRouter()
+    const searchParams = useSearchParams()
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
 
 
@@ -49,7 +50,7 @@ const CreatePassword = () => {
 
     const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setConfirmPassword(e.target.value);
-    };    const searchParams = useSearchParams()
+    };
 
 
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
