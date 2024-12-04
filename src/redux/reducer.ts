@@ -8,7 +8,6 @@ import { cohortApi } from "@/service/admin/cohort_query";
 import { userApi } from "@/service/users/api";
 import {organizationApi} from "@/service/admin/organization";
 import {loaneeApi} from "@/service/users/Loanee_query";
-// import {loaneeSlice} from "@/redux/slice/loanee/Loanee_slice";
 
 
 const appReducer = combineReducers({
@@ -16,7 +15,6 @@ const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
     selectedLoan: selectedLoanReducer,
     authSlice: authSliceReducer,
-    // loaneeReducer: loaneeSlice,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
     [cohortApi.reducerPath]: cohortApi.reducer,
