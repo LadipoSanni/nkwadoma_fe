@@ -9,6 +9,7 @@ import {DotsVerticalIcon} from '@radix-ui/react-icons';
 import {Button} from '@/components/ui/button'
 import {Menubar, MenubarTrigger, MenubarContent, MenubarMenu, MenubarItem} from '@/components/ui/menubar'
 import TableEmptyState from '../emptyStates/TableEmptyState'
+import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 
 
 interface ColumnProps<T> {
@@ -48,6 +49,8 @@ interface Props<T extends TableRowData> {
     optionalRowsPerPage?: number;
     tableCellStyle?: string;
     enableRowSelection?: boolean;
+    isLoading?: boolean;
+    condition?:boolean
 }
 
 
@@ -70,8 +73,8 @@ function SelectableTable<T extends TableRowData> ({
                                              optionalRowsPerPage = 8,
                                              tableCellStyle,
                                              enableRowSelection = false,
-
-
+                                                      isLoading = true,
+                                                      condition
                                          }: Props<T>) {
     const [page, setPage] = useState(1);
     const rowsPerPage = optionalRowsPerPage;
@@ -145,9 +148,10 @@ function SelectableTable<T extends TableRowData> ({
 
     return (
         <div id="loanProductTableContainer" className={`w-[100%] `}>
-            {
-                tableData.length === 0 ? <TableEmptyState icon={icon} name={sideBarTabName} className={emptyStateStyle}
-                                                          optionalFilterName={optionalFilterName}/> : (
+                {
+                    isLoading ? (<SkeletonForTable/>) :
+                        ( tableData.length === 0 ? <TableEmptyState icon={icon} name={sideBarTabName} className={emptyStateStyle}
+                                                                    optionalFilterName={optionalFilterName} condition={condition}/> : (
                     <div>
                         <div id="loanProductTableBorder"
                              className='border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block '>
@@ -418,6 +422,7 @@ function SelectableTable<T extends TableRowData> ({
 
                         </div>
                     </div>
+                            )
                 )
             }
         </div>
