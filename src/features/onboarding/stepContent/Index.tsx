@@ -7,13 +7,19 @@ import ConfirmLoanReferralAcceptance from "@/features/onboarding/stepContent/con
 interface StepContentProps {
     step: number;
     setCurrentStep: (step: number) => void;
-
+    loaneeLoanDetail: LoaneeLoanDetail;
+}
+export interface LoaneeLoanDetail {
+    tuitionAmount: string;
+    amountRequested: string;
+    initialDeposit: string
 }
 
-const StepContent: React.FC<StepContentProps> = ({ step, setCurrentStep }) => {
+const StepContent: React.FC<StepContentProps> = ({ step, setCurrentStep, loaneeLoanDetail }) => {
+
     switch (step) {
         case 0:
-            return <LoanApplicationDetails/>;
+            return <LoanApplicationDetails initialDeposit={loaneeLoanDetail.initialDeposit} amountRequested={loaneeLoanDetail.amountRequested} tuitionAmount={loaneeLoanDetail.tuitionAmount}/>;
         case 1:
             return <IdentityVerification/>;
         case 2:
