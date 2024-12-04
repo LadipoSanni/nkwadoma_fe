@@ -269,9 +269,7 @@ const SideBar = () => {
         }
     }
     const closeSideBar = () => {
-        console.log("it's gets here:: ")
         store.dispatch(setShowMobileSideBar(false))
-        console.log("it's gets afteree:: ")
 
     }
 

@@ -107,13 +107,20 @@ export const cohortApi = createApi({
                 method: "GET",
                 params: cohortId
             }),
-        })
+        }),
+        getCohortLoanBreakDown : builder.query({
+           query: (cohortId) => ({
+               url:`/cohort/loanbreakdown?cohortId=${cohortId}`,
+               method: "GET",
+           })
+        }),
     })
 })
 
 
 
 export const {
+    useGetCohortLoanBreakDownQuery,
     useCreateCohortMutation,
     useViewAllLoaneeQuery,
     useGetAllCohortsByOrganisationQuery,

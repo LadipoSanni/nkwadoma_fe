@@ -10,6 +10,8 @@ import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 // import {getUserDetails} from '@/features/auth/usersAuth/login/action';
 import {MdOutlineDelete} from "react-icons/md";
+import {useGetCohortLoanBreakDownQuery} from "@/service/admin/cohort_query";
+import {getItemSessionStorage} from "@/utils/storage";
 
 interface idProps {
     cohortId: string;
@@ -17,6 +19,13 @@ interface idProps {
     setIsOpen?: (e: boolean | undefined) => void;
 }
 
+type cohortBreakDown = {
+    currency: string,
+    itemAmount: string,
+    itemName: string,
+    loanBreakdownId: string
+
+}
 
 function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
     // const {storedAccessToken} = getUserDetails();
@@ -30,6 +39,9 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
         {item: 'Total amount requested', amount: '₦3,500,000.00'},
     ];
 
+    const COHORTID  = getItemSessionStorage("cohortId")
+    console.log("coddo: ",COHORTID )
+
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [isLoading] = useState(false);
@@ -37,6 +49,9 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
     const [loanBreakdowns, setLoanBreakdowns] = useState<
         { itemName: string; itemAmount: string; currency: string }[]
     >([]);
+    const {data} = useGetCohortLoanBreakDownQuery(COHORTID)
+    const [cohortBreakDown, setCohortBreakDown] = useState([]);
+
 
     const handleNewValue = (newValue: string, index: number) => {
         setInputValue(newValue);
@@ -82,8 +97,18 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
         }
     };
 
-    const handleSubmitStep1 = () => {
+    const handleSubmitStep1 =  () => {
+        // const response = await loanBreakDown(cohortId).unwrap()
+        console.log("cohortId", cohortId,"response: ", data)
+        const newCohortBreakDown = data?.data
+        // newCohortBreakDown.add(data?.data)
+        console.log(" beforee usestase:: ", cohortBreakDown, "dada: ", data?.data, "duydu: ", newCohortBreakDown)
+        cohortBreakDown.push(data?.data)
+        // setCohortBreakDown(data?.data)
+
+        console.log(" usestase:: ", cohortBreakDown.at(0))
         setStep(2);
+
     };
 
     const handleFinalSubmit = (values: typeof initialFormValue) => {

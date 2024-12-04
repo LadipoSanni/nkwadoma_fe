@@ -103,7 +103,7 @@ const Login: React.FC = () => {
                     clearData()
                     await persistor.purge();
                     toast({
-                        description: "Login successfully",
+                        description: "Login successful",
                         status: "success",
                     });
                     if (user_role) {
