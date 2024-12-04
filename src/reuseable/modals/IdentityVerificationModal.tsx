@@ -35,7 +35,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const methods = useForm<FormData>({mode: 'onChange'});
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
-    const [id,setId] = useState('');
+    const [id,setId] = useState('9faf34f7-a805-4d7a-ab55-0fab5883bb23');
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
     const [showCamera, setShowCamera] = useState(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
@@ -46,14 +46,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
         setIsSecondModalOpen(false);
         setShowSuccessDialog(true);
     };
-
-    useEffect(() => {
-        const loanReferralIdInStorage = getItemSessionStorage('loanReferralId');
-        if(loanReferralIdInStorage) {
-            setId(loanReferralIdInStorage)
-        }
-        setId("9faf34f7-a805-4d7a-ab55-0fab5883bb23")
-    }, []);
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
         // const secretKey = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
