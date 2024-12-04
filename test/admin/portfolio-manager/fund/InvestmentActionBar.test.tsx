@@ -1,5 +1,5 @@
 import { render, screen, fireEvent,cleanup} from "@testing-library/react";
-import InvestmentActionBar from "@/components/portfolio-manager/Investment-action-bar";
+import InvestmentActionBar from "@/components/portfolio-manager/fund/Investment-action-bar";
 
 
 describe("InvestmentActionBar", () => {

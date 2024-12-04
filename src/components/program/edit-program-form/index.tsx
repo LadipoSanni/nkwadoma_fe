@@ -168,6 +168,8 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                     <Label htmlFor="programDeliveryType">Program delivery type</Label>
                   
                     <CustomSelect
+                      triggerId='editProgramDeliveryTypeTriggerId'
+                      id="editProgramDeliveryType"
                       selectContent={programDeliveryTypes}
                       value={values.deliveryType} 
                       onChange={(value) => setFieldValue("deliveryType", value)} 
@@ -188,6 +190,8 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                   <div>
                     <Label htmlFor="programMode">Program mode</Label>
                     <CustomSelect
+                      triggerId='editProgramModeTriggerId'
+                      id="editProgramModalSelect"
                       selectContent={programModes}
                       value={values.mode} 
                       onChange={(value) => setFieldValue("mode", value)} 
@@ -263,6 +267,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                 </div>
                 <div className='md:flex gap-4 justify-end mt-2 mb-4 md:mb-0'>
                 <Button 
+                 id='editProgramCancelButton'
                 variant={'outline'} 
                 type='reset'
                 className='w-full md:w-36 h-[57px] mb-4'
@@ -271,6 +276,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                     Cancel
                 </Button>
                 <Button 
+                id='editProgramSaveButton'
                 variant={'default'} 
                 className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-neutral650 cursor-not-allowed " :"hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
                 type='submit'

@@ -24,7 +24,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                                                     }) => {
 
     const ProgramHeader = [
-        {title: "Trainee", sortable: true, id: "trainee"},
+        {title: "Loanee", sortable: true, id: "trainee"},
         {title: "Referral Date", sortable: true, id: "referralDate"},
         {title: "Amount Requested", sortable: true, id: "amountRequested"},
     ];
@@ -56,10 +56,10 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                          key={index}
                                          className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
                                         <div className="text-black300">
-                                            <p>{item.label}</p>
+                                            <span>{item.label}</span>
                                         </div>
                                         <div className="text-meedlBlack">
-                                            <p>{item.value}</p>
+                                            <span>{item.value}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -92,10 +92,10 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                                  key={index}
                                                  className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
                                                 <div className="text-black300">
-                                                    <p>{item.detail}</p>
+                                                    <span>{item.detail}</span>
                                                 </div>
                                                 <div className="text-meedlBlack">
-                                                    <p>{item.value}</p>
+                                                    <span>{item.value}</span>
                                                 </div>
                                             </div>
                                         ))}

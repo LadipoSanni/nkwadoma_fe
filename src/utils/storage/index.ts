@@ -17,6 +17,12 @@ export const setItemSessionStorage = (name: string, item: string) => {
    }
 }
 
+export const clearData = (): void => {
+   if (typeof window !== 'undefined') {
+      localStorage.clear();
+      sessionStorage.clear();   }
+}
+
 export const getItemSessionStorage = (name: string): string | undefined => {
    if (typeof window !== 'undefined') {
       return sessionStorage.getItem(name) ?? undefined;

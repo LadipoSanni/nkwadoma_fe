@@ -38,6 +38,18 @@ export const cohortApi = createApi({
             invalidatesTags: ({id}) => [{type: 'cohort', id}],
         }),
 
+        referLoanee: builder.mutation({
+            query: (formData: {
+                cohortId: string
+                loaneeIds: string[]
+            }) => ({
+                url: `/cohort/loanee/refer`,
+                method: "POST",
+                body: formData
+            }),
+            invalidatesTags: ({id}) => [{type: 'cohort', id}],
+        }),
+
         viewAllLoanee: builder.query({
             query: (data: {
                 cohortId?: string,
@@ -90,7 +102,7 @@ export const cohortApi = createApi({
           invalidatesTags: ['cohort'],
         }),
         getCohortDetails: builder.query({
-            query: (cohortId:{id: string}) => ({
+            query: (cohortId:{cohortId: string}) => ({
                 url: `/cohort-details`,
                 method: "GET",
                 params: cohortId
@@ -108,6 +120,6 @@ export const {
     useSearchCohortByOrganisationQuery,
     useViewCohortDetailsQuery,
     useDeleteCohortMutation, useEditCohortMutation,
-    useGetCohortDetailsQuery
+    useGetCohortDetailsQuery, useReferLoaneeMutation
 } = cohortApi;
 
