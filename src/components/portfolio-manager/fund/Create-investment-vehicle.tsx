@@ -1,11 +1,12 @@
 import React,{useState} from 'react'
-// import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Formik,Form,Field,ErrorMessage } from 'formik'
 import * as Yup from 'yup';
 import { Label } from '@/components/ui/label';
 import {inter} from "@/app/fonts"
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
-// import CustomSelect from '@/reuseable/Input/Custom-select';
+import RichTextEditor from '@/reuseable/Input/Ritch-text-editor';
+import Isloading from '@/reuseable/display/Isloading';
 
 
 // interface ApiError {
@@ -31,18 +32,19 @@ import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
     
   }
 
-  // interface props {
-  //   setIsOpen? : (e:boolean) => void;
-  // }
-function CreateInvestmentVehicle() {
+  interface props {
+    setIsOpen? : (e:boolean) => void;
+  }
+function CreateInvestmentVehicle({setIsOpen}:props) {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
 
-    // const handleCloseModal = () => {
-    //     if (setIsOpen) {
-    //       setIsOpen(false);
-    //     }
-    //   }
-
+    const handleCloseModal = () => {
+        if (setIsOpen) {
+          setIsOpen(false);
+        }
+      }
+      
+      const isLoading = false
   
       const validationSchema = Yup.object().shape({
         name:Yup.string()
@@ -85,7 +87,7 @@ function CreateInvestmentVehicle() {
         validationSchema={validationSchema}
         >
        {
-        ({errors,  touched,setFieldValue}) => (
+        ({errors,isValid,values,  touched,setFieldValue}) => (
             <Form className={`${inter.className}`}>
               <div
                className='grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto'
@@ -277,6 +279,84 @@ function CreateInvestmentVehicle() {
                 }
                 </div>
                 </div>
+                <div className='relative bottom-3'>
+                <Label htmlFor="name">Bank partner</Label>
+                <Field
+                  id="bankPartner"
+                  name="bankPartner"
+                  placeholder="Enter Bank partner"
+                  className="w-full p-3 border rounded focus:outline-none mt-2"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("bankPartner", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                  />
+                </div>
+                <div className='grid md:grid-cols-2 gap-4 w-full relative bottom-3'>
+                <div>
+                    <Label htmlFor="trustee">Trustee</Label>
+                    <Field
+                      id="trustee"
+                      name="trustee"
+                      placeholder="Enter trustee"
+                      className="w-full p-3 border rounded focus:outline-none mt-2"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("trustee", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                    />
+                     {/* {
+                 errors.sponsor && touched.sponsor &&  (
+                    <ErrorMessage
+                    name="sponsor"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                 )
+                } */}
+                </div>
+                <div>
+                <Label htmlFor="custodian">Custodian</Label>
+                    <Field
+                      id="custodian"
+                      name="custodian"
+                      placeholder="Enter Custodian"
+                      className="w-full p-3 border rounded focus:outline-none mt-2"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("custodian", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                    /> 
+                    {/* {
+                 errors.fundManager && touched.fundManager &&  (
+                    <ErrorMessage
+                    name="fundManager"
+                    component="div"
+                    className="text-red-500 text-sm"
+                  />
+                 )
+                } */}
+                </div>
+                </div>
+                <div className='relative bottom-3'>
+                <Label htmlFor="mandate">Vehicle mandate</Label>
+                 <RichTextEditor value="" onChange={(value) => setFieldValue("vehicleMandate", value)} />
+                </div>
+                <div className='md:flex gap-4 justify-end mt-2 mb-4 md:mb-0'>
+                <Button 
+                variant={'outline'} 
+                type='reset'
+                className='w-full md:w-36 h-[57px] mb-4'
+                // onClick={() => handleReset(resetForm)}
+                onClick={handleCloseModal}
+                >
+                    Cancel
+                </Button>
+                <Button 
+                variant={'default'} 
+                className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-neutral650 cursor-not-allowed " :"hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
+                type='submit'
+                disabled={!isValid}
+                >
+                  {isLoading ? (
+                                     <Isloading />          
+                                            ) : (
+                                                "Publish"
+                                            )}
+                  
+                </Button>
+              </div>
               </div>
             </Form>
         )
