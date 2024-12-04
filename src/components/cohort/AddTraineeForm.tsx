@@ -8,7 +8,7 @@ import {Icon} from '@iconify/react';
 import {inter} from '@/app/fonts';
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
-import {getUserDetails} from '@/features/auth/usersAuth/login/action';
+// import {getUserDetails} from '@/features/auth/usersAuth/login/action';
 import {MdOutlineDelete} from "react-icons/md";
 
 interface idProps {
@@ -20,7 +20,7 @@ interface idProps {
 
 function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
     // const {storedAccessToken} = getUserDetails();
-    console.log('tuitionfee : ', tuitionFee);
+    // console.log('tuitionfee : ', tuitionFee);
 
     const details = [
         {item: 'Tuition', amount: tuitionFee},
@@ -40,7 +40,7 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
 
     const handleNewValue = (newValue: string, index: number) => {
         setInputValue(newValue);
-        // console.log(`New value for detail-${index}:`, newValue);
+        console.log(`New value for detail-${index}:`, newValue);
     };
 
     const validationSchemaStep1 = Yup.object().shape({
@@ -87,10 +87,10 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
     };
 
     const handleFinalSubmit = (values: typeof initialFormValue) => {
-        const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
-        const formattedValues = {...values, initialDeposit: formattedDeposit};
+        // const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
+        // const formattedValues = {...values, initialDeposit: formattedDeposit};
         toastPopUp.showToast();
-        // console.log(formattedValues);
+        console.log(values);
 
         if (setIsOpen) {
             setIsOpen(false);
