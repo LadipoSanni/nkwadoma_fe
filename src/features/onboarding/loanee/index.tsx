@@ -6,8 +6,9 @@ import Connector from '@/components/common/Connector';
 import { Button } from '@/components/ui/button';
 import StepContent from '@/features/onboarding/stepContent/Index';
 import dynamic from 'next/dynamic';
-import {useIsIdentityVerifiedQuery} from "@/service/users/Loanee_query";
-import {getItemSessionStorage, setItemSessionStorage} from "@/utils/storage";
+import {useIsIdentityVerifiedQuery, useViewLoanReferralDetailsQuery} from "@/service/users/Loanee_query";
+import {getItemSessionStorage} from "@/utils/storage";
+import isloading from "@/reuseable/display/Isloading";
 
 const DynamicIdentityVerificationModal = dynamic(() => import('@/reuseable/modals/IdentityVerificationModal'), {
     ssr: false
@@ -23,14 +24,46 @@ const steps = [
 const LoaneeOnboarding = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [showModal, setShowModal] = useState(false);
-    const loanReferralId = getItemSessionStorage('loanReferralId');
-    const {data} = useIsIdentityVerifiedQuery({ "loanReferralId" : loanReferralId} );
-
-    useEffect(() => {
-        if (data?.data === "Identity Not Verified"){
-            console.log(data.data)
+    const [loanReferralId, setLoanReferralId] = useState("");
+    const {data, isLoading} = useViewLoanReferralDetailsQuery({})
+    const [loaneeLoanDetail, setLoaneeLoanDetail] = useState({
+        tuitionAmount: "0.00",
+        amountRequested: "0.00",
+        initialDeposit: "0.00"
+    })
+    function viewLoanReferralDetails  (){
+        if (data?.statusCode === "OK" &&  data?.data?.id){
+            setLoanReferralId((prevId) => {
+                return data.data.id || prevId;
+            });
         }
-    }, [data]);
+        console.log("loaneeLoan detail : " , data)
+        if (data?.statusCode === "OK" && data?.data?.loanee?.loaneeLoanDetail) {
+            const backendDetails = data.data.loanee.loaneeLoanDetail;
+            setLoaneeLoanDetail(prevState => {
+                const newDetails = {
+                    tuitionAmount: backendDetails.tuitionAmount?.toString() || "0.00",
+                    amountRequested: backendDetails.amountRequested?.toString() || "0.00",
+                    initialDeposit: backendDetails.initialDeposit?.toString() || "0.00",
+                };
+                if (
+                    prevState.tuitionAmount !== newDetails.tuitionAmount ||
+                    prevState.amountRequested !== newDetails.amountRequested ||
+                    prevState.initialDeposit !== newDetails.initialDeposit
+                ) {
+                    return newDetails;
+                }
+                return prevState;
+            });
+        }
+    }
+    const {data: verificationFirstResponse} = useIsIdentityVerifiedQuery({"loanReferralId": loanReferralId});
+    useEffect(() => {
+            viewLoanReferralDetails()
+            if (verificationFirstResponse?.data === "Identity Not Verified") {
+                console.log(verificationFirstResponse.data)
+            }
+    }, [verificationFirstResponse,isLoading]);
     const handleThirdStepContinue = () => {
         setShowModal(false);
         setCurrentStep(2);
@@ -50,6 +83,7 @@ const LoaneeOnboarding = () => {
         }
 
     }
+    // console.log("loaneeLoan detail : " , loaneeLoanDetail)
     return (
         <div id="loanApplicationDetailsContainer"
              className={`md:overflow-visible overflow-y-auto h-[calc(100vh-8rem)] md:h-auto grid pr-1.5 md:gap-[58px] gap-6 ${inter.className}`}>
@@ -84,7 +118,7 @@ const LoaneeOnboarding = () => {
                         {currentStep === 2 && 'Additional information'}
                         {currentStep === 3 && 'Confirm loan referral acceptance'}
                     </h2>
-                    <StepContent step={currentStep} setCurrentStep={setCurrentStep} />
+                    <StepContent step={currentStep} setCurrentStep={setCurrentStep} loaneeLoanDetail={loaneeLoanDetail} />
                     {currentStep === 1 && (
                         <DynamicIdentityVerificationModal
                             isOpen={showModal}
