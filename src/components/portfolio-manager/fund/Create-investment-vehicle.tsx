@@ -1,19 +1,19 @@
 import React,{useState} from 'react'
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 import { Formik,Form,Field,ErrorMessage } from 'formik'
 import * as Yup from 'yup';
 import { Label } from '@/components/ui/label';
 import {inter} from "@/app/fonts"
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
-import CustomSelect from '@/reuseable/Input/Custom-select';
+// import CustomSelect from '@/reuseable/Input/Custom-select';
 
 
-interface ApiError {
-    status: number;
-    data: {
-      message: string;
-    };
-  }
+// interface ApiError {
+//     status: number;
+//     data: {
+//       message: string;
+//     };
+//   }
 
   const initialFormValue = {
     name: "",
@@ -34,14 +34,14 @@ interface ApiError {
   interface props {
     setIsOpen? : (e:boolean) => void;
   }
-function CreateInvestmentVehicle({setIsOpen}:props) {
+function CreateInvestmentVehicle() {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
 
-    const handleCloseModal = () => {
-        if (setIsOpen) {
-          setIsOpen(false);
-        }
-      }
+    // const handleCloseModal = () => {
+    //     if (setIsOpen) {
+    //       setIsOpen(false);
+    //     }
+    //   }
 
   
       const validationSchema = Yup.object().shape({
@@ -79,7 +79,7 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
         validationSchema={validationSchema}
         >
        {
-        ({errors, isValid, touched,setFieldValue,values}) => (
+        ({errors,  touched,setFieldValue}) => (
             <Form className={`${inter.className}`}>
               <div
                className='grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto'
@@ -100,7 +100,10 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
                         const value = e.target.value; const regex = /^[a-zA-Z][a-zA-Z0-9_\-\/]*$/; 
                          if (regex.test(value) || value === "") { 
-                             setFieldValue("name", value); } else { 
+                             setFieldValue("name", value); 
+                            } 
+                             
+                             else { 
                              setFieldValue("name", value.replace(/[^a-zA-Z0-9_\-\/]/g, '').replace(/^[^a-zA-Z]/, '')); 
                             } }}
                     />

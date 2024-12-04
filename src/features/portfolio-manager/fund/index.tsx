@@ -146,7 +146,7 @@ const InvestmentVehicle = () => {
            closeOnOverlayClick={true}
            icon={Cross2Icon}
           >
-            <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)}/>
+            <CreateInvestmentVehicle />
           </TableModal>
         }
       </div>
