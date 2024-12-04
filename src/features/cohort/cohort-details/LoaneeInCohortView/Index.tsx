@@ -157,7 +157,7 @@ export const LoaneeInCohortView = () => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                    {!isLoading && (
+                    {
                         <SelectableTable
                             tableData={allLoanee}
                             tableHeader={loanProduct}
@@ -173,7 +173,7 @@ export const LoaneeInCohortView = () => {
                             isLoading={isLoading}
                             condition={true}
                         />
-                    )}
+                    }
                 </div>
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
