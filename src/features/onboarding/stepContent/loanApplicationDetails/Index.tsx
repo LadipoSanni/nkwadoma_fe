@@ -1,10 +1,44 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible";
 import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
+import {useViewLoanReferralDetailsQuery} from "@/service/users/Loanee_query";
 
 const LoanApplicationDetails = () => {
-        const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [loaneeLoanDetail, setLoaneeLoanDetail] = useState({
+        tuitionAmount: "0.00",
+        amountRequested: "0.00",
+        initialDeposit: "0.00"
+    })
+    const {data} = useViewLoanReferralDetailsQuery({})
+    useEffect(() => {
+        viewLoanReferralDetails()
+    }, [data]);
+    function viewLoanReferralDetails  (){
+        if (data?.statusCode === "OK" &&  data?.data?.id){
+            sessionStorage.setItem("loanReferralId", data?.data?.id);
+        }
+        if (data?.statusCode === "OK" && data?.data?.loanee?.loaneeLoanDetail) {
+            const backendDetails = data.data.loanee.loaneeLoanDetail;
+
+            setLoaneeLoanDetail(prevState => {
+                const newDetails = {
+                    tuitionAmount: backendDetails.tuitionAmount?.toString() || "0.00",
+                    amountRequested: backendDetails.amountRequested?.toString() || "0.00",
+                    initialDeposit: backendDetails.initialDeposit?.toString() || "0.00",
+                };
+                if (
+                    prevState.tuitionAmount !== newDetails.tuitionAmount ||
+                    prevState.amountRequested !== newDetails.amountRequested ||
+                    prevState.initialDeposit !== newDetails.initialDeposit
+                ) {
+                    return newDetails;
+                }
+                return prevState;
+            });
+        }
+    }
 
     return (
         <div id="loanApplicationDetailsContent" className={'rounded-md grid gap-9 p-5 bg-grey105'}>
@@ -12,7 +46,7 @@ const LoanApplicationDetails = () => {
                 <h3 id="tuitionAmountLabel"
                     className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Tuition amount</h3>
                 <p id="tuitionAmountValue"
-                   className={`text-black500 text-[14px] leading-[150%]`}>₦3,500,000.00</p>
+                   className={`text-black500 text-[14px] leading-[150%]`}>{loaneeLoanDetail.tuitionAmount}</p>
             </div>
             <div id="startDateContainer" className={'md:flex md:justify-between grid gap-3'}>
                 <h3 id="startDateLabel"
@@ -25,12 +59,12 @@ const LoanApplicationDetails = () => {
                     className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Loan amount
                     requested</h3>
                 <p id="loanAmountRequestedValue"
-                   className={`text-black500 text-[14px] leading-[150%]`}>₦3,000,000.00</p>
+                   className={`text-black500 text-[14px] leading-[150%]`}>{loaneeLoanDetail.amountRequested}</p>
             </div>
             <div id="depositContainer" className={'md:flex md:justify-between grid gap-3'}>
                 <h3 id="depositLabel"
                     className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Deposit</h3>
-                <p id="depositValue" className={`text-black500 text-[14px] leading-[150%]`}>₦35,000</p>
+                <p id="depositValue" className={`text-black500 text-[14px] leading-[150%]`}>{loaneeLoanDetail.initialDeposit}</p>
             </div>
             <Collapsible className={'bg-meedlWhite rounded-md border border-lightBlue250'} open={isOpen}
                          onOpenChange={setIsOpen}>
