@@ -39,9 +39,7 @@ const OrganizationDetails = () => {
         setIsModalOpen(true);
     };
 
-    const setAdminView = (data: typeof adminData) => {
-        console.log(data);
-    };
+    const setAdminView = () => {};
 
     const details = { cohortStatus: "Active" };
 
@@ -88,7 +86,7 @@ const OrganizationDetails = () => {
 
     useEffect(() => {
         if (adminData) {
-            setAdminView(adminData);
+            setAdminView();
         }
     }, [adminData]);
 
