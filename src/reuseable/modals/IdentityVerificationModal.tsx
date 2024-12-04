@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogOverlay} from '@/components/ui/dialog';
 import {FormProvider, useForm} from 'react-hook-form';
 import {Label} from '@/components/ui/label';
@@ -12,6 +12,7 @@ import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWi
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
 // import CryptoJS from "crypto-js";
 import {useVerifyIdentityMutation} from "@/service/admin/cohort_query";
+import {getItemSessionStorage} from "@/utils/storage";
 
 
 interface IdentityVerificationModalProps {
@@ -23,7 +24,7 @@ interface IdentityVerificationModalProps {
 type FormData = {
     bvn: string;
     nin: string;
-    loanReferralId: string|null;
+    loanReferralId: string;
 };
 
 const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
@@ -34,6 +35,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const methods = useForm<FormData>({mode: 'onChange'});
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
+    const [id,setId] = useState('');
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
     const [showCamera, setShowCamera] = useState(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
@@ -45,12 +47,22 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
         setShowSuccessDialog(true);
     };
 
+    useEffect(() => {
+        const loanReferralIdInStorage = getItemSessionStorage('loanReferralId');
+        if(loanReferralIdInStorage) {
+            setId(loanReferralIdInStorage)
+        }
+        setId("9faf34f7-a805-4d7a-ab55-0fab5883bb23")
+    }, []);
+
     const onSubmit: SubmitHandler<FormData> = (data) => {
         // const secretKey = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
         // const encryptedBvn = CryptoJS.AES.encrypt(data.bvn, secretKey).toString();
         // const encryptedNin = CryptoJS.AES.encrypt(data.nin, secretKey).toString();
-        const loanReferralIdInStorage = sessionStorage.getItem('loanReferralId');
+
+
+
         const loaneeBvn = data.bvn
         const loaneeNin = data.nin
 
@@ -58,7 +70,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             const formData: FormData = {
                 bvn: loaneeBvn,
                 nin: loaneeNin,
-                loanReferralId : loanReferralIdInStorage
+                loanReferralId : id
             };
             console.log(formData);
             const data = verifyIdentity(formData);
