@@ -8,21 +8,22 @@ import {Icon} from '@iconify/react';
 import {inter} from '@/app/fonts';
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
-import {getUserDetails} from '@/features/auth/usersAuth/login/action';
+// import {getUserDetails} from '@/features/auth/usersAuth/login/action';
 import {MdOutlineDelete} from "react-icons/md";
 
 interface idProps {
     cohortId: string;
+    tuitionFee?:string,
     setIsOpen?: (e: boolean | undefined) => void;
 }
 
 
-function AddTraineeForm({cohortId, setIsOpen}: idProps) {
-    const {storedAccessToken} = getUserDetails();
-    console.log('stored: ', storedAccessToken);
+function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
+    // const {storedAccessToken} = getUserDetails();
+    // console.log('tuitionfee : ', tuitionFee);
 
     const details = [
-        {item: 'Tuition', amount: '₦2,000,000.00'},
+        {item: 'Tuition', amount: tuitionFee},
         {item: 'Devices', amount: '₦600,000.00'},
         {item: 'Accommodation', amount: '₦600,000.00'},
         {item: 'Feeding', amount: '₦300,000.00'},
@@ -86,10 +87,10 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
     };
 
     const handleFinalSubmit = (values: typeof initialFormValue) => {
-        const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
-        const formattedValues = {...values, initialDeposit: formattedDeposit};
+        // const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
+        // const formattedValues = {...values, initialDeposit: formattedDeposit};
         toastPopUp.showToast();
-        console.log(formattedValues);
+        console.log(values);
 
         if (setIsOpen) {
             setIsOpen(false);
