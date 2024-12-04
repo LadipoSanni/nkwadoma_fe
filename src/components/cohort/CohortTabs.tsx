@@ -11,9 +11,11 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import EditCohortForm from './EditCohortForm'
 import { inter } from '@/app/fonts'
 import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
-import { setItemSessionStorage,getItemSessionStorage } from '@/utils/storage';
-import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
-// import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
+import { setItemSessionStorage } from '@/utils/storage';
+// import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
+import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
+
+
 
 interface allCohortsProps extends TableRowData {
   name:string,
@@ -35,14 +37,14 @@ interface TableRowData {
 interface cohortList {
   listOfCohorts: allCohortsProps[]
   handleDelete?: (id: string) => void;
- 
+  isLoading?: boolean
 }
 
 
-const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
+const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
-  const [programId, setProgramId] = React.useState("")
+  // const [programId, setProgramId] = React.useState("")
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
   const [details, setDetails] = React.useState({
     id: "",
@@ -59,10 +61,9 @@ const CohortTabs = ({listOfCohorts = [],handleDelete}:cohortList) => {
     expectedEndDate: "",
 })
 
-const {data: cohortDetails} = useViewCohortDetailsQuery({
-  programId: programId,
+const {data: cohortDetails, isLoading: loading, refetch} = useGetCohortDetailsQuery({
   cohortId: cohortId
-}, {refetchOnMountOrArgChange: true});
+}, {skip: !cohortId,refetchOnMountOrArgChange: true});
 
 // const {data:cohortInfo} = useViewCohortDetailsQuery({})
 
@@ -137,12 +138,17 @@ useEffect(() => {
 
 
 
-  const handleDropdownClick = (id:string,row: rowData) => {
-    if(id === "1") router.push('/cohort/cohort-details')
+  const handleDropdownClick = async (id:string,row: rowData) => {
+    if(id === "1") {router.push('/cohort/cohort-details')
+      setItemSessionStorage("programsId", String(row.programId))
+  }
     else if(id === "2") {
       setCohortId(String(row.id))
-      setItemSessionStorage("programsId", String(row.programId))
-      
+      if(cohortId){
+        await refetch()
+        setTimeout(()=>{ setIsOpen(true)},800)
+      }
+      setTimeout(()=>{ setIsOpen(true)},800)
       
     
     }
@@ -152,12 +158,12 @@ useEffect(() => {
     }
   }
 
-  useEffect(()=> {
-    const id = getItemSessionStorage("programsId")
-    if (id) {
-      setProgramId(id)
-    }
-  },[])
+  // useEffect(()=> {
+  //   const id = getItemSessionStorage("programsId")
+  //   if (id) {
+  //     setProgramId(id)
+  //   }
+  // },[])
 
   
   
@@ -167,7 +173,7 @@ useEffect(() => {
     // { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row: TableRowData) => row.noOfTrainees },
     { title: 'No. of Loanees', sortable: true, id: 'noOfLoanees', selector: (row:TableRowData) => row.noOfLoanees || 0 },
     { title: 'Tuition', sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => formatAmount(row.tuitionAmount)},
-    { title: 'Amount recieved', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRecieved)}</div> },
+    { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRecieved)}</div> },
     { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountRequested)}</div> },
     { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountOutstanding)}</div> },
 
@@ -196,7 +202,7 @@ useEffect(() => {
               optionalFilterName='incoming'
               handleDropDownClick={handleDropdownClick}
               optionalRowsPerPage={10}
-
+              isLoading={isLoading}
              />
              </div>
     },
@@ -219,6 +225,7 @@ useEffect(() => {
               handleDropDownClick={handleDropdownClick}
               optionalRowsPerPage={10}
               condition={true}
+              isLoading={isLoading}
              />
              </div>
     },
@@ -241,6 +248,7 @@ useEffect(() => {
               handleDropDownClick={handleDropdownClick}
                optionalRowsPerPage={10}
                condition={true}
+               isLoading={isLoading}
              />
              </div>
     },
@@ -253,7 +261,7 @@ useEffect(() => {
       <Tabs defaultValue='incoming'>
         <TabsList className= {`z-50 ${inter.className}`}>
           {tabData.map((tab,index) => (
-            <TabsTrigger data-testid={`tabName${tab.value}`}  value={tab.value} key={index}>
+            <TabsTrigger id={`${tab.name}-${index}`} data-testid={`tabName${tab.value}`}  value={tab.value} key={index}>
                 {tab.name}
           </TabsTrigger>
           ))}
@@ -268,19 +276,24 @@ useEffect(() => {
 
       </Tabs>
       <div>
+        { loading ? "" : (
         <TableModal
         isOpen={isOpen}
-        closeModal={() => setIsOpen(false)}
+        closeModal={() => {
+          setIsOpen(false)
+          setCohortId('')
+        }}
         closeOnOverlayClick={true}
         headerTitle='Edit Cohort'
         className='pb-1'
         icon={Cross2Icon}
        
         >
-          <EditCohortForm cohortId={cohortId} setIsOpen={()=>setIsOpen(false)} cohortDetail={details}/>  
+          <EditCohortForm setIsOpen={()=>{setIsOpen(false); setCohortId("")}} cohortDetail={details}/>  
          
         </TableModal>
-           
+        )
+           }
         <TableModal
         isOpen={isDeleteOpen}
         closeModal={() => setIsDeleteOpen(false)}
@@ -296,7 +309,7 @@ useEffect(() => {
         id={cohortId}
         />
         </TableModal>
-       
+
       </div>
     </div>
   )

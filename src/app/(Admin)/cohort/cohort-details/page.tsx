@@ -1,5 +1,5 @@
 import React from 'react';
-import CohortDetails from "@/features/cohort/cohort-details/Index";
+import CohortDetails from "@/features/cohort/cohort-details/details/Index";
 
 const Page = () => {
     return (

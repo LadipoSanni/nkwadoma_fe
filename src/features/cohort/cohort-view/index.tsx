@@ -22,6 +22,7 @@ import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
 
 
 
+
 export const initialFormValue = {
   selectProgram:""
 }
@@ -77,13 +78,13 @@ const CohortView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [programId, setProgramId] = useState('');
   const [pendingProgramId, setPendingProgramId] = useState('');
-   const [isLoading] = useState(false);
+   const [isLoadings] = useState(false);
    const [page] = useState(0);
    const size = 200;
 
    const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
    const { data: searchData } = useSearchCohortByOrganisationQuery(searchTerm, { skip:!searchTerm })
-   const { data: programDatas, } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
+   const { data: programDatas, isLoading } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
   const { data: cohortsByProgram, refetch } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
    
@@ -147,7 +148,7 @@ const CohortView = () => {
        }
   }
 
-  console.log("The hhhid: ",programId)
+  // console.log("The hhhid: ",programId)
 
  const validationSchema = Yup.object().shape({
    selectProgram: Yup.string().required('Program is required'),
@@ -193,7 +194,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
              <div className='z-10'>
               <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
-                  <Button variant={'default'} className='w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none' >
+                  <Button id='cohortInProgram' variant={'default'} className='w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none' >
                      Program
                     <span className='ml-4'>
                       {isDropdown ? (
@@ -222,8 +223,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                       }}
                       onOpenChange={toggleDropdown}
                       >
-                      <SelectTrigger className='flex justify-between w-72  focus:ring-0 focus:outline-none text-forgetPasswordBlue'>
-                      <SelectValue placeholder="Select Program" className='' data-testid='Select Program'/>
+                      <SelectTrigger id='cohortInProgramSelectTrigger' className='flex justify-between w-72  focus:ring-0 focus:outline-none text-forgetPasswordBlue'>
+                      <SelectValue  placeholder="Select Program" className='' data-testid='Select Program'/>
                       <div className='ml-4'>
                 {isDropdown ? (
           <ChevronUpIcon className="h-4 w-5 font-semibold" />
@@ -239,8 +240,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                         <SelectGroup
                           className=''
                         >
-                          {listOfPrograms.map((value) => (
-                           <SelectItem key={value.id} value={value.name} className='hover:bg-blue-200'>
+                          {listOfPrograms.map((value,index) => (
+                           <SelectItem key={value.id} id={`${value}-${index}`} value={value.name} className='hover:bg-blue-200'>
                              {value.name}
                            </SelectItem>
                           ))}
@@ -278,7 +279,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                         type='submit'
                         disabled={!isValid}
                         >
-                           {isLoading ? (
+                           {isLoadings ? (
                                                 <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">
                                                     <Icon id={'Icon'} icon={loadingLoop} width={24} height={24}/>
                                                 </div>
@@ -303,7 +304,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
           </div>
         </div>
         <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
-         <CohortTabs listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation}/>
+         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation}/>
+         
         </div>
     </div>
   )

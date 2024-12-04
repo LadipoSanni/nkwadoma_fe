@@ -60,10 +60,12 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
 
             <div className={`flex flex-row justify-end gap-3 py-5`}>
                 <Button size={'lg'} variant={'outline'}
+                        id="cancelDeleteButtton"
                         className={`${inter.className} h-12 text-sm font-semibold leading-6 text-meedlBlack`}
                         onClick={handleCanCelCohort}>Cancel</Button>
                 <Button size={'lg'} variant={'secondary'}
                         className={`${inter.className} h-12 bg-error450 text-sm font-semibold leading-6 text-meedlWhite`}
+                        id="deleteButton"
                         onClick={handleDeleteCohort}>
                             {
                                 isLoading? <Isloading /> : 'Delete'
