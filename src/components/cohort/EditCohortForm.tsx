@@ -215,11 +215,9 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
     const networkPopUp =  ToastPopUp({
       description: "No internet connection",
       status: "error",
-      
     });
 
   const handleSubmit = async (values: typeof initialFormValue) => {
-     console.log("values: ",values);
     if (!navigator.onLine) {
       networkPopUp.showToast();
       if (setIsOpen) {

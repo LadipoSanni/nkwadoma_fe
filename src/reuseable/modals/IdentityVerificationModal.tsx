@@ -35,7 +35,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
     const handleCapture = (imageSrc: string | null) => {
-        console.log('Captured image:', imageSrc);
         setIsSecondModalOpen(false);
         setShowSuccessDialog(true);
     };

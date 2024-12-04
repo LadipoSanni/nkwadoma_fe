@@ -95,8 +95,8 @@ const CreatePassword = () => {
             const access_token = response?.data?.access_token
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
-            const user_id = response?.data?.id
-            console.log("user email: ",user_email, "user_id: ", user_id)
+            // const user_id = response?.data?.id
+            // console.log("user email: ",user_email, "user_id: ", user_id)
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             const userName = decode_access_token?.name

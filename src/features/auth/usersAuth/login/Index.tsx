@@ -90,7 +90,6 @@ const Login: React.FC = () => {
             try {
                 const response = await login({email, password}).unwrap()
                 if (response?.data) {
-                    // console.log("response: ", response)
                     const access_token = response?.data?.access_token
                     const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
                     //eslint-disable-next-line @typescript-eslint/ban-ts-comment

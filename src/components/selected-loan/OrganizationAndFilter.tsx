@@ -14,7 +14,6 @@ const OrganizationAndFilter = () => {
     const [selectProgram, setSelectProgram] = useState('')
 
     const handleSubmit = async (values:{selectedProgram: string}) => {
-        console.log('Form submitted', values)
         // setIsDropdown(false)
     
       }
