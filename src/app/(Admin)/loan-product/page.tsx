@@ -1,12 +1,12 @@
 import React from 'react'
-import LoanProductPage from '@/pages/admin/loanProduct'
+import LoanProductPage from '../../../pages/admin/loan-product'
 
 function page() {
-  return (
-    <div>
-      <LoanProductPage />
-    </div>
-  )
+    return (
+        <div>
+            <LoanProductPage/>
+        </div>
+    )
 }
 
 export default page
