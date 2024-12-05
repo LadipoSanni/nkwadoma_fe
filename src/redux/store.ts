@@ -1,17 +1,16 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { setupListeners } from "@reduxjs/toolkit/query";
-import { persistStore, persistReducer } from "redux-persist";
+import {configureStore} from "@reduxjs/toolkit";
+import {setupListeners} from "@reduxjs/toolkit/query";
+import {persistStore, persistReducer} from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import appReducer from "@/redux/reducer";
-import { authApi } from "@/service/auths/api";
-import { programApi } from "@/service/admin/program_query";
-import { cohortApi } from "@/service/admin/cohort_query";
+import {authApi} from "@/service/auths/api";
+import {programApi} from "@/service/admin/program_query";
+import {cohortApi} from "@/service/admin/cohort_query";
 import {userApi} from "@/service/users/api";
 import {organizationApi} from "@/service/admin/organization";
 import {loaneeApi} from "@/service/users/Loanee_query";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
-
-
+import {loanProductApi} from "@/service/admin/loan_product";
 
 
 const persistConfig = {
@@ -37,6 +36,7 @@ export const store = configureStore({
             cohortApi.middleware,
             userApi.middleware,
             organizationApi.middleware,
+            loanProductApi.middleware,
         ]),
 });
 export const persistor = persistStore(store);
