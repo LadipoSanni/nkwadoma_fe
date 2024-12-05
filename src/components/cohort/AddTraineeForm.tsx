@@ -158,19 +158,26 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
 
         }
         const updateArray : cohortBreakDown[] = [...cohortBreakDown];
-        console.log("upaff: ", updateArray)
         for (let i = 0; i < updateArray.length; i++) {
             if (i === index) {
                 updateArray[index] = updatedData
-                // updateArray.splice(index, updatedData)
             }
 
         }
         console.log("up: ", updateArray)
 
-        const update = updateArray
+        const update : cohortBreakDown[] = []
 
-        if (update) {
+        if (updateArray) {
+            updateArray.forEach((item) => update.push(item))
+            // cohortBreakDown.fo
+            for (let i = 0; i < updateArray.length; i++) {
+                // if (i === index) {
+                    cohortBreakDown[index] = updateArray[index]
+                // }
+
+            }
+            console.log("after changing: ",cohortBreakDown )
             setCohortBreakDown(update)
             console.log("after setting: ", cohortBreakDown)
             const items = cohortBreakDown[index]?.itemAmount * 1
