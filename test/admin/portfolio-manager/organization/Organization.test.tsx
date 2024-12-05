@@ -1,8 +1,16 @@
 import { render, screen, fireEvent,cleanup} from "@testing-library/react";
 import { Providers } from "@/app/provider";
 import Organization from "@/features/portfolio-manager/organization/view-organization";
+import { useRouter } from 'next/navigation';
+
+
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(),
+  }));
+
 
 describe("Portfolio Manager", () => {
+    const mockPush = jest.fn();
     beforeEach(() => {
         cleanup()
         render(
@@ -10,6 +18,10 @@ describe("Portfolio Manager", () => {
                 <Organization />
             </Providers>
         );
+        (useRouter as jest.Mock).mockReturnValue({
+            push: mockPush,
+          });
+          
           jest.spyOn(console,'log').mockReturnValue()
           jest.spyOn(console,'warn').mockReturnValue()
           jest.spyOn(console,'error').mockReturnValue()
