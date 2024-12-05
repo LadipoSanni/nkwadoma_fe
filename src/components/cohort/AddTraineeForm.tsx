@@ -9,13 +9,15 @@ import {inter} from '@/app/fonts';
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 // import {getUserDetails} from '@/features/auth/usersAuth/login/action';
+// import Input
 import {MdOutlineDelete} from "react-icons/md";
 import {useGetCohortLoanBreakDownQuery, useAddLoaneeToCohortMutation} from "@/service/admin/cohort_query";
 import {getItemSessionStorage} from "@/utils/storage";
+import {number} from "yup";
 
 interface idProps {
     cohortId: string;
-    tuitionFee?:string,
+    tuitionFee?: string,
     setIsOpen?: (e: boolean | undefined) => void;
 }
 
@@ -27,20 +29,20 @@ type cohortBreakDown = {
 
 }
 
-function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
+function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: idProps) {
     // const {storedAccessToken} = getUserDetails();
     // console.log('tuitionfee : ', tuitionFee);
 
-    const details = [
-        {item: 'Tuition', amount: tuitionFee},
-        {item: 'Devices', amount: '₦600,000.00'},
-        {item: 'Accommodation', amount: '₦600,000.00'},
-        {item: 'Feeding', amount: '₦300,000.00'},
-        {item: 'Total amount requested', amount: '₦3,500,000.00'},
-    ];
+    // const details = [
+    //     {item: 'Tuition', amount: tuitionFee},
+    //     {item: 'Devices', amount: '₦600,000.00'},
+    //     {item: 'Accommodation', amount: '₦600,000.00'},
+    //     {item: 'Feeding', amount: '₦300,000.00'},
+    //     {item: 'Total amount requested', amount: '₦3,500,000.00'},
+    // ];
 
-    const COHORTID  = getItemSessionStorage("cohortId")
-    console.log("coddo: ",COHORTID )
+    const COHORTID = getItemSessionStorage("cohortId")
+    console.log("coddo: ", COHORTID)
 
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
@@ -51,20 +53,20 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
     >([]);
     const {data} = useGetCohortLoanBreakDownQuery(COHORTID)
     const [userIdentityInput, setUserIdentityInput] = useState()
-    const [cohortBreakDown, setCohortBreakDown] = useState([]);
+    const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([]);
+    // let cohortBreakDown : cohortBreakDown[] = []
 
+    // const [addLoaneeToCohort] = useAddLoaneeToCohortMutation()
+    // const handleNewValue = (newValue: string, index: number) => {
+    //     setInputValue(newValue);
+    //     console.log(`New value for detail-${index}:`, newValue);
+    // };
 
-    const [addLoaneeToCohort] = useAddLoaneeToCohortMutation()
-    const handleNewValue = (newValue: string, index: number) => {
-        setInputValue(newValue);
-        console.log(`New value for detail-${index}:`, newValue);
-    };
-
-    const inputProps = {
-        chortId: COHORTID,
-        userIdentity: userIdentityInput,
-        cohortBreakDown
-    }
+    // const inputProps = {
+    //     chortId: COHORTID,
+    //     userIdentity: userIdentityInput,
+    //     cohortBreakDown
+    // }
 
     const validationSchemaStep1 = Yup.object().shape({
         firstName: Yup.string()
@@ -105,21 +107,24 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
         }
     };
 
-    const handleSubmitStep1 =  () => {
+    const handleSubmitStep1 = () => {
         // const response = await loanBreakDown(cohortId).unwrap()
-        console.log("cohortId", cohortId,"response: ", data)
+        console.log("cohortId", cohortId, "response: ", data)
         // const newCohortBreakDown = data?.data
         // newCohortBreakDown.add(data?.data)
-        // const datass : cohortBreakDown = []
-        // data?.data?.forEach((datas ) => {datass.push(datas)})
+        const datass : cohortBreakDown[] = []
+        data?.data?.forEach((datas) => {
+            datass.push(datas)
+        })
+        setCohortBreakDown(datass)
         // console.log(" datasss::after ", datass)
         // console.log(" beforee usestase:: ", cohortBreakDown, "dada: ", data?.data, "duydu: ", newCohortBreakDown)
-        cohortBreakDown.push(data?.data)
-        console.log("cohortBreakDown", cohortBreakDown,"data?.data: ", data?.data)
+        // cohortBreakDown.push(data?.data)
+        console.log("cohortBreakDown", cohortBreakDown, "data?.data: ", data?.data)
 
         // setCohortBreakDown(data?.data)
 
-        console.log(" usestase:: ", cohortBreakDown.at(0))
+        console.log(" usestase:: ", cohortBreakDown)
         setStep(2);
 
     };
@@ -140,40 +145,38 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
         setLoanBreakdowns(loanBreakdowns.filter((_, i) => i !== index));
     };
 
-    const editCohortBreakDown = (element: cohortBreakDown,e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+        const cohortBreakDown =  data?.data
+        const currentCohortBreakdown = cohortBreakDown[index]
+        const currentCohortBreakDownAmount = currentCohortBreakdown?.itemAmount * 1
+        const {value} = e.target
+        const item = cohortBreakDown[index]
+        const updatedData: cohortBreakDown = {
+            currency: item?.currency,
+            itemAmount: value,
+            loanBreakdownId: item.loanBreakdownId,
+            itemName: item.itemName
 
-        const current : cohortBreakDown[] | undefined   = cohortBreakDown.at(0)
-        if(current){
-            const currentData : cohortBreakDown[] = current
-            console.log('currebt:: ', current)
-            const newIndexElement  = {
-                currency: element?.currency,
-                itemAmount:e.target.value,
-                loanBreakDownId: element?.loanBreakdownId,
-                itemName:  element?.itemName
+        }
+        const updateArray : cohortBreakDown[] = [...cohortBreakDown];
+        console.log("upaff: ", updateArray)
+        for (let i = 0; i < updateArray.length; i++) {
+            if (i === index) {
+                updateArray[index] = updatedData
+                // updateArray.splice(index, updatedData)
             }
-            console.log("cri: ", cohortBreakDown)
 
-            // if(current){
-                // //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // // @ts-expect-error
-                // current.splice(index, newIndexElement)
-                // const index = 2;
-                const newArr = [];
-                for (let i = 0; i < currentData.length; i++) {
-                    if (i === index) {
-                        newArr.push(newIndexElement);
-                    }
-                    newArr.push(currentData[i]);
-                }
+        }
+        console.log("up: ", updateArray)
 
-                console.log(newArr); // "walk the dog", "go shopping", "go to the pharmacy", "exercise"
 
-                console.log('after splicing: ', current)
-                setCohortBreakDown(current)
-                console.log("cohruri: ", cohortBreakDown)
-            }
-        // }
+        if (updateArray) {
+            setCohortBreakDown(updateArray)
+            const items = cohortBreakDown[index]?.itemAmount * 1
+
+            console.log("cohort amount: ", currentCohortBreakDownAmount, "itemmm: ", items)
+
+        }
 
         // current[index] = newIndexElement
         // current.r
@@ -325,7 +328,7 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
                                         />
                                     </div>
                                 </div>
-                                {cohortBreakDown?.at(0)?.map((detail : cohortBreakDown, index: number) => (
+                                {cohortBreakDown?.map((detail: cohortBreakDown, index: number) => (
                                     <div
                                         key={index}
                                         className={``}
@@ -371,7 +374,7 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
                                                         placeholder={`${detail.itemName}`}
                                                         className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                            editCohortBreakDown(detail, e, index)
+                                                            editCohortBreakDown(e, index)
                                                         }}
 
                                                     />
