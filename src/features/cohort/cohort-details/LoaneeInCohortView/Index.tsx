@@ -25,6 +25,7 @@ interface loaneeLoanDetail {
 interface viewAllLoanee {
     userIdentity: userIdentity;
     loaneeLoanDetails: loaneeLoanDetail;
+    loaneeStatus?: string;
 }
 
 interface TableRowData {
@@ -39,6 +40,7 @@ interface props {
 
 export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [allLoanee, setAllLoanee] = useState<viewAllLoanees[]>([]);
+    const [filteredLoanee, setFilteredLoanee] = useState<viewAllLoanee[]>([]);
     const [isReferred, setIsReferred] = React.useState(``);
     const [addLoanee, setAddLoanee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
@@ -68,6 +70,16 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
             setAllLoanee(result)
         }
     }, [data,loaneeName,searchResults ])
+
+    useEffect(() => {
+        if (isReferred === "Referred") {
+            setFilteredLoanee(allLoanee.filter((loanee) => loanee.loaneeStatus === "REFERRED"));
+        } else if (isReferred === "Not referred") {
+            setFilteredLoanee(allLoanee.filter((loanee) => loanee.loaneeStatus === "ADDEED"));
+        } else {
+            setFilteredLoanee(allLoanee);
+        }
+    }, [allLoanee, isReferred]);
 
     const loanProduct = [
         {
@@ -164,7 +176,8 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
                     {
                         <SelectableTable
-                            tableData={allLoanee}
+                            tableData={filteredLoanee}
+                            // tableData={allLoanee}
                             tableHeader={loanProduct}
                             staticHeader="Trainee"
                             staticColunm="firstName"
