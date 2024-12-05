@@ -64,21 +64,24 @@ const TopBar = () => {
                             <p className={`text-black500 ${styles.fullName}`}>{capitalizeFirstLetters(user_name)}</p>
                             <p className={`text-black500 ${styles.role}`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
                         </div>
-                        <div id={'toggleArrowDiv'} className={``}>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    {arrowToggled ? (
-                                        <ChevronUpIcon className={'h-4 w-5 stroke-2 text-primary200'} onClick={toggleArrow} />
-                                    ) : (
-                                        <ChevronDownIcon className={'h-4 w-5 stroke-2 text-primary200'} onClick={toggleArrow} />
-                                    )}
-                                </PopoverTrigger>
-                                <PopoverContent className={"h-[11.875rem] w-[17.1875rem] absolute top-3 -right-2  p-3 rounded-md bg-meedlWhite shadow-boxShadowLight"}>
-                                    <AdminProfile />
-                                </PopoverContent>
-                            </Popover>
-                        </div>
-                    </div>
+                            <div id={'toggleArrowDiv'} className={``}>
+                                {user_role === 'ORGANIZATION_ADMIN' && (
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            {arrowToggled ? (
+                                                <ChevronUpIcon className={'h-4 w-5 stroke-2 text-primary200'}
+                                                               onClick={toggleArrow}/>
+                                            ) : (
+                                                <ChevronDownIcon className={'h-4 w-5 stroke-2 text-primary200'}
+                                                                 onClick={toggleArrow}/>
+                                            )}
+                                        </PopoverTrigger>
+                                        <PopoverContent className={"h-[11.875rem] w-[17.1875rem] absolute top-3 -right-2  p-3 rounded-md bg-meedlWhite shadow-boxShadowLight"}>
+                                            <AdminProfile />
+                                        </PopoverContent>
+                                    </Popover>
+                                )}
+                            </div>                    </div>
                 </div>
             </div>
         </header>
