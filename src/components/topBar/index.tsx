@@ -1,34 +1,29 @@
 "use client"
-import React from 'react';
-import {IoMdMenu} from "react-icons/io";
-import {setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
-import {inter} from"@/app/fonts"
-// import { ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons"
-import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods"
-import styles from "@/components/topBar/index.module.css"
-import {store, useAppSelector} from "@/redux/store";
-import {getUserDetailsFromStorage} from "@/components/topBar/action";
-
+import React, { useState } from 'react';
+import { IoMdMenu } from "react-icons/io";
+import { setShowMobileSideBar } from "@/redux/slice/layout/adminLayout";
+import { inter } from "@/app/fonts";
+import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import { capitalizeFirstLetters, getFirstLetterOfWord } from "@/utils/GlobalMethods";
+import styles from "@/components/topBar/index.module.css";
+import { store, useAppSelector } from "@/redux/store";
+import { getUserDetailsFromStorage } from "@/components/topBar/action";
+import AdminProfile from "@/features/profile/adminProfile/Index";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 const TopBar = () => {
+    const [arrowToggled, setArrowToggled] = useState(false);
+    const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem);
+    const user_role = getUserDetailsFromStorage('user_role');
+    const user_name = getUserDetailsFromStorage("user_name");
 
-    // const [arrowToggled, setArrowToggled] = useState(false)
-    const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem)
-    const user_role = getUserDetailsFromStorage('user_role')
-    const user_name = getUserDetailsFromStorage("user_name")
-    // const user_
+    const toggleArrow = () => {
+        setArrowToggled(!arrowToggled);
+    };
 
-
-    // const toggleArrow = ()=> {
-    //     if (arrowToggled){
-    //         setArrowToggled(false)
-    //     }else {
-    //         setArrowToggled(true)
-    //     }
-    // }
     const openMobileSideBar = () => {
-        store.dispatch(setShowMobileSideBar(true))
-    }
+        store.dispatch(setShowMobileSideBar(true));
+    };
 
     return (
 
@@ -63,25 +58,30 @@ const TopBar = () => {
                                 <div
                                     className={` grid place-content-center  mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `}>
                                 {getFirstLetterOfWord(user_name)}
-                                </div>
                             </div>
-                            <div className={` hidden md:grid md:gap-1  w-fit object-contain  `}>
-                                <p className={` text-black500 ${styles.fullName}`}>{capitalizeFirstLetters(user_name)}</p>
-                                <p className={` text-black500 ${styles.role}`}>{capitalizeFirstLetters(user_role?.replace("_", "  "))}</p>
-                            </div>
-                            <div id={'toggleArrowDiv'} className={``}>
-                                {/*#66708*/}
-                                {/*{arrowToggled ?*/}
-                                {/*    <ChevronUpIcon className={``} onClick={toggleArrow}/> :*/}
-                                {/*    <ChevronDownIcon className={``}  onClick={toggleArrow}/>*/}
-                                {/*}*/}
-                                {/*{arrowToggled &&*/}
-                                {/*    <ProfileDropdown onLogoutClick={handleLogout} close={toggleArrow}/>}*/}
-                            </div>
+                        </div>
+                        <div className={`hidden md:grid md:gap-1 w-fit object-contain`}>
+                            <p className={`text-black500 ${styles.fullName}`}>{capitalizeFirstLetters(user_name)}</p>
+                            <p className={`text-black500 ${styles.role}`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
+                        </div>
+                        <div id={'toggleArrowDiv'} className={``}>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    {arrowToggled ? (
+                                        <ChevronUpIcon className={'h-4 w-5 stroke-2 text-primary200'} onClick={toggleArrow} />
+                                    ) : (
+                                        <ChevronDownIcon className={'h-4 w-5 stroke-2 text-primary200'} onClick={toggleArrow} />
+                                    )}
+                                </PopoverTrigger>
+                                <PopoverContent className={"h-[11.875rem] w-[17.1875rem] absolute top-3 -right-2  p-3 rounded-md bg-meedlWhite shadow-boxShadowLight"}>
+                                    <AdminProfile />
+                                </PopoverContent>
+                            </Popover>
                         </div>
                     </div>
                 </div>
-            </header>
+            </div>
+        </header>
     );
 };
 
