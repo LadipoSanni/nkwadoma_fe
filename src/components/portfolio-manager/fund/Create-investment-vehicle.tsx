@@ -87,7 +87,7 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
         validationSchema={validationSchema}
         >
        {
-        ({errors,isValid,values,  touched,setFieldValue}) => (
+        ({errors,isValid, touched,setFieldValue}) => (
             <Form className={`${inter.className}`}>
               <div
                className='grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto'

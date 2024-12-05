@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import { DetailsTabContainer } from "@/reuseable/details/DetailsTabContainer";
 import SearchInput from "@/reuseable/Input/SearchInput";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { Book } from "lucide-react";
 import InviteAdminDialog from "@/reuseable/modals/InviteAdminDialog/Index";
@@ -62,11 +62,11 @@ const OrganizationDetails = () => {
     router.push("/organizations");
   };
 
-  const handleInviteClick = () => {
-    setIsModalOpen(true);
-  };
+  // const handleInviteClick = () => {
+  //   setIsModalOpen(true);
+  // };
 
-  const setAdminView = () => {};
+  // const setAdminView = () => {};
 
   // const details = { cohortStatus: "Active" };
 
