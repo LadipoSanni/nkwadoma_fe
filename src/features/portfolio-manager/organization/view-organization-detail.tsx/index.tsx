@@ -1,5 +1,5 @@
 "use client";
-import React,{ useState, useEffect } from 'react'
+import React from 'react'
 import { inter, cabinetGrotesk } from "@/app/fonts";
 import { IoGlobeOutline } from "react-icons/io5";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,7 +11,7 @@ import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { Book } from "lucide-react";
 // import { getItemSessionStorage } from "@/utils/storage";
 import { formatAmount } from "@/utils/Format";
-import { useViewAllAdminsInOrganizationQuery, useGetDetailsOfOrganizationQuery } from '@/service/admin/organization';
+import {  useGetDetailsOfOrganizationQuery } from '@/service/admin/organization';
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -19,12 +19,12 @@ interface TableRowData {
 
 
 const ViewOrganizationDetail = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const {data:organizationDetail} = useGetDetailsOfOrganizationQuery({})
   console.log("the details: ",organizationDetail);
   
   const handleInviteClick = () => {
-    setIsModalOpen(true);
+    // setIsModalOpen(true);
   };
 
   const organizationName = organizationDetail?.data.name ?? "";;
