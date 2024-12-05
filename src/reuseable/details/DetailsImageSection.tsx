@@ -17,7 +17,7 @@ interface detailsProps {
     cohortTitle: string;
     cohortDescription: string;
     icon?: ElementType;
-    dropdownOption: { name: string, id: string }[];
+    dropdownOption?: { name: string, id: string }[];
     handleDropdownClicked: (id: string) => void;
     buttonText: string;
     tagButtonData: { tagIcon: ElementType, tagCount: number, tagButtonStyle: string, tagText: string }[];
