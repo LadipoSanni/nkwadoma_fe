@@ -135,6 +135,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                                           placeHolder={`referred`}/>
                         </div>
                     </div>
+                    {/*#*/}
 
                     <div className={`flex md:flex-row flex-col gap-4 md:items-center`}
                          id={`ReferAndTraineeDiv`}>
