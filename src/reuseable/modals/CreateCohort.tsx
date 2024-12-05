@@ -295,7 +295,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                                              
                                              </Button> */}
                   <Button
-                    id="CreateCohortButton"
+                    id="CancelCohortButton"
                     variant={"outline"}
                     className={`text-meedlBlue font-bold border-solid border-meedlBlue w-full md:w-[8.75rem] h-[3.5625rem]`}
                     onClick={() => setIsFormSubmitted(false)}
