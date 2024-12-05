@@ -319,7 +319,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
             </main>
           )}
         </form>
-        <div
+        <div id="createCohortError"
           className={`text-error500 flex justify-center items-center ${
             error ? "mb-3" : ""
           }`}
