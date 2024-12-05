@@ -452,6 +452,7 @@ function CreateProgram({setIsOpen}:Props) {
                     errors.programName && touched.programName &&  (
                        <ErrorMessage
                     name="programName"
+                    id='programNameError'
                     component="div"
                     className="text-red-500 text-sm"
                     />
@@ -476,6 +477,7 @@ function CreateProgram({setIsOpen}:Props) {
                        <ErrorMessage
                     name="deliveryType"
                     component="div"
+                    id='deliveryTypeError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -499,6 +501,7 @@ function CreateProgram({setIsOpen}:Props) {
                        <ErrorMessage
                     name="programMode"
                     component="div"
+                    id='programModeError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -533,6 +536,7 @@ function CreateProgram({setIsOpen}:Props) {
                        <ErrorMessage
                     name="programDuration"
                     component="div"
+                    id='programDurationError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -555,6 +559,7 @@ function CreateProgram({setIsOpen}:Props) {
                        <ErrorMessage
                     name="programDescription"
                     component="div"
+                    id='programDescriptionError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -586,7 +591,7 @@ function CreateProgram({setIsOpen}:Props) {
 
                 </div>
                 {
-                <div className={`text-error500 flex justify-center items-center`}>{error}</div>
+                <div id='createProgramErrorFromBackend' className={`text-error500 flex justify-center items-center`}>{error}</div>
                  }
 
               </Form>
