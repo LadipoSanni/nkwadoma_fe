@@ -3,11 +3,12 @@ import adminLayoutReducer from "@/redux/slice/layout/adminLayout";
 import selectedLoanReducer from "@/redux/slice/loan/selected-loan";
 import authSliceReducer from "@/redux/slice/auth/slice";
 import {authApi} from "@/service/auths/api"
-import { programApi } from "@/service/admin/program_query";
-import { cohortApi } from "@/service/admin/cohort_query";
-import { userApi } from "@/service/users/api";
+import {programApi} from "@/service/admin/program_query";
+import {cohortApi} from "@/service/admin/cohort_query";
+import {userApi} from "@/service/users/api";
 import {organizationApi} from "@/service/admin/organization";
 import {loaneeApi} from "@/service/users/Loanee_query";
+import {loanProductApi} from "@/service/admin/loan_product";
 
 
 const appReducer = combineReducers({
@@ -20,7 +21,8 @@ const appReducer = combineReducers({
     [cohortApi.reducerPath]: cohortApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [loaneeApi.reducerPath]: loaneeApi.reducer,
-    [organizationApi.reducerPath] : organizationApi.reducer,
+    [organizationApi.reducerPath]: organizationApi.reducer,
+    [loanProductApi.reducerPath]: loanProductApi.reducer,
 })
 
 export default appReducer;
