@@ -1,10 +1,11 @@
 'use client'
-import React, {useState} from 'react';
+import React,{ useState} from 'react';
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible";
 import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
+import {LoaneeLoanDetail} from "@/features/onboarding/stepContent/Index";
 
-const LoanApplicationDetails = () => {
-        const [isOpen, setIsOpen] = useState(false);
+const LoanApplicationDetails: React.FC<LoaneeLoanDetail>= ({initialDeposit, tuitionAmount, amountRequested}) => {
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <div id="loanApplicationDetailsContent" className={'rounded-md grid gap-9 p-5 bg-grey105'}>
@@ -12,7 +13,7 @@ const LoanApplicationDetails = () => {
                 <h3 id="tuitionAmountLabel"
                     className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Tuition amount</h3>
                 <p id="tuitionAmountValue"
-                   className={`text-black500 text-[14px] leading-[150%]`}>₦3,500,000.00</p>
+                   className={`text-black500 text-[14px] leading-[150%]`}>{tuitionAmount}</p>
             </div>
             <div id="startDateContainer" className={'md:flex md:justify-between grid gap-3'}>
                 <h3 id="startDateLabel"
@@ -25,12 +26,12 @@ const LoanApplicationDetails = () => {
                     className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Loan amount
                     requested</h3>
                 <p id="loanAmountRequestedValue"
-                   className={`text-black500 text-[14px] leading-[150%]`}>₦3,000,000.00</p>
+                   className={`text-black500 text-[14px] leading-[150%]`}>{amountRequested}</p>
             </div>
             <div id="depositContainer" className={'md:flex md:justify-between grid gap-3'}>
                 <h3 id="depositLabel"
                     className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Deposit</h3>
-                <p id="depositValue" className={`text-black500 text-[14px] leading-[150%]`}>₦35,000</p>
+                <p id="depositValue" className={`text-black500 text-[14px] leading-[150%]`}>{initialDeposit}</p>
             </div>
             <Collapsible className={'bg-meedlWhite rounded-md border border-lightBlue250'} open={isOpen}
                          onOpenChange={setIsOpen}>

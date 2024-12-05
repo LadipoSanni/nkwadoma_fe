@@ -8,7 +8,6 @@ import {useAppSelector} from "@/redux/store";
 const ResetPassword = () => {
     const isEmailEntered = useAppSelector(state => state.authSlice.resetPasswordUserInput)
 
-    console.log("emsms: ", isEmailEntered)
 
     return (
         <div className={`md:w-full  md:h-full w-full mb-20  h-full grid content-start md:flex md:justify-end`} >

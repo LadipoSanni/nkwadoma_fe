@@ -24,18 +24,21 @@ export const authApi = createApi({
                 body: data
             }),
         }),
-  //       curl -X 'POST' \
-  // 'https://api-systest.learnspace.africa/api/v1/auth/password/forgotPassword?email=mariiam22222%40gmail.com' \
-  // -H 'accept: */*' \
-  // -d ''
         sendEmailToResetPassword: builder.mutation({
            query: (email) => ({
                url: `/auth/password/forgotPassword?email=${email}`,
                method: 'POST',
            })
         }),
+        resetPassword: builder.mutation({
+            query:(data) => ({
+                url: `/auth/password/reset`,
+                method: 'POST',
+                body:data
+            })
+        })
 
     })
 })
 
-export const {useLoginMutation, useSendEmailToResetPasswordMutation, useCreatePasswordMutation} = authApi;
+export const {useResetPasswordMutation,useLoginMutation, useSendEmailToResetPasswordMutation, useCreatePasswordMutation} = authApi;

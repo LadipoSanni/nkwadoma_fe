@@ -2,7 +2,9 @@
 import React, {ChangeEvent,  useState} from 'react';
 import AuthInput from "@/reuseable/Input/AuthInputField";
 import AuthButton from "@/reuseable/buttons/AuthButton";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useResetPasswordMutation} from "@/service/auths/api";
+import {useToast} from "@/hooks/use-toast"
 
 const Step3 = () => {
 
@@ -10,6 +12,8 @@ const Step3 = () => {
     const [confirmPassword, setConfirmPassword] = useState("")
     // const [disableButton, setDisableButton] = useState(true)
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
+    const searchParams = useSearchParams()
+    const [resetPassword, { data}] = useResetPasswordMutation()
 
     const criteriaMessages = [
         "Must be at least 8 characters",
@@ -21,10 +25,40 @@ const Step3 = () => {
 
     const router = useRouter()
 
+    const getUserToken = () => {
+        if (searchParams){
+            const pathVariable = searchParams.get("token")
+            if (pathVariable){
+                return pathVariable
+            }
+        }
+    }
+    const {toast} = useToast()
 
 
-    const changePassword = () => {
+    const changePassword = async() => {
+        const token = getUserToken()
+        // console.log("token: ", token)
 
+        try{
+
+            await resetPassword({token: token, password: newPassword}).unwrap()
+            // console.log("response: ", response,"isError:: ", isError, "isSuccess:: ", isSuccess, "data: ", data)
+            if(data?.message){
+                toast({
+                    description: data?.message,
+                    status: "success",
+                })
+            }
+        }catch(error){
+            // console.log("error: ", error)
+            toast({
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: error?.data?.message,
+                status: "error",
+            })
+        }
     }
 
     const login = ()=> {

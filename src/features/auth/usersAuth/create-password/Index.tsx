@@ -52,6 +52,7 @@ const CreatePassword = () => {
         setConfirmPassword(e.target.value);
     };
 
+
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
     const getUserToken = () => {
@@ -88,24 +89,19 @@ const CreatePassword = () => {
     }
     const handleCreatePassword = async () => {
         const token = getUserToken()
-        console.log("token: ", token)
 
         try {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
-            console.log("responsebhybyuihiuhuihiu : ",response)
-            const access_token = response?.data?.access_token
+            const access_token = response?.data?.accessToken
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
-            const user_id = response?.data?.id
-            console.log("user email: ",user_email, "user_id: ", user_id)
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             const userName = decode_access_token?.name
             // const user_email = decode_access_token?.email
             const user_roles = decode_access_token?.realm_access?.roles
             const user_role = user_roles.filter(getUserRoles).at(0)
-            console.log("userName: ", userName,"user_role; ", user_role )
             if (user_role) {
                 storeUserDetails(access_token, user_email, user_role, userName)
                 if (user_role === 'LOANEE') {

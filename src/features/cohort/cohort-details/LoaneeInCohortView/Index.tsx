@@ -1,13 +1,13 @@
 "use client";
-import React from 'react'
+import React,{useEffect} from 'react'
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {Input} from "@/components/ui/input";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import {Button} from "@/components/ui/button";
 import SelectableTable from "@/reuseable/table/SelectableTable";
 import {formatAmount} from "@/utils/Format";
-import {useEffect, useState} from "react";
-import {useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
+import { useState} from "react";
+import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
@@ -33,11 +33,16 @@ interface TableRowData {
 
 type viewAllLoanees = viewAllLoanee & TableRowData;
 
-export const LoaneeInCohortView = () => {
+interface props {
+    cohortFee?: string,
+}
+
+export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [allLoanee, setAllLoanee] = useState<viewAllLoanees[]>([]);
     const [isReferred, setIsReferred] = React.useState(``);
     const [addLoanee, setAddLoanee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
+    const [loaneeName, setLoaneeName] = React.useState("");
 
     const id = "1";
     const size = 100;
@@ -48,17 +53,23 @@ export const LoaneeInCohortView = () => {
         cohortId: cohortsId,
         pageSize: size,
         pageNumber: page
-    }, {refetchOnMountOrArgChange: true,})
+    })
+
+    const {data: searchResults, isLoading:isLoading} = useSearchForLoaneeInACohortQuery( { loaneeName:loaneeName, cohortId: cohortsId },
+        { skip: !loaneeName || !cohortsId})
 
 
     useEffect(() => {
-        if (data && data?.data) {
+        if (loaneeName && searchResults && searchResults?.data) {
+            const result = searchResults?.data
+            setAllLoanee(result)
+        } else if(!loaneeName && data && data?.data) {
             const result = data?.data?.body
             setAllLoanee(result)
         }
-    }, [data])
+    }, [data,loaneeName,searchResults ])
 
-    const TraineeHeader = [
+    const loanProduct = [
         {
             title: "Loanee",
             sortable: true,
@@ -113,7 +124,8 @@ export const LoaneeInCohortView = () => {
                                 </div>
                                 <Input
                                     className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
-                                    type="search" id={`search`} placeholder={"Search"} required/>
+                                    type="search" value={loaneeName} id={`search`} placeholder={"Search"} onChange={(e) => setLoaneeName(e.target.value)}
+                                    />
                             </div>
                         </div>
                         <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
@@ -149,19 +161,23 @@ export const LoaneeInCohortView = () => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                    <SelectableTable
-                        tableData={allLoanee}
-                        tableHeader={TraineeHeader}
-                        staticHeader={"LoaneeInCohortView"}
-                        staticColunm={"firstName"}
-                        tableHeight={45}
-                        icon={MdOutlinePerson}
-                        sideBarTabName={"LoaneeInCohortView"}
-                        handleRowClick={(row) => handleRowClick(row)}
-                        optionalRowsPerPage={10}
-                        tableCellStyle={"h-12"}
-                        enableRowSelection={true}
-                    />
+                    {
+                        <SelectableTable
+                            tableData={allLoanee}
+                            tableHeader={loanProduct}
+                            staticHeader="Trainee"
+                            staticColunm="firstName"
+                            tableHeight={45}
+                            icon={MdOutlinePerson}
+                            sideBarTabName="Trainee"
+                            handleRowClick={(row) => handleRowClick(row)}
+                            optionalRowsPerPage={10}
+                            tableCellStyle="h-12"
+                            enableRowSelection={true}
+                            isLoading={isLoading}
+                            condition={true}
+                        />
+                    }
                 </div>
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
@@ -173,7 +189,7 @@ export const LoaneeInCohortView = () => {
                     headerTitle={`Add Loanee`}
                     width="30%"
                 >
-                    <AddTraineeForm cohortId={id} setIsOpen={() => setAddLoanee(false)}/>
+                    <AddTraineeForm tuitionFee={cohortFee} cohortId={id} setIsOpen={() => setAddLoanee(false)}/>
                 </TableModal>
 
             </div>
