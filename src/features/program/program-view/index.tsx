@@ -11,31 +11,30 @@ import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
 import {MdOutlineDateRange, MdOutlinePeopleAlt, MdPersonOutline} from "react-icons/md";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import { setItemSessionStorage } from '@/utils/storage';
+import {setItemSessionStorage} from '@/utils/storage';
 import {Button} from "@/components/ui/button";
 import TableModal from "@/reuseable/modals/TableModal";
-import { useRouter } from 'next/navigation'
-import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
+import {useRouter} from 'next/navigation'
+import {DeleteCohort} from '@/reuseable/details/DeleteCohort'
 import EditProgramForm from '@/components/program/edit-program-form';
-import { useGetAllProgramsQuery } from '@/service/admin/program_query';
-import { useDeleteProgramMutation } from '@/service/admin/program_query';
-import { useGetProgramByIdQuery } from '@/service/admin/program_query';
+import {useGetAllProgramsQuery} from '@/service/admin/program_query';
+import {useDeleteProgramMutation} from '@/service/admin/program_query';
+import {useGetProgramByIdQuery} from '@/service/admin/program_query';
 import SkeletonForGrid from '@/reuseable/Skeleton-loading-state/Skeleton-for-grid';
-import { useSearchProgramQuery } from '@/service/admin/program_query';
+import {useSearchProgramQuery} from '@/service/admin/program_query';
 import TableEmptyState from '@/reuseable/emptyStates/TableEmptyState';
-import { setTimeout } from 'timers';
-
+import {setTimeout} from 'timers';
 
 
 interface TableRowData {
-    [key: string]: string | number | null | React.ReactNode ;
+    [key: string]: string | number | null | React.ReactNode;
 }
 
 interface rowData {
-    [key: string]: string | number | null | React.ReactNode | object ;
+    [key: string]: string | number | null | React.ReactNode | object;
 }
 
-interface viewAllProgramProps extends TableRowData  {
+interface viewAllProgramProps extends TableRowData {
     id?: string;
     programDescription?: string;
     name?: string;
@@ -47,8 +46,7 @@ interface viewAllProgramProps extends TableRowData  {
     totalAmountRepaid?: number;
     totalAmountDisbursed?: number;
     totalAmountOutstanding?: number
- }
-
+}
 
 
 const ProgramView = () => {
@@ -66,76 +64,77 @@ const ProgramView = () => {
 
     const [programView, setProgramView] = useState<viewAllProgramProps[]>([])
     const [progamDetail, setProgramDetail] = useState({
-    id: "",
-    programDescription: "",
-    name: "",
-    durationType: "",
-    programStartDate: "",
-    duration: 0,
-    mode: "",
-    deliveryType: "",
-    totalAmountRepaid: 0,
-    totalAmountDisbursed: 0,
-    totalAmountOutstanding: 0,
- }
-)
+            id: "",
+            programDescription: "",
+            name: "",
+            durationType: "",
+            programStartDate: "",
+            duration: 0,
+            mode: "",
+            deliveryType: "",
+            totalAmountRepaid: 0,
+            totalAmountDisbursed: 0,
+            totalAmountOutstanding: 0,
+        }
+    )
 
-    const [programId, setProgramId] =  React.useState("")
+    const [programId, setProgramId] = React.useState("")
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [page] = useState(0);
     // const [totalPage, setTotalPage] = useState(0);
     const size = 100;
-    
 
-    const { data,isLoading} = useGetAllProgramsQuery({ pageSize:size, pageNumber:page }, { refetchOnMountOrArgChange: true, })
+
+    const {data, isLoading} = useGetAllProgramsQuery({
+        pageSize: size,
+        pageNumber: page
+    }, {refetchOnMountOrArgChange: true,})
+    console.log(data)
     const [deleteItem] = useDeleteProgramMutation()
-    const { data: searchResults } = useSearchProgramQuery(searchTerm, { skip: !searchTerm });
+    const {data: searchResults} = useSearchProgramQuery(searchTerm, {skip: !searchTerm});
 
     useEffect(() => {
-        if(data && data?.data ) {
+        if (data && data?.data) {
             const programs = data?.data?.body
             setProgramView(programs)
             // setTotalPage(data?.data?.totalPages)
         }
-       
-    },[data])
-   
+
+    }, [data])
+
 
     const handleRowClick = (row: TableRowData) => {
         router.push('/program/details')
         // console.log('The row: ',row.id)
-        setItemSessionStorage("programId",String(row.id))
+        setItemSessionStorage("programId", String(row.id))
 
-       
+
     }
 
-    const handleProgramDetailsOnclick= (id:string) => {
+    const handleProgramDetailsOnclick = (id: string) => {
         router.push('/program/details')
         setProgramId(id)
-        setItemSessionStorage("programId",id)
-       
+        setItemSessionStorage("programId", id)
+
     }
 
-   
-    
-    useEffect(() => { 
-        if (searchTerm && searchResults && searchResults.data) { 
-            const programs =searchResults.data; 
-            setProgramView(programs); 
-        } 
-           
-      else if 
-    (data && data?.data ) {
-        const programs = data?.data?.body
-        setProgramView(programs)
-        // setSearchTerm("")
-    }
-        }, [searchTerm, searchResults,data]);
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
+    useEffect(() => {
+        if (searchTerm && searchResults && searchResults.data) {
+            const programs = searchResults.data;
+            setProgramView(programs);
+        } else if
+        (data && data?.data) {
+            const programs = data?.data?.body
+            setProgramView(programs)
+            // setSearchTerm("")
+        }
+    }, [searchTerm, searchResults, data]);
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
-     };
+    };
 
 
     const ProgramHeader = [
@@ -147,7 +146,12 @@ const ProgramView = () => {
             selector: (row: TableRowData) => <span
                 className={` pt-1 pb-1 pr-3 pl-3  rounded-xl ${row.programStatus === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"} `}>{row.programStatus ?? "Declined"}</span>
         },
-        {title: 'No. of Cohorts', sortable: true, id: 'noOfCohorts', selector: (row: TableRowData) => row.noOfCohorts ?? "0"},
+        {
+            title: 'No. of Cohorts',
+            sortable: true,
+            id: 'noOfCohorts',
+            selector: (row: TableRowData) => row.noOfCohorts ?? "0"
+        },
         {
             title: 'No. of Trainees',
             sortable: true,
@@ -174,7 +178,7 @@ const ProgramView = () => {
         },
 
 
-    ] 
+    ]
 
     // useEffect(() => {
     //     const data = Array.from({length: 9}, (_, index) => ({
@@ -187,7 +191,10 @@ const ProgramView = () => {
     //     }));
     //     setDummyData(data);
     // }, []);
-    const { data: program, isLoading: loading,refetch} = useGetProgramByIdQuery({id:programId},{ skip: !programId, refetchOnMountOrArgChange: true });
+    const {data: program, isLoading: loading, refetch} = useGetProgramByIdQuery({id: programId}, {
+        skip: !programId,
+        refetchOnMountOrArgChange: true
+    });
 
     const dropDownOption = [
         {name: 'View Program', id: '1'},
@@ -195,51 +202,55 @@ const ProgramView = () => {
         {name: 'Delete Program', id: '3'}
     ];
 
-    const handleDropdownClick = async (id:string,row: rowData) => {
-        if(id === "1") {
+    const handleDropdownClick = async (id: string, row: rowData) => {
+        if (id === "1") {
             router.push('/program/details')
-            setItemSessionStorage("programId",String(row.id))
+            setItemSessionStorage("programId", String(row.id))
 
-          
-        }
-        else if(id === "2") {
-          setProgramId(String(row.id))
-          if(programId){
-            await refetch();
-            setTimeout(()=>{ setEditOpen(true)},700)
-         }
-           setTimeout(()=>{ setEditOpen(true)},700)
-          
-        
-        }
-        else {
-          setIsDeleteOpen(true)
-          setProgramId(String(row.id))
-        }
-      }
 
-      const handleCardDropDownClick = async (optionId: string, id: string) => {
+        } else if (id === "2") {
+            setProgramId(String(row.id))
+            if (programId) {
+                await refetch();
+                setTimeout(() => {
+                    setEditOpen(true)
+                }, 700)
+            }
+            setTimeout(() => {
+                setEditOpen(true)
+            }, 700)
+
+
+        } else {
+            setIsDeleteOpen(true)
+            setProgramId(String(row.id))
+        }
+    }
+
+    const handleCardDropDownClick = async (optionId: string, id: string) => {
         if (optionId === "1") {
             router.push(`/program/details`);
-            setItemSessionStorage("programId",id)
+            setItemSessionStorage("programId", id)
         } else if (optionId === "2") {
-             setProgramId(id);
-             if(programId){
+            setProgramId(id);
+            if (programId) {
                 await refetch();
-                setTimeout(()=>{ setEditOpen(true)},700)
-             }
-            setTimeout(()=>{ setEditOpen(true)},700)
+                setTimeout(() => {
+                    setEditOpen(true)
+                }, 700)
+            }
+            setTimeout(() => {
+                setEditOpen(true)
+            }, 700)
         } else if (optionId === "3") {
             setProgramId(id);
             setIsDeleteOpen(true);
-           
+
         }
     };
 
 
-   
-
-      const handleEditProgram = (id: string) => {
+    const handleEditProgram = (id: string) => {
         setProgramId(id);
         setEditOpen(true);
     };
@@ -250,43 +261,41 @@ const ProgramView = () => {
     };
 
     const handleDeleteAProgram = async (id: string) => {
-       
-        try{
+
+        try {
             await deleteItem({id}).unwrap();
             setProgramView((prevData) => prevData.filter((item) => item.id !== id))
-        }catch(error){
+        } catch (error) {
             console.error("Error deleting program: ", error);
         }
     }
 
-    
- 
-    useEffect(()=> {
-    if(editOpen && program?.data ){
-        const detail = program?.data
-        setProgramDetail({
-            id: detail?.id || "",
-            programDescription: detail?.programDescription || "",
-            name: detail?.name || "",
-            durationType: detail?.durationType || "",
-            programStartDate: detail?.programStartDate || "",
-            duration: detail?.duration || 0,
-            mode: detail?.mode || "",
-            deliveryType: detail?.deliveryType || "",
-            totalAmountRepaid: detail?.totalAmountRepaid || 0,
-            totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
-            totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
-        }); 
-    }
-   // saveObjectItemToSessionStorage("programDetail",progamDetail)
 
-  },[editOpen, program])
+    useEffect(() => {
+        if (editOpen && program?.data) {
+            const detail = program?.data
+            setProgramDetail({
+                id: detail?.id || "",
+                programDescription: detail?.programDescription || "",
+                name: detail?.name || "",
+                durationType: detail?.durationType || "",
+                programStartDate: detail?.programStartDate || "",
+                duration: detail?.duration || 0,
+                mode: detail?.mode || "",
+                deliveryType: detail?.deliveryType || "",
+                totalAmountRepaid: detail?.totalAmountRepaid || 0,
+                totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
+                totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
+            });
+        }
+        // saveObjectItemToSessionStorage("programDetail",progamDetail)
 
-    
-   
+    }, [editOpen, program])
+
+
     const tagButtonData = [
-        {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
-        {tagIcon: MdOutlineDateRange, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
+        {tagIcon: MdPersonOutline, tagCount: 0, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
+        {tagIcon: MdOutlineDateRange, tagCount: 6, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
         {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "cohorts"},
     ];
 
@@ -301,18 +310,18 @@ const ProgramView = () => {
               className={`${cabinetGrotesk.className} flex flex-col gap-8 pl-5 pr-2 pt-7 bg-meedlWhite overflow-hidden`}>
             <section id="programSection" className={'grid gap-7 '}>
                 <div id="programControls" className={'md:flex pr-2 md:justify-between gap-5 grid'}>
-                    <SearchInput 
-                    id={'ProgramSearchInput'} 
-                    value={searchTerm}
-                    onChange={handleSearchChange}
+                    <SearchInput
+                        id={'ProgramSearchInput'}
+                        value={searchTerm}
+                        onChange={handleSearchChange}
                     />
                     <Button variant={"secondary"}
                             size={"lg"}
                             className={`${inter.className} bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center`}
                             id='createProgramButton'
                             onClick={handleModalOpen}>
-                                Create program
-                            </Button>
+                        Create program
+                    </Button>
 
                     <TableModal isOpen={isOpen}
                                 closeModal={() => setIsOpen(false)}
@@ -322,13 +331,13 @@ const ProgramView = () => {
                                 icon={Cross2Icon}
                                 width={`32%`}
                     >
-                        
+
                         <CreateProgram setIsOpen={setIsOpen}
-                                            //  programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
-                                            //  programModes={["PART_TIME", "FULL_TIME"]}
-                                            //  programDurations={["3", "4"]}
-                                            //  submitButtonText={"Create"}
-                                             />
+                            //  programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
+                            //  programModes={["PART_TIME", "FULL_TIME"]}
+                            //  programDurations={["3", "4"]}
+                            //  submitButtonText={"Create"}
+                        />
 
                     </TableModal>
                 </div>
@@ -344,27 +353,27 @@ const ProgramView = () => {
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
-                    { isLoading ? (<SkeletonForGrid/> ) :
-                      ( programView.length === 0 ?  (
-                        <TableEmptyState
-                        icon={Book}
-                        name='program'
-                        />
-                    )   : (programView.slice().reverse().map((program, index) => (
-                            <AllProgramsCard
-                                key={index}
-                                description={program.programDescription ?? ''}
-                                title={program.name ?? ''}
-                                id={program.id ?? ""} dropdownOption={dropDownOption} 
-                                tagButtonData={tagButtonData}
-                                onEdit={handleEditProgram}
-                                onDelete={handleDeleteProgram}
-                                handleCardDropDownClick={(optionId:string) => handleCardDropDownClick(optionId, program.id ?? '')}
-                                handleProgramDetails={()=> handleProgramDetailsOnclick(program.id ?? '')}                   
+                        {isLoading ? (<SkeletonForGrid/>) :
+                            (programView.length === 0 ? (
+                                <TableEmptyState
+                                    icon={Book}
+                                    name='program'
                                 />
-                        )
-                        )) )}
-                       
+                            ) : (programView.slice().reverse().map((program, index) => (
+                                    <AllProgramsCard
+                                        key={index}
+                                        description={program.programDescription ?? ''}
+                                        title={program.name ?? ''}
+                                        id={program.id ?? ""} dropdownOption={dropDownOption}
+                                        tagButtonData={tagButtonData}
+                                        onEdit={handleEditProgram}
+                                        onDelete={handleDeleteProgram}
+                                        handleCardDropDownClick={(optionId: string) => handleCardDropDownClick(optionId, program.id ?? '')}
+                                        handleProgramDetails={() => handleProgramDetailsOnclick(program.id ?? '')}
+                                    />
+                                )
+                            )))}
+
                     </div>
                 ) : (
                     <div
@@ -395,37 +404,37 @@ const ProgramView = () => {
                 )}
             </div>
             <div>
-                { loading ? "" : (
-                <TableModal
-                isOpen={editOpen}
-                closeOnOverlayClick={true}
-                closeModal={() => setEditOpen(!editOpen)}
-                icon={Cross2Icon}
-                headerTitle='Edit Program'
-                >
-                   
-                    <EditProgramForm 
-                    programId={programId} 
-                    setIsOpen={setEditOpen}
-                    programDetail={progamDetail}
-                    /> 
-                </TableModal>
-                ) 
+                {loading ? "" : (
+                    <TableModal
+                        isOpen={editOpen}
+                        closeOnOverlayClick={true}
+                        closeModal={() => setEditOpen(!editOpen)}
+                        icon={Cross2Icon}
+                        headerTitle='Edit Program'
+                    >
+
+                        <EditProgramForm
+                            programId={programId}
+                            setIsOpen={setEditOpen}
+                            programDetail={progamDetail}
+                        />
+                    </TableModal>
+                )
                 }
                 <TableModal
-                isOpen={isDeleteOpen}
-                closeOnOverlayClick={true}
-                closeModal={() => setIsDeleteOpen(false)}
-                icon={Cross2Icon}
-                width='auto'
+                    isOpen={isDeleteOpen}
+                    closeOnOverlayClick={true}
+                    closeModal={() => setIsDeleteOpen(false)}
+                    icon={Cross2Icon}
+                    width='auto'
                 >
-                   <DeleteCohort 
-                   setIsOpen={()=> setIsDeleteOpen(false)} 
-                   headerTitle='Program' 
-                   title='program' 
-                   handleDelete={handleDeleteAProgram}
-                   id={programId}
-                   />
+                    <DeleteCohort
+                        setIsOpen={() => setIsDeleteOpen(false)}
+                        headerTitle='Program'
+                        title='program'
+                        handleDelete={handleDeleteAProgram}
+                        id={programId}
+                    />
                 </TableModal>
             </div>
 
