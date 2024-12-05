@@ -10,7 +10,7 @@ import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 // import {getUserDetails} from '@/features/auth/usersAuth/login/action';
 import {MdOutlineDelete} from "react-icons/md";
-import {useGetCohortLoanBreakDownQuery} from "@/service/admin/cohort_query";
+import {useGetCohortLoanBreakDownQuery, useAddLoaneeToCohortMutation} from "@/service/admin/cohort_query";
 import {getItemSessionStorage} from "@/utils/storage";
 
 interface idProps {
@@ -50,13 +50,21 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
         { itemName: string; itemAmount: string; currency: string }[]
     >([]);
     const {data} = useGetCohortLoanBreakDownQuery(COHORTID)
+    const [userIdentityInput, setUserIdentityInput] = useState()
     const [cohortBreakDown, setCohortBreakDown] = useState([]);
 
 
+    const [addLoaneeToCohort] = useAddLoaneeToCohortMutation()
     const handleNewValue = (newValue: string, index: number) => {
         setInputValue(newValue);
         console.log(`New value for detail-${index}:`, newValue);
     };
+
+    const inputProps = {
+        chortId: COHORTID,
+        userIdentity: userIdentityInput,
+        cohortBreakDown
+    }
 
     const validationSchemaStep1 = Yup.object().shape({
         firstName: Yup.string()
@@ -100,10 +108,15 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
     const handleSubmitStep1 =  () => {
         // const response = await loanBreakDown(cohortId).unwrap()
         console.log("cohortId", cohortId,"response: ", data)
-        const newCohortBreakDown = data?.data
+        // const newCohortBreakDown = data?.data
         // newCohortBreakDown.add(data?.data)
-        console.log(" beforee usestase:: ", cohortBreakDown, "dada: ", data?.data, "duydu: ", newCohortBreakDown)
+        // const datass : cohortBreakDown = []
+        // data?.data?.forEach((datas ) => {datass.push(datas)})
+        // console.log(" datasss::after ", datass)
+        // console.log(" beforee usestase:: ", cohortBreakDown, "dada: ", data?.data, "duydu: ", newCohortBreakDown)
         cohortBreakDown.push(data?.data)
+        console.log("cohortBreakDown", cohortBreakDown,"data?.data: ", data?.data)
+
         // setCohortBreakDown(data?.data)
 
         console.log(" usestase:: ", cohortBreakDown.at(0))
@@ -114,6 +127,7 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
     const handleFinalSubmit = (values: typeof initialFormValue) => {
         // const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
         // const formattedValues = {...values, initialDeposit: formattedDeposit};
+        setUserIdentityInput(values)
         toastPopUp.showToast();
         console.log(values);
 
@@ -125,6 +139,46 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
     const handleDeleteItem = (index: number) => {
         setLoanBreakdowns(loanBreakdowns.filter((_, i) => i !== index));
     };
+
+    const editCohortBreakDown = (element: cohortBreakDown,e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+
+        const current : cohortBreakDown[] | undefined   = cohortBreakDown.at(0)
+        if(current){
+            const currentData : cohortBreakDown[] = current
+            console.log('currebt:: ', current)
+            const newIndexElement  = {
+                currency: element?.currency,
+                itemAmount:e.target.value,
+                loanBreakDownId: element?.loanBreakdownId,
+                itemName:  element?.itemName
+            }
+            console.log("cri: ", cohortBreakDown)
+
+            // if(current){
+                // //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // // @ts-expect-error
+                // current.splice(index, newIndexElement)
+                // const index = 2;
+                const newArr = [];
+                for (let i = 0; i < currentData.length; i++) {
+                    if (i === index) {
+                        newArr.push(newIndexElement);
+                    }
+                    newArr.push(currentData[i]);
+                }
+
+                console.log(newArr); // "walk the dog", "go shopping", "go to the pharmacy", "exercise"
+
+                console.log('after splicing: ', current)
+                setCohortBreakDown(current)
+                console.log("cohruri: ", cohortBreakDown)
+            }
+        // }
+
+        // current[index] = newIndexElement
+        // current.r
+
+    }
 
     return (
         <div id="addTraineeForm">
@@ -252,67 +306,81 @@ function AddTraineeForm({cohortId, setIsOpen,tuitionFee}: idProps) {
                             </div>
                         ) : (
                             <div className={`py-5 ${inter.className}`}>
-                                {details.map((detail, index) => (
+                                <label>Tuition</label>
+                                <div className="flex items-center gap-2">
+                                    <CurrencySelectInput
+                                        readOnly
+                                        selectedcurrency={selectCurrency}
+                                        setSelectedCurrency={setSelectCurrency}
+                                    />
+                                    <div
+                                        className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>
+                                        <Field
+                                            id={`detail-`}
+                                            name={`detail-`}
+                                            type="text"
+                                            defaultValue={tuitionFee || ''}
+                                            readOnly
+                                            className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
+                                        />
+                                    </div>
+                                </div>
+                                {cohortBreakDown?.at(0)?.map((detail : cohortBreakDown, index: number) => (
                                     <div
                                         key={index}
-                                        className={`${detail.item === 'Total amount requested' ? `` : ''}`}
+                                        className={``}
                                     >
-                                        <Label htmlFor={`detail-${index}`}>{detail.item}</Label>
+                                        <Label htmlFor={`detail-${index}`}>{detail.itemName}</Label>
                                         <div className="w-full">
-                                            {detail.item === 'Tuition' ? (
-                                                <div className="flex items-center gap-2">
+                                            {/*{detail.item === 'Tuition' ? (*/}
+                                            {/*    <div className="flex items-center gap-2">*/}
+                                            {/*        <CurrencySelectInput*/}
+                                            {/*            readOnly*/}
+                                            {/*            selectedcurrency={selectCurrency}*/}
+                                            {/*            setSelectedCurrency={setSelectCurrency}*/}
+                                            {/*        />*/}
+                                            {/*        <div*/}
+                                            {/*            className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>*/}
+                                            {/*            <Field*/}
+                                            {/*                id={`detail-${index}`}*/}
+                                            {/*                name={`detail-${index}`}*/}
+                                            {/*                type="text"*/}
+                                            {/*                defaultValue={detail.amount || ''}*/}
+                                            {/*                readOnly*/}
+                                            {/*                className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"*/}
+                                            {/*            />*/}
+                                            {/*        </div>*/}
+                                            {/*    </div>*/}
+                                            <div className={`flex items-center w-full gap-2`}>
+                                                <div>
                                                     <CurrencySelectInput
-                                                        readOnly
+                                                        readOnly={false}
                                                         selectedcurrency={selectCurrency}
                                                         setSelectedCurrency={setSelectCurrency}
                                                     />
-                                                    <div
-                                                        className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>
-                                                        <Field
-                                                            id={`detail-${index}`}
-                                                            name={`detail-${index}`}
-                                                            type="text"
-                                                            defaultValue={detail.amount || ''}
-                                                            readOnly
-                                                            className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
-                                                        />
-                                                    </div>
                                                 </div>
-                                            ) : (
-                                                <div className={`flex items-center w-full gap-2`}>
-                                                    <div>
-                                                        <CurrencySelectInput
-                                                            readOnly={false}
-                                                            selectedcurrency={selectCurrency}
-                                                            setSelectedCurrency={setSelectCurrency}
-                                                        />
-                                                    </div>
 
-                                                    <div
-                                                        className={`flex w-full flex-row items-center justify-between mb-2 text-black300 ${detail.item === "Total amount requested" ? "" : ""}`}
-                                                    >
-                                                        <Field
-                                                            id={`detail-${index}`}
-                                                            name={`detail-${index}`}
-                                                            type="text"
-                                                            value={inputValue}
-                                                            placeholder={`Enter ${detail.item}`}
-                                                            className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                const value = e.target.value;
-                                                                if (/^\d*$/.test(value)) {
-                                                                    setFieldValue(`detail-${index}`, value);
-                                                                    handleNewValue(value, index);
-                                                                }
-                                                            }}
+                                                <div
+                                                    className={`flex w-full flex-row items-center justify-between mb-2 text-black300 `}
+                                                >
+                                                    <Field
+                                                        id={`detail-${index}`}
+                                                        name={`detail-${index}`}
+                                                        type="text"
+                                                        value={detail?.itemAmount}
+                                                        placeholder={`${detail.itemName}`}
+                                                        className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                            editCohortBreakDown(detail, e, index)
+                                                        }}
 
-                                                        />
-                                                        <MdOutlineDelete id={`deleteItemButton${index}`}
-                                                                         className={'text-blue200 h-4 w-4 cursor-pointer'}
-                                                                         onClick={() => handleDeleteItem(index)}/>
-                                                    </div>
+                                                    />
+                                                    <MdOutlineDelete id={`deleteItemButton${index}`}
+                                                                     className={'text-blue200 h-4 w-4 cursor-pointer'}
+                                                                     onClick={() => handleDeleteItem(index)}/>
                                                 </div>
-                                            )}
+                                            </div>
+                                            {/*}*/}
                                         </div>
                                     </div>
                                 ))}

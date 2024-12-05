@@ -123,13 +123,21 @@ export const cohortApi = createApi({
                 method: 'GET',
                 params: param,
             })
-        })
+        }),
+        addLoaneeToCohort: builder.mutation({
+            query: (data) => ({
+                url: `add/loaneeToCohort`,
+                method: 'GET',
+                body: data
+            })
+        }),
     })
 })
 
 
 
 export const {
+    useAddLoaneeToCohortMutation,
     useGetCohortLoanBreakDownQuery,
     useCreateCohortMutation,
     useViewAllLoaneeQuery,
