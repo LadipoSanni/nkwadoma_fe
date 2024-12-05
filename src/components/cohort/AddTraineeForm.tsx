@@ -11,11 +11,10 @@ import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 // import {getUserDetails} from '@/features/auth/usersAuth/login/action';
 // import Input
 import {MdOutlineDelete} from "react-icons/md";
-import {useGetCohortLoanBreakDownQuery, useAddLoaneeToCohortMutation} from "@/service/admin/cohort_query";
+import {useGetCohortLoanBreakDownQuery} from "@/service/admin/cohort_query";
 import {getItemSessionStorage} from "@/utils/storage";
-import {number} from "yup";
 
-interface idProps {
+interface Props {
     cohortId: string;
     tuitionFee?: string,
     setIsOpen?: (e: boolean | undefined) => void;
@@ -29,7 +28,7 @@ type cohortBreakDown = {
 
 }
 
-function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: idProps) {
+function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     // const {storedAccessToken} = getUserDetails();
     // console.log('tuitionfee : ', tuitionFee);
 
@@ -47,12 +46,12 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: idProps) {
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [isLoading] = useState(false);
-    const [inputValue, setInputValue] = useState(``);
+    // const [inputValue, setInputValue] = useState(``);
     const [loanBreakdowns, setLoanBreakdowns] = useState<
         { itemName: string; itemAmount: string; currency: string }[]
     >([]);
     const {data} = useGetCohortLoanBreakDownQuery(COHORTID)
-    const [userIdentityInput, setUserIdentityInput] = useState()
+    // const [userIdentityInput, setUserIdentityInput] = useState()
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([]);
     // let cohortBreakDown : cohortBreakDown[] = []
 
@@ -132,7 +131,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: idProps) {
     const handleFinalSubmit = (values: typeof initialFormValue) => {
         // const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
         // const formattedValues = {...values, initialDeposit: formattedDeposit};
-        setUserIdentityInput(values)
+        // setUserIdentityInput(values)
         toastPopUp.showToast();
         console.log(values);
 
@@ -169,9 +168,11 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: idProps) {
         }
         console.log("up: ", updateArray)
 
+        const update = updateArray
 
-        if (updateArray) {
-            setCohortBreakDown(updateArray)
+        if (update) {
+            setCohortBreakDown(update)
+            console.log("after setting: ", cohortBreakDown)
             const items = cohortBreakDown[index]?.itemAmount * 1
 
             console.log("cohort amount: ", currentCohortBreakDownAmount, "itemmm: ", items)
@@ -309,7 +310,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: idProps) {
                             </div>
                         ) : (
                             <div className={`py-5 ${inter.className}`}>
-                                <label>Tuition</label>
+                                <span>Tuition</span>
                                 <div className="flex items-center gap-2">
                                     <CurrencySelectInput
                                         readOnly
@@ -322,7 +323,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: idProps) {
                                             id={`detail-`}
                                             name={`detail-`}
                                             type="text"
-                                            defaultValue={tuitionFee || ''}
+                                            defaultValue={tuitionFee}
                                             readOnly
                                             className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
                                         />
@@ -330,7 +331,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: idProps) {
                                 </div>
                                 {cohortBreakDown?.map((detail: cohortBreakDown, index: number) => (
                                     <div
-                                        key={index}
+                                        key={"breakDown"+index}
                                         className={``}
                                     >
                                         <Label htmlFor={`detail-${index}`}>{detail.itemName}</Label>
