@@ -150,6 +150,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         const currentCohortBreakDownAmount = currentCohortBreakdown?.itemAmount * 1
         const {value} = e.target
         const item = cohortBreakDown[index]
+        //creating a variable with the inputted amount
         const updatedData: cohortBreakDown = {
             currency: item?.currency,
             itemAmount: value,
@@ -157,12 +158,15 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
             itemName: item.itemName
 
         }
+        console.log("ii: ", updatedData)
+        // creating the copy of the cohortBreakDown
         const updateArray : cohortBreakDown[] = [...cohortBreakDown];
+        //looping through the copy array to change the item  inputted amount
         for (let i = 0; i < updateArray.length; i++) {
             if (i === index) {
+                //replacing the copy with the created item
                 updateArray[index] = updatedData
             }
-
         }
         console.log("up: ", updateArray)
 
