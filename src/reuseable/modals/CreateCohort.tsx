@@ -172,7 +172,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
 
   const handleSelectClick = () => {
     setLoanBreakdowns([
-      { itemName: "", itemAmount: "", currency: "" },
+      { itemName: "", itemAmount: "", currency: "NGN" },
       ...loanBreakdowns,
     ]);
   };
@@ -245,6 +245,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
               <DescriptionTextarea
                 description={cohortDescription}
                 setDescription={setDescription}
+                maximumDescription={2500}
               />
               <FileUpload
                 handleDrop={handleDrop}
@@ -318,7 +319,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
             </main>
           )}
         </form>
-        <div
+        <div id="createCohortError"
           className={`text-error500 flex justify-center items-center ${
             error ? "mb-3" : ""
           }`}

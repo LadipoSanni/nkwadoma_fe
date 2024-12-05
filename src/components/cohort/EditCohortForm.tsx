@@ -215,7 +215,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
     const networkPopUp =  ToastPopUp({
       description: "No internet connection",
       status: "error",
-      
+
     });
 
   const handleSubmit = async (values: typeof initialFormValue) => {
@@ -270,6 +270,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
               errors.name && touched.name &&  (
                  <ErrorMessage
               name="name"
+              id='editCohortNameError'
               component="div"
               className="text-red-500 text-sm"
             /> 
@@ -291,6 +292,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                  <ErrorMessage
               name="startDate"
               component="div"
+              id='editStartDateError'
               className="text-red-500 text-sm"
             /> 
               )
@@ -314,6 +316,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                  <ErrorMessage
               name="expectedEndDate"
               component="div"
+              id='editEndDateError'
               className="text-red-500 text-sm"
             /> 
               )
@@ -336,6 +339,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                  <ErrorMessage
               name="cohortDescription"
               component="div"
+              id='editCohortDescriptionError'
               className="text-red-500 text-sm"
             /> 
               )
@@ -344,7 +348,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
               <div>
                 <Label htmlFor='cohortImage'>Cohort Image (Optional)</Label>
                 <div className='mt-2'>
-                  
+
                       <div className='relative border border-solid h-24 rounded flex items-center justify-between px-4'>
                       {image? ( <div   className='flex items-center'> <img  data-testid="image" src={image} alt="Cohort" className="w-24 h-16 object-cover rounded-md" />
                        <span className="ml-4 text-sm text-gray-600">
@@ -433,7 +437,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
               </div>
                </div>
                {
-                <div className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
+                <div id='editCohortErrorFromBackend' className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
             }
             </Form>
 

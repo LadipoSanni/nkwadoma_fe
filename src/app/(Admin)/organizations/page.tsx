@@ -1,5 +1,5 @@
 import React from 'react';
-import Organization from "@/features/portfolio-manager/organization";
+import Organization from "@/features/portfolio-manager/organization/view-organization";
 
 const Page = () => {
     return (

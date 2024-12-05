@@ -351,18 +351,22 @@ function CreateProgram({setIsOpen}:Props) {
     const validationSchema = Yup.object().shape({
         programName:Yup.string()
        .trim()
+       .matches(/^[a-zA-Z\s_-]+$/, 'Program name can only contain letters, underscores, hyphens, and spaces.')
       .required('Program name is required'),
       deliveryType:Yup.string()
       .required('Program delivery type is required'),
       programMode:Yup.string()
       .required('Program Mode is required'),
       programDuration:  Yup.string()
+      .matches(/^(?!0)\d+$/, 'Program duration must be a number and cannot start with zero.')
       .required('Program duration is required'),
       programDescription: Yup.string()
        .trim()
        .required('Program Description is required')
        .max(2500, 'Program description must be 2500 characters or less')
     });
+
+    
   
      const toastPopUp = ToastPopUp({
       description: "Program Created successfully updated.",
@@ -439,11 +443,16 @@ function CreateProgram({setIsOpen}:Props) {
                   name="programName"
                   className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
                   placeholder="Enter program name"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
+                    const value = e.target.value; const regex = /^[a-zA-Z\s_-]*$/; 
+                    if (regex.test(value)) { 
+                      setFieldValue("programName", value); } }}
                   /> 
                   {
                     errors.programName && touched.programName &&  (
                        <ErrorMessage
                     name="programName"
+                    id='programNameError'
                     component="div"
                     className="text-red-500 text-sm"
                     />
@@ -468,6 +477,7 @@ function CreateProgram({setIsOpen}:Props) {
                        <ErrorMessage
                     name="deliveryType"
                     component="div"
+                    id='deliveryTypeError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -491,6 +501,7 @@ function CreateProgram({setIsOpen}:Props) {
                        <ErrorMessage
                     name="programMode"
                     component="div"
+                    id='programModeError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -512,6 +523,12 @@ function CreateProgram({setIsOpen}:Props) {
                         // type="number"
                         className="w-full p-3 md:h-[3.2rem] border rounded focus:outline-none mt-2 text-sm"
                         placeholder="Enter program duration"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          const value = e.target.value;
+                          if (/^(?!0)\d*$/.test(value)) { 
+                              setFieldValue("programDuration", value); 
+                          }
+                      }}
                         /> 
 
                      {
@@ -519,6 +536,7 @@ function CreateProgram({setIsOpen}:Props) {
                        <ErrorMessage
                     name="programDuration"
                     component="div"
+                    id='programDurationError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -541,6 +559,7 @@ function CreateProgram({setIsOpen}:Props) {
                        <ErrorMessage
                     name="programDescription"
                     component="div"
+                    id='programDescriptionError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -572,7 +591,7 @@ function CreateProgram({setIsOpen}:Props) {
 
                 </div>
                 {
-                <div className={`text-error500 flex justify-center items-center`}>{error}</div>
+                <div id='createProgramErrorFromBackend' className={`text-error500 flex justify-center items-center`}>{error}</div>
                  }
 
               </Form>
