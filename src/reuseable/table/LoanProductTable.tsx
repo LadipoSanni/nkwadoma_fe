@@ -121,14 +121,14 @@ function Tables<T extends TableRowData> ({
 
      
     const paginatedData = tableData?.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-    const totalPages = Math.ceil(tableData.length / rowsPerPage);
+    const totalPages = Math.ceil(tableData?.length / rowsPerPage);
     const isLastPage = page === totalPages;
 
     return (
         <div id="loanProductTableContainer" className={`w-[100%] `}>
             { 
               isLoading ? (<SkeletonForTable/>) :
-               ( tableData.length === 0 ? <TableEmptyState icon={icon} name={sideBarTabName} className={emptyStateStyle}
+               ( tableData?.length === 0 ? <TableEmptyState icon={icon} name={sideBarTabName} className={emptyStateStyle}
                                                           optionalFilterName={optionalFilterName} condition={condition}/> : (
                     <div>
                         <div id="loanProductTableBorder"
@@ -162,7 +162,7 @@ function Tables<T extends TableRowData> ({
 
                                     </TableHeader>
                                     <TableBody id="dynamicTableBody" data-testid="datatable" className=''>
-                                        {paginatedData.map((row, rowIndex) => (
+                                        {paginatedData?.map((row, rowIndex) => (
                                             <TableRow
                                                 id={`dynamicTableBodyRow${rowIndex}`}
                                                 key={rowIndex}
@@ -310,7 +310,7 @@ function Tables<T extends TableRowData> ({
                                     </TableHeader>
                                     <TableBody id="dynamicTableBodyMobile" className='w-full'>
                                         {
-                                            paginatedData.map((row, rowIndex) => (
+                                            paginatedData?.map((row, rowIndex) => (
                                                 <TableRow
                                                     key={rowIndex}
                                                     onClick={() => handleRowClick(row)}
