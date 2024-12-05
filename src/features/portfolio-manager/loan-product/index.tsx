@@ -17,7 +17,6 @@ function LoanProductPage() {
     const size = 100;
     const number = 0;
     const {data, isLoading: isLoading} = useViewAllLoanProductQuery({pageSize: size, pageNumber: number})
-    console.log(data)
 
     useEffect(() => {
         if (data && data?.data) {
