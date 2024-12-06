@@ -11,8 +11,9 @@ import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 // import {getUserDetails} from '@/features/auth/usersAuth/login/action';
 // import Input
 import {MdOutlineDelete} from "react-icons/md";
-import {useGetCohortLoanBreakDownQuery} from "@/service/admin/cohort_query";
+import {useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery} from "@/service/admin/cohort_query";
 import {getItemSessionStorage} from "@/utils/storage";
+import TotalInput from "@/reuseable/display/TotalInput";
 
 interface Props {
     cohortId: string;
@@ -29,16 +30,7 @@ type cohortBreakDown = {
 }
 
 function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
-    // const {storedAccessToken} = getUserDetails();
-    // console.log('tuitionfee : ', tuitionFee);
 
-    // const details = [
-    //     {item: 'Tuition', amount: tuitionFee},
-    //     {item: 'Devices', amount: '₦600,000.00'},
-    //     {item: 'Accommodation', amount: '₦600,000.00'},
-    //     {item: 'Feeding', amount: '₦300,000.00'},
-    //     {item: 'Total amount requested', amount: '₦3,500,000.00'},
-    // ];
 
     const COHORTID = getItemSessionStorage("cohortId")
     console.log("coddo: ", COHORTID)
@@ -46,20 +38,14 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [isLoading] = useState(false);
-    // const [inputValue, setInputValue] = useState(``);
     const [loanBreakdowns, setLoanBreakdowns] = useState<
         { itemName: string; itemAmount: string; currency: string }[]
     >([]);
     const {data} = useGetCohortLoanBreakDownQuery(COHORTID)
-    // const [userIdentityInput, setUserIdentityInput] = useState()
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([]);
-    // let cohortBreakDown : cohortBreakDown[] = []
 
-    // const [addLoaneeToCohort] = useAddLoaneeToCohortMutation()
-    // const handleNewValue = (newValue: string, index: number) => {
-    //     setInputValue(newValue);
-    //     console.log(`New value for detail-${index}:`, newValue);
-    // };
+    const [addLoaneeToCohort] = useAddLoaneeToCohortMutation()
+
 
     // const inputProps = {
     //     chortId: COHORTID,
@@ -170,19 +156,19 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         }
         console.log("up: ", updateArray)
 
-        const update : cohortBreakDown[] = []
+        // const update : cohortBreakDown[] = []
 
         if (updateArray) {
-            updateArray.forEach((item) => update.push(item))
-            // cohortBreakDown.fo
-            for (let i = 0; i < updateArray.length; i++) {
-                // if (i === index) {
-                    cohortBreakDown[index] = updateArray[index]
-                // }
-
-            }
+            // updateArray.forEach((item) => update.push(item))
+            // // cohortBreakDown.fo
+            // for (let i = 0; i < updateArray.length; i++) {
+            //     // if (i === index) {
+            //         cohortBreakDown[index] = updateArray[index]
+            //     // }
+            //
+            // }
             console.log("after changing: ",cohortBreakDown )
-            setCohortBreakDown(update)
+            setCohortBreakDown(updateArray)
             console.log("after setting: ", cohortBreakDown)
             const items = cohortBreakDown[index]?.itemAmount * 1
 
@@ -390,15 +376,21 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                                         }}
 
                                                     />
-                                                    <MdOutlineDelete id={`deleteItemButton${index}`}
-                                                                     className={'text-blue200 h-4 w-4 cursor-pointer'}
-                                                                     onClick={() => handleDeleteItem(index)}/>
+                                                    {/*<MdOutlineDelete id={`deleteItemButton${index}`}*/}
+                                                    {/*                 className={'text-blue200 h-4 w-4 cursor-pointer'}*/}
+                                                    {/*                 onClick={() => handleDeleteItem(index)}/>*/}
                                                 </div>
                                             </div>
                                             {/*}*/}
                                         </div>
                                     </div>
                                 ))}
+                                <div
+                                    id={'totalInputOnAddLoaneeModal'}
+                                    data-testid={'totalInputOnAddLoaneeModal'}
+                                >
+                                    <TotalInput total={"20000"} componentId={'totalInputOnAddLoaneeModalComponent'}/>
+                                </div>
                                 <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
                                         variant="outline"
