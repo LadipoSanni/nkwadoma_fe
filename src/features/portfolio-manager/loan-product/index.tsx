@@ -130,6 +130,7 @@ function LoanProductPage() {
                 <div id={`createProduct`}>
                     <Button variant={"secondary"}
                             size={"lg"}
+                            onClick={handleCreateButton}
                             className={`bg-meedlBlue h-12 py-5 px-6  w-full hover:bg-meedlBlue focus-visible:ring-0 shadow-none`}
                     >Create loan product</Button>
                 </div>
