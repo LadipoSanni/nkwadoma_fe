@@ -9,8 +9,8 @@ import Tables from "@/reuseable/table/LoanProductTable";
 
 interface detailContainerProps {
     dataList?: { label: string; value: string | React.ReactNode; }[];
-    isNotTableDataList?: {detail: string; value: string}[]
-    breakDown?: { title: string; amount: string; }[];
+    isNotTableDataList?: { detail: string; value: string }[]
+    breakDown?: { itemName: string; itemAmount: string; }[];
     tabTitle1: string;
     tabTitle2: string;
     useBreakdown?: boolean;
@@ -20,9 +20,8 @@ interface detailContainerProps {
 export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                                                         dataList, breakDown,
                                                                         tabTitle1, tabTitle2, useBreakdown = false,
-                                                                        isTable=true, isNotTableDataList
+                                                                        isTable = true, isNotTableDataList
                                                                     }) => {
-
     const ProgramHeader = [
         {title: "Loanee", sortable: true, id: "trainee"},
         {title: "Referral Date", sortable: true, id: "referralDate"},
@@ -70,38 +69,37 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
 
                         <TabsContent value={"trainee"} id="trainee-content" data-testid="trainee-content"
                                      className={`py-3 w-full `}>
-                            {isTable?
+                            {isTable ?
                                 <Tables
-                                tableData={traineeData}
-                                tableHeader={ProgramHeader}
-                                staticHeader={'Trainee'}
-                                staticColunm={'trainee'}
-                                tableHeight={41.5}
-                                icon={MdOutlinePerson}
-                                sideBarTabName={"Trainee"}
-                                handleRowClick={() => {
-                                }}
-                                optionalRowsPerPage={10}
-                                tableCellStyle={'h-12'}
-                            />
+                                    tableData={traineeData}
+                                    tableHeader={ProgramHeader}
+                                    staticHeader={'Trainee'}
+                                    staticColunm={'trainee'}
+                                    tableHeight={41.5}
+                                    icon={MdOutlinePerson}
+                                    sideBarTabName={"Trainee"}
+                                    handleRowClick={() => {
+                                    }}
+                                    optionalRowsPerPage={10}
+                                    tableCellStyle={'h-12'}
+                                />
                                 :
-                                    <div
-                                        className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
-                                        {isNotTableDataList?.map((item, index) => (
-                                            <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
-                                                 key={index}
-                                                 className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                                <div className="text-black300">
-                                                    <span>{item.detail}</span>
-                                                </div>
-                                                <div className="text-meedlBlack">
-                                                    <span>{item.value}</span>
-                                                </div>
+                                <div
+                                    className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                    {isNotTableDataList?.map((item, index) => (
+                                        <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
+                                             key={index}
+                                             className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
+                                            <div className="text-black300">
+                                                <span>{item.detail}</span>
                                             </div>
-                                        ))}
+                                            <div className="text-meedlBlack">
+                                                <span>{item.value}</span>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             }
-
                         </TabsContent>
                     </Tabs>
                 </div>
