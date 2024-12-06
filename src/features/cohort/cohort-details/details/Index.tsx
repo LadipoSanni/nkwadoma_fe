@@ -7,7 +7,6 @@ import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {MdPersonOutline} from "react-icons/md";
 import {BiArrowBack} from "react-icons/bi";
-import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
@@ -16,17 +15,33 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import {formatAmount} from '@/utils/Format'
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
+import {useCohortBreakdownQuery} from "@/service/admin/loan_product";
 
+interface breakDown {
+    itemName: string;
+    itemAmount: string
+}
 
 const CohortDetails = () => {
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [isEditOpen, setEditOpen] = React.useState(false);
 
+    const [breakdown, setBreakdown] = useState<breakDown[]>([]);
 
     const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortsId
     }, {refetchOnMountOrArgChange: true});
+
+    const {data: cohortBreakDown} = useCohortBreakdownQuery({cohortId: cohortsId}, {skip: !cohortsId})
+
+    useEffect(() => {
+        if (cohortBreakDown && cohortBreakDown?.data) {
+            const breakdowns = cohortBreakDown?.data
+            setBreakdown(breakdowns)
+        }
+    }, [cohortBreakDown])
+
 
     const [details, setDetails] = useState({
         id: "",
@@ -43,9 +58,9 @@ const CohortDetails = () => {
         expectedEndDate: "",
         numberOfDropOut:"",
         numberOfEmployed: "",
+        numberOfLoanees: 0,
+        numberOfReferredLoanee: 0,
     })
-
-    console.log("cohort details: ", cohortDetails)
 
     useEffect(() => {
         if (cohortDetails && cohortDetails?.data) {
@@ -63,6 +78,8 @@ const CohortDetails = () => {
                 imageUrl: details?.imageUrl || "",
                 startDate: details?.startDate || "",
                 expectedEndDate: details?.expectedEndDate || "",
+                numberOfLoanees: details?.numberOfLoanees || "",
+                numberOfReferredLoanee: details?.numberOfReferredLoanee || "",
                 numberOfDropOut:details?. numberOfDropOut || "",
                 numberOfEmployed:details?.numberOfEmployed || "",
             })
@@ -105,19 +122,9 @@ const CohortDetails = () => {
         {detail: "Repayment rate", value: "0"},
     ]
 
-    const program1Options = [
-        {name: 'Edit Cohort', id: '1'},
-        traineeData.length > 0
-            ?
-            {name: 'Refer Cohort', id: '2'}
-            :
-            {name: 'Delete Cohort', id: '3'},
-    ]
-
-
     const tagButtonData = [
-        {tagIcon: FiBook, tagCount: 10, tagButtonStyle: "bg-lightBlue100", tagText: "trainees"},
-        {tagIcon: MdPersonOutline, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "cohorts"},
+        {tagIcon: MdPersonOutline, tagCount: 0, tagButtonStyle: "bg-warning50", tagText: "React"},
+        {tagIcon: FiBook, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-lightBlue100", tagText: "Loanee"},
     ];
 
 
@@ -170,7 +177,6 @@ const CohortDetails = () => {
                             <div id={`firstSection`}>
                                 <DetailsImageSection imageSrc={details.imageUrl} cohortTitle={details.name}
                                                      cohortDescription={details.cohortDescription}
-                                                     dropdownOption={program1Options}
                                                      handleDropdownClicked={handleDropdownClick}
                                                      buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
                                                      isEditButton={false}
@@ -180,7 +186,7 @@ const CohortDetails = () => {
                             <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
                                 <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail} dataList={dataList}
                                                      tabTitle1={"Cohort details"} tabTitle2={"Loan details"}
-                                                     useBreakdown={true} breakDown={breakDown}/>
+                                                     useBreakdown={true} breakDown={breakdown}/>
                             </div>
                         </div>
                     </TabsContent>

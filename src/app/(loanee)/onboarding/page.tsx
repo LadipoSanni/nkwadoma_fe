@@ -1,9 +1,10 @@
 import React from 'react';
-import LoaneeOverview from "@/pages/loanee/overview/Index";
+import LoaneeOnboarding from "@/features/onboarding/loanee";
+
 
 const Page = () => {
     return (
-        <LoaneeOverview />
+        <LoaneeOnboarding/>
     );
 };
 
