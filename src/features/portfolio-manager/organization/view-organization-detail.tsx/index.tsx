@@ -1,5 +1,5 @@
 "use client";
-import React from 'react'
+import React,{useState} from 'react'
 import { inter, cabinetGrotesk } from "@/app/fonts";
 import { IoGlobeOutline } from "react-icons/io5";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,6 +12,11 @@ import { Book } from "lucide-react";
 // import { getItemSessionStorage } from "@/utils/storage";
 import { formatAmount } from "@/utils/Format";
 import {  useGetDetailsOfOrganizationQuery } from '@/service/admin/organization';
+import TableModal from '@/reuseable/modals/TableModal';
+import { Cross2Icon } from "@radix-ui/react-icons";
+import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
+
+
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -19,12 +24,12 @@ interface TableRowData {
 
 
 const ViewOrganizationDetail = () => {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {data:organizationDetail} = useGetDetailsOfOrganizationQuery({})
   console.log("the details: ",organizationDetail);
   
   const handleInviteClick = () => {
-    // setIsModalOpen(true);
+    setIsModalOpen(true);
   };
 
   const organizationName = organizationDetail?.data.name ?? "";;
@@ -280,7 +285,7 @@ const ViewOrganizationDetail = () => {
               handleRowClick={() => {}}
               // sx='cursor-pointer'
               icon={Book}
-              sideBarTabName="Program"
+              sideBarTabName="Admin"
               optionalRowsPerPage={10}
               tableCellStyle="h-12"
             />
@@ -289,6 +294,19 @@ const ViewOrganizationDetail = () => {
           
         </TabsContent>
       </Tabs>
+      <div>
+        {
+          <TableModal
+           isOpen={isModalOpen}
+           closeModal={() => setIsModalOpen(false)}
+           closeOnOverlayClick={true}
+           icon={Cross2Icon}
+           headerTitle='Invite Admin'
+          >
+           <InviteAdmin setIsOpen={setIsModalOpen}/>
+          </TableModal>
+        }
+      </div>
     </main>
   )
 }
