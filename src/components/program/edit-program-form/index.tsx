@@ -159,6 +159,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                     name="name"
                     component="div"
                     className="text-red-500 text-sm"
+                    id='editProgramNameError'
                     />
                     )
                    }
@@ -180,6 +181,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                     errors.deliveryType && touched.deliveryType &&  (
                        <ErrorMessage
                     name="deliveryType"
+                    id='editDeliveryTypeError'
                     component="div"
                     className="text-red-500 text-sm"
                     />
@@ -204,6 +206,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                        <ErrorMessage
                     name="mode"
                     component="div"
+                    id='editModeError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -237,6 +240,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                     errors.duration && touched.duration &&  (
                        <ErrorMessage
                     name="duration"
+                    id='editProgramDurationError'
                     component="div"
                     className="text-red-500 text-sm"
                     />
@@ -260,6 +264,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                        <ErrorMessage
                     name="programDescription"
                     component="div"
+                    id='editprogramDescriptionError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -299,7 +304,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
 
                 </div>
                 {
-                <div className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
+                <div id='errorFromBackEnd' className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
             }
               </Form>
             )
