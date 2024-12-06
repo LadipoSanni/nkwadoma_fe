@@ -141,6 +141,12 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         const currentCohortBreakDownAmount = currentCohortBreakdown?.itemAmount * 1
         const {value} = e.target
         const item = cohortBreakDown[index]
+        setCohortBreakDown((prevValue) => {
+            const currentObj = prevValue[index];
+            const updatedCurrentObj = {...currentObj,  itemAmount: value}
+            const updatedCohortBreakdown = prevValue.filter((obj, objIndex) => objIndex === index ? updatedCurrentObj : obj)
+            return updatedCohortBreakdown
+        })
         //creating a variable with the inputted amount
         const updatedData: cohortBreakDown = {
             currency: item?.currency,
@@ -151,14 +157,14 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         }
         console.log("ii: ", updatedData)
         // creating the copy of the cohortBreakDown
-        const updateArray : cohortBreakDown[] = [...cohortBreakDown];
-        //looping through the copy array to change the item  inputted amount
-        for (let i = 0; i < updateArray.length; i++) {
-            if (i === index) {
-                //replacing the copy with the created item
-                updateArray[index] = updatedData
-            }
-        }
+        // const updateArray : cohortBreakDown[] = [...cohortBreakDown];
+        // //looping through the copy array to change the item  inputted amount
+        // for (let i = 0; i < updateArray.length; i++) {
+        //     if (i === index) {
+        //         //replacing the copy with the created item
+        //         updateArray[index] = updatedData
+        //     }
+        // }
         console.log("up: ", updateArray)
 
         // const updateArary =
@@ -169,13 +175,13 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         if (updateArray) {
             // updateArray.forEach((item) => update.push(item))
             // // cohortBreakDown.fo
-            for (let i = 0; i < updateArray.length; i++) {
-                if (i === index) {
-                    cohortBreakDown[index] = updateArray[index]
-                }
-
-            }
-            store.dispatch(setCohortBreakDownContainer(updateArray))
+            // for (let i = 0; i < updateArray.length; i++) {
+            //     if (i === index) {
+            //         cohortBreakDown[index] = updateArray[index]
+            //     }
+            //
+            // }
+            // store.dispatch(setCohortBreakDownContainer(updateArray))
 
             console.log("after changing: ",cohortBreakDown )
              // cohortBreakDown.replaceAll(cohortBreakDown)
