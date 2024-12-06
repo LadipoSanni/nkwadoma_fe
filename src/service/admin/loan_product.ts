@@ -17,10 +17,27 @@ export const loanProductApi = createApi({
                 param: param,
             }),
             providesTags: [`loanProduct`]
+        }),
+
+        cohortBreakdown: builder.query({
+            query: ( cohortId ) => ({
+                url: `/cohort/loanbreakdown`,
+                method: "GET",
+                params: cohortId
+            }),
+            providesTags: [`loanProduct`]
+        }),
+
+        searchLoanProduct: builder.query({
+            query: (param:{
+                loanProductName: string,
+            }) => ({
+                url: '/loan/loan-product/search',
+                method: 'GET',
+                params: param,
+            })
         })
     })
 })
-
-
-export const {useViewAllLoanProductQuery} = loanProductApi;
+export const {useViewAllLoanProductQuery, useCohortBreakdownQuery, useSearchLoanProductQuery} = loanProductApi;
 

@@ -14,10 +14,11 @@ interface Props {
     placeholder?: string;
     calendarStyle?: string;
     disabledDate?: (date: Date) => boolean;
+    disabled?: boolean;
 
 }
 
-function DatePickerInput({selectedDate, onDateChange,className, placeholder = "Select a date",calendarStyle,disabledDate}: Props) {
+function DatePickerInput({selectedDate, onDateChange,className, placeholder = "Select a date",calendarStyle,disabledDate,disabled = false}: Props) {
     const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -31,6 +32,7 @@ function DatePickerInput({selectedDate, onDateChange,className, placeholder = "S
       data-testid="calenderButton"
       className={cn("w-full flex justify-between  border rounded text-left text-black p-5 shadow-none ",className)} 
       onClick={() => setIsOpen(true)}
+      disabled={disabled}  
       >
          {selectedDate ? (
             // format(selectedDate, 'dd-MM-yyyy') 
