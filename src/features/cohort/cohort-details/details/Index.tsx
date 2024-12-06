@@ -32,7 +32,6 @@ const CohortDetails = () => {
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortsId
     }, {refetchOnMountOrArgChange: true});
-    console.log("dsfdsfsdfsd", cohortDetails)
 
     const {data: cohortBreakDown} = useCohortBreakdownQuery({cohortId: cohortsId}, {skip: !cohortsId})
 
