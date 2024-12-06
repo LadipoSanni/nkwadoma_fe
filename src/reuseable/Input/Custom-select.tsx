@@ -38,7 +38,7 @@ function CustomSelect({value,onChange,className,selectContent,name,placeHolder,i
           <SelectValue className='' data-testid='SelectContent' placeholder={placeHolder}/>
           <div className=''>
                 {dropdownOpen ? (
-                    <ChevronUpIcon data-testid="ChevronUpIcon" className="h-4  font-semibold"/>
+                    <ChevronUpIcon dataadd-testid="ChevronUpIcon" className="h-4  font-semibold"/>
                 ) : (
                     <ChevronDownIcon data-testid="ChevronDownIcon" className="h-4 font-semibold"/>
                 )}
