@@ -18,6 +18,7 @@ const config: Config = {
   			blue300: '#626F8C',
   			blue400: '#435376',
 			blue500: '#D9EAFF',
+			blue550: '#D7D7D7',
   			meedlBlue: '#142854',
   			blue600: '#12244C',
   			labelBlue: '#101828',
@@ -178,7 +179,9 @@ const config: Config = {
   			}
   		},
   		boxShadow: {
-  			custom: '0px 0px 0px 1px rgba(18, 55, 105, 0.08)'
+  			custom: '0px 0px 0px 1px rgba(18, 55, 105, 0.08)',
+			boxShadowLight: '0px 2px 8px 0px rgba(99, 99, 99, 0.12)'
+
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

@@ -9,7 +9,7 @@ import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import CreateProgram from "@/components/program/create-program";
 import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
-import {MdOutlineDateRange, MdOutlinePeopleAlt, MdPersonOutline} from "react-icons/md";
+import {MdGridView, MdOutlineDateRange, MdOutlinePeopleAlt, MdOutlineViewList, MdPersonOutline} from "react-icons/md";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {setItemSessionStorage} from '@/utils/storage';
 import {Button} from "@/components/ui/button";
@@ -50,7 +50,7 @@ interface viewAllProgramProps extends TableRowData {
 
 
 const ProgramView = () => {
-    const [view, setView] = useState<'grid' | 'list'>('grid');
+    const [view, setView] = useState<string>('grid');
     const [searchTerm, setSearchTerm] = useState('');
     // const [dummyData, setDummyData] = useState<{
     //     cohorts: number;
@@ -90,7 +90,6 @@ const ProgramView = () => {
         pageSize: size,
         pageNumber: page
     }, {refetchOnMountOrArgChange: true,})
-    console.log(data)
     const [deleteItem] = useDeleteProgramMutation()
     const {data: searchResults} = useSearchProgramQuery(searchTerm, {skip: !searchTerm});
 
@@ -294,8 +293,8 @@ const ProgramView = () => {
 
 
     const tagButtonData = [
-        {tagIcon: MdPersonOutline, tagCount: 0, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
-        {tagIcon: MdOutlineDateRange, tagCount: 6, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
+        {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
+        {tagIcon: MdOutlineDateRange, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
         {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "cohorts"},
     ];
 
@@ -304,6 +303,19 @@ const ProgramView = () => {
     const handleModalOpen = () => {
         setIsOpen(!isOpen)
     }
+
+    const options = [
+        {
+            id: 'grid',
+            label: 'Grid',
+            icon: <MdGridView className={`w-5 h-5 ${view === 'grid' ? 'text-meedlBlue' : 'text-neutral950'}`}/>
+        },
+        {
+            id: 'list',
+            label: 'List',
+            icon: <MdOutlineViewList className={`w-5 h-5 ${view === 'list' ? 'text-meedlBlue' : 'text-neutral950'}`}/>
+        }
+    ];
 
     return (
         <main id="programMain"
@@ -331,19 +343,19 @@ const ProgramView = () => {
                                 icon={Cross2Icon}
                                 width={`32%`}
                     >
-
+                        
                         <CreateProgram setIsOpen={setIsOpen}
-                            //  programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
-                            //  programModes={["PART_TIME", "FULL_TIME"]}
-                            //  programDurations={["3", "4"]}
-                            //  submitButtonText={"Create"}
-                        />
+                                            //  programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
+                                            //  programModes={["PART_TIME", "FULL_TIME"]}
+                                            //  programDurations={["3", "4"]}
+                                            //  submitButtonText={"Create"}
+                                             />
 
                     </TableModal>
                 </div>
             </section>
             <div id="programContent" className={'grid gap-4 relative bottom-3 overflow-hidden'}>
-                <DisplayOptions setView={setView} activeView={view}/>
+                <DisplayOptions setView={setView} activeView={view} options={options}/>
                 {view === 'grid' ? (
                     <div
                         id={'programGrid'}
