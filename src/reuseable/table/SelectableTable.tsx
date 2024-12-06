@@ -50,12 +50,16 @@ interface Props<T extends TableRowData> {
     tableCellStyle?: string;
     enableRowSelection?: boolean;
     isLoading?: boolean;
-    condition?:boolean
+    condition?:boolean;
+    disabledButton?: ()=> void;
+    handleSelectedRow: (rows:Set<string>) => void
 }
 
 
 function SelectableTable<T extends TableRowData> ({
                                              tableHeader,
+                                                      disabledButton,
+                                                      handleSelectedRow,
                                              tableData,
                                              handleRowClick,
                                              tableHeight,
@@ -82,7 +86,7 @@ function SelectableTable<T extends TableRowData> ({
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
-    const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
+    const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
 
 
 
@@ -116,20 +120,27 @@ function SelectableTable<T extends TableRowData> ({
     const handleSelectAll = () => {
         if (selectAll) {
             setSelectedRows(new Set());
+            if (disabledButton){
+                disabledButton()
+            }
         } else {
-            const allRowIndexes = new Set(paginatedData.map((_, idx) => (page - 1) * rowsPerPage + idx));
+            const allRowIndexes : Set<string> = new Set();
+            paginatedData?.forEach((data) => allRowIndexes.add(data?.id))
             setSelectedRows(allRowIndexes);
+            handleSelectedRow(allRowIndexes)
         }
         setSelectAll(!selectAll);
+
     };
 
-    const handleRowSelect = (rowIndex: number) => {
+    const handleRowSelect = (rowIndex: string) => {
         const updatedSelectedRows = new Set(selectedRows);
         if (updatedSelectedRows.has(rowIndex)) {
             updatedSelectedRows.delete(rowIndex);
         } else {
             updatedSelectedRows.add(rowIndex);
         }
+        handleSelectedRow(updatedSelectedRows)
         setSelectedRows(updatedSelectedRows);
         setSelectAll(updatedSelectedRows.size === paginatedData.length);
     };
@@ -207,8 +218,8 @@ function SelectableTable<T extends TableRowData> ({
                                                         <input
                                                             type="checkbox"
                                                             id={`rowCheckBox`}
-                                                            checked={selectedRows.has((page - 1) * rowsPerPage + rowIndex)}
-                                                            onChange={() => handleRowSelect((page - 1) * rowsPerPage + rowIndex)}
+                                                            checked={selectedRows.has(row.id)}
+                                                            onChange={() => handleRowSelect(row.id)}
                                                             className={`border-2 border-[#D7D7D7] rounded-md`}
                                                         />
                                                     </TableCell>
@@ -376,8 +387,8 @@ function SelectableTable<T extends TableRowData> ({
                                                         <TableCell>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={selectedRows.has((page - 1) * rowsPerPage + rowIndex)}
-                                                                onChange={() => handleRowSelect((page - 1) * rowsPerPage + rowIndex)}
+                                                                checked={selectedRows.has(row.id)}
+                                                                onChange={() => handleRowSelect(row.id)}
                                                                 className={`border-2 border-[#D7D7D7] rounded-md`}
                                                             />
                                                         </TableCell>

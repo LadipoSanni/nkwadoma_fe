@@ -43,6 +43,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [addLoanee, setAddLoanee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
     const [loaneeName, setLoaneeName] = React.useState("");
+    const [enableRefferButton, setRefferBottom] = useState(true)
+    const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
+
 
     const id = "1";
     const size = 100;
@@ -68,6 +71,19 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
             setAllLoanee(result)
         }
     }, [data,loaneeName,searchResults ])
+
+    const enableButton = () => {
+        setRefferBottom(false)
+        console.log('after calling enable button')
+    }
+    const disableButton = () => {
+        setRefferBottom(true)
+        console.log('after calling disable button')
+    }
+    const handleSelectedRow = (rows: Set<string>) => {
+        setSelectedRows(rows)
+        console.log('after setting: ', selectedRows)
+    }
 
     const loanProduct = [
         {
@@ -101,12 +117,13 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     }
 
     const handleRefer = () => {
-
+        console.log("onClick refer: ",enableRefferButton)
+        console.log("rows: ", selectedRows)
+        console.log('array from set: ', Array.from(selectedRows))
     }
 
     const handleRowClick = (row: TableRowData) => {
         setIsRowSelected(isRowSelected);
-        console.log('Row clicked:', row);
     };
 
     return (
@@ -141,8 +158,8 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         <div className={`md:block hidden`} id={`largerScreenReferButton`}>
                             <Button variant={"outline"}
                                     size={"lg"}
-                                    className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
-                                    onClick={handleRefer} disabled={!isRowSelected}>Refer</Button>
+                                    className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none ${!enableRefferButton ? 'md:border md:border-solid md:text-meedleBlue md:border-[#142854] ': ''} md:border-solid md:border-neutral650 border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
+                                    onClick={handleRefer} disabled={selectedRows.size === 0}>Refer</Button>
                         </div>
                         <div id={`addTraineeButton`}>
                             <Button variant={"secondary"}
@@ -153,7 +170,8 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         <div className={`md:hidden block`} id={`smallScreenReferButton`}>
                             <Button variant={"outline"}
                                     size={"lg"}
-                                    className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none  border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
+                                    disabled={false}
+                                    className={`bg-neutral100 text-meedlBlack   border-solid md:border md:bg-red-50 md:border-neutral650 border border-neutral650 w-full h-12 flex justify-center items-center`}
                                     onClick={handleRefer}>Refer</Button>
                         </div>
 
@@ -176,6 +194,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             enableRowSelection={true}
                             isLoading={isLoading}
                             condition={true}
+                            handleSelectedRow={handleSelectedRow}
                         />
                     }
                 </div>
