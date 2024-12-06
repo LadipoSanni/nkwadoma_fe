@@ -335,7 +335,7 @@ function Tables<T extends TableRowData>({
                       >
                         <SelectTrigger className="h-4 border-none focus:ring-0 focus:outline-none  text-[15px] text-[#404653] font-semibold  bg-gray hover:bg-gray shadow-none  flex justify-center relative top-[7px]">
                          <div
-                         className="overflow-x-auto whitespace-nowrap max-w-full sm:max-w-[150px]" style={{ maxWidth: '100%', /* Full width on larger screens */ maxWidth: '150px' /* Adjust the width on small screens */, }}
+                         className="overflow-x-auto whitespace-nowrap max-w-full sm:max-w-[150px]" style={{ maxWidth: '100%', }}
                          > <SelectValue placeholder="" /></div> 
                           <div className="ml-4">
                             {dropdownOpen ? (

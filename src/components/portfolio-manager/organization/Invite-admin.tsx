@@ -32,10 +32,10 @@ function InviteAdmin({setIsOpen}: Props) {
 
     const isLoading = false
 
-    const handleSubmit = (value: typeof initialFormValue) => {
-        if (setIsOpen) {
-            setIsOpen(false);
-          }
+    const handleSubmit = () => {
+        // if (setIsOpen) {
+        //     setIsOpen(false);
+        //   }
       
     }
 
