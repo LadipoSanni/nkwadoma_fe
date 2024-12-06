@@ -22,11 +22,6 @@
       }
     ],
     "paths": {
-      "outDir": "../../dist/out-tsc",
-      "module": "commonjs",
-      "types": ["node"],
-      "emitDecoratorMetadata": true,
-      "target": "es2021",
       "@/*": [
         "./src/*"
       ]

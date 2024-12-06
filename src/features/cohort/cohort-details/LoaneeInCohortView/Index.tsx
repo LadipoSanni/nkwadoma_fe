@@ -17,6 +17,7 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 import {getItemSessionStorage} from "@/utils/storage";
 import {useToast} from "@/hooks/use-toast";
+import {cohortLoaneeResponse} from "@/types/Component.type";
 
 interface userIdentity {
     firstName: string;
@@ -34,7 +35,7 @@ interface viewAllLoanee {
 }
 
 interface TableRowData {
-    [key: string]: string | number | null | React.ReactNode | userIdentity | loaneeLoanDetail;
+    [key: string]: string | number | null | React.ReactNode | userIdentity | loaneeLoanDetail | cohortLoaneeResponse;
 }
 
 type viewAllLoanees = viewAllLoanee & TableRowData;
@@ -77,6 +78,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     useEffect(() => {
         if (loaneeName && searchResults && searchResults?.data) {
             const result = searchResults?.data
+            console.log("result: ", result)
             setAllLoanee(result)
         } else if (!loaneeName && data && data?.data) {
             const result = data?.data?.body
