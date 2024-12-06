@@ -12,7 +12,7 @@ interface Props<T> {
 }
 
 function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handleNextPage, handlePreviousPage }: Props<T>){
-  const totalPages = Math.ceil(tableData.length / rowsPerPage);
+  const totalPages = Math.ceil(tableData?.length / rowsPerPage);
 
   const renderPaginationItems = () => {
     const items = [];
