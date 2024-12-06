@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import StepContent from '@/features/onboarding/stepContent/Index';
 import dynamic from 'next/dynamic';
 import {
-    useIsIdentityVerifiedQuery,
     useLazyIsIdentityVerifiedQuery,
     useViewLoanReferralDetailsQuery
 } from "@/service/users/Loanee_query";
@@ -29,9 +28,8 @@ const LoaneeOnboarding = () => {
     const [showModal, setShowModal] = useState(false);
     const [loanReferralId, setLoanReferralId] = useState("");
     const {data, isLoading: loanReferralDetailsIsLoading} = useViewLoanReferralDetailsQuery({})
-    const [triggerVerification, { data: verificationFirstResponse, isLoading }] = useLazyIsIdentityVerifiedQuery();
-    console.log("triggerVerification is loading : ", isLoading)
-    console.log("triggerVerification response : ", verificationFirstResponse)
+    const [triggerVerification, { data: verificationFirstResponse }] = useLazyIsIdentityVerifiedQuery();
+    console.log("data from backend: ",data);
     const [loaneeLoanDetail, setLoaneeLoanDetail] = useState({
         tuitionAmount: "0.00",
         amountRequested: "0.00",
@@ -43,8 +41,8 @@ const LoaneeOnboarding = () => {
                 return data.data.id || prevId;
             });
         }
-        if (data?.statusCode === "OK" && data?.data?.loanee?.loaneeLoanDetail) {
-            const backendDetails = data.data.loanee.loaneeLoanDetail;
+        if (data?.statusCode === "OK" && data?.data) {
+            const backendDetails = data.data;
             setLoaneeLoanDetail(prevState => {
                 const newDetails = {
                     tuitionAmount: backendDetails.tuitionAmount?.toString() || "0.00",
