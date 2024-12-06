@@ -11,7 +11,7 @@ const AdminProfile = () => {
     const router = useRouter()
 
     const handleOrganizationRoute = () => {
-        router.push('/organizations/details')
+        router.push('/organizations/organizations-details')
     }
 
 

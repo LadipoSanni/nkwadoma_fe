@@ -79,9 +79,15 @@ export const organizationApi = createApi({
                 method: "GET",
             }),
             providesTags: (result, error, arg) => [{ type: 'organization', id: arg.id }],
+        }),
+        getDetailsOfOrganization: builder.query({
+            query:() => ({
+                url: "/organization/details",
+                method: "GET",
+            }),
+             providesTags: [ "organization"]
         })
-
     })
 })
 
-export const { useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery} = organizationApi
+export const { useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery} = organizationApi
