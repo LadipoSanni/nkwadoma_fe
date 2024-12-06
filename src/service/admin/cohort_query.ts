@@ -124,6 +124,14 @@ export const cohortApi = createApi({
                 params: param,
             })
         }),
+        referLoaneeToACohort: builder.mutation({
+           query: (data) => ({
+               url: `/cohort/loanee/refer`,
+               method: 'POST',
+               body: data
+           })
+        }),
+        }),
         addLoaneeToCohort: builder.mutation({
             query: (data) => ({
                 url: `add/loaneeToCohort`,
@@ -139,6 +147,7 @@ export const cohortApi = createApi({
 export const {
     useAddLoaneeToCohortMutation,
     useGetCohortLoanBreakDownQuery,
+    useReferLoaneeToACohortMutation,
     useCreateCohortMutation,
     useViewAllLoaneeQuery,
     useGetAllCohortsByOrganisationQuery,

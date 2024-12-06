@@ -14,3 +14,14 @@ export  interface navbarItemsProps {
     icon?:string|React.ReactElement| JSX.Element;
     handleClick: (id?:string, name?: string)=> void
 }
+
+export interface cohortLoaneeResponse {
+    cohortId : string,
+    createdAt: string,
+    createdBy: string,
+    id: string,
+    loaneeLoanDetail : [],
+    loaneeStatus: string,
+    updatedAt : string,
+    userIdentity: []
+}
