@@ -7,7 +7,6 @@ interface LoanBreakdown {
     currency: string;
 }
 
-
 export const cohortApi = createApi({
     reducerPath: 'cohortApi',
     baseQuery: customFetchBaseQuery,
@@ -44,18 +43,6 @@ export const cohortApi = createApi({
                 loaneeIds: string[]
             }) => ({
                 url: `/cohort/loanee/refer`,
-                method: "POST",
-                body: formData
-            }),
-            invalidatesTags: ({id}) => [{type: 'cohort', id}],
-        }),
-        verifyIdentity: builder.mutation({
-            query: (formData: {
-                bvn: string
-                nin: string
-                loanReferralId: string
-            }) => ({
-                url: `/identity/verification/verify`,
                 method: "POST",
                 body: formData
             }),
@@ -143,7 +130,6 @@ export const {
     useViewCohortDetailsQuery,
     useDeleteCohortMutation, useEditCohortMutation,
     useGetCohortDetailsQuery, useReferLoaneeMutation,
-    useVerifyIdentityMutation,
     useSearchForLoaneeInACohortQuery
 } = cohortApi;
 

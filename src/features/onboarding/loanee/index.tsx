@@ -6,7 +6,11 @@ import Connector from '@/components/common/Connector';
 import { Button } from '@/components/ui/button';
 import StepContent from '@/features/onboarding/stepContent/Index';
 import dynamic from 'next/dynamic';
-import {useIsIdentityVerifiedQuery, useViewLoanReferralDetailsQuery} from "@/service/users/Loanee_query";
+import {
+    useIsIdentityVerifiedQuery,
+    useLazyIsIdentityVerifiedQuery,
+    useViewLoanReferralDetailsQuery
+} from "@/service/users/Loanee_query";
 
 
 const DynamicIdentityVerificationModal = dynamic(() => import('@/reuseable/modals/IdentityVerificationModal'), {
@@ -24,7 +28,10 @@ const LoaneeOnboarding = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const [loanReferralId, setLoanReferralId] = useState("");
-    const {data, isLoading} = useViewLoanReferralDetailsQuery({})
+    const {data, isLoading: loanReferralDetailsIsLoading} = useViewLoanReferralDetailsQuery({})
+    const [triggerVerification, { data: verificationFirstResponse, isLoading }] = useLazyIsIdentityVerifiedQuery();
+    console.log("triggerVerification is loading : ", isLoading)
+    console.log("triggerVerification response : ", verificationFirstResponse)
     const [loaneeLoanDetail, setLoaneeLoanDetail] = useState({
         tuitionAmount: "0.00",
         amountRequested: "0.00",
@@ -55,22 +62,21 @@ const LoaneeOnboarding = () => {
             });
         }
     }
-    const {data: verificationFirstResponse} = useIsIdentityVerifiedQuery({"loanReferralId": loanReferralId});
     useEffect(() => {
             viewLoanReferralDetails()
-            if (verificationFirstResponse?.data === "Identity Not Verified") {
-                console.log(verificationFirstResponse.data)
-            }
-    }, [verificationFirstResponse,isLoading]);
+    }, [loanReferralDetailsIsLoading]);
     const handleThirdStepContinue = () => {
         setShowModal(false);
         setCurrentStep(2);
     };
     const handleAcceptLoanReferral = () =>{
         console.log(loanReferralId)
+        triggerVerification({ loanReferralId });
+        if (verificationFirstResponse?.data === "Identity Not Verified") {
+            console.log(verificationFirstResponse.data)
+        }
     }
     const handleNext = ()=>{
-        console.log("currentStep : ", currentStep);
         if (currentStep === 0){
             handleAcceptLoanReferral()
         }

@@ -1,17 +1,17 @@
-import React, {useState,useEffect} from 'react';
-import {Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogOverlay} from '@/components/ui/dialog';
-import {FormProvider, useForm} from 'react-hook-form';
+import React, {useState} from 'react';
+import {Dialog, DialogClose, DialogContent, DialogHeader, DialogOverlay, DialogTitle} from '@/components/ui/dialog';
+import {FormProvider, SubmitHandler, useForm} from 'react-hook-form';
 import {Label} from '@/components/ui/label';
 import {Input} from '@/components/ui/input';
 import {cabinetGrotesk, inter} from "@/app/fonts";
-import {MdClose, MdOutlineAdd, MdHorizontalRule, MdOutlineCameraAlt} from "react-icons/md";
+import {MdClose, MdHorizontalRule, MdOutlineAdd, MdOutlineCameraAlt} from "react-icons/md";
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from '@/components/ui/collapsible';
 import {Button} from '@/components/ui/button';
-import {SubmitHandler} from 'react-hook-form';
 import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
 // import CryptoJS from "crypto-js";
-import {useVerifyIdentityMutation} from "@/service/admin/cohort_query";
+import {uploadImageToCloudinary} from "@/utils/UploadToCloudinary";
+import {useVerifyIdentityMutation} from "@/service/users/Loanee_query";
 
 interface IdentityVerificationModalProps {
     isOpen: boolean;
@@ -22,6 +22,7 @@ interface IdentityVerificationModalProps {
 type FormData = {
     bvn: string;
     nin: string;
+    imageUrl: string;
     loanReferralId: string;
 };
 
@@ -34,40 +35,47 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
     const [id,setId] = useState('9faf34f7-a805-4d7a-ab55-0fab5883bb23');
+    const [loaneeIdentityData, setLoaneeIdentityData] = useState<FormData>({
+        imageUrl: "",
+        loanReferralId: "",
+        bvn: "",
+        nin: ""
+    });
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
     const [showCamera, setShowCamera] = useState(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
     const [verifyIdentity] = useVerifyIdentityMutation();
 
-    const handleCapture = (imageSrc: string | null) => {
-        setIsSecondModalOpen(false);
-        setShowSuccessDialog(true);
-        console.log(imageSrc)
-    };
-
-    const onSubmit: SubmitHandler<FormData> = (data) => {
-        // const secretKey = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-
-        // const encryptedBvn = CryptoJS.AES.encrypt(data.bvn, secretKey).toString();
-        // const encryptedNin = CryptoJS.AES.encrypt(data.nin, secretKey).toString();
-
-        const loaneeBvn = data.bvn
-        const loaneeNin = data.nin
-
+    const handleCapture = async (imageFile: File) => {
+        loaneeIdentityData.imageUrl = await uploadImageToCloudinary(imageFile);
+        loaneeIdentityData.loanReferralId = id;
         try {
-            const formData: FormData = {
-                bvn: loaneeBvn,
-                nin: loaneeNin,
-                loanReferralId : id
-            };
+            const formData: FormData = loaneeIdentityData
             console.log(formData);
             const data = verifyIdentity(formData);
             console.log("Response from backend: ",data);
             onClose();
-            setIsSecondModalOpen(true);
         } catch (error) {
             console.error("Error while submitting form:", error);
         }
+        setIsSecondModalOpen(false);
+        setShowSuccessDialog(true);
+    };
+
+    const onSubmit: SubmitHandler<FormData> = (data) => {
+        // const secretKey = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+        // const encryptedBvn = CryptoJS.AES.encrypt(data.bvn, secretKey).toString();
+
+        // const encryptedNin = CryptoJS.AES.encrypt(data.nin, secretKey).toString();
+        setLoaneeIdentityData(data)
+        //
+        // const loaneeBvn = data.bvn
+        // const loaneeNin = data.nin
+        console.log("submit", data)
+
+        setIsSecondModalOpen(true);
+        onClose();
+
     };
 
     return (
