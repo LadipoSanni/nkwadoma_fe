@@ -304,6 +304,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                     selectedDate={parseISO(values.expectedEndDate?? "")}
                      onDateChange={(date) => setFieldValue('expectedEndDate', format(date, 'yyyy-MM-dd'))}
                      className='p-6 mt-2'
+                     disabled={true}
                      disabledDate={
                       // (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
                       (date) =>

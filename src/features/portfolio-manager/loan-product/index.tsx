@@ -1,64 +1,82 @@
 "use client";
-import React from "react";
-import {loanProductData} from "@/utils/LoanProductMockData";
+import React, {useEffect, useState} from "react";
 import Tables from "@/reuseable/table/LoanProductTable";
-import {MdSearch} from "react-icons/md";
+import {MdOutlineInventory2, MdSearch} from "react-icons/md";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
+import {useViewAllLoanProductQuery} from "@/service/admin/loan_product";
+import {formatAmount} from "@/utils/Format";
 
+interface TableRowData {
+    [key: string]: string | number | null | React.ReactNode;
+}
 
 function LoanProductPage() {
+    const [allLoanee, setAllLoanProduct] = useState([]);
+    // const [createProduct, setCreateProduct] = React.useState(false)
+    const size = 100;
+    const number = 0;
+    const {data, isLoading: isLoading} = useViewAllLoanProductQuery({pageSize: size, pageNumber: number})
 
-// const [createProduct, setCreateProduct] = React.useState(false)
+    useEffect(() => {
+        if (data && data?.data) {
+            const all = data?.data?.body;
+            setAllLoanProduct(all)
+        }
+    }, [data])
+
 //     const handleCreateButton = () => {
 //               setCreateProduct(true)
 //     }
 
-    const handleRowClick =()=>{
+    const handleRowClick = () => {
 
     }
 
 
-    const columns = [
+    const loanProductHeader = [
+        {title: 'loan products', sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
         {
-            title: 'Loan product',
+            title: 'Fund product',
             sortable: true,
-            id: 'loanProductName'
-        },
-        {
-            title: 'Loan product ',
-            sortable: true,
-            id: 'loanProductSponsor'
+            id: 'bankPartner',
+            selector: (row: TableRowData) => row.bankPartner ?? "0"
         },
         {
             title: 'Interest rate (%)',
             sortable: true,
-            id: "interestRate"
+            id: "interestRate",
+            selector: (row: TableRowData) => formatAmount(row.interestRate)
         },
         {
             title: 'No. of loanees',
             sortable: true,
-            id: 'noOfLoan'
+            id: 'numberOfLoanees',
+            selector: (row: TableRowData) => formatAmount(row.numberOfLoanees)
         },
         {
             title: 'Cost of funds',
             sortable: true,
-            id: 'costOfFund'
+            id: 'costOfFund',
+            selector: (row: TableRowData) => formatAmount(row.costOfFund)
         },
         {
             title: 'Amount disbursed',
             sortable: true,
-            id: 'AmountDisbursed'
+            id: 'totalAmountDisbursed',
+            selector: (row: TableRowData) => formatAmount(row.totalAmountDisbursed)
         },
         {
             title: 'Amount repaid',
             sortable: true,
-            id: 'AmountRepaid'
+            id: 'totalAmountRepaid',
+            selector: (row: TableRowData) => formatAmount(row.totalAmountRepaid)
         },
         {
             title: 'Amount earned',
             sortable: true,
-            id: 'AmountEarned'
+            id: 'totalAmountEarned',
+            selector: (row: TableRowData) => formatAmount(row.totalAmountEarned)
         },
     ]
 
@@ -95,15 +113,15 @@ function LoanProductPage() {
                     <Button variant={"secondary"}
                             size={"lg"}
                             className={`bg-meedlBlue h-12 py-5 px-6 hover:bg-meedlBlue focus-visible:ring-0 shadow-none`}
-                            >Create loan product</Button>
+                    >Create loan product</Button>
                 </div>
             </div>
 
             <div id={`table`} className={`pt-8`}>
                 <Tables
-                    tableData={loanProductData}
+                    tableData={allLoanee}
                     handleRowClick={handleRowClick}
-                    tableHeader={columns}
+                    tableHeader={loanProductHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
                     staticColunm="loanProductName"
@@ -112,6 +130,10 @@ function LoanProductPage() {
                     kirkBabDropdownOption={dropDownOption}
                     tableCellStyle={"h-12"}
                     optionalRowsPerPage={10}
+                    icon={MdOutlineInventory2}
+                    sideBarTabName={"Loan products"}
+                    isLoading={isLoading}
+                    condition={true}
                 />
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
