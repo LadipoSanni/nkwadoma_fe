@@ -1,4 +1,5 @@
-import React from 'react';
+'use client'
+import React, {useState} from 'react';
 import { Input } from "@/components/ui/input";
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MdOutlineDelete } from "react-icons/md";
@@ -11,7 +12,7 @@ interface ItemListProps {
 }
 
 const ItemList: React.FC<ItemListProps> = ({ items, setItems, handleDeleteItem }) => {
-
+    const [errors, setErrors] = useState<string[]>([]);
     const selectCurrency = 'NGN';
 
     const handleCurrencyChange = (index: number, currency: string) => {
@@ -20,17 +21,43 @@ const ItemList: React.FC<ItemListProps> = ({ items, setItems, handleDeleteItem }
         setItems(newItems);
     };
 
+    const validateText = (text: string) => {
+        return /^[a-zA-Z-]+$/.test(text);
+    };
+
+    const handleInputChange = (index: number, value: string) => {
+        const newItems = [...items];
+        if (validateText(value)) {
+            newItems[index].itemName = value;
+            setErrors(prevErrors => {
+                const newErrors = [...prevErrors];
+                newErrors[index] = '';
+                return newErrors;
+            });
+        } else {
+            setErrors(prevErrors => {
+                const newErrors = [...prevErrors];
+                newErrors[index] = 'Only text and hyphens are allowed';
+                return newErrors;
+            });
+        }
+        setItems(newItems);
+    };
+
    return (
     <>
         {items.map((item, index) => (
             <div key={index} id={`itemContainer${index}`} className="flex gap-5">
                 <div className="grid gap-2">
-                    <Input type="text" id={`itemInputField${index}`} name={`itemName-${index}`} placeholder="Item Name" className="p-4 focus-visible:outline-0 md:w-[14.4375rem] w-[6.25rem] shadow-none focus-visible:ring-transparent rounded-md h-[3.10rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650" 
+                    <Input type="text" id={`itemInputField${index}`} name={`itemName-${index}`} placeholder="Item Name" className="p-4 focus-visible:outline-0 md:w-[14.4375rem] w-[6.25rem] shadow-none focus-visible:ring-transparent rounded-md h-[3.10rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"
                     value={item.itemName} onChange={(e) => {
                         const newItems = [...items];
                         newItems[index].itemName = e.target.value;
                         setItems(newItems);
+                        handleInputChange(index, e.target.value)
                     }}/>
+
+                    {errors[index] && <span className="text-[14px] text-red-500">{errors[index]}</span>}
                 </div>
                 <div className="grid gap-2">
                     <div className="flex gap-2">
@@ -43,7 +70,7 @@ const ItemList: React.FC<ItemListProps> = ({ items, setItems, handleDeleteItem }
                             </SelectContent>
                         </Select> */}
                         <CurrencySelectInput
-                                selectedcurrency={item.currency || selectCurrency} 
+                                selectedcurrency={item.currency || selectCurrency}
                                 setSelectedCurrency={(currency) => handleCurrencyChange(index, currency)}
                                 className="mt-0 mb-0 min-w-[78px] h-[3.10rem]"
                             />
