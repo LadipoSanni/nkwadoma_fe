@@ -49,7 +49,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [addLoanee, setAddLoanee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
     const [loaneeName, setLoaneeName] = React.useState("");
-    const [enableRefferButton, setRefferBottom] = useState(true)
+    // const [enableRefferButton, setRefferBottom] = useState(true)
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
 
 
@@ -72,7 +72,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         {skip: !loaneeName || !cohortsId})
 
 
-    const [refer, {isSuccess, isError, error}] = useReferLoaneeToACohortMutation()
+    const [refer] = useReferLoaneeToACohortMutation()
 
     useEffect(() => {
         if (loaneeName && searchResults && searchResults?.data) {
@@ -133,7 +133,6 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 description: response?.message,
                 status: "success",
             })
-            // console.log('response: ', response)
         } catch (error) {
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -145,7 +144,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
     }
 
-    const handleRowClick = (row: TableRowData) => {
+    const handleRowClick = () => {
         setIsRowSelected(isRowSelected);
     };
 
@@ -212,7 +211,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             tableHeight={45}
                             icon={MdOutlinePerson}
                             sideBarTabName="Trainee"
-                            handleRowClick={(row) => handleRowClick(row)}
+                            handleRowClick={ handleRowClick}
                             optionalRowsPerPage={10}
                             tableCellStyle="h-12"
                             enableRowSelection={true}
