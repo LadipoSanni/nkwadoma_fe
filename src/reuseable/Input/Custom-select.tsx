@@ -45,14 +45,15 @@ function CustomSelect({value,onChange,className,selectContent,name,placeHolder,i
             </div>
          </SelectTrigger>
            <SelectContent
+           id='generalSelectContent'
          className='border-none  border-[#FAFBFC] text-[#404653]  text-sm'
          style={{zIndex:1000}}
          >
-          <SelectGroup className=''>
+          <SelectGroup className='' id='selectGroup'>
             {selectContent.map((content,index) => (
               <SelectItem 
               key={`${content}-${index}`} 
-              id={`${id}-item-${index}`}
+              id={`${id}item${index}`}
               value={String(content)}  
               className=''
               >

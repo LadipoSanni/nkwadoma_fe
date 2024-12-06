@@ -52,6 +52,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [createButtonDisabled, setCreateButtonDisabled] = useState(true)
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [loanBreakdowns, setLoanBreakdowns] = useState<
     { itemName: string; itemAmount: string; currency: string }[]
@@ -62,6 +63,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const [page] = useState(0);
   const size = 200;
   const [error, setError] = useState("");
+  const [descriptionError, setDescriptionError] = useState<string | null>(null);
 
   const { data } = useGetAllProgramsQuery(
     { pageSize: size, pageNumber: page },
@@ -79,39 +81,36 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (name && selectedProgram && startDate && cohortDescription) {
+    if (name && selectedProgram && startDate && !descriptionError) {
       setIsButtonDisabled(false);
     } else {
       setIsButtonDisabled(true);
     }
-  }, [name, selectedProgram, startDate, cohortDescription]);
+  }, [name, selectedProgram, startDate, descriptionError]);
 
-  // useEffect(() => {
-  //   console.log("Form Data:", {
-  //     name,
-  //     selectedProgram,
-  //     programId,
-  //     startDate,
-  //     cohortDescription,
-  //     loanBreakdowns,
-  //     imageUrl,
-  //   });
-  // }, [
-  //   name,
-  //   selectedProgram,
-  //   programId,
-  //   startDate,
-  //   cohortDescription,
-  //   loanBreakdowns,
-  // ]);
+  const areLoanBreakdownsValid = () => {
+    return loanBreakdowns.every(item => item.itemName && item.itemAmount);
+  };
+  
 
+  useEffect(() => {
+    if(areLoanBreakdownsValid() && loanBreakdowns.length > 0) {
+      setCreateButtonDisabled(false);
+    }else {
+      setCreateButtonDisabled(true);
+    }
+  },[loanBreakdowns])
+
+  
   const resetForm = () => {
     setDate(undefined);
     setName("");
     setDescription("");
     setSelectedProgram(null);
+    setDescriptionError(null);
     setIsSelectOpen(false);
     setIsButtonDisabled(true);
+    setCreateButtonDisabled(true);
     setIsFormSubmitted(false);
     setLoanBreakdowns([]);
     setProgramId("");
@@ -128,7 +127,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
       });
       return;
     }
-    if (!isButtonDisabled) {
+    if (!isButtonDisabled && !descriptionError) {
       const formData = {
         name: name,
         programId: programId,
@@ -146,13 +145,13 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
           description: result.message,
           status: "success",
         });
-        // console.log("The result: ", result);
+       
       } catch (err) {
         const error = err as ApiError;
         setError(error?.data?.message);
         
       }
-    }
+    }else { setError("Description must be 2500 characters or less"); }
   };
 
   const handleReset = () => {
@@ -245,8 +244,15 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
               <DescriptionTextarea
                 description={cohortDescription}
                 setDescription={setDescription}
-                maximumDescription={2500}
+                // maximumDescription={2500}
+                onDescriptionChange={(desc) => { 
+                  if (desc.length <= 2500) { 
+                    setDescription(desc);
+                    setDescriptionError(null); } 
+                    else { 
+                      setDescriptionError("Description must be 2500 characters or less"); } }}
               />
+              {descriptionError && ( <div className="text-red-500 text-sm">{descriptionError}</div> )}
               <FileUpload
                 handleDrop={handleDrop}
                 handleDragOver={handleDragOver}
@@ -289,7 +295,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                                              
                                              </Button> */}
                   <Button
-                    id="CreateCohortButton"
+                    id="CancelCohortButton"
                     variant={"outline"}
                     className={`text-meedlBlue font-bold border-solid border-meedlBlue w-full md:w-[8.75rem] h-[3.5625rem]`}
                     onClick={() => setIsFormSubmitted(false)}
@@ -300,11 +306,11 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                     <Button
                       id="CreateCohortButton"
                       className={`text-meedlWhite font-bold ${
-                        isButtonDisabled
-                          ? "bg-neutral650"
+                        createButtonDisabled
+                          ? "bg-neutral650 hover:bg-neutral650"
                           : "bg-meedlBlue hover:bg-meedlBlue"
                       } w-full md:w-[8.75rem] h-[3.5625rem]`}
-                      disabled={isButtonDisabled}
+                       disabled={createButtonDisabled}
                       type="submit"
                     >
                      {isLoading ? (
@@ -319,7 +325,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
             </main>
           )}
         </form>
-        <div
+        <div id="createCohortError"
           className={`text-error500 flex justify-center items-center ${
             error ? "mb-3" : ""
           }`}

@@ -11,7 +11,7 @@ const CohortNameInput: React.FC<CohortNameInputProps> = ({ cohortName, setCohort
     const [error, setError] = useState<string | null>(null); 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
         const value = e.target.value; 
-        const regex = /^(?=.*[a-zA-Z])[a-zA-Z0-9-_]*$/; 
+        const regex = /^(?=.*[a-zA-Z])[a-zA-Z0-9-_\s]*$/; 
          if (value === "" || regex.test(value)) { 
             setCohortName(value);
               setError(null); 

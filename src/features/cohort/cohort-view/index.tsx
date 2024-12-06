@@ -195,7 +195,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
               <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
                   <Button id='cohortInProgram' variant={'default'} className='w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none' >
-                     Program
+                    {!selectProgram? "Program" : selectProgram}
                     <span className='ml-4'>
                       {isDropdown ? (
           <ChevronUpIcon className="h-4 w-5 font-semibold" />

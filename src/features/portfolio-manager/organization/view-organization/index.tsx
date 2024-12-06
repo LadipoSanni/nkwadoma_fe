@@ -12,6 +12,9 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import {useViewAllOrganizationsQuery} from "@/service/admin/organization";
 import { formatAmount } from '@/utils/Format';
 import { useSearchOrganisationByNameQuery } from '@/service/admin/organization';
+import { setItemSessionStorage } from '@/utils/storage';
+import { useRouter } from 'next/navigation'
+
 
 
 interface TableRowData {
@@ -57,7 +60,7 @@ function Organization() {
    
 
     const [isOpen, setIsOpen] = useState(false);
-
+    const router = useRouter()
 
     const handleInviteOrganizationClick = () => {
         setIsOpen(!isOpen);
@@ -72,7 +75,7 @@ function Organization() {
     const {data} = useViewAllOrganizationsQuery(dataElement)
     const { data: searchResults } = useSearchOrganisationByNameQuery(searchTerm, { skip: !searchTerm });
 
-    // console.log("data: ", organizationList)
+    
 
   
 
@@ -86,6 +89,12 @@ function Organization() {
            
         }
     },[searchTerm,searchResults,data])
+
+    const handleRowClick = (row:TableRowData) => {
+         router.push('/organizations/details')
+         setItemSessionStorage("organisationId",String(row.id))
+        
+    }
 
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -137,8 +146,7 @@ function Organization() {
                     tableHeader={organizationHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
-                    handleRowClick={() => {
-                    }}
+                    handleRowClick={handleRowClick}
                     tableCellStyle={'h-12'}
                     optionalRowsPerPage={10}
                     staticHeader='Name'
@@ -167,8 +175,7 @@ function Organization() {
                     tableHeader={organizationHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
-                    handleRowClick={() => {
-                    }}
+                    handleRowClick={handleRowClick}
                     tableCellStyle={'h-12'}
                     optionalRowsPerPage={10}
                     staticHeader='Name'
@@ -198,8 +205,7 @@ function Organization() {
                     tableHeader={organizationHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
-                    handleRowClick={() => {
-                    }}
+                    handleRowClick={handleRowClick}
                     tableCellStyle={'h-12'}
                     optionalRowsPerPage={10}
                     staticHeader='Name'

@@ -270,6 +270,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
               errors.name && touched.name &&  (
                  <ErrorMessage
               name="name"
+              id='editCohortNameError'
               component="div"
               className="text-red-500 text-sm"
             /> 
@@ -291,6 +292,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                  <ErrorMessage
               name="startDate"
               component="div"
+              id='editStartDateError'
               className="text-red-500 text-sm"
             /> 
               )
@@ -302,6 +304,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                     selectedDate={parseISO(values.expectedEndDate?? "")}
                      onDateChange={(date) => setFieldValue('expectedEndDate', format(date, 'yyyy-MM-dd'))}
                      className='p-6 mt-2'
+                     disabled={true}
                      disabledDate={
                       // (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
                       (date) =>
@@ -314,6 +317,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                  <ErrorMessage
               name="expectedEndDate"
               component="div"
+              id='editEndDateError'
               className="text-red-500 text-sm"
             /> 
               )
@@ -336,6 +340,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                  <ErrorMessage
               name="cohortDescription"
               component="div"
+              id='editCohortDescriptionError'
               className="text-red-500 text-sm"
             /> 
               )
@@ -433,7 +438,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
               </div>
                </div>
                {
-                <div className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
+                <div id='editCohortErrorFromBackend' className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
             }
             </Form>
 
