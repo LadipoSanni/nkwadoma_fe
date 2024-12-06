@@ -39,9 +39,5 @@ export const loanProductApi = createApi({
         })
     })
 })
-
-
-export const {useViewAllLoanProductQuery,
-    useCohortBreakdownQuery} = loanProductApi;
-export const {useViewAllLoanProductQuery, useSearchLoanProductQuery} = loanProductApi;
+export const {useViewAllLoanProductQuery, useCohortBreakdownQuery, useSearchLoanProductQuery} = loanProductApi;
 

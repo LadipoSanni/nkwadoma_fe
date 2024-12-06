@@ -32,6 +32,7 @@ const CohortDetails = () => {
     const {data: cohortDetails} = useViewCohortDetailsQuery({
         cohortId: cohortsId
     }, {refetchOnMountOrArgChange: true});
+    console.log("dsfdsfsdfsd", cohortDetails)
 
     const {data: cohortBreakDown} = useCohortBreakdownQuery({cohortId: cohortsId}, {skip: !cohortsId})
 
@@ -102,18 +103,9 @@ const CohortDetails = () => {
         {label: "Dropout rate", value: "0"},
         {label: "Number employed", value: formatAmount(details.numberOfEmployed)},
         {label: "Employment rate", value: "0"},
-        {label: "Average starting salary", value: "0"},
+        {label: "Average starting salary", value: formatAmount(0)},
         {label: "Tuition amount", value: formatAmount(details.tuitionAmount)},
     ];
-
-    const breakDown = [
-        {title: "Tuition", amount: "200,000,000.00"},
-        {title: "Device", amount: "600,000,000.00"},
-        {title: "Accommodation", amount: "200,000,000.00"},
-        {title: "Feeding", amount: "200,000.00"},
-        {title: "Total", amount: "300,500,000.00"},
-    ];
-
 
     const loanDetail = [
         {detail: "Total amount disbursed", value: "0"},
