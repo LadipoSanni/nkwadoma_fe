@@ -14,6 +14,8 @@ import {MdOutlineDelete} from "react-icons/md";
 import {useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery} from "@/service/admin/cohort_query";
 import {getItemSessionStorage} from "@/utils/storage";
 import TotalInput from "@/reuseable/display/TotalInput";
+import {store, useAppSelector} from "@/redux/store";
+import {setCohortBreakDownContainer} from "@/redux/slice/cohort/unpersist-slice";
 
 interface Props {
     cohortId: string;
@@ -42,7 +44,9 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         { itemName: string; itemAmount: string; currency: string }[]
     >([]);
     const {data} = useGetCohortLoanBreakDownQuery(COHORTID)
+    const breakDown = useAppSelector(state => state.cohortBreakDownSlice.cohortBreakDownContainer)
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([]);
+    const [totalItemAmount, setTotalItenAmount] = useState()
 
     const [addLoaneeToCohort] = useAddLoaneeToCohortMutation()
 
@@ -101,7 +105,8 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         data?.data?.forEach((datas) => {
             datass.push(datas)
         })
-        setCohortBreakDown(datass)
+        store.dispatch(setCohortBreakDownContainer(data?.data))
+        setCohortBreakDown(data?.data)
         // console.log(" datasss::after ", datass)
         // console.log(" beforee usestase:: ", cohortBreakDown, "dada: ", data?.data, "duydu: ", newCohortBreakDown)
         // cohortBreakDown.push(data?.data)
@@ -156,20 +161,27 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         }
         console.log("up: ", updateArray)
 
+        // const updateArary =
+
+
         // const update : cohortBreakDown[] = []
 
         if (updateArray) {
             // updateArray.forEach((item) => update.push(item))
             // // cohortBreakDown.fo
-            // for (let i = 0; i < updateArray.length; i++) {
-            //     // if (i === index) {
-            //         cohortBreakDown[index] = updateArray[index]
-            //     // }
-            //
-            // }
+            for (let i = 0; i < updateArray.length; i++) {
+                if (i === index) {
+                    cohortBreakDown[index] = updateArray[index]
+                }
+
+            }
+            store.dispatch(setCohortBreakDownContainer(updateArray))
+
             console.log("after changing: ",cohortBreakDown )
-            setCohortBreakDown(updateArray)
+             // cohortBreakDown.replaceAll(cohortBreakDown)
+            // setCohortBreakDown(breakDown)
             console.log("after setting: ", cohortBreakDown)
+            console.log("breakDown: ", breakDown)
             const items = cohortBreakDown[index]?.itemAmount * 1
 
             console.log("cohort amount: ", currentCohortBreakDownAmount, "itemmm: ", items)
@@ -333,25 +345,6 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                     >
                                         <Label htmlFor={`detail-${index}`}>{detail.itemName}</Label>
                                         <div className="w-full">
-                                            {/*{detail.item === 'Tuition' ? (*/}
-                                            {/*    <div className="flex items-center gap-2">*/}
-                                            {/*        <CurrencySelectInput*/}
-                                            {/*            readOnly*/}
-                                            {/*            selectedcurrency={selectCurrency}*/}
-                                            {/*            setSelectedCurrency={setSelectCurrency}*/}
-                                            {/*        />*/}
-                                            {/*        <div*/}
-                                            {/*            className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>*/}
-                                            {/*            <Field*/}
-                                            {/*                id={`detail-${index}`}*/}
-                                            {/*                name={`detail-${index}`}*/}
-                                            {/*                type="text"*/}
-                                            {/*                defaultValue={detail.amount || ''}*/}
-                                            {/*                readOnly*/}
-                                            {/*                className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"*/}
-                                            {/*            />*/}
-                                            {/*        </div>*/}
-                                            {/*    </div>*/}
                                             <div className={`flex items-center w-full gap-2`}>
                                                 <div>
                                                     <CurrencySelectInput
@@ -389,7 +382,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                     id={'totalInputOnAddLoaneeModal'}
                                     data-testid={'totalInputOnAddLoaneeModal'}
                                 >
-                                    <TotalInput total={"20000"} componentId={'totalInputOnAddLoaneeModalComponent'}/>
+                                    <TotalInput prefix={'₦'} total={"20000"} componentId={'totalInputOnAddLoaneeModalComponent'}/>
                                 </div>
                                 <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button

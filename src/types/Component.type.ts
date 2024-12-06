@@ -25,3 +25,11 @@ export interface cohortLoaneeResponse {
     updatedAt : string,
     userIdentity: []
 }
+
+export type cohortBreakDown = {
+    currency: string,
+    itemAmount: string,
+    itemName: string,
+    loanBreakdownId: string
+
+}

@@ -1,12 +1,21 @@
 import React from 'react';
+declare module "react-number-format";
+import { NumericFormat } from 'react-number-format';
+
 
 interface props {
     total: string,
     componentId: string,
+    prefix: string
 
 }
 
-const TotalInput = ({total, componentId}: props) => {
+const TotalInput = ({total, componentId, prefix}: props) => {
+    // var NumberFormat = require('react-number-format');
+
+    // const number = 1 * total
+
+
     return (
         <div
             data-testid={componentId}
@@ -17,7 +26,13 @@ const TotalInput = ({total, componentId}: props) => {
             <div
                 className={`bg-blue500 text-meedlBlue grid w-fit  h-fit px-3 py-1 rounded-full `}
             >
-                {total}
+                <NumericFormat
+                    value={total }
+                    className="w-fit "
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    prefix={prefix}
+                />
             </div>
         </div>
     );
