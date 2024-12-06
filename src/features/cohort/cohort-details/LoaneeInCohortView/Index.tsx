@@ -1,16 +1,22 @@
 "use client";
-import React,{useEffect} from 'react'
+import React, {useEffect} from 'react'
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {Input} from "@/components/ui/input";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import {Button} from "@/components/ui/button";
 import SelectableTable from "@/reuseable/table/SelectableTable";
 import {formatAmount} from "@/utils/Format";
-import { useState} from "react";
-import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
+import {useState} from "react";
+import {
+    useReferLoaneeToACohortMutation,
+    useSearchForLoaneeInACohortQuery,
+    useViewAllLoaneeQuery
+} from "@/service/admin/cohort_query";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
+import {getItemSessionStorage} from "@/utils/storage";
+import {useToast} from "@/hooks/use-toast";
 
 interface userIdentity {
     firstName: string;
@@ -47,6 +53,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
 
 
+    const cohortId = getItemSessionStorage("cohortId")
     const id = "1";
     const size = 100;
     const [page] = useState(0);
@@ -58,31 +65,28 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         pageNumber: page
     })
 
-    const {data: searchResults, isLoading:isLoading} = useSearchForLoaneeInACohortQuery( { loaneeName:loaneeName, cohortId: cohortsId },
-        { skip: !loaneeName || !cohortsId})
+    const {data: searchResults, isLoading: isLoading} = useSearchForLoaneeInACohortQuery({
+            loaneeName: loaneeName,
+            cohortId: cohortsId
+        },
+        {skip: !loaneeName || !cohortsId})
 
+
+    const [refer, {isSuccess, isError, error}] = useReferLoaneeToACohortMutation()
 
     useEffect(() => {
         if (loaneeName && searchResults && searchResults?.data) {
             const result = searchResults?.data
             setAllLoanee(result)
-        } else if(!loaneeName && data && data?.data) {
+        } else if (!loaneeName && data && data?.data) {
             const result = data?.data?.body
             setAllLoanee(result)
         }
-    }, [data,loaneeName,searchResults ])
+    }, [data, loaneeName, searchResults])
 
-    const enableButton = () => {
-        setRefferBottom(false)
-        console.log('after calling enable button')
-    }
-    const disableButton = () => {
-        setRefferBottom(true)
-        console.log('after calling disable button')
-    }
+
     const handleSelectedRow = (rows: Set<string>) => {
         setSelectedRows(rows)
-        console.log('after setting: ', selectedRows)
     }
 
     const loanProduct = [
@@ -115,11 +119,30 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const handleAddLoane = () => {
         setAddLoanee(true)
     }
+    const {toast} = useToast()
 
-    const handleRefer = () => {
-        console.log("onClick refer: ",enableRefferButton)
-        console.log("rows: ", selectedRows)
-        console.log('array from set: ', Array.from(selectedRows))
+
+    const handleRefer = async () => {
+        const data = {
+            cohortId: cohortId,
+            loaneeIds: Array.from(selectedRows)
+        }
+        try {
+            const response = await refer(data).unwrap()
+            toast({
+                description: response?.message,
+                status: "success",
+            })
+            // console.log('response: ', response)
+        } catch (error) {
+            toast({
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: error?.data?.message,
+                status: "error",
+            })
+        }
+
     }
 
     const handleRowClick = (row: TableRowData) => {
@@ -141,8 +164,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                                 </div>
                                 <Input
                                     className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
-                                    type="search" value={loaneeName} id={`search`} placeholder={"Search"} onChange={(e) => setLoaneeName(e.target.value)}
-                                    />
+                                    type="search" value={loaneeName} id={`search`} placeholder={"Search"}
+                                    onChange={(e) => setLoaneeName(e.target.value)}
+                                />
                             </div>
                         </div>
                         <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
@@ -158,7 +182,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         <div className={`md:block hidden`} id={`largerScreenReferButton`}>
                             <Button variant={"outline"}
                                     size={"lg"}
-                                    className={`bg-neutral100 text-meedlBlack focus-visible:ring-0 shadow-none ${!enableRefferButton ? 'md:border md:border-solid md:text-meedleBlue md:border-[#142854] ': ''} md:border-solid md:border-neutral650 border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
+                                    className={`bg-neutral100  ${selectedRows.size !== 0 ? ' border-solid  border-[#142854] text-[#142854] ' : 'text-[#939CB0]'} md:border-solid md:border-neutral650 border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
                                     onClick={handleRefer} disabled={selectedRows.size === 0}>Refer</Button>
                         </div>
                         <div id={`addTraineeButton`}>
@@ -170,8 +194,8 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         <div className={`md:hidden block`} id={`smallScreenReferButton`}>
                             <Button variant={"outline"}
                                     size={"lg"}
-                                    disabled={false}
-                                    className={`bg-neutral100 text-meedlBlack   border-solid md:border md:bg-red-50 md:border-neutral650 border border-neutral650 w-full h-12 flex justify-center items-center`}
+                                    disabled={selectedRows.size === 0}
+                                    className={`bg-neutral100   ${selectedRows.size !== 0 ? ' border-solid ring-2 ring-[#142854] border-[#142854] text-[#142854] ' : 'text-[#939CB0] border border-neutral650'} w-full h-12 flex justify-center items-center`}
                                     onClick={handleRefer}>Refer</Button>
                         </div>
 
