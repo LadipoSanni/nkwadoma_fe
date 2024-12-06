@@ -71,10 +71,21 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         className={`${inter.className} text-3xl font-medium text-black`}>
                         {cohortTitle}
                     </h1>
-                    <p id="cohort-description" data-testid="cohort-description"
-                       className={`${inter.className} text-grey450 text-sm py-3`}>
+                    <p
+                        id="cohort-description"
+                        data-testid="cohort-description"
+                        className={`${inter.className}  text-grey450 break-words overflow-scroll scrollbar-width:none overflow-y-auto text-sm py-3 px-3 h-48 pt-4`}
+                    >
                         {cohortDescription}
                     </p>
+
+                    {/*<p*/}
+                    {/*    id="cohort-description"*/}
+                    {/*    data-testid="cohort-description"*/}
+                    {/*    className={`${inter.className} text-grey450 overflow-y-auto h-44 text-sm py-3`}*/}
+                    {/*>*/}
+                    {/*    {cohortDescription}*/}
+                    {/*</p>*/}
 
 
                     <div

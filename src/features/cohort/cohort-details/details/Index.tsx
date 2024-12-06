@@ -41,6 +41,8 @@ const CohortDetails = () => {
         imageUrl: "",
         startDate: "",
         expectedEndDate: "",
+        numberOfDropOut:"",
+        numberOfEmployed: "",
     })
 
     console.log("cohort details: ", cohortDetails)
@@ -61,6 +63,8 @@ const CohortDetails = () => {
                 imageUrl: details?.imageUrl || "",
                 startDate: details?.startDate || "",
                 expectedEndDate: details?.expectedEndDate || "",
+                numberOfDropOut:details?. numberOfDropOut || "",
+                numberOfEmployed:details?.numberOfEmployed || "",
             })
         }
     }, [cohortDetails]);
@@ -77,11 +81,11 @@ const CohortDetails = () => {
                 {details.cohortStatus}
             </div>
         },
-        {label: "Number of Dropouts", value: "10"},
-        {label: "Dropout rate", value: "0.5%"},
-        {label: "Number employed", value: "38"},
-        {label: "Employment rate", value: "38%"},
-        {label: "Average starting salary", value: "3,000,000.00"},
+        {label: "Number of Dropouts", value: formatAmount(details.numberOfDropOut)},
+        {label: "Dropout rate", value: "0"},
+        {label: "Number employed", value: formatAmount(details.numberOfEmployed)},
+        {label: "Employment rate", value: "0"},
+        {label: "Average starting salary", value: "0"},
         {label: "Tuition amount", value: formatAmount(details.tuitionAmount)},
     ];
 
@@ -95,10 +99,10 @@ const CohortDetails = () => {
 
 
     const loanDetail = [
-        {detail: "Total amount disbursed", value: "3,000,000.00"},
-        {detail: "Total amount repaid", value: "3,000,000.00"},
-        {detail: "Total amount outstanding", value: "3,000,000.00"},
-        {detail: "Repayment rate", value: "70%"},
+        {detail: "Total amount disbursed", value: "0"},
+        {detail: "Total amount repaid", value: "0"},
+        {detail: "Total amount outstanding", value: "0"},
+        {detail: "Repayment rate", value: "0"},
     ]
 
     const program1Options = [
@@ -138,7 +142,7 @@ const CohortDetails = () => {
             <div className={` `} id={`backClickContainer`}>
                 <div className={`flex py-2 space-x-1 text-meedlBlue`} id={`backClick`}
                      data-testid={`backClick `}>
-                    <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`}/>
+                    <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`} onClick={handleBackClick}/>
                     <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
                         onClick={handleBackClick}>Back to cohort</h1>
                 </div>
