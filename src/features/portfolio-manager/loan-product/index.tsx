@@ -4,7 +4,7 @@ import Tables from "@/reuseable/table/LoanProductTable";
 import {MdOutlineInventory2, MdSearch} from "react-icons/md";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
-import {useViewAllLoanProductQuery} from "@/service/admin/loan_product";
+import {useSearchLoanProductQuery, useViewAllLoanProductQuery} from "@/service/admin/loan_product";
 import {formatAmount} from "@/utils/Format";
 
 interface TableRowData {
@@ -14,9 +14,23 @@ interface TableRowData {
 function LoanProductPage() {
     const [allLoanee, setAllLoanProduct] = useState([]);
     // const [createProduct, setCreateProduct] = React.useState(false)
+    const [searchTerm, setSearchTerm] = useState("");
     const size = 100;
     const number = 0;
     const {data, isLoading: isLoading} = useViewAllLoanProductQuery({pageSize: size, pageNumber: number})
+    const { data: searchResult } = useSearchLoanProductQuery(
+        { loanProductName: searchTerm },
+        { skip: !searchTerm }
+    );
+    useEffect(() => {
+        if (searchTerm && searchResult && searchResult?.data) {
+            const result = searchResult?.data
+            setAllLoanProduct(result)
+        } else if(!searchTerm && data && data?.data) {
+            const result = data?.data?.body
+            setAllLoanProduct(result)
+        }
+    }, [data,searchTerm,searchResult ])
 
     useEffect(() => {
         if (data && data?.data) {
@@ -107,12 +121,13 @@ function LoanProductPage() {
                     </div>
                     <Input
                         className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
-                        type="search" id={`search`} placeholder={"Search"} required/>
+                        type="search" id={`search`} value={searchTerm} placeholder={"Search"} onChange={(e) => setSearchTerm(e.target.value)}
+                        required/>
                 </div>
                 <div id={`createProduct`}>
                     <Button variant={"secondary"}
                             size={"lg"}
-                            className={`bg-meedlBlue h-12 py-5 px-6 hover:bg-meedlBlue focus-visible:ring-0 shadow-none`}
+                            className={`bg-meedlBlue h-12 py-5 px-6  w-full hover:bg-meedlBlue focus-visible:ring-0 shadow-none`}
                     >Create loan product</Button>
                 </div>
             </div>
