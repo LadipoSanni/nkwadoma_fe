@@ -32,7 +32,6 @@ interface loaneeLoanDetail {
 interface viewAllLoanee {
     userIdentity: userIdentity;
     loaneeLoanDetails: loaneeLoanDetail;
-    loaneeStatus?: string;
 }
 
 interface TableRowData {
@@ -47,7 +46,6 @@ interface props {
 
 export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [allLoanee, setAllLoanee] = useState<viewAllLoanees[]>([]);
-    const [filteredLoanee, setFilteredLoanee] = useState<viewAllLoanee[]>([]);
     const [isReferred, setIsReferred] = React.useState(``);
     const [addLoanee, setAddLoanee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
@@ -92,16 +90,6 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const handleSelectedRow = (rows: Set<string>) => {
         setSelectedRows(rows)
     }
-
-    useEffect(() => {
-        if (isReferred === "Referred") {
-            setFilteredLoanee(allLoanee.filter((loanee) => loanee.loaneeStatus === "REFERRED"));
-        } else if (isReferred === "Not referred") {
-            setFilteredLoanee(allLoanee.filter((loanee) => loanee.loaneeStatus === "ADDEED"));
-        } else {
-            setFilteredLoanee(allLoanee);
-        }
-    }, [allLoanee, isReferred]);
 
     const loanProduct = [
         {
@@ -183,13 +171,12 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             </div>
                         </div>
                         <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
-                            <CustomSelect value={isReferred} onChange={handleSelected}
+                            <CustomSelect onChange={handleSelected}
                                           selectContent={items}
                                           className={` w-full text-black  bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
                                           placeHolder={`referred`}/>
                         </div>
                     </div>
-                    {/*#*/}
 
                     <div className={`flex md:flex-row flex-col gap-4 md:items-center`}
                          id={`ReferAndTraineeDiv`}>
@@ -219,8 +206,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
                     {
                         <SelectableTable
-                            tableData={filteredLoanee}
-                            // tableData={allLoanee}
+                            tableData={allLoanee}
                             tableHeader={loanProduct}
                             staticHeader="Trainee"
                             staticColunm="firstName"
