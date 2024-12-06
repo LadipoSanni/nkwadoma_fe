@@ -86,7 +86,6 @@ function SelectableTable<T extends TableRowData> ({
     const [isMounted, setIsMounted] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
-    const [select, setSelect] = useState<Array<string>>()
 
 
 
@@ -120,17 +119,14 @@ function SelectableTable<T extends TableRowData> ({
     const handleSelectAll = () => {
         if (selectAll) {
             setSelectedRows(new Set());
-            setSelect([])
             if (disabledButton){
                 disabledButton()
             }
         } else {
             const allRowIndexes : Set<string> = new Set();
-            paginatedData?.forEach((data) => allRowIndexes.add(data?.id))
+            paginatedData?.forEach((data) => allRowIndexes.add(String(data.id)))
             console.log("paginated: ", paginatedData)
             setSelectedRows(allRowIndexes);
-            setSelect(Array.from(allRowIndexes))
-
             handleSelectedRow(allRowIndexes)
         }
         setSelectAll(!selectAll);
@@ -222,8 +218,8 @@ function SelectableTable<T extends TableRowData> ({
                                                         <input
                                                             type="checkbox"
                                                             id={`rowCheckBox`}
-                                                            checked={select?.includes(row.id)}
-                                                            onChange={() => handleRowSelect(row.id)}
+                                                            checked={selectedRows.has(String(row.id))}
+                                                            onChange={() => handleRowSelect(String(row.id))}
                                                             className={`border-2 border-[#D7D7D7] rounded-md`}
                                                         />
                                                     </TableCell>
@@ -391,8 +387,8 @@ function SelectableTable<T extends TableRowData> ({
                                                         <TableCell>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={select?.includes(row.id)}
-                                                                onChange={() => handleRowSelect(row.id)}
+                                                                checked={selectedRows.has(String(row.id))}
+                                                                onChange={() => handleRowSelect(String(row.id))}
                                                                 className={`border-2 border-[#D7D7D7] rounded-md`}
                                                             />
                                                         </TableCell>
