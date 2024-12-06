@@ -22,20 +22,15 @@ function LoanProductPage() {
         { loanProductName: searchTerm },
         { skip: !searchTerm }
     );
-    console.log(searchResult)
     useEffect(() => {
-        if (searchTerm && searchResult && searchResult?.data.body) {
-            const result = searchResult?.data.body
+        if (searchTerm && searchResult && searchResult?.data) {
+            const result = searchResult?.data
             setAllLoanProduct(result)
         } else if(!searchTerm && data && data?.data) {
             const result = data?.data?.body
             setAllLoanProduct(result)
         }
     }, [data,searchTerm,searchResult ])
-
-    // const displayedData = searchTerm && searchResult && searchResult?.body
-    //     ? searchResult.data.body
-    //     : data?.data?.body || [];
 
     useEffect(() => {
         if (data && data?.data) {
