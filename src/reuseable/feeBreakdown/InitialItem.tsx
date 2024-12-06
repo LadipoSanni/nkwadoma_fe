@@ -20,7 +20,7 @@ const InitialItem: React.FC = () => (
                         <SelectItem value="NGN">NGN</SelectItem>
                     </SelectContent> */}
                 </Select>
-                <Input type="text" id={`itemAmount-`} name={`itemAmount`} placeholder="0.0"  className="bg-grey105 p-4 focus-visible:outline-0 w-[6.25rem] md:w-[8.25rem] shadow-none focus-visible:ring-transparent rounded-md h-[3.20rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"/>
+                <Input type="text" id={`itemAmount-`} name={`itemAmount`} placeholder="0.00"  className="bg-grey105 p-4 focus-visible:outline-0 w-[6.25rem] md:w-[8.25rem] shadow-none focus-visible:ring-transparent rounded-md h-[3.20rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"/>
             </div>
         </div>
     </div>
