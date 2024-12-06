@@ -17,10 +17,20 @@ export const loanProductApi = createApi({
                 param: param,
             }),
             providesTags: [`loanProduct`]
+        }),
+
+        searchLoanProduct: builder.query({
+            query: (param:{
+                loanProductName: string,
+            }) => ({
+                url: '/loan/loan-product/search',
+                method: 'GET',
+                params: param,
+            })
         })
     })
 })
 
 
-export const {useViewAllLoanProductQuery} = loanProductApi;
+export const {useViewAllLoanProductQuery, useSearchLoanProductQuery} = loanProductApi;
 
