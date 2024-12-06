@@ -4,11 +4,11 @@ import '@testing-library/jest-dom';
 import {Breakdown} from "@/reuseable/details/breakdown";
 
 const breakDownData = [
-    { title: 'Tuition Fee', amount: '$5000' },
-    { title: 'Lab Fee', amount: '$300' },
-    { title: 'Library Fee', amount: '$150' },
-    { title: 'Sports Fee', amount: '$200' },
-    { title: 'Activity Fee', amount: '$100' }
+    { itemName: 'Tuition Fee', itemAmount: '$5000' },
+    { itemName: 'Lab Fee', itemAmount: '$300' },
+    { itemName: 'Library Fee', itemAmount: '$150' },
+    { itemName: 'Sports Fee', itemAmount: '$200' },
+    { itemName: 'Activity Fee', itemAmount: '$100' }
 ];
 
 describe('Breakdown Component', () => {
@@ -40,8 +40,8 @@ describe('Breakdown Component', () => {
         fireEvent.click(triggerButton);
 
         breakDownData.forEach((item) => {
-            const titleElement = screen.getByText(item.title);
-            const amountElement = screen.getByText(item.amount);
+            const titleElement = screen.getByText(item.itemName);
+            const amountElement = screen.getByText(item.itemAmount);
             expect(titleElement).toBeInTheDocument();
             expect(amountElement).toBeInTheDocument();
         });
