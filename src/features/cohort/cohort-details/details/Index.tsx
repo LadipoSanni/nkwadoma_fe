@@ -56,10 +56,11 @@ const CohortDetails = () => {
         imageUrl: "",
         startDate: "",
         expectedEndDate: "",
-        numberOfDropOut:"",
-        numberOfEmployed: "",
+        numberOfDropOut:0,
+        numberOfEmployed: 0,
         numberOfLoanees: 0,
         numberOfReferredLoanee: 0,
+        programName: "",
     })
 
     useEffect(() => {
@@ -82,6 +83,7 @@ const CohortDetails = () => {
                 numberOfReferredLoanee: details?.numberOfReferredLoanee || "",
                 numberOfDropOut:details?. numberOfDropOut || "",
                 numberOfEmployed:details?.numberOfEmployed || "",
+                programName:details?.programName || "",
             })
         }
     }, [cohortDetails]);
@@ -98,11 +100,11 @@ const CohortDetails = () => {
                 {details.cohortStatus}
             </div>
         },
-        {label: "Number of Dropouts", value: formatAmount(details.numberOfDropOut)},
+        {label: "Number of Dropout", value: details.numberOfDropOut},
         {label: "Dropout rate", value: "0"},
-        {label: "Number employed", value: formatAmount(details.numberOfEmployed)},
+        {label: "Number employed", value: details.numberOfEmployed},
         {label: "Employment rate", value: "0"},
-        {label: "Average starting salary", value: formatAmount(0)},
+        {label: "Average starting salary", value: "0"},
         {label: "Tuition amount", value: formatAmount(details.tuitionAmount)},
     ];
 
@@ -114,8 +116,8 @@ const CohortDetails = () => {
     ]
 
     const tagButtonData = [
-        {tagIcon: MdPersonOutline, tagCount: 0, tagButtonStyle: "bg-warning50", tagText: "React"},
-        {tagIcon: FiBook, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-lightBlue100", tagText: "Loanee"},
+        {tagIcon: MdPersonOutline, tagCount: details?.programName, tagButtonStyle: "bg-warning50", tagText: ""},
+        {tagIcon: FiBook, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-lightBlue100", tagText: "Loanees"},
     ];
 
 

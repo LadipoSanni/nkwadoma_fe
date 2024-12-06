@@ -6,6 +6,9 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {useSearchLoanProductQuery, useViewAllLoanProductQuery} from "@/service/admin/loan_product";
 import {formatAmount} from "@/utils/Format";
+import TableModal from "@/reuseable/modals/TableModal";
+import {CreateLoanProduct} from "@/components/portfolio-manager/loan-product/createLoanProduct";
+import {Cross2Icon} from "@radix-ui/react-icons";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -13,7 +16,7 @@ interface TableRowData {
 
 function LoanProductPage() {
     const [allLoanee, setAllLoanProduct] = useState([]);
-    // const [createProduct, setCreateProduct] = React.useState(false)
+    const [createProduct, setCreateProduct] = React.useState(false)
     const [searchTerm, setSearchTerm] = useState("");
     const size = 100;
     const number = 0;
@@ -39,9 +42,9 @@ function LoanProductPage() {
         }
     }, [data])
 
-//     const handleCreateButton = () => {
-//               setCreateProduct(true)
-//     }
+    const handleCreateButton = () => {
+              setCreateProduct(true)
+    }
 
     const handleRowClick = () => {
 
@@ -127,6 +130,7 @@ function LoanProductPage() {
                 <div id={`createProduct`}>
                     <Button variant={"secondary"}
                             size={"lg"}
+                            onClick={handleCreateButton}
                             className={`bg-meedlBlue h-12 py-5 px-6  w-full hover:bg-meedlBlue focus-visible:ring-0 shadow-none`}
                     >Create loan product</Button>
                 </div>
@@ -152,16 +156,16 @@ function LoanProductPage() {
                 />
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
-                {/*<TableModal*/}
-                {/*    isOpen={createProduct}*/}
-                {/*    closeModal={() => setCreateProduct(false)}*/}
-                {/*    closeOnOverlayClick={true}*/}
-                {/*    icon={Cross2Icon}*/}
-                {/*    headerTitle={`Create loan Product`}*/}
-                {/*    width="30%"*/}
-                {/*>*/}
-                {/*    <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>*/}
-                {/*</TableModal>*/}
+                <TableModal
+                    isOpen={createProduct}
+                    closeModal={() => setCreateProduct(false)}
+                    closeOnOverlayClick={true}
+                    icon={Cross2Icon}
+                    headerTitle={`Create loan Product`}
+                    width="30%"
+                >
+                    <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>
+                </TableModal>
 
             </div>
         </main>
