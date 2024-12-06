@@ -2,16 +2,23 @@ import React from 'react';
 import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {inter} from "@/app/fonts";
-import {MdOutlinePersonOutline, MdOutlineAccountBalance} from "react-icons/md";
+import {
+    // MdOutlinePersonOutline,
+    MdOutlineAccountBalance} from "react-icons/md";
 import {useRouter} from "next/navigation";
 
-const AdminProfile = () => {
+interface AdminProfileProps {
+    closePopover: () => void
+}
+
+const AdminProfile: React.FC<AdminProfileProps> = ({closePopover}: AdminProfileProps) => {
     const user_name = getUserDetailsFromStorage("user_name");
     const user_role = getUserDetailsFromStorage('user_role');
     const router = useRouter()
 
     const handleOrganizationRoute = () => {
         router.push('/organizations/organizations-details')
+        closePopover()
     }
 
 
@@ -28,14 +35,14 @@ const AdminProfile = () => {
                 </div>
             </div>
             <div className={'flex flex-col items-start'}>
-                <section className={'group w-full'}>
-                    <div
-                        className={'group-hover:bg-tagButtonColor flex rounded cursor-pointer select-none w-full h-11 gap-2 p-[12px_8px] items-center'}>
-                        <MdOutlinePersonOutline className={'text-primary200 group-hover:text-meedlBlue h-5 w-5'}/>
-                        <p className={'text-blue300 group-hover:text-meedlBlue text-[14px] group-hover:font-medium  font-normal leading-[150%]'}>Your
-                            profile</p>
-                    </div>
-                </section>
+                {/*<section className={'group w-full'}>*/}
+                {/*    <div*/}
+                {/*        className={'group-hover:bg-tagButtonColor flex rounded cursor-pointer select-none w-full h-11 gap-2 p-[12px_8px] items-center'}>*/}
+                {/*        <MdOutlinePersonOutline className={'text-primary200 group-hover:text-meedlBlue h-5 w-5'}/>*/}
+                {/*        <p className={'text-blue300 group-hover:text-meedlBlue text-[14px] group-hover:font-medium  font-normal leading-[150%]'}>Your*/}
+                {/*            profile</p>*/}
+                {/*    </div>*/}
+                {/*</section>*/}
                 <section onClick={handleOrganizationRoute} className={'group w-full '}>
                     <div
                         className={'group-hover:bg-tagButtonColor flex rounded cursor-pointer select-none h-11 gap-2 p-[12px_8px] items-center'}>
