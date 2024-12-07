@@ -9,12 +9,13 @@ import {Collapsible, CollapsibleContent, CollapsibleTrigger} from '@/components/
 import {Button} from '@/components/ui/button';
 import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
-// import CryptoJS from "crypto-js";
+import CryptoJS from "crypto-js";
 import {uploadImageToCloudinary} from "@/utils/UploadToCloudinary";
 import {useVerifyIdentityMutation} from "@/service/users/Loanee_query";
 
 interface IdentityVerificationModalProps {
     isOpen: boolean;
+    loanReferralId: string;
     onClose: () => void;
     onThirdStepContinue: () => void;
 }
@@ -29,12 +30,12 @@ type FormData = {
 const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                                                                  isOpen,
                                                                                  onClose,
-                                                                                 onThirdStepContinue
+                                                                                 onThirdStepContinue,
+                                                                                 loanReferralId
                                                                              }) => {
     const methods = useForm<FormData>({mode: 'onChange'});
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
-    const [id,setId] = useState('9faf34f7-a805-4d7a-ab55-0fab5883bb23');
     const [loaneeIdentityData, setLoaneeIdentityData] = useState<FormData>({
         imageUrl: "",
         loanReferralId: "",
@@ -48,7 +49,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
 
     const handleCapture = async (imageFile: File) => {
         loaneeIdentityData.imageUrl = await uploadImageToCloudinary(imageFile);
-        loaneeIdentityData.loanReferralId = id;
+        loaneeIdentityData.loanReferralId = loanReferralId;
         try {
             const formData: FormData = loaneeIdentityData
             console.log(formData);
@@ -63,19 +64,12 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     };
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
-        // const secretKey = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
-        // const encryptedBvn = CryptoJS.AES.encrypt(data.bvn, secretKey).toString();
-
-        // const encryptedNin = CryptoJS.AES.encrypt(data.nin, secretKey).toString();
+        const secretKey = "secret_key";
+        data.bvn = CryptoJS.AES.encrypt(data.bvn, secretKey).toString();
+        data.nin = CryptoJS.AES.encrypt(data.nin, secretKey).toString();
         setLoaneeIdentityData(data)
-        //
-        // const loaneeBvn = data.bvn
-        // const loaneeNin = data.nin
-        console.log("submit", data)
-
         setIsSecondModalOpen(true);
         onClose();
-
     };
 
     return (

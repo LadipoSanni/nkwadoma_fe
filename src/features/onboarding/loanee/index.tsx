@@ -29,7 +29,6 @@ const LoaneeOnboarding = () => {
     const [loanReferralId, setLoanReferralId] = useState("");
     const {data, isLoading: loanReferralDetailsIsLoading} = useViewLoanReferralDetailsQuery({})
     const [triggerVerification, { data: verificationFirstResponse }] = useLazyIsIdentityVerifiedQuery();
-    console.log("data from backend: ",data);
     const [loaneeLoanDetail, setLoaneeLoanDetail] = useState({
         tuitionAmount: "0.00",
         amountRequested: "0.00",
@@ -68,7 +67,6 @@ const LoaneeOnboarding = () => {
         setCurrentStep(2);
     };
     const handleAcceptLoanReferral = () =>{
-        console.log(loanReferralId)
         triggerVerification({ loanReferralId });
         if (verificationFirstResponse?.data === "Identity Not Verified") {
             console.log(verificationFirstResponse.data)
@@ -125,6 +123,7 @@ const LoaneeOnboarding = () => {
                             isOpen={showModal}
                             onClose={() => setShowModal(false)}
                             onThirdStepContinue={handleThirdStepContinue}
+                            loanReferralId={loanReferralId}
                         />
                     )}
                     {(currentStep === 0 || currentStep === 1) && (
