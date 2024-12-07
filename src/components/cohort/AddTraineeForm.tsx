@@ -14,9 +14,9 @@ import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import {useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery} from "@/service/admin/cohort_query";
 import {getItemSessionStorage} from "@/utils/storage";
 import TotalInput from "@/reuseable/display/TotalInput";
-import {store, useAppSelector} from "@/redux/store";
-import {setCohortBreakDownContainer} from "@/redux/slice/cohort/unpersist-slice";
-import {Input} from "@/components/ui/input";
+// import {store, useAppSelector} from "@/redux/store";
+// import {setCohortBreakDownContainer} from "@/redux/slice/cohort/unpersist-slice";
+// import {Input} from "@/components/ui/input";
 
 interface Props {
     cohortId: string;
@@ -36,19 +36,29 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
 
 
     const COHORTID = getItemSessionStorage("cohortId")
-    console.log("coddo: ", COHORTID)
+    // console.log("coddo: ", COHORTID)
 
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [isLoading] = useState(false);
-    const [loanBreakdowns, setLoanBreakdowns] = useState<
-        { itemName: string; itemAmount: string; currency: string }[]
-    >([]);
+    // const [loanBreakdowns, setLoanBreakdowns] = useState<
+    //     { itemName: string; itemAmount: string; currency: string }[]
+    // >([]);
     const {data} = useGetCohortLoanBreakDownQuery(COHORTID)
-    const breakDown = useAppSelector(state => state.cohortBreakDownSlice.cohortBreakDownContainer)
-    const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([]);
+    // const breakDown = useAppSelector(state => state.cohortBreakDownSlice.cohortBreakDownContainer)
+    const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([])
+    const [edittedCohortBreakDown, setEdittedCohortBreakDown] = useState<cohortBreakDown[]>([])
     const [totalItemAmount, setTotalItenAmount] = useState()
-    const [loanBreakDownInputError, setLoanBreakDownInputError] = useState('')
+    const [initialDeposit, setInitialDeposit] = useState('')
+    // const [loanBreakDownInputError, setLoanBreakDownInputError] = useState('')
+    const [userIdentity, setUserIdentity] = useState(
+        {
+            firstName: '',
+            lastName: '',
+            email: ''
+
+        }
+    )
 
     const [addLoaneeToCohort] = useAddLoaneeToCohortMutation()
 
@@ -80,11 +90,10 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     });
 
     const initialFormValue = {
-        cohortId,
         firstName: '',
         lastName: '',
         emailAddress: '',
-        initialDeposit: '',
+        initialDeposit: ''
     };
 
     const toastPopUp = ToastPopUp({
@@ -99,24 +108,14 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     };
 
     const handleSubmitStep1 = () => {
-        // const response = await loanBreakDown(cohortId).unwrap()
-        console.log("cohortId", cohortId, "response: ", data)
-        // const newCohortBreakDown = data?.data
-        // newCohortBreakDown.add(data?.data)
+        // setUserIdentity(initialFormValue)
+        console.log("cohortId", cohortId, "response: ", data, 'useIdentity', initialFormValue)
         const datass : cohortBreakDown[] = []
         data?.data?.forEach((datas) => {
             datass.push(datas)
         })
-        store.dispatch(setCohortBreakDownContainer(data?.data))
         setCohortBreakDown(data?.data)
-        // console.log(" datasss::after ", datass)
-        // console.log(" beforee usestase:: ", cohortBreakDown, "dada: ", data?.data, "duydu: ", newCohortBreakDown)
         cohortBreakDown.push(data?.data)
-        console.log("cohortBreakDown", cohortBreakDown, "data?.data: ", data?.data)
-
-        // setCohortBreakDown(data?.data)
-
-        console.log(" usestase:: ", cohortBreakDown)
         setStep(2);
 
     };
@@ -124,7 +123,8 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     const handleFinalSubmit = (values: typeof initialFormValue) => {
         // const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
         // const formattedValues = {...values, initialDeposit: formattedDeposit};
-        // setUserIdentityInput(values)
+        console.log("initial: ", initialFormValue)
+        // setUserIdentity(values)
         toastPopUp.showToast();
         console.log(values);
 
@@ -138,19 +138,16 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     // };
 
     const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-        const cohortBreakDown =  data?.data
-        const currentCohortBreakdown = cohortBreakDown[index]
-        const currentCohortBreakDownAmount = currentCohortBreakdown?.itemAmount * 1
+        // const
         const {value} = e.target
-        const currentueui = value.toString() * 1
-        // if (currentueui > )
+        const currentueui = Number(value)
         const item = cohortBreakDown[index]
-        setCohortBreakDown((prevValue) => {
-            const currentObj = prevValue[index];
-            const updatedCurrentObj = {...currentObj,  itemAmount: value}
-            const updatedCohortBreakdown = prevValue.filter((obj, objIndex) => objIndex === index ? updatedCurrentObj : obj)
-            return updatedCohortBreakdown
-        })
+        // setCohortBreakDown((prevValue) => {
+        //     const currentObj = prevValue[index];
+        //     const updatedCurrentObj = {...currentObj,  itemAmount: value}
+        //     const updatedCohortBreakdown = prevValue.filter((obj, objIndex) => objIndex === index ? updatedCurrentObj : obj)
+        //     return updatedCohortBreakdown
+        // })
         //creating a variable with the inputted amount
         const updatedData: cohortBreakDown = {
             currency: item?.currency,
@@ -159,7 +156,6 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
             itemName: item.itemName
 
         }
-        console.log("ii: ", updatedData)
        // creating the copy of the cohortBreakDown
         const updateArray : cohortBreakDown[] = [...cohortBreakDown];
         //looping through the copy array to change the item  inputted amount
@@ -169,37 +165,14 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                 updateArray[index] = updatedData
             }
         }
-        console.log("up: ", updateArray)
-
-        // const updateArary =
-
-
-        // const update : cohortBreakDown[] = []
-
         if (updateArray) {
-            // updateArray.forEach((item) => update.push(item))
-            // // cohortBreakDown.fo
-            // for (let i = 0; i < updateArray.length; i++) {
-            //     if (i === index) {
-            //         cohortBreakDown[index] = updateArray[index]
-            //     }
-            //
-            // }
-            // store.dispatch(setCohortBreakDownContainer(updateArray))
-
-            console.log("after changing: ",cohortBreakDown )
-             // cohortBreakDown.replaceAll(cohortBreakDown)
             setCohortBreakDown(updateArray)
-            console.log("after setting: ", cohortBreakDown)
-            console.log("breakDown: ", breakDown)
-            const items = cohortBreakDown[index]?.itemAmount * 1
-
-            console.log("cohort amount: ", currentCohortBreakDownAmount, "itemmm: ", items)
+            setEdittedCohortBreakDown(updateArray)
+            console.log('unu: ',cohortBreakDown,"eddiete: ", edittedCohortBreakDown)
+            const total = 0
 
         }
 
-        // current[index] = newIndexElement
-        // current.r
 
     }
 
@@ -290,7 +263,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     const value = e.target.value;
                                                     if (/^\d*$/.test(value)) {
-                                                        setFieldValue("initialDeposit", value);
+                                                        setFieldValue("initialDeposit", value)
                                                     }
                                                 }}
                                             />
@@ -319,6 +292,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                         Cancel
                                     </Button>
                                     <Button
+                                        type='submit'
                                         variant="default"
                                         className={`w-full md:w-36 h-[57px] ${!isValid ? 'bg-neutral650 cursor-not-allowed ' : 'hover:bg-meedlBlue bg-meedlBlue cursor-pointer'}`}
                                         disabled={!isValid}
@@ -392,7 +366,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                     id={'totalInputOnAddLoaneeModal'}
                                     data-testid={'totalInputOnAddLoaneeModal'}
                                 >
-                                    <TotalInput prefix={'₦'} total={"20000"} componentId={'totalInputOnAddLoaneeModalComponent'}/>
+                                    <TotalInput prefix={'₦'} total={totalItemAmount} componentId={'totalInputOnAddLoaneeModalComponent'}/>
                                 </div>
                                 <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button

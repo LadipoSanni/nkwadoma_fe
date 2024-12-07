@@ -4,7 +4,7 @@ import { NumericFormat } from 'react-number-format';
 
 
 interface props {
-    total: string,
+    total: string | number,
     componentId: string,
     prefix: string
 
