@@ -20,7 +20,7 @@ interface detailsProps {
     dropdownOption?: { name: string, id: string }[];
     handleDropdownClicked: (id: string) => void;
     buttonText: string;
-    tagButtonData: { tagIcon: ElementType, tagCount: number, tagButtonStyle: string, tagText: string }[];
+    tagButtonData: { tagIcon: ElementType,   tagCount: number | string , tagButtonStyle: string, tagText: string }[];
     isEditButton: boolean
 }
 
@@ -71,31 +71,24 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         className={`${inter.className} text-3xl font-medium text-black`}>
                         {cohortTitle}
                     </h1>
-                    <p
-                        id="cohort-description"
-                        data-testid="cohort-description"
-                        className={`${inter.className}  text-grey450 break-words overflow-scroll scrollbar-width:none overflow-y-auto text-sm py-3 px-3 h-48 pt-4`}
-                    >
-                        {cohortDescription}
-                    </p>
+                    <div className={`pt-3`}>
+                        <p
+                            id="cohort-description"
+                            data-testid="cohort-description"
+                            className={`${inter.className}  text-grey450 break-words scrollbar-width:none overflow-y-auto h-20 text-sm`}
+                        >
+                            {cohortDescription}
+                        </p>
 
-                    {/*<p*/}
-                    {/*    id="cohort-description"*/}
-                    {/*    data-testid="cohort-description"*/}
-                    {/*    className={`${inter.className} text-grey450 overflow-y-auto h-44 text-sm py-3`}*/}
-                    {/*>*/}
-                    {/*    {cohortDescription}*/}
-                    {/*</p>*/}
-
-
-                    <div
-                        id={`details`}
-                        data-testid="details"
-                        className="grid md:grid-cols-3 grid-cols-2 gap-2 w-fit mt-3"
-                    >
-                        {tagButtonData.map((tagProps, index) => (
-                            <TagButton key={index} {...tagProps} />
-                        ))}
+                        <div
+                            id={`details`}
+                            data-testid="details"
+                            className="grid md:grid-cols-3 grid-cols-2 gap-2 w-fit mt-3"
+                        >
+                            {tagButtonData.map((tagProps, index) => (
+                                <TagButton key={index} {...tagProps} />
+                            ))}
+                        </div>
                     </div>
 
                     <div className={`flex flex-row md:space-x-3 space-x-2 md:pt-5 pt-8 w-full`}>
