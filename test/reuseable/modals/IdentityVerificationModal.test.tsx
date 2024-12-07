@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import IdentityVerificationModal from '@/reuseable/modals/IdentityVerificationModal';
-import {Providers} from "@/app/provider"; // Adjust the import path accordingly
+import {Providers} from "@/app/provider";
 
 describe('IdentityVerificationModal', () => {
     const testId= "test-id";

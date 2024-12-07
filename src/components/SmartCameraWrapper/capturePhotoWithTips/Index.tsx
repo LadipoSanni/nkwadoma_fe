@@ -15,29 +15,27 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         if (webcamRef.current) {
             const imageSrc = webcamRef.current.getScreenshot();
             if (imageSrc) {
-                // Convert the base64 string to a File
-                const file = base64ToFile(imageSrc, "captured-image.jpg");
-
+                const file = convertBase64ToFile(imageSrc, "captured-image.jpg");
                 setImageSrc(imageSrc);
                 onCapture(file);
             }
         }
     }, [webcamRef, onCapture]);
 
-    const base64ToFile = (base64String: string, fileName: string): File => {
-        // Extract base64 data without the prefix (e.g., "data:image/jpeg;base64,")
-        const arr = base64String.split(',');
-        const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
+    const convertBase64ToFile = (base64String: string, fileName: string): File => {
+        const base64Parts = base64String.split(',');
+        const mimeType = base64Parts[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
+        const binaryString = atob(base64Parts[1]);
+        const binaryStringLength = binaryString.length;
+        const byteArray = new Uint8Array(binaryStringLength);
 
-        while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
+        for (let i = 0; i < binaryStringLength; i++) {
+            byteArray[i] = binaryString.charCodeAt(i);
         }
 
-        return new File([u8arr], fileName, { type: mime });
+        return new File([byteArray], fileName, { type: mimeType });
     };
+
     useEffect(() => {
         const interval = setInterval(() => {
             setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
