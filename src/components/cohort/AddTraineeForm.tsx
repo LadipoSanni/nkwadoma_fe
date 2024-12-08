@@ -48,7 +48,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     // const breakDown = useAppSelector(state => state.cohortBreakDownSlice.cohortBreakDownContainer)
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([])
     const [edittedCohortBreakDown, setEdittedCohortBreakDown] = useState<cohortBreakDown[]>([])
-    const [totalItemAmount, setTotalItenAmount] = useState()
+    const [totalItemAmount, setTotalItenAmount] = useState(0)
     const [initialDeposit, setInitialDeposit] = useState('')
     // const [loanBreakDownInputError, setLoanBreakDownInputError] = useState('')
     const [userIdentity, setUserIdentity] = useState(
@@ -137,6 +137,14 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     //     setLoanBreakdowns(loanBreakdowns.filter((_, i) => i !== index));
     // };
 
+    const calculateTotal = ()=> {
+        const to = 0
+        cohortBreakDown.forEach((item) => to + Number(item.itemAmount))
+        setTotalItenAmount(to)
+        console.log('total after calculating: ', to, "toto: ", totalItemAmount)
+        return to;
+    }
+
     const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         // const
         const {value} = e.target
@@ -151,7 +159,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         //creating a variable with the inputted amount
         const updatedData: cohortBreakDown = {
             currency: item?.currency,
-            itemAmount: value,
+            itemAmount: e.target.value,
             loanBreakdownId: item.loanBreakdownId,
             itemName: item.itemName
 
@@ -366,7 +374,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                     id={'totalInputOnAddLoaneeModal'}
                                     data-testid={'totalInputOnAddLoaneeModal'}
                                 >
-                                    <TotalInput prefix={'₦'} total={totalItemAmount} componentId={'totalInputOnAddLoaneeModalComponent'}/>
+                                    <TotalInput prefix={'₦'} total={calculateTotal} componentId={'totalInputOnAddLoaneeModalComponent'}/>
                                 </div>
                                 <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
