@@ -27,7 +27,8 @@ interface userIdentity {
 
 interface loaneeLoanDetail {
     initialDeposit: number;
-    amountRequested: number
+    amountRequested: number;
+    amountReceived: number;
 }
 
 interface viewAllLoanee {
@@ -67,7 +68,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         cohortId: cohortsId,
         pageSize: size,
         pageNumber: page
-    })
+    },{refetchOnMountOrArgChange: true})
 
     const {data: searchResults, isLoading: isLoading} = useSearchForLoaneeInACohortQuery({
             loaneeName: loaneeName,
@@ -120,7 +121,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
             id: "AmountRequested",
             selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)
         },
-        {title: "Amount received", sortable: true, id: "AmountReceived"},
+        {title: "Amount received", sortable: true, id: "AmountReceived",
+            selector:(row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountReceived)
+        },
     ]
 
     const items = ["Not Referred","Referred"]
