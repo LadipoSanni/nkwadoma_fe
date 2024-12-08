@@ -48,7 +48,6 @@ interface props {
 
 export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [allLoanee, setAllLoanee] = useState<viewAllLoanees[]>([]);
-    // const [isReferred, setIsReferred] = React.useState(``);
     const [addLoanee, setAddLoanee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
     const [loaneeName, setLoaneeName] = React.useState("");
@@ -78,27 +77,6 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
 
     const [refer] = useReferLoaneeToACohortMutation()
-
-    // useEffect(() => {
-    //
-    //     if (loaneeName && searchResults && searchResults?.data) {
-    //         const result = searchResults?.data
-    //         console.log("result: ", result)
-    //         setAllLoanee(result)
-    //     } else if (!loaneeName && data && data?.data) {
-    //         const result = data?.data?.body
-    //         setAllLoanee(result)
-    //     }
-    //     if (isReferred === "Referred") {
-    //         const filter = allLoanee.filter(loanee => loanee.loaneeStatus === "REFERRED");
-    //         setAllLoanee(filter)
-    //
-    //     }
-    //     else if (isReferred === "Not referred") {
-    //         const filter = allLoanee.filter(loanee => loanee.loaneeStatus !== "REFERRED");
-    //         setAllLoanee(filter) }
-    //
-    // }, [data, loaneeName, searchResults,isReferred])
 
     useEffect(() => {
         let result: viewAllLoanees[] = [];
