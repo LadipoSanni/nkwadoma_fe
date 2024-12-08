@@ -64,9 +64,13 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     };
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
-        const secretKey = "secret_key";
-        data.bvn = CryptoJS.AES.encrypt(data.bvn, secretKey).toString();
-        data.nin = CryptoJS.AES.encrypt(data.nin, secretKey).toString();
+        const encryptionKey = "secret_key";
+
+        const secretKey = CryptoJS.enc.Utf8.parse(encryptionKey.padEnd(16, " "));
+        const iv = CryptoJS.enc.Utf8.parse("4983929933445555");
+
+        data.bvn  = CryptoJS.AES.encrypt(data.bvn, secretKey, { iv: iv }).toString();
+        data.nin = CryptoJS.AES.encrypt(data.nin, secretKey, { iv: iv }).toString();
         setLoaneeIdentityData(data)
         setIsSecondModalOpen(true);
         onClose();
