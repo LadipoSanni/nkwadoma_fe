@@ -86,7 +86,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         else if (!loaneeName && data && data?.data) {
             result = data.data.body;
         }
-        if (isReferred === "Not Referred") {
+        if (isReferred === "Not referred") {
             result = result.filter(filter => filter.loaneeStatus === "ADDED");
         }
         else if
@@ -126,7 +126,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         },
     ]
 
-    const items = ["Not Referred","Referred"]
+    const items = ["Not referred","Referred"]
 
     const handleSelected = (value: string) => {
         setIsReferred(value);
@@ -187,7 +187,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             <CustomSelect onChange={handleSelected}
                                           selectContent={items}
                                           className={` w-full text-black  bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
-                                          placeHolder={`referred`}/>
+                                          placeHolder={`Not referred`}/>
                         </div>
                     </div>
 
@@ -217,7 +217,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                    { isReferred === "Not Referred"?
+                    { isReferred === "Not referred"?
                         <SelectableTable
                             tableData={allLoanee}
                             tableHeader={loanProduct}
