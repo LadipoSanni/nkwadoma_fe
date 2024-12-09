@@ -26,11 +26,18 @@ export const loanProductApi = createApi({
                 params: cohortId
             }),
             providesTags: [`loanProduct`]
+        }),
+
+        searchLoanProduct: builder.query({
+            query: (param:{
+                loanProductName: string,
+            }) => ({
+                url: '/loan/loan-product/search',
+                method: 'GET',
+                params: param,
+            })
         })
     })
 })
-
-
-export const {useViewAllLoanProductQuery,
-    useCohortBreakdownQuery} = loanProductApi;
+export const {useViewAllLoanProductQuery, useCohortBreakdownQuery, useSearchLoanProductQuery} = loanProductApi;
 

@@ -40,11 +40,13 @@ const SideBar = () => {
 
     const [currentTab, setCurrentTab] = React.useState(current)
 
-    const clickNavbar = (name: string, id: string) => {
+    const clickNavbar = (name: string, route?: string) => {
         setCurrentTab(name)
         store.dispatch(setCurrentNavBottomItem(name))
         store.dispatch(setCurrentNavbarItem(name))
-        router.push("/" + id)
+        if(route){
+            router.push(route)
+        }
 
     }
     const handleClick = (name?: string, id?: string) => {
@@ -269,7 +271,9 @@ const SideBar = () => {
         }
     }
     const closeSideBar = () => {
+        // console.log("it's gets here:: ")
         store.dispatch(setShowMobileSideBar(false))
+        // console.log("it's gets after:: ")
 
     }
 

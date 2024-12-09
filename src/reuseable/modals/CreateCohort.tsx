@@ -64,6 +64,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const size = 200;
   const [error, setError] = useState("");
   const [descriptionError, setDescriptionError] = useState<string | null>(null);
+  const [isItemListValid, setIsItemListValid] = useState(true);
 
   const { data } = useGetAllProgramsQuery(
     { pageSize: size, pageNumber: page },
@@ -99,7 +100,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     }else {
       setCreateButtonDisabled(true);
     }
-  },[loanBreakdowns])
+  },[areLoanBreakdownsValid, loanBreakdowns])
 
   
   const resetForm = () => {
@@ -171,8 +172,8 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
 
   const handleSelectClick = () => {
     setLoanBreakdowns([
-      { itemName: "", itemAmount: "", currency: "NGN" },
       ...loanBreakdowns,
+      { itemName: "", itemAmount: "", currency: "NGN" },
     ]);
   };
 
@@ -272,6 +273,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                 items={loanBreakdowns}
                 setItems={setLoanBreakdowns}
                 handleDeleteItem={handleDeleteItem}
+                setIsItemListValid={setIsItemListValid}
               />
               <div
                 id={"Step2stickyContainer"}
@@ -306,11 +308,11 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                     <Button
                       id="CreateCohortButton"
                       className={`text-meedlWhite font-bold ${
-                        createButtonDisabled
+                        createButtonDisabled || !isItemListValid
                           ? "bg-neutral650 hover:bg-neutral650"
                           : "bg-meedlBlue hover:bg-meedlBlue"
                       } w-full md:w-[8.75rem] h-[3.5625rem]`}
-                       disabled={createButtonDisabled}
+                       disabled={createButtonDisabled || !isItemListValid}
                       type="submit"
                     >
                      {isLoading ? (
