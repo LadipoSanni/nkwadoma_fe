@@ -304,7 +304,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import Isloading from '@/reuseable/display/Isloading';
 import CustomSelect from '@/reuseable/Input/Custom-select';
-import { useQueryClient } from '@tanstack/react-query';
+// import { useQueryClient } from '@tanstack/react-query';
 import {useCreateProgramMutation} from "@/service/admin/program_query";
 
 
@@ -329,7 +329,7 @@ interface ApiError {
 
 
 function CreateProgram({setIsOpen}:Props) {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const [createProgram,{isLoading}] = useCreateProgramMutation();
   const [error, setError] =  useState('');
 
@@ -342,7 +342,7 @@ function CreateProgram({setIsOpen}:Props) {
     }
 
     
-    const maxChars = 1500;
+    const maxChars = 2500;
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
     const programModes=["FULL_TIME", "PART_TIME"]
@@ -407,7 +407,7 @@ function CreateProgram({setIsOpen}:Props) {
     
      const create = await createProgram(payload).unwrap();
      if(create) {
-     queryClient.invalidateQueries({ queryKey: ['program'] });
+    //  queryClient.invalidateQueries({ queryKey: ['program'] });
       toastPopUp.showToast();
       if (setIsOpen) {
         setIsOpen(false);
@@ -508,7 +508,7 @@ function CreateProgram({setIsOpen}:Props) {
                    }
                   </div>
                    <div className='md:mt-1'>
-                    <Label htmlFor="duration">Program duration</Label>
+                    <Label htmlFor="duration">Program duration (Months)</Label>
                     {/* <CustomSelect
                       selectContent={programDurations}
                       value={values.duration} 
@@ -553,6 +553,15 @@ function CreateProgram({setIsOpen}:Props) {
                   placeholder="Enter program description"
                   rows={4}
                   maxLength={maxChars}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { 
+                    const value = e.target.value; 
+                    if (value.length <= maxChars) { 
+                      setFieldValue("programDescription", value); } }} 
+                  onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => { 
+                    const paste = e.clipboardData.getData('text'); 
+                    if (paste.length + values.programDescription.length > maxChars) { 
+                      e.preventDefault(); 
+                      setError('Program description must be 2500 characters or less'); } }}
                   /> 
                   {
                     errors.programDescription && touched.programDescription &&  (

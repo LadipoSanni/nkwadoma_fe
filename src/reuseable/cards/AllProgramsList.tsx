@@ -5,6 +5,7 @@ import {inter} from "@/app/fonts";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import { FiMoreVertical } from 'react-icons/fi';
 import {TagButton} from "@/reuseable/tagButton/TagButton";
+import {MdPersonOutline} from "react-icons/md";
 
 
 interface ProgramList {
@@ -66,7 +67,18 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
                     {tagButtonData.map((tagProps, index) => (
                         <TagButton key={index} {...tagProps} />
                     ))}
+
                 </div>
+                 {/* <div
+                  className="grid grid-cols-2 gap-3 w-fit mt-4 cursor-pointer"
+                  id='card details'
+                 >
+                    <TagButton 
+                    tagIcon={MdPersonOutline}
+
+                    />
+
+                 </div> */}
 
             </CardContent>
         </Card>
