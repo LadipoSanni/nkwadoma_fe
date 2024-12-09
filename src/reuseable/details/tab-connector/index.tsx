@@ -3,7 +3,7 @@ import React from 'react';
 
 interface props {
     tabNames: string[],
-    currentTab?: number,
+    currentTab?: number | string,
 
 }
 

@@ -37,6 +37,15 @@ const LoanDetails = () => {
         {label: "Next of kin relation", value: "brother"},
 
     ];
+    const componentSteps : {
+        'step1': <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
+                         backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>,
+        'step2' : <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
+                         backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>,
+        'step3':<LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
+                         backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>
+
+    }
 
     // const component = [
     //     {
@@ -106,9 +115,9 @@ const LoanDetails = () => {
                     >
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab}/>
                     </div>
-                    <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
-                                     backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>
-
+                   <div>
+                       {componentSteps[currentTab]}
+                   </div>
                 </div>
             </div>
         </div>
