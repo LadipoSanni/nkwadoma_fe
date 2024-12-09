@@ -27,6 +27,7 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 import Isloading from "../display/Isloading";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
+import TotalInput from "@/reuseable/display/TotalInput";
 
 interface createCohortProps {
   triggerButtonStyle: string;
@@ -65,6 +66,8 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const [error, setError] = useState("");
   const [descriptionError, setDescriptionError] = useState<string | null>(null);
   const [isItemListValid, setIsItemListValid] = useState(true);
+  const [totalAmount, setTotalAmount] = useState(0);
+
 
   const { data } = useGetAllProgramsQuery(
     { pageSize: size, pageNumber: page },
@@ -274,12 +277,14 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                 setItems={setLoanBreakdowns}
                 handleDeleteItem={handleDeleteItem}
                 setIsItemListValid={setIsItemListValid}
+                setTotalAmount={setTotalAmount}
               />
               <div
                 id={"Step2stickyContainer"}
                 className={"sticky bottom-0 bg-meedlWhite"}
               >
                 <AddItemSection handleSelectClick={handleSelectClick} />
+                <TotalInput total={totalAmount.toString()} componentId={"createCohort"} prefix={"₦"} />
                 <section
                   id="Step2formButtonsContainer"
                   className={
