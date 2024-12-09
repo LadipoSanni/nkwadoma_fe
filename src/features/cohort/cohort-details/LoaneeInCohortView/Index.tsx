@@ -78,7 +78,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     useEffect(() => {
         if (loaneeName && searchResults && searchResults?.data) {
             const result = searchResults?.data
-            console.log("result: ", result)
+            // console.log("result: ", result)
             setAllLoanee(result)
         } else if (!loaneeName && data && data?.data) {
             const result = data?.data?.body

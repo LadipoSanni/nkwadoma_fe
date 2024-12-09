@@ -140,23 +140,6 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         // const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
         // const formattedValues = {...values, initialDeposit: formattedDeposit};
         // console.log("initial: ", initialFormValue)
-        // setUserIdentity(values)
-        // const in = {
-        //     cohortId: COHORTID,
-        //      userIdentity : {
-        //         // initialFormValue?.firstName,
-        //         // initialFormValue?.lastName,
-        //         // initialFormValue?.emailAddress
-        //     },
-        //     loaneeLoanDetail: [
-        //         "initialDeposit" : 500.00,
-        //         "amountRequested": 100000.00,
-        //         "loanBreakdown": [
-        //
-        //         ]
-        //
-        //     ]
-        // }
         const input = {
             cohortId: COHORTID,
             userIdentity: {
@@ -234,7 +217,6 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                     <Form className={`${inter.className}`}>
                         {step === 1 ? (
                             <div className="grid grid-cols-1 gap-y-4 md:max-h-[520px] overflow-y-auto">
-                                {/* Step 1 Fields */}
                                 <div>
                                     <Label htmlFor="firstName">First name</Label>
                                     <Field
@@ -353,7 +335,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                 <div className="flex items-center gap-2">
                                     <CurrencySelectInput
                                         readOnly
-                                        selectedcurrency={selectCurrency}
+                                        selectedcurrency={'NGN'}
                                         setSelectedCurrency={setSelectCurrency}
                                     />
                                     <div
