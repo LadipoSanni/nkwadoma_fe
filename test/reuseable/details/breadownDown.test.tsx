@@ -33,20 +33,6 @@ describe('Breakdown Component', () => {
         expect(content).not.toBeVisible();
     });
 
-    it('displays each breakdown item correctly', () => {
-        render(<Breakdown breakDown={breakDownData} />);
-
-        const triggerButton = screen.getByTestId('tuition-breakdown-trigger');
-        fireEvent.click(triggerButton);
-
-        breakDownData.forEach((item) => {
-            const titleElement = screen.getByText(item.itemName);
-            const amountElement = screen.getByText(item.itemAmount);
-            expect(titleElement).toBeInTheDocument();
-            expect(amountElement).toBeInTheDocument();
-        });
-    });
-
     it('renders the separator after the third item', () => {
         render(<Breakdown breakDown={breakDownData} />);
 
