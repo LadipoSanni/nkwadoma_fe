@@ -62,6 +62,7 @@ const CohortDetails = () => {
         numberOfReferredLoanee: 0,
         programName: "",
     })
+    console.log(details)
 
     useEffect(() => {
         if (cohortDetails && cohortDetails?.data) {
@@ -81,8 +82,8 @@ const CohortDetails = () => {
                 expectedEndDate: details?.expectedEndDate || "",
                 numberOfLoanees: details?.numberOfLoanees || "",
                 numberOfReferredLoanee: details?.numberOfReferredLoanee || "",
-                numberOfDropOut:details?. numberOfDropOut || "",
-                numberOfEmployed:details?.numberOfEmployed || "",
+                numberOfDropOut:details?. numberOfDropOut ,
+                numberOfEmployed:details?.numberOfEmployed ,
                 programName:details?.programName || "",
             })
         }
