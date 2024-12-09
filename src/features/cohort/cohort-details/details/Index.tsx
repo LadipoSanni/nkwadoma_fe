@@ -61,6 +61,10 @@ const CohortDetails = () => {
         numberOfLoanees: 0,
         numberOfReferredLoanee: 0,
         programName: "",
+        amountDisbursed: 0,
+        amountRepaid: 0,
+        amountOutstanding: 0,
+        repaymentRate: 0
     })
 
     useEffect(() => {
@@ -81,9 +85,13 @@ const CohortDetails = () => {
                 expectedEndDate: details?.expectedEndDate || "",
                 numberOfLoanees: details?.numberOfLoanees || "",
                 numberOfReferredLoanee: details?.numberOfReferredLoanee || "",
-                numberOfDropOut:details?. numberOfDropOut || "",
-                numberOfEmployed:details?.numberOfEmployed || "",
+                numberOfDropOut:details?. numberOfDropOut ,
+                numberOfEmployed:details?.numberOfEmployed ,
                 programName:details?.programName || "",
+                amountDisbursed:details?.amountDisbursed,
+                amountRepaid: details?.amountRepaid,
+                amountOutstanding: details?.amountOutstanding,
+                repaymentRate: details?.repaymentRate
             })
         }
     }, [cohortDetails]);
@@ -109,10 +117,10 @@ const CohortDetails = () => {
     ];
 
     const loanDetail = [
-        {detail: "Total amount disbursed", value: "0"},
-        {detail: "Total amount repaid", value: "0"},
-        {detail: "Total amount outstanding", value: "0"},
-        {detail: "Repayment rate", value: "0"},
+        {detail: "Total amount disbursed", value: formatAmount(details.amountDisbursed)},
+        {detail: "Total amount repaid", value: formatAmount(details.amountRepaid)},
+        {detail: "Total amount outstanding", value: formatAmount(details.numberOfEmployed)},
+        {detail: "Repayment rate", value: formatAmount(details.repaymentRate)},
     ]
 
     const tagButtonData = [
