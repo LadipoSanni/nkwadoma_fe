@@ -4,16 +4,13 @@ import { NumericFormat } from 'react-number-format';
 
 
 interface props {
-    total: string,
+    total: string | number,
     componentId: string,
     prefix: string
 
 }
 
 const TotalInput = ({total, componentId, prefix}: props) => {
-    // var NumberFormat = require('react-number-format');
-
-    // const number = 1 * total
 
 
     return (
