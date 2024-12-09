@@ -37,19 +37,15 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
 
 
     const COHORTID = getItemSessionStorage("cohortId")
-    // console.log("coddo: ", COHORTID)
 
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [isLoading] = useState(false);
-    // const [loanBreakdowns, setLoanBreakdowns] = useState<
-    //     { itemName: string; itemAmount: string; currency: string }[]
-    // >([]);
+
     const {data} = useGetCohortLoanBreakDownQuery(COHORTID)
-    // const breakDown = useAppSelector(state => state.cohortBreakDownSlice.cohortBreakDownContainer)
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([])
     const [edittedCohortBreakDown, setEdittedCohortBreakDown] = useState<cohortBreakDown[]>([])
-    const [totalItemAmount, setTotalItenAmount] = useState(1)
+    const [totalItemAmount, setTotalItenAmount] = useState(100)
     const [initialDeposit, setInitialDeposit] = useState('')
     const [totalItems, setTotalItems]= useState()
     const total = 0
@@ -122,12 +118,9 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
 
         }
         console.log('total after calculating: ', to, "toto: ", totalItemAmount)
-        // return cohortBreakDown.forEach((item) =>  Number(item.itemAmount));
     }
 
     const handleSubmitStep1 = () => {
-        // setUserIdentity(initialFormValue)
-        console.log("cohortId", cohortId, "response: ", data, 'useIdentity', initialFormValue)
         const datass : cohortBreakDown[] = []
         data?.data?.forEach((datas) => {
             datass.push(datas)
@@ -135,7 +128,9 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         setTotalItems(data?.data)
         setCohortBreakDown(data?.data)
         cohortBreakDown.push(data?.data)
-        calculateTotal()
+        cohortBreakDown.forEach((item) => setTotalItenAmount((prev) => prev + Number(item.itemAmount)))
+        console.log("after::: ", totalItemAmount)
+        // calculateTotal()
 
         setStep(2);
 
@@ -144,14 +139,50 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     const handleFinalSubmit = (values: typeof initialFormValue) => {
         // const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
         // const formattedValues = {...values, initialDeposit: formattedDeposit};
-        console.log("initial: ", initialFormValue)
+        // console.log("initial: ", initialFormValue)
         // setUserIdentity(values)
-        toastPopUp.showToast();
-        console.log(values);
+        // const in = {
+        //     cohortId: COHORTID,
+        //      userIdentity : {
+        //         // initialFormValue?.firstName,
+        //         // initialFormValue?.lastName,
+        //         // initialFormValue?.emailAddress
+        //     },
+        //     loaneeLoanDetail: [
+        //         "initialDeposit" : 500.00,
+        //         "amountRequested": 100000.00,
+        //         "loanBreakdown": [
+        //
+        //         ]
+        //
+        //     ]
+        // }
+        const input = {
+            cohortId: COHORTID,
+            userIdentity: {
+                email: values.emailAddress,
+                firstName: values.firstName,
+                lastName: values.lastName
+            },
+            loaneeLoanDetail: {
+                initialDeposit: values.initialDeposit,
+                amountRequested: '45567',
+                loanBreakdown: [
+                    cohortBreakDown
+                ]
 
-        if (setIsOpen) {
-            setIsOpen(false);
+            }
         }
+        console.log("input: ",input)
+        const response = addLoaneeToCohort(input).unwrap()
+        console.log("response: ", response)
+
+        // toastPopUp.showToast();
+        console.log(values);
+        //
+        // if (setIsOpen) {
+        //     setIsOpen(false);
+        // }
     };
 
     // const handleDeleteItem = (index: number) => {
@@ -161,39 +192,34 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
 
 
     const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-        console.log("i don enter" +
-            "here")
-            console.log("see oo: ", totalItems)
-        // const
         const {value} = e.target
-        const currentueui = Number(value)
         const item = cohortBreakDown[index]
-        console.log('data: ', data?.data)
         const itemAmount =  Number(data?.data[index].itemAmount)
-        console.log('itemAmount: ', itemAmount, "entered input: ", value)
-        const updatedData: cohortBreakDown = {
-            currency: item?.currency,
-            itemAmount: e.target.value,
-            loanBreakdownId: item.loanBreakdownId,
-            itemName: item.itemName
-
-        }
-        // const [total, setTotal] = useState(0)
-       // creating the copy of the cohortBreakDown
-        const updateArray : cohortBreakDown[] = [...cohortBreakDown];
-        //looping through the copy array to change the item  inputted amount
-        for (let i = 0; i < updateArray.length; i++) {
-            if (i === index) {
-                //replacing the copy with the created item
-                updateArray[index] = updatedData
+        if(Number(value) < itemAmount){
+            const updatedData: cohortBreakDown = {
+                currency: item?.currency,
+                itemAmount: e.target.value,
+                loanBreakdownId: item.loanBreakdownId,
+                itemName: item.itemName
+    
             }
-        }
-        if (updateArray) {
-            setCohortBreakDown(updateArray)
-            setEdittedCohortBreakDown(updateArray)
-            console.log('unu: ',cohortBreakDown,"eddiete: ", edittedCohortBreakDown)
-            const total = 0
+            // const [total, setTotal] = useState(0)
+           // creating the copy of the cohortBreakDown
+            const updateArray : cohortBreakDown[] = [...cohortBreakDown];
+            //looping through the copy array to change the item  inputted amount
+            for (let i = 0; i < updateArray.length; i++) {
+                if (i === index) {
+                    //replacing the copy with the created item
+                    updateArray[index] = updatedData
+                }
+            }
+            if (updateArray) {
+                setCohortBreakDown(updateArray)
+                setEdittedCohortBreakDown(updateArray)
+                console.log('unu: ',cohortBreakDown,"eddiete: ", edittedCohortBreakDown)
 
+    
+            }
         }
 
 

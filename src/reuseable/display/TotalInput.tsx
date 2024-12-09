@@ -11,9 +11,6 @@ interface props {
 }
 
 const TotalInput = ({total, componentId, prefix}: props) => {
-    // var NumberFormat = require('react-number-format');
-
-    // const number = 1 * total
 
 
     return (
