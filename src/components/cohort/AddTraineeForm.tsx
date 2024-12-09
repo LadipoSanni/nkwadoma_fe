@@ -14,7 +14,6 @@ import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import {useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery} from "@/service/admin/cohort_query";
 import {getItemSessionStorage} from "@/utils/storage";
 import TotalInput from "@/reuseable/display/TotalInput";
-import { log } from 'console';
 // import {store, useAppSelector} from "@/redux/store";
 // import {setCohortBreakDownContainer} from "@/redux/slice/cohort/unpersist-slice";
 // import {Input} from "@/components/ui/input";
@@ -45,20 +44,9 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     const {data} = useGetCohortLoanBreakDownQuery(COHORTID)
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([])
     const [edittedCohortBreakDown, setEdittedCohortBreakDown] = useState<cohortBreakDown[]>([])
-    const [totalItemAmount, setTotalItenAmount] = useState(100)
-    const [initialDeposit, setInitialDeposit] = useState('')
+    const [totalItemAmount, setTotalItenAmount] = useState('')
+    // const [initialDeposit, setInitialDeposit] = useState('')
     const [totalItems, setTotalItems]= useState()
-    const total = 0
-    // const [loanBreakDownInputError, setLoanBreakDownInputError] = useState('')
-    const [userIdentity, setUserIdentity] = useState(
-        {
-            firstName: '',
-            lastName: '',
-            email: ''
-
-        }
-    )
-
     const [addLoaneeToCohort] = useAddLoaneeToCohortMutation()
 
 
@@ -95,10 +83,10 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         initialDeposit: ''
     };
 
-    const toastPopUp = ToastPopUp({
-        description: 'Cohort Trainee successfully added.',
-        status: 'success',
-    });
+    // const toastPopUp = ToastPopUp({
+    //     description: 'Cohort Trainee successfully added.',
+    //     status: 'success',
+    // });
 
     const handleCloseModal = () => {
         if (setIsOpen) {
@@ -130,7 +118,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
         cohortBreakDown.push(data?.data)
         cohortBreakDown.forEach((item) => setTotalItenAmount((prev) => prev + Number(item.itemAmount)))
         console.log("after::: ", totalItemAmount)
-        // calculateTotal()
+        calculateTotal()
 
         setStep(2);
 
@@ -181,7 +169,6 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                 itemAmount: e.target.value,
                 loanBreakdownId: item.loanBreakdownId,
                 itemName: item.itemName
-    
             }
             // const [total, setTotal] = useState(0)
            // creating the copy of the cohortBreakDown
@@ -196,7 +183,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
             if (updateArray) {
                 setCohortBreakDown(updateArray)
                 setEdittedCohortBreakDown(updateArray)
-                console.log('unu: ',cohortBreakDown,"eddiete: ", edittedCohortBreakDown)
+                // console.log('unu: ',cohortBreakDown,"eddiete: ", edittedCohortBreakDown)
 
     
             }
