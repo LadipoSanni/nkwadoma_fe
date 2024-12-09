@@ -5,7 +5,7 @@ import {inter} from "@/app/fonts";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import { FiMoreVertical } from 'react-icons/fi';
 import {TagButton} from "@/reuseable/tagButton/TagButton";
-import {MdPersonOutline} from "react-icons/md";
+// import {MdPersonOutline} from "react-icons/md";
 
 
 interface ProgramList {

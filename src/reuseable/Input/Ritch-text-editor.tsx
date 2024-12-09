@@ -9,11 +9,11 @@ import Highlight from "@tiptap/extension-highlight"
 import Image from "@tiptap/extension-image"
 import BulletList from "@tiptap/extension-bullet-list"
 import OrderedList from "@tiptap/extension-ordered-list"
-import Bold from "@tiptap/extension-bold"
-import Italic from "@tiptap/extension-italic"
-import Underline from "@tiptap/extension-underline"
-import Strike from "@tiptap/extension-strike"
-import Code from "@tiptap/extension-code"
+// import Bold from "@tiptap/extension-bold"
+// import Italic from "@tiptap/extension-italic"
+// import Underline from "@tiptap/extension-underline"
+// import Strike from "@tiptap/extension-strike"
+// import Code from "@tiptap/extension-code"
 import ImageRezise from "tiptap-extension-resize-image";
 import ToolBar from '../display/ToolBar';
 
