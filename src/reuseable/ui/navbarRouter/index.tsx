@@ -4,7 +4,7 @@ import {inter} from "@/app/fonts";
 interface Props <T extends navbarRouterItemsProps> {
     navbarItems: T[] | undefined,
     currentTab: string | undefined | string[] | null,
-    handleClick: (name: string,  id: string ) => void,
+    handleClick: (name: string,  id?: string ) => void,
 }
 
 
@@ -30,7 +30,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                     id={item.id}
                     data-testid={item.id}
                     className={`inline-flex h-fit py-2 gap-2 px-1 w-full ${(currentTab === item.name ?currentTabStyle : noStyle  )} `}
-                    onClick={() => {handleClick(item.name, item.id)}}
+                    onClick={() => {handleClick(item.name, item.route)}}
                 >
                     <div className={` flex gap-2`}>
                         <div id={'navbarRouteIcon' + item.id}

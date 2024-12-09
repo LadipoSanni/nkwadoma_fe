@@ -171,7 +171,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             </div>
                         </div>
                         <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
-                            <CustomSelect value={isReferred} onChange={handleSelected}
+                            <CustomSelect onChange={handleSelected}
                                           selectContent={items}
                                           className={` w-full text-black  bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
                                           placeHolder={`referred`}/>

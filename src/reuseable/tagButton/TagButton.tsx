@@ -3,7 +3,7 @@ import {inter} from "@/app/fonts";
 
 interface TagButtonProps {
     tagIcon: ElementType;
-    tagCount: number;
+    tagCount: string | number;
     tagButtonStyle: string;
     tagText: string;
 }

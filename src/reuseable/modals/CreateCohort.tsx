@@ -99,7 +99,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     }else {
       setCreateButtonDisabled(true);
     }
-  },[loanBreakdowns])
+  },[areLoanBreakdownsValid, loanBreakdowns])
 
   
   const resetForm = () => {
@@ -307,7 +307,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                       id="CreateCohortButton"
                       className={`text-meedlWhite font-bold ${
                         createButtonDisabled
-                          ? "bg-neutral650"
+                          ? "bg-neutral650 hover:bg-neutral650"
                           : "bg-meedlBlue hover:bg-meedlBlue"
                       } w-full md:w-[8.75rem] h-[3.5625rem]`}
                        disabled={createButtonDisabled}
