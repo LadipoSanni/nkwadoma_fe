@@ -167,10 +167,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
             loaneeLoanDetail: {
                 initialDeposit: values.initialDeposit,
                 amountRequested: '45567',
-                loanBreakdown: [
-                    cohortBreakDown
-                ]
-
+                loanBreakdown: cohortBreakDown
             }
         }
         console.log("input: ",input)
