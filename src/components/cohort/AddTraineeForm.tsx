@@ -394,7 +394,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                                         placeholder={`${detail.itemName}`}
                                                         fixedDecimalScale={true}
                                                         decimalScale={2}
-                                                        value={}
+                                                        // value={cohortBreakDown}
                                                         className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                             editCohortBreakDown(e, index)
