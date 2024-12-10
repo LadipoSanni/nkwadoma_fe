@@ -89,7 +89,7 @@ const ProgramView = () => {
     const {data, isLoading} = useGetAllProgramsQuery({
         pageSize: size,
         pageNumber: page
-    }, {refetchOnMountOrArgChange: true,})
+    })
     const [deleteItem] = useDeleteProgramMutation()
     const {data: searchResults} = useSearchProgramQuery(searchTerm, {skip: !searchTerm});
 
@@ -292,11 +292,11 @@ const ProgramView = () => {
     }, [editOpen, program])
 
 
-    const tagButtonData = [
-        {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
-        {tagIcon: MdOutlineDateRange, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
-        {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "cohorts"},
-    ];
+    // const tagButtonData = [
+    //     {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
+    //     {tagIcon: MdOutlineDateRange, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
+    //     {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "cohorts"},
+    // ];
 
     const [isOpen, setIsOpen] = React.useState(false);
 
@@ -330,7 +330,7 @@ const ProgramView = () => {
                     <Button variant={"secondary"}
                             size={"lg"}
                             className={`${inter.className} bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center`}
-                            id='createProgramButton'
+                            id='createProgramModal'
                             onClick={handleModalOpen}>
                         Create program
                     </Button>
@@ -371,7 +371,12 @@ const ProgramView = () => {
                                     icon={Book}
                                     name='program'
                                 />
-                            ) : (programView.slice().reverse().map((program, index) => (
+                            ) : (programView.slice().reverse().map((program, index) => {
+    
+                               const tagButtonData = [ { tagIcon: MdPersonOutline, tagCount: Number(program.noOfLoanees ?? 0), tagButtonStyle: 'bg-tagButtonColor', tagText: 'loanees' }, 
+                               { tagIcon: MdOutlineDateRange, tagCount: Number(program.duration ?? 0) , tagButtonStyle: 'bg-tagButtonColor', tagText: 'months' }, 
+                               { tagIcon: MdOutlinePeopleAlt, tagCount: Number(program.noOfCohorts ?? 0) , tagButtonStyle: 'bg-tagButtonColor', tagText: 'cohorts' } ];
+                                    return (
                                     <AllProgramsCard
                                         key={index}
                                         description={program.programDescription ?? ''}
@@ -383,7 +388,7 @@ const ProgramView = () => {
                                         handleCardDropDownClick={(optionId: string) => handleCardDropDownClick(optionId, program.id ?? '')}
                                         handleProgramDetails={() => handleProgramDetailsOnclick(program.id ?? '')}
                                     />
-                                )
+                                )}
                             )))}
 
                     </div>
