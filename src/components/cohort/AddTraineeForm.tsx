@@ -14,6 +14,8 @@ import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import {useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery} from "@/service/admin/cohort_query";
 import {getItemSessionStorage} from "@/utils/storage";
 import TotalInput from "@/reuseable/display/TotalInput";
+import {formatAmount} from "@/utils/Format";
+import {NumberFormatValues, NumericFormat} from "react-number-format";
 // import {store, useAppSelector} from "@/redux/store";
 // import {setCohortBreakDownContainer} from "@/redux/slice/cohort/unpersist-slice";
 // import {Input} from "@/components/ui/input";
@@ -45,7 +47,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([])
     const [edittedCohortBreakDown, setEdittedCohortBreakDown] = useState<cohortBreakDown[]>([])
     const [totalItemAmount, setTotalItenAmount] = useState('')
-    // const [initialDeposit, setInitialDeposit] = useState('')
+    const [initialDeposit, setInitialDeposit] = useState('')
     const [totalItems, setTotalItems]= useState()
     const [addLoaneeToCohort] = useAddLoaneeToCohortMutation()
 
@@ -84,7 +86,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
     };
 
     // const toastPopUp = ToastPopUp({
-    //     description: 'Cohort Trainee successfully added.',
+    //     description: 'Cohort Loanee successfully added.',
     //     status: 'success',
     // });
 
@@ -141,33 +143,6 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                 loanBreakdown: cohortBreakDown
             }
         }
-        // const input =
-        //     {
-        //         "cohortId": "dcb8757b-ed21-41a8-afe2-02178970b734",
-        //         "userIdentity": {
-        //             "email": "randomFirstName@grr.la",
-        //             "firstName": "Favor ",
-        //             "lastName": "Mbata"
-        //         },
-        //         "loaneeLoanDetail": {
-        //             "initialDeposit": 100.00,
-        //             "amountRequested": 2000.00,
-        //             "loanBreakdown": [
-        //                 {
-        //                     "loaneeLoanBreakdownId" : "caf0a119-6fab-4a42-8d47-47ec375e58ae",
-        //                     "itemName": "Tuition Fee",
-        //                     "itemAmount": 100.00,
-        //                     "currency": "USD"
-        //                 },
-        //                 {
-        //                     "loaneeLoanBreakdownId" : "96556608-72b7-4c34-b9a2-d43040cbe3b0",
-        //                     "itemName": "Books",
-        //                     "itemAmount": 500.00,
-        //                     "currency": "USD"
-        //                 }
-        //             ]
-        //         }
-        //     }
         console.log("input: ",input)
         const response = addLoaneeToCohort(input).unwrap()
         console.log("response: ", response)
@@ -295,11 +270,39 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                             selectedcurrency={selectCurrency}
                                             setSelectedCurrency={setSelectCurrency}
                                         />
-                                        <div className='w-full mb-2'>
+                                        <div className='w-full'>
+                                            {/*<NumericFormat*/}
+                                            {/*    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"*/}
+                                            {/*    thousandSeparator={","}*/}
+                                            {/*    decimalScale={2}*/}
+                                            {/*    placeholder={"Enter Initial Deposit"}*/}
+                                            {/*    fixedDecimalScale={true}*/}
+                                            {/*    value={initialDeposit}*/}
+                                            {/*    onChange={(values: NumberFormatValues) => {*/}
+                                            {/*        const value = values.value; // Get the raw numeric value as a string*/}
+                                            {/*        if (/^\d*$/.test(value || "")) {*/}
+                                            {/*            setFieldValue("initialDeposit", value);*/}
+                                            {/*        }*/}
+                                            {/*    }}*/}
+                                            {/*/>*/}
+                                            {/*<NumericFormat*/}
+                                            {/*    className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none "*/}
+                                            {/*    thousandSeparator={","}*/}
+                                            {/*    decimalScale={2}*/}
+                                            {/*    placeholder={"Enter Initial Deposit"}*/}
+                                            {/*    fixedDecimalScale={true}*/}
+                                            {/*    value={initialDeposit}*/}
+                                            {/*    onValueChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
+                                            {/*        const value = e.target.value;*/}
+                                            {/*        if (/^\d*$/.test(value)) {*/}
+                                            {/*            setFieldValue("initialDeposit", value)*/}
+                                            {/*        }*/}
+                                            {/*    }}*/}
+                                            {/*        />*/}
                                             <Field
                                                 id="initialDeposit"
                                                 name="initialDeposit"
-                                                type="text"
+                                                type="number"
                                                 placeholder="Enter Initial Deposit"
                                                 className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none "
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -309,7 +312,6 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                                     }
                                                 }}
                                             />
-
                                         </div>
                                     </div>
                                 </div>
@@ -335,7 +337,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                     </Button>
                                     <Button
                                         type='submit'
-                                        variant="default"
+                                        variant="secondary"
                                         className={`w-full md:w-36 h-[57px] ${!isValid ? 'bg-neutral650 cursor-not-allowed ' : 'hover:bg-meedlBlue bg-meedlBlue cursor-pointer'}`}
                                         disabled={!isValid}
                                     >
@@ -358,7 +360,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                             id={`detail-`}
                                             name={`detail-`}
                                             type="text"
-                                            defaultValue={tuitionFee}
+                                            defaultValue={formatAmount(tuitionFee)}
                                             readOnly
                                             className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
                                         />
@@ -383,19 +385,35 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                                 <div
                                                     className={`flex w-full flex-row items-center justify-between mb-2 text-black300 `}
                                                 >
-                                                    <Field
+                                                    <NumericFormat
                                                         id={`detail-${index}`}
                                                         name={`detail-${index}`}
-                                                        type="number"
-                                                        defaultValue={detail?.itemAmount}
+                                                        thousandSeparator={","}
+                                                        // defaultValue={formatAmount(detail?.itemAmount)}
+                                                        defaultValue={'0.00'}
                                                         placeholder={`${detail.itemName}`}
+                                                        fixedDecimalScale={true}
+                                                        decimalScale={2}
+                                                        value={}
                                                         className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                             editCohortBreakDown(e, index)
                                                         }}
-
                                                     />
-                                                    {/*<MdOutlineDelete id={`deleteItemButton${index}`}*/}
+                                                    {/*<NumericFormat*/}
+                                                    {/*    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"*/}
+                                                    {/*    thousandSeparator={","}*/}
+                                                    {/*    defaultValue={formatAmount(detail?.itemAmount)}*/}
+                                                    {/*    decimalScale={2}*/}
+                                                    {/*    placeholder={"Enter Initial Deposit"}*/}
+                                                    {/*    fixedDecimalScale={true}*/}
+                                                    {/*    value={initialDeposit}*/}
+                                                    {/*    onValueChange={(values: NumberFormatValues) => {*/}
+                                                    {/*        const value = values.value; // Get the raw numeric value as a string*/}
+                                                    {/*       */}
+                                                    {/*    }}*/}
+                                                    {/*/>*/}
+                                                    {/*/!*<MdOutlineDelete id={`deleteItemButton${index}`}*!/*/}
                                                     {/*                 className={'text-blue200 h-4 w-4 cursor-pointer'}*/}
                                                     {/*                 onClick={() => handleDeleteItem(index)}/>*/}
                                                 </div>
@@ -408,7 +426,7 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                                     id={'totalInputOnAddLoaneeModal'}
                                     data-testid={'totalInputOnAddLoaneeModal'}
                                 >
-                                    <TotalInput prefix={'₦'} total={totalItemAmount} componentId={'totalInputOnAddLoaneeModalComponent'}/>
+                                    <TotalInput prefix={'₦'} total={formatAmount(totalItemAmount)} componentId={'totalInputOnAddLoaneeModalComponent'}/>
                                 </div>
                                 <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
