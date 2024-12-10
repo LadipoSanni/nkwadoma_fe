@@ -78,6 +78,7 @@ const Step1 = () => {
 
     }
     const login = () => {
+        store.dispatch(setUserPasswordInput(''))
         router.push("/auth/login")
     }
 
