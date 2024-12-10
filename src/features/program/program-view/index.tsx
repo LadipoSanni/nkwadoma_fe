@@ -45,7 +45,9 @@ interface viewAllProgramProps extends TableRowData {
     deliveryType?: string;
     totalAmountRepaid?: number;
     totalAmountDisbursed?: number;
-    totalAmountOutstanding?: number
+    totalAmountOutstanding?: number;
+    numberOfTrainees:number;
+    numberOfCohort:number
 }
 
 
@@ -75,6 +77,8 @@ const ProgramView = () => {
             totalAmountRepaid: 0,
             totalAmountDisbursed: 0,
             totalAmountOutstanding: 0,
+            numberOfTrainees:0,
+            numberOfCohort:0
         }
     )
 
@@ -285,6 +289,8 @@ const ProgramView = () => {
                 totalAmountRepaid: detail?.totalAmountRepaid || 0,
                 totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
                 totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
+                numberOfTrainees: detail?.numberOfTrainees,
+                numberOfCohort: detail?.numberOfCohort
             });
         }
         // saveObjectItemToSessionStorage("programDetail",progamDetail)
@@ -293,9 +299,9 @@ const ProgramView = () => {
 
 
     const tagButtonData = [
-        {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
-        {tagIcon: MdOutlineDateRange, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
-        {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "cohorts"},
+        {tagIcon: MdPersonOutline, tagCount: progamDetail?.numberOfTrainees, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
+        {tagIcon: MdOutlineDateRange, tagCount: progamDetail?.duration, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
+        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail?.numberOfCohort, tagButtonStyle: "bg-tagButtonColor", tagText: "cohorts"},
     ];
 
     const [isOpen, setIsOpen] = React.useState(false);
