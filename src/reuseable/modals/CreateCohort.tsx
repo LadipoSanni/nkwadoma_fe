@@ -67,7 +67,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const [descriptionError, setDescriptionError] = useState<string | null>(null);
   const [isItemListValid, setIsItemListValid] = useState(true);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [initialItemAmount, setInitialItemAmount] = useState("0.00");
+  const [initialItemAmount, setInitialItemAmount] = useState("");
 
   const { data } = useGetAllProgramsQuery(
     { pageSize: size, pageNumber: page },
