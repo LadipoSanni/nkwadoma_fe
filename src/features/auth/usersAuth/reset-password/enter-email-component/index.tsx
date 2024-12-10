@@ -72,8 +72,9 @@ const Step1 = () => {
 
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         event.stopPropagation()
-        setEmail(event.currentTarget.value)
-        validateEmail(event.currentTarget.value)
+        const value = event.target.value
+        setEmail(value)
+        validateEmail(value)
 
     }
     const login = () => {

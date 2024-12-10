@@ -129,7 +129,8 @@ export const cohortApi = createApi({
                url: `/cohort/loanee/refer`,
                method: 'POST',
                body: data
-           })
+           }),
+            invalidatesTags: ['cohort'],
         }),
         addLoaneeToCohort: builder.mutation({
             query: (data) => ({

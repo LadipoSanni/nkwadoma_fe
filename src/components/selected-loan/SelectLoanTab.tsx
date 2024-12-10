@@ -19,7 +19,7 @@ const SelectLoanTab = () => {
         {name: "Loan requests", id: "loanRequests", route: "loan-request"},
         {name: 'Loan offers', id: 'loanOffers', route: "loan-offer"},
         {name: 'Loan disbursal', id: "loanDisbursal", route: 'loan-disbursal'},
-        {name: 'Loan books', id: "loanBooks", route: "loan-book"},
+        {name: 'Loan book', id: "loanBook", route: "loan-book"},
 
     ]
 
