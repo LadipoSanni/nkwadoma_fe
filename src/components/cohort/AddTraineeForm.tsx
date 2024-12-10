@@ -351,7 +351,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                         )}
                         {errorMessage && (
                             <div
-                                className="mb-8 text-error500 text-sm text-center"
+                                className="mb-8 text-error500  text-sm text-center"
                                 data-testid="formErrorMessage"
                             >
                                 {errorMessage}
