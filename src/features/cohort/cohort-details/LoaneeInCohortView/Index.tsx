@@ -59,7 +59,6 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
 
     const cohortId = getItemSessionStorage("cohortId")
-    const id = "1";
     const size = 100;
     const [page] = useState(0);
     const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
