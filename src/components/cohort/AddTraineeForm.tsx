@@ -13,14 +13,7 @@ import { getItemSessionStorage } from "@/utils/storage";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
 
-import {formatAmount} from "@/utils/Format";
-import {NumberFormatValues, NumericFormat} from "react-number-format";
-// import {store, useAppSelector} from "@/redux/store";
-// import {setCohortBreakDownContainer} from "@/redux/slice/cohort/unpersist-slice";
-// import {Input} from "@/components/ui/input";
-
 interface Props {
-    cohortId: string;
     tuitionFee?: string;
     setIsOpen?: (e: boolean | undefined) => void;
 }
@@ -32,7 +25,7 @@ type cohortBreakDown = {
     loanBreakdownId: string;
 }
 
-function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
+function AddTraineeForm({cohortId, setIsOpen, tuitionFee }: Props) {
     const COHORTID = getItemSessionStorage("cohortId");
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
@@ -40,12 +33,7 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
     const { data } = useGetCohortLoanBreakDownQuery(COHORTID);
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([]);
     const [totalItemAmount, setTotalItemAmount] = useState(0);
-    const [initialDeposit, setInitialDeposit] = useState('');
-    const [userIdentity, setUserIdentity] = useState({
-        firstName: '',
-        lastName: '',
-        email: ''
-    });
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const [addLoaneeToCohort] = useAddLoaneeToCohortMutation();
 
@@ -113,7 +101,6 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
             },
             loaneeLoanDetail: {
                 initialDeposit: values.initialDeposit,
-                amountRequested: '45567',
                 loanBreakdown: cohortBreakDown
             }
         };
@@ -121,8 +108,9 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
             const response = await addLoaneeToCohort(input).unwrap();
             toastPopUp.showToast();
             handleCloseModal();
+            setErrorMessage(null);
         } catch (error) {
-            console.error("Error adding loanee to cohort:", error);
+            setErrorMessage(error.data?.message || "An unexpected error occurred.");
         }
     };
 
@@ -133,6 +121,10 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
         );
         setCohortBreakDown(updatedData);
         calculateTotal(updatedData);
+    };
+
+    const handleBack = () => {
+        setStep(1);
     };
 
     return (
@@ -201,33 +193,20 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
                                         />
                                         <div className='w-full'>
                                             {/*<NumericFormat*/}
+                                            {/*    id={`initialDeposit`}*/}
+                                            {/*    name={"initialDeposit"}*/}
+                                            {/*    placeholder="Enter Initial Deposit"*/}
                                             {/*    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"*/}
-                                            {/*    thousandSeparator={","}*/}
+                                            {/*    thousandSeparator=","*/}
                                             {/*    decimalScale={2}*/}
-                                            {/*    placeholder={"Enter Initial Deposit"}*/}
                                             {/*    fixedDecimalScale={true}*/}
-                                            {/*    value={initialDeposit}*/}
-                                            {/*    onChange={(values: NumberFormatValues) => {*/}
-                                            {/*        const value = values.value; // Get the raw numeric value as a string*/}
-                                            {/*        if (/^\d*$/.test(value || "")) {*/}
-                                            {/*            setFieldValue("initialDeposit", value);*/}
+                                            {/*    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
+                                            {/*        const value = e.target.value;*/}
+                                            {/*        if (/^\d*$/.test(value)) {*/}
+                                            {/*            void setFieldValue("initialDeposit", value);*/}
                                             {/*        }*/}
                                             {/*    }}*/}
                                             {/*/>*/}
-                                            {/*<NumericFormat*/}
-                                            {/*    className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none "*/}
-                                            {/*    thousandSeparator={","}*/}
-                                            {/*    decimalScale={2}*/}
-                                            {/*    placeholder={"Enter Initial Deposit"}*/}
-                                            {/*    fixedDecimalScale={true}*/}
-                                            {/*    value={initialDeposit}*/}
-                                            {/*    onValueChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
-                                            {/*        const value = e.target.value;*/}
-                                            {/*        if (/^\d*$/.test(value)) {*/}
-                                            {/*            setFieldValue("initialDeposit", value)*/}
-                                            {/*        }*/}
-                                            {/*    }}*/}
-                                            {/*        />*/}
                                             <Field
                                                 id="initialDeposit"
                                                 name="initialDeposit"
@@ -237,7 +216,7 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     const value = e.target.value;
                                                     if (/^\d*$/.test(value)) {
-                                                        setFieldValue("initialDeposit", value);
+                                                        void setFieldValue("initialDeposit", value);
                                                     }
                                                 }}
                                             />
@@ -279,10 +258,10 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
                                     />
                                     <div className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>
                                         <Field
-                                            id={`detail-`}
-                                            name={`detail-`}
+                                            id="detail-"
+                                            name="detail-"
                                             type="text"
-                                            defaultValue={tuitionFee}
+                                            defaultValue={tuitionFee?.toLocaleString() || ''}
                                             readOnly
                                             className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
                                         />
@@ -296,22 +275,30 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
                                                 <div>
                                                     <CurrencySelectInput
                                                         readOnly={false}
-                                                        selectedcurrency={selectCurrency}
+                                                        selectedcurrency={detail.currency}
                                                         setSelectedCurrency={setSelectCurrency}
                                                     />
                                                 </div>
                                                 <div className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>
-                                                    <Field
+                                                    <NumericFormat
                                                         id={`detail-${index}`}
                                                         name={`detail-${index}`}
-                                                        type="number"
-                                                        defaultValue={detail?.itemAmount}
+                                                        type="text"
+                                                        thousandSeparator=","
+                                                        decimalScale={2}
+                                                        fixedDecimalScale={true}
+                                                        value={detail?.itemAmount?.toLocaleString() || ''}
                                                         placeholder={`${detail.itemName}`}
                                                         className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                            editCohortBreakDown(e, index);
+                                                            const rawValue = e.target.value.replace(/,/g, '');
+                                                            if (!isNaN(Number(rawValue))) {
+                                                                editCohortBreakDown(
+                                                                    { target: { value: rawValue } } as React.ChangeEvent<HTMLInputElement>,
+                                                                    index
+                                                                );
+                                                            }
                                                         }}
-
                                                     />
                                                 </div>
                                             </div>
@@ -326,9 +313,9 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
                                         variant="outline"
                                         type="reset"
                                         className="w-full md:w-36 h-[57px] mb-4"
-                                        onClick={handleCloseModal}
+                                        onClick={handleBack}
                                     >
-                                        Cancel
+                                        Back
                                     </Button>
                                     <Button
                                         variant="default"
@@ -354,6 +341,14 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
                                         )}
                                     </Button>
                                 </div>
+                            </div>
+                        )}
+                        {errorMessage && (
+                            <div
+                                className="mb-8 text-error500 text-sm text-center"
+                                data-testid="formErrorMessage"
+                            >
+                                {errorMessage}
                             </div>
                         )}
                     </Form>

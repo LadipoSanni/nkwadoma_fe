@@ -157,8 +157,8 @@ const ProgramDetails = () => {
             tagButtonStyle: "bg-lightBlue100",
             tagText: "months"
         },
-        {tagIcon: MdOutlinePeopleAlt, tagCount: 10, tagButtonStyle: "bg-warning80", tagText: "cohorts"},
-        {tagIcon: MdPersonOutline, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "trainees"},
+        {tagIcon: MdOutlinePeopleAlt, tagCount: 0, tagButtonStyle: "bg-warning80", tagText: "cohorts"},
+        {tagIcon: MdPersonOutline, tagCount: 0, tagButtonStyle: "bg-warning50", tagText: "loanees"},
     ];
     const ProgramHeader = [
         {title: "Cohort", sortable: true, id: "name"},

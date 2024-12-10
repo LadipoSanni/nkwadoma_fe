@@ -126,7 +126,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         },
     ]
 
-    const items = ["Not referred","Referred"]
+    const items = ["Referred","Not referred"]
 
     const handleSelected = (value: string) => {
         setIsReferred(value);
