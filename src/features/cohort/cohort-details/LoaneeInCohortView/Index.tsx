@@ -59,7 +59,6 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
 
     const cohortId = getItemSessionStorage("cohortId")
-    const id = "1";
     const size = 100;
     const [page] = useState(0);
     const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
@@ -126,7 +125,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         },
     ]
 
-    const items = ["Not referred","Referred"]
+    const items = ["Referred","Not referred"]
 
     const handleSelected = (value: string) => {
         setIsReferred(value);
@@ -187,7 +186,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             <CustomSelect onChange={handleSelected}
                                           selectContent={items}
                                           className={` w-full text-black  bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
-                                          placeHolder={`Not referred`}/>
+                                          placeHolder={`Referred`}/>
                         </div>
                     </div>
 
@@ -259,7 +258,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     headerTitle={`Add Loanee`}
                     width="30%"
                 >
-                    <AddTraineeForm tuitionFee={cohortFee} cohortId={id} setIsOpen={() => setAddLoanee(false)}/>
+                    <AddTraineeForm tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)}/>
                 </TableModal>
 
             </div>

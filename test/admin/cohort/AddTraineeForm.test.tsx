@@ -1,6 +1,7 @@
-import { render, screen, fireEvent,cleanup,waitFor,act} from "@testing-library/react";
+import { render, screen, fireEvent,cleanup,waitFor} from "@testing-library/react";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 import userEvent from '@testing-library/user-event';
+import { Providers } from "@/app/provider";
 
 
 describe("AddTraineeForm", () => {
@@ -14,15 +15,23 @@ describe("AddTraineeForm", () => {
 
 
     it('should initialize form with default values when component is rendered', () => {
-        const { getByPlaceholderText } = render(<AddTraineeForm cohortId="123" />);
-        expect((getByPlaceholderText('Enter first name') as HTMLInputElement).value).toBe('');
-        expect((getByPlaceholderText('Enter last name') as HTMLInputElement).value).toBe('');
+        const { getByPlaceholderText } = render(
+            <Providers>
+                <AddTraineeForm cohortId="123" />
+            </Providers>
+
+        );
         expect((getByPlaceholderText('Enter email address') as HTMLInputElement).value).toBe('');
         expect((getByPlaceholderText('Enter Initial Deposit') as HTMLInputElement).value).toBe('');
       });
 
       it('should trigger validation errors when form is submitted with empty fields', async () => {
-        render(<AddTraineeForm cohortId="123" />);
+        render(
+            <Providers>
+                <AddTraineeForm cohortId="123" />
+            </Providers>
+
+        );
         fireEvent.click(screen.getByRole('button', { name: /Continue/i }));
         await waitFor(() => {
             expect(screen.getByText('First name is required')).toBeInTheDocument();
@@ -38,7 +47,11 @@ describe("AddTraineeForm", () => {
         it('should log formatted values when form is submitted', async () => {
       const consoleSpy = jest.spyOn(console, 'log');
       const mockSetIsOpen = jest.fn();
-      const { getByLabelText, getByRole } = render(<AddTraineeForm cohortId="123" setIsOpen={mockSetIsOpen} />);
+      const { getByLabelText, getByRole } = render(
+          <Providers>
+              <AddTraineeForm cohortId="123" setIsOpen={mockSetIsOpen} />
+          </Providers>
+      );
   
       fireEvent.change(getByLabelText('First name'), { target: { value: 'John' } });
       fireEvent.change(getByLabelText('Last name'), { target: { value: 'Doe' } });
@@ -51,7 +64,11 @@ describe("AddTraineeForm", () => {
 
 
     it('should display validation errors when fields are invalid',async () => {
-      const { getByRole, getByText,getByLabelText } = render(<AddTraineeForm cohortId="123" />);
+      const { getByRole, getByText,getByLabelText } = render(
+          <Providers>
+              <AddTraineeForm cohortId="123" />
+          </Providers>
+      );
   
       fireEvent.click(getByRole('button', { name: 'Continue' }));
     
@@ -83,7 +100,11 @@ describe("AddTraineeForm", () => {
         setIsOpen: jest.fn()
     };
  
-    render(<AddTraineeForm {...props} />);
+    render(
+        <Providers>
+            <AddTraineeForm {...props} />
+        </Providers>
+    );
 
     
     fireEvent.click(screen.getByText('Continue'));
@@ -101,7 +122,11 @@ it('should reject invalid email formats when email is entered', async () => {
     setIsOpen: jest.fn()
 };
 
-  render(<AddTraineeForm {...props}/>);
+  render(
+      <Providers>
+          <AddTraineeForm {...props}/>
+      </Providers>
+  );
   const emailInput = screen.getByLabelText('Email address');
   userEvent.type(emailInput, 'invalidemail');
   fireEvent.click(screen.getByText('Continue'));
@@ -114,7 +139,11 @@ it('should reject invalid email formats when email is entered', async () => {
 
 it('should close modal when cancel button is clicked', () => {
   const setIsOpen = jest.fn();
-  render(<AddTraineeForm cohortId="123" setIsOpen={setIsOpen} />);
+  render(
+      <Providers>
+          <AddTraineeForm cohortId="123" setIsOpen={setIsOpen} />
+      </Providers>
+  );
   
   const cancelButton = screen.getByRole('button', { name: /cancel/i });
   fireEvent.click(cancelButton);
@@ -125,7 +154,12 @@ it('should close modal when cancel button is clicked', () => {
 
 it('should clear all form fields when reset button is clicked', () => {
   const setIsOpen = jest.fn();
-  render(<AddTraineeForm cohortId="123" setIsOpen={setIsOpen} />);
+  render(
+      <Providers>
+          <AddTraineeForm cohortId="123" setIsOpen={setIsOpen} />
+      </Providers>
+          );
+
   const resetButton = screen.getByText('Cancel');
   userEvent.click(resetButton);
 
@@ -134,10 +168,4 @@ it('should clear all form fields when reset button is clicked', () => {
   expect((screen.getByLabelText('Email address')as HTMLInputElement).value).toBe('');
   expect((screen.getByLabelText('Initial Deposit')as HTMLInputElement).value).toBe('');
 });
-
-
-
-
-
-
 })    

@@ -106,7 +106,12 @@ export const cohortApi = createApi({
                 params: cohortId
             }),
         }),
-
+        getCohortLoanBreakDown : builder.query({
+           query: (cohortId) => ({
+               url:`/cohort/loanbreakdown?cohortId=${cohortId}`,
+               method: "GET",
+           })
+        }),
         searchForLoaneeInACohort: builder.query({
             query: (param:{
                 loaneeName: string,
@@ -125,12 +130,22 @@ export const cohortApi = createApi({
            }),
             invalidatesTags: ['cohort'],
         }),
+        addLoaneeToCohort: builder.mutation({
+            query: (data) => ({
+                url: `/addLoaneeToCohort`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['cohort'],
+        }),
     })
 })
 
 
 
 export const {
+    useAddLoaneeToCohortMutation,
+    useGetCohortLoanBreakDownQuery,
     useReferLoaneeToACohortMutation,
     useCreateCohortMutation,
     useViewAllLoaneeQuery,
