@@ -108,10 +108,10 @@ const SideBar = () => {
             id: 'loanProduct',
             name: 'Loan Product',
             route: '/loan-product',
-            isActive: true,
+            isActive: false,
             icon: <MdOutlineInventory2
-
-                color={current === 'Loan Product' ? '#142854' : '#939CB0'}
+                color={'#d7d7d7'}
+                // color={current === 'Loan Product' ? '#142854' : '#939CB0'}
                 className={` h-[1.2rem] w-[1.2rem]  `}
             ></MdOutlineInventory2>
 
