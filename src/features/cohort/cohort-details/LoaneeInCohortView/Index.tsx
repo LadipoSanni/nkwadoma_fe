@@ -259,7 +259,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     headerTitle={`Add Loanee`}
                     width="30%"
                 >
-                    <AddTraineeForm tuitionFee={cohortFee} cohortId={id} setIsOpen={() => setAddLoanee(false)}/>
+                    <AddTraineeForm tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)}/>
                 </TableModal>
 
             </div>
