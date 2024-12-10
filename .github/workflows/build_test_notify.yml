@@ -10,6 +10,8 @@ env:
   EMAILS: 'sam@semicolon.africa,ladipo@semicolon.africa,t.lemon@semicolon.africa,divinemercy601@gmail.com,qudusa55@gmail.com,o.koleaje@semicolon.africa,ned@semicolon.africa,tade@semicolon.africa,moyinoluwa@semicolon.africa,mariam@semicolon.africa,i.james@semicolon.africa,david@semicolon.africa,abigail@semicolon.africa,precious@semicolon.africa,dapo@semicolon.africa,pauline@semicolon.africa,davidoso@semicolon.africa,henry@semicolon.africa'
   NEXT_PUBLIC_UPLOAD_PRESET: ${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}
   NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
+  APP_DEV_IV_KEY: ${{ vars.APP_DEV_IV_KEY }}4983929933491528
+  APP_DEV_IV_ENCRYPTION_SECRET_KEY: ${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}secret_key
   
 jobs:
   build:
@@ -40,6 +42,8 @@ jobs:
         run: |
           echo "NEXT_PUBLIC_UPLOAD_PRESET=${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}" > .env
           echo "NEXT_PUBLIC_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}" >> .env
+          echo "APP_DEV_IV_KEY=${{ vars.APP_DEV_IV_KEY }}" >> .env
+          echo "APP_DEV_IV_ENCRYPTION_SECRET_KEY=${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}" >> .env
 
       - name: Install and build the app
         run: |
