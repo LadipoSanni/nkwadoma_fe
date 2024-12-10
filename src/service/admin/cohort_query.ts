@@ -137,7 +137,8 @@ export const cohortApi = createApi({
                 url: `/addLoaneeToCohort`,
                 method: 'POST',
                 body: data
-            })
+            }),
+            invalidatesTags: ['cohort'],
         }),
     })
 })
