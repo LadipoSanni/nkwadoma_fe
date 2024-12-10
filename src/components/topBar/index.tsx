@@ -11,7 +11,7 @@ import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import AdminProfile from "@/features/profile/adminProfile/Index";
 import {Popover, PopoverTrigger, PopoverContent} from "@/components/ui/popover";
 
-const TopBar = () => {
+const  TopBar = () => {
     const [arrowToggled, setArrowToggled] = useState(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem);
@@ -43,7 +43,7 @@ const TopBar = () => {
                                   id={'LayOutHamburger'}/>
                     </div>
                     <div className={` relative flex place-items-center `}>
-                        <div className={` ${inter.className} text-sm font-bold text-black500  `}>{currentTab}</div>
+                        <div className={` ${inter.className} text-xm font-bold md:text-lg md:font-bold md:text-black500 text-black500  `}>{currentTab}</div>
                     </div>
                 </div>
 

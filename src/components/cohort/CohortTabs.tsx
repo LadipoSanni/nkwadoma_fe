@@ -130,7 +130,7 @@ useEffect(() => {
 
   const handleRowClick = (row: TableRowData) => {
     router.push('/cohort/cohort-details')
-    console.log('The row: ',row.id)
+    // console.log('The row: ',row.id)
      setItemSessionStorage("cohortId",String(row.id))
      setItemSessionStorage("programsId", String(row.programId))
 

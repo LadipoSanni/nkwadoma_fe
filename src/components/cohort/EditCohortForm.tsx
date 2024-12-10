@@ -134,7 +134,7 @@ const maxChars = 1500;
     });
 
   const handleSubmit = async (values: typeof initialFormValue) => {
-     console.log("values: ",values);
+     // console.log("values: ",values);
     if (!navigator.onLine) {
       networkPopUp.showToast();
       if (setIsOpen) {
