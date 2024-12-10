@@ -265,6 +265,7 @@ function Tables<T extends TableRowData>({
                                   {kirkBabDropdownOption?.map(
                                     (option, index) => (
                                       <MenubarItem
+                                       id={`${index}optionItem`}
                                         key={index}
                                         className={`cursor-pointer mt-2 pr-8  ${
                                           option.id === "3"
