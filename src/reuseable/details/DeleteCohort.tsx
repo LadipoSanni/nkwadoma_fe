@@ -13,6 +13,7 @@ interface deleteCohortProps {
     title: string,
     handleDelete?: (id: string) => void;
     isLoading?: boolean
+    isDeleted?: boolean
 
 }
 
@@ -32,7 +33,7 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
         }
     }
 
-    const handleDeleteCohort = () => {
+    const handleDeleteCohort = async () => {
         if(handleDelete){
             handleDelete(id ?? "");
             setTimeout(() => {

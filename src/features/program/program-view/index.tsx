@@ -84,7 +84,7 @@ const ProgramView = () => {
     const [page] = useState(0);
     // const [totalPage, setTotalPage] = useState(0);
     const size = 100;
-
+    let deleteProgram = ''
 
     const {data, isLoading} = useGetAllProgramsQuery({
         pageSize: size,
@@ -110,6 +110,8 @@ const ProgramView = () => {
 
 
     }
+
+    
 
     const handleProgramDetailsOnclick = (id: string) => {
         router.push('/program/details')
@@ -265,7 +267,8 @@ const ProgramView = () => {
             await deleteItem({id}).unwrap();
             setProgramView((prevData) => prevData.filter((item) => item.id !== id))
         } catch (error) {
-            console.error("Error deleting program: ", error);
+            // console.error("Error deleting program: ", error);
+            deleteProgram = "Error deleting program:"
         }
     }
 
