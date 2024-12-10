@@ -112,7 +112,9 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
             setErrorMessage(null);
             console.log(response)
         } catch (error) {
-            setErrorMessage(error.data?.message || "An unexpected error occurred.");
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            setErrorMessage(error?.data?.message || "An unexpected error occurred.");
         }
     };
 

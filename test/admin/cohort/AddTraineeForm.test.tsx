@@ -1,4 +1,4 @@
-import { render, screen, fireEvent,cleanup,waitFor,act} from "@testing-library/react";
+import { render, screen, fireEvent,cleanup,waitFor} from "@testing-library/react";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 import userEvent from '@testing-library/user-event';
 import { Providers } from "@/app/provider";
