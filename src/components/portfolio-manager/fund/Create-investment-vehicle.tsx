@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Label } from '@/components/ui/label';
 import {inter} from "@/app/fonts"
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
-import RichTextEditor from '@/reuseable/Input/Ritch-text-editor';
+// import RichTextEditor from '@/reuseable/Input/Ritch-text-editor';
 import Isloading from '@/reuseable/display/Isloading';
 
 
@@ -37,6 +37,7 @@ import Isloading from '@/reuseable/display/Isloading';
   }
 function CreateInvestmentVehicle({setIsOpen}:props) {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
+    const [isError, setError] = useState('')
 
     const handleCloseModal = () => {
         if (setIsOpen) {
@@ -73,11 +74,16 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
       .min(1, 'Rate must be at least 1.') 
       .max(100, 'Rate must be at most 100.') 
       .required('Rate is required'),
+      mandate:Yup.string()
+      .trim()
+      .max(2500, 'Mandate must be 2500 characters or less')
       })
 
      const handleSubmit = () => {
 
       }
+
+      const maxChars = 1500;
   return (
     <div id='createInvestmentVehicleId'>
         <Formik
@@ -87,7 +93,7 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
         validationSchema={validationSchema}
         >
        {
-        ({errors,isValid, touched,setFieldValue}) => (
+        ({errors,isValid, touched,setFieldValue,values}) => (
             <Form className={`${inter.className}`}>
               <div
                className='grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto'
@@ -331,7 +337,35 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
                 </div>
                 <div className='relative bottom-3'>
                 <Label htmlFor="mandate">Vehicle mandate</Label>
-                 <RichTextEditor value="" onChange={(value) => setFieldValue("vehicleMandate", value)} />
+
+                 <Field
+                 as="textarea"
+                id="mandate"
+                name="mandate"
+                className="w-full p-3 border rounded focus:outline-none mt-2 resize-none "
+                placeholder="Enter cohort description"
+                rows={4}
+                maxLength={maxChars}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { 
+                  const value = e.target.value; 
+                  if (value.length <= maxChars) { 
+                    setFieldValue("mandate", value); } }} 
+                onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => { 
+                  const paste = e.clipboardData.getData('text'); 
+                  if (paste.length + values.mandate.length > maxChars) { 
+                    e.preventDefault(); 
+                    setError('Mandate must be 2500 characters or less'); } }}
+                />
+             {/* {
+              errors.mandate && touched.mandate &&  (
+                 <ErrorMessage
+              name="mandate"
+              component="div"
+              id='editCohortDescriptionError'
+              className="text-red-500 text-sm"
+            /> 
+              )
+             } */}
                 </div>
                 <div className='md:flex gap-4 justify-end mt-2 mb-4 md:mb-0'>
                 <Button 
@@ -358,6 +392,7 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
                 </Button>
               </div>
               </div>
+              <p className={`text-error500 flex justify-center items-center ${isError? "mb-3" : ""}`}>{isError}</p>
             </Form>
         )
        }

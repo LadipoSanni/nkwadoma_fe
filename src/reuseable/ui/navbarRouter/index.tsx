@@ -4,7 +4,8 @@ import {inter} from "@/app/fonts";
 interface Props <T extends navbarRouterItemsProps> {
     navbarItems: T[] | undefined,
     currentTab: string | undefined | string[] | null,
-    handleClick: (name: string,  id?: string ) => void,
+    handleClick: (name: string,  id?: string, isActive?: boolean ) => void,
+
 }
 
 
@@ -29,8 +30,8 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                     key={item?.id + index}
                     id={item.id}
                     data-testid={item.id}
-                    className={`inline-flex h-fit py-2 gap-2 px-1 w-full ${(currentTab === item.name ?currentTabStyle : noStyle  )} `}
-                    onClick={() => {handleClick(item.name, item.route)}}
+                    className={`inline-flex h-fit py-2 gap-2 px-1 w-full ${item.isActive ? `${(currentTab === item.name ?currentTabStyle : noStyle  )}` :  ''}  `}
+                    onClick={() => {handleClick(item.name, item.route, item.isActive)}}
                 >
                     <div className={` flex gap-2`}>
                         <div id={'navbarRouteIcon' + item.id}
@@ -38,7 +39,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                         >{item?.icon}</div>
                         <span id={'navbarRouterName' + item.id}
                               data-testid={`navbarRouteName` + item.id}
-                              className={`text-xs mt-auto mb-auto font-thin   ${inter.className}  ${(currentTab !== item.name ? tabNameStyle : currentTabNameStyle)} `}>{item.name}</span>
+                              className={`text-xs mt-auto mb-auto font-thin   ${inter.className}  ${item.isActive ? `${(currentTab !== item.name ? tabNameStyle : currentTabNameStyle)}` : 'text-[#d7d7d7]'} `}>{item.name}</span>
 
                     </div>
                 </button>

@@ -5,6 +5,7 @@ import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/
 import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import {DropdownMenuSeparator} from "@/components/ui/dropdown-menu";
+import {formatAmount} from "@/utils/Format";
 
 
 interface breakdownProps {
@@ -67,7 +68,7 @@ export const Breakdown: React.FC<breakdownProps> = ({breakDown}) => {
                                 <p>{item.itemName}</p>
                             </div>
                             <div className="text-meedlBlack">
-                                <p>{item.itemAmount}</p>
+                                <p>{formatAmount(item.itemAmount)}</p>
                             </div>
                         </div>
                         {index === 3 && index < breakDown.length - 1 && (
