@@ -68,7 +68,7 @@ const SideBar = () => {
           await logout({})
          router.push("/auth/login")
      }catch (error){
-         console.log("error: ", error)
+         // console.log("error: ", error)
          router.push("/auth/login")
 
      }
@@ -96,11 +96,12 @@ const SideBar = () => {
             id: 'loan',
             name: 'Loan',
             route: '/loan',
-            isActive: true,
+            isActive: false,
             icon: <Icon icon="material-symbols:money-bag-outline"
                         height={"1.2rem"}
                         width={"1.2rem"}
-                        color={current === 'Loan' ? '#142854' : '#939cb0'}
+                        color={'#d7d7d7'}
+                // color={current === 'Loan' ? '#142854' : '#939cb0'}
             ></Icon>
 
         },
