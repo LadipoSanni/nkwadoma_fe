@@ -36,6 +36,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const methods = useForm<FormData>({mode: 'onChange'});
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
+    const [isDataError, setDataError] = useState("");
     const [loaneeIdentityData, setLoaneeIdentityData] = useState<FormData>({
         imageUrl: "",
         loanReferralId: "",
@@ -64,17 +65,25 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     };
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
-        const encryptionKey = "secret_key";
+        const encryptionKey = process.env.APP_DEV_IV_ENCRYPTION_SECRET_KEY;
+        const ivKey = process.env.APP_DEV_IV_KEY
+        let iv
+        if (ivKey) {
+            iv = CryptoJS.enc.Utf8.parse(ivKey);
+        }
 
-        const secretKey = CryptoJS.enc.Utf8.parse(encryptionKey.padEnd(16, " "));
-        const iv = CryptoJS.enc.Utf8.parse("4983929933491528");
-
-        data.bvn  = CryptoJS.AES.encrypt(data.bvn, secretKey, { iv: iv }).toString();
-        data.nin = CryptoJS.AES.encrypt(data.nin, secretKey, { iv: iv }).toString();
-        console.log(data)
-        setLoaneeIdentityData(data)
-        setIsSecondModalOpen(true);
-        onClose();
+        let secretKey;
+        if (encryptionKey) {
+            secretKey = CryptoJS.enc.Utf8.parse(encryptionKey.padEnd(16, " "));
+            data.bvn  = CryptoJS.AES.encrypt(data.bvn, secretKey, { iv: iv }).toString();
+            data.nin = CryptoJS.AES.encrypt(data.nin, secretKey, { iv: iv }).toString();
+            console.log(data)
+            setLoaneeIdentityData(data)
+            setIsSecondModalOpen(true);
+            onClose();
+        }else {
+            setDataError("Unable to encrypt data. Please try again later.");
+        }
     };
 
     return (
@@ -176,6 +185,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                             disabled={!methods.formState.isValid}>Continue
                                     </Button>
                                 </div>
+                                <p className={"text-red-800 text-[13px]"}>{isDataError}</p>
                             </main>
                         </form>
                     </FormProvider>
