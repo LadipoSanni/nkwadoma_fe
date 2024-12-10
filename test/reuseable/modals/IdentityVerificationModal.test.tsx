@@ -41,7 +41,6 @@ describe('IdentityVerificationModal', () => {
         });
 
         fireEvent.submit(screen.getByRole('button', {name: /Continue/i}));
-
         await waitFor(() => {
             expect(screen.getByText(/Liveness check/i)).toBeInTheDocument();
         });
