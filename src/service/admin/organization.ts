@@ -87,12 +87,6 @@ export const organizationApi = createApi({
             }),
              providesTags: [ "organization"]
         }),
-        searchForAnOrganization: builder.query({
-            query:() => ({
-                url: "organization/search",
-                method: "GET",
-            }), 
-        })
     })
 })
 

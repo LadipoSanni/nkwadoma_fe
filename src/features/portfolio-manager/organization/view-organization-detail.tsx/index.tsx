@@ -15,6 +15,7 @@ import {  useGetDetailsOfOrganizationQuery } from '@/service/admin/organization'
 import TableModal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
 import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
+// import { useSearchOrganisationByNameQuery } from '@/service/admin/organization';
 
 
 
@@ -26,7 +27,7 @@ interface TableRowData {
 const ViewOrganizationDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {data:organizationDetail} = useGetDetailsOfOrganizationQuery({})
-  console.log("the details: ",organizationDetail);
+  // const [searchTerm, setSearchTerm] = useState("");
   
   const handleInviteClick = () => {
     setIsModalOpen(true);
@@ -226,7 +227,7 @@ const ViewOrganizationDetail = () => {
                       "text-meedlBlue text-[14px] font-medium leading-[150%]"
                     }
                   >
-                    {organizationDetail?.data.email}
+                    {organizationDetail?.data.websiteAddress}
                   </p>
                 </div>
               </div>
