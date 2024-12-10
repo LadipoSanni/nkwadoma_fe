@@ -49,6 +49,7 @@ const Step3 = () => {
                     description: data?.message,
                     status: "success",
                 })
+                router.push("/auth/login")
             }
         }catch(error){
             // console.log("error: ", error)
