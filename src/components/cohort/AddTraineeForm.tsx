@@ -25,7 +25,7 @@ type cohortBreakDown = {
     loanBreakdownId: string;
 }
 
-function AddTraineeForm({cohortId, setIsOpen, tuitionFee }: Props) {
+function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
     const COHORTID = getItemSessionStorage("cohortId");
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
@@ -110,10 +110,13 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee }: Props) {
             toastPopUp.showToast();
             handleCloseModal();
             setErrorMessage(null);
+            console.log(response)
         } catch (error) {
             setErrorMessage(error.data?.message || "An unexpected error occurred.");
         }
     };
+
+
 
     const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const { value } = e.target;
