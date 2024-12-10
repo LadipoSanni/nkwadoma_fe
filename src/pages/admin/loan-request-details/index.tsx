@@ -11,7 +11,7 @@ import {cabinetGroteskRegular, inter} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
 import styles from "./index.module.css"
-import LoanDetailsCard from "@/reuseable/cards/loan-details-card";
+// import LoanDetailsCard from "@/reuseable/cards/loan-details-card";
 
 
 const LoanDetails = () => {
@@ -27,16 +27,25 @@ const LoanDetails = () => {
         "Additional details",
         "Loan details"
     ]
-    const dataList = [
-        {label: "Alternate email address", value: "mariiam@gmail.com"},
-        {label: "Alternate phone number", value: "+2347039393309"},
-        {label: "Alternative residential address", value: "300, Herbert Macaulay Way, Alagomeji, Sabo, Yaba"},
-        {label: "Next of kin", value: "Samuel koko"},
-        {label: "Next of kin phone number", value: "0903849449"},
-        {label: "Next of kin email address", value: "maria@gmail.com"},
-        {label: "Next of kin relation", value: "brother"},
-
-    ];
+    // const dataList = [
+    //     {label: "Alternate email address", value: "mariiam@gmail.com"},
+    //     {label: "Alternate phone number", value: "+2347039393309"},
+    //     {label: "Alternative residential address", value: "300, Herbert Macaulay Way, Alagomeji, Sabo, Yaba"},
+    //     {label: "Next of kin", value: "Samuel koko"},
+    //     {label: "Next of kin phone number", value: "0903849449"},
+    //     {label: "Next of kin email address", value: "maria@gmail.com"},
+    //     {label: "Next of kin relation", value: "brother"},
+    //
+    // ];
+    // const componentSteps : {
+    //     'step1': <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
+    //                      backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>,
+    //     'step2' : <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
+    //                      backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>,
+    //     'step3':<LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
+    //                      backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>
+    //
+    // }
 
     // const component = [
     //     {
@@ -106,9 +115,10 @@ const LoanDetails = () => {
                     >
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab}/>
                     </div>
-                    <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
-                                     backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>
-
+                    {/*<LoanDetailsCard/>*/}
+                   {/*<div>*/}
+                   {/*    {componentSteps[currentTab]}*/}
+                   {/*</div>*/}
                 </div>
             </div>
         </div>

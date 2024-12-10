@@ -219,7 +219,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
     });
 
   const handleSubmit = async (values: typeof initialFormValue) => {
-     console.log("values: ",values);
+     // console.log("values: ",values);
     if (!navigator.onLine) {
       networkPopUp.showToast();
       if (setIsOpen) {

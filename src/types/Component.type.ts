@@ -5,14 +5,15 @@ export  interface navbarRouterItemsProps {
     name: string,
     route?: string,
     icon?:string|React.ReactElement| JSX.Element;
-    handleClick?: (element: unknown)=> void
+    handleClick?: (element: unknown)=> void,
+    isActive?: boolean
 }
 
 export  interface navbarItemsProps {
     id: string,
     name: string,
     icon?:string|React.ReactElement| JSX.Element;
-    handleClick: (id?:string, name?: string)=> void
+    handleClick: (id?:string, name?: string, isActive?: boolean)=> void
 }
 
 export interface cohortLoaneeResponse {
