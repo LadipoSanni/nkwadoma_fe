@@ -185,7 +185,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                             disabled={!methods.formState.isValid}>Continue
                                     </Button>
                                 </div>
-                                <p className={"text-red-800 text-[13px]"}>{isDataError}</p>
+                                <p className={"text-red-800 text-[13px]"} id={"encryptionFailure"}>{isDataError}</p>
                             </main>
                         </form>
                     </FormProvider>
