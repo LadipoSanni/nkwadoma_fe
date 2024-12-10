@@ -5,7 +5,8 @@ export  interface navbarRouterItemsProps {
     name: string,
     route?: string,
     icon?:string|React.ReactElement| JSX.Element;
-    handleClick?: (element: unknown)=> void
+    handleClick?: (element: unknown)=> void,
+    isActive?: boolean
 }
 
 export  interface navbarItemsProps {

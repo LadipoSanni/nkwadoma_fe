@@ -5,6 +5,7 @@ interface Props <T extends navbarRouterItemsProps> {
     navbarItems: T[] | undefined,
     currentTab: string | undefined | string[] | null,
     handleClick: (name: string,  id?: string ) => void,
+
 }
 
 
@@ -29,7 +30,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                     key={item?.id + index}
                     id={item.id}
                     data-testid={item.id}
-                    className={`inline-flex h-fit py-2 gap-2 px-1 w-full ${(currentTab === item.name ?currentTabStyle : noStyle  )} `}
+                    className={`inline-flex h-fit py-2 gap-2 px-1 w-full ${(currentTab === item.name ?currentTabStyle : noStyle  )}  `}
                     onClick={() => {handleClick(item.name, item.route)}}
                 >
                     <div className={` flex gap-2`}>
@@ -38,7 +39,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                         >{item?.icon}</div>
                         <span id={'navbarRouterName' + item.id}
                               data-testid={`navbarRouteName` + item.id}
-                              className={`text-xs mt-auto mb-auto font-thin   ${inter.className}  ${(currentTab !== item.name ? tabNameStyle : currentTabNameStyle)} `}>{item.name}</span>
+                              className={`text-xs mt-auto mb-auto font-thin   ${inter.className}  ${item.isActive ? `${(currentTab !== item.name ? tabNameStyle : currentTabNameStyle)}` : 'text-[#fdfdfd]'} `}>{item.name}</span>
 
                     </div>
                 </button>

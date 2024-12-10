@@ -80,16 +80,22 @@ const SideBar = () => {
         {
 
             icon: <MdOutlineHome
+                // color={'#fdfdfd'}
+                color={'#fdfdfd'}
                 color={current === 'Overview' ? '#142854' : '#939cb0'}
-                className={` h-[1.2rem] w-[1.2em] `}/>,
+                className={` h-[1.2rem] w-[1.2em] `}
+            />,
             id: 'Overview',
             name: 'Overview',
-            route: '/overview'
+            isActive: false,
+
+            // route: '/overview'
         },
         {
             id: 'loan',
             name: 'Loan',
             route: '/loan',
+            isActive: true,
             icon: <Icon icon="material-symbols:money-bag-outline"
                         height={"1.2rem"}
                         width={"1.2rem"}
@@ -101,6 +107,7 @@ const SideBar = () => {
             id: 'loanProduct',
             name: 'Loan Product',
             route: '/loan-product',
+            isActive: true,
             icon: <MdOutlineInventory2
 
                 color={current === 'Loan Product' ? '#142854' : '#939CB0'}
@@ -112,6 +119,7 @@ const SideBar = () => {
             id: 'organizations',
             name: 'Organizations',
             route: '/organizations',
+            isActive: true,
             icon: <MdOutlineAccountBalance
                 className={` h-[1.2rem] w-[1.2em]  `}
                 color={current === 'Organizations' ? '#142854' : '#939CB0'}
@@ -121,7 +129,8 @@ const SideBar = () => {
         {
             id: 'loanee',
             name: 'Loanee',
-            route: '/loanee',
+            // route: '/loanee',
+            isActive: false,
             icon: <MdOutlinePersonOutline
                 color={current === 'Loanee' ? '#142854' : '#939CB0'}
                 className={` h-[1.2rem] w-[1.2rem]   `}/>
@@ -129,8 +138,10 @@ const SideBar = () => {
         {
             id: 'funds',
             name: 'Funds',
-            route: '/funds',
+            isActive: false,
+            // route: '/funds',
             icon: <MdOutlinePayments
+                // color={'#fdfdfd'}
                 color={current === 'Funds' ? '#142854' : '#939CB0'}
                 className={` h-[1.2rem] w-[1.2rem]  `}/>
         },
@@ -138,8 +149,10 @@ const SideBar = () => {
 
             id: 'investors',
             name: 'Investors',
-            route: '/investors',
+            isActive: false,
+            // route: '/investors',
             icon: <MdOutlineBusinessCenter
+                   // color={'#f0f0f0'}
                 color={current === 'Investors' ? '#142854' : '#939CB0'}
                 className={` h-[1.2rem] w-[1.2rem]  `}/>
         },
@@ -153,6 +166,7 @@ const SideBar = () => {
                 className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
             />,
             id: 'overview',
+            isActive: true,
             name: "Overview",
             route: '/overview'
         },
@@ -162,6 +176,7 @@ const SideBar = () => {
             />,
             id: 'transaction',
             name: "Transaction",
+            isActive: true,
             route: '/transaction'
         },
         {
@@ -172,6 +187,7 @@ const SideBar = () => {
                 width={"1.3rem"}
             />,
             id: 'repayment',
+            isActive: true,
             name: "Repayment",
             route: '/repayment'
         },
@@ -182,15 +198,20 @@ const SideBar = () => {
     const INSTITUTION_ADMIN: navbarRouterItemsProps[] = [
         {
             icon: <MdOutlineHome
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}/>,
+                color={'#fdfdfd'}
+
+                // className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
+            />,
             id: 'Overview',
             name: 'Overview',
-            route: '/Overview'
+            // route: '/Overview'
+            isActive: false
         },
         {
             id: 'program',
             name: 'Program',
             route: '/program',
+            isActive: true,
             icon: <Icon
                 icon="mynaui:book"
                 color={current === 'Loan' ? '#142854' : '#667085'}
@@ -204,46 +225,53 @@ const SideBar = () => {
             id: 'cohort',
             name: 'Cohort',
             route: '/cohort',
+            isActive: true,
             icon: <MdOutlinePeopleAlt
                 className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}/>
         },
         {
             id: 'loan',
             name: 'Loan',
-            route: '/loan',
+            // route: '/loan',
+            isActive: false,
             icon: <Icon icon="material-symbols:money-bag-outline"
                         height={"1.2rem"}
                         width={"1.3rem"}
-                        color={current === 'Loan' ? '#142854' : '#667085'}
+                        color={'#fdfdfd'}
+                        // color={current === 'Loan' ? '#142854' : '#667085'}
             ></Icon>
 
         },
         {
             id: 'loanee',
             name: 'Loanee',
-            route: '/loanee',
+            isActive: false,
+            // route: '/loanee',
             icon: <MdOutlinePersonOutline
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Loanee' ? currentTextLiterals : textLiterals} `}/>
+                color={'#939CB0'}
+
+                className={` h-[1.2rem] w-[1.2rem] ${current === 'Loanee' ? currentTextLiterals : textLiterals} `}
+                />
         },
     ]
 
     const navbarContainerItems: navbarItemsProps[] = [
-        {
-            id: 'settings',
-            name: 'Settings',
-            icon: <GearIcon
-                color={currentNavBottom === 'Settings' ? '#142854' : '#939CB0'}
-                className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
-            handleClick: handleClick
-        },
-        {
-            id: 'help&support',
-            name: "Help & Support",
-            icon: <QuestionMarkCircledIcon
-                color={currentNavBottom === "Help & Support" ? '#142854' : '#939CB0'}
-                className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
-            handleClick: handleClick
-        },
+        // {
+        //     id: 'settings',
+        //     name: 'Settings',
+        //     icon: <GearIcon
+        //         color={currentNavBottom === 'Settings' ? '#142854' : '#939CB0'}
+        //         className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
+        //     handleClick: handleClick
+        // },
+        // {
+        //     id: 'help&support',
+        //     name: "Help & Support",
+        //     icon: <QuestionMarkCircledIcon
+        //         color={currentNavBottom === "Help & Support" ? '#142854' : '#939CB0'}
+        //         className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
+        //     handleClick: handleClick
+        // },
         {
             id: 'logout',
             name: 'Logout',
