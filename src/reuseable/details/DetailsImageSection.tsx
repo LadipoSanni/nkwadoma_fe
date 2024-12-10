@@ -41,7 +41,6 @@ const DetailsImageSection: React.FC<detailsProps> = ({
         setIsOpen(!isOpen)
     }
 
-    const cohortId = "1"
 
     return (
         <main id="details-main" data-testid="details-main" className={``}>
@@ -122,7 +121,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             className={"md:w-full pb-1"}
                             icon={Cross2Icon}
                 >
-                    <AddTraineeForm cohortId={cohortId} setIsOpen={handleModalOpen}/>
+                    <AddTraineeForm  setIsOpen={handleModalOpen}/>
                 </TableModal>
             </div>
         </main>
