@@ -259,7 +259,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
               onChange={(value) => setFieldValue("industry", value)}
               name="industry"
               placeHolder='Select industry'
-              isItemDisabled={(item) => item !== 'BANKING'}
+              isItemDisabled={(item) => item !== 'EDUCATION'}
              />
            {
               errors.industry && touched.industry &&  (
