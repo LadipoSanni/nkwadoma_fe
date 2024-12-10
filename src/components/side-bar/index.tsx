@@ -40,12 +40,14 @@ const SideBar = () => {
 
     const [currentTab, setCurrentTab] = React.useState(current)
 
-    const clickNavbar = (name: string, route?: string) => {
-        setCurrentTab(name)
-        store.dispatch(setCurrentNavBottomItem(name))
-        store.dispatch(setCurrentNavbarItem(name))
-        if(route){
-            router.push(route)
+    const clickNavbar = (name: string, route?: string, isActive?: boolean) => {
+        if (isActive){
+            setCurrentTab(name)
+            store.dispatch(setCurrentNavBottomItem(name))
+            store.dispatch(setCurrentNavbarItem(name))
+            if(route){
+                router.push(route)
+            }
         }
 
     }
@@ -80,9 +82,8 @@ const SideBar = () => {
         {
 
             icon: <MdOutlineHome
-                // color={'#fdfdfd'}
-                color={'#fdfdfd'}
-                color={current === 'Overview' ? '#142854' : '#939cb0'}
+                color={'#d7d7d7'}
+                // color={current === 'Overview' ? '#142854' : '#939cb0'}
                 className={` h-[1.2rem] w-[1.2em] `}
             />,
             id: 'Overview',
@@ -132,7 +133,8 @@ const SideBar = () => {
             // route: '/loanee',
             isActive: false,
             icon: <MdOutlinePersonOutline
-                color={current === 'Loanee' ? '#142854' : '#939CB0'}
+                color={'#d7d7d7'}
+                // color={current === 'Loanee' ? '#142854' : '#939CB0'}
                 className={` h-[1.2rem] w-[1.2rem]   `}/>
         },
         {
@@ -141,8 +143,8 @@ const SideBar = () => {
             isActive: false,
             // route: '/funds',
             icon: <MdOutlinePayments
-                // color={'#fdfdfd'}
-                color={current === 'Funds' ? '#142854' : '#939CB0'}
+                color={'#d7d7d7'}
+                // color={current === 'Funds' ? '#142854' : '#939CB0'}
                 className={` h-[1.2rem] w-[1.2rem]  `}/>
         },
         {
@@ -152,8 +154,8 @@ const SideBar = () => {
             isActive: false,
             // route: '/investors',
             icon: <MdOutlineBusinessCenter
-                   // color={'#f0f0f0'}
-                color={current === 'Investors' ? '#142854' : '#939CB0'}
+                color={'#d7d7d7'}
+                // color={current === 'Investors' ? '#142854' : '#939CB0'}
                 className={` h-[1.2rem] w-[1.2rem]  `}/>
         },
 
@@ -198,8 +200,9 @@ const SideBar = () => {
     const INSTITUTION_ADMIN: navbarRouterItemsProps[] = [
         {
             icon: <MdOutlineHome
-                color={'#fdfdfd'}
-
+                // color={'#fdfdfd'}
+                color={'#d7d7d7'}
+                className={`h-[1.2rem] w-[1.2rem]`}
                 // className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
             />,
             id: 'Overview',
@@ -237,7 +240,9 @@ const SideBar = () => {
             icon: <Icon icon="material-symbols:money-bag-outline"
                         height={"1.2rem"}
                         width={"1.3rem"}
-                        color={'#fdfdfd'}
+                        // color={'#fdfdfd'}
+                        color={'#d7d7d7'}
+                        className={`h-[1.2rem] w-[1.2rem]`}
                         // color={current === 'Loan' ? '#142854' : '#667085'}
             ></Icon>
 
@@ -248,9 +253,9 @@ const SideBar = () => {
             isActive: false,
             // route: '/loanee',
             icon: <MdOutlinePersonOutline
-                color={'#939CB0'}
-
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Loanee' ? currentTextLiterals : textLiterals} `}
+                color={'#d7d7d7'}
+                className={`h-[1.2rem] w-[1.2rem]`}
+                // className={` h-[1.2rem] w-[1.2rem] ${current === 'Loanee' ? currentTextLiterals : textLiterals} `}
                 />
         },
     ]
