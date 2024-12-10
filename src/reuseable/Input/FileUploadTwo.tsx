@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { FiUploadCloud } from "react-icons/fi";
 import { Label } from "@/components/ui/label";
-import { MdOutlineDelete, MdOutlineEdit, MdCheck } from "react-icons/md";
+import { MdOutlineDelete, MdOutlineEdit} from "react-icons/md";
 import { uploadImageToCloudinary } from '@/utils/UploadToCloudinary';
 import Image from 'next/image';
 
