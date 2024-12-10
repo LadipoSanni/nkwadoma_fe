@@ -330,7 +330,7 @@ const ProgramView = () => {
                     <Button variant={"secondary"}
                             size={"lg"}
                             className={`${inter.className} bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center`}
-                            id='createProgramButton'
+                            id='createProgramModal'
                             onClick={handleModalOpen}>
                         Create program
                     </Button>

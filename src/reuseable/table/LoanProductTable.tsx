@@ -257,7 +257,7 @@ function Tables<T extends TableRowData>({
                                   asChild
                                   className={`border-none shadow-none cursor-pointer hover:bg-b`}
                                 >
-                                  <Button className="border-none shadow-none">
+                                  <Button className="border-none shadow-none" id="kirkBabButton">
                                     <DotsVerticalIcon className="w-5 h-6 text-grey500 font-extrabold" />
                                   </Button>
                                 </MenubarTrigger>
