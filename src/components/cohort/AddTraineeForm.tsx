@@ -13,7 +13,6 @@ import { getItemSessionStorage } from "@/utils/storage";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
 
-
 interface Props {
     cohortId: string;
     tuitionFee?: string;
@@ -47,9 +46,9 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
     useEffect(() => {
         if (data?.data) {
             setCohortBreakDown(data.data);
-            calculateTotal(data.data);
+            calculateTotal(data.data, tuitionFee);
         }
-    }, [data]);
+    }, [data, tuitionFee]);
 
     const validationSchemaStep1 = Yup.object().shape({
         firstName: Yup.string()
@@ -89,9 +88,10 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
         }
     };
 
-    const calculateTotal = (items: cohortBreakDown[]) => {
+    const calculateTotal = (items: cohortBreakDown[], tuitionFee?: string) => {
         const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
-        setTotalItemAmount(total);
+        const totalWithTuition = total + (tuitionFee ? parseFloat(tuitionFee) : 0);
+        setTotalItemAmount(totalWithTuition);
     };
 
     const handleSubmitStep1 = () => {
@@ -127,7 +127,7 @@ function AddTraineeForm({ cohortId, setIsOpen, tuitionFee }: Props) {
             i === index ? { ...item, itemAmount: value } : item
         );
         setCohortBreakDown(updatedData);
-        calculateTotal(updatedData);
+        calculateTotal(updatedData, tuitionFee);
     };
 
     return (
