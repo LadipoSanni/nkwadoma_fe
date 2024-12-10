@@ -141,6 +141,33 @@ function AddTraineeForm({cohortId, setIsOpen, tuitionFee}: Props) {
                 loanBreakdown: cohortBreakDown
             }
         }
+        // const input =
+        //     {
+        //         "cohortId": "dcb8757b-ed21-41a8-afe2-02178970b734",
+        //         "userIdentity": {
+        //             "email": "randomFirstName@grr.la",
+        //             "firstName": "Favor ",
+        //             "lastName": "Mbata"
+        //         },
+        //         "loaneeLoanDetail": {
+        //             "initialDeposit": 100.00,
+        //             "amountRequested": 2000.00,
+        //             "loanBreakdown": [
+        //                 {
+        //                     "loaneeLoanBreakdownId" : "caf0a119-6fab-4a42-8d47-47ec375e58ae",
+        //                     "itemName": "Tuition Fee",
+        //                     "itemAmount": 100.00,
+        //                     "currency": "USD"
+        //                 },
+        //                 {
+        //                     "loaneeLoanBreakdownId" : "96556608-72b7-4c34-b9a2-d43040cbe3b0",
+        //                     "itemName": "Books",
+        //                     "itemAmount": 500.00,
+        //                     "currency": "USD"
+        //                 }
+        //             ]
+        //         }
+        //     }
         console.log("input: ",input)
         const response = addLoaneeToCohort(input).unwrap()
         console.log("response: ", response)
