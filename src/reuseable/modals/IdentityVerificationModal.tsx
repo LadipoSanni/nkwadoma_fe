@@ -1,56 +1,88 @@
 import React, {useState} from 'react';
-import {Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogOverlay} from '@/components/ui/dialog';
-import {FormProvider, useForm} from 'react-hook-form';
+import {Dialog, DialogClose, DialogContent, DialogHeader, DialogOverlay, DialogTitle} from '@/components/ui/dialog';
+import {FormProvider, SubmitHandler, useForm} from 'react-hook-form';
 import {Label} from '@/components/ui/label';
 import {Input} from '@/components/ui/input';
 import {cabinetGrotesk, inter} from "@/app/fonts";
-import {MdClose, MdOutlineAdd, MdHorizontalRule, MdOutlineCameraAlt} from "react-icons/md";
+import {MdClose, MdHorizontalRule, MdOutlineAdd, MdOutlineCameraAlt} from "react-icons/md";
 import {Collapsible, CollapsibleContent, CollapsibleTrigger} from '@/components/ui/collapsible';
 import {Button} from '@/components/ui/button';
-import {SubmitHandler} from 'react-hook-form';
 import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
+import CryptoJS from "crypto-js";
+import {uploadImageToCloudinary} from "@/utils/UploadToCloudinary";
+import {useVerifyIdentityMutation} from "@/service/users/Loanee_query";
 
 interface IdentityVerificationModalProps {
     isOpen: boolean;
+    loanReferralId: string;
     onClose: () => void;
     onThirdStepContinue: () => void;
 }
 
 type FormData = {
-    bvn: number;
-    nin: number;
+    bvn: string;
+    nin: string;
+    imageUrl: string;
+    loanReferralId: string;
 };
 
 const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                                                                  isOpen,
                                                                                  onClose,
-                                                                                 onThirdStepContinue
+                                                                                 onThirdStepContinue,
+                                                                                 loanReferralId
                                                                              }) => {
     const methods = useForm<FormData>({mode: 'onChange'});
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
+    const [isDataError, setDataError] = useState("");
+    const [loaneeIdentityData, setLoaneeIdentityData] = useState<FormData>({
+        imageUrl: "",
+        loanReferralId: "",
+        bvn: "",
+        nin: ""
+    });
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
     const [showCamera, setShowCamera] = useState(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+    const [verifyIdentity] = useVerifyIdentityMutation();
 
-    const handleCapture = (imageSrc: string | null) => {
+    const handleCapture = async (imageFile: File) => {
+        loaneeIdentityData.imageUrl = await uploadImageToCloudinary(imageFile);
+        loaneeIdentityData.loanReferralId = loanReferralId;
+        try {
+            const formData: FormData = loaneeIdentityData
+            console.log(formData);
+            const data = verifyIdentity(formData);
+            console.log("Response from backend: ",data);
+            onClose();
+        } catch (error) {
+            console.error("Error while submitting form:", error);
+        }
         setIsSecondModalOpen(false);
         setShowSuccessDialog(true);
-        console.log(imageSrc)
     };
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
-        try {
-            const formData: FormData = {
-                bvn: Number(data.bvn),
-                nin: Number(data.nin)
-            };
-            console.log(formData);
-            onClose();
+        const encryptionKey = process.env.APP_DEV_IV_ENCRYPTION_SECRET_KEY;
+        const ivKey = process.env.APP_DEV_IV_KEY
+        let iv
+        if (ivKey) {
+            iv = CryptoJS.enc.Utf8.parse(ivKey);
+        }
+
+        let secretKey;
+        if (encryptionKey) {
+            secretKey = CryptoJS.enc.Utf8.parse(encryptionKey.padEnd(16, " "));
+            data.bvn  = CryptoJS.AES.encrypt(data.bvn, secretKey, { iv: iv }).toString();
+            data.nin = CryptoJS.AES.encrypt(data.nin, secretKey, { iv: iv }).toString();
+            console.log(data)
+            setLoaneeIdentityData(data)
             setIsSecondModalOpen(true);
-        } catch (error) {
-            console.error("Error while submitting form:", error);
+            onClose();
+        }else {
+            setDataError("Unable to encrypt data. Please try again later.");
         }
     };
 
@@ -153,6 +185,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                             disabled={!methods.formState.isValid}>Continue
                                     </Button>
                                 </div>
+                                <p className={"text-red-800 text-[13px]"} id={"encryptionFailure"}>{isDataError}</p>
                             </main>
                         </form>
                     </FormProvider>
