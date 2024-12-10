@@ -12,10 +12,11 @@ type Props = {
     selectContent: Array<string | number>,
     name?: string,
     placeHolder?: string,
-    triggerId?: string
+    triggerId?: string,
+    isItemDisabled?: (item: string | number) => boolean;
 }
 
-function CustomSelect({value,onChange,className,selectContent,name,placeHolder,id,triggerId}: Props) {
+function CustomSelect({value,onChange,className,selectContent,name,placeHolder,id,triggerId,isItemDisabled}: Props) {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -25,6 +26,7 @@ function CustomSelect({value,onChange,className,selectContent,name,placeHolder,i
   return (
     <div>
       <Select
+      
        name={name}
        value={value}
         onValueChange={(val:string) => {onChange(val)}}
@@ -35,12 +37,12 @@ function CustomSelect({value,onChange,className,selectContent,name,placeHolder,i
         role='button'
 
         >
-          <SelectValue className='' data-testid='SelectContent' placeholder={placeHolder}/>
+          <SelectValue className='' data-testid='SelectContent' placeholder={placeHolder} id={`selectId${id}`}/>
           <div className=''>
                 {dropdownOpen ? (
-                    <ChevronUpIcon data-testid="ChevronUpIcon" className="h-4  font-semibold"/>
+                    <ChevronUpIcon data-testid="ChevronUpIcon" id='chevronUp' className="h-4  font-semibold"/>
                 ) : (
-                    <ChevronDownIcon data-testid="ChevronDownIcon" className="h-4 font-semibold"/>
+                    <ChevronDownIcon data-testid="ChevronDownIcon" id='chevronDown' className="h-4 font-semibold"/>
                 )}
             </div>
          </SelectTrigger>
@@ -49,16 +51,19 @@ function CustomSelect({value,onChange,className,selectContent,name,placeHolder,i
          className='border-none  border-[#FAFBFC] text-[#404653]  text-sm'
          style={{zIndex:1000}}
          >
-          <SelectGroup className='' id='selectGroup'>
+          <SelectGroup className='selectgroup'>
             {selectContent.map((content,index) => (
+               <div key={content} id={`${content}`}>
               <SelectItem 
               key={`${content}-${index}`} 
-              id={`${id}item${index}`}
+              id={`${content}`}
               value={String(content)}  
-              className=''
+              className={`${content}`}
+              disabled={isItemDisabled ? isItemDisabled(content) : false}
               >
-                {content}
+             {content}
               </SelectItem>
+              </div>  
             ))}
           </SelectGroup>
          </SelectContent>

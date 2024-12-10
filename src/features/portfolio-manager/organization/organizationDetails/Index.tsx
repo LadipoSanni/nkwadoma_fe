@@ -277,7 +277,7 @@ const OrganizationDetails = () => {
                       "text-meedlBlue text-[14px] font-medium leading-[150%]"
                     }
                   >
-                    {organizationDetails?.data.email}
+                    {organizationDetails?.data.websiteAddress}
                   </p>
                 </div>
               </div>

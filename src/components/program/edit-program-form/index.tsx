@@ -56,11 +56,11 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
         deliveryType: programDetail?.deliveryType,
         mode: programDetail?.mode,
         duration: programDetail?.duration,
-        programDescription: programDetail?.programDescription,
+        programDescription: programDetail?.programDescription || "",
     }
 
     // const [isButtonLoading] = useState(false);
-    const maxChars = 1500;
+    const maxChars = 2500;
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
     const programModes=["FULL_TIME", "PART_TIME"]
@@ -258,6 +258,15 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                   placeholder="Enter program description"
                   rows={4}
                   maxLength={maxChars}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { 
+                    const value = e.target.value; 
+                    if (value.length <= maxChars) { 
+                      setFieldValue("programDescription", value); } }} 
+                  onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => { 
+                    const paste = e.clipboardData.getData('text'); 
+                    if (paste.length + values.programDescription.length > maxChars) { 
+                      e.preventDefault(); 
+                      setError('Program description must be 2500 characters or less'); } }}
                   /> 
                   {
                     errors.programDescription && touched.programDescription &&  (
