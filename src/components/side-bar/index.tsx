@@ -68,9 +68,7 @@ const SideBar = () => {
           await logout({})
          router.push("/auth/login")
      }catch (error){
-         // console.log("error: ", error)
-         router.push("/auth/login")
-
+         console.log("error:: ", error)
      }
     }
 
