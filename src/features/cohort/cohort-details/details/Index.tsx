@@ -78,13 +78,13 @@ const CohortDetails = () => {
                 name: details?.name || "",
                 activationStatus: details?.activationStatus || "",
                 cohortStatus: details?.cohortStatus || "",
-                tuitionAmount: details?.tuitionAmount || "",
+                tuitionAmount: details?.tuitionAmount,
                 totalCohortFee: details?.totalCohortFee || "",
                 imageUrl: details?.imageUrl || "",
                 startDate: details?.startDate || "",
                 expectedEndDate: details?.expectedEndDate || "",
-                numberOfLoanees: details?.numberOfLoanees || "",
-                numberOfReferredLoanee: details?.numberOfReferredLoanee || "",
+                numberOfLoanees: details?.numberOfLoanees,
+                numberOfReferredLoanee: details?.numberOfReferredLoanee,
                 numberOfDropOut:details?. numberOfDropOut ,
                 numberOfEmployed:details?.numberOfEmployed ,
                 programName:details?.programName || "",
@@ -120,7 +120,7 @@ const CohortDetails = () => {
         {detail: "Total amount disbursed", value: formatAmount(details.amountDisbursed)},
         {detail: "Total amount repaid", value: formatAmount(details.amountRepaid)},
         {detail: "Total amount outstanding", value: formatAmount(details.numberOfEmployed)},
-        {detail: "Repayment rate", value: formatAmount(details.repaymentRate)},
+        {detail: "Repayment rate", value: "%"},
     ]
 
     const tagButtonData = [

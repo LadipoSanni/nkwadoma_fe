@@ -17,6 +17,18 @@ export const loaneeApi = createApi({
             }),
             providesTags: [`loanee`]
         }),
+        verifyIdentity: builder.mutation({
+            query: (formData: {
+                bvn: string
+                nin: string
+                loanReferralId: string
+            }) => ({
+                url: `/identity/verification/verify`,
+                method: "POST",
+                body: formData
+            }),
+            invalidatesTags: ({id}) => [{type: 'loanee', id}],
+        }),
         saveNextOfKinDetails: builder.mutation({
             query: (data)=> ({
                 url: '/next-of-kin-details',
@@ -38,6 +50,9 @@ export const loaneeApi = createApi({
 
 export const {
     useIsIdentityVerifiedQuery,
-    useViewLoanReferralDetailsQuery, useSaveNextOfKinDetailsMutation
+     useSaveNextOfKinDetailsMutation,
+    useViewLoanReferralDetailsQuery,
+    useVerifyIdentityMutation,
+    useLazyIsIdentityVerifiedQuery,
 } = loaneeApi;
 
