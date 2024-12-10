@@ -5,6 +5,7 @@ import {Button} from "@/components/ui/button";
 import {Dialog, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogClose} from "@/components/ui/dialog";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
+import {useSaveNextOfKinDetailsMutation} from "@/service/users/Loanee_query";
 
 interface AdditionalInformationProps {
     setCurrentStep?: (step: number) => void;
@@ -12,32 +13,40 @@ interface AdditionalInformationProps {
 
 const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrentStep}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [alternateEmail, setAlternateEmail] = useState('');
-    const [alternatePhone, setAlternatePhone] = useState('');
-    const [alternateAddress, setAlternateAddress] = useState('');
-    const [nextOfKinFirstName, setNextOfKinFirstName] = useState('');
-    const [nextOfKinEmail, setNextOfKinEmail] = useState('');
-    const [nextOfKinPhone, setNextOfKinPhone] = useState('');
-    const [nextOfKinRelationship, setNextOfKinRelationship] = useState('');
+    const [values, setValues] = useState({
+        firstName: "",
+        lastName: "To be fix",
+        email: "",
+        phoneNumber: "",
+        nextOfKinRelationship: "",
+        contactAddress: "To be fixed",
+        alternateEmail: "",
+        alternatePhoneNumber: "",
+        alternateContactAddress: "",
+    });
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+    const [saveNextOfKinDetails] = useSaveNextOfKinDetailsMutation()
 
     useEffect(() => {
-        const isFormValid = alternateEmail && alternatePhone && alternateAddress && nextOfKinFirstName && nextOfKinEmail && nextOfKinPhone && nextOfKinRelationship;
+        const isFormValid = Object.values(values).every((value) => value.trim() !== "");
         setIsButtonDisabled(!isFormValid);
-    }, [alternateEmail, alternatePhone, alternateAddress, nextOfKinFirstName, nextOfKinEmail, nextOfKinPhone, nextOfKinRelationship]);
+    }, [values]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setValues((prev) => ({ ...prev, [id]: value }));
+    };
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const response = await saveNextOfKinDetails(values);
+        console.log("response of saved data: ",response);
         setIsFormSubmitted(true);
         setIsModalOpen(false);
     };
-
     const handleContinueClick = () => {
-        if (isFormSubmitted) {
-            if (setCurrentStep) {
-                setCurrentStep(3);
-            }
+        if (isFormSubmitted && setCurrentStep) {
+            setCurrentStep(3);
         }
     };
 
@@ -67,40 +76,40 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate email
                                 address</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{alternateEmail}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.alternateEmail}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate phone
                                 number</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{alternatePhone}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.alternatePhoneNumber}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate residential
                                 address</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{alternateAddress}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.alternateContactAddress}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
                                 first
                                 name</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{nextOfKinFirstName}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.firstName}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
                                 email
                                 address</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{nextOfKinEmail}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.email}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
                                 phone
                                 number</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{nextOfKinPhone}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.phoneNumber}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
                                 relationship</p>
-                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{nextOfKinRelationship}</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.nextOfKinRelationship}</p>
                         </div>
 
                     </div>
@@ -137,44 +146,44 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
                                     email address</Label>
                                 <Input type="email" id="alternateEmail" placeholder="Enter email address"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={alternateEmail} onChange={(e) => setAlternateEmail(e.target.value)}/>
+                                       value={values.alternateEmail} onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
                                 <Label htmlFor="alternatePhone" className="block text-sm font-medium text-labelBlue">Alternate
                                     phone number</Label>
-                                <Input type="tel" id="alternatePhone" placeholder="Enter phone number"
+                                <Input type="tel" id="alternatePhoneNumber" placeholder="Enter phone number"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={alternatePhone} onChange={(e) => setAlternatePhone(e.target.value)}/>
+                                       value={values.alternatePhoneNumber} onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
                                 <Label htmlFor="alternateAddress" className="block text-sm font-medium text-labelBlue">Alternate
                                     residential address</Label>
-                                <Input type="text" id="alternateAddress" placeholder="Enter residential address"
+                                <Input type="text" id="alternateContactAddress" placeholder="Enter residential address"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={alternateAddress} onChange={(e) => setAlternateAddress(e.target.value)}/>
+                                       value={values.alternateContactAddress} onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
                                 <Label htmlFor="nextOfKinFirstName"
                                        className="block text-sm font-medium text-labelBlue">Alternate next of Kin&#39;s
                                     first name</Label>
-                                <Input type="text" id="nextOfKinFirstName" placeholder="Enter first name"
+                                <Input type="text" id="firstName" placeholder="Enter first name"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={nextOfKinFirstName}
-                                       onChange={(e) => setNextOfKinFirstName(e.target.value)}/>
+                                       value={values.firstName}
+                                       onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
                                 <Label htmlFor="nextOfKinEmail" className="block text-sm font-medium text-labelBlue">Alternate
                                     next of Kin&#39;s email address</Label>
-                                <Input type="email" id="nextOfKinEmail" placeholder="Enter email address"
+                                <Input type="email" id="email" placeholder="Enter email address"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={nextOfKinEmail} onChange={(e) => setNextOfKinEmail(e.target.value)}/>
+                                       value={values.email} onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
                                 <Label htmlFor="nextOfKinPhone" className="block text-sm font-medium text-labelBlue">Alternate
                                     next of Kin&#39;s phone number</Label>
-                                <Input type="tel" id="nextOfKinPhone" placeholder="Enter phone number"
+                                <Input type="tel" id="phoneNumber" placeholder="Enter phone number"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={nextOfKinPhone} onChange={(e) => setNextOfKinPhone(e.target.value)}/>
+                                       value={values.phoneNumber} onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
                                 <Label htmlFor="nextOfKinRelationship"
@@ -182,8 +191,8 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
                                     relationship</Label>
                                 <Input type="text" id="nextOfKinRelationship" placeholder="Enter relationship"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={nextOfKinRelationship}
-                                       onChange={(e) => setNextOfKinRelationship(e.target.value)}/>
+                                       value={values.nextOfKinRelationship}
+                                       onChange={handleChange}/>
                             </div>
                             <div className="flex justify-end gap-5 mt-3">
                                 <Button type="button"

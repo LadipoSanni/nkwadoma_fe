@@ -17,6 +17,13 @@ export const loaneeApi = createApi({
             }),
             providesTags: [`loanee`]
         }),
+        saveNextOfKinDetails: builder.mutation({
+            query: (data)=> ({
+                url: '/next-of-kin-details',
+                method: 'POST',
+                body: data
+            }),
+        }),
         viewLoanReferralDetails: builder.query ({
             query: () => ({
                 url: `/loan/loan-referral`,
@@ -31,6 +38,6 @@ export const loaneeApi = createApi({
 
 export const {
     useIsIdentityVerifiedQuery,
-    useViewLoanReferralDetailsQuery,
+    useViewLoanReferralDetailsQuery, useSaveNextOfKinDetailsMutation
 } = loaneeApi;
 
