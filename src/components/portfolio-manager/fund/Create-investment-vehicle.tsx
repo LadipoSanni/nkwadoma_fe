@@ -392,6 +392,7 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
                 </Button>
               </div>
               </div>
+              <p className={`text-error500 flex justify-center items-center ${isError? "mb-3" : ""}`}>{isError}</p>
             </Form>
         )
        }
