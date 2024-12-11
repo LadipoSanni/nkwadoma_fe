@@ -51,7 +51,8 @@ interface Props<T extends TableRowData> {
     isLoading?: boolean;
     condition?:boolean;
     disabledButton?: ()=> void;
-    handleSelectedRow: (rows:Set<string>) => void
+    handleSelectedRow: (rows:Set<string>) => void,
+    enableButton?: ()=> void,
 }
 
 
@@ -59,6 +60,7 @@ function SelectableTable<T extends TableRowData> ({
                                              tableHeader,
                                                       disabledButton,
                                                       handleSelectedRow,
+                                                      enableButton,
                                              tableData,
                                              handleRowClick,
                                              tableHeight,
@@ -125,9 +127,12 @@ function SelectableTable<T extends TableRowData> ({
         } else {
             const allRowIndexes : Set<string> = new Set();
             paginatedData?.forEach((data) => allRowIndexes.add(String(data.id)))
-            console.log("paginated: ", paginatedData)
+            // console.log("paginated: ", paginatedData)
             setSelectedRows(allRowIndexes);
             handleSelectedRow(allRowIndexes)
+            if(enableButton){
+                enableButton()
+            }
         }
         setSelectAll(!selectAll);
 
@@ -139,7 +144,21 @@ function SelectableTable<T extends TableRowData> ({
             updatedSelectedRows.delete(rowIndex);
         } else {
             updatedSelectedRows.add(rowIndex);
+            // if(enableButton){
+            //     enableButton()
+            // }
         }
+        if (updatedSelectedRows.size <=  paginatedData.length || updatedSelectedRows.size != 0 ){
+            if (enableButton){
+                enableButton()
+            }
+        }
+        if(updatedSelectedRows.size === 0 ){
+            if (disabledButton){
+                disabledButton()
+            }
+        }
+
         handleSelectedRow(updatedSelectedRows)
         setSelectedRows(updatedSelectedRows);
         setSelectAll(updatedSelectedRows.size === paginatedData.length);
