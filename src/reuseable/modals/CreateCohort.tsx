@@ -27,6 +27,7 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 import Isloading from "../display/Isloading";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
+import TotalInput from "@/reuseable/display/TotalInput";
 
 interface createCohortProps {
   triggerButtonStyle: string;
@@ -65,6 +66,8 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const [error, setError] = useState("");
   const [descriptionError, setDescriptionError] = useState<string | null>(null);
   const [isItemListValid, setIsItemListValid] = useState(true);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [initialItemAmount, setInitialItemAmount] = useState("");
 
   const { data } = useGetAllProgramsQuery(
     { pageSize: size, pageNumber: page },
@@ -92,7 +95,6 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const areLoanBreakdownsValid = () => {
     return loanBreakdowns.every(item => item.itemName && item.itemAmount);
   };
-  
 
   useEffect(() => {
     if(areLoanBreakdownsValid() && loanBreakdowns.length > 0) {
@@ -102,7 +104,11 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     }
   },[areLoanBreakdownsValid, loanBreakdowns])
 
-  
+  useEffect(() => {
+    const total = loanBreakdowns.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0) + parseFloat(initialItemAmount || '0');
+    setTotalAmount(total);
+  }, [loanBreakdowns, initialItemAmount]);
+
   const resetForm = () => {
     setDate(undefined);
     setName("");
@@ -117,6 +123,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     setProgramId("");
     setError("");
     setUploadedUrl(null);
+    setInitialItemAmount("0.00");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -157,10 +164,19 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
 
   const handleReset = () => {
     setIsFormSubmitted(false);
-    resetForm();
+    setDate(undefined);
+    setName("");
+    setDescription("");
+    setSelectedProgram(null);
+    setDescriptionError(null);
+    setIsSelectOpen(false);
+    setIsButtonDisabled(true);
+    setCreateButtonDisabled(true);
+    setLoanBreakdowns([]);
+    setProgramId("");
+    setError("");
+    setUploadedUrl(null);
   };
-
-  // const selectOption = ["Design thinking", "Software engineering", "Product design", "Product marketing", "Product management"]
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -268,34 +284,26 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
           ) : (
             <main id="feeBreakdownContainer" className={"grid gap-5"}>
               <FeeBreakdownHeader />
-              <InitialItem />
+              <InitialItem initialItemAmount={initialItemAmount} setInitialItemAmount={setInitialItemAmount} />
               <ItemList
                 items={loanBreakdowns}
                 setItems={setLoanBreakdowns}
                 handleDeleteItem={handleDeleteItem}
                 setIsItemListValid={setIsItemListValid}
+                setTotalAmount={setTotalAmount}
               />
               <div
                 id={"Step2stickyContainer"}
                 className={"sticky bottom-0 bg-meedlWhite"}
               >
                 <AddItemSection handleSelectClick={handleSelectClick} />
+                <TotalInput total={totalAmount.toString()} componentId={"createCohort"} prefix={"₦"} />
                 <section
                   id="Step2formButtonsContainer"
                   className={
                     "md:flex grid gap-5 mt-3 md:justify-end md:items-end bg-meedlWhite"
                   }
                 >
-                  {/* <Button id="Step2cancelButton"
-                                                variant={"outline"}
-                                                className={'border-meedlBlue bg-black font-bold  text-meedlBlue w-full md:w-[8.75rem] h-[3.5625rem] border border-solid'}
-                                                asChild>
-                                            <DialogClose>
-                                                Cancel
-
-                                            </DialogClose>
-                                             
-                                             </Button> */}
                   <Button
                     id="CancelCohortButton"
                     variant={"outline"}
