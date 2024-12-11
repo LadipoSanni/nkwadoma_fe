@@ -185,10 +185,13 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
        
     try{
        const deleteCohort = await deleteItem({id}).unwrap();
-        setOrganisationCohort((prevData) => prevData.filter((item) => item.id !== id))
-        setTimeout(() => {
-          toastPopUp.showToast(); 
-         }, 1000); 
+         if(deleteCohort){
+          setOrganisationCohort((prevData) => prevData.filter((item) => item.id !== id))
+          setTimeout(() => {
+            toastPopUp.showToast(); 
+           }, 1000); 
+         }
+       
     }catch(error){
         const err = error as ApiError;
         setDeleteProgram(err?.data?.message || "Error deleting cohort")
