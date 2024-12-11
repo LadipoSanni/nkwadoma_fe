@@ -193,7 +193,7 @@ const CohortDetails = () => {
                     </TabsContent>
 
                     <TabsContent value={"loanees"} id={`traineeId`}>
-                        <LoaneeInCohortView cohortFee={cohortDetails?.data?.totalCohortFee}/>
+                        <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
                     </TabsContent>
 
                 </div>
