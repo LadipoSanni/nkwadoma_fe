@@ -3,6 +3,8 @@ import React from 'react';
 import Image from 'next/legacy/image'
 import {useRouter} from 'next/navigation'
 import {inter} from "@/app/fonts";
+import {store} from "@/redux/store";
+import {setUserPasswordInput} from "@/redux/slice/auth/slice";
 
 interface props {
     header?: string,
@@ -14,6 +16,7 @@ const AuthEmail = ({header, email}: props) => {
     const router = useRouter()
 
     const goToLogin = () => {
+        store.dispatch(setUserPasswordInput(''))
         router.push("/auth/login")
     }
 
