@@ -29,7 +29,7 @@ const SideBar = () => {
 
     const [role, setRole] = useState('')
     const user_role = getUserDetailsFromStorage('user_role')
-    const access_token = getUserDetailsFromStorage('access_token')
+    // const access_token = getUserDetailsFromStorage('access_token')
 
 
     useEffect(() => {
