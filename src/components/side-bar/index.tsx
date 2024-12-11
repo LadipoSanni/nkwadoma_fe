@@ -40,7 +40,7 @@ const SideBar = () => {
         }
     }, [user_role]);
 
-    console.log("acesss: ",access_token)
+    // console.log("acesss: ",access_token)
 
 
     const [currentTab, setCurrentTab] = React.useState(current)
