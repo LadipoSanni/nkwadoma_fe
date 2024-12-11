@@ -17,6 +17,7 @@ import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 
 
 
+
 interface allCohortsProps extends TableRowData {
   name:string,
   cohortDescriptions:string,
@@ -28,6 +29,7 @@ interface allCohortsProps extends TableRowData {
   tuitionAmount: number
   id:string
   programId: string
+  numberOfLoanees: number
 }
 
 interface TableRowData {
@@ -38,10 +40,11 @@ interface cohortList {
   listOfCohorts: allCohortsProps[]
   handleDelete?: (id: string) => void;
   isLoading?: boolean
+  errorDeleted?: string
 }
 
 
-const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading}:cohortList) => {
+const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
   // const [programId, setProgramId] = React.useState("")
@@ -90,7 +93,7 @@ useEffect(() => {
   const router = useRouter()
 
   const tabData = [
-    {name:"Incoming",
+   {name:"Incoming",
       value: "incoming"
     },
     {
@@ -103,20 +106,23 @@ useEffect(() => {
     },
 
   ]
+  // const loanee = listOfCohorts.map(data => data.numberOfLoanees)
 
   const dropDownOption = [
+  
     {
       name: "View Cohort",
       id: "1"
     },
-    {
+    { 
       name: "Edit Cohort",
       id: "2"
     },
-    {
+   {
       name: "Delete Cohort",
       id: "3"
     }
+  
   ]
 
 
@@ -171,7 +177,7 @@ useEffect(() => {
     { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => row.name },
     { title: 'End date', sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatDate(row?.expectedEndDate)},
     // { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row: TableRowData) => row.noOfTrainees },
-    { title: 'No. of Loanees', sortable: true, id: 'noOfLoanees', selector: (row:TableRowData) => row.noOfLoanees || 0 },
+    { title: 'No. of Loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => row.numberOfLoanees || 0 },
     { title: 'Tuition', sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => formatAmount(row.tuitionAmount)},
     { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRecieved)}</div> },
     { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountRequested)}</div> },
@@ -307,6 +313,7 @@ useEffect(() => {
         title='cohort'
         handleDelete={handleDelete}
         id={cohortId}
+        errorDeleted={errorDeleted}
         />
         </TableModal>
 

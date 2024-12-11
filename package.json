@@ -41,6 +41,7 @@
     "@types/react-query": "^1.2.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
     "formik": "^2.4.6",
@@ -66,6 +67,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "6.5.0",
     "@testing-library/react": "16.0.1",
+    "@types/crypto-js": "^4.2.2",
     "@types/jest": "29.5.13",
     "@types/lodash": "^4.17.13",
     "@types/node": "^20.16.6",

@@ -1,5 +1,5 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Input} from "@/components/ui/input";
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {MdOutlineDelete} from "react-icons/md";
@@ -11,12 +11,18 @@ interface ItemListProps {
     setItems: (items: { itemName: string, itemAmount: string, currency: string }[]) => void;
     handleDeleteItem: (index: number) => void;
     setIsItemListValid: (isValid: boolean) => void;
+    setTotalAmount: (total: number) => void;
 
 }
 
-const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, setIsItemListValid}) => {
+const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, setIsItemListValid, setTotalAmount}) => {
     const [errors, setErrors] = useState<string[]>([]);
     const selectCurrency = 'NGN';
+
+    useEffect(() => {
+        const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
+        setTotalAmount(total);
+    }, [items, setTotalAmount]);
 
     const handleCurrencyChange = (index: number, currency: string) => {
         const newItems = [...items];
@@ -116,18 +122,28 @@ const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, s
                                     className="p-4 focus-visible:outline-0 w-[6.25rem] md:w-[8.25rem] shadow-none focus-visible:ring-transparent rounded-md h-[3.10rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     value={item.itemAmount}
                                     defaultValue="0.00"
-                                    onValueChange={(values) => {
-                                        const newItems = [...items];
-                                        newItems[index].itemAmount = values.value;
-                                        setItems(newItems);
-                                    }}
+                                    // onValueChange={(values) => {
+                                    //     const newItems = [...items];
+                                    //     newItems[index].itemAmount = values.value;
+                                    //     setItems(newItems);
+                                    // }}
+                                    onValueChange={(values) => { const newItems = [...items]; const amount = values.value; 
+                                         if (amount.length > 1 && amount.startsWith('0')) { 
+                                            setErrors(prevErrors => { const newErrors = [...prevErrors]; newErrors[index] = 'Item amount cannot start with 0'; return newErrors; }); 
+                                            setIsItemListValid(false); }
+                                             else { newItems[index].itemAmount = amount; setItems(newItems); 
+                                            setErrors(prevErrors => { const newErrors = [...prevErrors]; newErrors[index] = ''; 
+                                            return newErrors; });
+                                             setIsItemListValid(true); } 
+                                            }}
                                     thousandSeparator=","
                                     decimalScale={2}
                                     fixedDecimalScale={true}
                                 />
-                                <MdOutlineDelete id={`deleteItemButton${index}`}
+                               { item.itemName === "Tuition"? "" : <MdOutlineDelete id={`deleteItemButton${index}`}
                                                  className={'text-blue200 h-4 w-4 cursor-pointer'}
                                                  onClick={() => handleDeleteItem(index)}/>
+                                }
                             </div>
                         </div>
                     </div>

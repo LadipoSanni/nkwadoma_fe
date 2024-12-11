@@ -43,11 +43,9 @@ const SideBar = () => {
     // console.log("acesss: ",access_token)
 
 
-    const [currentTab, setCurrentTab] = React.useState(current)
 
     const clickNavbar = (name: string, route?: string, isActive?: boolean) => {
         if (isActive){
-            setCurrentTab(name)
             store.dispatch(setCurrentNavBottomItem(name))
             store.dispatch(setCurrentNavbarItem(name))
             if(route){
@@ -74,9 +72,7 @@ const SideBar = () => {
           await logout({})
          router.push("/auth/login")
      }catch (error){
-         console.log("error: ", error)
-         router.push("/auth/login")
-
+         console.log("error:: ", error)
      }
     }
 
@@ -102,11 +98,12 @@ const SideBar = () => {
             id: 'loan',
             name: 'Loan',
             route: '/loan',
-            isActive: true,
+            isActive: false,
             icon: <Icon icon="material-symbols:money-bag-outline"
                         height={"1.2rem"}
                         width={"1.2rem"}
-                        color={current === 'Loan' ? '#142854' : '#939cb0'}
+                        color={'#d7d7d7'}
+                // color={current === 'Loan' ? '#142854' : '#939cb0'}
             ></Icon>
 
         },
@@ -223,7 +220,7 @@ const SideBar = () => {
             isActive: true,
             icon: <Icon
                 icon="mynaui:book"
-                color={current === 'Loan' ? '#142854' : '#667085'}
+                color={current === 'Program' ? '#142854' : '#667085'}
                 height={"1.2rem"}
                 width={"1.3rem"}
             >
@@ -310,9 +307,7 @@ const SideBar = () => {
         }
     }
     const closeSideBar = () => {
-        // console.log("it's gets here:: ")
         store.dispatch(setShowMobileSideBar(false))
-        // console.log("it's gets after:: ")
 
     }
 
@@ -341,7 +336,7 @@ const SideBar = () => {
 
                         </div>
                         <div className={`  grid h-fit  w-full `}>
-                            <NavbarRouter currentTab={currentTab} handleClick={clickNavbar}
+                            <NavbarRouter currentTab={current} handleClick={clickNavbar}
                                           navbarItems={getUserSideBarByRole(role)}/>
                             < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
                         </div>
@@ -369,7 +364,7 @@ const SideBar = () => {
                             />
                         </div>
                         <div className={` hidden  md:grid md:h-fit  md:w-full `}>
-                            <NavbarRouter currentTab={currentTab} handleClick={clickNavbar}
+                            <NavbarRouter currentTab={current} handleClick={clickNavbar}
                                           navbarItems={getUserSideBarByRole(role)}/>
                         </div>
                     </div>

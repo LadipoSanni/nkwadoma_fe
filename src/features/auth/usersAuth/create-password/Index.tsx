@@ -116,8 +116,8 @@ const CreatePassword = () => {
                     store.dispatch(setCurrentNavbarItem("Program"))
                     router.push("/program")
                 }else if(user_role === 'PORTFOLIO_MANAGER'){
-                    store.dispatch(setCurrentNavbarItem("Loan"))
-                    router.push("/loan")
+                    store.dispatch(setCurrentNavbarItem("Organizations"))
+                    router.push("/organizations")
                 }
 
             }

@@ -3,7 +3,7 @@ import DeleteIcon from '../../../public/Icon - Delete.png'
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {inter, cabinetGrotesk} from "@/app/fonts";
-import ToastPopUp from '@/reuseable/notification/ToastPopUp';
+// import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import Isloading from "../display/Isloading";
 
 interface deleteCohortProps {
@@ -13,33 +13,25 @@ interface deleteCohortProps {
     title: string,
     handleDelete?: (id: string) => void;
     isLoading?: boolean
+    errorDeleted?: string
 
 }
 
 
 export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading}) => {
-
-    const toastPopUp = ToastPopUp({
-    description: `${headerTitle} deleted successfully.`,
-    status:"success"
-  });
-  
-  
+ 
 
     const handleCanCelCohort = () => {
         if (setIsOpen) {
             setIsOpen(false)
+            
         }
     }
 
-    const handleDeleteCohort = () => {
+    const handleDeleteCohort = async () => {
         if(handleDelete){
             handleDelete(id ?? "");
-            setTimeout(() => {
-                toastPopUp.showToast(); 
-            }, 1000); 
-           if (setIsOpen) setIsOpen(false)
-
+            if (setIsOpen) setIsOpen(false); 
         }
      
     }
@@ -72,6 +64,7 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
                             }
                             </Button>
             </div>
+           
         </div>
     )
 }

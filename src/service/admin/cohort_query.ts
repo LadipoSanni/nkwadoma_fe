@@ -7,7 +7,6 @@ interface LoanBreakdown {
     currency: string;
 }
 
-
 export const cohortApi = createApi({
     reducerPath: 'cohortApi',
     baseQuery: customFetchBaseQuery,
@@ -49,7 +48,6 @@ export const cohortApi = createApi({
             }),
             invalidatesTags: ({id}) => [{type: 'cohort', id}],
         }),
-
         viewAllLoanee: builder.query({
             query: (data: {
                 cohortId?: string,
@@ -137,7 +135,8 @@ export const cohortApi = createApi({
                 url: `/addLoaneeToCohort`,
                 method: 'POST',
                 body: data
-            })
+            }),
+            invalidatesTags: ['cohort'],
         }),
     })
 })
