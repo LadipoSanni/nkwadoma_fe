@@ -14,7 +14,7 @@ import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 import { setItemSessionStorage } from '@/utils/storage';
 // import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
 import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
-import { error } from 'console'
+
 
 
 
