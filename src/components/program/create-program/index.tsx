@@ -65,7 +65,7 @@ function CreateProgram({setIsOpen}:Props) {
     
   
      const toastPopUp = ToastPopUp({
-      description: "Program Created successfully updated.",
+      description: "Program Created successfully.",
       status:"success"
       
     });

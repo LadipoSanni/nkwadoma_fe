@@ -44,5 +44,4 @@ const InitialItem: React.FC<InitialItemProps> = ({ initialItemAmount, setInitial
   </div>
 );
 }
-
 export default InitialItem;
