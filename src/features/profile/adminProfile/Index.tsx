@@ -6,6 +6,8 @@ import {
     // MdOutlinePersonOutline,
     MdOutlineAccountBalance} from "react-icons/md";
 import {useRouter} from "next/navigation";
+import {store, useAppSelector} from "@/redux/store";
+import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 
 interface AdminProfileProps {
     closePopover: () => void
@@ -15,8 +17,13 @@ const AdminProfile: React.FC<AdminProfileProps> = ({closePopover}: AdminProfileP
     const user_name = getUserDetailsFromStorage("user_name");
     const user_role = getUserDetailsFromStorage('user_role');
     const router = useRouter()
+    const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
+
 
     const handleOrganizationRoute = () => {
+        store.dispatch(setCurrentNavBottomItem('Organizations'))
+        store.dispatch(setCurrentNavbarItem('Organizations'))
+        console.log("after changing: ", current)
         router.push('/organizations/organizations-details')
         closePopover()
     }
