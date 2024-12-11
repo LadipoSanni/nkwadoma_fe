@@ -54,7 +54,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [loaneeName, setLoaneeName] = React.useState("");
     // const [enableRefferButton, setRefferBottom] = useState(true)
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
-    const [isReferred, setIsReferred] = React.useState("Not Referred");
+    const [isReferred, setIsReferred] = React.useState("Not referred");
 
 
 
@@ -125,7 +125,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         },
     ]
 
-    const items = ["Referred","Not referred"]
+    const items = ["Not referred","Referred"]
 
     const handleSelected = (value: string) => {
         setIsReferred(value);
@@ -185,8 +185,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
                             <CustomSelect onChange={handleSelected}
                                           selectContent={items}
+                                          placeHolder={"Not referred"}
                                           className={` w-full text-black  bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
-                                          placeHolder={`Referred`}/>
+                                          />
                         </div>
                     </div>
 
