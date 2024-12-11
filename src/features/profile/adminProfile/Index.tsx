@@ -17,7 +17,6 @@ const AdminProfile: React.FC<AdminProfileProps> = ({closePopover}: AdminProfileP
     const user_name = getUserDetailsFromStorage("user_name");
     const user_role = getUserDetailsFromStorage('user_role');
     const router = useRouter()
-    const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
 
 
     const handleOrganizationRoute = () => {
