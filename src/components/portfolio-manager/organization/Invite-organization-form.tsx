@@ -43,7 +43,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
      const queryClient = useQueryClient();
     //  const industries = [ "MANUFACTURING", "INSURANCE", "LOGISTIC", "TELECOMMUNICATION", "REAL ESTATE", "AUTOMOBILE", "FASHION", "AVIATION", "AGRICULTURE", "EDUCATION", "HEALTHCARE", "ENTERTAINMENT", "HOSPITALITY", "FMCG", "TECHNOLOGY", "FINANCE" ];
     const industries =   ["EDUCATION","BANKING"]
-    const serviceOfferings = [ "FINANCIAL ADVISORY", "INSURANCE SERVICES", "LOAN SERVICES", "ACCOUNTING AND BOOKKEEPING", "INVESTMENT ADVISORY", "RISK MANAGEMENT", "CORPORATE FINANCE", "TAX SERVICES", "BANKING SERVICES", "CRYPTOCURRENCY SERVICES", "SOFTWARE DEVELOPMENT", "WEB DEVELOPMENT", "CLOUD SERVICES", "CYBERSECURITY SERVICES", "IT SUPPORT AND CONSULTING", "DATABASE MANAGEMENT", "AI AND MACHINE LEARNING", "BUSINESS INTELLIGENCE", "DEVOPS SERVICES", "BLOCKCHAIN SERVICES", "DISTRIBUTION SERVICES", "MARKETING AND BRANDING", "SALES SERVICES", "LOGISTIC AND SUPPLY CHAIN MANAGEMENT", "CUSTOMER SERVICE AND SUPPORT", "SUSTAINABILITY SERVICES", "REGULATORY COMPLIANCE AND LEGAL SERVICES", "CONSUMER ENGAGEMENT AND LOYALTY", "TECHNOLOGY AND INNOVATION", "HOTEL SERVICES", "RESTAURANT SERVICES", "EVENT PLANNING", "TRAVEL AND TOUR SERVICES", "CORPORATE RETREATS", "SPA AND WELLNESS", "TRANSPORTATION", "CONFERENCE AND MEETING FACILITIES", "FILM AND TELEVISION", "MUSIC", "THEATRE", "SPORTS AND FITNESS", "GAMING", "EVENT AND PARTIES", "TELECOMMUNICATION", "PHOTOGRAPHY", "TRAINING", ];
+    const serviceOfferings = [ "TRAINING","FINANCIAL ADVISORY", "INSURANCE SERVICES", "LOAN SERVICES", "ACCOUNTING AND BOOKKEEPING", "INVESTMENT ADVISORY", "RISK MANAGEMENT", "CORPORATE FINANCE", "TAX SERVICES", "BANKING SERVICES", "CRYPTOCURRENCY SERVICES", "SOFTWARE DEVELOPMENT", "WEB DEVELOPMENT", "CLOUD SERVICES", "CYBERSECURITY SERVICES", "DATABASE MANAGEMENT", "AI AND MACHINE LEARNING", "BUSINESS INTELLIGENCE", "DEVOPS SERVICES", "BLOCKCHAIN SERVICES", "DISTRIBUTION SERVICES", "MARKETING AND BRANDING", "SALES SERVICES", "CUSTOMER SERVICE AND SUPPORT", "SUSTAINABILITY SERVICES",  "CONSUMER ENGAGEMENT AND LOYALTY", "TECHNOLOGY AND INNOVATION", "HOTEL SERVICES", "RESTAURANT SERVICES", "EVENT PLANNING", "TRAVEL AND TOUR SERVICES", "CORPORATE RETREATS", "SPA AND WELLNESS", "TRANSPORTATION", "FILM AND TELEVISION", "MUSIC", "THEATRE", "SPORTS AND FITNESS", "GAMING", "EVENT AND PARTIES", "TELECOMMUNICATION", "PHOTOGRAPHY" ];
 
     const [error, setError] = useState("");
 
@@ -123,7 +123,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
         serviceOfferings: [
            {
             industry: values.industry,
-            name:"Service",
+            name: values.serviceOffering,
             transactionLowerBound: "3000",
             transactionUpperBound: "5000"
            }
@@ -259,6 +259,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
               onChange={(value) => setFieldValue("industry", value)}
               name="industry"
               placeHolder='Select industry'
+              isItemDisabled={(item) => item !== 'EDUCATION'}
              />
            {
               errors.industry && touched.industry &&  (
@@ -280,6 +281,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
               onChange={(value) => setFieldValue("serviceOffering", value)}
               name="serviceOffering"
               placeHolder='Select service'
+              isItemDisabled={(item) => item !== 'TRAINING'}
              />
               {
               errors.serviceOffering && touched.serviceOffering &&  (

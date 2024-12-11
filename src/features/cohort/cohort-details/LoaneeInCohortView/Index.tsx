@@ -18,6 +18,7 @@ import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 import {getItemSessionStorage} from "@/utils/storage";
 import {useToast} from "@/hooks/use-toast";
 import {cohortLoaneeResponse} from "@/types/Component.type";
+import Table from "@/reuseable/table/LoanProductTable"
 
 interface userIdentity {
     firstName: string;
@@ -26,12 +27,14 @@ interface userIdentity {
 
 interface loaneeLoanDetail {
     initialDeposit: number;
-    amountRequested: number
+    amountRequested: number;
+    amountReceived: number;
 }
 
 interface viewAllLoanee {
     userIdentity: userIdentity;
     loaneeLoanDetails: loaneeLoanDetail;
+    loaneeStatus: string;
 }
 
 interface TableRowData {
@@ -46,16 +49,16 @@ interface props {
 
 export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [allLoanee, setAllLoanee] = useState<viewAllLoanees[]>([]);
-    const [isReferred, setIsReferred] = React.useState(``);
     const [addLoanee, setAddLoanee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
     const [loaneeName, setLoaneeName] = React.useState("");
     // const [enableRefferButton, setRefferBottom] = useState(true)
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
+    const [isReferred, setIsReferred] = React.useState("Not Referred");
+
 
 
     const cohortId = getItemSessionStorage("cohortId")
-    const id = "1";
     const size = 100;
     const [page] = useState(0);
     const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
@@ -64,7 +67,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         cohortId: cohortsId,
         pageSize: size,
         pageNumber: page
-    })
+    },{refetchOnMountOrArgChange: true})
 
     const {data: searchResults, isLoading: isLoading} = useSearchForLoaneeInACohortQuery({
             loaneeName: loaneeName,
@@ -76,15 +79,22 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [refer] = useReferLoaneeToACohortMutation()
 
     useEffect(() => {
+        let result: viewAllLoanees[] = [];
         if (loaneeName && searchResults && searchResults?.data) {
-            const result = searchResults?.data
-            console.log("result: ", result)
-            setAllLoanee(result)
-        } else if (!loaneeName && data && data?.data) {
-            const result = data?.data?.body
-            setAllLoanee(result)
+            result = searchResults.data; }
+        else if (!loaneeName && data && data?.data) {
+            result = data.data.body;
         }
-    }, [data, loaneeName, searchResults])
+        if (isReferred === "Not referred") {
+            result = result.filter(filter => filter.loaneeStatus === "ADDED");
+        }
+        else if
+            (isReferred === "Referred") {
+                result = result.filter(filter => filter.loaneeStatus === "REFERRED");
+            }
+
+        setAllLoanee(result);
+    }, [data, loaneeName, searchResults, isReferred]);
 
 
     const handleSelectedRow = (rows: Set<string>) => {
@@ -110,13 +120,15 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
             id: "AmountRequested",
             selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)
         },
-        {title: "Amount received", sortable: true, id: "AmountReceived"},
+        {title: "Amount received", sortable: true, id: "AmountReceived",
+            selector:(row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountReceived)
+        },
     ]
 
-    const items = ["Referred", "Not referred"]
+    const items = ["Referred","Not referred"]
 
-    const handleSelected = () => {
-        setIsReferred(isReferred)
+    const handleSelected = (value: string) => {
+        setIsReferred(value);
     }
     const handleAddLoane = () => {
         setAddLoanee(true)
@@ -171,10 +183,10 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             </div>
                         </div>
                         <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
-                            <CustomSelect value={isReferred} onChange={handleSelected}
+                            <CustomSelect onChange={handleSelected}
                                           selectContent={items}
                                           className={` w-full text-black  bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
-                                          placeHolder={`referred`}/>
+                                          placeHolder={`Referred`}/>
                         </div>
                     </div>
 
@@ -204,7 +216,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                    {
+                    { isReferred === "Not referred"?
                         <SelectableTable
                             tableData={allLoanee}
                             tableHeader={loanProduct}
@@ -220,6 +232,19 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             isLoading={isLoading}
                             condition={true}
                             handleSelectedRow={handleSelectedRow}
+                        /> : <Table
+                            tableData={allLoanee}
+                            tableHeader={loanProduct}
+                            handleRowClick={()=> {}}
+                            staticHeader="Trainee"
+                            staticColunm="firstName"
+                            icon={MdOutlinePerson}
+                            sideBarTabName="Trainee"
+                            optionalRowsPerPage={10}
+                            tableCellStyle="h-12"
+                            isLoading={isLoading}
+                            condition={true}
+                            tableHeight={45}
                         />
                     }
                 </div>
@@ -233,7 +258,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     headerTitle={`Add Loanee`}
                     width="30%"
                 >
-                    <AddTraineeForm tuitionFee={cohortFee} cohortId={id} setIsOpen={() => setAddLoanee(false)}/>
+                    <AddTraineeForm tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)}/>
                 </TableModal>
 
             </div>

@@ -110,9 +110,12 @@ const Login: React.FC = () => {
                         if (user_role === 'LOANEE') {
                             store.dispatch(setCurrentNavbarItem("overview"))
                             router.push("/overview")
-                        } else {
-                            store.dispatch(setCurrentNavbarItem("Overview"))
-                            router.push("/Overview")
+                        } else if(user_role === 'ORGANIZATION_ADMIN') {
+                            store.dispatch(setCurrentNavbarItem("Program"))
+                            router.push("/program")
+                        }else if(user_role === 'PORTFOLIO_MANAGER'){
+                            store.dispatch(setCurrentNavbarItem("Loan"))
+                            router.push("/loan")
                         }
 
                     }

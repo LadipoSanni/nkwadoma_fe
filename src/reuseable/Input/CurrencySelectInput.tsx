@@ -33,7 +33,7 @@ function CurrencySelectInput({ selectedcurrency, setSelectedCurrency, className,
             >
                 <SelectTrigger
                     className={`md:w-0 min-w-20 h-[3.2rem] border focus:ring-0 focus:outline-none text-sm text-[#404653] shadow-none flex justify-between ${
-                        readOnly ? 'bg-gray105 cursor-not-allowed' : ''
+                        readOnly ? 'cursor-not-allowed' : ''
                     } ${className}`}
                     role="button"
                 >

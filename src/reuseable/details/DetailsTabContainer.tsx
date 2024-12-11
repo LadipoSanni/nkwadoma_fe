@@ -40,10 +40,10 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         className={`shadow-none`}
                     >
                         <TabsList id="tabs-list" data-testid="tabs-list" className={`p-1`}>
-                            <TabsTrigger value={"trainee-details-mock-data"}
+                            <TabsTrigger id='tabTitleOne' value={"trainee-details-mock-data"}
                                          data-testid="cohort-details-tab ">{tabTitle1}
                             </TabsTrigger>
-                            <TabsTrigger value={"trainee"} data-testid="trainees-tab">{tabTitle2}</TabsTrigger>
+                            <TabsTrigger id='tabTitleTwo' value={"trainee"} data-testid="trainees-tab">{tabTitle2}</TabsTrigger>
                         </TabsList>
 
                         <TabsContent value={"trainee-details-mock-data"} id="cohort-details-content"

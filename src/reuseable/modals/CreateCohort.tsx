@@ -102,7 +102,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     }else {
       setCreateButtonDisabled(true);
     }
-  },[loanBreakdowns])
+  },[areLoanBreakdownsValid, loanBreakdowns])
 
   useEffect(() => {
     const total = loanBreakdowns.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0) + parseFloat(initialItemAmount || '0');

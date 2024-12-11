@@ -10,6 +10,9 @@ import { useToast} from "@/hooks/use-toast";
 import {jwtDecode} from "jwt-decode";
 import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {ADMIN_ROLES} from "@/types/roles";
+import {persistor, store} from "@/redux/store";
+import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
+import {clearData} from "@/utils/storage";
 
 
 const CreatePassword = () => {
@@ -102,12 +105,19 @@ const CreatePassword = () => {
             // const user_email = decode_access_token?.email
             const user_roles = decode_access_token?.realm_access?.roles
             const user_role = user_roles.filter(getUserRoles).at(0)
+            clearData()
+            await persistor.purge();
             if (user_role) {
                 storeUserDetails(access_token, user_email, user_role, userName)
                 if (user_role === 'LOANEE') {
+                    store.dispatch(setCurrentNavbarItem("overview"))
                     router.push("/overview")
-                } else {
-                    router.push("/Overview")
+                } else if(user_role === 'ORGANIZATION_ADMIN') {
+                    store.dispatch(setCurrentNavbarItem("Program"))
+                    router.push("/program")
+                }else if(user_role === 'PORTFOLIO_MANAGER'){
+                    store.dispatch(setCurrentNavbarItem("Loan"))
+                    router.push("/loan")
                 }
 
             }
