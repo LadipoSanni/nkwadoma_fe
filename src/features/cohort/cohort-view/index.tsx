@@ -61,6 +61,7 @@ interface allCohortsProps extends TableRowData {
    tuitionAmount: number
    id:string
    programId: string
+   numberOfLoanees: number
 }
 
 interface viewAllProgramProps extends TableRowData  {

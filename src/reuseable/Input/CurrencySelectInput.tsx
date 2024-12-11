@@ -53,7 +53,7 @@ function CurrencySelectInput({ selectedcurrency, setSelectedCurrency, className,
                     >
                         <SelectGroup>
                             {currencyOptions.map((currency) => (
-                                <SelectItem key={currency} value={currency}>
+                                <SelectItem key={currency} value={currency} disabled={currency !== "NGN"}>
                                     {currency}
                                 </SelectItem>
                             ))}
