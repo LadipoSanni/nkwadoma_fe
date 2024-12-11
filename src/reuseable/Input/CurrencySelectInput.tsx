@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectGroup } from '@/components/ui/select';
-import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
 
 interface Props {
     selectedcurrency: string;
@@ -12,14 +12,6 @@ interface Props {
 const currencyOptions = ['NGN', 'USD', 'GBP'];
 
 function CurrencySelectInput({ selectedcurrency, setSelectedCurrency, className, readOnly = false }: Props) {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-
-    const handleDropdownOpen = () => {
-        if (!readOnly) {
-            setDropdownOpen(!dropdownOpen);
-        }
-    };
-
     return (
         <div>
             <Select
@@ -29,22 +21,26 @@ function CurrencySelectInput({ selectedcurrency, setSelectedCurrency, className,
                         setSelectedCurrency(value);
                     }
                 }}
-                onOpenChange={handleDropdownOpen}
+                onOpenChange={() => {
+                    if (readOnly) {
+                        return;
+                    }
+                }}
+                disabled={readOnly}
             >
                 <SelectTrigger
-                    className={`md:w-0 min-w-20 h-[3.2rem] border focus:ring-0 focus:outline-none text-sm text-[#404653] shadow-none flex justify-between ${
-                        readOnly ? 'cursor-not-allowed' : ''
+                    className={`md:w-0 min-w-20 h-[3.2rem] border focus:ring-0 focus:outline-none text-sm shadow-none flex justify-between ${
+                        readOnly ? 'cursor-not-allowed bg-grey105 text-black300' : ''
                     } ${className}`}
                     role="button"
                 >
-                    <SelectValue className="w-3" data-testid="Select Currency" />
-                    <div>
-                        {dropdownOpen ? (
-                            <ChevronUpIcon className="h-4 font-semibold" />
-                        ) : (
-                            <ChevronDownIcon className="h-4 font-semibold" />
-                        )}
-                    </div>
+                    <SelectValue
+                        className={`w-full ${readOnly ? 'text-black300' : ''}`}
+                        data-testid="Select Currency"
+                    >
+                        {selectedcurrency}
+                    </SelectValue>
+                    {!readOnly && <ChevronDownIcon className="h-4 font-semibold" />}
                 </SelectTrigger>
                 {!readOnly && (
                     <SelectContent
@@ -53,7 +49,7 @@ function CurrencySelectInput({ selectedcurrency, setSelectedCurrency, className,
                     >
                         <SelectGroup>
                             {currencyOptions.map((currency) => (
-                                <SelectItem key={currency} value={currency} disabled={currency !== "NGN"}>
+                                <SelectItem key={currency} value={currency} disabled={currency !== 'NGN'}>
                                     {currency}
                                 </SelectItem>
                             ))}
