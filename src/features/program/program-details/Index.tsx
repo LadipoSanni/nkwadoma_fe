@@ -69,6 +69,8 @@ const ProgramDetails = () => {
             totalAmountRepaid: 0,
             totalAmountDisbursed: 0,
             totalAmountOutstanding: 0,
+            numberOfCohort: 0,
+            numberOfLoanees: 0
         }
     )
     const [cohorts, setCohorts] = useState<ViewAllProgramProps[]>([])
@@ -110,6 +112,8 @@ const ProgramDetails = () => {
                 totalAmountRepaid: detail?.totalAmountRepaid || 0,
                 totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
                 totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
+                numberOfCohort: detail?.numberOfCohort,
+                numberOfLoanees: detail?.numberOfLoanees,
             });
         }
     }, [program])
@@ -155,10 +159,10 @@ const ProgramDetails = () => {
             tagIcon: MdOutlineDateRange,
             tagCount: progamDetail.duration,
             tagButtonStyle: "bg-lightBlue100",
-            tagText: "months"
+            tagText: "Months"
         },
-        {tagIcon: MdOutlinePeopleAlt, tagCount: 0, tagButtonStyle: "bg-warning80", tagText: "cohorts"},
-        {tagIcon: MdPersonOutline, tagCount: 0, tagButtonStyle: "bg-warning50", tagText: "loanees"},
+        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: "Cohorts"},
+        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: "Loanees"},
     ];
     const ProgramHeader = [
         {title: "Cohort", sortable: true, id: "name"},
@@ -274,12 +278,12 @@ const ProgramDetails = () => {
                                         id="editButton"
                                         className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
                                     program</Button>
-                                <div role={"button"}
+                                {progamDetail.numberOfLoanees > 0? "" : <div role={"button"}
                                      id="kebabId"
                                      className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
                                     <Kebab kebabOptions={programOptions} icon={IoEllipsisHorizontalSharp}
                                            handleDropDownClick={handleDropdownClick}/>
-                                </div>
+                                </div>}
                             </div>
                         </div>
                         <div id={`container`} className={`md:w-6/12 md:pt-0 pt-0`}>

@@ -135,14 +135,14 @@ const OrganizationDetails = () => {
       selector: (row: TableRowData) => row.fullName,
     },
     {
-      title: <div className="relative md:left-10 md:right-10">Email</div>,
+      title: <div className="relative md:left-16 md:right-16">Email</div>,
       sortable: true,
       id: "email",
       selector: (row: TableRowData) => ( <div className="relative md:left-12 md:right-12">{row.email ? row.email : "nill"}</div>),
     },
     {
       title: (
-        <div id="adminStatusHeader" className="relative md:left-64 md:right-64">
+        <div id="adminStatusHeader" className="">
           Status
         </div>
       ),
@@ -151,7 +151,7 @@ const OrganizationDetails = () => {
       selector: (row: TableRowData) => (
         <span
           id="adminStatus"
-          className={`pt-1 pb-1 pr-3 pl-3 rounded-xl relative md:left-60 md:right-60 ${
+          className={`pt-1 pb-1 pr-3 pl-3 rounded-xl relative right-2 ${
             row.status === "ACTIVE"
               ? "text-[#063F1A] bg-[#E7F5EC]"
               : row.status === "INVITED"
