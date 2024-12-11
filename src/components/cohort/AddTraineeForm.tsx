@@ -197,7 +197,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                             selectedcurrency={selectCurrency}
                                             setSelectedCurrency={setSelectCurrency}
                                         />
-                                        <div className='w-full'>
+                                        <div className='w-full mb-2'>
                                             {/*<NumericFormat*/}
                                             {/*    id={`initialDeposit`}*/}
                                             {/*    name={"initialDeposit"}*/}
