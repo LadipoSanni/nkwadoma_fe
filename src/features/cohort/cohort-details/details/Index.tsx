@@ -104,7 +104,7 @@ const CohortDetails = () => {
         {
             label: "Cohort status",
             value: <div
-                className={`rounded-2xl px-2 py-1 ${details.cohortStatus === "ACTIVE" ? "bg-[#E7F5EC] text-[#0B6B2B]" : "bg-[#FEF6E8] text-[#66440A]"}`}>
+                className={`rounded-2xl px-2 py-1 ${details.cohortStatus === "ACTIVE" ? "bg-[#E7F5EC] w-fit text-[#0B6B2B]" : "bg-[#FEF6E8] w-fit text-[#66440A]"}`}>
                 {details.cohortStatus}
             </div>
         },
