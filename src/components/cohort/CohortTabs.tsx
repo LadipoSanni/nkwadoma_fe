@@ -106,7 +106,7 @@ useEffect(() => {
     },
 
   ]
-  const loanee = listOfCohorts.map(data => data.numberOfLoanees)
+  // const loanee = listOfCohorts.map(data => data.numberOfLoanees)
 
   const dropDownOption = [
   

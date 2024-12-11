@@ -1,5 +1,5 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Input} from "@/components/ui/input";
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {MdOutlineDelete} from "react-icons/md";
@@ -11,12 +11,18 @@ interface ItemListProps {
     setItems: (items: { itemName: string, itemAmount: string, currency: string }[]) => void;
     handleDeleteItem: (index: number) => void;
     setIsItemListValid: (isValid: boolean) => void;
+    setTotalAmount: (total: number) => void;
 
 }
 
-const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, setIsItemListValid}) => {
+const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, setIsItemListValid, setTotalAmount}) => {
     const [errors, setErrors] = useState<string[]>([]);
     const selectCurrency = 'NGN';
+
+    useEffect(() => {
+        const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
+        setTotalAmount(total);
+    }, [items, setTotalAmount]);
 
     const handleCurrencyChange = (index: number, currency: string) => {
         const newItems = [...items];

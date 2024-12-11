@@ -14,7 +14,7 @@ const FormButtons: React.FC<FormButtonsProps> = ({ isButtonDisabled, setIsFormSu
         </Button>
         <Button
             id="continueButton"
-            className={`text-meedlWhite font-bold ${isButtonDisabled ? 'bg-neutral650' : 'bg-meedlBlue hover:bg-meedlBlue'} w-full md:w-[8.75rem] h-[3.5625rem]`}
+            className={`text-meedlWhite font-bold ${isButtonDisabled ? 'bg-neutral650 hover:bg-neutral650' : 'bg-meedlBlue hover:bg-meedlBlue'} w-full md:w-[8.75rem] h-[3.5625rem]`}
             disabled={isButtonDisabled}
             onClick={() => setIsFormSubmitted(true)}
         >
