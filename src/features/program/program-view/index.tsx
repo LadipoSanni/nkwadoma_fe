@@ -24,6 +24,7 @@ import SkeletonForGrid from '@/reuseable/Skeleton-loading-state/Skeleton-for-gri
 import {useSearchProgramQuery} from '@/service/admin/program_query';
 import TableEmptyState from '@/reuseable/emptyStates/TableEmptyState';
 import {setTimeout} from 'timers';
+import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 
 
 interface TableRowData {
@@ -33,6 +34,14 @@ interface TableRowData {
 interface rowData {
     [key: string]: string | number | null | React.ReactNode | object;
 }
+
+interface ApiError {
+    status: number;
+    data: {
+      message: string;
+    };
+  }
+  
 
 interface viewAllProgramProps extends TableRowData {
     id?: string;
@@ -46,6 +55,7 @@ interface viewAllProgramProps extends TableRowData {
     totalAmountRepaid?: number;
     totalAmountDisbursed?: number;
     totalAmountOutstanding?: number
+    noOfLoanees?: number;
 }
 
 
@@ -84,7 +94,7 @@ const ProgramView = () => {
     const [page] = useState(0);
     // const [totalPage, setTotalPage] = useState(0);
     const size = 100;
-    let deleteProgram = ''
+    const [deleteProgram, setDeleteProgram] = useState("")
 
     const {data, isLoading} = useGetAllProgramsQuery({
         pageSize: size,
@@ -154,10 +164,10 @@ const ProgramView = () => {
             selector: (row: TableRowData) => row.noOfCohorts ?? "0"
         },
         {
-            title: 'No. of Trainees',
+            title: 'No. of loanees',
             sortable: true,
-            id: 'noOfTrainees',
-            selector: (row: TableRowData) => row.noOfTrainees ?? "0"
+            id: 'noOfLoanees',
+            selector: (row: TableRowData) => row.noOfLoanees ?? "0"
         },
         {
             title: 'Amount Disbursed',
@@ -261,14 +271,37 @@ const ProgramView = () => {
         setIsDeleteOpen(true)
     };
 
+    const toastPopUp = ToastPopUp({
+        description: `Program deleted successfully.`,
+        status:"success"
+      });
+
+      const errorPop = ToastPopUp({
+        description: `error deleting progtram.`,
+        status:"error"
+      });
+
     const handleDeleteAProgram = async (id: string) => {
 
         try {
-            await deleteItem({id}).unwrap();
-            setProgramView((prevData) => prevData.filter((item) => item.id !== id))
+          const deletePro = await deleteItem({id}).unwrap();
+            if(deletePro){
+               setProgramView((prevData) => prevData.filter((item) => item.id !== id))
+               setTimeout(() => {
+                toastPopUp.showToast(); 
+               }, 1000); 
+            }else {
+                setDeleteProgram("Failed to delete program")
+               
+            }
+           
         } catch (error) {
             // console.error("Error deleting program: ", error);
-            deleteProgram = "Error deleting program:"
+            const err = error as ApiError;
+            setDeleteProgram(err?.data?.message || "Error deleting program")
+            setTimeout(() => {
+                errorPop.showToast(); 
+               }, 1000); 
         }
     }
 
@@ -454,6 +487,7 @@ const ProgramView = () => {
                         title='program'
                         handleDelete={handleDeleteAProgram}
                         id={programId}
+                        errorDeleted= {deleteProgram }
                     />
                 </TableModal>
             </div>

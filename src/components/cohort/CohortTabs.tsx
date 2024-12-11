@@ -14,6 +14,7 @@ import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 import { setItemSessionStorage } from '@/utils/storage';
 // import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
 import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
+import { error } from 'console'
 
 
 
@@ -38,10 +39,11 @@ interface cohortList {
   listOfCohorts: allCohortsProps[]
   handleDelete?: (id: string) => void;
   isLoading?: boolean
+  errorDeleted?: string
 }
 
 
-const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading}:cohortList) => {
+const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
   // const [programId, setProgramId] = React.useState("")
@@ -307,6 +309,7 @@ useEffect(() => {
         title='cohort'
         handleDelete={handleDelete}
         id={cohortId}
+        errorDeleted={errorDeleted}
         />
         </TableModal>
 
