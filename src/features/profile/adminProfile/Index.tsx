@@ -23,7 +23,6 @@ const AdminProfile: React.FC<AdminProfileProps> = ({closePopover}: AdminProfileP
     const handleOrganizationRoute = () => {
         store.dispatch(setCurrentNavBottomItem('Organizations'))
         store.dispatch(setCurrentNavbarItem('Organizations'))
-        console.log("after changing: ", current)
         router.push('/organizations/organizations-details')
         closePopover()
     }
