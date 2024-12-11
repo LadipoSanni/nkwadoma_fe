@@ -6,7 +6,7 @@ import {
     // MdOutlinePersonOutline,
     MdOutlineAccountBalance} from "react-icons/md";
 import {useRouter} from "next/navigation";
-import {store, useAppSelector} from "@/redux/store";
+import {store} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 
 interface AdminProfileProps {
