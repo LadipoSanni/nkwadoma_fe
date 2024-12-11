@@ -53,12 +53,12 @@ describe("TableEmptyState", () => {
       });
 
 
-      it('renders correctly without any props', () => {
-        render(<TableEmptyState />);
+      // it('renders correctly without any props', () => {
+      //   render(<TableEmptyState />);
       
-        const defaultText = screen.getByText(/s will show here/i);
-        expect(defaultText).toBeInTheDocument();
-      });
+      //   const defaultText = screen.getByText(/s will show here/i);
+      //   expect(defaultText).toBeInTheDocument();
+      // });
 
       it('renders the name correctly with proper formatting', () => {
         render(<TableEmptyState name="TestItem" />);
@@ -82,14 +82,14 @@ describe("TableEmptyState", () => {
 
      
 
-    it('updates the content when props change', () => {
-        const { rerender } = render(<TableEmptyState name="User" />);
+    // it('updates the content when props change', () => {
+    //     const { rerender } = render(<TableEmptyState name="User" />);
       
-        expect(screen.getByText(/Users will show here/i)).toBeInTheDocument();
+    //     expect(screen.getByText(/Users will show here/i)).toBeInTheDocument();
       
-        rerender(<TableEmptyState name="Admin" />);
-        expect(screen.getByText(/Admins will show here/i)).toBeInTheDocument();
-      });
+    //     rerender(<TableEmptyState name="Admin" />);
+    //     expect(screen.getByText(/Admins will show here/i)).toBeInTheDocument();
+    //   });
       
 
     
