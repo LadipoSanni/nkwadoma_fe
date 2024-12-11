@@ -13,6 +13,7 @@ import {Icon} from "@iconify/react";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {MdOutlineAccountBalance, MdOutlineInventory2,MdOutlineReceiptLong, MdOutlinePayments, MdOutlineBusinessCenter,MdOutlinePersonOutline, MdOutlinePeopleAlt,MdOutlineHome} from "react-icons/md";
 import {useLogoutMutation} from "@/service/users/api";
+import {clearData} from "@/utils/storage";
 
 
 
@@ -28,6 +29,8 @@ const SideBar = () => {
 
     const [role, setRole] = useState('')
     const user_role = getUserDetailsFromStorage('user_role')
+    const access_token = getUserDetailsFromStorage('access_token')
+
 
     useEffect(() => {
         if (!user_role) {
@@ -36,6 +39,8 @@ const SideBar = () => {
             setRole(user_role)
         }
     }, [user_role]);
+
+    console.log("acesss: ",access_token)
 
 
     const [currentTab, setCurrentTab] = React.useState(current)
@@ -63,6 +68,7 @@ const SideBar = () => {
     // }
     const handleLogout =  async () => {
         store.dispatch(setCurrentNavBottomItem("Logout"))
+        clearData()
         await persistor.purge();
      try{
           await logout({})
