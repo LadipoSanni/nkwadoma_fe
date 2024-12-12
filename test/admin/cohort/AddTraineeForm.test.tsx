@@ -17,7 +17,7 @@ describe("AddTraineeForm", () => {
     it('should initialize form with default values when component is rendered', () => {
         const { getByPlaceholderText } = render(
             <Providers>
-                <AddTraineeForm cohortId="123" />
+                <AddTraineeForm  />
             </Providers>
 
         );
@@ -28,7 +28,7 @@ describe("AddTraineeForm", () => {
       it('should trigger validation errors when form is submitted with empty fields', async () => {
         render(
             <Providers>
-                <AddTraineeForm cohortId="123" />
+                <AddTraineeForm  />
             </Providers>
 
         );
@@ -49,7 +49,7 @@ describe("AddTraineeForm", () => {
       const mockSetIsOpen = jest.fn();
       const { getByLabelText, getByRole } = render(
           <Providers>
-              <AddTraineeForm cohortId="123" setIsOpen={mockSetIsOpen} />
+              <AddTraineeForm  setIsOpen={mockSetIsOpen} />
           </Providers>
       );
   
@@ -66,7 +66,7 @@ describe("AddTraineeForm", () => {
     it('should display validation errors when fields are invalid',async () => {
       const { getByRole, getByText,getByLabelText } = render(
           <Providers>
-              <AddTraineeForm cohortId="123" />
+              <AddTraineeForm  />
           </Providers>
       );
   
@@ -141,7 +141,7 @@ it('should close modal when cancel button is clicked', () => {
   const setIsOpen = jest.fn();
   render(
       <Providers>
-          <AddTraineeForm cohortId="123" setIsOpen={setIsOpen} />
+          <AddTraineeForm  setIsOpen={setIsOpen} />
       </Providers>
   );
   
@@ -156,7 +156,7 @@ it('should clear all form fields when reset button is clicked', () => {
   const setIsOpen = jest.fn();
   render(
       <Providers>
-          <AddTraineeForm cohortId="123" setIsOpen={setIsOpen} />
+          <AddTraineeForm  setIsOpen={setIsOpen} />
       </Providers>
           );
 

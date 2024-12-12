@@ -30,6 +30,7 @@ interface allCohortsProps extends TableRowData {
   id:string
   programId: string
   numberOfLoanees: number
+  
 }
 
 interface TableRowData {

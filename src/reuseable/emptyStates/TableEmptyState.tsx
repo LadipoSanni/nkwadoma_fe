@@ -25,7 +25,7 @@ function TableEmptyState({name,icon: Icon,className, optionalFilterName,conditio
          </div>
          }
          </div>
-         <h1 id='titleId' className='font-semibold mb-2 capitalize'>{name}s will show here</h1> 
+         <h1 id='titleId' className={`font-semibold mb-2 `}> <span className='capitalize'>{name + "s"}</span> will show here</h1> 
         
          <p id='bodyMessageId' className='text-foundationBlue800 md:w-96 w-72 lowercase'>There are no {optionalFilterName} {name}s available yet. { !condition?<span> To create a  <span className='lowercase'>{name}</span>, click on the  <span className='font-semibold lowercase'>create {name}</span>  </span>: ""}</p> 
           </div>
