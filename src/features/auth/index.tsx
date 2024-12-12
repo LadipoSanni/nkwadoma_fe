@@ -3,6 +3,8 @@ import {redirect} from "next/navigation";
 
 
 const Index = () => {
+
+
     // useEffect(()=> {
     
     // },[])
