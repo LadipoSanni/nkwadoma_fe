@@ -24,7 +24,7 @@ import SkeletonForGrid from '@/reuseable/Skeleton-loading-state/Skeleton-for-gri
 import {useSearchProgramQuery} from '@/service/admin/program_query';
 import TableEmptyState from '@/reuseable/emptyStates/TableEmptyState';
 import {setTimeout} from 'timers';
-import ToastPopUp from '@/reuseable/notification/ToastPopUp';
+import {useToast} from "@/hooks/use-toast"
 
 
 interface TableRowData {
@@ -38,7 +38,7 @@ interface rowData {
 interface ApiError {
     status: number;
     data: {
-      message: string;
+        message: string;
     };
   }
   
@@ -56,12 +56,14 @@ interface viewAllProgramProps extends TableRowData {
     totalAmountDisbursed?: number;
     totalAmountOutstanding?: number
     noOfLoanees?: number;
+    numberOfCohort: number
 }
 
 
 const ProgramView = () => {
     const [view, setView] = useState<string>('grid');
     const [searchTerm, setSearchTerm] = useState('');
+    const {toast} = useToast()
     // const [dummyData, setDummyData] = useState<{
     //     cohorts: number;
     //     description: string;
@@ -160,8 +162,8 @@ const ProgramView = () => {
         {
             title: 'No. of Cohorts',
             sortable: true,
-            id: 'noOfCohorts',
-            selector: (row: TableRowData) => row.noOfCohorts ?? "0"
+            id: 'numberOfCohort',
+            selector: (row: TableRowData) => row.numberOfCohort ?? "0"
         },
         {
             title: 'No. of loanees',
@@ -271,15 +273,6 @@ const ProgramView = () => {
         setIsDeleteOpen(true)
     };
 
-    const toastPopUp = ToastPopUp({
-        description: `Program deleted successfully.`,
-        status:"success"
-      });
-
-      const errorPop = ToastPopUp({
-        description: `error deleting progtram.`,
-        status:"error"
-      });
 
     const handleDeleteAProgram = async (id: string) => {
 
@@ -288,23 +281,29 @@ const ProgramView = () => {
             if(deletePro){
                setProgramView((prevData) => prevData.filter((item) => item.id !== id))
                setTimeout(() => {
-                toastPopUp.showToast(); 
-               }, 1000); 
+                toast({
+                    description:"Program deleted successfully"  ,
+                    status: "success",
+                })
+               }, 600); 
             }else {
                 setDeleteProgram("Failed to delete program")
                
             }
            
         } catch (error) {
-            // console.error("Error deleting program: ", error);
             const err = error as ApiError;
-            setDeleteProgram(err?.data?.message || "Error deleting program")
+            setDeleteProgram(err?.data?.message || "Program with loanee cannot be deleted")
             setTimeout(() => {
-                errorPop.showToast(); 
-               }, 1000); 
+                toast({
+                    description:  deleteProgram || "Program with loanee cannot be deleted"  ,
+                    status: "error",
+                })
+               }, 600); 
         }
     }
-
+  
+  
 
     useEffect(() => {
         if (editOpen && program?.data) {
@@ -411,7 +410,7 @@ const ProgramView = () => {
     
                                const tagButtonData = [ { tagIcon: MdPersonOutline, tagCount: Number(program.noOfLoanees ?? 0), tagButtonStyle: 'bg-tagButtonColor', tagText: 'loanees' }, 
                                { tagIcon: MdOutlineDateRange, tagCount: Number(program.duration ?? 0) , tagButtonStyle: 'bg-tagButtonColor', tagText: 'months' }, 
-                               { tagIcon: MdOutlinePeopleAlt, tagCount: Number(program.noOfCohorts ?? 0) , tagButtonStyle: 'bg-tagButtonColor', tagText: 'cohorts' } ];
+                               { tagIcon: MdOutlinePeopleAlt, tagCount: Number(program.numberOfCohort?? 0) , tagButtonStyle: 'bg-tagButtonColor', tagText: 'cohorts' } ];
                                     return (
                                     <AllProgramsCard
                                         key={index}
