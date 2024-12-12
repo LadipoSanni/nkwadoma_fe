@@ -39,7 +39,7 @@ describe('LoanApplicationDetails', () => {
     it('toggles collapsible content correctly', () => {
         render(
             <Providers>
-                <LoanApplicationDetails />
+                <LoanApplicationDetails tuitionAmount={''} amountRequested={''} initialDeposit={''} />
             </Providers>
         );
         const trigger = screen.getByText('Expand to see the tuition breakdown');
@@ -51,7 +51,7 @@ describe('LoanApplicationDetails', () => {
     test('renders additional information component', () => {
         render(
             <Providers>
-                <LoanApplicationDetails />
+                <LoanApplicationDetails tuitionAmount={''} amountRequested={''} initialDeposit={''} />
             </Providers>
         );
         expect(screen.getByText('Tuition amount')).toBeInTheDocument();
@@ -60,7 +60,7 @@ describe('LoanApplicationDetails', () => {
     it('renders the collapsible trigger text correctly', () => {
         render(
             <Providers>
-                <LoanApplicationDetails />
+                <LoanApplicationDetails tuitionAmount={''} amountRequested={''} initialDeposit={''} />
             </Providers>
         );
         const trigger = screen.getByText('Expand to see the tuition breakdown');
@@ -70,7 +70,7 @@ describe('LoanApplicationDetails', () => {
     it('applies correct CSS class names to the collapsible trigger', () => {
         render(
             <Providers>
-                <LoanApplicationDetails />
+                <LoanApplicationDetails tuitionAmount={''} amountRequested={''} initialDeposit={''} />
             </Providers>
         );
         const trigger = screen.getByText('Expand to see the tuition breakdown');
