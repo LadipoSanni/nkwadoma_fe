@@ -18,6 +18,7 @@ import {
 import { useRouter } from "next/navigation";
 import { getItemSessionStorage } from "@/utils/storage";
 import { formatAmount } from "@/utils/Format";
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -54,7 +55,7 @@ const OrganizationDetails = () => {
   // 
   const router = useRouter();
 
-  const organizationName = organizationDetails?.data.name ?? "";;
+  const organizationName = organizationDetails?.data.name ?? "";
   const firstCharInName = organizationName.charAt(0).toUpperCase()
   
 
@@ -159,7 +160,7 @@ const OrganizationDetails = () => {
               : "text-[#59100D] bg-[#FBE9E9]"
           }`}
         >
-          {row.status}
+          {capitalizeFirstLetters(String(row.status))}
         </span>
       ),
     },
