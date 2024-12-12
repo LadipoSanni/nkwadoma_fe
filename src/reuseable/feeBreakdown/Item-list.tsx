@@ -87,7 +87,8 @@ const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, s
                             // disabled={item.itemName === "Tuition"}
                             
                         }}
-                        disabled={item.itemName === "Tuition"}
+                        // disabled={item.itemName === "Tuition"}
+                        readOnly={item.itemName === "Tuition"}
                         />
 
                         {errors[index] && <span className="text-[14px] text-red-500">{errors[index]}</span>}

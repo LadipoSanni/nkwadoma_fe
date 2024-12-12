@@ -55,7 +55,7 @@ interface viewAllProgramProps extends TableRowData {
     totalAmountRepaid?: number;
     totalAmountDisbursed?: number;
     totalAmountOutstanding?: number
-    noOfLoanees?: number;
+    numberOfLoanees?: number;
     numberOfCohort: number
 }
 
@@ -168,8 +168,8 @@ const ProgramView = () => {
         {
             title: 'No. of loanees',
             sortable: true,
-            id: 'noOfLoanees',
-            selector: (row: TableRowData) => row.noOfLoanees ?? "0"
+            id: 'numberOfLoanees',
+            selector: (row: TableRowData) => row.numberOfLoanees ?? "0"
         },
         {
             title: 'Amount Disbursed',
@@ -408,7 +408,7 @@ const ProgramView = () => {
                                 />
                             ) : (programView.slice().reverse().map((program, index) => {
     
-                               const tagButtonData = [ { tagIcon: MdPersonOutline, tagCount: Number(program.noOfLoanees ?? 0), tagButtonStyle: 'bg-tagButtonColor', tagText: 'loanees' }, 
+                               const tagButtonData = [ { tagIcon: MdPersonOutline, tagCount: Number(program.numberOfLoanees ?? 0), tagButtonStyle: 'bg-tagButtonColor', tagText: 'loanees' }, 
                                { tagIcon: MdOutlineDateRange, tagCount: Number(program.duration ?? 0) , tagButtonStyle: 'bg-tagButtonColor', tagText: 'months' }, 
                                { tagIcon: MdOutlinePeopleAlt, tagCount: Number(program.numberOfCohort?? 0) , tagButtonStyle: 'bg-tagButtonColor', tagText: 'cohorts' } ];
                                     return (

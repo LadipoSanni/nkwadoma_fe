@@ -19,6 +19,7 @@ export const cohortApi = createApi({
                 startDate: string,
                 cohortDescription: string,
                 imageUrl: string | null,
+                tuitionAmount: string,
                 loanBreakdowns: LoanBreakdown[]
 
             }) => ({

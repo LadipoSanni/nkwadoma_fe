@@ -65,7 +65,8 @@ function InviteOrganizationForm({setIsOpen}: props) {
         .matches(/^[^0-9]*$/, 'Numbers are not allowed'),
         email: Yup.string()
         .email('Invalid email address')
-        .matches(/^\S*$/, 'Email address should not contain spaces')
+        // .matches(/^\S*$/, 'Email address should not contain spaces')
+        .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
         .required('Email address is required'),
         industry:Yup.string()
         .required('Industry is required'),
@@ -79,6 +80,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
         .trim()
         .required('Tax number is required')
         .min(9, 'Tax number must be at least 9 characters long')
+        .max(15,'Must be the length of 15 characters long')
         .matches(/^[A-Za-z0-9-]*$/, 'Tax number can only contain letters, numbers, and hyphens, and must not start with a hyphen'),
         adminFirstName: Yup.string()
         .trim()
@@ -91,7 +93,8 @@ function InviteOrganizationForm({setIsOpen}: props) {
         .matches(/^(0)(70|71|80|81|90|91)\d{8}$/,'Invalid phone number'),
         adminEmail: Yup.string()
         .email('Invalid email address')
-        .matches(/^\S*$/, 'Email address should not contain spaces')
+        // .matches(/^\S*$/, 'Email address should not contain spaces')
+        .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
         .required('Admin email address is required')
         .test(
             'email-different', 'Admin email address must be different from company email address',
