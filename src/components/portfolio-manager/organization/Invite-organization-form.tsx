@@ -272,7 +272,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
              }
              </div>
              <div>
-             <Label htmlFor="serviceOffering:">Service Offering:</Label>
+             <Label htmlFor="serviceOffering:">Service Offering</Label>
              <CustomSelect
              triggerId='serviceOfferingTriggerId'
               id='serviceOffering'

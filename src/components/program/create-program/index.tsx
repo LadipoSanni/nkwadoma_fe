@@ -42,6 +42,7 @@ function CreateProgram({setIsOpen}:Props) {
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
     const programModes=["FULL_TIME", "PART_TIME"]
+    const programDurations=Array.from({ length: 24 }, (_, i) => (i + 1).toString());
 
 
     const validationSchema = Yup.object().shape({
@@ -181,7 +182,13 @@ function CreateProgram({setIsOpen}:Props) {
                   </div>
                 <div className='grid md:grid-cols-2 gap-4 w-full'>
                   <div>
-                    <Label htmlFor="programMode">Program mode</Label>
+                    {/* <Label htmlFor="programMode"
+                     style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'inline-block', maxWidth: '100%', }}
+                    >Program mode</Label> */}
+                     <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', scrollbarWidth: 'none',
+                       msOverflowStyle: 'none'}}> 
+                    <Label htmlFor="minimumAmount" style={{ display: 'inline-block',WebkitOverflowScrolling: 'touch'  }}>Program mode</Label> 
+                    </div>
                     <CustomSelect
                      triggerId='programModeTriggerId'
                       id="programModalSelect"
@@ -189,7 +196,7 @@ function CreateProgram({setIsOpen}:Props) {
                       value={values.programMode} 
                       onChange={(value) => setFieldValue("programMode", value)} 
                       name="programMode"
-                      placeHolder='Select a program Mode'
+                      placeHolder='Select a mode'
                      
                     />
                      {
@@ -203,17 +210,29 @@ function CreateProgram({setIsOpen}:Props) {
                     )
                    }
                   </div>
-                   <div className='md:mt-1'>
-                    <Label htmlFor="duration">Program duration (Months)</Label>
-                    {/* <CustomSelect
+                   <div className=''>
+                    {/* <Label htmlFor="duration"
+                      className="overflow-x-auto whitespace-nowrap max-w-full md:max-w-[100px]"
+                     style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'inline-block', maxWidth: '100%', }}
+                    >Program duration (Months)</Label> */}
+                    <div 
+                    style={{ 
+                      overflowX: 'auto', 
+                      whiteSpace: 'nowrap' ,
+                      scrollbarWidth: 'none',
+                       msOverflowStyle: 'none'
+                      }}> 
+                    <Label htmlFor="programDuration" style={{ display: 'inline-block',WebkitOverflowScrolling: 'touch' }}>Program duration (Months)</Label> 
+                    </div>
+                    <CustomSelect
                       selectContent={programDurations}
-                      value={values.duration} 
-                      onChange={(value) => setFieldValue("duration", value)} 
-                      name="duration"
-                      placeHolder='Select a program Duration'
+                      value={values.programDuration} 
+                      onChange={(value) => setFieldValue("programDuration", value)} 
+                      name="programDuration"
+                      placeHolder='Select a duration'
                      
-                    /> */}
-                      <Field
+                    />
+                      {/* <Field
                         id="duration"
                         name="programDuration"
                         // type="number"
@@ -225,7 +244,7 @@ function CreateProgram({setIsOpen}:Props) {
                               setFieldValue("programDuration", value); 
                           }
                       }}
-                        /> 
+                        />  */}
 
                      {
                     errors.programDuration && touched.programDuration &&  (

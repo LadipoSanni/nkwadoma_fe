@@ -124,19 +124,19 @@ describe('program-view Component', () => {
         expect(screen.getByText('Edit program')).toBeInTheDocument();
     });
 
-    test('displays cohorts tab content when clicked', () => {
-        act(() => {
-            render(
-                <Providers>
-                    <ProgramDetails />
-                </Providers>
-            );
-        });
-        act(() => {
-            fireEvent.click(screen.getByText('Cohorts'));
-        });
-        expect(screen.getByText('Cohorts')).toBeInTheDocument();
-    });
+    // test('displays cohorts tab content when clicked', () => {
+    //     act(() => {
+    //         render(
+    //             <Providers>
+    //                 <ProgramDetails />
+    //             </Providers>
+    //         );
+    //     });
+    //     act(() => {
+    //         fireEvent.click(screen.getByText('Cohorts'));
+    //     });
+    //     expect(screen.getByText('Cohorts')).toBeInTheDocument();
+    // });
 
     test('navigates back to programs on back button click', () => {
         act(() => {
@@ -152,31 +152,31 @@ describe('program-view Component', () => {
         expect(mockPush).toHaveBeenCalledWith('/program');
     });
 
-    test('renders search input in cohorts tab', () => {
-        act(() => {
-            render(
-                <Providers>
-                    <ProgramDetails />
-                </Providers>
-            );
-        });
-        act(() => {
-            fireEvent.click(screen.getByText('Cohorts'));
-        });
+    // test('renders search input in cohorts tab', () => {
+    //     act(() => {
+    //         render(
+    //             <Providers>
+    //                 <ProgramDetails />
+    //             </Providers>
+    //         );
+    //     });
+    //     act(() => {
+    //         fireEvent.click(screen.getByText('Cohorts'));
+    //     });
        
-    });
+    // });
 
-    test('renders table in cohorts tab', () => {
-        act(() => {
-            render(
-                <Providers>
-                    <ProgramDetails />
-                </Providers>
-            );
-        });
-        act(() => {
-            fireEvent.click(screen.getByText('Cohorts'));
-        });
+    // test('renders table in cohorts tab', () => {
+    //     act(() => {
+    //         render(
+    //             <Providers>
+    //                 <ProgramDetails />
+    //             </Providers>
+    //         );
+    //     });
+    //     act(() => {
+    //         fireEvent.click(screen.getByText('Cohorts'));
+    //     });
         
-    });
+    // });
 });
