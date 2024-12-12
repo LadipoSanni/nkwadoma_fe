@@ -15,11 +15,12 @@ import CreateCohort from "@/reuseable/modals/CreateCohort";
 import { inter } from '@/app/fonts'
 import { useGetAllCohortsByOrganisationQuery } from '@/service/admin/cohort_query'
 import { useSearchCohortByOrganisationQuery } from '@/service/admin/cohort_query'
-import { debounce } from 'lodash';
+// import { debounce } from 'lodash';
 import { useGetAllCohortByAParticularProgramQuery } from '@/service/admin/program_query'
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
+
 
 
 
@@ -165,12 +166,12 @@ const CohortView = () => {
    selectProgram: Yup.string().required('Program is required'),
  })
 
- const debouncedSearch = useCallback( debounce((term) => { 
-  setSearchTerm(term);
- }, 300), [setSearchTerm] );
+//  const debouncedSearch = useCallback( debounce((term) => { 
+//   setSearchTerm(term);
+//  }, 300), [setSearchTerm] );
 
  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
-  debouncedSearch(event.target.value);
+  setSearchTerm(event.target.value);
 };
 
       const toastPopUp = ToastPopUp({
@@ -196,7 +197,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
        
     }catch(error){
         const err = error as ApiError;
-        setDeleteProgram(err?.data?.message || "Error deleting cohort")
+        setDeleteProgram(err?.data?.message || "Cohort with loanee cannot be deleted")
         setTimeout(() => {
           errorPop.showToast(); 
          }, 1000); 

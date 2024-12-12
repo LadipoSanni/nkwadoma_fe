@@ -61,7 +61,7 @@ const ViewOrganizationDetail = () => {
       label: "Number of programs",
       value: organizationDetail?.data.numberOfPrograms,
     },
-    { label: "Number of cohorts", value: "0" },
+    { label: "Number of cohorts", value: organizationDetail?.data.numberOfCohort },
     {
       label: "Number of loanees",
       value: organizationDetail?.data.numberOfLoanees,

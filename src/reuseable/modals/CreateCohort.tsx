@@ -98,7 +98,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   };
 
   useEffect(() => {
-    if(areLoanBreakdownsValid() && loanBreakdowns.length > 0 ) {
+    if(areLoanBreakdownsValid() && loanBreakdowns.length > 1 ) {
       setCreateButtonDisabled(false);
     }else {
       setCreateButtonDisabled(true);
@@ -138,13 +138,18 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
       return;
     }
     if (!isButtonDisabled && !descriptionError) {
+      const tuitionItem = loanBreakdowns.find(item => item.itemName === "Tuition");
+      const tuitionAmount = tuitionItem? tuitionItem.itemAmount : "" ;
+      const filteredLoanBreakdowns = loanBreakdowns.filter(item => item.itemName !== "Tuition");
+
       const formData = {
         name: name,
         programId: programId,
         startDate: startDate ? format(startDate, "yyyy-MM-dd") : "",
         cohortDescription: cohortDescription,
         imageUrl: imageUrl,
-        loanBreakdowns: loanBreakdowns,
+        loanBreakdowns: filteredLoanBreakdowns,
+        tuitionAmount: tuitionAmount
       };
       try {
         const result = await createCohort(formData).unwrap();
@@ -174,7 +179,8 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     setIsSelectOpen(false);
     setIsButtonDisabled(true);
     setCreateButtonDisabled(true);
-    setLoanBreakdowns([]);
+    // setLoanBreakdowns([]);
+     setLoanBreakdowns([{ itemName: "Tuition", itemAmount: "", currency: "NGN" }]);
     setProgramId("");
     setError("");
     setUploadedUrl(null);
