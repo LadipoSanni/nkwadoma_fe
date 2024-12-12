@@ -10,6 +10,9 @@ import { useToast} from "@/hooks/use-toast";
 import {jwtDecode} from "jwt-decode";
 import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {ADMIN_ROLES} from "@/types/roles";
+import {persistor, store} from "@/redux/store";
+import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
+import {clearData} from "@/utils/storage";
 
 
 const CreatePassword = () => {
@@ -18,6 +21,7 @@ const CreatePassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const router = useRouter()
     const searchParams = useSearchParams()
+    const [disableButton, setDisableButton] = useState(false)
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
 
 
@@ -51,6 +55,7 @@ const CreatePassword = () => {
     const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setConfirmPassword(e.target.value);
     };
+
 
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
@@ -87,46 +92,52 @@ const CreatePassword = () => {
 
     }
     const handleCreatePassword = async () => {
+        setDisableButton(true)
         const token = getUserToken()
-        console.log("token: ", token)
 
         try {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
-            console.log("responsebhybyuihiuhuihiu : ",response)
-            const access_token = response?.data?.access_token
+            const access_token = response?.data?.accessToken
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
-            const user_id = response?.data?.id
-            console.log("user email: ",user_email, "user_id: ", user_id)
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             const userName = decode_access_token?.name
             // const user_email = decode_access_token?.email
             const user_roles = decode_access_token?.realm_access?.roles
             const user_role = user_roles.filter(getUserRoles).at(0)
-            console.log("userName: ", userName,"user_role; ", user_role )
+            clearData()
+            await persistor.purge();
             if (user_role) {
                 storeUserDetails(access_token, user_email, user_role, userName)
                 if (user_role === 'LOANEE') {
+                    store.dispatch(setCurrentNavbarItem("overview"))
                     router.push("/overview")
-                } else {
-                    router.push("/Overview")
+                } else if(user_role === 'ORGANIZATION_ADMIN') {
+                    store.dispatch(setCurrentNavbarItem("Program"))
+                    router.push("/program")
+                }else if(user_role === 'PORTFOLIO_MANAGER'){
+                    store.dispatch(setCurrentNavbarItem("Organizations"))
+                    router.push("/organizations")
                 }
 
             }
 
 
         }catch (error){
-            console.log("error: ", error)
+
+            // console.log("error: ", error)
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
                 description: error?.data?.message,
                 status: "error",
             })
+            // setDisableButton(false)
 
-            }
+
+        }
 
     }
 
@@ -162,7 +173,7 @@ const CreatePassword = () => {
                 <AuthButton
                     backgroundColor={criteriaStatus.every(Boolean) && password === confirmPassword ? '#142854' : '#D0D5DD'}
                     buttonText={'Create password'}
-                    disable={!criteriaStatus.every(Boolean) || password !== confirmPassword}
+                    disable={!criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton}
                     handleClick={handleCreatePassword}
                     id={"createPasswordButton"}
                     textColor={'#FFFFFF'}

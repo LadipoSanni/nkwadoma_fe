@@ -7,6 +7,11 @@ type props = {
 }
 
 const Layout: React.FC<props> = ({ children }) => {
+
+
+
+
+
     return (
         <AdminLayout>
             {children}

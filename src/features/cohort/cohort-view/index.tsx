@@ -15,10 +15,12 @@ import CreateCohort from "@/reuseable/modals/CreateCohort";
 import { inter } from '@/app/fonts'
 import { useGetAllCohortsByOrganisationQuery } from '@/service/admin/cohort_query'
 import { useSearchCohortByOrganisationQuery } from '@/service/admin/cohort_query'
-import { debounce } from 'lodash';
+// import { debounce } from 'lodash';
 import { useGetAllCohortByAParticularProgramQuery } from '@/service/admin/program_query'
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
+import ToastPopUp from '@/reuseable/notification/ToastPopUp';
+
 
 
 
@@ -60,12 +62,21 @@ interface allCohortsProps extends TableRowData {
    tuitionAmount: number
    id:string
    programId: string
+   numberOfLoanees: number
+   
 }
 
 interface viewAllProgramProps extends TableRowData  {
   id?: string;
   name: string;
   
+}
+
+interface ApiError {
+  status: number;
+  data: {
+    message: string;
+  };
 }
 
 
@@ -78,6 +89,7 @@ const CohortView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [programId, setProgramId] = useState('');
   const [pendingProgramId, setPendingProgramId] = useState('');
+  const [deleteProgram, setDeleteProgram] = useState("")
    const [isLoadings] = useState(false);
    const [page] = useState(0);
    const size = 200;
@@ -154,21 +166,41 @@ const CohortView = () => {
    selectProgram: Yup.string().required('Program is required'),
  })
 
- const debouncedSearch = useCallback( debounce((term) => { 
-  setSearchTerm(term);
- }, 300), [setSearchTerm] );
+//  const debouncedSearch = useCallback( debounce((term) => { 
+//   setSearchTerm(term);
+//  }, 300), [setSearchTerm] );
 
  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
-  debouncedSearch(event.target.value);
+  setSearchTerm(event.target.value);
 };
+
+      const toastPopUp = ToastPopUp({
+      description: `Cohort deleted successfully.`,
+      status:"success"
+      });
+
+      const errorPop = ToastPopUp({
+      description: `error deleting Cohort.`,
+      status:"error"
+      });
 
 const handleDeleteCohortByOrganisation = async (id: string) => {
        
     try{
-        await deleteItem({id}).unwrap();
-        setOrganisationCohort((prevData) => prevData.filter((item) => item.id !== id))
+       const deleteCohort = await deleteItem({id}).unwrap();
+         if(deleteCohort){
+          setOrganisationCohort((prevData) => prevData.filter((item) => item.id !== id))
+          setTimeout(() => {
+            toastPopUp.showToast(); 
+           }, 1000); 
+         }
+       
     }catch(error){
-        console.error("Error deleting program: ", error);
+        const err = error as ApiError;
+        setDeleteProgram(err?.data?.message || "Cohort with loanee cannot be deleted")
+        setTimeout(() => {
+          errorPop.showToast(); 
+         }, 1000); 
     }
 }
 
@@ -195,7 +227,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
               <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
                   <Button id='cohortInProgram' variant={'default'} className='w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none' >
-                     Program
+                    {!selectProgram? "Program" : selectProgram}
                     <span className='ml-4'>
                       {isDropdown ? (
           <ChevronUpIcon className="h-4 w-5 font-semibold" />
@@ -304,7 +336,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
           </div>
         </div>
         <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
-         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation}/>
+         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation} errorDeleted={deleteProgram}/>
          
         </div>
     </div>

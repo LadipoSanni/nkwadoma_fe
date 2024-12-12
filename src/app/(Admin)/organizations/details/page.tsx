@@ -1,5 +1,5 @@
 import React from 'react';
-import OrganizationDetails from "@/features/portfolio-manager/organizationDetails/Index";
+import OrganizationDetails from "@/features/portfolio-manager/organization/organizationDetails/Index";
 
 const Page = () => {
     return (

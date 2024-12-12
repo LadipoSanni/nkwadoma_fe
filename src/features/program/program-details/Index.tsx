@@ -22,13 +22,11 @@ import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import EditProgramForm from "@/components/program/edit-program-form";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
-import {useGetProgramByIdQuery} from "@/service/admin/program_query";
+import {useGetProgramByIdQuery, useSearchCohortsInAParticularProgramQuery} from "@/service/admin/program_query";
 import {getItemSessionStorage} from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
 import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/program_query";
-import {useSearchCohortsInAParticularProgramQuery} from "@/service/admin/program_query";
-
 
 interface loanDetails {
     totalAmountRepaid?: number;
@@ -71,6 +69,8 @@ const ProgramDetails = () => {
             totalAmountRepaid: 0,
             totalAmountDisbursed: 0,
             totalAmountOutstanding: 0,
+            numberOfCohort: 0,
+            numberOfLoanees: 0
         }
     )
     const [cohorts, setCohorts] = useState<ViewAllProgramProps[]>([])
@@ -112,6 +112,8 @@ const ProgramDetails = () => {
                 totalAmountRepaid: detail?.totalAmountRepaid || 0,
                 totalAmountDisbursed: detail?.totalAmountDisbursed || 0,
                 totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
+                numberOfCohort: detail?.numberOfCohort,
+                numberOfLoanees: detail?.numberOfLoanees,
             });
         }
     }, [program])
@@ -157,26 +159,24 @@ const ProgramDetails = () => {
             tagIcon: MdOutlineDateRange,
             tagCount: progamDetail.duration,
             tagButtonStyle: "bg-lightBlue100",
-            tagText: "months"
+            tagText: "Months"
         },
-        {tagIcon: MdOutlinePeopleAlt, tagCount: 10, tagButtonStyle: "bg-warning80", tagText: "cohorts"},
-        {tagIcon: MdPersonOutline, tagCount: 50, tagButtonStyle: "bg-warning50", tagText: "trainees"},
+        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: "Cohorts"},
+        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: "Loanees"},
     ];
     const ProgramHeader = [
         {title: "Cohort", sortable: true, id: "name"},
-        {title: "No of trainees", sortable: true, id: "noOfTrainees",
-        selector: (row: ViewAllProgramProps) => row.tuitionAmount
+        {
+            title: "No of trainees", sortable: true, id: "noOfTrainees",
+            selector: (row: ViewAllProgramProps) => row.tuitionAmount
         },
-        
+
         {
             title: "Tuition",
             sortable: true,
             id: "tuitionAmount",
             selector: (row: ViewAllProgramProps) => formatAmount(row.tuitionAmount)
         },
-        // {title: "Amount Requested", sortable: true, id: "amountRequested"},
-        // {title: "Amount Received", sortable: true, id: "amountReceived"},
-        // {title: "Amount Outstanding", sortable: true, id: "totalAmountOutstanding"},
         {
             title: "Amount Requested",
             sortable: true,
@@ -233,8 +233,6 @@ const ProgramDetails = () => {
     };
 
 
-    // const description = "Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes."
-
     return (
         <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`} id={"mainDiv"}>
             <div className={`flex gap-2 w-[9.2rem] items-center cursor-pointer text-meedlBlue`} id={`backClick`}
@@ -246,9 +244,9 @@ const ProgramDetails = () => {
 
             <Tabs defaultValue="details">
                 <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'}>
-                    <TabsTrigger value="details" id = {`tabTrigger1`}
+                    <TabsTrigger value="details" id={`tabTrigger1`}
                                  className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] w-[3.875rem] data-[state=active]:shadow-custom'}>Details</TabsTrigger>
-                    <TabsTrigger value="cohorts" id = {`tabTrigger2`}
+                    <TabsTrigger value="cohorts" id={`tabTrigger2`}
                                  className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom'}>Cohorts</TabsTrigger>
                 </TabsList>
                 <TabsContent value="details" className={'mt-4'} id={`content`}>
@@ -260,11 +258,13 @@ const ProgramDetails = () => {
                                 <FiBook id={`book`} className={'h-[50px] w-[50px] text-meedlBlue'}/>
                             </div>
                             <div className={'flex flex-col gap-3'} id={`tagDiv`}>
-                                <h1 id={`name`} className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>
+                                <h1 id={`name`}
+                                    className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>
                                     {progamDetail.name}
                                 </h1>
                                 <div className={'grid gap-5'} id={`tagButtonDiv`}>
-                                    <p id={`details`} className={'text-sm font-normal text-black400 w-[351px]'}>{progamDetail.programDescription}</p>
+                                    <p id={`details`}
+                                       className={'text-sm font-normal text-black400 w-[351px]'}>{progamDetail.programDescription}</p>
                                     <div id={`details`} data-testid="details"
                                          className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
                                         {tagButtonData.map((tagProps, index) => (
@@ -275,15 +275,15 @@ const ProgramDetails = () => {
                             </div>
                             <div id={`buttons`} className={'flex justify-between'}>
                                 <Button onClick={handleModalClick}
-                                 id="editButton"
+                                        id="editButton"
                                         className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
                                     program</Button>
-                                <div role={"button"}
+                                {progamDetail.numberOfLoanees > 0? "" : <div role={"button"}
                                      id="kebabId"
                                      className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
                                     <Kebab kebabOptions={programOptions} icon={IoEllipsisHorizontalSharp}
                                            handleDropDownClick={handleDropdownClick}/>
-                                </div>
+                                </div>}
                             </div>
                         </div>
                         <div id={`container`} className={`md:w-6/12 md:pt-0 pt-0`}>
@@ -342,8 +342,6 @@ const ProgramDetails = () => {
                         />
                     </TableModal>
                 </>
-
-
             }
         </main>
     );

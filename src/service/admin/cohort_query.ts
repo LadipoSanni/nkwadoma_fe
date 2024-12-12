@@ -7,7 +7,6 @@ interface LoanBreakdown {
     currency: string;
 }
 
-
 export const cohortApi = createApi({
     reducerPath: 'cohortApi',
     baseQuery: customFetchBaseQuery,
@@ -20,6 +19,7 @@ export const cohortApi = createApi({
                 startDate: string,
                 cohortDescription: string,
                 imageUrl: string | null,
+                tuitionAmount: string,
                 loanBreakdowns: LoanBreakdown[]
 
             }) => ({
@@ -49,7 +49,6 @@ export const cohortApi = createApi({
             }),
             invalidatesTags: ({id}) => [{type: 'cohort', id}],
         }),
-
         viewAllLoanee: builder.query({
             query: (data: {
                 cohortId?: string,
@@ -107,19 +106,55 @@ export const cohortApi = createApi({
                 method: "GET",
                 params: cohortId
             }),
-        })
+        }),
+        getCohortLoanBreakDown : builder.query({
+           query: (cohortId) => ({
+               url:`/cohort/loanbreakdown?cohortId=${cohortId}`,
+               method: "GET",
+           })
+        }),
+        searchForLoaneeInACohort: builder.query({
+            query: (param:{
+                loaneeName: string,
+                cohortId?: string,
+            }) => ({
+                url: '/cohort/searchForLoanee',
+                method: 'GET',
+                params: param,
+            })
+        }),
+        referLoaneeToACohort: builder.mutation({
+           query: (data) => ({
+               url: `/cohort/loanee/refer`,
+               method: 'POST',
+               body: data
+           }),
+            invalidatesTags: ['cohort'],
+        }),
+        addLoaneeToCohort: builder.mutation({
+            query: (data) => ({
+                url: `/addLoaneeToCohort`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['cohort'],
+        }),
     })
 })
 
 
 
 export const {
+    useAddLoaneeToCohortMutation,
+    useGetCohortLoanBreakDownQuery,
+    useReferLoaneeToACohortMutation,
     useCreateCohortMutation,
     useViewAllLoaneeQuery,
     useGetAllCohortsByOrganisationQuery,
     useSearchCohortByOrganisationQuery,
     useViewCohortDetailsQuery,
     useDeleteCohortMutation, useEditCohortMutation,
-    useGetCohortDetailsQuery, useReferLoaneeMutation
+    useGetCohortDetailsQuery, useReferLoaneeMutation,
+    useSearchForLoaneeInACohortQuery
 } = cohortApi;
 

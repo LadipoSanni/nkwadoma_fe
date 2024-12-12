@@ -4,11 +4,11 @@ import {Table, TableRow, TableHead, TableCell, TableBody, TableHeader} from '@/c
 import TableContainer from './TableContainer'
 import Paginations from './TablePagination'
 import {Select, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectGroup} from '@/components/ui/select'
-import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
-import {DotsVerticalIcon} from '@radix-ui/react-icons';
+import {ChevronDownIcon, ChevronUpIcon, DotsVerticalIcon} from "@radix-ui/react-icons";
 import {Button} from '@/components/ui/button'
 import {Menubar, MenubarTrigger, MenubarContent, MenubarMenu, MenubarItem} from '@/components/ui/menubar'
 import TableEmptyState from '../emptyStates/TableEmptyState'
+import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 
 
 interface ColumnProps<T> {
@@ -32,7 +32,7 @@ interface DropdownOption {
 interface Props<T extends TableRowData> {
     tableData: T[];
     tableHeader: ColumnProps<T>[];
-    handleRowClick: (row: T) => void;
+    handleRowClick: ()=> void;
     handleDropDownClick?: (id: string,row: TableRowData) => void;
     tableHeight?: number;
     sx?: string
@@ -48,11 +48,19 @@ interface Props<T extends TableRowData> {
     optionalRowsPerPage?: number;
     tableCellStyle?: string;
     enableRowSelection?: boolean;
+    isLoading?: boolean;
+    condition?:boolean;
+    disabledButton?: ()=> void;
+    handleSelectedRow: (rows:Set<string>) => void,
+    enableButton?: ()=> void,
 }
 
 
 function SelectableTable<T extends TableRowData> ({
                                              tableHeader,
+                                                      disabledButton,
+                                                      handleSelectedRow,
+                                                      enableButton,
                                              tableData,
                                              handleRowClick,
                                              tableHeight,
@@ -70,16 +78,16 @@ function SelectableTable<T extends TableRowData> ({
                                              optionalRowsPerPage = 8,
                                              tableCellStyle,
                                              enableRowSelection = false,
-
-
-                                         }: Props<T>) {
+                                                      isLoading = true,
+                                                      condition
+                                         }: Readonly<Props<T>>) {
     const [page, setPage] = useState(1);
     const rowsPerPage = optionalRowsPerPage;
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
-    const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
+    const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
 
 
 
@@ -113,20 +121,45 @@ function SelectableTable<T extends TableRowData> ({
     const handleSelectAll = () => {
         if (selectAll) {
             setSelectedRows(new Set());
+            if (disabledButton){
+                disabledButton()
+            }
         } else {
-            const allRowIndexes = new Set(paginatedData.map((_, idx) => (page - 1) * rowsPerPage + idx));
+            const allRowIndexes : Set<string> = new Set();
+            paginatedData?.forEach((data) => allRowIndexes.add(String(data.id)))
+            // console.log("paginated: ", paginatedData)
             setSelectedRows(allRowIndexes);
+            handleSelectedRow(allRowIndexes)
+            if(enableButton){
+                enableButton()
+            }
         }
         setSelectAll(!selectAll);
+
     };
 
-    const handleRowSelect = (rowIndex: number) => {
+    const handleRowSelect = (rowIndex: string) => {
         const updatedSelectedRows = new Set(selectedRows);
         if (updatedSelectedRows.has(rowIndex)) {
             updatedSelectedRows.delete(rowIndex);
         } else {
             updatedSelectedRows.add(rowIndex);
+            // if(enableButton){
+            //     enableButton()
+            // }
         }
+        if (updatedSelectedRows.size <=  paginatedData.length || updatedSelectedRows.size != 0 ){
+            if (enableButton){
+                enableButton()
+            }
+        }
+        if(updatedSelectedRows.size === 0 ){
+            if (disabledButton){
+                disabledButton()
+            }
+        }
+
+        handleSelectedRow(updatedSelectedRows)
         setSelectedRows(updatedSelectedRows);
         setSelectAll(updatedSelectedRows.size === paginatedData.length);
     };
@@ -145,9 +178,10 @@ function SelectableTable<T extends TableRowData> ({
 
     return (
         <div id="loanProductTableContainer" className={`w-[100%] `}>
-            {
-                tableData.length === 0 ? <TableEmptyState icon={icon} name={sideBarTabName} className={emptyStateStyle}
-                                                          optionalFilterName={optionalFilterName}/> : (
+                {
+                    isLoading ? (<SkeletonForTable/>) :
+                        ( tableData.length === 0 ? <TableEmptyState icon={icon} name={sideBarTabName} className={emptyStateStyle}
+                                                                    optionalFilterName={optionalFilterName} condition={condition}/> : (
                     <div>
                         <div id="loanProductTableBorder"
                              className='border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block '>
@@ -203,8 +237,8 @@ function SelectableTable<T extends TableRowData> ({
                                                         <input
                                                             type="checkbox"
                                                             id={`rowCheckBox`}
-                                                            checked={selectedRows.has((page - 1) * rowsPerPage + rowIndex)}
-                                                            onChange={() => handleRowSelect((page - 1) * rowsPerPage + rowIndex)}
+                                                            checked={selectedRows.has(String(row.id))}
+                                                            onChange={() => handleRowSelect(String(row.id))}
                                                             className={`border-2 border-[#D7D7D7] rounded-md`}
                                                         />
                                                     </TableCell>
@@ -213,7 +247,7 @@ function SelectableTable<T extends TableRowData> ({
                                                     tableHeader.map((column) => (
 
                                                         <TableCell
-                                                            onClick={() => handleRowClick(row)}
+                                                            onClick={handleRowClick}
                                                             key={`${column.id}${rowIndex} `}
                                                             id={`dynamicTableCell${column.id}${rowIndex}`}
                                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
@@ -365,15 +399,15 @@ function SelectableTable<T extends TableRowData> ({
                                             paginatedData.map((row, rowIndex) => (
                                                 <TableRow
                                                     key={rowIndex}
-                                                    onClick={() => handleRowClick(row)}
+                                                    onClick={handleRowClick}
                                                     className={`${sx}`}
                                                 >
                                                     {enableRowSelection && (
                                                         <TableCell>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={selectedRows.has((page - 1) * rowsPerPage + rowIndex)}
-                                                                onChange={() => handleRowSelect((page - 1) * rowsPerPage + rowIndex)}
+                                                                checked={selectedRows.has(String(row.id))}
+                                                                onChange={() => handleRowSelect(String(row.id))}
                                                                 className={`border-2 border-[#D7D7D7] rounded-md`}
                                                             />
                                                         </TableCell>
@@ -418,6 +452,7 @@ function SelectableTable<T extends TableRowData> ({
 
                         </div>
                     </div>
+                            )
                 )
             }
         </div>

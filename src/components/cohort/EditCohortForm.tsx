@@ -8,16 +8,13 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
-import { MdDeleteOutline } from 'react-icons/md';
-import { MdOutlineEdit } from 'react-icons/md';
-import { Input } from '@/components/ui/input';
+// import { MdDeleteOutline } from 'react-icons/md';
+// import { MdOutlineEdit } from 'react-icons/md';
+// import { Input } from '@/components/ui/input';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import { useEditCohortMutation } from '@/service/admin/cohort_query';
 import { useQueryClient } from '@tanstack/react-query';
-// import data from '@iconify/icons-line-md/loading-loop';
-// import { uploadImageToCloudinary } from '@/utils/UploadToCloudinary';
-
-// import Image from 'next/image';
+import FileUploadTwo from '@/reuseable/Input/FileUploadTwo';
 
 
 interface cohortDetails {
@@ -64,119 +61,24 @@ const EditCohortForm = ({setIsOpen,cohortDetail}: idProps) => {
     startDate: cohortDetail?.startDate,
     expectedEndDate: cohortDetail?.expectedEndDate,
     cohortDescription: cohortDetail?.cohortDescription,  
-    cohortImage: cohortDetail?.imageUrl,
-
-//  'https://www.thoughtco.com/thmb/gvFwQROKdUKVqquJ7a1t79S1qC4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-10194740-58b885703df78c353cbe18bc.jpg'
-
+    imageUrl: cohortDetail?.imageUrl,
 
 }
-
-
-
+const maxChars = 1500;
   
-  const [image, setImage] = useState(initialFormValue.cohortImage);
-  // const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  // const [uploading, setUploading] = useState(false); 
-  // const [uploadError, setUploadError] = useState(false); 
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null); 
-  // const [isImageUploaded, setIsImageUploaded] = useState(false)
-  const maxChars = 1500;
-  
-  
-  const supportedTypes = [
-    "image/svg+xml",
-    "image/png",
-    "image/jpg",
-    "image/jpeg",
-    "image/gif",
-    "image/webp",
-    "image/bmp",
-    "image/tiff",
-    "image/x-icon",
-    "image/heif",
-    "image/heic"
-  ];
-
-  
-
-
-const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  // setUploadError(false); 
-  if (e.target.files && e.target.files[0]) {
-    const file = e.target.files[0];
-   
-
-    if (supportedTypes.includes(file.type)) {
-      // setUploadError(false); 
-      // setIsImageUploaded(true); 
-      setUploadedFile(file); 
-      setImage(URL.createObjectURL(file)); 
-
-      setTimeout(() => {
-        // setUploading(false);
-        // setShowSuccessMessage(true);
-        // setIsImageUploaded(true);
-      }, 2000);
-  } else {
-      // setUploadError(true);
-      return;
-     
-  }
-    
-  }
-
-  
-};
-
-// const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-//   e.preventDefault();
-//   setUploadError(false);
-//   const file = e.dataTransfer.files[0];
-//   if (supportedTypes.includes(file.type)) {
-//     setUploadedFile(file);
-//     setImage(URL.createObjectURL(file));
-//     setUploading(true);
-
-//     setTimeout(() => {
-//       setUploadError(false); 
-//       setUploading(false);
-//       setShowSuccessMessage(true);
-//       setIsImageUploaded(true);
-//     }, 2000);
-//   } else {
-//     setUploadError(true);
-//   }
-// }
-
-// const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-//   e.preventDefault();
-// };
-
-const fileInputRef = React.useRef<HTMLInputElement | null>(null);
-
-  const handleImageDelete = () => {
-    setImage('')
-    setUploadedFile(null); 
-    // setIsImageUploaded(false);
-    // setShowSuccessMessage(false);
-    // setUploadError(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''; 
-  };
-
-}
-
-  //  const handleReset = (resetForm: () => void) => {
-  //   resetForm(); 
-  //   setImage(initialFormValue.cohortImage);
-  //   setUploadedFile(null); 
-  // };
-
   const handleCloseModal = () => {
     if (setIsOpen) {
       setIsOpen(false);
     }
   }
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+    };
+
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+    };
 
  
 
@@ -185,21 +87,34 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const validationSchema = Yup.object().shape({
     name: Yup.string()
      .trim()
-     .matches(/^\S*$/, 'Cohort name should not contain spaces')
+     .matches(/^[a-zA-Z0-9\- ]*$/, 'Cohort name should only contain letters, numbers, spaces, and hyphens')
      .required('Cohort name is required'),
     startDate: Yup.date()
                 .required('Start date is required')
-                .nullable(),
+                .nullable()
+                .test( 'is-before-end-date', 'Start date must be before end date', function (value) { 
+                  const { expectedEndDate } = this.parent; 
+                  return !expectedEndDate || !value || new Date(value) < new Date(expectedEndDate); } ) 
+                .test( 'not-equal-to-endDate', 'Start date cannot be the same as end date', function (value) { 
+                  const { expectedEndDate } = this.parent; 
+                  return !value || !expectedEndDate || new Date(value).getTime() !== new Date(expectedEndDate).getTime(); } )
+                ,
      expectedEndDate: Yup.date()
     .required('End date is required')
     .nullable()
-    .when('startDate', (startDate, schema) => {
+    // .when('startDate', (startDate, schema) => {
      
-      return startDate
-        ? schema.min(startDate, 'End date must be after start date')
-        : schema;
-    })
+    //   return startDate
+    //     ? schema.min(startDate, 'End date must be after start date')
+    //     : schema;
+    // })
+    .when('startDate', (startDate, schema) => { 
+      return startDate ? schema.min(startDate, 'End date must be after start date')
+      .test( 'not-equal-to-startDate', 'End date cannot be the same as start date', 
+      function (value) { const { startDate } = this.parent;  
+      return !!value && value !== startDate; } ) : schema; })
     ,
+    // .test( 'is-after-start-date', 'End date must be after start date', function (value) { const { startDate } = this.parent; return !startDate || !value || new Date(value) > new Date(startDate); } ) .test( 'not-equal-to-startDate', 'End date cannot be the same as start date', function (value) { const { startDate } = this.parent; return !value || !startDate || new Date(value).getTime() !== new Date(startDate).getTime(); } )
     cohortDescription: Yup.string()
      .trim()
     .required('Cohort Description is required')
@@ -215,11 +130,11 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
     const networkPopUp =  ToastPopUp({
       description: "No internet connection",
       status: "error",
-      
+
     });
 
   const handleSubmit = async (values: typeof initialFormValue) => {
-     console.log("values: ",values);
+     // console.log("values: ",values);
     if (!navigator.onLine) {
       networkPopUp.showToast();
       if (setIsOpen) {
@@ -270,6 +185,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
               errors.name && touched.name &&  (
                  <ErrorMessage
               name="name"
+              id='editCohortNameError'
               component="div"
               className="text-red-500 text-sm"
             /> 
@@ -284,13 +200,17 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                     selectedDate={parseISO(values.startDate ?? "")}
                      onDateChange={(date) => setFieldValue('startDate', format(date, 'yyyy-MM-dd'))}
                      className='p-6 mt-2'
-                     disabledDate={(date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)}
+                    //  disabledDate={
+                    //   (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
+                    // }
+                    disabledDate={(date) => date && (date.getTime() < new Date().setHours(0, 0, 0, 0) || date >= parseISO(values.expectedEndDate ?? ""))}
                  />
                    {
               errors.startDate && touched.startDate &&  (
                  <ErrorMessage
               name="startDate"
               component="div"
+              id='editStartDateError'
               className="text-red-500 text-sm"
             /> 
               )
@@ -302,6 +222,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                     selectedDate={parseISO(values.expectedEndDate?? "")}
                      onDateChange={(date) => setFieldValue('expectedEndDate', format(date, 'yyyy-MM-dd'))}
                      className='p-6 mt-2'
+                     disabled={true}
                      disabledDate={
                       // (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
                       (date) =>
@@ -314,6 +235,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                  <ErrorMessage
               name="expectedEndDate"
               component="div"
+              id='editEndDateError'
               className="text-red-500 text-sm"
             /> 
               )
@@ -336,6 +258,7 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                  <ErrorMessage
               name="cohortDescription"
               component="div"
+              id='editCohortDescriptionError'
               className="text-red-500 text-sm"
             /> 
               )
@@ -343,8 +266,68 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
               </div>
               <div>
                 <Label htmlFor='cohortImage'>Cohort Image (Optional)</Label>
-                <div className='mt-2'>
+                 <FileUploadTwo
+                  handleDrop={handleDrop}
+                  handleDragOver={handleDragOver}
+                  setUploadedImageUrl={(url: string | null) => setFieldValue("imageUrl",url)}
+                  initialImageUrl={values.imageUrl}
+            />   
+              </div>
+              <div className='md:flex gap-4 justify-end mt-2 mb-4 md:mb-0'>
+                <Button 
+                variant={'outline'} 
+                type='reset'
+                className='w-full md:w-36 h-[57px] mb-4'
+                // onClick={() => handleReset(resetForm)}
+                onClick={handleCloseModal}
+                >
+                    Cancel
+                </Button>
+                <Button 
+                variant={'default'} 
+                className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-neutral650 cursor-not-allowed " :"hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
+                type='submit'
+                disabled={!isValid}
+                >
+                  {isLoading ? (
+                                                <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">
+                                                    <Icon id={'Icon'} icon={loadingLoop} width={34} height={32}  style={{
+                                                animation: 'spin 1s linear infinite',
+                                                strokeWidth: 6, 
+                                                display: 'block',
+                                                    }}/>
+                                                </div>
+                                            ) : (
+                                                "Save"
+                                            )}
                   
+                </Button>
+              </div>
+               </div>
+               {
+                <div id='editCohortErrorFromBackend' className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
+            }
+            </Form>
+
+          )
+          
+         } 
+
+        </Formik>
+    </div>
+  )
+}
+
+export default EditCohortForm
+
+
+  //   const [image, setImage] = useState(initialFormValue.cohortImage);
+  // const [uploadedFile, setUploadedFile] = useState<File | null>(null); 
+
+
+
+ {/* <div className='mt-2'>
+
                       <div className='relative border border-solid h-24 rounded flex items-center justify-between px-4'>
                       {image? ( <div   className='flex items-center'> <img  data-testid="image" src={image} alt="Cohort" className="w-24 h-16 object-cover rounded-md" />
                        <span className="ml-4 text-sm text-gray-600">
@@ -399,51 +382,94 @@ const fileInputRef = React.useRef<HTMLInputElement | null>(null);
                         </div>
                       </div>
                   
-                </div>
-              </div>
-              <div className='md:flex gap-4 justify-end mt-2 mb-4 md:mb-0'>
-                <Button 
-                variant={'outline'} 
-                type='reset'
-                className='w-full md:w-36 h-[57px] mb-4'
-                // onClick={() => handleReset(resetForm)}
-                onClick={handleCloseModal}
-                >
-                    Cancel
-                </Button>
-                <Button 
-                variant={'default'} 
-                className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-neutral650 cursor-not-allowed " :"hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
-                type='submit'
-                disabled={!isValid}
-                >
-                  {isLoading ? (
-                                                <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">
-                                                    <Icon id={'Icon'} icon={loadingLoop} width={34} height={32}  style={{
-                                                animation: 'spin 1s linear infinite',
-                                                strokeWidth: 6, 
-                                                display: 'block',
-                                                    }}/>
-                                                </div>
-                                            ) : (
-                                                "Save"
-                                            )}
+                </div> */}
+
                   
-                </Button>
-              </div>
-               </div>
-               {
-                <div className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
-            }
-            </Form>
+//   const supportedTypes = [
+//     "image/svg+xml",
+//     "image/png",
+//     "image/jpg",
+//     "image/jpeg",
+//     "image/gif",
+//     "image/webp",
+//     "image/bmp",
+//     "image/tiff",
+//     "image/x-icon",
+//     "image/heif",
+//     "image/heic"
+//   ];
 
-          )
-          
-         } 
+  
 
-        </Formik>
-    </div>
-  )
-}
 
-export default EditCohortForm
+// const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+//   // setUploadError(false); 
+//   if (e.target.files && e.target.files[0]) {
+//     const file = e.target.files[0];
+   
+
+//     if (supportedTypes.includes(file.type)) {
+//       // setUploadError(false); 
+//       // setIsImageUploaded(true); 
+//       setUploadedFile(file); 
+//       setImage(URL.createObjectURL(file)); 
+
+//       setTimeout(() => {
+//         // setUploading(false);
+//         // setShowSuccessMessage(true);
+//         // setIsImageUploaded(true);
+//       }, 2000);
+//   } else {
+//       // setUploadError(true);
+//       return;
+     
+//   }
+    
+//   }
+
+  
+// };
+
+
+
+// const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+//   e.preventDefault();
+//   setUploadError(false);
+//   const file = e.dataTransfer.files[0];
+//   if (supportedTypes.includes(file.type)) {
+//     setUploadedFile(file);
+//     setImage(URL.createObjectURL(file));
+//     setUploading(true);
+
+//     setTimeout(() => {
+//       setUploadError(false); 
+//       setUploading(false);
+//       setShowSuccessMessage(true);
+//       setIsImageUploaded(true);
+//     }, 2000);
+//   } else {
+//     setUploadError(true);
+//   }
+// }
+
+// const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+//   e.preventDefault();
+// };
+
+//   const handleImageDelete = () => {
+//     setImage('')
+//     setUploadedFile(null); 
+//     // setIsImageUploaded(false);
+//     // setShowSuccessMessage(false);
+//     // setUploadError(false);
+//     if (fileInputRef.current) {
+//       fileInputRef.current.value = ''; 
+//   };
+
+// }
+
+  //  const handleReset = (resetForm: () => void) => {
+  //   resetForm(); 
+  //   setImage(initialFormValue.cohortImage);
+  //   setUploadedFile(null); 
+  // };

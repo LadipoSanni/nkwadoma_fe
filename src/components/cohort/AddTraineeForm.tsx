@@ -1,46 +1,48 @@
-import React, {useState} from 'react';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
+import React, { useState, useEffect } from 'react';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import {Label} from '@/components/ui/label';
-import {Button} from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import loadingLoop from '@iconify/icons-line-md/loading-loop';
-import {Icon} from '@iconify/react';
-import {inter} from '@/app/fonts';
+import { Icon } from '@iconify/react';
+import { inter } from '@/app/fonts';
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
-import {getUserDetails} from '@/features/auth/usersAuth/login/action';
-import {MdOutlineDelete} from "react-icons/md";
+import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery } from "@/service/admin/cohort_query";
+import { getItemSessionStorage } from "@/utils/storage";
+import TotalInput from "@/reuseable/display/TotalInput";
+import { NumericFormat } from 'react-number-format';
 
-interface idProps {
-    cohortId: string;
+interface Props {
+    tuitionFee?: string;
     setIsOpen?: (e: boolean | undefined) => void;
 }
 
+type cohortBreakDown = {
+    currency: string;
+    itemAmount: string;
+    itemName: string;
+    loanBreakdownId: string;
+}
 
-function AddTraineeForm({cohortId, setIsOpen}: idProps) {
-    const {storedAccessToken} = getUserDetails();
-    console.log('stored: ', storedAccessToken);
-
-    const details = [
-        {item: 'Tuition', amount: '₦2,000,000.00'},
-        {item: 'Devices', amount: '₦600,000.00'},
-        {item: 'Accommodation', amount: '₦600,000.00'},
-        {item: 'Feeding', amount: '₦300,000.00'},
-        {item: 'Total amount requested', amount: '₦3,500,000.00'},
-    ];
-
+function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
+    const COHORTID = getItemSessionStorage("cohortId");
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [isLoading] = useState(false);
-    const [inputValue, setInputValue] = useState(``);
-    const [loanBreakdowns, setLoanBreakdowns] = useState<
-        { itemName: string; itemAmount: string; currency: string }[]
-    >([]);
+    const { data } = useGetCohortLoanBreakDownQuery(COHORTID);
+    const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([]);
+    const [totalItemAmount, setTotalItemAmount] = useState(0);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const handleNewValue = (newValue: string, index: number) => {
-        setInputValue(newValue);
-        console.log(`New value for detail-${index}:`, newValue);
-    };
+    const [addLoaneeToCohort] = useAddLoaneeToCohortMutation();
+
+    useEffect(() => {
+        if (data?.data) {
+            setCohortBreakDown(data.data);
+            calculateTotal(data.data, tuitionFee);
+        }
+    }, [data, tuitionFee]);
 
     const validationSchemaStep1 = Yup.object().shape({
         firstName: Yup.string()
@@ -63,11 +65,10 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
     });
 
     const initialFormValue = {
-        cohortId,
         firstName: '',
         lastName: '',
         emailAddress: '',
-        initialDeposit: '',
+        initialDeposit: ''
     };
 
     const toastPopUp = ToastPopUp({
@@ -81,23 +82,55 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
         }
     };
 
+    const calculateTotal = (items: cohortBreakDown[], tuitionFee?: string) => {
+        const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
+        const totalWithTuition = total + (tuitionFee ? parseFloat(tuitionFee) : 0);
+        setTotalItemAmount(totalWithTuition);
+    };
+
     const handleSubmitStep1 = () => {
         setStep(2);
     };
 
-    const handleFinalSubmit = (values: typeof initialFormValue) => {
-        const formattedDeposit = `${selectCurrency}${values.initialDeposit}`;
-        const formattedValues = {...values, initialDeposit: formattedDeposit};
-        toastPopUp.showToast();
-        console.log(formattedValues);
-
-        if (setIsOpen) {
-            setIsOpen(false);
+    const handleFinalSubmit = async (values: typeof initialFormValue) => {
+        const input = {
+            cohortId: COHORTID,
+            userIdentity: {
+                email: values.emailAddress,
+                firstName: values.firstName,
+                lastName: values.lastName
+            },
+            loaneeLoanDetail: {
+                initialDeposit: values.initialDeposit,
+                loanBreakdown: cohortBreakDown
+            }
+        };
+        try {
+            const response = await addLoaneeToCohort(input).unwrap();
+            toastPopUp.showToast();
+            handleCloseModal();
+            setErrorMessage(null);
+            console.log(response)
+        } catch (error) {
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            setErrorMessage(error?.data?.message || "An unexpected error occurred.");
         }
     };
 
-    const handleDeleteItem = (index: number) => {
-        setLoanBreakdowns(loanBreakdowns.filter((_, i) => i !== index));
+
+
+    const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+        const { value } = e.target;
+        const updatedData = cohortBreakDown.map((item, i) =>
+            i === index ? { ...item, itemAmount: value } : item
+        );
+        setCohortBreakDown(updatedData);
+        calculateTotal(updatedData, tuitionFee);
+    };
+
+    const handleBack = () => {
+        setStep(1);
     };
 
     return (
@@ -108,11 +141,10 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
                 onSubmit={step === 1 ? handleSubmitStep1 : handleFinalSubmit}
                 validateOnMount
             >
-                {({errors, isValid, touched, setFieldValue}) => (
+                {({ errors, isValid, touched, setFieldValue }) => (
                     <Form className={`${inter.className}`}>
                         {step === 1 ? (
                             <div className="grid grid-cols-1 gap-y-4 md:max-h-[520px] overflow-y-auto">
-                                {/* Step 1 Fields */}
                                 <div>
                                     <Label htmlFor="firstName">First name</Label>
                                     <Field
@@ -125,50 +157,38 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
                                         }
                                     />
                                     {errors.firstName && touched.firstName && (
-                                        <ErrorMessage name="firstName" component="div"
-                                                      className="text-red-500 text-sm"/>
+                                        <ErrorMessage name="firstName" component="div" className="text-red-500 text-sm" />
                                     )}
                                 </div>
-
-                                <div className=''>
+                                <div>
                                     <Label htmlFor="lastName">Last name</Label>
                                     <Field
                                         id="lastName"
                                         name="lastName"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
                                         placeholder="Enter last name"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("lastName", e.target.value.replace(/[^A-Za-z]/g, ''))}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                            setFieldValue("lastName", e.target.value.replace(/[^A-Za-z]/g, ''))
+                                        }
                                     />
-
-                                    {
-                                        errors.lastName && touched.lastName && (
-                                            <ErrorMessage
-                                                name="lastName"
-                                                component="div"
-                                                className="text-red-500 text-sm"
-                                            />
-                                        )
-                                    }
+                                    {errors.lastName && touched.lastName && (
+                                        <ErrorMessage name="lastName" component="div" className="text-red-500 text-sm" />
+                                    )}
                                 </div>
-                                <div className=''>
+                                <div>
                                     <Label htmlFor="emailAddress">Email address</Label>
                                     <Field
                                         id="emailAddress"
                                         name="emailAddress"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
                                         placeholder="Enter email address"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("emailAddress", e.target.value.replace(/\s+/g, ''))}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                            setFieldValue("emailAddress", e.target.value.replace(/\s+/g, ''))
+                                        }
                                     />
-
-                                    {
-                                        errors.emailAddress && touched.emailAddress && (
-                                            <ErrorMessage
-                                                name="emailAddress"
-                                                component="div"
-                                                className="text-red-500 text-sm"
-                                            />
-                                        )
-                                    }
+                                    {errors.emailAddress && touched.emailAddress && (
+                                        <ErrorMessage name="emailAddress" component="div" className="text-red-500 text-sm" />
+                                    )}
                                 </div>
                                 <div>
                                     <Label htmlFor="initialDeposit">Initial Deposit</Label>
@@ -178,34 +198,44 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
                                             setSelectedCurrency={setSelectCurrency}
                                         />
                                         <div className='w-full mb-2'>
+                                            {/*<NumericFormat*/}
+                                            {/*    id={`initialDeposit`}*/}
+                                            {/*    name={"initialDeposit"}*/}
+                                            {/*    placeholder="Enter Initial Deposit"*/}
+                                            {/*    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"*/}
+                                            {/*    thousandSeparator=","*/}
+                                            {/*    decimalScale={2}*/}
+                                            {/*    fixedDecimalScale={true}*/}
+                                            {/*    // value={FieldValue}*/}
+                                            {/*    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
+                                            {/*        const value = e.target.value;*/}
+
+                                            {/*            void setFieldValue("initialDeposit", value);*/}
+
+                                            {/*    }}*/}
+                                            {/*/>*/}
+
                                             <Field
                                                 id="initialDeposit"
                                                 name="initialDeposit"
-                                                type="text"
+                                                type="number"
                                                 placeholder="Enter Initial Deposit"
-                                                className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none "
+                                                className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     const value = e.target.value;
                                                     if (/^\d*$/.test(value)) {
-                                                        setFieldValue("initialDeposit", value);
+                                                        void setFieldValue("initialDeposit", value);
                                                     }
                                                 }}
                                             />
-
                                         </div>
                                     </div>
                                 </div>
                                 <div className='relative bottom-6 ml-[90px]'>
-                                    {
-                                        errors.initialDeposit && touched.initialDeposit && (
-                                            <ErrorMessage
-                                                name="initialDeposit"
-                                                component="div"
-                                                className="text-red-500 text-sm"
-                                            />)}
+                                    {errors.initialDeposit && touched.initialDeposit && (
+                                        <ErrorMessage name="initialDeposit" component="div" className="text-red-500 text-sm" />
+                                    )}
                                 </div>
-
-
                                 <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
                                         variant="outline"
@@ -216,7 +246,8 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
                                         Cancel
                                     </Button>
                                     <Button
-                                        variant="default"
+                                        type='submit'
+                                        variant="secondary"
                                         className={`w-full md:w-36 h-[57px] ${!isValid ? 'bg-neutral650 cursor-not-allowed ' : 'hover:bg-meedlBlue bg-meedlBlue cursor-pointer'}`}
                                         disabled={!isValid}
                                     >
@@ -226,78 +257,75 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
                             </div>
                         ) : (
                             <div className={`py-5 ${inter.className}`}>
-                                {details.map((detail, index) => (
-                                    <div
-                                        key={index}
-                                        className={`${detail.item === 'Total amount requested' ? `` : ''}`}
-                                    >
-                                        <Label htmlFor={`detail-${index}`}>{detail.item}</Label>
+                                <span>Tuition</span>
+                                <div className="flex items-center gap-2 ">
+                                    <CurrencySelectInput
+                                        readOnly={true}
+                                        className={`bg-grey105 text-black300`}
+                                        selectedcurrency={selectCurrency}
+                                        setSelectedCurrency={setSelectCurrency}
+                                    />
+
+                                    <div className={`flex w-full flex-row items-center justify-between mb-2`}>
+                                        <Field
+                                            id="detail-"
+                                            name="detail-"
+                                            type="text"
+                                            defaultValue={tuitionFee?.toLocaleString() || ''}
+                                            readOnly
+                                            className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
+                                        />
+                                    </div>
+                                </div>
+                                {cohortBreakDown?.map((detail: cohortBreakDown, index: number) => (
+                                    <div key={"breakDown" + index} className={``}>
+                                        <Label htmlFor={`detail-${index}`}>{detail.itemName}</Label>
                                         <div className="w-full">
-                                            {detail.item === 'Tuition' ? (
-                                                <div className="flex items-center gap-2">
+                                            <div className={`flex items-center w-full gap-2`}>
+                                                <div>
                                                     <CurrencySelectInput
-                                                        readOnly
-                                                        selectedcurrency={selectCurrency}
+                                                        // readOnly={false}
+                                                        selectedcurrency={detail.currency}
                                                         setSelectedCurrency={setSelectCurrency}
                                                     />
-                                                    <div
-                                                        className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>
-                                                        <Field
-                                                            id={`detail-${index}`}
-                                                            name={`detail-${index}`}
-                                                            type="text"
-                                                            defaultValue={detail.amount || ''}
-                                                            readOnly
-                                                            className="w-full p-3 h-[3.2rem] border rounded bg-grey105 focus:outline-none"
-                                                        />
-                                                    </div>
                                                 </div>
-                                            ) : (
-                                                <div className={`flex items-center w-full gap-2`}>
-                                                    <div>
-                                                        <CurrencySelectInput
-                                                            readOnly={false}
-                                                            selectedcurrency={selectCurrency}
-                                                            setSelectedCurrency={setSelectCurrency}
-                                                        />
-                                                    </div>
-
-                                                    <div
-                                                        className={`flex w-full flex-row items-center justify-between mb-2 text-black300 ${detail.item === "Total amount requested" ? "" : ""}`}
-                                                    >
-                                                        <Field
-                                                            id={`detail-${index}`}
-                                                            name={`detail-${index}`}
-                                                            type="text"
-                                                            value={inputValue}
-                                                            placeholder={`Enter ${detail.item}`}
-                                                            className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                const value = e.target.value;
-                                                                if (/^\d*$/.test(value)) {
-                                                                    setFieldValue(`detail-${index}`, value);
-                                                                    handleNewValue(value, index);
-                                                                }
-                                                            }}
-
-                                                        />
-                                                        <MdOutlineDelete id={`deleteItemButton${index}`}
-                                                                         className={'text-blue200 h-4 w-4 cursor-pointer'}
-                                                                         onClick={() => handleDeleteItem(index)}/>
-                                                    </div>
+                                                <div className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>
+                                                    <NumericFormat
+                                                        id={`detail-${index}`}
+                                                        name={`detail-${index}`}
+                                                        type="text"
+                                                        thousandSeparator=","
+                                                        decimalScale={2}
+                                                        fixedDecimalScale={true}
+                                                        value={detail?.itemAmount?.toLocaleString() || ''}
+                                                        placeholder={`${detail.itemName}`}
+                                                        className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                            const rawValue = e.target.value.replace(/,/g, '');
+                                                            if (!isNaN(Number(rawValue))) {
+                                                                editCohortBreakDown(
+                                                                    { target: { value: rawValue } } as React.ChangeEvent<HTMLInputElement>,
+                                                                    index
+                                                                );
+                                                            }
+                                                        }}
+                                                    />
                                                 </div>
-                                            )}
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
+                                <div id={'totalInputOnAddLoaneeModal'} data-testid={'totalInputOnAddLoaneeModal'}>
+                                    <TotalInput prefix={'₦'} total={totalItemAmount} componentId={'totalInputOnAddLoaneeModalComponent'} />
+                                </div>
                                 <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
                                         variant="outline"
                                         type="reset"
                                         className="w-full md:w-36 h-[57px] mb-4"
-                                        onClick={handleCloseModal}
+                                        onClick={handleBack}
                                     >
-                                        Cancel
+                                        Back
                                     </Button>
                                     <Button
                                         variant="default"
@@ -323,6 +351,14 @@ function AddTraineeForm({cohortId, setIsOpen}: idProps) {
                                         )}
                                     </Button>
                                 </div>
+                            </div>
+                        )}
+                        {errorMessage && (
+                            <div
+                                className="mb-8 text-error500  text-sm text-center"
+                                data-testid="formErrorMessage"
+                            >
+                                {errorMessage}
                             </div>
                         )}
                     </Form>

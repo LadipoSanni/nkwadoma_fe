@@ -2,7 +2,9 @@
 import React, {ChangeEvent,  useState} from 'react';
 import AuthInput from "@/reuseable/Input/AuthInputField";
 import AuthButton from "@/reuseable/buttons/AuthButton";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useResetPasswordMutation} from "@/service/auths/api";
+import {useToast} from "@/hooks/use-toast"
 
 const Step3 = () => {
 
@@ -10,21 +12,53 @@ const Step3 = () => {
     const [confirmPassword, setConfirmPassword] = useState("")
     // const [disableButton, setDisableButton] = useState(true)
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
+    const searchParams = useSearchParams()
+    const [resetPassword, { data}] = useResetPasswordMutation()
 
     const criteriaMessages = [
         "Must be at least 8 characters",
         "Must contain one special character",
         "Must contain one uppercase character",
         "Must contain one lowercase character",
-        "Must contain one digit"
+        // "Must contain one digit"
     ];
 
     const router = useRouter()
 
+    const getUserToken = () => {
+        if (searchParams){
+            const pathVariable = searchParams.get("token")
+            if (pathVariable){
+                return pathVariable
+            }
+        }
+    }
+    const {toast} = useToast()
 
 
-    const changePassword = () => {
+    const changePassword = async() => {
+        const token = getUserToken()
+        // console.log("token: ", token)
 
+        try{
+
+            await resetPassword({token: token, password: newPassword}).unwrap()
+            if(data?.message){
+                toast({
+                    description: data?.message,
+                    status: "success",
+                })
+                router.push("/auth/login")
+
+            }
+        }catch(error){
+            toast({
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: error?.data?.token?.message ? error?.data?.token?.message : error?.data?.message,
+                status: "error",
+            })
+        }
     }
 
     const login = ()=> {
@@ -36,20 +70,21 @@ const Step3 = () => {
             /[!@#$%^&*(),.?":{}|<>]/.test(password),
             /[A-Z]/.test(password),
             /[a-z]/.test(password),
-            /\d/.test(password)
         ];
         setCriteriaStatus(criteria);
     };
 
     const handleChangeNewPassword = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         event.stopPropagation()
-        setNewPassword(event.target.value)
-        validatePassword(newPassword);
+        const value = event.target.value
+        setNewPassword(value)
+        validatePassword(value);
 
     }
     const handleChangeConfirmPassword = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         event.stopPropagation()
-        setConfirmPassword(event.target.value)
+        const value = event.target.value
+        setConfirmPassword(value)
     }
 
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);

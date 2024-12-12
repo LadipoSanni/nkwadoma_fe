@@ -12,8 +12,8 @@ import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {useRouter} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
 import {ADMIN_ROLES} from "@/types/roles";
-import {store} from "@/redux/store";
-import {setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
+import {persistor, store} from "@/redux/store";
+import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 
 
@@ -79,6 +79,7 @@ const Login: React.FC = () => {
     }
 
 
+
     const {toast} = useToast()
     const handleLogin = async () => {
         if (!navigator.onLine) {
@@ -90,9 +91,9 @@ const Login: React.FC = () => {
             try {
                 const response = await login({email, password}).unwrap()
                 if (response?.data) {
-                    // console.log("response: ", response)
                     const access_token = response?.data?.access_token
                     const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+                    // console.log('decoded: ', decode_access_token)
                     //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-expect-error
                     const userName = decode_access_token?.name
@@ -100,14 +101,22 @@ const Login: React.FC = () => {
                     const user_roles = decode_access_token?.realm_access?.roles
                     const user_role = user_roles.filter(getUserRoles).at(0)
                     clearData()
+                    await persistor.purge();
+                    toast({
+                        description: "Login successful",
+                        status: "success",
+                    });
                     if (user_role) {
                         storeUserDetails(access_token, user_email, user_role, userName)
                         if (user_role === 'LOANEE') {
-                            store.dispatch(setCurrentNavBottomItem("overview"))
+                            store.dispatch(setCurrentNavbarItem("overview"))
                             router.push("/overview")
-                        } else {
-                            store.dispatch(setCurrentNavBottomItem("Overview"))
-                            router.push("/Overview")
+                        } else if(user_role === 'ORGANIZATION_ADMIN') {
+                            store.dispatch(setCurrentNavbarItem("Program"))
+                            router.push("/program")
+                        }else if(user_role === 'PORTFOLIO_MANAGER'){
+                            store.dispatch(setCurrentNavbarItem("Organizations"))
+                            router.push("/organizations")
                         }
 
                     }
@@ -173,7 +182,7 @@ const Login: React.FC = () => {
                         </AuthButton>
                     </div>
                     <p className="flex items-center justify-center text-sm text-forgetPasswordBlue leading-4">
-                        Forgot Password? <Link href={"/auth/reset-password"}
+                        Forgot Password? <Link id={'resetPasswordLinkFromLogin'} href={"/auth/reset-password-request"}
                                                className="font-medium text-meedlBlue ml-1  underline">Reset it
                         here</Link>
                     </p>

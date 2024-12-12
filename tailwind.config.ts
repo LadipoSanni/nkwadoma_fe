@@ -18,6 +18,7 @@ const config: Config = {
   			blue300: '#626F8C',
   			blue400: '#435376',
 			blue500: '#D9EAFF',
+			blue550: '#D7D7D7',
   			meedlBlue: '#142854',
   			blue600: '#12244C',
   			labelBlue: '#101828',
@@ -54,11 +55,13 @@ const config: Config = {
   			layoutBlue800: '#72757A',
   			green50: '#E6F2EA',
   			green100: '#B2D5BE',
+			green150: '#E7F7ED',
   			green200: '#8CC19E',
   			green300: '#58A572',
   			green400: '#389457',
   			green500: '#06792D',
   			green600: '#056E29',
+			green650: 'B4E5C8',
   			green700: '#045620',
 			green750: '#0D9B48',
   			green800: '#034319',
@@ -87,6 +90,7 @@ const config: Config = {
   			warning900: '#5D3C05',
   			error50: '#FAE8E8',
   			error100: '#EEB8B6',
+			error150: '#FBE9E9',
   			error200: '#E69693',
   			error300: '#DA6662',
   			error400: '#D34843',
@@ -178,7 +182,9 @@ const config: Config = {
   			}
   		},
   		boxShadow: {
-  			custom: '0px 0px 0px 1px rgba(18, 55, 105, 0.08)'
+  			custom: '0px 0px 0px 1px rgba(18, 55, 105, 0.08)',
+			boxShadowLight: '0px 2px 8px 0px rgba(99, 99, 99, 0.12)'
+
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

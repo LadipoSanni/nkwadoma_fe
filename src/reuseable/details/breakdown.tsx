@@ -5,10 +5,11 @@ import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/
 import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import {DropdownMenuSeparator} from "@/components/ui/dropdown-menu";
+import {formatAmount} from "@/utils/Format";
 
 
 interface breakdownProps {
-    breakDown?: { title: string; amount: string; }[];
+    breakDown?: { itemName: string; itemAmount: string; }[];
 }
 
 export const Breakdown: React.FC<breakdownProps> = ({breakDown}) => {
@@ -28,18 +29,20 @@ export const Breakdown: React.FC<breakdownProps> = ({breakDown}) => {
             data-testid="tuition-breakdown-collapsible"
         >
             <CollapsibleTrigger
-            asChild className={`border-b w-full`}
-                                id="tuition-breakdown-trigger"
-                                data-testid="tuition-breakdown-trigger">
+                asChild className={`border-b w-full`}
+                id="tuition-breakdown-trigger"
+                data-testid="tuition-breakdown-trigger">
                 <Button variant="ghost" size="lg"
                         className={`w-full focus:outline-none px-6 focus:ring-0 focus-visible:ring-0`}>
                     <div
                         className="flex justify-center items-center gap-2 bg-meedlWhite">
                         <div className={`${inter.className} text-sm text-black300 md:w-full md:block hidden`}>
-                            {isOpen ? <p > Collapse to hide the tuition breakdown </p>: <p > Expand to see the tuition breakdown </p>}
+                            {isOpen ? <p> Collapse to hide the tuition breakdown </p> :
+                                <p> Expand to see the tuition breakdown </p>}
                         </div>
                         <div className={`${inter.className} text-sm text-black300 md:w-full md:hidden block`}>
-                            {isOpen ? <p > Collapse to hide <br/> the tuition breakdown </p>: <p > Expand to see <br/> the tuition breakdown </p>}
+                            {isOpen ? <p> Collapse to hide <br/> the tuition breakdown </p> :
+                                <p> Expand to see <br/> the tuition breakdown </p>}
                         </div>
 
                         <div>
@@ -62,10 +65,10 @@ export const Breakdown: React.FC<breakdownProps> = ({breakDown}) => {
                              data-testid={`breakdown-item-${index}`}
                              className="flex md:flex-row flex-col py-5 justify-between">
                             <div className="text-black300">
-                                <p>{item.title}</p>
+                                <p>{item.itemName}</p>
                             </div>
                             <div className="text-meedlBlack">
-                                <p>{item.amount}</p>
+                                <p>{formatAmount(item.itemAmount)}</p>
                             </div>
                         </div>
                         {index === 3 && index < breakDown.length - 1 && (

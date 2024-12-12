@@ -3,7 +3,7 @@ import React, { useRef, useState, useCallback, useEffect } from "react";
 import { MdCheckCircleOutline, MdOutlineCancel } from "react-icons/md";
 
 interface CapturePhotoWithTipsProps {
-    onCapture: (imageSrc: string | null) => void;
+    onCapture: (imageSrc: File) => void;
 }
 
 const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }) => {
@@ -14,10 +14,27 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const capture = useCallback(() => {
         if (webcamRef.current) {
             const imageSrc = webcamRef.current.getScreenshot();
-            setImageSrc(imageSrc);
-            onCapture(imageSrc);
+            if (imageSrc) {
+                const file = convertBase64ToFile(imageSrc, "captured-image.jpg");
+                setImageSrc(imageSrc);
+                onCapture(file);
+            }
         }
     }, [webcamRef, onCapture]);
+
+    const convertBase64ToFile = (base64String: string, fileName: string): File => {
+        const base64Parts = base64String.split(',');
+        const mimeType = base64Parts[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
+        const binaryString = atob(base64Parts[1]);
+        const binaryStringLength = binaryString.length;
+        const byteArray = new Uint8Array(binaryStringLength);
+
+        for (let i = 0; i < binaryStringLength; i++) {
+            byteArray[i] = binaryString.charCodeAt(i);
+        }
+
+        return new File([byteArray], fileName, { type: mimeType });
+    };
 
     useEffect(() => {
         const interval = setInterval(() => {

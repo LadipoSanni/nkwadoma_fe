@@ -56,11 +56,11 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
         deliveryType: programDetail?.deliveryType,
         mode: programDetail?.mode,
         duration: programDetail?.duration,
-        programDescription: programDetail?.programDescription,
+        programDescription: programDetail?.programDescription || "",
     }
 
     // const [isButtonLoading] = useState(false);
-    const maxChars = 1500;
+    const maxChars = 2500;
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
     const programModes=["FULL_TIME", "PART_TIME"]
@@ -159,6 +159,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                     name="name"
                     component="div"
                     className="text-red-500 text-sm"
+                    id='editProgramNameError'
                     />
                     )
                    }
@@ -180,6 +181,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                     errors.deliveryType && touched.deliveryType &&  (
                        <ErrorMessage
                     name="deliveryType"
+                    id='editDeliveryTypeError'
                     component="div"
                     className="text-red-500 text-sm"
                     />
@@ -204,6 +206,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                        <ErrorMessage
                     name="mode"
                     component="div"
+                    id='editModeError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -237,6 +240,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                     errors.duration && touched.duration &&  (
                        <ErrorMessage
                     name="duration"
+                    id='editProgramDurationError'
                     component="div"
                     className="text-red-500 text-sm"
                     />
@@ -254,12 +258,22 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                   placeholder="Enter program description"
                   rows={4}
                   maxLength={maxChars}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { 
+                    const value = e.target.value; 
+                    if (value.length <= maxChars) { 
+                      setFieldValue("programDescription", value); } }} 
+                  onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => { 
+                    const paste = e.clipboardData.getData('text'); 
+                    if (paste.length + values.programDescription.length > maxChars) { 
+                      e.preventDefault(); 
+                      setError('Program description must be 2500 characters or less'); } }}
                   /> 
                   {
                     errors.programDescription && touched.programDescription &&  (
                        <ErrorMessage
                     name="programDescription"
                     component="div"
+                    id='editprogramDescriptionError'
                     className="text-red-500 text-sm"
                     />
                     )
@@ -299,7 +313,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
 
                 </div>
                 {
-                <div className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
+                <div id='errorFromBackEnd' className={`text-error500 flex justify-center items-center ${error? "mb-3" : ""}`}>{error}</div>
             }
               </Form>
             )

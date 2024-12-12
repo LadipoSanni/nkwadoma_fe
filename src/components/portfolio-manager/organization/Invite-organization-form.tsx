@@ -43,7 +43,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
      const queryClient = useQueryClient();
     //  const industries = [ "MANUFACTURING", "INSURANCE", "LOGISTIC", "TELECOMMUNICATION", "REAL ESTATE", "AUTOMOBILE", "FASHION", "AVIATION", "AGRICULTURE", "EDUCATION", "HEALTHCARE", "ENTERTAINMENT", "HOSPITALITY", "FMCG", "TECHNOLOGY", "FINANCE" ];
     const industries =   ["EDUCATION","BANKING"]
-    const serviceOfferings = [ "FINANCIAL ADVISORY", "INSURANCE SERVICES", "LOAN SERVICES", "ACCOUNTING AND BOOKKEEPING", "INVESTMENT ADVISORY", "RISK MANAGEMENT", "CORPORATE FINANCE", "TAX SERVICES", "BANKING SERVICES", "CRYPTOCURRENCY SERVICES", "SOFTWARE DEVELOPMENT", "WEB DEVELOPMENT", "CLOUD SERVICES", "CYBERSECURITY SERVICES", "IT SUPPORT AND CONSULTING", "DATABASE MANAGEMENT", "AI AND MACHINE LEARNING", "BUSINESS INTELLIGENCE", "DEVOPS SERVICES", "BLOCKCHAIN SERVICES", "DISTRIBUTION SERVICES", "MARKETING AND BRANDING", "SALES SERVICES", "LOGISTIC AND SUPPLY CHAIN MANAGEMENT", "CUSTOMER SERVICE AND SUPPORT", "SUSTAINABILITY SERVICES", "REGULATORY COMPLIANCE AND LEGAL SERVICES", "CONSUMER ENGAGEMENT AND LOYALTY", "TECHNOLOGY AND INNOVATION", "HOTEL SERVICES", "RESTAURANT SERVICES", "EVENT PLANNING", "TRAVEL AND TOUR SERVICES", "CORPORATE RETREATS", "SPA AND WELLNESS", "TRANSPORTATION", "CONFERENCE AND MEETING FACILITIES", "FILM AND TELEVISION", "MUSIC", "THEATRE", "SPORTS AND FITNESS", "GAMING", "EVENT AND PARTIES", "TELECOMMUNICATION", "PHOTOGRAPHY", "TRAINING", ];
+    const serviceOfferings = [ "TRAINING","FINANCIAL ADVISORY", "INSURANCE SERVICES", "LOAN SERVICES", "ACCOUNTING AND BOOKKEEPING", "INVESTMENT ADVISORY", "RISK MANAGEMENT", "CORPORATE FINANCE", "TAX SERVICES", "BANKING SERVICES", "CRYPTOCURRENCY SERVICES", "SOFTWARE DEVELOPMENT", "WEB DEVELOPMENT", "CLOUD SERVICES", "CYBERSECURITY SERVICES", "DATABASE MANAGEMENT", "AI AND MACHINE LEARNING", "BUSINESS INTELLIGENCE", "DEVOPS SERVICES", "BLOCKCHAIN SERVICES", "DISTRIBUTION SERVICES", "MARKETING AND BRANDING", "SALES SERVICES", "CUSTOMER SERVICE AND SUPPORT", "SUSTAINABILITY SERVICES",  "CONSUMER ENGAGEMENT AND LOYALTY", "TECHNOLOGY AND INNOVATION", "HOTEL SERVICES", "RESTAURANT SERVICES", "EVENT PLANNING", "TRAVEL AND TOUR SERVICES", "CORPORATE RETREATS", "SPA AND WELLNESS", "TRANSPORTATION", "FILM AND TELEVISION", "MUSIC", "THEATRE", "SPORTS AND FITNESS", "GAMING", "EVENT AND PARTIES", "TELECOMMUNICATION", "PHOTOGRAPHY" ];
 
     const [error, setError] = useState("");
 
@@ -65,7 +65,8 @@ function InviteOrganizationForm({setIsOpen}: props) {
         .matches(/^[^0-9]*$/, 'Numbers are not allowed'),
         email: Yup.string()
         .email('Invalid email address')
-        .matches(/^\S*$/, 'Email address should not contain spaces')
+        // .matches(/^\S*$/, 'Email address should not contain spaces')
+        .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
         .required('Email address is required'),
         industry:Yup.string()
         .required('Industry is required'),
@@ -79,6 +80,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
         .trim()
         .required('Tax number is required')
         .min(9, 'Tax number must be at least 9 characters long')
+        .max(15,'Must be the length of 15 characters long')
         .matches(/^[A-Za-z0-9-]*$/, 'Tax number can only contain letters, numbers, and hyphens, and must not start with a hyphen'),
         adminFirstName: Yup.string()
         .trim()
@@ -91,7 +93,8 @@ function InviteOrganizationForm({setIsOpen}: props) {
         .matches(/^(0)(70|71|80|81|90|91)\d{8}$/,'Invalid phone number'),
         adminEmail: Yup.string()
         .email('Invalid email address')
-        .matches(/^\S*$/, 'Email address should not contain spaces')
+        // .matches(/^\S*$/, 'Email address should not contain spaces')
+        .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
         .required('Admin email address is required')
         .test(
             'email-different', 'Admin email address must be different from company email address',
@@ -123,13 +126,13 @@ function InviteOrganizationForm({setIsOpen}: props) {
         serviceOfferings: [
            {
             industry: values.industry,
-            name:"Service",
+            name: values.serviceOffering,
             transactionLowerBound: "3000",
             transactionUpperBound: "5000"
            }
         ]
       }
-      console.log("the forms: ", formData)
+      // console.log("the forms: ", formData)
      try{
       const result = await inviteOrganization(formData).unwrap();
       if(result){
@@ -259,6 +262,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
               onChange={(value) => setFieldValue("industry", value)}
               name="industry"
               placeHolder='Select industry'
+              isItemDisabled={(item) => item !== 'EDUCATION'}
              />
            {
               errors.industry && touched.industry &&  (
@@ -271,7 +275,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
              }
              </div>
              <div>
-             <Label htmlFor="serviceOffering:">Service Offering:</Label>
+             <Label htmlFor="serviceOffering:">Service Offering</Label>
              <CustomSelect
              triggerId='serviceOfferingTriggerId'
               id='serviceOffering'
@@ -280,6 +284,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
               onChange={(value) => setFieldValue("serviceOffering", value)}
               name="serviceOffering"
               placeHolder='Select service'
+              isItemDisabled={(item) => item !== 'TRAINING'}
              />
               {
               errors.serviceOffering && touched.serviceOffering &&  (
