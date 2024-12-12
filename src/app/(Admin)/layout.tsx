@@ -4,6 +4,7 @@ import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {isTokenValid, isUserAdmin} from "@/utils/GlobalMethods";
 import {redirect} from "next/navigation";
 import {useToast} from "@/hooks/use-toast";
+import {clearData} from "@/utils/storage";
 
 
 type props = {
@@ -17,7 +18,8 @@ const Layout: React.FC<props> = ({ children }) => {
     const {toast} = useToast()
     if(cookie){
        const response =  isTokenValid(cookie)
-        if (response){
+        if (!response){
+            clearData()
             toast({
                 description: "Session expired. Please login again",
                 status: "error",
@@ -28,7 +30,7 @@ const Layout: React.FC<props> = ({ children }) => {
     if (role){
         if(!isUserAdmin(role)){
             toast({
-                description: "You don't have the permission to perform action," +
+                description: "You don't have the permission to perform this action," +
                     "please login",
                 status: "error",
             });
