@@ -1,10 +1,10 @@
 import React from 'react';
 import LoanOfferDetails from "@/pages/admin/loanOfferDetails/Index";
 
-const Index = () => {
+const page = () => {
     return (
         <LoanOfferDetails/>
     );
 };
 
-export default Index;
+export default page;
