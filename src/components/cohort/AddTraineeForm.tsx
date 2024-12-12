@@ -197,7 +197,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                             selectedcurrency={selectCurrency}
                                             setSelectedCurrency={setSelectCurrency}
                                         />
-                                        <div className='w-full'>
+                                        <div className='w-full mb-2'>
                                             {/*<NumericFormat*/}
                                             {/*    id={`initialDeposit`}*/}
                                             {/*    name={"initialDeposit"}*/}
@@ -206,13 +206,15 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                             {/*    thousandSeparator=","*/}
                                             {/*    decimalScale={2}*/}
                                             {/*    fixedDecimalScale={true}*/}
+                                            {/*    // value={FieldValue}*/}
                                             {/*    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
                                             {/*        const value = e.target.value;*/}
-                                            {/*        if (/^\d*$/.test(value)) {*/}
+
                                             {/*            void setFieldValue("initialDeposit", value);*/}
-                                            {/*        }*/}
+
                                             {/*    }}*/}
                                             {/*/>*/}
+
                                             <Field
                                                 id="initialDeposit"
                                                 name="initialDeposit"
@@ -256,13 +258,15 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                         ) : (
                             <div className={`py-5 ${inter.className}`}>
                                 <span>Tuition</span>
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 ">
                                     <CurrencySelectInput
-                                        readOnly
+                                        readOnly={true}
+                                        className={`bg-grey105 text-black300`}
                                         selectedcurrency={selectCurrency}
                                         setSelectedCurrency={setSelectCurrency}
                                     />
-                                    <div className={`flex w-full flex-row items-center justify-between mb-2 text-black300`}>
+
+                                    <div className={`flex w-full flex-row items-center justify-between mb-2`}>
                                         <Field
                                             id="detail-"
                                             name="detail-"
@@ -280,7 +284,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                             <div className={`flex items-center w-full gap-2`}>
                                                 <div>
                                                     <CurrencySelectInput
-                                                        readOnly={false}
+                                                        // readOnly={false}
                                                         selectedcurrency={detail.currency}
                                                         setSelectedCurrency={setSelectCurrency}
                                                     />

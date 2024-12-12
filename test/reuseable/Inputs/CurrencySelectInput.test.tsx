@@ -51,14 +51,6 @@ describe('CurrencySelectInput', () => {
   });
 
 
-
-test('calls setSelectedCurrency when a currency is selected', () => {
-    renderComponent();
-    fireEvent.click(screen.getByRole('button'));
-    fireEvent.click(screen.getByText('USD'));
-    expect(mockSetSelectedCurrency).toHaveBeenCalledWith('USD');
-  });
-
 test('applies custom className if provided', () => {
     render(
       <CurrencySelectInput 

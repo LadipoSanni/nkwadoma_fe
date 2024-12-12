@@ -54,7 +54,8 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [loaneeName, setLoaneeName] = React.useState("");
     // const [enableRefferButton, setRefferBottom] = useState(true)
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
-    const [isReferred, setIsReferred] = React.useState("Not Referred");
+    const [isReferred, setIsReferred] = React.useState("Not referred");
+    const [enableButton, setEnableButton] = useState(false)
 
 
 
@@ -125,7 +126,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         },
     ]
 
-    const items = ["Referred","Not referred"]
+    const items = ["Not referred","Referred"]
 
     const handleSelected = (value: string) => {
         setIsReferred(value);
@@ -185,8 +186,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         <div className='w-32 md:pt-2 pt-2' id={`selectId`}>
                             <CustomSelect onChange={handleSelected}
                                           selectContent={items}
+                                          placeHolder={"Not referred"}
                                           className={` w-full text-black  bg-neutral100 h-12 border-1 focus-visible:outline-0 focus-visible:ring-0 shadow-none hover:bg-neutral100 ring-1 ring-neutral650`}
-                                          placeHolder={`Referred`}/>
+                                          />
                         </div>
                     </div>
 
@@ -195,7 +197,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         <div className={`md:block hidden`} id={`largerScreenReferButton`}>
                             <Button variant={"outline"}
                                     size={"lg"}
-                                    className={`bg-neutral100  ${selectedRows.size !== 0 ? ' border-solid  border-[#142854] text-[#142854] ' : 'text-[#939CB0]'} md:border-solid md:border-neutral650 border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
+                                    className={`bg-neutral100  ${enableButton ? ' border-solid ring-1 ring-[#142854] border-[#142854] text-[#142854] ' : 'text-[#939CB0] border border-neutral650'} md:border-solid md:border-neutral650 border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
                                     onClick={handleRefer} disabled={selectedRows.size === 0}>Refer</Button>
                         </div>
                         <div id={`addTraineeButton`}>
@@ -208,7 +210,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             <Button variant={"outline"}
                                     size={"lg"}
                                     disabled={selectedRows.size === 0}
-                                    className={`bg-neutral100   ${selectedRows.size !== 0 ? ' border-solid ring-2 ring-[#142854] border-[#142854] text-[#142854] ' : 'text-[#939CB0] border border-neutral650'} w-full h-12 flex justify-center items-center`}
+                                    className={`bg-neutral100   ${enableButton ? ' border-solid ring-2 ring-[#142854] border-[#142854] text-[#142854] ' : 'text-[#939CB0] border border-neutral650'} w-full h-12 flex justify-center items-center`}
                                     onClick={handleRefer}>Refer</Button>
                         </div>
 
@@ -231,6 +233,8 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             enableRowSelection={true}
                             isLoading={isLoading}
                             condition={true}
+                            enableButton={() =>setEnableButton(true) }
+                            disabledButton={()=> setEnableButton(false) }
                             handleSelectedRow={handleSelectedRow}
                         /> : <Table
                             tableData={allLoanee}

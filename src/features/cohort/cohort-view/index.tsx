@@ -19,6 +19,7 @@ import { debounce } from 'lodash';
 import { useGetAllCohortByAParticularProgramQuery } from '@/service/admin/program_query'
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
+import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 
 
 
@@ -60,12 +61,20 @@ interface allCohortsProps extends TableRowData {
    tuitionAmount: number
    id:string
    programId: string
+   numberOfLoanees: number
 }
 
 interface viewAllProgramProps extends TableRowData  {
   id?: string;
   name: string;
   
+}
+
+interface ApiError {
+  status: number;
+  data: {
+    message: string;
+  };
 }
 
 
@@ -78,6 +87,7 @@ const CohortView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [programId, setProgramId] = useState('');
   const [pendingProgramId, setPendingProgramId] = useState('');
+  const [deleteProgram, setDeleteProgram] = useState("")
    const [isLoadings] = useState(false);
    const [page] = useState(0);
    const size = 200;
@@ -162,13 +172,33 @@ const CohortView = () => {
   debouncedSearch(event.target.value);
 };
 
+      const toastPopUp = ToastPopUp({
+      description: `Cohort deleted successfully.`,
+      status:"success"
+      });
+
+      const errorPop = ToastPopUp({
+      description: `error deleting Cohort.`,
+      status:"error"
+      });
+
 const handleDeleteCohortByOrganisation = async (id: string) => {
        
     try{
-        await deleteItem({id}).unwrap();
-        setOrganisationCohort((prevData) => prevData.filter((item) => item.id !== id))
+       const deleteCohort = await deleteItem({id}).unwrap();
+         if(deleteCohort){
+          setOrganisationCohort((prevData) => prevData.filter((item) => item.id !== id))
+          setTimeout(() => {
+            toastPopUp.showToast(); 
+           }, 1000); 
+         }
+       
     }catch(error){
-        console.error("Error deleting program: ", error);
+        const err = error as ApiError;
+        setDeleteProgram(err?.data?.message || "Error deleting cohort")
+        setTimeout(() => {
+          errorPop.showToast(); 
+         }, 1000); 
     }
 }
 
@@ -304,7 +334,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
           </div>
         </div>
         <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
-         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation}/>
+         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation} errorDeleted={deleteProgram}/>
          
         </div>
     </div>
