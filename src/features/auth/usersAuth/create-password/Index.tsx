@@ -21,6 +21,7 @@ const CreatePassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const router = useRouter()
     const searchParams = useSearchParams()
+    const [disableButton, setDisableButton] = useState(false)
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
 
 
@@ -91,6 +92,7 @@ const CreatePassword = () => {
 
     }
     const handleCreatePassword = async () => {
+        setDisableButton(true)
         const token = getUserToken()
 
         try {
@@ -124,15 +126,18 @@ const CreatePassword = () => {
 
 
         }catch (error){
-            console.log("error: ", error)
+
+            // console.log("error: ", error)
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
                 description: error?.data?.message,
                 status: "error",
             })
+            // setDisableButton(false)
 
-            }
+
+        }
 
     }
 
@@ -168,7 +173,7 @@ const CreatePassword = () => {
                 <AuthButton
                     backgroundColor={criteriaStatus.every(Boolean) && password === confirmPassword ? '#142854' : '#D0D5DD'}
                     buttonText={'Create password'}
-                    disable={!criteriaStatus.every(Boolean) || password !== confirmPassword}
+                    disable={!criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton}
                     handleClick={handleCreatePassword}
                     id={"createPasswordButton"}
                     textColor={'#FFFFFF'}
