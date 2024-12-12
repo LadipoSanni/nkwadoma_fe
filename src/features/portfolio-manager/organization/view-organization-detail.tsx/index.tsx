@@ -15,6 +15,7 @@ import {  useGetDetailsOfOrganizationQuery } from '@/service/admin/organization'
 import TableModal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
 import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 // import { useSearchOrganisationByNameQuery } from '@/service/admin/organization';
 
 
@@ -33,7 +34,7 @@ const ViewOrganizationDetail = () => {
     setIsModalOpen(true);
   };
 
-  const organizationName = organizationDetail?.data.name ?? "";;
+  const organizationName = organizationDetail?.data.name ?? "";
   const firstCharInName = organizationName.charAt(0).toUpperCase()
 
   const dataList = [
@@ -125,7 +126,8 @@ const ViewOrganizationDetail = () => {
               : "text-[#59100D] bg-[#FBE9E9]"
           }`}
         >
-          {row.status}
+          {capitalizeFirstLetters(String(row.status))}
+
         </span>
       ),
     },
