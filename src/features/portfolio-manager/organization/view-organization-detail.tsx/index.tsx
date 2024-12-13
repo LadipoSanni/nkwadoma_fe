@@ -35,9 +35,9 @@ interface adminProps extends TableRowData {
 const ViewOrganizationDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {data:organizationDetail} = useGetDetailsOfOrganizationQuery({})
-  const [searchTerm, setSearchTerm] = useState('');
-  const [adminList, setAdminList] = useState<adminProps[]>([])
-  const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
+  // const [searchTerm, setSearchTerm] = useState('');
+  // const [adminList, setAdminList] = useState<adminProps[]>([])
+  // const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
   
   const handleInviteClick = () => {
     setIsModalOpen(true);
