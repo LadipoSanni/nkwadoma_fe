@@ -16,7 +16,7 @@ import TableModal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
 import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
+// import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
 // import { useSearchOrganisationByNameQuery } from '@/service/admin/organization';
 
 
@@ -25,11 +25,11 @@ interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
 }
 
-interface adminProps extends TableRowData {
-  fullName: string,
-  email: string,
-  status: string
-}
+// interface adminProps extends TableRowData {
+//   fullName: string,
+//   email: string,
+//   status: string
+// }
 
 
 const ViewOrganizationDetail = () => {
