@@ -9,6 +9,7 @@ interface props {
 
 const TabConnector = ({ tabNames, currentTab = 0 }: props) => {
     const currentTabIndex = typeof currentTab === 'string' ? parseInt(currentTab, 10) : currentTab;
+    const spanWidth = tabNames.length === 4 ? 'md:w-[2.6875rem]' : 'md:w-[6rem]';
 
     return (
         <div
@@ -27,7 +28,7 @@ const TabConnector = ({ tabNames, currentTab = 0 }: props) => {
                     </div>
                     {index + 1 < tabNames.length &&
                         <span
-                            className={`w-[20px] md:w-[6rem] h-[2px] md:h-[1px] ${currentTabIndex > index ? 'bg-meedlBlue' : 'bg-lightBlue250'}`}></span>
+                            className={`w-[20px] ${spanWidth} h-[2px] md:h-[1px] ${currentTabIndex > index ? 'bg-meedlBlue' : 'bg-lightBlue250'}`}></span>
                     }
                 </div>
             ))}
