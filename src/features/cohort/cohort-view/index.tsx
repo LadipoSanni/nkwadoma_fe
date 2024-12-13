@@ -19,7 +19,7 @@ import { useSearchCohortByOrganisationQuery } from '@/service/admin/cohort_query
 import { useGetAllCohortByAParticularProgramQuery } from '@/service/admin/program_query'
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
-import ToastPopUp from '@/reuseable/notification/ToastPopUp';
+import {useToast} from "@/hooks/use-toast"
 
 
 
@@ -93,6 +93,7 @@ const CohortView = () => {
    const [isLoadings] = useState(false);
    const [page] = useState(0);
    const size = 200;
+   const {toast} = useToast()
 
    const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
    const { data: searchData } = useSearchCohortByOrganisationQuery(searchTerm, { skip:!searchTerm })
@@ -101,7 +102,7 @@ const CohortView = () => {
   const [deleteItem] = useDeleteCohortMutation()
    
 
-  //  useEffect(() => { 
+  //  useEffect(const {toast} = useToast()() => { 
   //   if (cohortData && cohortData?.data) { 
   //     const result = cohortData?.data?.body; 
   //     setOrganisationCohort(result); 
@@ -174,15 +175,7 @@ const CohortView = () => {
   setSearchTerm(event.target.value);
 };
 
-      const toastPopUp = ToastPopUp({
-      description: `Cohort deleted successfully.`,
-      status:"success"
-      });
-
-      const errorPop = ToastPopUp({
-      description: `error deleting Cohort.`,
-      status:"error"
-      });
+     
 
 const handleDeleteCohortByOrganisation = async (id: string) => {
        
@@ -191,16 +184,25 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
          if(deleteCohort){
           setOrganisationCohort((prevData) => prevData.filter((item) => item.id !== id))
           setTimeout(() => {
-            toastPopUp.showToast(); 
-           }, 1000); 
-         }
+            toast({
+              description:"Cohort deleted successfully"  ,
+              status: "success",
+          })
+           }, 600); 
+         }else {
+          setDeleteProgram("Failed to delete program")
+         
+      }
        
     }catch(error){
         const err = error as ApiError;
         setDeleteProgram(err?.data?.message || "Cohort with loanee cannot be deleted")
         setTimeout(() => {
-          errorPop.showToast(); 
-         }, 1000); 
+          toast({
+            description:  deleteProgram || "Cohort with loanee cannot be deleted"  ,
+            status: "error",
+        })
+         }, 600); 
     }
 }
 
