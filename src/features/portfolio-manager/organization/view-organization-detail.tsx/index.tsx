@@ -16,6 +16,7 @@ import TableModal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
 import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
 // import { useSearchOrganisationByNameQuery } from '@/service/admin/organization';
 
 
@@ -24,11 +25,19 @@ interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
 }
 
+interface adminProps extends TableRowData {
+  fullName: string,
+  email: string,
+  status: string
+}
+
 
 const ViewOrganizationDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {data:organizationDetail} = useGetDetailsOfOrganizationQuery({})
-  // const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [adminList, setAdminList] = useState<adminProps[]>([])
+  const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
   
   const handleInviteClick = () => {
     setIsModalOpen(true);
