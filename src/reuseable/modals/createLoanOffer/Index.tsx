@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { cabinetGrotesk, inter } from "@/app/fonts";
 import { MdClose } from "react-icons/md";
@@ -9,9 +9,11 @@ import { Label } from "@/components/ui/label";
 
 interface CreateLoanOfferProps {
     onSubmit: (data: { amountApproved: string, loanProduct: string }) => void;
+    isOpen: boolean;
+    setIsOpen: (value: boolean) => void;
 }
 
-const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit }) => {
+const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, setIsOpen }) => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         const formData = new FormData(event.target as HTMLFormElement);
@@ -21,18 +23,11 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit }) => {
         };
         onSubmit(data);
     };
+    if (!isOpen) return null;
+
 
     return (
         <Dialog>
-            <DialogTrigger asChild>
-                <Button
-                    id="createCohortButton"
-                    size={"lg"}
-                    className={`${inter.className} h-12 shadow-none bg-meedlBlue hover:bg-meedlBlue cursor-pointer text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
-                >
-                    Create loan offer
-                </Button>
-            </DialogTrigger>
             <DialogContent
                 id="createLoanOfferDialogContent"
                 className="max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-8 py-5 pl-5 pr-2"
@@ -59,7 +54,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit }) => {
                 <form
                     id="createCohortForm"
                     className={`grid gap-5 ${inter.className} pr-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`}
-                    style={{ scrollbarGutter: "stable both-edge" }}
+                    style={{scrollbarGutter: "stable both-edge"}}
                     onSubmit={handleSubmit}
                 >
                     <div className="grid gap-2">
@@ -76,7 +71,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit }) => {
                         <Label htmlFor="loanProduct">Loan product</Label>
                         <Select name="loanProduct">
                             <SelectTrigger id="loanProductSelectTrigger" className="mt-0 mb-0 min-w-[78px]">
-                                <SelectValue placeholder="Select product" />
+                                <SelectValue placeholder="Select product"/>
                             </SelectTrigger>
                             <SelectContent id="loanProductSelectContent">
                                 <SelectItem value="Product1">Product1</SelectItem>
@@ -85,6 +80,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit }) => {
                             </SelectContent>
                         </Select>
                     </div>
+                    <Button onClick={() => setIsOpen(false)}>Close</Button>
                     <Button type="submit" className="mt-4">Create</Button>
                 </form>
             </DialogContent>
