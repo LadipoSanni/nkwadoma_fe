@@ -6,5 +6,17 @@ const loanOfferApi = createApi({
     tagTypes: ['loanOffer'],
     baseQuery: customFetchBaseQuery,
     reducerPath: 'loanOfferApi',
-    // endpoints
+    endpoints : (buider) => ({
+        viewAllLoanOffer : buider.query({
+            query: (data:  {
+                pageNumber?: number;
+                pageSize?: number;}) => ({
+                url: `/loan/loanOffer/all`,
+                body: 'GET',
+                params: data
+            })
+
+        }) ,
+    })
 })
+export const {useViewAllLoanOfferQuery} = loanOfferApi

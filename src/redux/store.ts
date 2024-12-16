@@ -39,6 +39,7 @@ export const store = configureStore({
             organizationApi.middleware,
             loanProductApi.middleware,
             loanRequestApi.middleware,
+
         ]),
 });
 export const persistor = persistStore(store);
