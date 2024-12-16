@@ -19,7 +19,7 @@ const DynamicIdentityVerificationModal = dynamic(() => import('@/reuseable/modal
 const steps = [
     'Loan application details',
     'Verify your identity',
-    'Additional information',
+    'Current information',
     'Confirm loan application'
 ];
 
@@ -114,7 +114,7 @@ const LoaneeOnboarding = () => {
                         className={`${cabinetGrotesk.className} text-labelBlue md:text-[20px] text-[16px] leading-[120%]`}>
                         {currentStep === 0 && 'Loan application details'}
                         {currentStep === 1 && 'Verify your identity'}
-                        {currentStep === 2 && 'Additional information'}
+                        {currentStep === 2 && 'Current information'}
                         {currentStep === 3 && 'Confirm loan referral acceptance'}
                     </h2>
                     <StepContent step={currentStep} setCurrentStep={setCurrentStep} loaneeLoanDetail={loaneeLoanDetail} />
