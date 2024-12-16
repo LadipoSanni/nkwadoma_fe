@@ -1,9 +1,9 @@
 import React from 'react';
-import ViewAllLoanRequest from "@/pages/admin/loan/Index";
+import Index from "@/components/viewAll/LoanRequestTable";
 
 const Page = () => {
     return (
-            <ViewAllLoanRequest/>
+            <Index/>
     );
 };
 

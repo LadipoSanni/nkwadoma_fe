@@ -16,7 +16,7 @@ const SelectLoanTab = () => {
 
     const tabContent = [
         {name: "Loan referrals", id: "loanReferrals", route: 'loan-referral'},
-        {name: "Loan requests", id: "loanRequests", route: "loan-request"},
+        {name: "Loan requests", id: "loanRequests", route: "loan"},
         {name: 'Loan offers', id: 'loanOffers', route: "loan-offer"},
         {name: 'Loan disbursal', id: "loanDisbursal", route: 'loan-disbursal'},
         {name: 'Loan book', id: "loanBook", route: "loan-book"},

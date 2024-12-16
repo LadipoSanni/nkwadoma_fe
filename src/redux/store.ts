@@ -11,6 +11,7 @@ import {organizationApi} from "@/service/admin/organization";
 import {loaneeApi} from "@/service/users/Loanee_query";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {loanProductApi} from "@/service/admin/loan_product";
+import {loanRequestApi} from "@/service/admin/loan/loan-request-api"
 
 
 const persistConfig = {
@@ -37,6 +38,7 @@ export const store = configureStore({
             userApi.middleware,
             organizationApi.middleware,
             loanProductApi.middleware,
+            loanRequestApi.middleware,
         ]),
 });
 export const persistor = persistStore(store);

@@ -11,7 +11,7 @@ export const LoanRequestTable = [
     },
     {
         id: 2,
-        traineeName: 'Anoluwapo Ogungbemi',
+        firstName: 'Anoluwapo Ogungbemi',
         program: 'Software Engineering',
         cohort: 'Gems',
         startDate: '12 Dec, 2021',
@@ -208,6 +208,20 @@ export const LoanRequestTable = [
         initialDeposit: '#3,000,0000',
         amountRequested: '#3,000,0000'
     },
+
+]
+
+export const loanOfferTable = [
+    {
+        id: 1,
+        loanee: 'Anoluwapo Ogungbemi',
+        loanProduct: 'Software Engineering',
+        offerDate: '12 Dec, 2021',
+        requestDate: '12 Jan, 2022',
+        amountRequested: '#3,000,0000',
+        amountApproved: '#3,000,0000'
+    },
+
 
 ]
 
