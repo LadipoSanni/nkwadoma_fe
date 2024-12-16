@@ -90,7 +90,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
         <>
             <Dialog open={isOpen} onOpenChange={onClose}>
                 <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]"/>
-                <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6 py-5 px-5'}>
+                <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6 py-5 pl-5 pr-2'}>
                     <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
                         <DialogTitle
                             className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Provide
@@ -102,7 +102,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                         </DialogClose>
                     </DialogHeader>
                     <FormProvider {...methods}>
-                        <form className={`${inter.className}`} onSubmit={methods.handleSubmit(onSubmit)}>
+                        <form className={`${inter.className} pr-2  overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`} onSubmit={methods.handleSubmit(onSubmit)}>
                             <main className={'grid gap-5'}>
                                 <div className={'grid gap-2'}>
                                     <Label htmlFor="bvn" className="block text-sm font-medium text-labelBlue">Bank
