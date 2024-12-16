@@ -3,7 +3,7 @@ import { render, fireEvent, screen,cleanup } from '@testing-library/react';
 import CurrentInformation from '@/features/onboarding/stepContent/currentInformation/Index';
 import { Providers } from '@/app/provider';
 
-describe('AdditionalInformation Component', () => {
+describe('CurrentInformation Component', () => {
     beforeEach(() => {
         cleanup()
     
@@ -17,7 +17,7 @@ describe('AdditionalInformation Component', () => {
                 <CurrentInformation />
             </Providers>
         );
-        expect(screen.getByText('Additional information will appear here')).toBeInTheDocument();
+        expect(screen.getByText('Current information will appear here')).toBeInTheDocument();
     });
 
     test('opens modal when add additional information button is clicked', () => {
@@ -26,8 +26,8 @@ describe('AdditionalInformation Component', () => {
                 <CurrentInformation />
             </Providers>
         );
-        fireEvent.click(screen.getByText('Add additional information'));
-        expect(screen.getByText('Additional information')).toBeInTheDocument();
+        fireEvent.click(screen.getByText('Add current information'));
+        expect(screen.getByText('Current information')).toBeInTheDocument();
     });
 
     test('submits form when all fields are filled', () => {
@@ -36,7 +36,7 @@ describe('AdditionalInformation Component', () => {
                 <CurrentInformation />
             </Providers>
         );
-        fireEvent.click(screen.getByText('Additional information will appear here'));
+        fireEvent.click(screen.getByText('Current information will appear here'));
         fireEvent.click(screen.getByText('Continue'));
         expect(screen.queryByText('Alternate email address is required')).not.toBeInTheDocument();
         expect(screen.queryByText('National identification number is required')).not.toBeInTheDocument();
