@@ -153,11 +153,11 @@ const ProgramView = () => {
     const ProgramHeader = [
         {title: 'Programs', sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
         {
-            title: <div className='relative md:right-4 md:left-4'>Status</div>,
+            title: <div className='relative md:right-4 md:left-4 '>Status</div>,
             sortable: true,
             id: 'programStatus',
             selector: (row: TableRowData) => <span
-                className={` pt-1 pb-1 pr-3 pl-3  rounded-xl ${row.programStatus === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"} `}>{row.programStatus ?? "Declined"}</span>
+                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.programStatus === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"} `}>{row.programStatus ?? "Declined"}</span>
         },
         {
             title: 'No. of Cohorts',
@@ -376,7 +376,8 @@ const ProgramView = () => {
                                 headerTitle={"Create program"}
                                 className={"w-full"}
                                 icon={Cross2Icon}
-                                width={`32%`}
+                                
+                                // width={`32%`}
                     >
                         
                         <CreateProgram setIsOpen={setIsOpen}

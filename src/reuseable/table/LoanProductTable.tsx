@@ -227,11 +227,12 @@ function Tables<T extends TableRowData>({
                           // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                           className={`h-1 ${
                             isLastPage ? "border-b border-solid " : ""
-                          } ${tableCellStyle}`}
+                          } ${tableCellStyle} overflow-hidden whitespace-nowrap text-ellipsis max-w-[140px]  `}
                         >
                           <div
                             id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
-                            className={`${Styles.tableBodyItem} ${tableStyle} `}
+                            className={`${Styles.tableBodyItem} ${tableStyle}  truncate pt-2 pb-2 pr-2 pl-2`}
+                            // style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", maxWidth: "200px",  }}
                           >
                             {/* {column.selector ? column.selector(row) : row[column.id]} */}
                             {renderCellContent(
@@ -374,8 +375,8 @@ function Tables<T extends TableRowData>({
                       onClick={() => handleRowClick(row)}
                       className={`${sx}`}
                     >
-                      <TableCell className="h-14 ">
-                        <div className="">
+                      <TableCell className="h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[50px]">
+                        <div className="truncate pt-2 pb-2 pr-2 pl-2 ">
                           {/* {row[`${staticColunm}`]} */}
                           {renderCellContent(
                             tableHeader.find(
@@ -389,8 +390,8 @@ function Tables<T extends TableRowData>({
                         </div>
                       </TableCell>
 
-                      <TableCell className="h-14">
-                        <div className={`flex justify-center `}>
+                      <TableCell className="h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[50px]">
+                        <div className={`text-center truncate pr-2 pl-2 pt-2 pb-2 `}>
                           {/* {row[selectedColumn]} */}
                           {renderCellContent(
                             tableHeader.find(

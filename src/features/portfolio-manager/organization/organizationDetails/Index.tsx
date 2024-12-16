@@ -19,9 +19,17 @@ import { useRouter } from "next/navigation";
 import { getItemSessionStorage } from "@/utils/storage";
 import { formatAmount } from "@/utils/Format";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
+
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
+}
+
+interface adminProps extends TableRowData {
+  fullName: string,
+  email: string,
+  status: string
 }
 
 
@@ -30,15 +38,9 @@ const OrganizationDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page] = useState(0);
   const [orgId, setOrgList] = useState("");
-
-  useEffect(() => {
-    const id = getItemSessionStorage("organisationId");
-    if (id) {
-      setOrgList(id);
-    }
-  }, []);
-
-  const { data: adminData } = useViewAllAdminsInOrganizationQuery(
+  const [searchTerm, setSearchTerm] = useState('');
+  const [adminList, setAdminList] = useState<adminProps[]>([])
+   const { data: adminData } = useViewAllAdminsInOrganizationQuery(
     {
       organizationId: orgId,
       pageNumber: page,
@@ -52,7 +54,31 @@ const OrganizationDetails = () => {
     },
     { skip: !orgId }
   );
-  // 
+
+  const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
+
+  useEffect(() => {
+    const id = getItemSessionStorage("organisationId");
+    if (id) {
+      setOrgList(id);
+    }
+  }, []);
+
+    useEffect(() => {
+      if (searchTerm && searchResults && searchResults.data) {
+        const admins = searchResults.data
+        setAdminList(admins);
+      } else if (!searchTerm && adminData && adminData?.data) {
+        const admins = adminData?.data?.body;
+        setAdminList(admins);
+      }
+    },[searchTerm, searchResults,adminData]);
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(event.target.value);
+  };
+
+
   const router = useRouter();
 
   const organizationName = organizationDetails?.data.name ?? "";
@@ -307,18 +333,10 @@ const OrganizationDetails = () => {
           >
             <SearchInput
               id={"organizationSearch"}
-              value="search"
-              onChange={() => {}}
+              value={searchTerm}
+              onChange={handleSearchChange}
             />
-            {/* <Button
-              id="inviteAdminButton"
-              className={
-                "h-[2.8125rem] md:w-[10.375rem] w-full rounded-md bg-meedlBlue hover:bg-meedlBlue text-meedlWhite text-[0.875rem] font-semibold leading-[150%] "
-              }
-              onClick={handleInviteClick}
-            >
-              Invite admin
-            </Button> */}
+           
           </section>
           <div
             id="adminListView"
@@ -329,7 +347,7 @@ const OrganizationDetails = () => {
             }}
           >
             <LoanProductTable
-              tableData={adminData?.data.body}
+              tableData={adminList}
               tableHeader={adminsHeader}
               staticHeader={"Full name"}
               staticColunm={"fullName"}
