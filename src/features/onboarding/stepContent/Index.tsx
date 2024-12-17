@@ -1,7 +1,7 @@
 import React from 'react';
 import LoanApplicationDetails from "@/features/onboarding/stepContent/loanApplicationDetails/Index";
 import IdentityVerification from "@/features/onboarding/stepContent/identityVerification/Index";
-import AdditionalInformation from "@/features/onboarding/stepContent/additionalInformation/Index";
+import CurrentInformation from "@/features/onboarding/stepContent/currentInformation/Index";
 import ConfirmLoanReferralAcceptance from "@/features/onboarding/stepContent/confirmLoanReferralAcceptance/Index";
 
 interface StepContentProps {
@@ -23,7 +23,7 @@ const StepContent: React.FC<StepContentProps> = ({ step, setCurrentStep, loaneeL
         case 1:
             return <IdentityVerification/>;
         case 2:
-            return <AdditionalInformation setCurrentStep={setCurrentStep}/>;
+            return <CurrentInformation setCurrentStep={setCurrentStep}/>;
         case 3:
             return <ConfirmLoanReferralAcceptance />;
         default:
