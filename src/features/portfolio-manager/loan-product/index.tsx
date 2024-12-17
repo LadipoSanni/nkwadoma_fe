@@ -150,7 +150,7 @@ function LoanProductPage() {
                     tableCellStyle={"h-12"}
                     optionalRowsPerPage={10}
                     icon={MdOutlineInventory2}
-                    sideBarTabName={"Loan products"}
+                    sideBarTabName={"Loan product"}
                     isLoading={isLoading}
                     condition={true}
                 />
@@ -162,7 +162,7 @@ function LoanProductPage() {
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
                     headerTitle={`Create loan Product`}
-                    width="30%"
+                    width="40%"
                 >
                     <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>
                 </TableModal>
