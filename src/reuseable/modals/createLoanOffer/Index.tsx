@@ -1,38 +1,47 @@
-import React from 'react';
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import React, { useState } from 'react';
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { cabinetGrotesk, inter } from "@/app/fonts";
 import { MdClose } from "react-icons/md";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
+import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
+import { NumericFormat } from "react-number-format";
+import ProgramSelect from "@/reuseable/select/ProgramSelect";
 
 interface CreateLoanOfferProps {
     onSubmit: (data: { amountApproved: string, loanProduct: string }) => void;
+    isOpen: boolean;
+    setIsOpen: (value: boolean) => void;
 }
 
-const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit }) => {
+const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, setIsOpen }) => {
+    const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
+    const [isSelectOpen, setIsSelectOpen] = useState(false);
+    const [, setProgramId] = useState("");
+    const [isFormValid, setIsFormValid] = useState(true);
+    const [errorMessage, setErrorMessage] = useState("");
+
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+        if (!selectedProgram) {
+            setIsFormValid(false);
+            setErrorMessage("Please select a program.");
+            return;
+        }
+        setIsFormValid(true);
+        setErrorMessage("");
         const formData = new FormData(event.target as HTMLFormElement);
         const data = {
             amountApproved: formData.get('amountApproved') as string,
-            loanProduct: formData.get('loanProduct') as string,
+            loanProduct: selectedProgram || "",
         };
         onSubmit(data);
     };
 
+    if (!isOpen) return null;
+
     return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button
-                    id="createCohortButton"
-                    size={"lg"}
-                    className={`${inter.className} h-12 shadow-none bg-meedlBlue hover:bg-meedlBlue cursor-pointer text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
-                >
-                    Create loan offer
-                </Button>
-            </DialogTrigger>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogContent
                 id="createLoanOfferDialogContent"
                 className="max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-8 py-5 pl-5 pr-2"
@@ -41,13 +50,13 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit }) => {
                     <DialogTitle
                         className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}
                     >
-                        Create cohort
+                        Create loan offer
                     </DialogTitle>
                     <DialogClose asChild>
                         <button
                             id="createCohortDialogCloseButton"
                             className="absolute right-5"
-                            onClick={() => {}}
+                            onClick={() => setIsOpen(false)}
                         >
                             <MdClose
                                 id={"createCohortCloseIcon"}
@@ -64,28 +73,59 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit }) => {
                 >
                     <div className="grid gap-2">
                         <Label htmlFor="amountApproved">Amount approved</Label>
-                        <Input
-                            type="number"
-                            id="amountApproved"
-                            name="amountApproved"
-                            placeholder="Enter amount"
-                            className="p-4 focus-visible:outline-0 w-full shadow-none focus-visible:ring-transparent rounded-md h-[3.10rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"
-                        />
+                        <div className={'flex gap-2'}>
+                            <CurrencySelectInput
+                                selectedcurrency={"NGN"}
+                                setSelectedCurrency={(currency) => console.log(currency)}
+                                className="mt-0 mb-0 min-w-[78px] h-[3.10rem]"
+                            />
+                            <NumericFormat
+                                id={`itemAmount`}
+                                name={`itemAmount`}
+                                placeholder="0.00"
+                                className="p-4 focus-visible:outline-0 w-full shadow-none focus-visible:ring-transparent rounded-md h-[3.20rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"
+                                thousandSeparator=","
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                            />
+                        </div>
                     </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="loanProduct">Loan product</Label>
-                        <Select name="loanProduct">
-                            <SelectTrigger id="loanProductSelectTrigger" className="mt-0 mb-0 min-w-[78px]">
-                                <SelectValue placeholder="Select product" />
-                            </SelectTrigger>
-                            <SelectContent id="loanProductSelectContent">
-                                <SelectItem value="Product1">Product1</SelectItem>
-                                <SelectItem value="Product2">Product2</SelectItem>
-                                <SelectItem value="Product3">Product3</SelectItem>
-                            </SelectContent>
-                        </Select>
+                    <ProgramSelect
+                        selectedProgram={selectedProgram}
+                        setSelectedProgram={setSelectedProgram}
+                        isSelectOpen={isSelectOpen}
+                        setIsSelectOpen={setIsSelectOpen}
+                        selectOptions={[
+                            { id: "1", name: "Product1" },
+                            { id: "2", name: "Product2" },
+                            { id: "3", name: "Product3" }
+                        ]}
+                        setId={setProgramId}
+                        label={'Loan product'}
+                        placeholder={'Select loan product'}
+                    />
+                    {!isFormValid && (
+                        <div className="text-red-500 text-sm">{errorMessage}</div>
+                    )}
+                    <div className={'flex justify-end gap-2'}>
+                        <DialogClose asChild>
+                            <Button
+                                id="CancelCohortButton"
+                                variant={"outline"}
+                                className={`text-meedlBlue font-bold border-solid border-meedlBlue w-full md:w-[8.75rem] h-[3.5625rem]`}
+                            >
+                                Back
+                            </Button>
+                        </DialogClose>
+                        <Button
+                            id="CreateCohortButton"
+                            className={`text-meedlWhite font-bold ${!isFormValid ? 'bg-neutral650' : 'bg-meedlBlue hover:bg-meedlBlue'} w-full md:w-[8.75rem] h-[3.5625rem]`}
+                            type="submit"
+                            disabled={!isFormValid}
+                        >
+                            Create
+                        </Button>
                     </div>
-                    <Button type="submit" className="mt-4">Create</Button>
                 </form>
             </DialogContent>
         </Dialog>
