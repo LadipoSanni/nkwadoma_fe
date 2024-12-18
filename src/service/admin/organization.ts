@@ -55,8 +55,6 @@ export const organizationApi = createApi({
                 email: string;
                 firstName: string;
                 lastName: string;
-                organizationDomain: string;
-                createdBy: string;
                 role: string;
             }) => ({
                 url: `auth/colleague/invite`,

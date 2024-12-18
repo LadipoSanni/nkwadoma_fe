@@ -227,7 +227,7 @@ function Tables<T extends TableRowData>({
                           // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                           className={`h-1 ${
                             isLastPage ? "border-b border-solid " : ""
-                          } ${tableCellStyle} overflow-hidden whitespace-nowrap text-ellipsis max-w-[140px]  `}
+                          } ${tableCellStyle} overflow-hidden whitespace-nowrap text-ellipsis max-w-[80px]  `}
                         >
                           <div
                             id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
