@@ -11,6 +11,7 @@ import {useRouter} from "next/navigation";
 import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
 // import {LoanRequestType} from "@/types/loan/loan-request.type";
 import {formatAmount} from "@/utils/Format";
+import dayjs from "dayjs";
 // import DynamicTable from "@/reuseable/table/LoanProductTable";
 // import {formatDate} from "date-fns";
 // import dayjs from dayjs
@@ -36,14 +37,15 @@ function Index() {
     //     setData({ pageNumber: counter, pageSize: 10 });
     // }, [counter]);
     console.log("data:: ", data, "error: ", error, "isLoading:: ", isLoading)
+    console.log("date:: ", dayjs('2024-12-16T16:17:42.934384').format('MMMM D, YYYY'))
 
     const loanRequestHeader = [
-        // { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) => row.firstName },
+        // { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) => row.firstName },row.requestDate
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-4 '>{row.firstName}{row.lastName}</div>  },
         { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.programName },
         { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort },
-        { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => row.cohortStartDate },
-        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) => row.requestDate },
+        { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate).format('MMMM D, YYYY')}</div> },
+        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.requestDate).format('MMMM D, YYYY')}</div> },
         { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div>},
         { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>}
     ];
