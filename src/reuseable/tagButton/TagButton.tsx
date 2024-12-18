@@ -17,7 +17,7 @@ export const TagButton: React.FC<TagButtonProps> = ({tagCount, tagIcon: Icon, ta
                 className={`${inter.className} ${tagButtonStyle} py-1 px-3 text-sm font-medium text-lightBlue300 w-full rounded-full flex items-center space-x-2`}>
                 <Icon className="w-4 h-4 text-meedlBlue"/>
                 <span className={`flex flex-row w-full`}>
-                    <span className={`${inter.className} w-full text-meedlBlue`}>
+                    <span className={`${inter.className} w-full text-meedlBlue `}>
                         {tagCount}
                     </span>
                     <span className={`${inter.className} w-full text-meedlBlue`}>

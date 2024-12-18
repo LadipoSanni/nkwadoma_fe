@@ -252,10 +252,10 @@ function SelectableTable<T extends TableRowData> ({
                                                             id={`dynamicTableCell${column.id}${rowIndex}`}
                                                             // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                                                             className={`h-1 ${
-                                                                isLastPage ? 'border-b border-solid ' : ''} ${tableCellStyle}`}
+                                                                isLastPage ? 'border-b border-solid ' : ''} ${tableCellStyle}  overflow-hidden whitespace-nowrap text-ellipsis max-w-[140px]`}
                                                         >
                                                             <div id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
-                                                                 className={`${Styles.tableBodyItem} ${tableStyle} `}>
+                                                                 className={`${Styles.tableBodyItem} ${tableStyle} truncate pt-2 pb-2 pr-2 pl-2`}>
                                                                 {/* {column.selector ? column.selector(row) : row[column.id]} */}
                                                                 {renderCellContent(column.selector ? column.selector(row) : row[column.id])}
                                                             </div>
@@ -413,9 +413,9 @@ function SelectableTable<T extends TableRowData> ({
                                                         </TableCell>
                                                     )}
                                                     <TableCell
-                                                        className='h-14 '
+                                                        className='h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[50px]'
                                                     >
-                                                        <div className=''>
+                                                        <div className='truncate pt-2 pb-2 pr-2 pl-2 '>
                                                             {/* {row[`${staticColunm}`]} */}
                                                             {renderCellContent(tableHeader.find((header) => header.id === staticColunm)?.selector
                                                                 ? tableHeader.find((header) => header.id === staticColunm)?.selector!(row)

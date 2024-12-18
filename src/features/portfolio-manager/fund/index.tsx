@@ -10,6 +10,9 @@ import { MdOutlinePayments } from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
+import { useRouter } from 'next/navigation'
+import CreateInvestmentVehicleDonor from '@/components/portfolio-manager/fund/Create-investment-vehicle-donor';
+import { setItemSessionStorage } from '@/utils/storage';
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -30,11 +33,19 @@ const tabData = [
 
 const InvestmentVehicle = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const[isDonorModalOpen, setDonorModalOpen] = useState(false);
+
+  const router = useRouter()
+
   const handleDraftClick = () => {
 
   }
    const handleCreateInvestmentVehicleClick = () => {
      setIsModalOpen(true);
+  }
+
+  const handleCreateInvestmentDonorClick = () => {
+     setDonorModalOpen(true);
   }
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
@@ -52,7 +63,12 @@ const InvestmentVehicle = () => {
       { title: 'Amount Disbursed', sortable: true, id: 'amountDisbursed', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountDisbursed)}</div> },
       { title: 'Amount Available', sortable: true, id: 'amountAvailable', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountAvailable)}</div> },
   ]
-  
+    
+    
+  const handleRowClick = (row:TableRowData) => {
+    router.push('/funds/details')  
+    setItemSessionStorage('investmentVehicleId', String(row.id));
+}
   
   const tabContent = [
     {
@@ -69,7 +85,7 @@ const InvestmentVehicle = () => {
       table: <div>
         <Tables
           tableData={fund}
-          handleRowClick={() => {}}
+          handleRowClick={handleRowClick}
           tableHeader={fundHeader}
            tableHeight={52}
            sx='cursor-pointer'
@@ -90,14 +106,14 @@ const InvestmentVehicle = () => {
           value=''
           onChange={handleSearchChange}
           handleDraftClick={handleDraftClick}
-          handleCreateInvestmentVehicleClick={handleCreateInvestmentVehicleClick}
+          handleCreateInvestmentVehicleClick={handleCreateInvestmentDonorClick}
          />
       </div>,
       value: "endowmentFund",
       table: <div>
         <Tables
           tableData={fund}
-          handleRowClick={() => {}}
+          handleRowClick={handleRowClick}
           tableHeader={fundHeader}
            tableHeight={52}
            optionalRowsPerPage={10}
@@ -146,7 +162,21 @@ const InvestmentVehicle = () => {
            closeOnOverlayClick={true}
            icon={Cross2Icon}
           >
-            <CreateInvestmentVehicle />
+            <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)}/>
+          </TableModal>
+        }
+      </div>
+      <div>
+        {
+          <TableModal
+           isOpen={isDonorModalOpen}
+           closeModal={()=> setDonorModalOpen(false)}
+           className='pb-1'
+           headerTitle='Create Investment'
+           closeOnOverlayClick={true}
+           icon={Cross2Icon}
+          >
+            <CreateInvestmentVehicleDonor setIsOpen={()=> setDonorModalOpen(false)}/>
           </TableModal>
         }
       </div>

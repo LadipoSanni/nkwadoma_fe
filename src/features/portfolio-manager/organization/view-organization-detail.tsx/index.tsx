@@ -1,5 +1,5 @@
 "use client";
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { inter, cabinetGrotesk } from "@/app/fonts";
 import { IoGlobeOutline } from "react-icons/io5";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,32 +16,56 @@ import TableModal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
 import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-// import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
+import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
 // import { useSearchOrganisationByNameQuery } from '@/service/admin/organization';
 
 
 
-interface TableRowData {
-  [key: string]: string | number | null | React.ReactNode;
+interface meedlUser{
+  id: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  status: string,
 }
 
-// interface adminProps extends TableRowData {
-//   fullName: string,
-//   email: string,
-//   status: string
-// }
+interface adminProps {
+ meedlUser: meedlUser
+}
+
+interface tableRowData {
+  [key: string]: string | number | null | React.ReactNode | adminProps;
+}
+
+type viewAllEmployees = adminProps & tableRowData
 
 
 const ViewOrganizationDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {data:organizationDetail} = useGetDetailsOfOrganizationQuery({})
-  // const [searchTerm, setSearchTerm] = useState('');
-  // const [adminList, setAdminList] = useState<adminProps[]>([])
-  // const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
-  
+  const [searchTerm, setSearchTerm] = useState('');
+  const [adminEmployees, setAdminEmployees] = useState<viewAllEmployees[]>([])
+  const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
+
+  useEffect(()=> {
+    if(searchTerm && searchResults && searchResults?.data){
+        const adminEmployees = searchResults.data
+        setAdminEmployees(adminEmployees)
+    }
+   else if(!searchTerm && organizationDetail && organizationDetail?.data  && organizationDetail?.data.organizationEmployees){
+       const adminEmployees = organizationDetail?.data.organizationEmployees
+       setAdminEmployees(adminEmployees)
+    }
+  },[organizationDetail,searchTerm,searchResults])
+
+
   const handleInviteClick = () => {
     setIsModalOpen(true);
   };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+};
 
   const organizationName = organizationDetail?.data.name ?? "";
   const firstCharInName = organizationName.charAt(0).toUpperCase()
@@ -108,34 +132,34 @@ const ViewOrganizationDetail = () => {
       title: "Full name",
       sortable: true,
       id: "fullName",
-      selector: (row: TableRowData) => row.fullName,
+      selector: (row:  viewAllEmployees) =>row.meedlUser?.firstName + " " + row.meedlUser?.lastName,
     },
     {
-      title: <div className="relative md:left-10 md:right-10">Email</div>,
+      title: <div className="relative md:left-20 md:right-10">Email</div>,
       sortable: true,
       id: "email",
-      selector: (row: TableRowData) => ( <div className="relative md:left-12 md:right-12">{row.email ? row.email : "nill"}</div>),
+      selector: (row:  viewAllEmployees) => ( <div className="relative md:left-12 md:right-12">{row.meedlUser?.email ? row.meedlUser?.email : "nill"}</div>),
     },
     {
       title: (
-        <div id="adminStatusHeader" className="relative md:left-64 md:right-64">
+        <div id="adminStatusHeader" className="relative md:left-28 md:right-64">
           Status
         </div>
       ),
       sortable: true,
       id: "adminStatus",
-      selector: (row: TableRowData) => (
+      selector: (row:  viewAllEmployees) => (
         <span
           id="adminStatus"
-          className={`pt-1 pb-1 pr-3 pl-3 rounded-xl relative md:left-60 md:right-60 ${
-            row.status === "ACTIVE"
+          className={`pt-1 pb-1 pr-3 pl-3 rounded-xl relative md:left-24 md:right-60 ${
+            row.meedlUser?.status=== "ACTIVE"
               ? "text-[#063F1A] bg-[#E7F5EC]"
-              : row.status === "INVITED"
+              : row.meedlUser?.status === "INVITED"
               ? "text-[#142854] bg-[#F3F8FF]"
               : "text-[#59100D] bg-[#FBE9E9]"
           }`}
         >
-          {capitalizeFirstLetters(String(row.status))}
+          {capitalizeFirstLetters(String(row.meedlUser?.status || "INVITED"))}
 
         </span>
       ),
@@ -267,8 +291,8 @@ const ViewOrganizationDetail = () => {
           >
             <SearchInput
               id={"organizationSearch"}
-              value="search"
-              onChange={() => {}}
+              value={searchTerm}
+              onChange={handleSearchChange}
             />
             <Button
               id="inviteAdminButton"
@@ -289,7 +313,7 @@ const ViewOrganizationDetail = () => {
             }}
           >
             <LoanProductTable
-              tableData={[]}
+              tableData={adminEmployees}
               tableHeader={adminsHeader}
               staticHeader={"Full name"}
               staticColunm={"fullName"}
@@ -300,6 +324,7 @@ const ViewOrganizationDetail = () => {
               sideBarTabName="Admin"
               optionalRowsPerPage={10}
               tableCellStyle="h-12"
+              condition={true}
             />
           </div>
 
