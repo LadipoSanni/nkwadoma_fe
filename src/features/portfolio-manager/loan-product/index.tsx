@@ -162,7 +162,7 @@ function LoanProductPage() {
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
                     headerTitle={`Create loan Product`}
-                    width="40%"
+                    width="36%"
                 >
                     <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>
                 </TableModal>
