@@ -4,6 +4,7 @@ import "@testing-library/react";
 // import { LoanRequestTable } from "@/utils/LoanRequestMockData/Index";
 // import ViewAllLoanRequest from "@/pages/admin/loan/Index";
 import Index from "@/components/viewAll/LoanRequestTable";
+import {Providers} from "@/app/provider";
 
 
 jest.mock('next/navigation', () => ({
@@ -35,7 +36,11 @@ describe("ViewAllLoanRequest", ()=>{
 
 
     beforeEach(() => {
-        render(<Index />)
+        render(
+            <Providers>
+                <Index />
+            </Providers>
+        )
     })
 
    
