@@ -1,18 +1,20 @@
 export const LoanRequestTable = [
     {
         id: 1,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
+        firstName: 'Anoluwapo',
+        lastName: 'Ogungbemi',
+        programName: 'Software Engineering',
         cohort: 'Gems',
-        startDate: '12 Dec, 2021',
+        cohortStartDate: '12 Dec, 2021',
         requestDate: '12 Jan, 2022',
         initialDeposit: '#3,000,0000',
         amountRequested: '#3,000,0000'
     },
     {
         id: 2,
-        firstName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
+        firstName: 'Anoluwapo',
+        lastName: 'Ogungbemi',
+        programName: 'Software Engineering',
         cohort: 'Gems',
         startDate: '12 Dec, 2021',
         requestDate: '12 Jan, 2022',
@@ -20,8 +22,9 @@ export const LoanRequestTable = [
         amountRequested: '#3,000,0000'
     }, {
         id: 3,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
+        firstName: 'Anoluwapo',
+        lastName: 'Ogungbemi',
+        programName: 'Software Engineering',
         cohort: 'Gems',
         startDate: '12 Dec, 2021',
         requestDate: '12 Jan, 2022',
@@ -29,8 +32,9 @@ export const LoanRequestTable = [
         amountRequested: '#3,000,0000'
     }, {
         id: 4,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
+        firstName: 'Anoluwapo',
+        lastName: 'Ogungbemi',
+        programName: 'Software Engineering',
         cohort: 'Gems',
         startDate: '12 Dec, 2021',
         requestDate: '12 Jan, 2022',
@@ -38,7 +42,18 @@ export const LoanRequestTable = [
         amountRequested: '#3,000,0000'
     }, {
         id: 5,
-        traineeName: 'Anoluwapo Ogungbemi',
+        firstName: 'Anoluwapo',
+        lastName: 'Ogungbemi',
+        programName: 'Software Engineering',
+        cohort: 'Gems',
+        startDate: '12 Dec, 2021',
+        requestDate: '12 Jan, 2022',
+        initialDeposit: '#3,000,0000',
+        amountRequested: '#3,000,0000'
+    }, {
+        id: 6,
+        firstName: 'Anoluwapo',
+        lastName: 'Ogungbemi',
         program: 'Software Engineering',
         cohort: 'Gems',
         startDate: '12 Dec, 2021',
@@ -47,16 +62,8 @@ export const LoanRequestTable = [
         amountRequested: '#3,000,0000'
     }, {
         id: 6,
-        traineeName: 'Anoluwapo Ogungbemi',
-        program: 'Software Engineering',
-        cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        initialDeposit: '#3,000,0000',
-        amountRequested: '#3,000,0000'
-    }, {
-        id: 6,
-        traineeName: 'Anoluwapo Ogungbemi',
+        firstName: 'Anoluwapo',
+        lastName: 'Ogungbemi',
         program: 'Software Engineering',
         cohort: 'Gems',
         startDate: '12 Dec, 2021',
@@ -65,7 +72,8 @@ export const LoanRequestTable = [
         amountRequested: '#3,000,0000'
     }, {
         id: 7,
-        traineeName: 'Anoluwapo Ogungbemi',
+        firstName: 'Anoluwapo',
+        lastName: 'Ogungbemi',
         program: 'Software Engineering',
         cohort: 'Gems',
         startDate: '12 Dec, 2021',
@@ -74,7 +82,8 @@ export const LoanRequestTable = [
         amountRequested: '#3,000,0000'
     }, {
         id: 8,
-        traineeName: 'Anoluwapo Ogungbemi',
+        firstName: 'Anoluwapo',
+        lastName: 'Ogungbemi',
         program: 'Software Engineering',
         cohort: 'Gems',
         startDate: '12 Dec, 2021',

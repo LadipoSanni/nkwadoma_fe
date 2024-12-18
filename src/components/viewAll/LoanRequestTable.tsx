@@ -4,15 +4,15 @@ import React from "react";
 import {LoanRequestTable} from "@/utils/LoanRequestMockData/Index"
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import {Icon} from "@iconify/react";
-import { loanRequestData} from "@/utils/LoanRequestMockData/cohortProduct";
+// import { loanRequestData} from "@/utils/LoanRequestMockData/cohortProduct";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {useRouter} from "next/navigation";
 import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
-import {LoanRequestType} from "@/types/loan/loan-request.type";
+// import {LoanRequestType} from "@/types/loan/loan-request.type";
 import {formatAmount} from "@/utils/Format";
 // import DynamicTable from "@/reuseable/table/LoanProductTable";
-
+// import {formatDate} from "date-fns";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -35,13 +35,14 @@ function Index() {
     console.log("data:: ", data, "error: ", error, "isLoading:: ", isLoading)
 
     const loanRequestHeader = [
-        { title: 'Loanee', sortable: true, id: 'loanee', selector: (row: TableRowData) => row.firstName  },
+        // { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) => row.firstName },
+        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-4 '>{row.firstName}{row.lastName}</div>  },
         { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.programName },
         { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort },
         { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => row.cohortStartDate },
         { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) => row.requestDate },
-        { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className='ml-8'>{formatAmount(row.initialDeposit)}</div>},
-        { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-8'>{formatAmount(row.amountRequested)}</div>}
+        { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div>},
+        { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>}
     ];
 
     const handleRowClick = () => {
@@ -60,7 +61,7 @@ function Index() {
                 LoanRequestTable?.length > 0 ?
                     <div className={`md:w-full w-full h-full md:h-full `}>
                         <Tables
-                            tableData={loanRequestData}
+                            tableData={LoanRequestTable}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
