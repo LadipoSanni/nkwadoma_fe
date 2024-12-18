@@ -5,7 +5,7 @@ import {Button} from "@/components/ui/button";
 import {Dialog, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogClose} from "@/components/ui/dialog";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import {useSaveNextOfKinDetailsMutation} from "@/service/users/Loanee_query";
+// import {useSaveNextOfKinDetailsMutation} from "@/service/users/Loanee_query";
 import ProgramSelect from "@/reuseable/select/ProgramSelect";
 
 interface CurrentInformationProps {
@@ -27,7 +27,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
     });
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-    const [saveNextOfKinDetails] = useSaveNextOfKinDetailsMutation()
+    // const [saveNextOfKinDetails] = useSaveNextOfKinDetailsMutation()
     const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
 
