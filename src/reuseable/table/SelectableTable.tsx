@@ -200,7 +200,7 @@ function SelectableTable<T extends TableRowData> ({
                                                         id={`selectAll`}
                                                         checked={selectAll}
                                                         onChange={handleSelectAll}
-                                                        className={`border-2 border-[#D7D7D7] rounded-md`}
+                                                        className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md`}
                                                     />
                                                 </TableHead>
                                             )}
@@ -239,7 +239,7 @@ function SelectableTable<T extends TableRowData> ({
                                                             id={`rowCheckBox`}
                                                             checked={selectedRows.has(String(row.id))}
                                                             onChange={() => handleRowSelect(String(row.id))}
-                                                            className={`border-2 border-[#D7D7D7] rounded-md`}
+                                                            className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md`}
                                                         />
                                                     </TableCell>
                                                 )}
@@ -336,7 +336,7 @@ function SelectableTable<T extends TableRowData> ({
                                                         type="checkbox"
                                                         checked={selectAll}
                                                         onChange={handleSelectAll}
-                                                        className={`border-2 border-[#D7D7D7] rounded-md`}
+                                                        className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md`}
                                                     />
                                                 </TableHead>
                                             )}
@@ -408,7 +408,7 @@ function SelectableTable<T extends TableRowData> ({
                                                                 type="checkbox"
                                                                 checked={selectedRows.has(String(row.id))}
                                                                 onChange={() => handleRowSelect(String(row.id))}
-                                                                className={`border-2 border-[#D7D7D7] rounded-md`}
+                                                                className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md`}
                                                             />
                                                         </TableCell>
                                                     )}
