@@ -12,6 +12,7 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
 import { useRouter } from 'next/navigation'
 import CreateInvestmentVehicleDonor from '@/components/portfolio-manager/fund/Create-investment-vehicle-donor';
+import { setItemSessionStorage } from '@/utils/storage';
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -66,7 +67,7 @@ const InvestmentVehicle = () => {
     
   const handleRowClick = (row:TableRowData) => {
     router.push('/funds/details')  
-   
+    setItemSessionStorage('investmentVehicleId', String(row.id));
 }
   
   const tabContent = [
