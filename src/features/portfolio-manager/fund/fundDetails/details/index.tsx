@@ -8,10 +8,6 @@ import { formatAmount } from '@/utils/Format'
 
 const Details = () => {
   
-  interface infoDetail {
-    name: string;
-    value: string | React.ReactNode;
-}
 
   const detailInfo = [
     {name: 'Vehicle type', value: 'Commercial'},
