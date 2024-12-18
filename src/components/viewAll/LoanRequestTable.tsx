@@ -27,7 +27,7 @@ function Index() {
         pageSize: 10,
         pageNumber: 10
     }
-    const {data, error, isLoading} = useViewAllLoanRequestQuery(request)
+    const { isLoading} = useViewAllLoanRequestQuery(request)
 
     // const
     // const [counter] = useState(0);
@@ -36,16 +36,22 @@ function Index() {
     // useEffect(() => {
     //     setData({ pageNumber: counter, pageSize: 10 });
     // }, [counter]);
-    console.log("data:: ", data, "error: ", error, "isLoading:: ", isLoading)
-    console.log("date:: ", dayjs('2024-12-16T16:17:42.934384').format('MMMM D, YYYY'))
+    // console.log("data:: ", data, "error: ", error, "isLoading:: ", isLoading)
+    // console.log("date:: ", dayjs('2024-12-16T16:17:42.934384').format('MMMM D, YYYY'))
+    //
+    // const convertDate = (date: string | undefined | null | ReactNode) => {
+    //     if (date){
+    //         return(dayjs(date.toString()).format('MMMM D, YYYY'))
+    //     }
+    // }
 
     const loanRequestHeader = [
         // { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) => row.firstName },row.requestDate
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-4 '>{row.firstName}{row.lastName}</div>  },
         { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.programName },
         { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort },
-        { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate).format('MMMM D, YYYY')}</div> },
-        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.requestDate).format('MMMM D, YYYY')}</div> },
+        { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMMM D, YYYY')}</div> },
+        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.requestDate?.toString()).format('MMMM D, YYYY')}</div> },
         { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div>},
         { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>}
     ];

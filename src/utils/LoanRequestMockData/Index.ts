@@ -27,7 +27,7 @@ export const LoanRequestTable = [
         programName: 'Software Engineering',
         cohort: 'Gems',
         cohortStartDate: '2024-12-16T16:17:42.934384',
-        requestDate: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-10-18',
         initialDeposit: '#3,000,0000',
         amountRequested: '#3,000,0000'
     }, {
@@ -37,7 +37,7 @@ export const LoanRequestTable = [
         programName: 'Software Engineering',
         cohort: 'Gems',
         cohortStartDate: '2024-12-16T16:17:42.934384',
-        requestDate: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-10-18',
         initialDeposit: '#3,000,0000',
         amountRequested: '#3,000,0000'
     }, {
@@ -47,7 +47,7 @@ export const LoanRequestTable = [
         programName: 'Software Engineering',
         cohort: 'Gems',
         cohortStartDate: '2024-12-16T16:17:42.934384',
-        requestDate: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-10-18',
         initialDeposit: '#3,000,0000',
         amountRequested: '#3,000,0000'
     }, {
