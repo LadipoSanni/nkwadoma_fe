@@ -1,16 +1,16 @@
 "use client"
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {useRouter} from "next/navigation";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem} from '@/components/ui/dropdown-menu';
-import {cabinetGroteskRegular, inter, ibmPlexSans} from "@/app/fonts";
-import {Button} from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { cabinetGroteskRegular, inter, ibmPlexSans } from "@/app/fonts";
+import { Button } from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
-import {FaCircle} from "react-icons/fa6";
-import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
-import {Breakdown} from "@/reuseable/details/breakdown";
-import {Checkbox} from "@/components/ui/checkbox";
+import { FaCircle } from "react-icons/fa6";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { Breakdown } from "@/reuseable/details/breakdown";
+import { Checkbox } from "@/components/ui/checkbox";
 import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
 
 const AcceptLoanOfferDetails = () => {

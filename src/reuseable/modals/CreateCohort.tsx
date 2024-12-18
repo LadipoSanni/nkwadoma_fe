@@ -260,13 +260,12 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                 className={"md:flex grid gap-5 w-full items-center"}
               >
                 <ProgramSelect
-                  selectedProgram={selectedProgram}
-                  setSelectedProgram={setSelectedProgram}
-                  isSelectOpen={isSelectOpen}
-                  setIsSelectOpen={setIsSelectOpen}
-                  selectOptions={programView}
-                  setId={setProgramId}
-                />
+                    selectedProgram={selectedProgram}
+                    setSelectedProgram={setSelectedProgram}
+                    isSelectOpen={isSelectOpen}
+                    setIsSelectOpen={setIsSelectOpen}
+                    selectOptions={programView}
+                    setId={setProgramId} label={"Program"} placeholder={"Select program"}                />
                 <DatePicker date={startDate} setDate={setDate} />
               </div>
               <DescriptionTextarea
