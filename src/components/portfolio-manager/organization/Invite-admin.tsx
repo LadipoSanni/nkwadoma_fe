@@ -1,21 +1,35 @@
 
-import React from 'react';
+import React,{useState} from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Button } from '@/components/ui/button';
 import { inter } from '@/app/fonts';
 import { Label } from '@/components/ui/label';
 import Isloading from '@/reuseable/display/Isloading';
+import { useInviteAdminMutation } from '@/service/admin/organization';
+import { useToast } from "@/hooks/use-toast";
 
 interface Props {
   setIsOpen?: (e: boolean) => void;
 }
 
+interface ApiError {
+  status: number;
+  data: {
+    message: string;
+  };
+}
+
+
 function InviteAdmin({ setIsOpen }: Props) {
+   const [error, setError] = useState("")
+   const [inviteAdmin, {isLoading}] =  useInviteAdminMutation()
+    const { toast } = useToast();
   const initialFormValue = {
     firstName: "",
     lastName: "",
-    emailAddress: "",
+    email: "",
+   
   };
 
   const validationSchema = Yup.object().shape({
@@ -27,19 +41,43 @@ function InviteAdmin({ setIsOpen }: Props) {
       .trim()
       .matches(/^[A-Za-z]+$/, 'Last name should only contain letters')
       .required('Last Name is required'),
-    emailAddress: Yup.string()
+    email: Yup.string()
       .trim()
       .email('Invalid email address')
       .matches(/^\S*$/, 'Email address should not contain spaces')
       .required('Email Address is required'),
   });
 
-  const isLoading = false;
+ 
 
-  const handleSubmit = () => {
-    // if (setIsOpen) {
-    //   setIsOpen(false);
-    // }
+  const handleSubmit = async (values: typeof initialFormValue) => {
+     
+    const formData = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      role: "ORGANIZATION_ADMIN"
+    }
+
+    try{
+      const result = await inviteAdmin(formData).unwrap();
+       if(result){
+          toast({
+          description: result.message,
+          status: "success",
+        });
+          if (setIsOpen) {
+        setIsOpen(false);
+      }
+       }
+      
+    } catch (err) {
+        const error = err as ApiError;
+        setError(error?.data?.message);
+        
+      }
+    
+    
   };
 
   const handleCloseModal = () => {
@@ -113,15 +151,15 @@ function InviteAdmin({ setIsOpen }: Props) {
                 <Label htmlFor="emailAddress">Email address</Label>
                 <Field
                   id="emailAddress"
-                  name="emailAddress"
-                  value={values.emailAddress}
+                  name="email"
+                  value={values.email}
                   className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
                   placeholder="Enter email address"
                 />
-                {errors.emailAddress && touched.emailAddress && (
+                {errors.email && touched.email && (
                   <ErrorMessage
-                    name="emailAddress"
-                    id='emailAddress'
+                    name="email"
+                    id='email'
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -149,6 +187,9 @@ function InviteAdmin({ setIsOpen }: Props) {
                   )}
                 </Button>
               </div>
+               {
+                <div className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>
+                 }
             </div>
           </Form>
         )}
