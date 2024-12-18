@@ -1,15 +1,15 @@
 "use client"
 // import { useRouter } from 'next/navigation'
 import React from "react";
-import {loanOfferTable, LoanRequestTable} from "@/utils/LoanRequestMockData/Index"
+import {loanOfferTable} from "@/utils/LoanRequestMockData/Index"
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import {Icon} from "@iconify/react";
-import { loanRequestData} from "@/utils/LoanRequestMockData/cohortProduct";
+// import { loanRequestData} from "@/utils/LoanRequestMockData/cohortProduct";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {useRouter} from "next/navigation";
 import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
-import {LoanRequestType} from "@//types/loan/loan-request.type";
+// import {LoanRequestType} from "@//types/loan/loan-request.type";
 // import DynamicTable from "@/reuseable/table/LoanProductTable";
 
 
