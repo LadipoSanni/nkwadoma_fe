@@ -45,7 +45,6 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const response = await saveNextOfKinDetails(values);
-        console.log("response of saved data: ",response);
         setIsFormSubmitted(true);
         setIsModalOpen(false);
     };
