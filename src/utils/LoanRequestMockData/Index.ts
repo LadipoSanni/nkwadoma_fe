@@ -5,8 +5,8 @@ export const LoanRequestTable = [
         lastName: 'Ogungbemi',
         programName: 'Software Engineering',
         cohort: 'Gems',
-        cohortStartDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
+        cohortStartDate: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
         initialDeposit: '#3,000,0000',
         amountRequested: '#3,000,0000'
     },
@@ -16,8 +16,8 @@ export const LoanRequestTable = [
         lastName: 'Ogungbemi',
         programName: 'Software Engineering',
         cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
+        cohortStartDate: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
         initialDeposit: '#3,000,0000',
         amountRequested: '#3,000,0000'
     }, {
@@ -26,8 +26,8 @@ export const LoanRequestTable = [
         lastName: 'Ogungbemi',
         programName: 'Software Engineering',
         cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
+        cohortStartDate: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
         initialDeposit: '#3,000,0000',
         amountRequested: '#3,000,0000'
     }, {
@@ -36,8 +36,8 @@ export const LoanRequestTable = [
         lastName: 'Ogungbemi',
         programName: 'Software Engineering',
         cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
+        cohortStartDate: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
         initialDeposit: '#3,000,0000',
         amountRequested: '#3,000,0000'
     }, {
@@ -46,8 +46,8 @@ export const LoanRequestTable = [
         lastName: 'Ogungbemi',
         programName: 'Software Engineering',
         cohort: 'Gems',
-        startDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
+        cohortStartDate: '2024-12-16T16:17:42.934384',
+        requestDate: '2024-12-16T16:17:42.934384',
         initialDeposit: '#3,000,0000',
         amountRequested: '#3,000,0000'
     }, {

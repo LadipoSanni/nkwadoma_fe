@@ -13,6 +13,7 @@ import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api"
 import {formatAmount} from "@/utils/Format";
 // import DynamicTable from "@/reuseable/table/LoanProductTable";
 // import {formatDate} from "date-fns";
+// import dayjs from dayjs
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -25,6 +26,7 @@ function Index() {
         pageNumber: 10
     }
     const {data, error, isLoading} = useViewAllLoanRequestQuery(request)
+
     // const
     // const [counter] = useState(0);
     // const [data, setData] = useState({ pageNumber: counter, pageSize: 10 });
