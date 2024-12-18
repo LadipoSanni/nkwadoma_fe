@@ -9,7 +9,7 @@ type Props = {
     value?: string ,
     onChange: (value: string) => void,
     className?: string,
-    selectContent: Array<string | number>,
+    selectContent?: Array<string | number>,
     name?: string,
     placeHolder?: string,
     triggerId?: string,
@@ -52,7 +52,7 @@ function CustomSelect({value,onChange,className,selectContent,name,placeHolder,i
          style={{zIndex:1000}}
          >
           <SelectGroup className='selectgroup'>
-            {selectContent.map((content,index) => (
+            {selectContent?.map((content,index) => (
                <div key={content} id={`${content}`}>
               <SelectItem 
               key={`${content}-${index}`} 

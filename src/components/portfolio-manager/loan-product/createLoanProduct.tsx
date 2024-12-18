@@ -19,7 +19,7 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         }
     };
     const [step, setStep] = useState(1);
-    const [errors] = useState({
+    const [errors, setErrors] = useState({
         productName: '',
         productSponsor: '',
         FundProduct: '',
@@ -78,7 +78,7 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         }
 
         if (formData.moratorium === '') {
-            newErrors.moratorium = 'Moratorium can not be empty';
+            newErrors.moratorium = 'Moratorium cannot be empty';
         } else if (isNaN(Number(formData.moratorium))) {
             newErrors.moratorium = 'Moratorium must be a valid number';
         } else if (Number(formData.moratorium) < 0) {
@@ -86,18 +86,19 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         } else if (Number(formData.moratorium) === 0) {
             newErrors.moratorium = 'Moratorium must be greater than 0';
         } else if (Number(formData.moratorium) > 12) {
-            newErrors.moratorium = 'Moratorium can not be greater than 12';
+            newErrors.moratorium = 'Moratorium cannot be greater than 12';
         } else {
             newErrors.moratorium = '';
         }
+
 
         if (formData.costOfFunds === '') {
             newErrors.costOfFunds = 'Cost of funds is required';
         } else if (isNaN(Number(formData.costOfFunds))) {
             newErrors.costOfFunds = 'Cost of funds must be a valid number';
-        } else if (Number(formData.costOfFunds) < 0) {
+        } else if (Number(formData.costOfFunds[0]) < 0) {
             newErrors.costOfFunds = 'Cost of funds cannot be negative';
-        } else if (Number(formData.costOfFunds) === 0) {
+        } else if (Number(formData.costOfFunds[0]) === 0) {
             newErrors.costOfFunds = 'Cost of funds must be greater than 0';
         } else {
             newErrors.costOfFunds = '';
@@ -107,21 +108,21 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             newErrors.tenor = 'Tenor is required';
         } else if (isNaN(Number(formData.tenor))) {
             newErrors.tenor = 'Tenor must be a valid number';
-        } else if (Number(formData.tenor) < 0) {
+        } else if (Number(formData.tenor[0]) < 0) {
             newErrors.tenor = 'Tenor cannot be negative';
-        } else if (Number(formData.tenor) === 0) {
+        } else if (Number(formData.tenor[0]) === 0) {
             newErrors.tenor = 'Tenor must be greater than 0';
         } else {
             newErrors.tenor = '';
         }
 
         if (formData.loanProductSize === '') {
-            newErrors.tenor = 'Loan product size is required';
+            newErrors.loanProductSize = 'Loan product size is required';
         } else if (isNaN(Number(formData.loanProductSize))) {
             newErrors.loanProductSize = 'Loan product size must be a valid number';
-        } else if (Number(formData.loanProductSize) < 0) {
+        } else if (Number(formData.loanProductSize[0]) < 0) {
             newErrors.loanProductSize = 'Loan product size cannot be negative';
-        } else if (Number(formData.loanProductSize) === 0) {
+        } else if (Number(formData.loanProductSize[0]) === 0) {
             newErrors.loanProductSize = 'Loan product size must be greater than 0';
         } else {
             newErrors.loanProductSize = '';
@@ -129,25 +130,24 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
         if (formData.interest === '') {
             newErrors.interest = 'Interest product size is required';
-        } else if (isNaN(Number(formData.interest))) {
+        } else if (isNaN(Number(formData.interest[0]))) {
             newErrors.interest = 'Interest product size must be a valid number';
-        } else if (Number(formData.interest) < 0) {
+        } else if (Number(formData.interest[0]) < 0) {
             newErrors.interest = 'Interest product size cannot be negative';
-        } else if (Number(formData.interest) === 0) {
+        } else if (Number(formData.interest[0]) === 0) {
             newErrors.interest = 'Interest product size must be greater than 0';
         } else {
             newErrors.interest = '';
         }
 
-
         if (formData.obligorLimit === '') {
-            newErrors.obligorLimit = 'Obligor limit product size is required';
+            newErrors.obligorLimit = 'Obligor limit size is required';
         } else if (isNaN(Number(formData.obligorLimit))) {
-            newErrors.obligorLimit = 'Obligor limit product size must be a valid number';
-        } else if (Number(formData.obligorLimit) < 0) {
-            newErrors.obligorLimit = 'Obligor limit product size cannot be negative';
-        } else if (Number(formData.obligorLimit) === 0) {
-            newErrors.obligorLimit = 'Obligor limit product size must be greater than 0';
+            newErrors.obligorLimit = 'Obligor limit size must be a valid number';
+        } else if (Number(formData.obligorLimit[0]) < 0) {
+            newErrors.obligorLimit = 'Obligor limit size cannot be negative';
+        } else if (Number(formData.obligorLimit[0]) === 0) {
+            newErrors.obligorLimit = 'Obligor limit size must be greater than 0';
         } else {
             newErrors.obligorLimit = '';
         }
@@ -156,40 +156,38 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             newErrors.minimumRepaymentAmount = 'Minimum repayment is required';
         } else if (isNaN(Number(formData.minimumRepaymentAmount))) {
             newErrors.minimumRepaymentAmount = 'Minimum repayment amount must be a valid number';
-        } else if (Number(formData.minimumRepaymentAmount) < 0) {
+        } else if (Number(formData.minimumRepaymentAmount[0]) < 0) {
             newErrors.minimumRepaymentAmount = 'Minimum repayment amount cannot be negative';
-        } else if (Number(formData.minimumRepaymentAmount) === 0) {
+        } else if (Number(formData.minimumRepaymentAmount[0]) === 0) {
             newErrors.minimumRepaymentAmount = 'Minimum repayment amount must be greater than 0';
         } else {
             newErrors.minimumRepaymentAmount = '';
         }
 
-        if (!formData.loanProductMandate || formData.loanProductMandate.trim() === '') {
-            newErrors.loanProductMandate = 'Loan product is required';
-        } else if (formData.loanProductMandate.trim().length < 10) {
-            newErrors.loanProductMandate = 'Loan product must be at least 10 characters long';
-        } else if (formData.loanProductMandate.trim().length > 200) {
-            newErrors.loanProductMandate = 'Loan product must not exceed 200 characters';
-        } else if (/[^a-zA-Z0-9\s.,!?'-]/.test(formData.loanProductMandate)) {
-            newErrors.loanProductMandate = 'Loan product contains invalid characters';
+
+        if (formData.loanProductMandate === '') {
+            newErrors.loanProductMandate = "Loan product mandate is required";
+        } else if (formData.loanProductTermsAndCondition[0] === ' ') {
+            newErrors.loanProductTermsAndCondition = 'Description should not start with a space';
+        } else if (formData.loanProductMandate.length > 2500) {
+            newErrors.loanProductMandate = 'Loan product mandate can not exceed 2500';
         } else {
             newErrors.loanProductMandate = '';
         }
 
 
-        if (!formData.loanProductTermsAndCondition || formData.loanProductTermsAndCondition.trim() === '') {
-            newErrors.loanProductTermsAndCondition = 'Description is required';
-        } else if (formData.loanProductTermsAndCondition.trim().length < 10) {
-            newErrors.loanProductTermsAndCondition = 'Description must be at least 10 characters long';
-        } else if (formData.loanProductTermsAndCondition.trim().length > 200) {
-            newErrors.loanProductTermsAndCondition = 'Description must not exceed 200 characters';
-        } else if (/[^a-zA-Z0-9\s.,!?'-]/.test(formData.loanProductTermsAndCondition)) {
-            newErrors.loanProductTermsAndCondition = 'Description contains invalid characters';
+        if (formData.loanProductTermsAndCondition === '' || formData.loanProductTermsAndCondition.length < 1) {
+            newErrors.loanProductTermsAndCondition = "Terms and condition must be set";
+        } else if (formData.loanProductTermsAndCondition[0] === ' ') {
+            newErrors.loanProductTermsAndCondition = 'Description should not start with a space';
+        } else if (formData.loanProductTermsAndCondition.length > 2500) {
+            newErrors.loanProductTermsAndCondition = 'Maximum amount of characters cannot exceed 2,500';
         } else {
             newErrors.loanProductTermsAndCondition = '';
         }
-    }
 
+        setErrors(newErrors);
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -197,7 +195,6 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         if (Object.values(errors).some(error => error !== '')) {
             return;
         }
-        console.log(formData);
         console.log(formData);
         if (!navigator.onLine) {
             toast({
@@ -273,8 +270,7 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                         <div className={`grid md:grid-cols-2 grid-col gap-5 pt-5`}>
                             <div>
                                 <Label htmlFor="productSponsor"
-                                       className={`${inter.className} text-sm font-medium text-labelBlue`}>Loan
-                                    product
+                                       className={`${inter.className} text-sm font-medium text-labelBlue`}>Loan product
                                     sponsor</Label>
                                 <CustomSelect
                                     triggerId="productSponsor"
@@ -298,6 +294,7 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     triggerId="FundProduct"
                                     id="FundProduct"
                                     selectContent={funds}
+                                    // name="FundProduct"
                                     value={formData.FundProduct}
                                     onChange={(value: string) => setFormData({...formData, FundProduct: value})}
                                     placeHolder="Select fund"
@@ -310,8 +307,7 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                             <div className={`pt-3`}>
                                 <Label htmlFor="costOfFunds"
-                                       className={`${inter.className} text-sm font-medium text-labelBlue`}>Cost of
-                                    funds
+                                       className={`${inter.className} text-sm font-medium text-labelBlue`}>Cost of funds
                                     (%)</Label>
                                 <div>
                                     <Input
@@ -370,8 +366,7 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                             <div className={`p[b-5`}>
                                 <Label htmlFor="Loan product size"
-                                       className={`${inter.className} text-sm font-medium text-labelBlue`}>Loan
-                                    product
+                                       className={`${inter.className} text-sm font-medium text-labelBlue`}>Loan product
                                     size</Label>
                                 <div className={`flex gap-3 w-full`}>
                                     <div>
@@ -487,8 +482,7 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                         <div className={`pt-5`}>
                             <div>
                                 <Label htmlFor="loanProductMandate"
-                                       className={`${inter.className} text-sm font-medium text-labelBlue`}>Loan
-                                    product
+                                       className={`${inter.className} text-sm font-medium text-labelBlue`}>Loan product
                                     mandate</Label>
                                 <Textarea
                                     name="loanProductMandate"
@@ -504,8 +498,7 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                             <div className={`pt-5`}>
                                 <Label htmlFor="loanProductTermsAndCondition"
-                                       className={`${inter.className} text-sm font-medium text-labelBlue`}>Loan
-                                    terms
+                                       className={`${inter.className} text-sm font-medium text-labelBlue`}>Loan terms
                                     and
                                     conditions</Label>
                                 <Textarea
@@ -549,6 +542,7 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
             {step === 2 && (
                 <div id={`step2Div`}>
+                    {/*<div>*/}
                     <div>
                         <Label className={`${inter.className} text-sm font-medium text-labelBlue`}>Bank partner
                             (optional)</Label>
@@ -618,6 +612,9 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                             onChange={handleFormDataChange}
                         />
                     </div>
+                    {/*</div>*/
+                    }
+
 
                     <div className={`flex justify-end py-5 gap-3`}>
                         <Button
@@ -636,7 +633,9 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                         </Button>
                     </div>
                 </div>
+
             )}
+
         </form>
     );
 };
