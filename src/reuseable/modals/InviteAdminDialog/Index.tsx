@@ -63,8 +63,6 @@ const InviteAdminDialog: React.FC<InviteAdminDialogProps> = ({ isModalOpen, setI
                     email,
                     firstName,
                     lastName,
-                    organizationDomain: 'EDUCATION',
-                    createdBy: '0e1e93ee-3392-4de4-90f0-2f29b9c6a7dc',
                     role: 'PORTFOLIO_MANAGER'
                 }).unwrap();
                 console.log('Admin invited successfully');
