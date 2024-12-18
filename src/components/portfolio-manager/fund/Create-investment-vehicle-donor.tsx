@@ -35,7 +35,7 @@ import Isloading from '@/reuseable/display/Isloading';
   interface props {
     setIsOpen? : (e:boolean) => void;
   }
-function CreateInvestmentVehicle({setIsOpen}:props) {
+function CreateInvestmentVehicleDonor({setIsOpen}:props) {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [isError, setError] = useState('')
 
@@ -80,7 +80,7 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
       })
 
      const handleSubmit = () => {
-      handleCloseModal();
+        handleCloseModal();
       }
 
       const maxChars = 1500;
@@ -133,7 +133,7 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
                 </div>
                 <div className='grid md:grid-cols-2 gap-4 w-full'>
                 <div>
-                    <Label htmlFor="sponsor">Vehicle Sponsor</Label>
+                    <Label htmlFor="sponsor">Vehicle Donor</Label>
                     <Field
                       id="sponsor"
                       name="sponsor"
@@ -402,4 +402,4 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
   )
 }
 
-export default  CreateInvestmentVehicle
+export default  CreateInvestmentVehicleDonor
