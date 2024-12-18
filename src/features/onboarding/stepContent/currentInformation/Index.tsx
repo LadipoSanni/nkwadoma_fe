@@ -6,6 +6,7 @@ import {Dialog, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogC
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {useSaveNextOfKinDetailsMutation} from "@/service/users/Loanee_query";
+import ProgramSelect from "@/reuseable/select/ProgramSelect";
 
 interface CurrentInformationProps {
     setCurrentStep?: (step: number) => void;
@@ -27,6 +28,10 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
     const [saveNextOfKinDetails] = useSaveNextOfKinDetailsMutation()
+    const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
+    const [isSelectOpen, setIsSelectOpen] = useState(false);
+
+
 
     useEffect(() => {
         const isFormValid = Object.values(values).every((value) => value.trim() !== "");
@@ -186,13 +191,18 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
                                        value={values.phoneNumber} onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
-                                <Label htmlFor="nextOfKinRelationship"
-                                       className="block text-sm font-medium text-labelBlue">Current next of Kin&#39;s
-                                    relationship</Label>
-                                <Input type="text" id="nextOfKinRelationship" placeholder="Enter relationship"
-                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={values.nextOfKinRelationship}
-                                       onChange={handleChange}/>
+                                <ProgramSelect
+                                    selectedProgram={selectedProgram}
+                                    setSelectedProgram={setSelectedProgram}
+                                    isSelectOpen={isSelectOpen}
+                                    setIsSelectOpen={setIsSelectOpen}
+                                    selectOptions={[
+                                        { id: "1", name: "Sister" },
+                                        { id: "2", name: "brother" },
+                                    ]}
+                                    setId={(id: string) => setSelectedProgram(id)}
+                                    label={'Current next of Kin\'s relationship'}
+                                    placeholder={'Select relationship'}                                />
                             </div>
                             <div className="flex justify-end gap-5 mt-3">
                                 <Button type="button"
