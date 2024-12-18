@@ -24,7 +24,6 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         productName: '',
         productSponsor: '',
         FundProduct: '',
-        selectCurrency: '',
         costOfFunds: '',
         tenor: '',
         tenorDuration: '',
