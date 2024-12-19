@@ -10,7 +10,7 @@ import {organizationApi} from "@/service/admin/organization";
 import {loaneeApi} from "@/service/users/Loanee_query";
 import {loanProductApi} from "@/service/admin/loan_product";
 import cohortBreakDownReducer from "@/redux/slice/cohort/unpersist-slice";
-
+import {loanRequestApi} from "@/service/admin/loan/loan-request-api";
 
 const appReducer = combineReducers({
 
@@ -25,6 +25,7 @@ const appReducer = combineReducers({
     [loaneeApi.reducerPath]: loaneeApi.reducer,
     [organizationApi.reducerPath]: organizationApi.reducer,
     [loanProductApi.reducerPath]: loanProductApi.reducer,
+    [loanRequestApi.reducerPath]: loanRequestApi.reducer,
 })
 
 export default appReducer;

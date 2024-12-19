@@ -5,13 +5,14 @@ import {Button} from "@/components/ui/button";
 import {Dialog, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogClose} from "@/components/ui/dialog";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import {useSaveNextOfKinDetailsMutation} from "@/service/users/Loanee_query";
+// import {useSaveNextOfKinDetailsMutation} from "@/service/users/Loanee_query";
+import ProgramSelect from "@/reuseable/select/ProgramSelect";
 
-interface AdditionalInformationProps {
+interface CurrentInformationProps {
     setCurrentStep?: (step: number) => void;
 }
 
-const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrentStep}) => {
+const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [values, setValues] = useState({
         firstName: "",
@@ -26,7 +27,11 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
     });
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-    const [saveNextOfKinDetails] = useSaveNextOfKinDetailsMutation()
+    // const [saveNextOfKinDetails] = useSaveNextOfKinDetailsMutation()
+    const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
+    const [isSelectOpen, setIsSelectOpen] = useState(false);
+
+
 
     useEffect(() => {
         const isFormValid = Object.values(values).every((value) => value.trim() !== "");
@@ -39,8 +44,8 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
     };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const response = await saveNextOfKinDetails(values);
-        console.log("response of saved data: ",response);
+        // const response = await saveNextOfKinDetails(values);
+        // console.log("response of saved data: ",response);
         setIsFormSubmitted(true);
         setIsModalOpen(false);
     };
@@ -61,53 +66,53 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
                             <MdPersonOutline className={'h-8 w-8 text-meedlBlue'}/>
                         </div>
                         <div className={'grid place-content-center place-items-center text-center gap-2'}>
-                            <h1 className={`${cabinetGrotesk.className} md:w-[20.875rem] w-[13.75rem] md:text-[20px] text-[18px] leading-[120%] font-medium text-meedlBlack`}>Additional
+                            <h1 className={`${cabinetGrotesk.className} md:w-[20.875rem] w-[13.75rem] md:text-[20px] text-[18px] leading-[120%] font-medium text-meedlBlack`}>Current
                                 information will appear here</h1>
                             <p className={'text-[14px] font-normal leading-[150%] text-#57595D w-[13.75rem] md:w-[317px]'}>To
-                                add your additional information, click on the <span className={'font-semibold '}>add additional information</span> button
+                                add your current information, click on the <span className={'font-semibold '}>add current information</span> button
                             </p>
                             <Button
                                 className={'h-[2.8125rem] w-[13.75rem] mt-5 px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md'}
-                                onClick={() => setIsModalOpen(true)}>Add additional information</Button>
+                                onClick={() => setIsModalOpen(true)}>Add current information</Button>
                         </div>
                     </div>
                 ) : (
                     <div className={'bg-grey105 p-5  grid gap-9 rounded-md'}>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate email
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current email
                                 address</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.alternateEmail}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate phone
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current phone
                                 number</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.alternatePhoneNumber}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate residential
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current residential
                                 address</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.alternateContactAddress}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of Kin&#39;s
                                 first
                                 name</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.firstName}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of Kin&#39;s
                                 email
                                 address</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.email}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of Kin&#39;s
                                 phone
                                 number</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.phoneNumber}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of Kin&#39;s
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of Kin&#39;s
                                 relationship</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.nextOfKinRelationship}</p>
                         </div>
@@ -129,7 +134,7 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
                 <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6  py-5 pl-5 pr-2'}>
                     <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
                         <DialogTitle
-                            className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Additional
+                            className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Current
                             information</DialogTitle>
                         <DialogClose asChild>
                             <button id="createCohortDialogCloseButton" className="absolute right-5">
@@ -142,21 +147,21 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
                         onSubmit={handleSubmit}>
                         <main className={'grid gap-5'}>
                             <div className={'grid gap-2'}>
-                                <Label htmlFor="alternateEmail" className="block text-sm font-medium text-labelBlue">Alternate
+                                <Label htmlFor="alternateEmail" className="block text-sm font-medium text-labelBlue">Current
                                     email address</Label>
                                 <Input type="email" id="alternateEmail" placeholder="Enter email address"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
                                        value={values.alternateEmail} onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
-                                <Label htmlFor="alternatePhone" className="block text-sm font-medium text-labelBlue">Alternate
+                                <Label htmlFor="alternatePhone" className="block text-sm font-medium text-labelBlue">Current
                                     phone number</Label>
                                 <Input type="tel" id="alternatePhoneNumber" placeholder="Enter phone number"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
                                        value={values.alternatePhoneNumber} onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
-                                <Label htmlFor="alternateAddress" className="block text-sm font-medium text-labelBlue">Alternate
+                                <Label htmlFor="alternateAddress" className="block text-sm font-medium text-labelBlue">Current
                                     residential address</Label>
                                 <Input type="text" id="alternateContactAddress" placeholder="Enter residential address"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
@@ -164,7 +169,7 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
                             </div>
                             <div className={'grid gap-2'}>
                                 <Label htmlFor="nextOfKinFirstName"
-                                       className="block text-sm font-medium text-labelBlue">Alternate next of Kin&#39;s
+                                       className="block text-sm font-medium text-labelBlue">Current next of Kin&#39;s
                                     first name</Label>
                                 <Input type="text" id="firstName" placeholder="Enter first name"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
@@ -172,27 +177,32 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
                                        onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
-                                <Label htmlFor="nextOfKinEmail" className="block text-sm font-medium text-labelBlue">Alternate
+                                <Label htmlFor="nextOfKinEmail" className="block text-sm font-medium text-labelBlue">Current
                                     next of Kin&#39;s email address</Label>
                                 <Input type="email" id="email" placeholder="Enter email address"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
                                        value={values.email} onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
-                                <Label htmlFor="nextOfKinPhone" className="block text-sm font-medium text-labelBlue">Alternate
+                                <Label htmlFor="nextOfKinPhone" className="block text-sm font-medium text-labelBlue">Current
                                     next of Kin&#39;s phone number</Label>
                                 <Input type="tel" id="phoneNumber" placeholder="Enter phone number"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
                                        value={values.phoneNumber} onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
-                                <Label htmlFor="nextOfKinRelationship"
-                                       className="block text-sm font-medium text-labelBlue">Alternate next of Kin&#39;s
-                                    relationship</Label>
-                                <Input type="text" id="nextOfKinRelationship" placeholder="Enter relationship"
-                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={values.nextOfKinRelationship}
-                                       onChange={handleChange}/>
+                                <ProgramSelect
+                                    selectedProgram={selectedProgram}
+                                    setSelectedProgram={setSelectedProgram}
+                                    isSelectOpen={isSelectOpen}
+                                    setIsSelectOpen={setIsSelectOpen}
+                                    selectOptions={[
+                                        { id: "1", name: "Sister" },
+                                        { id: "2", name: "brother" },
+                                    ]}
+                                    setId={(id: string) => setSelectedProgram(id)}
+                                    label={'Current next of Kin\'s relationship'}
+                                    placeholder={'Select relationship'}                                />
                             </div>
                             <div className="flex justify-end gap-5 mt-3">
                                 <Button type="button"
@@ -209,4 +219,4 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({setCurrent
     );
 };
 
-export default AdditionalInformation;
+export default CurrentInformation;
