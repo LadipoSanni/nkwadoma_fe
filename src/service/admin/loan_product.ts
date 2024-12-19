@@ -36,8 +36,34 @@ export const loanProductApi = createApi({
                 method: 'GET',
                 params: param,
             })
-        })
+        }),
+
+        createLoanProduct: builder.mutation({
+            query: (formData: {
+                productName: string,
+                productSponsor: string,
+                FundProduct: string,
+                costOfFunds: number,
+                tenor: number,
+                tenorDuration: string,
+                loanProductSize: number,
+                minimumRepaymentAmount: number,
+                moratorium: number,
+                interest: number,
+                obligorLimit: number,
+                loanProductMandate: string,
+                loanProductTermsAndCondition: string,
+                bankPartner: string,
+                loanInsuranceProvider: string,
+                loanDisbursementTerms: string,
+            }) => ({
+                url: 'loan/loan-product/create',
+                method: "POST",
+                body: formData,
+            }),
+            invalidatesTags: ['loanProduct'],
+        }),
     })
 })
-export const {useViewAllLoanProductQuery, useCohortBreakdownQuery, useSearchLoanProductQuery} = loanProductApi;
+export const {useViewAllLoanProductQuery, useCohortBreakdownQuery, useSearchLoanProductQuery, useCreateLoanProductMutation} = loanProductApi;
 
