@@ -6,6 +6,9 @@ import {Button} from '@/components/ui/button';
 import React, {useState} from "react";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
+import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
+import Isloading from "@/reuseable/display/Isloading";
+import {toast} from "@/hooks/use-toast";
 
 
 interface CreateLoanProductProps {
@@ -16,6 +19,9 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [error, setError] =  useState('');
     const [step, setStep] = useState(1);
+    const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
+
+    console.log(createLoanProduct);
 
     const initialFormValue = {
         productName: "",
@@ -102,8 +108,34 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
     const bankPartner = ["Patner 1", "Partner 2",];
     const maxChars = 2500;
 
-    const handleSubmit = () => {
 
+    const handleSubmit = async (values: typeof initialFormValue) => {
+        if (!navigator.onLine) {
+            toast({
+                description: "No internet connection",
+                status: "error",
+            });
+            return;
+        }
+
+        const formData = {
+            productName: values.productName,
+            productSponsor: values.productSponsor,
+            FundProduct: values.FundProduct,
+            costOfFunds: values.costOfFunds,
+            tenor: values.tenor,
+            tenorDuration: values.tenorDuration,
+            loanProductSize: values.loanProductSize,
+            minimumRepaymentAmount: values.minimumRepaymentAmount,
+            moratorium: values.moratorium,
+            interest: values.interest,
+            obligorLimit: values.obligorLimit,
+            loanProductMandate: values.loanProductMandate,
+            loanProductTermsAndCondition: values.loanProductTermsAndCondition,
+            bankPartner: values.bankPartner,
+            loanInsuranceProvider: values.loanInsuranceProvider,
+            loanDisbursementTerms: values.loanDisbursementTerms,
+        }
     }
 
 
@@ -660,10 +692,10 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
                                             variant={"secondary"}
                                             type={"submit"}
                                         >
-                                            Create
-                                            {/*{isLoading ? ( <Isloading/> ) : (*/}
-                                            {/*    "Create"*/}
-                                            {/*)}*/}
+                                            {/*Create*/}
+                                            {isLoading ? ( <Isloading/> ) : (
+                                                "Create"
+                                            )}
 
                                         </Button>
                                     </div>
