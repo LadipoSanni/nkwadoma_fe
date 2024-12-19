@@ -55,8 +55,6 @@ export const organizationApi = createApi({
                 email: string;
                 firstName: string;
                 lastName: string;
-                organizationDomain: string;
-                createdBy: string;
                 role: string;
             }) => ({
                 url: `auth/colleague/invite`,
@@ -87,7 +85,14 @@ export const organizationApi = createApi({
             }),
              providesTags: [ "organization"]
         }),
+        searchOrganisationAdminByName: builder.query({
+            query: (name) => ({
+                url: '/organization/search/admin',
+                method: 'GET',
+                params: {name},
+            }),
+        }),
     })
 })
 
-export const { useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery} = organizationApi
+export const { useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery} = organizationApi

@@ -43,7 +43,7 @@ describe('EditProgramForm', () => {
         it('renders the form fields correctly', () => {
             renderComponent();
             expect(screen.getByPlaceholderText(/Enter program name/i)).toBeInTheDocument();
-            expect(screen.getByPlaceholderText(/Enter program duration/i)).toBeInTheDocument();
+            // expect(screen.getByPlaceholderText(/Enter program duration/i)).toBeInTheDocument();
             expect(screen.getByPlaceholderText(/Enter program description/i)).toBeInTheDocument();
            
           });

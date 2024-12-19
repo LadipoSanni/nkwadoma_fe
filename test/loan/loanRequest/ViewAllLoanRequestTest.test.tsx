@@ -1,8 +1,11 @@
 import React from "react";
-import {render, screen, fireEvent,cleanup, } from "@testing-library/react";
+import {render, screen,cleanup, } from "@testing-library/react";
 import "@testing-library/react";
-import { LoanRequestTable } from "@/utils/LoanRequestMockData/Index";
-import ViewAllLoanRequest from "@/pages/admin/loan/Index";
+// import { LoanRequestTable } from "@/utils/LoanRequestMockData/Index";
+// import ViewAllLoanRequest from "@/pages/admin/loan/Index";
+import Index from "@/components/viewAll/LoanRequestTable";
+import {Providers} from "@/app/provider";
+
 
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
@@ -33,7 +36,11 @@ describe("ViewAllLoanRequest", ()=>{
 
 
     beforeEach(() => {
-        render(<ViewAllLoanRequest />)
+        render(
+            <Providers>
+                <Index />
+            </Providers>
+        )
     })
 
    

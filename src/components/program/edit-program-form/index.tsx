@@ -64,7 +64,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
     const programModes=["FULL_TIME", "PART_TIME"]
-    // const programDurations=[1,3,4,5,6]
+    const programDurations=Array.from({ length: 24 }, (_, i) => (i + 1).toString());
 
     const validationSchema = Yup.object().shape({
       name: Yup.string()
@@ -212,17 +212,17 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                     )
                    }
                   </div>
-                   <div className='md:mt-1'>
+                   <div className=''>
                     <Label htmlFor="duration">Program duration</Label>
-                    {/* <CustomSelect
+                    <CustomSelect
                       selectContent={programDurations}
-                      value={values.duration} 
+                      value={String(values.duration)} 
                       onChange={(value) => setFieldValue("duration", value)} 
                       name="duration"
                       placeHolder='Select a program Duration'
                      
-                    /> */}
-                      <Field
+                    />
+                      {/* <Field
                         id="duration"
                         name="duration"
                         // type="number"
@@ -234,7 +234,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                               setFieldValue("duration", value);
                           }
                       }}
-                        /> 
+                        />  */}
 
                      {
                     errors.duration && touched.duration &&  (

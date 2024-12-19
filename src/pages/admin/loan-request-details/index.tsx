@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter} from "next/navigation";
+// useSearchParams
 import {
     Avatar,
     AvatarFallback,
@@ -11,12 +12,20 @@ import {cabinetGroteskRegular, inter} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
 import styles from "./index.module.css"
+// import {useViewLoanRequestDetailsQuery} from "@/service/admin/loan/loan-request-api";
 // import LoanDetailsCard from "@/reuseable/cards/loan-details-card";
 
 
 const LoanDetails = () => {
     const router = useRouter()
     const [currentTab] = useState(0)
+    // const pathName = pa
+    // const searchParams = useSearchParams()
+    // // @ts-expect-error
+    // const loanRequestId =  searchParams.get('id')
+    // const {data} = useViewLoanRequestDetailsQuery(loanRequestId)
+    // console.log("datssa: ", data)
+
 
     const backToLoanRequest = () => {
         router.push("/loan/loan-request")
