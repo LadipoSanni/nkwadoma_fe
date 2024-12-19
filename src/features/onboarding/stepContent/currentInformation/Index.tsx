@@ -5,8 +5,10 @@ import {Button} from "@/components/ui/button";
 import {Dialog, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogClose} from "@/components/ui/dialog";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-// import {useSaveNextOfKinDetailsMutation} from "@/service/users/Loanee_query";
+import {useSaveNextOfKinDetailsMutation} from "@/service/users/Loanee_query";
 import ProgramSelect from "@/reuseable/select/ProgramSelect";
+import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
+import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
 
 interface CurrentInformationProps {
     setCurrentStep?: (step: number) => void;
@@ -27,25 +29,27 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
     });
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-    // const [saveNextOfKinDetails] = useSaveNextOfKinDetailsMutation()
+    const [saveNextOfKinDetails] = useSaveNextOfKinDetailsMutation()
     const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
 
 
-
     useEffect(() => {
         const isFormValid = Object.values(values).every((value) => value.trim() !== "");
+        console.log("Form values:", values);
+        console.log("Form validity:", isFormValid);
         setIsButtonDisabled(!isFormValid);
     }, [values]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
+        console.log("Field changed:", id, value); // Add this line to check field changes
         setValues((prev) => ({ ...prev, [id]: value }));
     };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // const response = await saveNextOfKinDetails(values);
-        // console.log("response of saved data: ",response);
+        const response = await saveNextOfKinDetails(values);
+        console.log("response of saved data: ", response);
         setIsFormSubmitted(true);
         setIsModalOpen(false);
     };
@@ -94,25 +98,29 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.alternateContactAddress}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of Kin&#39;s
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
+                                Kin&#39;s
                                 first
                                 name</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.firstName}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of Kin&#39;s
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
+                                Kin&#39;s
                                 email
                                 address</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.email}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of Kin&#39;s
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
+                                Kin&#39;s
                                 phone
                                 number</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.phoneNumber}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of Kin&#39;s
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
+                                Kin&#39;s
                                 relationship</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.nextOfKinRelationship}</p>
                         </div>
@@ -153,23 +161,32 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
                                        value={values.alternateEmail} onChange={handleChange}/>
                             </div>
+                            <PhoneNumberSelect
+                                selectedCountryCode={values.phoneNumber}
+                                setSelectedCountryCode={(code) => setValues((prev) => ({
+                                    ...prev,
+                                    selectedCountryCode: code
+                                }))}
+                                phoneNumber={values.phoneNumber}
+                                setPhoneNumber={(number) => setValues((prev) => ({...prev, phoneNumber: number}))}
+                                isSelectOpen={isSelectOpen}
+                                setIsSelectOpen={setIsSelectOpen}
+                                countryCodeOptions={[{id: "1", name: "+234"}]}
+                                label="Current phone number"
+                                placeholder="+234" id={'phoneNumber'}                            />
                             <div className={'grid gap-2'}>
-                                <Label htmlFor="alternatePhone" className="block text-sm font-medium text-labelBlue">Current
-                                    phone number</Label>
-                                <Input type="tel" id="alternatePhoneNumber" placeholder="Enter phone number"
-                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={values.alternatePhoneNumber} onChange={handleChange}/>
-                            </div>
-                            <div className={'grid gap-2'}>
-                                <Label htmlFor="alternateAddress" className="block text-sm font-medium text-labelBlue">Current
-                                    residential address</Label>
-                                <Input type="text" id="alternateContactAddress" placeholder="Enter residential address"
-                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={values.alternateContactAddress} onChange={handleChange}/>
+                                <DescriptionTextarea
+                                    description={values.alternateContactAddress}
+                                    setDescription={(description) => setValues((prev) => ({
+                                        ...prev,
+                                        alternateContactAddress: description
+                                    }))} maximumDescription={500} label={'Current residential address'}
+                                    placeholder={'Enter residential address'}/>
                             </div>
                             <div className={'grid gap-2'}>
                                 <Label htmlFor="nextOfKinFirstName"
-                                       className="block text-sm font-medium text-labelBlue">Current next of Kin&#39;s
+                                       className="block text-sm font-medium text-labelBlue">Current next of
+                                    Kin&#39;s
                                     first name</Label>
                                 <Input type="text" id="firstName" placeholder="Enter first name"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
@@ -177,32 +194,49 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
                                        onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
-                                <Label htmlFor="nextOfKinEmail" className="block text-sm font-medium text-labelBlue">Current
+                                <Label htmlFor="nextOfKinEmail"
+                                       className="block text-sm font-medium text-labelBlue">Current
                                     next of Kin&#39;s email address</Label>
                                 <Input type="email" id="email" placeholder="Enter email address"
                                        className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
                                        value={values.email} onChange={handleChange}/>
                             </div>
                             <div className={'grid gap-2'}>
-                                <Label htmlFor="nextOfKinPhone" className="block text-sm font-medium text-labelBlue">Current
-                                    next of Kin&#39;s phone number</Label>
-                                <Input type="tel" id="phoneNumber" placeholder="Enter phone number"
-                                       className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
-                                       value={values.phoneNumber} onChange={handleChange}/>
+                                <PhoneNumberSelect
+                                    id={'alternatePhoneNumber'}
+                                    selectedCountryCode={values.alternatePhoneNumber}
+                                    setSelectedCountryCode={(code) => setValues((prev) => ({
+                                        ...prev,
+                                        selectedCountryCode: code
+                                    }))}
+                                    phoneNumber={values.alternatePhoneNumber}
+                                    setPhoneNumber={(number) => setValues((prev) => ({...prev, alternatePhoneNumber: number}))}
+                                    isSelectOpen={isSelectOpen}
+                                    setIsSelectOpen={setIsSelectOpen}
+                                    countryCodeOptions={[{id: "1", name: "+234"}]}
+                                    label="Current next of Kin's phone number"
+                                    placeholder="+234"
+                                />
                             </div>
                             <div className={'grid gap-2'}>
                                 <ProgramSelect
-                                    selectedProgram={selectedProgram}
-                                    setSelectedProgram={setSelectedProgram}
+                                    selectedProgram={values.nextOfKinRelationship}
+                                    setSelectedProgram={(program) => setValues((prev) => ({
+                                        ...prev,
+                                        nextOfKinRelationship: program
+                                    }))}
                                     isSelectOpen={isSelectOpen}
                                     setIsSelectOpen={setIsSelectOpen}
                                     selectOptions={[
-                                        { id: "1", name: "Sister" },
-                                        { id: "2", name: "brother" },
+                                        {id: "1", name: "Father"},
+                                        {id: "2", name: "Mother"},
+                                        {id: "3", name: "Brother"},
+                                        {id: "4", name: "Sister"},
+                                        {id: "5", name: "Friend"},
                                     ]}
                                     setId={(id: string) => setSelectedProgram(id)}
                                     label={'Current next of Kin\'s relationship'}
-                                    placeholder={'Select relationship'}                                />
+                                    placeholder={'Select relationship'}/>
                             </div>
                             <div className="flex justify-end gap-5 mt-3">
                                 <Button type="button"

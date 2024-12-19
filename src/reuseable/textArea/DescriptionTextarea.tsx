@@ -7,18 +7,20 @@ interface DescriptionTextareaProps {
     setDescription: (description: string) => void;
     maximumDescription?: number;
     onDescriptionChange?: (desc: string) => void;
+    label: string;
+    placeholder: string;
 }
 
-const DescriptionTextarea: React.FC<DescriptionTextareaProps> = ({ description, setDescription,maximumDescription, onDescriptionChange }) => {
+const DescriptionTextarea: React.FC<DescriptionTextareaProps> = ({ description, setDescription,maximumDescription, onDescriptionChange, label, placeholder }) => {
      
       return (
      
     <div id="descriptionContainer">
-        <Label htmlFor="description" className="block text-sm font-medium text-labelBlue">Description</Label>
+        <Label htmlFor="description" className="block text-sm font-medium text-labelBlue">{label}</Label>
         <Textarea
             id="description"
             name="description"
-            placeholder="Enter description"
+            placeholder={placeholder}
             className={'resize-none placeholder:text-grey250 focus-visible:outline-0 ring-transparent focus-visible:ring-transparent'}
             value={description}
             onChange={(e) => {
