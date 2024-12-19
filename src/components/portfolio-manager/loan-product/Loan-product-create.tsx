@@ -8,11 +8,18 @@ import CustomSelect from "@/reuseable/Input/Custom-select";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
-import {toast} from "@/hooks/use-toast";
+import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 
 
 interface CreateLoanProductProps {
     setIsOpen?: (b: boolean) => void;
+}
+
+interface ApiError {
+    status: number;
+    data: {
+        message: string;
+    };
 }
 
 export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
@@ -90,6 +97,7 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
             .matches(/^[a-zA-Z0-9\s.,'-]+$/, "Product mandate terms contains invalid characters")
             .test( "no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value) ),
         loanProductTermsAndCondition: Yup.string()
+            .required("loan product terms is required")
             .trim()
             .max(2500, "Terms exceeds 2500 characters")
             .matches(/^[a-zA-Z0-9\s.,'-]+$/, "Loan product terms contains invalid characters")
@@ -108,14 +116,24 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
     const bankPartner = ["Patner 1", "Partner 2",];
     const maxChars = 2500;
 
+    const toastPopUp = ToastPopUp({
+        description: "Program Created successfully.",
+        status:"success"
+    });
+
+    const networkPopUp =  ToastPopUp({
+        description: "No internet connection",
+        status: "error",
+    });
+
 
     const handleSubmit = async (values: typeof initialFormValue) => {
         if (!navigator.onLine) {
-            toast({
-                description: "No internet connection",
-                status: "error",
-            });
-            return;
+            networkPopUp.showToast();
+            if (setIsOpen) {
+                setIsOpen(false);
+            }
+            return
         }
 
         const formData = {
@@ -135,7 +153,20 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
             bankPartner: values.bankPartner,
             loanInsuranceProvider: values.loanInsuranceProvider,
             loanDisbursementTerms: values.loanDisbursementTerms,
+        };
+        try {
+
+            const create = await createLoanProduct(formData).unwrap();
+            if(create) {
+                toastPopUp.showToast();
+                if (setIsOpen) {
+                    setIsOpen(false);
+                }
+            }} catch (err) {
+            const error = err as ApiError;
+            setError(error ? error?.data?.message : "Error occured" );
         }
+        console.log(createLoanProduct, "formValue")
     }
 
 
@@ -342,7 +373,7 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
                                                                          className={`h-12`}/>
                                                 </div>
 
-                                                <div className={`pt-2`}>
+                                                <div className={`pt-2 w-full`}>
                                                     <Field
                                                         id="loanProductSize"
                                                         data-testid="loanProductSize"
@@ -379,7 +410,7 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
                                                    style={{display: 'inline-block', WebkitOverflowScrolling: 'touch'}}>Minimum
                                                 repayment amount</Label>
 
-                                            <div className={`flex flex-row gap-2`}>
+                                            <div className={`flex flex-row gap-2 w-full`}>
                                                 <div className={`pt-1`}>
                                                     <CurrencySelectInput readOnly={false}
                                                                          selectedcurrency={selectCurrency}
@@ -387,7 +418,7 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
                                                                          className={`h-12`}/>
                                                 </div>
 
-                                                <div className={`pt-2`}>
+                                                <div className={`pt-2 w-full`}>
                                                     <Field
                                                         id="minimumRepaymentAmount"
                                                         data-testid="minimumRepaymentAmount"
