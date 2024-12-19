@@ -7,9 +7,8 @@ import {Button} from "@/components/ui/button";
 import {useSearchLoanProductQuery, useViewAllLoanProductQuery} from "@/service/admin/loan_product";
 import {formatAmount} from "@/utils/Format";
 import TableModal from "@/reuseable/modals/TableModal";
-import {CreateLoanProduct} from "@/components/portfolio-manager/loan-product/createLoanProduct";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {setItemSessionStorage} from "@/utils/storage";
+import {LoanProductCreate} from "@/components/portfolio-manager/loan-product/Loan-product-create";
 import {useRouter} from "next/navigation";
 
 interface TableRowData {
@@ -54,7 +53,6 @@ function LoanProductPage() {
         // setItemSessionStorage("programId", String(row.id))
         // console.log("this is the row clicked", row)
     }
-
 
 
     const loanProductHeader = [
@@ -157,7 +155,7 @@ function LoanProductPage() {
                     tableCellStyle={"h-12"}
                     optionalRowsPerPage={10}
                     icon={MdOutlineInventory2}
-                    sideBarTabName={"Loan products"}
+                    sideBarTabName={"Loan product"}
                     isLoading={isLoading}
                     condition={true}
                 />
@@ -169,9 +167,9 @@ function LoanProductPage() {
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
                     headerTitle={`Create loan Product`}
-                    width="30%"
+                    width="36%"
                 >
-                    <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>
+                    <LoanProductCreate setIsOpen={() => setCreateProduct(false)}/>
                 </TableModal>
 
             </div>
