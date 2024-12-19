@@ -27,6 +27,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
         alternatePhoneNumber: "",
         alternateContactAddress: "",
     });
+
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
     const [saveNextOfKinDetails] = useSaveNextOfKinDetailsMutation()
@@ -43,12 +44,16 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
-        console.log("Field changed:", id, value); // Add this line to check field changes
+        console.log("Field changed:", id, value);
         setValues((prev) => ({ ...prev, [id]: value }));
     };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const response = await saveNextOfKinDetails(values);
+        const dataToSubmit = {
+            ...values,
+            selectedProgram,
+        };
+        const response = await saveNextOfKinDetails(dataToSubmit);
         console.log("response of saved data: ", response);
         setIsFormSubmitted(true);
         setIsModalOpen(false);
@@ -239,8 +244,10 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
                                     placeholder={'Select relationship'}/>
                             </div>
                             <div className="flex justify-end gap-5 mt-3">
-                                <Button type="button"
-                                        className="h-[3.5625rem] w-[8.75rem] border border-meedlBlue text-meedlBlue px-4 py-2 bg-gray-300 rounded-md">Cancel</Button>
+                                <DialogClose asChild>
+                                    <Button type="button"
+                                            className="h-[3.5625rem] w-[8.75rem] border border-meedlBlue text-meedlBlue px-4 py-2 bg-gray-300 rounded-md">Cancel</Button>
+                                </DialogClose>
                                 <Button type="submit"
                                         className={`h-[3.5625rem] w-[8.75rem] px-4 py-2 ${isButtonDisabled ? 'bg-neutral650' : 'bg-meedlBlue'} hover:bg-meedlBlue text-white rounded-md`}
                                         disabled={isButtonDisabled}>Continue</Button>
