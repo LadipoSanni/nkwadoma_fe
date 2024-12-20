@@ -59,11 +59,11 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
                                          className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                        <div className="text-black300">
-                                            <span>{item.label}</span>
+                                        <div id={`itemsId`} className="text-black300">
+                                            <span id={`item`}>{item.label}</span>
                                         </div>
-                                        <div className="text-meedlBlack">
-                                            <span>{item.value}</span>
+                                        <div id={`valueId`} className="text-meedlBlack">
+                                            <span id={`value`}>{item.value}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -95,11 +95,11 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                         <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                              key={index}
                                              className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                            <div className="text-black300">
-                                                <span>{item.detail}</span>
+                                            <div id={`detailsId`} className="text-black300">
+                                                <span id={`details`}>{item.detail}</span>
                                             </div>
-                                            <div className="text-meedlBlack">
-                                                <span>{item.value}</span>
+                                            <div id={`valuesId`} className="text-meedlBlack">
+                                                <span id={"values"}>{item.value}</span>
                                             </div>
                                         </div>
                                     ))}
@@ -115,11 +115,11 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
                                          className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                        <div className="text-black300">
-                                            <span>{item.label}</span>
+                                        <div id={`labelsId`} className="text-black300">
+                                            <span id={`labels`}>{item.label}</span>
                                         </div>
-                                        <div className="text-meedlBlack">
-                                            <span>{item.value}</span>
+                                        <div id={`valueDiv`} className="text-meedlBlack">
+                                            <span id={`valueItems`}>{item.value}</span>
                                         </div>
                                     </div>
                                 ))}
