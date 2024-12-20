@@ -82,8 +82,10 @@ const LoaneeOnboarding = () => {
             "id": loanReferralId,
             "loanReferralStatus": "ACCEPTED"
         }
-        const response = await respondToLoanReferral(requestData).unwrap()
-        console.log(response)
+        if (requestData.id) {
+            const response = await respondToLoanReferral(requestData).unwrap()
+            console.log(response)
+        }
 
         if (verificationFirstResponse?.data === "Identity Not Verified") {
             console.log(verificationFirstResponse.data)
