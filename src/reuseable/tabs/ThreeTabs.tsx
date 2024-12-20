@@ -41,7 +41,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                         id="cohort-tabs"
                         data-testid="cohort-tabs"
                         defaultValue={"productDetails"}
-                        className={`shadow-none ${styles.tab}`}
+                        className={`shadow-none`}
                     >
                         <TabsList id="tabs-list" data-testid="tabs-list" className={`p-1`}>
                             <TabsTrigger id='productDetails' value={"productDetails"}
@@ -50,6 +50,8 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                             <TabsTrigger id='termsAndCondition' value={"termsAndCondition"} data-testid="termsAndCondition">{tabTitle2}</TabsTrigger>
                             <TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>
                         </TabsList>
+
+                        <div>
 
                         <TabsContent value={"productDetails"} id="cohort-details-content"
                                      data-testid="productDetails" className={`py-3`}>
@@ -72,60 +74,60 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                             </div>
                         </TabsContent>
 
-                        <TabsContent value={"termsAndCondition"} id="trainee-content" data-testid="trainee-content"
-                                     className={`py-3 w-full `}>
-                            {isTable ?
-                                <Tables
-                                    tableData={traineeData}
-                                    tableHeader={ProgramHeader}
-                                    staticHeader={'Trainee'}
-                                    staticColunm={'trainee'}
-                                    tableHeight={41.5}
-                                    icon={MdOutlinePerson}
-                                    sideBarTabName={"Trainee"}
-                                    handleRowClick={() => {
-                                    }}
-                                    optionalRowsPerPage={10}
-                                    tableCellStyle={'h-12'}
-                                />
-                                :
+                            <TabsContent value={"termsAndCondition"} id="trainee-content" data-testid="trainee-content"
+                                         className={`py-3 w-full `}>
+                                {isTable ?
+                                    <Tables
+                                        tableData={traineeData}
+                                        tableHeader={ProgramHeader}
+                                        staticHeader={'Trainee'}
+                                        staticColunm={'trainee'}
+                                        tableHeight={41.5}
+                                        icon={MdOutlinePerson}
+                                        sideBarTabName={"Trainee"}
+                                        handleRowClick={() => {
+                                        }}
+                                        optionalRowsPerPage={10}
+                                        tableCellStyle={'h-12'}
+                                    />
+                                    :
+                                    <div
+                                        className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                        {isNotTableDataList?.map((item, index) => (
+                                            <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
+                                                 key={index}
+                                                 className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
+                                                <div id={`detailsId-${index}`} className="text-black300">
+                                                    <span id={`details-${index}`}>{item.detail}</span>
+                                                </div>
+                                                <div id={`valuesId-${index}`} className="text-meedlBlack">
+                                                    <span id={`values-${index}`}>{item.value}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                }
+                            </TabsContent>
+
+                            <TabsContent value={"disbursementTerms"} id="trainee-content" data-testid="trainee-content"
+                                         className={`py-3 w-full `}>
                                 <div
                                     className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
-                                    {isNotTableDataList?.map((item, index) => (
+                                    {dataList3?.map((item, index) => (
                                         <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                              key={index}
                                              className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                            <div id={`detailsId-${index}`} className="text-black300">
-                                                <span id={`details-${index}`}>{item.detail}</span>
+                                            <div id={`labelsId-${index}`} className="text-black300">
+                                                <span id={`labels-${index}`}>{item.label}</span>
                                             </div>
-                                            <div id={`valuesId-${index}`} className="text-meedlBlack">
-                                                <span id={`values-${index}`}>{item.value}</span>
+                                            <div id={`valueDiv-${index}`} className="text-meedlBlack">
+                                                <span id={`valueItems-${index}`}>{item.value}</span>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
-                            }
-                        </TabsContent>
-
-                        <TabsContent value={"disbursementTerms"} id="trainee-content" data-testid="trainee-content"
-                                     className={`py-3 w-full `}>
-                            <div
-                                className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
-                                {dataList3?.map((item, index) => (
-                                    <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
-                                         key={index}
-                                         className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                        <div id={`labelsId-${index}`} className="text-black300">
-                                            <span id={`labels-${index}`}>{item.label}</span>
-                                        </div>
-                                        <div id= {`valueDiv-${index}`} className="text-meedlBlack">
-                                            <span id={`valueItems-${index}`}>{item.value}</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-
-                        </TabsContent>
+                            </TabsContent>
+                        </div>
                     </Tabs>
                 </div>
             </div>
