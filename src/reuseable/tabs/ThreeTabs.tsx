@@ -6,7 +6,6 @@ import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import {MdOutlinePerson} from "react-icons/md";
 import {Breakdown} from "@/reuseable/details/breakdown";
 import Tables from "@/reuseable/table/LoanProductTable";
-import styles from "@/components/selected-loan/SelectedLoan.module.css"
 
 
 interface detailContainerProps {
