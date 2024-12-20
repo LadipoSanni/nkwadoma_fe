@@ -7,21 +7,24 @@ import { MdClose } from "react-icons/md";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import { NumericFormat } from "react-number-format";
 import ProgramSelect from "@/reuseable/select/ProgramSelect";
+import { useRespondToLoanRequestMutation } from "@/service/admin/loan/loan-request-api"; // Import the new mutation
 
 interface CreateLoanOfferProps {
     onSubmit: (data: { amountApproved: string, loanProduct: string }) => void;
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
+    loanRequestId: string;
 }
 
-const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, setIsOpen }) => {
+const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, setIsOpen, loanRequestId }) => {
     const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
-    const [, setProgramId] = useState("");
+    const [programId, setProgramId] = useState("");
     const [isFormValid, setIsFormValid] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
+    const [respondToLoanRequest] = useRespondToLoanRequestMutation(); // Use the new mutation
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (!selectedProgram) {
             setIsFormValid(false);
@@ -32,10 +35,17 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
         setErrorMessage("");
         const formData = new FormData(event.target as HTMLFormElement);
         const data = {
-            amountApproved: formData.get('amountApproved') as string,
-            loanProduct: selectedProgram || "",
+            loanRequestId,
+            loanProductId: programId,
+            status: "NEW",
+            amountApproved: parseFloat(formData.get('amountApproved') as string),
+            declineReason: ""
         };
-        onSubmit(data);
+        await respondToLoanRequest(data);
+        onSubmit({
+            amountApproved: formData.get('amountApproved') as string,
+            loanProduct: programId
+        });
     };
 
     if (!isOpen) return null;
@@ -80,8 +90,8 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                                 className="mt-0 mb-0 min-w-[78px] h-[3.10rem]"
                             />
                             <NumericFormat
-                                id={`itemAmount`}
-                                name={`itemAmount`}
+                                id={`amountApproved`}
+                                name={`amountApproved`}
                                 placeholder="0.00"
                                 className="p-4 focus-visible:outline-0 w-full shadow-none focus-visible:ring-transparent rounded-md h-[3.20rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"
                                 thousandSeparator=","
