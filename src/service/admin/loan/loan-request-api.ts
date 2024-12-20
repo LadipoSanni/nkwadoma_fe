@@ -1,32 +1,42 @@
-import {createApi} from '@reduxjs/toolkit/query/react'
-import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { customFetchBaseQuery } from "@/service/customFetchBaseQuery";
 
 export const loanRequestApi = createApi({
-    reducerPath : 'loanRequestApi',
+    reducerPath: 'loanRequestApi',
     baseQuery: customFetchBaseQuery,
     tagTypes: ['loanRequests', 'loanRequest-details'],
     endpoints: (builder) => ({
         viewAllLoanRequest: builder.query({
-          query: (data: {
-              pageNumber?: number;
-              pageSize?: number;}) => ({
-              url: `/loan/loan-requests`,
-              method: 'GET',
-              params: data
-          }),
+            query: (data: {
+                pageNumber?: number;
+                pageSize?: number;
+            }) => ({
+                url: `/loan/loan-requests`,
+                method: 'GET',
+                params: data
+            }),
             providesTags: ['loanRequests']
-
         }),
         viewLoanRequestDetails: builder.query({
-           query: (id) => ({
-               url: `/loan/loan-requests`,
-               method:'GET',
-               query: id
-           }) ,
+            query: (id) => ({
+                url: `/loan/loan-requests`,
+                method: 'GET',
+                query: id
+            }),
             providesTags: ['loanRequest-details']
         }),
+        respondToLoanRequest: builder.mutation({
+            query: (data) => ({
+                url: '/loan/loan-request/response',
+                method: 'POST',
+                body: data
+            })
+        })
     })
+});
 
-})
-
-export const {useViewAllLoanRequestQuery, useViewLoanRequestDetailsQuery} = loanRequestApi
+export const {
+    useViewAllLoanRequestQuery,
+    useViewLoanRequestDetailsQuery,
+    useRespondToLoanRequestMutation
+} = loanRequestApi;
