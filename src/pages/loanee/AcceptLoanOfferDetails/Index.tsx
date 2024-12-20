@@ -210,7 +210,8 @@ const AcceptLoanOfferDetails = () => {
                             <Button className={'w-full md:w-[8.75rem] h-[3.5625rem] bg-meedlBlue hover:bg-meedlBlue'}
                                     onClick={handleNext}
                                     disabled={currentTab === loanRequestDetailsTab.length - 1}>Continue</Button>
-                        )} <DeclineLoanModal isOpen={isModalOpen} setIsOpen={setIsModalOpen}/>
+                        )} <DeclineLoanModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} loanRequestId={''}
+                                             loanProductId={''} title={'Decline loan Offer'}/>
 
                     </div>
                 </div>
