@@ -9,12 +9,14 @@ import {formatAmount} from "@/utils/Format";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {CreateLoanProduct} from "@/components/portfolio-manager/loan-product/Index";
+import {useRouter} from "next/navigation";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
 function LoanProductPage() {
+    const router = useRouter()
     const [allLoanee, setAllLoanProduct] = useState([]);
     const [createProduct, setCreateProduct] = React.useState(false)
     const [searchTerm, setSearchTerm] = useState("");
@@ -46,8 +48,10 @@ function LoanProductPage() {
         setCreateProduct(true)
     }
 
-    const handleRowClick = () => {
-
+    const handleRowClick = (row: TableRowData) => {
+        router.push('/loan-product/loan-product-details')
+        // setItemSessionStorage("programId", String(row.id))
+        console.log("this is the row clicked", row)
     }
 
 

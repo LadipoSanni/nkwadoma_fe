@@ -1,11 +1,13 @@
-import React from 'react';
-import LoanProductPage from '@/features/portfolio-manager/loan-product/Index'
+import LoanProductPage from '@/features/portfolio-manager/loan-product/loan-product-view'
+import React from 'react'
 
-
-const Page = () => {
+function page() {
     return (
-        <LoanProductPage/>
-    );
-};
+        <div>
+            <LoanProductPage/>
+        </div>
+    )
+}
 
-export default Page;
+export default page
+

@@ -110,7 +110,7 @@ const Login: React.FC = () => {
                         storeUserDetails(access_token, user_email, user_role, userName)
                         if (user_role === 'LOANEE') {
                             store.dispatch(setCurrentNavbarItem("overview"))
-                            router.push("/overview")
+                            router.push("/onboarding")
                         } else if(user_role === 'ORGANIZATION_ADMIN') {
                             store.dispatch(setCurrentNavbarItem("Program"))
                             router.push("/program")

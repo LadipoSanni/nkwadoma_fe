@@ -2,7 +2,7 @@
 import React, {ElementType} from "react";
 import {inter} from "@/app/fonts";
 import {Card} from "@/components/ui/card";
-import Image from 'next/image';
+import Image, {StaticImageData} from 'next/image';
 import {Button} from "@/components/ui/button";
 import {TagButton} from "@/reuseable/tagButton/TagButton";
 import Kebab from "@/reuseable/Kebab/Kebab";
@@ -13,7 +13,7 @@ import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 
 
 interface detailsProps {
-    imageSrc?: string;
+    imageSrc?: string | StaticImageData;
     cohortTitle: string;
     cohortDescription: string;
     icon?: ElementType;
