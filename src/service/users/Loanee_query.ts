@@ -29,6 +29,17 @@ export const loaneeApi = createApi({
             }),
             invalidatesTags: ({id}) => [{type: 'loanee', id}],
         }),
+        respondToLoanReferral: builder.mutation({
+            query: (formData: {
+                id: string
+                loanReferralStatus: string
+            }) => ({
+                url: `/loan-referrals/respond`,
+                method: "POST",
+                body: formData
+            }),
+            invalidatesTags: ({id}) => [{type: 'loanee', id}],
+        }),
         saveNextOfKinDetails: builder.mutation({
             query: (data)=> ({
                 url: '/next-of-kin-details',
@@ -38,7 +49,7 @@ export const loaneeApi = createApi({
         }),
         viewLoanReferralDetails: builder.query ({
             query: () => ({
-                url: `/loan/loan-referral`,
+                url: `/loan-referral`,
                 method: "GET",
             }),
         }),
@@ -53,6 +64,7 @@ export const {
      useSaveNextOfKinDetailsMutation,
     useViewLoanReferralDetailsQuery,
     useVerifyIdentityMutation,
+    useRespondToLoanReferralMutation,
     useLazyIsIdentityVerifiedQuery,
 } = loaneeApi;
 
