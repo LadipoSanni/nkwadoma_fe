@@ -4,8 +4,21 @@ import LoaneeOnboarding from "@/features/onboarding/loanee";
 import {Providers} from "@/app/provider";
 import React from "react";
 
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(() => ({
+        push: jest.fn(),
+        replace: jest.fn(),
+        prefetch: jest.fn(),
+    })),
+}));
 
 describe('LoanApplicationDetails', () => {
+    const data = {
+        tuitionAmount: "0.00",
+        amountRequested: "0.00",
+        initialDeposit: "0.00",
+        referredBy: "",
+    }
     it('renders the header correctly', () => {
         render(
             <Providers>
@@ -35,23 +48,21 @@ describe('LoanApplicationDetails', () => {
         expect(button).toBeInTheDocument();
         expect(button).toHaveClass('bg-meedlBlue', 'rounded-md', 'h-[2.8125rem]');
     });
-
     it('toggles collapsible content correctly', () => {
         render(
             <Providers>
-                <LoanApplicationDetails tuitionAmount={''} amountRequested={''} initialDeposit={''} />
+                <LoanApplicationDetails loaneeLoanDetail={data} />
             </Providers>
         );
         const trigger = screen.getByText('Expand to see the tuition breakdown');
         fireEvent.click(trigger);
         expect(screen.getByText('Collapse to hide the tuition breakdown')).toBeInTheDocument();
         expect(screen.getByText('Tuition')).toBeInTheDocument();
-        expect(screen.getByText('₦2,000,000.00')).toBeInTheDocument();
     });
     test('renders additional information component', () => {
         render(
             <Providers>
-                <LoanApplicationDetails tuitionAmount={''} amountRequested={''} initialDeposit={''} />
+                <LoanApplicationDetails loaneeLoanDetail={data}/>
             </Providers>
         );
         expect(screen.getByText('Tuition amount')).toBeInTheDocument();
@@ -60,7 +71,7 @@ describe('LoanApplicationDetails', () => {
     it('renders the collapsible trigger text correctly', () => {
         render(
             <Providers>
-                <LoanApplicationDetails tuitionAmount={''} amountRequested={''} initialDeposit={''} />
+                <LoanApplicationDetails loaneeLoanDetail={data} />
             </Providers>
         );
         const trigger = screen.getByText('Expand to see the tuition breakdown');
@@ -70,7 +81,7 @@ describe('LoanApplicationDetails', () => {
     it('applies correct CSS class names to the collapsible trigger', () => {
         render(
             <Providers>
-                <LoanApplicationDetails tuitionAmount={''} amountRequested={''} initialDeposit={''} />
+                <LoanApplicationDetails loaneeLoanDetail={data}/>
             </Providers>
         );
         const trigger = screen.getByText('Expand to see the tuition breakdown');

@@ -12,14 +12,15 @@ interface StepContentProps {
 export interface LoaneeLoanDetail {
     tuitionAmount: string;
     amountRequested: string;
-    initialDeposit: string
+    initialDeposit: string;
+    referredBy: string
 }
 
 const StepContent: React.FC<StepContentProps> = ({ step, setCurrentStep, loaneeLoanDetail }) => {
 
     switch (step) {
         case 0:
-            return <LoanApplicationDetails initialDeposit={loaneeLoanDetail.initialDeposit} amountRequested={loaneeLoanDetail.amountRequested} tuitionAmount={loaneeLoanDetail.tuitionAmount}/>;
+            return <LoanApplicationDetails loaneeLoanDetail={loaneeLoanDetail}/>;
         case 1:
             return <IdentityVerification/>;
         case 2:

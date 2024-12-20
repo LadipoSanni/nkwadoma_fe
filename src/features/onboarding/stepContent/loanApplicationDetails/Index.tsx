@@ -5,14 +5,19 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { LoaneeLoanDetail } from "@/features/onboarding/stepContent/Index";
 import DetailItem from "@/reuseable/details/detail-Item/Index";
 
-const LoanApplicationDetails: React.FC<LoaneeLoanDetail> = ({ initialDeposit, tuitionAmount, amountRequested }) => {
+interface LoanApplicationDetailsProps {
+    loaneeLoanDetail: LoaneeLoanDetail;
+}
+
+const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeLoanDetail }) => {
+    const { initialDeposit, tuitionAmount, amountRequested, referredBy } = loaneeLoanDetail;
     const [isOpen, setIsOpen] = useState(false);
 
     return (
         <div id="loanApplicationDetailsContent" className={'rounded-md grid gap-9 p-5 bg-grey105'}>
             <DetailItem label="Tuition amount" value={tuitionAmount} />
             <DetailItem label="Cohort start date" value="13 Dec, 2023" />
-            <DetailItem label="Referred by" value="Semicolon Africa" />
+            <DetailItem label="Referred by" value={referredBy ? referredBy : "Empty"} />
             <DetailItem label="Loan amount requested" value={amountRequested} />
             <DetailItem label="Deposit" value={initialDeposit} />
             <Collapsible className={'bg-meedlWhite rounded-md border border-lightBlue250'} open={isOpen} onOpenChange={setIsOpen}>
@@ -26,7 +31,7 @@ const LoanApplicationDetails: React.FC<LoaneeLoanDetail> = ({ initialDeposit, tu
                 </CollapsibleTrigger>
                 <CollapsibleContent id="tuitionBreakdownContent">
                     <div id="tuitionBreakdownDetails" className={'rounded-md grid gap-8 py-5 px-3'}>
-                        <DetailItem label="Tuition" value="₦2,000,000.00" />
+                        <DetailItem label="Tuition" value={tuitionAmount} />
                         <DetailItem label="Devices" value="₦600,000.00" />
                         <DetailItem label="Accommodation" value="₦600,000.00" />
                         <DetailItem label="Feeding" value="₦300,000.00" />

@@ -7,33 +7,35 @@ import {Button} from "@/components/ui/button";
 import {useSearchLoanProductQuery, useViewAllLoanProductQuery} from "@/service/admin/loan_product";
 import {formatAmount} from "@/utils/Format";
 import TableModal from "@/reuseable/modals/TableModal";
-import {CreateLoanProduct} from "@/components/portfolio-manager/loan-product/createLoanProduct";
 import {Cross2Icon} from "@radix-ui/react-icons";
+import {LoanProductCreate} from "@/components/portfolio-manager/loan-product/Loan-product-create";
+import {useRouter} from "next/navigation";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
 function LoanProductPage() {
+    const router = useRouter()
     const [allLoanee, setAllLoanProduct] = useState([]);
     const [createProduct, setCreateProduct] = React.useState(false)
     const [searchTerm, setSearchTerm] = useState("");
     const size = 100;
     const number = 0;
     const {data, isLoading: isLoading} = useViewAllLoanProductQuery({pageSize: size, pageNumber: number})
-    const { data: searchResult } = useSearchLoanProductQuery(
-        { loanProductName: searchTerm },
-        { skip: !searchTerm }
+    const {data: searchResult} = useSearchLoanProductQuery(
+        {loanProductName: searchTerm},
+        {skip: !searchTerm}
     );
     useEffect(() => {
         if (searchTerm && searchResult && searchResult?.data) {
             const result = searchResult?.data
             setAllLoanProduct(result)
-        } else if(!searchTerm && data && data?.data) {
+        } else if (!searchTerm && data && data?.data) {
             const result = data?.data?.body
             setAllLoanProduct(result)
         }
-    }, [data,searchTerm,searchResult ])
+    }, [data, searchTerm, searchResult])
 
     useEffect(() => {
         if (data && data?.data) {
@@ -43,11 +45,13 @@ function LoanProductPage() {
     }, [data])
 
     const handleCreateButton = () => {
-              setCreateProduct(true)
+        setCreateProduct(true)
     }
 
-    const handleRowClick = () => {
-
+    const handleRowClick = (row: TableRowData) => {
+        router.push('/loan-product/loan-product-details')
+        // setItemSessionStorage("programId", String(row.id))
+        console.log("this is the row clicked", row)
     }
 
 
@@ -124,7 +128,8 @@ function LoanProductPage() {
                     </div>
                     <Input
                         className='w-full lg:w-80 h-12 focus-visible:outline-0 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
-                        type="search" id={`search`} value={searchTerm} placeholder={"Search"} onChange={(e) => setSearchTerm(e.target.value)}
+                        type="search" id={`search`} value={searchTerm} placeholder={"Search"}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         required/>
                 </div>
                 <div id={`createProduct`}>
@@ -150,7 +155,7 @@ function LoanProductPage() {
                     tableCellStyle={"h-12"}
                     optionalRowsPerPage={10}
                     icon={MdOutlineInventory2}
-                    sideBarTabName={"Loan products"}
+                    sideBarTabName={"Loan product"}
                     isLoading={isLoading}
                     condition={true}
                 />
@@ -162,9 +167,9 @@ function LoanProductPage() {
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
                     headerTitle={`Create loan Product`}
-                    width="30%"
+                    width="36%"
                 >
-                    <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>
+                    <LoanProductCreate setIsOpen={() => setCreateProduct(false)}/>
                 </TableModal>
 
             </div>

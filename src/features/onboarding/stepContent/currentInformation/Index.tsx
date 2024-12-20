@@ -37,14 +37,11 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
 
     useEffect(() => {
         const isFormValid = Object.values(values).every((value) => value.trim() !== "");
-        console.log("Form values:", values);
-        console.log("Form validity:", isFormValid);
         setIsButtonDisabled(!isFormValid);
     }, [values]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
-        console.log("Field changed:", id, value);
         setValues((prev) => ({ ...prev, [id]: value }));
     };
     const handleSubmit = async (e: React.FormEvent) => {
@@ -53,10 +50,13 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({setCurrentStep})
             ...values,
             selectedProgram,
         };
-        const response = await saveNextOfKinDetails(dataToSubmit);
-        console.log("response of saved data: ", response);
-        setIsFormSubmitted(true);
-        setIsModalOpen(false);
+        try {
+            await saveNextOfKinDetails(dataToSubmit);
+            setIsFormSubmitted(true);
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error(error);
+        }
     };
     const handleContinueClick = () => {
         if (isFormSubmitted && setCurrentStep) {
