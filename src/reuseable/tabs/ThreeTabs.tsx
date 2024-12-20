@@ -95,11 +95,11 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                         <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                              key={index}
                                              className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                            <div id={`detailsId`} className="text-black300">
-                                                <span id={`details`}>{item.detail}</span>
+                                            <div id={`detailsId-${index}`} className="text-black300">
+                                                <span id={`details-${index}`}>{item.detail}</span>
                                             </div>
-                                            <div id={`valuesId`} className="text-meedlBlack">
-                                                <span id={"values"}>{item.value}</span>
+                                            <div id={`valuesId-${index}`} className="text-meedlBlack">
+                                                <span id={`values-${index}`}>{item.value}</span>
                                             </div>
                                         </div>
                                     ))}
@@ -115,10 +115,10 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
                                          className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                        <div id={`labelsId`} className="text-black300">
+                                        <div id={`labelsId-${index}`} className="text-black300">
                                             <span id={`labels`}>{item.label}</span>
                                         </div>
-                                        <div id={`valueDiv`} className="text-meedlBlack">
+                                        <div id= {`valueDiv-${index}`} className="text-meedlBlack">
                                             <span id={`valueItems`}>{item.value}</span>
                                         </div>
                                     </div>
