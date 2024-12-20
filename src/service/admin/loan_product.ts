@@ -60,6 +60,7 @@ export const loanProductApi = createApi({
                 bankPartner: string,
                 loanInsuranceProvider: string,
                 disbursementTerms: string,
+                loanProductStatus: string
             }) => ({
                 url: 'loan/loan-product/create',
                 method: "POST",
