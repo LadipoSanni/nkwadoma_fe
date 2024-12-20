@@ -167,7 +167,6 @@ const LoanProductPage = () => {
                 >
                     <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>
                 </TableModal>
-
             </div>
         </main>
     );
