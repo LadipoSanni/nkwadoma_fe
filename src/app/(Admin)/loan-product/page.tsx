@@ -1,13 +1,11 @@
+import React from 'react';
 import LoanProductPage from '@/features/portfolio-manager/loan-product/Index'
-import React from 'react'
 
-function page() {
+
+const Page = () => {
     return (
-        <div>
-            <LoanProductPage/>
-        </div>
-    )
-}
+        <LoanProductPage/>
+    );
+};
 
-export default page
-
+export default Page;
