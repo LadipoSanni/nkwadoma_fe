@@ -46,10 +46,6 @@ const LoaneeOnboarding = () => {
         }
         if (data?.statusCode === "OK" && data?.data) {
             const backendDetails = data.data;
-            if (backendDetails.loanReferralStatus === "AUTHORIZED"){
-                setCurrentStep(1)
-                router.push("/overview");
-            }
             setLoaneeLoanDetail(prevState => {
                 const newDetails = {
                     tuitionAmount: backendDetails.tuitionAmount?.toString() || "0.00",
@@ -67,6 +63,10 @@ const LoaneeOnboarding = () => {
                 }
                 return prevState;
             });
+            if (backendDetails.loanReferralStatus === "AUTHORIZED"){
+                setCurrentStep(1)
+                router.push("/overview");
+            }
         }
     }
     useEffect(() => {
