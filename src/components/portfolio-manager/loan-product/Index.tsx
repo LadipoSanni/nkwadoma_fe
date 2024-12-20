@@ -15,6 +15,7 @@ interface CreateLoanProductProps {
     setIsOpen?: (b: boolean) => void;
 }
 
+export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 interface ApiError {
     status: number;
     data: {
@@ -25,7 +26,7 @@ interface ApiError {
 export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [error, setError] =  useState('');
-    const [step, setStep] = useState(1);
+    // const [step, setStep] = useState(1);
     const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
 
     console.log(createLoanProduct);
@@ -113,7 +114,7 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
     const productSponsor = ["Zenith", "Apple"];
     const funds = ["Equity Fund", "Debt Fund",];
     const durations = ["Day", "Month", "Year",];
-    const bankPartner = ["Patner 1", "Partner 2",];
+    // const bankPartner = ["Patner 1", "Partner 2",];
     const maxChars = 2500;
 
     const toastPopUp = ToastPopUp({
@@ -170,13 +171,13 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
     }
 
 
-    const handleBack = () => {
-        setStep(1);
-    }
-
-    const handleContinueButton = () => {
-        setStep(2);
-    };
+    // const handleBack = () => {
+    //     setStep(1);
+    // }
+    //
+    // const handleContinueButton = () => {
+    //     setStep(2);
+    // };
     const handleModalClose = () => {
         if (setIsOpen) {
             setIsOpen(false);
@@ -194,7 +195,7 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
                 {
                     ({errors, isValid, touched, setFieldValue, values}) => (
                         <Form className={`${inter.className}`}>
-                            {step === 1 && (
+                            {/*{step === 1 && (*/}
                                 <div className='grid grid-cols-1 md:max-h-[580px] overflow-y-auto'
                                      style={{
                                          scrollbarWidth: 'none',
@@ -373,7 +374,7 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
                                                                          className={`h-12`}/>
                                                 </div>
 
-                                                <div className={`pt-2 w-full`}>
+                                                <div className={`pt-2`}>
                                                     <Field
                                                         id="loanProductSize"
                                                         data-testid="loanProductSize"
@@ -631,111 +632,127 @@ export const LoanProductCreate = ({setIsOpen}: CreateLoanProductProps) => {
                                             Cancel
                                         </Button>
                                         <Button
-                                            className={`h-12 w-32 ${!isValid? 'bg-neutral650 text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'
-                                            }`}
-                                            variant="secondary"
-                                            onClick={handleContinueButton}
-                                            disabled={!isValid}
-                                        >
-                                            Continue
-                                        </Button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {step === 2 && (
-                                <div id={"step2Div"}>
-                                    <div>
-                                        <Label htmlFor="bankPartner">Bank partner(optional)</Label>
-                                        <div>
-                                            <CustomSelect triggerId='bankPartner'
-                                                          id="bankPartner"
-                                                          selectContent={bankPartner}
-                                                          value={values.bankPartner}
-                                                          onChange={(value) => setFieldValue("bankPartner", value)}
-                                                          name="bankPartner"
-                                                          placeHolder='Select partner'
-                                            />
-                                            {
-                                                errors.bankPartner && touched.bankPartner && (
-                                                    <ErrorMessage
-                                                        name="bankPartner"
-                                                        id='bankPartner'
-                                                        component="div"
-                                                        className="text-red-500 text-sm"
-                                                    />)
-                                            }
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="loanDisbursementTerms">Select loan insurance provider (optional)</Label>
-                                        <div>
-
-                                        </div>
-                                    </div>
-
-
-
-
-                                    <div className={`pt-4`}>
-                                        <Label htmlFor="loanDisbursementTerms">Loan disbursement terms(optional)</Label>
-                                        <Field
-                                            as="textarea"
-                                            id="loanDisbursementTermsId"
-                                            name="loanDisbursementTerms"
-                                            className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"
-                                            placeholder="Enter disbursement terms"
-                                            rows={4}
-                                            maxLength={maxChars}
-                                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                                                const value = e.target.value; if (value.length <= maxChars) {
-                                                    setFieldValue("loanDisbursementTerms", value); } }}
-                                            onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-                                                const paste = e.clipboardData.getData('text');
-                                                if (paste.length + values.loanDisbursementTerms.length > maxChars) {
-                                                    e.preventDefault();
-                                                    setError('Loan terms must be 2500 characters or less');
-                                                } }}
-                                        />
-                                        { errors.loanDisbursementTerms && touched.loanDisbursementTerms && (
-                                            <ErrorMessage
-                                                name="loanDisbursementTerms"
-                                                component="div"
-                                                id='loanDisbursementTerms'
-                                                className="text-red-500 text-sm"
-                                            /> ) }
-                                        { error && (
-                                            <div className="text-red-500 text-sm"> {error} </div>
-                                        )}
-                                    </div>
-
-                                    <div className={`flex justify-end py-5 gap-3`}>
-                                        <Button
-                                            className={`text-meedlBlue border border-meedlBlue h-12 w-32`}
-                                            variant={"outline"}
-                                            onClick={handleBack}
-                                        >
-                                            Back
-                                        </Button>
-                                        <Button
-                                            className={`bg-meedlBlue text-meedlWhite h-12 w-32`}
+                                            className={`h-12 w-32 ${!isValid? 'bg-neutral650 text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
                                             variant={"secondary"}
                                             type={"submit"}
+                                            disabled={!isValid}
                                         >
-                                            {/*Create*/}
-                                            {isLoading ? ( <Isloading/> ) : (
-                                                "Create"
-                                            )}
+                                            Create
+                                            {/*{isLoading ? ( <Isloading/> ) : (*/}
+                                            {/*    "Create"*/}
+                                            {/*)}*/}
 
                                         </Button>
+                                        {/*<Button*/}
+                                        {/*    className={`h-12 w-32 ${!isValid? 'bg-neutral650 text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'*/}
+                                        {/*    }`}*/}
+                                        {/*    variant="secondary"*/}
+                                        {/*    onClick={handleContinueButton}*/}
+                                        {/*    disabled={!isValid}*/}
+                                        {/*>*/}
+                                        {/*    Continue*/}
+                                        {/*</Button>*/}
                                     </div>
                                     {
                                         <div
                                             className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>
                                     }
                                 </div>
-                            )}
+                            {/*)}*/}
+
+                            {/*{step === 2 && (*/}
+                            {/*    <div id={"step2Div"}>*/}
+                            {/*        <div>*/}
+                            {/*            <Label htmlFor="bankPartner">Bank partner(optional)</Label>*/}
+                            {/*            <div>*/}
+                            {/*                <CustomSelect triggerId='bankPartner'*/}
+                            {/*                              id="bankPartner"*/}
+                            {/*                              selectContent={bankPartner}*/}
+                            {/*                              value={values.bankPartner}*/}
+                            {/*                              onChange={(value) => setFieldValue("bankPartner", value)}*/}
+                            {/*                              name="bankPartner"*/}
+                            {/*                              placeHolder='Select partner'*/}
+                            {/*                />*/}
+                            {/*                {*/}
+                            {/*                    errors.bankPartner && touched.bankPartner && (*/}
+                            {/*                        <ErrorMessage*/}
+                            {/*                            name="bankPartner"*/}
+                            {/*                            id='bankPartner'*/}
+                            {/*                            component="div"*/}
+                            {/*                            className="text-red-500 text-sm"*/}
+                            {/*                        />)*/}
+                            {/*                }*/}
+                            {/*            </div>*/}
+                            {/*        </div>*/}
+
+                            {/*        <div>*/}
+                            {/*            <Label htmlFor="loanDisbursementTerms">Select loan insurance provider (optional)</Label>*/}
+                            {/*            <div>*/}
+
+                            {/*            </div>*/}
+                            {/*        </div>*/}
+
+
+
+
+                            {/*        <div className={`pt-4`}>*/}
+                            {/*            <Label htmlFor="loanDisbursementTerms">Loan disbursement terms(optional)</Label>*/}
+                            {/*            <Field*/}
+                            {/*                as="textarea"*/}
+                            {/*                id="loanDisbursementTermsId"*/}
+                            {/*                name="loanDisbursementTerms"*/}
+                            {/*                className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"*/}
+                            {/*                placeholder="Enter disbursement terms"*/}
+                            {/*                rows={4}*/}
+                            {/*                maxLength={maxChars}*/}
+                            {/*                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {*/}
+                            {/*                    const value = e.target.value; if (value.length <= maxChars) {*/}
+                            {/*                        setFieldValue("loanDisbursementTerms", value); } }}*/}
+                            {/*                onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {*/}
+                            {/*                    const paste = e.clipboardData.getData('text');*/}
+                            {/*                    if (paste.length + values.loanDisbursementTerms.length > maxChars) {*/}
+                            {/*                        e.preventDefault();*/}
+                            {/*                        setError('Loan terms must be 2500 characters or less');*/}
+                            {/*                    } }}*/}
+                            {/*            />*/}
+                            {/*            { errors.loanDisbursementTerms && touched.loanDisbursementTerms && (*/}
+                            {/*                <ErrorMessage*/}
+                            {/*                    name="loanDisbursementTerms"*/}
+                            {/*                    component="div"*/}
+                            {/*                    id='loanDisbursementTerms'*/}
+                            {/*                    className="text-red-500 text-sm"*/}
+                            {/*                /> ) }*/}
+                            {/*            { error && (*/}
+                            {/*                <div className="text-red-500 text-sm"> {error} </div>*/}
+                            {/*            )}*/}
+                            {/*        </div>*/}
+
+                            {/*        <div className={`flex justify-end py-5 gap-3`}>*/}
+                            {/*            <Button*/}
+                            {/*                className={`text-meedlBlue border border-meedlBlue h-12 w-32`}*/}
+                            {/*                variant={"outline"}*/}
+                            {/*                onClick={handleBack}*/}
+                            {/*            >*/}
+                            {/*                Back*/}
+                            {/*            </Button>*/}
+                            {/*            <Button*/}
+                            {/*                className={`bg-meedlBlue text-meedlWhite h-12 w-32`}*/}
+                            {/*                variant={"secondary"}*/}
+                            {/*                type={"submit"}*/}
+                            {/*            >*/}
+                            {/*                Create*/}
+                            {/*                /!*{isLoading ? ( <Isloading/> ) : (*!/*/}
+                            {/*                /!*    "Create"*!/*/}
+                            {/*                /!*)}*!/*/}
+
+                            {/*            </Button>*/}
+                            {/*        </div>*/}
+                            {/*        {*/}
+                            {/*            <div*/}
+                            {/*                className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>*/}
+                            {/*        }*/}
+                            {/*    </div>*/}
+                            {/*)}*/}
                         </Form>
                     )
                 }
