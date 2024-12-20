@@ -42,7 +42,7 @@ export const loaneeApi = createApi({
         }),
         saveNextOfKinDetails: builder.mutation({
             query: (data)=> ({
-                url: '/next-of-kin-details',
+                url: '/additional-details',
                 method: 'POST',
                 body: data
             }),
