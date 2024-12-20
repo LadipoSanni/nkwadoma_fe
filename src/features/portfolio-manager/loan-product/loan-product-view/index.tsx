@@ -8,8 +8,8 @@ import {useSearchLoanProductQuery, useViewAllLoanProductQuery} from "@/service/a
 import {formatAmount} from "@/utils/Format";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {CreateLoanProduct} from "@/components/portfolio-manager/loan-product/Index";
 import {useRouter} from "next/navigation";
+import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
