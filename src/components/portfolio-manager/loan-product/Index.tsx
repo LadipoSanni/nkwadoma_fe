@@ -45,6 +45,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         bankPartner: "",
         loanInsuranceProvider: "",
         loanDisbursementTerms: "",
+        loanProductStatus: "ACTIVE"
     }
 
     const validationSchema = Yup.object().shape({
@@ -125,14 +126,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         status: "error",
     });
 
-
     const handleSubmit = async (values: typeof initialFormValue) => {
         if (!navigator.onLine) {
             networkPopUp.showToast();
             if (setIsOpen) {
                 setIsOpen(false);
             }
-            return
+            return;
         }
 
         const formData = {
@@ -157,8 +157,11 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             bankPartner: values.bankPartner,
             loanInsuranceProvider: values.loanInsuranceProvider,
             disbursementTerms: values.loanDisbursementTerms,
+            loanProductStatus: "ACTIVE",
         };
+
         try {
+            // console.log('Submitting form data:', formData);
             const create = await createLoanProduct(formData).unwrap();
             if (create) {
                 toastPopUp.showToast();
@@ -168,9 +171,10 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             }
         } catch (err) {
             const error = err as ApiError;
-            setError(error ? error?.data?.message : "Error occured");
+            // console.error('Error occurred:', error);
+            setError(error ? error?.data?.message : "Error occurred");
         }
-    }
+    };
 
 
     // const handleBack = () => {
