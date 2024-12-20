@@ -1,6 +1,10 @@
 import {createApi} from '@reduxjs/toolkit/query/react'
 import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 
+interface sponsors {
+    sponsor1: string;
+    sponsor2: string;
+}
 
 export const loanProductApi = createApi({
     reducerPath: 'loanProductApi',
@@ -9,9 +13,9 @@ export const loanProductApi = createApi({
     endpoints: (builder) => ({
         viewAllLoanProduct: builder.query({
             query: (param: {
-                pageSize : number;
-                pageNumber : number;
-            })=> ({
+                pageSize: number;
+                pageNumber: number;
+            }) => ({
                 url: `/loan/loan-product/all`,
                 method: "GET",
                 param: param,
@@ -20,7 +24,7 @@ export const loanProductApi = createApi({
         }),
 
         cohortBreakdown: builder.query({
-            query: ( cohortId ) => ({
+            query: (cohortId) => ({
                 url: `/cohort/loanbreakdown`,
                 method: "GET",
                 params: cohortId
@@ -29,7 +33,7 @@ export const loanProductApi = createApi({
         }),
 
         searchLoanProduct: builder.query({
-            query: (param:{
+            query: (param: {
                 loanProductName: string,
             }) => ({
                 url: '/loan/loan-product/search',
@@ -40,22 +44,22 @@ export const loanProductApi = createApi({
 
         createLoanProduct: builder.mutation({
             query: (formData: {
-                productName: string,
-                productSponsor: string,
+                name: string,
+                sponsors: sponsors[],
                 FundProduct: string,
-                costOfFunds: string,
+                costOfFund: string,
                 tenor: string,
                 tenorDuration: string,
                 loanProductSize: string,
-                minimumRepaymentAmount: string,
+                minRepaymentAmount: string,
                 moratorium: string,
-                interest: string,
-                obligorLimit: string,
-                loanProductMandate: string,
-                loanProductTermsAndCondition: string,
+                interestRate: string,
+                obligorLoanLimit: string,
+                mandate: string,
+                termsAndCondition: string,
                 bankPartner: string,
                 loanInsuranceProvider: string,
-                loanDisbursementTerms: string,
+                disbursementTerms: string,
             }) => ({
                 url: 'loan/loan-product/create',
                 method: "POST",
@@ -65,5 +69,10 @@ export const loanProductApi = createApi({
         }),
     })
 })
-export const {useViewAllLoanProductQuery, useCohortBreakdownQuery, useSearchLoanProductQuery, useCreateLoanProductMutation} = loanProductApi;
+export const {
+    useViewAllLoanProductQuery,
+    useCohortBreakdownQuery,
+    useSearchLoanProductQuery,
+    useCreateLoanProductMutation
+} = loanProductApi;
 
