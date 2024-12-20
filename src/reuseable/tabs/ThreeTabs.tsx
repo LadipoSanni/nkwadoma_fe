@@ -6,6 +6,8 @@ import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import {MdOutlinePerson} from "react-icons/md";
 import {Breakdown} from "@/reuseable/details/breakdown";
 import Tables from "@/reuseable/table/LoanProductTable";
+import styles from "@/components/selected-loan/SelectedLoan.module.css"
+
 
 interface detailContainerProps {
     dataList?: { label: string; value: string | React.ReactNode; }[];
@@ -39,7 +41,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                         id="cohort-tabs"
                         data-testid="cohort-tabs"
                         defaultValue={"productDetails"}
-                        className={`shadow-none`}
+                        className={`shadow-none ${styles.tab}`}
                     >
                         <TabsList id="tabs-list" data-testid="tabs-list" className={`p-1`}>
                             <TabsTrigger id='productDetails' value={"productDetails"}
