@@ -269,16 +269,17 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                 <DatePicker date={startDate} setDate={setDate} />
               </div>
               <DescriptionTextarea
-                description={cohortDescription}
-                setDescription={setDescription}
-                // maximumDescription={2500}
-                onDescriptionChange={(desc) => { 
-                  if (desc.length <= 2500) { 
-                    setDescription(desc);
-                    setDescriptionError(null); } 
-                    else { 
-                      setDescriptionError("Description must be 2500 characters or less"); } }}
-              />
+                  description={cohortDescription}
+                  setDescription={setDescription}
+                  // maximumDescription={2500}
+                  onDescriptionChange={(desc) => {
+                    if (desc.length <= 2500) {
+                      setDescription(desc);
+                      setDescriptionError(null);
+                    } else {
+                      setDescriptionError("Description must be 2500 characters or less");
+                    }
+                  }} label={"Description"} placeholder={"Enter description"}              />
               {descriptionError && ( <div className="text-red-500 text-sm">{descriptionError}</div> )}
               <FileUpload
                 handleDrop={handleDrop}
