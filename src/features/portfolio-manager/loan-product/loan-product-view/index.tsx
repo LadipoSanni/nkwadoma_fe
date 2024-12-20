@@ -8,7 +8,7 @@ import {useSearchLoanProductQuery, useViewAllLoanProductQuery} from "@/service/a
 import {formatAmount} from "@/utils/Format";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {LoanProductCreate} from "@/components/portfolio-manager/loan-product/Loan-product-create";
+import {CreateLoanProduct} from "@/components/portfolio-manager/loan-product/Index";
 import {useRouter} from "next/navigation";
 
 interface TableRowData {
@@ -169,7 +169,7 @@ function LoanProductPage() {
                     headerTitle={`Create loan Product`}
                     width="36%"
                 >
-                    <LoanProductCreate setIsOpen={() => setCreateProduct(false)}/>
+                    <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>
                 </TableModal>
 
             </div>
