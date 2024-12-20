@@ -13,7 +13,7 @@ const Details = () => {
     }
 
 
-    const tagButtonData = [
+    const tagButtonData: { tagIcon: React.ElementType; tagCount: string | number; tagButtonStyle: string; tagText: string; }[] = [
         // {tagIcon: MdPersonOutline, tagCount: details?.programName, tagButtonStyle: "bg-warning50", tagText: ""},
         // {tagIcon: FiBook, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-lightBlue100", tagText: "Loanees"},
     ];
@@ -73,11 +73,16 @@ const Details = () => {
         { label: "Disbursement Term 2", value: "Term 2 Description"},
         { label: "Disbursement Term 2", value: "Term 2 Description"},
     ]
+
+    const description = "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement" +
+        "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement" +
+        "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement" +
+        "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement"
     return (
         <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
             <div id={`firstSection`}>
                 <DetailsImageSection imageSrc={image} cohortTitle={"details"}
-                                     cohortDescription={"detailsfghggruuei"}
+                                     cohortDescription={description}
                                      handleDropdownClicked={handleDropdownClick}
                                      buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
                                      isEditButton={false}
