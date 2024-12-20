@@ -13,6 +13,7 @@ export interface LoaneeLoanDetail {
     tuitionAmount: string;
     amountRequested: string;
     initialDeposit: string;
+    cohortStartDate: string;
     referredBy: string
 }
 
