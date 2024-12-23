@@ -4,13 +4,14 @@ import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {FiBook} from "react-icons/fi";
 import {ThreeTabs} from "@/reuseable/tabs/ThreeTabs";
 import image from '../../../../../../public/asset/Image/CohortDetailsImage.png'
+import { useGetLoanProductDetailsByIdQuery } from "@/service/admin/loan_product";
 
 
 const Details = () => {
 
-    const handleDropdownClick = ()=>{
-
-    }
+    const loanProductId = sessionStorage.getItem("LoanProductId") ?? undefined;
+    const { data: loanProduct } = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
+    const handleDropdownClick = ()=>{}
 
 
     const tagButtonData: { tagIcon: React.ElementType; tagCount: string | number; tagButtonStyle: string; tagText: string; }[] = [

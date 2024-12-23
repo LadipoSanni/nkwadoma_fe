@@ -36,15 +36,21 @@ export const loanProductApi = createApi({
             }), invalidatesTags: ['loanProduct'],
         }),
 
+
         getLoanProductDetailsById: builder.query({
-            query: (loanProductId) =>
-                `loan/loan-product/view-details-by-id?loanProductId=${loanProductId}`,
+            query: (loanProductId) => ({
+                url: `/loan/loan-product/view-details-by-id`,
+                method: "GET",
+                params: loanProductId
+            }),
+            providesTags: [`loanProduct`]
         }),
     }),
 })
 export const {
     useViewAllLoanProductQuery,
     useSearchLoanProductQuery,
-    useCreateLoanProductMutation
+    useCreateLoanProductMutation,
+    useGetLoanProductDetailsByIdQuery
 } = loanProductApi;
 
