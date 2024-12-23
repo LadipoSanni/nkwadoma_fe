@@ -110,7 +110,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     });
 
 
-    const productSponsors = ["sponsor 1", "sponsor 2", "sponsor 3", "sponsor 4", "sponsor 5"];
+    const productSponsors = ["Sponsor 1", "sponsor1", "Sponsor 2", "sponsor2", "Sponsor 3", "sponsor3", "Sponsor 4", "sponsor4", "Sponsor 5", "sponsor5"]
     const funds = ["Equity Fund", "Debt Fund",];
     const durations = ["Day", "Month", "Year",];
     // const bankPartner = ["Patner 1", "Partner 2",];
@@ -137,31 +137,25 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
         const formData = {
             name: values.productName,
-            sponsors: [
-                {
-                    sponsor1: "sponsor 1",
-                    sponsor2: "sponsor 2"
-                }
-            ],
+            sponsors: values.productSponsor,
             FundProduct: values.FundProduct,
-            costOfFund: values.costOfFunds,
-            tenor: values.tenor,
+            costOfFund: Number(values.costOfFunds),
+            tenor: Number(values.tenor),
             tenorDuration: values.tenorDuration,
-            loanProductSize: values.loanProductSize,
-            minRepaymentAmount: values.minimumRepaymentAmount,
-            moratorium: values.moratorium,
-            interestRate: values.interest,
-            obligorLoanLimit: values.obligorLimit,
+            loanProductSize: Number(values.loanProductSize),
+            minRepaymentAmount: Number(values.minimumRepaymentAmount),
+            moratorium: Number(values.moratorium),
+            interestRate: Number(values.interest),
+            obligorLoanLimit: Number(values.obligorLimit),
             mandate: values.loanProductMandate,
             termsAndCondition: values.loanProductTermsAndCondition,
             bankPartner: values.bankPartner,
             loanInsuranceProvider: values.loanInsuranceProvider,
             disbursementTerms: values.loanDisbursementTerms,
-            loanProductStatus: "ACTIVE",
+            loanProductStatus: values.loanProductStatus,
         };
 
         try {
-            // console.log('Submitting form data:', formData);
             const create = await createLoanProduct(formData).unwrap();
             if (create) {
                 toastPopUp.showToast();
@@ -171,11 +165,10 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             }
         } catch (err) {
             const error = err as ApiError;
-            // console.error('Error occurred:', error);
             setError(error ? error?.data?.message : "Error occurred");
         }
+        console.log('data; ', formData);
     };
-
 
     // const handleBack = () => {
     //     setStep(1);
@@ -201,12 +194,10 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                 {
                     ({errors, isValid, touched, setFieldValue, values}) => (
                         <Form className={`${inter.className}`}>
-                            {/*{step === 1 && (*/}
                             <div className='grid grid-cols-1 md:max-h-[580px] overflow-y-auto'
                                  style={{
                                      scrollbarWidth: 'none',
                                      msOverflowStyle: 'none',
-
                                  }}
                             >
                                 <div>

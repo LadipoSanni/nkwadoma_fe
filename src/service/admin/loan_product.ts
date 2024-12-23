@@ -1,11 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react'
 import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 
-interface sponsors {
-    sponsor1: string;
-    sponsor2: string;
-}
-
 export const loanProductApi = createApi({
     reducerPath: 'loanProductApi',
     baseQuery: customFetchBaseQuery,
@@ -43,30 +38,11 @@ export const loanProductApi = createApi({
         }),
 
         createLoanProduct: builder.mutation({
-            query: (formData: {
-                name: string,
-                sponsors: sponsors[],
-                FundProduct: string,
-                costOfFund: string,
-                tenor: string,
-                tenorDuration: string,
-                loanProductSize: string,
-                minRepaymentAmount: string,
-                moratorium: string,
-                interestRate: string,
-                obligorLoanLimit: string,
-                mandate: string,
-                termsAndCondition: string,
-                bankPartner: string,
-                loanInsuranceProvider: string,
-                disbursementTerms: string,
-                loanProductStatus: string
-            }) => ({
+            query: (formData) => ({
                 url: 'loan/loan-product/create',
-                method: "POST",
+                method: 'POST',
                 body: formData,
-            }),
-            invalidatesTags: ['loanProduct'],
+            }), invalidatesTags: ['loanProduct'],
         }),
     })
 })
