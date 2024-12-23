@@ -14,33 +14,55 @@ interface DeclineLoanModalProps {
     title: string;
 }
 
+interface LoanRequestPayload {
+    loanRequestId: string;
+    loanProductId: string;
+    status: 'NEW';
+    amountApproved: number;
+    loanRequestDecision: 'DECLINED';
+    declineReason: string;
+}
+
 const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, loanRequestId, loanProductId, title }) => {
     const [reason, setReason] = useState('');
+    const [error, setError] = useState<string | null>(null);
     const [respondToLoanRequest, { isLoading }] = useRespondToLoanRequestMutation();
 
-    const handleDecline = async () => {
+    const handleDecline = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+
+        if (!reason.trim()) {
+            setError("Please provide a reason.");
+            return;
+        }
+
+        const payload: LoanRequestPayload = {
+            loanRequestId,
+            loanProductId,
+            status: 'NEW',
+            amountApproved: 0,
+            loanRequestDecision: 'DECLINED',
+            declineReason: reason.trim()
+        };
+
         try {
-            await respondToLoanRequest({
-                loanRequestId,
-                loanProductId,
-                status: 'NEW',
-                amountApproved: 0,
-                loanRequestDecision: 'DECLINED',
-                declineReason: reason
-            }).unwrap();
+            await respondToLoanRequest(payload).unwrap();
+            setReason('');
             setIsOpen(false);
-        } catch (error) {
-            console.error('Failed to decline loan request:', error);
+            setError(null);
+        } catch  {
+            setError('Failed to decline loan request. Please try again.');
         }
     };
 
     return (
         <div className={`${inter.className}`}>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                <DialogContent className={'grid gap-6'}>
+                <DialogContent className="grid gap-6">
                     <DialogHeader>
                         <DialogTitle
-                            className={`${cabinetGrotesk.className} text-[28px] font-medium leading-[120%] text-labelBlue`}>
+                            className={`${cabinetGrotesk.className} text-[28px] font-medium leading-[120%] text-labelBlue`}
+                        >
                             {title}
                         </DialogTitle>
                     </DialogHeader>
@@ -51,25 +73,31 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
                         <Textarea
                             id="reason"
                             name="reason"
-                            placeholder={'Enter reason'}
-                            className={'resize-none placeholder:text-grey250 focus-visible:outline-0 ring-transparent focus-visible:ring-transparent'}
+                            placeholder="Enter reason"
+                            className="resize-none placeholder:text-grey250 focus-visible:outline-0 ring-transparent focus-visible:ring-transparent"
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
                         />
                     </div>
-                    <div className={'flex justify-end gap-5'}>
+                    {error && <p className="text-red-500">{error}</p>}
+                    <div className="flex justify-end gap-5">
                         <Button
-                            className={'w-[140px] h-[57px] flex items-center font-bold text-[14px] justify-center rounded-md text-meedlBlue border border-meedlBlue bg-meedlWhite'}
+                            type="button"
+                            className="w-[140px] h-[57px] flex items-center font-bold text-[14px] justify-center rounded-md text-meedlBlue border border-meedlBlue bg-meedlWhite"
                             onClick={() => setIsOpen(false)}
+                            disabled={isLoading}
                         >
                             Cancel
                         </Button>
                         <Button
-                            className={`w-[140px] h-[57px] flex items-center font-bold text-[14px] justify-center rounded-md text-meedlWhite ${reason ? 'bg-error450 hover:bg-error450' : 'bg-blue50 hover:bg-blue50'}`}
-                            disabled={!reason || isLoading}
+                            type="button"
+                            className={`w-[140px] h-[57px] flex items-center font-bold text-[14px] justify-center rounded-md text-meedlWhite ${
+                                reason.trim() ? 'bg-error450 hover:bg-error450' : 'bg-blue50 hover:bg-blue50'
+                            }`}
+                            disabled={!reason.trim() || isLoading}
                             onClick={handleDecline}
                         >
-                            Decline
+                            {isLoading ? 'Declining...' : 'Decline'}
                         </Button>
                     </div>
                 </DialogContent>
