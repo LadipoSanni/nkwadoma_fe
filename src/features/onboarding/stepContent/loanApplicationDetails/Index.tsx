@@ -10,13 +10,13 @@ interface LoanApplicationDetailsProps {
 }
 
 const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeLoanDetail }) => {
-    const { initialDeposit, tuitionAmount, amountRequested, referredBy } = loaneeLoanDetail;
+    const { initialDeposit, cohortStartDate, tuitionAmount, amountRequested, referredBy } = loaneeLoanDetail;
     const [isOpen, setIsOpen] = useState(false);
 
     return (
         <div id="loanApplicationDetailsContent" className={'rounded-md grid gap-9 p-5 bg-grey105'}>
             <DetailItem label="Tuition amount" value={tuitionAmount} />
-            <DetailItem label="Cohort start date" value="13 Dec, 2023" />
+            <DetailItem label="Cohort start date" value={cohortStartDate}/>
             <DetailItem label="Referred by" value={referredBy ? referredBy : "Empty"} />
             <DetailItem label="Loan amount requested" value={amountRequested} />
             <DetailItem label="Deposit" value={initialDeposit} />
