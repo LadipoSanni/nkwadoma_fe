@@ -4,7 +4,7 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import {inter} from '@/app/fonts'
 import { Button } from '@/components/ui/button';
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
-import { investmentVehicleData } from '@/utils/cohort/trainee-details-mock-data/Index';
+// import { investmentVehicleData } from '@/utils/cohort/trainee-details-mock-data/Index';
 import { formatAmount } from '@/utils/Format';
 import { Book } from "lucide-react";
 

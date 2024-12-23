@@ -4,7 +4,7 @@ import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
 import { inter } from '@/app/fonts'
 import InvestmentActionBar from '@/components/portfolio-manager/fund/Investment-action-bar'
-import { fund } from '@/utils/LoanRequestMockData/Index';
+// import { fund } from '@/utils/LoanRequestMockData/Index';
 import { formatAmount, formatDate } from '@/utils/Format';
 import { MdOutlinePayments } from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
