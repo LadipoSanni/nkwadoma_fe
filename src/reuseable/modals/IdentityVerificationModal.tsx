@@ -10,6 +10,7 @@ import {Button} from '@/components/ui/button';
 import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
 import CryptoJS from "crypto-js";
+import {useToast} from "@/hooks/use-toast"
 import {uploadImageToCloudinary} from "@/utils/UploadToCloudinary";
 import {useVerifyIdentityMutation} from "@/service/users/Loanee_query";
 
@@ -34,6 +35,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                                                                  loanReferralId
                                                                              }) => {
     const methods = useForm<FormData>({mode: 'onChange'});
+    const {toast} = useToast()
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
     const [isDataError, setDataError] = useState("");
@@ -53,9 +55,11 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
         loaneeIdentityData.loanReferralId = loanReferralId;
         try {
             const formData: FormData = loaneeIdentityData
-            console.log(formData);
-            const data = verifyIdentity(formData);
-            console.log("Response from backend: ",data);
+            const data = await verifyIdentity(formData).unwrap();
+            toast({
+                description: data.data,
+                status: "success",
+            })
             onClose();
         } catch (error) {
             console.error("Error while submitting form:", error);
@@ -77,7 +81,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             secretKey = CryptoJS.enc.Utf8.parse(encryptionKey.padEnd(16, " "));
             data.bvn  = CryptoJS.AES.encrypt(data.bvn, secretKey, { iv: iv }).toString();
             data.nin = CryptoJS.AES.encrypt(data.nin, secretKey, { iv: iv }).toString();
-            console.log(data)
             setLoaneeIdentityData(data)
             setIsSecondModalOpen(true);
             onClose();

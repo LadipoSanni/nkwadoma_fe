@@ -37,6 +37,7 @@ const LoaneeOnboarding = () => {
         amountRequested: "0.00",
         initialDeposit: "0.00",
         referredBy: "",
+        cohortStartDate: "",
     })
     function viewLoanReferralDetails  (){
         if (data?.statusCode === "OK" &&  data?.data?.id){
@@ -51,12 +52,14 @@ const LoaneeOnboarding = () => {
                     tuitionAmount: backendDetails.tuitionAmount?.toString() || "0.00",
                     amountRequested: backendDetails.amountRequested?.toString() || "0.00",
                     initialDeposit: backendDetails.initialDeposit?.toString() || "0.00",
+                    cohortStartDate: backendDetails.cohortStartDate,
                     referredBy: backendDetails.referredBy
                 };
                 if (
                     prevState.tuitionAmount !== newDetails.tuitionAmount ||
                     prevState.amountRequested !== newDetails.amountRequested ||
                     prevState.initialDeposit !== newDetails.initialDeposit ||
+                    prevState.cohortStartDate !== newDetails.cohortStartDate ||
                     prevState.referredBy !== newDetails.referredBy
                 ) {
                     return newDetails;
@@ -82,8 +85,11 @@ const LoaneeOnboarding = () => {
             "id": loanReferralId,
             "loanReferralStatus": "ACCEPTED"
         }
-        const response = await respondToLoanReferral(requestData).unwrap()
-        console.log(response)
+        if (requestData.id) {
+            await respondToLoanReferral(requestData).unwrap()
+        }else {
+            console.log("No loan referral detected.")
+        }
 
         if (verificationFirstResponse?.data === "Identity Not Verified") {
             console.log(verificationFirstResponse.data)
