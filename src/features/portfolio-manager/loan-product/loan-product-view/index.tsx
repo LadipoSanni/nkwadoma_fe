@@ -148,7 +148,7 @@ const LoanProductPage = () => {
                     tableHeader={loanProductHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
-                    staticColunm="loanProductName"
+                    staticColunm="name"
                     staticHeader="Loan Product"
                     showKirkBabel={false}
                     kirkBabDropdownOption={dropDownOption}
