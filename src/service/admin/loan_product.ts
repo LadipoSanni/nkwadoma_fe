@@ -1,7 +1,6 @@
 import {createApi} from '@reduxjs/toolkit/query/react'
 import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 
-
 export const loanProductApi = createApi({
     reducerPath: 'loanProductApi',
     baseQuery: customFetchBaseQuery,
@@ -9,35 +8,38 @@ export const loanProductApi = createApi({
     endpoints: (builder) => ({
         viewAllLoanProduct: builder.query({
             query: (param: {
-                pageSize : number;
-                pageNumber : number;
-            })=> ({
+                pageSize: number;
+                pageNumber: number;
+            }) => ({
                 url: `/loan/loan-product/all`,
                 method: "GET",
-                param: param,
-            }),
-            providesTags: [`loanProduct`]
-        }),
-
-        cohortBreakdown: builder.query({
-            query: ( cohortId ) => ({
-                url: `/cohort/loanbreakdown`,
-                method: "GET",
-                params: cohortId
+                params: param,
             }),
             providesTags: [`loanProduct`]
         }),
 
         searchLoanProduct: builder.query({
-            query: (param:{
+            query: (param: {
                 loanProductName: string,
             }) => ({
                 url: '/loan/loan-product/search',
                 method: 'GET',
                 params: param,
             })
-        })
+        }),
+
+        createLoanProduct: builder.mutation({
+            query: (formData) => ({
+                url: 'loan/loan-product/create',
+                method: 'POST',
+                body: formData,
+            }), invalidatesTags: ['loanProduct'],
+        }),
     })
 })
-export const {useViewAllLoanProductQuery, useCohortBreakdownQuery, useSearchLoanProductQuery} = loanProductApi;
+export const {
+    useViewAllLoanProductQuery,
+    useSearchLoanProductQuery,
+    useCreateLoanProductMutation
+} = loanProductApi;
 
