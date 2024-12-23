@@ -6,16 +6,28 @@ import {Button} from '@/components/ui/button';
 import React, {useState} from "react";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
+import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
+import Isloading from "@/reuseable/display/Isloading";
+import ToastPopUp from "@/reuseable/notification/ToastPopUp";
+import LoanProductCustomSelect from "@/components/portfolio-manager/loan-product/LoanProductCustomSelect";
 
 
 interface CreateLoanProductProps {
     setIsOpen?: (b: boolean) => void;
 }
 
-export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
+interface ApiError {
+    status: number;
+    data: {
+        message: string;
+    };
+}
+
+const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
-    const [error, setError] =  useState('');
+    const [error, setError] = useState('');
     // const [step, setStep] = useState(1);
+    const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
 
     const initialFormValue = {
         productName: "",
@@ -34,6 +46,7 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         bankPartner: "",
         loanInsuranceProvider: "",
         loanDisbursementTerms: "",
+        // loanProductStatus: "ACTIVE"
     }
 
     const validationSchema = Yup.object().shape({
@@ -67,9 +80,10 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .required("Amount is required"),
         moratorium: Yup.string()
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Moratorium must be greater than 0 and must be numeric")
             .trim()
-            .required("Amount is required"),
+            .required("Amount is required")
+            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Moratorium must be greater than 0 and must be numeric")
+            .test("max-number", "Moratorium must be less than or equal to 12", value => !value || Number(value) <= 12),
         interest: Yup.string()
             .trim()
             .required("Interest is required"),
@@ -82,30 +96,86 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .required("Product mandate is required")
             .max(2500, "Terms exceeds 2500 characters")
             .matches(/^[a-zA-Z0-9\s.,'-]+$/, "Product mandate terms contains invalid characters")
-            .test( "no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value) ),
+            .test("no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
         loanProductTermsAndCondition: Yup.string()
+            .required("loan product terms is required")
             .trim()
             .max(2500, "Terms exceeds 2500 characters")
             .matches(/^[a-zA-Z0-9\s.,'-]+$/, "Loan product terms contains invalid characters")
-            .test( "no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value) ),
+            .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
         loanDisbursementTerms: Yup.string()
             .trim()
             .max(2500, "Terms exceeds 2500 characters")
             .matches(/^[a-zA-Z0-9\s.,'-]+$/, "Loan disbursement terms contains invalid characters")
-            .test( "no-html-tags", "Loan disbursement terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value) )
+            .test("no-html-tags", "Loan disbursement terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value))
     });
 
 
-    const productSponsor = ["Zenith", "Apple"];
+    const productSponsors = [
+        {label: "Sponsor 1", value: "sponsor1"},
+        {label: "Sponsor 2", value: "sponsor2"},
+        {label: "Sponsor 3", value: "sponsor3"},
+        {label: "Sponsor 4", value: "sponsor4"},
+        {label: "Sponsor 5", value: "sponsor5"}
+    ];
     const funds = ["Equity Fund", "Debt Fund",];
     const durations = ["Day", "Month", "Year",];
     // const bankPartner = ["Patner 1", "Partner 2",];
     const maxChars = 2500;
 
-    const handleSubmit = () => {
+    const toastPopUp = ToastPopUp({
+        description: "Loan product Created successfully.",
+        status: "success"
+    });
 
-    }
+    const networkPopUp = ToastPopUp({
+        description: "No internet connection",
+        status: "error",
+    });
 
+    const handleSubmit = async (values: typeof initialFormValue) => {
+        if (!navigator.onLine) {
+            networkPopUp.showToast();
+            if (setIsOpen) {
+                setIsOpen(false);
+            }
+            return;
+        }
+
+        const formData = {
+            name: values.productName,
+            sponsors: [values.productSponsor],
+            FundProduct: values.FundProduct,
+            costOfFund: Number(values.costOfFunds),
+            tenor: Number(values.tenor),
+            tenorDuration: values.tenorDuration,
+            loanProductSize: Number(values.loanProductSize),
+            minRepaymentAmount: Number(values.minimumRepaymentAmount),
+            moratorium: Number(values.moratorium),
+            interestRate: Number(values.interest),
+            obligorLoanLimit: Number(values.obligorLimit),
+            mandate: values.loanProductMandate,
+            termsAndCondition: values.loanProductTermsAndCondition,
+            bankPartner: values.bankPartner,
+            loanInsuranceProvider: values.loanInsuranceProvider,
+            disbursementTerms: values.loanDisbursementTerms,
+            // loanProductStatus: values.loanProductStatus,
+        };
+
+        try {
+            const create = await createLoanProduct(formData).unwrap();
+            if (create) {
+                toastPopUp.showToast();
+                if (setIsOpen) {
+                    setIsOpen(false);
+                }
+            }
+        } catch (err) {
+            const error = err as ApiError;
+            setError(error ? error?.data?.message : "Error occurred");
+        }
+        console.log('data; ', formData);
+    };
 
     // const handleBack = () => {
     //     setStep(1);
@@ -131,86 +201,272 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                 {
                     ({errors, isValid, touched, setFieldValue, values}) => (
                         <Form className={`${inter.className}`}>
-                            {/*{step === 1 && (*/}
-                                <div className='grid grid-cols-1 md:max-h-[580px] overflow-y-auto'
-                                     style={{
-                                         scrollbarWidth: 'none',
-                                         msOverflowStyle: 'none',
+                            <div className='grid grid-cols-1 md:max-h-[580px] overflow-y-auto'
+                                 style={{
+                                     scrollbarWidth: 'none',
+                                     msOverflowStyle: 'none',
+                                 }}
+                            >
+                                <div>
+                                    <Label htmlFor="productName">Product name</Label>
+                                    <Field
+                                        id="productName"
+                                        data-testid="productName"
+                                        name="productName"
+                                        className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
+                                        placeholder="Enter Product name"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            const value = e.target.value;
+                                            const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, '');
+                                            setFieldValue("productName", formattedValue);
+                                        }}
+                                    />
+                                    {
+                                        errors.productName && touched.productName && (
+                                            <ErrorMessage
+                                                name="productName"
+                                                id='productNameError'
+                                                component="div"
+                                                className="text-red-500 text-sm"
+                                            />)
+                                    }
+                                </div>
 
-                                     }}
-                                >
+                                <div className={`grid md:grid-cols-2 grid-col gap-y-0 gap-x-5 pt-4`}>
                                     <div>
-                                        <Label htmlFor="productName">Product name</Label>
-                                        <Field
-                                            id="productName"
-                                            data-testid="productName"
-                                            name="productName"
-                                            className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
-                                            placeholder="Enter Product name"
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                const value = e.target.value;
-                                                const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, '');
-                                                setFieldValue("productName", formattedValue);
-                                            }}
-                                        />
+                                        <Label htmlFor="productSponsor">Product Sponsor</Label>
+                                        <LoanProductCustomSelect triggerId='productSponsorId'
+                                                                 id="productSponsor"
+                                                                 selectContent={productSponsors}
+                                                                 value={values.productSponsor}
+                                                                 onChange={(value) => setFieldValue("productSponsor", value)}
+                                                                 name="productSponsor"
+                                                                 placeHolder='Select a sponsor'/>
                                         {
-                                            errors.productName && touched.productName && (
+                                            errors.productSponsor && touched.productSponsor && (
                                                 <ErrorMessage
-                                                    name="productName"
-                                                    id='productNameError'
+                                                    name="productSponsor"
+                                                    id='productSponsorError'
                                                     component="div"
                                                     className="text-red-500 text-sm"
                                                 />)
                                         }
                                     </div>
 
-                                    <div className={`grid md:grid-cols-2 grid-col gap-y-0 gap-x-5 pt-4`}>
+                                    <div>
+                                        <Label htmlFor="FundProduct">Fund Product</Label>
+                                        <CustomSelect triggerId='FundProductId'
+                                                      id="FundProduct"
+                                                      selectContent={funds}
+                                                      value={values.FundProduct}
+                                                      onChange={(value) => setFieldValue("FundProduct", value)}
+                                                      name="FundProduct"
+                                                      placeHolder='Select fund'/>
+                                        {
+                                            errors.FundProduct && touched.FundProduct && (
+                                                <ErrorMessage
+                                                    name="FundProduct"
+                                                    id='FundProductError'
+                                                    component="div"
+                                                    className="text-red-500 text-sm"
+                                                />)
+                                        }
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="costOfFunds">Cost of funds (%)</Label>
+                                        <Field
+                                            id="costOfFunds"
+                                            data-testid="costOfFunds"
+                                            name="costOfFunds"
+                                            type={"number"}
+                                            className="w-full p-3 border rounded focus:outline-none mt-3 text-sm"
+                                            placeholder="0"
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                let rawValue = e.target.value.replace(/,/g, "");
+                                                if (/^(?!0$)\d*$/.test(rawValue)) {
+                                                    rawValue = parseInt(rawValue).toString();
+                                                    let formattedValue = Number(rawValue).toLocaleString();
+                                                    formattedValue += ".00";
+                                                    setFieldValue("costOfFunds", rawValue);
+                                                    e.target.value = formattedValue;
+                                                }
+                                            }}
+                                        />
+                                        {
+                                            errors.costOfFunds && touched.costOfFunds && (
+                                                <ErrorMessage
+                                                    name="costOfFunds"
+                                                    id='costOfFundsError'
+                                                    component="div"
+                                                    className="text-red-500 text-sm"
+                                                />)
+                                        }
+                                    </div>
+
+                                    <div className={`flex flex-row gap-2`}>
                                         <div>
-                                            <Label htmlFor="productSponsor">Product Sponsor</Label>
-                                            <CustomSelect triggerId='productSponsorId'
-                                                          id="productSponsor"
-                                                          selectContent={productSponsor}
-                                                          value={values.productSponsor}
-                                                          onChange={(value) => setFieldValue("productSponsor", value)}
-                                                          name="productSponsor"
-                                                          placeHolder='Select a sponsor'/>
-                                            {
-                                                errors.productSponsor && touched.productSponsor && (
-                                                    <ErrorMessage
-                                                        name="productSponsor"
-                                                        id='productSponsorError'
-                                                        component="div"
-                                                        className="text-red-500 text-sm"
-                                                    />)
-                                            }
+                                            <Label htmlFor="tenor">Tenor</Label>
+                                            <div>
+                                                <Field
+                                                    id="tenor"
+                                                    data-testid="tenor"
+                                                    name="tenor"
+                                                    type={"number"}
+                                                    className="w-20 p-3 border rounded focus:outline-none mt-3 text-sm"
+                                                    placeholder="0"
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                        let rawValue = e.target.value.replace(/,/g, "");
+                                                        if (/^(?!0$)\d*$/.test(rawValue)) {
+                                                            rawValue = parseInt(rawValue).toString();
+                                                            let formattedValue = Number(rawValue).toLocaleString();
+                                                            formattedValue += ".00";
+                                                            setFieldValue("tenor", rawValue);
+                                                            e.target.value = formattedValue;
+                                                        }
+                                                    }}
+                                                />
+                                                {
+                                                    errors.tenor && touched.tenor && (
+                                                        <ErrorMessage
+                                                            name="tenor"
+                                                            id='tenorId'
+                                                            component="div"
+                                                            className="text-red-500 text-sm"
+                                                        />)
+                                                }
+                                            </div>
+
                                         </div>
 
-                                        <div>
-                                            <Label htmlFor="FundProduct">Fund Product</Label>
-                                            <CustomSelect triggerId='FundProductId'
-                                                          id="FundProduct"
-                                                          selectContent={funds}
-                                                          value={values.FundProduct}
-                                                          onChange={(value) => setFieldValue("FundProduct", value)}
-                                                          name="FundProduct"
-                                                          placeHolder='Select fund'/>
-                                            {
-                                                errors.FundProduct && touched.FundProduct && (
-                                                    <ErrorMessage
-                                                        name="FundProduct"
-                                                        id='FundProductError'
-                                                        component="div"
-                                                        className="text-red-500 text-sm"
-                                                    />)
-                                            }
+
+                                        <div className={`w-full`}>
+                                            <Label htmlFor="tenorDuration">Duration</Label>
+                                            <div>
+                                                <CustomSelect triggerId='tenorDuration'
+                                                              id="tenorDuration"
+                                                              selectContent={durations}
+                                                              value={values.tenorDuration}
+                                                              onChange={(value) => setFieldValue("tenorDuration", value)}
+                                                              name="tenorDuration"
+                                                              placeHolder='Select duration'
+                                                              isItemDisabled={(item) => item !== "Month"}
+                                                />
+                                                {
+                                                    errors.tenorDuration && touched.tenorDuration && (
+                                                        <ErrorMessage
+                                                            name="tenorDuration"
+                                                            id='tenorDuration'
+                                                            component="div"
+                                                            className="text-red-500 text-sm"
+                                                        />)
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="loanProductSize"
+                                               style={{display: 'inline-block', WebkitOverflowScrolling: 'touch'}}>Loan
+                                            product size</Label>
+
+                                        <div className={`flex flex-row gap-2`}>
+                                            <div className={`pt-1`}>
+                                                <CurrencySelectInput readOnly={false}
+                                                                     selectedcurrency={selectCurrency}
+                                                                     setSelectedCurrency={setSelectCurrency}
+                                                                     className={`h-12`}/>
+                                            </div>
+
+                                            <div className={`pt-2 w-full`}>
+                                                <Field
+                                                    id="loanProductSize"
+                                                    data-testid="loanProductSize"
+                                                    name="loanProductSize"
+                                                    type={"number"}
+                                                    className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
+                                                    placeholder="0.00"
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                        let rawValue = e.target.value.replace(/,/g, "");
+                                                        if (/^(?!0$)\d*$/.test(rawValue)) {
+                                                            rawValue = parseInt(rawValue).toString();
+                                                            let formattedValue = Number(rawValue).toLocaleString();
+                                                            formattedValue += ".00";
+                                                            setFieldValue("loanProductSize", rawValue);
+                                                            e.target.value = formattedValue;
+                                                        }
+                                                    }}
+                                                />
+                                                {
+                                                    errors.loanProductSize && touched.loanProductSize && (
+                                                        <ErrorMessage
+                                                            name="loanProductSize"
+                                                            id='loanProductSizeId'
+                                                            component="div"
+                                                            className="text-red-500 text-sm"
+                                                        />)
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="minimumRepaymentAmount"
+                                               style={{display: 'inline-block', WebkitOverflowScrolling: 'touch'}}>Minimum
+                                            repayment amount</Label>
+
+                                        <div className={`flex flex-row gap-2 w-full`}>
+                                            <div className={`pt-1`}>
+                                                <CurrencySelectInput readOnly={false}
+                                                                     selectedcurrency={selectCurrency}
+                                                                     setSelectedCurrency={setSelectCurrency}
+                                                                     className={`h-12`}/>
+                                            </div>
+
+                                            <div className={`pt-2 w-full`}>
+                                                <Field
+                                                    id="minimumRepaymentAmount"
+                                                    data-testid="minimumRepaymentAmount"
+                                                    name="minimumRepaymentAmount"
+                                                    type={"number"}
+                                                    className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
+                                                    placeholder="0.00"
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                        let rawValue = e.target.value.replace(/,/g, "");
+                                                        if (/^(?!0$)\d*$/.test(rawValue)) {
+                                                            rawValue = parseInt(rawValue).toString();
+                                                            let formattedValue = Number(rawValue).toLocaleString();
+                                                            formattedValue += ".00";
+                                                            setFieldValue("minimumRepaymentAmount", rawValue);
+                                                            e.target.value = formattedValue;
+                                                        }
+                                                    }}
+                                                />
+                                                {
+                                                    errors.minimumRepaymentAmount && touched.minimumRepaymentAmount && (
+                                                        <ErrorMessage
+                                                            name="minimumRepaymentAmount"
+                                                            id='minimumRepaymentAmount'
+                                                            component="div"
+                                                            className="text-red-500 text-sm"
+                                                        />)
+                                                }
+                                            </div>
                                         </div>
 
-                                        <div>
-                                            <Label htmlFor="costOfFunds">Cost of funds (%)</Label>
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="moratorium"
+                                               style={{
+                                                   display: 'inline-block',
+                                                   WebkitOverflowScrolling: 'touch'
+                                               }}>Moratorium(month)</Label>
+                                        <div className={`pt-2`}>
                                             <Field
-                                                id="costOfFunds"
-                                                data-testid="costOfFunds"
-                                                name="costOfFunds"
+                                                id="moratorium"
+                                                data-testid="moratorium"
+                                                name="moratorium"
                                                 type={"number"}
                                                 className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
                                                 placeholder="0"
@@ -220,32 +476,57 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         rawValue = parseInt(rawValue).toString();
                                                         let formattedValue = Number(rawValue).toLocaleString();
                                                         formattedValue += ".00";
-                                                        setFieldValue("costOfFunds", rawValue);
+                                                        setFieldValue("moratorium", rawValue);
                                                         e.target.value = formattedValue;
                                                     }
                                                 }}
                                             />
                                             {
-                                                errors.costOfFunds && touched.costOfFunds && (
+                                                errors.moratorium && touched.moratorium && (
                                                     <ErrorMessage
-                                                        name="costOfFunds"
-                                                        id='costOfFundsError'
+                                                        name="moratorium"
+                                                        id='moratorium'
                                                         component="div"
                                                         className="text-red-500 text-sm"
                                                     />)
                                             }
                                         </div>
+                                    </div>
 
-                                        <div className={`flex flex-row gap-2`}>
+                                    <div>
+                                        <div className={`flex flex-row gap-2 pt-2`}>
                                             <div>
-                                                <Label htmlFor="tenor">Tenor</Label>
+                                                <Label htmlFor="interest">Interest(%)</Label>
                                                 <div>
                                                     <Field
-                                                        id="tenor"
-                                                        data-testid="tenor"
-                                                        name="tenor"
+                                                        id="interest"
+                                                        data-testid="interest"
+                                                        name="interest"
                                                         type={"number"}
-                                                        className="w-20 p-3 border rounded focus:outline-none mt-2 text-sm"
+                                                        className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
+                                                        placeholder="0"
+                                                    />
+                                                    {
+                                                        errors.interest && touched.interest && (
+                                                            <ErrorMessage
+                                                                name="interest"
+                                                                id='interestId'
+                                                                component="div"
+                                                                className="text-red-500 text-sm"
+                                                            />)
+                                                    }
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <Label htmlFor="obligorLimit">Obligor limit</Label>
+                                                <div>
+                                                    <Field
+                                                        id="obligorLimit"
+                                                        data-testid="obligorLimit"
+                                                        name="obligorLimit"
+                                                        type={"number"}
+                                                        className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
                                                         placeholder="0"
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                             let rawValue = e.target.value.replace(/,/g, "");
@@ -253,42 +534,16 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                                 rawValue = parseInt(rawValue).toString();
                                                                 let formattedValue = Number(rawValue).toLocaleString();
                                                                 formattedValue += ".00";
-                                                                setFieldValue("tenor", rawValue);
+                                                                setFieldValue("obligorLimit", rawValue);
                                                                 e.target.value = formattedValue;
                                                             }
                                                         }}
                                                     />
                                                     {
-                                                        errors.tenor && touched.tenor && (
+                                                        errors.obligorLimit && touched.obligorLimit && (
                                                             <ErrorMessage
-                                                                name="tenor"
-                                                                id='tenorId'
-                                                                component="div"
-                                                                className="text-red-500 text-sm"
-                                                            />)
-                                                    }
-                                                </div>
-
-                                            </div>
-
-
-                                            <div className={`w-full`}>
-                                                <Label htmlFor="tenorDuration">Duration</Label>
-                                                <div>
-                                                    <CustomSelect triggerId='tenorDuration'
-                                                                  id="tenorDuration"
-                                                                  selectContent={durations}
-                                                                  value={values.tenorDuration}
-                                                                  onChange={(value) => setFieldValue("tenorDuration", value)}
-                                                                  name="tenorDuration"
-                                                                  placeHolder='Select duration'
-                                                                  isItemDisabled={(item) => item !== "Month"}
-                                                    />
-                                                    {
-                                                        errors.tenorDuration && touched.tenorDuration && (
-                                                            <ErrorMessage
-                                                                name="tenorDuration"
-                                                                id='tenorDuration'
+                                                                name="obligorLimit"
+                                                                id='obligorLimitId'
                                                                 component="div"
                                                                 className="text-red-500 text-sm"
                                                             />)
@@ -296,304 +551,121 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div>
-                                            <Label htmlFor="loanProductSize"
-                                                   style={{display: 'inline-block', WebkitOverflowScrolling: 'touch'}}>Loan
-                                                product size</Label>
-
-                                            <div className={`flex flex-row gap-2`}>
-                                                <div className={`pt-1`}>
-                                                    <CurrencySelectInput readOnly={false}
-                                                                         selectedcurrency={selectCurrency}
-                                                                         setSelectedCurrency={setSelectCurrency}
-                                                                         className={`h-12`}/>
-                                                </div>
-
-                                                <div className={`pt-2`}>
-                                                    <Field
-                                                        id="loanProductSize"
-                                                        data-testid="loanProductSize"
-                                                        name="loanProductSize"
-                                                        type={"number"}
-                                                        className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
-                                                        placeholder="0.00"
-                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                            let rawValue = e.target.value.replace(/,/g, "");
-                                                            if (/^(?!0$)\d*$/.test(rawValue)) {
-                                                                rawValue = parseInt(rawValue).toString();
-                                                                let formattedValue = Number(rawValue).toLocaleString();
-                                                                formattedValue += ".00";
-                                                                setFieldValue("loanProductSize", rawValue);
-                                                                e.target.value = formattedValue;
-                                                            }
-                                                        }}
-                                                    />
-                                                    {
-                                                        errors.loanProductSize && touched.loanProductSize && (
-                                                            <ErrorMessage
-                                                                name="loanProductSize"
-                                                                id='loanProductSizeId'
-                                                                component="div"
-                                                                className="text-red-500 text-sm"
-                                                            />)
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <Label htmlFor="minimumRepaymentAmount"
-                                                   style={{display: 'inline-block', WebkitOverflowScrolling: 'touch'}}>Minimum
-                                                repayment amount</Label>
-
-                                            <div className={`flex flex-row gap-2`}>
-                                                <div className={`pt-1`}>
-                                                    <CurrencySelectInput readOnly={false}
-                                                                         selectedcurrency={selectCurrency}
-                                                                         setSelectedCurrency={setSelectCurrency}
-                                                                         className={`h-12`}/>
-                                                </div>
-
-                                                <div className={`pt-2`}>
-                                                    <Field
-                                                        id="minimumRepaymentAmount"
-                                                        data-testid="minimumRepaymentAmount"
-                                                        name="minimumRepaymentAmount"
-                                                        type={"number"}
-                                                        className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
-                                                        placeholder="0.00"
-                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                            let rawValue = e.target.value.replace(/,/g, "");
-                                                            if (/^(?!0$)\d*$/.test(rawValue)) {
-                                                                rawValue = parseInt(rawValue).toString();
-                                                                let formattedValue = Number(rawValue).toLocaleString();
-                                                                formattedValue += ".00";
-                                                                setFieldValue("minimumRepaymentAmount", rawValue);
-                                                                e.target.value = formattedValue;
-                                                            }
-                                                        }}
-                                                    />
-                                                    {
-                                                        errors.minimumRepaymentAmount && touched.minimumRepaymentAmount && (
-                                                            <ErrorMessage
-                                                                name="minimumRepaymentAmount"
-                                                                id='minimumRepaymentAmount'
-                                                                component="div"
-                                                                className="text-red-500 text-sm"
-                                                            />)
-                                                    }
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div>
-                                            <Label htmlFor="moratorium"
-                                                   style={{
-                                                       display: 'inline-block',
-                                                       WebkitOverflowScrolling: 'touch'
-                                                   }}>Moratorium(month)</Label>
-                                            <div className={`pt-2`}>
-                                                <Field
-                                                    id="moratorium"
-                                                    data-testid="moratorium"
-                                                    name="moratorium"
-                                                    type={"number"}
-                                                    className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
-                                                    placeholder="0"
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                        let rawValue = e.target.value.replace(/,/g, "");
-                                                        if (/^(?!0$)\d*$/.test(rawValue)) {
-                                                            rawValue = parseInt(rawValue).toString();
-                                                            let formattedValue = Number(rawValue).toLocaleString();
-                                                            formattedValue += ".00";
-                                                            setFieldValue("moratorium", rawValue);
-                                                            e.target.value = formattedValue;
-                                                        }
-                                                    }}
-                                                />
-                                                {
-                                                    errors.moratorium && touched.moratorium && (
-                                                        <ErrorMessage
-                                                            name="moratorium"
-                                                            id='moratorium'
-                                                            component="div"
-                                                            className="text-red-500 text-sm"
-                                                        />)
-                                                }
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <div className={`flex flex-row gap-2 pt-2`}>
-                                                <div>
-                                                    <Label htmlFor="interest">Interest(%)</Label>
-                                                    <div>
-                                                        <Field
-                                                            id="interest"
-                                                            data-testid="interest"
-                                                            name="interest"
-                                                            type={"number"}
-                                                            className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
-                                                            placeholder="0"
-                                                        />
-                                                        {
-                                                            errors.interest && touched.interest && (
-                                                                <ErrorMessage
-                                                                    name="interest"
-                                                                    id='interestId'
-                                                                    component="div"
-                                                                    className="text-red-500 text-sm"
-                                                                />)
-                                                        }
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <Label htmlFor="obligorLimit">Obligor limit</Label>
-                                                    <div>
-                                                        <Field
-                                                            id="obligorLimit"
-                                                            data-testid="obligorLimit"
-                                                            name="obligorLimit"
-                                                            type={"number"}
-                                                            className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
-                                                            placeholder="0"
-                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                let rawValue = e.target.value.replace(/,/g, "");
-                                                                if (/^(?!0$)\d*$/.test(rawValue)) {
-                                                                    rawValue = parseInt(rawValue).toString();
-                                                                    let formattedValue = Number(rawValue).toLocaleString();
-                                                                    formattedValue += ".00";
-                                                                    setFieldValue("obligorLimit", rawValue);
-                                                                    e.target.value = formattedValue;
-                                                                }
-                                                            }}
-                                                        />
-                                                        {
-                                                            errors.obligorLimit && touched.obligorLimit && (
-                                                                <ErrorMessage
-                                                                    name="obligorLimit"
-                                                                    id='obligorLimitId'
-                                                                    component="div"
-                                                                    className="text-red-500 text-sm"
-                                                                />)
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
+                                </div>
 
-                                    <div className={`pt-4`}>
-                                        <Label htmlFor="loanProductMandate">LoanProduct mandate</Label>
-                                        <Field
-                                            as="textarea"
-                                            id="loanProductMandateId"
-                                            name="loanProductMandate"
-                                            className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"
-                                            placeholder="Enter description"
-                                            rows={4}
-                                            maxLength={maxChars}
-                                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                                                const value = e.target.value;
-                                                if (value.length <= maxChars) {
-                                                    setFieldValue("loanProductMandate", value);
-                                                }
-                                            }}
-                                            onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-                                                const paste = e.clipboardData.getData('text');
-                                                if (paste.length + values.loanProductMandate.length > maxChars) {
-                                                    e.preventDefault();
-                                                    setError('Program description must be 2500 characters or less');
-                                                }
-                                            }}
-                                        />
-                                        {
-                                            errors.loanProductMandate && touched.loanProductMandate && (
-                                                <ErrorMessage
-                                                    name="loanProductMandate"
-                                                    component="div"
-                                                    id='loanProductMandateError'
-                                                    className="text-red-500 text-sm"
-                                                />
-                                            )
-                                        }
-                                    </div>
-
-                                    <div className={`pt-4`}>
-                                        <Label htmlFor="loanProductTermsAndCondition">Loan product terms and
-                                            condition</Label>
-                                        <Field
-                                            as="textarea"
-                                            id="loanProductTermsAndConditionId"
-                                            name="loanProductTermsAndCondition"
-                                            className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"
-                                            placeholder="Enter terms and condition"
-                                            rows={4}
-                                            maxLength={maxChars}
-                                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                                                const value = e.target.value;
-                                                if (value.length <= maxChars) {
-                                                    setFieldValue("loanProductTermsAndCondition", value);
-                                                }
-                                            }}
-                                            onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-                                                const paste = e.clipboardData.getData('text');
-                                                if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {
-                                                    e.preventDefault();
-                                                    setError('Program description must be 2500 characters or less');
-                                                }
-                                            }}
-                                        />
-                                        {
-                                            errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
-                                                <ErrorMessage
-                                                    name="loanProductTermsAndCondition"
-                                                    component="div"
-                                                    id='loanProductTermsAndConditionError'
-                                                    className="text-red-500 text-sm"
-                                                />
-                                            )
-                                        }
-                                    </div>
-                                    <div className={`flex justify-end py-5 gap-3`}>
-                                        <Button
-                                            className={`text-meedlBlue border border-meedlBlue h-12 w-32`}
-                                            variant={"outline"}
-                                            type={"reset"}
-                                            onClick={handleModalClose}
-                                        >
-                                            Cancel
-                                        </Button>
-                                        <Button
-                                            className={`h-12 w-32 ${!isValid? 'bg-neutral650 text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
-                                            variant={"secondary"}
-                                            type={"submit"}
-                                            disabled={!isValid}
-                                        >
-                                            Create
-                                            {/*{isLoading ? ( <Isloading/> ) : (*/}
-                                            {/*    "Create"*/}
-                                            {/*)}*/}
-
-                                        </Button>
-                                        {/*<Button*/}
-                                        {/*    className={`h-12 w-32 ${!isValid? 'bg-neutral650 text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'*/}
-                                        {/*    }`}*/}
-                                        {/*    variant="secondary"*/}
-                                        {/*    onClick={handleContinueButton}*/}
-                                        {/*    disabled={!isValid}*/}
-                                        {/*>*/}
-                                        {/*    Continue*/}
-                                        {/*</Button>*/}
-                                    </div>
+                                <div className={`pt-4`}>
+                                    <Label htmlFor="loanProductMandate">LoanProduct mandate</Label>
+                                    <Field
+                                        as="textarea"
+                                        id="loanProductMandateId"
+                                        name="loanProductMandate"
+                                        className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"
+                                        placeholder="Enter description"
+                                        rows={4}
+                                        maxLength={maxChars}
+                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                                            const value = e.target.value;
+                                            if (value.length <= maxChars) {
+                                                setFieldValue("loanProductMandate", value);
+                                            }
+                                        }}
+                                        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+                                            const paste = e.clipboardData.getData('text');
+                                            if (paste.length + values.loanProductMandate.length > maxChars) {
+                                                e.preventDefault();
+                                                setError('Program description must be 2500 characters or less');
+                                            }
+                                        }}
+                                    />
                                     {
-                                        <div
-                                            className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>
+                                        errors.loanProductMandate && touched.loanProductMandate && (
+                                            <ErrorMessage
+                                                name="loanProductMandate"
+                                                component="div"
+                                                id='loanProductMandateError'
+                                                className="text-red-500 text-sm"
+                                            />
+                                        )
                                     }
                                 </div>
+
+                                <div className={`pt-4`}>
+                                    <Label htmlFor="loanProductTermsAndCondition">Loan product terms and
+                                        condition</Label>
+                                    <Field
+                                        as="textarea"
+                                        id="loanProductTermsAndConditionId"
+                                        name="loanProductTermsAndCondition"
+                                        className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"
+                                        placeholder="Enter terms and condition"
+                                        rows={4}
+                                        maxLength={maxChars}
+                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                                            const value = e.target.value;
+                                            if (value.length <= maxChars) {
+                                                setFieldValue("loanProductTermsAndCondition", value);
+                                            }
+                                        }}
+                                        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+                                            const paste = e.clipboardData.getData('text');
+                                            if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {
+                                                e.preventDefault();
+                                                setError('Program description must be 2500 characters or less');
+                                            }
+                                        }}
+                                    />
+                                    {
+                                        errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
+                                            <ErrorMessage
+                                                name="loanProductTermsAndCondition"
+                                                component="div"
+                                                id='loanProductTermsAndConditionError'
+                                                className="text-red-500 text-sm"
+                                            />
+                                        )
+                                    }
+                                </div>
+                                <div className={`flex justify-end py-5 gap-3`}>
+                                    <Button
+                                        className={`text-meedlBlue border border-meedlBlue h-12 w-32`}
+                                        variant={"outline"}
+                                        type={"reset"}
+                                        onClick={handleModalClose}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        className={`h-12 w-32 ${!isValid ? 'bg-neutral650 text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
+                                        variant={"secondary"}
+                                        type={"submit"}
+                                        disabled={!isValid}
+                                    >
+                                        {isLoading ? (<Isloading/>) : (
+                                            "Create"
+                                        )}
+                                    </Button>
+                                    {/*<Button*/}
+                                    {/*    className={`h-12 w-32 ${!isValid? 'bg-neutral650 text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'*/}
+                                    {/*    }`}*/}
+                                    {/*    variant="secondary"*/}
+                                    {/*    onClick={handleContinueButton}*/}
+                                    {/*    disabled={!isValid}*/}
+                                    {/*>*/}
+                                    {/*    Continue*/}
+                                    {/*</Button>*/}
+                                </div>
+                                {error && (
+                                    <div className="text-red-500 text-sm mt-2 text-center">
+                                        {error}
+                                    </div>
+                                )}
+
+                                {/*{*/}
+                                {/*    <div*/}
+                                {/*        className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>*/}
+                                {/*}*/}
+                            </div>
                             {/*)}*/}
 
                             {/*{step === 2 && (*/}
@@ -627,8 +699,6 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                             {/*            </div>*/}
                             {/*        </div>*/}
-
-
 
 
                             {/*        <div className={`pt-4`}>*/}
@@ -695,5 +765,7 @@ export const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             </Formik>
 
         </main>
-    )
+    );
 }
+
+export default CreateLoanProduct;

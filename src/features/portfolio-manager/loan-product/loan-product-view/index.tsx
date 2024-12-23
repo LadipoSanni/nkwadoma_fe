@@ -8,15 +8,15 @@ import {useSearchLoanProductQuery, useViewAllLoanProductQuery} from "@/service/a
 import {formatAmount} from "@/utils/Format";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {CreateLoanProduct} from "@/components/portfolio-manager/loan-product/Index";
 import {useRouter} from "next/navigation";
+import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index";
 import { setItemSessionStorage } from "@/utils/storage";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
-function LoanProductPage() {
+const LoanProductPage = () => {
     const router = useRouter()
     const [allLoanee, setAllLoanProduct] = useState([]);
     const [createProduct, setCreateProduct] = React.useState(false)
@@ -149,7 +149,7 @@ function LoanProductPage() {
                     tableHeader={loanProductHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
-                    staticColunm="loanProductName"
+                    staticColunm="name"
                     staticHeader="Loan Product"
                     showKirkBabel={false}
                     kirkBabDropdownOption={dropDownOption}
@@ -172,7 +172,6 @@ function LoanProductPage() {
                 >
                     <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>
                 </TableModal>
-
             </div>
         </main>
     );
