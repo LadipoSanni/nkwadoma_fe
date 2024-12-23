@@ -13,7 +13,7 @@ export const loanProductApi = createApi({
             }) => ({
                 url: `/loan/loan-product/all`,
                 method: "GET",
-                param: param,
+                params: param,
             }),
             providesTags: [`loanProduct`]
         }),
