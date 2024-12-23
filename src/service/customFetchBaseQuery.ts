@@ -1,6 +1,6 @@
 
 
-import { fetchBaseQuery } from '@reduxjs/toolkit/query';
+import { fetchBaseQuery,FetchArgs, FetchBaseQueryError, BaseQueryFn } from '@reduxjs/toolkit/query';
 import { getUserDetails } from '@/features/auth/usersAuth/login/action';
 
 // import {getItemSessionStorage} from "@/utils/storage";
@@ -9,7 +9,7 @@ import { getUserDetails } from '@/features/auth/usersAuth/login/action';
 const baseUrl = process.env.APP_DEV_AUTH_URL;
 
 
-export const customFetchBaseQuery = fetchBaseQuery({
+const customFetchBaseQuery = fetchBaseQuery({
     baseUrl,
     // mode: 'no-cors',
     fetchFn: typeof window === 'undefined'
@@ -25,3 +25,6 @@ export const customFetchBaseQuery = fetchBaseQuery({
         return headers;
     },
 });
+
+const handleRedirection: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => { let result = await customFetchBaseQuery(args, api, extraOptions); if (result.error && result.error.status === 302) { const location = result.meta?.response?.headers?.get('Location'); if (location) { console.log('Redirecting to:', location); result = await customFetchBaseQuery({ url: location }, api, extraOptions); console.log('Redirected data:', result.data); } } return result; };
+export { handleRedirection as customFetchBaseQuery };
