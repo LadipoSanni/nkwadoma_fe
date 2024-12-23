@@ -35,7 +35,12 @@ export const loanProductApi = createApi({
                 body: formData,
             }), invalidatesTags: ['loanProduct'],
         }),
-    })
+
+        getLoanProductDetailsById: builder.query({
+            query: (loanProductId) =>
+                `loan/loan-product/view-details-by-id?loanProductId=${loanProductId}`,
+        }),
+    }),
 })
 export const {
     useViewAllLoanProductQuery,
