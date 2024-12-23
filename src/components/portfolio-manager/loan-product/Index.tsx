@@ -9,6 +9,7 @@ import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
+import LoanProductCustomSelect from "@/components/portfolio-manager/loan-product/LoanProductCustomSelect";
 
 
 interface CreateLoanProductProps {
@@ -45,7 +46,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         bankPartner: "",
         loanInsuranceProvider: "",
         loanDisbursementTerms: "",
-        loanProductStatus: "ACTIVE"
+        // loanProductStatus: "ACTIVE"
     }
 
     const validationSchema = Yup.object().shape({
@@ -110,7 +111,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     });
 
 
-    const productSponsors = ["Sponsor 1", "sponsor1", "Sponsor 2", "sponsor2", "Sponsor 3", "sponsor3", "Sponsor 4", "sponsor4", "Sponsor 5", "sponsor5"]
+    const productSponsors = [
+        {label: "Sponsor 1", value: "sponsor1"},
+        {label: "Sponsor 2", value: "sponsor2"},
+        {label: "Sponsor 3", value: "sponsor3"},
+        {label: "Sponsor 4", value: "sponsor4"},
+        {label: "Sponsor 5", value: "sponsor5"}
+    ];
     const funds = ["Equity Fund", "Debt Fund",];
     const durations = ["Day", "Month", "Year",];
     // const bankPartner = ["Patner 1", "Partner 2",];
@@ -137,7 +144,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
         const formData = {
             name: values.productName,
-            sponsors: values.productSponsor,
+            sponsors: [values.productSponsor],
             FundProduct: values.FundProduct,
             costOfFund: Number(values.costOfFunds),
             tenor: Number(values.tenor),
@@ -152,7 +159,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             bankPartner: values.bankPartner,
             loanInsuranceProvider: values.loanInsuranceProvider,
             disbursementTerms: values.loanDisbursementTerms,
-            loanProductStatus: values.loanProductStatus,
+            // loanProductStatus: values.loanProductStatus,
         };
 
         try {
@@ -228,13 +235,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                 <div className={`grid md:grid-cols-2 grid-col gap-y-0 gap-x-5 pt-4`}>
                                     <div>
                                         <Label htmlFor="productSponsor">Product Sponsor</Label>
-                                        <CustomSelect triggerId='productSponsorId'
-                                                      id="productSponsor"
-                                                      selectContent={productSponsors}
-                                                      value={values.productSponsor}
-                                                      onChange={(value) => setFieldValue("productSponsor", value)}
-                                                      name="productSponsor"
-                                                      placeHolder='Select a sponsor'/>
+                                        <LoanProductCustomSelect triggerId='productSponsorId'
+                                                                 id="productSponsor"
+                                                                 selectContent={productSponsors}
+                                                                 value={values.productSponsor}
+                                                                 onChange={(value) => setFieldValue("productSponsor", value)}
+                                                                 name="productSponsor"
+                                                                 placeHolder='Select a sponsor'/>
                                         {
                                             errors.productSponsor && touched.productSponsor && (
                                                 <ErrorMessage
