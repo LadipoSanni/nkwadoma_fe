@@ -39,23 +39,24 @@ function Financiers() {
             onChange={handleSearchChange}
          />     
          <Button
+         
           variant={"secondary"}
           size={"lg"}
           id='inviteFinancierModal'
-          className={` bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center md:max-w-32 w-full`}
+          className={` bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center md:max-w-32 w-full cursor-not-allowed`}
          >
           Invite financier
          </Button>
         </div>
         <div className='mt-4 '>
           <LoanProductTable
-             tableData={investmentVehicleData}
+             tableData={[]}
              tableHeader={investmentHeader}
              handleRowClick={()=>{}}
              optionalRowsPerPage={10}
              tableHeight={48}
             icon={Book}
-            sideBarTabName='Investment vehicle'
+            sideBarTabName='Financier'
             condition={true}
             staticHeader={"Financier"}
             staticColunm={"financier"}

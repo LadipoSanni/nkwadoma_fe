@@ -26,10 +26,10 @@ export const fundApi = createApi({
         providesTags: ['funds'],
       }),
        createIInvestmentVehicle: builder.mutation({
-        query: (data: {}) => ({
+        query: () => ({
                 url: `auth/colleague/invite`,
                 method: 'POST',
-                body: data
+                // body: data
         })
        })
     })
