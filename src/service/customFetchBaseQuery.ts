@@ -1,5 +1,4 @@
 
-
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { getUserDetails } from '@/features/auth/usersAuth/login/action';
 
