@@ -11,7 +11,12 @@ import {cabinetGroteskRegular, inter} from "@/app/fonts";
 import TabConnector from "@/reuseable/details/tab-connector";
 import styles from "./index.module.css"
 import {useViewLoanRequestDetailsQuery} from "@/service/admin/loan/loan-request-api";
+import dynamic from 'next/dynamic'
 
+const LoanDetailsContent = dynamic(
+    () => Promise.resolve(LoanDetails),
+    { ssr: false }
+)
 
 function LoanDetails () {
     const router = useRouter()
@@ -107,4 +112,4 @@ function LoanDetails () {
     );
 }
 
-export default LoanDetails;
+export default LoanDetailsContent;
