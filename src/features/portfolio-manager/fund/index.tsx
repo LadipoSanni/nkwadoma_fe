@@ -1,18 +1,18 @@
 "use client";
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
 import { inter } from '@/app/fonts'
 import InvestmentActionBar from '@/components/portfolio-manager/fund/Investment-action-bar'
-import { fund } from '@/utils/LoanRequestMockData/Index';
+// import { fund } from '@/utils/LoanRequestMockData/Index';
 import { formatAmount, formatDate } from '@/utils/Format';
 import { MdOutlinePayments } from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
 import { useRouter } from 'next/navigation'
-import CreateInvestmentVehicleDonor from '@/components/portfolio-manager/fund/Create-investment-vehicle-donor';
 import { setItemSessionStorage } from '@/utils/storage';
+import { useGetAllInvestmentmentVehicleQuery } from '@/service/admin/fund_query';
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -29,23 +29,59 @@ const tabData = [
     },
 ]
 
+ interface investmentVehicleProps extends TableRowData {
+  id: string,
+  name: string,
+  investmentVehicleType: string,
+  mandate: string,
+  sponsors: string,
+  tenure: string,
+  size: number,
+  rate: number,
+  fundRaisingStatus: string,
+  totalAmountInInvestmentVehicle: string,
+  amountRaised: string,
+  amountDisbursed: string,
+  amountAvailable: string,
+  totalIncomeGenerated: string,
+  netAssetValue: string
+}
+
 
 
 const InvestmentVehicle = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const[isDonorModalOpen, setDonorModalOpen] = useState(false);
+  const [modalType, setModalType] = useState('');
+  const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
 
+  const dataElement = {
+    pageNumber: 0,
+    pageSize: 200
+}
+ 
+ const { data: investmentVehicleData } = useGetAllInvestmentmentVehicleQuery(dataElement)
   const router = useRouter()
+
+
+  useEffect(()=> {
+    if(investmentVehicleData && investmentVehicleData.data) {
+      setViewAllInvestmentVehicle(investmentVehicleData.data)
+    }
+  })
+
+  console.log("The data: ",viewAllInvestmentVehicle)
 
   const handleDraftClick = () => {
 
   }
    const handleCreateInvestmentVehicleClick = () => {
-     setIsModalOpen(true);
+    setModalType('commercial');
+    setIsModalOpen(true);
   }
 
   const handleCreateInvestmentDonorClick = () => {
-     setDonorModalOpen(true);
+     setModalType('endowment');
+      setIsModalOpen(true);
   }
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
@@ -54,13 +90,13 @@ const InvestmentVehicle = () => {
   };
   
   const fundHeader = [
-    { title: <div className='h-11 flex justify-center items-center'>Vehicle</div> , sortable: true, id: 'vehicle', selector: (row:TableRowData ) => row.vehicle},
+    { title: <div className='h-11 flex justify-center items-center'>Vehicle</div> , sortable: true, id: 'name', selector: (row:TableRowData ) => row.name},
     { title: 'Start Date', sortable: true, id: 'startDate', selector: (row:TableRowData ) => formatDate(row?.startDate)},
-      { title: 'Tenure(Months)', sortable: true, id: 'tenureMonths', selector: (row: TableRowData) => row.tenureMonths },
-      { title: 'vehicle Size', sortable: true, id: 'vehicleSize', selector: (row:TableRowData) => <div className=''>{formatAmount(row.vehicleSize)}</div> },
-      { title: 'InterestRate (%)', sortable: true, id: 'interestRatePercent', selector: (row:TableRowData) => formatAmount(row.interestRatePercent)},
-      { title: 'Amount Collected', sortable: true, id: 'amountCollected', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountCollected)}</div> },
-      { title: 'Amount Disbursed', sortable: true, id: 'amountDisbursed', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountDisbursed)}</div> },
+      { title: 'Tenure(Months)', sortable: true, id: 'tenure', selector: (row: TableRowData) => row.tenure },
+      { title: 'vehicle Size', sortable: true, id: 'size', selector: (row:TableRowData) => <div className=''>{row.size}</div> },
+      { title: 'InterestRate (%)', sortable: true, id: ' rate', selector: (row:TableRowData) => row. rate},
+      { title: 'Amount Collected', sortable: true, id: 'amountRaised', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRaised)}</div> },
+      { title: 'Amount Disbursed', sortable: true, id: ' amountDisbursed', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountDisbursed)}</div> },
       { title: 'Amount Available', sortable: true, id: 'amountAvailable', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountAvailable)}</div> },
   ]
     
@@ -68,7 +104,12 @@ const InvestmentVehicle = () => {
   const handleRowClick = (row:TableRowData) => {
     router.push('/funds/details')  
     setItemSessionStorage('investmentVehicleId', String(row.id));
+    
 }
+
+
+const commercial = viewAllInvestmentVehicle.filter( vehicle => vehicle.investmentVehicleType === 'COMMERCIAL');
+const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investmentVehicleType === 'ENDOWMENT');
   
   const tabContent = [
     {
@@ -84,7 +125,7 @@ const InvestmentVehicle = () => {
       value: "commercialFund",
       table: <div>
         <Tables
-          tableData={fund}
+          tableData={commercial}
           handleRowClick={handleRowClick}
           tableHeader={fundHeader}
            tableHeight={52}
@@ -92,10 +133,11 @@ const InvestmentVehicle = () => {
            tableCellStyle={'h-12'}
             optionalRowsPerPage={10}
             staticHeader={'Vehicle'}
-           staticColunm={'vehicle'}
+           staticColunm={'name'}
            icon={MdOutlinePayments}
            sideBarTabName='Fund'
            optionalFilterName='Commercial'
+           condition={true}
         />
       </div>
     },
@@ -112,17 +154,18 @@ const InvestmentVehicle = () => {
       value: "endowmentFund",
       table: <div>
         <Tables
-          tableData={fund}
+          tableData={endowment}
           handleRowClick={handleRowClick}
           tableHeader={fundHeader}
            tableHeight={52}
            optionalRowsPerPage={10}
            staticHeader={'Vehicle'}
-           staticColunm={'vehicle'}
+           staticColunm={'name'}
             tableCellStyle={'h-12'}
             icon={MdOutlinePayments}
             sideBarTabName='Fund'
             optionalFilterName='Endowment'
+            condition={true}
         />
       </div>
     }
@@ -162,24 +205,12 @@ const InvestmentVehicle = () => {
            closeOnOverlayClick={true}
            icon={Cross2Icon}
           >
-            <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)}/>
+          
+            {modalType === 'commercial' ? ( <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='sponsor' investmentVehicleType='COMMERCIAL' />  ) : ( <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='donor' investmentVehicleType='ENDOWMENT'/> )}
           </TableModal>
         }
       </div>
-      <div>
-        {
-          <TableModal
-           isOpen={isDonorModalOpen}
-           closeModal={()=> setDonorModalOpen(false)}
-           className='pb-1'
-           headerTitle='Create Investment'
-           closeOnOverlayClick={true}
-           icon={Cross2Icon}
-          >
-            <CreateInvestmentVehicleDonor setIsOpen={()=> setDonorModalOpen(false)}/>
-          </TableModal>
-        }
-      </div>
+     
     </div>
   )
 }
