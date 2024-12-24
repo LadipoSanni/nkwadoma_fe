@@ -11,7 +11,6 @@ import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
 import { useRouter } from 'next/navigation'
-import CreateInvestmentVehicleDonor from '@/components/portfolio-manager/fund/Create-investment-vehicle-donor';
 import { setItemSessionStorage } from '@/utils/storage';
 import { useGetAllInvestmentmentVehicleQuery } from '@/service/admin/fund_query';
 
@@ -52,7 +51,7 @@ const tabData = [
 
 const InvestmentVehicle = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const[isDonorModalOpen, setDonorModalOpen] = useState(false);
+  const [modalType, setModalType] = useState('');
   const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
 
   const dataElement = {
@@ -76,11 +75,13 @@ const InvestmentVehicle = () => {
 
   }
    const handleCreateInvestmentVehicleClick = () => {
-     setIsModalOpen(true);
+    setModalType('commercial');
+    setIsModalOpen(true);
   }
 
   const handleCreateInvestmentDonorClick = () => {
-     setDonorModalOpen(true);
+     setModalType('endowment');
+      setIsModalOpen(true);
   }
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
@@ -204,24 +205,12 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
            closeOnOverlayClick={true}
            icon={Cross2Icon}
           >
-            <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)}/>
+          
+            {modalType === 'commercial' ? ( <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='sponsor' investmentVehicleType='COMMERCIAL' />  ) : ( <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='donor' investmentVehicleType='ENDOWMENT'/> )}
           </TableModal>
         }
       </div>
-      <div>
-        {
-          <TableModal
-           isOpen={isDonorModalOpen}
-           closeModal={()=> setDonorModalOpen(false)}
-           className='pb-1'
-           headerTitle='Create Investment'
-           closeOnOverlayClick={true}
-           icon={Cross2Icon}
-          >
-            <CreateInvestmentVehicleDonor setIsOpen={()=> setDonorModalOpen(false)}/>
-          </TableModal>
-        }
-      </div>
+     
     </div>
   )
 }

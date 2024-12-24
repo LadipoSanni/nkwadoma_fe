@@ -25,14 +25,29 @@ export const fundApi = createApi({
         // providesTags: (result, error, arg) => [{ type: 'funds', id: arg.id }],
         providesTags: ['funds'],
       }),
-       createIInvestmentVehicle: builder.mutation({
-        query: () => ({
-                url: `auth/colleague/invite`,
+       createInvestmentVehicle: builder.mutation({
+        query: (data:{
+        name:  string,
+        investmentVehicleType: string | undefined,
+        mandate: string,
+       tenure: string,
+       size: string,
+       rate: string,
+       trustee: string,
+       custodian: string,
+       bankPartner: string,
+       fundManager: string,
+       sponsor: string,
+       minimumInvestmentAmount: string
+
+        }) => ({
+                url: `/investment-vehicle`,
                 method: 'POST',
-                // body: data
-        })
+                body: data
+        }),
+        invalidatesTags: ['funds']
        })
     })
 })
 
-export const { useGetAllInvestmentmentVehicleQuery,useGetInvestmentVehicleDetailQuery } = fundApi;
+export const { useGetAllInvestmentmentVehicleQuery,useGetInvestmentVehicleDetailQuery,useCreateInvestmentVehicleMutation} = fundApi;

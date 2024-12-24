@@ -7,37 +7,46 @@ import {inter} from "@/app/fonts"
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 // import RichTextEditor from '@/reuseable/Input/Ritch-text-editor';
 import Isloading from '@/reuseable/display/Isloading';
+import { useCreateInvestmentVehicleMutation } from '@/service/admin/fund_query';
+import { useToast } from "@/hooks/use-toast";
 
 
-// interface ApiError {
-//     status: number;
-//     data: {
-//       message: string;
-//     };
-//   }
+interface ApiError {
+    status: number;
+    data: {
+      message: string;
+    };
+  }
 
-  const initialFormValue = {
+  const initialFormValue = {  
     name: "",
     sponsor: "",
     fundManager: "",
-    minimumAmount:"",
+    minimumInvestmentAmount:"",
     mandate: "",
-    tenor:"",
-    vehicleSize: "",
+    tenure:"",
+    size: "",
     rate:"",
     bankPartner: "",
     trustee: "",
     custodian:"",
+    investmentVehicleType: ""
 
     
   }
 
+  
+
   interface props {
     setIsOpen? : (e:boolean) => void;
+    type?: string
+    investmentVehicleType?: string
   }
-function CreateInvestmentVehicle({setIsOpen}:props) {
+function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [isError, setError] = useState('')
+    const [createInvestmentVehicle, {isLoading}] = useCreateInvestmentVehicleMutation();
+    const { toast } = useToast();
 
     const handleCloseModal = () => {
         if (setIsOpen) {
@@ -45,7 +54,7 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
         }
       }
       
-      const isLoading = false
+  
   
       const validationSchema = Yup.object().shape({
         name:Yup.string()
@@ -60,13 +69,13 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
        .trim()
        .matches(/^[a-zA-Z\s]+$/, 'Fund manager can only contain letters and spaces.')
        .required('Fund is required'),
-       vehicleSize:Yup.string()
+       size:Yup.string()
        .required('Vehicle size is required')
        .matches(/^[1-9]\d*$/, 'Vehicle size must be a positive number and cannot start with zero'),
-       minimumAmount:Yup.string()
+       minimumInvestmentAmount:Yup.string()
        .required('Vehicle size is required')
        .matches(/^[1-9]\d*$/, 'Vehicle size must be a positive number and cannot start with zero'),
-       tenor:Yup.string()
+       tenure:Yup.string()
        .trim()
        .required('tenor size is required')
        .matches(/^[1-9]\d*$/, 'Tenor must be a positive number and cannot start with zero.'),
@@ -79,8 +88,38 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
       .max(2500, 'Mandate must be 2500 characters or less')
       })
 
-     const handleSubmit = () => {
-      handleCloseModal();
+     const handleSubmit = async (values: typeof initialFormValue) => {
+     
+      const formData = {
+        name: values.name,
+        sponsor: values.sponsor,
+        fundManager: values.fundManager,
+        minimumInvestmentAmount: values.minimumInvestmentAmount,
+        mandate: values.mandate,
+        tenure: values.tenure,
+        size: values.size,
+        rate: values.rate,
+        bankPartner: values.bankPartner,
+        trustee: values.trustee,
+        custodian: values.custodian,
+        investmentVehicleType: investmentVehicleType 
+
+    }
+      try {
+          const create = await createInvestmentVehicle(formData).unwrap();
+          if (create) { 
+            toast({
+              description: create.message,
+              status: "success",
+            });
+            handleCloseModal();
+          }
+      } catch (err) {
+        const error = err as ApiError;
+        setError(error?.data?.message);
+
+      }
+    
       }
 
       const maxChars = 1500;
@@ -133,7 +172,7 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
                 </div>
                 <div className='grid md:grid-cols-2 gap-4 w-full'>
                 <div>
-                    <Label htmlFor="sponsor">Vehicle Sponsor</Label>
+                    <Label htmlFor="sponsor">Vehicle {type}</Label>
                     <Field
                       id="sponsor"
                       name="sponsor"
@@ -174,31 +213,31 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
                 <div className='grid md:grid-cols-2 gap-4 w-full'>
                     <div>
                   
-                    <Label htmlFor="vehicleSize">Vehicle size</Label> 
+                    <Label htmlFor="size">Vehicle size</Label> 
                     <div className='flex gap-2 items-center justify-center'>
                         <CurrencySelectInput
                          selectedcurrency={selectCurrency}
                          setSelectedCurrency={setSelectCurrency}
                         />
                         <Field
-                        id="vehicleSize"
-                         name="vehicleSize"
+                        id="size"
+                         name="size"
                          type="text"
                           placeholder="0.00"
                          className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2 "
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             const value = e.target.value;
                             if (/^(?!0)\d*$/.test(value)) { 
-                                setFieldValue("vehicleSize", value); 
+                                setFieldValue("size", value); 
                             }
                         }}
                         />
                         </div>
                         <div className='relative bottom-5'>
                           {
-                 errors.vehicleSize && touched.vehicleSize &&  (
+                 errors.size && touched.size &&  (
                     <ErrorMessage
-                    name="vehicleSize"
+                    name="size"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -208,7 +247,7 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
                     
                     </div>
                     <div>
-                    <Label htmlFor=" minimumAmount"
+                    <Label htmlFor=" minimumInvestmentAmount"
                     style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'inline-block', maxWidth: '100%', }}
                     >Minimum investment amount</Label>  
                     <div className='flex gap-2 items-center justify-center'>
@@ -217,24 +256,24 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
                          setSelectedCurrency={setSelectCurrency}
                         />
                     <Field
-                        id="minimumAmount"
-                        name="minimumAmount"
+                        id="minimumInvestemntAmount"
+                        name="minimumInvestmentAmount"
                         type="text"
                         placeholder="0.00"
                         className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             const value = e.target.value;
                             if (/^(?!0)\d*$/.test(value)) { 
-                                setFieldValue("minimumAmount", value); 
+                                setFieldValue("minimumInvestmentAmount", value); 
                             }
                         }}
                         />
                     </div> 
                     <div className='relative bottom-5'>
                     {
-                 errors.minimumAmount && touched.minimumAmount &&  (
+                 errors.minimumInvestmentAmount && touched.minimumInvestmentAmount &&  (
                     <ErrorMessage
-                    name="minimumAmount"
+                    name="minimumInvestmentAmount"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -265,19 +304,19 @@ function CreateInvestmentVehicle({setIsOpen}:props) {
                 }
                 </div>
                 <div>
-                <Label htmlFor="tenor">Tenor (months)</Label>
+                <Label htmlFor="tenure">Tenor (months)</Label>
                     <Field
-                      id="tenor"
-                      name="tenor"
+                      id="tenure"
+                      name="tenure"
                       placeholder="0"
                       
                       className="w-full p-3 border rounded focus:outline-none mt-2"
                       // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("tenor", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
                     /> 
                     {
-                 errors.tenor && touched.tenor &&  (
+                 errors.tenure && touched.tenure &&  (
                     <ErrorMessage
-                    name="tenor"
+                    name="tenure"
                     component="div"
                     className="text-red-500 text-sm"
                   />
