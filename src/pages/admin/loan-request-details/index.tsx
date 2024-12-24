@@ -1,82 +1,58 @@
 "use client"
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {useRouter} from "next/navigation";
-// useSearchParams
+import {useRouter, useSearchParams} from "next/navigation";
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
 import {cabinetGroteskRegular, inter} from "@/app/fonts";
-import {Button} from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
 import styles from "./index.module.css"
-// import {useViewLoanRequestDetailsQuery} from "@/service/admin/loan/loan-request-api";
-// import LoanDetailsCard from "@/reuseable/cards/loan-details-card";
+import {useViewLoanRequestDetailsQuery} from "@/service/admin/loan/loan-request-api";
 
 
-const LoanDetails = () => {
+function LoanDetails () {
     const router = useRouter()
     const [currentTab] = useState(0)
-    // const pathName = pa
-    // const searchParams = useSearchParams()
-    // // @ts-expect-error
-    // const loanRequestId =  searchParams.get('id')
-    // const {data} = useViewLoanRequestDetailsQuery(loanRequestId)
-    // console.log("datssa: ", data)
+    const searchParams = useSearchParams()
 
+
+    const getId  = () => {
+        if (searchParams){
+            const pathVariable = searchParams.get("id")
+            if (pathVariable){
+                return pathVariable
+            }else {
+                return ""
+            }
+        }else {
+            return ""
+        }
+
+    }
+    const id : string =  getId()
+    const {data} = useViewLoanRequestDetailsQuery(id)
+    console.log("datssa: ", data)
 
     const backToLoanRequest = () => {
         router.push("/loan/loan-request")
     }
-
     const loanRequestDetailsTab = [
         "Basic details",
         "Additional details",
         "Loan details"
     ]
-    // const dataList = [
-    //     {label: "Alternate email address", value: "mariiam@gmail.com"},
-    //     {label: "Alternate phone number", value: "+2347039393309"},
-    //     {label: "Alternative residential address", value: "300, Herbert Macaulay Way, Alagomeji, Sabo, Yaba"},
-    //     {label: "Next of kin", value: "Samuel koko"},
-    //     {label: "Next of kin phone number", value: "0903849449"},
-    //     {label: "Next of kin email address", value: "maria@gmail.com"},
-    //     {label: "Next of kin relation", value: "brother"},
-    //
-    // ];
-    // const componentSteps : {
-    //     'step1': <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
-    //                      backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>,
-    //     'step2' : <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
-    //                      backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>,
-    //     'step3':<LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
-    //                      backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>
-    //
-    // }
-
-    // const component = [
-    //     {
-    //         "basicDetails": <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
-    //                                          backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>
-    //     },
-    //     {"AdditionalDetails": <LoanDetailsCard id={"basicDetailsOnLoanDetails"}/>},
-    //     {"LoanDetails": <LoanDetailsCard id={"basicDetailsOnLoanDetails"}/>}
-    //
-    // ]
 
     return (
         <div
             id={"loanRequestDetails"}
             data-testid={"loanRequestDetails"}
             className={`  md:px-8 w-full h-full  px-3 pt-4 md:pt-4 `}
-            // className={`w-full h-full md:grid grid gap-2 md:px-8 px-4 pt-4 md:pt-4  md:w-full md:h-full  `}
         >
             <BackButton handleClick={backToLoanRequest} iconRight={true} text={"Back to loan request"}
                         id={"loanRequestDetailsBackButton"} textColor={'#142854'}/>
-
-
             <div
                 id={`ImageComponentOnLoanRequestDetails`}
                 data-testid={`ImageComponentOnLoanRequestDetails`}
@@ -107,13 +83,13 @@ const LoanDetails = () => {
                             <span id={'loaneeCohortOnLoanRequestDetails'} data-testid={'loaneeCohortOnLoanRequestDetails'}
                                   className={`${inter.className} text-sm text-black400`}>Luminary</span>
                         </div>
-                        <Button
-                            id={'loaneeCheckCreditScoreOnLoanRequestDetails'}
-                            data-testid={'loaneeCheckCreditScoreOnLoanRequestDetails'}
-                            className={`${inter.className} w-fit px-4 md:mt-2 text-sm font-semibold text-meedlBlue border border-meedlBlue`}
-                        >
-                            Check credit score
-                        </Button>
+                        {/*<Button*/}
+                        {/*    id={'loaneeCheckCreditScoreOnLoanRequestDetails'}*/}
+                        {/*    data-testid={'loaneeCheckCreditScoreOnLoanRequestDetails'}*/}
+                        {/*    className={`${inter.className} w-fit px-4 md:mt-2 text-sm font-semibold text-meedlBlue border border-meedlBlue`}*/}
+                        {/*>*/}
+                        {/*    Check credit score*/}
+                        {/*</Button>*/}
                     </div>
                 </div>
                 <div
@@ -124,14 +100,11 @@ const LoanDetails = () => {
                     >
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab}/>
                     </div>
-                    {/*<LoanDetailsCard/>*/}
-                   {/*<div>*/}
-                   {/*    {componentSteps[currentTab]}*/}
-                   {/*</div>*/}
+
                 </div>
             </div>
         </div>
     );
-};
+}
 
 export default LoanDetails;
