@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React, {useEffect, useState} from "react";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {FiBook} from "react-icons/fi";
 import {ThreeTabs} from "@/reuseable/tabs/ThreeTabs";
@@ -11,6 +11,51 @@ const Details = () => {
 
     const loanProductId = sessionStorage.getItem("LoanProductId") ?? undefined;
     const { data: loanProduct } = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
+
+    const [details, setDetails] = useState({
+        id: "",
+        productName: "",
+        productSponsor: "",
+        FundProduct: "",
+        costOfFunds: 0,
+        tenor: 0,
+        tenorDuration: "",
+        loanProductSize: 0,
+        minimumRepaymentAmount: 0,
+        moratorium: 0,
+        interest: 0,
+        obligorLimit: 0,
+        loanProductMandate: "",
+        loanProductTermsAndCondition: "",
+        bankPartner: "",
+        loanInsuranceProvider: "",
+        loanDisbursementTerms: "",
+    })
+
+    useEffect(() => {
+        if(loanProduct && loanProduct?. data) {
+            const details = loanProduct.data
+            setDetails({
+                id: details?.id || "",
+                productName: details?.productName || "",
+                productSponsor: details?.productSponsor || "",
+                FundProduct: details?.FundProduct || "",
+                costOfFunds: details?.costOfFunds,
+                tenor: details?.tenor,
+                tenorDuration: details?.tenorDuration || "",
+                loanProductSize: details?.loanProductSize,
+                minimumRepaymentAmount: details?.minimumRepaymentAmount,
+                moratorium: details?.moratorium,
+                interest: details?.interest,
+                obligorLimit: details?.obligorLimit,
+                loanProductMandate: details?.loanProductMandate,
+                loanProductTermsAndCondition: details?.loanProductTermsAndCondition,
+                bankPartner: details?.bankPartner || "",
+                loanInsuranceProvider: details?.loanInsuranceProvider || "",
+                loanDisbursementTerms: details?.loanDisbursementTerms || "",
+            })
+        }
+    }, [loanProduct])
     const handleDropdownClick = ()=>{}
 
 
@@ -20,9 +65,9 @@ const Details = () => {
     ];
 
     const dataList = [
-        { label: "Fund product", value: 0 },
-        { label: "Product sponsor", value: "2024-01-01" },
-        { label: "Product size ", value: "2024-01-01" },
+        { label: "Fund product", value: details.costOfFunds },
+        { label: "Product sponsor", value: details.productSponsor },
+        { label: "Product size ", value: details.loanProductSize},
         { label: "Tenor", value: "2024-01-01" },
         { label: "Minimum repayment amount", value: "2024-01-01" },
         { label: "Interest rate", value: "2024-01-01" },
@@ -37,18 +82,21 @@ const Details = () => {
         { label: "Health insurance provider", value: "2024-01-01" },
     ];
 
-    const loanDetail = [
-        { detail: "Loan Amount", value: "This is Loan terms and conditions" },
-    ];
+    const loanDetail = "Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement " +
+        "Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement " +
+        "Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement" +
+        " Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement" +
+        " Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement " +
+        "Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement " +
+        "Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement " +
+        "Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement" +
+        " Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement " +
+        "Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement " +
+        "Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement Disbursement " +
+        "Disbursementthyugploieuyuui"
 
-    const dataList3 = [
-        { label: "Disbursement Term 2", value: "This is loan disbursment terms"},
-    ]
-
-    const description = "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement" +
-        "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement" +
-        "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement" +
-        "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement"
+    const dataList3 = "DisbursementDisbursementDisbursement DisbursementDisbursementDisbursement Dishjuuuy gfjghjhjkhjk"
+    const description = "DisbursementDisbursementDisbursementDisbursementDisbursementDisbjjjjjjjjjjjjjjjjjlllllkkkklopDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbjjjjjjjjjjjjjjjjjlllllkkkklopDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbjjjjjjjjjjjjjjjjjlllllkkkklopDisbursementDisbursement"
     return (
         <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
             <div id={`firstSection`}>
