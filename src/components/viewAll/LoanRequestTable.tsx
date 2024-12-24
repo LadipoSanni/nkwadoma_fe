@@ -1,20 +1,14 @@
 "use client"
-// import { useRouter } from 'next/navigation'
 import React from "react";
-import {LoanRequestTable} from "@/utils/LoanRequestMockData/Index"
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import {Icon} from "@iconify/react";
-// import { loanRequestData} from "@/utils/LoanRequestMockData/cohortProduct";
 import {MdOutlinePeople} from "react-icons/md";
-import Tables from "@/reuseable/table/LoanProductTable";
+import Tables from "@/reuseable/table/index";
 import {useRouter} from "next/navigation";
 import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
-// import {LoanRequestType} from "@/types/loan/loan-request.type";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
-// import DynamicTable from "@/reuseable/table/LoanProductTable";
-// import {formatDate} from "date-fns";
-// import dayjs from dayjs
+
 
 
 interface TableRowData {
@@ -29,25 +23,11 @@ function Index() {
     }
     const { data, isLoading} = useViewAllLoanRequestQuery(request)
 
-    // const
-    // const [counter] = useState(0);
-    // const [data, setData] = useState({ pageNumber: counter, pageSize: 10 });
 
-    // useEffect(() => {
-    //     setData({ pageNumber: counter, pageSize: 10 });
-    // }, [counter]);
-    // console.log("data:: ", data, "error: ", error, "isLoading:: ", isLoading)
-    // console.log("date:: ", dayjs('2024-12-16T16:17:42.934384').format('MMMM D, YYYY'))
-    //
-    // const convertDate = (date: string | undefined | null | ReactNode) => {
-    //     if (date){
-    //         return(dayjs(date.toString()).format('MMMM D, YYYY'))
-    //     }
-    // }
+
 
     const loanRequestHeader = [
-        // { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) => row.firstName },row.requestDate
-        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-4 '>{row.firstName}{row.lastName}</div>  },
+        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{row.firstName} <div className={``}></div>{row.lastName}</div>  },
         { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.programName },
         { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort },
         { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMMM D, YYYY')}</div> },
@@ -56,11 +36,8 @@ function Index() {
         { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>}
     ];
 
-    const handleRowClick = () => {
-        // router.push(`/loan-details?id=${row?.id}`);
-        // LoanRequestType
-        router.push(`/loan-request-details?id=5f0a7531-970a-4dec-8ee0-e4f1e42901c7`);
-
+    const handleRowClick = (ID: string | object | React.ReactNode) => {
+        router.push(`/loan-details?id=${ID}`);
     };
 
     return (
@@ -81,11 +58,9 @@ function Index() {
                             staticColunm='cohort'
                             staticHeader='Cohort'
                             showKirkBabel={false}
-                            // kirkBabDropdownOption={dropDownOption}
                             icon={MdOutlinePeople}
                             sideBarTabName='Cohort'
                             optionalFilterName='graduate'
-                            // handleDropDownClick={handleDropdownClick}
                         />
                     </div>
 
