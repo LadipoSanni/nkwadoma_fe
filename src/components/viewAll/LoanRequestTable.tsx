@@ -27,7 +27,7 @@ function Index() {
         pageSize: 10,
         pageNumber: 10
     }
-    const { isLoading} = useViewAllLoanRequestQuery(request)
+    const { data, isLoading} = useViewAllLoanRequestQuery(request)
 
     // const
     // const [counter] = useState(0);
@@ -68,11 +68,11 @@ function Index() {
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {
-                // data?.data?.body?.length > 0 ?
-                LoanRequestTable?.length > 0 ?
+                data?.data?.body?.length > 0 ?
+                // LoanRequestTable?.length > 0 ?
                     <div className={`md:w-full w-full h-full md:h-full `}>
                         <Tables
-                            tableData={LoanRequestTable}
+                            tableData={data?.data?.body}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
