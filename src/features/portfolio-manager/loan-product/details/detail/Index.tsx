@@ -3,7 +3,6 @@ import React from "react";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {FiBook} from "react-icons/fi";
 import {ThreeTabs} from "@/reuseable/tabs/ThreeTabs";
-import image from '../../../../../../public/asset/Image/CohortDetailsImage.png'
 import { useGetLoanProductDetailsByIdQuery } from "@/service/admin/loan_product";
 import {formatAmount} from "@/utils/Format";
 
@@ -41,7 +40,7 @@ const Details = () => {
     return (
         <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
             <div id={`firstSection`}>
-                <DetailsImageSection imageSrc={image} cohortTitle={loanProduct?.data.name}
+                <DetailsImageSection imageSrc={loanProduct?.data.imageUrl} cohortTitle={loanProduct?.data.name}
                                      cohortDescription={loanProduct?.data.mandate}
                                      handleDropdownClicked={handleDropdownClick}
                                      buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
