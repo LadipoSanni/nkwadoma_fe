@@ -17,7 +17,12 @@ import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
-
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -27,7 +32,6 @@ const LoanDetailsContent = dynamic(
 function LoanDetails() {
     const router = useRouter()
     const searchParams = useSearchParams()
-    // const [breakdown] = useState<[]>([]);
     const [currentTab, setCurrentTab] = useState(0);
     const [arrowDown, setArrowDown] = useState(false);
 
@@ -67,9 +71,9 @@ function LoanDetails() {
     const toggleArrow = () => {
         console.log('he dey enter')
         if (arrowDown) {
-            setArrowDown(true)
-        } else {
             setArrowDown(false)
+        } else {
+            setArrowDown(true)
         }
     };
 
@@ -290,17 +294,26 @@ function LoanDetails() {
                             onClick={handleBack} disabled={currentTab === 0}>Back</Button>
                     )}
 
-                    <Button
-                        className={'w-full md:w-fit md:px-8 flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                    <div
+                        className={'w-full md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                         onClick={handleNext}
-                        disabled={currentTab === loanRequestDetailsTab.length - 1}>
+                        // disabled={currentTab === loanRequestDetailsTab.length - 1}>
+                        >
                         {currentTab === 2 ? 'Make decision ' : 'Continue'}
                         {currentTab == 2 &&
-                            <div onClick={toggleArrow}>
+                            <div className={'bg-red-200'} >
                                 {arrowDown ?
-                                    <ChevronUpIcon
-                                        className={'h-5 cursor-pointer  w-4 stroke-2 text-white'}
-                                        onClick={toggleArrow}/>
+                                   <DropdownMenu>
+                                         <DropdownMenuTrigger>
+                                         <ChevronUpIcon
+                                            className={'h-5 cursor-pointer  w-4 stroke-2 text-white'}
+                                             onClick={toggleArrow}/>
+                                         </DropdownMenuTrigger>
+                                       <DropdownMenuContent>
+                                            <DropdownMenuItem>Approve loan request</DropdownMenuItem>
+                                            <DropdownMenuItem>Decline loan request</DropdownMenuItem>
+                                       </DropdownMenuContent>
+                                    </DropdownMenu>
                                  :
                                     <ChevronDownIcon
                                         className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
@@ -309,10 +322,9 @@ function LoanDetails() {
                                 }
                             </div>
                         }
-                    </Button>
+                    </div>
+
                 </div>
-
-
             </div>
         </div>
 </div>
