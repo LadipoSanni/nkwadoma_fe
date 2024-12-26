@@ -52,7 +52,6 @@ const LoanProductPage = () => {
     const handleRowClick = (row: TableRowData) => {
         router.push('/loan-product/loan-product-details')
         setItemSessionStorage("LoanProductId", String(row.id))
-        console.log("this is the row clicked", row.id)
     }
 
 
