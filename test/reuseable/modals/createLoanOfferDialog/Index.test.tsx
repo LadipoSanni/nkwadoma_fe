@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import CreateLoanOffer from '@/reuseable/modals/createLoanOffer/Index';
+import CreateLoanOffer from '@/reuseable/modals/createLoanOffer/index';
 import { Providers } from '@/app/provider';
 
 describe('CreateLoanOffer Component', () => {
