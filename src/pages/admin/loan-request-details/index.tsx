@@ -23,7 +23,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import CreateLoanOffer from "@/reuseable/modals/createLoanOffer";
+import CreateLoanOffer from "@/reuseable/modals/createLoanOffer/Index";
+import DeclineLoanModal from "@/reuseable/modals/declineLoan";
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -36,6 +37,7 @@ function LoanDetails() {
     const [currentTab, setCurrentTab] = useState(0);
     const [arrowDown, setArrowDown] = useState(false);
     const [openCreateLoanOffer, setOpenCreateLoanOffer] = useState(false)
+    const [openDeclineLoanRequestModal, setOpenDeclineLoanRequestModal] = useState(false)
 
 
 
@@ -274,7 +276,7 @@ function LoanDetails() {
                     >
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab}/>
                     </div>
-                    <div className={`px - 2`}>
+                    <div className={`px-2 md:px-0`}>
                         <div className={`bg-grey105 `}>
                             {getCurrentDataList().map((item, index) => (
                                 <li key={"key" + index} className={'p-5  grid gap-9 rounded-md'}>
@@ -296,7 +298,7 @@ function LoanDetails() {
                             </div>
                         </div>
                     </div>
-                <div  className="md:flex grid md:justify-end gap-5 mt-4">
+                <div  className="md:flex px-2 md:px-0 grid md:justify-end gap-5 mt-4">
                     {currentTab !== 0 && (
                         <Button
                             id={`backButtonOnIndex` + currentTab}
@@ -308,35 +310,37 @@ function LoanDetails() {
                     <div
                         id={`continueButtonOnIndex` + currentTab}
                         data-testid={`continueButtonOnIndex` + currentTab}
-                        className={'w-full md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                        className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                         onClick={handleNext}
                         // disabled={currentTab === loanRequestDetailsTab.length - 1}>
                         >
                         {currentTab === 2 ? 'Make decision ' : 'Continue'}
                         {currentTab == 2 &&
                             <div className={''} >
-                                   <DropdownMenu>
-                                       {arrowDown ?
-                                           <DropdownMenuTrigger>
-                                               <ChevronDownIcon
-                                                   className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
-                                                   onClick={toggleArrow}/>
-                                           </DropdownMenuTrigger>
-                                       :
-                                           <ChevronUpIcon
+                                {arrowDown ?
+                                    <ChevronUpIcon
+                                        id={'downIcon'}
 
+                                        className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
+                                        onClick={toggleArrow}/>
+                                    :
+                                   <DropdownMenu>
+                                       <DropdownMenuTrigger >
+                                           <ChevronDownIcon
                                                className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
-                                               onClick={toggleArrow}/>
-                                       }
-                                       <DropdownMenuContent>
-                                            <DropdownMenuItem id={'loanRequestDetailsApproveLoanRequestButton'} data-testid={'loanRequestDetailsApproveLoanRequestButton'} onClick={() => {setOpenCreateLoanOffer(true)}} className={`md:text-meedleBlue md:hover:bg-[#EEF5FF] rounded-md md:rounded-md `}>Approve loan request</DropdownMenuItem>
-                                            <DropdownMenuItem id={'loanRequestDetailsDeclineLoanRequestButton'} data-testid={'loanRequestDetailsDeclineLoanRequestButton'} className={`text-error500 md:hover:text-error500 md:text-error500 md:hover:bg-error50 rounded-md md:rounded-md`}>Decline loan request</DropdownMenuItem>
+                                               onClick={() => {setArrowDown(true)}}/>
+                                       </DropdownMenuTrigger>
+                                       <DropdownMenuContent >
+                                            <DropdownMenuItem id={'loanRequestDetailsApproveLoanRequestButton'} data-testid={'loanRequestDetailsApproveLoanRequestButton'} onClick={() => {setOpenCreateLoanOffer(true)}} className={`md:text-meedleBlue text-meedlBlue hover:bg-[#EEF5FF] md:hover:bg-[#EEF5FF] rounded-md md:rounded-md `}>Approve loan request</DropdownMenuItem>
+                                            <DropdownMenuItem id={'loanRequestDetailsDeclineLoanRequestButton'} data-testid={'loanRequestDetailsDeclineLoanRequestButton'} onClick={() => {setOpenDeclineLoanRequestModal(true)}} className={`text-error500 md:hover:text-error500 md:text-error500 md:hover:bg-error50 rounded-md md:rounded-md`}>Decline loan request</DropdownMenuItem>
                                        </DropdownMenuContent>
                                     </DropdownMenu>
+                                }
                             </div>
                         }
                     </div>
                     <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer} setIsOpen={open} onSubmit={onSubmit} />
+                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()} setIsOpen={open} loanProductId={""} title={""}/>
 
                 </div>
             </div>
