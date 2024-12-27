@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import CreateLoanOffer from '@/reuseable/modals/createLoanOffer/index';
+import CreateLoanOffer from '@/reuseable/modals/createLoanOffer/Index';
 import { Providers } from '@/app/provider';
 
 describe('CreateLoanOffer Component', () => {
@@ -14,7 +14,7 @@ describe('CreateLoanOffer Component', () => {
     test('renders CreateLoanOffer component', () => {
         render(
             <Providers>
-                <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen} />
+                <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen}  loanRequestId={''}/>
             </Providers>
         );
         expect(screen.getByText('Create loan offer')).toBeInTheDocument();
@@ -23,7 +23,7 @@ describe('CreateLoanOffer Component', () => {
     test('displays error message when form is submitted without selecting a program', () => {
         render(
             <Providers>
-                <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen} />
+                <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen} loanRequestId={''}/>
             </Providers>
         );
         fireEvent.submit(screen.getByRole('button', { name: /create/i }));
@@ -33,7 +33,7 @@ describe('CreateLoanOffer Component', () => {
     test('changes button color to bg-neutral650 when form is invalid', () => {
         render(
             <Providers>
-                <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen} />
+                <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen} loanRequestId={''} />
             </Providers>
         );
         fireEvent.submit(screen.getByRole('button', { name: /create/i }));
