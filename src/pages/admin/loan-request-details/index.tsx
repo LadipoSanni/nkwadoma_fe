@@ -1,82 +1,218 @@
 "use client"
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {useRouter} from "next/navigation";
-// useSearchParams
+import {useRouter, useSearchParams} from "next/navigation";
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
 import {cabinetGroteskRegular, inter} from "@/app/fonts";
-import {Button} from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
 import styles from "./index.module.css"
-// import {useViewLoanRequestDetailsQuery} from "@/service/admin/loan/loan-request-api";
-// import LoanDetailsCard from "@/reuseable/cards/loan-details-card";
+import {useViewLoanRequestDetailsQuery} from "@/service/admin/loan/loan-request-api";
+import dynamic from 'next/dynamic'
+import {Breakdown} from "@/reuseable/details/breakdown";
+import {NumericFormat} from "react-number-format";
+import dayjs from "dayjs";
+import {Button} from "@/components/ui/button";
+import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 
 
-const LoanDetails = () => {
+const LoanDetailsContent = dynamic(
+    () => Promise.resolve(LoanDetails),
+    {ssr: false}
+)
+
+function LoanDetails() {
     const router = useRouter()
-    const [currentTab] = useState(0)
-    // const pathName = pa
-    // const searchParams = useSearchParams()
-    // // @ts-expect-error
-    // const loanRequestId =  searchParams.get('id')
-    // const {data} = useViewLoanRequestDetailsQuery(loanRequestId)
-    // console.log("datssa: ", data)
+    const searchParams = useSearchParams()
+    // const [breakdown] = useState<[]>([]);
+    const [currentTab, setCurrentTab] = useState(0);
+    const [arrowDown, setArrowDown] = useState(false);
 
+
+
+    const getId = () => {
+        if (searchParams) {
+            const pathVariable = searchParams.get("id")
+            if (pathVariable) {
+                return pathVariable
+            } else {
+                return ""
+            }
+        } else {
+            return ""
+        }
+
+    }
+    const id: string = getId()
+    const {data} = useViewLoanRequestDetailsQuery(id)
 
     const backToLoanRequest = () => {
         router.push("/loan/loan-request")
     }
-
     const loanRequestDetailsTab = [
         "Basic details",
         "Additional details",
         "Loan details"
     ]
-    // const dataList = [
-    //     {label: "Alternate email address", value: "mariiam@gmail.com"},
-    //     {label: "Alternate phone number", value: "+2347039393309"},
-    //     {label: "Alternative residential address", value: "300, Herbert Macaulay Way, Alagomeji, Sabo, Yaba"},
-    //     {label: "Next of kin", value: "Samuel koko"},
-    //     {label: "Next of kin phone number", value: "0903849449"},
-    //     {label: "Next of kin email address", value: "maria@gmail.com"},
-    //     {label: "Next of kin relation", value: "brother"},
-    //
-    // ];
-    // const componentSteps : {
-    //     'step1': <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
-    //                      backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>,
-    //     'step2' : <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
-    //                      backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>,
-    //     'step3':<LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
-    //                      backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>
-    //
-    // }
 
-    // const component = [
-    //     {
-    //         "basicDetails": <LoanDetailsCard dataList={dataList} id={"basicDetailsOnLoanDetails"} showNextButton={true}
-    //                                          backButtonId={"continueToLoan"} nextButtonTittle={'continue'}/>
-    //     },
-    //     {"AdditionalDetails": <LoanDetailsCard id={"basicDetailsOnLoanDetails"}/>},
-    //     {"LoanDetails": <LoanDetailsCard id={"basicDetailsOnLoanDetails"}/>}
-    //
-    // ]
+    const breakDown = [
+        {itemName: 'tuition', itemAmount: '$2000'},
+        {itemName: 'skincare', itemAmount: '$2000'},
+        {itemName: 'head', itemAmount: '$2000'},
+
+    ]
+    const toggleArrow = () => {
+        console.log('he dey enter')
+        if (arrowDown) {
+            setArrowDown(true)
+        } else {
+            setArrowDown(false)
+        }
+    };
+
+
+
+
+    const handleNext = () => {
+        if (currentTab < loanRequestDetailsTab.length - 1) {
+            setCurrentTab(currentTab + 1);
+        }
+    };
+
+    const handleBack = () => {
+        if (currentTab > 0) {
+            setCurrentTab(currentTab - 1);
+        }
+    };
+
+    const loanDetil = [
+        {
+            label: 'Tuition', value:
+                <NumericFormat
+                    id={'loanTuitionAmount'}
+                    name={'loanTuitionAmount'}
+                    type="text"
+                    thousandSeparator=","
+                    decimalScale={2}
+                    fixedDecimalScale={true}
+                    // value={'200000'}
+                    prefix={'₦'}
+
+                    className='bg-grey105 flex md:place-items-end '
+
+                    value={data?.data?.body?.data?.tuitionAmount}
+                    // placeholder={${detail.itemName}}
+                    // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+
+                />
+        },
+        {
+            label: 'Start date', value:
+            // dayjs(data?.data?.body?.data?.createdDate?.toString()).format('MMMM D, YYYY')
+                dayjs(data?.data?.body?.data?.createdDate?.toString()).format('MMMM D, YYYY')
+
+        },
+        {
+            label: 'Loan amount requested', value: <NumericFormat
+                id={'loanAmountRequested'}
+                name={'loanAmountRequested'}
+                type="text"
+                thousandSeparator=","
+                decimalScale={2}
+                fixedDecimalScale={true}
+                // value={'200000'}
+                className='bg-grey105 flex md:place-items-end '
+                prefix={'₦'}
+                value={data?.data?.body?.data?.loanAmountRequested}
+                // placeholder={${detail.itemName}}
+                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+
+            />
+        },
+        {
+            label: 'Deposit', value: <NumericFormat
+                id={'depositOnLoanRequestDetails'}
+                name={'depositOnLoanRequestDetails'}
+                type="text"
+                thousandSeparator=","
+                decimalScale={2}
+                fixedDecimalScale={true}
+                // value={'200000'}
+                prefix={'₦'}
+                value={data?.data?.body?.data?.initialDeposit}
+                // placeholder={${detail.itemName}}
+                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+                className='bg-grey105 flex md:place-items-end'
+
+            />
+        },
+        {
+            label: 'Credit score', value:
+            // data?.data?.body?.data
+                <div className={`flex gap-2 `}>
+                    <span>Good</span>
+                    <div
+                        className={` w-fit md:w-fit md:h-fit h-fit md:py-0 py-0 md:px-1 px-1 md:rounded-md rounded-md border md:border border-green650 md:border-green650`}>
+                        <span
+                            className={`md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-xs text-xs text-green750 md:text-green750 `}>234</span>
+                    </div>
+                </div>
+        },
+
+    ]
+
+    const basic = [
+        {label: 'Gender', value: data?.data?.body?.data?.userIdentity?.gender},
+        {label: 'Email address', value: data?.data?.body?.data?.userIdentity?.email},
+        {label: 'Phone number', value: data?.data?.body?.data?.userIdentity?.phoneNumer},
+        {label: 'Date of birth', value: data?.data?.body?.data?.userIdentity?.dateOfBirth},
+        {label: 'Marital status', value: data?.data?.body?.data?.userIdentity?.maritalStatus},
+        {label: 'Nationality', value: data?.data?.body?.data?.userIdentity?.nationality},
+        {label: 'State of origin ', value: data?.data?.body?.data?.userIdentity?.stateOfOrigin},
+        {label: 'State of residence', value: data?.data?.body?.data?.userIdentity?.stateOfResidence},
+    ]
+
+    const additional = [
+        {label: 'Alternate email address', value: data?.data?.body?.data?.alternateEmail},
+        {label: 'Alternate phone number', value: data?.data?.body?.data?.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: data?.data?.body?.data?.alternateContactAddress},
+        {
+            label: 'Next of kin name',
+            value: data?.data?.body?.data?.nextOfKin?.firstName + " " + data?.data?.body?.data?.nextOfKin?.lastName
+        },
+        {label: 'Next of kin email address', value: data?.data?.body?.data?.nextOfKin?.email},
+        {label: 'Next of kin phone number', value: data?.data?.body?.data?.nextOfKin?.phoneNumber},
+        {label: 'Next of kin relationship ', value: data?.data?.body?.data?.nextOfKin?.nextOfKinRelationship},
+
+    ]
+
+
+    const getCurrentDataList = () => {
+        switch (currentTab) {
+            case 0:
+                return basic;
+            case 1:
+                return additional;
+            case 2:
+                return loanDetil;
+
+            default:
+                return [];
+        }
+    };
+
 
     return (
         <div
             id={"loanRequestDetails"}
             data-testid={"loanRequestDetails"}
             className={`  md:px-8 w-full h-full  px-3 pt-4 md:pt-4 `}
-            // className={`w-full h-full md:grid grid gap-2 md:px-8 px-4 pt-4 md:pt-4  md:w-full md:h-full  `}
         >
             <BackButton handleClick={backToLoanRequest} iconRight={true} text={"Back to loan request"}
                         id={"loanRequestDetailsBackButton"} textColor={'#142854'}/>
-
-
             <div
                 id={`ImageComponentOnLoanRequestDetails`}
                 data-testid={`ImageComponentOnLoanRequestDetails`}
@@ -104,16 +240,17 @@ const LoanDetails = () => {
                               className={`${inter.className} text-sm text-black400`}>Product Design</span>
                             <span
                                 className={`${inter.className} text-sm text-black400 mt-auto mb-auto md:mt-auto md:mb-auto `}>.</span>
-                            <span id={'loaneeCohortOnLoanRequestDetails'} data-testid={'loaneeCohortOnLoanRequestDetails'}
+                            <span id={'loaneeCohortOnLoanRequestDetails'}
+                                  data-testid={'loaneeCohortOnLoanRequestDetails'}
                                   className={`${inter.className} text-sm text-black400`}>Luminary</span>
                         </div>
-                        <Button
-                            id={'loaneeCheckCreditScoreOnLoanRequestDetails'}
-                            data-testid={'loaneeCheckCreditScoreOnLoanRequestDetails'}
-                            className={`${inter.className} w-fit px-4 md:mt-2 text-sm font-semibold text-meedlBlue border border-meedlBlue`}
-                        >
-                            Check credit score
-                        </Button>
+                        {/*<Button*/}
+                        {/*    id={'loaneeCheckCreditScoreOnLoanRequestDetails'}*/}
+                        {/*    data-testid={'loaneeCheckCreditScoreOnLoanRequestDetails'}*/}
+                        {/*    className={`${inter.className} w-fit px-4 md:mt-2 text-sm font-semibold text-meedlBlue border border-meedlBlue`}*/}
+                        {/*>*/}
+                        {/*    Check credit score*/}
+                        {/*</Button>*/}
                     </div>
                 </div>
                 <div
@@ -124,14 +261,63 @@ const LoanDetails = () => {
                     >
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab}/>
                     </div>
-                    {/*<LoanDetailsCard/>*/}
-                   {/*<div>*/}
-                   {/*    {componentSteps[currentTab]}*/}
-                   {/*</div>*/}
+                    <div className={`px - 2`}>
+                        <div className={`bg-grey105 `}>
+                            {getCurrentDataList().map((item, index) => (
+                                <li key={"key" + index} className={'p-5  grid gap-9 rounded-md'}>
+                                    <div
+                                        className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
+                                        <div
+                                            className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
+                                        <div
+                                            className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value}</div>
+                                    </div>
+                                </li>
+                            ))
+                            }
+                            <div className={` px-3 pb-2`}>
+                                {currentTab == 2 &&
+                                    <Breakdown breakDown={breakDown}
+                                    />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                <div  className="md:flex grid md:justify-end gap-5 mt-4">
+                    {currentTab !== 0 && (
+                        <Button
+                            className={'w-full md:w-fit md:px-6 md:py-4 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
+                            onClick={handleBack} disabled={currentTab === 0}>Back</Button>
+                    )}
+
+                    <Button
+                        className={'w-full md:w-fit md:px-8 flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                        onClick={handleNext}
+                        disabled={currentTab === loanRequestDetailsTab.length - 1}>
+                        {currentTab === 2 ? 'Make decision ' : 'Continue'}
+                        {currentTab == 2 &&
+                            <div onClick={toggleArrow}>
+                                {arrowDown ?
+                                    <ChevronUpIcon
+                                        className={'h-5 cursor-pointer  w-4 stroke-2 text-white'}
+                                        onClick={toggleArrow}/>
+                                 :
+                                    <ChevronDownIcon
+                                        className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
+                                        onClick={toggleArrow}/>
+
+                                }
+                            </div>
+                        }
+                    </Button>
                 </div>
+
+
             </div>
         </div>
-    );
-};
+</div>
+)
+    ;
+}
 
-export default LoanDetails;
+export default LoanDetailsContent;
