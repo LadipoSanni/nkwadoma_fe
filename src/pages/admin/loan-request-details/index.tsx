@@ -24,7 +24,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import CreateLoanOffer from "@/reuseable/modals/createLoanOffer/Index";
-import DeclineLoanModal from "@/reuseable/modals/declineLoan";
+import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
