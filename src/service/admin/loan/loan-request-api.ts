@@ -17,20 +17,19 @@ export const loanRequestApi = createApi({
             }),
             providesTags: ['loanRequests']
         }),
-        viewLoanRequestDetails: builder.query({
-            query: (id) => ({
-                url: `/loan/loan-requests`,
-                method: 'GET',
-                query: id
-            }),
-            providesTags: ['loanRequest-details']
-        }),
         respondToLoanRequest: builder.mutation({
             query: (data) => ({
                 url: '/loan/loan-request/response',
                 method: 'POST',
                 body: data
             })
+        }),
+        viewLoanRequestDetails: builder.query({
+            query: (id: string) => ({
+                url: `/loan/loan-requests`,
+                method: 'GET',
+                query: id
+            }),
         })
     })
 });
