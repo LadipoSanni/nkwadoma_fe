@@ -4,7 +4,7 @@ import { NumericFormat,NumberFormatValues } from 'react-number-format';
 
 interface CustomNumberFormatProps { 
     name: string;
-     [x: string]: any;
+     [x: string]: string | number;
      } 
      
      
