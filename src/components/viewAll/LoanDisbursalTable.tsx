@@ -22,7 +22,7 @@ function Index() {
         pageSize: 10,
         pageNumber: 10
     }
-    const { data, isLoading} = useViewAllLoanRequestQuery(request)
+    const {  isLoading} = useViewAllLoanRequestQuery(request)
 
 
 
