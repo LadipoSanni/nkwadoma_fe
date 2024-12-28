@@ -176,8 +176,6 @@ function Tables<T extends TableRowData>({
                                             <TableHead
                                                 key={column.id}
                                                 id={`dynamicTableHeadCell${column.id}`}
-                                                // className={`${Styles.tableHeaderItem} `}
-                                                // className={`px-[12px] py-[10px] text-[#101828]`}
                                                 className="bg-[#F0F2F4] h-10 hover:bg-[#F0F2F4]"
                                             >
                                                 <div
@@ -204,7 +202,6 @@ function Tables<T extends TableRowData>({
                                         <TableRow
                                             id={`dynamicTableBodyRow${rowIndex}`}
                                             key={rowIndex}
-                                            // onClick={() => handleRowClick(row)}
                                             className={`${sx}`}
                                         >
                                             {tableHeader.map((column) => (
@@ -212,7 +209,6 @@ function Tables<T extends TableRowData>({
                                                     onClick={() => handleRowClick(row?.id)}
                                                     key={`${column.id}${rowIndex} `}
                                                     id={`dynamicTableCell${column.id}${rowIndex}`}
-                                                    // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                                                     className={`h-1 ${
                                                         isLastPage ? "border-b border-solid " : ""
                                                     } ${tableCellStyle} overflow-hidden whitespace-nowrap text-ellipsis max-w-[140px]  `}
@@ -220,9 +216,7 @@ function Tables<T extends TableRowData>({
                                                     <div
                                                         id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
                                                         className={`${Styles.tableBodyItem} ${tableStyle}  truncate pt-2 pb-2 pr-2 pl-2`}
-                                                        // style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", maxWidth: "200px",  }}
                                                     >
-                                                        {/* {column.selector ? column.selector(row) : row[column.id]} */}
                                                         {renderCellContent(
                                                             column.selector
                                                                 ? column.selector(row)
@@ -239,7 +233,6 @@ function Tables<T extends TableRowData>({
                                                 >
                                                     {
                                                         <Menubar
-                                                            // onClick={}
                                                         >
                                                             <MenubarMenu>
                                                                 <MenubarTrigger
