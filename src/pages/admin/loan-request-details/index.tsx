@@ -55,6 +55,7 @@ function LoanDetails() {
 
     }
     const onSubmit   = (data: {amountApproved: string, loanProduct: string} ) => {
+        // this is so it doesn't throw unuse variable error
         console.log("data: ", data)
     }
     const id: string = getId()
@@ -76,7 +77,6 @@ function LoanDetails() {
 
     ]
     const toggleArrow = () => {
-        console.log('he dey enter')
         if (arrowDown) {
             setArrowDown(false)
         } else {
