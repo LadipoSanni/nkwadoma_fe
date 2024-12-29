@@ -20,7 +20,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
     const [programId, setProgramId] = useState("");
-    const [isFormValid, setIsFormValid] = useState(true);
+    const [isFormValid, setIsFormValid] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [respondToLoanRequest] = useRespondToLoanRequestMutation(); // Use the new mutation
 
