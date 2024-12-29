@@ -38,7 +38,7 @@ function Index() {
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        router.push(`/loan-details?id=${ID}`);
+        router.push(`/disbursed-loan-details?id=${ID}`);
     };
 
     return (
