@@ -1,5 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import { CheckCircle, X } from "lucide-react";
+import * as faceapi from 'face-api.js';
 
 interface CapturePhotoWithTipsProps {
     onCapture: (imageSrc: File) => void;
@@ -13,8 +14,33 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const [step, setStep] = useState<'front' | 'side'>('front');
     const [progress, setProgress] = useState(0);
     const [hasInitialFaceDetection, setHasInitialFaceDetection] = useState(false);
+    const [isModelLoaded, setIsModelLoaded] = useState(false);
+    const [modelLoadingError, setModelLoadingError] = useState<string | null>(null);
     const [, setImageSrc] = useState<string | null>(null);
     const [captureTimeout, setCaptureTimeout] = useState<NodeJS.Timeout | null>(null);
+
+
+    useEffect(() => {
+        const loadModels = async () => {
+            try {
+                await Promise.all([
+                    faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
+                    faceapi.nets.faceLandmark68TinyNet.loadFromUri('/models'),
+                    faceapi.nets.faceRecognitionNet.loadFromUri('/models')
+                ]);
+
+                console.log('All models loaded successfully');
+                setIsModelLoaded(true);
+                setModelLoadingError(null);
+            } catch (err) {
+                const errorMessage = err instanceof Error ? err.message : 'Unknown error loading models';
+                console.error("Error loading face-api models:", errorMessage);
+                setModelLoadingError(errorMessage);
+            }
+        };
+
+        loadModels();
+    }, []);
 
     useEffect(() => {
         const startCamera = async () => {
@@ -40,74 +66,60 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         };
     }, []);
 
-    const detectFace = useCallback(() => {
-        if (!videoRef.current || !canvasRef.current) return;
+    const detectFace = useCallback(async () => {
+        if (!videoRef.current || !canvasRef.current || !isModelLoaded) return;
 
-        const video = videoRef.current;
-        const canvas = canvasRef.current;
-        const context = canvas.getContext('2d', { willReadFrequently: true });
-        if (!context) return;
+        try {
+            const video = videoRef.current;
 
-        // Ensure the video has valid dimensions
-        if (video.videoWidth === 0 || video.videoHeight === 0) return;
+            if (video.paused || video.ended || !video.videoWidth) return;
 
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        context.drawImage(video, 0, 0);
+            const detection = await faceapi.detectSingleFace(
+                video,
+                new faceapi.TinyFaceDetectorOptions({
+                    inputSize: 224,
+                    scoreThreshold: 0.3
+                })
+            );
 
-        const centerX = Math.floor(canvas.width / 4);
-        const centerY = Math.floor(canvas.height / 4);
-        const size = Math.floor(Math.min(canvas.width, canvas.height) / 2);
+            const faceDetected = !!detection;
+            setIsFaceDetected(faceDetected);
 
-        const imageData = context.getImageData(centerX, centerY, size, size);
-        const data = imageData.data;
+            if (faceDetected) {
+                setProgress(prev => {
+                    const newProgress = Math.min(100, prev + 2);
+                    return newProgress;
+                });
 
-        let skinTonePixels = 0;
-        for (let i = 0; i < data.length; i += 4) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
-
-            if (r > 95 && g > 40 && b > 20 &&
-                Math.abs(r - g) > 15 && r > g && r > b) {
-                skinTonePixels++;
-            }
-        }
-
-        const faceDetected = skinTonePixels > (size * size * 0.1);
-        setIsFaceDetected(faceDetected);
-
-        if (faceDetected) {
-            setProgress(prev => {
-                const newProgress = prev >= 100 ? 0 : prev + 1;
-                console.log(`Face detection progress: ${newProgress}%`);
-                return newProgress;
-            });
-
-            if (!captureTimeout) {
-                const timeout = setTimeout(() => {
-                    capture();
-                    setCaptureTimeout(null);
-                }, 20000);
-                setCaptureTimeout(timeout);
-            }
-        } else {
-            if (captureTimeout) {
-                clearTimeout(captureTimeout);
-                setCaptureTimeout(null);
-            }
-            setProgress(0);
-        }
-
-        if (faceDetected && !hasInitialFaceDetection) {
-            setHasInitialFaceDetection(true);
-            setTimeout(() => {
-                if (step === 'front') {
-                    setStep('side');
+                if (!hasInitialFaceDetection && step === 'front') {
+                    setHasInitialFaceDetection(true);
+                    setTimeout(() => {
+                        setStep('side');
+                        setProgress(0);
+                    }, 1000);
                 }
-            }, 1000);
+
+                if (!captureTimeout && progress > 90) {
+                    const timeout = setTimeout(() => {
+                        capture();
+                        setCaptureTimeout(null);
+                    }, 1000);
+                    setCaptureTimeout(timeout);
+                }
+            } else {
+                if (captureTimeout) {
+                    clearTimeout(captureTimeout);
+                    setCaptureTimeout(null);
+                }
+                setProgress(prev => Math.max(0, prev - 5));
+            }
+        } catch (err) {
+            console.error('Face detection error:', err);
+            setIsFaceDetected(false);
         }
-    }, [step, hasInitialFaceDetection, captureTimeout]);
+    }, [step, hasInitialFaceDetection, captureTimeout, isModelLoaded, progress]);
+
+
 
     const capture = useCallback(() => {
         if (videoRef.current) {
@@ -123,7 +135,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                 onCapture(file);
             }
         }
-    }, [videoRef, onCapture]);
+    }, [onCapture]);
 
     const convertBase64ToFile = (base64String: string, fileName: string): File => {
         const base64Parts = base64String.split(',');
@@ -139,19 +151,18 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     };
 
     useEffect(() => {
-        const interval = setInterval(detectFace, 200);
-        return () => clearInterval(interval);
-    }, [detectFace]);
+        let intervalId: NodeJS.Timeout | null = null;
 
-    useEffect(() => {
-        if (isFaceDetected) {
-            const interval = setInterval(() => {
-                setProgress(prev => (prev >= 100 ? 0 : prev + 1));
-            }, 200);
-            return () => clearInterval(interval);
+        if (isModelLoaded && videoRef.current) {
+            videoRef.current.onloadedmetadata = () => {
+                intervalId = setInterval(detectFace, 200);
+            };
         }
-        return () => {};
-    }, [isFaceDetected]);
+
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
+    }, [detectFace, isModelLoaded]);
 
     const frameClassName = isFaceDetected
         ? "absolute top-4 right-4 w-[270px] h-[270px] rounded-full overflow-hidden transition-all duration-500"
@@ -191,9 +202,15 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     </div>
                 </main>
                 <p className="text-gray-700 text-sm">
-                    {step === 'front'
-                        ? "Position your face within the frame"
-                        : "Turn your head to the side"}
+                    {modelLoadingError ? (
+                        <span className="text-red-500">Error loading face detection: {modelLoadingError}</span>
+                    ) : !isModelLoaded ? (
+                        "Loading face detection models..."
+                    ) : step === 'front' ? (
+                        "Position your face within the frame"
+                    ) : (
+                        "Turn your head to the side"
+                    )}
                 </p>
             </div>
             <section className="bg-gray-50 rounded p-5 space-y-3">
@@ -226,154 +243,3 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
 };
 
 export default CapturePhotoWithTips;
-
-// import React, { useRef, useState, useCallback, useEffect } from "react";
-// import Webcam from "react-webcam";
-// import * as faceapi from 'face-api.js';
-// import { MdCheckCircleOutline, MdOutlineCancel } from "react-icons/md";
-//
-// interface CapturePhotoWithTipsProps {
-//     onCapture: (imageSrc: File) => void;
-// }
-//
-// const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }) => {
-//     const webcamRef = useRef<Webcam>(null);
-//     const [isFaceDetected, setIsFaceDetected] = useState(false);
-//     const [step, setStep] = useState<'front' | 'side'>('front');
-//     const [progress, setProgress] = useState(0);
-//
-//     useEffect(() => {
-//         // Load face-api models
-//         const loadModels = async () => {
-//             await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-//             await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
-//         };
-//         loadModels();
-//     }, []);
-//
-//     const detectFace = useCallback(async () => {
-//         if (webcamRef.current) {
-//             const video = webcamRef.current.video;
-//             if (video) {
-//                 const detection = await faceapi.detectSingleFace(
-//                     video,
-//                     new faceapi.TinyFaceDetectorOptions()
-//                 );
-//
-//                 if (detection) {
-//                     setIsFaceDetected(true);
-//                     if (step === 'front') {
-//                         setTimeout(capture, 1000);
-//                     }
-//                 } else {
-//                     setIsFaceDetected(false);
-//                 }
-//             }
-//         }
-//     }, [step]);
-//
-//     useEffect(() => {
-//         const interval = setInterval(detectFace, 100);
-//         return () => clearInterval(interval);
-//     }, [detectFace]);
-//
-//     const capture = useCallback(() => {
-//         if (webcamRef.current) {
-//             const imageSrc = webcamRef.current.getScreenshot();
-//             if (imageSrc) {
-//                 const file = convertBase64ToFile(imageSrc, "captured-image.jpg");
-//                 if (step === 'front') {
-//                     setStep('side');
-//                 } else {
-//                     onCapture(file);
-//                 }
-//             }
-//         }
-//     }, [step, onCapture]);
-//
-//     const convertBase64ToFile = (base64String: string, fileName: string): File => {
-//         const base64Parts = base64String.split(',');
-//         const mimeType = base64Parts[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
-//         const binaryString = atob(base64Parts[1]);
-//         const byteArray = new Uint8Array(binaryString.length);
-//
-//         for (let i = 0; i < binaryString.length; i++) {
-//             byteArray[i] = binaryString.charCodeAt(i);
-//         }
-//
-//         return new File([byteArray], fileName, { type: mimeType });
-//     };
-//
-//     useEffect(() => {
-//         const interval = setInterval(() => {
-//             setProgress((prev) => (prev >= 100 ? 0 : prev + 10));
-//         }, 2000);
-//         return () => clearInterval(interval);
-//     }, []);
-//
-//     return (
-//         <main className="grid gap-5">
-//             <div className="grid place-items-center gap-5">
-//                 <main className="relative w-[300px] h-[300px]">
-//                     <svg width="300" height="301" viewBox="0 0 300 301" fill="none" xmlns="http://www.w3.org/2000/svg">
-//                         <path
-//                             d="M300 150.5C300 233.343 232.843 300.5 150 300.5C67.1573 300.5 0 233.343 0 150.5C0 67.6573 67.1573 0.5 150 0.5C232.843 0.5 300 67.6573 300 150.5ZM10.4561 150.5C10.4561 227.568 72.932 290.044 150 290.044C227.068 290.044 289.544 227.568 289.544 150.5C289.544 73.432 227.068 10.9561 150 10.9561C72.932 10.9561 10.4561 73.432 10.4561 150.5Z"
-//                             fill="#F0F2F4"
-//                         />
-//                         <circle
-//                             className="progress-circle"
-//                             cx="150"
-//                             cy="150.5"
-//                             r="144"
-//                             fill="none"
-//                             stroke={isFaceDetected ? "#00FF00" : "#142854"}
-//                             strokeWidth="12"
-//                             strokeDasharray="904.32"
-//                             strokeDashoffset={`${904.32 * (1 - progress / 100)}`}
-//                         />
-//                     </svg>
-//                     <div className="absolute top-4 right-4 w-[270px] h-[270px] rounded-full overflow-hidden">
-//                         <Webcam
-//                             audio={false}
-//                             ref={webcamRef}
-//                             screenshotFormat="image/jpeg"
-//                             className="w-full h-full object-cover"
-//                         />
-//                     </div>
-//                 </main>
-//                 <p className="text-black400 text-[14px] font-normal leading-[150%]">
-//                     {step === 'front'
-//                         ? "Position your face within the frame"
-//                         : "Turn your head to the side"}
-//                 </p>
-//             </div>
-//             <section className="bg-grey105 rounded grid p-[12px_20px] gap-3">
-//                 <h1 className="text-[#212221] text-[14px] font-medium leading-[150%]">Tips</h1>
-//                 <div className="grid gap-4">
-//                     <div className="flex gap-2 items-center">
-//                         {isFaceDetected ? (
-//                             <MdCheckCircleOutline className="text-green750 h-3 w-3" />
-//                         ) : (
-//                             <MdOutlineCancel className="text-error1000 h-3 w-3" />
-//                         )}
-//                         <p className="text-black400 text-[14px] font-normal leading-[150%]">
-//                             {step === 'front'
-//                                 ? "Face detected"
-//                                 : "Turn head sideways"}
-//                         </p>
-//                     </div>
-//                     <div className="flex gap-2 items-center">
-//                         <MdCheckCircleOutline className="text-green750 h-3 w-3" />
-//                         <p className="text-black400 text-[14px] font-normal leading-[150%]">Find a well lit environment</p>
-//                     </div>
-//                     <div className="flex gap-2 items-center">
-//                         <MdOutlineCancel className="text-error1000 h-3 w-3" />
-//                         <p className="text-black400 text-[14px] font-normal leading-[150%]">Don't wear hats, glasses and masks</p>
-//                     </div>
-//                 </div>
-//             </section>
-//         </main>
-//     );
-// };
-//
-// export default CapturePhotoWithTips;
