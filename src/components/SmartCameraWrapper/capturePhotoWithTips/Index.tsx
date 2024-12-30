@@ -17,8 +17,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const [isModelLoaded, setIsModelLoaded] = useState(false);
     const [modelLoadingError, setModelLoadingError] = useState<string | null>(null);
     const [, setImageSrc] = useState<string | null>(null);
-    const [captureTimeout, setCaptureTimeout] = useState<NodeJS.Timeout | null>(null);
-
+    const [detectionTimeout, setDetectionTimeout] = useState<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         const loadModels = async () => {
@@ -99,17 +98,22 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     }, 1000);
                 }
 
-                if (!captureTimeout && progress > 90) {
+                if (!detectionTimeout) {
                     const timeout = setTimeout(() => {
-                        capture();
-                        setCaptureTimeout(null);
-                    }, 1000);
-                    setCaptureTimeout(timeout);
+                        if (isFaceDetected) {
+                            capture();
+                        } else {
+                            setIsFaceDetected(false);
+                            setProgress(0);
+                        }
+                        setDetectionTimeout(null);
+                    }, 10000);
+                    setDetectionTimeout(timeout);
                 }
             } else {
-                if (captureTimeout) {
-                    clearTimeout(captureTimeout);
-                    setCaptureTimeout(null);
+                if (detectionTimeout) {
+                    clearTimeout(detectionTimeout);
+                    setDetectionTimeout(null);
                 }
                 setProgress(prev => Math.max(0, prev - 5));
             }
@@ -117,9 +121,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
             console.error('Face detection error:', err);
             setIsFaceDetected(false);
         }
-    }, [step, hasInitialFaceDetection, captureTimeout, isModelLoaded, progress]);
-
-
+    }, [step, hasInitialFaceDetection, detectionTimeout, isModelLoaded, progress]);
 
     const capture = useCallback(() => {
         if (videoRef.current) {
