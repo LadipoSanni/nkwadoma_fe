@@ -17,7 +17,14 @@ import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
-
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import CreateLoanOffer from "@/reuseable/modals/createLoanOffer/Index";
+import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -27,9 +34,10 @@ const LoanDetailsContent = dynamic(
 function LoanDetails() {
     const router = useRouter()
     const searchParams = useSearchParams()
-    // const [breakdown] = useState<[]>([]);
     const [currentTab, setCurrentTab] = useState(0);
     const [arrowDown, setArrowDown] = useState(false);
+    const [openCreateLoanOffer, setOpenCreateLoanOffer] = useState(false)
+    const [openDeclineLoanRequestModal, setOpenDeclineLoanRequestModal] = useState(false)
 
 
 
@@ -45,6 +53,10 @@ function LoanDetails() {
             return ""
         }
 
+    }
+    const onSubmit   = (data: {amountApproved: string, loanProduct: string} ) => {
+        // this is so it doesn't throw unuse variable error
+        console.log("data: ", data)
     }
     const id: string = getId()
     const {data} = useViewLoanRequestDetailsQuery(id)
@@ -65,11 +77,10 @@ function LoanDetails() {
 
     ]
     const toggleArrow = () => {
-        console.log('he dey enter')
         if (arrowDown) {
-            setArrowDown(true)
-        } else {
             setArrowDown(false)
+        } else {
+            setArrowDown(true)
         }
     };
 
@@ -204,6 +215,10 @@ function LoanDetails() {
         }
     };
 
+    const open =  (value: boolean) => {
+        setOpenCreateLoanOffer(value)
+    }
+
 
     return (
         <div
@@ -261,7 +276,7 @@ function LoanDetails() {
                     >
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab}/>
                     </div>
-                    <div className={`px - 2`}>
+                    <div className={`px-2 md:px-0`}>
                         <div className={`bg-grey105 `}>
                             {getCurrentDataList().map((item, index) => (
                                 <li key={"key" + index} className={'p-5  grid gap-9 rounded-md'}>
@@ -283,41 +298,55 @@ function LoanDetails() {
                             </div>
                         </div>
                     </div>
-                <div  className="md:flex grid md:justify-end gap-5 mt-4">
+                <div  className="md:flex px-2 md:px-0 grid md:justify-end gap-5 mt-4">
                     {currentTab !== 0 && (
                         <Button
+                            id={`backButtonOnIndex` + currentTab}
+                            data-testid={`backButtonOnIndex` + currentTab}
                             className={'w-full md:w-fit md:px-6 md:py-4 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
                             onClick={handleBack} disabled={currentTab === 0}>Back</Button>
                     )}
 
-                    <Button
-                        className={'w-full md:w-fit md:px-8 flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                    <div
+                        id={`continueButtonOnIndex` + currentTab}
+                        data-testid={`continueButtonOnIndex` + currentTab}
+                        className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                         onClick={handleNext}
-                        disabled={currentTab === loanRequestDetailsTab.length - 1}>
+                        // disabled={currentTab === loanRequestDetailsTab.length - 1}>
+                        >
                         {currentTab === 2 ? 'Make decision ' : 'Continue'}
                         {currentTab == 2 &&
-                            <div onClick={toggleArrow}>
+                            <div className={''} >
                                 {arrowDown ?
                                     <ChevronUpIcon
-                                        className={'h-5 cursor-pointer  w-4 stroke-2 text-white'}
-                                        onClick={toggleArrow}/>
-                                 :
-                                    <ChevronDownIcon
+                                        id={'downIcon'}
+
                                         className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
                                         onClick={toggleArrow}/>
-
+                                    :
+                                   <DropdownMenu>
+                                       <DropdownMenuTrigger >
+                                           <ChevronDownIcon
+                                               className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
+                                               onClick={() => {setArrowDown(true)}}/>
+                                       </DropdownMenuTrigger>
+                                       <DropdownMenuContent >
+                                            <DropdownMenuItem id={'loanRequestDetailsApproveLoanRequestButton'} data-testid={'loanRequestDetailsApproveLoanRequestButton'} onClick={() => {setOpenCreateLoanOffer(true)}} className={`md:text-meedleBlue text-meedlBlue hover:bg-[#EEF5FF] md:hover:bg-[#EEF5FF] rounded-md md:rounded-md `}>Approve loan request</DropdownMenuItem>
+                                            <DropdownMenuItem id={'loanRequestDetailsDeclineLoanRequestButton'} data-testid={'loanRequestDetailsDeclineLoanRequestButton'} onClick={() => {setOpenDeclineLoanRequestModal(true)}} className={`text-error500 md:hover:text-error500 md:text-error500 md:hover:bg-error50 rounded-md md:rounded-md`}>Decline loan request</DropdownMenuItem>
+                                       </DropdownMenuContent>
+                                    </DropdownMenu>
                                 }
                             </div>
                         }
-                    </Button>
+                    </div>
+                    <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer} setIsOpen={open} onSubmit={onSubmit} />
+                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()} setIsOpen={open} loanProductId={""} title={""}/>
+
                 </div>
-
-
             </div>
         </div>
 </div>
 )
-    ;
 }
 
 export default LoanDetailsContent;
