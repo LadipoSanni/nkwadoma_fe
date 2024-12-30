@@ -6,7 +6,7 @@ import { teamData } from '@/utils/cohort/trainee-details-mock-data/Index';
 import { Book } from "lucide-react";
 import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {  useGetDetailsOfOrganizationQuery } from '@/service/admin/organization';
+// import {  useGetDetailsOfOrganizationQuery } from '@/service/admin/organization';
 import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
 
 interface TableRowData {
