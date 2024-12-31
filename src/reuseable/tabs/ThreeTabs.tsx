@@ -10,20 +10,18 @@ import Tables from "@/reuseable/table/LoanProductTable";
 
 interface detailContainerProps {
     dataList?: { label: string; value: string | React.ReactNode; }[];
-    isNotTableDataList?: { detail: string; value: string }[]
+    isNotTableDataList?: string
     breakDown?: { itemName: string; itemAmount: string; }[];
     tabTitle1: string;
     tabTitle2: string;
-    tabTitle3: string;
     useBreakdown?: boolean;
     isTable?: boolean;
-    dataList3? : { label: string; value: string | React.ReactNode; }[]
 }
 
 export const ThreeTabs: React.FC<detailContainerProps> = ({
                                                                         dataList, breakDown,
-                                                                        tabTitle1, tabTitle2, tabTitle3, useBreakdown = false,
-                                                                        isTable = true, isNotTableDataList, dataList3
+                                                                        tabTitle1, tabTitle2, useBreakdown = false,
+                                                                        isTable = true, isNotTableDataList
                                                                     }) => {
     const ProgramHeader = [
         {title: "Loanee", sortable: true, id: "trainee"},
@@ -47,7 +45,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                          data-testid="productDetails ">{tabTitle1}
                             </TabsTrigger>
                             <TabsTrigger id='termsAndCondition' value={"termsAndCondition"} data-testid="termsAndCondition">{tabTitle2}</TabsTrigger>
-                            <TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>
+                            {/*<TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>*/}
                         </TabsList>
 
                         <div>
@@ -55,7 +53,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                         <TabsContent value={"productDetails"} id="cohort-details-content"
                                      data-testid="productDetails" className={`py-3`}>
                             <div
-                                className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                className="bg-[#F9F9F9] h-80 px-5 w-full overflow-y-auto rounded-sm">
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
@@ -92,40 +90,24 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                     :
                                     <div
                                         className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
-                                        {isNotTableDataList?.map((item, index) => (
-                                            <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
-                                                 key={index}
-                                                 className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                                <div id={`detailsId-${index}`} className="text-black300">
-                                                    <span id={`details-${index}`}>{item.detail}</span>
-                                                </div>
-                                                <div id={`valuesId-${index}`} className="text-meedlBlack">
-                                                    <span id={`values-${index}`}>{item.value}</span>
-                                                </div>
-                                            </div>
-                                        ))}
+                                        <div id={`data-item`} data-testid={`data-item`}
+                                             className="flex md:flex-row flex-col w-full font-medium text-sm">
+                                            {isNotTableDataList}
+                                        </div>
                                     </div>
                                 }
                             </TabsContent>
 
-                            <TabsContent value={"disbursementTerms"} id="trainee-content" data-testid="trainee-content"
-                                         className={`py-3 w-full `}>
-                                <div
-                                    className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
-                                    {dataList3?.map((item, index) => (
-                                        <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
-                                             key={index}
-                                             className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                            <div id={`labelsId-${index}`} className="text-black300">
-                                                <span id={`labels-${index}`}>{item.label}</span>
-                                            </div>
-                                            <div id={`valueDiv-${index}`} className="text-meedlBlack">
-                                                <span id={`valueItems-${index}`}>{item.value}</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </TabsContent>
+                            {/*<TabsContent value={"disbursementTerms"} id="trainee-content" data-testid="trainee-content"*/}
+                            {/*             className={`py-3 w-full `}>*/}
+                            {/*    <div*/}
+                            {/*        className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">*/}
+                            {/*        <div id={`data-item`} data-testid={`data-item`}*/}
+                            {/*             className="flex md:xcflex-row flex-col overflow-y-auto font-medium text-sm">*/}
+                            {/*            {dataList3}*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</TabsContent>*/}
                         </div>
                     </Tabs>
                 </div>

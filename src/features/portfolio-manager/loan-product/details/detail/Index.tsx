@@ -3,14 +3,18 @@ import React from "react";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {FiBook} from "react-icons/fi";
 import {ThreeTabs} from "@/reuseable/tabs/ThreeTabs";
-import image from '../../../../../../public/asset/Image/CohortDetailsImage.png'
+import { useGetLoanProductDetailsByIdQuery } from "@/service/admin/loan_product";
+import {formatAmount} from "@/utils/Format";
 
 
 const Details = () => {
 
-    const handleDropdownClick = ()=>{
+    const loanProductId = sessionStorage.getItem("LoanProductId") ?? undefined;
+    const { data: loanProduct } = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
 
-    }
+    console.log(loanProduct)
+
+    const handleDropdownClick = ()=>{}
 
 
     const tagButtonData: { tagIcon: React.ElementType; tagCount: string | number; tagButtonStyle: string; tagText: string; }[] = [
@@ -18,71 +22,26 @@ const Details = () => {
         // {tagIcon: FiBook, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-lightBlue100", tagText: "Loanees"},
     ];
 
-    const dataList = [ { label: "Cohort Name", value: "Cohort A" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
-        { label: "Start Date", value: "2024-01-01" },
+    const dataList = [
+        { label: "Fund product", value: loanProduct?.data.name },
+        { label: "Product sponsor", value: loanProduct?.data.sponsor },
+        { label: "Product size ", value: formatAmount(loanProduct?.data.loanProductSize)},
+        { label: "Tenor", value: loanProduct?.data.tenor },
+        { label: "Minimum repayment amount", value: formatAmount(loanProduct?.data.minimumRepaymentAmount)},
+        { label: "Interest rate", value: loanProduct?.data.interestRate },
+        { label: "Obligor limit", value: formatAmount(loanProduct?.data.obligorLimit)},
+        { label: "Moratorium", value: loanProduct?.data.moratorium },
+        { label: "Amount disbursed", value: formatAmount(loanProduct?.data.amountDisbursed)},
+        { label: "Amount repaid ", value: formatAmount(loanProduct?.data.amountRepaid)},
+        { label: "Amount earned", value: formatAmount(loanProduct?.data.amountEarned)},
+        { label: "Cost of funds", value: formatAmount(loanProduct?.data.costOfFunds)},
     ];
 
-    const loanDetail = [ { detail: "Loan Amount", value: "50000" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-        { detail: "Interest Rate", value: "5%" },
-    ];
-    const dataList3 = [ { label: "Disbursement Term 1", value: "Term 1 Description" },
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-        { label: "Disbursement Term 2", value: "Term 2 Description"},
-    ]
-
-    const description = "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement" +
-        "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement" +
-        "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement" +
-        "DisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursementDisbursement"
     return (
         <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
             <div id={`firstSection`}>
-                <DetailsImageSection imageSrc={image} cohortTitle={"details"}
-                                     cohortDescription={description}
+                <DetailsImageSection imageSrc={loanProduct?.data.imageUrl} cohortTitle={loanProduct?.data.name}
+                                     cohortDescription={loanProduct?.data.mandate}
                                      handleDropdownClicked={handleDropdownClick}
                                      buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
                                      isEditButton={false}
@@ -91,9 +50,9 @@ const Details = () => {
             </div>
             <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
                 <ThreeTabs
-                    isTable={false} isNotTableDataList={loanDetail} dataList={dataList}
-                                     tabTitle1={"Product details"} tabTitle2={"Loan terms and conditions"} tabTitle3={"Loan disbursement terms"}
-                                     useBreakdown={false} dataList3={dataList3}/>
+                    isTable={false} isNotTableDataList={loanProduct?.data.termsAndCondition} dataList={dataList}
+                                     tabTitle1={"Product details"} tabTitle2={"Loan terms and conditions"}
+                                     useBreakdown={false} />
             </div>
         </div>
     );

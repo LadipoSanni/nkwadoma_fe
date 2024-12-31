@@ -63,7 +63,7 @@ export const cohortApi = createApi({
         }),
 
         viewCohortDetails: builder.query({
-            query: ( cohortId ) => ({
+            query: (cohortId) => ({
                 url: `/cohort-details`,
                 method: "GET",
                 params: cohortId
@@ -93,28 +93,39 @@ export const cohortApi = createApi({
         }),
 
         editCohort: builder.mutation({
-          query: ({data}) => ({
-                 url: "cohort/edit" ,
+            query: ({data}) => ({
+                url: "cohort/edit",
                 method: "POST",
                 body: data,
-         }),
-          invalidatesTags: ['cohort'],
+            }),
+            invalidatesTags: ['cohort'],
         }),
+
         getCohortDetails: builder.query({
-            query: (cohortId:{cohortId: string}) => ({
+            query: (cohortId: { cohortId: string }) => ({
                 url: `/cohort-details`,
                 method: "GET",
                 params: cohortId
             }),
         }),
-        getCohortLoanBreakDown : builder.query({
-           query: (cohortId) => ({
-               url:`/cohort/loanbreakdown?cohortId=${cohortId}`,
-               method: "GET",
-           })
+
+        getCohortDetailsBreakdown: builder.query({
+            query: (cohortId) => ({
+                url: `/cohort/loanbreakdown`,
+                method: "GET",
+                params: cohortId
+            }),
+            providesTags: [`cohort`]
+        }),
+
+        getCohortLoanBreakDown: builder.query({
+            query: (cohortId) => ({
+                url: `/cohort/loanbreakdown?cohortId=${cohortId}`,
+                method: "GET",
+            })
         }),
         searchForLoaneeInACohort: builder.query({
-            query: (param:{
+            query: (param: {
                 loaneeName: string,
                 cohortId?: string,
             }) => ({
@@ -124,11 +135,11 @@ export const cohortApi = createApi({
             })
         }),
         referLoaneeToACohort: builder.mutation({
-           query: (data) => ({
-               url: `/cohort/loanee/refer`,
-               method: 'POST',
-               body: data
-           }),
+            query: (data) => ({
+                url: `/cohort/loanee/refer`,
+                method: 'POST',
+                body: data
+            }),
             invalidatesTags: ['cohort'],
         }),
         addLoaneeToCohort: builder.mutation({
@@ -143,7 +154,6 @@ export const cohortApi = createApi({
 })
 
 
-
 export const {
     useAddLoaneeToCohortMutation,
     useGetCohortLoanBreakDownQuery,
@@ -155,6 +165,7 @@ export const {
     useViewCohortDetailsQuery,
     useDeleteCohortMutation, useEditCohortMutation,
     useGetCohortDetailsQuery, useReferLoaneeMutation,
-    useSearchForLoaneeInACohortQuery
+    useSearchForLoaneeInACohortQuery,
+    useGetCohortDetailsBreakdownQuery
 } = cohortApi;
 

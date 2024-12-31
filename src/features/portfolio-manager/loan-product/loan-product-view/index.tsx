@@ -10,6 +10,7 @@ import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {useRouter} from "next/navigation";
 import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index";
+import { setItemSessionStorage } from "@/utils/storage";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -50,8 +51,7 @@ const LoanProductPage = () => {
 
     const handleRowClick = (row: TableRowData) => {
         router.push('/loan-product/loan-product-details')
-        // setItemSessionStorage("programId", String(row.id))
-        console.log("this is the row clicked", row)
+        setItemSessionStorage("LoanProductId", String(row.id))
     }
 
 
