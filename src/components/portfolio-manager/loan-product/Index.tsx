@@ -115,8 +115,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         {label: "Sponsor 1", value: "sponsor1"},
         {label: "Sponsor 2", value: "sponsor2"},
         {label: "Sponsor 3", value: "sponsor3"},
-        {label: "Sponsor 4", value: "sponsor4"},
-        {label: "Sponsor 5", value: "sponsor5"}
     ];
     const funds = ["Equity Fund", "Debt Fund",];
     const durations = ["Day", "Month", "Year",];
