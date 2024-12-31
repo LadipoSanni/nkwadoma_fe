@@ -63,6 +63,7 @@ const SelectLoanTab = () => {
                 <div
                     key={item?.name}
                     id={item.id}
+                    data-testid={item.id}
                     className={`flex place-self-center w-auto  md:h-auto md:px-2 md:w-auto `}
                 >
                     <MenuItem name={item.name} index={index}/>
