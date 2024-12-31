@@ -14,16 +14,14 @@ interface detailContainerProps {
     breakDown?: { itemName: string; itemAmount: string; }[];
     tabTitle1: string;
     tabTitle2: string;
-    tabTitle3: string;
     useBreakdown?: boolean;
     isTable?: boolean;
-    dataList3? : string
 }
 
 export const ThreeTabs: React.FC<detailContainerProps> = ({
                                                                         dataList, breakDown,
-                                                                        tabTitle1, tabTitle2, tabTitle3, useBreakdown = false,
-                                                                        isTable = true, isNotTableDataList, dataList3
+                                                                        tabTitle1, tabTitle2, useBreakdown = false,
+                                                                        isTable = true, isNotTableDataList
                                                                     }) => {
     const ProgramHeader = [
         {title: "Loanee", sortable: true, id: "trainee"},
@@ -47,7 +45,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                          data-testid="productDetails ">{tabTitle1}
                             </TabsTrigger>
                             <TabsTrigger id='termsAndCondition' value={"termsAndCondition"} data-testid="termsAndCondition">{tabTitle2}</TabsTrigger>
-                            <TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>
+                            {/*<TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>*/}
                         </TabsList>
 
                         <div>
@@ -100,16 +98,16 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                 }
                             </TabsContent>
 
-                            <TabsContent value={"disbursementTerms"} id="trainee-content" data-testid="trainee-content"
-                                         className={`py-3 w-full `}>
-                                <div
-                                    className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
-                                    <div id={`data-item`} data-testid={`data-item`}
-                                         className="flex md:xcflex-row flex-col overflow-y-auto font-medium text-sm">
-                                        {dataList3}
-                                    </div>
-                                </div>
-                            </TabsContent>
+                            {/*<TabsContent value={"disbursementTerms"} id="trainee-content" data-testid="trainee-content"*/}
+                            {/*             className={`py-3 w-full `}>*/}
+                            {/*    <div*/}
+                            {/*        className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">*/}
+                            {/*        <div id={`data-item`} data-testid={`data-item`}*/}
+                            {/*             className="flex md:xcflex-row flex-col overflow-y-auto font-medium text-sm">*/}
+                            {/*            {dataList3}*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</TabsContent>*/}
                         </div>
                     </Tabs>
                 </div>

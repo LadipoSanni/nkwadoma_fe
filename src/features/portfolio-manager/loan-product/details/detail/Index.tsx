@@ -12,7 +12,7 @@ const Details = () => {
     const loanProductId = sessionStorage.getItem("LoanProductId") ?? undefined;
     const { data: loanProduct } = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
 
-    console.log(loanProduct, "This is details")
+    console.log(loanProduct)
 
     const handleDropdownClick = ()=>{}
 
@@ -50,9 +50,9 @@ const Details = () => {
             </div>
             <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
                 <ThreeTabs
-                    isTable={false} isNotTableDataList={loanProduct?.data.loanProductTermsAndCondition} dataList={dataList}
-                                     tabTitle1={"Product details"} tabTitle2={"Loan terms and conditions"} tabTitle3={"Loan disbursement terms"}
-                                     useBreakdown={false} dataList3={loanProduct?.data.loanDisbursementTerms}/>
+                    isTable={false} isNotTableDataList={loanProduct?.data.termsAndCondition} dataList={dataList}
+                                     tabTitle1={"Product details"} tabTitle2={"Loan terms and conditions"}
+                                     useBreakdown={false} />
             </div>
         </div>
     );
