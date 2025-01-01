@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 // import {
 //     DialogDescription,
 //     Root,
@@ -14,24 +14,24 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 // import "./styles.css";
 import {inter} from "@/app/fonts";
-interface props {
-    open: boolean
-}
+// interface props {
+    // open: boolean,
+    // onOpenChange: (state: boolean) => void
+// }
 
-const ChangeInstitutionModal = ({open}: props) => {
+const ChangeInstitutionModal = () => {
 
-    // const [open, setOpen] = useState(false)
-    if (open){
+    const [open, setOpen] = React.useState(false)
+    if (open ){
         console.log('ajhbs')
     }
 
     return(
-        <Dialog.Root open={open}  >
-            <Dialog.Trigger onClick={()=> {console.log('cbufyfuygfy')}} asChild>
-                <div id="changeOrganizationButton" data-testid={'changeOrganizationButton'}
+        <Dialog.Root  open={open}>
+            <Dialog.Trigger className={` ${inter.className} text-blue300 pt-0.5 underline w-fit h-fit md:text-xs md:font-light px-1 bg-blue500 rounded `} asChild>
+                <button onClick={()=> {setOpen(true)}} id="changeOrganizationButton" data-testid={'changeOrganizationButton'}
                      className={` ${inter.className} text-blue300 pt-0.5 underline w-fit h-fit md:text-xs md:font-light px-1 bg-blue500 rounded `}>Change
-                </div>
-
+                </button>
             </Dialog.Trigger>
             <Dialog.Portal >
                 <Dialog.Overlay className="DialogOverlay" />
