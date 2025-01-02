@@ -23,10 +23,6 @@ import {Input} from "@/components/ui/input";
 
 const ChangeInstitutionModal = () => {
 
-    const [open, setOpen] = React.useState(false)
-    if (open) {
-        console.log('ajhbs')
-    }
 
     return (
         <Dialog.Root>
@@ -38,7 +34,7 @@ const ChangeInstitutionModal = () => {
             <Dialog.Portal>
                 <Dialog.Overlay className="fixed inset-0 bg-[#344054B2] data-[state=open]:animate-overlayShow"/>
                 <Dialog.Content
-                    className="fixed left-1/2 top-1/2 md:h-[80vh] md:w-[30vw] h-[90vh] w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5  ">
+                    className="fixed left-1/2 top-1/2 md:h-[75vh] md:w-[30vw] h-[90vh] w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5  ">
                     <Dialog.Title className={` flex justify-between  w-full `}>
                         <div id={`organizationText`} data-testid={`organizationText`}
                              className={`${cabinetGroteskRegular.className} text-2xl`}>
@@ -56,7 +52,7 @@ const ChangeInstitutionModal = () => {
                     <Dialog.Description className="w-full md:w-full ">
                         <div className='relative mt-7 '>
                             <span className="absolute inset-y-0 left-0 flex items-center pr-4 pl-3">
-                               <MdSearch className="h-5 w-5 text-[#939CB0]"/>
+                               <MdSearch className="h-5 w-5 pr-4 text-[#939CB0]"/>
                             </span>
                             <Input
                                 id='searchOrganizationOn'
@@ -65,7 +61,11 @@ const ChangeInstitutionModal = () => {
                             />
                         </div>
                     </Dialog.Description>
-                    <div className="mt-[25px] flex justify-end">
+                    <div className="bottom-0 md:bottom-1/2 md:flex md:justify-end md:bg-red-50 flex justify-end w-full md:w-full bg-red-300">
+                        <div className={`flex gap-3 `}>
+                            <button id={'cancel'} data-testid={'cancel'} className={`border border-meedlBlue text-meedlBlue `}>Cancel</button>
+
+                        </div>
                     </div>
                 </Dialog.Content>
             </Dialog.Portal>
