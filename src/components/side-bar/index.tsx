@@ -342,7 +342,7 @@ const SideBar = () => {
                         </div>
                     </div>
                     <button data-testid="blurry" id="sideBarblurBackground"
-                            className={` grid md:hidden   h-[100%] w-[40%] z-10 bg-[#717987] opacity-30 `}
+                            className={` grid md:hidden   h-[100%] w-[40%] z-10 bg-[#344054B2]  `}
                             onClick={closeSideBar}
                     ></button>
                 </div>
