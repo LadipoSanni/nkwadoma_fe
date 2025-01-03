@@ -77,8 +77,10 @@ const ChangeInstitutionModal = () => {
                                                     className='w-full md:w-full rounded h-11 md:h-11 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 '
                                                 />
                         </div>
-                        <div className={`${styles.organizations}`}>
+                        <div className={`${styles.organizations} py-2 `}>
+                            <div className={` w-full border border-[#ECECEC]  `}>
 
+                            </div>
                         </div>
 
                         </div>

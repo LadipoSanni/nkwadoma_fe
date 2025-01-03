@@ -9,7 +9,23 @@
     grid-template-rows: 8% 92%;
 }
 .organizations{
+    width: 100%;
+    margin-top: 1rem;
+    height: 80%;
+    background-color: crimson;
     display: grid;
     gap: 10px;
     overflow-y: scroll;
+}
+
+
+@media only screen  and (min-width: 768px){
+    .organizations{
+        height: 90%;
+        background-color: crimson;
+        display: grid;
+        gap: 10px;
+        overflow-y: scroll;
+    }
+
 }
