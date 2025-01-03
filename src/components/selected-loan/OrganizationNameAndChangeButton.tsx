@@ -20,10 +20,6 @@ const OrganizationNameAndChangeButton = () => {
                  className={`${cabinetGroteskRegular.className} text-2xl `}>
                 AltSchool Africa
             </div>
-            {/*<div id="changeOrganizationButton" data-testid={'changeOrganizationButton'}*/}
-            {/*     onClick={()=> {setOpen(true)}}*/}
-            {/*     className={` ${inter.className} text-blue300 pt-0.5 underline w-fit h-fit md:text-xs md:font-light px-1 bg-blue500 rounded `}>Change*/}
-            {/*</div>*/}
             <ChangeInstitutionModal />
         </div>
     );

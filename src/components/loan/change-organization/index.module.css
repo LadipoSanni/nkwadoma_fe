@@ -1,0 +1,15 @@
+.container{
+    background-color: white;
+    display: grid;
+    grid-template-rows: 8% 82% 10%;
+}
+.innerContainer{
+    background-color: white;
+    display: grid;
+    grid-template-rows: 8% 92%;
+}
+.organizations{
+    display: grid;
+    gap: 10px;
+    overflow-y: scroll;
+}
