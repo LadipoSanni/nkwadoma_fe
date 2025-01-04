@@ -269,4 +269,37 @@ export const investmentVehicleData = [
       portfolioValue: 30000000.0,
     },
   ];
+  export const teamData = [
+    { "fullName": "Joseph Oyebanjo", "role": "Admin", "status": "Active", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Michael Nwosu", "role": "Admin", "status": "Invited", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Martha Olabode", "role": "Admin", "status": "Active", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Elizabeth Ebikake", "role": "Admin", "status": "Deactivated", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Andrew Madaubuchi", "role": "Admin", "status": "Invited", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "David Anigbogu", "role": "Admin", "status": "Invited", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Joseph Aluko", "role": "Admin", "status": "Deactivated", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Priscilla Tonbara", "role": "Admin", "status": "Invited", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Okechukwu Chukwuemeka", "role": "Admin", "status": "Active", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Chinedu Okafor", "role": "Admin", "status": "Active", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Adaobi Nwokoye", "role": "Admin", "status": "Invited", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Ifeanyi Eze", "role": "Admin", "status": "Deactivated", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Ngozi Okeke", "role": "Admin", "status": "Active", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Emmanuel Chukwuma", "role": "Admin", "status": "Invited", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Blessing Adebayo", "role": "Admin", "status": "Deactivated", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Samuel Akinyemi", "role": "Admin", "status": "Active", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Joy Adenuga", "role": "Admin", "status": "Invited", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Chukwudi Nnamdi", "role": "Admin", "status": "Deactivated", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Grace Oluwole", "role": "Admin", "status": "Active", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Victor Alabi", "role": "Admin", "status": "Invited", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Favour Uche", "role": "Admin", "status": "Active", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Faith Akinola", "role": "Admin", "status": "Deactivated", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Esther Eze", "role": "Admin", "status": "Invited", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Olumide Balogun", "role": "Admin", "status": "Active", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Precious Ekene", "role": "Admin", "status": "Invited", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Funmi Adeola", "role": "Admin", "status": "Deactivated", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Daniel Ifeoma", "role": "Admin", "status": "Active", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Cynthia Opara", "role": "Admin", "status": "Invited", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Peter Olamide", "role": "Admin", "status": "Active", "lastChangedDate": "23 Apr, 2024" },
+    { "fullName": "Sophia Ikenna", "role": "Admin", "status": "Deactivated", "lastChangedDate": "23 Apr, 2024" }
+  ]
+  
   

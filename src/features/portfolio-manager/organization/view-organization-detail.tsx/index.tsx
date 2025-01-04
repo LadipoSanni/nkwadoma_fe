@@ -340,7 +340,10 @@ const ViewOrganizationDetail = () => {
            icon={Cross2Icon}
            headerTitle='Invite Admin'
           >
-           <InviteAdmin setIsOpen={setIsModalOpen}/>
+           <InviteAdmin 
+           setIsOpen={setIsModalOpen}
+           adminType="ORGANIZATION_ADMIN"
+           />
           </TableModal>
         }
       </div>

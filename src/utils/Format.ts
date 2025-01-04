@@ -39,3 +39,28 @@ export const formatDate = (
   return "null"; 
 };
 
+export const validateNumber = (field: string, setFieldValue: (field: string, value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => { 
+  const value = e.target.value; 
+  const validValue = value.replace(/[^0-9]/g, '').replace(/^0+/, ''); 
+  setFieldValue(field, validValue); 
+}; 
+
+    // const value = e.target.value;
+    //                         if (/^(?!0)\d*$/.test(value)) { 
+    //                             setFieldValue("size", value); 
+    //                         }
+
+    export const formatNumberOnBlur = (field: string, setFieldValue: (field: string, value: string) => void, value: string) => { 
+      const trimmedValue = value.replace(/^0+/, ''); 
+      const numberValue = parseFloat(trimmedValue); 
+      const formattedValue = isNaN(numberValue) ? '' : numberValue.toLocaleString('en-US', { 
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2, }); 
+      setFieldValue(field, formattedValue);
+     };
+
+     export const validateText = (field: string, setFieldValue: (field: string, value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => { 
+      const value = e.target.value; 
+       const validValue = value.replace(/[^a-zA-Z\s]/g, ''); 
+       setFieldValue(field, validValue);
+       };
