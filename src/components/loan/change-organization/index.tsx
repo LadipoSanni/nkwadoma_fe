@@ -6,51 +6,23 @@ import {MdSearch} from "react-icons/md";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button"
 import styles from "./index.module.css"
+import {organizations} from "../../../utils/LoanProductMockData";
+import OrganizationImage from "@/reuseable/profile/Organization-image";
+import {store, useAppSelector} from "@/redux/store";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {setClickedOrganization} from "@/redux/slice/loan/selected-loan";
 
 const ChangeInstitutionModal = () => {
 
+    const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
+    const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganizationId)
 
+    const handleClick = (id: string| number) => {
+        store.dispatch( setClickedOrganization(id))
+
+    }
+    // setClickedOrganization
     return (
-        // <Dialog.Root>
-        //     <Dialog.Trigger asChild>
-        //         <button id="changeOrganizationButton" data-testid={'changeOrganizationButton'}
-        //                 className={` ${inter.className} text-meedlBlue pt-0.5 underline w-fit h-fit md:font-size-0.875rem md:font-light px-1 bg-blue500 rounded `}>Change
-        //         </button>
-        //     </Dialog.Trigger>
-        //     <Dialog.Portal>
-        //         <Dialog.Overlay className="fixed inset-0 bg-[#344054B2] data-[state=open]:animate-overlayShow"/>
-        //         <Dialog.Content
-        //             className="fixed left-1/2 top-1/2 md:h-[75vh] md:w-[30vw] h-[90vh] w-[90vw] grid grid-rows-3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5  ">
-        //             <Dialog.Title id={'titleAndCloseIcon'} data-testid={'titleAndCloseIcon'} className={`${cabinetGroteskRegular.className} text-2xl`}>
-        //                     Organization
-        //             </Dialog.Title>
-        //             <Dialog.Description className="w-full md:w-full ">
-        //                 <div className='relative mt-7 '>
-        //                     <span className="absolute inset-y-0 left-0 flex items-center pr-4 pl-3">
-        //                        <MdSearch className="h-5 w-5 pr-4 text-[#939CB0]"/>
-        //                     </span>
-        //                     <Input
-        //                         id='searchOrganizationOn'
-        //                         placeholder='Search'
-        //                         className='w-full md:w-full rounded h-11 md:h-11 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 '
-        //                     />
-        //                 </div>
-        //             </Dialog.Description>
-        //             <div
-        //                 className="bottom-0  md:bottom-1/2 md:flex md:justify-end h-fit flex  gap-4 md:h-fit md:bg-red-50  justify-end w-full md:w-full bg-red-300">
-        //                 <button id={'cancel'} data-testid={'cancel'}
-        //                         className={`border border-meedlBlue rounded-md text-sm h-fit w-fit px-10 py-4  text-meedlBlue `}>Cancel
-        //                 </button>
-        //                 <button id={'cancel'} data-testid={'cancel'}
-        //                         disabled={true}
-        //                         className={`border border-meedlBlue bg-meedlBlue rounded-md text-sm h-fit w-fit px-10 py-4  text-meedlWhite `}>Comfirm
-        //                 </button>
-        //
-        //                 {/*</div>*/}
-        //             </div>
-        //         </Dialog.Content>
-        //     </Dialog.Portal>
-        // </Dialog.Root>
         <Dialog.Root>
             <Dialog.Trigger asChild>
                          <button id="changeOrganizationButton" data-testid={'changeOrganizationButton'}
@@ -61,11 +33,11 @@ const ChangeInstitutionModal = () => {
                 <Dialog.Overlay className="fixed inset-0 bg-[#344054B2] data-[state=open]:animate-overlayShow"/>
                 <Dialog.Content
                                 className={`fixed left-1/2 top-1/2 ${styles.container} md:h-[75vh] md:w-[30vw] h-[90vh] w-[90vw] grid grid-rows-3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5 `}>
-                    <Dialog.Title  className={`${cabinetGroteskRegular.className} text-2xl`}>
+                    <Dialog.Title  className={`${cabinetGroteskRegular.className}  text-2xl`}>
                         Organization
                     </Dialog.Title>
                     <div
-                        className={` ${styles.innerContainer}h-full md:h-full w-full md:w-full `}
+                        className={` ${styles.innerContainer}  h-full md:h-full w-full md:w-full `}
                     >
                         <div className='relative  '>
                              <span className="absolute inset-y-0 left-0 flex items-center pr-4 pl-3">
@@ -77,24 +49,55 @@ const ChangeInstitutionModal = () => {
                                                     className='w-full md:w-full rounded h-11 md:h-11 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 '
                                                 />
                         </div>
-                        <div className={`${styles.organizations} py-2 `}>
-                            <div className={` w-full border border-[#ECECEC]  `}>
+                        <div className={`${styles.organizations} py-2 grid gap-3 `}>
+                            {
+                                organizations.map((organization, index) => (
+                                    <div key={organization.id} id={"index" + index}
+                                         onClick={() => {handleClick(organization?.id)}}
+                                         className={` ${styles.institutionMiniCard2} md:flex pl-3  md:place-items-center md:px-2 md:justify-between grid   w-[98%] h-[6rem] md:h-[4rem] rounded-md border ${organization.id === clickedOrganizationId ? `border-meedlBlue` : `border-[#ECECEC]`}   `}>
 
-                            </div>
+                                        <div
+                                            className={`flex md:flex gap-3 place-items-center md:place-items-center `}
+                                        >
+                                            <RadioGroup className={``} defaultValue="comfortable">
+                                                <div className="flex items-center space-x-2">
+                                                    <RadioGroupItem  onClick={() => {handleClick(organization?.id)}}  className={` ring-1 ring-meedleBlue `} checked={organization.id === clickedOrganizationId} value="default" id="r1" />
+                                                </div>
+                                            </RadioGroup>
+                                            <OrganizationImage
+                                                src={organization?.pic}
+                                                alt={'image'} id={'oranizationImageOnLoan'}/>
+                                            <span className={` ${inter.className} text-black500 `}>{organization.name}</span>
+                                        </div>
+                                        <div className={`flex md:flex bg-grey105 px-3 rounded-full w-fit h-fit   place-items-center gap-3 pr-1 `}>
+                                            <span className={`text-sm `}>{currentTab}</span>
+                                            <div
+                                                className={` w-fit h-fit ring-1 ring-[#E1EEFF] rounded-md  px-1 py-1 `}
+                                            >
+                                                <div className={`bg-[#E1EEFF] `}>
+                                                    <span className={`text-sm text-meedlBlue`}>263</span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                ))
+                            }
                         </div>
 
-                        </div>
-                        <div
-                            className="absolute bottom-0  px-4 pb-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
-                            <Button
-                                id={'cancel'} data-testid={'cancel'}
-                                className={` border border-meedlBlue rounded-md text-sm h-fit md:w-fit md:px-10 md:py-4 py-5 w-full  text-meedlBlue`}
+                    </div>
+                    <div
+                        className="absolute bottom-0 px-4 pb-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
+                        <Button
+                            id={'cancel'} data-testid={'cancel'}
+                            className={` border border-meedlBlue rounded-md text-sm h-fit md:w-fit md:px-10 md:py-4 py-4 w-full  text-meedlBlue`}
                             >
                                 Cancel
                             </Button>
                             <Button id={'cancel'} data-testid={'cancel'}
                                     disabled={true}
-                                    className={`border border-meedlBlue bg-meedlBlue rounded-md text-sm h-fit md:w-fit py-5 md:px-10 md:py-4 w-full text-meedlWhite `}>Confirm
+                                    className={`border border-meedlBlue bg-meedlBlue rounded-md text-sm h-fit md:w-fit py-4 md:px-10 md:py-4 w-full text-meedlWhite `}>Confirm
                             </Button>
                         </div>
                         <Dialog.Close asChild>

@@ -1,12 +1,11 @@
 "use client"
-import React, {useState} from 'react';
+import React from 'react';
 import OrganizationImage from "@/reuseable/profile/Organization-image";
-import {cabinetGroteskRegular, inter} from "@/app/fonts";
+import {cabinetGroteskRegular} from "@/app/fonts";
 import ChangeInstitutionModal from "@/components/loan/change-organization/index";
 
 const OrganizationNameAndChangeButton = () => {
 
-    // const [open, setOpen] = useState(false)
 
     return (
         <div
