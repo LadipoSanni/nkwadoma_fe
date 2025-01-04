@@ -75,9 +75,9 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, setDate }) => {
             selected={date}
             onSelect={handleDateSelect}
             initialFocus
-            disabled={(date) =>
-              date && date.getTime() < new Date().setHours(0, 0, 0, 0)
-            }
+            // disabled={(date) =>
+            //   date && date.getTime() < new Date().setHours(0, 0, 0, 0)
+            // }
           />{" "}
         </PopoverContent>{" "}
       </Popover>{" "}
