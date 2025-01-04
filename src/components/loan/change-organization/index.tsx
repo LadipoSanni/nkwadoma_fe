@@ -9,7 +9,6 @@ import styles from "./index.module.css"
 import {organizations} from "../../../utils/LoanProductMockData";
 import OrganizationImage from "@/reuseable/profile/Organization-image";
 import {store, useAppSelector} from "@/redux/store";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {setClickedOrganization} from "@/redux/slice/loan/selected-loan";
 
 const ChangeInstitutionModal = () => {
@@ -59,12 +58,14 @@ const ChangeInstitutionModal = () => {
                                         <div
                                             className={`flex md:flex gap-3 place-items-center md:place-items-center `}
                                         >
-                                            <RadioGroup className={``} defaultValue="comfortable">
-                                                <div className="flex items-center space-x-2">
-                                                    <RadioGroupItem  onClick={() => {handleClick(organization?.id)}}  className={` ring-1 ring-meedleBlue `} checked={organization.id === clickedOrganizationId} value="default" id="r1" />
+                                            {/*<RadioGroup className={``} defaultValue="comfortable">*/}
+                                                <div className={`flex w-fit h-fit px-1 py-1 ring-1 ${organization.id === clickedOrganizationId ?  `ring-meedlBlue` : `ring-[#ECECEC]` } rounded-full items-center space-x-2`}>
+                                                    <div className={` w-[0.7rem] h-[0.7rem] rounded-full  ${organization.id === clickedOrganizationId ?  `bg-meedlBlue md:bg-meedlBlue` : `bg-white` } `}></div>
+                                                    {/*<RadioGroupItem  onClick={() => {handleClick(organization?.id)}}  className={` ring-1 ring-meedleBlue `} checked={organization.id === clickedOrganizationId} value="default" id="r1" />*/}
                                                 </div>
-                                            </RadioGroup>
+                                            {/*</RadioGroup>*/}
                                             <OrganizationImage
+                                                size={'small'}
                                                 src={organization?.pic}
                                                 alt={'image'} id={'oranizationImageOnLoan'}/>
                                             <span className={` ${inter.className} text-black500 `}>{organization.name}</span>
