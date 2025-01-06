@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import CreateLoanOffer from "@/reuseable/modals/createLoanOffer/Index";
 import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
+import {loaneeLoanBreakDown} from "@/types/loan/loan-request.type";
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -42,6 +43,7 @@ function LoanDetails() {
     const [arrowDown, setArrowDown] = useState(false);
     const [openCreateLoanOffer, setOpenCreateLoanOffer] = useState(false)
     const [openDeclineLoanRequestModal, setOpenDeclineLoanRequestModal] = useState(false)
+    const [breakDown, setBreakDown] = useState<{ itemName: string; itemAmount: string; }[]>()
 
 
 
@@ -64,7 +66,6 @@ function LoanDetails() {
     }
     const id: string = getId()
     const {data} = useViewLoanRequestDetailsQuery(id)
-
     const backToLoanRequest = () => {
         store.dispatch(setCurrentTab('Loan requests'))
         router.push("/loan/loan-request")
@@ -75,12 +76,12 @@ function LoanDetails() {
         "Loan details"
     ]
 
-    const breakDown = [
-        {itemName: 'tuition', itemAmount: '$2000'},
-        {itemName: 'skincare', itemAmount: '$2000'},
-        {itemName: 'head', itemAmount: '$2000'},
-
-    ]
+    // const breakDown = [
+    //     {itemName: 'tuition', itemAmount: '$2000'},
+    //     {itemName: 'skincare', itemAmount: '$2000'},
+    //     {itemName: 'head', itemAmount: '$2000'},
+    //
+    // ]
     const toggleArrow = () => {
         if (arrowDown) {
             setArrowDown(false)
@@ -93,6 +94,11 @@ function LoanDetails() {
 
 
     const handleNext = () => {
+        if (currentTab == 1){
+            const item = getloaneeloanDetails();
+            setBreakDown(item)
+            console.log('item:: ', item, "bress: ", breakDown)
+        }
         if (currentTab < loanRequestDetailsTab.length - 1) {
             setCurrentsTab(currentTab + 1);
         }
@@ -103,6 +109,20 @@ function LoanDetails() {
             setCurrentsTab(currentTab - 1);
         }
     };
+    // const jj =  [
+    //     {itemName: 'shoe', itemAmount: '2000'},
+    //     {itemName: 'shoe', itemAmount: '2000'},
+    //     {itemName: 'shoe', itemAmount: '2000'},
+    //     {itemName: 'shoe', itemAmount: '2000'},
+    //
+    // ]
+    const getloaneeloanDetails = () => {
+        const loaneeeLoanBreakdowns =  data?.data?.body?.data?.loaneeLoanBreakdowns
+        const loaneeloanBreakDown :{ itemName: string; itemAmount: string; }[] = [ ]
+        loaneeeLoanBreakdowns?.forEach((element:loaneeLoanBreakDown) => loaneeloanBreakDown?.push({itemName: element?.itemName, itemAmount: element?.itemAmount} ) )
+        // console.log("jj: ", jj, "jjk", loaneeloanBreakDown)
+        return loaneeloanBreakDown;
+    }
 
     const loanDetil = [
         {
@@ -181,20 +201,20 @@ function LoanDetails() {
     ]
 
     const basic = [
-        {label: 'Gender', value: data?.data?.body?.data?.userIdentity?.gender},
-        {label: 'Email address', value: data?.data?.body?.data?.userIdentity?.email},
-        {label: 'Phone number', value: data?.data?.body?.data?.userIdentity?.phoneNumer},
-        {label: 'Date of birth', value: data?.data?.body?.data?.userIdentity?.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.body?.data?.userIdentity?.maritalStatus},
-        {label: 'Nationality', value: data?.data?.body?.data?.userIdentity?.nationality},
-        {label: 'State of origin ', value: data?.data?.body?.data?.userIdentity?.stateOfOrigin},
-        {label: 'State of residence', value: data?.data?.body?.data?.userIdentity?.stateOfResidence},
+        {label: 'Gender', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.gender},
+        {label: 'Email address', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.email},
+        {label: 'Phone number', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.phoneNumer},
+        {label: 'Date of birth', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.dateOfBirth},
+        {label: 'Marital status', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.maritalStatus},
+        {label: 'Nationality', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.nationality},
+        {label: 'State of origin ', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfOrigin},
+        {label: 'State of residence', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfResidence},
     ]
 
     const additional = [
-        {label: 'Alternate email address', value: data?.data?.body?.data?.alternateEmail},
-        {label: 'Alternate phone number', value: data?.data?.body?.data?.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data?.body?.data?.alternateContactAddress},
+        {label: 'Alternate email address', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateEmail},
+        {label: 'Alternate phone number', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateContactAddress},
         {
             label: 'Next of kin name',
             value: data?.data?.body?.data?.nextOfKin?.firstName + " " + data?.data?.body?.data?.nextOfKin?.lastName
