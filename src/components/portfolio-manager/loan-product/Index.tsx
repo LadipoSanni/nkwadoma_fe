@@ -74,7 +74,21 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         loanProductSize: Yup.string()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0 and must be numeric")
             .trim()
-            .required("loan product is required"),
+            .required("Loan product is required")
+            .test('is-greater-than-obligor-limit', 'Loan Product Size must be greater than or equal to Obligor Limit',
+                function (value) {
+                    const {obligorLimit} = this.parent;
+                    return parseFloat(value) >= parseFloat(obligorLimit);
+                }),
+        obligorLimit: Yup.string()
+            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Limit must be greater than 0 and must be numeric")
+            .trim()
+            .required("Obligor limit is required")
+            .test('is-less-than-loan-product-size', 'Obligor limit must be less than or equal to Loan Product Size',
+                function (value) {
+                    const {loanProductSize} = this.parent;
+                    return parseFloat(value) <= parseFloat(loanProductSize);
+                }),
         minimumRepaymentAmount: Yup.string()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Amount must be greater than 0 and must be numeric")
             .trim()
@@ -87,10 +101,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         interest: Yup.string()
             .trim()
             .required("Interest is required"),
-        obligorLimit: Yup.string()
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "limit must be greater than 0 and must be numeric")
-            .trim()
-            .required("Obligor limit is required"),
         loanProductMandate: Yup.string()
             .trim()
             .required("Product mandate is required")
