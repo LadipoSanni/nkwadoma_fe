@@ -99,12 +99,14 @@ const ChangeInstitutionModal = () => {
                     </div>
                     <div
                         className="absolute bottom-0 px-4 pb-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
-                        <Button
-                            id={'cancel'} data-testid={'cancel'}
-                            className={` border border-meedlBlue rounded-md text-sm h-fit md:w-fit md:px-10 md:py-4 py-4   text-meedlBlue`}
-                            >
-                                Cancel
-                            </Button>
+                        <Dialog.Close asChild>
+                            <Button
+                                id={'cancel'} data-testid={'cancel'}
+                                className={` border border-meedlBlue rounded-md text-sm h-fit md:w-fit md:px-10 md:py-4 py-4   text-meedlBlue`}
+                                >
+                                    Cancel
+                                </Button>
+                        </Dialog.Close>
                         <div className={`w-full  md:w-[8rem]`}>
                             <AuthButton
                                 disable={disabled} backgroundColor={'#142854'} textColor={"white"}
