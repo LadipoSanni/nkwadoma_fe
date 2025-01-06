@@ -46,7 +46,6 @@ function LoanDetails() {
     const [breakDown, setBreakDown] = useState<{ itemName: string; itemAmount: string; }[]>()
 
 
-
     const getId = () => {
         if (searchParams) {
             const pathVariable = searchParams.get("id")
@@ -60,7 +59,7 @@ function LoanDetails() {
         }
 
     }
-    const onSubmit   = (data: {amountApproved: string, loanProduct: string} ) => {
+    const onSubmit = (data: { amountApproved: string, loanProduct: string }) => {
         // this is so it doesn't throw unuse variable error
         console.log("data: ", data)
     }
@@ -91,10 +90,8 @@ function LoanDetails() {
     };
 
 
-
-
     const handleNext = () => {
-        if (currentTab == 1){
+        if (currentTab == 1) {
             const item = getloaneeloanDetails();
             setBreakDown(item)
             console.log('item:: ', item, "bress: ", breakDown)
@@ -109,7 +106,7 @@ function LoanDetails() {
             setCurrentsTab(currentTab - 1);
         }
     };
-    const jj =  [
+    const jj = [
         {itemName: 'shoe', itemAmount: '2000'},
         {itemName: 'shoe', itemAmount: '2000'},
         {itemName: 'shoe', itemAmount: '2000'},
@@ -117,10 +114,12 @@ function LoanDetails() {
 
     ]
     const getloaneeloanDetails = () => {
-        const loaneeeLoanBreakdowns =  data?.data?.body?.data?.loaneeLoanBreakdowns
-        const loaneeloanBreakDown :{ itemName: string; itemAmount: string; }[] = [ ]
-        loaneeeLoanBreakdowns?.forEach((element:loaneeLoanBreakDown) => loaneeloanBreakDown?.push({itemName: element?.itemName, itemAmount: element?.itemAmount} ) )
-        console.log("jj: ", jj, "jjk", loaneeloanBreakDown)
+        const loaneeeLoanBreakdowns = data?.data?.body?.data?.loaneeLoanBreakdowns
+        const loaneeloanBreakDown: { itemName: string; itemAmount: string; }[] = []
+        loaneeeLoanBreakdowns?.forEach((element: loaneeLoanBreakDown) => loaneeloanBreakDown?.push({
+            itemName: element?.itemName,
+            itemAmount: element?.itemAmount
+        }))
         return loaneeloanBreakDown;
     }
 
@@ -203,18 +202,45 @@ function LoanDetails() {
     const basic = [
         {label: 'Gender', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.gender},
         {label: 'Email address', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.email},
-        {label: 'Phone number', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.phoneNumer},
-        {label: 'Date of birth', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.maritalStatus},
-        {label: 'Nationality', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.nationality},
-        {label: 'State of origin ', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfOrigin},
-        {label: 'State of residence', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfResidence},
+        {
+            label: 'Phone number',
+            value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.phoneNumer
+        },
+        {
+            label: 'Date of birth',
+            value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.dateOfBirth
+        },
+        {
+            label: 'Marital status',
+            value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.maritalStatus
+        },
+        {
+            label: 'Nationality',
+            value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.nationality
+        },
+        {
+            label: 'State of origin ',
+            value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfOrigin
+        },
+        {
+            label: 'State of residence',
+            value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfResidence
+        },
     ]
 
     const additional = [
-        {label: 'Alternate email address', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateEmail},
-        {label: 'Alternate phone number', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateContactAddress},
+        {
+            label: 'Alternate email address',
+            value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateEmail
+        },
+        {
+            label: 'Alternate phone number',
+            value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternatePhoneNumber
+        },
+        {
+            label: 'Alternate residential address',
+            value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateContactAddress
+        },
         {
             label: 'Next of kin name',
             value: data?.data?.body?.data?.nextOfKin?.firstName + " " + data?.data?.body?.data?.nextOfKin?.lastName
@@ -240,7 +266,7 @@ function LoanDetails() {
         }
     };
 
-    const open =  (value: boolean) => {
+    const open = (value: boolean) => {
         setOpenCreateLoanOffer(value)
     }
 
@@ -323,55 +349,71 @@ function LoanDetails() {
                             </div>
                         </div>
                     </div>
-                <div  className="md:flex px-2 md:px-0 grid md:justify-end gap-5 mt-4">
-                    {currentTab !== 0 && (
-                        <Button
-                            id={`backButtonOnIndex` + currentTab}
-                            data-testid={`backButtonOnIndex` + currentTab}
-                            className={'w-full md:w-fit md:px-6 md:py-4 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
-                            onClick={handleBack} disabled={currentTab === 0}>Back</Button>
-                    )}
+                    <div className="md:flex px-2 md:px-0 grid md:justify-end gap-5 mt-4">
+                        {currentTab !== 0 && (
+                            <Button
+                                id={`backButtonOnIndex` + currentTab}
+                                data-testid={`backButtonOnIndex` + currentTab}
+                                className={'w-full md:w-fit md:px-6 md:py-4 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
+                                onClick={handleBack} disabled={currentTab === 0}>Back</Button>
+                        )}
 
-                    <div
-                        id={`continueButtonOnIndex` + currentTab}
-                        data-testid={`continueButtonOnIndex` + currentTab}
-                        className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
-                        onClick={handleNext}
-                        // disabled={currentTab === loanRequestDetailsTab.length - 1}>
+                        <div
+                            id={`continueButtonOnIndex` + currentTab}
+                            data-testid={`continueButtonOnIndex` + currentTab}
+                            className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                            onClick={handleNext}
+                            // disabled={currentTab === loanRequestDetailsTab.length - 1}>
                         >
-                        {currentTab === 2 ? 'Make decision ' : 'Continue'}
-                        {currentTab == 2 &&
-                            <div className={''} >
-                                {arrowDown ?
-                                    <ChevronUpIcon
-                                        id={'downIcon'}
+                            {currentTab === 2 ? 'Make decision ' : 'Continue'}
+                            {currentTab == 2 &&
+                                <div className={''}>
+                                    {arrowDown ?
+                                        <ChevronUpIcon
+                                            id={'downIcon'}
 
-                                        className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
-                                        onClick={toggleArrow}/>
-                                    :
-                                   <DropdownMenu>
-                                       <DropdownMenuTrigger >
-                                           <ChevronDownIcon
-                                               className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
-                                               onClick={() => {setArrowDown(true)}}/>
-                                       </DropdownMenuTrigger>
-                                       <DropdownMenuContent >
-                                            <DropdownMenuItem id={'loanRequestDetailsApproveLoanRequestButton'} data-testid={'loanRequestDetailsApproveLoanRequestButton'} onClick={() => {setOpenCreateLoanOffer(true)}} className={`md:text-meedleBlue text-meedlBlue hover:bg-[#EEF5FF] md:hover:bg-[#EEF5FF] rounded-md md:rounded-md `}>Approve loan request</DropdownMenuItem>
-                                            <DropdownMenuItem id={'loanRequestDetailsDeclineLoanRequestButton'} data-testid={'loanRequestDetailsDeclineLoanRequestButton'} onClick={() => {setOpenDeclineLoanRequestModal(true)}} className={`text-error500 md:hover:text-error500 md:text-error500 md:hover:bg-error50 rounded-md md:rounded-md`}>Decline loan request</DropdownMenuItem>
-                                       </DropdownMenuContent>
-                                    </DropdownMenu>
-                                }
-                            </div>
-                        }
+                                            className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
+                                            onClick={toggleArrow}/>
+                                        :
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger>
+                                                <ChevronDownIcon
+                                                    className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
+                                                    onClick={() => {
+                                                        setArrowDown(true)
+                                                    }}/>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuItem id={'loanRequestDetailsApproveLoanRequestButton'}
+                                                                  data-testid={'loanRequestDetailsApproveLoanRequestButton'}
+                                                                  onClick={() => {
+                                                                      setOpenCreateLoanOffer(true)
+                                                                  }}
+                                                                  className={`md:text-meedleBlue text-meedlBlue hover:bg-[#EEF5FF] md:hover:bg-[#EEF5FF] rounded-md md:rounded-md `}>Approve
+                                                    loan request</DropdownMenuItem>
+                                                <DropdownMenuItem id={'loanRequestDetailsDeclineLoanRequestButton'}
+                                                                  data-testid={'loanRequestDetailsDeclineLoanRequestButton'}
+                                                                  onClick={() => {
+                                                                      setOpenDeclineLoanRequestModal(true)
+                                                                  }}
+                                                                  className={`text-error500 md:hover:text-error500 md:text-error500 md:hover:bg-error50 rounded-md md:rounded-md`}>Decline
+                                                    loan request</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer} setIsOpen={open}
+                                         onSubmit={onSubmit}/>
+                        <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()} setIsOpen={open}
+                                          loanProductId={""} title={""}/>
+
                     </div>
-                    <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer} setIsOpen={open} onSubmit={onSubmit} />
-                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()} setIsOpen={open} loanProductId={""} title={""}/>
-
                 </div>
             </div>
         </div>
-</div>
-)
+    )
 }
 
 export default LoanDetailsContent;
