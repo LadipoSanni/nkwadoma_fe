@@ -8,6 +8,7 @@ import {useRouter} from "next/navigation";
 import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
+import {loanDisbursalTable} from "@/utils/LoanRequestMockData/Index";
 
 
 
@@ -21,38 +22,38 @@ function Index() {
         pageSize: 10,
         pageNumber: 10
     }
-    const { data, isLoading} = useViewAllLoanRequestQuery(request)
+    const {  isLoading} = useViewAllLoanRequestQuery(request)
 
 
 
 
-    const loanRequestHeader = [
-        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{row.firstName} <div className={``}></div>{row.lastName}</div>  },
-        { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.programName },
+    const loanDisbursalHeader = [
+        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{row.loanee} <div className={``}></div>{row.lastName}</div>  },
+        { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.program },
         { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort },
-        { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMMM D, YYYY')}</div> },
-        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.requestDate?.toString()).format('MMMM D, YYYY')}</div> },
-        { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div>},
-        { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>}
+        { title: 'Offer date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.offerDate?.toString()).format('MMMM D, YYYY')}</div> },
+        { title: 'Loan start date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.loanStartDate?.toString()).format('MMMM D, YYYY')}</div> },
+        { title: 'Deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.deposit)}</div>},
+        { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.AmountRequested)}</div>}
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        router.push(`/loan-details?id=${ID}`);
+        router.push(`/disbursed-loan-details?id=${ID}`);
     };
 
     return (
-        <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
+        <div data-testid={'LoanDisbursalMainDivContainer'} id={`LoanDisbursalMainDivContainer`}
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {
-                data?.data?.body?.length > 0 ?
-                // LoanRequestTable?.length > 0 ?
+                loanDisbursalTable?.length > 0 ?
+                    // LoanRequestTable?.length > 0 ?
                     <div className={`md:w-full w-full h-full md:h-full `}>
                         <Tables
-                            tableData={data?.data?.body}
+                            tableData={loanDisbursalTable}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
-                            tableHeader={loanRequestHeader}
+                            tableHeader={loanDisbursalHeader}
                             tableHeight={52}
                             sx='cursor-pointer'
                             staticColunm='cohort'
@@ -67,12 +68,14 @@ function Index() {
 
                     :
                     <LoanEmptyState
-                        id={'LoanRequestEmptyState'}
+                        id={'LoanDisbursalEmptyState'}
+                        data-testid={'LoanDisbursalEmptyState'}
                         icon={<Icon icon="material-symbols:money-bag-outline"
                                     height={"2rem"}
                                     width={"2em"}
                                     color={'#142854'}
-                        ></Icon >} iconBg={'#D9EAFF'} title={'Loan request will show here'} description={`There are no loan requests available yet`} />
+                                    id={'loanDisbursalId'}
+                        ></Icon >} iconBg={'#D9EAFF'} title={'Disbursed loan will show here'} description={`There are no loan disbursed loan available yet`} />
 
 
             }

@@ -6,25 +6,22 @@ import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import {MdOutlinePerson} from "react-icons/md";
 import {Breakdown} from "@/reuseable/details/breakdown";
 import Tables from "@/reuseable/table/LoanProductTable";
-import styles from "@/components/selected-loan/SelectedLoan.module.css"
 
 
 interface detailContainerProps {
     dataList?: { label: string; value: string | React.ReactNode; }[];
-    isNotTableDataList?: { detail: string; value: string }[]
+    isNotTableDataList?: string
     breakDown?: { itemName: string; itemAmount: string; }[];
     tabTitle1: string;
     tabTitle2: string;
-    tabTitle3: string;
     useBreakdown?: boolean;
     isTable?: boolean;
-    dataList3? : { label: string; value: string | React.ReactNode; }[]
 }
 
 export const ThreeTabs: React.FC<detailContainerProps> = ({
                                                                         dataList, breakDown,
-                                                                        tabTitle1, tabTitle2, tabTitle3, useBreakdown = false,
-                                                                        isTable = true, isNotTableDataList, dataList3
+                                                                        tabTitle1, tabTitle2, useBreakdown = false,
+                                                                        isTable = true, isNotTableDataList
                                                                     }) => {
     const ProgramHeader = [
         {title: "Loanee", sortable: true, id: "trainee"},
@@ -41,20 +38,22 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                         id="cohort-tabs"
                         data-testid="cohort-tabs"
                         defaultValue={"productDetails"}
-                        className={`shadow-none ${styles.tab}`}
+                        className={`shadow-none`}
                     >
                         <TabsList id="tabs-list" data-testid="tabs-list" className={`p-1`}>
                             <TabsTrigger id='productDetails' value={"productDetails"}
                                          data-testid="productDetails ">{tabTitle1}
                             </TabsTrigger>
                             <TabsTrigger id='termsAndCondition' value={"termsAndCondition"} data-testid="termsAndCondition">{tabTitle2}</TabsTrigger>
-                            <TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>
+                            {/*<TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>*/}
                         </TabsList>
+
+                        <div>
 
                         <TabsContent value={"productDetails"} id="cohort-details-content"
                                      data-testid="productDetails" className={`py-3`}>
                             <div
-                                className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                className="bg-[#F9F9F9] h-80 px-5 w-full overflow-y-auto rounded-sm">
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
@@ -72,60 +71,44 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                             </div>
                         </TabsContent>
 
-                        <TabsContent value={"termsAndCondition"} id="trainee-content" data-testid="trainee-content"
-                                     className={`py-3 w-full `}>
-                            {isTable ?
-                                <Tables
-                                    tableData={traineeData}
-                                    tableHeader={ProgramHeader}
-                                    staticHeader={'Trainee'}
-                                    staticColunm={'trainee'}
-                                    tableHeight={41.5}
-                                    icon={MdOutlinePerson}
-                                    sideBarTabName={"Trainee"}
-                                    handleRowClick={() => {
-                                    }}
-                                    optionalRowsPerPage={10}
-                                    tableCellStyle={'h-12'}
-                                />
-                                :
-                                <div
-                                    className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
-                                    {isNotTableDataList?.map((item, index) => (
-                                        <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
-                                             key={index}
-                                             className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                            <div id={`detailsId-${index}`} className="text-black300">
-                                                <span id={`details-${index}`}>{item.detail}</span>
-                                            </div>
-                                            <div id={`valuesId-${index}`} className="text-meedlBlack">
-                                                <span id={`values-${index}`}>{item.value}</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            }
-                        </TabsContent>
-
-                        <TabsContent value={"disbursementTerms"} id="trainee-content" data-testid="trainee-content"
-                                     className={`py-3 w-full `}>
-                            <div
-                                className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
-                                {dataList3?.map((item, index) => (
-                                    <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
-                                         key={index}
-                                         className="flex md:flex-row py-5 flex-col w-full justify-between font-medium text-sm">
-                                        <div id={`labelsId-${index}`} className="text-black300">
-                                            <span id={`labels-${index}`}>{item.label}</span>
-                                        </div>
-                                        <div id= {`valueDiv-${index}`} className="text-meedlBlack">
-                                            <span id={`valueItems-${index}`}>{item.value}</span>
+                            <TabsContent value={"termsAndCondition"} id="trainee-content" data-testid="trainee-content"
+                                         className={`py-3 w-full `}>
+                                {isTable ?
+                                    <Tables
+                                        tableData={traineeData}
+                                        tableHeader={ProgramHeader}
+                                        staticHeader={'Trainee'}
+                                        staticColunm={'trainee'}
+                                        tableHeight={41.5}
+                                        icon={MdOutlinePerson}
+                                        sideBarTabName={"Trainee"}
+                                        handleRowClick={() => {
+                                        }}
+                                        optionalRowsPerPage={10}
+                                        tableCellStyle={'h-12'}
+                                    />
+                                    :
+                                    <div
+                                        className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                        <div id={`data-item`} data-testid={`data-item`}
+                                             className="flex md:flex-row flex-col w-full font-medium text-sm">
+                                            {isNotTableDataList}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
+                                }
+                            </TabsContent>
 
-                        </TabsContent>
+                            {/*<TabsContent value={"disbursementTerms"} id="trainee-content" data-testid="trainee-content"*/}
+                            {/*             className={`py-3 w-full `}>*/}
+                            {/*    <div*/}
+                            {/*        className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">*/}
+                            {/*        <div id={`data-item`} data-testid={`data-item`}*/}
+                            {/*             className="flex md:xcflex-row flex-col overflow-y-auto font-medium text-sm">*/}
+                            {/*            {dataList3}*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</TabsContent>*/}
+                        </div>
                     </Tabs>
                 </div>
             </div>

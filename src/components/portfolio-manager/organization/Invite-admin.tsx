@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface Props {
   setIsOpen?: (e: boolean) => void;
+  adminType: string;
 }
 
 interface ApiError {
@@ -21,7 +22,7 @@ interface ApiError {
 }
 
 
-function InviteAdmin({ setIsOpen }: Props) {
+function InviteAdmin({ setIsOpen,adminType }: Props) {
    const [error, setError] = useState("")
    const [inviteAdmin, {isLoading}] =  useInviteAdminMutation()
     const { toast } = useToast();
@@ -56,7 +57,7 @@ function InviteAdmin({ setIsOpen }: Props) {
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
-      role: "ORGANIZATION_ADMIN"
+      role: adminType
     }
 
     try{

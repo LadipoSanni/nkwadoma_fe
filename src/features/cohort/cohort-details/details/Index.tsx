@@ -12,10 +12,9 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
 import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import {useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
+import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import {formatAmount} from '@/utils/Format'
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
-import {useCohortBreakdownQuery} from "@/service/admin/loan_product";
 
 interface breakDown {
     itemName: string;
@@ -33,7 +32,7 @@ const CohortDetails = () => {
         cohortId: cohortsId
     }, {refetchOnMountOrArgChange: true});
 
-    const {data: cohortBreakDown} = useCohortBreakdownQuery({cohortId: cohortsId}, {skip: !cohortsId})
+    const {data: cohortBreakDown} = useGetCohortDetailsBreakdownQuery({cohortId: cohortsId}, {skip: !cohortsId})
 
     useEffect(() => {
         if (cohortBreakDown && cohortBreakDown?.data) {

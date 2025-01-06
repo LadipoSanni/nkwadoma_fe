@@ -1,10 +1,10 @@
 import React from 'react'
-import Details from '@/features/portfolio-manager/fund/fundDetails/details/index'
+import Team from '@/features/portfolio-manager/settings/Team'
 
 function page() {
   return (
     <div>
-      <Details/>
+      <Team/>
     </div>
   )
 }

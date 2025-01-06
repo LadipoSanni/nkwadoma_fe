@@ -97,13 +97,13 @@ const SideBar = () => {
         {
             id: 'loan',
             name: 'Loan',
-            route: '/loan',
-            isActive: false,
+            route: '/loan/loan-request',
+            isActive: true,
             icon: <Icon icon="material-symbols:money-bag-outline"
                         height={"1.2rem"}
                         width={"1.2rem"}
-                        color={'#d7d7d7'}
-                // color={current === 'Loan' ? '#142854' : '#939cb0'}
+                        // color={'#d7d7d7'}
+                color={current === 'Loan' ? '#142854' : '#939cb0'}
             ></Icon>
 
         },
@@ -111,11 +111,11 @@ const SideBar = () => {
             id: 'loanProduct',
             name: 'Loan Product',
             route: '/loan-product',
-            isActive: false,
+            isActive: true,
             icon: <MdOutlineInventory2
-                color={'#d7d7d7'}
-                // color={current === 'Loan Product' ? '#142854' : '#939CB0'}
-                className={` h-[1.2rem] w-[1.2rem]  `}
+                // color={'#d7d7d7'}
+                color={current === 'Loan Product' ? '#142854' : '#939CB0'}
+                // className={` h-[1.2rem] w-[1.2rem]  `}
             ></MdOutlineInventory2>
 
         },
@@ -143,11 +143,11 @@ const SideBar = () => {
         {
             id: 'funds',
             name: 'Funds',
-            isActive: false,
-            // route: '/funds',
+            isActive: true,
+             route: '/funds',
             icon: <MdOutlinePayments
-                color={'#d7d7d7'}
-                // color={current === 'Funds' ? '#142854' : '#939CB0'}
+                // color={'#d7d7d7'}
+                color={current === 'Funds' ? '#142854' : '#939CB0'}
                 className={` h-[1.2rem] w-[1.2rem]  `}/>
         },
         {
