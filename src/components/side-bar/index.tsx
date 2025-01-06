@@ -97,7 +97,7 @@ const SideBar = () => {
         {
             id: 'loan',
             name: 'Loan',
-            route: '/loan',
+            route: '/loan/loan-request',
             isActive: true,
             icon: <Icon icon="material-symbols:money-bag-outline"
                         height={"1.2rem"}
@@ -144,7 +144,7 @@ const SideBar = () => {
             id: 'funds',
             name: 'Funds',
             isActive: true,
-            // route: '/funds',
+             route: '/funds',
             icon: <MdOutlinePayments
                 // color={'#d7d7d7'}
                 color={current === 'Funds' ? '#142854' : '#939CB0'}

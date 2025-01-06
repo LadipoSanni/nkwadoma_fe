@@ -33,7 +33,7 @@ describe('CreateLoanOffer Component', () => {
     test('changes button color to bg-neutral650 when form is invalid', () => {
         render(
             <Providers>
-                <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen} loanRequestId={''} />
+                <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen}loanRequestId={''} />
             </Providers>
         );
         fireEvent.submit(screen.getByRole('button', { name: /create/i }));

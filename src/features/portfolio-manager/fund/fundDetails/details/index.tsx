@@ -37,7 +37,9 @@ const Details = () => {
   ];
 
   return (
-    <div className='flex flex-col md:flex-row md:justify-between'>
+    <div 
+    className='flex flex-col md:flex-row md:justify-between'
+    >
       <div className='w-full'>
         <InfoCard
           icon={MdOutlinePayments}

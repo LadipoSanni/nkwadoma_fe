@@ -9,13 +9,16 @@ import TabConnector from "@/reuseable/details/tab-connector";
 import {FaCircle} from "react-icons/fa6";
 import {Breakdown} from "@/reuseable/details/breakdown";
 import LoanTermsAndConditions from "@/reuseable/terms/loanTermsAndConditions/Index";
+import {store} from "@/redux/store";
+import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 
 const LoanOfferDetails = () => {
     const router = useRouter();
-    const [currentTab, setCurrentTab] = useState(0);
+    const [currentTab, setCurrentsTab] = useState(0);
 
     const backToLoanRequest = () => {
-        router.push("/loan/loan-request");
+        store.dispatch(setCurrentTab('Loan offers'))
+        router.push("/loan/loan-offer");
     };
 
     const loanRequestDetailsTab = [
@@ -63,13 +66,13 @@ const LoanOfferDetails = () => {
 
     const handleNext = () => {
         if (currentTab < loanRequestDetailsTab.length - 1) {
-            setCurrentTab(currentTab + 1);
+            setCurrentsTab(currentTab + 1);
         }
     };
 
     const handleBack = () => {
         if (currentTab > 0) {
-            setCurrentTab(currentTab - 1);
+            setCurrentsTab(currentTab - 1);
         }
     };
 
