@@ -17,6 +17,9 @@ import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
+import {store} from "@/redux/store";
+import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -34,7 +37,8 @@ const LoanDetailsContent = dynamic(
 function LoanDetails() {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const [currentTab, setCurrentTab] = useState(0);
+    // const [breakdown] = useState<[]>([]);
+    const [currentTab, setCurrentsTab] = useState(0);
     const [arrowDown, setArrowDown] = useState(false);
     const [openCreateLoanOffer, setOpenCreateLoanOffer] = useState(false)
     const [openDeclineLoanRequestModal, setOpenDeclineLoanRequestModal] = useState(false)
@@ -62,6 +66,7 @@ function LoanDetails() {
     const {data} = useViewLoanRequestDetailsQuery(id)
 
     const backToLoanRequest = () => {
+        store.dispatch(setCurrentTab('Loan requests'))
         router.push("/loan/loan-request")
     }
     const loanRequestDetailsTab = [
@@ -89,13 +94,13 @@ function LoanDetails() {
 
     const handleNext = () => {
         if (currentTab < loanRequestDetailsTab.length - 1) {
-            setCurrentTab(currentTab + 1);
+            setCurrentsTab(currentTab + 1);
         }
     };
 
     const handleBack = () => {
         if (currentTab > 0) {
-            setCurrentTab(currentTab - 1);
+            setCurrentsTab(currentTab - 1);
         }
     };
 
