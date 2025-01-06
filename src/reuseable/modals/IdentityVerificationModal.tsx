@@ -200,7 +200,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                 <DialogContent className={'max-w-[425px] md:max-w-[460px] [&>button]:hidden gap-6 py-5 px-5'}>
                     <DialogHeader className={'flex py-3'} id="secondModalHeader">
                         <DialogTitle
-                            className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Liveness
+                            className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Likeness
                             check</DialogTitle>
                     </DialogHeader>
                     <div className={`${inter.className} grid gap-5`}>

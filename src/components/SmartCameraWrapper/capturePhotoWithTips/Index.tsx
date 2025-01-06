@@ -1,12 +1,13 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
-import { CheckCircle, X } from "lucide-react";
+import React, {useRef, useState, useCallback, useEffect} from "react";
+import {MdCheckCircleOutline, MdOutlineCancel} from "react-icons/md";
+import {inter} from '@/app/fonts'
 import * as faceapi from 'face-api.js';
 
 interface CapturePhotoWithTipsProps {
     onCapture: (imageSrc: File) => void;
 }
 
-const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }) => {
+const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({onCapture}) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
@@ -27,8 +28,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     faceapi.nets.faceLandmark68TinyNet.loadFromUri('/models'),
                     faceapi.nets.faceRecognitionNet.loadFromUri('/models')
                 ]);
-
-                console.log('All models loaded successfully');
                 setIsModelLoaded(true);
                 setModelLoadingError(null);
             } catch (err) {
@@ -47,8 +46,8 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                 const mediaStream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: "user",
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 }
+                        width: {ideal: 1280},
+                        height: {ideal: 720}
                     }
                 });
                 setStream(mediaStream);
@@ -149,7 +148,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
             byteArray[i] = binaryString.charCodeAt(i);
         }
 
-        return new File([byteArray], fileName, { type: mimeType });
+        return new File([byteArray], fileName, {type: mimeType});
     };
 
     useEffect(() => {
@@ -168,14 +167,16 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
 
     const frameClassName = isFaceDetected
         ? "absolute top-4 right-4 w-[270px] h-[270px] rounded-full overflow-hidden transition-all duration-500"
-        : "absolute top-4 right-4 w-[270px] h-[270px] overflow-hidden transition-all duration-500";
+        : "absolute w-[419px] h-[279px] overflow-hidden transition-all duration-500";
 
     return (
-        <main className="grid gap-5">
+        <main className={`grid gap-5 ${inter.className}`}>
             <div className="grid place-items-center gap-5">
-                <main className="relative w-[300px] h-[300px]">
+                <main
+                    className={` ${isFaceDetected ? 'relative w-[300px] h-[300px]' : ' w-[419px] h-[279px] '}`}>
                     {isFaceDetected && (
-                        <svg viewBox="0 0 300 301" className="absolute top-0 left-0 w-full h-full transition-opacity duration-500">
+                        <svg viewBox="0 0 300 301"
+                             className="absolute top-0 left-0 w-full h-full transition-opacity duration-500">
                             <path
                                 d="M300 150.5C300 233.343 232.843 300.5 150 300.5C67.1573 300.5 0 233.343 0 150.5C0 67.6573 67.1573 0.5 150 0.5C232.843 0.5 300 67.6573 300 150.5ZM10.4561 150.5C10.4561 227.568 72.932 290.044 150 290.044C227.068 290.044 289.544 227.568 289.544 150.5C289.544 73.432 227.068 10.9561 150 10.9561C72.932 10.9561 10.4561 73.432 10.4561 150.5Z"
                                 className="fill-gray-100"
@@ -193,17 +194,36 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                             />
                         </svg>
                     )}
+                    {/*<div className={frameClassName}>*/}
+                    {/*    <video*/}
+                    {/*        ref={videoRef}*/}
+                    {/*        autoPlay*/}
+                    {/*        playsInline*/}
+                    {/*        className={` object-cover ${isFaceDetected ? ' w-full h-full' : ' w-[419px] h-[279px]' } `}*/}
+                    {/*    />*/}
+                    {/*    <canvas ref={canvasRef} className="hidden"/>*/}
+                    {/*</div>*/}
                     <div className={frameClassName}>
+                        {/*{!isFaceDetected && (*/}
+                        {/*    <div className={'absolute flex justify-center items-center w-[323px] h-[180px]'}>*/}
+                        {/*        <div className="absolute top-0 left-0 w-[46px] h-[45px] border-[5px] border-meedlWhite flex-shrink-0"></div>*/}
+                        {/*        <div className="absolute top-0 right-0 w-[46px] h-[45px] border-[5px] border-meedlWhite flex-shrink-0"></div>*/}
+                        {/*        <div className="absolute bottom-0 left-0 w-[46px] h-[45px] border-[5px] border-meedlWhite flex-shrink-0"></div>*/}
+                        {/*        <div className="absolute bottom-0 right-0 w-[46px] h-[45px] border-[5px] border-meedlWhite flex-shrink-0"></div>*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
                         <video
                             ref={videoRef}
                             autoPlay
                             playsInline
-                            className="w-full h-full object-cover"
+                            className={`object-cover ${isFaceDetected ? 'w-full h-full' : 'w-[419px] h-[279px]'}`}
                         />
-                        <canvas ref={canvasRef} className="hidden" />
+                        <canvas ref={canvasRef} className="hidden"/>
                     </div>
+
                 </main>
-                <p className="text-gray-700 text-sm">
+
+                <p className="text-black400 text-sm">
                     {modelLoadingError ? (
                         <span className="text-red-500">Error loading face detection: {modelLoadingError}</span>
                     ) : !isModelLoaded ? (
@@ -211,32 +231,26 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     ) : step === 'front' ? (
                         "Position your face within the frame"
                     ) : (
-                        "Turn your head to the side"
+                        "Slowly turn your face to the right"
                     )}
                 </p>
             </div>
             <section className="bg-gray-50 rounded p-5 space-y-3">
-                <h1 className="text-gray-900 text-sm font-medium">Tips</h1>
+                <h1 className="text-black500 text-[14px] leading-[21px] font-medium">Tips</h1>
                 <div className="space-y-4">
                     <div className="flex gap-2 items-center">
-                        {isFaceDetected ? (
-                            <CheckCircle className="h-3 w-3 text-green-600" />
-                        ) : (
-                            <X className="h-3 w-3 text-red-600" />
-                        )}
-                        <p className="text-gray-700 text-sm">
-                            {step === 'front'
-                                ? "Face detected"
-                                : "Turn head sideways"}
+                        <MdCheckCircleOutline className="h-3 w-3 text-green-600"/>
+                        <p className="text-black400 text-sm">
+                            Ensure your face is within the frame
                         </p>
                     </div>
                     <div className="flex gap-2 items-center">
-                        <CheckCircle className="h-3 w-3 text-green-600" />
-                        <p className="text-gray-700 text-sm">Find a well lit environment</p>
+                        <MdCheckCircleOutline className="h-3 w-3 text-green-600"/>
+                        <p className="text-black400 text-sm">Find a well lit environment</p>
                     </div>
                     <div className="flex gap-2 items-center">
-                        <X className="h-3 w-3 text-red-600" />
-                        <p className="text-gray-700 text-sm">Don&#39;t wear hats, glasses and masks</p>
+                        <MdOutlineCancel className="h-3 w-3 text-red-600"/>
+                        <p className="text-black400 text-sm">Don&#39;t wear hats, glasses and masks</p>
                     </div>
                 </div>
             </section>
