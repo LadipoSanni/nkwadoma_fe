@@ -97,7 +97,7 @@ const SideBar = () => {
         {
             id: 'loan',
             name: 'Loan',
-            route: '/loan',
+            route: '/loan/loan-referral',
             isActive: true,
             icon: <Icon icon="material-symbols:money-bag-outline"
                         height={"1.2rem"}

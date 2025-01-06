@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {inter, cabinetGroteskRegular} from "@/app/fonts";
@@ -10,17 +10,29 @@ import {organizations} from "../../../utils/LoanProductMockData";
 import OrganizationImage from "@/reuseable/profile/Organization-image";
 import {store, useAppSelector} from "@/redux/store";
 import {setClickedOrganization} from "@/redux/slice/loan/selected-loan";
+import AuthButton from "@/reuseable/buttons/AuthButton";
 
 const ChangeInstitutionModal = () => {
 
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
-    const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganizationId)
+    // const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganizationId)
+    const [current, setCurrent] = useState<number| string>('')
+    const [disabled, setDisable] = React.useState(true)
 
     const handleClick = (id: string| number) => {
+        if (id === current){
+            setCurrent('')
+            setDisable(true)
+        }else {
+            setCurrent(id)
+            setDisable(false)
+        }
         store.dispatch( setClickedOrganization(id))
 
     }
-    // setClickedOrganization
+
+    const handleContinue = () => {}
+
     return (
         <Dialog.Root>
             <Dialog.Trigger asChild>
@@ -53,17 +65,14 @@ const ChangeInstitutionModal = () => {
                                 organizations.map((organization, index) => (
                                     <div key={organization.id} id={"index" + index}
                                          onClick={() => {handleClick(organization?.id)}}
-                                         className={` ${styles.institutionMiniCard2} md:flex pl-3  md:place-items-center md:px-2 md:justify-between grid   w-[98%] h-[6rem] md:h-[4rem] rounded-md border ${organization.id === clickedOrganizationId ? `border-meedlBlue` : `border-[#ECECEC]`}   `}>
+                                         className={` ${styles.institutionMiniCard2} md:flex pl-3  md:place-items-center md:px-2 md:justify-between grid   w-[98%] h-[6rem] md:h-[4rem] rounded-md border ${organization.id === current ? `border-meedlBlue` : `border-[#ECECEC]`}   `}>
 
                                         <div
                                             className={`flex md:flex gap-3 place-items-center md:place-items-center `}
                                         >
-                                            {/*<RadioGroup className={``} defaultValue="comfortable">*/}
-                                                <div className={`flex w-fit h-fit px-1 py-1 ring-1 ${organization.id === clickedOrganizationId ?  `ring-meedlBlue` : `ring-[#ECECEC]` } rounded-full items-center space-x-2`}>
-                                                    <div className={` w-[0.7rem] h-[0.7rem] rounded-full  ${organization.id === clickedOrganizationId ?  `bg-meedlBlue md:bg-meedlBlue` : `bg-white` } `}></div>
-                                                    {/*<RadioGroupItem  onClick={() => {handleClick(organization?.id)}}  className={` ring-1 ring-meedleBlue `} checked={organization.id === clickedOrganizationId} value="default" id="r1" />*/}
+                                                <div id={`radioGroupOnOrganizationModal`} data-testid={`radioGroupOnOrganizationModal`} className={`flex w-fit h-fit px-1 py-1 ring-1 ${organization.id === current ?  `ring-meedlBlue` : `ring-[#ECECEC]` } rounded-full items-center space-x-2`}>
+                                                    <div id={`radioGroupCheeckedOnOrganizationModal`} data-testid={`radioGroupCheeckedOnOrganizationModal`} className={` w-[0.7rem] h-[0.7rem] rounded-full  ${organization.id === current ?  `bg-meedlBlue md:bg-meedlBlue` : `bg-white` } `}></div>
                                                 </div>
-                                            {/*</RadioGroup>*/}
                                             <OrganizationImage
                                                 size={'small'}
                                                 src={organization?.pic}
@@ -92,14 +101,28 @@ const ChangeInstitutionModal = () => {
                         className="absolute bottom-0 px-4 pb-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
                         <Button
                             id={'cancel'} data-testid={'cancel'}
-                            className={` border border-meedlBlue rounded-md text-sm h-fit md:w-fit md:px-10 md:py-4 py-4 w-full  text-meedlBlue`}
+                            className={` border border-meedlBlue rounded-md text-sm h-fit md:w-fit md:px-10 md:py-4 py-4   text-meedlBlue`}
                             >
                                 Cancel
                             </Button>
-                            <Button id={'cancel'} data-testid={'cancel'}
-                                    disabled={true}
-                                    className={`border border-meedlBlue bg-meedlBlue rounded-md text-sm h-fit md:w-fit py-4 md:px-10 md:py-4 w-full text-meedlWhite `}>Confirm
-                            </Button>
+                        <div className={`w-full  md:w-[8rem]`}>
+                            <AuthButton
+                                disable={disabled} backgroundColor={'#142854'} textColor={"white"}
+                                id={"continueButton"}
+                                height={'3.4rem'}
+                                data-testid={`continueButton`}
+                                buttonText={"continue"} width={"inherit"}
+                                isLoading={false}
+                                handleClick={handleContinue}
+                            >
+
+                            </AuthButton>
+                        </div>
+
+                            {/*<Button disabled={disabled} id={'cancel'} data-testid={'cancel'}*/}
+                            {/*        variant={`secondary`}*/}
+                            {/*        className={`border border-meedlBlue bg-meedlBlue rounded-md text-sm h-fit md:w-fit py-4 md:px-10 md:py-4 w-full text-meedlWhite `}>Confirm*/}
+                            {/*</Button>*/}
                         </div>
                         <Dialog.Close asChild>
                             <button
