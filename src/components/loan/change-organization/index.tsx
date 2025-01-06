@@ -108,9 +108,9 @@ const ChangeInstitutionModal = () => {
                         <div className={`w-full  md:w-[8rem]`}>
                             <AuthButton
                                 disable={disabled} backgroundColor={'#142854'} textColor={"white"}
-                                id={"continueButton"}
+                                id={"continueButtonOnOrganizationModal"}
                                 height={'3.4rem'}
-                                data-testid={`continueButton`}
+                                data-testid={`continueButtonOnOrganizationModal`}
                                 buttonText={"continue"} width={"inherit"}
                                 isLoading={false}
                                 handleClick={handleContinue}
