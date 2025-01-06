@@ -56,24 +56,28 @@ const LoanProductPage = () => {
 
 
     const loanProductHeader = [
-        {title: 'loan products', sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
+        {
+            title: 'loan products',
+            sortable: true,
+            id: 'name',
+            selector: (row: TableRowData) => row.name},
         {
             title: 'Fund product',
             sortable: true,
-            id: 'bankPartner',
-            selector: (row: TableRowData) => row.bankPartner ?? "0"
+            id: 'fundProduct',
+            selector: (row: TableRowData) => row.fundProduct ?? "fund product"
         },
         {
             title: 'Interest rate (%)',
             sortable: true,
             id: "interestRate",
-            selector: (row: TableRowData) => formatAmount(row.interestRate)
+            selector: (row: TableRowData) => row.interestRate
         },
         {
             title: 'No. of loanees',
             sortable: true,
             id: 'numberOfLoanees',
-            selector: (row: TableRowData) => formatAmount(row.numberOfLoanees)
+            selector: (row: TableRowData) => row.numberOfLoanees
         },
         {
             title: 'Cost of funds',
@@ -90,8 +94,8 @@ const LoanProductPage = () => {
         {
             title: 'Amount repaid',
             sortable: true,
-            id: 'totalAmountRepaid',
-            selector: (row: TableRowData) => formatAmount(row.totalAmountRepaid)
+            id: 'minRepaymentAmount',
+            selector: (row: TableRowData) => formatAmount(row.minRepaymentAmount)
         },
         {
             title: 'Amount earned',
