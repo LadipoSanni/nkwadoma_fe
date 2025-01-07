@@ -10,7 +10,7 @@ import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {useRouter} from "next/navigation";
 import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index";
-import { setItemSessionStorage } from "@/utils/storage";
+import {setItemSessionStorage} from "@/utils/storage";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -57,10 +57,11 @@ const LoanProductPage = () => {
 
     const loanProductHeader = [
         {
-            title: 'loan products',
+            title: 'Loan products',
             sortable: true,
             id: 'name',
-            selector: (row: TableRowData) => row.name},
+            selector: (row: TableRowData) => row.name
+        },
         {
             title: 'Fund product',
             sortable: true,
