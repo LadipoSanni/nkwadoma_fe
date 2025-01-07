@@ -53,7 +53,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                         <TabsContent value={"productDetails"} id="cohort-details-content"
                                      data-testid="productDetails" className={`py-3`}>
                             <div
-                                className="bg-[#F9F9F9] h-80 px-5 w-full overflow-y-auto rounded-sm">
+                                className="bg-[#F9F9F9] h-96 px-5 w-full overflow-y-auto rounded-sm">
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
@@ -89,7 +89,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                     />
                                     :
                                     <div
-                                        className="bg-[#F9F9F9] h-80 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                        className="bg-[#F9F9F9] h-96 px-5 w-full py-2 overflow-y-auto rounded-sm">
                                         <div id={`data-item`} data-testid={`data-item`}
                                              className="flex md:flex-row flex-col w-full font-medium text-sm">
                                             {isNotTableDataList}
