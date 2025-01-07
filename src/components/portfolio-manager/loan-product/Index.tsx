@@ -52,8 +52,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const validationSchema = Yup.object().shape({
         productName: Yup.string()
             .trim()
-            .required("Product Name is required")
-            .matches(/^[^0-9]*$/, 'Numbers are not allowed'),
+            .required("Product Name is required"),
         productSponsor: Yup.string()
             .trim()
             .required("Product sponsor is required"),
@@ -70,7 +69,8 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         tenor: Yup.string()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Tenor must be greater than 0 and must be numeric")
             .trim()
-            .required("Tenor is required"),
+            .required("Tenor is required")
+            .test("max-number", "Tenor must be less than or equal to 24", value => !value || Number(value) <= 24),
         loanProductSize: Yup.string()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0 and must be numeric")
             .trim()
@@ -97,7 +97,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .required("Amount is required")
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Moratorium must be greater than 0 and must be numeric")
-            .test("max-number", "Moratorium must be less than or equal to 12", value => !value || Number(value) <= 12),
+            .test("max-number", "Moratorium must be less than or equal to 24", value => !value || Number(value) <= 24),
         interest: Yup.string()
             .trim()
             .required("Interest is required"),
@@ -242,7 +242,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                 <div className={`grid md:grid-cols-2 grid-col gap-y-0 gap-x-5 pt-4`}>
                                     <div>
-                                        <Label htmlFor="productSponsor">Product Sponsor</Label>
+                                        <Label htmlFor="productSponsor">Loan product sponsor</Label>
                                         <LoanProductCustomSelect triggerId='productSponsorId'
                                                                  id="productSponsor"
                                                                  selectContent={productSponsors}
@@ -262,7 +262,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     </div>
 
                                     <div>
-                                        <Label htmlFor="FundProduct">Fund Product</Label>
+                                        <Label htmlFor="FundProduct">Fund product</Label>
                                         <CustomSelect triggerId='FundProductId'
                                                       id="FundProduct"
                                                       selectContent={funds}
@@ -288,7 +288,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             data-testid="costOfFunds"
                                             name="costOfFunds"
                                             type={"number"}
-                                            className="w-full p-3 border rounded focus:outline-none mt-3 text-sm"
+                                            className="w-full p-3 border rounded focus:outline-none mt-3 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                             placeholder="0"
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                 let rawValue = e.target.value.replace(/,/g, "");
@@ -312,16 +312,18 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         }
                                     </div>
 
-                                    <div className={`flex flex-row gap-2`}>
+                                    <div className={`flex flex-col`}>
                                         <div>
                                             <Label htmlFor="tenor">Tenor</Label>
+                                        </div>
+                                        <div className={`flex flex-row gap-2`}>
                                             <div>
                                                 <Field
                                                     id="tenor"
                                                     data-testid="tenor"
                                                     name="tenor"
                                                     type={"number"}
-                                                    className="w-20 p-3 border rounded focus:outline-none mt-3 text-sm"
+                                                    className="w-20 p-3 border rounded focus:outline-none mt-3 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                     placeholder="0"
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                         let rawValue = e.target.value.replace(/,/g, "");
@@ -334,41 +336,38 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         }
                                                     }}
                                                 />
-                                                {
-                                                    errors.tenor && touched.tenor && (
-                                                        <ErrorMessage
-                                                            name="tenor"
-                                                            id='tenorId'
-                                                            component="div"
-                                                            className="text-red-500 text-sm"
-                                                        />)
-                                                }
                                             </div>
 
-                                        </div>
-
-
-                                        <div className={`w-full`}>
-                                            <Label htmlFor="tenorDuration">Duration</Label>
-                                            <div>
-                                                <CustomSelect triggerId='tenorDuration'
-                                                              id="tenorDuration"
-                                                              selectContent={durations}
-                                                              value={values.tenorDuration}
-                                                              onChange={(value) => setFieldValue("tenorDuration", value)}
-                                                              name="tenorDuration"
-                                                              placeHolder='Select duration'
-                                                              isItemDisabled={(item) => item !== "Month"}
-                                                />
-                                                {
-                                                    errors.tenorDuration && touched.tenorDuration && (
-                                                        <ErrorMessage
-                                                            name="tenorDuration"
-                                                            id='tenorDuration'
-                                                            component="div"
-                                                            className="text-red-500 text-sm"
-                                                        />)
-                                                }
+                                            <div className={`w-full`}>
+                                                <div>
+                                                    <CustomSelect triggerId='tenorDuration'
+                                                                  id="tenorDuration"
+                                                                  selectContent={durations}
+                                                                  value={values.tenorDuration}
+                                                                  onChange={(value) => setFieldValue("tenorDuration", value)}
+                                                                  name="tenorDuration"
+                                                                  placeHolder='Select duration'
+                                                                  isItemDisabled={(item) => item !== "Month"}
+                                                    />
+                                                    {
+                                                        errors.tenorDuration && touched.tenorDuration && (
+                                                            <ErrorMessage
+                                                                name="tenorDuration"
+                                                                id='tenorDuration'
+                                                                component="div"
+                                                                className="text-red-500 text-sm"
+                                                            />)
+                                                    }
+                                                    {
+                                                        errors.tenor && touched.tenor && (
+                                                            <ErrorMessage
+                                                                name="tenor"
+                                                                id='tenorId'
+                                                                component="div"
+                                                                className="text-red-500 text-sm"
+                                                            />)
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -392,7 +391,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                     data-testid="loanProductSize"
                                                     name="loanProductSize"
                                                     type={"number"}
-                                                    className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
+                                                    className="w-full p-3 border rounded focus:outline-none mt-2 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                     placeholder="0.00"
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                         let rawValue = e.target.value.replace(/,/g, "");
@@ -437,7 +436,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                     data-testid="minimumRepaymentAmount"
                                                     name="minimumRepaymentAmount"
                                                     type={"number"}
-                                                    className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
+                                                    className="w-full p-3 border rounded focus:outline-none mt-2 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                     placeholder="0.00"
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                         let rawValue = e.target.value.replace(/,/g, "");
@@ -469,14 +468,14 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                style={{
                                                    display: 'inline-block',
                                                    WebkitOverflowScrolling: 'touch'
-                                               }}>Moratorium(month)</Label>
+                                               }}>Moratorium (month)</Label>
                                         <div className={`pt-2`}>
                                             <Field
                                                 id="moratorium"
                                                 data-testid="moratorium"
                                                 name="moratorium"
                                                 type={"number"}
-                                                className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
+                                                className="w-full p-3 border rounded focus:outline-none mt-2 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                 placeholder="0"
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     let rawValue = e.target.value.replace(/,/g, "");
@@ -504,14 +503,14 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     <div>
                                         <div className={`flex flex-row gap-2 pt-2`}>
                                             <div>
-                                                <Label htmlFor="interest">Interest(%)</Label>
+                                                <Label htmlFor="interest">Interest (%)</Label>
                                                 <div>
                                                     <Field
                                                         id="interest"
                                                         data-testid="interest"
                                                         name="interest"
                                                         type={"number"}
-                                                        className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
+                                                        className="w-full p-3 border rounded focus:outline-none mt-2 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                         placeholder="0"
                                                     />
                                                     {
@@ -534,7 +533,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         data-testid="obligorLimit"
                                                         name="obligorLimit"
                                                         type={"number"}
-                                                        className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
+                                                        className="w-full p-3 border rounded focus:outline-none mt-2 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                         placeholder="0"
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                             let rawValue = e.target.value.replace(/,/g, "");
@@ -563,7 +562,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                 </div>
 
                                 <div className={`pt-4`}>
-                                    <Label htmlFor="loanProductMandate">LoanProduct mandate</Label>
+                                    <Label htmlFor="loanProductMandate">Loan product mandate</Label>
                                     <Field
                                         as="textarea"
                                         id="loanProductMandateId"
