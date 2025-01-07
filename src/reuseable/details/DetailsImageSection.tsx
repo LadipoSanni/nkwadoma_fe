@@ -74,7 +74,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         <p
                             id="cohort-description"
                             data-testid="cohort-description"
-                            className={`${inter.className}  text-grey450 break-words scrollbar-width:none overflow-y-auto h-20 text-sm`}
+                            className={`${inter.className}  text-grey450 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}
                         >
                             {cohortDescription}
                         </p>
