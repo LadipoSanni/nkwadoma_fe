@@ -1,16 +1,12 @@
 "use client"
-// import { useRouter } from 'next/navigation'
 import React from "react";
-import {loanOfferTable} from "@/utils/LoanRequestMockData/Index"
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import {Icon} from "@iconify/react";
-// import { loanRequestData} from "@/utils/LoanRequestMockData/cohortProduct";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {useRouter} from "next/navigation";
-import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
-// import {LoanRequestType} from "@//types/loan/loan-request.type";
-// import DynamicTable from "@/reuseable/table/LoanProductTable";
+import {useViewAllLoanOfferQuery} from "@/service/admin/loan/loan-offer-api";
+
 
 
 interface TableRowData {
@@ -23,15 +19,8 @@ function LoanOfferTable() {
         pageSize: 10,
         pageNumber: 10
     }
-    const {data, error, isLoading} = useViewAllLoanRequestQuery(request)
-    // const
-    // const [counter] = useState(0);
-    // const [data, setData] = useState({ pageNumber: counter, pageSize: 10 });
+    const {data, isLoading} = useViewAllLoanOfferQuery(request)
 
-    // useEffect(() => {
-    //     setData({ pageNumber: counter, pageSize: 10 });
-    // }, [counter]);
-    console.log("data:: ", data, "error: ", error, "isLoading:: ", isLoading)
 
     const loanOfferHeader = [
         { title: 'Loanee', sortable: true, id: 'loanee', selector: (row: TableRowData) => row.loanee  },
@@ -42,11 +31,8 @@ function LoanOfferTable() {
 
     ];
 
-    const handleRowClick = () => {
-        // router.push(`/loan-details?id=${row?.id}`);
-        // LoanRequestType
-        router.push(`/loan-request-details?id=5f0a7531-970a-4dec-8ee0-e4f1e42901c7`);
-
+    const handleRowClick = (ID: string | object | React.ReactNode) => {
+        router.push(`/loan-offer-details?id=${ID}`);
     };
 
     return (
@@ -54,11 +40,11 @@ function LoanOfferTable() {
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {
-                // data?.data?.body?.length > 0 ?
-                loanOfferTable?.length > 0 ?
+                data?.data?.body?.length > 0 ?
+                // loanOfferTable?.length > 0 ?
                     <div className={`md:w-full w-full h-full md:h-full `}>
                         <Tables
-                            tableData={loanOfferTable}
+                            tableData={data?.data?.body}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanOfferHeader}

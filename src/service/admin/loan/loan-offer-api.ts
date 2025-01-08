@@ -2,7 +2,7 @@ import {createApi} from "@reduxjs/toolkit/query/react";
 import {customFetchBaseQuery} from "@/service/customFetchBaseQuery";
 
 
-const loanOfferApi = createApi({
+export const loanOfferApi = createApi({
     tagTypes: ['loanOffer'],
     baseQuery: customFetchBaseQuery,
     reducerPath: 'loanOfferApi',
@@ -12,7 +12,7 @@ const loanOfferApi = createApi({
                 pageNumber?: number;
                 pageSize?: number;}) => ({
                 url: `/loan/loanOffer/all`,
-                body: 'GET',
+                method: 'GET',
                 params: data
             })
 
