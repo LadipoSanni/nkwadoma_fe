@@ -19,6 +19,7 @@ function LoanOfferTable() {
         pageSize: 10,
         pageNumber: 10
     }
+
     const {data, isLoading} = useViewAllLoanOfferQuery(request)
 
 

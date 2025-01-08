@@ -1,7 +1,7 @@
 "use client"
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {cabinetGroteskRegular, inter, ibmPlexSans} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
@@ -11,12 +11,30 @@ import {Breakdown} from "@/reuseable/details/breakdown";
 import LoanTermsAndConditions from "@/reuseable/terms/loanTermsAndConditions/Index";
 import {store} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
+import {useViewLoanOfferDetailsQuery} from "@/service/admin/loan/loan-offer-api";
 
 const LoanOfferDetails = () => {
     const router = useRouter();
     const [currentTab, setCurrentsTab] = useState(0);
+    const searchParams = useSearchParams()
+    // useViewLoanOfferDetailsQuery
+    const getId = () => {
+        if (searchParams) {
+            const pathVariable = searchParams.get("id")
+            if (pathVariable) {
+                return pathVariable
+            } else {
+                return ""
+            }
+        } else {
+            return ""
+        }
 
-    const backToLoanRequest = () => {
+    }
+    const id: string = getId()
+    const {data} = useViewLoanOfferDetailsQuery(id)
+    console.log('data: ', data)
+    const backToLoanOffer = () => {
         store.dispatch(setCurrentTab('Loan offers'))
         router.push("/loan/loan-offer");
     };
@@ -96,7 +114,7 @@ const LoanOfferDetails = () => {
             data-testid={"loanRequestDetails"}
             className={`w-full h-full ${inter.className} pt-6 px-10`}
         >
-            <BackButton handleClick={backToLoanRequest} iconRight={true} text={"Back to loan offer"}
+            <BackButton handleClick={backToLoanOffer} iconRight={true} text={"Back to loan offer"}
                         id={"loanRequestDetailsBackButton"} textColor={'#142854'}/>
 
             <div
