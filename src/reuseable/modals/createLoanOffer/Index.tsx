@@ -24,6 +24,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const [errorMessage, setErrorMessage] = useState("");
     const [respondToLoanRequest] = useRespondToLoanRequestMutation(); // Use the new mutation
 
+    console.log('loanRequestId', loanRequestId);
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (!selectedProgram) {
