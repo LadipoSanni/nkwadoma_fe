@@ -51,7 +51,7 @@ const Details = () => {
             <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
                 <ThreeTabs
                     isTable={false} isNotTableDataList={loanProduct?.data.termsAndCondition} dataList={dataList}
-                                     tabTitle1={"Product details"} tabTitle2={"Loan terms and conditions"}
+                                     tabTitle1={"Product details"} tabTitle2={"Terms and conditions"}
                                      useBreakdown={false} />
             </div>
         </div>
