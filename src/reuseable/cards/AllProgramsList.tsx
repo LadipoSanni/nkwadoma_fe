@@ -65,7 +65,7 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
                     className="grid grid-cols-2 gap-3 w-fit mt-4 cursor-pointer"
                 >
                     {tagButtonData.map((tagProps, index) => (
-                        <TagButton key={index} {...tagProps} />
+                        <TagButton textColor={''} key={index} {...tagProps} />
                     ))}
 
                 </div>

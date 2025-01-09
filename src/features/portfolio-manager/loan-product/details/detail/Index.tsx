@@ -23,17 +23,17 @@ const Details = () => {
     ];
 
     const dataList = [
-        { label: "Fund product", value: loanProduct?.data.name },
-        { label: "Product sponsor", value: loanProduct?.data.sponsor },
+        { label: "Fund product", value: loanProduct?.data.fundProduct },
+        { label: "Product sponsor", value: loanProduct?.data.sponsors },
         { label: "Product size ", value: formatAmount(loanProduct?.data.loanProductSize)},
         { label: "Tenor", value: loanProduct?.data.tenor },
         { label: "Minimum repayment amount", value: formatAmount(loanProduct?.data.minimumRepaymentAmount)},
         { label: "Interest rate", value: loanProduct?.data.interestRate },
         { label: "Obligor limit", value: formatAmount(loanProduct?.data.obligorLimit)},
         { label: "Moratorium", value: loanProduct?.data.moratorium },
-        { label: "Amount disbursed", value: formatAmount(loanProduct?.data.amountDisbursed)},
-        { label: "Amount repaid ", value: formatAmount(loanProduct?.data.amountRepaid)},
-        { label: "Amount earned", value: formatAmount(loanProduct?.data.amountEarned)},
+        { label: "Amount disbursed", value: formatAmount(loanProduct?.data.totalAmountDisbursed)},
+        { label: "Amount repaid ", value: formatAmount(loanProduct?.data.minRepaymentAmount)},
+        { label: "Amount earned", value: formatAmount(loanProduct?.data.totalAmountEarned)},
         { label: "Cost of funds", value: formatAmount(loanProduct?.data.costOfFunds)},
     ];
 
@@ -51,7 +51,7 @@ const Details = () => {
             <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
                 <ThreeTabs
                     isTable={false} isNotTableDataList={loanProduct?.data.termsAndCondition} dataList={dataList}
-                                     tabTitle1={"Product details"} tabTitle2={"Loan terms and conditions"}
+                                     tabTitle1={"Product details"} tabTitle2={"Terms and conditions"}
                                      useBreakdown={false} />
             </div>
         </div>
