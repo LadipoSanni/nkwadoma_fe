@@ -10,7 +10,7 @@ import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 import LoanProductCustomSelect from "@/components/portfolio-manager/loan-product/LoanProductCustomSelect";
-
+import {useGetAllInvestmentmentVehicleQuery} from "@/service/admin/fund_query";
 
 interface CreateLoanProductProps {
     setIsOpen?: (b: boolean) => void;
@@ -23,16 +23,33 @@ interface ApiError {
     };
 }
 
+
 const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [error, setError] = useState('');
     // const [step, setStep] = useState(1);
     const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
+    const dataElement = {
+        pageNumber: 0,
+        pageSize: 200
+    }
+    // const { data: investmentVehicleData } = useGetAllInvestmentmentVehicleQuery(dataElement)
+    // console.log(investmentVehicleData?.name, "VEHICLES")
+    const {data: investmentVehicleData} = useGetAllInvestmentmentVehicleQuery(dataElement);
+
+    // if (investmentVehicleData && investmentVehicleData.data) {
+    //     investmentVehicleData.data.forEach(vehicle => {
+    //         console.log(vehicle.name, "VEHICLES");
+    //     });
+    // } else {
+    //     console.log("No data available");
+    // }
+
 
     const initialFormValue = {
         productName: "",
         productSponsor: "",
-        FundProduct: "",
+        investmentVehicleId: "",
         costOfFunds: "",
         tenor: "",
         tenorDuration: "",
@@ -46,6 +63,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         bankPartner: "",
         loanInsuranceProvider: "",
         loanDisbursementTerms: "",
+        // investmentVehicleId: "",
         // loanProductStatus: "ACTIVE"
     }
 
@@ -56,47 +74,47 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         productSponsor: Yup.string()
             .trim()
             .required("Product sponsor is required"),
-        FundProduct: Yup.string()
+        investmentVehicleId: Yup.string()
             .trim()
             .required("Fund product is required"),
         costOfFunds: Yup.string()
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Cost of fund must be greater than 0 and must be numeric")
+            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Cost of fund must be greater than 0 ")
             .trim()
             .required("Cost of fund is required"),
         tenorDuration: Yup.string()
             .trim()
             .required("Duration can not be empty"),
         tenor: Yup.string()
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Tenor must be greater than 0 and must be numeric")
+            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Tenor must be greater than 0")
             .trim()
             .required("Tenor is required")
             .test("max-number", "Tenor must be less than or equal to 24", value => !value || Number(value) <= 24),
         loanProductSize: Yup.string()
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0 and must be numeric")
+            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0")
             .trim()
-            .required("Loan product is required")
-            .test('is-greater-than-obligor-limit', 'Loan Product Size must be greater than or equal to Obligor Limit',
-                function (value) {
-                    const {obligorLimit} = this.parent;
-                    return parseFloat(value) >= parseFloat(obligorLimit);
-                }),
+            .required("Loan product is required"),
+            // .test('is-greater-than-obligor-limit', 'Loan Product Size must be greater than or equal to Obligor Limit',
+            //     function (value) {
+            //         const {obligorLimit} = this.parent;
+            //         return parseFloat(value) >= parseFloat(obligorLimit);
+            //     }),
         obligorLimit: Yup.string()
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Limit must be greater than 0 and must be numeric")
+            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Limit must be greater than 0")
             .trim()
             .required("Obligor limit is required")
-            .test('is-less-than-loan-product-size', 'Obligor limit must be less than or equal to Loan Product Size',
+            .test('is-less-than-loan-product-size', 'Obligor cant be greater than product size',
                 function (value) {
                     const {loanProductSize} = this.parent;
                     return parseFloat(value) <= parseFloat(loanProductSize);
                 }),
         minimumRepaymentAmount: Yup.string()
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Amount must be greater than 0 and must be numeric")
+            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Amount must be greater than 0")
             .trim()
             .required("Amount is required"),
         moratorium: Yup.string()
             .trim()
             .required("Amount is required")
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Moratorium must be greater than 0 and must be numeric")
+            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Moratorium must be greater than 0")
             .test("max-number", "Moratorium must be less than or equal to 24", value => !value || Number(value) <= 24),
         interest: Yup.string()
             .trim()
@@ -105,28 +123,37 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .required("Product mandate is required")
             .max(2500, "Terms exceeds 2500 characters")
-            .matches(/^[a-zA-Z0-9\s.,'-]+$/, "Product mandate terms contains invalid characters")
             .test("no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
         loanProductTermsAndCondition: Yup.string()
-            .required("loan product terms is required")
             .trim()
+            .required("Loan product terms is required")
             .max(2500, "Terms exceeds 2500 characters")
-            .matches(/^[a-zA-Z0-9\s.,'-]+$/, "Loan product terms contains invalid characters")
             .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
         loanDisbursementTerms: Yup.string()
             .trim()
             .max(2500, "Terms exceeds 2500 characters")
-            .matches(/^[a-zA-Z0-9\s.,'-]+$/, "Loan disbursement terms contains invalid characters")
             .test("no-html-tags", "Loan disbursement terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value))
     });
 
 
-    const productSponsors = [
-        {label: "Sponsor 1", value: "sponsor1"},
-        {label: "Sponsor 2", value: "sponsor2"},
-        {label: "Sponsor 3", value: "sponsor3"},
-    ];
-    const funds = ["Equity Fund", "Debt Fund",];
+    const productSponsors = ["PIPE PIPER", "WHATSAPP", "ZENITH", "GOGGLE"];
+    interface Vehicle {
+        id: string;
+        name: string;
+    }
+    // const investmentVehicleNames = investmentVehicleData?.data?.map((vehicle: Vehicle, index: number) => ({
+    //     id: vehicle.id,
+    //     name: vehicle.name,
+    //     key: `${vehicle.id}-${index}`
+    // }));
+
+    // const investmentVehicleNames = investmentVehicleData?.data?.map((vehicle: Vehicle) => ({
+    //     id: vehicle.id,
+    //     name: vehicle.name,
+    //     key: vehicle.id
+    // }))
+    const investmentVehicleNames = investmentVehicleData?.data?.map((vehicle: Vehicle) => vehicle.name) || [];
+    console.log(investmentVehicleNames);
     const durations = ["Day", "Month", "Year",];
     // const bankPartner = ["Patner 1", "Partner 2",];
     const maxChars = 2500;
@@ -141,6 +168,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         status: "error",
     });
 
+    const fundProductId = "1fd80e57-de2e-4cea-8ad9-c57ad13245ab"
+    // const fundProductId = ""
+
     const handleSubmit = async (values: typeof initialFormValue) => {
         if (!navigator.onLine) {
             networkPopUp.showToast();
@@ -149,11 +179,12 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             }
             return;
         }
+        // const selectedVehicle = investmentVehicleNames.find(vehicle => vehicle.name === values.investmentVehicleId);
 
         const formData = {
             name: values.productName,
             sponsors: [values.productSponsor],
-            FundProduct: values.FundProduct,
+            investmentVehicleId: fundProductId,
             costOfFund: Number(values.costOfFunds),
             tenor: Number(values.tenor),
             tenorDuration: values.tenorDuration,
@@ -167,6 +198,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             bankPartner: values.bankPartner,
             loanInsuranceProvider: values.loanInsuranceProvider,
             disbursementTerms: values.loanDisbursementTerms,
+            // investmentVehicleId: fundProductId,
             // loanProductStatus: values.loanProductStatus,
         };
 
@@ -263,26 +295,57 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                     <div>
                                         <Label htmlFor="FundProduct">Fund product</Label>
-                                        <CustomSelect triggerId='FundProductId'
-                                                      id="FundProduct"
-                                                      selectContent={funds}
-                                                      value={values.FundProduct}
-                                                      onChange={(value) => setFieldValue("FundProduct", value)}
-                                                      name="FundProduct"
-                                                      placeHolder='Select fund'/>
-                                        {
-                                            errors.FundProduct && touched.FundProduct && (
-                                                <ErrorMessage
-                                                    name="FundProduct"
-                                                    id='FundProductError'
-                                                    component="div"
-                                                    className="text-red-500 text-sm"
-                                                />)
-                                        }
+                                        <CustomSelect
+                                            triggerId='FundProductId'
+                                            id="FundProduct"
+                                            selectContent={investmentVehicleNames}
+                                            value={values.investmentVehicleId}
+                                            onChange={(value) => setFieldValue("investmentVehicleId", value)}
+                                            name="FundProduct"
+                                            placeHolder='Select fund'
+                                            isItemDisabled={(item) => item !== 'tade'}
+                                        />
+                                        {errors.investmentVehicleId && touched.investmentVehicleId && (
+                                            <ErrorMessage
+                                                name="FundProduct"
+                                                id='FundProductError'
+                                                component="div"
+                                                className="text-red-500 text-sm"
+                                            />
+                                        )}
                                     </div>
 
+
                                     <div>
-                                        <Label htmlFor="costOfFunds">Cost of funds (%)</Label>
+                                        <div className={`flex flex-col w-full`}>
+                                            <div>
+                                                <Label htmlFor="costOfFunds">Cost of funds (%)</Label>
+                                            </div>
+
+                                            {/*<div>*/}
+                                            {/*    <NumericFormat*/}
+                                            {/*        id={`costOfFundsId`}*/}
+                                            {/*        name={`costOfFunds`}*/}
+                                            {/*        placeholder="0.00"*/}
+                                            {/*        className="p-4 focus-visible:outline-0 w-[6.25rem] md:w-[8.25rem] shadow-none focus-visible:ring-transparent rounded-md h-[3.10rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"*/}
+                                            {/*        value={initialFormValue.FundProduct}*/}
+                                            {/*        defaultValue="0.00"*/}
+                                            {/*        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
+                                            {/*            let rawValue = e.target.value.replace(/,/g, "");*/}
+                                            {/*            if (/^(?!0$)\d*$/.test(rawValue)) {*/}
+                                            {/*                rawValue = parseInt(rawValue).toString();*/}
+                                            {/*                let formattedValue = Number(rawValue).toLocaleString();*/}
+                                            {/*                formattedValue += ".00";*/}
+                                            {/*                setFieldValue("costOfFunds", rawValue);*/}
+                                            {/*                e.target.value = formattedValue;*/}
+                                            {/*            }*/}
+                                            {/*        }}*/}
+                                            {/*        thousandSeparator=","*/}
+                                            {/*        decimalScale={2}*/}
+                                            {/*        fixedDecimalScale={true}*/}
+                                            {/*    />*/}
+                                            {/*</div>*/}
+                                        </div>
                                         <Field
                                             id="costOfFunds"
                                             data-testid="costOfFunds"
@@ -308,7 +371,8 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                     id='costOfFundsError'
                                                     component="div"
                                                     className="text-red-500 text-sm"
-                                                />)
+                                                />
+                                            )
                                         }
                                     </div>
 
@@ -338,16 +402,17 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                 />
                                             </div>
 
-                                            <div className={`w-full`}>
+                                            <div className="flex flex-col w-full">
                                                 <div>
-                                                    <CustomSelect triggerId='tenorDuration'
-                                                                  id="tenorDuration"
-                                                                  selectContent={durations}
-                                                                  value={values.tenorDuration}
-                                                                  onChange={(value) => setFieldValue("tenorDuration", value)}
-                                                                  name="tenorDuration"
-                                                                  placeHolder='Select duration'
-                                                                  isItemDisabled={(item) => item !== "Month"}
+                                                    <CustomSelect
+                                                        triggerId='tenorDuration'
+                                                        id="tenorDuration"
+                                                        selectContent={durations}
+                                                        value={values.tenorDuration}
+                                                        onChange={(value) => setFieldValue("tenorDuration", value)}
+                                                        name="tenorDuration"
+                                                        placeHolder='Select duration'
+                                                        isItemDisabled={(item) => item !== "Month"}
                                                     />
                                                     {
                                                         errors.tenorDuration && touched.tenorDuration && (
@@ -356,21 +421,26 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                                 id='tenorDuration'
                                                                 component="div"
                                                                 className="text-red-500 text-sm"
-                                                            />)
-                                                    }
-                                                    {
-                                                        errors.tenor && touched.tenor && (
-                                                            <ErrorMessage
-                                                                name="tenor"
-                                                                id='tenorId'
-                                                                component="div"
-                                                                className="text-red-500 text-sm"
-                                                            />)
+                                                            />
+                                                        )
                                                     }
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className={`mb-[2%]`}>
+                                            {
+                                                errors.tenor && touched.tenor && (
+                                                    <ErrorMessage
+                                                        name="tenor"
+                                                        id='tenorId'
+                                                        component="div"
+                                                        className="text-red-500 text-sm"
+                                                    />
+                                                )
+                                            }
+                                        </div>
                                     </div>
+
 
                                     <div>
                                         <Label htmlFor="loanProductSize"
@@ -404,15 +474,17 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         }
                                                     }}
                                                 />
-                                                {
-                                                    errors.loanProductSize && touched.loanProductSize && (
-                                                        <ErrorMessage
-                                                            name="loanProductSize"
-                                                            id='loanProductSizeId'
-                                                            component="div"
-                                                            className="text-red-500 text-sm"
-                                                        />)
-                                                }
+                                                <div className={`pb-5`}>
+                                                    {
+                                                        errors.loanProductSize && touched.loanProductSize && (
+                                                            <ErrorMessage
+                                                                name="loanProductSize"
+                                                                id='loanProductSizeId'
+                                                                component="div"
+                                                                className="text-red-500 text-sm"
+                                                            />)
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -449,18 +521,17 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         }
                                                     }}
                                                 />
-                                                {
-                                                    errors.minimumRepaymentAmount && touched.minimumRepaymentAmount && (
-                                                        <ErrorMessage
-                                                            name="minimumRepaymentAmount"
-                                                            id='minimumRepaymentAmount'
-                                                            component="div"
-                                                            className="text-red-500 text-sm"
-                                                        />)
-                                                }
                                             </div>
                                         </div>
-
+                                        {
+                                            errors.minimumRepaymentAmount && touched.minimumRepaymentAmount && (
+                                                <ErrorMessage
+                                                    name="minimumRepaymentAmount"
+                                                    id='minimumRepaymentAmount'
+                                                    component="div"
+                                                    className="text-red-500 text-sm"
+                                                />)
+                                        }
                                     </div>
 
                                     <div>
@@ -581,7 +652,8 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             const paste = e.clipboardData.getData('text');
                                             if (paste.length + values.loanProductMandate.length > maxChars) {
                                                 e.preventDefault();
-                                                setError('Program description must be 2500 characters or less');
+                                                // setFieldValue("loanProductMandate", paste);
+                                                setError('Mandate must be 2500 characters or less');
                                             }
                                         }}
                                     />
@@ -618,7 +690,8 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             const paste = e.clipboardData.getData('text');
                                             if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {
                                                 e.preventDefault();
-                                                setError('Program description must be 2500 characters or less');
+                                                // setFieldValue("loanProductTermsAndCondition", paste);
+                                                setError('Product condition must be 2500 characters or less');
                                             }
                                         }}
                                     />
