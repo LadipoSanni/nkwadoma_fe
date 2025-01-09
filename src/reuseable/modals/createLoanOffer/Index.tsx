@@ -8,7 +8,7 @@ import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import { NumericFormat } from "react-number-format";
 import ProgramSelect from "@/reuseable/select/ProgramSelect";
 import { useRespondToLoanRequestMutation } from "@/service/admin/loan/loan-request-api"; // Import the new mutation
-
+import {useViewAllLoanProductQuery} from '@/service/admin/loan_product'
 interface CreateLoanOfferProps {
     onSubmit: (data: { amountApproved: string, loanProduct: string }) => void;
     isOpen: boolean;
@@ -24,7 +24,13 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const [errorMessage, setErrorMessage] = useState("");
     const [respondToLoanRequest] = useRespondToLoanRequestMutation(); // Use the new mutation
 
-    console.log('loanRequestId', loanRequestId);
+    const parameter = {
+        pageSize: 10,
+        pageNumber: 0
+    }
+    const {data , error } = useViewAllLoanProductQuery(parameter)
+    console.log('loanRequestId', loanRequestId, "data: ", data, "error: ", error);
+
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (!selectedProgram) {

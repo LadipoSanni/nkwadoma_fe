@@ -11,6 +11,20 @@
     height: 97%;
     background-color: white;
 }
+.loanRequestDetails {
+    background-color: #fff;
+    overflow-y: scroll;
+}
+.loanRequestDetails::-webkit-scrollbar-track{
+    background-color: #fff;
+
+}
+.loanRequestDetails::-webkit-scrollbar-thumb{
+    background-color: rgb(217, 217, 217);
+    width: 4px;
+    height: 1rem;
+    margin-right: 0.5rem;
+}
 
 
 @media only screen and (max-width: 600px){

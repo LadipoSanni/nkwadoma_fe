@@ -227,6 +227,10 @@ function LoanDetails() {
         setOpenCreateLoanOffer(value)
     }
 
+    const setOpenDeclineOffer = (value: boolean) => {
+        setOpenDeclineLoanRequestModal(value)
+    }
+
 
     return (
         <div
@@ -277,7 +281,7 @@ function LoanDetails() {
                     </div>
                 </div>
                 <div
-                    className={`  overflow-x-hidden overflow-y-auto md:w-fit mt-4   w-full md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid `}
+                    className={` ${styles.loanRequestDetails} md:w-fit h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid md:gap-3`}
                 >
                     <div
                         className={` ${styles.tabConnector} md:w-fit pl-1  h-fit md:h-fit  flex md:flex `}
@@ -348,7 +352,7 @@ function LoanDetails() {
                         }
                     </div>
                     <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer} setIsOpen={open} onSubmit={onSubmit} />
-                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()} setIsOpen={open} loanProductId={""} title={""}/>
+                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()} setIsOpen={setOpenDeclineOffer} loanProductId={id} title={"Decline loan request"} />
 
                 </div>
             </div>
