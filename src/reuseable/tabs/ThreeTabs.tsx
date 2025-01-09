@@ -1,5 +1,6 @@
 "use client"
 import React from 'react';
+import styles from "@/components/selected-loan/SelectedLoan.module.css"
 import {inter} from "@/app/fonts";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
@@ -40,13 +41,24 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                         defaultValue={"productDetails"}
                         className={`shadow-none`}
                     >
-                        <TabsList id="tabs-list" data-testid="tabs-list" className={`p-1`}>
-                            <TabsTrigger id='productDetails' value={"productDetails"}
-                                         data-testid="productDetails ">{tabTitle1}
-                            </TabsTrigger>
-                            <TabsTrigger id='termsAndCondition' value={"termsAndCondition"} data-testid="termsAndCondition">{tabTitle2}</TabsTrigger>
-                            {/*<TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>*/}
-                        </TabsList>
+                        <div className={`md:block hidden`}>
+                            <TabsList id="tabs-list" data-testid="tabs-list" className={`p-1`}>
+                                <TabsTrigger id='productDetails' value={"productDetails"}
+                                             data-testid="productDetails ">{tabTitle1}
+                                </TabsTrigger>
+                                <TabsTrigger id='termsAndCondition' value={"termsAndCondition"} data-testid="termsAndCondition">{tabTitle2}</TabsTrigger>
+                                {/*<TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>*/}
+                            </TabsList>
+                        </div>
+                        <div className={`block md:hidden`}>
+                            <TabsList id="tabs-list" data-testid="tabs-list" className={`${styles.tab}  overflow--auto shadow-none p-1`}>
+                                <TabsTrigger id='productDetails' value={"productDetails"}
+                                             data-testid="productDetails ">{tabTitle1}
+                                </TabsTrigger>
+                                <TabsTrigger id='termsAndCondition' value={"termsAndCondition"} data-testid="termsAndCondition">{tabTitle2}</TabsTrigger>
+                                {/*<TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>*/}
+                            </TabsList>
+                        </div>
 
                         <div>
 
