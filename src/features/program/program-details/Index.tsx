@@ -159,10 +159,11 @@ const ProgramDetails = () => {
             tagIcon: MdOutlineDateRange,
             tagCount: progamDetail.duration,
             tagButtonStyle: "bg-lightBlue100",
-            tagText: "Months"
+            tagText: "Months",
+            textColor: "text-meedlBlue",
         },
-        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: "Cohorts"},
-        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: "Loanees"},
+        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: "Cohorts", textColor: "text-success700"},
+        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: "Loanees", textColor: "text-warning900" },
     ];
     const ProgramHeader = [
         {title: "Cohort", sortable: true, id: "name"},
