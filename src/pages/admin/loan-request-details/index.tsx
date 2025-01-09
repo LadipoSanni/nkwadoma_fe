@@ -70,6 +70,7 @@ function LoanDetails() {
         store.dispatch(setCurrentTab('Loan requests'))
         router.push("/loan/loan-request")
     }
+    console.log('data: ', data)
     const loanRequestDetailsTab = [
         "Basic details",
         "Additional details",
@@ -162,11 +163,8 @@ function LoanDetails() {
                 thousandSeparator=","
                 decimalScale={2}
                 fixedDecimalScale={true}
-                // value={'200000'}
                 prefix={'₦'}
                 value={data?.data?.body?.data?.initialDeposit}
-                // placeholder={${detail.itemName}}
-                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                 className='bg-grey105 flex md:place-items-end'
 
             />
