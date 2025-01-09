@@ -139,7 +139,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                             <p className="text-black400 text-[14px] leading-[150%] font-normal">We
                                                 request for your BVN to verify your identity and confirm that the
                                                 account you registered with is yours. It is also a KYC requirement for
-                                                all financial institutions by the Central Bank of Nigeria (CBN).</p>
+                                                all financial institutions.</p>
                                         </CollapsibleContent>
                                     </Collapsible>
                                 </div>
@@ -175,7 +175,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                             <p className="text-black400 text-[14px] leading-[150%] font-normal">We
                                                 request for your NIN to verify your identity and confirm that the
                                                 account you registered with is yours. It is also a KYC requirement for
-                                                all financial institutions by the Central Bank of Nigeria (CBN).</p>
+                                                all financial institutions.</p>
                                         </CollapsibleContent>
                                     </Collapsible>
                                 </div>
@@ -200,7 +200,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                 <DialogContent className={'max-w-[425px] md:max-w-[460px] [&>button]:hidden gap-6 py-5 px-5'}>
                     <DialogHeader className={'flex py-3'} id="secondModalHeader">
                         <DialogTitle
-                            className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Likeness
+                            className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Liveness
                             check</DialogTitle>
                     </DialogHeader>
                     <div className={`${inter.className} grid gap-5`}>

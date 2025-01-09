@@ -12,7 +12,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({onCapture}) 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
     const [isFaceDetected, setIsFaceDetected] = useState(false);
-    const [step, setStep] = useState<'front' | 'side'>('front');
+    const [step, setStep] = useState<'front' | 'right' | 'left' | 'up' | 'down'>('front');
     const [progress, setProgress] = useState(0);
     const [hasInitialFaceDetection, setHasInitialFaceDetection] = useState(false);
     const [isModelLoaded, setIsModelLoaded] = useState(false);
@@ -92,9 +92,20 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({onCapture}) 
                 if (!hasInitialFaceDetection && step === 'front') {
                     setHasInitialFaceDetection(true);
                     setTimeout(() => {
-                        setStep('side');
+                        setStep('right');
                         setProgress(0);
                     }, 1000);
+                } else if (step === 'right' && progress >= 100) {
+                    setStep('left');
+                    setProgress(0);
+                } else if (step === 'left' && progress >= 100) {
+                    setStep('up');
+                    setProgress(0);
+                } else if (step === 'up' && progress >= 100) {
+                    setStep('down');
+                    setProgress(0);
+                } else if (step === 'down' && progress >= 100) {
+                    capture();
                 }
 
                 if (!detectionTimeout) {
@@ -166,8 +177,8 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({onCapture}) 
     }, [detectFace, isModelLoaded]);
 
     const frameClassName = isFaceDetected
-        ? "absolute top-4 right-4 w-[270px] h-[270px] rounded-full overflow-hidden transition-all duration-500"
-        : "absolute w-[419px] h-[279px] overflow-hidden transition-all duration-500";
+        ? "absolute top-4 right-4 w-[270px] h-[270px] rounded-full overflow-hidden"
+        : "absolute w-[419px] h-[279px] overflow-hidden ";
 
     return (
         <main className={`grid gap-5 ${inter.className}`}>
@@ -179,7 +190,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({onCapture}) 
                              className="absolute top-0 left-0 w-full h-full transition-opacity duration-500">
                             <path
                                 d="M300 150.5C300 233.343 232.843 300.5 150 300.5C67.1573 300.5 0 233.343 0 150.5C0 67.6573 67.1573 0.5 150 0.5C232.843 0.5 300 67.6573 300 150.5ZM10.4561 150.5C10.4561 227.568 72.932 290.044 150 290.044C227.068 290.044 289.544 227.568 289.544 150.5C289.544 73.432 227.068 10.9561 150 10.9561C72.932 10.9561 10.4561 73.432 10.4561 150.5Z"
-                                className="fill-gray-100"
+                                className="fill-greyBase200 "
                             />
                             <circle
                                 className="transition-all duration-300"
@@ -187,31 +198,28 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({onCapture}) 
                                 cy="150.5"
                                 r="144"
                                 fill="none"
-                                stroke="#22c55e"
+                                stroke="#142854"
                                 strokeWidth="12"
                                 strokeDasharray="904.32"
                                 strokeDashoffset={`${904.32 * (1 - progress / 100)}`}
                             />
                         </svg>
                     )}
-                    {/*<div className={frameClassName}>*/}
-                    {/*    <video*/}
-                    {/*        ref={videoRef}*/}
-                    {/*        autoPlay*/}
-                    {/*        playsInline*/}
-                    {/*        className={` object-cover ${isFaceDetected ? ' w-full h-full' : ' w-[419px] h-[279px]' } `}*/}
-                    {/*    />*/}
-                    {/*    <canvas ref={canvasRef} className="hidden"/>*/}
-                    {/*</div>*/}
                     <div className={frameClassName}>
-                        {/*{!isFaceDetected && (*/}
-                        {/*    <div className={'absolute flex justify-center items-center w-[323px] h-[180px]'}>*/}
-                        {/*        <div className="absolute top-0 left-0 w-[46px] h-[45px] border-[5px] border-meedlWhite flex-shrink-0"></div>*/}
-                        {/*        <div className="absolute top-0 right-0 w-[46px] h-[45px] border-[5px] border-meedlWhite flex-shrink-0"></div>*/}
-                        {/*        <div className="absolute bottom-0 left-0 w-[46px] h-[45px] border-[5px] border-meedlWhite flex-shrink-0"></div>*/}
-                        {/*        <div className="absolute bottom-0 right-0 w-[46px] h-[45px] border-[5px] border-meedlWhite flex-shrink-0"></div>*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
+                        {!isFaceDetected && (
+                            <div className="absolute inset-0 flex justify-center items-center">
+                                <div className="relative w-[323px] h-[180px]">
+                                    <div
+                                        className="absolute top-0 left-0 w-[46px] h-[45px] rounded- rounded-[4px] border-t-[5px] border-l-[5px]  border-meedlWhite flex-shrink-0"></div>
+                                    <div
+                                        className="absolute top-0 right-0 w-[46px] h-[45px] rounded-[4px] border-t-[5px]  border-r-[5px] border-meedlWhite flex-shrink-0"></div>
+                                    <div
+                                        className="absolute bottom-0 left-0 w-[46px] h-[45px] rounded-[4px] border-b-[5px]  border-l-[5px] border-meedlWhite flex-shrink-0"></div>
+                                    <div
+                                        className="absolute bottom-0 right-0 w-[46px] h-[45px] rounded-[4px] border-b-[5px]  border-r-[5px]  border-meedlWhite flex-shrink-0"></div>
+                                </div>
+                            </div>
+                        )}
                         <video
                             ref={videoRef}
                             autoPlay
@@ -220,7 +228,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({onCapture}) 
                         />
                         <canvas ref={canvasRef} className="hidden"/>
                     </div>
-
                 </main>
 
                 <p className="text-black400 text-sm">
@@ -230,8 +237,14 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({onCapture}) 
                         "Loading face detection models..."
                     ) : step === 'front' ? (
                         "Position your face within the frame"
-                    ) : (
+                    ) : step === 'right' ? (
                         "Slowly turn your face to the right"
+                    ) : step === 'left' ? (
+                        "Slowly turn your face to the left"
+                    ) : step === 'up' ? (
+                        "Slowly turn your face up"
+                    ) : (
+                        "Slowly turn your face down"
                     )}
                 </p>
             </div>
