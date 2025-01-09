@@ -39,12 +39,16 @@ const LoanOfferDetails = () => {
         router.push("/loan/loan-offer");
     };
 
-    const loanRequestDetailsTab = [
+    const loanOfferDetailsTab = [
         "Loan details",
         "Basic details",
         "Additional details",
         "Loan terms"
     ];
+
+    // const  loanOfferDetails =  data-testi
+
+
 
     const basicDetails = [
         {label: "Gender", value: "Female"},
@@ -83,7 +87,7 @@ const LoanOfferDetails = () => {
     ];
 
     const handleNext = () => {
-        if (currentTab < loanRequestDetailsTab.length - 1) {
+        if (currentTab < loanOfferDetailsTab.length - 1) {
             setCurrentsTab(currentTab + 1);
         }
     };
@@ -110,20 +114,20 @@ const LoanOfferDetails = () => {
 
     return (
         <div
-            id={"loanRequestDetails"}
-            data-testid={"loanRequestDetails"}
+            id={"loanOfferDetails"}
+            data-testid={"loanOfferDetails"}
             className={`w-full h-full ${inter.className} pt-6 px-10`}
         >
             <BackButton handleClick={backToLoanOffer} iconRight={true} text={"Back to loan offer"}
-                        id={"loanRequestDetailsBackButton"} textColor={'#142854'}/>
+                        id={"loanOfferDetailsBackButton"} textColor={'#142854'}/>
 
             <div
-                id={`ImageComponentOnLoanRequestDetails`}
-                data-testid={`ImageComponentOnLoanRequestDetails`}
+                id={`ImageComponentOnLoanOfferDetails`}
+                data-testid={`ImageComponentOnLoanOfferDetails`}
                 className={`mt-10 mb-4 grid md:flex gap-3 h-fit md:justify-between md:gap-6 md:w-full md:h-fit`}
             >
                 <div>
-                    <Avatar id={'loaneeImageOnLoanRequestDetails'} data-testid={'loaneeImageOnLoanRequestDetails'}
+                    <Avatar id={'loaneeImageOnLoanOfferDetails'} data-testid={'loaneeImageOnLoanOfferDetails'}
                             className={`h-[5.625rem] w-[5.625rem] md:w-[7.5rem] md:h-[7.5rem]`}>
                         <AvatarImage src={`/234d70b3-ec71-4d68-8696-5f427a617fb7.jpeg`} alt="@shadcn"
                                      style={{objectFit: 'cover'}}/>
@@ -131,16 +135,16 @@ const LoanOfferDetails = () => {
                     </Avatar>
 
                     <div className={`grid gap-1 mt-4`}>
-                        <div id={'loaneeNameOnLoanRequestDetails'} data-testid={'loaneeNameOnLoanRequestDetails'}
+                        <div id={'loaneeNameOnLoanOfferDetails'} data-testid={'loaneeNameOnLoanOfferDetails'}
                              className={`${cabinetGroteskRegular.className} font-medium  text-meedlBlack text-[24px] md:text-[28px] leading-[120%]`}>Sarah
                             Akinyemi
                         </div>
                         <div className={`flex gap-2 items-center`}>
-                            <p id={'loaneeProgramOnLoanRequestDetails'}
-                               data-testid={'loaneeProgramOnLoanRequestDetails'}
+                            <p id={'loaneeProgramOnLoanOfferDetails'}
+                               data-testid={'loaneeProgramOnLoanOfferDetails'}
                                className={` text-sm text-black400`}>Product Design</p>
                             <FaCircle className={'h-1 w-1 text-blue550'}/>
-                            <p id={'loaneeCohortOnLoanRequestDetails'} data-testid={'loaneeCohortOnLoanRequestDetails'}
+                            <p id={'loaneeCohortOnLoanRequestDetails'} data-testid={'loaneeCohortOnLoaOfferDetails'}
                                className={`text-sm text-black400`}>Luminary</p>
                         </div>
                     </div>
@@ -149,7 +153,7 @@ const LoanOfferDetails = () => {
                     className={`overflow-x-hidden overflow-y-auto md:w-[36.75rem]  mt-4 w-full md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid`}
                 >
                     <div className={` md:w-fit pl-1 h-fit md:h-fit flex md:flex`}>
-                        <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab}/>
+                        <TabConnector tabNames={loanOfferDetailsTab} currentTab={currentTab}/>
                     </div>
                     <div>
                         <ul className={'h-64 bg-grey105   overflow-auto'}>
@@ -187,7 +191,7 @@ const LoanOfferDetails = () => {
 
                         <Button className={'w-full md:w-[8.75rem] h-[3.5625rem] bg-meedlBlue hover:bg-meedlBlue'}
                                 onClick={handleNext}
-                                disabled={currentTab === loanRequestDetailsTab.length - 1}>
+                                disabled={currentTab === loanOfferDetailsTab.length - 1}>
                             {currentTab === 3 ? 'Disburse loan' : 'Continue'}
                         </Button>
 

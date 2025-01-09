@@ -76,12 +76,6 @@ function LoanDetails() {
         "Loan details"
     ]
 
-    // const breakDown = [
-    //     {itemName: 'tuition', itemAmount: '$2000'},
-    //     {itemName: 'skincare', itemAmount: '$2000'},
-    //     {itemName: 'head', itemAmount: '$2000'},
-    //
-    // ]
     const toggleArrow = () => {
         if (arrowDown) {
             setArrowDown(false)
@@ -97,7 +91,6 @@ function LoanDetails() {
         if (currentTab == 1){
             const item = getloaneeloanDetails();
             setBreakDown(item)
-            console.log('item:: ', item, "bress: ", breakDown)
         }
         if (currentTab < loanRequestDetailsTab.length - 1) {
             setCurrentsTab(currentTab + 1);
@@ -109,18 +102,11 @@ function LoanDetails() {
             setCurrentsTab(currentTab - 1);
         }
     };
-    // const jj =  [
-    //     {itemName: 'shoe', itemAmount: '2000'},
-    //     {itemName: 'shoe', itemAmount: '2000'},
-    //     {itemName: 'shoe', itemAmount: '2000'},
-    //     {itemName: 'shoe', itemAmount: '2000'},
-    //
-    // ]
+
     const getloaneeloanDetails = () => {
         const loaneeeLoanBreakdowns =  data?.data?.body?.data?.loaneeLoanBreakdowns
         const loaneeloanBreakDown :{ itemName: string; itemAmount: string; }[] = [ ]
         loaneeeLoanBreakdowns?.forEach((element:loaneeLoanBreakDown) => loaneeloanBreakDown?.push({itemName: element?.itemName, itemAmount: element?.itemAmount} ) )
-        // console.log("jj: ", jj, "jjk", loaneeloanBreakDown)
         return loaneeloanBreakDown;
     }
 
