@@ -148,7 +148,7 @@ const LoanProductPage = () => {
 
             <div id={`table`} className={`pt-8`}>
                 <Tables
-                    tableData={allLoanee}
+                    tableData={allLoanee.slice().reverse()}
                     handleRowClick={handleRowClick}
                     tableHeader={loanProductHeader}
                     tableHeight={52}
