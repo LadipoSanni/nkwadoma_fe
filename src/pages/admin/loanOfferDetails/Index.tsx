@@ -14,7 +14,12 @@ import {useViewLoanOfferDetailsQuery} from "@/service/admin/loan/loan-offer-api"
 import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import styles from "./index.module.css"
+import dynamic from "next/dynamic";
 
+const LoanOfferDetailsContent = dynamic(
+    () => Promise.resolve(LoanOfferDetails),
+    {ssr: false}
+)
 
 const LoanOfferDetails = () => {
     const router = useRouter();
@@ -256,4 +261,4 @@ const LoanOfferDetails = () => {
     );
 };
 
-export default LoanOfferDetails;
+export default LoanOfferDetailsContent;
