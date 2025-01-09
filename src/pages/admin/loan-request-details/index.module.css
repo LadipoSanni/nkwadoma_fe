@@ -22,12 +22,13 @@
 .loanRequestDetails::-webkit-scrollbar-thumb{
     background-color: rgb(217, 217, 217);
     width: 4px;
-    height: 1rem;
+    height: 0.5rem;
     margin-right: 0.5rem;
 }
 
 
 @media only screen and (max-width: 600px){
+
     .tabConnector{
         display: flex;
         grid-template-columns: max-content;

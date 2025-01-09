@@ -249,27 +249,28 @@ function LoanDetails() {
                 <div>
                     <Avatar id={'loaneeImageOnLoanRequestDetails'} data-testid={'loaneeImageOnLoanRequestDetails'}
                             className={`h-[8rem] w-[8rem] md:w-[8rem] md:h-[8rem] `}>
-                        <AvatarImage src={`/234d70b3-ec71-4d68-8696-5f427a617fb7.jpeg`} alt="@shadcn"/>
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarImage src={data?.data?.body?.data?.image} alt="@shadcn"/>
+                        <AvatarFallback></AvatarFallback>
                     </Avatar>
 
                     <div
                         className={`grid gap-2 mt-4`}
                     >
                         <div id={'loaneeNameOnLoanRequestDetails'} data-testid={'loaneeNameOnLoanRequestDetails'}
-                             className={`${cabinetGroteskRegular.className} text-black text-xl md:text-3xl  `}>Sarah
-                            Akinyemi
+                             className={`${cabinetGroteskRegular.className} text-black text-xl gap-2 md:text-3xl  `}>
+                            {data?.data?.body?.data?.firstName}
+                            {data?.data?.body?.data?.lastName}
                         </div>
                         <div
                             className={`flex gap-2  `}
                         >
                         <span id={'loaneeProgramOnLoanRequestDetails'} data-testid={'loaneeProgramOnLoanRequestDetails'}
-                              className={`${inter.className} text-sm text-black400`}>Product Design</span>
+                              className={`${inter.className} text-sm text-black400`}> {data?.data?.body?.data?.programName}</span>
                             <span
                                 className={`${inter.className} text-sm text-black400 mt-auto mb-auto md:mt-auto md:mb-auto `}>.</span>
                             <span id={'loaneeCohortOnLoanRequestDetails'}
                                   data-testid={'loaneeCohortOnLoanRequestDetails'}
-                                  className={`${inter.className} text-sm text-black400`}>Luminary</span>
+                                  className={`${inter.className} text-sm text-black400`}>{data?.data?.body?.data?.cohortName}</span>
                         </div>
                         {/*<Button*/}
                         {/*    id={'loaneeCheckCreditScoreOnLoanRequestDetails'}*/}
