@@ -69,8 +69,6 @@ const InvestmentVehicle = () => {
     }
   })
 
-  console.log("The data: ",viewAllInvestmentVehicle)
-
   const handleDraftClick = () => {
 
   }
@@ -104,7 +102,6 @@ const InvestmentVehicle = () => {
   const handleRowClick = (row:TableRowData) => {
     router.push('/funds/details')  
     setItemSessionStorage('investmentVehicleId', String(row.id));
-    
 }
 
 
