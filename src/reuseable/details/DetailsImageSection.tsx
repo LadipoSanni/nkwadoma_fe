@@ -58,7 +58,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                 data-testid="cohort-image"
                             />
                         ) : Icon ? (
-                            <div className="w-32 h-32 flex bg-[#D9EAFF] rounded-full justify-center items-center">
+                            <div className="w-32 h-32 md:w-40 md:h-40 flex bg-[#D9EAFF] rounded-full justify-center items-center">
                                 <Icon className="text-6xl text-meedlBlue"/>
                             </div>
                         ) : null}
