@@ -2,6 +2,14 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import CreateLoanOffer from '@/reuseable/modals/createLoanOffer/Index';
 import { Providers } from '@/app/provider';
+jest.mock("next/navigation", () => ({
+    useRouter() {
+        return {
+            prefetch: () => null
+        };
+    },
+
+}));
 
 describe('CreateLoanOffer Component', () => {
     const mockOnSubmit = jest.fn();
