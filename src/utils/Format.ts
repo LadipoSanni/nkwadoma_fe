@@ -65,10 +65,10 @@ export const validateText = (field: string, setFieldValue: (field: string, value
     const validValue = value.replace(/[^a-zA-Z\s]/g, '');
     setFieldValue(field, validValue);
 };
-export const formatValueWithComma = (e: any) => {
-    const numericValue = e?.target?.value?.replace(/\D+/g, '');
-    return numericValue?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
+// export const formatValueWithComma = (e: any) => {
+//     const numericValue = e?.target?.value?.replace(/\D+/g, '');
+//     return numericValue?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+// };
 
 export const formatAmount2 = (amount: number): string =>{
     return new Intl.NumberFormat('en-NG', {
