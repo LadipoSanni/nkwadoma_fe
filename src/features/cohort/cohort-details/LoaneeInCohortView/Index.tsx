@@ -56,6 +56,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
     const [isReferred, setIsReferred] = React.useState("Not referred");
     const [enableButton, setEnableButton] = useState(false)
+    const [isLoadingReffered, setIsLoadingReffered] = React.useState(false);
 
 
 
@@ -262,7 +263,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     headerTitle={`Add Loanee`}
                     width="30%"
                 >
-                    <AddTraineeForm tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)}/>
+                    <AddTraineeForm  tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)}/>
                 </TableModal>
 
             </div>

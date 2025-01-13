@@ -23,6 +23,7 @@ type cohortBreakDown = {
     itemAmount: string;
     itemName: string;
     loanBreakdownId: string;
+    isloading?:(value: boolean) => boolean;
 }
 
 function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
@@ -122,7 +123,9 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
 
 
 
-    const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number, initialAmount: number) => {
+        const ei = cohortBreakDown.at(index);
+        console.log('inisso: ', ei?.itemAmount)
         const { value } = e.target;
         const updatedData = cohortBreakDown.map((item, i) =>
             i === index ? { ...item, itemAmount: value } : item
@@ -215,25 +218,6 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                                     }
                                                 }}
                                             />
-                                            {/*<NumericFormat*/}
-                                            {/*    id={`initialDeposit`}*/}
-                                            {/*    name={`initialDeposit`}*/}
-                                            {/*    type="text"*/}
-                                            {/*    thousandSeparator=","*/}
-                                            {/*    decimalScale={2}*/}
-                                            {/*    fixedDecimalScale={true}*/}
-                                            {/*    value={initialDepositAmount}*/}
-                                            {/*    placeholder={`Enter Initial Deposit`}*/}
-                                            {/*    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"*/}
-                                            {/*        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
-                                            {/*            const value = e.target.value;*/}
-                                            {/*            setInitialDepositAmount(value)*/}
-                                            {/*            console.log('initial deposit amount afterc setting : ', initialDepositAmount);*/}
-                                            {/*            if (/^\d*$/.test(value)) {*/}
-                                            {/*                void setFieldValue("initialDeposit", value);*/}
-                                            {/*            }*/}
-                                            {/*        }}*/}
-                                            {/*/>*/}
                                         </div>
                                     </div>
                                 </div>
@@ -311,7 +295,8 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                                             if (!isNaN(Number(rawValue))) {
                                                                 editCohortBreakDown(
                                                                     { target: { value: rawValue } } as React.ChangeEvent<HTMLInputElement>,
-                                                                    index
+                                                                    index,
+                                                                    Number(detail?.itemAmount)
                                                                 );
                                                             }
                                                         }}
