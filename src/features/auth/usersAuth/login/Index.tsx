@@ -8,13 +8,13 @@ import {cabinetGrotesk} from "@/app/fonts";
 import {validateEmailInput} from "@/utils/GlobalMethods"
 import {useLoginMutation} from "@/service/auths/api"
 import {useToast} from "@/hooks/use-toast"
-import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
+import {getUserRoles, getUserRoleSS, setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {useRouter} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
 import {ADMIN_ROLES} from "@/types/roles";
-import {persistor, store} from "@/redux/store";
+import {persistor, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
-import {clearData} from "@/utils/storage";
+import {clearData, getItemSessionStorage} from "@/utils/storage";
 
 
 interface CustomJwtPayload {
@@ -106,18 +106,27 @@ const Login: React.FC = () => {
                         description: "Login successful",
                         status: "success",
                     });
+                    const userRoles = getUserRoleSS
+                    console.log('before setting:: ', userRoles)
                     if (user_role) {
                         storeUserDetails(access_token, user_email, user_role, userName)
-                        if (user_role === 'LOANEE') {
-                            store.dispatch(setCurrentNavbarItem("overview"))
-                            router.push("/onboarding")
-                        } else if(user_role === 'ORGANIZATION_ADMIN') {
-                            store.dispatch(setCurrentNavbarItem("Program"))
-                            router.push("/program")
-                        }else if(user_role === 'PORTFOLIO_MANAGER'){
-                            store.dispatch(setCurrentNavbarItem("Organizations"))
-                            router.push("/organizations")
+                        setUserRoles(user_roles)
+                        console.log('after setting:: ', userRoles)
+                        switch (user_role){
+                            case 'LOANEE' :
+                                store.dispatch(setCurrentNavbarItem("overview"))
+                                router.push("/onboarding")
+                                break;
+                            case 'ORGANIZATION_ADMIN':
+                                store.dispatch(setCurrentNavbarItem("Program"))
+                                router.push("/program")
+                                break;
+                            case 'PORTFOLIO_MANAGER':
+                                store.dispatch(setCurrentNavbarItem("Organizations"))
+                                router.push("/organizations")
+                                break;
                         }
+
 
                     }
                 }
