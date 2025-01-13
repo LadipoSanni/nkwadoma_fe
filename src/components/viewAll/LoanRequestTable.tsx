@@ -19,10 +19,9 @@ const Index = () => {
     const router = useRouter();
     const request ={
         pageSize: 10,
-        pageNumber: 10
+        pageNumber: 0
     }
     const { data, isLoading} = useViewAllLoanRequestQuery(request)
-    console.log('data:  ', data)
 
     const loanRequestHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{row.firstName} <div className={``}></div>{row.lastName}</div>  },
