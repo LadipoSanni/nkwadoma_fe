@@ -1,10 +1,11 @@
 "use client"
 import React from "react";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
-import {FiBook} from "react-icons/fi";
 import {ThreeTabs} from "@/reuseable/tabs/ThreeTabs";
 import { useGetLoanProductDetailsByIdQuery } from "@/service/admin/loan_product";
 import {formatAmount} from "@/utils/Format";
+import { MdOutlineInventory2 } from "react-icons/md";
+
 
 
 const Details = () => {
@@ -23,7 +24,7 @@ const Details = () => {
 
     const dataList = [
         { label: "Fund product", value: loanProduct?.data.fundProduct },
-        { label: "Product sponsor", value: loanProduct?.data.sponsors },
+        // { label: "Product sponsor", value: loanProduct?.data.sponsors },
         { label: "Product size ", value: formatAmount(loanProduct?.data.loanProductSize)},
         { label: "Tenor", value: loanProduct?.data.tenor },
         { label: "Minimum repayment amount", value: formatAmount(loanProduct?.data.minimumRepaymentAmount)},
@@ -37,14 +38,14 @@ const Details = () => {
     ];
 
     return (
-        <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
+        <div className={`py-4 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
             <div id={`firstSection`}>
                 <DetailsImageSection imageSrc={loanProduct?.data.imageUrl} cohortTitle={loanProduct?.data.name}
                                      cohortDescription={loanProduct?.data.mandate}
                                      handleDropdownClicked={handleDropdownClick}
                                      buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
                                      isEditButton={false}
-                                     icon={FiBook}
+                                     icon={MdOutlineInventory2}
                 />
             </div>
             <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>

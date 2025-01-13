@@ -65,16 +65,16 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                     </Card>
                 </div>
 
-                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col py-5`}>
+                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col py-5 gap-4`}>
                     <h1 id="cohort-title" data-testid="cohort-title"
                         className={`${cabinetGrotesk.className} text-3xl font-medium text-black`}>
                         {cohortTitle}
                     </h1>
-                    <div className={`pt-5`}>
+                    <div>
                         <p
                             id="cohort-description"
                             data-testid="cohort-description"
-                            className={`${inter.className}  text-grey400 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}
+                            className={`${inter.className} text-grey400 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}
                         >
                             {cohortDescription}
                         </p>
