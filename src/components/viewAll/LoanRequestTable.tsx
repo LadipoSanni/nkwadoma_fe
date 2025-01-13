@@ -22,6 +22,7 @@ const Index = () => {
         pageNumber: 0
     }
     const { data, isLoading} = useViewAllLoanRequestQuery(request)
+    console.log('data: ', data)
 
     const loanRequestHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{row.firstName} <div className={``}></div>{row.lastName}</div>  },
@@ -34,7 +35,7 @@ const Index = () => {
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        router.push(`/loan-details?id=${ID}`);
+        router.push(`/loan-request-details?id=${ID}`);
     };
 
     return (
