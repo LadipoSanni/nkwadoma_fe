@@ -110,7 +110,7 @@ const CreatePassword = () => {
             clearData()
             await persistor.purge();
             if (user_role) {
-                storeUserDetails(access_token, user_email, user_role, userName, user_roles)
+                storeUserDetails(access_token, user_email, user_role, userName)
                 if (user_role === 'LOANEE') {
                     store.dispatch(setCurrentNavbarItem("overview"))
                     router.push("/onboarding")

@@ -8,13 +8,13 @@ import {cabinetGrotesk} from "@/app/fonts";
 import {validateEmailInput} from "@/utils/GlobalMethods"
 import {useLoginMutation} from "@/service/auths/api"
 import {useToast} from "@/hooks/use-toast"
-import {getUserRoles, getUserRoleSS, setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
+import { getUserRoleSS, setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {useRouter} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
 import {ADMIN_ROLES} from "@/types/roles";
-import {persistor, store, useAppSelector} from "@/redux/store";
+import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
-import {clearData, getItemSessionStorage} from "@/utils/storage";
+import {clearData} from "@/utils/storage";
 
 
 interface CustomJwtPayload {
