@@ -1,6 +1,5 @@
 import React from 'react';
 import AdminLayout from "@/layout/admin-layout/index";
-import CustomAuthorization from "@/utils/CustomAuthorization";
 
 
 type props = {
@@ -14,12 +13,12 @@ const Layout: React.FC<props> = ({ children }) => {
 
 
     return (
-        <CustomAuthorization roles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN']}
-        >
+        // <CustomAuthorization roles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN']}
+        // >
             <AdminLayout>
                 {children}
             </AdminLayout>
-        </CustomAuthorization>
+        // </CustomAuthorization>
     );
 };
 
