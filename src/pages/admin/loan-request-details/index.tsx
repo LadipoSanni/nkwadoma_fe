@@ -70,6 +70,7 @@ function LoanDetails() {
         store.dispatch(setCurrentTab('Loan requests'))
         router.push("/loan/loan-request")
     }
+    console.log('data: ', data)
     const loanRequestDetailsTab = [
         "Basic details",
         "Additional details",
@@ -104,7 +105,7 @@ function LoanDetails() {
     };
 
     const getloaneeloanDetails = () => {
-        const loaneeeLoanBreakdowns =  data?.data?.body?.data?.loaneeLoanBreakdowns
+        const loaneeeLoanBreakdowns =  data?.data?.loaneeLoanBreakdowns
         const loaneeloanBreakDown :{ itemName: string; itemAmount: string; }[] = [ ]
         loaneeeLoanBreakdowns?.forEach((element:loaneeLoanBreakDown) => loaneeloanBreakDown?.push({itemName: element?.itemName, itemAmount: element?.itemAmount} ) )
         return loaneeloanBreakDown;
@@ -125,7 +126,7 @@ function LoanDetails() {
 
                     className='bg-grey105 flex md:place-items-end '
 
-                    value={data?.data?.body?.data?.tuitionAmount}
+                    value={data?.data?.tuitionAmount}
                     // placeholder={${detail.itemName}}
                     // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
 
@@ -134,7 +135,7 @@ function LoanDetails() {
         {
             label: 'Start date', value:
             // dayjs(data?.data?.body?.data?.createdDate?.toString()).format('MMMM D, YYYY')
-                dayjs(data?.data?.body?.data?.createdDate?.toString()).format('MMMM D, YYYY')
+                dayjs(data?.data?.createdDate?.toString()).format('MMMM D, YYYY')
 
         },
         {
@@ -148,7 +149,7 @@ function LoanDetails() {
                 // value={'200000'}
                 className='bg-grey105 flex md:place-items-end '
                 prefix={'₦'}
-                value={data?.data?.body?.data?.loanAmountRequested}
+                value={data?.data?.loanAmountRequested}
                 // placeholder={${detail.itemName}}
                 // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
 
@@ -163,7 +164,7 @@ function LoanDetails() {
                 decimalScale={2}
                 fixedDecimalScale={true}
                 prefix={'₦'}
-                value={data?.data?.body?.data?.initialDeposit}
+                value={data?.data?.initialDeposit}
                 className='bg-grey105 flex md:place-items-end'
 
             />
@@ -184,27 +185,27 @@ function LoanDetails() {
     ]
 
     const basic = [
-        {label: 'Gender', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.gender},
-        {label: 'Email address', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.email},
-        {label: 'Phone number', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.phoneNumer},
-        {label: 'Date of birth', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.maritalStatus},
-        {label: 'Nationality', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.nationality},
-        {label: 'State of origin ', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfOrigin},
-        {label: 'State of residence', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfResidence},
+        {label: 'Gender', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.gender},
+        {label: 'Email address', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.email},
+        {label: 'Phone number', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.phoneNumer},
+        {label: 'Date of birth', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.dateOfBirth},
+        {label: 'Marital status', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.maritalStatus},
+        {label: 'Nationality', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.nationality},
+        {label: 'State of origin ', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfOrigin},
+        {label: 'State of residence', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfResidence},
     ]
 
     const additional = [
-        {label: 'Alternate email address', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateEmail},
-        {label: 'Alternate phone number', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data?.body?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateContactAddress},
+        {label: 'Alternate email address', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateEmail},
+        {label: 'Alternate phone number', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateContactAddress},
         {
             label: 'Next of kin name',
-            value: data?.data?.body?.data?.nextOfKin?.firstName + " " + data?.data?.body?.data?.nextOfKin?.lastName
+            value: data?.data?.nextOfKin?.firstName + " " + data?.data?.nextOfKin?.lastName
         },
-        {label: 'Next of kin email address', value: data?.data?.body?.data?.nextOfKin?.email},
-        {label: 'Next of kin phone number', value: data?.data?.body?.data?.nextOfKin?.phoneNumber},
-        {label: 'Next of kin relationship ', value: data?.data?.body?.data?.nextOfKin?.nextOfKinRelationship},
+        {label: 'Next of kin email address', value: data?.data?.nextOfKin?.email},
+        {label: 'Next of kin phone number', value: data?.data?.nextOfKin?.phoneNumber},
+        {label: 'Next of kin relationship ', value: data?.data?.nextOfKin?.nextOfKinRelationship},
 
     ]
 
