@@ -58,7 +58,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                 data-testid="cohort-image"
                             />
                         ) : Icon ? (
-                            <div className="w-32 h-32 flex bg-[#D9EAFF] rounded-full justify-center items-center">
+                            <div className="w-32 h-32 md:w-40 md:h-40 flex bg-[#D9EAFF] rounded-full justify-center items-center">
                                 <Icon className="text-6xl text-meedlBlue"/>
                             </div>
                         ) : null}
@@ -74,7 +74,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         <p
                             id="cohort-description"
                             data-testid="cohort-description"
-                            className={`${inter.className}  text-grey450 break-words scrollbar-width:none overflow-y-auto h-20 text-sm`}
+                            className={`${inter.className}  text-grey450 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}
                         >
                             {cohortDescription}
                         </p>
@@ -85,7 +85,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             className="grid md:grid-cols-3 grid-cols-2 gap-2 w-fit mt-3"
                         >
                             {tagButtonData.map((tagProps, index) => (
-                                <TagButton key={index} {...tagProps} />
+                                <TagButton textColor={""} key={index} {...tagProps} />
                             ))}
                         </div>
                     </div>

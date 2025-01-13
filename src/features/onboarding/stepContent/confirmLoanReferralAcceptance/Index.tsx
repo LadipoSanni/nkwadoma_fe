@@ -2,10 +2,14 @@ import React, {useState} from 'react';
 import {Checkbox} from '@/components/ui/checkbox';
 import {Button} from '@/components/ui/button';
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
+import { useRouter } from 'next/navigation';
+
 
 const ConfirmLoanReferralAcceptance = () => {
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    const router = useRouter()
 
     return (
         <div className="flex flex-col gap-[22px]">
@@ -37,7 +41,11 @@ const ConfirmLoanReferralAcceptance = () => {
             <SuccessDialog
                 open={isDialogOpen}
                 onClose={() => setIsDialogOpen(false)}
-                onContinue={() => setIsDialogOpen(false)} title={'Acceptance process successful'}
+                onContinue={() => {
+                    setIsDialogOpen(false);
+                    router.push('/overview');
+                }}
+                title={'Acceptance process successful'}
                 message={'Congratulations! You have successfully completed the loan referral acceptance process'}
                 buttonText={'Go to dashboard'}/>
         </div>

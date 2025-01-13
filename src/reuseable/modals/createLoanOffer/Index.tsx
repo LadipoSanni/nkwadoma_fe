@@ -8,6 +8,13 @@ import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import { NumericFormat } from "react-number-format";
 import ProgramSelect from "@/reuseable/select/ProgramSelect";
 import { useRespondToLoanRequestMutation } from "@/service/admin/loan/loan-request-api"; // Import the new mutation
+import {useViewAllLoanProductQuery} from '@/service/admin/loan_product'
+import {LoanProductType} from "@/types/loan/loan-request.type";
+import { Loader2 } from "lucide-react"
+import { useToast} from "@/hooks/use-toast";
+import {store} from "@/redux/store";
+import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
+import {useRouter} from "next/navigation";
 
 interface CreateLoanOfferProps {
     onSubmit: (data: { amountApproved: string, loanProduct: string }) => void;
@@ -19,10 +26,26 @@ interface CreateLoanOfferProps {
 const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, setIsOpen, loanRequestId }) => {
     const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
-    const [programId, setProgramId] = useState("");
+    const router = useRouter()
+
+    const [selectedLoanProductId, setSelectedLoanProductId] = useState("");
     const [isFormValid, setIsFormValid] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const [respondToLoanRequest] = useRespondToLoanRequestMutation(); // Use the new mutation
+    const [respondToLoanRequest, {isError, isLoading, error,isSuccess}] = useRespondToLoanRequestMutation(); // Use the new mutation
+    const [amount , setAmount] = useState('');
+    const isValid = amount.length > 0 && selectedProgram !== null;
+
+    const parameter = {
+        pageSize: 10,
+        pageNumber: 0
+    }
+    const {data  } = useViewAllLoanProductQuery(parameter)
+    const loanProducts =  data?.data?.body
+    const empty : {id: string, name: string}[] = []
+    loanProducts?.forEach((element: LoanProductType) => empty?.push({id: element.id, name: element.name}))
+
+
+    const {toast} = useToast()
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -36,7 +59,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
         const formData = new FormData(event.target as HTMLFormElement);
         const data = {
             loanRequestId,
-            loanProductId: programId,
+            loanProductId: selectedLoanProductId,
             status: "NEW",
             amountApproved: parseFloat(formData.get('amountApproved') as string),
             declineReason: ""
@@ -44,8 +67,17 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
         await respondToLoanRequest(data);
         onSubmit({
             amountApproved: formData.get('amountApproved') as string,
-            loanProduct: programId
+            loanProduct: selectedLoanProductId
         });
+        if (isSuccess){
+            store.dispatch(setCurrentTab('Loan requests'))
+            router.push("/loan/loan-request")
+            setIsOpen(false)
+            toast({
+                description:'Loan offer has been created',
+                status: "success",
+            })
+        }
     };
 
     if (!isOpen) return null;
@@ -97,6 +129,9 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                                 thousandSeparator=","
                                 decimalScale={2}
                                 fixedDecimalScale={true}
+                                onChange={(e)=> {
+                                    setAmount(e.target.value)
+                                }}
                             />
                         </div>
                     </div>
@@ -105,17 +140,18 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                         setSelectedProgram={setSelectedProgram}
                         isSelectOpen={isSelectOpen}
                         setIsSelectOpen={setIsSelectOpen}
-                        selectOptions={[
-                            { id: "1", name: "Product1" },
-                            { id: "2", name: "Product2" },
-                            { id: "3", name: "Product3" }
-                        ]}
-                        setId={setProgramId}
+                        selectOptions={empty}
+                        setId={setSelectedLoanProductId}
                         label={'Loan product'}
                         placeholder={'Select loan product'}
                     />
                     {!isFormValid && (
                         <div className="text-red-500 text-sm">{errorMessage}</div>
+                    )}
+                    {isError && (
+                        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-expect-error
+                        <div className="text-red-500 text-sm">{error?.data?.message}</div>
                     )}
                     <div className={'flex justify-end gap-2'}>
                         <DialogClose asChild>
@@ -129,10 +165,12 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                         </DialogClose>
                         <Button
                             id="CreateCohortButton"
-                            className={`text-meedlWhite font-bold ${!isFormValid ? 'bg-neutral650' : 'bg-meedlBlue hover:bg-meedlBlue'} w-full md:w-[8.75rem] h-[3.5625rem]`}
+                            className={`text-meedlWhite gap-2 font-bold ${!isValid ? 'bg-neutral650' : 'bg-meedlBlue hover:bg-meedlBlue'} w-full md:w-[8.75rem] h-[3.5625rem]`}
                             type="submit"
-                            disabled={!isFormValid}
+                            disabled={!isValid}
+
                         >
+                            {isLoading && <Loader2 className="animate-spin" />}
                             Create
                         </Button>
                     </div>

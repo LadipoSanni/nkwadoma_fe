@@ -1,5 +1,6 @@
 
 export interface AuthButtonPropsType {
+    height?: string,
     id: string,
     buttonText: string,
     width: string,

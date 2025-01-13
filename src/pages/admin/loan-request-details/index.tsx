@@ -76,12 +76,6 @@ function LoanDetails() {
         "Loan details"
     ]
 
-    // const breakDown = [
-    //     {itemName: 'tuition', itemAmount: '$2000'},
-    //     {itemName: 'skincare', itemAmount: '$2000'},
-    //     {itemName: 'head', itemAmount: '$2000'},
-    //
-    // ]
     const toggleArrow = () => {
         if (arrowDown) {
             setArrowDown(false)
@@ -97,7 +91,6 @@ function LoanDetails() {
         if (currentTab == 1){
             const item = getloaneeloanDetails();
             setBreakDown(item)
-            console.log('item:: ', item, "bress: ", breakDown)
         }
         if (currentTab < loanRequestDetailsTab.length - 1) {
             setCurrentsTab(currentTab + 1);
@@ -109,18 +102,11 @@ function LoanDetails() {
             setCurrentsTab(currentTab - 1);
         }
     };
-    // const jj =  [
-    //     {itemName: 'shoe', itemAmount: '2000'},
-    //     {itemName: 'shoe', itemAmount: '2000'},
-    //     {itemName: 'shoe', itemAmount: '2000'},
-    //     {itemName: 'shoe', itemAmount: '2000'},
-    //
-    // ]
+
     const getloaneeloanDetails = () => {
         const loaneeeLoanBreakdowns =  data?.data?.body?.data?.loaneeLoanBreakdowns
         const loaneeloanBreakDown :{ itemName: string; itemAmount: string; }[] = [ ]
         loaneeeLoanBreakdowns?.forEach((element:loaneeLoanBreakDown) => loaneeloanBreakDown?.push({itemName: element?.itemName, itemAmount: element?.itemAmount} ) )
-        // console.log("jj: ", jj, "jjk", loaneeloanBreakDown)
         return loaneeloanBreakDown;
     }
 
@@ -176,11 +162,8 @@ function LoanDetails() {
                 thousandSeparator=","
                 decimalScale={2}
                 fixedDecimalScale={true}
-                // value={'200000'}
                 prefix={'₦'}
                 value={data?.data?.body?.data?.initialDeposit}
-                // placeholder={${detail.itemName}}
-                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                 className='bg-grey105 flex md:place-items-end'
 
             />
@@ -244,6 +227,10 @@ function LoanDetails() {
         setOpenCreateLoanOffer(value)
     }
 
+    const setOpenDeclineOffer = (value: boolean) => {
+        setOpenDeclineLoanRequestModal(value)
+    }
+
 
     return (
         <div
@@ -262,27 +249,28 @@ function LoanDetails() {
                 <div>
                     <Avatar id={'loaneeImageOnLoanRequestDetails'} data-testid={'loaneeImageOnLoanRequestDetails'}
                             className={`h-[8rem] w-[8rem] md:w-[8rem] md:h-[8rem] `}>
-                        <AvatarImage src={`/234d70b3-ec71-4d68-8696-5f427a617fb7.jpeg`} alt="@shadcn"/>
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarImage src={data?.data?.body?.data?.image} alt="@shadcn"/>
+                        <AvatarFallback></AvatarFallback>
                     </Avatar>
 
                     <div
                         className={`grid gap-2 mt-4`}
                     >
                         <div id={'loaneeNameOnLoanRequestDetails'} data-testid={'loaneeNameOnLoanRequestDetails'}
-                             className={`${cabinetGroteskRegular.className} text-black text-xl md:text-3xl  `}>Sarah
-                            Akinyemi
+                             className={`${cabinetGroteskRegular.className} text-black text-xl gap-2 md:text-3xl  `}>
+                            {data?.data?.body?.data?.firstName}
+                            {data?.data?.body?.data?.lastName}
                         </div>
                         <div
                             className={`flex gap-2  `}
                         >
                         <span id={'loaneeProgramOnLoanRequestDetails'} data-testid={'loaneeProgramOnLoanRequestDetails'}
-                              className={`${inter.className} text-sm text-black400`}>Product Design</span>
+                              className={`${inter.className} text-sm text-black400`}> {data?.data?.body?.data?.programName}</span>
                             <span
                                 className={`${inter.className} text-sm text-black400 mt-auto mb-auto md:mt-auto md:mb-auto `}>.</span>
                             <span id={'loaneeCohortOnLoanRequestDetails'}
                                   data-testid={'loaneeCohortOnLoanRequestDetails'}
-                                  className={`${inter.className} text-sm text-black400`}>Luminary</span>
+                                  className={`${inter.className} text-sm text-black400`}>{data?.data?.body?.data?.cohortName}</span>
                         </div>
                         {/*<Button*/}
                         {/*    id={'loaneeCheckCreditScoreOnLoanRequestDetails'}*/}
@@ -294,7 +282,7 @@ function LoanDetails() {
                     </div>
                 </div>
                 <div
-                    className={`  overflow-x-hidden overflow-y-auto md:w-fit mt-4   w-full md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid `}
+                    className={` ${styles.loanRequestDetails} md:w-fit h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid md:gap-3`}
                 >
                     <div
                         className={` ${styles.tabConnector} md:w-fit pl-1  h-fit md:h-fit  flex md:flex `}
@@ -365,7 +353,7 @@ function LoanDetails() {
                         }
                     </div>
                     <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer} setIsOpen={open} onSubmit={onSubmit} />
-                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()} setIsOpen={open} loanProductId={""} title={""}/>
+                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()} setIsOpen={setOpenDeclineOffer} loanProductId={id} title={"Decline loan request"} />
 
                 </div>
             </div>

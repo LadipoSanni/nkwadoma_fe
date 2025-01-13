@@ -76,3 +76,27 @@ export interface loaneeLoanBreakDown {
         }
     }
 }
+export interface LoanProductType {
+    bankPartner: string,
+    costOfFund: string,
+    createdAt:string,
+    disbursementTerms: string,
+    id: string,
+    interestRate: string,
+    investmentVehicleId: string,
+    investmentVehicleName: string,
+    loanProductSize: string,
+    mandate: string,
+    minRepaymentAmount: string,
+    moratorium: number,
+    name: string,
+    numberOfLoanees: number,
+    obligorLoanLimit: number,
+    sponsors: string[]
+    tenor: number,
+    termsAndCondition:string,
+    totalAmountAvailable: number,
+    totalAmountDisbursed:  number,
+    totalAmountEarned:  number,
+    totalAmountRepaid:  number,
+}

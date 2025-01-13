@@ -5,7 +5,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 interface CustomSelectProps {
     triggerId: string;
     id: string;
-    selectContent: { label: string; value: string }[];
+    selectContent?: Array<string | number>,
     value: string;
     onChange: (value: string) => void;
     name: string;
@@ -59,19 +59,32 @@ const LoanProductCustomSelect: React.FC<CustomSelectProps> = ({
                     style={{ zIndex: 1000 }}
                 >
                     <SelectGroup className='selectgroup'>
-                        {selectContent.map((option, index) => (
-                            <div key={option.value} id={`${option.value}`}>
+                        {selectContent?.map((content,index) => (
+                            <div key={content} id={`${content}`}>
                                 <SelectItem
-                                    key={`${option.value}-${index}`}
-                                    id={`${option.value}`}
-                                    value={option.value}
-                                    className={`${option.value}`}
-                                    disabled={isItemDisabled ? isItemDisabled(option.value) : false}
+                                    key={`${content}-${index}`}
+                                    id={`${content}`}
+                                    value={String(content)}
+                                    className={`${content}`}
+                                    disabled={isItemDisabled ? isItemDisabled(content) : false}
                                 >
-                                    {option.label}
+                                    {content}
                                 </SelectItem>
                             </div>
                         ))}
+                        {/*{selectContent.map((option, index) => (*/}
+                        {/*    <div key={option.value} id={`${option.value}`}>*/}
+                        {/*        <SelectItem*/}
+                        {/*            key={`${option.value}-${index}`}*/}
+                        {/*            id={`${option.value}`}*/}
+                        {/*            value={option.value}*/}
+                        {/*            className={`${option.value}`}*/}
+                        {/*            disabled={isItemDisabled ? isItemDisabled(option.value) : false}*/}
+                        {/*        >*/}
+                        {/*            {option.label}*/}
+                        {/*        </SelectItem>*/}
+                        {/*    </div>*/}
+                        {/*))}*/}
                     </SelectGroup>
                 </SelectContent>
             </Select>
