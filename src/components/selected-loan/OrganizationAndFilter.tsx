@@ -62,15 +62,7 @@ const OrganizationAndFilter = () => {
                         placeholder='Search'
                         className='w-full lg:w-80 rounded h-11 md:h-9 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
                     />
-                </div>
-                {/* <Button
-                    id={'filterLoanButton'}
-                    data-testid="filterLoanButton"
-                    className={` text-sm gap-2 md:text-xs  w-fit px-2 md:w-1/5 h-11 md:h-9 rounded bg-neutral100 hover:bg-neutral100 text-black border border-[#D0D5DD] shadow-none `}
-                >
-                    Program
-                    <ChevronDownIcon className="h-4 w-4 md:h-8 md:w-8 font-semibold" />
-                </Button> */}
+                </div> 
                 <div>
                     <ProductFilter 
                     filterName='Program'

@@ -33,6 +33,8 @@ const Index = () => {
         { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>}
     ];
 
+
+
     const handleRowClick = (ID: string | object | React.ReactNode) => {
         router.push(`/loan-request-details?id=${ID}`);
     };
@@ -43,7 +45,6 @@ const Index = () => {
         >
             {
                 data?.data?.body?.length > 0 ?
-                // LoanRequestTable?.length > 0 ?
                     <div className={`md:w-full w-full h-full md:h-full `}>
                         <Tables
                             tableData={data?.data?.body}
@@ -52,8 +53,8 @@ const Index = () => {
                             tableHeader={loanRequestHeader}
                             tableHeight={52}
                             sx='cursor-pointer'
-                            staticColunm='cohort'
-                            staticHeader='Cohort'
+                            staticColunm='loanee'
+                            staticHeader='Loanee'
                             showKirkBabel={false}
                             icon={MdOutlinePeople}
                             sideBarTabName='Cohort'
