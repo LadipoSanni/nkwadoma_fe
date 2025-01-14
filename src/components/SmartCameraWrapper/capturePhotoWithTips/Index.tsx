@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { MdCheckCircleOutline, MdOutlineCancel } from "react-icons/md";
 import { inter } from '@/app/fonts';
 import * as faceapi from 'face-api.js';
@@ -31,88 +31,89 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                 }
             }
         };
-        loadModels();
-    }, []);
 
-    useEffect(() => {
         const startCamera = async () => {
             const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
             }
         };
-        startCamera();
-    }, []);
 
-    const detectFaceOrientation = useCallback(async () => {
-        if (!videoRef.current || !isModelLoaded) return;
+        const detectFaceOrientation = async () => {
+            if (!videoRef.current || !isModelLoaded) return;
 
-        const video = videoRef.current;
-        const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.3 })).withFaceLandmarks();
+            const video = videoRef.current;
+            const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.3 })).withFaceLandmarks();
 
-        if (detection) {
-            setIsFaceDetected(true);
-            if (!hasFaceBeenDetected) {
-                setHasFaceBeenDetected(true);
-            }
-            const landmarks = detection.landmarks;
-            const nose = landmarks.getNose();
-            const leftEye = landmarks.getLeftEye();
-            const rightEye = landmarks.getRightEye();
+            if (detection) {
+                setIsFaceDetected(true);
+                if (!hasFaceBeenDetected) {
+                    setHasFaceBeenDetected(true);
+                }
+                const landmarks = detection.landmarks;
+                const nose = landmarks.getNose();
+                const leftEye = landmarks.getLeftEye();
+                const rightEye = landmarks.getRightEye();
 
-            const noseX = nose[3].x;
-            const noseY = nose[3].y;
-            const leftEyeX = leftEye[0].x;
-            const leftEyeY = leftEye[0].y;
-            const rightEyeX = rightEye[3].x;
-            const rightEyeY = rightEye[3].y;
+                const noseX = nose[3].x;
+                const noseY = nose[3].y;
+                const leftEyeX = leftEye[0].x;
+                const leftEyeY = leftEye[0].y;
+                const rightEyeX = rightEye[3].x;
+                const rightEyeY = rightEye[3].y;
 
-            let newOrientation: string | null = "center";
-            if (noseX > rightEyeX) {
-                newOrientation = "left";
-            } else if (noseX < leftEyeX) {
-                newOrientation = "right";
-            } else if (noseY < leftEyeY && noseY < rightEyeY) {
-                newOrientation = "up";
-            } else if (noseY > leftEyeY && noseY > rightEyeY) {
-                newOrientation = "down";
-            }
+                let newOrientation: string | null = "center";
+                if (noseX > rightEyeX) {
+                    newOrientation = "left";
+                } else if (noseX < leftEyeX) {
+                    newOrientation = "right";
+                } else if (noseY < leftEyeY && noseY < rightEyeY) {
+                    newOrientation = "up";
+                } else if (noseY > leftEyeY && noseY > rightEyeY) {
+                    newOrientation = "down";
+                }
 
-            if (newOrientation !== orientation) {
-                setOrientation(newOrientation);
-                if (newOrientation === "center") {
-                    if (step === "right") {
-                        setStep("left");
-                    } else if (step === "left") {
-                        setStep("up");
-                    } else if (step === "up") {
-                        setStep("down");
+                console.log(`Face movement detected. Orientation: ${newOrientation}`);
+
+                if (newOrientation !== orientation) {
+                    setOrientation(newOrientation);
+                    if (newOrientation === step) {
+                        if (step === "right") {
+                            setStep("left");
+                        } else if (step === "left") {
+                            setStep("up");
+                        } else if (step === "up") {
+                            setStep("down");
+                        } else if (step === "down") {
+                            setStep("complete");
+                        }
                     }
                 }
-            }
 
-            if (newOrientation === "center") {
-                const canvas = document.createElement('canvas');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                const context = canvas.getContext('2d');
-                if (context) {
-                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    canvas.toBlob((blob) => {
-                        if (blob) {
-                            onCapture(new File([blob], "capture.png", { type: "image/png" }));
-                        }
-                    });
+                if (newOrientation === "center") {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const context = canvas.getContext('2d');
+                    if (context) {
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        canvas.toBlob((blob) => {
+                            if (blob) {
+                                onCapture(new File([blob], "capture.png", { type: "image/png" }));
+                            }
+                        });
+                    }
+                }
+            } else {
+                if (!hasFaceBeenDetected) {
+                    setIsFaceDetected(false);
                 }
             }
-        } else {
-            if (!hasFaceBeenDetected) {
-                setIsFaceDetected(false);
-            }
-        }
-    }, [isModelLoaded, orientation, onCapture, hasFaceBeenDetected, step]);
+        };
 
-    useEffect(() => {
+        loadModels();
+        startCamera();
+
         let intervalId: NodeJS.Timeout | null = null;
         if (isModelLoaded) {
             intervalId = setInterval(detectFaceOrientation, 200);
@@ -120,7 +121,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         return () => {
             if (intervalId) clearInterval(intervalId);
         };
-    }, [detectFaceOrientation, isModelLoaded]);
+    }, [isModelLoaded, orientation, onCapture, hasFaceBeenDetected, step]);
 
     const frameClassName = isFaceDetected
         ? "absolute top-4 right-4 w-[270px] h-[270px] rounded-full overflow-hidden"
@@ -151,7 +152,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                             />
                         </svg>
                     )}
-                    <div className={frameClassName} style={{ transform: 'scaleX(-1)' }}>
+                    <div className={frameClassName} style={{transform: 'scaleX(-1)'}}>
                         {!hasFaceBeenDetected && (
                             <div className="absolute inset-0 flex justify-center items-center">
                                 <div className="relative w-[323px] h-[180px]">
@@ -170,10 +171,11 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                             ref={videoRef}
                             autoPlay
                             playsInline
-                            className={`object-cover ${isFaceDetected ? 'w-full h-full' : 'w-[419px] h-[279px]'}`}
+                            className={`object-cover ${(isFaceDetected || hasFaceBeenDetected) ? 'w-full h-full' : 'w-[419px] h-[279px]'}`}
                         />
                     </div>
                 </main>
+
                 <p className="text-black400 text-sm">
                     {modelLoadingError ? (
                         <span className="text-red-500">Error loading face detection: {modelLoadingError}</span>
@@ -187,8 +189,10 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                         "Slowly turn your face to the left"
                     ) : step === 'up' ? (
                         "Slowly turn your face up"
-                    ) : (
+                    ) : step === 'down' ? (
                         "Slowly turn your face down"
+                    ) : (
+                        "Face capture complete"
                     )}
                 </p>
             </div>
