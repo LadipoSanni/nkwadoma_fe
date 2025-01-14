@@ -10,7 +10,7 @@ interface menuItemsProps {
     index: number,
 }
 
-const SelectLoanTab = () => {
+const  SelectLoanTab = () => {
     const router = useRouter()
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
 
