@@ -38,6 +38,8 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
     const [initialDepositAmount, setInitialDepositAmount] = useState('');
     const [amountError, setAmountError] = useState<{error: string, index: number}>()
     const item = data?.data
+    const [disableAddLoaneeButton, setDisableAddLoaneeButton] = useState(true)
+    const [initialDepositError, setInitialDepositError] = useState('')
 
     const [addLoaneeToCohort] = useAddLoaneeToCohortMutation();
 
@@ -66,6 +68,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
         initialDeposit: Yup.string()
             .required('Initial deposit is required')
             .matches(/^[1-9]\d*$/, 'Initial deposit must be a positive number and cannot start with zero'),
+
     });
 
     const initialFormValue = {
@@ -128,7 +131,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
     const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const itemAmountFromCohort = Number(item?.at(index)?.itemAmount)
         const userInput =  Number(e.target.value)
-        if (userInput < itemAmountFromCohort) {
+        if (userInput < itemAmountFromCohort || userInput  === itemAmountFromCohort) {
             console.log('ii:: ', item?.at(index)?.itemAmount)
             const { value } = e.target;
             const updatedData = cohortBreakDown.map((item, i) =>
@@ -137,11 +140,14 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
             setCohortBreakDown(updatedData);
             calculateTotal(updatedData, tuitionFee);
             setAmountError({error:'', index:0})
+            setDisableAddLoaneeButton(false)
 
         }else {
+            console.log('item amount:: ', itemAmountFromCohort)
             const updatedData = cohortBreakDown.map((item, i) =>
                 i === index ? { ...item, itemAmount: itemAmountFromCohort.toLocaleString() } : item
             );
+            setDisableAddLoaneeButton(true)
             setCohortBreakDown(updatedData);
             setAmountError({error:'amount can not be greater than cohort amount', index})
         }
@@ -227,9 +233,15 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     const value = e.target.value;
                                                     setInitialDepositAmount(value)
-                                                    console.log('initial deposit amount afterc setting : ', initialDepositAmount);
                                                     if (/^\d*$/.test(value)) {
-                                                        void setFieldValue("initialDeposit", value);
+                                                        if (Number(e.target.value) < Number(totalItemAmount) || Number(e.target.value) === Number(totalItemAmount)) {
+                                                            setInitialDepositError('')
+                                                            void setFieldValue("initialDeposit", e.target.value);
+                                                        }else {
+                                                            void setFieldValue("initialDeposit", '');
+                                                            setInitialDepositError("initialDeposit can not be greater than cohort amount");
+
+                                                        }
                                                     }
                                                 }}
                                             />
@@ -240,6 +252,8 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                     {errors.initialDeposit && touched.initialDeposit && (
                                         <ErrorMessage name="initialDeposit" component="div" className="text-red-500 text-sm" />
                                     )}
+                                    {initialDepositError.length > 1 &&
+                                    <span className="text-red-500 text-sm" >{initialDepositError}</span>}
                                 </div>
                                 <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
@@ -336,9 +350,10 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                         Back
                                     </Button>
                                     <Button
-                                        variant="default"
+                                        variant="secondary"
                                         className="w-full md:w-36 h-[57px] hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
                                         type="submit"
+                                        disabled={disableAddLoaneeButton}
                                     >
                                         {isLoading ? (
                                             <div id="loadingLoopIconDiv" className="flex items-center justify-center">
