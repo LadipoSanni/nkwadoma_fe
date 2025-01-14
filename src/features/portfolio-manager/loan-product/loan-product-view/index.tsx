@@ -81,10 +81,10 @@ const LoanProductPage = () => {
             selector: (row: TableRowData) => row.numberOfLoanees
         },
         {
-            title: 'Cost of funds',
+            title: 'Cost of funds (%)',
             sortable: true,
             id: 'costOfFund',
-            selector: (row: TableRowData) => formatAmount(row.costOfFund)
+            selector: (row: TableRowData) => row.costOfFund
         },
         {
             title: 'Amount disbursed',
@@ -96,7 +96,7 @@ const LoanProductPage = () => {
             title: 'Amount repaid',
             sortable: true,
             id: 'minRepaymentAmount',
-            selector: (row: TableRowData) => formatAmount(row.minRepaymentAmount)
+            selector: (row: TableRowData) => formatAmount(row.amountRepaid)
         },
         {
             title: 'Amount earned',

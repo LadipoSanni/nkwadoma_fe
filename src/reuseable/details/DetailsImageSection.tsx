@@ -1,6 +1,6 @@
 "use client"
 import React, {ElementType} from "react";
-import {inter} from "@/app/fonts";
+import {cabinetGrotesk, inter} from "@/app/fonts";
 import {Card} from "@/components/ui/card";
 import Image, {StaticImageData} from 'next/image';
 import {Button} from "@/components/ui/button";
@@ -65,16 +65,16 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                     </Card>
                 </div>
 
-                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col`}>
+                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col py-5 gap-4`}>
                     <h1 id="cohort-title" data-testid="cohort-title"
-                        className={`${inter.className} text-3xl font-medium text-black`}>
+                        className={`${cabinetGrotesk.className} text-3xl font-medium text-black`}>
                         {cohortTitle}
                     </h1>
-                    <div className={`pt-3`}>
+                    <div>
                         <p
                             id="cohort-description"
                             data-testid="cohort-description"
-                            className={`${inter.className}  text-grey450 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}
+                            className={`${inter.className} text-grey400 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}
                         >
                             {cohortDescription}
                         </p>
