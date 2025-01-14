@@ -36,6 +36,8 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
     const [totalItemAmount, setTotalItemAmount] = useState(0);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [initialDepositAmount, setInitialDepositAmount] = useState('');
+    const [amountError, setAmountError] = useState<{error: string, index: number}>()
+    const item = data?.data
 
     const [addLoaneeToCohort] = useAddLoaneeToCohortMutation();
 
@@ -123,15 +125,28 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
 
 
 
-    const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number, initialAmount: number) => {
-        const ei = cohortBreakDown.at(index);
-        console.log('inisso: ', ei?.itemAmount)
-        const { value } = e.target;
-        const updatedData = cohortBreakDown.map((item, i) =>
-            i === index ? { ...item, itemAmount: value } : item
-        );
-        setCohortBreakDown(updatedData);
-        calculateTotal(updatedData, tuitionFee);
+    const editCohortBreakDown = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+        const itemAmountFromCohort = Number(item?.at(index)?.itemAmount)
+        const userInput =  Number(e.target.value)
+        if (userInput < itemAmountFromCohort) {
+            console.log('ii:: ', item?.at(index)?.itemAmount)
+            const { value } = e.target;
+            const updatedData = cohortBreakDown.map((item, i) =>
+                i === index ? { ...item, itemAmount: value } : item
+            );
+            setCohortBreakDown(updatedData);
+            calculateTotal(updatedData, tuitionFee);
+            setAmountError({error:'', index:0})
+
+        }else {
+            const updatedData = cohortBreakDown.map((item, i) =>
+                i === index ? { ...item, itemAmount: itemAmountFromCohort.toLocaleString() } : item
+            );
+            setCohortBreakDown(updatedData);
+            setAmountError({error:'amount can not be greater than cohort amount', index})
+        }
+
+
     };
 
     const handleBack = () => {
@@ -296,13 +311,14 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                                                 editCohortBreakDown(
                                                                     { target: { value: rawValue } } as React.ChangeEvent<HTMLInputElement>,
                                                                     index,
-                                                                    Number(detail?.itemAmount)
                                                                 );
                                                             }
                                                         }}
                                                     />
                                                 </div>
                                             </div>
+                                            {amountError?.index === index && <span
+                                                className={`text-error500  text-sm text-center`}>{amountError?.error}</span>}
                                         </div>
                                     </div>
                                 ))}
