@@ -93,7 +93,6 @@ function Tables<T extends TableRowData>({
     const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
-    console.log('tableData:: ', tableData, 'StatisColunm: ', staticColunm)
 
     useEffect(() => {
         setIsMounted(true);

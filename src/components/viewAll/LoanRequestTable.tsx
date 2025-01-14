@@ -24,7 +24,6 @@ const Index = () => {
     }
     const { data, isLoading} = useViewAllLoanRequestQuery(request)
 
-    console.log('view all loan request:: ', data)
     const loanRequestHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
         { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) =>row.programName },
