@@ -159,7 +159,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     //     key: vehicle.id
     // }))
     const investmentVehicleNames = investmentVehicleData?.data?.map((vehicle: Vehicle) => vehicle.name) || [];
-    console.log(investmentVehicleNames);
     // const bankPartner = ["Patner 1", "Partner 2",];
     const maxChars = 2500;
 
@@ -219,7 +218,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             const error = err as ApiError;
             setError(error ? error?.data?.message : "Error occurred");
         }
-        console.log('data; ', formData);
     };
 
     // const handleBack = () => {
