@@ -73,8 +73,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     newOrientation = "down";
                 }
 
-                console.log(`Face movement detected. Orientation: ${newOrientation}`);
-
                 if (newOrientation !== orientation) {
                     setOrientation(newOrientation);
                     if (newOrientation === step) {
