@@ -7,7 +7,7 @@ interface SelectedLoanState {
 }
 
 const initialState: SelectedLoanState = {
-    currentTab: 'loan referrals',
+    currentTab: 'Loan requests',
     clickedOrganizationId: '',
 
 
