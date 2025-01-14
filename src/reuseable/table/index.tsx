@@ -140,6 +140,7 @@ function Tables<T extends TableRowData>({
         if (typeof value === "object" && value !== null) {
             return capitalizeFirstLetters(JSON.stringify(value));
         }
+
         return value;
     };
 

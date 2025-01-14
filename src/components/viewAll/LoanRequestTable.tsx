@@ -8,6 +8,7 @@ import {useRouter} from "next/navigation";
 import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 
 
@@ -23,12 +24,13 @@ const Index = () => {
     }
     const { data, isLoading} = useViewAllLoanRequestQuery(request)
 
+    console.log('view all loan request:: ', data)
     const loanRequestHeader = [
-        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{row.firstName} <div className={``}></div>{row.lastName}</div>  },
-        { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.programName },
-        { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort },
-        { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMMM D, YYYY')}</div> },
-        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.requestDate?.toString()).format('MMMM D, YYYY')}</div> },
+        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
+        { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) =>row.programName },
+        { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohortName },
+        { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMM D, YYYY')}</div> },
+        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.requestDate?.toString()).format('MMM D, YYYY')}</div> },
         { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div>},
         { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>}
     ];
@@ -53,7 +55,7 @@ const Index = () => {
                             tableHeader={loanRequestHeader}
                             tableHeight={52}
                             sx='cursor-pointer'
-                            staticColunm='loanee'
+                            staticColunm='firstName'
                             staticHeader='Loanee'
                             showKirkBabel={false}
                             icon={MdOutlinePeople}
