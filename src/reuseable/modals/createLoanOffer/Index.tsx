@@ -60,7 +60,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
         const data = {
             loanRequestId,
             loanProductId: selectedLoanProductId,
-            status: "NEW",
+            status: "APPROVED",
             amountApproved: parseFloat(formData.get('amountApproved') as string),
             declineReason: ""
         };
