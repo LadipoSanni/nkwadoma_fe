@@ -40,8 +40,8 @@ interface ApiError {
     data: {
         message: string;
     };
-  }
-  
+}
+
 
 interface viewAllProgramProps extends TableRowData {
     id?: string;
@@ -123,7 +123,6 @@ const ProgramView = () => {
 
     }
 
-    
 
     const handleProgramDetailsOnclick = (id: string) => {
         router.push('/program/details')
@@ -277,33 +276,32 @@ const ProgramView = () => {
     const handleDeleteAProgram = async (id: string) => {
 
         try {
-          const deletePro = await deleteItem({id}).unwrap();
-            if(deletePro){
-               setProgramView((prevData) => prevData.filter((item) => item.id !== id))
-               setTimeout(() => {
-                toast({
-                    description:"Program deleted successfully"  ,
-                    status: "success",
-                })
-               }, 600); 
-            }else {
+            const deletePro = await deleteItem({id}).unwrap();
+            if (deletePro) {
+                setProgramView((prevData) => prevData.filter((item) => item.id !== id))
+                setTimeout(() => {
+                    toast({
+                        description: "Program deleted successfully",
+                        status: "success",
+                    })
+                }, 600);
+            } else {
                 setDeleteProgram("Failed to delete program")
-               
+
             }
-           
+
         } catch (error) {
             const err = error as ApiError;
             setDeleteProgram(err?.data?.message || "Program with loanee cannot be deleted")
             setTimeout(() => {
                 toast({
-                    description:  deleteProgram || "Program with loanee cannot be deleted"  ,
+                    description: deleteProgram || "Program with loanee cannot be deleted",
                     status: "error",
                 })
-               }, 600); 
+            }, 600);
         }
     }
-  
-  
+
 
     useEffect(() => {
         if (editOpen && program?.data) {
@@ -376,16 +374,16 @@ const ProgramView = () => {
                                 headerTitle={"Create program"}
                                 className={"w-full"}
                                 icon={Cross2Icon}
-                                
-                                // width={`32%`}
+
+                        // width={`32%`}
                     >
-                        
+
                         <CreateProgram setIsOpen={setIsOpen}
-                                            //  programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
-                                            //  programModes={["PART_TIME", "FULL_TIME"]}
-                                            //  programDurations={["3", "4"]}
-                                            //  submitButtonText={"Create"}
-                                             />
+                            //  programDeliveryTypes={["ONSITE", "ONLINE","HYBRID"]}
+                            //  programModes={["PART_TIME", "FULL_TIME"]}
+                            //  programDurations={["3", "4"]}
+                            //  submitButtonText={"Create"}
+                        />
 
                     </TableModal>
                 </div>
@@ -408,23 +406,39 @@ const ProgramView = () => {
                                     name='program'
                                 />
                             ) : (programView.slice().reverse().map((program, index) => {
-    
-                               const tagButtonData = [ { tagIcon: MdPersonOutline, tagCount: Number(program.numberOfLoanees ?? 0), tagButtonStyle: 'bg-tagButtonColor', tagText: 'loanees' }, 
-                               { tagIcon: MdOutlineDateRange, tagCount: Number(program.duration ?? 0) , tagButtonStyle: 'bg-tagButtonColor', tagText: 'months' }, 
-                               { tagIcon: MdOutlinePeopleAlt, tagCount: Number(program.numberOfCohort?? 0) , tagButtonStyle: 'bg-tagButtonColor', tagText: 'cohorts' } ];
+
+                                    const tagButtonData = [{
+                                        tagIcon: MdPersonOutline,
+                                        tagCount: Number(program.numberOfLoanees ?? 0),
+                                        tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
+                                        tagText: 'loanees'
+                                    },
+                                        {
+                                            tagIcon: MdOutlineDateRange,
+                                            tagCount: Number(program.duration ?? 0),
+                                            tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
+                                            tagText: 'months'
+                                        },
+                                        {
+                                            tagIcon: MdOutlinePeopleAlt,
+                                            tagCount: Number(program.numberOfCohort ?? 0),
+                                            tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
+                                            tagText: 'cohorts'
+                                        }];
                                     return (
-                                    <AllProgramsCard
-                                        key={index}
-                                        description={program.programDescription ?? ''}
-                                        title={program.name ?? ''}
-                                        id={program.id ?? ""} dropdownOption={dropDownOption}
-                                        tagButtonData={tagButtonData}
-                                        onEdit={handleEditProgram}
-                                        onDelete={handleDeleteProgram}
-                                        handleCardDropDownClick={(optionId: string) => handleCardDropDownClick(optionId, program.id ?? '')}
-                                        handleProgramDetails={() => handleProgramDetailsOnclick(program.id ?? '')}
-                                    />
-                                )}
+                                        <AllProgramsCard
+                                            key={index}
+                                            description={program.programDescription ?? ''}
+                                            title={program.name ?? ''}
+                                            id={program.id ?? ""} dropdownOption={dropDownOption}
+                                            tagButtonData={tagButtonData}
+                                            onEdit={handleEditProgram}
+                                            onDelete={handleDeleteProgram}
+                                            handleCardDropDownClick={(optionId: string) => handleCardDropDownClick(optionId, program.id ?? '')}
+                                            handleProgramDetails={() => handleProgramDetailsOnclick(program.id ?? '')}
+                                        />
+                                    )
+                                }
                             )))}
 
                     </div>
@@ -487,7 +501,7 @@ const ProgramView = () => {
                         title='program'
                         handleDelete={handleDeleteAProgram}
                         id={programId}
-                        errorDeleted= {deleteProgram }
+                        errorDeleted={deleteProgram}
                     />
                 </TableModal>
             </div>

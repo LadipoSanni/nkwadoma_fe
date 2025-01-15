@@ -28,6 +28,8 @@ interface ApiError {
 const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [error, setError] = useState('');
+    const [mandateError, setMandateError] = useState('');
+    const [loanProductTermsAndConditionError, setLoanProductTermsAndConditionError] = useState('');
     // const [step, setStep] = useState(1);
     const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
     const dataElement = {
@@ -161,6 +163,12 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const investmentVehicleNames = investmentVehicleData?.data?.map((vehicle: Vehicle) => vehicle.name) || [];
     // const bankPartner = ["Patner 1", "Partner 2",];
     const maxChars = 2500;
+
+    const validateLength = (value: string) => {
+        const maxChars = 2500;
+        const regex = new RegExp(`^.{0,${maxChars}}$`);
+        return regex.test(value);
+    };
 
     const toastPopUp = ToastPopUp({
         description: "Loan product Created successfully.",
@@ -649,18 +657,30 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         placeholder="Enter description"
                                         rows={4}
                                         maxLength={maxChars}
+                                        // onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                                        //     const value = e.target.value;
+                                        //     if (value.length <= maxChars) {
+                                        //         setFieldValue("loanProductMandate", value);
+                                        //          setMandateError('');
+                                        //
+                                        //     }else { setMandateError('Mandate must be 2500 characters or less');}
+                                        // }}
                                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                                             const value = e.target.value;
-                                            if (value.length <= maxChars) {
+                                            if (validateLength(value)) {
                                                 setFieldValue("loanProductMandate", value);
-                                            }
-                                        }}
+                                                setMandateError('');
+                                            } else {
+                                                setMandateError('Mandate must be 2500 characters or less');
+                                            } }}
+
                                         onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
                                             const paste = e.clipboardData.getData('text');
                                             if (paste.length + values.loanProductMandate.length > maxChars) {
                                                 e.preventDefault();
-                                                // setFieldValue("loanProductMandate", paste);
-                                                setError('Mandate must be 2500 characters or less');
+                                                setMandateError('Mandate must be 2500 characters or less');
+                                            }else{
+                                                setMandateError('');
                                             }
                                         }}
                                     />
@@ -674,6 +694,11 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             />
                                         )
                                     }
+                                    {mandateError && (
+                                        <div className="text-red-500 text-sm">
+                                            {mandateError}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className={`pt-4`}>
@@ -689,16 +714,19 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         maxLength={maxChars}
                                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                                             const value = e.target.value;
-                                            if (value.length <= maxChars) {
+                                            if (validateLength(value)) {
                                                 setFieldValue("loanProductTermsAndCondition", value);
-                                            }
-                                        }}
+                                                setLoanProductTermsAndConditionError('');
+                                            } else {
+                                                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');
+                                            } }}
                                         onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
                                             const paste = e.clipboardData.getData('text');
                                             if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {
                                                 e.preventDefault();
-                                                // setFieldValue("loanProductTermsAndCondition", paste);
-                                                setError('Product condition must be 2500 characters or less');
+                                                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');
+                                            }else{
+                                                setLoanProductTermsAndConditionError('');
                                             }
                                         }}
                                     />
@@ -712,6 +740,11 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             />
                                         )
                                     }
+                                    {loanProductTermsAndConditionError && (
+                                        <div className="text-red-500 text-sm">
+                                            {loanProductTermsAndConditionError}
+                                        </div>
+                                    )}
                                 </div>
                                 {/*<div className="pt-4">*/}
                                 {/*    <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product*/}

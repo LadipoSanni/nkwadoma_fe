@@ -125,8 +125,8 @@ const CohortDetails = () => {
     ]
 
     const tagButtonData = [
-        {tagIcon: FiBook, tagCount: details?.programName, tagButtonStyle: "bg-lightBlue100", tagText: "", textColor: "text-meedlBlue"},
-        {tagIcon: MdPersonOutline, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-warning50", tagText: "Loanees", textColor: "text-warning900"},
+        {tagIcon: FiBook, tagCount: details?.programName, tagButtonStyle: "bg-lightBlue100 text-meedlBlue", tagText: ""},
+        {tagIcon: MdPersonOutline, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-warning50 text-meedlBlue", tagText: "Loanees"},
     ];
 
 
