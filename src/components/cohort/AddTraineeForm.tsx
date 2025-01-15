@@ -13,6 +13,7 @@ import { getItemSessionStorage } from "@/utils/storage";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
 import { useToast } from '@/hooks/use-toast';
+import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 
 interface Props {
     tuitionFee?: string;
@@ -234,6 +235,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                                 name="initialDeposit"
                                                 type="number"
                                                 placeholder="Enter Initial Deposit"
+                                                component={CustomInputField}
                                                 className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     const value = e.target.value;
@@ -250,6 +252,25 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                                     }
                                                 }}
                                             />
+                                            {/*<NumericFormat*/}
+                                            {/*    id={`initialDeposit`}*/}
+                                            {/*    name={`initialDeposit`}*/}
+                                            {/*    type="text"*/}
+                                            {/*    thousandSeparator=","*/}
+                                            {/*    decimalScale={2}*/}
+                                            {/*    fixedDecimalScale={true}*/}
+                                            {/*    value={initialDepositAmount}*/}
+                                            {/*    placeholder={`Enter Initial Deposit`}*/}
+                                            {/*    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"*/}
+                                            {/*        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
+                                            {/*            const value = e.target.value;*/}
+                                            {/*            setInitialDepositAmount(value)*/}
+                                            {/*            console.log('initial deposit amount afterc setting : ', initialDepositAmount);*/}
+                                            {/*            if (/^\d*$/.test(value)) {*/}
+                                            {/*                void setFieldValue("initialDeposit", value);*/}
+                                            {/*            }*/}
+                                            {/*        }}*/}
+                                            {/*/>*/}
                                         </div>
                                     </div>
                                 </div>
