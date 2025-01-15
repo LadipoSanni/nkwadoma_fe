@@ -70,7 +70,7 @@ function LoanDetails() {
         store.dispatch(setCurrentTab('Loan requests'))
         router.push("/loan/loan-request")
     }
-    console.log('data: ', data)
+    console.log('loan request details : ', data)
     const loanRequestDetailsTab = [
         "Basic details",
         "Additional details",
