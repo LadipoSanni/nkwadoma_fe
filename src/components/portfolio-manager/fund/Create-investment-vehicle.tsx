@@ -293,6 +293,7 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
                         // className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2"
                         component={CustomInputField}
                         onChange={validateNumber("minimumInvestmentAmount",setFieldValue)}
+                        
                         />
                     </div> 
                     <div className='relative bottom-5'>
