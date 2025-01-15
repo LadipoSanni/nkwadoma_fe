@@ -5,7 +5,7 @@ import Tables from '@/reuseable/table/LoanProductTable'
 import { MdOutlinePeople } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
 import { formatAmount } from '@/utils/Format'
-import { formatDate } from '@/utils/Format'
+import { formatMonthInDate } from '@/utils/Format'
 import TableModal from '@/reuseable/modals/TableModal'
 import { Cross2Icon } from "@radix-ui/react-icons";
 import EditCohortForm from './EditCohortForm'
@@ -176,7 +176,7 @@ useEffect(() => {
   
   const ProgramHeader = [
     { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => row.name },
-    { title: 'End date', sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatDate(row?.expectedEndDate)},
+    { title: <div className='relative right-2 left-2'>End date</div>, sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatMonthInDate(row?.expectedEndDate)},
     // { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row: TableRowData) => row.noOfTrainees },
     { title: 'No. of Loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => row.numberOfLoanees || 0 },
     { title: 'Tuition', sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => formatAmount(row.tuitionAmount)},

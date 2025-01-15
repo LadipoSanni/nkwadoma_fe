@@ -46,6 +46,7 @@ interface viewAllProgramProps {
     cohortDescription?: string;
     name?: string;
     tuitionAmount?: number;
+    numberOfLoanees?: number;
     loanDetails?: loanDetails
 }
 
@@ -169,8 +170,8 @@ const ProgramDetails = () => {
     const ProgramHeader = [
         {title: "Cohort", sortable: true, id: "name"},
         {
-            title: "No of trainees", sortable: true, id: "noOfTrainees",
-            selector: (row: ViewAllProgramProps) => row.tuitionAmount
+            title: "No of loanees", sortable: true, id: "noOfTrainees",
+            selector: (row: ViewAllProgramProps) => row.numberOfLoanees
         },
 
         {

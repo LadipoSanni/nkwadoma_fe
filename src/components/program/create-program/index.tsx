@@ -9,6 +9,7 @@ import Isloading from '@/reuseable/display/Isloading';
 import CustomSelect from '@/reuseable/Input/Custom-select';
 // import { useQueryClient } from '@tanstack/react-query';
 import {useCreateProgramMutation} from "@/service/admin/program_query";
+import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 
 
 type Props = {
@@ -41,8 +42,11 @@ function CreateProgram({setIsOpen}:Props) {
     const maxChars = 2500;
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
-    const programModes=["FULL_TIME", "PART_TIME"]
+    // const programModes=["FULL_TIME", "PART_TIME"]
+    const programModes = [ { value: "FULL_TIME", label: "Full Time" }, { value: "PART_TIME", label: "Part Time" } ];
     const programDurations=Array.from({ length: 24 }, (_, i) => (i + 1).toString());
+
+   
 
 
     const validationSchema = Yup.object().shape({
@@ -189,7 +193,7 @@ function CreateProgram({setIsOpen}:Props) {
                        msOverflowStyle: 'none'}}> 
                     <Label htmlFor="minimumAmount" style={{ display: 'inline-block',WebkitOverflowScrolling: 'touch'  }}>Program mode</Label> 
                     </div>
-                    <CustomSelect
+                    <CustomSelectObj
                      triggerId='programModeTriggerId'
                       id="programModalSelect"
                       selectContent={programModes}
