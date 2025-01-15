@@ -12,6 +12,7 @@ import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery } from "@/
 import { getItemSessionStorage } from "@/utils/storage";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
+import { useToast } from '@/hooks/use-toast';
 
 interface Props {
     tuitionFee?: string;
@@ -38,7 +39,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
     const [initialDepositAmount, setInitialDepositAmount] = useState('');
     const [amountError, setAmountError] = useState<{error: string, index: number}>()
     const item = data?.data
-    const [disableAddLoaneeButton, setDisableAddLoaneeButton] = useState(true)
+    const [disableAddLoaneeButton, setDisableAddLoaneeButton] = useState(false)
     const [initialDepositError, setInitialDepositError] = useState('')
 
     const [addLoaneeToCohort] = useAddLoaneeToCohortMutation();
@@ -77,6 +78,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
         emailAddress: '',
         initialDeposit: ''
     };
+    const toast = useToast();
 
     const toastPopUp = ToastPopUp({
         description: 'Cohort Trainee successfully added.',
@@ -100,6 +102,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
         setStep(2);
     };
 
+
     const handleFinalSubmit = async (values: typeof initialFormValue) => {
         const input = {
             cohortId: COHORTID,
@@ -118,11 +121,17 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
             toastPopUp.showToast();
             handleCloseModal();
             setErrorMessage(null);
-            console.log(response)
+            console.log("respsoene:: ",response)
         } catch (error) {
+            console.log('error::: ', error)
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             setErrorMessage(error?.data?.message || "An unexpected error occurred.");
+            toast({
+                status: 'error',
+                description: errorMessage,
+            })
+
         }
     };
 
@@ -303,7 +312,6 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                             <div className={`flex items-center w-full gap-2`}>
                                                 <div>
                                                     <CurrencySelectInput
-                                                        // readOnly={false}
                                                         selectedcurrency={detail.currency}
                                                         setSelectedCurrency={setSelectCurrency}
                                                     />
@@ -349,11 +357,15 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                     >
                                         Back
                                     </Button>
-                                    <Button
+                                    {disableAddLoaneeButton ?
+                                    <Button className={`w-full md:w-36 h-[57px] hover:bg-[#D0D5DD] bg-[#D0D5DD] cursor-pointer`}>
+                                        Add
+                                    </Button>
+                                    :
+                                        <Button
                                         variant="secondary"
                                         className="w-full md:w-36 h-[57px] hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
                                         type="submit"
-                                        disabled={disableAddLoaneeButton}
                                     >
                                         {isLoading ? (
                                             <div id="loadingLoopIconDiv" className="flex items-center justify-center">
@@ -373,6 +385,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                             'Add'
                                         )}
                                     </Button>
+                                    }
                                 </div>
                             </div>
                         )}
