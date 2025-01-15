@@ -27,6 +27,7 @@ import {getItemSessionStorage} from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
 import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/program_query";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 
 interface loanDetails {
     totalAmountRepaid?: number;
@@ -45,6 +46,7 @@ interface viewAllProgramProps {
     cohortDescription?: string;
     name?: string;
     tuitionAmount?: number;
+    numberOfLoanees?: number;
     loanDetails?: loanDetails
 }
 
@@ -137,8 +139,8 @@ const ProgramDetails = () => {
     }, [searchTerm, searchResults, cohortsByProgram])
 
     const dataList = [
-        {label: "Program mode", value: progamDetail.mode},
-        {label: "Program delivery type", value: progamDetail.deliveryType},
+        {label: "Program mode", value: capitalizeFirstLetters(progamDetail.mode)},
+        {label: "Program delivery type", value: capitalizeFirstLetters(progamDetail.deliveryType.replace("_", "-"))},
         {label: "Completion rate", value: "0%"},
         {label: "Employment rate", value: "0%"},
         {label: "Average starting income", value: formatAmount(0)},
@@ -159,16 +161,17 @@ const ProgramDetails = () => {
             tagIcon: MdOutlineDateRange,
             tagCount: progamDetail.duration,
             tagButtonStyle: "bg-lightBlue100",
-            tagText: "Months"
+            tagText: "Months",
+            textColor: "text-meedlBlue",
         },
-        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: "Cohorts"},
-        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: "Loanees"},
+        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: "Cohorts", textColor: "text-success700"},
+        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: "Loanees", textColor: "text-warning900" },
     ];
     const ProgramHeader = [
         {title: "Cohort", sortable: true, id: "name"},
         {
-            title: "No of trainees", sortable: true, id: "noOfTrainees",
-            selector: (row: ViewAllProgramProps) => row.tuitionAmount
+            title: "No of loanees", sortable: true, id: "noOfTrainees",
+            selector: (row: ViewAllProgramProps) => row.numberOfLoanees
         },
 
         {
@@ -264,7 +267,7 @@ const ProgramDetails = () => {
                                 </h1>
                                 <div className={'grid gap-5'} id={`tagButtonDiv`}>
                                     <p id={`details`}
-                                       className={'text-sm font-normal text-black400 w-[351px]'}>{progamDetail.programDescription}</p>
+                                       className={'text-sm font-normal w-[351px] text-grey400 break-words scrollbar-width:none overflow-y-auto h-24'}>{progamDetail.programDescription}</p>
                                     <div id={`details`} data-testid="details"
                                          className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
                                         {tagButtonData.map((tagProps, index) => (

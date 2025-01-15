@@ -26,9 +26,8 @@ export const loanRequestApi = createApi({
         }),
         viewLoanRequestDetails: builder.query({
             query: (id: string) => ({
-                url: `/loan/loan-requests`,
+                url: `/loan/loan-requests/${id}`,
                 method: 'GET',
-                query: id
             }),
         })
     })

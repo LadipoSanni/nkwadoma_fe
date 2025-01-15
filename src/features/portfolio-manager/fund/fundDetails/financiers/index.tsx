@@ -43,7 +43,8 @@ function Financiers() {
           variant={"secondary"}
           size={"lg"}
           id='inviteFinancierModal'
-          className={` bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center md:max-w-32 w-full cursor-not-allowed`}
+          // className={` bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center md:max-w-32 w-full cursor-not-allowed`}
+          className={` bg-neutral650 text-meedlWhite  h-12 flex justify-center items-center md:max-w-32 w-full cursor-auto`}
          >
           Invite financier
          </Button>

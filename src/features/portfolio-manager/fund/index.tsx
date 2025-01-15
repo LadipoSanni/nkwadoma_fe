@@ -5,7 +5,7 @@ import Tables from '@/reuseable/table/LoanProductTable'
 import { inter } from '@/app/fonts'
 import InvestmentActionBar from '@/components/portfolio-manager/fund/Investment-action-bar'
 // import { fund } from '@/utils/LoanRequestMockData/Index';
-import { formatAmount, formatDate } from '@/utils/Format';
+import { formatAmount} from '@/utils/Format';
 import { MdOutlinePayments } from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
@@ -13,6 +13,7 @@ import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-
 import { useRouter } from 'next/navigation'
 import { setItemSessionStorage } from '@/utils/storage';
 import { useGetAllInvestmentmentVehicleQuery } from '@/service/admin/fund_query';
+import { formatMonthInDate } from '@/utils/Format';
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -69,8 +70,6 @@ const InvestmentVehicle = () => {
     }
   })
 
-  console.log("The data: ",viewAllInvestmentVehicle)
-
   const handleDraftClick = () => {
 
   }
@@ -91,9 +90,9 @@ const InvestmentVehicle = () => {
   
   const fundHeader = [
     { title: <div className='h-11 flex justify-center items-center'>Vehicle</div> , sortable: true, id: 'name', selector: (row:TableRowData ) => row.name},
-    { title: 'Start Date', sortable: true, id: 'startDate', selector: (row:TableRowData ) => formatDate(row?.startDate)},
+    { title: 'Start Date', sortable: true, id: 'startDate', selector: (row:TableRowData ) => formatMonthInDate(row?.startDate)},
       { title: 'Tenure(Months)', sortable: true, id: 'tenure', selector: (row: TableRowData) => row.tenure },
-      { title: 'vehicle Size', sortable: true, id: 'size', selector: (row:TableRowData) => <div className=''>{row.size}</div> },
+      { title: 'vehicle Size', sortable: true, id: 'size', selector: (row:TableRowData) => <div className=''>{formatAmount(row.size)}</div> },
       { title: 'InterestRate (%)', sortable: true, id: ' rate', selector: (row:TableRowData) => row. rate},
       { title: 'Amount Collected', sortable: true, id: 'amountRaised', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRaised)}</div> },
       { title: 'Amount Disbursed', sortable: true, id: ' amountDisbursed', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountDisbursed)}</div> },
@@ -104,7 +103,6 @@ const InvestmentVehicle = () => {
   const handleRowClick = (row:TableRowData) => {
     router.push('/funds/details')  
     setItemSessionStorage('investmentVehicleId', String(row.id));
-    
 }
 
 
@@ -125,7 +123,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
       value: "commercialFund",
       table: <div>
         <Tables
-          tableData={commercial}
+          tableData={commercial.slice().reverse()}
           handleRowClick={handleRowClick}
           tableHeader={fundHeader}
            tableHeight={52}
@@ -154,7 +152,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
       value: "endowmentFund",
       table: <div>
         <Tables
-          tableData={endowment}
+          tableData={endowment.slice().reverse()}
           handleRowClick={handleRowClick}
           tableHeader={fundHeader}
            tableHeight={52}
@@ -166,6 +164,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
             sideBarTabName='Fund'
             optionalFilterName='Endowment'
             condition={true}
+            sx='cursor-pointer'
         />
       </div>
     }
