@@ -15,7 +15,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import {formatAmount} from '@/utils/Format'
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
-
+import dayjs from 'dayjs'
 interface breakDown {
     itemName: string;
     itemAmount: string
@@ -98,8 +98,8 @@ const CohortDetails = () => {
     const id = "1";
 
     const dataList = [
-        {label: "Start Date", value: details.startDate},
-        {label: "End Date", value: details.expectedEndDate},
+        {label: "Start Date", value: dayjs(details.startDate).format('MMM DD YYYY')},
+        {label: "End Date", value: dayjs(details.expectedEndDate).format('MMM DD YYYY')},
         {
             label: "Cohort status",
             value: <div

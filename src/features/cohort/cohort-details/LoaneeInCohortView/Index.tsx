@@ -53,11 +53,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [addLoanee, setAddLoanee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
     const [loaneeName, setLoaneeName] = React.useState("");
-    // const [enableRefferButton, setRefferBottom] = useState(true)
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
     const [isReferred, setIsReferred] = React.useState("Not referred");
     const [enableButton, setEnableButton] = useState(false)
-    const [isLoadingReffered, setIsLoadingReffered] = React.useState(false);
 
 
 
@@ -133,6 +131,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 description: response?.message,
                 status: "success",
             })
+            setEnableButton(false)
         } catch (error) {
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment

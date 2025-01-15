@@ -78,7 +78,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
         emailAddress: '',
         initialDeposit: ''
     };
-    const toast = useToast();
+    const {toast} = useToast();
 
     const toastPopUp = ToastPopUp({
         description: 'Cohort Trainee successfully added.',
@@ -117,13 +117,11 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
             }
         };
         try {
-            const response = await addLoaneeToCohort(input).unwrap();
+            await addLoaneeToCohort(input).unwrap();
             toastPopUp.showToast();
             handleCloseModal();
             setErrorMessage(null);
-            console.log("respsoene:: ",response)
         } catch (error) {
-            console.log('error::: ', error)
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             setErrorMessage(error?.data?.message || "An unexpected error occurred.");
@@ -141,7 +139,6 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
         const itemAmountFromCohort = Number(item?.at(index)?.itemAmount)
         const userInput =  Number(e.target.value)
         if (userInput < itemAmountFromCohort || userInput  === itemAmountFromCohort) {
-            console.log('ii:: ', item?.at(index)?.itemAmount)
             const { value } = e.target;
             const updatedData = cohortBreakDown.map((item, i) =>
                 i === index ? { ...item, itemAmount: value } : item
@@ -152,7 +149,6 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
             setDisableAddLoaneeButton(false)
 
         }else {
-            console.log('item amount:: ', itemAmountFromCohort)
             const updatedData = cohortBreakDown.map((item, i) =>
                 i === index ? { ...item, itemAmount: itemAmountFromCohort.toLocaleString() } : item
             );
