@@ -27,6 +27,7 @@ import {getItemSessionStorage} from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
 import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/program_query";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 
 interface loanDetails {
     totalAmountRepaid?: number;
@@ -137,8 +138,8 @@ const ProgramDetails = () => {
     }, [searchTerm, searchResults, cohortsByProgram])
 
     const dataList = [
-        {label: "Program mode", value: progamDetail.mode},
-        {label: "Program delivery type", value: progamDetail.deliveryType},
+        {label: "Program mode", value: capitalizeFirstLetters(progamDetail.mode)},
+        {label: "Program delivery type", value: capitalizeFirstLetters(progamDetail.deliveryType.replace("_", "-"))},
         {label: "Completion rate", value: "0%"},
         {label: "Employment rate", value: "0%"},
         {label: "Average starting income", value: formatAmount(0)},
