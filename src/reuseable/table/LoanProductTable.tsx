@@ -177,7 +177,7 @@ function Tables<T extends TableRowData>({
               <Table id="dynamicTable" className="">
                 <TableHeader
                   id="dynamicTableHead"
-                  className={`bg-[#F0F2F4]  hover:bg-[#F0F2F4]`}
+                  className={`bg-[#F0F2F4] sticky top-0  hover:bg-[#F0F2F4]`}
                 >
                   <TableRow
                     id="dynamicTableHeadRow"
@@ -316,7 +316,7 @@ function Tables<T extends TableRowData>({
               <Table id="dynamicTableMobile" className="w-full">
                 <TableHeader
                   id="dynamicTableHeadMobile"
-                  className={` hover:bg-[#e7e7e7]`}
+                  className={`sticky top-0  hover:bg-[#e7e7e7]`}
                 >
                   <TableRow
                     id="dynamicTableHeadRow"

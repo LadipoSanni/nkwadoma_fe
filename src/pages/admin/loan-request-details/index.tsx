@@ -7,7 +7,7 @@ import {
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
-import {cabinetGroteskRegular, inter} from "@/app/fonts";
+import {cabinetGroteskMediumBold, cabinetGroteskRegular, inter} from "@/app/fonts";
 import TabConnector from "@/reuseable/details/tab-connector";
 import styles from "./index.module.css"
 import {useViewLoanRequestDetailsQuery} from "@/service/admin/loan/loan-request-api";
@@ -29,6 +29,7 @@ import {
 import CreateLoanOffer from "@/reuseable/modals/createLoanOffer/Index";
 import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
 import {loaneeLoanBreakDown} from "@/types/loan/loan-request.type";
+import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -121,21 +122,14 @@ function LoanDetails() {
                     thousandSeparator=","
                     decimalScale={2}
                     fixedDecimalScale={true}
-                    // value={'200000'}
                     prefix={'₦'}
-
                     className='bg-grey105 flex md:place-items-end '
-
                     value={data?.data?.tuitionAmount}
-                    // placeholder={${detail.itemName}}
-                    // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-
                 />
         },
         {
             label: 'Start date', value:
-            // dayjs(data?.data?.body?.data?.createdDate?.toString()).format('MMMM D, YYYY')
-                dayjs(data?.data?.createdDate?.toString()).format('MMMM D, YYYY')
+                dayjs(data?.data?.createdDate?.toString()).format('MMM D, YYYY')
 
         },
         {
@@ -146,13 +140,9 @@ function LoanDetails() {
                 thousandSeparator=","
                 decimalScale={2}
                 fixedDecimalScale={true}
-                // value={'200000'}
                 className='bg-grey105 flex md:place-items-end '
                 prefix={'₦'}
                 value={data?.data?.loanAmountRequested}
-                // placeholder={${detail.itemName}}
-                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-
             />
         },
         {
@@ -171,13 +161,12 @@ function LoanDetails() {
         },
         {
             label: 'Credit score', value:
-            // data?.data?.body?.data
                 <div className={`flex gap-2 `}>
                     <span>Good</span>
                     <div
                         className={` w-fit md:w-fit md:h-fit h-fit md:py-0 py-0 md:px-1 px-1 md:rounded-md rounded-md border md:border border-green650 md:border-green650`}>
                         <span
-                            className={`md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-xs text-xs text-green750 md:text-green750 `}>234</span>
+                            className={`md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-xs text-xs text-green750 md:text-green750 `}>{data?.data?.creditScore}</span>
                     </div>
                 </div>
         },
@@ -232,7 +221,11 @@ function LoanDetails() {
         setOpenDeclineLoanRequestModal(value)
     }
 
+    const userFullName = data?.data?.firstName +  data?.data?.lastName
 
+    const userFirstLetter : string| undefined = getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName)
+
+    console.log('userFullName', userFullName, "user firstZ: ", getFirstLetterOfWord(userFullName))
     return (
         <div
             id={"loanRequestDetails"}
@@ -251,35 +244,28 @@ function LoanDetails() {
                     <Avatar id={'loaneeImageOnLoanRequestDetails'} data-testid={'loaneeImageOnLoanRequestDetails'}
                             className={`h-[8rem] w-[8rem] md:w-[8rem] md:h-[8rem] `}>
                         <AvatarImage src={data?.data?.body?.data?.image} alt="@shadcn"/>
-                        <AvatarFallback></AvatarFallback>
+                        <AvatarFallback>{userFirstLetter}</AvatarFallback>
                     </Avatar>
 
                     <div
                         className={`grid gap-2 mt-4`}
                     >
                         <div id={'loaneeNameOnLoanRequestDetails'} data-testid={'loaneeNameOnLoanRequestDetails'}
-                             className={`${cabinetGroteskRegular.className} text-black text-xl gap-2 md:text-3xl  `}>
-                            {data?.data?.body?.data?.firstName}
-                            {data?.data?.body?.data?.lastName}
+                             className={`${cabinetGroteskRegular.className} text-black flex text-xl gap-2 md:flex md:gap-2 md:text-3xl  `}>
+                            <span className={`${cabinetGroteskMediumBold.className} text-black  gap-2 text-3xl md:text-3xl`}>{data?.data?.firstName}</span>
+                            <span className={`${cabinetGroteskMediumBold.className} text-black  gap-2 text-3xl  md:text-3xl`}>{data?.data?.lastName}</span>
                         </div>
                         <div
-                            className={`flex gap-2  `}
+                            className={`flex gap-2   `}
                         >
                         <span id={'loaneeProgramOnLoanRequestDetails'} data-testid={'loaneeProgramOnLoanRequestDetails'}
-                              className={`${inter.className} text-sm text-black400`}> {data?.data?.body?.data?.programName}</span>
+                              className={`${inter.className} text-sm text-black400`}> {data?.data?.programName}</span>
                             <span
-                                className={`${inter.className} text-sm text-black400 mt-auto mb-auto md:mt-auto md:mb-auto `}>.</span>
+                                className={` w-1 h-1 mt-auto mb-auto rounded-full bg-[#D7D7D7] `}></span>
                             <span id={'loaneeCohortOnLoanRequestDetails'}
                                   data-testid={'loaneeCohortOnLoanRequestDetails'}
-                                  className={`${inter.className} text-sm text-black400`}>{data?.data?.body?.data?.cohortName}</span>
+                                  className={`${inter.className} text-sm text-black400`}>{data?.data?.cohortName}</span>
                         </div>
-                        {/*<Button*/}
-                        {/*    id={'loaneeCheckCreditScoreOnLoanRequestDetails'}*/}
-                        {/*    data-testid={'loaneeCheckCreditScoreOnLoanRequestDetails'}*/}
-                        {/*    className={`${inter.className} w-fit px-4 md:mt-2 text-sm font-semibold text-meedlBlue border border-meedlBlue`}*/}
-                        {/*>*/}
-                        {/*    Check credit score*/}
-                        {/*</Button>*/}
                     </div>
                 </div>
                 <div
