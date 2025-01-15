@@ -29,7 +29,8 @@ function InvestmentActionBar({id,value,onChange,handleDraftClick,handleCreateInv
                 <Button
            variant={`outline`}
            id='draftButton'
-           className='border-solid border-[#142854] h-[45px] md:w-[105px] font-semibold text-[#142854] w-full  md:mt-0 mt-3 cursor-not-allowed'
+          //  className='border-solid border-[#142854] h-[45px] md:w-[105px] font-semibold text-[#142854] w-full  md:mt-0 mt-3 cursor-not-allowed'
+          className='border-solid border-white h-[45px] md:w-[105px] font-semibold bg-neutral650 text-white w-full  md:mt-0 mt-3 cursor-default'
            onClick={handleDraftClick}
            >
             Drafts

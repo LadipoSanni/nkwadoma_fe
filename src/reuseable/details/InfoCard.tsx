@@ -29,8 +29,8 @@ function InfoCard({icon: Icon,fundTitle,description}: Props) {
           {fundTitle}
          </p>
          <p 
-         className=' mt-3 w-full md:w-auto'
-          style={{ height: "auto",  maxHeight: "280px",  overflowY: "auto", minWidth: "280px", maxWidth: "50%" }}
+         className=' mt-3 w-full md:w-auto font-normal'
+          style={{ height: "auto",  maxHeight: "280px",  overflowY: "auto", minWidth: "280px", maxWidth: "50%",  fontSize:"14px" }}
          >
           {description}
          </p>

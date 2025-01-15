@@ -25,7 +25,7 @@ import {useSearchProgramQuery} from '@/service/admin/program_query';
 import TableEmptyState from '@/reuseable/emptyStates/TableEmptyState';
 import {setTimeout} from 'timers';
 import {useToast} from "@/hooks/use-toast"
-
+import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -157,7 +157,7 @@ const ProgramView = () => {
             sortable: true,
             id: 'programStatus',
             selector: (row: TableRowData) => <span
-                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.programStatus === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"} `}>{row.programStatus ?? "Declined"}</span>
+                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.programStatus === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"} `}>{capitalizeFirstLetters(String(row.programStatus ?? "Declined"))}</span>
         },
         {
             title: 'No. of Cohorts',

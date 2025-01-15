@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import dayjs from "dayjs";
+import moment from 'moment';
 
 interface TableRowData {
   [key: string]: string | number | null | ReactNode | object;
@@ -61,6 +62,36 @@ export const validateNumber = (field: string, setFieldValue: (field: string, val
 
      export const validateText = (field: string, setFieldValue: (field: string, value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => { 
       const value = e.target.value; 
-       const validValue = value.replace(/[^a-zA-Z\s]/g, ''); 
+      //  const validValue = value.replace(/[^a-zA-Z\s]/g, ''); 
+      const validValue = value.replace(/[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>_\-\/\s]/g, '');
        setFieldValue(field, validValue);
        };
+  
+       export function formatMonthInDate(dateStr: ReactNode) { 
+        if (dateStr == null) { 
+          return 'null'; 
+        }
+
+        const formats = ['DD-MM-YYYY', 'YYYY-MM-DD']; 
+        let date; 
+        for (const format of formats) { if (typeof dateStr !== 'string') { dateStr = dateStr.toString(); }
+          date = moment(dateStr.toString(), format, true); 
+          if (date.isValid()) { 
+            return date.format('DD MMM, YYYY'); 
+          } } 
+          return 'null'; 
+        }
+
+        export const validatePositiveNumber = (field: string, setFieldValue: (field: string, value: string) => void,maxFigure:number,minFigure:number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+          let value = e.target.value;
+        
+          value = value.replace(/[^0-9]/g, '');
+          if (value !== '' && parseInt(value, 10) >= minFigure && parseInt(value, 10) <= maxFigure) { 
+            setFieldValue(field, value); 
+          } 
+            else if (value === '') { 
+              setFieldValue(field, '');
+             }
+        };
+        
+      
