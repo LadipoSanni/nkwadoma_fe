@@ -19,9 +19,8 @@ import {
     SelectValue,
     SelectGroup,
 } from "@/components/ui/select";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { Button } from "@/components/ui/button";
+import { ChevronDownIcon, ChevronUpIcon, DotsVerticalIcon } from "@radix-ui/react-icons";
+  import { Button } from "@/components/ui/button";
 import {
     Menubar,
     MenubarTrigger,
@@ -30,6 +29,7 @@ import {
     MenubarItem,
 } from "@/components/ui/menubar";
 import SkeletonForTable from "../Skeleton-loading-state/Skeleton-for-table";
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 interface ColumnProps<T> {
     title: string | React.ReactNode;
@@ -68,6 +68,7 @@ interface Props<T extends TableRowData> {
     condition?: boolean;
     //   totalPages?: number;
     isLoading?: boolean;
+    mobileTableHeader?: ColumnProps<T>;
 }
 
 function Tables<T extends TableRowData>({
@@ -83,7 +84,7 @@ function Tables<T extends TableRowData>({
                                             kirkBabDropdownOption,
                                             handleDropDownClick,
 
-                                            optionalRowsPerPage = 8,
+                                            optionalRowsPerPage = 7,
                                             tableCellStyle,
                                             isLoading,
                                         }: Props<T>) {
@@ -136,8 +137,9 @@ function Tables<T extends TableRowData>({
             return value;
         }
         if (typeof value === "object" && value !== null) {
-            return JSON.stringify(value);
+            return capitalizeFirstLetters(JSON.stringify(value));
         }
+
         return value;
     };
 
@@ -165,7 +167,7 @@ function Tables<T extends TableRowData>({
                             <Table id="dynamicTable" className="">
                                 <TableHeader
                                     id="dynamicTableHead"
-                                    className={`bg-[#F0F2F4]  hover:bg-[#F0F2F4]`}
+                                    className={`bg-[#F0F2F4] sticky top-0   hover:bg-[#F0F2F4]`}
                                 >
                                     <TableRow
                                         id="dynamicTableHeadRow"
@@ -176,8 +178,6 @@ function Tables<T extends TableRowData>({
                                             <TableHead
                                                 key={column.id}
                                                 id={`dynamicTableHeadCell${column.id}`}
-                                                // className={`${Styles.tableHeaderItem} `}
-                                                // className={`px-[12px] py-[10px] text-[#101828]`}
                                                 className="bg-[#F0F2F4] h-10 hover:bg-[#F0F2F4]"
                                             >
                                                 <div
@@ -204,7 +204,6 @@ function Tables<T extends TableRowData>({
                                         <TableRow
                                             id={`dynamicTableBodyRow${rowIndex}`}
                                             key={rowIndex}
-                                            // onClick={() => handleRowClick(row)}
                                             className={`${sx}`}
                                         >
                                             {tableHeader.map((column) => (
@@ -212,7 +211,6 @@ function Tables<T extends TableRowData>({
                                                     onClick={() => handleRowClick(row?.id)}
                                                     key={`${column.id}${rowIndex} `}
                                                     id={`dynamicTableCell${column.id}${rowIndex}`}
-                                                    // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                                                     className={`h-1 ${
                                                         isLastPage ? "border-b border-solid " : ""
                                                     } ${tableCellStyle} overflow-hidden whitespace-nowrap text-ellipsis max-w-[140px]  `}
@@ -220,9 +218,7 @@ function Tables<T extends TableRowData>({
                                                     <div
                                                         id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
                                                         className={`${Styles.tableBodyItem} ${tableStyle}  truncate pt-2 pb-2 pr-2 pl-2`}
-                                                        // style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", maxWidth: "200px",  }}
                                                     >
-                                                        {/* {column.selector ? column.selector(row) : row[column.id]} */}
                                                         {renderCellContent(
                                                             column.selector
                                                                 ? column.selector(row)
@@ -239,7 +235,6 @@ function Tables<T extends TableRowData>({
                                                 >
                                                     {
                                                         <Menubar
-                                                            // onClick={}
                                                         >
                                                             <MenubarMenu>
                                                                 <MenubarTrigger
@@ -300,11 +295,12 @@ function Tables<T extends TableRowData>({
                             id="loanProductTableBorderMobile"
                             className="shadow-none border-none "
                             style={{ height: `${tableHeight}vh`, overflow: "auto" }}
+
                         >
                             <Table id="dynamicTableMobile" className="w-full">
                                 <TableHeader
                                     id="dynamicTableHeadMobile"
-                                    className={` hover:bg-[#e7e7e7]`}
+                                    className={` hover:bg-[#e7e7e7] sticky top-0 `}
                                 >
                                     <TableRow
                                         id="dynamicTableHeadRow"
@@ -365,7 +361,6 @@ function Tables<T extends TableRowData>({
                                         >
                                             <TableCell className="h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[50px]">
                                                 <div className="truncate pt-2 pb-2 pr-2 pl-2 ">
-                                                    {/* {row[`${staticColunm}`]} */}
                                                     {renderCellContent(
                                                         tableHeader.find(
                                                             (header) => header.id === staticColunm
@@ -373,14 +368,13 @@ function Tables<T extends TableRowData>({
                                                             ? tableHeader.find(
                                                                 (header) => header.id === staticColunm
                                                             )?.selector!(row)
-                                                            : row[`${staticColunm}`]
+                                                            : (row[`${staticColunm}`])
                                                     )}
                                                 </div>
                                             </TableCell>
 
                                             <TableCell className="h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[50px]">
                                                 <div className={`text-center truncate pr-2 pl-2 pt-2 pb-2 `}>
-                                                    {/* {row[selectedColumn]} */}
                                                     {renderCellContent(
                                                         tableHeader.find(
                                                             (header) => header.id === selectedColumn

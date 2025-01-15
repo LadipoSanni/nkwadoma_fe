@@ -139,7 +139,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                             <p className="text-black400 text-[14px] leading-[150%] font-normal">We
                                                 request for your BVN to verify your identity and confirm that the
                                                 account you registered with is yours. It is also a KYC requirement for
-                                                all financial institutions by the Central Bank of Nigeria (CBN).</p>
+                                                all financial institutions.</p>
                                         </CollapsibleContent>
                                     </Collapsible>
                                 </div>
@@ -175,7 +175,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                             <p className="text-black400 text-[14px] leading-[150%] font-normal">We
                                                 request for your NIN to verify your identity and confirm that the
                                                 account you registered with is yours. It is also a KYC requirement for
-                                                all financial institutions by the Central Bank of Nigeria (CBN).</p>
+                                                all financial institutions.</p>
                                         </CollapsibleContent>
                                     </Collapsible>
                                 </div>

@@ -26,3 +26,77 @@ export interface LoanRequestType {
         loanee: string
     }
 }
+export interface loaneeLoanBreakDown {
+    "loaneeLoanBreakdownId": string,
+    "itemName": string,
+    "itemAmount": string,
+    "currency": string,
+    "loanee": {
+        "id": string,
+        "cohortId": string,
+        "createdAt": string,
+        "updatedAt": string,
+        "creditScoreUpdatedAt": string,
+        "creditScore": string,
+        "registryId": string,
+        "userIdentity": {
+            "id": string,
+            "email": string,
+            "firstName": string,
+            "lastName": string,
+            "phoneNumber": string,
+            "emailVerified": boolean,
+            "enabled": boolean,
+            "createdAt": string,
+            "image": string,
+            "gender": string,
+            "dateOfBirth": string,
+            "stateOfOrigin": string,
+            "maritalStatus": string,
+            "stateOfResidence": string,
+            "nationality": string,
+            "residentialAddress": string,
+            "role": string,
+            "createdBy": string,
+            "alternateEmail": string,
+            "alternatePhoneNumber": string,
+            "alternateContactAddress": string,
+            "password": string,
+            "accessToken": string,
+            "refreshToken": string,
+            "newPassword": string,
+            "organizationDomain": string,
+            "deactivationReason": string,
+            "reactivationReason": string,
+            "bvn": string,
+            "nin": string,
+            "identityVerified": boolean,
+
+
+        }
+    }
+}
+export interface LoanProductType {
+    bankPartner: string,
+    costOfFund: string,
+    createdAt:string,
+    disbursementTerms: string,
+    id: string,
+    interestRate: string,
+    investmentVehicleId: string,
+    investmentVehicleName: string,
+    loanProductSize: string,
+    mandate: string,
+    minRepaymentAmount: string,
+    moratorium: number,
+    name: string,
+    numberOfLoanees: number,
+    obligorLoanLimit: number,
+    sponsors: string[]
+    tenor: number,
+    termsAndCondition:string,
+    totalAmountAvailable: number,
+    totalAmountDisbursed:  number,
+    totalAmountEarned:  number,
+    totalAmountRepaid:  number,
+}

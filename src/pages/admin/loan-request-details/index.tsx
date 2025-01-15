@@ -17,6 +17,9 @@ import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
+import {store} from "@/redux/store";
+import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -25,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import CreateLoanOffer from "@/reuseable/modals/createLoanOffer/Index";
 import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
+import {loaneeLoanBreakDown} from "@/types/loan/loan-request.type";
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -34,10 +38,12 @@ const LoanDetailsContent = dynamic(
 function LoanDetails() {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const [currentTab, setCurrentTab] = useState(0);
+    // const [breakdown] = useState<[]>([]);
+    const [currentTab, setCurrentsTab] = useState(0);
     const [arrowDown, setArrowDown] = useState(false);
     const [openCreateLoanOffer, setOpenCreateLoanOffer] = useState(false)
     const [openDeclineLoanRequestModal, setOpenDeclineLoanRequestModal] = useState(false)
+    const [breakDown, setBreakDown] = useState<{ itemName: string; itemAmount: string; }[]>()
 
 
 
@@ -60,8 +66,8 @@ function LoanDetails() {
     }
     const id: string = getId()
     const {data} = useViewLoanRequestDetailsQuery(id)
-
     const backToLoanRequest = () => {
+        store.dispatch(setCurrentTab('Loan requests'))
         router.push("/loan/loan-request")
     }
     const loanRequestDetailsTab = [
@@ -70,12 +76,6 @@ function LoanDetails() {
         "Loan details"
     ]
 
-    const breakDown = [
-        {itemName: 'tuition', itemAmount: '$2000'},
-        {itemName: 'skincare', itemAmount: '$2000'},
-        {itemName: 'head', itemAmount: '$2000'},
-
-    ]
     const toggleArrow = () => {
         if (arrowDown) {
             setArrowDown(false)
@@ -88,16 +88,27 @@ function LoanDetails() {
 
 
     const handleNext = () => {
+        if (currentTab == 1){
+            const item = getloaneeloanDetails();
+            setBreakDown(item)
+        }
         if (currentTab < loanRequestDetailsTab.length - 1) {
-            setCurrentTab(currentTab + 1);
+            setCurrentsTab(currentTab + 1);
         }
     };
 
     const handleBack = () => {
         if (currentTab > 0) {
-            setCurrentTab(currentTab - 1);
+            setCurrentsTab(currentTab - 1);
         }
     };
+
+    const getloaneeloanDetails = () => {
+        const loaneeeLoanBreakdowns =  data?.data?.loaneeLoanBreakdowns
+        const loaneeloanBreakDown :{ itemName: string; itemAmount: string; }[] = [ ]
+        loaneeeLoanBreakdowns?.forEach((element:loaneeLoanBreakDown) => loaneeloanBreakDown?.push({itemName: element?.itemName, itemAmount: element?.itemAmount} ) )
+        return loaneeloanBreakDown;
+    }
 
     const loanDetil = [
         {
@@ -114,7 +125,7 @@ function LoanDetails() {
 
                     className='bg-grey105 flex md:place-items-end '
 
-                    value={data?.data?.body?.data?.tuitionAmount}
+                    value={data?.data?.tuitionAmount}
                     // placeholder={${detail.itemName}}
                     // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
 
@@ -123,7 +134,7 @@ function LoanDetails() {
         {
             label: 'Start date', value:
             // dayjs(data?.data?.body?.data?.createdDate?.toString()).format('MMMM D, YYYY')
-                dayjs(data?.data?.body?.data?.createdDate?.toString()).format('MMMM D, YYYY')
+                dayjs(data?.data?.createdDate?.toString()).format('MMMM D, YYYY')
 
         },
         {
@@ -137,7 +148,7 @@ function LoanDetails() {
                 // value={'200000'}
                 className='bg-grey105 flex md:place-items-end '
                 prefix={'₦'}
-                value={data?.data?.body?.data?.loanAmountRequested}
+                value={data?.data?.loanAmountRequested}
                 // placeholder={${detail.itemName}}
                 // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
 
@@ -151,11 +162,8 @@ function LoanDetails() {
                 thousandSeparator=","
                 decimalScale={2}
                 fixedDecimalScale={true}
-                // value={'200000'}
                 prefix={'₦'}
-                value={data?.data?.body?.data?.initialDeposit}
-                // placeholder={${detail.itemName}}
-                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+                value={data?.data?.initialDeposit}
                 className='bg-grey105 flex md:place-items-end'
 
             />
@@ -176,27 +184,27 @@ function LoanDetails() {
     ]
 
     const basic = [
-        {label: 'Gender', value: data?.data?.body?.data?.userIdentity?.gender},
-        {label: 'Email address', value: data?.data?.body?.data?.userIdentity?.email},
-        {label: 'Phone number', value: data?.data?.body?.data?.userIdentity?.phoneNumer},
-        {label: 'Date of birth', value: data?.data?.body?.data?.userIdentity?.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.body?.data?.userIdentity?.maritalStatus},
-        {label: 'Nationality', value: data?.data?.body?.data?.userIdentity?.nationality},
-        {label: 'State of origin ', value: data?.data?.body?.data?.userIdentity?.stateOfOrigin},
-        {label: 'State of residence', value: data?.data?.body?.data?.userIdentity?.stateOfResidence},
+        {label: 'Gender', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.gender},
+        {label: 'Email address', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.email},
+        {label: 'Phone number', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.phoneNumer},
+        {label: 'Date of birth', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.dateOfBirth},
+        {label: 'Marital status', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.maritalStatus},
+        {label: 'Nationality', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.nationality},
+        {label: 'State of origin ', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfOrigin},
+        {label: 'State of residence', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfResidence},
     ]
 
     const additional = [
-        {label: 'Alternate email address', value: data?.data?.body?.data?.alternateEmail},
-        {label: 'Alternate phone number', value: data?.data?.body?.data?.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data?.body?.data?.alternateContactAddress},
+        {label: 'Alternate email address', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateEmail},
+        {label: 'Alternate phone number', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateContactAddress},
         {
             label: 'Next of kin name',
-            value: data?.data?.body?.data?.nextOfKin?.firstName + " " + data?.data?.body?.data?.nextOfKin?.lastName
+            value: data?.data?.nextOfKin?.firstName + " " + data?.data?.nextOfKin?.lastName
         },
-        {label: 'Next of kin email address', value: data?.data?.body?.data?.nextOfKin?.email},
-        {label: 'Next of kin phone number', value: data?.data?.body?.data?.nextOfKin?.phoneNumber},
-        {label: 'Next of kin relationship ', value: data?.data?.body?.data?.nextOfKin?.nextOfKinRelationship},
+        {label: 'Next of kin email address', value: data?.data?.nextOfKin?.email},
+        {label: 'Next of kin phone number', value: data?.data?.nextOfKin?.phoneNumber},
+        {label: 'Next of kin relationship ', value: data?.data?.nextOfKin?.nextOfKinRelationship},
 
     ]
 
@@ -219,6 +227,10 @@ function LoanDetails() {
         setOpenCreateLoanOffer(value)
     }
 
+    const setOpenDeclineOffer = (value: boolean) => {
+        setOpenDeclineLoanRequestModal(value)
+    }
+
 
     return (
         <div
@@ -237,27 +249,28 @@ function LoanDetails() {
                 <div>
                     <Avatar id={'loaneeImageOnLoanRequestDetails'} data-testid={'loaneeImageOnLoanRequestDetails'}
                             className={`h-[8rem] w-[8rem] md:w-[8rem] md:h-[8rem] `}>
-                        <AvatarImage src={`/234d70b3-ec71-4d68-8696-5f427a617fb7.jpeg`} alt="@shadcn"/>
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarImage src={data?.data?.body?.data?.image} alt="@shadcn"/>
+                        <AvatarFallback></AvatarFallback>
                     </Avatar>
 
                     <div
                         className={`grid gap-2 mt-4`}
                     >
                         <div id={'loaneeNameOnLoanRequestDetails'} data-testid={'loaneeNameOnLoanRequestDetails'}
-                             className={`${cabinetGroteskRegular.className} text-black text-xl md:text-3xl  `}>Sarah
-                            Akinyemi
+                             className={`${cabinetGroteskRegular.className} text-black text-xl gap-2 md:text-3xl  `}>
+                            {data?.data?.body?.data?.firstName}
+                            {data?.data?.body?.data?.lastName}
                         </div>
                         <div
                             className={`flex gap-2  `}
                         >
                         <span id={'loaneeProgramOnLoanRequestDetails'} data-testid={'loaneeProgramOnLoanRequestDetails'}
-                              className={`${inter.className} text-sm text-black400`}>Product Design</span>
+                              className={`${inter.className} text-sm text-black400`}> {data?.data?.body?.data?.programName}</span>
                             <span
                                 className={`${inter.className} text-sm text-black400 mt-auto mb-auto md:mt-auto md:mb-auto `}>.</span>
                             <span id={'loaneeCohortOnLoanRequestDetails'}
                                   data-testid={'loaneeCohortOnLoanRequestDetails'}
-                                  className={`${inter.className} text-sm text-black400`}>Luminary</span>
+                                  className={`${inter.className} text-sm text-black400`}>{data?.data?.body?.data?.cohortName}</span>
                         </div>
                         {/*<Button*/}
                         {/*    id={'loaneeCheckCreditScoreOnLoanRequestDetails'}*/}
@@ -269,7 +282,7 @@ function LoanDetails() {
                     </div>
                 </div>
                 <div
-                    className={`  overflow-x-hidden overflow-y-auto md:w-fit mt-4   w-full md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid `}
+                    className={` ${styles.loanRequestDetails} md:w-fit h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid md:gap-3`}
                 >
                     <div
                         className={` ${styles.tabConnector} md:w-fit pl-1  h-fit md:h-fit  flex md:flex `}
@@ -340,7 +353,7 @@ function LoanDetails() {
                         }
                     </div>
                     <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer} setIsOpen={open} onSubmit={onSubmit} />
-                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()} setIsOpen={open} loanProductId={""} title={""}/>
+                    <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()} setIsOpen={setOpenDeclineOffer} loanProductId={id} title={"Decline loan request"} />
 
                 </div>
             </div>

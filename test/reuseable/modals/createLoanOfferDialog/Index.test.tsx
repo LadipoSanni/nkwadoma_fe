@@ -2,6 +2,14 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import CreateLoanOffer from '@/reuseable/modals/createLoanOffer/Index';
 import { Providers } from '@/app/provider';
+jest.mock("next/navigation", () => ({
+    useRouter() {
+        return {
+            prefetch: () => null
+        };
+    },
+
+}));
 
 describe('CreateLoanOffer Component', () => {
     const mockOnSubmit = jest.fn();
@@ -33,7 +41,7 @@ describe('CreateLoanOffer Component', () => {
     test('changes button color to bg-neutral650 when form is invalid', () => {
         render(
             <Providers>
-                <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen} loanRequestId={''} />
+                <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen}loanRequestId={''} />
             </Providers>
         );
         fireEvent.submit(screen.getByRole('button', { name: /create/i }));

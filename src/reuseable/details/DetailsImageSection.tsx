@@ -1,6 +1,6 @@
 "use client"
 import React, {ElementType} from "react";
-import {inter} from "@/app/fonts";
+import {cabinetGrotesk, inter} from "@/app/fonts";
 import {Card} from "@/components/ui/card";
 import Image, {StaticImageData} from 'next/image';
 import {Button} from "@/components/ui/button";
@@ -58,23 +58,23 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                 data-testid="cohort-image"
                             />
                         ) : Icon ? (
-                            <div className="w-32 h-32 flex bg-[#D9EAFF] rounded-full justify-center items-center">
+                            <div className="w-32 h-32 md:w-40 md:h-40 flex bg-[#D9EAFF] rounded-full justify-center items-center">
                                 <Icon className="text-6xl text-meedlBlue"/>
                             </div>
                         ) : null}
                     </Card>
                 </div>
 
-                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col`}>
+                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col py-5 gap-4`}>
                     <h1 id="cohort-title" data-testid="cohort-title"
-                        className={`${inter.className} text-3xl font-medium text-black`}>
+                        className={`${cabinetGrotesk.className} text-3xl font-medium text-black`}>
                         {cohortTitle}
                     </h1>
-                    <div className={`pt-3`}>
+                    <div>
                         <p
                             id="cohort-description"
                             data-testid="cohort-description"
-                            className={`${inter.className}  text-grey450 break-words scrollbar-width:none overflow-y-auto h-20 text-sm`}
+                            className={`${inter.className} text-grey400 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}
                         >
                             {cohortDescription}
                         </p>
@@ -85,7 +85,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             className="grid md:grid-cols-3 grid-cols-2 gap-2 w-fit mt-3"
                         >
                             {tagButtonData.map((tagProps, index) => (
-                                <TagButton key={index} {...tagProps} />
+                                <TagButton textColor={""} key={index} {...tagProps} />
                             ))}
                         </div>
                     </div>

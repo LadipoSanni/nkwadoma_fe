@@ -17,7 +17,7 @@ interface DeclineLoanModalProps {
 interface LoanRequestPayload {
     loanRequestId: string;
     loanProductId: string;
-    status: 'NEW';
+    status: 'APPROVED' | 'DECLINED';
     amountApproved: number;
     loanRequestDecision: 'DECLINED';
     declineReason: string;
@@ -39,7 +39,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
         const payload: LoanRequestPayload = {
             loanRequestId,
             loanProductId,
-            status: 'NEW',
+            status: 'DECLINED',
             amountApproved: 0,
             loanRequestDecision: 'DECLINED',
             declineReason: reason.trim()

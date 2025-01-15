@@ -10,7 +10,7 @@ interface menuItemsProps {
     index: number,
 }
 
-const SelectLoanTab = () => {
+const  SelectLoanTab = () => {
     const router = useRouter()
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
 
@@ -18,7 +18,7 @@ const SelectLoanTab = () => {
         {name: "Loan referrals", id: "loanReferrals", route: 'loan-referral'},
         {name: "Loan requests", id: "loanRequests", route: "loan-request"},
         {name: 'Loan offers', id: 'loanOffers', route: "loan-offer"},
-        {name: 'Loan disbursal', id: "loanDisbursal", route: 'loan-disbursal'},
+        {name: 'Disbursed loan', id: "loanDisbursal", route: 'loan-disbursal'},
         {name: 'Loan book', id: "loanBook", route: "loan-book"},
 
     ]
@@ -63,6 +63,7 @@ const SelectLoanTab = () => {
                 <div
                     key={item?.name}
                     id={item.id}
+                    data-testid={item.id}
                     className={`flex place-self-center w-auto  md:h-auto md:px-2 md:w-auto `}
                 >
                     <MenuItem name={item.name} index={index}/>

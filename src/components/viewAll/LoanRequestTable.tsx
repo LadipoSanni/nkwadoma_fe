@@ -8,6 +8,7 @@ import {useRouter} from "next/navigation";
 import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 
 
@@ -15,29 +16,28 @@ interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
-function Index() {
+const Index = () => {
     const router = useRouter();
     const request ={
         pageSize: 10,
-        pageNumber: 10
+        pageNumber: 0
     }
     const { data, isLoading} = useViewAllLoanRequestQuery(request)
 
-
-
-
     const loanRequestHeader = [
-        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{row.firstName} <div className={``}></div>{row.lastName}</div>  },
-        { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.programName },
-        { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort },
-        { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMMM D, YYYY')}</div> },
-        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.requestDate?.toString()).format('MMMM D, YYYY')}</div> },
+        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
+        { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) =>row.programName },
+        { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohortName },
+        { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMM D, YYYY')}</div> },
+        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.requestDate?.toString()).format('MMM D, YYYY')}</div> },
         { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div>},
         { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>}
     ];
 
+
+
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        router.push(`/loan-details?id=${ID}`);
+        router.push(`/loan-request-details?id=${ID}`);
     };
 
     return (
@@ -46,7 +46,6 @@ function Index() {
         >
             {
                 data?.data?.body?.length > 0 ?
-                // LoanRequestTable?.length > 0 ?
                     <div className={`md:w-full w-full h-full md:h-full `}>
                         <Tables
                             tableData={data?.data?.body}
@@ -55,8 +54,8 @@ function Index() {
                             tableHeader={loanRequestHeader}
                             tableHeight={52}
                             sx='cursor-pointer'
-                            staticColunm='cohort'
-                            staticHeader='Cohort'
+                            staticColunm='firstName'
+                            staticHeader='Loanee'
                             showKirkBabel={false}
                             icon={MdOutlinePeople}
                             sideBarTabName='Cohort'

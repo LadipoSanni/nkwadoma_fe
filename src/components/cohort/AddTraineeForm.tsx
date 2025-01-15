@@ -34,6 +34,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([]);
     const [totalItemAmount, setTotalItemAmount] = useState(0);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [initialDepositAmount, setInitialDepositAmount] = useState('');
 
     const [addLoaneeToCohort] = useAddLoaneeToCohortMutation();
 
@@ -42,7 +43,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
             setCohortBreakDown(data.data);
             calculateTotal(data.data, tuitionFee);
         }
-    }, [data, tuitionFee]);
+    }, [data, tuitionFee, initialDepositAmount]);
 
     const validationSchemaStep1 = Yup.object().shape({
         firstName: Yup.string()
@@ -85,7 +86,8 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
     const calculateTotal = (items: cohortBreakDown[], tuitionFee?: string) => {
         const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
         const totalWithTuition = total + (tuitionFee ? parseFloat(tuitionFee) : 0);
-        setTotalItemAmount(totalWithTuition);
+        const totalWithInitialDepositDeducted  = totalWithTuition - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
+        setTotalItemAmount(totalWithInitialDepositDeducted);
     };
 
     const handleSubmitStep1 = () => {
@@ -198,23 +200,6 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                             setSelectedCurrency={setSelectCurrency}
                                         />
                                         <div className='w-full mb-2'>
-                                            {/*<NumericFormat*/}
-                                            {/*    id={`initialDeposit`}*/}
-                                            {/*    name={"initialDeposit"}*/}
-                                            {/*    placeholder="Enter Initial Deposit"*/}
-                                            {/*    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"*/}
-                                            {/*    thousandSeparator=","*/}
-                                            {/*    decimalScale={2}*/}
-                                            {/*    fixedDecimalScale={true}*/}
-                                            {/*    // value={FieldValue}*/}
-                                            {/*    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
-                                            {/*        const value = e.target.value;*/}
-
-                                            {/*            void setFieldValue("initialDeposit", value);*/}
-
-                                            {/*    }}*/}
-                                            {/*/>*/}
-
                                             <Field
                                                 id="initialDeposit"
                                                 name="initialDeposit"
@@ -223,11 +208,32 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                                 className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     const value = e.target.value;
+                                                    setInitialDepositAmount(value)
+                                                    console.log('initial deposit amount afterc setting : ', initialDepositAmount);
                                                     if (/^\d*$/.test(value)) {
                                                         void setFieldValue("initialDeposit", value);
                                                     }
                                                 }}
                                             />
+                                            {/*<NumericFormat*/}
+                                            {/*    id={`initialDeposit`}*/}
+                                            {/*    name={`initialDeposit`}*/}
+                                            {/*    type="text"*/}
+                                            {/*    thousandSeparator=","*/}
+                                            {/*    decimalScale={2}*/}
+                                            {/*    fixedDecimalScale={true}*/}
+                                            {/*    value={initialDepositAmount}*/}
+                                            {/*    placeholder={`Enter Initial Deposit`}*/}
+                                            {/*    className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"*/}
+                                            {/*        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
+                                            {/*            const value = e.target.value;*/}
+                                            {/*            setInitialDepositAmount(value)*/}
+                                            {/*            console.log('initial deposit amount afterc setting : ', initialDepositAmount);*/}
+                                            {/*            if (/^\d*$/.test(value)) {*/}
+                                            {/*                void setFieldValue("initialDeposit", value);*/}
+                                            {/*            }*/}
+                                            {/*        }}*/}
+                                            {/*/>*/}
                                         </div>
                                     </div>
                                 </div>
@@ -278,7 +284,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                     </div>
                                 </div>
                                 {cohortBreakDown?.map((detail: cohortBreakDown, index: number) => (
-                                    <div key={"breakDown" + index} className={``}>
+                                    <div key={"breakDown" + index} className={` grid md:grid gap-0`}>
                                         <Label htmlFor={`detail-${index}`}>{detail.itemName}</Label>
                                         <div className="w-full">
                                             <div className={`flex items-center w-full gap-2`}>
@@ -316,6 +322,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                     </div>
                                 ))}
                                 <div id={'totalInputOnAddLoaneeModal'} data-testid={'totalInputOnAddLoaneeModal'}>
+                                    <div className={`text-[#6A696D]`}>initial deposit is deducted from total</div>
                                     <TotalInput prefix={'₦'} total={totalItemAmount} componentId={'totalInputOnAddLoaneeModalComponent'} />
                                 </div>
                                 <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
