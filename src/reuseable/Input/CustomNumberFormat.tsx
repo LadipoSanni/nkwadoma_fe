@@ -58,7 +58,7 @@ const CustomInputField: React.FC<FieldProps> = ({ field, form }) => {
          return ( 
          <input 
          {...field} 
-         className="w-full p-3 h-[3.2rem] border rounded focus:outline-none mb-2" 
+         className="w-full p-3  border rounded focus:outline-none mb-2" 
          onChange={handleChange} 
         value={formatNumberWithCommas(field.value)} 
          placeholder="0.00"
