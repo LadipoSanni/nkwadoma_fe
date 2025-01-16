@@ -107,11 +107,11 @@ const Login: React.FC = () => {
                         status: "success",
                     });
                     const userRoles = getUserRoleSS
-                    console.log('before setting:: ', userRoles)
+                    // console.log('before setting:: ', userRoles)
                     if (user_role) {
                         storeUserDetails(access_token, user_email, user_role, userName)
                         setUserRoles(user_roles)
-                        console.log('after setting:: ', userRoles)
+                        // console.log('after setting:: ', userRoles)
                         switch (user_role){
                             case 'LOANEE' :
                                 store.dispatch(setCurrentNavbarItem("overview"))

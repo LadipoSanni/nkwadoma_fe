@@ -199,6 +199,7 @@ function LoanDetails() {
     ]
 
 
+
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
@@ -312,7 +313,6 @@ function LoanDetails() {
                         data-testid={`continueButtonOnIndex` + currentTab}
                         className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                         onClick={handleNext}
-                        // disabled={currentTab === loanRequestDetailsTab.length - 1}>
                         >
                         {currentTab === 2 ? 'Make decision ' : 'Continue'}
                         {currentTab == 2 &&
