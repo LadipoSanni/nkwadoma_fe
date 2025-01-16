@@ -20,7 +20,7 @@ interface detailsProps {
     dropdownOption?: { name: string, id: string }[];
     handleDropdownClicked: (id: string) => void;
     buttonText: string;
-    tagButtonData: { tagIcon: ElementType,   tagCount: number | string , tagButtonStyle: string, tagText: string }[];
+    tagButtonData: { tagIcon: ElementType, tagCount: number | string, tagButtonStyle: string, tagText: string }[];
     isEditButton: boolean
 }
 
@@ -45,20 +45,21 @@ const DetailsImageSection: React.FC<detailsProps> = ({
     return (
         <main id="details-main" data-testid="details-main" className={``}>
             <div id="cohort-image-section" data-testid="cohort-image-section"
-                 className={`flex md:flex-col flex-col md:block space-y-3 md:max-w-sm w-full`}>
+                 className={`flex md:flex-col flex-col md:block space-y-3 md:max-w-md w-full`}>
                 <div id="cohort-image-card" data-testid="cohort-image-card">
-                    <Card className="rounded-lg md:max-w-sm">
+                    <Card className="rounded-lg md:max-w-md ">
                         {imageSrc ? (
                             <Image
                                 src={imageSrc}
                                 alt="Cohort DetailsImageSection"
-                                width={300}
-                                height={300}
-                                className="w-full h-96 object-cover flex-shrink-0"
+                                width={500}
+                                height={500}
+                                className="w-full rounded-md h-64 object-cover"
                                 data-testid="cohort-image"
                             />
                         ) : Icon ? (
-                            <div className="w-32 h-32 md:w-40 md:h-40 flex bg-[#D9EAFF] rounded-full justify-center items-center">
+                            <div
+                                className="w-32 h-32 md:w-40 md:h-40 flex bg-[#D9EAFF] rounded-full justify-center items-center">
                                 <Icon className="text-6xl text-meedlBlue"/>
                             </div>
                         ) : null}
@@ -82,10 +83,10 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         <div
                             id={`details`}
                             data-testid="details"
-                            className="grid md:grid-cols-3 grid-cols-2 gap-2 w-fit mt-3"
+                            className="grid grid-cols-2 mt-5"
                         >
                             {tagButtonData.map((tagProps, index) => (
-                                <TagButton textColor={""} key={index} {...tagProps} />
+                                <TagButton key={index} {...tagProps} />
                             ))}
                         </div>
                     </div>
@@ -121,7 +122,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             className={"md:w-full pb-1"}
                             icon={Cross2Icon}
                 >
-                    <AddTraineeForm  setIsOpen={handleModalOpen}/>
+                    <AddTraineeForm setIsOpen={handleModalOpen}/>
                 </TableModal>
             </div>
         </main>

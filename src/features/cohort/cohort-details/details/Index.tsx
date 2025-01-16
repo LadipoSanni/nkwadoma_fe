@@ -15,6 +15,8 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import {formatAmount} from '@/utils/Format'
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
+import { formatMonthInDate } from "@/utils/Format";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 
 interface breakDown {
     itemName: string;
@@ -98,13 +100,13 @@ const CohortDetails = () => {
     const id = "1";
 
     const dataList = [
-        {label: "Start Date", value: details.startDate},
-        {label: "End Date", value: details.expectedEndDate},
+        {label: "Start Date", value: formatMonthInDate(details.startDate)},
+        {label: "End Date", value: formatMonthInDate(details.expectedEndDate)},
         {
             label: "Cohort status",
             value: <div
                 className={`rounded-2xl px-2 py-1 ${details.cohortStatus === "ACTIVE" ? "bg-[#E7F5EC] w-fit text-[#0B6B2B]" : "bg-[#FEF6E8] w-fit text-[#66440A]"}`}>
-                {details.cohortStatus}
+                {capitalizeFirstLetters(details.cohortStatus)}
             </div>
         },
         {label: "Number of Dropout", value: details.numberOfDropOut},
@@ -123,8 +125,8 @@ const CohortDetails = () => {
     ]
 
     const tagButtonData = [
-        {tagIcon: FiBook, tagCount: details?.programName, tagButtonStyle: "bg-lightBlue100", tagText: "", textColor: "text-meedlBlue"},
-        {tagIcon: MdPersonOutline, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-warning50", tagText: "Loanees", textColor: "text-warning900"},
+        {tagIcon: FiBook, tagCount: details?.programName, tagButtonStyle: "bg-lightBlue100 text-meedlBlue", tagText: ""},
+        {tagIcon: MdPersonOutline, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-warning50 text-meedlBlue", tagText: "Loanees"},
     ];
 
 
