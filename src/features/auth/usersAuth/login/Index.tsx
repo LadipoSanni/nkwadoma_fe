@@ -106,7 +106,7 @@ const Login: React.FC = () => {
                         description: "Login successful",
                         status: "success",
                     });
-                    const userRoles = getUserRoleSS
+                    // const userRoles = getUserRoleSS
                     // console.log('before setting:: ', userRoles)
                     if (user_role) {
                         storeUserDetails(access_token, user_email, user_role, userName)
