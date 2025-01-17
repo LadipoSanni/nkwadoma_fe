@@ -7,9 +7,13 @@ SMTP_PASSWORD=$4
 EMAILS=$5
 TAG=$6
 BRANCH_NAME=$7
+COMMIT_AUTHOR=$8
+SONARQUBE_URL_SET=$9
+MAVEN_REPORT_URL_SET=${10}
+AUTOMATION_TEST_URL_SET=${11}
+COMMIT_MESSAGE=${12}
 
-COMMIT_AUTHOR=${8}
-SONARQUBE_URL=http://sonarqube.enum.africa/dashboard?id=EnumVerse
+SONARQUBE_URL="http://sonarqube.enum.africa/dashboard?id=EnumVerse"
 
 # Debug output
 echo "Debug: COMMIT_MESSAGE received as: $COMMIT_MESSAGE"
@@ -17,17 +21,21 @@ echo "Debug: COMMIT_MESSAGE received as: $COMMIT_MESSAGE"
 # Unescape the commit message
 COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed 's/\\(/(/g; s/\\)/)/g; s/\\#/#/g')
 
-# More debug output
+# Debug output
 echo "Debug: COMMIT_MESSAGE after unescaping: $COMMIT_MESSAGE"
 
 # Extract only the name from the COMMIT_AUTHOR
 ENGINEER_NAME=$(echo "$COMMIT_AUTHOR" | sed 's/ <.*//')
 
+# Prepare email array
 IFS=',' read -r -a email_array <<< "${EMAILS}"
+
+# Loop through emails
 for email in "${email_array[@]}"
 do
   echo "Sending email to: $email" # Debug output
 
+  # Generate email content
   cat << EOF > /tmp/email.html
 From: builds@semicolon.africa
 To: $email
@@ -84,46 +92,11 @@ EOF
 </html>
 EOF
 
+  # Send email using curl
   curl --verbose --ssl-reqd \
     --url "smtps://${SMTP_SERVER}:${SMTP_PORT}" \
     --mail-from "builds@semicolon.africa" \
     --mail-rcpt "$email" \
     --user "${SMTP_USERNAME}:${SMTP_PASSWORD}" \
     --upload-file /tmp/email.html
-done
-
-COMMIT_AUTHOR=$8
-SONARQUBE_URL_SET=$9
-MAVEN_REPORT_URL_SET=${10}
-AUTOMATION_TEST_URL_SET=${11}
-COMMIT_MESSAGE=${12}
-
-IFS=',' read -r -a email_array <<< "${EMAILS}"
-
-for email in "${email_array[@]}"
-do
-  {
-    echo "From: builds@semicolon.africa"
-    echo "To: $email"
-    echo "Subject: Build Failure Notification"
-    echo "Content-Type: text/html; charset=UTF-8"
-    echo
-    echo "<html><body>"
-    echo "<h2 style='color:red;'>Build Failure Notification</h2>"
-    echo "<p>Your recent build was unsuccessful. Please check the details and fix the issues.</p>"
-    echo "<p><strong>Branch:</strong> ${BRANCH_NAME}</p>"
-    echo "<p><strong>Author:</strong> ${COMMIT_AUTHOR}</p>"
-    echo "<p><strong>Tag:</strong> ${TAG}</p>"
-    echo "<p><strong>Commit Message:</strong><br>${COMMIT_MESSAGE}</p>"
-    echo "<p><strong>SonarQube Report:</strong> <a href='${SONARQUBE_URL_SET}'>View Report</a></p>"
-    echo "<p><strong>Maven Report:</strong> <a href='${MAVEN_REPORT_URL_SET}'>View Report</a></p>"
-    echo "<p><strong>Automation Test Report:</strong> <a href='${AUTOMATION_TEST_URL_SET}'>View Report</a></p>"
-    echo "<p>Regards,<br>The Cloud Team</p>"
-    echo "</body></html>"
-  } | curl --verbose --ssl-reqd \
-    --url "smtps://${SMTP_SERVER}:${SMTP_PORT}" \
-    --mail-from "builds@semicolon.africa" \
-    --mail-rcpt "$email" \
-    --user "${SMTP_USERNAME}:${SMTP_PASSWORD}" \
-    --upload-file -
 done
