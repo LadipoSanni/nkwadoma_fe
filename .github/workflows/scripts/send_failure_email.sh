@@ -11,7 +11,6 @@ BRANCH_NAME=$7
 COMMIT_AUTHOR=${8}
 SONARQUBE_URL=http://sonarqube.enum.africa/dashboard?id=EnumVerse
 
-
 # Debug output
 echo "Debug: COMMIT_MESSAGE received as: $COMMIT_MESSAGE"
 
@@ -20,8 +19,6 @@ COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed 's/\\(/(/g; s/\\)/)/g; s/\\#/#/g')
 
 # More debug output
 echo "Debug: COMMIT_MESSAGE after unescaping: $COMMIT_MESSAGE"
-
-
 
 # Extract only the name from the COMMIT_AUTHOR
 ENGINEER_NAME=$(echo "$COMMIT_AUTHOR" | sed 's/ <.*//')
@@ -87,7 +84,13 @@ EOF
 </html>
 EOF
 
-  curl --ssl-reqd \
+  curl --verbose --ssl-reqd \
+    --url "smtps://${SMTP_SERVER}:${SMTP_PORT}" \
+    --mail-from "builds@semicolon.africa" \
+    --mail-rcpt "$email" \
+    --user "${SMTP_USERNAME}:${SMTP_PASSWORD}" \
+    --upload-file /tmp/email.html
+done
 
 COMMIT_AUTHOR=$8
 SONARQUBE_URL_SET=$9
@@ -118,15 +121,9 @@ do
     echo "<p>Regards,<br>The Cloud Team</p>"
     echo "</body></html>"
   } | curl --verbose --ssl-reqd \
-
     --url "smtps://${SMTP_SERVER}:${SMTP_PORT}" \
     --mail-from "builds@semicolon.africa" \
     --mail-rcpt "$email" \
     --user "${SMTP_USERNAME}:${SMTP_PASSWORD}" \
-
-    --upload-file /tmp/email.html \
-    --verbose # Add verbose output for debugging
-
     --upload-file -
-
 done
