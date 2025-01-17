@@ -56,21 +56,23 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
         }
         setIsFormValid(true);
         setErrorMessage("");
-        const formData = new FormData(event.target as HTMLFormElement);
+        // const formData = new FormData(event.target as HTMLFormElement);
 
         const data = {
             loanRequestId,
             loanProductId: selectedLoanProductId,
             status: "APPROVED",
-            amountApproved: parseFloat(formData.get('amountApproved') as string),
+            amountApproved: '2000',
             loanRequestDecision: 'ACCEPTED',
             declineReason: ""
         };
-        await respondToLoanRequest(data);
+        console.log('data:: ', data)
+       const response = await respondToLoanRequest(data);
         onSubmit({
-            amountApproved: formData.get('amountApproved') as string,
+            amountApproved: amount,
             loanProduct: selectedLoanProductId
         });
+        console.log('data:: ', response)
         if (isSuccess){
             store.dispatch(setCurrentTab('Loan requests'))
             router.push("/loan/loan-request")
@@ -132,7 +134,8 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                                 decimalScale={2}
                                 fixedDecimalScale={true}
                                 onChange={(e)=> {
-                                    setAmount(e.target.value)
+                                    const {value} = e.target
+                                    setAmount(value)
                                 }}
                             />
                         </div>
