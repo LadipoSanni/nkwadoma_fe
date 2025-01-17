@@ -92,7 +92,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
                         <Button
                             type="button"
                             className={`w-[140px] h-[57px] flex items-center font-bold text-[14px] justify-center rounded-md text-meedlWhite ${
-                                reason.trim() ? 'bg-error450 hover:bg-error450' : 'bg-blue50 hover:bg-blue50'
+                                reason.trim() ? 'bg-error500 hover:bg-error500' : 'bg-blue50 hover:bg-blue50'
                             }`}
                             disabled={!reason.trim() || isLoading}
                             onClick={handleDecline}
