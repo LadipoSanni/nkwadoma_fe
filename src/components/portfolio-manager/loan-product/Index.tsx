@@ -43,8 +43,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
     useEffect(() => {
         if(investmentVehicleData){
-            const obj = investmentVehicleData.data.map((vehicle:any)=>{
-                return {[vehicle.name]: vehicle.id}
+            const obj:any = {}
+            investmentVehicleData.data.forEach((vehicle:any)=>{
+                obj[vehicle?.name]= vehicle?.id
             })
             setInvestmentVehicleObj(obj)
         }
@@ -198,7 +199,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             // investmentVehicleId: fundProductId,
             // loanProductStatus: values.loanProductStatus,
         };
-        console.log(formData, "THis are the data")
         try {
             const create = await createLoanProduct(formData).unwrap();
             if (create) {
