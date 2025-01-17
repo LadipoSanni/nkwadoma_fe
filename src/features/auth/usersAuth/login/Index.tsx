@@ -8,7 +8,7 @@ import {cabinetGrotesk} from "@/app/fonts";
 import {validateEmailInput} from "@/utils/GlobalMethods"
 import {useLoginMutation} from "@/service/auths/api"
 import {useToast} from "@/hooks/use-toast"
-import { getUserRoleSS, setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
+import {  setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {useRouter} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
 import {ADMIN_ROLES} from "@/types/roles";
