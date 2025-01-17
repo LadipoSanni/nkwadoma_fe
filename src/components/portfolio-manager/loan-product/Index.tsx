@@ -10,9 +10,12 @@ import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 import {useGetAllInvestmentmentVehicleQuery} from "@/service/admin/fund_query";
-import 'react-quill-new/dist/quill.snow.css';
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import {validatePositiveNumber} from "@/utils/Format";
+import 'react-quill-new/dist/quill.snow.css'
+import {QuillField} from "@/components/portfolio-manager/loan-product/QuillField";
+
+
 
 interface CreateLoanProductProps {
     setIsOpen?: (b: boolean) => void;
@@ -36,15 +39,14 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [investmentVehicleObj, setInvestmentVehicleObj] = useState<{ [key: string]: string }>({});
     const [error, setError] = useState('');
-    const [mandateError, setMandateError] = useState('');
-    const [loanProductTermsAndConditionError, setLoanProductTermsAndConditionError] = useState('');
+    // const [mandateError, setMandateError] = useState('');
+    // const [loanProductTermsAndConditionError, setLoanProductTermsAndConditionError] = useState('');
     // const [step, setStep] = useState(1);
     const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
     const dataElement = {
         pageNumber: 0,
         pageSize: 200
     }
-
     const { data: investmentVehicleData } = useGetAllInvestmentmentVehicleQuery(dataElement);
 
     useEffect(() => {
@@ -72,12 +74,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         obligorLimit: "",
         loanProductMandate: "",
         loanProductTermsAndCondition: "",
-        bankPartner: "",
-        loanInsuranceProvider: "",
-        loanDisbursementTerms: "",
+        // bankPartner: "",
+        // loanInsuranceProvider: "",
+        // loanDisbursementTerms: "",
         // investmentVehicleId: "",
         // loanProductStatus: "ACTIVE"
     }
+
 
     const validationSchema = Yup.object().shape({
         productName: Yup.string()
@@ -139,17 +142,17 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         loanProductMandate: Yup.string()
             .trim()
             .required("Product mandate is required")
-            .max(2500, "Terms exceeds 2500 characters")
-            .test("no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
+            .max(2500, "Terms exceeds 2500 characters"),
+            // .test("no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
         loanProductTermsAndCondition: Yup.string()
             .trim()
             .required("Loan product terms is required")
             .max(2500, "Terms exceeds 2500 characters")
-            .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
-        loanDisbursementTerms: Yup.string()
-            .trim()
-            .max(2500, "Terms exceeds 2500 characters")
-            .test("no-html-tags", "Loan disbursement terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value))
+            // .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
+        // loanDisbursementTerms: Yup.string()
+        //     .trim()
+        //     .max(2500, "Terms exceeds 2500 characters")
+        //     .test("no-html-tags", "Loan disbursement terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value))
     });
 
     interface Vehicle {
@@ -159,13 +162,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
     const investmentVehicleNames = investmentVehicleData?.data?.map((vehicle: Vehicle) => vehicle.name) || [];
     // const bankPartner = ["Patner 1", "Partner 2",];
-    const maxChars = 2500;
-
-    const validateLength = (value: string) => {
-        const maxChars = 2500;
-        const regex = new RegExp(`^.{0,${maxChars}}$`);
-        return regex.test(value);
-    };
+    // const maxChars = 2500;
+    //
+    // const validateLength = (value: string) => {
+    //     const maxChars = 2500;
+    //     const regex = new RegExp(`^.{0,${maxChars}}$`);
+    //     return regex.test(value);
+    // };
 
     const toastPopUp = ToastPopUp({
         description: "Loan product Created successfully.",
@@ -200,12 +203,14 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             obligorLoanLimit: Number(values.obligorLimit),
             mandate: values.loanProductMandate,
             termsAndCondition: values.loanProductTermsAndCondition,
-            bankPartner: values.bankPartner,
-            loanInsuranceProvider: values.loanInsuranceProvider,
-            disbursementTerms: values.loanDisbursementTerms,
+            // bankPartner: values.bankPartner,
+            // loanInsuranceProvider: values.loanInsuranceProvider,
+            // disbursementTerms: values.loanDisbursementTerms,
             // investmentVehicleId: fundProductId,
             // loanProductStatus: values.loanProductStatus,
         };
+
+
         try {
             const create = await createLoanProduct(formData).unwrap();
             if (create) {
@@ -594,128 +599,133 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                 <div className={`pt-4`}>
                                     <Label htmlFor="loanProductMandate">Loan product mandate</Label>
-                                    <Field
-                                        as="textarea"
-                                        id="loanProductMandateId"
-                                        name="loanProductMandate"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"
-                                        placeholder="Enter description"
-                                        rows={4}
-                                        maxLength={maxChars}
-                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                                            const value = e.target.value;
-                                            if (validateLength(value)) {
-                                                setFieldValue("loanProductMandate", value);
-                                                setMandateError('');
-                                            } else {
-                                                setMandateError('Mandate must be 2500 characters or less');
-                                            }
-                                        }}
-
-                                        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-                                            const paste = e.clipboardData.getData('text');
-                                            if (paste.length + values.loanProductMandate.length > maxChars) {
-                                                e.preventDefault();
-                                                setMandateError('Mandate must be 2500 characters or less');
-                                            } else {
-                                                setMandateError('');
-                                            }
-                                        }}
-                                    />
-                                    {
-                                        errors.loanProductMandate && touched.loanProductMandate && (
-                                            <ErrorMessage
-                                                name="loanProductMandate"
-                                                component="div"
-                                                id='loanProductMandateError'
-                                                className="text-red-500 text-sm"
-                                            />
-                                        )
-                                    }
-                                    {mandateError && (
-                                        <div className="text-red-500 text-sm">
-                                            {mandateError}
+                                    <QuillField name={"loanProductMandate"} errorMessage={"Product mandate must be 2500 characters or less"}/>
+                                    {errors.loanProductMandate && touched.loanProductMandate && (
+                                        <div className="text-red-500 text-sm mt-1">
+                                            {errors.loanProductMandate}
                                         </div>
                                     )}
+                                    {/*<ReactQuill*/}
+                                    {/*    theme="snow"*/}
+                                    {/*    value={values.loanProductMandate || ``}*/}
+                                    {/*    onChange={(value) => {*/}
+                                    {/*        setFieldValue("loanProductMandate", value)*/}
+                                    {/*    }}*/}
+                                    {/*    placeholder="Enter description"*/}
+                                    {/*    className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
+                                    {/*/>*/}
+                                    {/*<Field*/}
+                                    {/*    as="textarea"*/}
+                                    {/*    id="loanProductMandateId"*/}
+                                    {/*    name="loanProductMandate"*/}
+                                    {/*    className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"*/}
+                                    {/*    placeholder="Enter description"*/}
+                                    {/*    rows={4}*/}
+                                    {/*    maxLength={maxChars}*/}
+                                    {/*    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {*/}
+                                    {/*        const value = e.target.value;*/}
+                                    {/*        console.log("Current value:", value);*/}
+                                    {/*        if (validateLength(value)) {*/}
+                                    {/*            setFieldValue("loanProductMandate", value);*/}
+                                    {/*            setMandateError('');*/}
+                                    {/*        } else {*/}
+                                    {/*            setMandateError('Mandate must be 2500 characters or less');*/}
+                                    {/*        }*/}
+                                    {/*    }}*/}
+
+                                    {/*    onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {*/}
+                                    {/*        const paste = e.clipboardData.getData('text');*/}
+                                    {/*        if (paste.length + values.loanProductMandate.length > maxChars) {*/}
+                                    {/*            e.preventDefault();*/}
+                                    {/*            setMandateError('Mandate must be 2500 characters or less');*/}
+                                    {/*        } else {*/}
+                                    {/*            setMandateError('');*/}
+                                    {/*        }*/}
+                                    {/*    }}*/}
+                                    {/*/>*/}
+                                    {/*{*/}
+                                    {/*    errors.loanProductMandate && touched.loanProductMandate && (*/}
+                                    {/*        <ErrorMessage*/}
+                                    {/*            name="loanProductMandate"*/}
+                                    {/*            component="div"*/}
+                                    {/*            id='loanProductMandateError'*/}
+                                    {/*            className="text-red-500 text-sm"*/}
+                                    {/*        />*/}
+                                    {/*    )*/}
+                                    {/*}*/}
+                                    {/*{mandateError && (*/}
+                                    {/*    <div className="text-red-500 text-sm">*/}
+                                    {/*        {mandateError}*/}
+                                    {/*    </div>*/}
+                                    {/*)}*/}
                                 </div>
 
-                                <div className={`pt-4`}>
-                                    <Label htmlFor="loanProductTermsAndCondition">Loan product terms and
-                                        condition</Label>
-                                    <Field
-                                        as="textarea"
-                                        id="loanProductTermsAndConditionId"
-                                        name="loanProductTermsAndCondition"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"
-                                        placeholder="Enter terms and condition"
-                                        rows={4}
-                                        maxLength={maxChars}
-                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                                            const value = e.target.value;
-                                            if (validateLength(value)) {
-                                                setFieldValue("loanProductTermsAndCondition", value);
-                                                setLoanProductTermsAndConditionError('');
-                                            } else {
-                                                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');
-                                            }
-                                        }}
-                                        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-                                            const paste = e.clipboardData.getData('text');
-                                            if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {
-                                                e.preventDefault();
-                                                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');
-                                            } else {
-                                                setLoanProductTermsAndConditionError('');
-                                            }
-                                        }}
-                                    />
-                                    {
-                                        errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
-                                            <ErrorMessage
-                                                name="loanProductTermsAndCondition"
-                                                component="div"
-                                                id='loanProductTermsAndConditionError'
-                                                className="text-red-500 text-sm"
-                                            />
-                                        )
-                                    }
-                                    {loanProductTermsAndConditionError && (
-                                        <div className="text-red-500 text-sm">
-                                            {loanProductTermsAndConditionError}
-                                        </div>
-                                    )}
-                                </div>
-                                {/*<div className="pt-4">*/}
-                                {/*    <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product*/}
-                                {/*        terms and*/}
+                                {/*<div className={`pt-4`}>*/}
+                                {/*    <Label htmlFor="loanProductTermsAndCondition">Loan product terms and*/}
                                 {/*        condition</Label>*/}
-                                {/*    <ReactQuill*/}
-                                {/*        theme="snow"*/}
-                                {/*        value={values.loanProductTermsAndCondition}*/}
-                                {/*        onChange={(content) => {*/}
-                                {/*            if (content.length <= maxChars) {*/}
-                                {/*                setFieldValue("loanProductTermsAndCondition", content);*/}
-                                {/*                setError('');*/}
+                                {/*    <Field*/}
+                                {/*        as="textarea"*/}
+                                {/*        id="loanProductTermsAndConditionId"*/}
+                                {/*        name="loanProductTermsAndCondition"*/}
+                                {/*        className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"*/}
+                                {/*        placeholder="Enter terms and condition"*/}
+                                {/*        rows={4}*/}
+                                {/*        maxLength={maxChars}*/}
+                                {/*        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {*/}
+                                {/*            const value = e.target.value;*/}
+                                {/*            if (validateLength(value)) {*/}
+                                {/*                setFieldValue("loanProductTermsAndCondition", value);*/}
+                                {/*                setLoanProductTermsAndConditionError('');*/}
                                 {/*            } else {*/}
-                                {/*                setError('Product condition must be 2500 characters or less');*/}
+                                {/*                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');*/}
                                 {/*            }*/}
                                 {/*        }}*/}
-                                {/*        placeholder="Enter terms and condition"*/}
-                                {/*        className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
-                                {/*        style={{height: '100px'}}*/}
+                                {/*        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {*/}
+                                {/*            const paste = e.clipboardData.getData('text');*/}
+                                {/*            if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {*/}
+                                {/*                e.preventDefault();*/}
+                                {/*                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');*/}
+                                {/*            } else {*/}
+                                {/*                setLoanProductTermsAndConditionError('');*/}
+                                {/*            }*/}
+                                {/*        }}*/}
                                 {/*    />*/}
                                 {/*    {*/}
                                 {/*        errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (*/}
                                 {/*            <ErrorMessage*/}
                                 {/*                name="loanProductTermsAndCondition"*/}
                                 {/*                component="div"*/}
-                                {/*                id="loanProductTermsAndConditionError"*/}
+                                {/*                id='loanProductTermsAndConditionError'*/}
                                 {/*                className="text-red-500 text-sm"*/}
                                 {/*            />*/}
                                 {/*        )*/}
                                 {/*    }*/}
-                                {/*    {error && <div className="text-red-500 text-sm">{error}</div>}*/}
+                                {/*    {loanProductTermsAndConditionError && (*/}
+                                {/*        <div className="text-red-500 text-sm">*/}
+                                {/*            {loanProductTermsAndConditionError}*/}
+                                {/*        </div>*/}
+                                {/*    )}*/}
                                 {/*</div>*/}
+                                <div className="pt-4">
+                                    <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product
+                                        terms and
+                                        condition</Label>
+                                    <QuillField name={"loanProductTermsAndCondition"} errorMessage={"Product terms must be 2500 characters or less"}/>
+                                    {/*<ReactQuill*/}
+                                        {/*    theme="snow"*/}
+                                        {/*    value={values.loanProductTermsAndCondition || ``}*/}
+                                        {/*    onChange={(value) => {*/}
+                                        {/*        setFieldValue("loanProductTermsAndCondition", value)*/}
+                                        {/*    }}*/}
+                                        {/*    placeholder="Enter terms and condition"*/}
+                                        {/*    className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
+                                        {/*/>*/}
+                                    {errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
+                                        <div className="text-red-500 text-sm mt-1">
+                                            {errors.loanProductTermsAndCondition}
+                                        </div>
+                                    )}
+                                </div>
 
                                 <div className={`flex justify-end pt-5 gap-3 pb-5`}>
                                     <Button

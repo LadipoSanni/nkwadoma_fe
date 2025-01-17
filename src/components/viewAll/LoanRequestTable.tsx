@@ -40,6 +40,7 @@ const Index = () => {
         router.push(`/loan-request-details?id=${ID}`);
     };
 
+
     return (
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
@@ -62,8 +63,6 @@ const Index = () => {
                             optionalFilterName='graduate'
                         />
                     </div>
-
-
                     :
                     <LoanEmptyState
                         id={'LoanRequestEmptyState'}

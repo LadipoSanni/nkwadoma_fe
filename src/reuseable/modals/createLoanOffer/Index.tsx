@@ -57,11 +57,13 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
         setIsFormValid(true);
         setErrorMessage("");
         const formData = new FormData(event.target as HTMLFormElement);
+
         const data = {
             loanRequestId,
             loanProductId: selectedLoanProductId,
             status: "APPROVED",
             amountApproved: parseFloat(formData.get('amountApproved') as string),
+            loanRequestDecision: 'ACCEPTED',
             declineReason: ""
         };
         await respondToLoanRequest(data);
