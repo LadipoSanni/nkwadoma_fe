@@ -25,10 +25,16 @@ interface ApiError {
     };
 }
 
+interface InvestmentVehicle {
+    id: string;
+    name: string;
+}
+
+
 
 const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
-    const [investmentVehicleObj, setInvestmentVehicleObj] = useState<any>({});
+    const [investmentVehicleObj, setInvestmentVehicleObj] = useState<{ [key: string]: string }>({});
     const [error, setError] = useState('');
     const [mandateError, setMandateError] = useState('');
     const [loanProductTermsAndConditionError, setLoanProductTermsAndConditionError] = useState('');
@@ -39,17 +45,18 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         pageSize: 200
     }
 
-    const {data: investmentVehicleData} = useGetAllInvestmentmentVehicleQuery(dataElement);
+    const { data: investmentVehicleData } = useGetAllInvestmentmentVehicleQuery(dataElement);
 
     useEffect(() => {
-        if(investmentVehicleData){
-            const obj:any = {}
-            investmentVehicleData.data.forEach((vehicle:any)=>{
-                obj[vehicle?.name]= vehicle?.id
-            })
-            setInvestmentVehicleObj(obj)
+        if (investmentVehicleData) {
+            const obj: { [key: string]: string } = {};
+            investmentVehicleData.data.forEach((vehicle: InvestmentVehicle) => {
+                obj[vehicle.name] = vehicle.id;
+            });
+            setInvestmentVehicleObj(obj);
         }
     }, [investmentVehicleData]);
+
 
     const initialFormValue = {
         productName: "",
