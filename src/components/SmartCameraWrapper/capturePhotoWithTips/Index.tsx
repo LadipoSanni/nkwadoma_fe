@@ -15,7 +15,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const [hasFaceBeenDetected, setHasFaceBeenDetected] = useState(false);
     const [modelLoadingError, setModelLoadingError] = useState<string | null>(null);
     const [step, setStep] = useState<string>('right');
-    const [progress] = useState<number>(0);
 
     useEffect(() => {
         const loadModels = async () => {
@@ -125,6 +124,25 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         ? "absolute top-4 right-4 w-[270px] h-[270px] rounded-full overflow-hidden"
         : "absolute w-[419px] h-[279px] overflow-hidden ";
 
+    const getStrokeDashoffset = () => {
+        const totalLength = 904.32;
+        return totalLength * 0.75;
+    };
+
+    const getRotationAngle = (step: string) => {
+        switch (step) {
+            case 'right':
+                return -40;
+            case 'left':
+                return 140;
+            case 'up':
+                return -140;
+            case 'down':
+                return 40;
+            default:
+                return 0;
+        }
+    };
     return (
         <main className={`grid gap-5 ${inter.className}`}>
             <div className="grid place-items-center gap-5">
@@ -146,7 +164,9 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                                 stroke="#142854"
                                 strokeWidth="12"
                                 strokeDasharray="904.32"
-                                strokeDashoffset={`${904.32 * (1 - progress / 100)}`}
+                                strokeDashoffset={getStrokeDashoffset()}
+                                style={{ transform: `rotate(${getRotationAngle(step)}deg)`, transformOrigin: 'center' }}
+
                             />
                         </svg>
                     )}
