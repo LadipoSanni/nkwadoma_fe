@@ -15,6 +15,7 @@ export interface LoaneeLoanDetail {
     initialDeposit: string;
     cohortStartDate: string;
     referredBy: string
+    loaneeLoanBreakdowns: { itemName: string; itemAmount: number }[];
 }
 
 const StepContent: React.FC<StepContentProps> = ({ step, setCurrentStep, loaneeLoanDetail }) => {

@@ -39,6 +39,7 @@ const LoaneeOnboarding = () => {
         initialDeposit: "0.00",
         referredBy: "",
         cohortStartDate: "",
+        loaneeLoanBreakdowns: []
     })
     function viewLoanReferralDetails  (){
         if (data?.statusCode === "OK" &&  data?.data?.id){
@@ -51,17 +52,19 @@ const LoaneeOnboarding = () => {
             setLoaneeLoanDetail(prevState => {
                 const newDetails = {
                     tuitionAmount: backendDetails.tuitionAmount?.toString() || "0.00",
-                    amountRequested: backendDetails.amountRequested?.toString() || "0.00",
+                    amountRequested: backendDetails.loanAmountRequested?.toString() || "0.00",
                     initialDeposit: backendDetails.initialDeposit?.toString() || "0.00",
                     cohortStartDate: backendDetails.cohortStartDate,
-                    referredBy: backendDetails.referredBy
+                    referredBy: backendDetails.referredBy,
+                    loaneeLoanBreakdowns: backendDetails.loaneeLoanBreakdowns || []
                 };
                 if (
                     prevState.tuitionAmount !== newDetails.tuitionAmount ||
                     prevState.amountRequested !== newDetails.amountRequested ||
                     prevState.initialDeposit !== newDetails.initialDeposit ||
                     prevState.cohortStartDate !== newDetails.cohortStartDate ||
-                    prevState.referredBy !== newDetails.referredBy
+                    prevState.referredBy !== newDetails.referredBy ||
+                    prevState.loaneeLoanBreakdowns !== newDetails.loaneeLoanBreakdowns
                 ) {
                     return newDetails;
                 }
