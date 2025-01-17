@@ -200,8 +200,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             // investmentVehicleId: fundProductId,
             // loanProductStatus: values.loanProductStatus,
         };
-        console.log(formData.termsAndCondition, "loanProductTermsAndCondition")
-        console.log(formData.mandate, "loanProductTermsAndCondition")
+
 
         try {
             const create = await createLoanProduct(formData).unwrap();
