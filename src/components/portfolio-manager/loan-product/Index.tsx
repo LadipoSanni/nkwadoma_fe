@@ -13,7 +13,7 @@ import {useGetAllInvestmentmentVehicleQuery} from "@/service/admin/fund_query";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import {validatePositiveNumber} from "@/utils/Format";
 import 'react-quill-new/dist/quill.snow.css'
-import {QuillField} from "@/components/portfolio-manager/loan-product/QuillField";
+import {QuillField} from "@/reuseable/textArea/QuillField";
 
 
 
