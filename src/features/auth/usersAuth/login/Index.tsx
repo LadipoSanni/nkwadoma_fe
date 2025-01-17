@@ -8,7 +8,7 @@ import {cabinetGrotesk} from "@/app/fonts";
 import {validateEmailInput} from "@/utils/GlobalMethods"
 import {useLoginMutation} from "@/service/auths/api"
 import {useToast} from "@/hooks/use-toast"
-import { getUserRoleSS, setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
+import {  setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {useRouter} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
 import {ADMIN_ROLES} from "@/types/roles";
@@ -106,12 +106,12 @@ const Login: React.FC = () => {
                         description: "Login successful",
                         status: "success",
                     });
-                    const userRoles = getUserRoleSS
-                    console.log('before setting:: ', userRoles)
+                    // const userRoles = getUserRoleSS
+                    // console.log('before setting:: ', userRoles)
                     if (user_role) {
                         storeUserDetails(access_token, user_email, user_role, userName)
                         setUserRoles(user_roles)
-                        console.log('after setting:: ', userRoles)
+                        // console.log('after setting:: ', userRoles)
                         switch (user_role){
                             case 'LOANEE' :
                                 store.dispatch(setCurrentNavbarItem("overview"))
