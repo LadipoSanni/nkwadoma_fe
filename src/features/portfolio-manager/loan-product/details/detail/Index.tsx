@@ -24,7 +24,7 @@ const Details = () => {
 
     const dataList = [
         { label: "Fund product", value: loanProduct?.data.fundProduct },
-        // { label: "Product sponsor", value: loanProduct?.data.sponsors },
+        { label: "Product sponsor", value: loanProduct?.data.sponsors },
         { label: "Product size ", value: formatAmount(loanProduct?.data.loanProductSize)},
         { label: "Tenor", value: loanProduct?.data.tenor },
         { label: "Minimum repayment amount", value: formatAmount(loanProduct?.data.minimumRepaymentAmount)},
