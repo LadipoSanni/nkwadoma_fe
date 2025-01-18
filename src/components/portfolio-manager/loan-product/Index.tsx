@@ -10,7 +10,12 @@ import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 import {useGetAllInvestmentmentVehicleQuery} from "@/service/admin/fund_query";
-import 'react-quill-new/dist/quill.snow.css';
+import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
+import {validatePositiveNumber} from "@/utils/Format";
+import 'react-quill-new/dist/quill.snow.css'
+// import ReactQuill from 'react-quill-new';
+import {QuillField} from "@/components/portfolio-manager/loan-product/QuillField";
+
 
 
 interface CreateLoanProductProps {
@@ -28,25 +33,15 @@ interface ApiError {
 const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [error, setError] = useState('');
-    const [mandateError, setMandateError] = useState('');
-    const [loanProductTermsAndConditionError, setLoanProductTermsAndConditionError] = useState('');
+    // const [mandateError, setMandateError] = useState('');
+    // const [loanProductTermsAndConditionError, setLoanProductTermsAndConditionError] = useState('');
     // const [step, setStep] = useState(1);
     const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
     const dataElement = {
         pageNumber: 0,
         pageSize: 200
     }
-    // const { data: investmentVehicleData } = useGetAllInvestmentmentVehicleQuery(dataElement)
-    // console.log(investmentVehicleData?.name, "VEHICLES")
     const {data: investmentVehicleData} = useGetAllInvestmentmentVehicleQuery(dataElement);
-
-    // if (investmentVehicleData && investmentVehicleData.data) {
-    //     investmentVehicleData.data.forEach(vehicle => {
-    //         console.log(vehicle.name, "VEHICLES");
-    //     });
-    // } else {
-    //     console.log("No data available");
-    // }
 
 
     const initialFormValue = {
@@ -63,17 +58,22 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         obligorLimit: "",
         loanProductMandate: "",
         loanProductTermsAndCondition: "",
-        bankPartner: "",
-        loanInsuranceProvider: "",
-        loanDisbursementTerms: "",
+        // bankPartner: "",
+        // loanInsuranceProvider: "",
+        // loanDisbursementTerms: "",
         // investmentVehicleId: "",
         // loanProductStatus: "ACTIVE"
     }
 
+
     const validationSchema = Yup.object().shape({
         productName: Yup.string()
             .trim()
-            .required("Product Name is required"),
+            .required("Product Name is required")
+            .test('valid-name', 'Name cannot be only numbers or special characters.', (value= '') => {
+                const hasLetter = /[a-zA-Z]/.test(value);
+                const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value);
+                return hasLetter && !isOnlyNumbersOrSpecials; }),
         // productSponsor: Yup.string()
         //     .trim()
         //     .required("Product sponsor is required"),
@@ -131,17 +131,17 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         loanProductMandate: Yup.string()
             .trim()
             .required("Product mandate is required")
-            .max(2500, "Terms exceeds 2500 characters")
-            .test("no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
+            .max(2500, "Terms exceeds 2500 characters"),
+            // .test("no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
         loanProductTermsAndCondition: Yup.string()
             .trim()
             .required("Loan product terms is required")
             .max(2500, "Terms exceeds 2500 characters")
-            .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
-        loanDisbursementTerms: Yup.string()
-            .trim()
-            .max(2500, "Terms exceeds 2500 characters")
-            .test("no-html-tags", "Loan disbursement terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value))
+            // .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
+        // loanDisbursementTerms: Yup.string()
+        //     .trim()
+        //     .max(2500, "Terms exceeds 2500 characters")
+        //     .test("no-html-tags", "Loan disbursement terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value))
     });
 
     interface Vehicle {
@@ -149,26 +149,15 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         name: string;
     }
 
-    // const investmentVehicleNames = investmentVehicleData?.data?.map((vehicle: Vehicle, index: number) => ({
-    //     id: vehicle.id,
-    //     name: vehicle.name,
-    //     key: `${vehicle.id}-${index}`
-    // }));
-
-    // const investmentVehicleNames = investmentVehicleData?.data?.map((vehicle: Vehicle) => ({
-    //     id: vehicle.id,
-    //     name: vehicle.name,
-    //     key: vehicle.id
-    // }))
     const investmentVehicleNames = investmentVehicleData?.data?.map((vehicle: Vehicle) => vehicle.name) || [];
     // const bankPartner = ["Patner 1", "Partner 2",];
-    const maxChars = 2500;
-
-    const validateLength = (value: string) => {
-        const maxChars = 2500;
-        const regex = new RegExp(`^.{0,${maxChars}}$`);
-        return regex.test(value);
-    };
+    // const maxChars = 2500;
+    //
+    // const validateLength = (value: string) => {
+    //     const maxChars = 2500;
+    //     const regex = new RegExp(`^.{0,${maxChars}}$`);
+    //     return regex.test(value);
+    // };
 
     const toastPopUp = ToastPopUp({
         description: "Loan product Created successfully.",
@@ -181,7 +170,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     });
 
     const fundProductId = "1fd80e57-de2e-4cea-8ad9-c57ad13245ab"
-    // const fundProductId = ""
 
     const handleSubmit = async (values: typeof initialFormValue) => {
         if (!navigator.onLine) {
@@ -191,7 +179,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             }
             return;
         }
-        // const selectedVehicle = investmentVehicleNames.find(vehicle => vehicle.name === values.investmentVehicleId);
 
         const formData = {
             name: values.productName,
@@ -207,12 +194,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             obligorLoanLimit: Number(values.obligorLimit),
             mandate: values.loanProductMandate,
             termsAndCondition: values.loanProductTermsAndCondition,
-            bankPartner: values.bankPartner,
-            loanInsuranceProvider: values.loanInsuranceProvider,
-            disbursementTerms: values.loanDisbursementTerms,
+            // bankPartner: values.bankPartner,
+            // loanInsuranceProvider: values.loanInsuranceProvider,
+            // disbursementTerms: values.loanDisbursementTerms,
             // investmentVehicleId: fundProductId,
             // loanProductStatus: values.loanProductStatus,
         };
+
 
         try {
             const create = await createLoanProduct(formData).unwrap();
@@ -267,11 +255,11 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         name="productName"
                                         className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
                                         placeholder="Enter Product name"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                            const value = e.target.value;
-                                            const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, '');
-                                            setFieldValue("productName", formattedValue);
-                                        }}
+                                        // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        //     const value = e.target.value;
+                                        //     const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, '');
+                                        //     setFieldValue("productName", formattedValue);
+                                        // }}
                                     />
                                     {
                                         errors.productName && touched.productName && (
@@ -327,57 +315,28 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     {/*    }*/}
                                     {/*</div>*/}
 
-                                    <div>
-                                        <div className={`flex flex-col w-full`}>
-                                            <div>
-                                                <Label htmlFor="costOfFunds">Cost of funds (%)</Label>
-                                            </div>
-
-                                            {/*<div className={`pt-4`}>*/}
-                                            {/*    <NumericFormat*/}
-                                            {/*        id={`costOfFundsId`}*/}
-                                            {/*        name={`costOfFunds`}*/}
-                                            {/*        placeholder="0.00"*/}
-                                            {/*        className="p-4 focus-visible:outline-0 w-full shadow-none focus-visible:ring-transparent rounded h-[3.10rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"*/}
-                                            {/*        value={initialFormValue.costOfFunds}*/}
-                                            {/*        defaultValue="0.00"*/}
-                                            {/*        // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {*/}
-                                            {/*        //     let rawValue = e.target.value.replace(/,/g, "");*/}
-                                            {/*        //     if (/^(?!0$)\d*$/.test(rawValue)) {*/}
-                                            {/*        //         rawValue = parseInt(rawValue).toString();*/}
-                                            {/*        //         let formattedValue = Number(rawValue).toLocaleString();*/}
-                                            {/*        //         formattedValue += ".00";*/}
-                                            {/*        //         setFieldValue("costOfFunds", rawValue);*/}
-                                            {/*        //         e.target.value = formattedValue;*/}
-                                            {/*        //     }*/}
-                                            {/*        // }}*/}
-                                            {/*        onChange={(e:any)=>{*/}
-                                            {/*            setFieldValue("constOfFunds", formatValueWithComma(e)).then()*/}
-                                            {/*        }}*/}
-                                            {/*        thousandSeparator=","*/}
-                                            {/*        decimalScale={2}*/}
-                                            {/*        fixedDecima4lScale={true}*/}
-                                            {/*    />*/}
-                                            {/*</div>*/}
+                                    <div className={`flex flex-col w-full`}>
+                                        <div>
+                                            <Label htmlFor="costOfFunds">Cost of funds (%)</Label>
                                         </div>
+
                                         <Field
                                             id="costOfFunds"
                                             data-testid="costOfFunds"
                                             name="costOfFunds"
-                                            // type={"number"}
-                                            type='text'
-                                            className="w-full p-3 border rounded focus:outline-none mt-3 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                            type={"number"}
+                                            className="w-full p-3 border rounded focus:outline-none mt-3 text-sm"
                                             placeholder="0"
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                const rawValue = e.target.value.replace(/,/g, "");
-                                                if (/^(?!0$)\d*$/.test(rawValue)) {
-                                                    // rawValue = parseInt(rawValue).toString();
-                                                    let formattedValue = Number(rawValue).toLocaleString();
-                                                    formattedValue += ".00";
-                                                    setFieldValue("costOfFunds", rawValue)
-                                                    e.target.value = formattedValue;
-                                                }
-                                            }}
+                                            onChange={validatePositiveNumber(`costOfFunds`, setFieldValue, 100, 1)}
+                                            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            //     const rawValue = e.target.value.replace(/,/g, "");
+                                            //     if (/^(?!0$)\d*$/.test(rawValue)) {
+                                            //         let formattedValue = Number(rawValue).toLocaleString();
+                                            //         formattedValue += ".00";
+                                            //         setFieldValue("costOfFunds", rawValue)
+                                            //         e.target.value = formattedValue;
+                                            //     }
+                                            // }}
                                         />
                                         {
                                             errors.costOfFunds && touched.costOfFunds && (
@@ -395,7 +354,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         <div>
                                             <Label htmlFor="tenor">Tenor (month)</Label>
                                         </div>
-                                        {/*<div className={`flex flex-row gap-2 w-full`}>*/}
                                         <div>
                                             <Field
                                                 id="tenor"
@@ -417,31 +375,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             />
                                         </div>
 
-                                        {/*<div className="flex flex-col w-full">*/}
-                                        {/*    <div>*/}
-                                        {/*        <CustomSelect*/}
-                                        {/*            triggerId='tenorDuration'*/}
-                                        {/*            id="tenorDuration"*/}
-                                        {/*            selectContent={durations}*/}
-                                        {/*            value={values.tenorDuration}*/}
-                                        {/*            onChange={(value) => setFieldValue("tenorDuration", value)}*/}
-                                        {/*            name="tenorDuration"*/}
-                                        {/*            placeHolder='Select duration'*/}
-                                        {/*            isItemDisabled={(item) => item !== "Month"}*/}
-                                        {/*        />*/}
-                                        {/*        {*/}
-                                        {/*            errors.tenorDuration && touched.tenorDuration && (*/}
-                                        {/*                <ErrorMessage*/}
-                                        {/*                    name="tenorDuration"*/}
-                                        {/*                    id='tenorDuration'*/}
-                                        {/*                    component="div"*/}
-                                        {/*                    className="text-red-500 text-sm"*/}
-                                        {/*                />*/}
-                                        {/*            )*/}
-                                        {/*        }*/}
-                                        {/*    </div>*/}
-                                        {/*</div>*/}
-                                        {/*</div>*/}
                                         <div className={`mb-[2%]`}>
                                             {
                                                 errors.tenor && touched.tenor && (
@@ -457,27 +390,28 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     </div>
 
 
-                                    <div className={`pt-4`}>
+                                    <div className={`pt-5`}>
                                         <Label htmlFor="loanProductSize"
                                                style={{display: 'inline-block', WebkitOverflowScrolling: 'touch'}}>Loan
                                             product size</Label>
 
                                         <div className={`flex flex-row gap-2`}>
-                                            <div className={`pt-1`}>
+                                            <div className={``}>
                                                 <CurrencySelectInput readOnly={false}
                                                                      selectedcurrency={selectCurrency}
                                                                      setSelectedCurrency={setSelectCurrency}
                                                                      className={`h-12`}/>
                                             </div>
 
-                                            <div className={`pt-2 w-full`}>
+                                            <div className={`pt-3 w-full`}>
                                                 <Field
                                                     id="loanProductSize"
                                                     data-testid="loanProductSize"
                                                     name="loanProductSize"
                                                     type={"number"}
-                                                    className="w-full p-3 border rounded focus:outline-none mt-2 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                    className="w-full p-3 border h-12 rounded focus:outline-none text-sm "
                                                     placeholder="0.00"
+                                                    component={CustomInputField}
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                         let rawValue = e.target.value.replace(/,/g, "");
                                                         if (/^(?!0$)\d*$/.test(rawValue)) {
@@ -517,13 +451,14 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                                      className={`h-12`}/>
                                             </div>
 
-                                            <div className={`pt-2 w-full`}>
+                                            <div className={`md:pt-4 w-full`}>
                                                 <Field
                                                     id="minimumRepaymentAmount"
                                                     data-testid="minimumRepaymentAmount"
                                                     name="minimumRepaymentAmount"
                                                     type={"number"}
-                                                    className="w-full p-3 border rounded focus:outline-none mt-2 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                    className="w-full p-3 border rounded focus:outline-none text-sm"
+                                                    component={CustomInputField}
                                                     placeholder="0.00"
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                         let rawValue = e.target.value.replace(/,/g, "");
@@ -596,8 +531,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         data-testid="interest"
                                                         name="interest"
                                                         type={"number"}
-                                                        className="w-20 p-3 border rounded focus:outline-none mt-2 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                        className="w-20 p-3 border rounded focus:outline-none mt-2 text-sm"
                                                         placeholder="0"
+                                                        onChange={validatePositiveNumber(`interest`, setFieldValue, 100, 1)}
                                                     />
                                                     {
                                                         errors.interest && touched.interest && (
@@ -608,18 +544,28 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                                 className="text-red-500 text-sm"
                                                             />)
                                                     }
+                                                    {
+                                                        errors.interest && touched.interest && (
+                                                            <ErrorMessage
+                                                                name="interest"
+                                                                id='interest'
+                                                                component="div"
+                                                                className="text-red-500 text-sm"
+                                                            />)
+                                                    }
                                                 </div>
                                             </div>
 
                                             <div className={`w-full`}>
                                                 <Label htmlFor="obligorLimit">Obligor limit</Label>
-                                                <div className={`w-full`}>
+                                                <div className={`w-full pt-1`}>
                                                     <Field
                                                         id="obligorLimit"
                                                         data-testid="obligorLimit"
                                                         name="obligorLimit"
                                                         type={"number"}
-                                                        className="w-full p-3 border rounded focus:outline-none mt-2 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                        className="w-full p-3 border rounded focus:outline-none text-sm"
+                                                        component={CustomInputField}
                                                         placeholder="0"
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                             let rawValue = e.target.value.replace(/,/g, "");
@@ -649,136 +595,135 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                 <div className={`pt-4`}>
                                     <Label htmlFor="loanProductMandate">Loan product mandate</Label>
-                                    <Field
-                                        as="textarea"
-                                        id="loanProductMandateId"
-                                        name="loanProductMandate"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"
-                                        placeholder="Enter description"
-                                        rows={4}
-                                        maxLength={maxChars}
-                                        // onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                                        //     const value = e.target.value;
-                                        //     if (value.length <= maxChars) {
-                                        //         setFieldValue("loanProductMandate", value);
-                                        //          setMandateError('');
-                                        //
-                                        //     }else { setMandateError('Mandate must be 2500 characters or less');}
-                                        // }}
-                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                                            const value = e.target.value;
-                                            if (validateLength(value)) {
-                                                setFieldValue("loanProductMandate", value);
-                                                setMandateError('');
-                                            } else {
-                                                setMandateError('Mandate must be 2500 characters or less');
-                                            } }}
-
-                                        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-                                            const paste = e.clipboardData.getData('text');
-                                            if (paste.length + values.loanProductMandate.length > maxChars) {
-                                                e.preventDefault();
-                                                setMandateError('Mandate must be 2500 characters or less');
-                                            }else{
-                                                setMandateError('');
-                                            }
-                                        }}
-                                    />
-                                    {
-                                        errors.loanProductMandate && touched.loanProductMandate && (
-                                            <ErrorMessage
-                                                name="loanProductMandate"
-                                                component="div"
-                                                id='loanProductMandateError'
-                                                className="text-red-500 text-sm"
-                                            />
-                                        )
-                                    }
-                                    {mandateError && (
-                                        <div className="text-red-500 text-sm">
-                                            {mandateError}
+                                    <QuillField name={"loanProductMandate"} errorMessage={"Product mandate must be 2500 characters or less"}/>
+                                    {errors.loanProductMandate && touched.loanProductMandate && (
+                                        <div className="text-red-500 text-sm mt-1">
+                                            {errors.loanProductMandate}
                                         </div>
                                     )}
+                                    {/*<ReactQuill*/}
+                                    {/*    theme="snow"*/}
+                                    {/*    value={values.loanProductMandate || ``}*/}
+                                    {/*    onChange={(value) => {*/}
+                                    {/*        setFieldValue("loanProductMandate", value)*/}
+                                    {/*    }}*/}
+                                    {/*    placeholder="Enter description"*/}
+                                    {/*    className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
+                                    {/*/>*/}
+                                    {/*<Field*/}
+                                    {/*    as="textarea"*/}
+                                    {/*    id="loanProductMandateId"*/}
+                                    {/*    name="loanProductMandate"*/}
+                                    {/*    className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"*/}
+                                    {/*    placeholder="Enter description"*/}
+                                    {/*    rows={4}*/}
+                                    {/*    maxLength={maxChars}*/}
+                                    {/*    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {*/}
+                                    {/*        const value = e.target.value;*/}
+                                    {/*        console.log("Current value:", value);*/}
+                                    {/*        if (validateLength(value)) {*/}
+                                    {/*            setFieldValue("loanProductMandate", value);*/}
+                                    {/*            setMandateError('');*/}
+                                    {/*        } else {*/}
+                                    {/*            setMandateError('Mandate must be 2500 characters or less');*/}
+                                    {/*        }*/}
+                                    {/*    }}*/}
+
+                                    {/*    onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {*/}
+                                    {/*        const paste = e.clipboardData.getData('text');*/}
+                                    {/*        if (paste.length + values.loanProductMandate.length > maxChars) {*/}
+                                    {/*            e.preventDefault();*/}
+                                    {/*            setMandateError('Mandate must be 2500 characters or less');*/}
+                                    {/*        } else {*/}
+                                    {/*            setMandateError('');*/}
+                                    {/*        }*/}
+                                    {/*    }}*/}
+                                    {/*/>*/}
+                                    {/*{*/}
+                                    {/*    errors.loanProductMandate && touched.loanProductMandate && (*/}
+                                    {/*        <ErrorMessage*/}
+                                    {/*            name="loanProductMandate"*/}
+                                    {/*            component="div"*/}
+                                    {/*            id='loanProductMandateError'*/}
+                                    {/*            className="text-red-500 text-sm"*/}
+                                    {/*        />*/}
+                                    {/*    )*/}
+                                    {/*}*/}
+                                    {/*{mandateError && (*/}
+                                    {/*    <div className="text-red-500 text-sm">*/}
+                                    {/*        {mandateError}*/}
+                                    {/*    </div>*/}
+                                    {/*)}*/}
                                 </div>
 
-                                <div className={`pt-4`}>
-                                    <Label htmlFor="loanProductTermsAndCondition">Loan product terms and
-                                        condition</Label>
-                                    <Field
-                                        as="textarea"
-                                        id="loanProductTermsAndConditionId"
-                                        name="loanProductTermsAndCondition"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"
-                                        placeholder="Enter terms and condition"
-                                        rows={4}
-                                        maxLength={maxChars}
-                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                                            const value = e.target.value;
-                                            if (validateLength(value)) {
-                                                setFieldValue("loanProductTermsAndCondition", value);
-                                                setLoanProductTermsAndConditionError('');
-                                            } else {
-                                                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');
-                                            } }}
-                                        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-                                            const paste = e.clipboardData.getData('text');
-                                            if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {
-                                                e.preventDefault();
-                                                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');
-                                            }else{
-                                                setLoanProductTermsAndConditionError('');
-                                            }
-                                        }}
-                                    />
-                                    {
-                                        errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
-                                            <ErrorMessage
-                                                name="loanProductTermsAndCondition"
-                                                component="div"
-                                                id='loanProductTermsAndConditionError'
-                                                className="text-red-500 text-sm"
-                                            />
-                                        )
-                                    }
-                                    {loanProductTermsAndConditionError && (
-                                        <div className="text-red-500 text-sm">
-                                            {loanProductTermsAndConditionError}
-                                        </div>
-                                    )}
-                                </div>
-                                {/*<div className="pt-4">*/}
-                                {/*    <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product*/}
-                                {/*        terms and*/}
+                                {/*<div className={`pt-4`}>*/}
+                                {/*    <Label htmlFor="loanProductTermsAndCondition">Loan product terms and*/}
                                 {/*        condition</Label>*/}
-                                {/*    <ReactQuill*/}
-                                {/*        theme="snow"*/}
-                                {/*        value={values.loanProductTermsAndCondition}*/}
-                                {/*        onChange={(content) => {*/}
-                                {/*            if (content.length <= maxChars) {*/}
-                                {/*                setFieldValue("loanProductTermsAndCondition", content);*/}
-                                {/*                setError('');*/}
+                                {/*    <Field*/}
+                                {/*        as="textarea"*/}
+                                {/*        id="loanProductTermsAndConditionId"*/}
+                                {/*        name="loanProductTermsAndCondition"*/}
+                                {/*        className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"*/}
+                                {/*        placeholder="Enter terms and condition"*/}
+                                {/*        rows={4}*/}
+                                {/*        maxLength={maxChars}*/}
+                                {/*        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {*/}
+                                {/*            const value = e.target.value;*/}
+                                {/*            if (validateLength(value)) {*/}
+                                {/*                setFieldValue("loanProductTermsAndCondition", value);*/}
+                                {/*                setLoanProductTermsAndConditionError('');*/}
                                 {/*            } else {*/}
-                                {/*                setError('Product condition must be 2500 characters or less');*/}
+                                {/*                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');*/}
                                 {/*            }*/}
                                 {/*        }}*/}
-                                {/*        placeholder="Enter terms and condition"*/}
-                                {/*        className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
-                                {/*        style={{height: '100px'}}*/}
+                                {/*        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {*/}
+                                {/*            const paste = e.clipboardData.getData('text');*/}
+                                {/*            if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {*/}
+                                {/*                e.preventDefault();*/}
+                                {/*                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');*/}
+                                {/*            } else {*/}
+                                {/*                setLoanProductTermsAndConditionError('');*/}
+                                {/*            }*/}
+                                {/*        }}*/}
                                 {/*    />*/}
                                 {/*    {*/}
                                 {/*        errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (*/}
                                 {/*            <ErrorMessage*/}
                                 {/*                name="loanProductTermsAndCondition"*/}
                                 {/*                component="div"*/}
-                                {/*                id="loanProductTermsAndConditionError"*/}
+                                {/*                id='loanProductTermsAndConditionError'*/}
                                 {/*                className="text-red-500 text-sm"*/}
                                 {/*            />*/}
                                 {/*        )*/}
                                 {/*    }*/}
-                                {/*    {error && <div className="text-red-500 text-sm">{error}</div>}*/}
+                                {/*    {loanProductTermsAndConditionError && (*/}
+                                {/*        <div className="text-red-500 text-sm">*/}
+                                {/*            {loanProductTermsAndConditionError}*/}
+                                {/*        </div>*/}
+                                {/*    )}*/}
                                 {/*</div>*/}
+                                <div className="pt-4">
+                                    <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product
+                                        terms and
+                                        condition</Label>
+                                    <QuillField name={"loanProductTermsAndCondition"} errorMessage={"Product terms must be 2500 characters or less"}/>
+                                    {/*<ReactQuill*/}
+                                        {/*    theme="snow"*/}
+                                        {/*    value={values.loanProductTermsAndCondition || ``}*/}
+                                        {/*    onChange={(value) => {*/}
+                                        {/*        setFieldValue("loanProductTermsAndCondition", value)*/}
+                                        {/*    }}*/}
+                                        {/*    placeholder="Enter terms and condition"*/}
+                                        {/*    className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
+                                        {/*/>*/}
+                                    {errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
+                                        <div className="text-red-500 text-sm mt-1">
+                                            {errors.loanProductTermsAndCondition}
+                                        </div>
+                                    )}
+                                </div>
 
-                                <div className={`flex justify-end pt-20 gap-3 pb-5`}>
+                                <div className={`flex justify-end pt-5 gap-3 pb-5`}>
                                     <Button
                                         className={`text-meedlBlue border border-meedlBlue h-12 w-32`}
                                         variant={"outline"}

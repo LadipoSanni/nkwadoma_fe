@@ -42,4 +42,10 @@ export const cabinetGroteskRegular = localFont({
     weight: "400",
     preload: false
 });
+export const cabinetGroteskMediumBold = localFont({
+    src: "./fonts/CabinetGrotesk-Regular.woff",
+    variable: "--font-cabinet-grotesk",
+    weight: "500",
+    preload: false
+});
 
