@@ -9,7 +9,7 @@ import { DetailsTabContainer } from "@/reuseable/details/DetailsTabContainer";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { Book } from "lucide-react";
-import InviteAdminDialog from "@/reuseable/modals/InviteAdminDialog/Index";
+// import InviteAdminDialog from "@/reuseable/modals/InviteAdminDialog/Index";
 import {
   useViewAllAdminsInOrganizationQuery,
   useGetOrganizationDetailsQuery,
