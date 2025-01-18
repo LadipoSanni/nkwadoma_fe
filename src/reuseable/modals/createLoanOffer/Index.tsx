@@ -15,6 +15,7 @@ import { useToast} from "@/hooks/use-toast";
 import {store} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation";
+import {unformatAmount} from "@/utils/Format";
 
 interface CreateLoanOfferProps {
     onSubmit: (data: { amountApproved: string, loanProduct: string }) => void;
@@ -56,13 +57,14 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
         }
         setIsFormValid(true);
         setErrorMessage("");
-        // const formData = new FormData(event.target as HTMLFormElement);
 
+        const unformatedAmount =  unformatAmount(amount);
+        console.log('unformateedAmount:: ', unformatedAmount);
         const data = {
             loanRequestId,
             loanProductId: selectedLoanProductId,
             status: "APPROVED",
-            amountApproved: '2000',
+            amountApproved: unformatedAmount,
             loanRequestDecision: 'ACCEPTED',
             declineReason: ""
         };
