@@ -75,7 +75,7 @@ function ActivateOrganization({setIsOpen,id}:props) {
         validationSchema={validationSchema}
         >
             {
-              ({errors,isValid, touched,setFieldValue,values}) => (
+              ({errors,isValid, touched}) => (
                 <Form className={`${inter.className}`} role="form">
                  <div
                   className='grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto mt-6'
