@@ -139,8 +139,8 @@ const ProgramDetails = () => {
     }, [searchTerm, searchResults, cohortsByProgram])
 
     const dataList = [
-        {label: "Program mode", value: capitalizeFirstLetters(progamDetail.mode)},
-        {label: "Program delivery type", value: capitalizeFirstLetters(progamDetail.deliveryType.replace("_", "-"))},
+        {label: "Program mode", value: capitalizeFirstLetters(progamDetail.mode.replace(/_/g, ' '))},
+        {label: "Program delivery type", value: capitalizeFirstLetters(progamDetail.deliveryType)},
         {label: "Completion rate", value: "0%"},
         {label: "Employment rate", value: "0%"},
         {label: "Average starting income", value: formatAmount(0)},

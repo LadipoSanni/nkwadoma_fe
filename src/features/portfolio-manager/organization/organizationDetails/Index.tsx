@@ -7,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import { DetailsTabContainer } from "@/reuseable/details/DetailsTabContainer";
 import SearchInput from "@/reuseable/Input/SearchInput";
-// import { Button } from "@/components/ui/button";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { Book } from "lucide-react";
 import InviteAdminDialog from "@/reuseable/modals/InviteAdminDialog/Index";
@@ -20,6 +19,12 @@ import { getItemSessionStorage } from "@/utils/storage";
 import { formatAmount } from "@/utils/Format";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
+import { Button } from "@/components/ui/button";
+import ActivateOrganization from "@/components/portfolio-manager/organization/ActivateOrganization";
+import DeactivateOrganization from "@/components/portfolio-manager/organization/DeactivateOrganization";
+import TableModal from "@/reuseable/modals/TableModal";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 
 
 interface TableRowData {
@@ -32,10 +37,9 @@ interface adminProps extends TableRowData {
   status: string
 }
 
-
-
 const OrganizationDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState('');
   const [page] = useState(0);
   const [orgId, setOrgList] = useState("");
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,7 +52,7 @@ const OrganizationDetails = () => {
     },
     { skip: !orgId }
   );
-  const { data: organizationDetails } = useGetOrganizationDetailsQuery(
+  const { data: organizationDetails, isLoading } = useGetOrganizationDetailsQuery(
     {
       id: orgId,
     },
@@ -89,13 +93,16 @@ const OrganizationDetails = () => {
     router.push("/organizations");
   };
 
-  // const handleInviteClick = () => {
-  //   setIsModalOpen(true);
-  // };
+  const handleActivateClick = () => {
+    setModalType("activate");
+    setIsModalOpen(true);
+  };
 
-  // const setAdminView = () => {};
+  const handleDeactivateClick = () => {
+    setModalType("deactivate");
+    setIsModalOpen(true);
+  };
 
-  // const details = { cohortStatus: "Active" };
 
   const dataList = [
     { label: "Phone number", value: organizationDetails?.data.phoneNumber },
@@ -192,13 +199,9 @@ const OrganizationDetails = () => {
     },
   ];
 
-  // useEffect(() => {
-  //     if (adminData) {
-  //         setAdminView();
-  //     }
-  // }, [adminData]);
-
   return (
+    <>
+    {isLoading ? ( <SkeletonForDetailPage /> ) : (
     <main
       id="organizationDetailsMain"
       className={`${inter.className} grid gap-7 py-6 px-3 md:px-10`}
@@ -307,6 +310,24 @@ const OrganizationDetails = () => {
                     {organizationDetails?.data.websiteAddress}
                   </p>
                 </div>
+                <div className="mt-5">
+                  {  organizationDetails?.data.status == "INVITED"?
+                  "" :
+                  <Button
+                     id='activateAndDeactiveButton'
+                     variant={'outline'}
+                     className="w-full h-[45px] text-[#142854] font-semibold border-solid border-[#142854]"
+                     onClick={organizationDetails?.data.status === "ACTIVE"? handleDeactivateClick : handleActivateClick }
+                  >
+                    {
+                      organizationDetails?.data.status === "ACTIVE" 
+                       ? "Deactivate"
+                        : "Activate"
+                    }
+                  </Button>
+                  
+              }
+                </div>
               </div>
             </section>
             <div
@@ -361,13 +382,29 @@ const OrganizationDetails = () => {
             />
           </div>
 
-          <InviteAdminDialog
+          {/* <InviteAdminDialog
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
-          />
+          /> */}
         </TabsContent>
       </Tabs>
+        <div>
+          <TableModal
+           isOpen={isModalOpen}
+           closeModal={()=> setIsModalOpen(false)}
+           className='pb-1'
+           closeOnOverlayClick={true}
+           icon={Cross2Icon}
+           headerTitle={modalType === "activate"? "Activate Reason" : "Deactivate Reason" }
+          >
+            {
+              modalType === "activate" ? (<ActivateOrganization setIsOpen={setIsModalOpen} id={orgId}/>) : (<DeactivateOrganization setIsOpen={setIsModalOpen} id={orgId}/>)
+            }
+          </TableModal>
+        </div>
     </main>
+    )}
+    </>
   );
 };
 
