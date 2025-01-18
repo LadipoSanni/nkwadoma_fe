@@ -113,13 +113,15 @@ export const formatAmount2 = (amount: number): string =>{
 
        export const unformatAmount = (value: string) => {
            const array = Array.from(value)
-           array.filter((item, index) => {
+           const oo = array.filter((item, index) => {
                if (item === ',') {
-                   array.splice(index, 1);
+                   array[index] = ''
                }
            })
-           const arrayWithoutComma =  array
-           return arrayWithoutComma;
+           console.log('array', oo);
+           // const newVal = value.replace(/','/, '')
+           console.log('newVal', array, 'newVal toString:: ',String(array))
+           return array
 
        }
         
