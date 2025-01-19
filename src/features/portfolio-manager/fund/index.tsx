@@ -68,7 +68,7 @@ const InvestmentVehicle = () => {
     if(investmentVehicleData && investmentVehicleData.data) {
       setViewAllInvestmentVehicle(investmentVehicleData.data)
     }
-  })
+  }, [investmentVehicleData])
 
   const handleDraftClick = () => {
 

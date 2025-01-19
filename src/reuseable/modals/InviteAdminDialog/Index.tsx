@@ -88,7 +88,7 @@ const InviteAdminDialog: React.FC<InviteAdminDialogProps> = ({ isModalOpen, setI
 
     useEffect(() => {
         validateForm();
-    }, [firstName, lastName, email]);
+    }, [firstName, lastName, email, validateForm]);
 
     useEffect(() => {
         if (isModalOpen) {

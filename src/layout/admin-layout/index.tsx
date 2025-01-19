@@ -36,7 +36,7 @@ const AdminLayout = ({children}: props) => {
             });
             redirect("/auth/login")
         }
-    }, [cookie]);
+    }, [cookie, toast]);
 
     return (
         <Providers>

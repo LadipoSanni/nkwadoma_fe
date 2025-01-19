@@ -75,7 +75,7 @@ const LoaneeOnboarding = () => {
     }
     useEffect(() => {
             viewLoanReferralDetails()
-    }, [loanReferralDetailsIsLoading]);
+    }, [loanReferralDetailsIsLoading, viewLoanReferralDetails]);
     const handleThirdStepContinue = () => {
         setShowModal(false);
         setCurrentStep(2);
