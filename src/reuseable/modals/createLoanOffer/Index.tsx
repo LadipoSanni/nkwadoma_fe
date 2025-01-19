@@ -59,7 +59,6 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
         setErrorMessage("");
 
         const unformatedAmount =  unformatAmount(amount);
-        console.log('unformateedAmount:: ', unformatedAmount);
         const data = {
             loanRequestId,
             loanProductId: selectedLoanProductId,
@@ -68,13 +67,11 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
             loanRequestDecision: 'ACCEPTED',
             declineReason: ""
         };
-        console.log('data:: ', data)
-       const response = await respondToLoanRequest(data);
+         await respondToLoanRequest(data);
         onSubmit({
             amountApproved: amount,
             loanProduct: selectedLoanProductId
         });
-        console.log('data:: ', response)
         if (isSuccess){
             store.dispatch(setCurrentTab('Loan requests'))
             router.push("/loan/loan-request")
