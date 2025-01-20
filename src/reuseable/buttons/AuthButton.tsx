@@ -14,7 +14,7 @@ const AuthButton = ({id, buttonText, width, handleClick, textColor, backgroundCo
             data-testid="auth-button"
             disabled={disable}
             id={id}
-            onClick={handleClick}
+            onClick={(event)=>{handleClick(event)}}
             style={{height: `${height ? height : '3rem'}`,width: `${width}`, color: `${textColor}`, backgroundColor: `${disable ? "#D0D0D0": backgroundColor}`}}
             className={`grid place-content-center rounded font-bold text-sm`}
         >  

@@ -81,7 +81,8 @@ const Login: React.FC = () => {
 
 
     const {toast} = useToast()
-    const handleLogin = async () => {
+    const handleLogin = async (e?:React.MouseEvent<HTMLButtonElement>) => {
+        e?.preventDefault()
         if (!navigator.onLine) {
             toast({
                 description: "No internet connection",
@@ -106,12 +107,9 @@ const Login: React.FC = () => {
                         description: "Login successful",
                         status: "success",
                     });
-                    // const userRoles = getUserRoleSS
-                    // console.log('before setting:: ', userRoles)
                     if (user_role) {
                         storeUserDetails(access_token, user_email, user_role, userName)
                         setUserRoles(user_roles)
-                        // console.log('after setting:: ', userRoles)
                         switch (user_role){
                             case 'LOANEE' :
                                 store.dispatch(setCurrentNavbarItem("overview"))
@@ -122,8 +120,8 @@ const Login: React.FC = () => {
                                 router.push("/program")
                                 break;
                             case 'PORTFOLIO_MANAGER':
-                                store.dispatch(setCurrentNavbarItem("Organizations"))
-                                router.push("/organizations")
+                                store.dispatch(setCurrentNavbarItem("Loan"))
+                                router.push("/loan")
                                 break;
                         }
 
@@ -151,7 +149,7 @@ const Login: React.FC = () => {
 
     return (
 
-        <div
+        <form
             className="w-full md:w-[50%] md:mr-10  h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-4">
@@ -187,7 +185,7 @@ const Login: React.FC = () => {
                                     data-testid={`loginButton`}
                                     buttonText={"Login"} width={"inherit"}
                                     isLoading={isLoading}
-                                    handleClick={handleLogin}>
+                                    handleClick={(e)=>{handleLogin(e)}}>
                         </AuthButton>
                     </div>
                     <p className="flex items-center justify-center text-sm text-forgetPasswordBlue leading-4">
@@ -197,7 +195,7 @@ const Login: React.FC = () => {
                     </p>
                 </div>
             </div>
-        </div>
+        </form>
     )
 }
 export default Login
