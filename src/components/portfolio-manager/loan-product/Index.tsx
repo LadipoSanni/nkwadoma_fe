@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import {inter} from "@/app/fonts"
 import {Label} from '@/components/ui/label';
 import {Button} from '@/components/ui/button';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
@@ -13,9 +13,7 @@ import {useGetAllInvestmentmentVehicleQuery} from "@/service/admin/fund_query";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import {validatePositiveNumber} from "@/utils/Format";
 import 'react-quill-new/dist/quill.snow.css'
-// import ReactQuill from 'react-quill-new';
-import {QuillField} from "@/components/portfolio-manager/loan-product/QuillField";
-
+import {QuillField} from "@/reuseable/textArea/QuillField";
 
 
 interface CreateLoanProductProps {
@@ -29,9 +27,15 @@ interface ApiError {
     };
 }
 
+interface InvestmentVehicle {
+    id: string;
+    name: string;
+}
+
 
 const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
+    const [investmentVehicleObj, setInvestmentVehicleObj] = useState<{ [key: string]: string }>({});
     const [error, setError] = useState('');
     // const [mandateError, setMandateError] = useState('');
     // const [loanProductTermsAndConditionError, setLoanProductTermsAndConditionError] = useState('');
@@ -42,6 +46,16 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         pageSize: 200
     }
     const {data: investmentVehicleData} = useGetAllInvestmentmentVehicleQuery(dataElement);
+
+    useEffect(() => {
+        if (investmentVehicleData) {
+            const obj: { [key: string]: string } = {};
+            investmentVehicleData.data.forEach((vehicle: InvestmentVehicle) => {
+                obj[vehicle.name] = vehicle.id;
+            });
+            setInvestmentVehicleObj(obj);
+        }
+    }, [investmentVehicleData]);
 
 
     const initialFormValue = {
@@ -70,10 +84,11 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         productName: Yup.string()
             .trim()
             .required("Product Name is required")
-            .test('valid-name', 'Name cannot be only numbers or special characters.', (value= '') => {
+            .test('valid-name', 'Name cannot be only numbers or special characters.', (value = '') => {
                 const hasLetter = /[a-zA-Z]/.test(value);
                 const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value);
-                return hasLetter && !isOnlyNumbersOrSpecials; }),
+                return hasLetter && !isOnlyNumbersOrSpecials;
+            }),
         // productSponsor: Yup.string()
         //     .trim()
         //     .required("Product sponsor is required"),
@@ -97,11 +112,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0")
             .required("Loan product is required"),
-        // .test('is-greater-than-obligor-limit', 'Loan Product Size must be greater than or equal to Obligor Limit',
-        //     function (value) {
-        //         const {obligorLimit} = this.parent;
-        //         return parseFloat(value) >= parseFloat(obligorLimit);
-        //     }),
         obligorLimit: Yup.string()
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Limit must be greater than 0")
@@ -132,12 +142,12 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .required("Product mandate is required")
             .max(2500, "Terms exceeds 2500 characters"),
-            // .test("no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
+        // .test("no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
         loanProductTermsAndCondition: Yup.string()
             .trim()
             .required("Loan product terms is required")
             .max(2500, "Terms exceeds 2500 characters")
-            // .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
+        // .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
         // loanDisbursementTerms: Yup.string()
         //     .trim()
         //     .max(2500, "Terms exceeds 2500 characters")
@@ -169,8 +179,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         status: "error",
     });
 
-    const fundProductId = "1fd80e57-de2e-4cea-8ad9-c57ad13245ab"
-
     const handleSubmit = async (values: typeof initialFormValue) => {
         if (!navigator.onLine) {
             networkPopUp.showToast();
@@ -183,7 +191,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         const formData = {
             name: values.productName,
             // sponsors: [values.productSponsor],
-            investmentVehicleId: fundProductId,
+            investmentVehicleId: investmentVehicleObj[values.investmentVehicleId],
             costOfFund: Number(values.costOfFunds),
             tenor: Number(values.tenor),
             // tenorDuration: values.tenorDuration,
@@ -255,11 +263,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         name="productName"
                                         className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
                                         placeholder="Enter Product name"
-                                        // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        //     const value = e.target.value;
-                                        //     const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, '');
-                                        //     setFieldValue("productName", formattedValue);
-                                        // }}
                                     />
                                     {
                                         errors.productName && touched.productName && (
@@ -282,7 +285,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         onChange={(value) => setFieldValue("investmentVehicleId", value)}
                                         name="FundProduct"
                                         placeHolder='Select fund'
-                                        isItemDisabled={(item) => item !== 'tade'}
+                                        // isItemDisabled={(item) => item !== 'tade'}
                                     />
                                     {errors.investmentVehicleId && touched.investmentVehicleId && (
                                         <ErrorMessage
@@ -595,7 +598,8 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                 <div className={`pt-4`}>
                                     <Label htmlFor="loanProductMandate">Loan product mandate</Label>
-                                    <QuillField name={"loanProductMandate"} errorMessage={"Product mandate must be 2500 characters or less"}/>
+                                    <QuillField name={"loanProductMandate"}
+                                                errorMessage={"Product mandate must be 2500 characters or less"}/>
                                     {errors.loanProductMandate && touched.loanProductMandate && (
                                         <div className="text-red-500 text-sm mt-1">
                                             {errors.loanProductMandate}
@@ -706,16 +710,17 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product
                                         terms and
                                         condition</Label>
-                                    <QuillField name={"loanProductTermsAndCondition"} errorMessage={"Product terms must be 2500 characters or less"}/>
+                                    <QuillField name={"loanProductTermsAndCondition"}
+                                                errorMessage={"Product terms must be 2500 characters or less"}/>
                                     {/*<ReactQuill*/}
-                                        {/*    theme="snow"*/}
-                                        {/*    value={values.loanProductTermsAndCondition || ``}*/}
-                                        {/*    onChange={(value) => {*/}
-                                        {/*        setFieldValue("loanProductTermsAndCondition", value)*/}
-                                        {/*    }}*/}
-                                        {/*    placeholder="Enter terms and condition"*/}
-                                        {/*    className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
-                                        {/*/>*/}
+                                    {/*    theme="snow"*/}
+                                    {/*    value={values.loanProductTermsAndCondition || ``}*/}
+                                    {/*    onChange={(value) => {*/}
+                                    {/*        setFieldValue("loanProductTermsAndCondition", value)*/}
+                                    {/*    }}*/}
+                                    {/*    placeholder="Enter terms and condition"*/}
+                                    {/*    className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
+                                    {/*/>*/}
                                     {errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
                                         <div className="text-red-500 text-sm mt-1">
                                             {errors.loanProductTermsAndCondition}
