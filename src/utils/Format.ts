@@ -109,5 +109,21 @@ export const formatAmount2 = (amount: number): string =>{
               setFieldValue(field, '');
              }
         };
+
+
+       export const unformatAmount = (value: string) => {
+           const array = Array.from(value)
+           array.filter((item, index) => {
+               if (item === ',') {
+                   array[index] = ''
+               }
+           })
+           let newArray: string = ''
+           array.forEach((item) => {
+               newArray += item;
+           })
+           return newArray
+
+       }
         
       

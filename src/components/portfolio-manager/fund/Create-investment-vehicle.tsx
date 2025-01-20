@@ -25,7 +25,7 @@ interface ApiError {
 
   const initialFormValue = {  
     name: "",
-    sponsor: "",
+    sponsors: "",
     fundManager: "",
     minimumInvestmentAmount:"",
     mandate: "",
@@ -70,7 +70,7 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
         const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value); 
         return hasLetter && !isOnlyNumbersOrSpecials; })
        .required('Name is required'),
-       sponsor:Yup.string()
+       sponsors:Yup.string()
        .trim()
        .required('vehicle sponsor is required')
       //  .matches(/^[a-zA-Z\s]+$/, 'Vehicle sponsor can only contain letters and spaces.')
@@ -125,7 +125,7 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
      
       const formData = {
         name: values.name,
-        sponsor: values.sponsor,
+        sponsors: values.sponsors,
         fundManager: values.fundManager,
         minimumInvestmentAmount: values.minimumInvestmentAmount,
         mandate: values.mandate,
@@ -207,19 +207,19 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
                 </div>
                 <div className='grid md:grid-cols-2 gap-4 w-full'>
                 <div>
-                    <Label htmlFor="sponsor">Vehicle {type}</Label>
+                    <Label htmlFor="sponsors">Vehicle {type}</Label>
                     <Field
-                      id="sponsor"
-                      name="sponsor"
+                      id="sponsors"
+                      name="sponsors"
                       placeholder="Enter Vehicle Sponsor"
                       className="w-full p-3 border rounded focus:outline-none mt-2"
                       // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("sponsor", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
-                      onChange={validateText('sponsor',setFieldValue)}
+                      onChange={validateText('sponsors',setFieldValue)}
                     />
                      {
-                 errors.sponsor && touched.sponsor &&  (
+                 errors.sponsors && touched.sponsors &&  (
                     <ErrorMessage
-                    name="sponsor"
+                    name="sponsors"
                     component="div"
                     className="text-red-500 text-sm"
                   />
