@@ -65,6 +65,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                     obj[vehicle.name] = vehicle.id;
                 });
                 setInvestmentVehicleObj(obj);
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error) {
                 setError('Error processing investment vehicles: ');
             }
