@@ -16,7 +16,6 @@ import 'react-quill-new/dist/quill.snow.css'
 import {QuillField} from "@/reuseable/textArea/QuillField";
 
 
-
 interface CreateLoanProductProps {
     setIsOpen?: (b: boolean) => void;
 }
@@ -34,7 +33,6 @@ interface InvestmentVehicle {
 }
 
 
-
 const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [investmentVehicleObj, setInvestmentVehicleObj] = useState<{ [key: string]: string }>({});
@@ -47,15 +45,29 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         pageNumber: 0,
         pageSize: 200
     }
-    const { data: investmentVehicleData } = useGetAllInvestmentmentVehicleQuery(dataElement);
+    const {data: investmentVehicleData} = useGetAllInvestmentmentVehicleQuery(dataElement);
+
+    // useEffect(() => {
+    //     if (investmentVehicleData) {
+    //         const obj: { [key: string]: string } = {};
+    //         investmentVehicleData.data.forEach((vehicle: InvestmentVehicle) => {
+    //             obj[vehicle.name] = vehicle.id;
+    //         });
+    //         setInvestmentVehicleObj(obj);
+    //     }
+    // }, [investmentVehicleData]);
 
     useEffect(() => {
         if (investmentVehicleData) {
-            const obj: { [key: string]: string } = {};
-            investmentVehicleData.data.forEach((vehicle: InvestmentVehicle) => {
-                obj[vehicle.name] = vehicle.id;
-            });
-            setInvestmentVehicleObj(obj);
+            try {
+                const obj: { [key: string]: string } = {};
+                investmentVehicleData.data.forEach((vehicle: InvestmentVehicle) => {
+                    obj[vehicle.name] = vehicle.id;
+                });
+                setInvestmentVehicleObj(obj);
+            } catch (error) {
+                setError('Error processing investment vehicles: ');
+            }
         }
     }, [investmentVehicleData]);
 
@@ -86,10 +98,11 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         productName: Yup.string()
             .trim()
             .required("Product Name is required")
-            .test('valid-name', 'Name cannot be only numbers or special characters.', (value= '') => {
+            .test('valid-name', 'Name cannot be only numbers or special characters.', (value = '') => {
                 const hasLetter = /[a-zA-Z]/.test(value);
                 const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value);
-                return hasLetter && !isOnlyNumbersOrSpecials; }),
+                return hasLetter && !isOnlyNumbersOrSpecials;
+            }),
         // productSponsor: Yup.string()
         //     .trim()
         //     .required("Product sponsor is required"),
@@ -143,12 +156,12 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .required("Product mandate is required")
             .max(2500, "Terms exceeds 2500 characters"),
-            // .test("no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
+        // .test("no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
         loanProductTermsAndCondition: Yup.string()
             .trim()
             .required("Loan product terms is required")
             .max(2500, "Terms exceeds 2500 characters")
-            // .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
+        // .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
         // loanDisbursementTerms: Yup.string()
         //     .trim()
         //     .max(2500, "Terms exceeds 2500 characters")
@@ -599,7 +612,8 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                 <div className={`pt-4`}>
                                     <Label htmlFor="loanProductMandate">Loan product mandate</Label>
-                                    <QuillField name={"loanProductMandate"} errorMessage={"Product mandate must be 2500 characters or less"}/>
+                                    <QuillField name={"loanProductMandate"}
+                                                errorMessage={"Product mandate must be 2500 characters or less"}/>
                                     {errors.loanProductMandate && touched.loanProductMandate && (
                                         <div className="text-red-500 text-sm mt-1">
                                             {errors.loanProductMandate}
@@ -710,16 +724,17 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product
                                         terms and
                                         condition</Label>
-                                    <QuillField name={"loanProductTermsAndCondition"} errorMessage={"Product terms must be 2500 characters or less"}/>
+                                    <QuillField name={"loanProductTermsAndCondition"}
+                                                errorMessage={"Product terms must be 2500 characters or less"}/>
                                     {/*<ReactQuill*/}
-                                        {/*    theme="snow"*/}
-                                        {/*    value={values.loanProductTermsAndCondition || ``}*/}
-                                        {/*    onChange={(value) => {*/}
-                                        {/*        setFieldValue("loanProductTermsAndCondition", value)*/}
-                                        {/*    }}*/}
-                                        {/*    placeholder="Enter terms and condition"*/}
-                                        {/*    className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
-                                        {/*/>*/}
+                                    {/*    theme="snow"*/}
+                                    {/*    value={values.loanProductTermsAndCondition || ``}*/}
+                                    {/*    onChange={(value) => {*/}
+                                    {/*        setFieldValue("loanProductTermsAndCondition", value)*/}
+                                    {/*    }}*/}
+                                    {/*    placeholder="Enter terms and condition"*/}
+                                    {/*    className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
+                                    {/*/>*/}
                                     {errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
                                         <div className="text-red-500 text-sm mt-1">
                                             {errors.loanProductTermsAndCondition}
