@@ -9,10 +9,10 @@ const cardData = [{
 }];
 
 const BalanceCard = () => {
-    return (<div id={'balanceCard'} className={'flex gap-6'}>
+    return (<div id={'balanceCard'} className={'md:flex grid gap-6'}>
             {cardData.map((card, index) => (
                 <main key={index} className="grid gap-5 px-3 pt-3 pb-5 w-full rounded-md border border-">
-                    <div id={`balanceCardBlock${index}`} className="bg-grey105 p-5 h-[14vh] grid gap-5">
+                    <div id={`balanceCardBlock${index}`} className="bg-grey105 p-5 grid gap-5">
                         <p id={`cardTitle${index}`}
                            className="text-black300 text-[14px] font-normal leading-[150%]">{card.title}</p>
                         <h1 id={`cardAmount${index}`}
