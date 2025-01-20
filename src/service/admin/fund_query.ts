@@ -37,7 +37,7 @@ export const fundApi = createApi({
        custodian: string,
        bankPartner: string,
        fundManager: string,
-       sponsor: string,
+       sponsors: string,
        minimumInvestmentAmount: string
 
         }) => ({
