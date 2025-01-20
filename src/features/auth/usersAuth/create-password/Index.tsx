@@ -91,7 +91,8 @@ const CreatePassword = () => {
         };
 
     }
-    const handleCreatePassword = async () => {
+    const handleCreatePassword = async (e?:React.MouseEvent<HTMLButtonElement>) => {
+        e?.preventDefault()
         setDisableButton(true)
         const token = getUserToken()
 
@@ -142,7 +143,7 @@ const CreatePassword = () => {
     }
 
     return (
-        <section id={'create-password-block'}
+        <form id={'create-password-block'}
                  className={'bg-white shadow-custom h-fit rounded-xl w-full md:w-[60%] md:mr-10 md:bg-meedlWhite md:ml-40 md:h-fit mb-10 py-6 px-5 grid gap-3 '}>
             <h1 id={'create-password-title'}
                 className={`${cabinetGrotesk.className} antialiased text-meedlBlue font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
@@ -174,13 +175,13 @@ const CreatePassword = () => {
                     backgroundColor={criteriaStatus.every(Boolean) && password === confirmPassword ? '#142854' : '#D0D5DD'}
                     buttonText={'Create password'}
                     disable={!criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton}
-                    handleClick={handleCreatePassword}
+                    handleClick={(e)=>{handleCreatePassword(e)}}
                     id={"createPasswordButton"}
                     textColor={'#FFFFFF'}
                     width={'100%'}
                     isLoading={isLoading}
                 />
-        </section>
+        </form>
     );
 };
 

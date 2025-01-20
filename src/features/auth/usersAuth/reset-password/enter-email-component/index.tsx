@@ -28,7 +28,8 @@ const Step1 = () => {
 
     const {toast} = useToast()
 
-    const handleReset = async () => {
+    const handleReset = async (e?:React.MouseEvent<HTMLButtonElement>) => {
+        e?.preventDefault()
         if (!navigator.onLine) {
             toast({
                 description: "No internet connection",
@@ -82,13 +83,12 @@ const Step1 = () => {
         router.push("/auth/login")
     }
 
-    // const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
 
 
     return (
 
-        <div
+        <form
             id="resetPasswordComponent"
             className={` py-4 border border-slate-200 px-4 w-[95vw] md:mr-10 rounded-xl h-fit  bg-white grid md:px-3 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[44%] md:h-fit md:rounded-xl`}
         >
@@ -116,7 +116,7 @@ const Step1 = () => {
                                         id={"resetPasswordSubmitEmailButton"}
                                         isLoading={isLoading}
                                         buttonText={"Submit email"} width={"inherit"}
-                                        handleClick={handleReset}></AuthButton>
+                                        handleClick={(e)=>{handleReset(e)}}></AuthButton>
                         </div>
                         <div className={`flex gap-2 place-self-center place-content-center  mt-1 `}>
                             <div className={`text-grey1 text-sm `}>Remember your password?</div>
@@ -131,7 +131,7 @@ const Step1 = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
 
     );
 };
