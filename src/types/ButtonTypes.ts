@@ -7,7 +7,7 @@ export interface AuthButtonPropsType {
     textColor: string,
     backgroundColor: string,
     disable: boolean,
-    handleClick: ()=> void;
+    handleClick: (e?: React.MouseEvent<HTMLButtonElement> )=> void;
     isLoading?: boolean;
 }
 
