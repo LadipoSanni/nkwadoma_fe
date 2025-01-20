@@ -17,7 +17,7 @@ function LoanOfferTable() {
     const router = useRouter();
     const request ={
         pageSize: 10,
-        pageNumber: 10
+        pageNumber: 0
     }
 
     const {data, isLoading} = useViewAllLoanOfferQuery(request)
