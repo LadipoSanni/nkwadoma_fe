@@ -15,10 +15,10 @@ env:
   
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -72,6 +72,7 @@ jobs:
           echo "BRANCH_NAME=${{ env.BRANCH_NAME }}"
           echo "COMMIT_AUTHOR=${{ env.COMMIT_AUTHOR }}"
           echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}"
+
 
   # send_notification:
   #   name: Send Email Notification
@@ -149,4 +150,5 @@ jobs:
   #           "${{ env.BRANCH_NAME }}" \
   #           "${{ env.COMMIT_AUTHOR }}" \
   #           "${{ env.COMMIT_MESSAGE }}"
+
 
