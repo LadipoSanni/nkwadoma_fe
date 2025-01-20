@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { cabinetGrotesk, inter } from "@/app/fonts";
+import { cabinetGrotesk } from "@/app/fonts";
 import { useRespondToLoanRequestMutation } from '@/service/admin/loan/loan-request-api';
 
 interface DeclineLoanModalProps {
@@ -46,17 +46,19 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
         };
 
         try {
-            await respondToLoanRequest(payload).unwrap();
+            await respondToLoanRequest(payload)
             setReason('');
             setIsOpen(false);
             setError(null);
-        } catch  {
-            setError('Failed to decline loan request. Please try again.');
+        } catch(error)  {
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            setError(error?.data?.message);
         }
-    };
+    }
 
     return (
-        <div className={`${inter.className}`}>
+        // <div className={`${inter.className}`}>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogContent className="grid gap-6">
                     <DialogHeader>
@@ -102,7 +104,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
                     </div>
                 </DialogContent>
             </Dialog>
-        </div>
+        // </div>
     );
 };
 
