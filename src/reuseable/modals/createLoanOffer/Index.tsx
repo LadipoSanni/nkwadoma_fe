@@ -15,6 +15,7 @@ import { useToast} from "@/hooks/use-toast";
 import {store} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation";
+import {unformatAmount} from "@/utils/Format";
 
 interface CreateLoanOfferProps {
     onSubmit: (data: { amountApproved: string, loanProduct: string }) => void;
@@ -56,19 +57,19 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
         }
         setIsFormValid(true);
         setErrorMessage("");
-        const formData = new FormData(event.target as HTMLFormElement);
 
+        const unformatedAmount =  unformatAmount(amount);
         const data = {
             loanRequestId,
             loanProductId: selectedLoanProductId,
             status: "APPROVED",
-            amountApproved: parseFloat(formData.get('amountApproved') as string),
+            amountApproved: unformatedAmount,
             loanRequestDecision: 'ACCEPTED',
             declineReason: ""
         };
-        await respondToLoanRequest(data);
+         await respondToLoanRequest(data);
         onSubmit({
-            amountApproved: formData.get('amountApproved') as string,
+            amountApproved: amount,
             loanProduct: selectedLoanProductId
         });
         if (isSuccess){
@@ -132,7 +133,8 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                                 decimalScale={2}
                                 fixedDecimalScale={true}
                                 onChange={(e)=> {
-                                    setAmount(e.target.value)
+                                    const {value} = e.target
+                                    setAmount(value)
                                 }}
                             />
                         </div>
