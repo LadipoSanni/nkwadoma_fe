@@ -47,28 +47,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     }
     const {data: investmentVehicleData} = useGetAllInvestmentmentVehicleQuery(dataElement);
 
-    // useEffect(() => {
-    //     if (investmentVehicleData) {
-    //         const obj: { [key: string]: string } = {};
-    //         investmentVehicleData.data.forEach((vehicle: InvestmentVehicle) => {
-    //             obj[vehicle.name] = vehicle.id;
-    //         });
-    //         setInvestmentVehicleObj(obj);
-    //     }
-    // }, [investmentVehicleData]);
-
     useEffect(() => {
         if (investmentVehicleData) {
-            try {
-                const obj: { [key: string]: string } = {};
-                investmentVehicleData.data.forEach((vehicle: InvestmentVehicle) => {
-                    obj[vehicle.name] = vehicle.id;
-                });
-                setInvestmentVehicleObj(obj);
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (error) {
-                setError('Error processing investment vehicles: ');
-            }
+            const obj: { [key: string]: string } = {};
+            investmentVehicleData.data.forEach((vehicle: InvestmentVehicle) => {
+                obj[vehicle.name] = vehicle.id;
+            });
+            setInvestmentVehicleObj(obj);
         }
     }, [investmentVehicleData]);
 
