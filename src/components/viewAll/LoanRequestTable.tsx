@@ -30,8 +30,8 @@ const Index = () => {
         { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohortName },
         { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMM D, YYYY')}</div> },
         { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.requestDate?.toString()).format('MMM D, YYYY')}</div> },
-        { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div>},
-        { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>}
+        { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className=''>{formatAmount(row.initialDeposit)}</div>},
+        { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountRequested)}</div>}
     ];
 
 
@@ -43,11 +43,11 @@ const Index = () => {
 
     return (
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
-             className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
+             className={`grid md:px-3 md:overflow-hidden  md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {
                 data?.data?.body?.length > 0 ?
-                    <div className={`md:w-full w-full h-full md:h-full `}>
+                    <div className={`md:w-full  w-full h-full md:h-full `}>
                         <Tables
                             tableData={data?.data?.body}
                             isLoading={isLoading}

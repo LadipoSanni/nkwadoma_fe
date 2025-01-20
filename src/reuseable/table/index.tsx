@@ -162,7 +162,7 @@ function Tables<T extends TableRowData>({
                     >
                         <TableContainer
                             id="loanProductTableScrollbar"
-                            style={{ height: `${tableHeight}vh`, overflow: "auto" }}
+                            style={{ height: `${tableHeight}vh` }}
                         >
                             <Table id="dynamicTable" className="">
                                 <TableHeader
