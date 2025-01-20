@@ -7,11 +7,12 @@ import InfoPanel from '@/reuseable/details/InfoPanel';
 import { formatAmount } from '@/utils/Format';
 import { useGetInvestmentVehicleDetailQuery } from '@/service/admin/fund_query';
 import { getItemSessionStorage } from '@/utils/storage';
+import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 
 const Details = () => {
   const [investmentId, setInvestmentId] = useState("");
   
-  const { data} = useGetInvestmentVehicleDetailQuery({ id: investmentId }, { skip: !investmentId });
+  const { data,isLoading} = useGetInvestmentVehicleDetailQuery({ id: investmentId }, { skip: !investmentId });
   
   useEffect(() => { 
     const id = getItemSessionStorage('investmentVehicleId'); 
@@ -37,6 +38,8 @@ const Details = () => {
   ];
 
   return (
+    <>
+    {isLoading ? ( <SkeletonForDetailPage /> ) : (
     <div 
     className='flex flex-col md:flex-row md:justify-between'
     >
@@ -51,6 +54,8 @@ const Details = () => {
         <InfoPanel infoList={detailInfo} />
       </div>
     </div>
+    )}
+    </>
   );
 };
 

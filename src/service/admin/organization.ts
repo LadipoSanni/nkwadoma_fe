@@ -13,7 +13,7 @@ interface  serviceOfferings{
 export const organizationApi = createApi({
     reducerPath: 'organizationApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['organization', "invite"],
+    tagTypes: ['organization', "invite","deactivate","reactivate"],
     endpoints: (builder) => ({
         viewAllOrganizations: builder.query({
             query: (data) => ({
@@ -92,7 +92,31 @@ export const organizationApi = createApi({
                 params: {name},
             }),
         }),
+        deactivateOrganization: builder.mutation({
+            query: (data: {
+                     id: string,
+                     reason: string,
+                     
+            }) => ({
+                url : `/organization/deactivate`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['organization', "deactivate","invite"]
+        }),
+        activateOrganization: builder.mutation({
+            query: (data: {
+                     id: string,
+                     reason: string,
+                     
+            }) => ({
+                url : `/organization/reactivate`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['organization', "reactivate","invite"]
+        }),
     })
 })
 
-export const { useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery} = organizationApi
+export const { useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery,useDeactivateOrganizationMutation,useActivateOrganizationMutation} = organizationApi
