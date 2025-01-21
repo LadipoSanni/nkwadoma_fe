@@ -67,7 +67,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
             loanRequestDecision: 'ACCEPTED',
             declineReason: ""
         };
-         const response = await respondToLoanRequest(data);
+          await respondToLoanRequest(data);
         // console.log('response:: ', response)
         onSubmit({
             amountApproved: amount,
