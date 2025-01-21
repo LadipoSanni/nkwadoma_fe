@@ -78,10 +78,10 @@ function LoanDetails() {
     ]
 
     const toggleArrow = () => {
-        if (arrowDown) {
-            setArrowDown(false)
-        } else {
+        if (!arrowDown) {
             setArrowDown(true)
+        } else {
+            setArrowDown(false)
         }
     };
 
@@ -221,11 +221,9 @@ function LoanDetails() {
         setOpenDeclineLoanRequestModal(value)
     }
 
-    const userFullName = data?.data?.firstName +  data?.data?.lastName
 
     const userFirstLetter : string| undefined = getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName)
 
-    console.log('userFullName', userFullName, "user firstZ: ", getFirstLetterOfWord(userFullName))
     return (
         <div
             id={"loanRequestDetails"}
@@ -306,38 +304,71 @@ function LoanDetails() {
                             className={'w-full md:w-fit md:px-6 md:py-4 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
                             onClick={handleBack} disabled={currentTab === 0}>Back</Button>
                     )}
+                    {currentTab === 2 &&
+                        <DropdownMenu>
+                            <DropdownMenuTrigger >
+                                <div
+                                    id={`continueButtonOnIndex` + currentTab}
+                                    data-testid={`continueButtonOnIndex` + currentTab}
+                                    className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                                    onClick={toggleArrow}
+                                >
+                                    Make decision
+                                    {arrowDown ?
+                                        <ChevronUpIcon
+                                                            className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
 
-                    <div
+                                        />
+                                        :
+                                        <ChevronDownIcon className={'h-5  cursor-pointer w-5 stroke-2 text-white'} />
+                                    }
+
+                                </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent >
+                                <DropdownMenuItem id={'loanRequestDetailsApproveLoanRequestButton'} data-testid={'loanRequestDetailsApproveLoanRequestButton'} onClick={() => {setOpenCreateLoanOffer(true)}} className={`md:text-meedleBlue text-meedlBlue hover:bg-[#EEF5FF] md:hover:bg-[#EEF5FF] rounded-md md:rounded-md `}>Approve loan request</DropdownMenuItem>
+                                <DropdownMenuItem id={'loanRequestDetailsDeclineLoanRequestButton'} data-testid={'loanRequestDetailsDeclineLoanRequestButton'} onClick={() => {setOpenDeclineLoanRequestModal(true)}} className={`text-error500 md:hover:text-error500 md:text-error500 md:hover:bg-error50 rounded-md md:rounded-md`}>Decline loan request</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+
+                    }
+
+
+                    {currentTab !== 2 &&
+
+                    <button
                         id={`continueButtonOnIndex` + currentTab}
                         data-testid={`continueButtonOnIndex` + currentTab}
                         className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                         onClick={handleNext}
                         >
-                        {currentTab === 2 ? 'Make decision ' : 'Continue'}
-                        {currentTab == 2 &&
-                            <div className={''} >
-                                {arrowDown ?
-                                    <ChevronUpIcon
-                                        id={'downIcon'}
+                        Continue
+                        {/*{currentTab === 2 ? 'Make decision ' : 'Continue'}*/}
+                        {/*{currentTab == 2 &&*/}
+                        {/*    <div className={''} >*/}
+                        {/*        {arrowDown ?*/}
+                        {/*            <ChevronUpIcon*/}
+                        {/*                id={'downIcon'}*/}
 
-                                        className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
-                                        onClick={toggleArrow}/>
-                                    :
-                                   <DropdownMenu>
-                                       <DropdownMenuTrigger >
-                                           <ChevronDownIcon
-                                               className={'h-5  cursor-pointer w-5 stroke-2 text-white'}
-                                               onClick={() => {setArrowDown(true)}}/>
-                                       </DropdownMenuTrigger>
-                                       <DropdownMenuContent >
-                                            <DropdownMenuItem id={'loanRequestDetailsApproveLoanRequestButton'} data-testid={'loanRequestDetailsApproveLoanRequestButton'} onClick={() => {setOpenCreateLoanOffer(true)}} className={`md:text-meedleBlue text-meedlBlue hover:bg-[#EEF5FF] md:hover:bg-[#EEF5FF] rounded-md md:rounded-md `}>Approve loan request</DropdownMenuItem>
-                                            <DropdownMenuItem id={'loanRequestDetailsDeclineLoanRequestButton'} data-testid={'loanRequestDetailsDeclineLoanRequestButton'} onClick={() => {setOpenDeclineLoanRequestModal(true)}} className={`text-error500 md:hover:text-error500 md:text-error500 md:hover:bg-error50 rounded-md md:rounded-md`}>Decline loan request</DropdownMenuItem>
-                                       </DropdownMenuContent>
-                                    </DropdownMenu>
-                                }
-                            </div>
-                        }
-                    </div>
+                        {/*                className={'h-5  cursor-pointer w-5 stroke-2 text-white'}*/}
+                        {/*                onClick={()=> {setArrowDown(false)}}/>*/}
+                        {/*            :*/}
+                        {/*           <DropdownMenu>*/}
+                        {/*               <DropdownMenuTrigger >*/}
+                        {/*                   <ChevronDownIcon*/}
+                        {/*                       className={'h-5  cursor-pointer w-5 stroke-2 text-white'}*/}
+                        {/*                       onClick={() => {setArrowDown(true)}}/>*/}
+                        {/*               </DropdownMenuTrigger>*/}
+                        {/*               <DropdownMenuContent >*/}
+                        {/*                    <DropdownMenuItem id={'loanRequestDetailsApproveLoanRequestButton'} data-testid={'loanRequestDetailsApproveLoanRequestButton'} onClick={() => {setOpenCreateLoanOffer(true)}} className={`md:text-meedleBlue text-meedlBlue hover:bg-[#EEF5FF] md:hover:bg-[#EEF5FF] rounded-md md:rounded-md `}>Approve loan request</DropdownMenuItem>*/}
+                        {/*                    <DropdownMenuItem id={'loanRequestDetailsDeclineLoanRequestButton'} data-testid={'loanRequestDetailsDeclineLoanRequestButton'} onClick={() => {setOpenDeclineLoanRequestModal(true)}} className={`text-error500 md:hover:text-error500 md:text-error500 md:hover:bg-error50 rounded-md md:rounded-md`}>Decline loan request</DropdownMenuItem>*/}
+                        {/*               </DropdownMenuContent>*/}
+                        {/*            </DropdownMenu>*/}
+                        {/*        }*/}
+                        {/*    </div>*/}
+                        {/*}*/}
+                    </button>
+                    }
                     <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer} setIsOpen={open} onSubmit={onSubmit} />
                     <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()} setIsOpen={setOpenDeclineOffer} loanProductId={id} title={"Decline loan request"} />
 
