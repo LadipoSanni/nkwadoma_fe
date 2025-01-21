@@ -10,6 +10,7 @@ import {Icon} from "@iconify/react";
 import CustomSelect from '@/reuseable/Input/Custom-select';
 import { useUpdateProgramMutation } from '@/service/admin/program_query';
 import { useQueryClient } from '@tanstack/react-query';
+import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 
 interface ProgramDetail {
     id: string;
@@ -63,7 +64,8 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
     const maxChars = 2500;
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
-    const programModes=["FULL_TIME", "PART_TIME"]
+    // const programModes=["FULL_TIME", "PART_TIME"]
+    const programModes = [ { value: "FULL_TIME", label: "Full Time" }, { value: "PART_TIME", label: "Part Time" } ];
     const programDurations=Array.from({ length: 24 }, (_, i) => (i + 1).toString());
 
     const validationSchema = Yup.object().shape({
@@ -191,7 +193,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                 <div className='grid md:grid-cols-2 gap-4 w-full'>
                   <div>
                     <Label htmlFor="programMode">Program mode</Label>
-                    <CustomSelect
+                    <CustomSelectObj
                       triggerId='editProgramModeTriggerId'
                       id="editProgramModalSelect"
                       selectContent={programModes}

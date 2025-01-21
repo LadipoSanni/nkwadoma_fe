@@ -22,10 +22,10 @@ function Team() {
     }
 
     const teamHeader = [
-        { title:  <div className='relative right-4 left-4'>Full name</div>, sortable: true, id: 'fullName', selector: (row:TableRowData ) => <div className='relative right-1 left-1'>{row.fullName}</div> },
-        { title: <div className='relative right-16 left-16'>Role</div>,sortable: true, id: 'role', selector: (row: TableRowData) => <div className={`${row.role === "Admin"? "text-[#212221] bg-[#ECECEC] ": "text-[#142854] bg-[#EEF5FF]"} rounded-xl w-20 h-6 flex items-center justify-center relative right-10 left-10`}>{row.role}</div> },
-        { title: <div className='relative right-24 left-24'>Status</div>, sortable: true, id: 'status', selector: (row:TableRowData) =>  <div className={`${row.status === "Active"? "text-success900 bg-[#E7F5EC]":   row.status === "Invited" ? "text-[#142854] bg-blue-100" :  "bg-error50 text-error900 pr-14 pl-14"} rounded-xl w-20 h-6 flex items-center justify-center relative right-20 left-20`}>{row.status}</div> },
-        { title: <div className='relative right-40 left-40'>Last changed date</div>, sortable: true, id: 'lastChangedDate', selector: (row:TableRowData ) => <div className='relative right-40 left-40'>{row.lastChangedDate}</div> },
+        { title:  <div className='md:relative right-4 left-4'>Full name</div>, sortable: true, id: 'fullName', selector: (row:TableRowData ) => <div className='md:relative right-1 left-1 -z-40'>{row.fullName}</div> },
+        { title: <div className='md:relative right-16 left-16'>Role</div>,sortable: true, id: 'role', selector: (row: TableRowData) => <div className={`${row.role === "Admin"? "text-[#212221] bg-[#ECECEC] ": "text-[#142854] bg-[#EEF5FF]"} rounded-xl w-20 h-6 flex items-center justify-center relative right-10 left-10 -z-40`}>{row.role}</div> },
+        { title: <div className='md:relative right-24 left-24'>Status</div>, sortable: true, id: 'status', selector: (row:TableRowData) =>  <div className={`${row.status === "Active"? "text-success900 bg-[#E7F5EC]":   row.status === "Invited" ? "text-[#142854] bg-blue-100" :  "bg-error50 text-error900 pr-14 pl-14"} rounded-xl w-20 h-6 flex items-center justify-center relative md:right-20 md:left-20 right-10 left-10 -z-40`}>{row.status}</div> },
+        { title: <div className='md:relative right-40 left-40'>Last changed date</div>, sortable: true, id: 'lastChangedDate', selector: (row:TableRowData ) => <div className='md:relative right-40 left-40 -z-40'>{row.lastChangedDate}</div> },
     
       ]
 

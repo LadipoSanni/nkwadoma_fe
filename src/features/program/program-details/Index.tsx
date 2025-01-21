@@ -28,6 +28,7 @@ import {formatAmount} from '@/utils/Format'
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
 import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/program_query";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 
 interface loanDetails {
     totalAmountRepaid?: number;
@@ -85,7 +86,7 @@ const ProgramDetails = () => {
         }
     }, [])
 
-    const {data: program} = useGetProgramByIdQuery({id: programId}, {refetchOnMountOrArgChange: true});
+    const {data: program,isLoading:loading} = useGetProgramByIdQuery({id: programId}, {refetchOnMountOrArgChange: true});
     const [deleteItem, {isLoading}] = useDeleteProgramMutation()
     const {data: cohortsByProgram} = useGetAllCohortByAParticularProgramQuery({
         programId: programId,
@@ -237,6 +238,8 @@ const ProgramDetails = () => {
 
 
     return (
+        <>
+          {loading ? ( <SkeletonForDetailPage /> ) : (
         <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`} id={"mainDiv"}>
             <div className={`flex gap-2 w-[9.2rem] items-center cursor-pointer text-meedlBlue`} id={`backClick`}
                  data-testid={`backClick`} onClick={handleBackClick}>
@@ -347,6 +350,8 @@ const ProgramDetails = () => {
                 </>
             }
         </main>
+          )}
+        </>
     );
 }
 export default ProgramDetails;
