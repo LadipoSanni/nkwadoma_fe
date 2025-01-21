@@ -7,28 +7,37 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button"
 import styles from "./index.module.css"
 import {organizations} from "../../../utils/LoanProductMockData";
-import OrganizationImage from "@/reuseable/profile/Organization-image";
 import {store, useAppSelector} from "@/redux/store";
 import {setClickedOrganization} from "@/redux/slice/loan/selected-loan";
 import AuthButton from "@/reuseable/buttons/AuthButton";
+import Image from "next/image";
 
 const ChangeInstitutionModal = () => {
 
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
     // const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganizationId)
     const [current, setCurrent] = useState<number | string>('')
-    const [disabled, setDisable] = React.useState(true)
+    const [disabled, setDisabled] = React.useState(true)
 
     const handleClick = (id: string | number) => {
         if (id === current) {
             setCurrent('')
-            setDisable(true)
+            setDisabled(true)
         } else {
             setCurrent(id)
-            setDisable(false)
+            setDisabled(false)
         }
         store.dispatch(setClickedOrganization(id))
+    }
 
+    const roundUpAmount = (number:string) => {
+        const numberGotten = Number(number)
+        if(numberGotten >= 1000 && numberGotten < 10000){
+            return number.charAt(0) + '.'+ number.charAt(1) + 'k'
+        }else if(numberGotten >= 10000){
+            return number.charAt(0) + number.charAt(1) + 'k'
+        }
+        return numberGotten
     }
 
     const handleContinue = () => {
@@ -44,7 +53,7 @@ const ChangeInstitutionModal = () => {
             <Dialog.Portal>
                 <Dialog.Overlay className="fixed inset-0 bg-[#344054B2] data-[state=open]:animate-overlayShow"/>
                 <Dialog.Content
-                    className={`fixed left-1/2 top-1/2 ${styles.container} md:h-[75vh] md:w-fit h-[90vh] w-[90vw] grid grid-rows-3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5 `}>
+                    className={`fixed left-1/2 top-1/2 ${styles.container} md:h-[75vh] md:w-[50vw] h-[90vh] w-[90vw] grid grid-rows-3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5 `}>
                     <Dialog.Title className={`${cabinetGroteskRegular.className}  text-2xl`}>
                         Organization
                     </Dialog.Title>
@@ -61,14 +70,14 @@ const ChangeInstitutionModal = () => {
                                 className='w-full md:w-full rounded h-11 md:h-11 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 '
                             />
                         </div>
-                        <div className={`${styles.organizations} py-2 grid gap-3 `}>
+                        <div className={`${styles.organizations} md:w-[30vw] md:h-fit  py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
                             {
                                 organizations.map((organization, index) => (
                                     <button key={organization.id} id={"index" + index}
                                             onClick={() => {
                                                 handleClick(organization?.id)
                                             }}
-                                            className={` ${styles.institutionMiniCard2} md:flex pl-3  md:place-items-center md:px-2 md:justify-between grid   w-[98%] h-[6rem] md:h-[4rem] rounded-md border ${organization.id === current ? `border-meedlBlue` : `border-[#ECECEC]`}   `}>
+                                            className={` ${styles.institutionMiniCard2} md:flex  md:place-items-center md:px-2 py-2 px-2 md:justify-between grid md:py-4  w-[98%] h-fit gap-3 md:h-[4rem] rounded-md border ${organization.id === current ? `border-meedlBlue` : `border-[#ECECEC]`}   `}>
 
                                         <div
                                             className={`flex md:flex gap-3 place-items-center md:place-items-center `}
@@ -78,26 +87,35 @@ const ChangeInstitutionModal = () => {
                                                  className={`flex w-fit h-fit px-1 py-1 ring-1 ${organization.id === current ? `ring-meedlBlue` : `ring-[#ECECEC]`} rounded-full items-center space-x-2`}>
                                                 <div id={`radioGroupCheeckedOnOrganizationModal`}
                                                      data-testid={`radioGroupCheeckedOnOrganizationModal`}
-                                                     className={` w-[0.7rem] h-[0.7rem] rounded-full  ${organization.id === current ? `bg-meedlBlue md:bg-meedlBlue` : `bg-white`} `}></div>
+                                                     className={` w-[0.5rem]  h-[0.5rem] rounded-full  ${organization.id === current ? `bg-meedlBlue md:bg-meedlBlue` : `bg-white`} `}></div>
                                             </div>
-                                            <OrganizationImage
-                                                size={'small'}
-                                                src={organization?.pic}
-                                                alt={'image'} id={'oranizationImageOnLoan'}/>
+                                            <div
+                                                className={` md:grid grid place-content-center  md:place-content-center  px-2 py-3 md:object-fit bg-[#F7F7F7] md:bg-[#F7F7F7] object-fit rounded-full  md:rounded-full   md:w-[3rem] md:h-[2rem] w-[3rem] h-[3rem]   `}
+
+                                            >
+                                                <Image
+                                                    id={'organizationImageOnLoan'}
+                                                    data-testid={'oranizationImageOnLoan'}
+                                                    width={ 100}
+                                                    height={ 100 }
+                                                    // style={{marginTop: 'auto', marginBottom: 'auto', backgroundColor: '#da9494'}}
+                                                    src={organization?.pic}
+                                                    alt={'image'}
+                                                />
+                                            </div>
                                             <span
-                                                className={` ${inter.className} text-black500 h-fit w-[3rem] bg-purple-50 `}>{organization.name}</span>
+                                                className={` ${inter.className} text-black500 md:text-black500 md:h-fit h-fit w-[30%] md:bg-red-300 break-all bg-purple-50 `}></span>
                                         </div>
                                         <div
-                                            className={`flex md:flex bg-grey105 px-3 py-2 rounded-full w-fit h-fit   place-items-center gap-3 `}>
-                                            <span className={`text-sm `}>{currentTab}</span>
+                                            className={`flex md:flex bg-grey105 md:bg-grey105 px-2 py-1 md:px-3 md:py-2  rounded-full md:rounded-full w-fit h-fit md:w-fit md:h-fit md:place-items-between   place-items-center gap-3 `}>
+                                            <span className={`text-xs md:text-xs md:flex md:break-keep break-keep w-fit md:w-fit `}>{currentTab}</span>
                                             <div
                                                 className={` w-fit h-fit ring-1 ring-[#E1EEFF] rounded-md  px-1 py-1 md:w-fit md:h-fit md:ring-1 md:ring-[#E1EEFF] md:rounded-md  md:px-1 md:py-1 `}
                                             >
-                                                <div className={`bg-[#E1EEFF] py-1 px-1 h-[1rem] flex place-content-center w-fit`}>
-                                                    <span className={`text-xs mt-auto mb-auto text-meedlBlue`}>263</span>
+                                                <div className={`bg-[#E1EEFF]  h-fit  flex place-content-center w-fit`}>
+                                                    <span className={`text-xs mt-auto mb-auto text-meedlBlue`}>{roundUpAmount('23454')}</span>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </button>
                                 ))

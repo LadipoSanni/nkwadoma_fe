@@ -12,7 +12,7 @@
     width: 100%;
     margin-top: 1rem;
     height: 80%;
-    background-color: #e8899c;
+    /*background-color: #e8899c;*/
     display: grid;
     gap: 10px;
     overflow-y: scroll;
