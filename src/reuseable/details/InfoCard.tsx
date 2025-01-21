@@ -14,7 +14,7 @@ function InfoCard({icon: Icon,fundTitle,description}: Props) {
     // className='mb-9 md:mb-0 w-full'
     className='mb-9 md:mb-0 w-full flex flex-col  items-start'
     >
-       <div className='mb-9' >
+       <div className='mb-3' >
          {Icon && 
           <div id='emptyStateIconId' data-testid="icon-container" className='bg-lightBlue500 w-32 h-32 flex justify-center items-center rounded-full mb-6 font-extrabold'>
          <Icon style={{fontSize:"3.2rem",color:"#142854"}}/>
@@ -30,7 +30,7 @@ function InfoCard({icon: Icon,fundTitle,description}: Props) {
          </p>
          <p 
          className=' mt-3 w-full md:w-auto font-normal'
-          style={{ height: "auto",  maxHeight: "280px",  overflowY: "auto", minWidth: "280px", maxWidth: "50%",  fontSize:"14px" }}
+          style={{ height: "auto",  maxHeight: "280px",  overflowY: "auto", minWidth: "340px", maxWidth: "50%",  fontSize:"14px" }}
          >
           {description}
          </p>
