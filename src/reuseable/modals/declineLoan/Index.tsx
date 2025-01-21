@@ -49,7 +49,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
         console.log('payload:: ', payload)
 
         try {
-            const response = await respondToLoanRequest(payload)
+           await respondToLoanRequest(payload)
             setReason('');
             setIsOpen(false);
             setError(null);
