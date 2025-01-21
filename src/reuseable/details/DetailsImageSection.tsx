@@ -83,7 +83,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         <div
                             id={`details`}
                             data-testid="details"
-                            className="grid grid-cols-2 mt-5"
+                            className="grid md:grid-cols-2 md:gap-2 gap-4 grid-cols-1 mt-5"
                         >
                             {tagButtonData.map((tagProps, index) => (
                                 <TagButton key={index} {...tagProps} />
@@ -91,7 +91,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         </div>
                     </div>
 
-                    <div className={`flex flex-row md:space-x-3 space-x-2 md:pt-5 pt-8 w-full`}>
+                    <div className={`flex flex-row md:space-x-3 space-x-2 md:pt-5 w-full`}>
                         {
                             isEditButton ? <div>
                                 <Button variant={"secondary"}
