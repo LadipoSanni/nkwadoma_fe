@@ -8,7 +8,7 @@ import {Icon} from "@iconify/react";
 const LoaneeOverview = () => {
     return (
         <main id={'OverviewTr'}
-              className={` ${inter.className} h-full w-full bg-learnSpaceWhite rounded-[8px] px-5 pt-10`}>
+              className={` ${inter.className} h-full w-full bg-learnSpaceWhite rounded-[8px]`}>
             <BalanceCard/>
             <TableEmptyState
                 name={'Repayment'}
