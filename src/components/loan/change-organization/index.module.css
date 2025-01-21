@@ -10,20 +10,17 @@
 }
 .organizations{
     width: 100%;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
     height: 80%;
-    /*background-color: crimson;*/
+    background-color: #e8899c;
     display: grid;
     gap: 10px;
     overflow-y: scroll;
-
 }
 .institutionMiniCard{
     object-fit: contain;
     margin-right: auto;
     margin-left: auto;
-    /*width: 90%;*/
-    /*height: 55px;*/
     margin-bottom: 1rem;
     border-radius: 4px ;
     border: 2px solid #eef0f3; ;
@@ -34,29 +31,22 @@
     object-fit: contain;
     margin-right: auto;
     margin-left: auto;
-    /*width: 90%;*/
-    /*height: 55px;*/
-    /*margin-bottom: 1rem;*/
     border-radius: 4px ;
-    /*border: 2px solid #142854; ;*/
-
 }
 
 .organizations::-webkit-scrollbar-track{
     background-color: #F0F2F4;
-    width: 3px;
-    margin-left: 1rem;
-
+    width: 2px;
 }
 .organizations::-webkit-scrollbar-thumb{
     background-color: #D9D9D9;
     height: 1rem;
+    border-radius: 1rem;
 }
 
 @media only screen  and (min-width: 768px){
     .organizations{
         height: 90%;
-        /*background-color: crimson;*/
         display: grid;
         gap: 10px;
         overflow-y: scroll;
