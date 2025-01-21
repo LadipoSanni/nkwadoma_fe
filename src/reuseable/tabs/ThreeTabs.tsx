@@ -102,10 +102,12 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                     :
                                     <div
                                         className="bg-[#F9F9F9] h-96 px-5 w-full py-2 overflow-y-auto rounded-sm">
-                                        <div id={`data-item`} data-testid={`data-item`}
-                                             className="flex md:flex-row flex-col w-full font-medium text-sm">
-                                            {isNotTableDataList}
-                                        </div>
+                                        <p
+                                            id={`data-item`}
+                                            data-testid={`data-iteM`}
+                                            className={` ${inter.className} md:flex-row flex-col w-full font-medium text-sm`}
+                                            dangerouslySetInnerHTML={{ __html: isNotTableDataList ?? "" }}
+                                        />
                                     </div>
                                 }
                             </TabsContent>
