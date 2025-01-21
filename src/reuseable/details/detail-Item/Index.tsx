@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface DetailItemProps {
     label: string;
-    value: string;
+    value: string | ReactNode;
 }
 
 const DetailItem: React.FC<DetailItemProps> = ({ label, value }) => (

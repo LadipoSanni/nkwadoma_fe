@@ -39,7 +39,6 @@ const LoanDetailsContent = dynamic(
 function LoanDetails() {
     const router = useRouter()
     const searchParams = useSearchParams()
-    // const [breakdown] = useState<[]>([]);
     const [currentTab, setCurrentsTab] = useState(0);
     const [arrowDown, setArrowDown] = useState(false);
     const [openCreateLoanOffer, setOpenCreateLoanOffer] = useState(false)
