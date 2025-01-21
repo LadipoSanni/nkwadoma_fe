@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { cabinetGrotesk } from "@/app/fonts";
 import { useRespondToLoanRequestMutation } from '@/service/admin/loan/loan-request-api';
+import {useToast} from "@/hooks/use-toast";
 
 interface DeclineLoanModalProps {
     isOpen: boolean;
@@ -28,6 +29,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
     const [error, setError] = useState<string | null>(null);
     const [respondToLoanRequest, { isLoading }] = useRespondToLoanRequestMutation();
 
+    const {toast} = useToast()
     const handleDecline = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
 
@@ -44,9 +46,10 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
             loanRequestDecision: 'DECLINED',
             declineReason: reason.trim()
         };
+        console.log('payload:: ', payload)
 
         try {
-            await respondToLoanRequest(payload)
+            const response = await respondToLoanRequest(payload)
             setReason('');
             setIsOpen(false);
             setError(null);
@@ -54,6 +57,14 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             setError(error?.data?.message);
+            toast({
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: error?.data?.message,
+                status: 'error',
+            })
+
+
         }
     }
 
