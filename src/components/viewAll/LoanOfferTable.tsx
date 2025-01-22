@@ -7,6 +7,8 @@ import Tables from "@/reuseable/table/LoanProductTable";
 import {useRouter} from "next/navigation";
 import {useViewAllLoanOfferQuery} from "@/service/admin/loan/loan-offer-api";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import {formatAmount} from "@/utils/Format";
+import dayjs from "dayjs";
 
 
 
@@ -23,27 +25,30 @@ function LoanOfferTable() {
 
     const {data, isLoading} = useViewAllLoanOfferQuery(request)
 
-    console.log('data: data', data)
+    console.log('data: data', data, 'table data:: ')
 
     const loanOfferHeader = [
         {
             title: 'Loanee',
             sortable: true,
-            id: 'loanee',
+            id: 'firstName',
             selector: (row: TableRowData) => <div
                 className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())}
                 <div className={``}></div>
                 {row.lastName}</div>
         },
         {title: 'Loan Product', sortable: true, id: 'program', selector: (row: TableRowData) => row.loanProductName},
-        {title: 'Offer date', sortable: true, id: 'startDate', selector: (row: TableRowData) => row.dateOffered },
-        { title: 'Amount Requested', sortable: true, id: 'amountRequest', selector: (row: TableRowData) => row.amountRequested },
-        { title: 'Amount Approved', sortable: true, id: 'requestDate', selector: (row: TableRowData) => row.amountApproved },
+        {title: 'Offer date', sortable: true, id: 'startDate', selector: (row: TableRowData) => dayjs(row.dateOffered?.toString() ).format('MMM D, YYYY')},
+        { title: 'Amount Requested', sortable: true, id: 'amountRequest', selector: (row: TableRowData) => formatAmount(row?.amountRequested) },
+        { title: 'Amount Approved', sortable: true, id: 'requestDate', selector: (row: TableRowData) => formatAmount(row?.amountApproved) },
 
     ];
 
-    const handleRowClick = (ID: string | object | React.ReactNode) => {
-        router.push(`/loan-offer-details?id=${ID}`);
+    const handleRowClick = (Object: string | object | React.ReactNode) => {
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const loanProductId = Object?.id
+        router.push(`/loan-offer-details?id=${loanProductId}`);
     };
 
     return (
@@ -52,7 +57,6 @@ function LoanOfferTable() {
         >
             {
                 data?.data?.body?.length > 0 ?
-                // loanOfferTable?.length > 0 ?
                     <div className={`md:w-full w-full h-full md:h-full `}>
                         <Tables
                             tableData={data?.data?.body}
@@ -61,14 +65,12 @@ function LoanOfferTable() {
                             tableHeader={loanOfferHeader}
                             tableHeight={52}
                             sx='cursor-pointer'
-                            staticColunm='cohort'
+                            staticColunm='firstName'
                             staticHeader='Loanee'
                             showKirkBabel={false}
-                            // kirkBabDropdownOption={dropDownOption}
                             icon={MdOutlinePeople}
                             sideBarTabName='Cohort'
                             optionalFilterName='graduate'
-                            // handleDropDownClick={handleDropdownClick}
                         />
                     </div>
 

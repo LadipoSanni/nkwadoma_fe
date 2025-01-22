@@ -32,7 +32,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const [selectedLoanProductId, setSelectedLoanProductId] = useState("");
     const [isFormValid, setIsFormValid] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const [respondToLoanRequest, {isError, isLoading, error,isSuccess}] = useRespondToLoanRequestMutation(); // Use the new mutation
+    const [respondToLoanRequest, {isError, isLoading, error}] = useRespondToLoanRequestMutation(); // Use the new mutation
     const [amount , setAmount] = useState('');
     const isValid = amount.length > 0 && selectedProgram !== null;
 
@@ -68,7 +68,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
             declineReason: ""
         };
          const response=  await respondToLoanRequest(data);
-        console.log('response:: ', response)
+        // console.log('response:: ', response)
         onSubmit({
             amountApproved: amount,
             loanProduct: selectedLoanProductId

@@ -1,9 +1,9 @@
 "use client"
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {cabinetGroteskRegular, ibmPlexSans} from "@/app/fonts";
+import {cabinetGroteskMediumBold, cabinetGroteskRegular, ibmPlexSans} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
 import {FaCircle} from "react-icons/fa6";
@@ -15,6 +15,8 @@ import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import styles from "./index.module.css"
 import dynamic from "next/dynamic";
+import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
+
 
 const LoanOfferDetailsContent = dynamic(
     () => Promise.resolve(LoanOfferDetails),
@@ -25,6 +27,8 @@ const LoanOfferDetails = () => {
     const router = useRouter();
     const [currentTab, setCurrentsTab] = useState(0);
     const searchParams = useSearchParams()
+    const [breakDown, setBreakDown] = useState<{ itemName: string; itemAmount: string; }[]>()
+
     // useViewLoanOfferDetailsQuery
     const getId = () => {
         if (searchParams) {
@@ -41,6 +45,16 @@ const LoanOfferDetails = () => {
     }
     const id: string = getId()
     const {data} = useViewLoanOfferDetailsQuery(id)
+
+    useEffect(() => {
+        console.log('data:: ', data)
+        const loaneeLoanBreakDown = data?.data?.loaneeBreakDown
+        const b:{itemAmount: string, itemName: string}[] = []
+        loaneeLoanBreakDown?.forEach((loanBreakDown:{currency: string, itemAmount: string, itemName: string, loaneeLoanBreakdownId: string}) => (b?.push({itemName: loanBreakDown?.itemName,itemAmount: loanBreakDown?.itemAmount})))
+        console.log('loaneeLoanBreakDown:: ',loaneeLoanBreakDown,'bbb:: ', b, 'break:: ', breakDown)
+        setBreakDown(b)
+    }, [data])
+
     const backToLoanOffer = () => {
         store.dispatch(setCurrentTab('Loan offers'))
         router.push("/loan/loan-offer");
@@ -57,28 +71,28 @@ const LoanOfferDetails = () => {
 
 
     const basicDetails = [
-        {label: 'Gender', value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.gender},
-        {label: 'Email address', value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.email},
-        {label: 'Phone number', value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.phoneNumer},
-        {label: 'Date of birth', value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.maritalStatus},
-        {label: 'Nationality', value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.nationality},
-        {label: 'State of origin ', value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfOrigin},
-        {label: 'State of residence', value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfResidence},
-        {label: "Residential address", value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.residentialAddress},
+        {label: 'Gender', value: data?.data?.gender},
+        {label: 'Email address', value: data?.data?.email},
+        {label: 'Phone number', value: data?.data?.phoneNumer},
+        {label: 'Date of birth', value: data?.data?.dateOfBirth},
+        {label: 'Marital status', value: data?.data?.maritalStatus},
+        {label: 'Nationality', value: data?.data?.nationality},
+        {label: 'State of origin ', value: data?.data?.stateOfOrigin},
+        {label: 'State of residence', value: data?.data?.stateOfResidence},
+        {label: "Residential address", value: data?.data?.residentialAddress},
     ];
 
     const additionalDetails = [
-        {label: 'Alternate email address', value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateEmail},
-        {label: 'Alternate phone number', value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data?.body?.loanRequestResponse?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateContactAddress},
+        {label: 'Alternate email address', value: data?.data?.alternateEmail},
+        {label: 'Alternate phone number', value: data?.data?.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: data?.data?.alternateContactAddress},
         {
             label: 'Next of kin name',
-            value: data?.data?.body?.loanRequestResponse?.nextOfKin?.firstName + " " +data?.data?.body?.loanRequestResponse?.nextOfKin?.lastName
+            value: data?.data?.nextOfKinFirstName + " " +data?.data?.nextOfKinLastName
         },
-        {label: 'Next of kin email address', value: data?.data?.body?.loanRequestResponse?.nextOfKin?.email},
-        {label: 'Next of kin phone number', value: data?.data?.body?.loanRequestResponse?.nextOfKin?.phoneNumber},
-        {label: 'Next of kin relationship ', value: data?.data?.body?.loanRequestResponse?.nextOfKin?.nextOfKinRelationship},
+        {label: 'Next of kin email address', value: data?.data?.nextOfKinEmail},
+        {label: 'Next of kin phone number', value: data?.data?.nextOfKinPhoneNumber},
+        {label: 'Next of kin relationship ', value: data?.data?.nextOfKinRelationship},
     ];
 
     const loanDetails = [
@@ -89,18 +103,12 @@ const LoanOfferDetails = () => {
                 thousandSeparator=","
                 decimalScale={2}
                 fixedDecimalScale={true}
-                // value={'200000'}
                 prefix={'₦'}
-
                 className='bg-grey105 flex md:place-items-end '
-
-                value={data?.data?.body?.loanRequestResponse?.tuitionAmount}
-                // placeholder={${detail.itemName}}
-                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-
+                value={data?.data?.tuitionAmount}
             />},
         {label: "Start date", value:
-                 dayjs(data?.data?.body?.loanRequestResponse?.createdDate?.toString()).format('MMMM D, YYYY')
+                 dayjs(data?.data?.startDate?.toString()).format('MMMM D, YYYY')
         },
         {label: "Loan amount requested", value: <NumericFormat
                 id={'loanAmountRequested'}
@@ -109,13 +117,9 @@ const LoanOfferDetails = () => {
                 thousandSeparator=","
                 decimalScale={2}
                 fixedDecimalScale={true}
-                // value={'200000'}
                 className='bg-grey105 flex md:place-items-end '
                 prefix={'₦'}
-                value={data?.data?.body?.loanRequestResponse?.loanAmountRequested}
-                // placeholder={${detail.itemName}}
-                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
-
+                value={data?.data?.amountRequested}
             />},
         {label: "Deposit", value:  <NumericFormat
                 id={'depositOnLoanRequestDetails'}
@@ -125,7 +129,7 @@ const LoanOfferDetails = () => {
                 decimalScale={2}
                 fixedDecimalScale={true}
                 prefix={'₦'}
-                value={data?.data?.body?.loanRequestResponse?.initialDeposit}
+                value={data?.data?.initialDeposit}
                 className='bg-grey105 flex md:place-items-end'
 
             />},
@@ -141,8 +145,12 @@ const LoanOfferDetails = () => {
     ];
 
     const handleNext = () => {
-        if (currentTab < loanOfferDetailsTab.length - 1) {
-            setCurrentsTab(currentTab + 1);
+        if (currentTab === 3 ){
+
+        }else {
+            if (currentTab < loanOfferDetailsTab.length - 1) {
+                setCurrentsTab(currentTab + 1);
+            }
         }
     };
 
@@ -166,6 +174,9 @@ const LoanOfferDetails = () => {
         }
     };
 
+    const userFirstLetter : string| undefined = getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName)
+
+
     return (
         <div
             id={"loanOfferDetails"}
@@ -184,16 +195,18 @@ const LoanOfferDetails = () => {
                     <Avatar id={'loaneeImageOnLoanOfferDetails'} data-testid={'loaneeImageOnLoanOfferDetails'}
                             className={`h-[5.625rem] w-[5.625rem] md:w-[7.5rem] md:h-[7.5rem]`}>
                         {/*`/234d70b3-ec71-4d68-8696-5f427a617fb7.jpeg`*/}
-                        <AvatarImage src={data?.data?.body?.loanRequestResponse?.image} alt="@shadcn"
+                        <AvatarImage src={data?.data?.image} alt="@shadcn"
                                      style={{objectFit: 'cover'}}/>
-                        <AvatarFallback></AvatarFallback>
+                        <AvatarFallback>{userFirstLetter}</AvatarFallback>
                     </Avatar>
 
                     <div className={`grid gap-1 mt-4`}>
-                        <div id={'loaneeNameOnLoanOfferDetails'} data-testid={'loaneeNameOnLoanOfferDetails'}
-                             className={`${cabinetGroteskRegular.className} font-medium  text-meedlBlack text-[24px] gap-2 md:text-[28px] leading-[120%]`}>
-                            {data?.data?.body?.loanRequestResponse?.firstName}
-                            {data?.data?.body?.loanRequestResponse?.lastName}
+                        <div id={'loaneeNameOnLoanRequestDetails'} data-testid={'loaneeNameOnLoanRequestDetails'}
+                             className={`${cabinetGroteskRegular.className} text-black flex text-xl gap-2 md:flex md:gap-2 md:text-3xl  `}>
+                            <span
+                                className={`${cabinetGroteskMediumBold.className} text-black  gap-2 text-3xl md:text-3xl`}>{data?.data?.firstName}</span>
+                            <span
+                                className={`${cabinetGroteskMediumBold.className} text-black  gap-2 text-3xl  md:text-3xl`}>{data?.data?.lastName}</span>
                         </div>
                         <div className={`flex gap-2 items-center`}>
                             <p id={'loaneeProgramOnLoanOfferDetails'}
@@ -234,7 +247,7 @@ const LoanOfferDetails = () => {
                             {currentTab === 0 && (
                                 <section>
                                     <div className={'px-5'}>
-                                        <Breakdown/>
+                                        <Breakdown breakDown={breakDown}/>
                                     </div>
                                 </section>
                             )}
