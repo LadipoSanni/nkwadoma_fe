@@ -27,7 +27,7 @@ interface ApiError {
 }
 
 function CreateProgram({setIsOpen}:Props) {
-  // const queryClient = useQueryClient();
+ 
   const [createProgram,{isLoading}] = useCreateProgramMutation();
   const [error, setError] =  useState('');
 
