@@ -28,13 +28,25 @@ export const loanRequestApi = createApi({
             query: (id: string) => ({
                 url: `/loan/loan-requests/${id}`,
                 method: 'GET',
-            }),
-        })
+            })
+        }),
+        viewAllLoanDisbursal: builder.mutation({
+            query: (data: {
+                organizationId: string,
+                pageSize: number,
+                pageNumber: number
+            }) => ({
+                url: '/loan/loan-disbursals',
+                method: 'POST',
+                body: data
+            })
+        }),
     })
 });
 
 export const {
     useViewAllLoanRequestQuery,
     useViewLoanRequestDetailsQuery,
-    useRespondToLoanRequestMutation
+    useRespondToLoanRequestMutation,
+    useViewAllLoanDisbursalMutation,
 } = loanRequestApi;

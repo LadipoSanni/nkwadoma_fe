@@ -1,14 +1,13 @@
 "use client"
-import React from "react";
+import React, {useState,useEffect} from "react";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/index";
 import {useRouter} from "next/navigation";
-import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
+import {useViewAllLoanDisbursalMutation} from "@/service/admin/loan/loan-request-api";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
-import {loanDisbursalTable} from "@/utils/LoanRequestMockData/Index";
 
 
 
@@ -18,11 +17,23 @@ interface TableRowData {
 
 function Index() {
     const router = useRouter();
+    const [loanDisbursalTable, setLoanDisbursalTable] = useState([])
+
+    const [data,{isLoading}] = useViewAllLoanDisbursalMutation()
     const request ={
+        organizationId: "b95805d1-2e2d-47f8-a037-7bcd264914fc",
         pageSize: 10,
         pageNumber: 10
     }
-    const {  isLoading} = useViewAllLoanRequestQuery(request)
+    useEffect(()=>{
+        const disbursal = data(request).unwrap()
+    },[])
+    // useEffect(() => {
+    //     if (data && data?.data) {
+    //         const all = data?.data?.body;
+    //         setLoanDisbursalTable(all)
+    //     }
+    // }, [data])
 
 
 
