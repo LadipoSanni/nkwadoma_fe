@@ -26,7 +26,7 @@ const  SelectLoanTab = () => {
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         // setCurrentTabs(newValue)
-        if (newValue !== 0) {
+        if (newValue !== 0 && newValue !== 4) {
             store.dispatch(setCurrentTab(tabContent[newValue].name))
             router.push(`/loan/${tabContent[newValue].route}`)
         }
@@ -48,7 +48,7 @@ const  SelectLoanTab = () => {
                 <div
                     data-testid={name}
                     id={"loanStatusText"}
-                    className={`flex ${name === 'Loan referrals' ? 'text-[#efefef] md:text-[#efefef]' : ``} gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
+                    className={`flex ${name === 'Loan referrals' ||  name === 'Loan book' ? 'text-[#efefef] md:text-[#efefef]' : ``} gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
                 >{name}</div>
 
             </button>
