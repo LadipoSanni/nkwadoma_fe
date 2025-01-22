@@ -1,14 +1,15 @@
 "use client"
-import React from "react";
+import React, {useEffect, useState} from "react";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/index";
 import {useRouter} from "next/navigation";
-import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
+import {useViewAllLoanDisbursalQuery} from "@/service/admin/loan/loan-request-api";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
-import {loanDisbursalTable} from "@/utils/LoanRequestMockData/Index";
+import {useAppSelector} from "@/redux/store";
+
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -16,11 +17,28 @@ interface TableRowData {
 
 function Index() {
     const router = useRouter();
-    const request = {
-        pageSize: 10,
-        pageNumber: 10
-    }
-    const {isLoading} = useViewAllLoanRequestQuery(request)
+    const [allDisbursedLoan, setAllDisbursedLoan] = useState([]);
+
+    const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganizationId)
+
+    const size = 1;
+    const page = 100;
+
+    const {data, isLoading: isLoading} = useViewAllLoanDisbursalQuery(
+        {
+            organizationId: clickedOrganizationId as string,
+            pageSize: size,
+            pageNumber: page,
+        },
+        {refetchOnMountOrArgChange: true}
+    );
+
+    useEffect(() => {
+        if (data && data?.data) {
+            const all = data?.data?.body;
+            setAllDisbursedLoan(all)
+        }
+    }, [data])
 
 
     const loanDisbursalHeader = [
@@ -69,11 +87,10 @@ function Index() {
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {
-                loanDisbursalTable?.length > 0 ?
-                    // LoanRequestTable?.length > 0 ?
+                allDisbursedLoan?.length > 0 ?
                     <div className={`md:w-full w-full h-full md:h-full `}>
                         <Tables
-                            tableData={loanDisbursalTable}
+                            tableData={allDisbursedLoan}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanDisbursalHeader}
@@ -85,6 +102,7 @@ function Index() {
                             icon={MdOutlinePeople}
                             sideBarTabName='Cohort'
                             optionalFilterName='graduate'
+                            condition={true}
                         />
                     </div>
 
