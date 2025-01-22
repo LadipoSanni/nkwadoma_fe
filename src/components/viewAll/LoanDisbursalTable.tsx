@@ -10,31 +10,54 @@ import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {loanDisbursalTable} from "@/utils/LoanRequestMockData/Index";
 
-
-
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
 function Index() {
     const router = useRouter();
-    const request ={
+    const request = {
         pageSize: 10,
         pageNumber: 10
     }
-    const {  isLoading} = useViewAllLoanRequestQuery(request)
-
-
+    const {isLoading} = useViewAllLoanRequestQuery(request)
 
 
     const loanDisbursalHeader = [
-        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{row.loanee} <div className={``}></div>{row.lastName}</div>  },
-        { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.program },
-        { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort },
-        { title: 'Offer date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.offerDate?.toString()).format('MMMM D, YYYY')}</div> },
-        { title: 'Loan start date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.loanStartDate?.toString()).format('MMMM D, YYYY')}</div> },
-        { title: 'Deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.deposit)}</div>},
-        { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.AmountRequested)}</div>}
+        {
+            title: 'Loanee',
+            sortable: true,
+            id: 'firstName',
+            selector: (row: TableRowData) => <div className='flex gap-2 '>{row.loanee}
+                <div className={``}></div>
+                {row.lastName}</div>
+        },
+        {title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.program},
+        {title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort},
+        {
+            title: 'Offer date',
+            sortable: true,
+            id: 'startDate',
+            selector: (row: TableRowData) => <div>{dayjs(row.offerDate?.toString()).format('MMMM D, YYYY')}</div>
+        },
+        {
+            title: 'Loan start date',
+            sortable: true,
+            id: 'requestDate',
+            selector: (row: TableRowData) => <div>{dayjs(row.loanStartDate?.toString()).format('MMMM D, YYYY')}</div>
+        },
+        {
+            title: 'Deposit',
+            sortable: true,
+            id: 'initialDeposit',
+            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.deposit)}</div>
+        },
+        {
+            title: 'Amount Requested',
+            sortable: true,
+            id: 'amountRequested',
+            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.AmountRequested)}</div>
+        }
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
@@ -75,7 +98,8 @@ function Index() {
                                     width={"2em"}
                                     color={'#142854'}
                                     id={'loanDisbursalId'}
-                        ></Icon >} iconBg={'#D9EAFF'} title={'Disbursed loan will show here'} description={`There are no loan disbursed loan available yet`} />
+                        ></Icon>} iconBg={'#D9EAFF'} title={'Disbursed loan will show here'}
+                        description={`There are no loan disbursed loan available yet`}/>
 
 
             }
