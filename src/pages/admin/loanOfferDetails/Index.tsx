@@ -10,7 +10,7 @@ import {FaCircle} from "react-icons/fa6";
 import {Breakdown} from "@/reuseable/details/breakdown";
 import {store} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
-import {useViewLoanOfferDetailsQuery, useDisburseLoanOfferMutation} from "@/service/admin/loan/loan-offer-api";
+import {useViewLoanOfferDetailsQuery} from "@/service/admin/loan/loan-offer-api";
 import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import styles from "./index.module.css"
@@ -27,7 +27,7 @@ const LoanOfferDetails = () => {
     const router = useRouter();
     const [currentTab, setCurrentsTab] = useState(0);
     const searchParams = useSearchParams()
-    const [disburseLoan] = useDisburseLoanOfferMutation()
+    // const [disburseLoan] = useDisburseLoanOfferMutation()
 
     // useViewLoanOfferDetailsQuery
     const getId = () => {
