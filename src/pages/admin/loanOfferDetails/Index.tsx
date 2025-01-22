@@ -1,5 +1,5 @@
 "use client"
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
@@ -27,7 +27,7 @@ const LoanOfferDetails = () => {
     const router = useRouter();
     const [currentTab, setCurrentsTab] = useState(0);
     const searchParams = useSearchParams()
-    const [breakDown, setBreakDown] = useState<{ itemName: string; itemAmount: string; }[]>()
+    // const [disburseLoan] = useDisburseLoanOfferMutation()
 
     // useViewLoanOfferDetailsQuery
     const getId = () => {
@@ -46,14 +46,14 @@ const LoanOfferDetails = () => {
     const id: string = getId()
     const {data} = useViewLoanOfferDetailsQuery(id)
 
-    useEffect(() => {
-        // console.log('data:: ', data)
-        const loaneeLoanBreakDown = data?.data?.loaneeBreakDown
-        const b:{itemAmount: string, itemName: string}[] = []
-        loaneeLoanBreakDown?.forEach((loanBreakDown:{currency: string, itemAmount: string, itemName: string, loaneeLoanBreakdownId: string}) => (b?.push({itemName: loanBreakDown?.itemName,itemAmount: loanBreakDown?.itemAmount})))
-        // console.log('loaneeLoanBreakDown:: ',loaneeLoanBreakDown,'bbb:: ', b, 'break:: ', breakDown)
-        setBreakDown(b)
-    }, [data])
+    console.log('data', data)
+    const getLoaneeLoanBreakdown= () => {
+        const loaneeLoanBreakDown = data?.data?.loaneeBreakdown
+        const items :{itemAmount: string, itemName: string}[] = []
+        loaneeLoanBreakDown?.forEach((loanBreakDown:{currency: string, itemAmount: string, itemName: string, loaneeLoanBreakdownId: string}) => (items ?.push({itemName: loanBreakDown?.itemName,itemAmount: loanBreakDown?.itemAmount})))
+        return items;
+    }
+    const breakDown = getLoaneeLoanBreakdown();
 
     const backToLoanOffer = () => {
         store.dispatch(setCurrentTab('Loan offers'))
@@ -143,10 +143,19 @@ const LoanOfferDetails = () => {
             </div>
         },
     ];
+    const disburseLoanOffer = () => {
+
+        // const body = {
+        //     loanOfferId: id,
+        //
+        // }
+
+    }
 
     const handleNext = () => {
         if (currentTab === 3 ){
 
+            disburseLoanOffer()
         }else {
             if (currentTab < loanOfferDetailsTab.length - 1) {
                 setCurrentsTab(currentTab + 1);
@@ -263,7 +272,8 @@ const LoanOfferDetails = () => {
 
                         <Button className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                                 onClick={handleNext}
-                                disabled={currentTab === loanOfferDetailsTab.length - 1}>
+                                // disabled={currentTab === loanOfferDetailsTab.length - 1}
+                        >
                             {currentTab === 3 ? 'Disburse loan' : 'Continue'}
                         </Button>
 
