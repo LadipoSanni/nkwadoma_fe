@@ -145,10 +145,10 @@ const LoanOfferDetails = () => {
     ];
     const disburseLoanOffer = () => {
 
-        const body = {
-            loanOfferId: id,
-
-        }
+        // const body = {
+        //     loanOfferId: id,
+        //
+        // }
 
     }
 
