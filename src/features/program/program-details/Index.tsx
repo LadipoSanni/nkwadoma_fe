@@ -29,6 +29,7 @@ import {useDeleteProgramMutation} from '@/service/admin/program_query';
 import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/program_query";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import { useToast } from "@/hooks/use-toast";
 
 interface loanDetails {
     totalAmountRepaid?: number;
@@ -54,10 +55,20 @@ interface viewAllProgramProps {
 
 type ViewAllProgramProps = viewAllProgramProps & TableRowData;
 
+interface ApiError {
+    status: number;
+    data: {
+        message: string;
+    };
+}
+
+
 const ProgramDetails = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [programId, setProgramId] = useState('');
+    const [deleteProgram, setDeleteProgram] = useState("")
+    const {toast} = useToast()
     const [page] = useState(0);
     const size = 100;
     const [progamDetail, setProgramDetail] = useState({
@@ -216,11 +227,24 @@ const ProgramDetails = () => {
             const itemDeleted = await deleteItem({id}).unwrap();
             if (itemDeleted) {
                 setIsDeleteOpen(false)
+                setTimeout(() => {
+                    toast({
+                        description: "Program deleted successfully",
+                        status: "success",
+                    })
+                }, 600);
                 router.push('/program')
             }
 
         } catch (error) {
-            console.error("Error deleting program: ", error);
+            const err = error as ApiError;
+            setDeleteProgram(err?.data?.message || "Program with loanee cannot be deleted")
+            setTimeout(() => {
+                toast({
+                    description: deleteProgram || "Program with loanee cannot be deleted",
+                    status: "error",
+                })
+            }, 600)
         }
     }
 
@@ -270,7 +294,10 @@ const ProgramDetails = () => {
                                 </h1>
                                 <div className={'grid gap-5'} id={`tagButtonDiv`}>
                                     <p id={`details`}
-                                       className={'text-sm font-normal w-[351px] text-grey400 break-words scrollbar-width:none overflow-y-auto h-24'}>{progamDetail.programDescription}</p>
+                                       className={'text-sm font-normal w-[351px] text-grey400 break-words scrollbar-width:none overflow-y-auto h-24'}
+                                       dangerouslySetInnerHTML={{__html: progamDetail.programDescription}}
+                                       />
+                                      
                                     <div id={`details`} data-testid="details"
                                          className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
                                         {tagButtonData.map((tagProps, index) => (
@@ -284,7 +311,9 @@ const ProgramDetails = () => {
                                         id="editButton"
                                         className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
                                     program</Button>
-                                {progamDetail.numberOfLoanees > 0? "" : <div role={"button"}
+                                {
+                                // progamDetail.numberOfLoanees > 0? "" :
+                                 <div role={"button"}
                                      id="kebabId"
                                      className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
                                     <Kebab kebabOptions={programOptions} icon={IoEllipsisHorizontalSharp}
