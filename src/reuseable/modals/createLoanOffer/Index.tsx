@@ -68,14 +68,13 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
             declineReason: ""
         };
          const response=  await respondToLoanRequest(data);
-        // console.log('response:: ', response)
+        console.log('response:: ', response)
         onSubmit({
             amountApproved: amount,
             loanProduct: selectedLoanProductId
         });
-        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        if (response?.statusCode === '200 OK'){
+
+        if (response?.data?.message === 'Loan request approved successfully'){
             store.dispatch(setCurrentTab('Loan requests'))
             router.push("/loan/loan-request")
             setIsOpen(false)
