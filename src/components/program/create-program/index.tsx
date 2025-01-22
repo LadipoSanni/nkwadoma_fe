@@ -40,7 +40,7 @@ function CreateProgram({setIsOpen}:Props) {
     }
 
     
-    const maxChars = 2500;
+    // const maxChars = 2500;
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
     // const programModes=["FULL_TIME", "PART_TIME"]

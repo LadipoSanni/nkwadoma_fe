@@ -65,7 +65,7 @@ const EditCohortForm = ({setIsOpen,cohortDetail}: idProps) => {
     imageUrl: cohortDetail?.imageUrl,
 
 }
-const maxChars = 1500;
+// const maxChars = 1500;
   
   const handleCloseModal = () => {
     if (setIsOpen) {

@@ -22,13 +22,13 @@ import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-f
 
 
 
-interface meedlUser{
-  id: string,
-  firstName: string,
-  lastName: string,
-  email: string,
-  status: string,
-}
+// interface meedlUser{
+//   id: string,
+//   firstName: string,
+//   lastName: string,
+//   email: string,
+//   status: string,
+// }
 
 
 

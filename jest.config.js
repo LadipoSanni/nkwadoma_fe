@@ -9,9 +9,9 @@ const createJestConfig = nextJest({
 const customJestConfig = {
     setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
     testEnvironment: "jsdom",
-    transform: {
-        "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
-    },
+    // transform: {
+    //     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+    // },
     transformIgnorePatterns: [
         "/node_modules/(?!react-quill-new)", 
     ],

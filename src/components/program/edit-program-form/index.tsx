@@ -62,7 +62,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
     }
 
     // const [isButtonLoading] = useState(false);
-    const maxChars = 2500;
+    // const maxChars = 2500;
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
     // const programModes=["FULL_TIME", "PART_TIME"]

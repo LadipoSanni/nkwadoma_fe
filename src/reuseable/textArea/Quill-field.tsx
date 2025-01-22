@@ -81,7 +81,7 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched }: FieldName) =>
   
     ['clean']];
 
-    const module = {
+    const quillModules = {
          toolbar: toolbarOptions,
     }
 
@@ -89,7 +89,7 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched }: FieldName) =>
         <div>
             <ReactQuill
                ref={quillRef}
-               modules={module}
+               modules={quillModules}
                 theme="snow"
                 value={field.value}
                 onChange={(value) => {
