@@ -26,7 +26,7 @@ function Index() {
 
     const {data, isLoading: isLoading} = useViewAllLoanDisbursalQuery(
         {
-            organizationId: clickedOrganizationId,
+            organizationId: clickedOrganizationId as string,
             pageSize: size,
             pageNumber: page,
         },
