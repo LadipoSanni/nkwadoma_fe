@@ -66,7 +66,7 @@ const LoanProductPage = () => {
             title: 'Fund product',
             sortable: true,
             id: 'fundProduct',
-            selector: (row: TableRowData) => row.investmentVehicleName ?? "fund product"
+            selector: (row: TableRowData) => row.fundProduct ?? "fund product"
         },
         {
             title: 'Interest rate (%)',

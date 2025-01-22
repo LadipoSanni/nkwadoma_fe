@@ -24,6 +24,7 @@ const ChangeInstitutionModal = () => {
 
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
     // const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganizationId)
+    // console.log(clickedOrganizationId)
     const [current, setCurrent] = useState<number | string>('')
     const [disabled, setDisabled] = React.useState(true)
     const dataElement = {
