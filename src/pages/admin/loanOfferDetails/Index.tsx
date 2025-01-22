@@ -47,11 +47,11 @@ const LoanOfferDetails = () => {
     const {data} = useViewLoanOfferDetailsQuery(id)
 
     useEffect(() => {
-        console.log('data:: ', data)
+        // console.log('data:: ', data)
         const loaneeLoanBreakDown = data?.data?.loaneeBreakDown
         const b:{itemAmount: string, itemName: string}[] = []
         loaneeLoanBreakDown?.forEach((loanBreakDown:{currency: string, itemAmount: string, itemName: string, loaneeLoanBreakdownId: string}) => (b?.push({itemName: loanBreakDown?.itemName,itemAmount: loanBreakDown?.itemAmount})))
-        console.log('loaneeLoanBreakDown:: ',loaneeLoanBreakDown,'bbb:: ', b, 'break:: ', breakDown)
+        // console.log('loaneeLoanBreakDown:: ',loaneeLoanBreakDown,'bbb:: ', b, 'break:: ', breakDown)
         setBreakDown(b)
     }, [data])
 
