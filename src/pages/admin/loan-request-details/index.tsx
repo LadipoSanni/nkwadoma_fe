@@ -343,30 +343,7 @@ function LoanDetails() {
                         onClick={handleNext}
                         >
                         Continue
-                        {/*{currentTab === 2 ? 'Make decision ' : 'Continue'}*/}
-                        {/*{currentTab == 2 &&*/}
-                        {/*    <div className={''} >*/}
-                        {/*        {arrowDown ?*/}
-                        {/*            <ChevronUpIcon*/}
-                        {/*                id={'downIcon'}*/}
 
-                        {/*                className={'h-5  cursor-pointer w-5 stroke-2 text-white'}*/}
-                        {/*                onClick={()=> {setArrowDown(false)}}/>*/}
-                        {/*            :*/}
-                        {/*           <DropdownMenu>*/}
-                        {/*               <DropdownMenuTrigger >*/}
-                        {/*                   <ChevronDownIcon*/}
-                        {/*                       className={'h-5  cursor-pointer w-5 stroke-2 text-white'}*/}
-                        {/*                       onClick={() => {setArrowDown(true)}}/>*/}
-                        {/*               </DropdownMenuTrigger>*/}
-                        {/*               <DropdownMenuContent >*/}
-                        {/*                    <DropdownMenuItem id={'loanRequestDetailsApproveLoanRequestButton'} data-testid={'loanRequestDetailsApproveLoanRequestButton'} onClick={() => {setOpenCreateLoanOffer(true)}} className={`md:text-meedleBlue text-meedlBlue hover:bg-[#EEF5FF] md:hover:bg-[#EEF5FF] rounded-md md:rounded-md `}>Approve loan request</DropdownMenuItem>*/}
-                        {/*                    <DropdownMenuItem id={'loanRequestDetailsDeclineLoanRequestButton'} data-testid={'loanRequestDetailsDeclineLoanRequestButton'} onClick={() => {setOpenDeclineLoanRequestModal(true)}} className={`text-error500 md:hover:text-error500 md:text-error500 md:hover:bg-error50 rounded-md md:rounded-md`}>Decline loan request</DropdownMenuItem>*/}
-                        {/*               </DropdownMenuContent>*/}
-                        {/*            </DropdownMenu>*/}
-                        {/*        }*/}
-                        {/*    </div>*/}
-                        {/*}*/}
                     </button>
                     }
                     <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer} setIsOpen={open} onSubmit={onSubmit} />
