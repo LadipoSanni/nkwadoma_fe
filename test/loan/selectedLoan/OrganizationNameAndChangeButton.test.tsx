@@ -3,7 +3,11 @@ import {render, screen} from "@testing-library/react";
 import OrganizationNameAndChangeButton from "@/components/selected-loan/OrganizationNameAndChangeButton";
 import {Providers} from "@/app/provider";
 
-
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+}));
 describe("testing OrganizationNameAndChangeButton component", ()=> {
 
 

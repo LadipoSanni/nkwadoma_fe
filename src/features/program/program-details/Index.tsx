@@ -280,7 +280,7 @@ const ProgramDetails = () => {
                                  className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom'}>Cohorts</TabsTrigger>
                 </TabsList>
                 <TabsContent value="details" className={'mt-4'} id={`content`}>
-                    <section className={`p- flex md:flex-row flex-col md:justify-between`} id={`section`}>
+                    <section className={`p- flex md:flex-row flex-col md:gap-0 gap-5 md:justify-between`} id={`section`}>
                         <div className={'flex flex-col gap-10'} id={`status`}>
                             <div
                                 id={`fibookIcon`}
