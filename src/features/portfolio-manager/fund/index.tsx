@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import { setItemSessionStorage } from '@/utils/storage';
 import { useGetAllInvestmentmentVehicleQuery } from '@/service/admin/fund_query';
 import { formatMonthInDate } from '@/utils/Format';
+import { useSearchInvestmentVehicleByNameQuery } from '@/service/admin/fund_query';
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -54,6 +55,7 @@ const InvestmentVehicle = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState('');
   const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const dataElement = {
     pageNumber: 0,
@@ -61,14 +63,19 @@ const InvestmentVehicle = () => {
 }
  
  const { data: investmentVehicleData } = useGetAllInvestmentmentVehicleQuery(dataElement)
+ const {data: searchData} = useSearchInvestmentVehicleByNameQuery(searchTerm, { skip:!searchTerm })
   const router = useRouter()
 
 
   useEffect(()=> {
-    if(investmentVehicleData && investmentVehicleData.data) {
+    if(searchTerm && searchData && searchData?.data) {
+      const result = searchData?.data
+      setViewAllInvestmentVehicle(result)
+    }
+   else if(investmentVehicleData && investmentVehicleData.data) {
       setViewAllInvestmentVehicle(investmentVehicleData.data)
     }
-  })
+  },[searchTerm,searchData,investmentVehicleData])
 
   const handleDraftClick = () => {
 
@@ -84,8 +91,8 @@ const InvestmentVehicle = () => {
   }
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
-    // setSearchTerm(event.target.value);
-    console.log(event)
+    setSearchTerm(event.target.value);
+    
   };
   
   const fundHeader = [
@@ -114,7 +121,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
       actionBar: <div>
         <InvestmentActionBar 
            id='commercialFundId'
-           value=''
+            value={searchTerm}
            onChange={handleSearchChange}
            handleDraftClick={handleDraftClick}
            handleCreateInvestmentVehicleClick={handleCreateInvestmentVehicleClick}
@@ -143,7 +150,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
       actionBar: <div>
          <InvestmentActionBar 
           id='endowmentFundId'
-          value=''
+           value={searchTerm}
           onChange={handleSearchChange}
           handleDraftClick={handleDraftClick}
           handleCreateInvestmentVehicleClick={handleCreateInvestmentDonorClick}

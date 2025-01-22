@@ -28,13 +28,26 @@ export const loanRequestApi = createApi({
             query: (id: string) => ({
                 url: `/loan/loan-requests/${id}`,
                 method: 'GET',
+            })
+        }),
+        viewAllLoanDisbursal: builder.query({
+            query: (data: {
+                organizationId: string,
+                pageSize?: number;
+                pageNumber?: number;
+            }) => ({
+                url: `/loan/loan-disbursals`,
+                method: 'GET',
+                params: data
             }),
-        })
+            // providesTags: ['loanRequests']
+        }),
     })
 });
 
 export const {
     useViewAllLoanRequestQuery,
     useViewLoanRequestDetailsQuery,
-    useRespondToLoanRequestMutation
+    useRespondToLoanRequestMutation,
+    useViewAllLoanDisbursalQuery,
 } = loanRequestApi;
