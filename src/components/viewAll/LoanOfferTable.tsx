@@ -6,6 +6,7 @@ import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {useRouter} from "next/navigation";
 import {useViewAllLoanOfferQuery} from "@/service/admin/loan/loan-offer-api";
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 
 
@@ -22,11 +23,20 @@ function LoanOfferTable() {
 
     const {data, isLoading} = useViewAllLoanOfferQuery(request)
 
+    console.log('data: data', data)
 
     const loanOfferHeader = [
-        { title: 'Loanee', sortable: true, id: 'loanee', selector: (row: TableRowData) => row.loanee  },
-        { title: 'Loan Product', sortable: true, id: 'program', selector: (row: TableRowData) => row.loanProduct },
-        { title: 'Offer date', sortable: true, id: 'startDate', selector: (row: TableRowData) => row.requestDate },
+        {
+            title: 'Loanee',
+            sortable: true,
+            id: 'loanee',
+            selector: (row: TableRowData) => <div
+                className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())}
+                <div className={``}></div>
+                {row.lastName}</div>
+        },
+        {title: 'Loan Product', sortable: true, id: 'program', selector: (row: TableRowData) => row.loanProductName},
+        {title: 'Offer date', sortable: true, id: 'startDate', selector: (row: TableRowData) => row.dateOffered },
         { title: 'Amount Requested', sortable: true, id: 'amountRequest', selector: (row: TableRowData) => row.amountRequested },
         { title: 'Amount Approved', sortable: true, id: 'requestDate', selector: (row: TableRowData) => row.amountApproved },
 
