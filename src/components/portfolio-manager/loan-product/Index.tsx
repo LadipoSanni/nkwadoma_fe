@@ -353,7 +353,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         }
                                     </div>
 
-                                    <div className={`w-full`}>
+                                    <div className={`w-full md:pt-0 pt-4`}>
                                         <div>
                                             <Label htmlFor="tenor">Tenor (month)</Label>
                                         </div>
@@ -441,7 +441,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         </div>
                                     </div>
 
-                                    <div className={`pt-4`}>
+                                    <div className={`md:pt-4`}>
                                         <Label htmlFor="minimumRepaymentAmount"
                                                style={{display: 'inline-block', WebkitOverflowScrolling: 'touch'}}>Minimum
                                             repayment amount</Label>
@@ -454,7 +454,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                                      className={`h-12`}/>
                                             </div>
 
-                                            <div className={`md:pt-4 w-full`}>
+                                            <div className={`pt-4 w-full`}>
                                                 <Field
                                                     id="minimumRepaymentAmount"
                                                     data-testid="minimumRepaymentAmount"

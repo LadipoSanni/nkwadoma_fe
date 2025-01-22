@@ -32,6 +32,9 @@ export const QuillField = ({ name, errorMessage }: FieldName) => {
                 onChange={(value) => {
                     if (validateLength(value)) {
                         setFieldValue(name, value);
+                        setCustomError('');
+                    } else {
+                        setCustomError(errorMessage);
                     }
                 }}
                 placeholder="Enter terms and condition"
