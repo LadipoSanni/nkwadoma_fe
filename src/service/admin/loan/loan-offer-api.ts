@@ -24,10 +24,10 @@ export const loanOfferApi = createApi({
             }),
         }),
         disburseLoanOffer: builder.mutation({
-            query: (body: {loanOfferId: string, loaneeResponse: string})=> ({
-                url: '/loan/accept/loan-offer',
+            query: (body: {loaneeId: string, loanOfferId: string})=> ({
+                url: '/loan/start',
                 method: 'POST',
-                body: body
+                params: body
             }),
             invalidatesTags: ['loanOffer']
         })
