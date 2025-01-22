@@ -1,14 +1,14 @@
 "use client"
-import React, {useState,useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/index";
 import {useRouter} from "next/navigation";
-import {useViewAllLoanDisbursalMutation} from "@/service/admin/loan/loan-request-api";
+import {useViewAllLoanDisbursalQuery} from "@/service/admin/loan/loan-request-api";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
-
+import {useAppSelector} from "@/redux/store";
 
 
 interface TableRowData {
@@ -17,35 +17,65 @@ interface TableRowData {
 
 function Index() {
     const router = useRouter();
-    const [loanDisbursalTable, setLoanDisbursalTable] = useState([])
+    const [allDisbursedLoan, setAllDisbursedLoan] = useState([]);
 
-    const [data,{isLoading}] = useViewAllLoanDisbursalMutation()
-    const request ={
-        organizationId: "b95805d1-2e2d-47f8-a037-7bcd264914fc",
-        pageSize: 10,
-        pageNumber: 10
-    }
-    useEffect(()=>{
-        const disbursal = data(request).unwrap()
-    },[])
-    // useEffect(() => {
-    //     if (data && data?.data) {
-    //         const all = data?.data?.body;
-    //         setLoanDisbursalTable(all)
-    //     }
-    // }, [data])
+    const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganizationId)
 
+    const size = 1;
+    const page = 100;
 
+    const {data, isLoading: isLoading} = useViewAllLoanDisbursalQuery(
+        {
+            organizationId: clickedOrganizationId,
+            pageSize: size,
+            pageNumber: page,
+        },
+        {refetchOnMountOrArgChange: true}
+    );
+
+    useEffect(() => {
+        if (data && data?.data) {
+            const all = data?.data?.body;
+            setAllDisbursedLoan(all)
+        }
+    }, [data])
 
 
     const loanDisbursalHeader = [
-        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{row.loanee} <div className={``}></div>{row.lastName}</div>  },
-        { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.program },
-        { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort },
-        { title: 'Offer date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.offerDate?.toString()).format('MMMM D, YYYY')}</div> },
-        { title: 'Loan start date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.loanStartDate?.toString()).format('MMMM D, YYYY')}</div> },
-        { title: 'Deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.deposit)}</div>},
-        { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.AmountRequested)}</div>}
+        {
+            title: 'Loanee',
+            sortable: true,
+            id: 'firstName',
+            selector: (row: TableRowData) => <div className='flex gap-2 '>{row.loanee}
+                <div className={``}></div>
+                {row.lastName}</div>
+        },
+        {title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.program},
+        {title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort},
+        {
+            title: 'Offer date',
+            sortable: true,
+            id: 'startDate',
+            selector: (row: TableRowData) => <div>{dayjs(row.offerDate?.toString()).format('MMMM D, YYYY')}</div>
+        },
+        {
+            title: 'Loan start date',
+            sortable: true,
+            id: 'requestDate',
+            selector: (row: TableRowData) => <div>{dayjs(row.loanStartDate?.toString()).format('MMMM D, YYYY')}</div>
+        },
+        {
+            title: 'Deposit',
+            sortable: true,
+            id: 'initialDeposit',
+            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.deposit)}</div>
+        },
+        {
+            title: 'Amount Requested',
+            sortable: true,
+            id: 'amountRequested',
+            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.AmountRequested)}</div>
+        }
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
@@ -57,11 +87,10 @@ function Index() {
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {
-                loanDisbursalTable?.length > 0 ?
-                    // LoanRequestTable?.length > 0 ?
+                allDisbursedLoan?.length > 0 ?
                     <div className={`md:w-full w-full h-full md:h-full `}>
                         <Tables
-                            tableData={loanDisbursalTable}
+                            tableData={allDisbursedLoan}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanDisbursalHeader}
@@ -73,6 +102,7 @@ function Index() {
                             icon={MdOutlinePeople}
                             sideBarTabName='Cohort'
                             optionalFilterName='graduate'
+                            condition={true}
                         />
                     </div>
 
@@ -86,7 +116,8 @@ function Index() {
                                     width={"2em"}
                                     color={'#142854'}
                                     id={'loanDisbursalId'}
-                        ></Icon >} iconBg={'#D9EAFF'} title={'Disbursed loan will show here'} description={`There are no loan disbursed loan available yet`} />
+                        ></Icon>} iconBg={'#D9EAFF'} title={'Disbursed loan will show here'}
+                        description={`There are no loan disbursed loan available yet`}/>
 
 
             }
