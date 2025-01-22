@@ -72,18 +72,24 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         {cohortTitle}
                     </h1>
                     <div>
+                        {/*<p*/}
+                        {/*    id="cohort-description"*/}
+                        {/*    data-testid="cohort-description"*/}
+                        {/*    className={`${inter.className} text-grey400 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}*/}
+                        {/*>*/}
+                        {/*    {cohortDescription}*/}
+                        {/*</p>*/}
                         <p
                             id="cohort-description"
                             data-testid="cohort-description"
                             className={`${inter.className} text-grey400 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}
-                        >
-                            {cohortDescription}
-                        </p>
+                            dangerouslySetInnerHTML={{ __html: cohortDescription }}
+                        />
 
                         <div
                             id={`details`}
                             data-testid="details"
-                            className="grid grid-cols-2 mt-5"
+                            className="grid md:grid-cols-2 md:gap-2 gap-4 grid-cols-1 mt-5"
                         >
                             {tagButtonData.map((tagProps, index) => (
                                 <TagButton key={index} {...tagProps} />
@@ -91,7 +97,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         </div>
                     </div>
 
-                    <div className={`flex flex-row md:space-x-3 space-x-2 md:pt-5 pt-8 w-full`}>
+                    <div className={`flex flex-row md:space-x-3 space-x-2 md:pt-5 w-full`}>
                         {
                             isEditButton ? <div>
                                 <Button variant={"secondary"}
