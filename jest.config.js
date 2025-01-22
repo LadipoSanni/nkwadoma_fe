@@ -9,9 +9,17 @@ const createJestConfig = nextJest({
 const customJestConfig = {
     setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
     testEnvironment: "jsdom",
+    transform: {
+        "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+    },
+    transformIgnorePatterns: [
+        "/node_modules/(?!react-quill-new)", 
+    ],
     moduleNameMapper: {
         // "^react-modal$": "<rootDir>/node_modules/react-modal", 
         "^@/(.*)$": "<rootDir>/src/$1",
+        "\\.(css|less|sass|scss)$": "identity-obj-proxy",
+        "^react-quill-new$": "<rootDir>/__mocks__/react-quill-new.js", 
       },
     
 };

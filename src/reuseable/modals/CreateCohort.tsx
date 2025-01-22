@@ -28,6 +28,7 @@ import Isloading from "../display/Isloading";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import TotalInput from "@/reuseable/display/TotalInput";
+import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
 
 interface createCohortProps {
   triggerButtonStyle: string;

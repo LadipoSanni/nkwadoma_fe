@@ -10,6 +10,7 @@ import CustomSelect from '@/reuseable/Input/Custom-select';
 // import { useQueryClient } from '@tanstack/react-query';
 import {useCreateProgramMutation} from "@/service/admin/program_query";
 import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
+import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
 
 
 type Props = {
@@ -63,8 +64,8 @@ function CreateProgram({setIsOpen}:Props) {
       .required('Program duration is required'),
       programDescription: Yup.string()
        .trim()
-       .required('Program Description is required')
-       .max(2500, 'Program description must be 2500 characters or less')
+      //  .required('Program Description is required')
+        .max(2500, 'Program description must be 2500 characters or less')
     });
 
     
@@ -264,7 +265,7 @@ function CreateProgram({setIsOpen}:Props) {
                 </div>
                 <div>
                   <Label htmlFor="programDescription">Program description</Label>
-                  <Field
+                  {/* <Field
                   as="textarea"
                   id="programDescription"
                   name="programDescription"
@@ -281,8 +282,14 @@ function CreateProgram({setIsOpen}:Props) {
                     if (paste.length + values.programDescription.length > maxChars) { 
                       e.preventDefault(); 
                       setError('Program description must be 2500 characters or less'); } }}
-                  /> 
-                  {
+                  />  */}
+                   <QuillFieldEditor
+                      name="programDescription"
+                      errorMessage="Program description must be 2500 characters or less"
+                      errors={errors}
+                      touched={touched}
+                     />
+                  {/* {
                     errors.programDescription && touched.programDescription &&  (
                        <ErrorMessage
                     name="programDescription"
@@ -291,7 +298,7 @@ function CreateProgram({setIsOpen}:Props) {
                     className="text-red-500 text-sm"
                     />
                     )
-                   }
+                   } */}
                 </div>
                 <div className='md:flex gap-4 justify-end mt-2 mb-4 md:mb-0'>
                 <Button 

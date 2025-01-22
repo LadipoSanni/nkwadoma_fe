@@ -17,7 +17,8 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
-// import { useSearchOrganisationByNameQuery } from '@/service/admin/organization';
+import { useViewOrganizationAdminQuery } from '@/service/admin/organization';
+import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage';
 
 
 
@@ -29,34 +30,48 @@ interface meedlUser{
   status: string,
 }
 
-interface adminProps {
- meedlUser: meedlUser
+
+
+interface TableRowData {
+  [key: string]: string | number | null | React.ReactNode ;
 }
 
-interface tableRowData {
-  [key: string]: string | number | null | React.ReactNode | adminProps;
+interface adminProps extends TableRowData  {
+ fullName: string,
+  email: string,
+  status: string
 }
 
-type viewAllEmployees = adminProps & tableRowData
+// type viewAllEmployees = adminProps & tableRowData
 
 
 const ViewOrganizationDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {data:organizationDetail} = useGetDetailsOfOrganizationQuery({})
   const [searchTerm, setSearchTerm] = useState('');
-  const [adminEmployees, setAdminEmployees] = useState<viewAllEmployees[]>([])
+  // const [adminEmployees, setAdminEmployees] = useState<viewAllEmployees[]>([])
+  const [adminList, setAdminList] = useState<adminProps[]>([])
+  const[] = useState('');
   const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
+
+  const dataElement = {
+    pageNumber: 0,
+    pageSize: 200
+}
+  const {data: adminData,isLoading} = useViewOrganizationAdminQuery(dataElement)
+  // console.log(adminData);
+    
 
   useEffect(()=> {
     if(searchTerm && searchResults && searchResults?.data){
         const adminEmployees = searchResults.data
-        setAdminEmployees(adminEmployees)
+        setAdminList(adminEmployees)
     }
-   else if(!searchTerm && organizationDetail && organizationDetail?.data  && organizationDetail?.data.organizationEmployees){
-       const adminEmployees = organizationDetail?.data.organizationEmployees
-       setAdminEmployees(adminEmployees)
+   else if(!searchTerm && adminData && adminData?.data  ){
+       const adminEmployees = adminData?.data?.body
+        setAdminList(adminEmployees)
     }
-  },[organizationDetail,searchTerm,searchResults])
+  },[adminData,searchTerm,searchResults])
 
 
   const handleInviteClick = () => {
@@ -127,40 +142,79 @@ const ViewOrganizationDetail = () => {
     },
   ];
 
+  // const adminsHeader = [
+  //   {
+  //     title: "Full name",
+  //     sortable: true,
+  //     id: "fullName",
+  //     selector: (row:  viewAllEmployees) =>row.meedlUser?.firstName + " " + row.meedlUser?.lastName,
+  //   },
+  //   {
+  //     title: <div className="relative md:left-20 md:right-10">Email</div>,
+  //     sortable: true,
+  //     id: "email",
+  //     selector: (row:  viewAllEmployees) => ( <div className="relative md:left-12 md:right-12">{row.meedlUser?.email ? row.meedlUser?.email : "nill"}</div>),
+  //   },
+  //   {
+  //     title: (
+  //       <div id="adminStatusHeader" className="relative md:left-28 md:right-64">
+  //         Status
+  //       </div>
+  //     ),
+  //     sortable: true,
+  //     id: "adminStatus",
+  //     selector: (row:  viewAllEmployees) => (
+  //       <span
+  //         id="adminStatus"
+  //         className={`pt-1 pb-1 pr-3 pl-3 rounded-xl relative md:left-24 md:right-60 ${
+  //           row.meedlUser?.status=== "ACTIVE"
+  //             ? "text-[#063F1A] bg-[#E7F5EC]"
+  //             : row.meedlUser?.status === "INVITED"
+  //             ? "text-[#142854] bg-[#F3F8FF]"
+  //             : "text-[#59100D] bg-[#FBE9E9]"
+  //         }`}
+  //       >
+  //         {capitalizeFirstLetters(String(row.meedlUser?.status || "INVITED"))}
+
+  //       </span>
+  //     ),
+  //   },
+  // ];
+
+
   const adminsHeader = [
     {
       title: "Full name",
       sortable: true,
       id: "fullName",
-      selector: (row:  viewAllEmployees) =>row.meedlUser?.firstName + " " + row.meedlUser?.lastName,
+      selector: (row: TableRowData) => row.fullName,
     },
     {
-      title: <div className="relative md:left-20 md:right-10">Email</div>,
+      title: <div className="relative md:left-16 md:right-16">Email</div>,
       sortable: true,
       id: "email",
-      selector: (row:  viewAllEmployees) => ( <div className="relative md:left-12 md:right-12">{row.meedlUser?.email ? row.meedlUser?.email : "nill"}</div>),
+      selector: (row: TableRowData) => ( <div className="relative md:left-12 md:right-12 -z-50">{row.email ? row.email : "nill"}</div>),
     },
     {
       title: (
-        <div id="adminStatusHeader" className="relative md:left-28 md:right-64">
+        <div id="adminStatusHeader" className="">
           Status
         </div>
       ),
       sortable: true,
       id: "adminStatus",
-      selector: (row:  viewAllEmployees) => (
+      selector: (row: TableRowData) => (
         <span
           id="adminStatus"
-          className={`pt-1 pb-1 pr-3 pl-3 rounded-xl relative md:left-24 md:right-60 ${
-            row.meedlUser?.status=== "ACTIVE"
+          className={`pt-1 pb-1 pr-3 pl-3 rounded-xl relative right-2 -z-50 ${
+            row.status === "ACTIVE"
               ? "text-[#063F1A] bg-[#E7F5EC]"
-              : row.meedlUser?.status === "INVITED"
+              : row.status === "INVITED"
               ? "text-[#142854] bg-[#F3F8FF]"
               : "text-[#59100D] bg-[#FBE9E9]"
           }`}
         >
-          {capitalizeFirstLetters(String(row.meedlUser?.status || "INVITED"))}
-
+          {capitalizeFirstLetters(String(row.status))}
         </span>
       ),
     },
@@ -168,6 +222,8 @@ const ViewOrganizationDetail = () => {
 
 
   return (
+    <>
+    {isLoading ? ( <SkeletonForDetailPage /> ) : (
     <main
       id="organizationDetailsMain"
       className={`${inter.className} grid gap-7 py-6 px-3 md:px-10`}
@@ -313,7 +369,7 @@ const ViewOrganizationDetail = () => {
             }}
           >
             <LoanProductTable
-              tableData={adminEmployees}
+              tableData={adminList.slice().reverse()}
               tableHeader={adminsHeader}
               staticHeader={"Full name"}
               staticColunm={"fullName"}
@@ -348,6 +404,8 @@ const ViewOrganizationDetail = () => {
         }
       </div>
     </main>
+    )}
+    </>
   )
 }
 

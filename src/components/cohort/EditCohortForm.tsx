@@ -15,6 +15,7 @@ import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import { useEditCohortMutation } from '@/service/admin/cohort_query';
 import { useQueryClient } from '@tanstack/react-query';
 import FileUploadTwo from '@/reuseable/Input/FileUploadTwo';
+import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
 
 
 interface cohortDetails {
@@ -244,7 +245,7 @@ const maxChars = 1500;
               </div>
               <div>
                 <Label htmlFor="cohortDescription">Cohort description</Label>
-                <Field
+                {/* <Field
                  as="textarea"
                 id="editCohortDescription"
                 name="cohortDescription"
@@ -252,7 +253,13 @@ const maxChars = 1500;
                 placeholder="Enter cohort description"
                 rows={4}
                 maxLength={maxChars}
-                />
+                /> */}
+                  <QuillFieldEditor
+                      name="cohortDescription"
+                      errorMessage="Cohort description must be 2500 characters or less"
+                      errors={errors}
+                      touched={touched}
+                     />
              {
               errors.cohortDescription && touched.cohortDescription &&  (
                  <ErrorMessage
