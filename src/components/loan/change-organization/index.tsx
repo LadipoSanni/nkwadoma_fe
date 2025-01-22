@@ -53,7 +53,7 @@ const ChangeInstitutionModal = () => {
             <Dialog.Portal>
                 <Dialog.Overlay className="fixed inset-0 bg-[#344054B2] data-[state=open]:animate-overlayShow"/>
                 <Dialog.Content
-                    className={`fixed left-1/2 top-1/2 ${styles.container} md:h-[75vh] md:w-[50vw] h-[90vh] w-[90vw] grid grid-rows-3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5 `}>
+                    className={`fixed left-1/2 top-1/2 ${styles.container} md:h-[75vh] md:w-[40vw] h-[90vh] w-[90vw] grid grid-rows-3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5 `}>
                     <Dialog.Title className={`${cabinetGroteskRegular.className}  text-2xl`}>
                         Organization
                     </Dialog.Title>
@@ -77,7 +77,7 @@ const ChangeInstitutionModal = () => {
                                             onClick={() => {
                                                 handleClick(organization?.id)
                                             }}
-                                            className={` ${styles.institutionMiniCard2} md:flex  md:place-items-center md:px-2 py-2 px-2 md:justify-between grid md:py-4  w-[98%] h-fit gap-3 md:h-[4rem] rounded-md border ${organization.id === current ? `border-meedlBlue` : `border-[#ECECEC]`}   `}>
+                                            className={` ${styles.institutionMiniCard2} md:flex  md:place-items-center md:px-2 py-2 px-2 md:justify-between grid md:py-4  w-[98%] h-fit gap-3 md:h-fit rounded-md border ${organization.id === current ? `border-meedlBlue` : `border-[#ECECEC]`}   `}>
 
                                         <div
                                             className={`flex md:flex gap-3 place-items-center md:place-items-center `}
@@ -98,17 +98,18 @@ const ChangeInstitutionModal = () => {
                                                     data-testid={'oranizationImageOnLoan'}
                                                     width={ 100}
                                                     height={ 100 }
+                                                    className={`rounded-full md:rounded-full`}
                                                     // style={{marginTop: 'auto', marginBottom: 'auto', backgroundColor: '#da9494'}}
                                                     src={organization?.pic}
                                                     alt={'image'}
                                                 />
                                             </div>
-                                            <span
-                                                className={` ${inter.className} text-black500 md:text-black500 md:h-fit h-fit w-[30%] md:bg-red-300 break-all bg-purple-50 `}></span>
+                                            <div
+                                                className={` ${inter.className} text-black500 md:text-black500 grid md:grid md:place-content-start md:px-0 md:w-[60%] text-sm md:text-sm md:h-fit h-fit  break-words  `}>Federal university of Technology, Akure</div>
                                         </div>
                                         <div
-                                            className={`flex md:flex bg-grey105 md:bg-grey105 px-2 py-1 md:px-3 md:py-2  rounded-full md:rounded-full w-fit h-fit md:w-fit md:h-fit md:place-items-between   place-items-center gap-3 `}>
-                                            <span className={`text-xs md:text-xs md:flex md:break-keep break-keep w-fit md:w-fit `}>{currentTab}</span>
+                                            className={`flex md:flex bg-grey105 md:bg-grey105 px-2 py-1 md:px-3 md:py-2  rounded-full md:rounded-full w-fit h-fit md:w-fit md:gap-2 md:h-fit md:place-items-between   place-items-center gap-3 `}>
+                                            <span className={`text-xs md:text-xs  md:break-normal  w-fit md:w-fit `}>{currentTab}</span>
                                             <div
                                                 className={` w-fit h-fit ring-1 ring-[#E1EEFF] rounded-md  px-1 py-1 md:w-fit md:h-fit md:ring-1 md:ring-[#E1EEFF] md:rounded-md  md:px-1 md:py-1 `}
                                             >
