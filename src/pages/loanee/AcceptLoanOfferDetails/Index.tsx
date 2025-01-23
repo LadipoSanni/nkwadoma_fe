@@ -125,7 +125,7 @@ const AcceptLoanOfferDetails: React.FC<AcceptLoanOfferDetailsProps> = ({ loaneeI
     const handleAccept = async () => {
         const payload = {
             loanOfferId: loaneeId,
-            loaneeResponse: 'ACCEPTED' as 'ACCEPTED'
+            loaneeResponse: 'ACCEPTED' as const
         };
 
         try {
@@ -139,7 +139,7 @@ const AcceptLoanOfferDetails: React.FC<AcceptLoanOfferDetailsProps> = ({ loaneeI
     const handleDecline = async () => {
         const payload = {
             loanOfferId: loaneeId,
-            loaneeResponse: 'DECLINED' as 'DECLINED'
+            loaneeResponse: 'DECLINED' as const
         };
 
         try {
