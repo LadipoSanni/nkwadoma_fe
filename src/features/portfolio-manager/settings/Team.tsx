@@ -2,14 +2,14 @@
 import React,{useState,useEffect} from 'react'
 import ButtonAndSearch from '@/reuseable/action-bars/Button-and-search'
 import Table from "@/reuseable/table/LoanProductTable";
-import { teamData } from '@/utils/cohort/trainee-details-mock-data/Index';
+// import { teamData } from '@/utils/cohort/trainee-details-mock-data/Index';
 import { Book } from "lucide-react";
 import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 // import {  useGetDetailsOfOrganizationQuery } from '@/service/admin/organization';
 import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
 import { useViewOrganizationAdminQuery } from '@/service/admin/organization';
-import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage';
+// import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage';
 import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
