@@ -1,60 +1,112 @@
-import React,{useState} from 'react'
+
+import React, { useState, useEffect, useRef } from 'react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill/dist/quill.snow.css';
 
-interface props{
-
+interface CustomQuillFieldProps {
+    description: string;
+    setDescription: (description: string) => void;
+    maximumDescription?: number;
+    onDescriptionChange?: (desc: string) => void;
+    label: string;
+    placeholder: string;
+    setError: (error: string | null) => void;
+    name: String
 }
 
-function CustomQuillField() {
-    const [value, setValue] = useState('');
+const CustomQuillField: React.FC<CustomQuillFieldProps> = ({ description, setDescription, maximumDescription = 150, onDescriptionChange, label, placeholder, setError,name }) => {
+    const [value, setValue] = useState("");
+    const internalMaxDescription = maximumDescription + 7; 
+    const quillRef = useRef<ReactQuill | null>(null);
 
-    
-    const toolbarOptions = [['bold', 'italic', 'underline', 'strike'],        
-    ['blockquote', 'code-block'],
-    // ['link', 'image', 'video', 'formula'],
-    ['link','formula'],
-    [{ 'header': 1 }, { 'header': 2 }],               
-    // [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
-    [ { 'list': 'check' }],
-    [{ 'script': 'sub'}, { 'script': 'super' }],      
-    [{ 'indent': '-1'}, { 'indent': '+1' }],          
-    [{ 'direction': 'rtl' }],                        
-  
-    [{ 'size': ['small', false, 'large', 'huge'] }],  
-    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-  
-    [{ 'color': [] }, { 'background': [] }],          
-    [{ 'font': [] }],
-    [{ 'align': [] }],
-  
-    ['clean']];
+    useEffect(() => {
+        setValue(description);
+    }, [description]);
+
+    useEffect(() => {
+        if (quillRef.current) {
+            const editor = quillRef.current.getEditor();
+            const root = editor?.root;
+            root?.addEventListener('paste', handlePaste);
+            return () => {
+                root?.removeEventListener('paste', handlePaste);
+            };
+        }
+    }, [value]);
+
+    const sanitizeContent = (content: string) => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = content;
+        return tempDiv.textContent || tempDiv.innerText || '';
+    };
+
+    const handleChange = (value: string) => {
+        const sanitizedValue = sanitizeContent(value);
+        if (sanitizedValue.length > internalMaxDescription) {
+            setError(`${name} Must be ${maximumDescription} characters or less.`);
+            return;
+        }
+        setValue(value);
+        setDescription(value);
+        setError(null);
+        if (onDescriptionChange) onDescriptionChange(value);
+    };
+
+    const handlePaste = (e: ClipboardEvent) => {
+        const pasteContent = e.clipboardData?.getData('text') || '';
+        const sanitizedPaste = sanitizeContent(pasteContent);
+        const combinedContent = sanitizeContent(value) + sanitizedPaste;
+
+        if (combinedContent.length > internalMaxDescription) {
+            e.preventDefault();
+            setError(`${name} Must be ${maximumDescription} characters or less.`);
+        }
+    };
+
+    const toolbarOptions = [
+        ['bold', 'italic', 'underline'],
+        ['link', 'formula'],
+        [{ 'list': 'check' }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+        [{ 'font': [] }],
+        
+    ];
 
     const quillModules = {
         toolbar: toolbarOptions,
-   }
-
-    const formats = [
-        'header',
-        'bold', 'italic', 'underline','strike',
-        'list', 'bullet',
-        'link', 'image',
-        'align',
-    ]
-
- 
+    };
 
     return (
-        <ReactQuill
-            theme='snow'
-            value={value}
-            onChange={setValue}
-            modules={quillModules}
-            // formats={formats}
-            placeholder="Enter your text here..."
-        />
-    )
-  
-}
+        <div id="descriptionContainer">
+            <label htmlFor="customQuill" className="block text-sm font-medium text-labelBlue">{label}</label>
+            <ReactQuill
+                ref={quillRef}
+                id="customQuill"
+                theme="snow"
+                value={value}
+                onChange={handleChange}
+                modules={quillModules}
+                placeholder={placeholder}
+                className="font-inter text-sm font-normal leading-[22px] pt-2 rounded-md"
+            />
+            {/* {maximumDescription && (
+                <div className="text-gray-500 text-sm">
+                    {sanitizeContent(value).length}/{maximumDescription} characters
+                </div>
+            )} */}
+        </div>
+    );
+};
 
 export default CustomQuillField;
+
+
+
+
+
+
+
+
+
+
+

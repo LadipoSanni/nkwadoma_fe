@@ -40,7 +40,7 @@ function CreateProgram({setIsOpen}:Props) {
     }
 
     
-    const maxChars = 2500;
+    // const maxChars = 2500;
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
     // const programModes=["FULL_TIME", "PART_TIME"]
@@ -265,7 +265,7 @@ function CreateProgram({setIsOpen}:Props) {
                 </div>
                 <div>
                   <Label htmlFor="programDescription">Program description</Label>
-                  <Field
+                  {/* <Field
                   as="textarea"
                   id="programDescription"
                   name="programDescription"
@@ -282,13 +282,13 @@ function CreateProgram({setIsOpen}:Props) {
                     if (paste.length + values.programDescription.length > maxChars) { 
                       e.preventDefault(); 
                       setError('Program description must be 2500 characters or less'); } }}
-                  /> 
-                   {/* <QuillFieldEditor
+                  />  */}
+                   <QuillFieldEditor
                       name="programDescription"
                       errorMessage="Program description must be 2500 characters or less"
                       errors={errors}
                       touched={touched}
-                     /> */}
+                     />
                   {/* {
                     errors.programDescription && touched.programDescription &&  (
                        <ErrorMessage
