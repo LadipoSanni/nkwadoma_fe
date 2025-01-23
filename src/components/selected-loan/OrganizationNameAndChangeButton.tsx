@@ -17,8 +17,9 @@ const OrganizationNameAndChangeButton = () => {
                 alt={'image'} id={'oranizationImageOnLoan'}/>
             <div data-testid="organizationNameContainer" id="organizationNameContainer"
                  className={`${cabinetGroteskRegular.className} text-2xl `}>
+                AltSchool Africa
             </div>
-            <ChangeInstitutionModal/>
+            <ChangeInstitutionModal />
         </div>
     );
 };
