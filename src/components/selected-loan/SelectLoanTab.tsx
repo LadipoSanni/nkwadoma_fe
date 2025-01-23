@@ -48,7 +48,7 @@ const  SelectLoanTab = () => {
                 <div
                     data-testid={name}
                     id={"loanStatusText"}
-                    className={`flex ${name === 'Loan referrals' ||  name === 'Loan book' ? 'text-[#efefef] md:text-[#efefef]' : ``} gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
+                    className={`flex ${name === 'Loan referrals' ||  name === 'Loan book' ? 'text-[#c3c2c2] md:text-[#c3c2c2]' : ``} gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
                 >{name}</div>
 
             </button>

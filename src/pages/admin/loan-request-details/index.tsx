@@ -105,7 +105,7 @@ function LoanDetails() {
     };
 
     const getloaneeloanDetails = () => {
-        const loaneeeLoanBreakdowns =  data?.data?.loaneeLoanBreakdowns
+        const loaneeeLoanBreakdowns =  data?.data?.loaneeLoanBreakdownResponse
         const loaneeloanBreakDown :{ itemName: string; itemAmount: string; }[] = [ ]
         loaneeeLoanBreakdowns?.forEach((element:loaneeLoanBreakDown) => loaneeloanBreakDown?.push({itemName: element?.itemName, itemAmount: element?.itemAmount} ) )
         return loaneeloanBreakDown;

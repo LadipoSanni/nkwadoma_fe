@@ -10,12 +10,14 @@ import {FaCircle} from "react-icons/fa6";
 import {Breakdown} from "@/reuseable/details/breakdown";
 import {store} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
-import {useViewLoanOfferDetailsQuery} from "@/service/admin/loan/loan-offer-api";
+import {useViewLoanOfferDetailsQuery, useDisburseLoanOfferMutation} from "@/service/admin/loan/loan-offer-api";
 import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import styles from "./index.module.css"
 import dynamic from "next/dynamic";
 import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
+import {Loader2} from "lucide-react";
+import {useToast} from "@/hooks/use-toast";
 
 
 const LoanOfferDetailsContent = dynamic(
@@ -27,9 +29,8 @@ const LoanOfferDetails = () => {
     const router = useRouter();
     const [currentTab, setCurrentsTab] = useState(0);
     const searchParams = useSearchParams()
-    // const [disburseLoan] = useDisburseLoanOfferMutation()
+    const [disburseLoan, {isLoading}] = useDisburseLoanOfferMutation()
 
-    // useViewLoanOfferDetailsQuery
     const getId = () => {
         if (searchParams) {
             const pathVariable = searchParams.get("id")
@@ -138,17 +139,31 @@ const LoanOfferDetails = () => {
             value: <div className="flex gap-2"> <span
                 className="flex py-[3px] px-1 items-center justify-center rounded-md border border-green650 bg-meedlWhite"><span
                 className={`${ibmPlexSans.className} bg-green150 h-[15px] w-[26px] rounded-[3px] text-green750 text-[11px] leading-[18px] font-medium text-center`}>
-                {data?.data?.body?.loanRequestResponse?.loaneeLoanBreakdowns?.[0]?.loanee?.creditScore}
+                {data?.data?.creditScore}
             </span></span>
             </div>
         },
     ];
-    const disburseLoanOffer = () => {
+    const {toast} = useToast()
+    const disburseLoanOffer =  async() => {
 
-        // const body = {
-        //     loanOfferId: id,
-        //
-        // }
+        console.log('start disbursment progress')
+        const body = {
+            loanOfferId: id,
+            loaneeId: data?.data?.loaneeId
+        }
+        console.log('parane: ', body);
+        const response = await disburseLoan(body)
+        console.log('response: ', response)
+        if (response?.error){
+            toast({
+                status: 'error',
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description:response?.error?.data?.message
+            })
+        }
+
 
     }
 
@@ -220,10 +235,10 @@ const LoanOfferDetails = () => {
                         <div className={`flex gap-2 items-center`}>
                             <p id={'loaneeProgramOnLoanOfferDetails'}
                                data-testid={'loaneeProgramOnLoanOfferDetails'}
-                               className={` text-sm text-black400`}>{data?.data?.body?.loanRequestResponse?.programName}</p>
+                               className={` text-sm text-black400`}>{data?.data?.programName}</p>
                             <FaCircle className={'h-1 w-1 text-blue550'}/>
                             <p id={'loaneeCohortOnLoanRequestDetails'} data-testid={'loaneeCohortOnLoaOfferDetails'}
-                               className={`text-sm text-black400`}>{data?.data?.body?.loanRequestResponse?.cohortName}</p>
+                               className={`text-sm text-black400`}>{data?.data?.cohortName}</p>
                         </div>
                     </div>
                 </div>
@@ -271,9 +286,11 @@ const LoanOfferDetails = () => {
                         )}
 
                         <Button className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
-                                onClick={handleNext}
+                                onClick={ currentTab === 3 ? disburseLoanOffer : handleNext}
                                 // disabled={currentTab === loanOfferDetailsTab.length - 1}
+
                         >
+                            {isLoading && <Loader2 className="animate-spin" />}
                             {currentTab === 3 ? 'Disburse loan' : 'Continue'}
                         </Button>
 
