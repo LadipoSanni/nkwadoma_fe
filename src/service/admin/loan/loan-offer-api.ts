@@ -30,7 +30,15 @@ export const loanOfferApi = createApi({
                 params: body
             }),
             invalidatesTags: ['loanOffer']
+        }),
+        respondToLoanOffer: builder.mutation({
+            query: (body: { loanOfferId: string, loaneeResponse: 'ACCEPTED' | 'DECLINED' }) => ({
+                url: '/api/v1/loan/accept/loan-offer',
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: ['loanOffer']
         })
     })
 })
-export const {useViewAllLoanOfferQuery, useViewLoanOfferDetailsQuery, useDisburseLoanOfferMutation} = loanOfferApi
+export const {useViewAllLoanOfferQuery, useViewLoanOfferDetailsQuery, useDisburseLoanOfferMutation, useRespondToLoanOfferMutation } = loanOfferApi
