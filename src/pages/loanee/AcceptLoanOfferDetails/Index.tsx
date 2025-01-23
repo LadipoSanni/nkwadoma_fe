@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import BackButton from "@/components/back-button";
-import { useRouter } from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { cabinetGroteskRegular, inter } from "@/app/fonts";
@@ -12,16 +12,33 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { Breakdown } from "@/reuseable/details/breakdown";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useViewLoanOfferDetailsQuery, useRespondToLoanOfferMutation } from "@/service/admin/loan/loan-offer-api";
+import dynamic from "next/dynamic";
 
-interface AcceptLoanOfferDetailsProps {
-    loaneeId: string;
-}
+const AcceptLoanOfferDetails = dynamic(
+    () => Promise.resolve(AcceptLoanOffer),
+    {ssr: false}
+)
 
-const AcceptLoanOfferDetails: React.FC<AcceptLoanOfferDetailsProps> = ({ loaneeId }) => {
-    const router = useRouter();
+const AcceptLoanOffer: React.FC= () => {
     const [currentTab, setCurrentTab] = useState(0);
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const getUserToken  = () => {
+        if (searchParams){
+            const pathVariable = searchParams.get("loaneeId")
+            if (pathVariable){
+                return pathVariable
+            }else {
+                return ''
+            }
+        }else {
+            return ""
+        }
+    }
+
+    const loaneeId: string = getUserToken()
 
     const { data } = useViewLoanOfferDetailsQuery(loaneeId);
     const [respondToLoanOffer] = useRespondToLoanOfferMutation();
