@@ -11,7 +11,7 @@ interface CustomQuillFieldProps {
     label: string;
     placeholder: string;
     setError: (error: string | null) => void;
-    name: String
+    name: string
 }
 
 const CustomQuillField: React.FC<CustomQuillFieldProps> = ({ description, setDescription, maximumDescription = 150, onDescriptionChange, label, placeholder, setError,name }) => {

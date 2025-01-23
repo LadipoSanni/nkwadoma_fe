@@ -12,7 +12,7 @@ import {
 import { MdClose } from "react-icons/md";
 import ProgramSelect from "@/reuseable/select/ProgramSelect";
 import DatePicker from "@/reuseable/date/DatePicker";
-import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
+// import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
 import FormButtons from "@/reuseable/buttons/FormButtons";
 import {
   FeeBreakdownHeader,
@@ -290,8 +290,8 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                     setDescription={setDescription}
                     maximumDescription={2500}
                     onDescriptionChange={(desc) => {
-                      let pTagSpace = 7
-                      let maximumDescription = 2500
+                      const pTagSpace = 7
+                      const maximumDescription = 2500
                       if (desc.length <= maximumDescription +  pTagSpace) {
                         setDescription(desc);
                         setDescriptionError(null);
