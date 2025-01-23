@@ -3,7 +3,6 @@ import React from 'react';
 import {AuthButtonPropsType} from "@/types/ButtonTypes";
 import {Button} from "@/components/ui/button"
 import Isloading from "@/reuseable/display/Isloading";
-import * as Dialog from "@radix-ui/react-dialog";
 
 
 const AuthButton = ({
