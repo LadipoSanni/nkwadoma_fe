@@ -1,37 +1,48 @@
-"use client"
+'use client'
 import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
 import BackButton from "@/components/back-button";
-import { useRouter } from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { cabinetGroteskRegular, inter, ibmPlexSans } from "@/app/fonts";
+import { cabinetGroteskRegular, inter } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
 import { FaCircle } from "react-icons/fa6";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { Breakdown } from "@/reuseable/details/breakdown";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useViewLoanOfferDetailsQuery, useRespondToLoanOfferMutation } from "@/service/admin/loan/loan-offer-api";
+import dynamic from "next/dynamic";
 
-const DeclineLoanModal = dynamic(
-    () => import("@/reuseable/modals/declineLoan/Index"),
-    { ssr: false }
-);
+const AcceptLoanOfferDetails = dynamic(
+    () => Promise.resolve(AcceptLoanOffer),
+    {ssr: false}
+)
 
-interface LoanDetailsItem {
-    label: string;
-    value: string | React.ReactNode;
-}
-
-const AcceptLoanOfferDetails = () => {
-    const router = useRouter();
+const AcceptLoanOffer: React.FC= () => {
     const [currentTab, setCurrentTab] = useState(0);
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const getUserToken  = () => {
+        if (searchParams){
+            const pathVariable = searchParams.get("loaneeId")
+            if (pathVariable){
+                return pathVariable
+            }else {
+                return ''
+            }
+        }else {
+            return ""
+        }
+    }
 
-    const loanRequestId = "some-loan-39";
-    const loanProductId = "some-loan-product-id";
+    const loaneeId: string = getUserToken()
+
+    const { data } = useViewLoanOfferDetailsQuery(loaneeId);
+    const [respondToLoanOffer] = useRespondToLoanOfferMutation();
+
 
     const backToLoanRequest = () => {
         router.push("/loan/loan-request");
@@ -43,47 +54,73 @@ const AcceptLoanOfferDetails = () => {
         "Loan details"
     ];
 
-    const basicDetails: LoanDetailsItem[] = [
-        { label: "Gender", value: "Female" },
-        { label: "Email address", value: "vanessa.oluchukwu@gmail.com" },
-        { label: "Phone number", value: "+2348048950903" },
-        { label: "Date of birth", value: "11 March, 1999" },
-        { label: "Marital status", value: "Single" },
-        { label: "Nationality", value: "Nigeria" },
-        { label: "State of origin", value: "Imo" },
-        { label: "State of residence", value: "Lagos" },
-        { label: "Residential address", value: "316, Herbert Macaulay Way, Alagomeji, Sabo, Yaba" }
-    ];
+    const getCurrentDataList = () => {
+        if (!data || !data.data) return [];
 
-    const additionalDetails: LoanDetailsItem[] = [
-        { label: "Alternate email address", value: "oluchukwuvanessa22@gmail.com" },
-        { label: "Alternate phone number", value: "+2348095953713" },
-        { label: "Alternate residential address", value: "300, Herbert Macaulay Way, Alagomeji, Sabo, Yaba" },
-        { label: "Next of kin name", value: "Michael Oluchukwu" },
-        { label: "Next of kin email address", value: "michael.oluchukwu@yahoo.com" },
-        { label: "Next of kin phone number", value: "+23480960273902" },
-        { label: "Next of kin relationship", value: "Brother" }
-    ];
+        const {
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            dateOfBirth,
+            stateOfOrigin,
+            maritalStatus,
+            stateOfResidence,
+            nationality,
+            residentialAddress,
+            alternateEmail,
+            alternatePhoneNumber,
+            alternateContactAddress,
+            nextOfKinEmail,
+            nextOfKinPhoneNumber,
+            nextOfKinRelationship,
+            nextOfKinFirstName,
+            nextOfKinLastName,
+            nextOfKinContactAddress,
+            tuitionAmount,
+            initialDeposit,
+            amountRequested,
+            amountReceived,
+            loanBreakdown
+        } = data.data;
 
-    const loanDetails: LoanDetailsItem[] = [
-        { label: "Tuition amount", value: "₦3,500,000.00" },
-        { label: "Start date", value: "13 Dec, 2023" },
-        { label: "Loan amount requested", value: "₦4,000,000.00" },
-        { label: "Deposit", value: "₦1,000,000.00" },
-        {
-            label: "Credit score",
-            value: (
-                <div className="flex gap-2">
-                    Good
-                    <span className="flex py-[3px] px-1 items-center justify-center rounded-md border border-green650 bg-meedlWhite">
-                        <span className={`${ibmPlexSans.className} bg-green150 h-[15px] w-[26px] rounded-[3px] text-green750 text-[11px] leading-[18px] font-medium text-center`}>
-                            670
-                        </span>
-                    </span>
-                </div>
-            )
-        },
-    ];
+        switch (currentTab) {
+            case 0:
+                return [
+                    { label: "First Name", value: firstName || "N/A" },
+                    { label: "Last Name", value: lastName || "N/A" },
+                    { label: "Email address", value: email || "N/A" },
+                    { label: "Phone number", value: phoneNumber || "N/A" },
+                    { label: "Date of birth", value: dateOfBirth || "N/A" },
+                    { label: "Marital status", value: maritalStatus || "N/A" },
+                    { label: "Nationality", value: nationality || "N/A" },
+                    { label: "State of origin", value: stateOfOrigin || "N/A" },
+                    { label: "State of residence", value: stateOfResidence || "N/A" },
+                    { label: "Residential address", value: residentialAddress || "N/A" }
+                ];
+            case 1:
+                return [
+                    { label: "Alternate email address", value: alternateEmail || "N/A" },
+                    { label: "Alternate phone number", value: alternatePhoneNumber || "N/A" },
+                    { label: "Alternate residential address", value: alternateContactAddress || "N/A" },
+                    { label: "Next of kin name", value: `${nextOfKinFirstName} ${nextOfKinLastName}` || "N/A" },
+                    { label: "Next of kin email address", value: nextOfKinEmail || "N/A" },
+                    { label: "Next of kin phone number", value: nextOfKinPhoneNumber || "N/A" },
+                    { label: "Next of kin relationship", value: nextOfKinRelationship || "N/A" },
+                    { label: "Next of kin contact address", value: nextOfKinContactAddress || "N/A" }
+                ];
+            case 2:
+                return [
+                    { label: "Tuition amount", value: tuitionAmount || "N/A" },
+                    { label: "Initial deposit", value: initialDeposit || "N/A" },
+                    { label: "Loan amount requested", value: amountRequested || "N/A" },
+                    { label: "Amount received", value: amountReceived || "N/A" },
+                    { label: "Loan breakdown", value: loanBreakdown || "N/A" }
+                ];
+            default:
+                return [];
+        }
+    };
 
     const handleNext = () => {
         if (currentTab < loanRequestDetailsTab.length - 1) {
@@ -97,16 +134,31 @@ const AcceptLoanOfferDetails = () => {
         }
     };
 
-    const getCurrentDataList = () => {
-        switch (currentTab) {
-            case 0:
-                return basicDetails;
-            case 1:
-                return additionalDetails;
-            case 2:
-                return loanDetails;
-            default:
-                return [];
+    const handleAccept = async () => {
+        const payload = {
+            loanOfferId: loaneeId,
+            loaneeResponse: 'ACCEPTED' as const
+        };
+
+        try {
+            await respondToLoanOffer(payload);
+            router.push('/overview');
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleDecline = async () => {
+        const payload = {
+            loanOfferId: loaneeId,
+            loaneeResponse: 'DECLINED' as const
+        };
+
+        try {
+            await respondToLoanOffer(payload);
+            router.push('/overview');
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -149,7 +201,7 @@ const AcceptLoanOfferDetails = () => {
                             data-testid="loaneeNameOnLoanRequestDetails"
                             className={`${cabinetGroteskRegular.className} font-medium text-meedlBlack text-[24px] md:text-[28px] leading-[120%]`}
                         >
-                            Sarah Akinyemi
+                            {data?.data.firstName} {data?.data.lastName}
                         </div>
                         <div className="flex gap-2 items-center">
                             <p
@@ -157,7 +209,7 @@ const AcceptLoanOfferDetails = () => {
                                 data-testid="loaneeProgramOnLoanRequestDetails"
                                 className="text-sm text-black400"
                             >
-                                Product Design
+                                {data?.data.programName}
                             </p>
                             <FaCircle className="h-1 w-1 text-blue550" />
                             <p
@@ -165,7 +217,7 @@ const AcceptLoanOfferDetails = () => {
                                 data-testid="loaneeCohortOnLoanRequestDetails"
                                 className="text-sm text-black400"
                             >
-                                Luminary
+                                {data?.data.cohortName}
                             </p>
                         </div>
                     </div>
@@ -247,13 +299,13 @@ const AcceptLoanOfferDetails = () => {
                                     <DropdownMenuContent className="w-[176px] h-[86px] p-1 grid gap-1">
                                         <DropdownMenuItem
                                             className="rounded cursor-pointer p-2 flex items-center text-meedlBlue focus:text-meedlBlue hover:bg-lightBlue200"
-                                            onSelect={() => console.log('Option 1 selected')}
+                                            onSelect={handleAccept}
                                         >
                                             Accept loan offer
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             className="rounded cursor-pointer p-2 flex items-center text-error500 focus:text-error500 hover:bg-error150"
-                                            onSelect={() => setIsModalOpen(true)}
+                                            onSelect={handleDecline}
                                         >
                                             Decline loan offer
                                         </DropdownMenuItem>
@@ -269,14 +321,6 @@ const AcceptLoanOfferDetails = () => {
                                 Continue
                             </Button>
                         )}
-
-                        <DeclineLoanModal
-                            isOpen={isModalOpen}
-                            setIsOpen={setIsModalOpen}
-                            loanRequestId={loanRequestId}
-                            loanProductId={loanProductId}
-                            title="Decline loan Offer"
-                        />
                     </div>
                 </div>
             </div>
