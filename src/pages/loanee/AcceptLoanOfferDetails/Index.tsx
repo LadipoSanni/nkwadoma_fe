@@ -1,6 +1,5 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import BackButton from "@/components/back-button";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,12 +11,7 @@ import { FaCircle } from "react-icons/fa6";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { Breakdown } from "@/reuseable/details/breakdown";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useViewLoanOfferDetailsQuery } from "@/service/admin/loan/loan-offer-api";
-
-const DeclineLoanModal = dynamic(
-    () => import("@/reuseable/modals/declineLoan/Index"),
-    { ssr: false }
-);
+import { useViewLoanOfferDetailsQuery, useRespondToLoanOfferMutation } from "@/service/admin/loan/loan-offer-api";
 
 interface AcceptLoanOfferDetailsProps {
     loaneeId: string;
@@ -28,9 +22,9 @@ const AcceptLoanOfferDetails: React.FC<AcceptLoanOfferDetailsProps> = ({ loaneeI
     const [currentTab, setCurrentTab] = useState(0);
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const { data } = useViewLoanOfferDetailsQuery(loaneeId);
+    const [respondToLoanOffer] = useRespondToLoanOfferMutation();
 
     useEffect(() => {
         if (data) {
@@ -125,6 +119,34 @@ const AcceptLoanOfferDetails: React.FC<AcceptLoanOfferDetailsProps> = ({ loaneeI
     const handleBack = () => {
         if (currentTab > 0) {
             setCurrentTab(currentTab - 1);
+        }
+    };
+
+    const handleAccept = async () => {
+        const payload = {
+            loanOfferId: loaneeId,
+            loaneeResponse: 'ACCEPTED' as 'ACCEPTED'
+        };
+
+        try {
+            await respondToLoanOffer(payload);
+            router.push('/overview');
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleDecline = async () => {
+        const payload = {
+            loanOfferId: loaneeId,
+            loaneeResponse: 'DECLINED' as 'DECLINED'
+        };
+
+        try {
+            await respondToLoanOffer(payload);
+            router.push('/overview');
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -265,13 +287,13 @@ const AcceptLoanOfferDetails: React.FC<AcceptLoanOfferDetailsProps> = ({ loaneeI
                                     <DropdownMenuContent className="w-[176px] h-[86px] p-1 grid gap-1">
                                         <DropdownMenuItem
                                             className="rounded cursor-pointer p-2 flex items-center text-meedlBlue focus:text-meedlBlue hover:bg-lightBlue200"
-                                            onSelect={() => console.log('Option 1 selected')}
+                                            onSelect={handleAccept}
                                         >
                                             Accept loan offer
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             className="rounded cursor-pointer p-2 flex items-center text-error500 focus:text-error500 hover:bg-error150"
-                                            onSelect={() => setIsModalOpen(true)}
+                                            onSelect={handleDecline}
                                         >
                                             Decline loan offer
                                         </DropdownMenuItem>
@@ -287,14 +309,6 @@ const AcceptLoanOfferDetails: React.FC<AcceptLoanOfferDetailsProps> = ({ loaneeI
                                 Continue
                             </Button>
                         )}
-
-                        <DeclineLoanModal
-                            isOpen={isModalOpen}
-                            setIsOpen={setIsModalOpen}
-                            loanRequestId={loaneeId}
-                            loanProductId="some-loan-product-id"
-                            title="Decline loan Offer"
-                        />
                     </div>
                 </div>
             </div>
