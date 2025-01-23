@@ -9,6 +9,7 @@ import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api"
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 
 
 
@@ -45,7 +46,11 @@ const Index = () => {
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
              className={`grid md:px-3 md:overflow-hidden  md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
-            {
+            {isLoading ? (
+                    <div className={`w-full h-fit md:w-full md:h-full`}>
+                        <SkeletonForTable />
+                    </div>
+                ):
                 data?.data?.body?.length > 0 ?
                     <div className={`md:w-full  w-full h-full md:h-full `}>
                         <Tables

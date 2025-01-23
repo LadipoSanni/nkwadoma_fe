@@ -3,7 +3,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery";
 
 
 export const loanOfferApi = createApi({
-    tagTypes: ['loanOffer'],
+    tagTypes: ['loanOffer', 'create-loan-offer'],
     baseQuery: customFetchBaseQuery,
     reducerPath: 'loanOfferApi',
     endpoints : (builder) => ({
@@ -15,6 +15,7 @@ export const loanOfferApi = createApi({
                 method: 'GET',
                 params: data
             }),
+            providesTags: ['create-loan-offer']
 
         }) ,
         viewLoanOfferDetails: builder.query({
@@ -25,12 +26,19 @@ export const loanOfferApi = createApi({
         }),
         disburseLoanOffer: builder.mutation({
             query: (body: {loaneeId: string, loanOfferId: string})=> ({
-                url: '/loan/start',
+                url: `/loan/start?loaneeId=${body.loaneeId}&loanOfferId=${body.loanOfferId}`,
                 method: 'POST',
-                params: body
+            }),
+            invalidatesTags: ['loanOffer']
+        }),
+        respondToLoanOffer: builder.mutation({
+            query: (body: { loanOfferId: string, loaneeResponse: 'ACCEPTED' | 'DECLINED' }) => ({
+                url: '/api/v1/loan/accept/loan-offer',
+                method: 'POST',
+                body
             }),
             invalidatesTags: ['loanOffer']
         })
     })
 })
-export const {useViewAllLoanOfferQuery, useViewLoanOfferDetailsQuery, useDisburseLoanOfferMutation} = loanOfferApi
+export const {useViewAllLoanOfferQuery, useViewLoanOfferDetailsQuery, useDisburseLoanOfferMutation, useRespondToLoanOfferMutation } = loanOfferApi
