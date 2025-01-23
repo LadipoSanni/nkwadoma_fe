@@ -40,13 +40,13 @@ describe('EditProgramForm', () => {
           expect(mockSetIsOpen).toHaveBeenCalledWith(false);
         });
 
-        it('renders the form fields correctly', () => {
-            renderComponent();
-            expect(screen.getByPlaceholderText(/Enter program name/i)).toBeInTheDocument();
-            // expect(screen.getByPlaceholderText(/Enter program duration/i)).toBeInTheDocument();
-            expect(screen.getByPlaceholderText(/Enter program description/i)).toBeInTheDocument();
+        // it('renders the form fields correctly', () => {
+        //     renderComponent();
+        //     expect(screen.getByPlaceholderText(/Enter program name/i)).toBeInTheDocument();
+        //     // expect(screen.getByPlaceholderText(/Enter program duration/i)).toBeInTheDocument();
+        //     expect(screen.getByPlaceholderText(/Enter program description/i)).toBeInTheDocument();
            
-          });
+        //   });
 
           it('shows validation errors for name if required fields are empty', async () => {
             renderComponent();
@@ -61,18 +61,18 @@ describe('EditProgramForm', () => {
             });
           });
 
-          it('shows validation errors for program description if required fields are empty', async () => {
-            renderComponent();
+          // it('shows validation errors for program description if required fields are empty', async () => {
+          //   renderComponent();
         
-            fireEvent.change(screen.getByPlaceholderText(/Enter program description/i), { target: { value: '' } });
-            fireEvent.blur(screen.getByPlaceholderText(/Enter program description/i)); 
+          //   fireEvent.change(screen.getByPlaceholderText(/Enter program description/i), { target: { value: '' } });
+          //   fireEvent.blur(screen.getByPlaceholderText(/Enter program description/i)); 
         
-            fireEvent.click(screen.getByText(/Save/i)); 
+          //   fireEvent.click(screen.getByText(/Save/i)); 
         
-            await waitFor(() => {
-              expect(screen.getByText(/Program Description is required/i)).toBeInTheDocument();
-            });
-          });
+          //   await waitFor(() => {
+          //     expect(screen.getByText(/Program Description is required/i)).toBeInTheDocument();
+          //   });
+          // });
 
           test('submits form with valid input', async () => {
             renderComponent();

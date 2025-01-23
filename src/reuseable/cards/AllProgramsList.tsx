@@ -46,8 +46,13 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
 
             <CardContent id={`contentId`} data-testid={`contentId`}>
                 <CardDescription id={`description-${id}`} data-testid="description"
-                                 className={`${inter.className}  text-sm text-grey450 `}>
-                    {shortDescription}
+                                 className={`${inter.className}  text-sm text-grey450`}
+                                 
+                      >  
+                        <span
+                         dangerouslySetInnerHTML={{ __html: shortDescription}}
+                        />                       
+                    
                     {description.length > 90 && (
                         <span
                             id={`readMore-${id}`}
@@ -56,8 +61,8 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
                         >
               { "...."}
             </span>
-                    )}
-                </CardDescription>
+                    )} 
+                </CardDescription> 
 
                 <div
                     id={`details-${id}`}

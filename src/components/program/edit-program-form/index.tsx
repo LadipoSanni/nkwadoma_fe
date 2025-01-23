@@ -11,6 +11,7 @@ import CustomSelect from '@/reuseable/Input/Custom-select';
 import { useUpdateProgramMutation } from '@/service/admin/program_query';
 import { useQueryClient } from '@tanstack/react-query';
 import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
+import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
 
 interface ProgramDetail {
     id: string;
@@ -61,7 +62,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
     }
 
     // const [isButtonLoading] = useState(false);
-    const maxChars = 2500;
+    // const maxChars = 2500;
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
     // const programModes=["FULL_TIME", "PART_TIME"]
@@ -84,8 +85,8 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
       }),
       programDescription: Yup.string()
        .trim()
-       .required('Program Description is required')
-       .max(2500, 'Program description must be 2500 characters or less')
+      //  .required('Program Description is required')
+        .max(2500, 'Program description must be 2500 characters or less')
     });
   
      const toastPopUp = ToastPopUp({
@@ -252,7 +253,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                 </div>
                 <div>
                   <Label htmlFor="programDescription">Program description</Label>
-                  <Field
+                  {/* <Field
                   as="textarea"
                   id="programDescription"
                   name="programDescription"
@@ -269,7 +270,13 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                     if (paste.length + values.programDescription.length > maxChars) { 
                       e.preventDefault(); 
                       setError('Program description must be 2500 characters or less'); } }}
-                  /> 
+                  />  */}
+                   <QuillFieldEditor
+                      name="programDescription"
+                      errorMessage="Program description must be 2500 characters or less"
+                      errors={errors}
+                      touched={touched}
+                     />
                   {
                     errors.programDescription && touched.programDescription &&  (
                        <ErrorMessage

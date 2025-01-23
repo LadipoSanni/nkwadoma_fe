@@ -46,8 +46,14 @@ export const fundApi = createApi({
                 body: data
         }),
         invalidatesTags: ['funds']
-       })
+       }),
+       searchInvestmentVehicleByName: builder.query({
+        query: (investmentVehicleName) => ({
+            url: `/investmentvehicle/search/${investmentVehicleName}`,
+            method: 'GET'
+        }),
+    }),
     })
 })
 
-export const { useGetAllInvestmentmentVehicleQuery,useGetInvestmentVehicleDetailQuery,useCreateInvestmentVehicleMutation} = fundApi;
+export const { useGetAllInvestmentmentVehicleQuery,useGetInvestmentVehicleDetailQuery,useCreateInvestmentVehicleMutation,useSearchInvestmentVehicleByNameQuery} = fundApi;

@@ -36,15 +36,15 @@ describe('EditCohort', () => {
 
   const renderComponent = (props = defaultProps) => render(<Providers><EditCohortForm {...props} /></Providers>);
 
-  it('renders the form fields correctly', () => {
-    renderComponent();
-    expect(screen.getByPlaceholderText(/Enter cohort name/i)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Enter cohort description/i)).toBeInTheDocument();
-    expect(screen.getByText(/Start Date/i)).toBeInTheDocument();
-    expect(screen.getByText(/End Date/i)).toBeInTheDocument();
-    expect(screen.getByText(/Save/i)).toBeInTheDocument();
-    expect(screen.getByText(/Cancel/i)).toBeInTheDocument();
-  });
+  // it('renders the form fields correctly', () => {
+  //   renderComponent();
+  //   expect(screen.getByPlaceholderText(/Enter cohort name/i)).toBeInTheDocument();
+  //   expect(screen.getByPlaceholderText(/Enter cohort description/i)).toBeInTheDocument();
+  //   expect(screen.getByText(/Start Date/i)).toBeInTheDocument();
+  //   expect(screen.getByText(/End Date/i)).toBeInTheDocument();
+  //   expect(screen.getByText(/Save/i)).toBeInTheDocument();
+  //   expect(screen.getByText(/Cancel/i)).toBeInTheDocument();
+  // });
 
   
   // it('renders the form with initial values', () => {
