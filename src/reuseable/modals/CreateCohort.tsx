@@ -12,7 +12,7 @@ import {
 import { MdClose } from "react-icons/md";
 import ProgramSelect from "@/reuseable/select/ProgramSelect";
 import DatePicker from "@/reuseable/date/DatePicker";
-import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
+// import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
 import FormButtons from "@/reuseable/buttons/FormButtons";
 import {
   FeeBreakdownHeader,
@@ -29,6 +29,7 @@ import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import TotalInput from "@/reuseable/display/TotalInput";
 // import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
+import CustomQuillField from "../textArea/Custom-quill-field";
 
 interface createCohortProps {
   triggerButtonStyle: string;
@@ -269,7 +270,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                     setId={setProgramId} label={"Program"} placeholder={"Select program"}                />
                 <DatePicker date={startDate} setDate={setDate} />
               </div>
-              <DescriptionTextarea
+              {/* <DescriptionTextarea
                   description={cohortDescription}
                   setDescription={setDescription}
                   // maximumDescription={2500}
@@ -280,7 +281,30 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                     } else {
                       setDescriptionError("Description must be 2500 characters or less");
                     }
-                  }} label={"Description"} placeholder={"Enter description"}              />
+                  }} 
+                  label={"Description"} 
+                  placeholder={"Enter description"}              
+                  /> */}
+                  <CustomQuillField
+                    description={cohortDescription}
+                    setDescription={setDescription}
+                    maximumDescription={2500}
+                    onDescriptionChange={(desc) => {
+                      const pTagSpace = 7
+                      const maximumDescription = 2500
+                      if (desc.length <= maximumDescription +  pTagSpace) {
+                        setDescription(desc);
+                        setDescriptionError(null);
+                      } else {
+                        setDescriptionError("Cohort description must be 2500 characters or less");
+                      }
+                    }} 
+                    label={"Description"} 
+                    placeholder={"Enter description...."}   
+                    setError={(error) => setDescriptionError(error)}
+                    name="Cohort description"
+                  />
+
               {descriptionError && ( <div className="text-red-500 text-sm">{descriptionError}</div> )}
               <FileUpload
                 handleDrop={handleDrop}

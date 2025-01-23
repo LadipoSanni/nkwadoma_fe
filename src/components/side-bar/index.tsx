@@ -119,6 +119,7 @@ const SideBar = () => {
         //         className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
         //     handleClick: handleClick
         // },
+        
         {id: 'logout', name: 'Logout', icon: <LuLogOut color={currentNavBottom === "Logout" ? '#142854' : '#939CB0'} className={` h-[1.2rem] w-[1.2rem] `}/>, handleClick: handleLogout},
 
     ]
