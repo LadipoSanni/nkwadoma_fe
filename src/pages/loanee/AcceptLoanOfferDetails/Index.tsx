@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import BackButton from "@/components/back-button";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -26,11 +26,6 @@ const AcceptLoanOfferDetails: React.FC<AcceptLoanOfferDetailsProps> = ({ loaneeI
     const { data } = useViewLoanOfferDetailsQuery(loaneeId);
     const [respondToLoanOffer] = useRespondToLoanOfferMutation();
 
-    useEffect(() => {
-        if (data) {
-            // Handle the fetched data
-        }
-    }, [data]);
 
     const backToLoanRequest = () => {
         router.push("/loan/loan-request");
