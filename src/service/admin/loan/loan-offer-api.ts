@@ -3,7 +3,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery";
 
 
 export const loanOfferApi = createApi({
-    tagTypes: ['loanOffer'],
+    tagTypes: ['loanOffer', 'create-loan-offer'],
     baseQuery: customFetchBaseQuery,
     reducerPath: 'loanOfferApi',
     endpoints : (builder) => ({
@@ -15,6 +15,7 @@ export const loanOfferApi = createApi({
                 method: 'GET',
                 params: data
             }),
+            providesTags: ['create-loan-offer']
 
         }) ,
         viewLoanOfferDetails: builder.query({

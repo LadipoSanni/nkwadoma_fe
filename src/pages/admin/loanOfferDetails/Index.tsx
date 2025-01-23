@@ -29,7 +29,7 @@ const LoanOfferDetails = () => {
     const router = useRouter();
     const [currentTab, setCurrentsTab] = useState(0);
     const searchParams = useSearchParams()
-    const [disburseLoan, isLoading] = useDisburseLoanOfferMutation()
+    const [disburseLoan, {isLoading}] = useDisburseLoanOfferMutation()
 
     const getId = () => {
         if (searchParams) {
@@ -158,7 +158,9 @@ const LoanOfferDetails = () => {
         if (response?.error){
             toast({
                 status: 'error',
-                description:''
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description:response?.error?.data?.message
             })
         }
 
