@@ -19,14 +19,17 @@ function Index() {
     const router = useRouter();
     const [allDisbursedLoan, setAllDisbursedLoan] = useState([]);
 
-    const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganizationId)
+    // const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization)
+
+    const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
+    const { id } = clickedOrganizationId || {};
 
     const size = 1;
     const page = 100;
 
     const {data, isLoading: isLoading} = useViewAllLoanDisbursalQuery(
         {
-            organizationId: clickedOrganizationId as string,
+            organizationId: id as string,
             pageSize: size,
             pageNumber: page,
         },

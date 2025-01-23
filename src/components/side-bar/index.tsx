@@ -14,6 +14,7 @@ import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {MdOutlineAccountBalance, MdOutlineInventory2,MdOutlineReceiptLong, MdOutlinePayments, MdOutlineBusinessCenter,MdOutlinePersonOutline, MdOutlinePeopleAlt,MdOutlineHome} from "react-icons/md";
 import {useLogoutMutation} from "@/service/users/api";
 import {clearData} from "@/utils/storage";
+import {GearIcon} from "@radix-ui/react-icons";
 
 
 
@@ -44,6 +45,13 @@ const SideBar = () => {
 
     const closeSideBar = () => {
         store.dispatch(setShowMobileSideBar(false))
+
+    }
+    const handleClick = ()=> {
+        router.push('/settings/team')
+        store.dispatch(setCurrentNavBottomItem("Settings"))
+        store.dispatch(setCurrentNavbarItem('Settings'))
+
 
     }
 
@@ -103,14 +111,14 @@ const SideBar = () => {
     ]
 
     const navbarContainerItems: navbarItemsProps[] = [
-        // {
-        //     id: 'settings',
-        //     name: 'Settings',
-        //     icon: <GearIcon
-        //         color={currentNavBottom === 'Settings' ? '#142854' : '#939CB0'}
-        //         className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
-        //     handleClick: handleClick
-        // },
+        {
+            id: 'settings',
+            name: 'Settings',
+            icon: <GearIcon
+                color={currentNavBottom === 'Settings' ? '#142854' : '#939CB0'}
+                className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
+            handleClick: handleClick
+        },
         // {
         //     id: 'help&support',
         //     name: "Help & Support",
@@ -119,6 +127,7 @@ const SideBar = () => {
         //         className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
         //     handleClick: handleClick
         // },
+        
         {id: 'logout', name: 'Logout', icon: <LuLogOut color={currentNavBottom === "Logout" ? '#142854' : '#939CB0'} className={` h-[1.2rem] w-[1.2rem] `}/>, handleClick: handleLogout},
 
     ]
