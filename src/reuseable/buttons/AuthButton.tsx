@@ -18,7 +18,6 @@ const AuthButton = ({
                         height
                     }: AuthButtonPropsType) => {
     return (
-        <Dialog.Close asChild>
             <Button
                 data-testid="auth-button"
                 disabled={disable}
@@ -37,7 +36,6 @@ const AuthButton = ({
                 {isLoading ? <Isloading/> : buttonText}
 
             </Button>
-        </Dialog.Close>
     );
 };
 

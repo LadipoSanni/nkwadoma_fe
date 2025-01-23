@@ -8,10 +8,10 @@ import {Button} from "@/components/ui/button"
 import styles from "./index.module.css"
 import {store, useAppSelector} from "@/redux/store";
 import {setClickedOrganization} from "@/redux/slice/loan/selected-loan";
-import AuthButton from "@/reuseable/buttons/AuthButton";
 import Image from "next/image";
 import {useSearchOrganisationByNameQuery, useViewAllOrganizationsQuery} from "@/service/admin/organization";
 import {useRouter} from "next/navigation";
+import LoaneeButton from "@/reuseable/buttons/filter/LoaneeButton";
 
 interface OrganizationType {
     id: string;
@@ -254,7 +254,7 @@ const ChangeInstitutionModal = () => {
                             </Button>
                         </Dialog.Close>
                         <div className={`w-full  md:w-[8rem]`}>
-                            <AuthButton
+                            <LoaneeButton
                                 disable={disabled}
                                 backgroundColor={'#142854'} textColor={"white"}
                                 id={"continueButtonOnOrganizationModal"}
@@ -264,7 +264,7 @@ const ChangeInstitutionModal = () => {
                                 isLoading={isLoading}
                                 handleClick={handleContinue}
                             >
-                            </AuthButton>
+                            </LoaneeButton>
                             {/*<AuthButton*/}
                             {/*    // disable={disabled} */}
                             {/*    backgroundColor={'#142854'} textColor={"white"}*/}
