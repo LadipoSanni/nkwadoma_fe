@@ -7,7 +7,7 @@ const nextConfig = {
         NEXT_PUBLIC_UPLOAD_PRESET: process.env.NEXT_PUBLIC_UPLOAD_PRESET,
         NEXT_PUBLIC_CLOUD_NAME: process.env.NEXT_PUBLIC_CLOUD_NAME,
     },
-    images: {domains: ['res.cloudinary.com'],},
+    images: {domains: ['res.cloudinary.com', 'via.placeholder.com'],},
 };
 
 
