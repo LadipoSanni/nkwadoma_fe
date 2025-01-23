@@ -26,6 +26,7 @@ const ChangeInstitutionModal = () => {
     // const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
     // console.log(clickedOrganizationId)
     // const clickedOrganization = useSelector((state: RootState) => state.selectedLoan.clickedOrganization);
+    const [saveId, setSaveId] = React.useState<{ id: string | number; name: string; logoImage: string } | null>(null);
     const [current, setCurrent] = useState<number | string>('')
     const [disabled, setDisabled] = React.useState(true)
     const dataElement = {
@@ -48,7 +49,7 @@ const ChangeInstitutionModal = () => {
             setCurrent(id);
             setDisabled(false);
         }
-        store.dispatch(setClickedOrganization({id, name: name || '', logoImage: logoImage || ''}));
+        setSaveId({id, name: name || '', logoImage: logoImage || ''});
     };
 
 
@@ -64,10 +65,15 @@ const ChangeInstitutionModal = () => {
 
     const router = useRouter()
     const handleContinue = () => {
-        router.push('/loan/loan-disbursal')
-        setCurrent('');
-        setDisabled(true);
-    }
+        if (saveId) {
+            store.dispatch(setClickedOrganization(saveId));
+            router.push('/loan/loan-disbursal');
+            setCurrent('');
+            setDisabled(true);
+        } else {
+            console.error('No organization selected');
+        }
+    };
 
     const getInitials = (name: string): string => {
         const nameArray = name.split(' ');
