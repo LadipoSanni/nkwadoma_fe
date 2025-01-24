@@ -370,7 +370,7 @@ const FormikCustomQuillField: React.FC<FieldProps & CustomQuillFieldProps> = ({
     label,
     placeholder,
     name,
-    setError,
+    // setError,
 }) => {
     const handleChange = (value: string) => {
         setFieldValue(field.name, value); // Set the raw HTML value in Formik state
