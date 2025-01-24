@@ -1,7 +1,7 @@
 'use client'
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {store, useAppSelector} from "@/redux/store";
+import {store} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation";
 import {cabinetGroteskRegular, inter} from "@/app/fonts";
@@ -23,12 +23,12 @@ import {Card} from "@/components/ui/card";
 
 const Index = () => {
     // const [breakdown, setBreakdown] = useState<breakDown[]>([]);
-    const clickedDisbursedLoanId = useAppSelector(state => state.selectedLoan.clickedDisbursedLoanIdNumber)
+    // const clickedDisbursedLoanId = useAppSelector(state => state.selectedLoan.clickedDisbursedLoanIdNumber)
+    const clickedDisbursedLoanId = "e23454895768"
     // console.log(clickedDisbursedLoanId)
     const router = useRouter()
     const [currentTab, setCurrentsTab] = useState(0);
-    const {data: details, isLoading} = useViewDisbursedLoanDetailsQuery(clickedDisbursedLoanId as string)
-
+    const {data: details, isLoading} = useViewDisbursedLoanDetailsQuery(clickedDisbursedLoanId)
 
     const backToViewAllDisbursedLoan = () => {
         store.dispatch(setCurrentTab('Disbursed loan'))
