@@ -234,9 +234,9 @@ export const loanOfferTable = [
 
 ]
 
-export const loanDisbursalTable = [
-    {loanee: 'Farok Adegbayi', program: 'Software Engineering', cohort: 'Gems', offerDate: '2024-12-16T16:17:42.934384', loanStartDate: '2024-12-16T16:17:42.934384', deposit: '₦40,000,000.00', AmountRequested: '₦40,000,000.00'}
-]
+// export const loanDisbursalTable = [
+//     {loanee: 'Farok Adegbayi', program: 'Software Engineering', cohort: 'Gems', offerDate: '2024-12-16T16:17:42.934384', loanStartDate: '2024-12-16T16:17:42.934384', deposit: '₦40,000,000.00', AmountRequested: '₦40,000,000.00'}
+// ]
 
 
 export const fund = [

@@ -3,8 +3,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { cabinetGrotesk, inter } from "@/app/fonts";
+import { cabinetGrotesk } from "@/app/fonts";
 import { useRespondToLoanRequestMutation } from '@/service/admin/loan/loan-request-api';
+import {useToast} from "@/hooks/use-toast";
 
 interface DeclineLoanModalProps {
     isOpen: boolean;
@@ -17,7 +18,7 @@ interface DeclineLoanModalProps {
 interface LoanRequestPayload {
     loanRequestId: string;
     loanProductId: string;
-    status: 'NEW';
+    status: 'APPROVED' | 'DECLINED';
     amountApproved: number;
     loanRequestDecision: 'DECLINED';
     declineReason: string;
@@ -28,6 +29,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
     const [error, setError] = useState<string | null>(null);
     const [respondToLoanRequest, { isLoading }] = useRespondToLoanRequestMutation();
 
+    const {toast} = useToast()
     const handleDecline = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
 
@@ -39,24 +41,35 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
         const payload: LoanRequestPayload = {
             loanRequestId,
             loanProductId,
-            status: 'NEW',
+            status: 'DECLINED',
             amountApproved: 0,
             loanRequestDecision: 'DECLINED',
             declineReason: reason.trim()
         };
+        console.log('payload:: ', payload)
 
         try {
-            await respondToLoanRequest(payload).unwrap();
+           await respondToLoanRequest(payload)
             setReason('');
             setIsOpen(false);
             setError(null);
-        } catch  {
-            setError('Failed to decline loan request. Please try again.');
+        } catch(error)  {
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            setError(error?.data?.message);
+            toast({
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: error?.data?.message,
+                status: 'error',
+            })
+
+
         }
-    };
+    }
 
     return (
-        <div className={`${inter.className}`}>
+        // <div className={`${inter.className}`}>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogContent className="grid gap-6">
                     <DialogHeader>
@@ -92,7 +105,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
                         <Button
                             type="button"
                             className={`w-[140px] h-[57px] flex items-center font-bold text-[14px] justify-center rounded-md text-meedlWhite ${
-                                reason.trim() ? 'bg-error450 hover:bg-error450' : 'bg-blue50 hover:bg-blue50'
+                                reason.trim() ? 'bg-error500 hover:bg-error500' : 'bg-blue50 hover:bg-blue50'
                             }`}
                             disabled={!reason.trim() || isLoading}
                             onClick={handleDecline}
@@ -102,7 +115,7 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
                     </div>
                 </DialogContent>
             </Dialog>
-        </div>
+        // </div>
     );
 };
 

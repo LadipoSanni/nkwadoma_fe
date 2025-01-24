@@ -7,16 +7,16 @@ export const loaneeApi = createApi({
     baseQuery: customFetchBaseQuery,
     tagTypes: ['loanee'],
     endpoints: (builder) => ({
-        isIdentityVerified: builder.query({
-            query: (param: {
-                loanReferralId: string|undefined
-            }) => ({
-                url: `/identity/verification/is-verified`,
-                method: "POST",
-                params: param
-            }),
-            providesTags: [`loanee`]
-        }),
+        // isIdentityVerified: builder.query({
+        //     query: (param: {
+        //         loanReferralId: string|undefined
+        //     }) => ({
+        //         url: `/identity/verification/is-verified`,
+        //         method: "POST",
+        //         params: param
+        //     }),
+        //     providesTags: [`loanee`]
+        // }),
         verifyIdentity: builder.mutation({
             query: (formData: {
                 bvn: string
@@ -60,11 +60,11 @@ export const loaneeApi = createApi({
 
 
 export const {
-    useIsIdentityVerifiedQuery,
+    // useIsIdentityVerifiedQuery,
      useSaveNextOfKinDetailsMutation,
     useViewLoanReferralDetailsQuery,
     useVerifyIdentityMutation,
     useRespondToLoanReferralMutation,
-    useLazyIsIdentityVerifiedQuery,
+    // useLazyIsIdentityVerifiedQuery,
 } = loaneeApi;
 

@@ -13,10 +13,12 @@ const Layout: React.FC<props> = ({ children }) => {
 
 
     return (
-        <AdminLayout>
-            {children}
-        </AdminLayout>
-
+        // <CustomAuthorization roles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN']}
+        // >
+            <AdminLayout>
+                {children}
+            </AdminLayout>
+        // </CustomAuthorization>
     );
 };
 

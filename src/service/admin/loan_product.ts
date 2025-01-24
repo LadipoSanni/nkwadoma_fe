@@ -57,7 +57,6 @@ export const loanProductApi = createApi({
 })
 export const {
     useViewAllLoanProductQuery,
-    useCohortBreakdownQuery,
     useSearchLoanProductQuery,
     useCreateLoanProductMutation,
     useGetLoanProductDetailsByIdQuery

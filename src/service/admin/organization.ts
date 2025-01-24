@@ -13,7 +13,7 @@ interface  serviceOfferings{
 export const organizationApi = createApi({
     reducerPath: 'organizationApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['organization', "invite"],
+    tagTypes: ['organization', "invite","deactivate","reactivate","admin"],
     endpoints: (builder) => ({
         viewAllOrganizations: builder.query({
             query: (data) => ({
@@ -61,7 +61,7 @@ export const organizationApi = createApi({
                 method: 'POST',
                 body: data
             }),
-            invalidatesTags: ['invite', "organization"]
+            invalidatesTags: ['invite', "organization","admin"]
         }),
         viewAllAdminsInOrganization: builder.query({
             query: (data) => ({
@@ -92,7 +92,43 @@ export const organizationApi = createApi({
                 params: {name},
             }),
         }),
+        deactivateOrganization: builder.mutation({
+            query: (data: {
+                     id: string,
+                     reason: string,
+                     
+            }) => ({
+                url : `/organization/deactivate`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['organization', "deactivate","invite"]
+        }),
+        activateOrganization: builder.mutation({
+            query: (data: {
+                     id: string,
+                     reason: string,
+                     
+            }) => ({
+                url : `/organization/reactivate`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['organization', "reactivate","invite"]
+        }),
+        viewOrganizationAdmin: builder.query({
+            query: (param: {
+                     pageSize: number,
+                     pageNumber: number,
+                     
+            }) => ({
+                url : `/organization/view-all/admin`,
+                method: 'GET',
+                params: param
+            }),
+            providesTags: ['admin']
+        }),
     })
 })
 
-export const { useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery} = organizationApi
+export const { useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery,useDeactivateOrganizationMutation,useActivateOrganizationMutation,useViewOrganizationAdminQuery} = organizationApi

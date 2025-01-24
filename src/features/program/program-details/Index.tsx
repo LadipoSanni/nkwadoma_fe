@@ -27,6 +27,9 @@ import {getItemSessionStorage} from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
 import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/program_query";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import { useToast } from "@/hooks/use-toast";
 
 interface loanDetails {
     totalAmountRepaid?: number;
@@ -45,16 +48,27 @@ interface viewAllProgramProps {
     cohortDescription?: string;
     name?: string;
     tuitionAmount?: number;
+    numberOfLoanees?: number;
     loanDetails?: loanDetails
 }
 
 
 type ViewAllProgramProps = viewAllProgramProps & TableRowData;
 
+interface ApiError {
+    status: number;
+    data: {
+        message: string;
+    };
+}
+
+
 const ProgramDetails = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [programId, setProgramId] = useState('');
+    const [deleteProgram, setDeleteProgram] = useState("")
+    const {toast} = useToast()
     const [page] = useState(0);
     const size = 100;
     const [progamDetail, setProgramDetail] = useState({
@@ -83,7 +97,7 @@ const ProgramDetails = () => {
         }
     }, [])
 
-    const {data: program} = useGetProgramByIdQuery({id: programId}, {refetchOnMountOrArgChange: true});
+    const {data: program,isLoading:loading} = useGetProgramByIdQuery({id: programId}, {refetchOnMountOrArgChange: true});
     const [deleteItem, {isLoading}] = useDeleteProgramMutation()
     const {data: cohortsByProgram} = useGetAllCohortByAParticularProgramQuery({
         programId: programId,
@@ -137,8 +151,8 @@ const ProgramDetails = () => {
     }, [searchTerm, searchResults, cohortsByProgram])
 
     const dataList = [
-        {label: "Program mode", value: progamDetail.mode},
-        {label: "Program delivery type", value: progamDetail.deliveryType},
+        {label: "Program mode", value: capitalizeFirstLetters(progamDetail.mode.replace(/_/g, ' '))},
+        {label: "Program delivery type", value: capitalizeFirstLetters(progamDetail.deliveryType)},
         {label: "Completion rate", value: "0%"},
         {label: "Employment rate", value: "0%"},
         {label: "Average starting income", value: formatAmount(0)},
@@ -159,16 +173,17 @@ const ProgramDetails = () => {
             tagIcon: MdOutlineDateRange,
             tagCount: progamDetail.duration,
             tagButtonStyle: "bg-lightBlue100",
-            tagText: "Months"
+            tagText: "Months",
+            textColor: "text-meedlBlue",
         },
-        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: "Cohorts"},
-        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: "Loanees"},
+        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: "Cohorts", textColor: "text-success700"},
+        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: "Loanees", textColor: "text-warning900" },
     ];
     const ProgramHeader = [
         {title: "Cohort", sortable: true, id: "name"},
         {
-            title: "No of trainees", sortable: true, id: "noOfTrainees",
-            selector: (row: ViewAllProgramProps) => row.tuitionAmount
+            title: "No of loanees", sortable: true, id: "noOfTrainees",
+            selector: (row: ViewAllProgramProps) => row.numberOfLoanees
         },
 
         {
@@ -212,11 +227,24 @@ const ProgramDetails = () => {
             const itemDeleted = await deleteItem({id}).unwrap();
             if (itemDeleted) {
                 setIsDeleteOpen(false)
+                setTimeout(() => {
+                    toast({
+                        description: "Program deleted successfully",
+                        status: "success",
+                    })
+                }, 600);
                 router.push('/program')
             }
 
         } catch (error) {
-            console.error("Error deleting program: ", error);
+            const err = error as ApiError;
+            setDeleteProgram(err?.data?.message || "Program with loanee cannot be deleted")
+            setTimeout(() => {
+                toast({
+                    description: deleteProgram || "Program with loanee cannot be deleted",
+                    status: "error",
+                })
+            }, 600)
         }
     }
 
@@ -234,6 +262,8 @@ const ProgramDetails = () => {
 
 
     return (
+        <>
+          {loading ? ( <SkeletonForDetailPage /> ) : (
         <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`} id={"mainDiv"}>
             <div className={`flex gap-2 w-[9.2rem] items-center cursor-pointer text-meedlBlue`} id={`backClick`}
                  data-testid={`backClick`} onClick={handleBackClick}>
@@ -250,7 +280,7 @@ const ProgramDetails = () => {
                                  className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom'}>Cohorts</TabsTrigger>
                 </TabsList>
                 <TabsContent value="details" className={'mt-4'} id={`content`}>
-                    <section className={`p- flex md:flex-row flex-col md:justify-between`} id={`section`}>
+                    <section className={`p- flex md:flex-row flex-col md:gap-0 gap-5 md:justify-between`} id={`section`}>
                         <div className={'flex flex-col gap-10'} id={`status`}>
                             <div
                                 id={`fibookIcon`}
@@ -264,7 +294,10 @@ const ProgramDetails = () => {
                                 </h1>
                                 <div className={'grid gap-5'} id={`tagButtonDiv`}>
                                     <p id={`details`}
-                                       className={'text-sm font-normal text-black400 w-[351px]'}>{progamDetail.programDescription}</p>
+                                       className={'text-sm font-normal w-[351px] text-grey400 break-words scrollbar-width:none overflow-y-auto h-24'}
+                                       dangerouslySetInnerHTML={{__html: progamDetail.programDescription}}
+                                       />
+                                      
                                     <div id={`details`} data-testid="details"
                                          className="grid md:grid-cols-3 grid-cols-2 gap-3 w-fit">
                                         {tagButtonData.map((tagProps, index) => (
@@ -278,7 +311,9 @@ const ProgramDetails = () => {
                                         id="editButton"
                                         className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
                                     program</Button>
-                                {progamDetail.numberOfLoanees > 0? "" : <div role={"button"}
+                                {
+                                // progamDetail.numberOfLoanees > 0? "" :
+                                 <div role={"button"}
                                      id="kebabId"
                                      className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
                                     <Kebab kebabOptions={programOptions} icon={IoEllipsisHorizontalSharp}
@@ -344,6 +379,8 @@ const ProgramDetails = () => {
                 </>
             }
         </main>
+          )}
+        </>
     );
 }
 export default ProgramDetails;

@@ -9,10 +9,12 @@ import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import Isloading from '@/reuseable/display/Isloading';
 import { useCreateInvestmentVehicleMutation } from '@/service/admin/fund_query';
 import { useToast } from "@/hooks/use-toast";
-import { validateNumber } from '@/utils/Format';
+import { validateNumber,validatePositiveNumber } from '@/utils/Format';
 // import { formatNumberOnBlur } from '@/utils/Format';
 import { validateText } from '@/utils/Format';
+import CustomInputField from '@/reuseable/Input/CustomNumberFormat';
 // import CustomNumberFormat from '@/reuseable/Input/CustomNumberFormat';
+// import FormikCustomQuillField from '@/reuseable/textArea/FormikCustomQuillField';
 
 
 interface ApiError {
@@ -24,7 +26,7 @@ interface ApiError {
 
   const initialFormValue = {  
     name: "",
-    sponsor: "",
+    sponsors: "",
     fundManager: "",
     minimumInvestmentAmount:"",
     mandate: "",
@@ -64,20 +66,37 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
         name:Yup.string()
        .trim()
       //  .matches(/^[a-zA-Z0-9_\-\/]+$/, 'Name can only contain letters, numbers, underscores, hyphens, and slashes.')
+      .test('valid-name', 'Name cannot be only numbers or special characters.', (value= '') => { 
+        const hasLetter = /[a-zA-Z]/.test(value); 
+        const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value); 
+        return hasLetter && !isOnlyNumbersOrSpecials; })
        .required('Name is required'),
-       sponsor:Yup.string()
+       sponsors:Yup.string()
        .trim()
        .required('vehicle sponsor is required')
-       .matches(/^[a-zA-Z\s]+$/, 'Vehicle sponsor can only contain letters and spaces.'),
+      //  .matches(/^[a-zA-Z\s]+$/, 'Vehicle sponsor can only contain letters and spaces.')
+       .test('valid-sponsor', 'Sponsor cannot be only numbers or special characters.', (value= '') => { 
+        const hasLetter = /[a-zA-Z]/.test(value); 
+        const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value); 
+        return hasLetter && !isOnlyNumbersOrSpecials; })
+      ,
        fundManager:Yup.string()
        .trim()
-       .matches(/^[a-zA-Z\s]+$/, 'Fund manager can only contain letters and spaces.')
-       .required('Fund is required'),
+      //  .matches(/^[a-zA-Z\s]+$/, 'Fund manager can only contain letters and spaces.')
+       .test('valid-fundManager', 'fundManager cannot be only numbers or special characters.', (value= '') => { 
+        const hasLetter = /[a-zA-Z]/.test(value); 
+        const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value); 
+        return hasLetter && !isOnlyNumbersOrSpecials; })
+       .required('FundManager is required'),
        size:Yup.string()
        .required('Vehicle size is required'),
       //  .matches(/^[1-9]\d*$/, 'Vehicle size must be a positive number and cannot start with zero'),
        minimumInvestmentAmount:Yup.string()
-       .required('Minimum InvestmentAmount is required'),
+       .required('Minimum InvestmentAmount is required')
+       .test('minimum-less-or-equal-to-size', 'Minimum Investment Amount must be less than or equal to Vehicle Size.', function(value) { 
+        const { size } = this.parent; 
+        return !value || !size || parseFloat(value) <= parseFloat(size);
+       }),
       //  .matches(/^[1-9]\d*$/, 'minimum investmentAmount must be a positive number and cannot start with zero'),
        tenure:Yup.string()
        .trim()
@@ -107,7 +126,7 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
      
       const formData = {
         name: values.name,
-        sponsor: values.sponsor,
+        sponsors: values.sponsors,
         fundManager: values.fundManager,
         minimumInvestmentAmount: values.minimumInvestmentAmount,
         mandate: values.mandate,
@@ -189,18 +208,20 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
                 </div>
                 <div className='grid md:grid-cols-2 gap-4 w-full'>
                 <div>
-                    <Label htmlFor="sponsor">Vehicle {type}</Label>
+                    <Label htmlFor="sponsors">Vehicle {type}</Label>
                     <Field
-                      id="sponsor"
-                      name="sponsor"
+                      id="sponsors"
+                      name="sponsors"
                       placeholder="Enter Vehicle Sponsor"
                       className="w-full p-3 border rounded focus:outline-none mt-2"
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("sponsor", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                      // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("sponsor", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                      onChange={validateText('sponsors',setFieldValue)}
+                      
                     />
                      {
-                 errors.sponsor && touched.sponsor &&  (
+                 errors.sponsors && touched.sponsors &&  (
                     <ErrorMessage
-                    name="sponsor"
+                    name="sponsors"
                     component="div"
                     className="text-red-500 text-sm"
                   />
@@ -214,7 +235,8 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
                       name="fundManager"
                       placeholder="Enter Fund manager"
                       className="w-full p-3 border rounded focus:outline-none mt-2"
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("fundManager", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                      // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("fundManager", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                      onChange={validateText('fundManager',setFieldValue)}
                     /> 
                     {
                  errors.fundManager && touched.fundManager &&  (
@@ -240,10 +262,9 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
                         id="size"
                          name="size"
                          type="text"
-                          placeholder="0.00"
-                         className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2 "
+                         component={CustomInputField}
+                        //  className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2 "
                         onChange={validateNumber("size",setFieldValue)}
-                        //  onBlur={() => formatNumberOnBlur("size", setFieldValue, values.size)}
                         />
                         </div>
                         <div className='relative bottom-5'>
@@ -271,19 +292,10 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
                     <Field
                         id="minimumInvestemntAmount"
                         name="minimumInvestmentAmount"
-                        type="text"
-                        placeholder="0.00"
-                        className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2"
-                        // component={CustomNumberFormat}
-                        // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        //     const value = e.target.value;
-                        //     if (/^(?!0)\d*$/.test(value)) { 
-                        //         setFieldValue("minimumInvestmentAmount", value); 
-                        //     }
-                        // }}
+                        // className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2"
+                        component={CustomInputField}
                         onChange={validateNumber("minimumInvestmentAmount",setFieldValue)}
-                        //  onBlur={() => formatNumberOnBlur("minimumInvestmentAmount", setFieldValue, values.minimumInvestmentAmount)}
-
+                        
                         />
                     </div> 
                     <div className='relative bottom-5'>
@@ -294,8 +306,10 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
                     component="div"
                     className="text-red-500 text-sm"
                   />
+                  
                  )
                 }   
+                
                 </div>
                     </div>
                 </div>
@@ -306,9 +320,9 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
                       id="rate"
                       name="rate"
                       placeholder="0"
-                      type="number"
+                      type="text"
                       className="w-full p-3 border rounded focus:outline-none mt-2"
-                       style={{ WebkitAppearance: 'none', MozAppearance: 'textfield', }}
+                      onChange={validatePositiveNumber('rate', setFieldValue,100,1)}
                     />
                      {
                  errors.rate && touched.rate &&  (
@@ -420,13 +434,26 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { 
                   const value = e.target.value; 
                   if (value.length <= maxChars) { 
-                    setFieldValue("mandate", value); } }} 
+                    setFieldValue("mandate", value);
+                    setError('')
+                   } }} 
                 onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => { 
                   const paste = e.clipboardData.getData('text'); 
                   if (paste.length + values.mandate.length > maxChars) { 
                     e.preventDefault(); 
-                    setError('Mandate must be 2500 characters or less'); } }}
+                    setError('Mandate must be 2500 characters or less'); } 
+                    else {
+                      setError('')
+                    }
+                  }}
                 />
+                  {/* <Field
+                  name="mandate"
+                  component={FormikCustomQuillField}
+                  maximumDescription={2500}
+                  label={"Mandate"}
+                  placeholder={"Enter mandate..."}
+                /> */}
              {
               errors.mandate && touched.mandate &&  (
                  <ErrorMessage

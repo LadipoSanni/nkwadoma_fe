@@ -104,9 +104,9 @@ function Organization() {
     };
       
 
-    const activeOrganization = organizationList.filter(organization => organization.status === 'ACTIVE');
+    const activeOrganization = organizationList.filter(organization => organization.status === 'ACTIVE' );
     const invitedOrganization = organizationList.filter(organization => organization.status === 'INVITED');
-    const deactivatedOrganization = organizationList.filter(organization => organization.status === 'DEACTIVED');
+    const deactivatedOrganization = organizationList.filter(organization => organization.status === 'DEACTIVATED');
 
     
   

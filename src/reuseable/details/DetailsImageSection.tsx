@@ -1,6 +1,6 @@
 "use client"
 import React, {ElementType} from "react";
-import {inter} from "@/app/fonts";
+import {cabinetGrotesk, inter} from "@/app/fonts";
 import {Card} from "@/components/ui/card";
 import Image, {StaticImageData} from 'next/image';
 import {Button} from "@/components/ui/button";
@@ -20,7 +20,7 @@ interface detailsProps {
     dropdownOption?: { name: string, id: string }[];
     handleDropdownClicked: (id: string) => void;
     buttonText: string;
-    tagButtonData: { tagIcon: ElementType,   tagCount: number | string , tagButtonStyle: string, tagText: string }[];
+    tagButtonData: { tagIcon: ElementType, tagCount: number | string, tagButtonStyle: string, tagText: string }[];
     isEditButton: boolean
 }
 
@@ -45,44 +45,53 @@ const DetailsImageSection: React.FC<detailsProps> = ({
     return (
         <main id="details-main" data-testid="details-main" className={``}>
             <div id="cohort-image-section" data-testid="cohort-image-section"
-                 className={`flex md:flex-col flex-col md:block space-y-3 md:max-w-sm w-full`}>
+                 className={`flex md:flex-col flex-col md:block space-y-3 md:max-w-md w-full`}>
                 <div id="cohort-image-card" data-testid="cohort-image-card">
-                    <Card className="rounded-lg md:max-w-sm">
+                    <Card className="rounded-lg md:max-w-md ">
                         {imageSrc ? (
                             <Image
                                 src={imageSrc}
                                 alt="Cohort DetailsImageSection"
-                                width={300}
-                                height={300}
-                                className="w-full h-96 object-cover flex-shrink-0"
+                                width={500}
+                                height={500}
+                                className="w-full rounded-md h-64 object-cover"
                                 data-testid="cohort-image"
                             />
                         ) : Icon ? (
-                            <div className="w-32 h-32 flex bg-[#D9EAFF] rounded-full justify-center items-center">
+                            <div
+                                className="w-32 h-32 md:w-40 md:h-40 flex bg-[#D9EAFF] rounded-full justify-center items-center">
                                 <Icon className="text-6xl text-meedlBlue"/>
                             </div>
                         ) : null}
                     </Card>
                 </div>
 
-                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col`}>
+                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col py-5 gap-4`}>
                     <h1 id="cohort-title" data-testid="cohort-title"
-                        className={`${inter.className} text-3xl font-medium text-black`}>
+                        className={`${cabinetGrotesk.className} text-3xl font-medium text-black`}>
                         {cohortTitle}
                     </h1>
-                    <div className={`pt-3`}>
+                    <div>
+                        {/*<p*/}
+                        {/*    id="cohort-description"*/}
+                        {/*    data-testid="cohort-description"*/}
+                        {/*    className={`${inter.className} text-grey400 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}*/}
+                        {/*>*/}
+                        {/*    {cohortDescription}*/}
+                        {/*</p>*/}
                         <p
                             id="cohort-description"
                             data-testid="cohort-description"
-                            className={`${inter.className}  text-grey450 break-words scrollbar-width:none overflow-y-auto h-20 text-sm`}
-                        >
-                            {cohortDescription}
-                        </p>
+                            className={`${inter.className} text-grey400 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}
+                            dangerouslySetInnerHTML={{__html: cohortDescription}}
+                        />
+                            {/* {cohortDescription}
+                        </p> */}
 
                         <div
                             id={`details`}
                             data-testid="details"
-                            className="grid md:grid-cols-3 grid-cols-2 gap-2 w-fit mt-3"
+                            className="grid md:grid-cols-2 md:gap-2 gap-4 grid-cols-1 mt-5"
                         >
                             {tagButtonData.map((tagProps, index) => (
                                 <TagButton key={index} {...tagProps} />
@@ -90,7 +99,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         </div>
                     </div>
 
-                    <div className={`flex flex-row md:space-x-3 space-x-2 md:pt-5 pt-8 w-full`}>
+                    <div className={`flex flex-row md:space-x-3 space-x-2 md:pt-5 w-full`}>
                         {
                             isEditButton ? <div>
                                 <Button variant={"secondary"}
@@ -121,7 +130,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             className={"md:w-full pb-1"}
                             icon={Cross2Icon}
                 >
-                    <AddTraineeForm  setIsOpen={handleModalOpen}/>
+                    <AddTraineeForm setIsOpen={handleModalOpen}/>
                 </TableModal>
             </div>
         </main>

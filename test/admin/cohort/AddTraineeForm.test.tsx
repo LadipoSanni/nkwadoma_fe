@@ -22,7 +22,7 @@ describe("AddTraineeForm", () => {
 
         );
         expect((getByPlaceholderText('Enter email address') as HTMLInputElement).value).toBe('');
-        expect((getByPlaceholderText('Enter Initial Deposit') as HTMLInputElement).value).toBe('');
+        // expect((getByPlaceholderText('Enter Initial Deposit') as HTMLInputElement).value).toBe('');
       });
 
       it('should trigger validation errors when form is submitted with empty fields', async () => {
@@ -45,7 +45,7 @@ describe("AddTraineeForm", () => {
 
 
         it('should log formatted values when form is submitted', async () => {
-      const consoleSpy = jest.spyOn(console, 'log');
+      // const consoleSpy = jest.spyOn(console, 'log');
       const mockSetIsOpen = jest.fn();
       const { getByLabelText, getByRole } = render(
           <Providers>
@@ -56,7 +56,7 @@ describe("AddTraineeForm", () => {
       fireEvent.change(getByLabelText('First name'), { target: { value: 'John' } });
       fireEvent.change(getByLabelText('Last name'), { target: { value: 'Doe' } });
       fireEvent.change(getByLabelText('Email address'), { target: { value: 'john.doe@example.com' } });
-      fireEvent.change(getByLabelText('Initial Deposit'), { target: { value: 5000 } });
+      // fireEvent.change(getByLabelText('Initial Deposit'), { target: { value: 5000 } });
   
       fireEvent.click(getByRole('button', { name: 'Continue' }));
 
@@ -82,7 +82,7 @@ describe("AddTraineeForm", () => {
       fireEvent.change(getByLabelText('First name'), { target: { value: 'John' } });
       fireEvent.change(getByLabelText('Last name'), { target: { value: 'Doe' } });
       fireEvent.change(getByLabelText('Email address'), { target: { value: 'invalid-email' } });
-      fireEvent.change(getByLabelText('Initial Deposit'), { target: { value: "" } });
+      // fireEvent.change(getByLabelText('Initial Deposit'), { target: { value: "" } });
   
       fireEvent.click(getByRole('button', { name: 'Continue' }));
   
@@ -166,6 +166,6 @@ it('should clear all form fields when reset button is clicked', () => {
   expect((screen.getByLabelText('First name')as HTMLInputElement).value).toBe('');
   expect((screen.getByLabelText('Last name')as HTMLInputElement).value).toBe('');
   expect((screen.getByLabelText('Email address')as HTMLInputElement).value).toBe('');
-  expect((screen.getByLabelText('Initial Deposit')as HTMLInputElement).value).toBe('');
+  // expect((screen.getByLabelText('Initial Deposit')as HTMLInputElement).value).toBe('');
 });
 })    

@@ -18,8 +18,8 @@ function InfoPanel({infoList}: Props) {
            {
             infoList && infoList.map((data,index) => (
                 <div key={index} className={`flex flex-col md:flex-row  md:items-center md:justify-between w-full p-3  text-[#6A6B6A] ${inter.className}`}>
-                  <p className='text-sm font-semibold opacity-60 mb-3 md:mb-0'>{data.name}</p>
-                  <div className='text-base '>{data.value}</div>
+                  <p className='text-sm font-normal text-[#6A6B6A] mb-3 md:mb-0'>{data.name}</p>
+                  <div className='text-base font-normal '>{data.value}</div>
                 </div>
             ))
            }

@@ -19,6 +19,7 @@ import {getItemSessionStorage} from "@/utils/storage";
 import {useToast} from "@/hooks/use-toast";
 import {cohortLoaneeResponse} from "@/types/Component.type";
 import Table from "@/reuseable/table/LoanProductTable"
+import Isloading from "@/reuseable/display/Isloading";
 
 interface userIdentity {
     firstName: string;
@@ -52,7 +53,6 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [addLoanee, setAddLoanee] = React.useState(false);
     const [isRowSelected, setIsRowSelected] = React.useState(false);
     const [loaneeName, setLoaneeName] = React.useState("");
-    // const [enableRefferButton, setRefferBottom] = useState(true)
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
     const [isReferred, setIsReferred] = React.useState("Not referred");
     const [enableButton, setEnableButton] = useState(false)
@@ -77,7 +77,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
         {skip: !loaneeName || !cohortsId})
 
 
-    const [refer] = useReferLoaneeToACohortMutation()
+    const [refer, {isLoading: isLoadingRefer}] = useReferLoaneeToACohortMutation()
 
     useEffect(() => {
         let result: viewAllLoanees[] = [];
@@ -103,27 +103,10 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     }
 
     const loanProduct = [
-        {
-            title: "Loanee",
-            sortable: true,
-            id: "firstName",
-            selector: (row: viewAllLoanees) => row.userIdentity?.firstName + " " + row.userIdentity?.lastName
-        },
-        {
-            title: "Initial deposit",
-            sortable: true,
-            id: "InitialDeposit",
-            selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.initialDeposit)
-        },
-        {
-            title: "Amount requested",
-            sortable: true,
-            id: "AmountRequested",
-            selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)
-        },
-        {title: "Amount received", sortable: true, id: "AmountReceived",
-            selector:(row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountReceived)
-        },
+        {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row.userIdentity?.firstName + " " + row.userIdentity?.lastName},
+        {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.initialDeposit)},
+        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)},
+        {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountReceived)},
     ]
 
     const items = ["Not referred","Referred"]
@@ -148,6 +131,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 description: response?.message,
                 status: "success",
             })
+            setEnableButton(false)
         } catch (error) {
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -169,10 +153,10 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 <div className={`flex md:flex-row flex-col md:justify-between`}
                      id={`searchReferAndAddTrainee`}>
                     <div className={`flex md:flex-row gap-4 md:items-center items-center`} id={`searchId`}>
-                        <div className="max-w-md mx-auto" id={`searchInput`}>
+                        <div className="max-w-md flex-1 mx-auto" id={`searchInput`}>
                             <div className="relative" id={`searchDiv`}>
                                 <div
-                                    className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+                                    className="absolute inset-y-0 start-0 w-full flex items-center ps-3 pointer-events-none"
                                     id={`searchIcon`}>
                                     <MdSearch className="h-5 w-5 text-grey200"/>
                                 </div>
@@ -198,7 +182,10 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             <Button variant={"outline"}
                                     size={"lg"}
                                     className={`bg-neutral100  ${enableButton ? ' border-solid ring-1 ring-[#142854] border-[#142854] text-[#142854] ' : 'text-[#939CB0] border border-neutral650'} md:border-solid md:border-neutral650 border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
-                                    onClick={handleRefer} disabled={selectedRows.size === 0}>Refer</Button>
+                                    onClick={handleRefer} disabled={selectedRows.size === 0 || isLoadingRefer}>
+                                {isLoadingRefer ? <Isloading /> : 'Refer'}
+
+                            </Button>
                         </div>
                         <div id={`addTraineeButton`}>
                             <Button variant={"secondary"}
@@ -209,9 +196,12 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         <div className={`md:hidden block`} id={`smallScreenReferButton`}>
                             <Button variant={"outline"}
                                     size={"lg"}
-                                    disabled={selectedRows.size === 0}
-                                    className={`bg-neutral100   ${enableButton ? ' border-solid ring-2 ring-[#142854] border-[#142854] text-[#142854] ' : 'text-[#939CB0] border border-neutral650'} w-full h-12 flex justify-center items-center`}
-                                    onClick={handleRefer}>Refer</Button>
+                                    disabled={selectedRows.size === 0 || isLoadingRefer}
+                                    className={`bg-neutral100   ${enableButton ? ' border-solid ring-1 ring-[#142854] border-[#142854] text-[#142854] ' : 'text-[#939CB0] border border-neutral650'} w-full h-12 flex justify-center items-center`}
+                                    onClick={handleRefer}>
+                                {isLoadingRefer ? <Isloading />: 'Refer'}
+
+                            </Button>
                         </div>
 
                     </div>
@@ -262,7 +252,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     headerTitle={`Add Loanee`}
                     width="30%"
                 >
-                    <AddTraineeForm tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)}/>
+                    <AddTraineeForm  tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)}/>
                 </TableModal>
 
             </div>

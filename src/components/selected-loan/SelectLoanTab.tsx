@@ -10,7 +10,7 @@ interface menuItemsProps {
     index: number,
 }
 
-const SelectLoanTab = () => {
+const  SelectLoanTab = () => {
     const router = useRouter()
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
 
@@ -26,8 +26,10 @@ const SelectLoanTab = () => {
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         // setCurrentTabs(newValue)
-        store.dispatch(setCurrentTab(tabContent[newValue].name))
-        router.push(`/loan/${tabContent[newValue].route}`)
+        if (newValue !== 0 && newValue !== 4) {
+            store.dispatch(setCurrentTab(tabContent[newValue].name))
+            router.push(`/loan/${tabContent[newValue].route}`)
+        }
 
     }
 
@@ -38,7 +40,7 @@ const SelectLoanTab = () => {
                 id="loanStatusBox"
                 data-testid="loanStatusBox"
                 style={{textTransform: 'none', color: 'black'}}
-                className={` py-1 flex px-2 place-self-center mr-auto ml-auto text-sm ${currentTab === name ? `  rounded-md border px-2 border-[#e5e8ec] ${styles.selectedLoan}` : `text-black300`}`}
+                className={` py-1 flex px-2 place-self-center mr-auto ml-auto text-sm ${currentTab === 'Loan referrals' ? `text-[#efefef] ` : `${currentTab === name ? `  rounded-md border px-2 border-[#e5e8ec] ${styles.selectedLoan}` : `text-black300`}`}`}
                 onClick={(event) => {
                     handleChange(event, index)
                 }}
@@ -46,7 +48,7 @@ const SelectLoanTab = () => {
                 <div
                     data-testid={name}
                     id={"loanStatusText"}
-                    className={`flex gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
+                    className={`flex ${name === 'Loan referrals' ||  name === 'Loan book' ? 'text-[#c3c2c2] md:text-[#c3c2c2]' : ``} gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
                 >{name}</div>
 
             </button>

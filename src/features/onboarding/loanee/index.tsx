@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import StepContent from '@/features/onboarding/stepContent/Index';
 import dynamic from 'next/dynamic';
 import {
-    useLazyIsIdentityVerifiedQuery, useRespondToLoanReferralMutation,
+    // useLazyIsIdentityVerifiedQuery,
+    useRespondToLoanReferralMutation,
     useViewLoanReferralDetailsQuery
 } from "@/service/users/Loanee_query";
 import {useRouter} from "next/navigation";
@@ -31,13 +32,14 @@ const LoaneeOnboarding = () => {
     const [loanReferralId, setLoanReferralId] = useState("");
     const {data, isLoading: loanReferralDetailsIsLoading} = useViewLoanReferralDetailsQuery({})
     const [respondToLoanReferral ]= useRespondToLoanReferralMutation({})
-    const [triggerVerification, { data: verificationFirstResponse }] = useLazyIsIdentityVerifiedQuery();
+    // const [triggerVerification, { data: verificationFirstResponse }] = useLazyIsIdentityVerifiedQuery();
     const [loaneeLoanDetail, setLoaneeLoanDetail] = useState({
         tuitionAmount: "0.00",
         amountRequested: "0.00",
         initialDeposit: "0.00",
         referredBy: "",
         cohortStartDate: "",
+        loaneeLoanBreakdowns: []
     })
     function viewLoanReferralDetails  (){
         if (data?.statusCode === "OK" &&  data?.data?.id){
@@ -50,17 +52,19 @@ const LoaneeOnboarding = () => {
             setLoaneeLoanDetail(prevState => {
                 const newDetails = {
                     tuitionAmount: backendDetails.tuitionAmount?.toString() || "0.00",
-                    amountRequested: backendDetails.amountRequested?.toString() || "0.00",
+                    amountRequested: backendDetails.loanAmountRequested?.toString() || "0.00",
                     initialDeposit: backendDetails.initialDeposit?.toString() || "0.00",
                     cohortStartDate: backendDetails.cohortStartDate,
-                    referredBy: backendDetails.referredBy
+                    referredBy: backendDetails.referredBy,
+                    loaneeLoanBreakdowns: backendDetails.loaneeLoanBreakdowns || []
                 };
                 if (
                     prevState.tuitionAmount !== newDetails.tuitionAmount ||
                     prevState.amountRequested !== newDetails.amountRequested ||
                     prevState.initialDeposit !== newDetails.initialDeposit ||
                     prevState.cohortStartDate !== newDetails.cohortStartDate ||
-                    prevState.referredBy !== newDetails.referredBy
+                    prevState.referredBy !== newDetails.referredBy ||
+                    prevState.loaneeLoanBreakdowns !== newDetails.loaneeLoanBreakdowns
                 ) {
                     return newDetails;
                 }
@@ -80,7 +84,7 @@ const LoaneeOnboarding = () => {
         setCurrentStep(2);
     };
     const handleAcceptLoanReferral = async () =>{
-        triggerVerification({ loanReferralId });
+        // triggerVerification({ loanReferralId });
         const requestData = {
             "id": loanReferralId,
             "loanReferralStatus": "ACCEPTED"
@@ -91,9 +95,9 @@ const LoaneeOnboarding = () => {
             console.log("No loan referral detected.")
         }
 
-        if (verificationFirstResponse?.data === "Identity Not Verified") {
-            console.log(verificationFirstResponse.data)
-        }
+        // if (verificationFirstResponse?.data === "Identity Not Verified") {
+        //     console.log(verificationFirstResponse.data)
+        // }
     }
     const handleNext = ()=>{
         if (currentStep === 0){

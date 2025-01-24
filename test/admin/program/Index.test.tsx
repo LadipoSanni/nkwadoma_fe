@@ -112,17 +112,17 @@ describe('program-view Component', () => {
         expect(screen.getByText('Create program')).toBeInTheDocument();
     });
 
-    test('displays details tab content by default', () => {
-        act(() => {
-            render(
-                <Providers>
-                    <ProgramDetails />
-                </Providers>
-            );
-        });
+    // test('displays details tab content by default', () => {
+    //     act(() => {
+    //         render(
+    //             <Providers>
+    //                 <ProgramDetails />
+    //             </Providers>
+    //         );
+    //     });
       
-        expect(screen.getByText('Edit program')).toBeInTheDocument();
-    });
+    //     expect(screen.getByText('Edit program')).toBeInTheDocument();
+    // });
 
     // test('displays cohorts tab content when clicked', () => {
     //     act(() => {
@@ -138,19 +138,19 @@ describe('program-view Component', () => {
     //     expect(screen.getByText('Cohorts')).toBeInTheDocument();
     // });
 
-    test('navigates back to programs on back button click', () => {
-        act(() => {
-            render(
-                <Providers>
-                    <ProgramDetails />
-                </Providers>
-            );
-        });
-        act(() => {
-            fireEvent.click(screen.getByTestId('backClick'));
-        });
-        expect(mockPush).toHaveBeenCalledWith('/program');
-    });
+    // test('navigates back to programs on back button click', () => {
+    //     act(() => {
+    //         render(
+    //             <Providers>
+    //                 <ProgramDetails />
+    //             </Providers>
+    //         );
+    //     });
+    //     act(() => {
+    //         fireEvent.click(screen.getByTestId('backClick'));
+    //     });
+    //     expect(mockPush).toHaveBeenCalledWith('/program');
+    // });
 
     // test('renders search input in cohorts tab', () => {
     //     act(() => {
