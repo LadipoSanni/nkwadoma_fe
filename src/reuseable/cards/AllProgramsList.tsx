@@ -35,12 +35,23 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
     const shortDescription = description.length > 90
         ? description.substring(0, 80)
         : description;
-
+    
+    const shortTitle =title.length > 20? title.substring(0,20) : title;
 
     return (
         <Card  id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full md:max-w-lg h-60  border border-grey50 rounded-lg cursor-pointer pt-0" onClick={() => handleProgramDetailsOnclick(id)} >
             <CardHeader id={`header-${id}`} data-testid="header" className="flex flex-row justify-between items-center" >
-               <CardTitle id={`title`} data-testid="title" className={`${inter.className} text-lg font-medium text-[#101828]`} >{title}</CardTitle>
+               <CardTitle id={`title`} data-testid="title" className={`${inter.className} text-lg font-medium text-[#101828]`} >
+                {shortTitle}
+                {title.length > 90 && (
+                        <span
+                            id={`readMore-${id}`}
+                            data-testid="readMore"
+                            className="${inter.className} text-grey450 ml-2"
+                        >
+              { "...."}
+            </span>)}
+                </CardTitle>
                    <div onClick={(e) => e.stopPropagation()}><Kebab kebabOptions={dropdownOption} icon={FiMoreVertical} handleDropDownClick={handleCardDropDownClick}/></div> 
             </CardHeader>
 

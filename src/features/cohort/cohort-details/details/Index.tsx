@@ -176,7 +176,7 @@ const CohortDetails = () => {
                 <div id={`tabsContentDiv`}>
                     <TabsContent value="details" className={'mt-4'} id={`tabsContent`}>
                         <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
-                            <div id={`firstSection`}>
+                            <div id={`firstSection`} >
                                 <DetailsImageSection imageSrc={details.imageUrl} cohortTitle={details.name}
                                                      cohortDescription={details.cohortDescription}
                                                      handleDropdownClicked={handleDropdownClick}

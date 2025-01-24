@@ -289,12 +289,12 @@ const ProgramDetails = () => {
                             </div>
                             <div className={'flex flex-col gap-3'} id={`tagDiv`}>
                                 <h1 id={`name`}
-                                    className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px]`}>
+                                    className={`text-meedlBlack ${cabinetGrotesk.className} text-[28px] font-medium leading-[33.6px] md:w-[351px] break-words overflow-y-auto max-h-28`}>
                                     {progamDetail.name}
                                 </h1>
                                 <div className={'grid gap-5'} id={`tagButtonDiv`}>
                                     <p id={`details`}
-                                       className={'text-sm font-normal w-[351px] text-grey400 break-words scrollbar-width:none overflow-y-auto h-24'}
+                                       className={'text-sm font-normal w-[351px] text-grey400 break-words scrollbar-width:none overflow-y-auto max-h-24'}
                                        dangerouslySetInnerHTML={{__html: progamDetail.programDescription}}
                                        />
                                       

@@ -1,5 +1,5 @@
 "use client"
-import React,{useState,useCallback,useEffect} from 'react'
+import React,{useState,useCallback,useEffect,useRef} from 'react'
 import { Input } from '@/components/ui/input'
 import { MdSearch } from 'react-icons/md'
 import { DropdownMenu, DropdownMenuContent,DropdownMenuTrigger,DropdownMenuItem,DropdownMenuLabel} from '@/components/ui/dropdown-menu'
@@ -101,6 +101,7 @@ const CohortView = () => {
    const { data: programDatas, isLoading } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
   const { data: cohortsByProgram, refetch } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
+  
    
 
   //  useEffect(const {toast} = useToast()() => { 
@@ -168,14 +169,23 @@ const CohortView = () => {
    selectProgram: Yup.string().required('Program is required'),
  })
 
-//  const debouncedSearch = useCallback( debounce((term) => { 
-//   setSearchTerm(term);
-//  }, 300), [setSearchTerm] );
 
- const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
-  setSearchTerm(event.target.value);
-};
+  
+const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(event.target.value);
+   }
 
+   useEffect(() => {
+    const handler = setTimeout(() => {
+      if(searchTerm){
+        setSearchTerm(searchTerm)
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
      
 
 const handleDeleteCohortByOrganisation = async (id: string) => {
@@ -224,6 +234,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
               className='w-full lg:w-96 h-11 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
               value={searchTerm}
               onChange={handleSearchChange}
+              //  onKeyUp={handleKeyUp}
               />
             </div>
              <div className='z-10'>

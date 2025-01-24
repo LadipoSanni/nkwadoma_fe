@@ -9,7 +9,7 @@ import loadingLoop from "@iconify/icons-line-md/loading-loop";
 import {Icon} from "@iconify/react";
 import CustomSelect from '@/reuseable/Input/Custom-select';
 import { useUpdateProgramMutation } from '@/service/admin/program_query';
-import { useQueryClient } from '@tanstack/react-query';
+// import { useQueryClient } from '@tanstack/react-query';
 import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
 
@@ -39,6 +39,7 @@ type Props = {
 
 interface ApiError {
   status: number;
+  message: string;
   data: {
       message: string;
   };
@@ -49,7 +50,7 @@ interface ApiError {
 
 function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
   const [updateProgram, { isLoading }] = useUpdateProgramMutation();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const [error, setError] =  useState('');
 
     const initialFormValue = {
@@ -72,6 +73,18 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
     const validationSchema = Yup.object().shape({
       name: Yup.string()
        .trim()
+       .test(
+        "valid-name",
+        "Program name cannot be only numbers or special character hyphen.",
+        (value = "") => {
+        //   const regex = /^[a-zA-Z0-9\s_'-.,&/():]*$/;
+        //  const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
+        //  return regex.test(value) && !onlyNumbersOrSpecials.test(value);
+        const regex = /^[a-zA-Z0-9\s-]*$/;
+        const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
+        return regex.test(value) && !onlyNumbersOrSpecials.test(value);
+        }
+      )
       .required('Program name is required'),
       deliveryType:Yup.string()
       .required('Program delivery type is required'),
@@ -118,20 +131,22 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
     }
     
     try {
-      await updateProgram({ id:programId, data: values }).unwrap();
-     queryClient.invalidateQueries({ queryKey: ['program'] });
+     const update = await updateProgram({ id:programId, data: values }).unwrap();
+    //  queryClient.invalidateQueries({ queryKey: ['program'] });
+    if(update){
       toastPopUp.showToast();
       if (setIsOpen) {
         setIsOpen(false);
-      }
+      }}
     } catch (err) {
       const error = err as ApiError;
-      setError(error?.data?.message );
+      setError(error ? error?.message : "Error occured" );
+      console.log("The error: ",error?.message);
       // setError(err instanceof Error ? err.message : 'An error occurred try again later');
     }
   }
 
-   
+    console.log("The error: ",error);
    
 
   return (
