@@ -5,6 +5,7 @@ import {inter} from "@/app/fonts";
 interface Props {
     items: navbarItemsProps[],
     current?: string
+    
 }
 const NavbarContainer = ({items, current}: Props) => {
     return (
@@ -19,7 +20,7 @@ const NavbarContainer = ({items, current}: Props) => {
                     id={item.id}
                     data-testid={item.id}
                     className={`inline-flex h-fit ${current === item.name ? 'rounded bg-[#f6f6f8]  ': ''} py-2 gap-2 px-1 w-full`}
-                    onClick={() => {item.handleClick(item?.name, item?.id)}}
+                     onClick={() => {item.handleClick(item?.name, item?.id)}}
                 >
                     <div id={'navbarIcon' + item.id}
                          data-testid={'navbarIcon' + item.id}

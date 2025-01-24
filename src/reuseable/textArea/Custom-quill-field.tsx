@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill/dist/quill.snow.css';
 
-interface CustomQuillFieldProps {
+export interface CustomQuillFieldProps {
     description: string;
     setDescription: (description: string) => void;
     maximumDescription?: number;
