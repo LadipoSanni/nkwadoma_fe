@@ -62,7 +62,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
         programDescription: programDetail?.programDescription || "",
     }
 
-    // const [isButtonLoading] = useState(false);
+  
     // const maxChars = 2500;
 
     const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
