@@ -9,7 +9,7 @@ import {validateEmailInput} from "@/utils/GlobalMethods"
 import {useLoginMutation} from "@/service/auths/api"
 import {useToast} from "@/hooks/use-toast"
 import {  setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
 import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
@@ -38,9 +38,21 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [validEmail, setValidEmail] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
-    const router = useRouter()
     const [login, { isLoading}] = useLoginMutation()
+    const router = useRouter()
+    const searchParams = useSearchParams()
     const [showEmailMessage, setShowEmailMessage] = useState(false)
+
+    const getUserLoanOfferId = () => {
+        if (searchParams){
+            const pathVariable = searchParams.get("loanOfferId")
+            if (pathVariable){
+                return pathVariable
+            }
+        }
+    }
+
+    const loanOfferId =  getUserLoanOfferId()
 
 
 
@@ -83,60 +95,87 @@ const Login: React.FC = () => {
     const {toast} = useToast()
     const handleLogin = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
-        if (!navigator.onLine) {
-            toast({
-                description: "No internet connection",
-                status: "error",
-            })
-        } else {
-            try {
-                const response = await login({email, password}).unwrap()
-                if (response?.data) {
-                    const access_token = response?.data?.access_token
-                    const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-                    // console.log('decoded: ', decode_access_token)
-                    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-expect-error
-                    const userName = decode_access_token?.name
-                    const user_email = decode_access_token?.email
-                    const user_roles = decode_access_token?.realm_access?.roles
-                    const user_role = user_roles.filter(getUserRoles).at(0)
-                    clearData()
-                    await persistor.purge();
-                    toast({
-                        description: "Login successful",
-                        status: "success",
-                    });
-                    if (user_role) {
-                        storeUserDetails(access_token, user_email, user_role, userName)
-                        setUserRoles(user_roles)
-                        switch (user_role){
-                            case 'LOANEE' :
-                                store.dispatch(setCurrentNavbarItem("overview"))
-                                router.push("/onboarding")
-                                break;
-                            case 'ORGANIZATION_ADMIN':
-                                store.dispatch(setCurrentNavbarItem("Program"))
-                                router.push("/program")
-                                break;
-                            case 'PORTFOLIO_MANAGER':
-                                store.dispatch(setCurrentNavbarItem("Loan"))
-                                router.push("/loan")
-                                break;
-                        }
+        if(loanOfferId){
+            const response = await login({email, password}).unwrap()
+            if (response?.data) {
+                const access_token = response?.data?.access_token
+                const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+                // console.log('decoded: ', decode_access_token)
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                const userName = decode_access_token?.name
+                const user_email = decode_access_token?.email
+                const user_roles = decode_access_token?.realm_access?.roles
+                const user_role = user_roles.filter(getUserRoles).at(0)
+                clearData()
+                await persistor.purge();
+                toast({
+                    description: "Login successful",
+                    status: "success",
+                });
+                if (user_role) {
+                    storeUserDetails(access_token, user_email, user_role, userName)
+                    setUserRoles(user_roles)
+                    store.dispatch(setCurrentNavbarItem("Accept loan offer"))
+                    router.push(`/accept-loan-offer/loanOfferId=${loanOfferId}`)
+                }
+            }
+        }else {
+            if (!navigator.onLine) {
+                toast({
+                    description: "No internet connection",
+                    status: "error",
+                })
+            } else {
+                try {
+                    const response = await login({email, password}).unwrap()
+                    if (response?.data) {
+                        const access_token = response?.data?.access_token
+                        const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+                        // console.log('decoded: ', decode_access_token)
+                        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-expect-error
+                        const userName = decode_access_token?.name
+                        const user_email = decode_access_token?.email
+                        const user_roles = decode_access_token?.realm_access?.roles
+                        const user_role = user_roles.filter(getUserRoles).at(0)
+                        clearData()
+                        await persistor.purge();
+                        toast({
+                            description: "Login successful",
+                            status: "success",
+                        });
+                        if (user_role) {
+                            storeUserDetails(access_token, user_email, user_role, userName)
+                            setUserRoles(user_roles)
+                            switch (user_role) {
+                                case 'LOANEE' :
+                                    store.dispatch(setCurrentNavbarItem("overview"))
+                                    router.push("/onboarding")
+                                    break;
+                                case 'ORGANIZATION_ADMIN':
+                                    store.dispatch(setCurrentNavbarItem("Program"))
+                                    router.push("/program")
+                                    break;
+                                case 'PORTFOLIO_MANAGER':
+                                    store.dispatch(setCurrentNavbarItem("Loan"))
+                                    router.push("/loan")
+                                    break;
+                            }
 
+
+                        }
+                    }
+                } catch (error) {
+                    const err = error as ApiError;
+                    if (err?.data?.message) {
+                        setErrorMessage(err?.data?.message);
+                        toast({
+                            description: errorMessage || "Invalid email or password",
+                            status: "error",
+                        });
 
                     }
-                }
-            } catch (error) {
-                const err = error as ApiError;
-                if (err?.data?.message) {
-                    setErrorMessage(err?.data?.message);
-                    toast({
-                        description: errorMessage || "Invalid email or password",
-                        status: "error",
-                    });
-
                 }
             }
         }
