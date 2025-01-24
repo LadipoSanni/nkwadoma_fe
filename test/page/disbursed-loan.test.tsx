@@ -1,8 +1,7 @@
 import "@testing-library/react"
-import {fireEvent, render, screen} from "@testing-library/react";
-import DisbursedLoanDetails from "@/pages/admin/disbursed-loan-details";
+import { render, screen} from "@testing-library/react";
+import DisbursedLoanDetails from "../../src/features/portfolio-manager/disbursed-loan-details";
 import {Providers} from "@/app/provider";
-import {useRouter} from "next/navigation";
 // import {userEvent} from "@testing-library/user-event";
 
 jest.mock('next/navigation', ()=> ({
