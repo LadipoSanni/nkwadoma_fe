@@ -179,10 +179,10 @@ const SideBar = () => {
             icon: <MdOutlineReceiptLong
                 className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
             />,
-            id: 'transaction',
-            name: "Transaction",
-            isActive: true,
-            route: '/transaction'
+            id: 'wallet',
+            name: "Wallet",
+            isActive: false,
+            route: '/wallet'
         },
         {
             icon: <Icon
@@ -192,7 +192,7 @@ const SideBar = () => {
                 width={"1.3rem"}
             />,
             id: 'repayment',
-            isActive: true,
+            isActive: false,
             name: "Repayment",
             route: '/repayment'
         },
