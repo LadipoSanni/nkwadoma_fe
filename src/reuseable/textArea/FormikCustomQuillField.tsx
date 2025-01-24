@@ -116,7 +116,7 @@ const FormikCustomQuillField: React.FC<FieldProps & CustomQuillFieldProps> = ({
     label,
     placeholder,
     name,
-    setError,
+    // setError,
 }) => {
     const handleChange = (value: string) => {
         const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
