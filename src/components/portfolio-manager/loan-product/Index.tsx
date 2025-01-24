@@ -13,7 +13,7 @@ import {useGetAllInvestmentmentVehicleQuery} from "@/service/admin/fund_query";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import {validatePositiveNumber} from "@/utils/Format";
 import 'react-quill-new/dist/quill.snow.css'
-import {QuillField} from "@/reuseable/textArea/QuillField";
+import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 
 
 interface CreateLoanProductProps {
@@ -106,8 +106,8 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         tenor: Yup.string()
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Tenor must be greater than 0")
-            .required("Tenor is required"),
-        // .test("max-number", "Tenor must be less than or equal to 24", value => !value || Number(value) <= 24),
+            .required("Tenor is required")
+            .test("max-number", "Invalid tenor limit", value => !value || Number(value) <= 999),
         loanProductSize: Yup.string()
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0")
@@ -141,12 +141,19 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         loanProductMandate: Yup.string()
             .trim()
             .required("Product mandate is required")
-            .max(2500, "Terms exceeds 2500 characters"),
-        // .test("no-html-tags", "Product mandate terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
+            .max(2500, "Terms exceeds 2500 characters")
+            .test("not-empty", "Mandate is required.", (value = "") => {
+                const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
+                return sanitizedValue !== "";
+            }),
         loanProductTermsAndCondition: Yup.string()
             .trim()
             .required("Loan product terms is required")
             .max(2500, "Terms exceeds 2500 characters")
+            .test("not-empty", "Mandate is required.", (value = "") => {
+                const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
+                return sanitizedValue !== "";
+            }),
         // .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
         // loanDisbursementTerms: Yup.string()
         //     .trim()
@@ -569,7 +576,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         type={"number"}
                                                         className="w-full p-3 border rounded focus:outline-none text-sm"
                                                         component={CustomInputField}
-                                                        placeholder="0"
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                             let rawValue = e.target.value.replace(/,/g, "");
                                                             if (/^(?!0$)\d*$/.test(rawValue)) {
@@ -598,12 +604,19 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                 <div className={`pt-4`}>
                                     <Label htmlFor="loanProductMandate">Loan product mandate</Label>
-                                    <QuillField name={"loanProductMandate"}
-                                                errorMessage={"Product mandate must be 2500 characters or less"}/>
+                                    <Field
+                                        name="loanProductMandate"
+                                        component={FormikCustomQuillField}
+                                        maximumDescription={2500}
+                                        placeholder={"Enter product mandate..."}
+                                    />
                                     {errors.loanProductMandate && touched.loanProductMandate && (
-                                        <div className="text-red-500 text-sm mt-1">
-                                            {errors.loanProductMandate}
-                                        </div>
+                                        <ErrorMessage
+                                            name="loanProductMandate"
+                                            component="div"
+                                            id="loanProductMandateError"
+                                            className="text-red-500 text-sm"
+                                        />
                                     )}
                                     {/*<ReactQuill*/}
                                     {/*    theme="snow"*/}
@@ -710,8 +723,22 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product
                                         terms and
                                         condition</Label>
-                                    <QuillField name={"loanProductTermsAndCondition"}
-                                                errorMessage={"Product terms must be 2500 characters or less"}/>
+                                    <Field
+                                        name="loanProductTermsAndCondition"
+                                        component={FormikCustomQuillField}
+                                        maximumDescription={2500}
+                                        placeholder={"Enter terms and condition"}
+                                    />
+                                    {errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
+                                        <ErrorMessage
+                                            name="loanProductTermsAndCondition"
+                                            component="div"
+                                            id="loanProductTermsAndConditionError"
+                                            className="text-red-500 text-sm"
+                                        />
+                                    )}
+                                    {/*<QuillField name={"loanProductTermsAndCondition"}*/}
+                                    {/*            errorMessage={"Product terms must be 2500 characters or less"}/>*/}
                                     {/*<ReactQuill*/}
                                     {/*    theme="snow"*/}
                                     {/*    value={values.loanProductTermsAndCondition || ``}*/}
@@ -721,11 +748,11 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     {/*    placeholder="Enter terms and condition"*/}
                                     {/*    className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
                                     {/*/>*/}
-                                    {errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
-                                        <div className="text-red-500 text-sm mt-1">
-                                            {errors.loanProductTermsAndCondition}
-                                        </div>
-                                    )}
+                                    {/*{errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (*/}
+                                    {/*    <div className="text-red-500 text-sm mt-1">*/}
+                                    {/*        {errors.loanProductTermsAndCondition}*/}
+                                    {/*    </div>*/}
+                                    {/*)}*/}
                                 </div>
 
                                 <div className={`flex justify-end pt-5 gap-3 pb-5`}>
