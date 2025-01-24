@@ -31,9 +31,10 @@ function InfoCard({icon: Icon,fundTitle,description}: Props) {
          <p 
          className={`mt-3 w-full md:w-auto font-normal text-[#4D4E4D] ${inter.className}`}
           style={{ height: "auto",  maxHeight: "260px",  overflowY: "auto", minWidth: "320px", maxWidth: "70%",  fontSize:"14px" }}
-         >
-          {description}
-         </p>
+          dangerouslySetInnerHTML={{__html: String(description)}}
+         />
+          {/* {description}
+         </p> */}
          </div>
     </div>
   )
