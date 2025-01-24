@@ -16,13 +16,13 @@ import Image from "next/image";
 import {Card} from "@/components/ui/card";
 
 
-interface breakDown {
-    itemName: string;
-    itemAmount: string
-}
+// interface breakDown {
+//     itemName: string;
+//     itemAmount: string
+// }
 
 const Index = () => {
-    const [breakdown, setBreakdown] = useState<breakDown[]>([]);
+    // const [breakdown, setBreakdown] = useState<breakDown[]>([]);
     const clickedDisbursedLoanId = useAppSelector(state => state.selectedLoan.clickedDisbursedLoanIdNumber)
     // console.log(clickedDisbursedLoanId)
     const router = useRouter()
