@@ -167,7 +167,7 @@ function CreateInvestmentVehicle({
     }
   };
 
-  const maxChars = 1500;
+  // const maxChars = 1500;
   return (
     <div id="createInvestmentVehicleId">
       <Formik
@@ -176,7 +176,9 @@ function CreateInvestmentVehicle({
         validateOnMount={true}
         validationSchema={validationSchema}
       >
-        {({ errors, isValid, touched, setFieldValue, values }) => (
+        {({ errors, isValid, touched, setFieldValue, 
+        // values 
+      }) => (
           <Form className={`${inter.className}`}>
             <div
               className="grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto"
