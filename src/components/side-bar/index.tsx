@@ -95,13 +95,42 @@ const SideBar = () => {
         {id: 'loanee', name: 'Loanee', isActive: false, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={` h-[1.2rem] w-[1.2rem]   `}/>},
         {id: 'funds', name: 'Funds', isActive: true, route: '/funds', icon: <MdOutlinePayments color={current === 'Funds' ? '#142854' : '#939CB0'} className={` h-[1.2rem] w-[1.2rem]  `}/>},
         {id: 'investors', name: 'Investors', isActive: false, icon: <MdOutlineBusinessCenter color={'#d7d7d7'} className={` h-[1.2rem] w-[1.2rem]  `}/>},
-        
+
     ]
 
     const LOANEE : navbarRouterItemsProps[] = [
-        {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem] ${current === 'CFundsohort' ? currentTextLiterals : textLiterals} `}/>, id: 'overview', isActive: true, name: "Overview", route: '/overview'},
-        {icon: <MdOutlineReceiptLong className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}/>, id: 'transaction', name: "Transaction", isActive: true, route: '/transaction'},
-        {icon: <Icon icon='iconoir:hand-cash' color={current === 'Loan' ? '#142854' : '#667085'} height={"1.2rem"} width={"1.3rem"}/>, id: 'repayment', isActive: true, name: "Repayment", route: '/repayment'},
+        {
+            icon: <MdOutlineHome
+                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
+            />,
+            id: 'overview',
+            isActive: true,
+            name: "Overview",
+            route: '/overview'
+        },
+        {
+            icon: <MdOutlineReceiptLong
+                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
+            />,
+            id: 'wallet',
+            name: "Wallet",
+            isActive: false,
+            route: '/wallet'
+        },
+        {
+            icon: <Icon
+                icon='iconoir:hand-cash'
+                color={current === 'Loan' ? '#142854' : '#667085'}
+                height={"1.2rem"}
+                width={"1.3rem"}
+            />,
+            id: 'repayment',
+            isActive: false,
+            name: "Repayment",
+            route: '/repayment'
+        },
+
+
     ]
 
     const INSTITUTION_ADMIN: navbarRouterItemsProps[] = [
@@ -112,7 +141,7 @@ const SideBar = () => {
         {id: 'loanee', name: 'Loanee', isActive: false, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={`h-[1.2rem] w-[1.2rem]`}/>},
     ]
 
-  
+
     // const navbarContainerItems: navbarItemsProps[] = [
     //     {
     //         id: 'settings',
@@ -130,10 +159,10 @@ const SideBar = () => {
     //             className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
     //         handleClick: () => {handleRoute("Help & Support")}
     //     },
-        
-    //     {id: 'logout', 
-    //     name: 'Logout', 
-    //     icon: <LuLogOut color={currentNavBottom === "Logout" ? '#142854' : '#939CB0'} 
+
+    //     {id: 'logout',
+    //     name: 'Logout',
+    //     icon: <LuLogOut color={currentNavBottom === "Logout" ? '#142854' : '#939CB0'}
     //     className={` h-[1.2rem] w-[1.2rem] `}/>, handleClick: handleLogout
     // },
 
@@ -149,14 +178,14 @@ const settingsAndHelpItems: navbarItemsProps[] = [];
                 className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
             handleClick: handleClick
         });
-    
-        
+
+
     }
 
     const logoutItem: navbarItemsProps = {
         id: 'logout',
         name: 'Logout',
-        icon: <LuLogOut color={currentNavBottom === 'Logout' ? '#142854' : '#939CB0'} 
+        icon: <LuLogOut color={currentNavBottom === 'Logout' ? '#142854' : '#939CB0'}
         className={` h-[1.2rem] w-[1.2rem] `}/>, handleClick: handleLogout
     };
 
@@ -206,7 +235,7 @@ const settingsAndHelpItems: navbarItemsProps[] = [];
                         <div className={`  grid h-fit  w-full `}>
                             <NavbarRouter currentTab={current} handleClick={clickNavbar}
                                           navbarItems={getUserSideBarByRole(role)}/>
-                                         
+
                             < NavbarContainer current={currentNavBottom} items={navbarContainerItems} />
                         </div>
                     </div>
