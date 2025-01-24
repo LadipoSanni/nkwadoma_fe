@@ -120,7 +120,7 @@ function Index() {
                                     color={'#142854'}
                                     id={'loanDisbursalId'}
                         ></Icon>} iconBg={'#D9EAFF'} title={'Disbursed loan will show here'}
-                        description={`There are no disbursed loan available yet`}/>
+                        description={`There are no disbursed loans available yet`}/>
 
 
             }
