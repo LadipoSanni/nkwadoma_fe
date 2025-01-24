@@ -14,6 +14,7 @@ import { validateNumber,validatePositiveNumber } from '@/utils/Format';
 import { validateText } from '@/utils/Format';
 import CustomInputField from '@/reuseable/Input/CustomNumberFormat';
 // import CustomNumberFormat from '@/reuseable/Input/CustomNumberFormat';
+import FormikCustomQuillField from '@/reuseable/textArea/FormikCustomQuillField';
 
 
 interface ApiError {
@@ -215,6 +216,7 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
                       className="w-full p-3 border rounded focus:outline-none mt-2"
                       // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("sponsor", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
                       onChange={validateText('sponsors',setFieldValue)}
+                      
                     />
                      {
                  errors.sponsors && touched.sponsors &&  (
@@ -445,6 +447,13 @@ function CreateInvestmentVehicle({setIsOpen,type,investmentVehicleType}:props) {
                     }
                   }}
                 />
+                  {/* <Field
+                  name="mandate"
+                  component={FormikCustomQuillField}
+                  maximumDescription={2500}
+                  label={"Mandate"}
+                  placeholder={"Enter mandate..."}
+                /> */}
              {
               errors.mandate && touched.mandate &&  (
                  <ErrorMessage

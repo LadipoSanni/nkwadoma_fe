@@ -113,31 +113,54 @@ const SideBar = () => {
     ]
 
   
-    const navbarContainerItems: navbarItemsProps[] = [
-        {
+    // const navbarContainerItems: navbarItemsProps[] = [
+    //     {
+    //         id: 'settings',
+    //         name: 'Settings',
+    //         icon: <GearIcon
+    //             color={currentNavBottom === 'Settings' ? '#142854' : '#939CB0'}
+    //             className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
+    //         handleClick: handleClick
+    //     },
+    //     {
+    //         id: 'help&support',
+    //         name: "Help & Support",
+    //         icon: <MdHelpOutline
+    //             color={currentNavBottom === "Help & Support" ? '#142854' : '#939CB0'}
+    //             className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
+    //         handleClick: () => {handleRoute("Help & Support")}
+    //     },
+        
+    //     {id: 'logout', 
+    //     name: 'Logout', 
+    //     icon: <LuLogOut color={currentNavBottom === "Logout" ? '#142854' : '#939CB0'} 
+    //     className={` h-[1.2rem] w-[1.2rem] `}/>, handleClick: handleLogout
+    // },
+
+//  ]
+
+const settingsAndHelpItems: navbarItemsProps[] = [];
+
+    if (role === "PORTFOLIO_MANAGER") {
+        settingsAndHelpItems.push({
             id: 'settings',
             name: 'Settings',
-            icon: <GearIcon
-                color={currentNavBottom === 'Settings' ? '#142854' : '#939CB0'}
+            icon: <GearIcon color={currentNavBottom === 'Settings' ? '#142854' : '#939CB0'}
                 className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
             handleClick: handleClick
-        },
-        // {
-        //     id: 'help&support',
-        //     name: "Help & Support",
-        //     icon: <MdHelpOutline
-        //         color={currentNavBottom === "Help & Support" ? '#142854' : '#939CB0'}
-        //         className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
-        //     handleClick: () => {handleRoute("Help & Support")}
-        // },
+        });
+    
         
-        {id: 'logout', 
-        name: 'Logout', 
-        icon: <LuLogOut color={currentNavBottom === "Logout" ? '#142854' : '#939CB0'} 
-        className={` h-[1.2rem] w-[1.2rem] `}/>, handleClick: handleLogout
-    },
+    }
 
-    ]
+    const logoutItem: navbarItemsProps = {
+        id: 'logout',
+        name: 'Logout',
+        icon: <LuLogOut color={currentNavBottom === 'Logout' ? '#142854' : '#939CB0'} 
+        className={` h-[1.2rem] w-[1.2rem] `}/>, handleClick: handleLogout
+    };
+
+    const navbarContainerItems: navbarItemsProps[] = [...settingsAndHelpItems, logoutItem];
 
     const sideBarContent = [
         {name: "PORTFOLIO_MANAGER", value: PORTFOLIO_MANAGER},
