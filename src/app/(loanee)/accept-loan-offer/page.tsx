@@ -1,5 +1,5 @@
 import React from 'react';
-import AcceptLoanOfferDetails from '@/pages/loanee/AcceptLoanOfferDetails/Index';
+import AcceptLoanOfferDetails from '@/pages/loanee/AcceptLoanOfferDetails';
 
 const AcceptLoanOfferPage = () => {
   return(
