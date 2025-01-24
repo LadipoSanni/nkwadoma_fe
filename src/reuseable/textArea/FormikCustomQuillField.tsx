@@ -276,12 +276,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill/dist/quill.snow.css';
 import { FieldProps } from 'formik';
-import { CustomQuillFieldProps } from './Custom-quill-field';
 
-export const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
+interface CustomQuillFieldProps {
+    description: string;
+    setDescription: (description: string) => void;
+    maximumDescription?: number;
+    onDescriptionChange?: (desc: string) => void;
+    label: string;
+    placeholder: string;
+    setError: (error: string | null) => void;
+    name: string;
+}
+
+const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
     description,
     setDescription,
-    maximumDescription = 150,
+    maximumDescription = 2500,
     onDescriptionChange,
     label,
     placeholder,
@@ -307,15 +317,23 @@ export const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
         }
     }, [value]);
 
+    const sanitizeContent = (content: string) => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = content;
+        const textContent = tempDiv.textContent?.trim() || '';
+        return (textContent === '' || textContent === '<br>') ? '' : textContent;
+    };
+
     const handleChange = (value: string) => {
+        const sanitizedValue = sanitizeContent(value);
+        if (sanitizedValue.length > internalMaxDescription) {
+            setError(`${name} Must be ${maximumDescription} characters or less.`);
+            return;
+        }
         setValue(value);
         setDescription(value);
-
-        const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
-        if (sanitizedValue.length === 0) {
+        if (sanitizedValue === '' || sanitizedValue === '<br>') {
             setError(`${name} is required.`);
-        } else if (sanitizedValue.length > internalMaxDescription) {
-            setError(`${name} Must be ${maximumDescription} characters or less.`);
         } else {
             setError(null);
         }
@@ -324,8 +342,8 @@ export const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
 
     const handlePaste = (e: ClipboardEvent) => {
         const pasteContent = e.clipboardData?.getData('text') || '';
-        const sanitizedPaste = pasteContent.replace(/<\/?[^>]+(>|$)/g, "").trim();
-        const combinedContent = value + sanitizedPaste;
+        const sanitizedPaste = sanitizeContent(pasteContent);
+        const combinedContent = sanitizeContent(value) + sanitizedPaste;
 
         if (combinedContent.length > internalMaxDescription) {
             e.preventDefault();
@@ -335,7 +353,7 @@ export const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline'],
-        ['link', 'formula'],
+        ['link'],
         [{ 'list': 'check' }],
         [{ 'size': ['small', false, 'large', 'huge'] }],
         [{ 'font': [] }],
@@ -370,21 +388,31 @@ const FormikCustomQuillField: React.FC<FieldProps & CustomQuillFieldProps> = ({
     label,
     placeholder,
     name,
-    // setError,
+    setError,
 }) => {
     const handleChange = (value: string) => {
-        setFieldValue(field.name, value); // Set the raw HTML value in Formik state
-    };
+        const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
+        const internalMaxDescription = maximumDescription ? maximumDescription + 7 : 2500 + 7;
 
-    const handleSetError = (error: string | null) => {
-        setFieldError(field.name, error || undefined);
+        if (sanitizedValue.length === 0) {
+            setFieldError(field.name, `${name} is required.`);
+        } else if (sanitizedValue.length > internalMaxDescription) {
+            setFieldError(field.name, `${name} Must be ${maximumDescription} characters or less.`);
+        } else {
+            setFieldError(field.name, undefined); 
+        }
+
+        setFieldValue(field.name, value); 
+        if (onDescriptionChange) {
+            onDescriptionChange(value);
+        }
     };
 
     return (
         <CustomQuillField
             description={field.value}
             setDescription={handleChange}
-            setError={handleSetError}
+            setError={(error) => setFieldError(field.name, error || undefined)} 
             maximumDescription={maximumDescription}
             onDescriptionChange={onDescriptionChange}
             label={label}
