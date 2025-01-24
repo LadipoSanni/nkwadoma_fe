@@ -17,6 +17,7 @@ import {formatAmount} from '@/utils/Format'
 import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohortView/Index";
 import { formatMonthInDate } from "@/utils/Format";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 
 interface breakDown {
     itemName: string;
@@ -30,7 +31,7 @@ const CohortDetails = () => {
     const [breakdown, setBreakdown] = useState<breakDown[]>([]);
 
     const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
-    const {data: cohortDetails} = useViewCohortDetailsQuery({
+    const {data: cohortDetails, isLoading} = useViewCohortDetailsQuery({
         cohortId: cohortsId
     }, {refetchOnMountOrArgChange: true});
 
@@ -147,84 +148,89 @@ const CohortDetails = () => {
 
 
     return (
-        <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
-            <div className={` `} id={`backClickContainer`}>
-                <div className={`flex py-2 space-x-1 text-meedlBlue`} id={`backClick`}
-                     data-testid={`backClick `}>
-                    <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`} onClick={handleBackClick}/>
-                    <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
-                        onClick={handleBackClick}>Back to cohort</h1>
-                </div>
-            </div>
-
-            <Tabs
-                id={"detailsAndTraineeTab"}
-                data-test-id={"detailsAndTraineeTab"}
-                defaultValue={"details"}
-                className={`pt-3`}
-            >
-                <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'}
-                          id={`tabsList`}>
-                    <TabsTrigger value="details"
-                                 className={'py-1 px-2 gap-1 items-center rounded-md'}
-                                 id={`tabsTrigger1`}>Details</TabsTrigger>
-                    <TabsTrigger value="loanees"
-                                 className={'py-1 px-2 gap-1 items-center rounded-md'}
-                                 id={`tabsTrigger2`}>Loanees</TabsTrigger>
-                </TabsList>
-
-                <div id={`tabsContentDiv`}>
-                    <TabsContent value="details" className={'mt-4'} id={`tabsContent`}>
-                        <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
-                            <div id={`firstSection`}>
-                                <DetailsImageSection imageSrc={details.imageUrl} cohortTitle={details.name}
-                                                     cohortDescription={details.cohortDescription}
-                                                     handleDropdownClicked={handleDropdownClick}
-                                                     buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
-                                                     isEditButton={false}
-                                                     icon={FiBook}
-                                />
-                            </div>
-                            <div className={`md:w-6/12 min-w-sm pt-0 h-[96%]`} id={`secondSection`}>
-                                <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail} dataList={dataList}
-                                                     tabTitle1={"Cohort details"} tabTitle2={"Loan details"}
-                                                     useBreakdown={true} breakDown={breakdown}/>
-                            </div>
-                        </div>
-                    </TabsContent>
-
-                    <TabsContent value={"loanees"} id={`traineeId`}>
-                        <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
-                    </TabsContent>
-
+        <>{isLoading? (<SkeletonForDetailPage/>): (
+            <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
+                <div className={` `} id={`backClickContainer`}>
+                    <div className={`flex py-2 space-x-1 text-meedlBlue`} id={`backClick`}
+                         data-testid={`backClick `}>
+                        <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`} onClick={handleBackClick}/>
+                        <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
+                            onClick={handleBackClick}>Back to cohort</h1>
+                    </div>
                 </div>
 
-            </Tabs>
-            <div id={`deleteModal`}>
-                <TableModal
-                    isOpen={isDeleteOpen}
-                    closeModal={() => setIsDeleteOpen(false)}
-                    closeOnOverlayClick={true}
-                    icon={Cross2Icon}
-                    width="auto"
+                <Tabs
+                    id={"detailsAndTraineeTab"}
+                    data-test-id={"detailsAndTraineeTab"}
+                    defaultValue={"details"}
+                    className={`pt-3`}
                 >
-                    <DeleteCohort setIsOpen={() => setIsDeleteOpen(false)} headerTitle={"Delete cohort"}
-                                  title={"cohort"}/>
-                </TableModal>
-            </div>
+                    <TabsList
+                        className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'}
+                        id={`tabsList`}>
+                        <TabsTrigger value="details"
+                                     className={'py-1 px-2 gap-1 items-center rounded-md'}
+                                     id={`tabsTrigger1`}>Details</TabsTrigger>
+                        <TabsTrigger value="loanees"
+                                     className={'py-1 px-2 gap-1 items-center rounded-md'}
+                                     id={`tabsTrigger2`}>Loanees</TabsTrigger>
+                    </TabsList>
 
-            <div className={`md:max-w-sm w-full`} id={`editCohortModal`}>
-                <TableModal
-                    isOpen={isEditOpen}
-                    closeModal={() => setEditOpen(false)}
-                    closeOnOverlayClick={true}
-                    headerTitle={`Edit Cohort`}
-                    icon={Cross2Icon}
-                >
-                    <EditCohortForm cohortId={id} setIsOpen={() => setEditOpen(false)}/>
-                </TableModal>
-            </div>
-        </main>
+                    <div id={`tabsContentDiv`}>
+                        <TabsContent value="details" className={'mt-4'} id={`tabsContent`}>
+                            <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
+                                <div id={`firstSection`}>
+                                    <DetailsImageSection imageSrc={details.imageUrl} cohortTitle={details.name}
+                                                         cohortDescription={details.cohortDescription}
+                                                         handleDropdownClicked={handleDropdownClick}
+                                                         buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
+                                                         isEditButton={false}
+                                                         icon={FiBook}
+                                    />
+                                </div>
+                                <div className={`md:w-6/12 min-w-sm pt-0 h-[96%]`} id={`secondSection`}>
+                                    <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail}
+                                                         dataList={dataList}
+                                                         tabTitle1={"Cohort details"} tabTitle2={"Loan details"}
+                                                         useBreakdown={true} breakDown={breakdown}/>
+                                </div>
+                            </div>
+                        </TabsContent>
+
+                        <TabsContent value={"loanees"} id={`traineeId`}>
+                            <LoaneeInCohortView cohortFee={cohortDetails?.data?.tuitionAmount}/>
+                        </TabsContent>
+
+                    </div>
+
+                </Tabs>
+                <div id={`deleteModal`}>
+                    <TableModal
+                        isOpen={isDeleteOpen}
+                        closeModal={() => setIsDeleteOpen(false)}
+                        closeOnOverlayClick={true}
+                        icon={Cross2Icon}
+                        width="auto"
+                    >
+                        <DeleteCohort setIsOpen={() => setIsDeleteOpen(false)} headerTitle={"Delete cohort"}
+                                      title={"cohort"}/>
+                    </TableModal>
+                </div>
+
+                <div className={`md:max-w-sm w-full`} id={`editCohortModal`}>
+                    <TableModal
+                        isOpen={isEditOpen}
+                        closeModal={() => setEditOpen(false)}
+                        closeOnOverlayClick={true}
+                        headerTitle={`Edit Cohort`}
+                        icon={Cross2Icon}
+                    >
+                        <EditCohortForm cohortId={id} setIsOpen={() => setEditOpen(false)}/>
+                    </TableModal>
+                </div>
+            </main>
+        )}
+        </>
     );
 }
 export default CohortDetails;
