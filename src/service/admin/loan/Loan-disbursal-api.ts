@@ -19,6 +19,14 @@ export const loanDisbursalApi = createApi({
             }),
             providesTags: ['loanDisbursal']
         }),
+        viewDisbursedLoanDetails: builder.query({
+            query: (disbursedLoanIdentificationNumber: string) => ({
+                url: `/loan/loan-disbursals/${disbursedLoanIdentificationNumber}`,
+                method: 'GET',
+            }),
+            providesTags: ['loanDisbursal']
+        }),
+
     })
 })
-export const {useViewAllLoanDisbursalQuery} = loanDisbursalApi
+export const {useViewAllLoanDisbursalQuery, useViewDisbursedLoanDetailsQuery} = loanDisbursalApi

@@ -26,8 +26,8 @@ interface OrganizationType {
 const ChangeInstitutionModal = () => {
 
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
-    // const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
-    // console.log(clickedOrganizationId)
+    const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
+    console.log(clickedOrganizationId)
     // const clickedOrganization = useSelector((state: RootState) => state.selectedLoan.clickedOrganization);
     const [current, setCurrent] = useState<number | string>('')
     const [disabled, setDisabled] = React.useState(true)

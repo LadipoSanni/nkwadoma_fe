@@ -1,7 +1,7 @@
 'use client'
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {store} from "@/redux/store";
+import {store, useAppSelector} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
@@ -11,11 +11,15 @@ import {Breakdown} from "@/reuseable/details/breakdown";
 import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import TabSwitch from "@/reuseable/details/TabSwitch";
+import {useViewDisbursedLoanDetailsQuery} from "@/service/admin/loan/Loan-disbursal-api";
 
 const Index = () => {
+    const clickedDisbursedLoanId = useAppSelector(state => state.selectedLoan.clickedDisbursedLoanIdNumber)
+    // const clickedDisbursedLoanId = "6758948756"
+    console.log(clickedDisbursedLoanId)
     const router = useRouter()
     const [currentTab, setCurrentsTab] = useState(0);
-
+    const {data, isLoading} = useViewDisbursedLoanDetailsQuery(clickedDisbursedLoanId as string)
 
     const backToViewAllDisbursedLoan = () => {
         store.dispatch(setCurrentTab('Disbursed loan'))

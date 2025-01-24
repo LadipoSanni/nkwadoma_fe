@@ -7,8 +7,9 @@ import Tables from "@/reuseable/table/index";
 import {useRouter} from "next/navigation";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
-import {useAppSelector} from "@/redux/store";
-import { useViewAllLoanDisbursalQuery } from "@/service/admin/loan/Loan-disbursal-api";
+import {store, useAppSelector} from "@/redux/store";
+import {useViewAllLoanDisbursalQuery} from "@/service/admin/loan/Loan-disbursal-api";
+import {setClickedDisbursedLoanIdNumber} from "@/redux/slice/loan/selected-loan";
 
 
 interface TableRowData {
@@ -22,7 +23,7 @@ function Index() {
     // const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization)
 
     const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
-    const { id } = clickedOrganizationId || {};
+    const {id} = clickedOrganizationId || {};
 
     const size = 1;
     const page = 100;
@@ -82,6 +83,7 @@ function Index() {
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
+        store.dispatch(setClickedDisbursedLoanIdNumber(ID))
         router.push(`/disbursed-loan-details?id=${ID}`);
     };
 
@@ -107,10 +109,7 @@ function Index() {
                             optionalFilterName='graduate'
                             condition={true}
                         />
-                    </div>
-
-
-                    :
+                    </div> :
                     <LoanEmptyState
                         id={'LoanDisbursalEmptyState'}
                         data-testid={'LoanDisbursalEmptyState'}

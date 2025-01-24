@@ -1,43 +1,8 @@
-
-// import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-//
-//
-// interface SelectedLoanState {
-//   currentTab: string;
-//   clickedOrganizationId: string | number,
-// }
-//
-// const initialState: SelectedLoanState = {
-//     currentTab: 'Loan requests',
-//     clickedOrganizationId: '',
-//
-//
-// };
-//
-//
-// export const selectedLoanSlice = createSlice({
-//     name: "SelectedLoan",
-//     initialState,
-//     reducers: {
-//         setCurrentTab: (state, action: PayloadAction<string>)=>{
-//             state.currentTab = action.payload;
-//         },
-//         setClickedOrganization: (state, action: PayloadAction<string | number>)=> {
-//           state.clickedOrganizationId = action.payload
-//         },
-//     },
-//
-// });
-//
-//
-// export const { setCurrentTab, setClickedOrganization } = selectedLoanSlice.actions;
-//
-// export default selectedLoanSlice.reducer;
-
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SelectedLoanState {
     currentTab: string;
+    clickedDisbursedLoanIdNumber: string | object | React.ReactNode;
     clickedOrganization: {
         id: string | number;
         name: string;
@@ -48,6 +13,7 @@ interface SelectedLoanState {
 const initialState: SelectedLoanState = {
     currentTab: 'Loan requests',
     clickedOrganization: null,
+    clickedDisbursedLoanIdNumber: "",
 };
 
 export const selectedLoanSlice = createSlice({
@@ -60,9 +26,12 @@ export const selectedLoanSlice = createSlice({
         setClickedOrganization: (state, action: PayloadAction<{ id: string | number; name: string; logoImage: string }>) => {
             state.clickedOrganization = action.payload;
         },
+        setClickedDisbursedLoanIdNumber: (state, action: PayloadAction<string | object | React.ReactNode>) => {
+            state.clickedDisbursedLoanIdNumber = action.payload;
+        }
     },
 });
 
-export const { setCurrentTab, setClickedOrganization } = selectedLoanSlice.actions;
+export const { setCurrentTab, setClickedOrganization, setClickedDisbursedLoanIdNumber } = selectedLoanSlice.actions;
 
 export default selectedLoanSlice.reducer;
