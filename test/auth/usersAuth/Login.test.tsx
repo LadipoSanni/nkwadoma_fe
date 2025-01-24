@@ -10,7 +10,10 @@ jest.mock("next/navigation", () => ({
         return {
             prefetch: () => null
         };
-    }
+    },
+    useSearchParams: jest.fn().mockImplementation(() => {
+        return new URLSearchParams(window.location.search);
+    }),
 }));
 
 jest.setTimeout(10000);
