@@ -1,5 +1,5 @@
 "use client"
-import React, {useEffect, useState} from "react";
+import React from "react";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import {store, useAppSelector} from "@/redux/store";
 import {useViewAllLoanDisbursalQuery} from "@/service/admin/loan/Loan-disbursal-api";
 import {setClickedDisbursedLoanIdNumber} from "@/redux/slice/loan/selected-loan";
+import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 
 
 interface TableRowData {
@@ -18,8 +19,6 @@ interface TableRowData {
 
 function Index() {
     const router = useRouter();
-    const [allDisbursedLoan, setAllDisbursedLoan] = useState([]);
-
     // const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization)
 
     const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
@@ -37,25 +36,18 @@ function Index() {
         {refetchOnMountOrArgChange: true}
     );
 
-    useEffect(() => {
-        if (data && data?.data) {
-            const all = data?.data?.body;
-            setAllDisbursedLoan(all)
-        }
-    }, [data])
-
 
     const loanDisbursalHeader = [
         {
             title: 'Loanee',
             sortable: true,
             id: 'firstName',
-            selector: (row: TableRowData) => <div className='flex gap-2 '>{row.loanee}
+            selector: (row: TableRowData) => <div className='flex gap-2 '>{row.firstName}
                 <div className={``}></div>
                 {row.lastName}</div>
         },
-        {title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.program},
-        {title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohort},
+        {title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) => row.programName},
+        {title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohortName},
         {
             title: 'Offer date',
             sortable: true,
@@ -66,19 +58,19 @@ function Index() {
             title: 'Loan start date',
             sortable: true,
             id: 'requestDate',
-            selector: (row: TableRowData) => <div>{dayjs(row.loanStartDate?.toString()).format('MMMM D, YYYY')}</div>
+            selector: (row: TableRowData) => <div>{dayjs(row.startDate?.toString()).format('MMMM D, YYYY')}</div>
         },
         {
             title: 'Deposit',
             sortable: true,
             id: 'initialDeposit',
-            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.deposit)}</div>
+            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div>
         },
         {
             title: 'Amount Requested',
             sortable: true,
             id: 'amountRequested',
-            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.AmountRequested)}</div>
+            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>
         }
     ];
 
@@ -92,34 +84,39 @@ function Index() {
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {
-                allDisbursedLoan?.length > 0 ?
-                    <div className={`md:w-full w-full h-full md:h-full `}>
-                        <Tables
-                            tableData={allDisbursedLoan}
-                            isLoading={isLoading}
-                            handleRowClick={handleRowClick}
-                            tableHeader={loanDisbursalHeader}
-                            tableHeight={52}
-                            sx='cursor-pointer'
-                            staticColunm='cohort'
-                            staticHeader='Cohort'
-                            showKirkBabel={false}
-                            icon={MdOutlinePeople}
-                            sideBarTabName='Cohort'
-                            optionalFilterName='graduate'
-                            condition={true}
-                        />
-                    </div> :
-                    <LoanEmptyState
-                        id={'LoanDisbursalEmptyState'}
-                        data-testid={'LoanDisbursalEmptyState'}
-                        icon={<Icon icon="material-symbols:money-bag-outline"
-                                    height={"2rem"}
-                                    width={"2em"}
-                                    color={'#142854'}
-                                    id={'loanDisbursalId'}
-                        ></Icon>} iconBg={'#D9EAFF'} title={'Disbursed loan will show here'}
-                        description={`There are no disbursed loans available yet`}/>
+                isLoading? (
+                        <div className={`w-full h-fit md:w-full md:h-full`}>
+                            <SkeletonForTable/>
+                        </div>
+                    ) :
+                    data?.data?.body?.length > 0 ?
+                        <div className={`md:w-full w-full h-full md:h-full `}>
+                            <Tables
+                                tableData={data?.data?.body}
+                                isLoading={isLoading}
+                                handleRowClick={handleRowClick}
+                                tableHeader={loanDisbursalHeader}
+                                tableHeight={52}
+                                sx='cursor-pointer'
+                                staticColunm='cohort'
+                                staticHeader='Cohort'
+                                showKirkBabel={false}
+                                icon={MdOutlinePeople}
+                                sideBarTabName='Loans'
+                                optionalFilterName='graduate'
+                                condition={true}
+                            />
+                        </div> :
+                        <LoanEmptyState
+                            id={'LoanDisbursalEmptyState'}
+                            data-testid={'LoanDisbursalEmptyState'}
+                            icon={<Icon icon="material-symbols:money-bag-outline"
+                                        height={"2rem"}
+                                        width={"2em"}
+                                        color={'#142854'}
+                                        id={'loanDisbursalId'}
+                            ></Icon>} iconBg={'#D9EAFF'} title={'Disbursed loan will show here'}
+                            description={`There are no disbursed loans available yet`}/>
 
 
             }
