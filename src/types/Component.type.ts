@@ -14,6 +14,7 @@ export  interface navbarItemsProps {
     name: string,
     icon?:string|React.ReactElement| JSX.Element;
     handleClick: (id?:string, name?: string, isActive?: boolean)=> void
+    route?: string,
 }
 
 export interface cohortLoaneeResponse {
