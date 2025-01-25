@@ -5,13 +5,14 @@ import {ThreeTabs} from "@/reuseable/tabs/ThreeTabs";
 import { useGetLoanProductDetailsByIdQuery } from "@/service/admin/loan_product";
 import {formatAmount} from "@/utils/Format";
 import { MdOutlineInventory2 } from "react-icons/md";
+import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 
 
 
 const Details = () => {
 
     const loanProductId = sessionStorage.getItem("LoanProductId") ?? undefined;
-    const { data: loanProduct } = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
+    const { data: loanProduct, isLoading:loading } = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
 
 
     const handleDropdownClick = ()=>{}
@@ -38,23 +39,30 @@ const Details = () => {
     ];
 
     return (
-        <div className={`py-4 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
-            <div id={`firstSection`}>
-                <DetailsImageSection imageSrc={loanProduct?.data.imageUrl} cohortTitle={loanProduct?.data.name}
-                                     cohortDescription={loanProduct?.data.mandate}
-                                     handleDropdownClicked={handleDropdownClick}
-                                     buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
-                                     isEditButton={false}
-                                     icon={MdOutlineInventory2}
-                />
-            </div>
-            <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
-                <ThreeTabs
-                    isTable={false} isNotTableDataList={loanProduct?.data.termsAndCondition} dataList={dataList}
-                                     tabTitle1={"Product details"} tabTitle2={"Terms and conditions"}
-                                     useBreakdown={false} />
-            </div>
-        </div>
+        <>{
+            loading? (
+                <SkeletonForDetailPage/>
+            ): (
+                <div className={`py-4 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
+                    <div id={`firstSection`}>
+                        <DetailsImageSection imageSrc={loanProduct?.data.imageUrl} cohortTitle={loanProduct?.data.name}
+                                             cohortDescription={loanProduct?.data.mandate}
+                                             handleDropdownClicked={handleDropdownClick}
+                                             buttonText={"Edit Cohort"} tagButtonData={tagButtonData}
+                                             isEditButton={false}
+                                             icon={MdOutlineInventory2}
+                        />
+                    </div>
+                    <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
+                        <ThreeTabs
+                            isTable={false} isNotTableDataList={loanProduct?.data.termsAndCondition} dataList={dataList}
+                            tabTitle1={"Product details"} tabTitle2={"Terms and conditions"}
+                            useBreakdown={false}/>
+                    </div>
+                </div>
+            )
+        }
+        </>
     );
 }
 
