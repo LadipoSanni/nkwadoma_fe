@@ -64,7 +64,7 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched }: FieldName) =>
     const toolbarOptions = [
         ['bold', 'italic', 'underline'],
         // ['blockquote', 'code-block'],
-        ['link', 'formula'],
+        ['link'],
         // [{ 'header': 1 }, { 'header': 2 }],
         [{ 'list': 'check' }],
         // [{ 'script': 'sub' }, { 'script': 'super' }],

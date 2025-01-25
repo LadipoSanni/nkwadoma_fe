@@ -53,7 +53,16 @@ function CreateProgram({setIsOpen}:Props) {
     const validationSchema = Yup.object().shape({
         programName:Yup.string()
        .trim()
-       .matches(/^[a-zA-Z\s_-]+$/, 'Program name can only contain letters, underscores, hyphens, and spaces.')
+      //  .matches(/^[a-zA-Z\s_-]+$/, 'Program name can only contain letters, underscores, hyphens, and spaces.')
+      .test(
+        "valid-name",
+        "Program name cannot be only numbers or special character hyphen.",
+        (value = "") => {
+        const regex = /^[a-zA-Z0-9\s-]*$/;
+        const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
+        return regex.test(value) && !onlyNumbersOrSpecials.test(value);
+        }
+      )
       .required('Program name is required'),
       deliveryType:Yup.string()
       .required('Program delivery type is required'),
@@ -118,6 +127,7 @@ function CreateProgram({setIsOpen}:Props) {
     }} catch (err) {
       const error = err as ApiError;
       setError(error ? error?.data?.message : "Error occured" );
+     
     }
   }
 
@@ -145,10 +155,18 @@ function CreateProgram({setIsOpen}:Props) {
                   name="programName"
                   className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"
                   placeholder="Enter program name"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
-                    const value = e.target.value; const regex = /^[a-zA-Z\s_-]*$/; 
-                    if (regex.test(value)) { 
-                      setFieldValue("programName", value); } }}
+                  // onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
+                  //   const value = e.target.value; const regex = /^[a-zA-Z\s_-]*$/; 
+                  //   if (regex.test(value)) { 
+                  //     setFieldValue("programName", value); } }}
+                  // onChange={(e: React.ChangeEvent<HTMLInputElement>) => { 
+                  //   const regex = /^[a-zA-Z0-9\s_'-.,&/():]*$/;
+                  //  const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;    
+                  //   const value = e.target.value;
+                  //   if (regex.test(value) && !onlyNumbersOrSpecials.test(value)) { 
+                  //     setFieldValue("programName", value); 
+                  //   }
+                  // }}
                   /> 
                   {
                     errors.programName && touched.programName &&  (
