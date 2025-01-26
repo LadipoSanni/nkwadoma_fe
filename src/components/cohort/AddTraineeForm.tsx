@@ -32,7 +32,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
     const COHORTID = getItemSessionStorage("cohortId");
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
-    const [isLoading] = useState(false);
+    // const [isLoading] = useState(false);
     const { data } = useGetCohortLoanBreakDownQuery(COHORTID);
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([]);
     const [totalItemAmount, setTotalItemAmount] = useState(0);
