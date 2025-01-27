@@ -5,7 +5,6 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
 import LoanProductTable from "@/reuseable/table/LoanProductTable";
-// import {programData} from "@/utils/ProgramData";
 import CreateProgram from "@/components/program/create-program";
 import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
