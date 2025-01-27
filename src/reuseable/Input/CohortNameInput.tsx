@@ -9,17 +9,32 @@ interface CohortNameInputProps {
 
 const CohortNameInput: React.FC<CohortNameInputProps> = ({ cohortName, setCohortName }) => {
     const [error, setError] = useState<string | null>(null); 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
-        const value = e.target.value; 
-        const regex = /^(?=.*[a-zA-Z])[a-zA-Z0-9-_\s]*$/; 
-         if (value === "" || regex.test(value)) { 
+    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+    //     const value = e.target.value; 
+    //     const regex = /^(?=.*[a-zA-Z])[a-zA-Z0-9-_\s]*$/; 
+    //      if (value === "" || regex.test(value)) { 
+    //         setCohortName(value);
+    //           setError(null); 
+    //      } 
+    //         else { 
+    //             setError('Cohort name should contain at least one letter and can include numbers, hyphens, and underscores.'); 
+    //         }
+    // };
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        const regex = /^(?=.*[a-zA-Z])[a-zA-Z0-9-_\s]*$/;
+        const maxLength = 200;
+    
+        if (value.length > maxLength) {
+            setError(`Cohort name should not exceed ${maxLength} characters.`);
+        } else if (value === "" || regex.test(value)) {
             setCohortName(value);
-              setError(null); 
-         } 
-            else { 
-                setError('Cohort name should contain at least one letter and can include numbers, hyphens, and underscores.'); 
-            }
+            setError(null);
+        } else {
+            setError('Cohort name should contain at least one letter and can include numbers, hyphens, and underscores.');
+        }
     };
+    
      
     return (
     

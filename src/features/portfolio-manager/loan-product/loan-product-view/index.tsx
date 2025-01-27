@@ -24,7 +24,7 @@ const LoanProductPage = () => {
     const [allLoanee, setAllLoanProduct] = useState<TableRowData[]>([]);
     const [createProduct, setCreateProduct] = React.useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-    const size = 100;
+    const size = 300;
     const number = 0;
     const { data, isLoading } = useViewAllLoanProductQuery({ pageSize: size, pageNumber: number });
     const { data: searchResult } = useSearchLoanProductQuery(
