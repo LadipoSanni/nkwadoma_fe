@@ -110,7 +110,7 @@ function ProductFilter({
                       )}
                     </div>
                   </SelectTrigger>
-                  <SelectContent className="border-none border-[#FAFBFC] text-[#404653]  text-sm z-50">
+                  <SelectContent className="border-none border-[#FAFBFC] text-[#404653]  text-sm z-50 mt-3 max-h-64">
                     <SelectGroup>
                       {valueListData.map((value) => (
                         <SelectItem
