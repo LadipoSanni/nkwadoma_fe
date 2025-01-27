@@ -8,7 +8,6 @@ import NavbarRouter from "../../reuseable/ui/navbarRouter";
 import {LuLogOut} from "react-icons/lu";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
 import NavbarContainer from "@/reuseable/ui/Navbar";
-// import {GearIcon, QuestionMarkCircledIcon} from "@radix-ui/react-icons";
 import {Icon} from "@iconify/react";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {MdOutlineAccountBalance, MdOutlineInventory2,MdOutlineReceiptLong, MdOutlinePayments, MdOutlineBusinessCenter,MdOutlinePersonOutline, MdOutlinePeopleAlt,MdOutlineHome} from "react-icons/md";
@@ -30,7 +29,6 @@ const SideBar = () => {
 
     const [role, setRole] = useState('')
     const user_role = getUserDetailsFromStorage('user_role')
-    // const access_token = getUserDetailsFromStorage('access_token')
 
 
     useEffect(() => {
@@ -41,7 +39,6 @@ const SideBar = () => {
         }
     }, [user_role]);
 
-    // console.log("acesss: ",access_token)
 
     const closeSideBar = () => {
         store.dispatch(setShowMobileSideBar(false))
@@ -63,8 +60,6 @@ const SideBar = () => {
                 router.push(route)
             }
             closeSideBar()
-
-
         }
 
     }
@@ -220,7 +215,7 @@ const settingsAndHelpItems: navbarItemsProps[] = [];
 
                     <div
                         className={` w-[70%] bg-white py-2 px-5 border border-r-grey-200 z-10 h-[100%] bg-learnSpaceWhite `}
-                    >getUserSideBarByRole(role)
+                    >
                         <div className={`md:h-fit py-6 md:w-full   md:grid   `}>
                             <Image
                                 id={'meddleMainLogoOnAdminLayout'}
