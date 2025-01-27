@@ -84,11 +84,15 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         productName: Yup.string()
             .trim()
             .required("Product Name is required")
-            .test('valid-name', 'Name cannot be only numbers or special characters.', (value = '') => {
-                const hasLetter = /[a-zA-Z]/.test(value);
-                const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value);
-                return hasLetter && !isOnlyNumbersOrSpecials;
-            }),
+            .test(
+                "valid-name",
+                "Name cannot be only numbers or special character hyphen.",
+                (value = "") => {
+                    const regex = /^[a-zA-Z0-9\s-]*$/;
+                    const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
+                    return regex.test(value) && !onlyNumbersOrSpecials.test(value);
+                }
+            ),
         // productSponsor: Yup.string()
         //     .trim()
         //     .required("Product sponsor is required"),
