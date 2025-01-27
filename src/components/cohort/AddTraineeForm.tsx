@@ -32,7 +32,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
     const COHORTID = getItemSessionStorage("cohortId");
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
-    const [isLoading] = useState(false);
+    // const [isLoading] = useState(false);
     const { data } = useGetCohortLoanBreakDownQuery(COHORTID);
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([]);
     const [totalItemAmount, setTotalItemAmount] = useState(0);
@@ -43,7 +43,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
     const [disableAddLoaneeButton, setDisableAddLoaneeButton] = useState(false)
     const [initialDepositError, setInitialDepositError] = useState('')
 
-    const [addLoaneeToCohort] = useAddLoaneeToCohortMutation();
+    const [addLoaneeToCohort, {isLoading: isLoadingAddLoanee}] = useAddLoaneeToCohortMutation();
 
     useEffect(() => {
         if (data?.data) {
@@ -384,7 +384,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                         className="w-full md:w-36 h-[57px] hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
                                         type="submit"
                                     >
-                                        {isLoading ? (
+                                        {isLoadingAddLoanee ? (
                                             <div id="loadingLoopIconDiv" className="flex items-center justify-center">
                                                 <Icon
                                                     id="Icon"

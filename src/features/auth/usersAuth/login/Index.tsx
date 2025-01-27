@@ -117,7 +117,7 @@ const Login: React.FC = () => {
                     storeUserDetails(access_token, user_email, user_role, userName)
                     setUserRoles(user_roles)
                     store.dispatch(setCurrentNavbarItem("Accept loan offer"))
-                    router.push(`/accept-loan-offer/loanOfferId=${loanOfferId}`)
+                    router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
                 }
             }
         }else {
