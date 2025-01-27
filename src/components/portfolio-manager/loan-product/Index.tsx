@@ -92,7 +92,8 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                     const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
                     return regex.test(value) && !onlyNumbersOrSpecials.test(value);
                 }
-            ),
+            )
+            .max(100, "Terms exceeds 100 characters"),
         // productSponsor: Yup.string()
         //     .trim()
         //     .required("Product sponsor is required"),
@@ -138,6 +139,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .required("Amount is required")
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Moratorium must be greater than 0")
+            .test("max-number", "Moratorium must be less than or equal to 24", value => !value || Number(value) <= 24)
             .test('is-less-than-loan-product-size', 'Moratorium can\'t be greater than tenor',
                 function (value) {
                     const {tenor} = this.parent;
@@ -147,8 +149,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                 function (value) {
                     const {tenor} = this.parent;
                     return parseFloat(value) !== parseFloat(tenor);
-                })
-            .test("max-number", "Moratorium must be less than or equal to 24", value => !value || Number(value) <= 24),
+                }),
         interest: Yup.string()
             .trim()
             .required("Interest is required"),
