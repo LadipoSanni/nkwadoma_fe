@@ -17,18 +17,14 @@ type props = {
 const AdminLayout = ({children}: props) => {
     const cookie = getUserDetailsFromStorage('access_token')
     const {toast} = useToast()
+    const response = isTokenValid(cookie ? cookie : '')
+
     useEffect(() => {
-        if (cookie) {
-            const response = isTokenValid(cookie)
-            if (!response) {
-                clearData()
-                toast({
-                    description: "Session expired. Please login again",
-                    status: "error",
-                });
-                redirect("/auth/login")
-            }
-        } else {
+        checkUserToken(response)
+    }, [response]);
+
+    const checkUserToken = (isTokenValid: boolean) => {
+        if (!isTokenValid) {
             clearData()
             toast({
                 description: "Session expired. Please login again",
@@ -36,7 +32,8 @@ const AdminLayout = ({children}: props) => {
             });
             redirect("/auth/login")
         }
-    }, [cookie]);
+    }
+
 
     return (
         <Providers>
