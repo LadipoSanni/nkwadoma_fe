@@ -20,7 +20,6 @@ import {useToast} from "@/hooks/use-toast";
 import {cohortLoaneeResponse} from "@/types/Component.type";
 import Table from "@/reuseable/table/LoanProductTable"
 import Isloading from "@/reuseable/display/Isloading";
-import {div} from "@tensorflow/tfjs-core";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 
 interface userIdentity {
