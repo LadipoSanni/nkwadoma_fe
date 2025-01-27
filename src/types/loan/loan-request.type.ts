@@ -26,6 +26,37 @@ export interface LoanRequestType {
         loanee: string
     }
 }
+
+export interface LoanOrganization {
+
+    "id": string,
+    "name": string,
+    "email": string,
+    "websiteAddress": string,
+    "invitedDate": string,
+    "rcNumber": string,
+    "tin": string,
+    "phoneNumber": string,
+    "numberOfPrograms": number,
+    "status": string,
+    "createdBy": string,
+    "numberOfLoanees": number,
+    "numberOfCohort": number,
+    "loanRequestCount": number,
+    "loanDisbursalCount": number,
+    "loanOfferCount": number,
+    "loanReferralCount": number,
+    "totalDebtRepaid": number,
+    "totalCurrentDebt": number,
+    "totalHistoricalDebt": number,
+    "repaymentRate": number,
+    "serviceOfferings": string,
+    "organizationEmployees": string,
+    "logoImage": string,
+    "bannerImage": string,
+    "address": string
+
+}
 export interface loaneeLoanBreakDown {
     "loaneeLoanBreakdownId": string,
     "itemName": string,

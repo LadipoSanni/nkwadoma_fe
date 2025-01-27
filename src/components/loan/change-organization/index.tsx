@@ -14,21 +14,17 @@ import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import {LoanOrganization} from "@/types/loan/loan-request.type";
 
 
-interface OrganizationType {
-    id: string;
-    name: string;
-    loanRequestCount: number;
-    logoImage: string;
-}
+
+
+
 
 const ChangeInstitutionModal = () => {
 
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
-    // const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
-    // console.log(clickedOrganizationId)
-    // const clickedOrganization = useSelector((state: RootState) => state.selectedLoan.clickedOrganization);
+
     const [current, setCurrent] = useState<number | string>('')
     const [disabled, setDisabled] = React.useState(true)
 
@@ -38,10 +34,9 @@ const ChangeInstitutionModal = () => {
         data: searchResults,
     } = useSearchOrganisationByNameQuery(searchTerm, {skip: !searchTerm});
 
-
-
-    const organisationList: OrganizationType[] = searchTerm ? searchResults?.data.body || [] : data?.data
+    const organisationList: LoanOrganization[] = searchTerm ? searchResults?.data.body || [] : data?.data
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
+
 
     const handleClick = (id: string | number, name?: string, logoImage?: string) => {
         if (id === current) {
@@ -79,6 +74,19 @@ const ChangeInstitutionModal = () => {
         }
         return initials.toUpperCase();
     };
+
+    const getLoanStatus =  (data: LoanOrganization) => {
+        if(currentTab === 'Loan request'){
+            return roundUpAmount(data?.loanRequestCount?.toString())
+        }else if(currentTab === 'Loan offers'){
+            return roundUpAmount(data?.loanOfferCount?.toString())
+        }else if(currentTab === 'Disbursed loan'){
+            return roundUpAmount(data?.loanDisbursalCount?.toString())
+        }else if(currentTab === 'Loan referrals'){
+            return roundUpAmount(data?.loanReferralCount?.toString())
+        }
+        return 0;
+    }
 
     return (
         <Dialog.Root>
@@ -118,7 +126,7 @@ const ChangeInstitutionModal = () => {
                                 {searchResults ? (
                                         searchResults?.data.length === 0 ?
                                             <SearchEmptyState searchTerm={searchTerm} icon={MdSearch}/> :
-                                            searchResults?.data.map((searchResult: OrganizationType, index: number) => {
+                                            searchResults?.data.map((searchResult: LoanOrganization, index: number) => {
 
                                             const initial = getInitials(searchResult.name)
                                             return (
@@ -173,7 +181,7 @@ const ChangeInstitutionModal = () => {
                                                             <div
                                                                 className={`bg-[#E1EEFF]  h-fit  flex place-content-center w-fit`}>
                                                         <span
-                                                            className={`text-xs mt-auto mb-auto text-meedlBlue`}>{roundUpAmount(searchResult.loanRequestCount.toString())}</span>
+                                                            className={`text-xs mt-auto mb-auto text-meedlBlue`}>{getLoanStatus(searchResult)}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -183,9 +191,7 @@ const ChangeInstitutionModal = () => {
                                     ) :
                                     (organisationList?.length === 0 ?
                                         <TableEmptyState name={"organization"} icon={MdOutlineAccountBalance} condition={true}/> :
-                                        organisationList?.map((organization: OrganizationType, index: number) => {
-
-                                            const initial = getInitials(organization.name)
+                                        organisationList?.map((organization: LoanOrganization, index: number) => {
                                             return (
                                                 <button key={organization.id} id={"index" + index}
                                                         onClick={() => {
@@ -223,7 +229,7 @@ const ChangeInstitutionModal = () => {
                                                                         alt={'image'}
                                                                     />
                                                                 ) : (
-                                                                    <div>{initial}</div>
+                                                                    <div>{getInitials(organization.name)}</div>
                                                                 )
                                                             }
 
@@ -241,7 +247,7 @@ const ChangeInstitutionModal = () => {
                                                             <div
                                                                 className={`bg-[#E1EEFF]  h-fit  flex place-content-center w-fit`}>
                                                         <span
-                                                            className={`text-xs mt-auto mb-auto text-meedlBlue`}>{roundUpAmount(organization.loanRequestCount.toString())}</span>
+                                                            className={`text-xs mt-auto mb-auto text-meedlBlue`}>{getLoanStatus(organization)}</span>
                                                             </div>
                                                         </div>
                                                     </div>
