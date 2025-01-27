@@ -76,7 +76,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
        .max(200, "Program name cannot be more than 200 characters.")
        .test(
         "valid-name",
-        "Program name cannot be only numbers or special character hyphen.",
+        "Program name can include letters, numbers, hyphens, and underscores, but cannot be solely numbers or special characters.",
         (value = "") => {
         //   const regex = /^[a-zA-Z0-9\s_'-.,&/():]*$/;
         //  const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;

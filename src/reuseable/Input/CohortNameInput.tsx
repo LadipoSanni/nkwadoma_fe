@@ -15,7 +15,7 @@ const CohortNameInput: React.FC<CohortNameInputProps> = ({ cohortName, setCohort
     //      if (value === "" || regex.test(value)) { 
     //         setCohortName(value);
     //           setError(null); 
-    //      } 
+   
     //         else { 
     //             setError('Cohort name should contain at least one letter and can include numbers, hyphens, and underscores.'); 
     //         }
