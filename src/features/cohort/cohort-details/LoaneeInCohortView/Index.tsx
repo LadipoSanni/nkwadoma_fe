@@ -213,7 +213,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                    {  allLoanee.length === 0? (<div><SearchEmptyState searchTerm={loaneeName} icon={MdSearch}/></div>) : ( isReferred === "Not referred"?
+                    { isReferred === "Not referred"?
                         <SelectableTable
                             tableData={allLoanee}
                             tableHeader={loanProduct}
@@ -235,7 +235,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             tableData={allLoanee}
                             tableHeader={loanProduct}
                             handleRowClick={()=> {}}
-                            staticHeader="Loanee"
+                            staticHeader=""
                             staticColunm="firstName"
                             icon={MdOutlinePerson}
                             sideBarTabName="Trainee"
@@ -245,7 +245,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             condition={true}
                             tableHeight={45}
                         />
-                )}
+                }
                 </div>
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
