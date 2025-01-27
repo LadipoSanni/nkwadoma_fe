@@ -120,8 +120,9 @@ const ChangeInstitutionModal = () => {
                             (<div
                                 className={`${styles.organizations} md:w-[30vw] md:h-fit  py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
                                 {searchResults ? (
-                                        searchResults?.data.length === 0 ? <SearchEmptyState searchTerm={searchTerm}
-                                                                                             icon={MdSearch}/> : searchResults?.data.map((searchResult: OrganizationType, index: number) => {
+                                        searchResults?.data.length === 0 ?
+                                            <SearchEmptyState searchTerm={searchTerm} icon={MdSearch}/> :
+                                            searchResults?.data.map((searchResult: OrganizationType, index: number) => {
 
                                             const initial = getInitials(searchResult.name)
                                             return (
@@ -185,8 +186,8 @@ const ChangeInstitutionModal = () => {
                                         })
                                     ) :
                                     (organisationList?.length === 0 ?
-                                        <TableEmptyState name={"organization"} icon={MdOutlineAccountBalance}
-                                                         condition={true}/> : organisationList?.map((organization: OrganizationType, index: number) => {
+                                        <TableEmptyState name={"organization"} icon={MdOutlineAccountBalance} condition={true}/> :
+                                        organisationList?.map((organization: OrganizationType, index: number) => {
 
                                             const initial = getInitials(organization.name)
                                             return (
