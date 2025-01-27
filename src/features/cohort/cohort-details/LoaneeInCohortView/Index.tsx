@@ -217,11 +217,11 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         <SelectableTable
                             tableData={allLoanee}
                             tableHeader={loanProduct}
-                            staticHeader="Trainee"
+                            staticHeader="Loanee"
                             staticColunm="firstName"
                             tableHeight={45}
                             icon={MdOutlinePerson}
-                            sideBarTabName="Trainee"
+                            sideBarTabName="Loanee"
                             handleRowClick={ handleRowClick}
                             optionalRowsPerPage={10}
                             tableCellStyle="h-12"
@@ -235,7 +235,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             tableData={allLoanee}
                             tableHeader={loanProduct}
                             handleRowClick={()=> {}}
-                            staticHeader="Trainee"
+                            staticHeader="Loanee"
                             staticColunm="firstName"
                             icon={MdOutlinePerson}
                             sideBarTabName="Trainee"
