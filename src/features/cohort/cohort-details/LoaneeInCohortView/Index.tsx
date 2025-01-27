@@ -179,7 +179,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     <div className={`flex md:flex-row flex-col gap-4 md:items-center`}
                          id={`ReferAndTraineeDiv`}>
                         <div className={`md:block hidden`} id={`largerScreenReferButton`}>
-                            <Button variant={"outline"}
+                            <Button
+                                aria-disabled={!enableButton}
+                                variant={"outline"}
                                     size={"lg"}
                                     className={`bg-neutral100  ${enableButton ? ' border-solid ring-1 ring-[#142854] border-[#142854] text-[#142854] ' : 'text-[#939CB0] border border-neutral650'} md:border-solid md:border-neutral650 border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
                                     onClick={handleRefer} disabled={selectedRows.size === 0 || isLoadingRefer}>
@@ -194,7 +196,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                                     onClick={handleAddLoane}>Add Loanee</Button>
                         </div>
                         <div className={`md:hidden block`} id={`smallScreenReferButton`}>
-                            <Button variant={"outline"}
+                            <Button
+                                aria-disabled={!enableButton}
+                                   variant={"outline"}
                                     size={"lg"}
                                     disabled={selectedRows.size === 0 || isLoadingRefer}
                                     className={`bg-neutral100   ${enableButton ? ' border-solid ring-1 ring-[#142854] border-[#142854] text-[#142854] ' : 'text-[#939CB0] border border-neutral650'} w-full h-12 flex justify-center items-center`}
