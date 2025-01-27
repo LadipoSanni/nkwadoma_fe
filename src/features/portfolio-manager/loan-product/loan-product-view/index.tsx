@@ -1,59 +1,62 @@
 "use client";
-import React, {useEffect, useState} from "react";
+
+import React, { useEffect, useState } from "react";
 import Tables from "@/reuseable/table/LoanProductTable";
-import {MdOutlineInventory2, MdSearch} from "react-icons/md";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import {useSearchLoanProductQuery, useViewAllLoanProductQuery} from "@/service/admin/loan_product";
-import {formatAmount} from "@/utils/Format";
+import { MdOutlineInventory2, MdSearch } from "react-icons/md";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useSearchLoanProductQuery, useViewAllLoanProductQuery } from "@/service/admin/loan_product";
+import { formatAmount } from "@/utils/Format";
 import TableModal from "@/reuseable/modals/TableModal";
-import {Cross2Icon} from "@radix-ui/react-icons";
-import {useRouter} from "next/navigation";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index";
-import {setItemSessionStorage} from "@/utils/storage";
+import { setItemSessionStorage } from "@/utils/storage";
+import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
+import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
 const LoanProductPage = () => {
-    const router = useRouter()
-    const [allLoanee, setAllLoanProduct] = useState([]);
-    const [createProduct, setCreateProduct] = React.useState(false)
+    const router = useRouter();
+    const [allLoanee, setAllLoanProduct] = useState<TableRowData[]>([]);
+    const [createProduct, setCreateProduct] = React.useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const size = 100;
     const number = 0;
-    const {data, isLoading: isLoading} = useViewAllLoanProductQuery({pageSize: size, pageNumber: number})
-    const {data: searchResult} = useSearchLoanProductQuery(
-        {loanProductName: searchTerm},
-        {skip: !searchTerm}
+    const { data, isLoading } = useViewAllLoanProductQuery({ pageSize: size, pageNumber: number });
+    const { data: searchResult } = useSearchLoanProductQuery(
+        { loanProductName: searchTerm },
+        { skip: !searchTerm }
     );
+
     useEffect(() => {
         if (searchTerm && searchResult && searchResult?.data) {
-            const result = searchResult?.data
-            setAllLoanProduct(result)
+            const result = searchResult?.data;
+            setAllLoanProduct(result);
         } else if (!searchTerm && data && data?.data) {
-            const result = data?.data?.body
-            setAllLoanProduct(result)
+            const result = data?.data?.body;
+            setAllLoanProduct(result);
         }
-    }, [data, searchTerm, searchResult])
+    }, [data, searchTerm, searchResult]);
 
     useEffect(() => {
         if (data && data?.data) {
             const all = data?.data?.body;
-            setAllLoanProduct(all)
+            setAllLoanProduct(all);
         }
-    }, [data])
+    }, [data]);
 
     const handleCreateButton = () => {
-        setCreateProduct(true)
-    }
+        setCreateProduct(true);
+    };
 
     const handleRowClick = (row: TableRowData) => {
-        router.push('/loan-product/loan-product-details')
-        setItemSessionStorage("LoanProductId", String(row.id))
-    }
-
+        router.push('/loan-product/loan-product-details');
+        setItemSessionStorage("LoanProductId", String(row.id));
+    };
 
     const loanProductHeader = [
         {
@@ -104,7 +107,7 @@ const LoanProductPage = () => {
             id: 'totalAmountEarned',
             selector: (row: TableRowData) => formatAmount(row.totalAmountEarned)
         },
-    ]
+    ];
 
     const dropDownOption = [
         {
@@ -119,8 +122,7 @@ const LoanProductPage = () => {
             name: "Delete Program",
             id: "3"
         }
-    ]
-
+    ];
 
     return (
         <main id={`mainDiv`} className={`px-5 py-6`}>
@@ -147,23 +149,31 @@ const LoanProductPage = () => {
             </div>
 
             <div id={`table`} className={`pt-8`}>
-                <Tables
-                    tableData={allLoanee.slice().reverse()}
-                    handleRowClick={handleRowClick}
-                    tableHeader={loanProductHeader}
-                    tableHeight={52}
-                    sx='cursor-pointer'
-                    staticColunm="name"
-                    staticHeader="Loan Product"
-                    showKirkBabel={false}
-                    kirkBabDropdownOption={dropDownOption}
-                    tableCellStyle={"h-12"}
-                    optionalRowsPerPage={10}
-                    icon={MdOutlineInventory2}
-                    sideBarTabName={"Loan product"}
-                    isLoading={isLoading}
-                    condition={true}
-                />
+                {isLoading ? (
+                    <div className={`w-full h-fit md:w-full md:h-full`}>
+                        <SkeletonForTable />
+                    </div>
+                ) : allLoanee.length > 0 ? (
+                    <Tables
+                        tableData={allLoanee.slice().reverse()}
+                        handleRowClick={handleRowClick}
+                        tableHeader={loanProductHeader}
+                        tableHeight={52}
+                        sx='cursor-pointer'
+                        staticColunm="name"
+                        staticHeader="Loan Product"
+                        showKirkBabel={false}
+                        kirkBabDropdownOption={dropDownOption}
+                        tableCellStyle={"h-12"}
+                        optionalRowsPerPage={10}
+                        icon={MdOutlineInventory2}
+                        sideBarTabName={"Loan product"}
+                        isLoading={isLoading}
+                        condition={true}
+                    />
+                ) : (
+                    <SearchEmptyState searchTerm={searchTerm} icon={MdSearch} />
+                )}
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
                 <TableModal
@@ -174,7 +184,7 @@ const LoanProductPage = () => {
                     headerTitle={`Create loan Product`}
                     width="36%"
                 >
-                    <CreateLoanProduct setIsOpen={() => setCreateProduct(false)}/>
+                    <CreateLoanProduct setIsOpen={() => setCreateProduct(false)} />
                 </TableModal>
             </div>
         </main>
