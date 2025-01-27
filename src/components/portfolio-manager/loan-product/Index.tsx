@@ -86,7 +86,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .required("Product Name is required")
             .test(
                 "valid-name",
-                "Name cannot be only numbers or special character hyphen.",
+                "Name can\'t be only numbers or special character hyphen.",
                 (value = "") => {
                     const regex = /^[a-zA-Z0-9\s-]*$/;
                     const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
@@ -120,7 +120,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Limit must be greater than 0")
             .required("Obligor limit is required")
-            .test('is-less-than-loan-product-size', 'Obligor cant be greater than product size',
+            .test('is-less-than-loan-product-size', 'Obligor can\'t be greater than product size',
                 function (value) {
                     const {loanProductSize} = this.parent;
                     return parseFloat(value) <= parseFloat(loanProductSize);
@@ -129,7 +129,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Amount must be greater than 0")
             .required("Amount is required")
-            .test('is-greater-than-loan-product-size', 'Repayment amount cant be greater than product size',
+            .test('is-greater-than-loan-product-size', 'Repayment amount can\'t be greater than product size',
                 function (value) {
                     const {loanProductSize} = this.parent;
                     return parseFloat(value) <= parseFloat(loanProductSize);
@@ -138,6 +138,16 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .required("Amount is required")
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Moratorium must be greater than 0")
+            .test('is-less-than-loan-product-size', 'Moratorium can\'t be greater than tenor',
+                function (value) {
+                    const {tenor} = this.parent;
+                    return parseFloat(value) <= parseFloat(tenor);
+                })
+            .test('is-not-equal-to-tenor', 'Moratorium can\'t be equal to tenor',
+                function (value) {
+                    const {tenor} = this.parent;
+                    return parseFloat(value) !== parseFloat(tenor);
+                })
             .test("max-number", "Moratorium must be less than or equal to 24", value => !value || Number(value) <= 24),
         interest: Yup.string()
             .trim()
