@@ -44,8 +44,8 @@ const AcceptLoanOffer: React.FC= () => {
     const [respondToLoanOffer] = useRespondToLoanOfferMutation();
 
 
-    const backToLoanRequest = () => {
-        router.push("/loan/loan-request");
+    const backToOverview = () => {
+        router.push("/overview");
     };
 
     const loanRequestDetailsTab = [
@@ -169,7 +169,7 @@ const AcceptLoanOffer: React.FC= () => {
             className={`w-full h-full ${inter.className}`}
         >
             <BackButton
-                handleClick={backToLoanRequest}
+                handleClick={backToOverview}
                 iconRight={true}
                 text="Back to overview"
                 id="loanRequestDetailsBackButton"
