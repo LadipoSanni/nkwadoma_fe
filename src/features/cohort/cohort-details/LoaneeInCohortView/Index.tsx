@@ -20,6 +20,8 @@ import {useToast} from "@/hooks/use-toast";
 import {cohortLoaneeResponse} from "@/types/Component.type";
 import Table from "@/reuseable/table/LoanProductTable"
 import Isloading from "@/reuseable/display/Isloading";
+import {div} from "@tensorflow/tfjs-core";
+import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 
 interface userIdentity {
     firstName: string;
@@ -212,7 +214,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                    { isReferred === "Not referred"?
+                    {  allLoanee.length === 0? (<div><SearchEmptyState searchTerm={loaneeName} icon={MdSearch}/></div>) : ( isReferred === "Not referred"?
                         <SelectableTable
                             tableData={allLoanee}
                             tableHeader={loanProduct}
@@ -244,7 +246,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             condition={true}
                             tableHeight={45}
                         />
-                    }
+                )}
                 </div>
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
