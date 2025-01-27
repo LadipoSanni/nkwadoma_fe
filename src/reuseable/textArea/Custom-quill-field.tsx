@@ -78,14 +78,18 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({ description, setDes
 
     return (
         <div id="descriptionContainer">
-             {/* <style>
+             <style>
                 {`
-                    .ql-picker.ql-expanded .ql-picker-options {
-                        left: 0 !important;
+                    .ql-toolbar .ql-picker-label {
+                        min-width: 0 !important; 
+                    }
+                    .ql-tooltip {
+                        left: 13% !important; 
                         right: auto !important;
+                        transform: translateX(-20%) !important; 
                     }
                 `}
-            </style> */}
+            </style>
             <label htmlFor="customQuill" className="block text-sm font-medium text-labelBlue">{label}</label>
             <ReactQuill
                 ref={quillRef}
@@ -96,6 +100,7 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({ description, setDes
                 modules={quillModules}
                 placeholder={placeholder}
                 className="font-inter text-sm font-normal leading-[22px] pt-2 rounded-md"
+                
             />
             {/* {maximumDescription && (
                 <div className="text-gray-500 text-sm">

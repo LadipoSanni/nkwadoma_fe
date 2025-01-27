@@ -84,6 +84,18 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched }: FieldName) =>
 
     return (
         <div>
+             <style>
+                {`
+                    .ql-toolbar .ql-picker-label {
+                        min-width: 0 !important; 
+                    }
+                    .ql-tooltip {
+                        left: 13% !important; 
+                        right: auto !important;
+                        transform: translateX(-20%) !important; 
+                    }
+                `}
+            </style>
             <ReactQuill
                ref={quillRef}
                modules={quillModules}
