@@ -22,6 +22,11 @@ interface OrganizationType {
     loanRequestCount: number;
     logoImage: string;
 }
+interface SaveClickedId {
+    id: string | number;
+    name: string;
+    logoImage: string;
+}
 
 const ChangeInstitutionModal = () => {
 
@@ -30,6 +35,7 @@ const ChangeInstitutionModal = () => {
     // console.log(clickedOrganizationId)
     // const clickedOrganization = useSelector((state: RootState) => state.selectedLoan.clickedOrganization);
     const [current, setCurrent] = useState<number | string>('')
+    const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
     const [disabled, setDisabled] = React.useState(true)
     const dataElement = {
         pageNumber: 0,
@@ -50,7 +56,7 @@ const ChangeInstitutionModal = () => {
             setCurrent(id);
             setDisabled(false);
         }
-        store.dispatch(setClickedOrganization({id, name: name || '', logoImage: logoImage || ''}));
+        setSaveClickedId({id, name: name || '', logoImage: logoImage || ''})
     };
 
 
@@ -65,6 +71,7 @@ const ChangeInstitutionModal = () => {
     }
 
     const handleContinue = () => {
+        store.dispatch(setClickedOrganization(saveClickedId || { id: '', name: '', logoImage: '' }));
         setCurrent('');
         setDisabled(true);
     }
