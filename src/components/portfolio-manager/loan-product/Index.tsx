@@ -116,7 +116,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         loanProductSize: Yup.string()
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0")
-            .required("Loan product is required"),
+            .required("Loan product is required")
+            .test("max-number", "Product size must be less than or equal to a quadrillion",
+                value => !value || Number(value) <= 1e15),
         obligorLimit: Yup.string()
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Limit must be greater than 0")
@@ -509,7 +511,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         }
                                     </div>
 
-                                    <div>
+                                    <div className={`p`}>
                                         <Label htmlFor="moratorium"
                                                style={{
                                                    display: 'inline-block',
@@ -547,10 +549,10 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     </div>
 
                                     <div>
-                                        <div className={`flex flex-row gap-2 pt-2`}>
+                                        <div className={`flex flex-row gap-2 `}>
                                             <div>
                                                 <Label htmlFor="interest">Interest (%)</Label>
-                                                <div>
+                                                <div className={`pt-2`}>
                                                     <Field
                                                         id="interest"
                                                         data-testid="interest"
@@ -583,13 +585,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                             <div className={`w-full`}>
                                                 <Label htmlFor="obligorLimit">Obligor limit</Label>
-                                                <div className={`w-full pt-1`}>
+                                                <div className={`w-full pt-3`}>
                                                     <Field
                                                         id="obligorLimit"
                                                         data-testid="obligorLimit"
                                                         name="obligorLimit"
                                                         type={"number"}
-                                                        className="w-full p-3 border rounded focus:outline-none text-sm"
+                                                        className="w-full p-3 border mt-2 rounded focus:outline-none text-sm"
                                                         component={CustomInputField}
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                             let rawValue = e.target.value.replace(/,/g, "");
