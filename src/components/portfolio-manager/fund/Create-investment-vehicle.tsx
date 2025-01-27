@@ -11,7 +11,7 @@ import { useCreateInvestmentVehicleMutation } from "@/service/admin/fund_query";
 import { useToast } from "@/hooks/use-toast";
 import { validateNumber, validatePositiveNumber } from "@/utils/Format";
 // import { formatNumberOnBlur } from '@/utils/Format';
-import { validateText } from "@/utils/Format";
+import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 // import CustomNumberFormat from '@/reuseable/Input/CustomNumberFormat';
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
@@ -73,6 +73,7 @@ function CreateInvestmentVehicle({
           return hasLetter && !isOnlyNumbersOrSpecials;
         }
       )
+      .max(200, "Name cannot be more than 200 characters.")
       .required("Name is required"),
     sponsors: Yup.string()
       .trim()
@@ -116,9 +117,13 @@ function CreateInvestmentVehicle({
     tenure: Yup.string()
       .trim()
       .required("tenor size is required")
+      // .matches(
+      //   /^[1-9]\d*$/,
+      //   "Tenor must be a positive number and cannot start with zero."
+      // )
       .matches(
-        /^[1-9]\d*$/,
-        "Tenor must be a positive number and cannot start with zero."
+        /^[1-9]\d{0,2}$/,
+        "Tenor must be a three-digit positive number and cannot start with zero."
       ),
     rate: Yup.number()
       .min(1, "Rate must be at least 1.")
@@ -176,9 +181,14 @@ function CreateInvestmentVehicle({
         validateOnMount={true}
         validationSchema={validationSchema}
       >
-        {({ errors, isValid, touched, setFieldValue, 
-        // values 
-      }) => (
+        {({
+          errors,
+          isValid,
+          touched,
+          setFieldValue,
+          setFieldError,
+          // values
+        }) => (
           <Form className={`${inter.className}`}>
             <div
               className="grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto"
@@ -351,11 +361,14 @@ function CreateInvestmentVehicle({
                     name="tenure"
                     placeholder="0"
                     className="w-full p-3 border rounded focus:outline-none mt-2"
-                    onChange={validateNumber("tenure", setFieldValue)}
-                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => { const value = e.target.value;
-                    //    const validValue = value.replace(/[^0-9]/g, '').replace(/^0+/, '');
-                    //    setFieldValue("tenure", validValue);
-                    //    }}
+                    onChange={validateNumberLimit(
+                      "tenure",
+                      setFieldValue,
+                      setFieldError,
+                      3,
+                      "Tenure must be a positive number, must not start with zero, and must be a maximum of three digits."
+                    )}
+          
                   />
                   {errors.tenure && touched.tenure && (
                     <ErrorMessage
