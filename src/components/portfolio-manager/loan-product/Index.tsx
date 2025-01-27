@@ -93,7 +93,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                     return regex.test(value) && !onlyNumbersOrSpecials.test(value);
                 }
             )
-            .max(100, "Terms exceeds 100 characters"),
+            .max(200, "Terms exceeds 100 characters"),
         // productSponsor: Yup.string()
         //     .trim()
         //     .required("Product sponsor is required"),
