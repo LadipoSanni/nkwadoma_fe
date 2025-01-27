@@ -78,6 +78,14 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({ description, setDes
 
     return (
         <div id="descriptionContainer">
+             {/* <style>
+                {`
+                    .ql-picker.ql-expanded .ql-picker-options {
+                        left: 0 !important;
+                        right: auto !important;
+                    }
+                `}
+            </style> */}
             <label htmlFor="customQuill" className="block text-sm font-medium text-labelBlue">{label}</label>
             <ReactQuill
                 ref={quillRef}
