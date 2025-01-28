@@ -14,6 +14,7 @@ import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index
 import { setItemSessionStorage } from "@/utils/storage";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -153,6 +154,8 @@ const LoanProductPage = () => {
                     <div className={`w-full h-fit md:w-full md:h-full`}>
                         <SkeletonForTable />
                     </div>
+                ) : searchTerm && searchResult && searchResult?.data.length === 0 ? (
+                    <SearchEmptyState searchTerm={searchTerm} icon={MdSearch} />
                 ) : allLoanee.length > 0 ? (
                     <Tables
                         tableData={allLoanee.slice().reverse()}
@@ -172,7 +175,7 @@ const LoanProductPage = () => {
                         condition={true}
                     />
                 ) : (
-                    <SearchEmptyState searchTerm={searchTerm} icon={MdSearch} />
+                    <TableEmptyState name={"loan product"} icon={MdOutlineInventory2} condition={true} />
                 )}
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>

@@ -28,7 +28,8 @@ export const selectedLoanSlice = createSlice({
         },
         setClickedDisbursedLoanIdNumber: (state, action: PayloadAction<string | object | React.ReactNode>) => {
             state.clickedDisbursedLoanIdNumber = action.payload;
-        }
+        },
+        // set
     },
 });
 

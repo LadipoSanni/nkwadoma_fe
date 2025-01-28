@@ -85,7 +85,7 @@ const SideBar = () => {
     const PORTFOLIO_MANAGER: navbarRouterItemsProps[] = [
         { icon: <MdOutlineHome color={'#d7d7d7'} className={` h-[1.2rem] w-[1.2em] `}/>, id: 'Overview', name: 'Overview', isActive: false,},
         {id: 'loan', name: 'Loan', route: '/loan/loan-request', isActive: true, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={current === 'Loan' ? '#142854' : '#939cb0'}></Icon>},
-        {id: 'loanProduct', name: 'Loan Product', route: '/loan-product', isActive: true, icon: <MdOutlineInventory2 color={current === 'Loan Product' ? '#142854' : '#939CB0'}></MdOutlineInventory2>},
+        {id: 'loanProduct', name: 'Loan product', route: '/loan-product', isActive: true, icon: <MdOutlineInventory2 color={current === 'Loan Product' ? '#142854' : '#939CB0'}></MdOutlineInventory2>},
         {id: 'organizations', name: 'Organizations', route: '/organizations', isActive: true, icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={current === 'Organizations' ? '#142854' : '#939CB0'}></MdOutlineAccountBalance>},
         {id: 'loanee', name: 'Loanee', isActive: false, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={` h-[1.2rem] w-[1.2rem]   `}/>},
         {id: 'funds', name: 'Funds', isActive: true, route: '/funds', icon: <MdOutlinePayments color={current === 'Funds' ? '#142854' : '#939CB0'} className={` h-[1.2rem] w-[1.2rem]  `}/>},
