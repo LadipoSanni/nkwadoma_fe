@@ -54,11 +54,12 @@ function CreateProgram({setIsOpen}:Props) {
         programName:Yup.string()
        .trim()
       //  .matches(/^[a-zA-Z\s_-]+$/, 'Program name can only contain letters, underscores, hyphens, and spaces.')
+      .max(200, "Program name cannot be more than 200 characters.")
       .test(
         "valid-name",
-        "Program name cannot be only numbers or special character hyphen.",
+        "Program name can include letters, numbers, hyphens, and underscores, but cannot be solely numbers or special characters.",
         (value = "") => {
-        const regex = /^[a-zA-Z0-9\s-]*$/;
+        const regex = /^[a-zA-Z0-9\s-_]*$/;
         const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
         return regex.test(value) && !onlyNumbersOrSpecials.test(value);
         }
