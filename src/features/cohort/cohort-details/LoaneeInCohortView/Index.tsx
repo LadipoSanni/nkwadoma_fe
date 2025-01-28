@@ -221,7 +221,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             staticColunm="firstName"
                             tableHeight={45}
                             icon={MdOutlinePerson}
-                            sideBarTabName="Loanee"
+                            sideBarTabName="loanee"
                             handleRowClick={ handleRowClick}
                             optionalRowsPerPage={10}
                             tableCellStyle="h-12"
@@ -238,7 +238,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             staticHeader=""
                             staticColunm="firstName"
                             icon={MdOutlinePerson}
-                            sideBarTabName="Trainee"
+                            sideBarTabName="loanee"
                             optionalRowsPerPage={10}
                             tableCellStyle="h-12"
                             isLoading={isLoading}
@@ -254,7 +254,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     closeModal={() => setAddLoanee(false)}
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
-                    headerTitle={`Add Loanee`}
+                    headerTitle={`Add loanee`}
                     width="30%"
                 >
                     <AddTraineeForm  tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)}/>

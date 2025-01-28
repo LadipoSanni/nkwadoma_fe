@@ -13,6 +13,7 @@ import { Breakdown } from "@/reuseable/details/breakdown";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useViewLoanOfferDetailsQuery, useRespondToLoanOfferMutation } from "@/service/admin/loan/loan-offer-api";
 import dynamic from "next/dynamic";
+import {useToast} from "@/hooks/use-toast";
 
 const AcceptLoanOfferDetails = dynamic(
     () => Promise.resolve(AcceptLoanOffer),
@@ -134,6 +135,7 @@ const AcceptLoanOffer: React.FC= () => {
             setCurrentTab(currentTab - 1);
         }
     };
+    const {toast } = useToast()
 
     const handleAccept = async () => {
         const payload = {
@@ -142,10 +144,16 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-            await respondToLoanOffer(payload);
-            router.push('/overview');
+            const response  = await respondToLoanOffer(payload);
+            console.log('response:: ', response);
         } catch (error) {
-            console.error(error);
+            toast({
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: error.message ? error.message : 'error occured pls try again',
+                status: 'error'
+            })
+            console.error('erorr:; ',error);
         }
     };
 
@@ -158,8 +166,9 @@ const AcceptLoanOffer: React.FC= () => {
         try {
             await respondToLoanOffer(payload);
             router.push('/overview');
+
         } catch (error) {
-            console.error(error);
+            console.error('error on accept loan offer as a loanee:: ',error);
         }
     };
 
