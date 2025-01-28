@@ -78,7 +78,8 @@ const Step1 = () => {
         validateEmail(value)
 
     }
-    const login = () => {
+    const login = (e?:React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
         store.dispatch(setUserPasswordInput(''))
         router.push("/auth/login")
     }
@@ -123,7 +124,9 @@ const Step1 = () => {
                             <button
                                 id={`loginOnResetPasswordStep1`}
                                 data-testid={`loginOnResetPasswordStep1`}
-                                onClick={login}
+                                onClick={(e)=> {
+                                    login(e)
+                                }}
                                 className={` h-fit md:h-fit text-meedlBlue text-sm  underline`}>
                                 Log in
                             </button>
