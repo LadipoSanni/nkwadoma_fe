@@ -79,7 +79,17 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
       .trim()
       .matches(
         /^[a-zA-Z0-9\-_ ]*$/,
-        "Cohort name can include letters, numbers, hyphens, and underscores, but cannot be solely numbers or special characters."
+        // "Cohort name can include letters, numbers, hyphens, and underscores"
+       "Name can include at least a letter and then numbers, hyphens and underscores.",
+      )
+      .test(
+        "valid-name",
+        "Program name can include at least a letter and then numbers, hyphens and underscores.",
+        (value = "") => {
+        const regex = /^[a-zA-Z0-9\s-_]*$/;
+        const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
+        return regex.test(value) && !onlyNumbersOrSpecials.test(value);
+        }
       )
       .required("Cohort name is required")
       .max(200, "Cohort name cannot be more than 200 characters"),

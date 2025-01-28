@@ -86,7 +86,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .required("Product Name is required")
             .test(
                 "valid-name",
-                "Name can include letters, numbers, hyphens, and underscores, but cannot be solely numbers or special characters.",
+                "Name can include letters, numbers, hyphens, and underscores",
                 (value = "") => {
                     const regex = /^[a-zA-Z0-9\s-_]*$/;
                     const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
