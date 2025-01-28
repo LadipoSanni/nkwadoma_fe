@@ -21,7 +21,7 @@ interface TableRowData {
 const Index = () => {
     const router = useRouter();
     const request ={
-        pageSize: 10,
+        pageSize: 100,
         pageNumber: 0
     }
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
@@ -29,7 +29,7 @@ const Index = () => {
     const { data, isLoading} = useViewAllLoanRequestQuery(request)
     const requestBody = {
         pageNumber: 0,
-        pageSize: 10,
+        pageSize: 100,
         organizationId: clickedOrganization?.id
     }
     const {data: viewAllLoanRequestsInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewLoanRequestsOfCurrentOrganizationQuery(requestBody)
