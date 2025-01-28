@@ -152,8 +152,8 @@ function Organization() {
                     optionalRowsPerPage={10}
                     staticHeader='Name'
                     staticColunm='name'
-                    sideBarTabName='Organization'
-                    optionalFilterName='Active'
+                    sideBarTabName='organization'
+                    optionalFilterName='active'
                     condition={true}
                     icon={MdOutlineAccountBalance}
                 />
@@ -181,8 +181,8 @@ function Organization() {
                     optionalRowsPerPage={10}
                     staticHeader='Name'
                     staticColunm='name'
-                    sideBarTabName='Organization'
-                    optionalFilterName='Invited'
+                    sideBarTabName='organization'
+                    optionalFilterName='invited'
                     icon={MdOutlineAccountBalance}
                     condition={true}
 
@@ -211,8 +211,8 @@ function Organization() {
                     optionalRowsPerPage={10}
                     staticHeader='Name'
                     staticColunm='name'
-                    sideBarTabName='Organization'
-                    optionalFilterName='Deactivated'
+                    sideBarTabName='organization'
+                    optionalFilterName='deactivated'
                     condition={true}
                     icon={MdOutlineAccountBalance}
                 />
