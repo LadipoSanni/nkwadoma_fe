@@ -9,7 +9,7 @@ export const loanDisbursalApi = createApi({
     endpoints: (builder) => ({
         viewAllLoanDisbursal: builder.query({
             query: (data: {
-                organizationId: string,
+                organizationId: string | number | undefined,
                 pageSize?: number;
                 pageNumber?: number;
             }) => ({
@@ -20,7 +20,7 @@ export const loanDisbursalApi = createApi({
             providesTags: ['loanDisbursal']
         }),
         viewDisbursedLoanDetails: builder.query({
-            query: (disbursedLoanIdentificationNumber: string) => ({
+            query: (disbursedLoanIdentificationNumber: string | number | undefined) => ({
                 url: `/loan/loan-disbursals/${disbursedLoanIdentificationNumber}`,
                 method: 'GET',
             }),
