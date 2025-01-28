@@ -8,7 +8,6 @@ interface SelectedLoanState {
         name: string;
         logoImage: string;
     } | null;
-    currentTabId: string;
 }
 
 const initialState: SelectedLoanState = {
@@ -31,12 +30,10 @@ export const selectedLoanSlice = createSlice({
         setClickedDisbursedLoanIdNumber: (state, action: PayloadAction<string | object | React.ReactNode>) => {
             state.clickedDisbursedLoanIdNumber = action.payload;
         },
-        setCurrentTabId : (state, action: PayloadAction<string>) => {
-            state.currentTabId = action.payload;
-        }
+        // set
     },
 });
 
-export const { setCurrentTab,setCurrentTabId, setClickedOrganization, setClickedDisbursedLoanIdNumber } = selectedLoanSlice.actions;
+export const { setCurrentTab, setClickedOrganization, setClickedDisbursedLoanIdNumber } = selectedLoanSlice.actions;
 
 export default selectedLoanSlice.reducer;

@@ -76,7 +76,7 @@ const ChangeInstitutionModal = () => {
     };
 
     const getLoanStatus =  (data: LoanOrganization) => {
-        if(currentTab === 'Loan request'){
+        if(currentTab === 'Loan requests'){
             return roundUpAmount(data?.loanRequestCount?.toString())
         }else if(currentTab === 'Loan offers'){
             return roundUpAmount(data?.loanOfferCount?.toString())
@@ -84,8 +84,10 @@ const ChangeInstitutionModal = () => {
             return roundUpAmount(data?.loanDisbursalCount?.toString())
         }else if(currentTab === 'Loan referrals'){
             return roundUpAmount(data?.loanReferralCount?.toString())
+        }else {
+            return roundUpAmount(data?.loanRequestCount?.toString())
         }
-        return 0;
+
     }
 
     return (

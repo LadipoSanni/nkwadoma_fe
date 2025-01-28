@@ -2,7 +2,7 @@
 import React from 'react';
 import {store, useAppSelector} from "@/redux/store";
 import styles from "./SelectedLoan.module.css"
-import {setCurrentTab, setCurrentTabId} from "@/redux/slice/loan/selected-loan";
+import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation"
 
 interface menuItemsProps {
@@ -15,8 +15,8 @@ const  SelectLoanTab = () => {
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
 
     const tabContent = [
-        {name: "Loan referrals", id: "loanReferral", route: 'loan-referral'},
-        {name: "Loan requests", id: "loanRequest", route: "loan-request"},
+        {name: "Loan referrals", id: "loanReferrals", route: 'loan-referral'},
+        {name: "Loan requests", id: "loanRequests", route: "loan-request"},
         {name: 'Loan offers', id: 'loanOffers', route: "loan-offer"},
         {name: 'Disbursed loan', id: "loanDisbursal", route: 'loan-disbursal'},
         {name: 'Loan book', id: "loanBook", route: "loan-book"},
@@ -28,7 +28,6 @@ const  SelectLoanTab = () => {
         // setCurrentTabs(newValue)
         if (newValue !== 0 && newValue !== 4) {
             store.dispatch(setCurrentTab(tabContent[newValue].name))
-            store.dispatch(setCurrentTabId(tabContent[newValue].id))
             router.push(`/loan/${tabContent[newValue].route}`)
         }
 
