@@ -38,6 +38,7 @@ const ChangeInstitutionModal = () => {
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
 
 
+
     const handleClick = (id: string | number, name?: string, logoImage?: string) => {
         if (id === current) {
             setCurrent('');
@@ -123,6 +124,7 @@ const ChangeInstitutionModal = () => {
                         </div>
                         {isLoading ? <SkeletonForLoanOrg/>
                             :
+                            // <TableEmptyState/>:
                             (<div
                                 className={`${styles.organizations} md:w-[30vw] md:h-fit  py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
                                 {searchResults ? (
