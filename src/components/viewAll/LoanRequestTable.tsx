@@ -57,7 +57,7 @@ const Index = () => {
              className={`grid md:px-3 md:overflow-hidden  md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {isLoading || isLoadingOrganizationLoanRequest ? (
-                    <div className={`w-full h-fit md:w-full md:h-full`}>
+                    <div className={`w-full h-fit md:w-full md:h-fit`}>
                         <SkeletonForTable />
                     </div>
                 ) :viewAllLoanRequestsInAnOrganizationData?.data?.body?.length === 0 || data?.data?.body?.length === 0 ?

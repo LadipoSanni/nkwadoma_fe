@@ -14,7 +14,6 @@ const initialState: SelectedLoanState = {
     currentTab: 'Loan requests',
     clickedOrganization: null,
     clickedDisbursedLoanIdNumber: "",
-    currentTabId: ''
 };
 
 export const selectedLoanSlice = createSlice({

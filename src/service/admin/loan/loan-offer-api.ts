@@ -38,7 +38,14 @@ export const loanOfferApi = createApi({
                 body
             }),
             invalidatesTags: ['loanOffer']
-        })
+        }),
+        viewLoanInAnOrganization: builder.query({
+            query: (body: {organizationId: number| string| undefined, pageSize: number, pageNumber: number})=> ({
+                url: `/loan/organization/view-all-loanOffers?organizationId=${body.organizationId}&pageSize=${body.pageSize}&pageNumber=${body.pageNumber}`,
+                method: 'GET'
+            })
+        }),
+
     })
 })
-export const {useViewAllLoanOfferQuery, useViewLoanOfferDetailsQuery, useDisburseLoanOfferMutation, useRespondToLoanOfferMutation } = loanOfferApi
+export const {useViewAllLoanOfferQuery,useViewLoanInAnOrganizationQuery, useViewLoanOfferDetailsQuery, useDisburseLoanOfferMutation, useRespondToLoanOfferMutation } = loanOfferApi
