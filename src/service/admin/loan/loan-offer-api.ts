@@ -15,7 +15,7 @@ export const loanOfferApi = createApi({
                 method: 'GET',
                 params: data
             }),
-            providesTags: ['create-loan-offer']
+            providesTags: ['create-loan-offer', 'loanOffer']
 
         }) ,
         viewLoanOfferDetails: builder.query({
