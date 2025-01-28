@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { MdClose, MdPersonOutline } from "react-icons/md";
 import { cabinetGrotesk, inter } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,10 @@ interface CurrentInformationProps {
     setCurrentStep?: (step: number) => void;
 }
 
+
+
 const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep }) => {
+    const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [values, setValues] = useState({
         firstName: "",
@@ -35,7 +39,6 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         alternatePhoneNumber: "",
     });
 
-    
     const [touched, setTouched] = useState({
         email: false,
         phoneNumber: false,
@@ -69,7 +72,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         }
 
         if (!validatePhoneNumber(values.phoneNumber)) {
-            newErrors.phoneNumber = "Invalid phone number"; 
+            newErrors.phoneNumber = "Invalid phone number";
         } else {
             newErrors.phoneNumber = "";
         }
@@ -116,10 +119,12 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
     };
 
     const handleContinueClick = () => {
-        if (isFormSubmitted && setCurrentStep) {
-            setCurrentStep(3);
+        if (isFormSubmitted) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            dispatch(setCurrentStep(3));
         }
-    };
+    }
 
     return (
         <>

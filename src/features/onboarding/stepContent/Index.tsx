@@ -11,7 +11,7 @@ interface StepContentProps {
 }
 export interface LoaneeLoanDetail {
     tuitionAmount: string;
-    amountRequested: string;
+    loanAmountRequested: string;
     initialDeposit: string;
     cohortStartDate: string;
     referredBy: string
