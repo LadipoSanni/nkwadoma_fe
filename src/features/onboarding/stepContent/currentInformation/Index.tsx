@@ -22,7 +22,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         email: "",
         phoneNumber: "",
         nextOfKinRelationship: "",
-        contactAddress: "To be fixed",
+        contactAddress: "",
         alternateEmail: "",
         alternatePhoneNumber: "",
         alternateContactAddress: "",
@@ -33,6 +33,14 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         phoneNumber: "",
         alternateEmail: "",
         alternatePhoneNumber: "",
+    });
+
+    
+    const [touched, setTouched] = useState({
+        email: false,
+        phoneNumber: false,
+        alternateEmail: false,
+        alternatePhoneNumber: false,
     });
 
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -61,19 +69,19 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         }
 
         if (!validatePhoneNumber(values.phoneNumber)) {
-            newErrors.phoneNumber = "Invalid phone number";
+            newErrors.phoneNumber = "Invalid phone number"; 
         } else {
             newErrors.phoneNumber = "";
         }
 
         if (values.alternateEmail && !validateEmail(values.alternateEmail)) {
-            newErrors.alternateEmail = "Invalid alternate email address";
+            newErrors.alternateEmail = "Invalid email address";
         } else {
             newErrors.alternateEmail = "";
         }
 
         if (values.alternatePhoneNumber && !validatePhoneNumber(values.alternatePhoneNumber)) {
-            newErrors.alternatePhoneNumber = "Invalid alternate phone number";
+            newErrors.alternatePhoneNumber = "Invalid phone number";
         } else {
             newErrors.alternatePhoneNumber = "";
         }
@@ -89,6 +97,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setValues((prev) => ({ ...prev, [id]: value }));
+        setTouched((prev) => ({ ...prev, [id]: true }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -178,6 +187,12 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                 number</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.phoneNumber}</p>
                         </div>
+                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
+                                Kin&#39;s
+                                residential address</p>
+                            <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{values.contactAddress}</p>
+                        </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
                                 Kin&#39;s
@@ -235,7 +250,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                 countryCodeOptions={[{ id: "1", name: "+234" }]}
                                 label="Current phone number"
                                 placeholder="+234" id={'phoneNumber'} />
-                            {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
+                            {touched.phoneNumber && errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
                             <div className={'grid gap-2'}>
                                 <DescriptionTextarea
                                     description={values.alternateContactAddress}
@@ -272,7 +287,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                 <Input type="email" id="email" placeholder="Enter email address"
                                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
                                     value={values.email} onChange={handleChange} />
-                                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                                {touched.email && errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                             </div>
                             <div className={'grid gap-2'}>
                                 <PhoneNumberSelect
@@ -291,6 +306,15 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                     placeholder="+234"
                                 />
                                 {errors.alternatePhoneNumber && <p className="text-red-500 text-sm">{errors.alternatePhoneNumber}</p>}
+                            </div>
+                            <div className={'grid gap-2'}>
+                                <DescriptionTextarea
+                                    description={values.contactAddress}
+                                    setDescription={(description) => setValues((prev) => ({
+                                        ...prev,
+                                        contactAddress: description
+                                    }))} maximumDescription={500} label={'Current residential address'}
+                                    placeholder={'Enter residential address'} />
                             </div>
                             <div className={'grid gap-2'}>
                                 <ProgramSelect
