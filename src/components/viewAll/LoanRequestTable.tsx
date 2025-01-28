@@ -60,7 +60,7 @@ const Index = () => {
                     <div className={`w-full h-fit md:w-full md:h-full`}>
                         <SkeletonForTable />
                     </div>
-                ) :viewAllLoanRequestsInAnOrganizationData?.data?.body === 0 || data?.data?.body?.length === 0 ?
+                ) :viewAllLoanRequestsInAnOrganizationData?.data?.body?.length === 0 || data?.data?.body?.length === 0 ?
                     (
                         <LoanEmptyState
                             id={'LoanRequestEmptyState'}
@@ -69,7 +69,7 @@ const Index = () => {
                                         width={"2em"}
                                         color={'#142854'}
                             ></Icon >} iconBg={'#D9EAFF'} title={'Loan request will show here'} description={clickedOrganization?.id ? 'There are no loan requests in this organization yet': `There are no loan requests available yet` } />
-                    ) :data?.data?.body?.length > 0 || viewAllLoanRequestsInAnOrganizationData?.data?.body?.length > 0 &&
+                    ) :
                (
                     <div className={`md:w-full  w-full h-full md:h-full `}>
                         <Tables
