@@ -74,7 +74,7 @@ function CreateInvestmentVehicle({
       //   }
       // )
       .matches(
-        /^[a-zA-Z0-9\-_ ]*$/, 
+        /^[a-zA-Z0-9\-_ ]*$/,
         "name can include letters,numbers, hyphens, and underscores only."
       )
       .test(
@@ -83,7 +83,7 @@ function CreateInvestmentVehicle({
         (value = "") => {
           const trimmedValue = value.trim();
           if (trimmedValue === "") {
-              return true; 
+            return true;
           }
           const hasLetter = /[a-zA-Z]/.test(value);
           const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
@@ -97,8 +97,10 @@ function CreateInvestmentVehicle({
       .required("vehicle sponsor is required")
       .max(100, "Program name cannot be more than 100 characters.")
       .matches(
-        /^[a-zA-Z\-_ ]*$/, 
-        " sponsors can include letters, hyphens, and underscores only."
+        // /^[a-zA-Z\-_ ]*$/,
+        // " sponsors can include letters, hyphens, and underscores only."
+        /^[a-zA-Z][a-zA-Z\-_ ]*$/,
+        "Sponsors can include letters, -, and _ only and cannot start with - and _."
       )
       //  .matches(/^[a-zA-Z\s]+$/, 'Vehicle sponsor can only contain letters and spaces.')
       .test(
@@ -107,7 +109,7 @@ function CreateInvestmentVehicle({
         (value = "") => {
           const trimmedValue = value.trim();
           if (trimmedValue === "") {
-              return true; 
+            return true;
           }
           const hasLetter = /[a-zA-Z]/.test(value);
           const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
@@ -116,11 +118,15 @@ function CreateInvestmentVehicle({
       ),
     fundManager: Yup.string()
       .trim()
-      
+
       .matches(
-        /^[a-zA-Z\-_ ]*$/, 
-        "Fund manager can include letters, hyphens, and underscores only."
+        // /^[a-zA-Z\-_ ]*$/,
+        // "Fund manager can include letters, hyphens, and underscores only."
+
+        /^[a-zA-Z][a-zA-Z\-_ ]*$/,
+        "Fund can include letters, -, and _ only and cannot start with - and _."
       )
+
       .max(100, "Program name cannot be more than 100 characters.")
       .test(
         "valid-fundManager",
@@ -128,7 +134,7 @@ function CreateInvestmentVehicle({
         (value = "") => {
           const trimmedValue = value.trim();
           if (trimmedValue === "") {
-              return true; 
+            return true;
           }
           const hasLetter = /[a-zA-Z]/.test(value);
           const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
@@ -403,7 +409,6 @@ function CreateInvestmentVehicle({
                       3,
                       "Tenure must be a positive number, must not start with zero, and must be a maximum of three digits."
                     )}
-          
                   />
                   {errors.tenure && touched.tenure && (
                     <ErrorMessage
