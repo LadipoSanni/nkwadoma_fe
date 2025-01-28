@@ -25,7 +25,7 @@ function LoanOfferTable() {
     }
 
     const {data, isLoading} = useViewAllLoanOfferQuery(request, {refetchOnMountOrArgChange: true})
-    console.log(data)
+    // console.log(data)
 
 
     const loanOfferHeader = [
