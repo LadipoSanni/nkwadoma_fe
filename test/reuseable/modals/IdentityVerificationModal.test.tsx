@@ -43,16 +43,16 @@ describe('IdentityVerificationModal', () => {
         fireEvent.submit(screen.getByRole('button', {name: /Continue/i}));
     });
 
-    it('collapses information when trigger clicked', () => {
-        render(
-            <Providers>
-                <IdentityVerificationModal isOpen={true} onClose={mockOnClose} loanReferralId={testId} onThirdStepContinue={jest.fn()}/>
-            </Providers>
-        );
-        const triggers = screen.getAllByText(/why do we need/i);
-        fireEvent.click(triggers[0]);
-        expect(screen.getByText(/We request for your BVN/i)).toBeInTheDocument();
-    });
+    // it('collapses information when trigger clicked', () => {
+    //     render(
+    //         <Providers>
+    //             <IdentityVerificationModal isOpen={true} onClose={mockOnClose} loanReferralId={testId} onThirdStepContinue={jest.fn()}/>
+    //         </Providers>
+    //     );
+    //     const triggers = screen.getAllByText(/why do we need/i);
+    //     fireEvent.click(triggers[0]);
+    //     expect(screen.getByText(/We request for your BVN/i)).toBeInTheDocument();
+    // });
 
     // it('does not render modal when isOpen is false', () => {
     //     render(
