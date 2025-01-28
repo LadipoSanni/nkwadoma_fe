@@ -20,11 +20,12 @@ interface TableRowData {
 function LoanOfferTable() {
     const router = useRouter();
     const request ={
-        pageSize: 10,
+        pageSize: 200,
         pageNumber: 0
     }
 
-    const {data, isLoading} = useViewAllLoanOfferQuery(request)
+    const {data, isLoading} = useViewAllLoanOfferQuery(request, {refetchOnMountOrArgChange: true})
+    console.log(data)
 
 
     const loanOfferHeader = [
@@ -63,7 +64,7 @@ function LoanOfferTable() {
                 data?.data?.body?.length > 0 ?
                     <div className={`md:w-full w-full h-full md:h-full `}>
                         <Tables
-                            tableData={data?.data?.body}
+                            tableData={data?.data?.body.slice().reverse()}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanOfferHeader}

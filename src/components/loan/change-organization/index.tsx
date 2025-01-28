@@ -48,6 +48,7 @@ const ChangeInstitutionModal = () => {
     } = useSearchOrganisationByNameQuery(searchTerm, {skip: !searchTerm});
     const organisationList: OrganizationType[] = searchTerm ? searchResults?.data.body || [] : data?.data.body
 
+
     const handleClick = (id: string | number, name?: string, logoImage?: string) => {
         if (id === current) {
             setCurrent('');
@@ -124,6 +125,7 @@ const ChangeInstitutionModal = () => {
                             //                      condition={true}/>
                             // )
                             :
+                            // <TableEmptyState/>:
                             (<div
                                 className={`${styles.organizations} md:w-[30vw] md:h-fit  py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
                                 {searchResults ? (
