@@ -361,11 +361,19 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                         </div>
                                     </div>
                                 ))}
-                                <div id={'totalInputOnAddLoaneeModal'} data-testid={'totalInputOnAddLoaneeModal'}>
+                                <div id={'totalInputOnAddLoaneeModal'} className={`mb-1`} data-testid={'totalInputOnAddLoaneeModal'}>
                                     <div className={`text-[#6A696D]`}>initial deposit is deducted from total</div>
                                     <TotalInput prefix={'₦'} total={totalItemAmount} componentId={'totalInputOnAddLoaneeModalComponent'} />
                                 </div>
-                                <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
+                                {errorMessage && (
+                                    <div
+                                        className="mb-2 text-error500  text-sm text-center"
+                                        data-testid="formErrorMessage"
+                                    >
+                                        {errorMessage}
+                                    </div>
+                                )}
+                                <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-1">
                                     <Button
                                         variant="outline"
                                         type="reset"
@@ -404,14 +412,6 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                     </Button>
                                     }
                                 </div>
-                            </div>
-                        )}
-                        {errorMessage && (
-                            <div
-                                className="mb-8 text-error500  text-sm text-center"
-                                data-testid="formErrorMessage"
-                            >
-                                {errorMessage}
                             </div>
                         )}
                     </Form>
