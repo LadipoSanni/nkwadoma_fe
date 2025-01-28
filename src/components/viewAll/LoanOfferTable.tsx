@@ -5,11 +5,12 @@ import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {useRouter} from "next/navigation";
-import {useViewAllLoanOfferQuery} from "@/service/admin/loan/loan-offer-api";
+import {useViewAllLoanOfferQuery, useViewLoanInAnOrganizationQuery} from "@/service/admin/loan/loan-offer-api";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
+import {useAppSelector} from "@/redux/store";
 
 
 
@@ -25,7 +26,15 @@ function LoanOfferTable() {
     }
 
     const {data, isLoading} = useViewAllLoanOfferQuery(request)
+    const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
+    const requestBody = {
+        pageSize: 10,
+        pageNumber: 0,
+        organizationId: clickedOrganization?.id
+    }
+    const {data: organizationLoanOffers, isLoading:isLoadingOrganizationLoanOffers} = useViewLoanInAnOrganizationQuery(requestBody)
 
+    console.log('organizationLoanOffers:: ', organizationLoanOffers,'isLoadingOrganizationLoanOffers:: ', isLoadingOrganizationLoanOffers)
 
     const loanOfferHeader = [
         {
@@ -55,15 +64,24 @@ function LoanOfferTable() {
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
-            { isLoading ? (
-                <div className={`w-full h-fit md:w-full md:h-full`}>
+            { isLoading || isLoadingOrganizationLoanOffers ? (
+                <div className={`w-full h-fit md:w-full md:h-fit`}>
                     <SkeletonForTable />
                 </div>
-                    ):
-                data?.data?.body?.length > 0 ?
-                    <div className={`md:w-full w-full h-full md:h-full `}>
+            ) :organizationLoanOffers?.data?.body?.length === 0 || data?.data?.body?.length === 0 ?
+                (
+                    <LoanEmptyState
+                        id={'LoanofferEmptyState'}
+                        icon={<Icon icon="material-symbols:money-bag-outline"
+                                    height={"2rem"}
+                                    width={"2em"}
+                                    color={'#142854'}
+                        ></Icon >} iconBg={'#D9EAFF'} title={'Loan request will show here'} description={clickedOrganization?.id ? 'There are no loan offers in this organization yet': `There are no loan offers available yet` } />
+                ) :
+                (
+                    <div className={`md:w-full  w-full h-full md:h-full `}>
                         <Tables
-                            tableData={data?.data?.body}
+                            tableData={clickedOrganization?.id  ? organizationLoanOffers?.data?.body : data?.data?.body}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanOfferHeader}
@@ -77,18 +95,7 @@ function LoanOfferTable() {
                             optionalFilterName='graduate'
                         />
                     </div>
-
-
-                    :
-                    <LoanEmptyState
-                        id={'LoanRequestEmptyState'}
-                        icon={<Icon icon="material-symbols:money-bag-outline"
-                                    height={"2rem"}
-                                    width={"2em"}
-                                    color={'#142854'}
-                        ></Icon >} iconBg={'#D9EAFF'} title={'Loan offer will show here'} description={`There are no loan offers available yet`} />
-
-
+                )
             }
         </div>
     );
