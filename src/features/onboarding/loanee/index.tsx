@@ -1,18 +1,15 @@
 'use client';
-
-import React, {useEffect, useState} from 'react';
-import { cabinetGrotesk, inter } from '@/app/fonts';
-import Connector from '@/components/common/Connector';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { RootState } from '@/redux/store';
+import { setLoanReferralStatus, setCurrentStep } from '@/service/users/loanRerralSlice';
+import { useViewLoanReferralDetailsQuery, useRespondToLoanReferralMutation } from "@/service/users/Loanee_query";
 import { Button } from '@/components/ui/button';
 import StepContent from '@/features/onboarding/stepContent/Index';
 import dynamic from 'next/dynamic';
-import {
-    // useLazyIsIdentityVerifiedQuery,
-    useRespondToLoanReferralMutation,
-    useViewLoanReferralDetailsQuery
-} from "@/service/users/Loanee_query";
-import {useRouter} from "next/navigation";
-
+import { cabinetGrotesk, inter } from '@/app/fonts';
+import Connector from '@/components/common/Connector';
 
 const DynamicIdentityVerificationModal = dynamic(() => import('@/reuseable/modals/IdentityVerificationModal'), {
     ssr: false
@@ -26,125 +23,79 @@ const steps = [
 ];
 
 const LoaneeOnboarding = () => {
-    const router = useRouter()
-    const [currentStep, setCurrentStep] = useState(0);
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const { loanReferralStatus, currentStep } = useSelector((state: RootState) => state.loanReferral);
     const [showModal, setShowModal] = useState(false);
+    const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery({});
+    const [respondToLoanReferral] = useRespondToLoanReferralMutation({});
     const [loanReferralId, setLoanReferralId] = useState("");
-    const {data, isLoading: loanReferralDetailsIsLoading} = useViewLoanReferralDetailsQuery({})
-    const [respondToLoanReferral ]= useRespondToLoanReferralMutation({})
-    // const [triggerVerification, { data: verificationFirstResponse }] = useLazyIsIdentityVerifiedQuery();
-    const [loaneeLoanDetail, setLoaneeLoanDetail] = useState({
-        tuitionAmount: "0.00",
-        amountRequested: "0.00",
-        initialDeposit: "0.00",
-        referredBy: "",
-        cohortStartDate: "",
-        loaneeLoanBreakdowns: []
-    })
-    function viewLoanReferralDetails  (){
-        if (data?.statusCode === "OK" &&  data?.data?.id){
-            setLoanReferralId((prevId) => {
-                return data.data.id || prevId;
-            });
+
+    useEffect(() => {
+        if (data?.statusCode === "OK" && data?.data?.id) {
+            setLoanReferralId(data.data.id);
+            dispatch(setLoanReferralStatus(data.data.loanReferralStatus));
         }
         if (data?.statusCode === "OK" && data?.data) {
             const backendDetails = data.data;
-            setLoaneeLoanDetail(prevState => {
-                const newDetails = {
-                    tuitionAmount: backendDetails.tuitionAmount?.toString() || "0.00",
-                    amountRequested: backendDetails.loanAmountRequested?.toString() || "0.00",
-                    initialDeposit: backendDetails.initialDeposit?.toString() || "0.00",
-                    cohortStartDate: backendDetails.cohortStartDate,
-                    referredBy: backendDetails.referredBy,
-                    loaneeLoanBreakdowns: backendDetails.loaneeLoanBreakdowns || []
-                };
-                if (
-                    prevState.tuitionAmount !== newDetails.tuitionAmount ||
-                    prevState.amountRequested !== newDetails.amountRequested ||
-                    prevState.initialDeposit !== newDetails.initialDeposit ||
-                    prevState.cohortStartDate !== newDetails.cohortStartDate ||
-                    prevState.referredBy !== newDetails.referredBy ||
-                    prevState.loaneeLoanBreakdowns !== newDetails.loaneeLoanBreakdowns
-                ) {
-                    return newDetails;
-                }
-                return prevState;
-            });
-            if (backendDetails.loanReferralStatus === "AUTHORIZED"){
-                setCurrentStep(1)
+            if (backendDetails.loanReferralStatus === "AUTHORIZED" && currentStep === steps.length - 1) {
                 router.push("/overview");
             }
         }
-    }
-    useEffect(() => {
-            viewLoanReferralDetails()
-    }, [loanReferralDetailsIsLoading]);
-    const handleThirdStepContinue = () => {
-        setShowModal(false);
-        setCurrentStep(2);
-    };
-    const handleAcceptLoanReferral = async () =>{
-        // triggerVerification({ loanReferralId });
-        const requestData = {
-            "id": loanReferralId,
-            "loanReferralStatus": "ACCEPTED"
-        }
-        if (requestData.id) {
-            await respondToLoanReferral(requestData).unwrap()
-        }else {
-            console.log("No loan referral detected.")
-        }
+    }, [data, loanReferralDetailsIsLoading, currentStep, dispatch, router]);
 
-        // if (verificationFirstResponse?.data === "Identity Not Verified") {
-        //     console.log(verificationFirstResponse.data)
-        // }
-    }
-    const handleNext = ()=>{
-        if (currentStep === 0){
-            handleAcceptLoanReferral()
-        }
-        if (currentStep === 1) {
+    const handleNext = () => {
+        if (currentStep === 0) {
+            handleAcceptLoanReferral();
+        } else if (currentStep === 1) {
             setShowModal(true);
         } else {
-            setCurrentStep(currentStep + 1);
+            dispatch(setCurrentStep(currentStep + 1));
         }
+    };
 
-    }
+    const handleAcceptLoanReferral = async () => {
+        const requestData = {
+            id: loanReferralId,
+            loanReferralStatus: "ACCEPTED"
+        };
+        if (requestData.id) {
+            await respondToLoanReferral(requestData).unwrap();
+            dispatch(setCurrentStep(currentStep + 1));
+        } else {
+            console.log("No loan referral detected.");
+        }
+    };
+
+    const handleThirdStepContinue = () => {
+        setShowModal(false);
+        dispatch(setCurrentStep(2));
+    };
+
     return (
-        <div id="loanApplicationDetailsContainer"
-             className={`md:overflow-visible overflow-y-auto h-[calc(100vh-8rem)] md:h-auto grid pr-1.5 md:gap-[58px] gap-6 ${inter.className}`}>
-            <header id="loanReferralAcceptanceHeader"
-                    className={'flex items-start border-b-lightBlue250 border-b border-solid w-full  py-5'}>
-                <h1 id="loanReferralAcceptanceTitle"
-                    className={`${cabinetGrotesk.className} md:text-[28px] text-[16px] leading-[120%]`}>Loan referral
-                    acceptance process</h1>
+        <div id="loanApplicationDetailsContainer" className={`md:overflow-visible overflow-y-auto h-[calc(100vh-8rem)] md:h-auto grid pr-1.5 md:gap-[58px] gap-6 ${inter.className}`}>
+            <header id="loanReferralAcceptanceHeader" className={'flex items-start border-b-lightBlue250 border-b border-solid w-full py-5'}>
+                <h1 id="loanReferralAcceptanceTitle" className={`${cabinetGrotesk.className} md:text-[28px] text-[16px] leading-[120%]`}>Loan referral acceptance process</h1>
             </header>
             <div id="loanApplicationStepsContainer" className={'md:flex md:justify-between grid gap-5 md:gap-0'}>
                 <aside id="loanApplicationStepsAside" className={'inline-flex flex-col items-start gap-1'}>
                     {steps.map((step, index) => (
                         <div key={index} id={`loanApplicationStep${index}`} className={'flex gap-2'}>
-                            <Connector
-                                showLine={index < steps.length - 1}
-                                isActive={index === currentStep}
-                                isCompleted={index < currentStep}
-                            />
-                            <p id={`loanApplicationStepText${index}`}
-                               className={`text-[14px] leading-[150%] ${index <= currentStep ? 'text-meedlBlue' : 'text-blue300'}`}>
+                            <Connector showLine={index < steps.length - 1} isActive={index === currentStep} isCompleted={index < currentStep} />
+                            <p id={`loanApplicationStepText${index}`} className={`text-[14px] leading-[150%] ${index <= currentStep ? 'text-meedlBlue' : 'text-blue300'}`}>
                                 {step}
                             </p>
                         </div>
                     ))}
                 </aside>
-                <section id="loanApplicationDetailsSection"
-                         className={'grid md:p-5 py-5 px-3 md:gap-[22px] gap-5 md:w-[43vw] w-full md:max-h-[calc(100vh-19rem)] md:overflow-y-auto rounded-md border border-lightBlue250 '}>
-                    <h2 id="loanApplicationDetailsTitle"
-                        className={`${cabinetGrotesk.className} text-labelBlue md:text-[20px] text-[16px] leading-[120%]`}>
+                <section id="loanApplicationDetailsSection" className={'grid md:p-5 py-5 px-3 md:gap-[22px] gap-5 md:w-[43vw] w-full md:max-h-[calc(100vh-19rem)] md:overflow-y-auto rounded-md border border-lightBlue250'}>
+                    <h2 id="loanApplicationDetailsTitle" className={`${cabinetGrotesk.className} text-labelBlue md:text-[20px] text-[16px] leading-[120%]`}>
                         {currentStep === 0 && 'Loan application details'}
                         {currentStep === 1 && 'Verify your identity'}
                         {currentStep === 2 && 'Current information'}
                         {currentStep === 3 && 'Confirm loan referral acceptance'}
                     </h2>
-                    <StepContent step={currentStep} setCurrentStep={setCurrentStep} loaneeLoanDetail={loaneeLoanDetail} />
+                    <StepContent step={currentStep} setCurrentStep={(step) => dispatch(setCurrentStep(step))} loaneeLoanDetail={data?.data} />
                     {currentStep === 1 && (
                         <DynamicIdentityVerificationModal
                             isOpen={showModal}
