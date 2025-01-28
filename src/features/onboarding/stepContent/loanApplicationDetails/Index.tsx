@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
@@ -8,12 +8,17 @@ import { format, isValid } from 'date-fns';
 import { NumericFormat } from 'react-number-format';
 
 interface LoanApplicationDetailsProps {
-    loaneeLoanDetail: LoaneeLoanDetail;
+    loaneeLoanDetail: LoaneeLoanDetail | undefined;
 }
 
 const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeLoanDetail }) => {
-    const { initialDeposit, cohortStartDate, tuitionAmount, amountRequested, referredBy, loaneeLoanBreakdowns = [] } = loaneeLoanDetail;
     const [isOpen, setIsOpen] = useState(false);
+
+    if (!loaneeLoanDetail) {
+        return <div>Loading...</div>;
+    }
+
+    const { initialDeposit, cohortStartDate, tuitionAmount, loanAmountRequested, referredBy, loaneeLoanBreakdowns = [] } = loaneeLoanDetail;
 
     const formattedCohortStartDate = isValid(new Date(cohortStartDate)) ? format(new Date(cohortStartDate), 'dd MMM, yyyy') : 'Date not available';
 
@@ -22,7 +27,7 @@ const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeL
             <DetailItem label="Tuition amount" value={<NumericFormat value={tuitionAmount} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
             <DetailItem label="Cohort start date" value={formattedCohortStartDate}/>
             <DetailItem label="Referred by" value={referredBy ? referredBy : "Not provided"} />
-            <DetailItem label="Loan amount requested" value={<NumericFormat value={amountRequested} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
+            <DetailItem label="Loan amount requested" value={<NumericFormat value={loanAmountRequested} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
             <DetailItem label="Deposit" value={<NumericFormat value={initialDeposit} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
             <Collapsible className={'bg-meedlWhite rounded-md border border-lightBlue250'} open={isOpen} onOpenChange={setIsOpen}>
                 <CollapsibleTrigger asChild>
@@ -46,7 +51,7 @@ const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeL
                         <h3 id="tuitionBreakdownTotalLabel"
                             className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Total</h3>
                         <p id="tuitionBreakdownTotalValue"
-                           className={`text-black500 text-[14px] font-semibold leading-[150%]`}><NumericFormat value={amountRequested} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} /></p>
+                           className={`text-black500 text-[14px] font-semibold leading-[150%]`}><NumericFormat value={loanAmountRequested} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} /></p>
                     </div>
                 </CollapsibleContent>
             </Collapsible>
