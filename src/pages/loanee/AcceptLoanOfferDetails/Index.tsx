@@ -42,6 +42,7 @@ const AcceptLoanOffer: React.FC= () => {
 
     const { data } = useViewLoanOfferDetailsQuery(loanOfferId);
     const [respondToLoanOffer] = useRespondToLoanOfferMutation();
+    console.log(data, "details")
 
 
     const backToOverview = () => {
