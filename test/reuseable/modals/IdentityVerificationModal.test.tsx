@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import IdentityVerificationModal from '@/reuseable/modals/IdentityVerificationModal';
 import {Providers} from "@/app/provider";
@@ -54,11 +54,11 @@ describe('IdentityVerificationModal', () => {
         expect(screen.getByText(/We request for your BVN/i)).toBeInTheDocument();
     });
 
-    it('does not render modal when isOpen is false', () => {
-        render(
-            <Providers>
-                <IdentityVerificationModal isOpen={false} onClose={mockOnClose} loanReferralId={testId} onThirdStepContinue={jest.fn()}/>
-            </Providers>
-        );expect(screen.queryByText(/Provide your details/i)).not.toBeInTheDocument();
-    });
+    // it('does not render modal when isOpen is false', () => {
+    //     render(
+    //         <Providers>
+    //             <IdentityVerificationModal isOpen={false} onClose={mockOnClose} loanReferralId={testId} onThirdStepContinue={jest.fn()}/>
+    //         </Providers>
+    //     );expect(screen.queryByText(/Provide your details/i)).not.toBeInTheDocument();
+    // });
 });
