@@ -136,6 +136,12 @@ const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, s
                                          if (amount.length > 1 && amount.startsWith('0')) { 
                                             setErrors(prevErrors => { const newErrors = [...prevErrors]; newErrors[index] = 'Item amount cannot start with 0'; return newErrors; }); 
                                             setIsItemListValid(false); }
+                                           else if (amount.length > 15) {
+                                                setErrors(prevErrors => {
+                                                    const newErrors = [...prevErrors];
+                                                    newErrors[index] = 'Item amount cannot exceed quadrillion';
+                                                    return newErrors;
+                                                });setIsItemListValid(false); }
                                              else { newItems[index].itemAmount = amount; setItems(newItems); 
                                             setErrors(prevErrors => { const newErrors = [...prevErrors]; newErrors[index] = ''; 
                                             return newErrors; });
@@ -150,7 +156,7 @@ const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, s
                                                  onClick={() => handleDeleteItem(index)}/>
                                 }
                             </div>
-                        </div>
+                        </div>NumericFormat
                     </div>
                 </div>
             ))}
