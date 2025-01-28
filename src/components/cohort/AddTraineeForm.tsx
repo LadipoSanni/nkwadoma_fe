@@ -279,7 +279,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                         <ErrorMessage name="initialDeposit" component="div" className="text-red-500 text-sm" />
                                     )}
                                     {initialDepositError.length > 1 &&
-                                    <span className="text-red-500 text-sm" >{initialDepositError}</span>}
+                                        <span className="text-red-500 text-sm" >{initialDepositError}</span>}
                                 </div>
                                 <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
@@ -361,19 +361,11 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                         </div>
                                     </div>
                                 ))}
-                                <div id={'totalInputOnAddLoaneeModal'} className={`mb-1`} data-testid={'totalInputOnAddLoaneeModal'}>
+                                <div id={'totalInputOnAddLoaneeModal'} data-testid={'totalInputOnAddLoaneeModal'}>
                                     <div className={`text-[#6A696D]`}>initial deposit is deducted from total</div>
                                     <TotalInput prefix={'₦'} total={totalItemAmount} componentId={'totalInputOnAddLoaneeModalComponent'} />
                                 </div>
-                                {errorMessage && (
-                                    <div
-                                        className="mb-2 text-error500  text-sm text-center"
-                                        data-testid="formErrorMessage"
-                                    >
-                                        {errorMessage}
-                                    </div>
-                                )}
-                                <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-1">
+                                <div className="md:flex gap-4 justify-end mt-2 md:mb-0 mb-3">
                                     <Button
                                         variant="outline"
                                         type="reset"
@@ -383,35 +375,43 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                         Back
                                     </Button>
                                     {disableAddLoaneeButton ?
-                                    <Button className={`w-full md:w-36 h-[57px] hover:bg-[#D0D5DD] bg-[#D0D5DD] cursor-pointer`}>
-                                        Add
-                                    </Button>
-                                    :
+                                        <Button className={`w-full md:w-36 h-[57px] hover:bg-[#D0D5DD] bg-[#D0D5DD] cursor-pointer`}>
+                                            Add
+                                        </Button>
+                                        :
                                         <Button
-                                        variant="secondary"
-                                        className="w-full md:w-36 h-[57px] hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
-                                        type="submit"
-                                    >
-                                        {isLoadingAddLoanee ? (
-                                            <div id="loadingLoopIconDiv" className="flex items-center justify-center">
-                                                <Icon
-                                                    id="Icon"
-                                                    icon={loadingLoop}
-                                                    width={34}
-                                                    height={32}
-                                                    style={{
-                                                        animation: 'spin 1s linear infinite',
-                                                        strokeWidth: 6,
-                                                        display: 'block',
-                                                    }}
-                                                />
-                                            </div>
-                                        ) : (
-                                            'Add'
-                                        )}
-                                    </Button>
+                                            variant="secondary"
+                                            className="w-full md:w-36 h-[57px] hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
+                                            type="submit"
+                                        >
+                                            {isLoadingAddLoanee ? (
+                                                <div id="loadingLoopIconDiv" className="flex items-center justify-center">
+                                                    <Icon
+                                                        id="Icon"
+                                                        icon={loadingLoop}
+                                                        width={34}
+                                                        height={32}
+                                                        style={{
+                                                            animation: 'spin 1s linear infinite',
+                                                            strokeWidth: 6,
+                                                            display: 'block',
+                                                        }}
+                                                    />
+                                                </div>
+                                            ) : (
+                                                'Add'
+                                            )}
+                                        </Button>
                                     }
                                 </div>
+                            </div>
+                        )}
+                        {errorMessage && (
+                            <div
+                                className="mb-8 text-error500  text-sm text-center"
+                                data-testid="formErrorMessage"
+                            >
+                                {errorMessage}
                             </div>
                         )}
                     </Form>
