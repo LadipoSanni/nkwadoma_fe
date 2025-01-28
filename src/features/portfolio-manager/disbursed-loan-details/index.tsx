@@ -33,7 +33,6 @@ const Index = () => {
     const backToViewAllDisbursedLoan = () => {
         store.dispatch(setCurrentTab('Disbursed loan'))
         router.push('/loan/loan-disbursal')
-
     }
 
     const breakDown = details?.data.loaneeLoanBreakDowns.map((item: LoaneeLoanBreakDown) => ({

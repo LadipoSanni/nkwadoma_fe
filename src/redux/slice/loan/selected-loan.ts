@@ -8,12 +8,14 @@ interface SelectedLoanState {
         name: string;
         logoImage: string;
     } | null;
+    disbursedLoanAccountId: string;
 }
 
 const initialState: SelectedLoanState = {
     currentTab: 'Loan requests',
     clickedOrganization: null,
     clickedDisbursedLoanIdNumber: "",
+    disbursedLoanAccountId:"",
 };
 
 export const selectedLoanSlice = createSlice({
@@ -29,10 +31,12 @@ export const selectedLoanSlice = createSlice({
         setClickedDisbursedLoanIdNumber: (state, action: PayloadAction<string | object | React.ReactNode>) => {
             state.clickedDisbursedLoanIdNumber = action.payload;
         },
-        // set
+        setDisbursedLoanIdNumber: (state, action: PayloadAction<string | object | React.ReactNode>) => {
+            state.clickedDisbursedLoanIdNumber = action.payload;
+        },
     },
 });
 
-export const { setCurrentTab, setClickedOrganization, setClickedDisbursedLoanIdNumber } = selectedLoanSlice.actions;
+export const { setCurrentTab, setClickedOrganization, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber } = selectedLoanSlice.actions;
 
 export default selectedLoanSlice.reducer;

@@ -24,6 +24,8 @@ function Index() {
     const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
     const {id} = clickedOrganizationId || {};
 
+    console.log("This is Organizationid", id)
+
     const size = 1;
     const page = 100;
 
