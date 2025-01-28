@@ -21,14 +21,14 @@ interface TableRowData {
 function LoanOfferTable() {
     const router = useRouter();
     const request ={
-        pageSize: 10,
+        pageSize: 100,
         pageNumber: 0
     }
 
     const {data, isLoading} = useViewAllLoanOfferQuery(request)
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
     const requestBody = {
-        pageSize: 10,
+        pageSize: 100,
         pageNumber: 0,
         organizationId: clickedOrganization?.id
     }
