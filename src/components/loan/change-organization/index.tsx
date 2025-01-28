@@ -1,3 +1,4 @@
+"use client"
 import React, {useState} from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import {MdOutlineAccountBalance, MdSearch} from 'react-icons/md';
@@ -17,8 +18,11 @@ import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {LoanOrganization} from "@/types/loan/loan-request.type";
 
 
-
-
+interface SaveClickedId {
+    id: string | number;
+    name: string;
+    logoImage: string;
+}
 
 
 const ChangeInstitutionModal = () => {
@@ -28,6 +32,7 @@ const ChangeInstitutionModal = () => {
     const [current, setCurrent] = useState<number | string>('')
     const [disabled, setDisabled] = React.useState(true)
 
+    const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const {data, isLoading} = useViewOrganizationsQuery(6);
     const {
@@ -42,14 +47,21 @@ const ChangeInstitutionModal = () => {
     const handleClick = (id: string | number, name?: string, logoImage?: string) => {
         if (id === current) {
             setCurrent('');
-            store.dispatch(setClickedOrganization({id:'', name:  '', logoImage: '' }));
             setDisabled(true);
         } else {
-            store.dispatch(setClickedOrganization({id, name: name || '', logoImage: logoImage || ''}));
             setCurrent(id);
             setDisabled(false);
         }
+        setSaveClickedId({id, name: name || '', logoImage: logoImage || ''})
     };
+
+
+    const handleContinue = () => {
+        store.dispatch(setClickedOrganization(saveClickedId || { id: '', name: '', logoImage: '' }));
+        setDisabled(true);
+        setCurrent('');
+    }
+
 
 
     const roundUpAmount = (number: string) => {
@@ -60,11 +72,6 @@ const ChangeInstitutionModal = () => {
             return number.charAt(0) + number.charAt(1) + 'k'
         }
         return numberGotten
-    }
-
-    const handleContinue = () => {
-        setCurrent('');
-        setDisabled(true);
     }
 
     const getInitials = (name: string): string => {
