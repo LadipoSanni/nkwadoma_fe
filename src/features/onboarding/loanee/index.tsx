@@ -25,7 +25,7 @@ const steps = [
 const LoaneeOnboarding = () => {
     const dispatch = useDispatch();
     const router = useRouter();
-    const { loanReferralStatus, currentStep } = useSelector((state: RootState) => state.loanReferral);
+    const {  currentStep } = useSelector((state: RootState) => state.loanReferral);
     const [showModal, setShowModal] = useState(false);
     const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery({});
     const [respondToLoanReferral] = useRespondToLoanReferralMutation({});
