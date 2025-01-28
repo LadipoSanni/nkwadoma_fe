@@ -136,7 +136,7 @@ const ChangeInstitutionModal = () => {
                                 className={`${styles.organizations} md:w-[30vw] md:h-fit  py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
                                 {searchResults ? (
                                         searchResults?.data.length === 0 ?
-                                            <SearchEmptyState icon={MdSearch}/> :
+                                            <SearchEmptyState name={"Organization"} icon={MdSearch}/> :
                                             searchResults?.data.map((searchResult: LoanOrganization, index: number) => {
 
                                                 const initial = getInitials(searchResult.name)
