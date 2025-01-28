@@ -33,7 +33,7 @@ export const loanOfferApi = createApi({
         }),
         respondToLoanOffer: builder.mutation({
             query: (body: { loanOfferId: string, loaneeResponse: 'ACCEPTED' | 'DECLINED' }) => ({
-                url: '/api/v1/loan/accept/loan-offer',
+                url: '/loan/accept/loan-offer',
                 method: 'POST',
                 body
             }),

@@ -140,8 +140,8 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
             staticHeader={'Vehicle'}
            staticColunm={'name'}
            icon={MdOutlinePayments}
-           sideBarTabName='Fund'
-           optionalFilterName='Commercial'
+           sideBarTabName='fund'
+           optionalFilterName='commercial'
            condition={true}
         />
       </div>
@@ -168,8 +168,8 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
            staticColunm={'name'}
             tableCellStyle={'h-12'}
             icon={MdOutlinePayments}
-            sideBarTabName='Fund'
-            optionalFilterName='Endowment'
+            sideBarTabName='fund'
+            optionalFilterName='endowment'
             condition={true}
             sx='cursor-pointer'
         />

@@ -75,7 +75,7 @@ function CreateInvestmentVehicle({
       // )
       .matches(
         /^[a-zA-Z0-9\-_ ]*$/, 
-        "name can include letters, hyphens, and underscores only."
+        "name can include letters,numbers, hyphens, and underscores only."
       )
       .test(
         "valid-name",
