@@ -64,6 +64,19 @@ function CreateInvestmentVehicle({
     name: Yup.string()
       .trim()
       //  .matches(/^[a-zA-Z0-9_\-\/]+$/, 'Name can only contain letters, numbers, underscores, hyphens, and slashes.')
+      // .test(
+      //   "valid-name",
+      //   "Name cannot be only numbers or special characters.",
+      //   (value = "") => {
+      //     const hasLetter = /[a-zA-Z]/.test(value);
+      //     const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value);
+      //     return hasLetter && !isOnlyNumbersOrSpecials;
+      //   }
+      // )
+      .matches(
+        /^[a-zA-Z0-9_-]*$/, 
+        "Name can include letters, numbers, hyphens, and underscores only."
+      )
       .test(
         "valid-name",
         "Name cannot be only numbers or special characters.",

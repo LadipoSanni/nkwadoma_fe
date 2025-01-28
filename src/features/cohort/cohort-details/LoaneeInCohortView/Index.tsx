@@ -20,7 +20,7 @@ import {useToast} from "@/hooks/use-toast";
 import {cohortLoaneeResponse} from "@/types/Component.type";
 import Table from "@/reuseable/table/LoanProductTable"
 import Isloading from "@/reuseable/display/Isloading";
-import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+// import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 
 interface userIdentity {
     firstName: string;
@@ -213,15 +213,15 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                    {  allLoanee.length === 0? (<div><SearchEmptyState searchTerm={loaneeName} icon={MdSearch}/></div>) : ( isReferred === "Not referred"?
+                    { isReferred === "Not referred"?
                         <SelectableTable
                             tableData={allLoanee}
                             tableHeader={loanProduct}
-                            staticHeader="Trainee"
+                            staticHeader="Loanee"
                             staticColunm="firstName"
                             tableHeight={45}
                             icon={MdOutlinePerson}
-                            sideBarTabName="Trainee"
+                            sideBarTabName="Loanee"
                             handleRowClick={ handleRowClick}
                             optionalRowsPerPage={10}
                             tableCellStyle="h-12"
@@ -235,7 +235,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             tableData={allLoanee}
                             tableHeader={loanProduct}
                             handleRowClick={()=> {}}
-                            staticHeader="Trainee"
+                            staticHeader=""
                             staticColunm="firstName"
                             icon={MdOutlinePerson}
                             sideBarTabName="Trainee"
@@ -245,7 +245,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             condition={true}
                             tableHeight={45}
                         />
-                )}
+                }
                 </div>
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>

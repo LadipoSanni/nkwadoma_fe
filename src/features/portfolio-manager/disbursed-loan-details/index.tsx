@@ -16,10 +16,10 @@ import Image from "next/image";
 import {Card} from "@/components/ui/card";
 
 
-// interface breakDown {
-//     itemName: string;
-//     itemAmount: string
-// }
+interface LoaneeLoanBreakDown {
+    itemName: string;
+    itemAmount: number;
+}
 
 const Index = () => {
     // const [breakdown, setBreakdown] = useState<breakDown[]>([]);
@@ -36,16 +36,15 @@ const Index = () => {
 
     }
 
+    const breakDown = details?.data.loaneeLoanBreakDowns.map((item: LoaneeLoanBreakDown) => ({
+        itemName: item.itemName,
+        itemAmount: `₦${item.itemAmount.toLocaleString()}`,
+    })) || [];
+
     const tabContent = [
         'Loan details',
         'Basic details',
         'Additional details'
-    ]
-
-    const breakDown = [
-        {itemName: 'tuition', itemAmount: ""},
-        {itemName: 'skincare', itemAmount: '$2000'},
-        {itemName: 'head', itemAmount: '$2000'},
     ]
 
     const handleTabChange = (index: number) => {
@@ -53,15 +52,15 @@ const Index = () => {
     }
 
     const basicDetails = [
-        {label: 'Gender', value: details?.data.gender},
-        {label: 'Email address', value: details?.data.email},
-        {label: 'Phone number', value: details?.data.phoneNumber},
-        {label: 'Date of birth', value: details?.data.dateOfBirth},
-        {label: 'Marital status', value: details?.data.maritalStatus},
-        {label: 'Nationality', value: details?.data.nationality},
-        {label: 'State of origin ', value: details?.data.stateOfOrigin},
-        {label: 'State of residence', value: details?.data.stateOfResidence},
-    ]
+        {label: 'Gender', value: details?.data.userIdentity.gender},
+        {label: 'Email address', value: details?.data.userIdentity.email},
+        {label: 'Phone number', value: details?.data.userIdentity.phoneNumber},
+        {label: 'Date of birth', value: details?.data.userIdentity.dateOfBirth},
+        {label: 'Marital status', value: details?.data.userIdentity.maritalStatus},
+        {label: 'Nationality', value: details?.data.userIdentity.nationality},
+        {label: 'State of origin', value: details?.data.userIdentity.stateOfOrigin},
+        {label: 'State of residence', value: details?.data.userIdentity.stateOfResidence},
+    ];
 
     const loanDetails = [
         {
@@ -122,29 +121,17 @@ const Index = () => {
     ]
 
     const alternate = [
-        // {label: 'Alternate email address', value: data?.data?.body?.data?.alternateEmail},
-        // {label: 'Alternate phone number', value: data?.data?.body?.data?.alternatePhoneNumber},
-        // {label: 'Alternate residential address', value: data?.data?.body?.data?.alternateContactAddress},
-        // {
-        //     label: 'Next of kin name',
-        //     value: data?.data?.body?.data?.nextOfKin?.firstName + " " + data?.data?.body?.data?.nextOfKin?.lastName
-        // },
-        // {label: 'Next of kin email address', value: data?.data?.body?.data?.nextOfKin?.email},
-        // {label: 'Next of kin phone number', value: data?.data?.body?.data?.nextOfKin?.phoneNumber},
-        // {label: 'Next of kin relationship ', value: data?.data?.body?.data?.nextOfKin?.nextOfKinRelationship},
-        {label: 'Alternate email address', value: details?.data.alternateEmail},
-        {label: 'Alternate phone number', value: details?.data.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: details?.data.alternateContactAddress},
+        {label: 'Alternate email address', value: details?.data.userIdentity.alternateEmail},
+        {label: 'Alternate phone number', value: details?.data.userIdentity.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: details?.data.userIdentity.alternateContactAddress},
         {
             label: 'Next of kin name',
-            value: details?.data.nextOfKin
+            value: `${details?.data.nextOfKin.firstName} ${details?.data.nextOfKin.lastName}`
         },
-        {label: 'Next of kin email address', value: details?.data.nextOfKinAddress},
-        {label: 'Next of kin phone number', value: details?.data.nextOfKinPhoneNumber},
-        {label: 'Next of kin relationship ', value: details?.data.nextOfKinRelationship},
-
-
-    ]
+        {label: 'Next of kin email address', value: details?.data.nextOfKin.email},
+        {label: 'Next of kin phone number', value: details?.data.nextOfKin.phoneNumber},
+        {label: 'Next of kin relationship', value: details?.data.nextOfKin.nextOfKinRelationship},
+    ];
 
     const getCurrentDataList = () => {
         switch (currentTab) {

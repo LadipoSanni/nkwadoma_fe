@@ -79,7 +79,7 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
       .trim()
       .matches(
         /^[a-zA-Z0-9\-_ ]*$/,
-        "Cohort name should only contain letters, numbers, spaces, and hyphens"
+        "Cohort name can include letters, numbers, hyphens, and underscores, but cannot be solely numbers or special characters."
       )
       .required("Cohort name is required")
       .max(200, "Cohort name cannot be more than 200 characters"),
