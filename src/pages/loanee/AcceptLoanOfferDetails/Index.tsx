@@ -41,7 +41,7 @@ const AcceptLoanOffer: React.FC= () => {
     const loanOfferId: string = getUserToken()
 
     const { data } = useViewLoanOfferDetailsQuery(loanOfferId);
-    const [respondToLoanOffer] = useRespondToLoanOfferMutation();
+    const [respondToLoanOffer, {isLoading, isSuccess, isError}] = useRespondToLoanOfferMutation();
     console.log(data, "details")
 
 
@@ -142,8 +142,9 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-            await respondToLoanOffer(payload);
-            router.push('/overview');
+            const response  = await respondToLoanOffer(payload);
+            console.log('response:: ', response);
+            // router.push('/overview');
         } catch (error) {
             console.error(error);
         }
@@ -158,8 +159,9 @@ const AcceptLoanOffer: React.FC= () => {
         try {
             await respondToLoanOffer(payload);
             router.push('/overview');
+
         } catch (error) {
-            console.error(error);
+            console.error('error on accept loan offer as a loanee:: ',error);
         }
     };
 
