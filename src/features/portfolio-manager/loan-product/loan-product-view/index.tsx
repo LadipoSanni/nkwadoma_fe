@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index";
 import { setItemSessionStorage } from "@/utils/storage";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
+import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 
 interface TableRowData {
@@ -153,6 +154,8 @@ const LoanProductPage = () => {
                     <div className={`w-full h-fit md:w-full md:h-full`}>
                         <SkeletonForTable />
                     </div>
+                ) : searchTerm && searchResult && searchResult?.data.length === 0 ? (
+                    <SearchEmptyState searchTerm={searchTerm} icon={MdSearch} />
                 ) : allLoanee.length > 0 ? (
                     <Tables
                         tableData={allLoanee.slice().reverse()}
@@ -173,7 +176,6 @@ const LoanProductPage = () => {
                     />
                 ) : (
                     <TableEmptyState name={"loan product"} icon={MdOutlineInventory2} condition={true} />
-                    // <SearchEmptyState searchTerm={searchTerm} icon={MdSearch} />
                 )}
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
