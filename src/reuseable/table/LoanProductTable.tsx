@@ -375,7 +375,7 @@ function Tables<T extends TableRowData>({
                       onClick={() => handleRowClick(row)}
                       className={`${sx}`}
                     >
-                      <TableCell className="h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[50px]">
+                      <TableCell className="h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[1rem]">
                         <div className="truncate pt-2 pb-2 pr-2 pl-2 ">
                           {/* {row[`${staticColunm}`]} */}
                           {renderCellContent(

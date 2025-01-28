@@ -27,7 +27,7 @@ const AcceptLoanOffer: React.FC= () => {
     const searchParams = useSearchParams()
     const getUserToken  = () => {
         if (searchParams){
-            const pathVariable = searchParams.get("loaneeId")
+            const pathVariable = searchParams.get("loanOfferId")
             if (pathVariable){
                 return pathVariable
             }else {
@@ -38,10 +38,11 @@ const AcceptLoanOffer: React.FC= () => {
         }
     }
 
-    const loaneeId: string = getUserToken()
+    const loanOfferId: string = getUserToken()
 
-    const { data } = useViewLoanOfferDetailsQuery(loaneeId);
+    const { data } = useViewLoanOfferDetailsQuery(loanOfferId);
     const [respondToLoanOffer] = useRespondToLoanOfferMutation();
+    console.log(data, "details")
 
 
     const backToOverview = () => {
@@ -136,7 +137,7 @@ const AcceptLoanOffer: React.FC= () => {
 
     const handleAccept = async () => {
         const payload = {
-            loanOfferId: loaneeId,
+            loanOfferId: loanOfferId,
             loaneeResponse: 'ACCEPTED' as const
         };
 
@@ -150,7 +151,7 @@ const AcceptLoanOffer: React.FC= () => {
 
     const handleDecline = async () => {
         const payload = {
-            loanOfferId: loaneeId,
+            loanOfferId: loanOfferId,
             loaneeResponse: 'DECLINED' as const
         };
 

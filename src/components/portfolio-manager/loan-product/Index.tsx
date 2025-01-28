@@ -84,11 +84,16 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         productName: Yup.string()
             .trim()
             .required("Product Name is required")
-            .test('valid-name', 'Name cannot be only numbers or special characters.', (value = '') => {
-                const hasLetter = /[a-zA-Z]/.test(value);
-                const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value);
-                return hasLetter && !isOnlyNumbersOrSpecials;
-            }),
+            .test(
+                "valid-name",
+                "Name can include letters, numbers, hyphens, and underscores",
+                (value = "") => {
+                    const regex = /^[a-zA-Z0-9\s-_]*$/;
+                    const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
+                    return regex.test(value) && !onlyNumbersOrSpecials.test(value);
+                }
+            )
+            .max(200, "Terms exceeds 100 characters"),
         // productSponsor: Yup.string()
         //     .trim()
         //     .required("Product sponsor is required"),
@@ -111,12 +116,14 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         loanProductSize: Yup.string()
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0")
-            .required("Loan product is required"),
+            .required("Loan product is required")
+            .test("max-number", "Product size must be less than or equal to a quadrillion",
+                value => !value || Number(value) <= 1e15),
         obligorLimit: Yup.string()
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Limit must be greater than 0")
             .required("Obligor limit is required")
-            .test('is-less-than-loan-product-size', 'Obligor cant be greater than product size',
+            .test('is-less-than-loan-product-size', 'Obligor can\'t be greater than product size',
                 function (value) {
                     const {loanProductSize} = this.parent;
                     return parseFloat(value) <= parseFloat(loanProductSize);
@@ -125,7 +132,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Amount must be greater than 0")
             .required("Amount is required")
-            .test('is-greater-than-loan-product-size', 'Repayment amount cant be greater than product size',
+            .test('is-greater-than-loan-product-size', 'Repayment amount can\'t be greater than product size',
                 function (value) {
                     const {loanProductSize} = this.parent;
                     return parseFloat(value) <= parseFloat(loanProductSize);
@@ -134,7 +141,17 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .required("Amount is required")
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Moratorium must be greater than 0")
-            .test("max-number", "Moratorium must be less than or equal to 24", value => !value || Number(value) <= 24),
+            .test("max-number", "Moratorium must be less than or equal to 24", value => !value || Number(value) <= 24)
+            .test('is-less-than-loan-product-size', 'Moratorium can\'t be greater than tenor',
+                function (value) {
+                    const {tenor} = this.parent;
+                    return parseFloat(value) <= parseFloat(tenor);
+                })
+            .test('is-not-equal-to-tenor', 'Moratorium can\'t be equal to tenor',
+                function (value) {
+                    const {tenor} = this.parent;
+                    return parseFloat(value) !== parseFloat(tenor);
+                }),
         interest: Yup.string()
             .trim()
             .required("Interest is required"),
@@ -494,7 +511,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         }
                                     </div>
 
-                                    <div>
+                                    <div className={`p`}>
                                         <Label htmlFor="moratorium"
                                                style={{
                                                    display: 'inline-block',
@@ -532,10 +549,10 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     </div>
 
                                     <div>
-                                        <div className={`flex flex-row gap-2 pt-2`}>
+                                        <div className={`flex flex-row gap-2 `}>
                                             <div>
                                                 <Label htmlFor="interest">Interest (%)</Label>
-                                                <div>
+                                                <div className={`pt-2`}>
                                                     <Field
                                                         id="interest"
                                                         data-testid="interest"
@@ -568,13 +585,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                             <div className={`w-full`}>
                                                 <Label htmlFor="obligorLimit">Obligor limit</Label>
-                                                <div className={`w-full pt-1`}>
+                                                <div className={`w-full pt-3`}>
                                                     <Field
                                                         id="obligorLimit"
                                                         data-testid="obligorLimit"
                                                         name="obligorLimit"
                                                         type={"number"}
-                                                        className="w-full p-3 border rounded focus:outline-none text-sm"
+                                                        className="w-full p-3 border mt-2 rounded focus:outline-none text-sm"
                                                         component={CustomInputField}
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                             let rawValue = e.target.value.replace(/,/g, "");

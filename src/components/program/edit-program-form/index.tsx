@@ -73,14 +73,16 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
     const validationSchema = Yup.object().shape({
       name: Yup.string()
        .trim()
+       .max(200, "Program name cannot be more than 200 characters.")
        .test(
         "valid-name",
-        "Program name cannot be only numbers or special character hyphen.",
+        // "Program name can include letters, numbers, hyphens, and underscores",
+        "Name can include at least a letter and then numbers, hyphens and underscores.",
         (value = "") => {
         //   const regex = /^[a-zA-Z0-9\s_'-.,&/():]*$/;
         //  const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
         //  return regex.test(value) && !onlyNumbersOrSpecials.test(value);
-        const regex = /^[a-zA-Z0-9\s-]*$/;
+        const regex = /^[a-zA-Z0-9\s-_]*$/;
         const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
         return regex.test(value) && !onlyNumbersOrSpecials.test(value);
         }
@@ -140,8 +142,8 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
       }}
     } catch (err) {
       const error = err as ApiError;
-      setError(error ? error?.message : "Error occured" );
-      console.log("The error: ",error?.message);
+      setError(error ? "Name already exist" : "" );
+      // console.log("The error: ",error?.message);
       // setError(err instanceof Error ? err.message : 'An error occurred try again later');
     }
   }

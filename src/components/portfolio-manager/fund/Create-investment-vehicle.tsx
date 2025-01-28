@@ -11,7 +11,7 @@ import { useCreateInvestmentVehicleMutation } from "@/service/admin/fund_query";
 import { useToast } from "@/hooks/use-toast";
 import { validateNumber, validatePositiveNumber } from "@/utils/Format";
 // import { formatNumberOnBlur } from '@/utils/Format';
-import { validateText } from "@/utils/Format";
+import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 // import CustomNumberFormat from '@/reuseable/Input/CustomNumberFormat';
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
@@ -64,46 +64,82 @@ function CreateInvestmentVehicle({
     name: Yup.string()
       .trim()
       //  .matches(/^[a-zA-Z0-9_\-\/]+$/, 'Name can only contain letters, numbers, underscores, hyphens, and slashes.')
+      // .test(
+      //   "valid-name",
+      //   "Name cannot be only numbers or special characters.",
+      //   (value = "") => {
+      //     const hasLetter = /[a-zA-Z]/.test(value);
+      //     const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value);
+      //     return hasLetter && !isOnlyNumbersOrSpecials;
+      //   }
+      // )
+      .matches(
+        /^[a-zA-Z0-9\-_ ]*$/, 
+        "name can include letters, hyphens, and underscores only."
+      )
       .test(
         "valid-name",
         "Name cannot be only numbers or special characters.",
         (value = "") => {
+          const trimmedValue = value.trim();
+          if (trimmedValue === "") {
+              return true; 
+          }
           const hasLetter = /[a-zA-Z]/.test(value);
-          const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value);
+          const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
           return hasLetter && !isOnlyNumbersOrSpecials;
         }
       )
+      .max(200, "Name cannot be more than 200 characters.")
       .required("Name is required"),
     sponsors: Yup.string()
       .trim()
       .required("vehicle sponsor is required")
+      .max(100, "Program name cannot be more than 100 characters.")
+      .matches(
+        /^[a-zA-Z\-_ ]*$/, 
+        " sponsors can include letters, hyphens, and underscores only."
+      )
       //  .matches(/^[a-zA-Z\s]+$/, 'Vehicle sponsor can only contain letters and spaces.')
       .test(
         "valid-sponsor",
         "Sponsor cannot be only numbers or special characters.",
         (value = "") => {
+          const trimmedValue = value.trim();
+          if (trimmedValue === "") {
+              return true; 
+          }
           const hasLetter = /[a-zA-Z]/.test(value);
-          const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value);
+          const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
           return hasLetter && !isOnlyNumbersOrSpecials;
         }
       ),
     fundManager: Yup.string()
       .trim()
-      //  .matches(/^[a-zA-Z\s]+$/, 'Fund manager can only contain letters and spaces.')
+      
+      .matches(
+        /^[a-zA-Z\-_ ]*$/, 
+        "Fund manager can include letters, hyphens, and underscores only."
+      )
+      .max(100, "Program name cannot be more than 100 characters.")
       .test(
         "valid-fundManager",
-        "fundManager cannot be only numbers or special characters.",
+        "fund manager cannot be only numbers or special characters.",
         (value = "") => {
+          const trimmedValue = value.trim();
+          if (trimmedValue === "") {
+              return true; 
+          }
           const hasLetter = /[a-zA-Z]/.test(value);
-          const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value);
+          const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
           return hasLetter && !isOnlyNumbersOrSpecials;
         }
       )
-      .required("FundManager is required"),
+      .required("Fund manager is required"),
     size: Yup.string().required("Vehicle size is required"),
     //  .matches(/^[1-9]\d*$/, 'Vehicle size must be a positive number and cannot start with zero'),
     minimumInvestmentAmount: Yup.string()
-      .required("Minimum InvestmentAmount is required")
+      .required("Minimum investmentAmount is required")
       .test(
         "minimum-less-or-equal-to-size",
         "Minimum Investment Amount must be less than or equal to Vehicle Size.",
@@ -115,10 +151,14 @@ function CreateInvestmentVehicle({
     //  .matches(/^[1-9]\d*$/, 'minimum investmentAmount must be a positive number and cannot start with zero'),
     tenure: Yup.string()
       .trim()
-      .required("tenor size is required")
+      .required("Tenor size is required")
+      // .matches(
+      //   /^[1-9]\d*$/,
+      //   "Tenor must be a positive number and cannot start with zero."
+      // )
       .matches(
-        /^[1-9]\d*$/,
-        "Tenor must be a positive number and cannot start with zero."
+        /^[1-9]\d{0,2}$/,
+        "Tenor must be a three-digit positive number and cannot start with zero."
       ),
     rate: Yup.number()
       .min(1, "Rate must be at least 1.")
@@ -132,9 +172,9 @@ function CreateInvestmentVehicle({
         const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
         return sanitizedValue !== "";
       }),
-    bankPartner: Yup.string().trim().required("bankPartner is required"),
-    trustee: Yup.string().trim().required("trustee is required"),
-    custodian: Yup.string().trim().required("custodian is required"),
+    bankPartner: Yup.string().trim().required("Bank partner is required"),
+    trustee: Yup.string().trim().required("Trustee is required"),
+    custodian: Yup.string().trim().required("Custodian is required"),
   });
 
   const handleSubmit = async (values: typeof initialFormValue) => {
@@ -176,9 +216,14 @@ function CreateInvestmentVehicle({
         validateOnMount={true}
         validationSchema={validationSchema}
       >
-        {({ errors, isValid, touched, setFieldValue, 
-        // values 
-      }) => (
+        {({
+          errors,
+          isValid,
+          touched,
+          setFieldValue,
+          setFieldError,
+          // values
+        }) => (
           <Form className={`${inter.className}`}>
             <div
               className="grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto"
@@ -192,7 +237,7 @@ function CreateInvestmentVehicle({
                 <Field
                   id="name"
                   name="name"
-                  placeholder="Enter Name"
+                  placeholder="Enter name"
                   className="w-full p-3 border rounded focus:outline-none mt-2"
                   onChange={validateText("name", setFieldValue)}
                   //   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("name", e.target.value.replace(/[^a-zA-Z0-9_\-\/]/g,''))}
@@ -220,7 +265,7 @@ function CreateInvestmentVehicle({
                   <Field
                     id="sponsors"
                     name="sponsors"
-                    placeholder="Enter Vehicle Sponsor"
+                    placeholder="Enter vehicle sponsor"
                     className="w-full p-3 border rounded focus:outline-none mt-2"
                     // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("sponsor", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
                     onChange={validateText("sponsors", setFieldValue)}
@@ -238,7 +283,7 @@ function CreateInvestmentVehicle({
                   <Field
                     id="fundManager"
                     name="fundManager"
-                    placeholder="Enter Fund manager"
+                    placeholder="Enter fund manager"
                     className="w-full p-3 border rounded focus:outline-none mt-2"
                     // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("fundManager", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
                     onChange={validateText("fundManager", setFieldValue)}
@@ -351,11 +396,14 @@ function CreateInvestmentVehicle({
                     name="tenure"
                     placeholder="0"
                     className="w-full p-3 border rounded focus:outline-none mt-2"
-                    onChange={validateNumber("tenure", setFieldValue)}
-                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => { const value = e.target.value;
-                    //    const validValue = value.replace(/[^0-9]/g, '').replace(/^0+/, '');
-                    //    setFieldValue("tenure", validValue);
-                    //    }}
+                    onChange={validateNumberLimit(
+                      "tenure",
+                      setFieldValue,
+                      setFieldError,
+                      3,
+                      "Tenure must be a positive number, must not start with zero, and must be a maximum of three digits."
+                    )}
+          
                   />
                   {errors.tenure && touched.tenure && (
                     <ErrorMessage
@@ -371,7 +419,7 @@ function CreateInvestmentVehicle({
                 <Field
                   id="bankPartner"
                   name="bankPartner"
-                  placeholder="Enter Bank partner"
+                  placeholder="Enter bank partner"
                   className="w-full p-3 border rounded focus:outline-none mt-2"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setFieldValue(
@@ -416,7 +464,7 @@ function CreateInvestmentVehicle({
                   <Field
                     id="custodian"
                     name="custodian"
-                    placeholder="Enter Custodian"
+                    placeholder="Enter custodian"
                     className="w-full p-3 border rounded focus:outline-none mt-2"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       setFieldValue(

@@ -222,7 +222,7 @@ function LoanDetails() {
     }
 
 
-    const userFirstLetter : string| undefined = getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName)
+    const userFirstLetter : string| undefined = data?.data?.firstName ?   getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName) : ''
 
     return (
         <div
