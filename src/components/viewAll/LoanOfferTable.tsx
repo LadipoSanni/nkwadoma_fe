@@ -5,12 +5,12 @@ import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/index";
 import {useRouter} from "next/navigation";
-import {useViewAllLoanRequestQuery, useViewLoanRequestsOfCurrentOrganizationQuery} from "@/service/admin/loan/loan-request-api";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import {useAppSelector} from "@/redux/store";
+import { useViewAllLoanOfferQuery } from "@/service/admin/loan/loan-offer-api";
 
 
 
@@ -25,14 +25,14 @@ const Index = () => {
         pageNumber: 0
     }
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
-
-    const { data, isLoading} = useViewAllLoanRequestQuery(request)
+ console.log(clickedOrganization?.id, "clickedOrganization id")
+    const { data, isLoading} = useViewAllLoanOfferQuery(request)
     const requestBody = {
         pageNumber: 0,
         pageSize: 100,
         organizationId: clickedOrganization?.id
     }
-    const {data: viewAllLoanRequestsInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewLoanRequestsOfCurrentOrganizationQuery(requestBody)
+    const {data: viewAllLoanRequestsInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewAllLoanOfferQuery(requestBody)
 
     // console.log('view all loan requests:: ', data,'viewAllLoanRequestsInAnOrganizationData:: ', viewAllLoanRequestsInAnOrganizationData, 'isLoadingOrganizationLoanRequest:: ', isLoadingOrganizationLoanRequest)
     const loanRequestHeader = [
@@ -49,7 +49,7 @@ const Index = () => {
     // console.log('')
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        router.push(`/loan-request-details?id=${ID}`);
+        router.push(`/loan-offer-details?id=${ID}`);
     };
 
 

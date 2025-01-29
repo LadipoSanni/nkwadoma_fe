@@ -1,7 +1,7 @@
 'use client'
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {store} from "@/redux/store";
+import {store, useAppSelector} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation";
 import {cabinetGroteskRegular, inter} from "@/app/fonts";
@@ -23,17 +23,16 @@ interface LoaneeLoanBreakDown {
 
 const Index = () => {
     // const [breakdown, setBreakdown] = useState<breakDown[]>([]);
-    // const clickedDisbursedLoanId = useAppSelector(state => state.selectedLoan.clickedDisbursedLoanIdNumber)
-    const clickedDisbursedLoanId = "e23454895768"
+    const clickedDisbursedLoanId = useAppSelector(state => state.selectedLoan.clickedDisbursedLoanIdNumber)
+    // const clickedDisbursedLoanId = "b50e9ddf-522b-466b-82c7-8f6f1bcc8e66"
     // console.log(clickedDisbursedLoanId)
     const router = useRouter()
     const [currentTab, setCurrentsTab] = useState(0);
-    const {data: details, isLoading} = useViewDisbursedLoanDetailsQuery(clickedDisbursedLoanId)
+    const {data: details, isLoading} = useViewDisbursedLoanDetailsQuery(clickedDisbursedLoanId as string)
 
     const backToViewAllDisbursedLoan = () => {
         store.dispatch(setCurrentTab('Disbursed loan'))
         router.push('/loan/loan-disbursal')
-
     }
 
     const breakDown = details?.data.loaneeLoanBreakDowns.map((item: LoaneeLoanBreakDown) => ({

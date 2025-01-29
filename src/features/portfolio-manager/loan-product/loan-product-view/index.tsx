@@ -155,7 +155,7 @@ const LoanProductPage = () => {
                         <SkeletonForTable />
                     </div>
                 ) : searchTerm && searchResult && searchResult?.data.length === 0 ? (
-                    <SearchEmptyState searchTerm={searchTerm} icon={MdSearch} />
+                    <SearchEmptyState name={"loan product"} icon={MdSearch} />
                 ) : allLoanee.length > 0 ? (
                     <Tables
                         tableData={allLoanee.slice().reverse()}
