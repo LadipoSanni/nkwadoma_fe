@@ -30,9 +30,9 @@ import { useToast } from "@/hooks/use-toast";
 import TotalInput from "@/reuseable/display/TotalInput";
 // import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
 import CustomQuillField from "../textArea/Custom-quill-field";
-import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedProgram, setUploadedUrl } from '@/redux/slice/create/cohortSlice';
-import { RootState } from '@/redux/store';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { setSelectedProgram, setUploadedUrl } from '@/redux/slice/create/cohortSlice';
+// import { RootState } from '@/redux/store';
 
 
 
@@ -56,9 +56,9 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const [startDate, setDate] = useState<Date>();
   const [programId, setProgramId] = useState("");
   const [name, setName] = useState("");
-  const { selectedProgram, imageUrl } = useSelector((state: RootState) => state.cohort);
+  // const { selectedProgram, imageUrl } = useSelector((state: RootState) => state.cohort);
   const [cohortDescription, setDescription] = useState("");
-  // const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
+  const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [createButtonDisabled, setCreateButtonDisabled] = useState(true)
@@ -69,7 +69,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const [loanBreakdowns, setLoanBreakdowns] = useState<{ itemName: string; itemAmount: string; currency: string }[]>([ { itemName: "Tuition", itemAmount: "", currency: "NGN" }  ]);
   const [programView, setProgramView] = useState<viewAllProgramProps[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [imageUrl, setUploadedUrl] = useState<string | null>(null);
+  const [imageUrl, setUploadedUrl] = useState<string | null>(null);
   const [page] = useState(0);
   const size = 200;
   const [error, setError] = useState("");
@@ -77,7 +77,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const [isItemListValid, setIsItemListValid] = useState(true);
   const [totalAmount, setTotalAmount] = useState(0);
   const [initialItemAmount, setInitialItemAmount] = useState("");
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const { data } = useGetAllProgramsQuery(
     { pageSize: size, pageNumber: page },
@@ -99,7 +99,8 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
       setIsButtonDisabled(false);
     } else {
       setIsButtonDisabled(true);
-    }resetForm
+    }
+    resetForm
   }, [name, selectedProgram, startDate, descriptionError]);
 
   const areLoanBreakdownsValid = () => {
@@ -273,8 +274,8 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
               >
                 <ProgramSelect
                     selectedProgram={selectedProgram}
-                    // setSelectedProgram={setSelectedProgram}
-                    setSelectedProgram={(value) => dispatch(setSelectedProgram(value))}
+                    setSelectedProgram={setSelectedProgram}
+                    // setSelectedProgram={(value) => dispatch(setSelectedProgram(value))}
                     isSelectOpen={isSelectOpen}
                     setIsSelectOpen={setIsSelectOpen}
                     selectOptions={programView}
@@ -324,8 +325,8 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
               <FileUpload
                 handleDrop={handleDrop}
                 handleDragOver={handleDragOver}
-                // setUploadedImageUrl={setUploadedUrl}
-                setUploadedImageUrl={(url) => dispatch(setUploadedUrl(url))}
+                 setUploadedImageUrl={setUploadedUrl}
+                // setUploadedImageUrl={(url) => dispatch(setUploadedUrl(url))}
                 labelName="Cohort image (optional)"
               />
               <FormButtons
