@@ -267,10 +267,10 @@ function LoanDetails() {
                     </div>
                 </div>
                 <div
-                    className={` ${styles.loanRequestDetails} md:w-fit h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid md:gap-3`}
+                    className={` ${styles.loanRequestDetails} md:w-fit h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4  grid gap-3 md:grid md:gap-3`}
                 >
                     <div
-                        className={` ${styles.tabConnector} md:w-fit pl-1  h-fit md:h-fit  flex md:flex `}
+                        className={` ${styles.tabConnector} md:w-fit py-3 pl-1 md:sticky md:top-0 md:py-3 md:bg-white h-fit md:h-fit  flex md:flex `}
                     >
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab}/>
                     </div>
@@ -283,7 +283,7 @@ function LoanDetails() {
                                         <div
                                             className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
                                         <div
-                                            className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value}</div>
+                                            className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item.value : 'N/A'}</div>
                                     </div>
                                 </li>
                             ))
@@ -296,7 +296,7 @@ function LoanDetails() {
                             </div>
                         </div>
                     </div>
-                <div  className="md:flex px-2 md:px-0 grid md:justify-end gap-5 mt-4">
+                <div  className="md:sticky md:bottom-0 md:py-3 md:bg-white md:flex px-2 md:px-0 py-3 grid md:justify-end gap-5 mt-4">
                     {currentTab !== 0 && (
                         <Button
                             id={`backButtonOnIndex` + currentTab}
@@ -310,7 +310,7 @@ function LoanDetails() {
                                 <div
                                     id={`continueButtonOnIndex` + currentTab}
                                     data-testid={`continueButtonOnIndex` + currentTab}
-                                    className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                                    className={'w-full justify-center md:py-3 md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                                     onClick={toggleArrow}
                                 >
                                     Make decision
@@ -339,7 +339,7 @@ function LoanDetails() {
                     <button
                         id={`continueButtonOnIndex` + currentTab}
                         data-testid={`continueButtonOnIndex` + currentTab}
-                        className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                        className={'w-full justify-center md:py-3 md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                         onClick={handleNext}
                         >
                         Continue
