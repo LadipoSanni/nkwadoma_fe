@@ -72,21 +72,12 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         {cohortTitle}
                     </h1>
                     <div>
-                        {/*<p*/}
-                        {/*    id="cohort-description"*/}
-                        {/*    data-testid="cohort-description"*/}
-                        {/*    className={`${inter.className} text-grey400 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}*/}
-                        {/*>*/}
-                        {/*    {cohortDescription}*/}
-                        {/*</p>*/}
                         <p
                             id="cohort-description"
                             data-testid="cohort-description"
                             className={`${inter.className} text-grey400 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}
                             dangerouslySetInnerHTML={{__html: cohortDescription}}
                         />
-                            {/* {cohortDescription}
-                        </p> */}
 
                         <div
                             id={`details`}
