@@ -131,3 +131,32 @@ export interface LoanProductType {
     totalAmountEarned:  number,
     totalAmountRepaid:  number,
 }
+
+export interface  ChangeOrganization {
+    "id": string,
+    "name": string,
+    "email": string,
+    "websiteAddress": string,
+    "invitedDate": string,
+    "rcNumber": string,
+    "tin": string,
+    "phoneNumber": string,
+    "numberOfPrograms": number,
+    "status": string,
+    "createdBy": string,
+    "numberOfLoanees": number,
+    "numberOfCohort": number,
+    "loanRequestCount": number,
+    "loanDisbursalCount": number,
+    "loanOfferCount": number,
+    "loanReferralCount": number,
+    "totalDebtRepaid": number,
+    "totalCurrentDebt": number,
+    "totalHistoricalDebt": number,
+    "repaymentRate": number,
+    "serviceOfferings": string,
+    "organizationEmployees": string,
+    "logoImage": string,
+    "bannerImage": string,
+    "address": string
+}
