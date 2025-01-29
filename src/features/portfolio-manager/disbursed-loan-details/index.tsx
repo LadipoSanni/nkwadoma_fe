@@ -22,10 +22,7 @@ interface LoaneeLoanBreakDown {
 }
 
 const Index = () => {
-    // const [breakdown, setBreakdown] = useState<breakDown[]>([]);
     const clickedDisbursedLoanId = useAppSelector(state => state.selectedLoan.clickedDisbursedLoanIdNumber)
-    // const clickedDisbursedLoanId = "b50e9ddf-522b-466b-82c7-8f6f1bcc8e66"
-    // console.log(clickedDisbursedLoanId)
     const router = useRouter()
     const [currentTab, setCurrentsTab] = useState(0);
     const {data: details, isLoading} = useViewDisbursedLoanDetailsQuery(clickedDisbursedLoanId as string)

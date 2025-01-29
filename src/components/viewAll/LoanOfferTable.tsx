@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import {useAppSelector} from "@/redux/store";
-import { useViewAllLoanOfferQuery } from "@/service/admin/loan/loan-offer-api";
+import { useViewAllLoanOfferQuery , useViewLoanInAnOrganizationQuery} from "@/service/admin/loan/loan-offer-api";
 
 
 
@@ -31,21 +31,17 @@ const Index = () => {
         pageSize: 100,
         organizationId: clickedOrganization?.id
     }
-    const {data: viewAllLoanRequestsInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewAllLoanOfferQuery(requestBody)
+    const {data: viewAllLoanRequestsInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewLoanInAnOrganizationQuery(requestBody)
 
-    // console.log('view all loan requests:: ', data,'viewAllLoanRequestsInAnOrganizationData:: ', viewAllLoanRequestsInAnOrganizationData, 'isLoadingOrganizationLoanRequest:: ', isLoadingOrganizationLoanRequest)
-    const loanRequestHeader = [
+    const loanOfferHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
-        { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) =>row.programName },
-        { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohortName },
-        { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMM D, YYYY')}</div> },
-        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.requestDate?.toString()).format('MMM D, YYYY')}</div> },
-        { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className=''>{formatAmount(row.initialDeposit)}</div>},
-        { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className=''>{formatAmount(row.loanAmountRequested)}</div>}
+        { title: 'Loan product', sortable: true, id: 'loanProduct', selector: (row: TableRowData) =>row.loanProductName },
+        { title: 'Offer date', sortable: true, id: 'offerDate', selector: (row: TableRowData) => <div>{dayjs(row.dateOffered?.toString()).format('MMM D, YYYY')}</div> },
+        { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountRequested)}</div>},
+        { title: 'Amount Approved', sortable: true, id: 'amountApproved', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountApproved)}</div>}
     ];
 
-    // console.log('sjd: ', di)
-    // console.log('')
+
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
         router.push(`/loan-offer-details?id=${ID}`);
@@ -76,7 +72,7 @@ const Index = () => {
                             tableData={clickedOrganization?.id  ? viewAllLoanRequestsInAnOrganizationData?.data?.body : data?.data?.body.slice().reverse()}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
-                            tableHeader={loanRequestHeader}
+                            tableHeader={loanOfferHeader}
                             tableHeight={52}
                             sx='cursor-pointer'
                             staticColunm='firstName'
