@@ -1,13 +1,14 @@
 import React, { ElementType } from 'react'
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 type Props = {
-    searchTerm?:string,
+    name: string
     icon?: ElementType,
     className?:string ,
 
 }
 
-function SearchEmptyState({searchTerm,icon: Icon,className}: Props) {
+function SearchEmptyState({name,icon: Icon,className}: Props) {
     // const lowercaseName = name?.charAt(0).toLowerCase()
     // const remainingPart = name?.slice(1);
     // const title = `${lowercaseName}${remainingPart}`;
@@ -23,7 +24,7 @@ function SearchEmptyState({searchTerm,icon: Icon,className}: Props) {
                             </div>
                         }
                     </div>
-                    <h1 id='titleId' className={`font-semibold mb-2 `}> <span className='capitalize'>{searchTerm}</span> not found</h1>
+                    <h1 id='titleId' className={`font-semibold mb-2 `}><span className={`capitalize`}/>{capitalizeFirstLetters(name)}<span/> not found</h1>
                 </div>
             </div>
         </div>

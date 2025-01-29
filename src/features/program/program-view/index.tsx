@@ -100,7 +100,7 @@ const ProgramView = () => {
     const {data, isLoading} = useGetAllProgramsQuery({
         pageSize: size,
         pageNumber: page
-    })
+    },{ refetchOnMountOrArgChange: true, })
     const [deleteItem] = useDeleteProgramMutation()
     const {data: searchResults} = useSearchProgramQuery(searchTerm, {skip: !searchTerm});
 
@@ -461,7 +461,7 @@ const ProgramView = () => {
                             showKirkBabel={true}
                             kirkBabDropdownOption={dropDownOption}
                             icon={Book}
-                            sideBarTabName='Program'
+                            sideBarTabName='program'
                             handleDropDownClick={handleDropdownClick}
                             optionalRowsPerPage={10}
                             isLoading={isLoading}
