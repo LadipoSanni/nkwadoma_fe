@@ -60,7 +60,7 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
     const handleChange = (value: string) => {
         const sanitizedValue = sanitizeContent(value);
         if (sanitizedValue.length > internalMaxDescription) {
-            setError(`${name} Must be ${maximumDescription} characters or less.`);
+            setError(` must be ${maximumDescription} characters or less.`);
             return;
         }
         setValue(value);
@@ -80,7 +80,7 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
 
         if (combinedContent.length > internalMaxDescription) {
             e.preventDefault();
-            setError(`${name} Must be ${maximumDescription} characters or less.`);
+            setError(`Must be ${maximumDescription} characters or less.`);
         }
     };
 
