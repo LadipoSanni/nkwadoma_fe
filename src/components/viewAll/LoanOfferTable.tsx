@@ -25,7 +25,6 @@ const Index = () => {
         pageNumber: 0
     }
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
- console.log(clickedOrganization?.id, "clickedOrganization id")
     const { data, isLoading} = useViewAllLoanOfferQuery(request)
     const requestBody = {
         pageNumber: 0,
@@ -74,7 +73,7 @@ const Index = () => {
                 (
                     <div className={`md:w-full  w-full h-full md:h-full `}>
                         <Tables
-                            tableData={clickedOrganization?.id  ? viewAllLoanRequestsInAnOrganizationData?.data?.body : data?.data?.body}
+                            tableData={clickedOrganization?.id  ? viewAllLoanRequestsInAnOrganizationData?.data?.body : data?.data?.body.slice().reverse()}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
