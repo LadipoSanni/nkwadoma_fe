@@ -57,7 +57,7 @@ function Financiers() {
              optionalRowsPerPage={10}
              tableHeight={48}
             icon={Book}
-            sideBarTabName='Financier'
+            sideBarTabName='financier'
             condition={true}
             staticHeader={"Financier"}
             staticColunm={"financier"}
