@@ -15,7 +15,6 @@ import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {ChangeOrganization} from "@/types/loan/loan-request.type";
-import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 
 
 interface OrganizationType {
