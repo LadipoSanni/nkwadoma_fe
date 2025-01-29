@@ -8,7 +8,7 @@ import {useRouter} from "next/navigation";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {store, useAppSelector} from "@/redux/store";
-import {useViewAllLoanDisbursalQuery} from "@/service/admin/loan/Loan-disbursal-api";
+import {useViewAllLoanDisbursalByOrgIdQuery} from "@/service/admin/loan/Loan-disbursal-api";
 import {setClickedDisbursedLoanIdNumber} from "@/redux/slice/loan/selected-loan";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 
@@ -25,7 +25,7 @@ function Index() {
     const size = 100;
     const page = 0;
 
-    const {data, isLoading: isLoading} = useViewAllLoanDisbursalQuery(
+    const {data, isLoading: isLoading} = useViewAllLoanDisbursalByOrgIdQuery(
         {
             organizationId: clickedOrganizationId?.id,
             pageSize: size,
