@@ -4,8 +4,7 @@ import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInput from "@/reuseable/Input/AuthInputField"
 import {useRouter} from "next/navigation";
 import {validateEmailInput} from "@/utils/GlobalMethods";
-// import {store} from "@/redux/store";
-// import {setUserPasswordInput} from "@/redux/slice/auth/slice";
+
 import {useSendEmailToResetPasswordMutation} from "@/service/auths/api";
 import {useToast} from "@/hooks/use-toast"
 import {setUserPasswordInput} from "@/redux/slice/auth/slice";
@@ -58,8 +57,7 @@ const Step1 = () => {
     }
 
     const validateEmail = (input: string) => {
-        // const criteria = /\s/g.test(input)
-        // setCriteriaStatus(criteria);
+
         const isValid = validateEmailInput(input);
         if (isValid) {
             setDisableButton(false)
@@ -78,7 +76,8 @@ const Step1 = () => {
         validateEmail(value)
 
     }
-    const login = () => {
+    const login = (e?:React.MouseEvent<HTMLButtonElement>) => {
+        e?.preventDefault()
         store.dispatch(setUserPasswordInput(''))
         router.push("/auth/login")
     }
@@ -123,7 +122,9 @@ const Step1 = () => {
                             <button
                                 id={`loginOnResetPasswordStep1`}
                                 data-testid={`loginOnResetPasswordStep1`}
-                                onClick={login}
+                                onClick={(e)=> {
+                                    login(e)
+                                }}
                                 className={` h-fit md:h-fit text-meedlBlue text-sm  underline`}>
                                 Log in
                             </button>
