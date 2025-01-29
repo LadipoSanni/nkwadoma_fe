@@ -40,4 +40,4 @@ export const loanDisbursalApi = createApi({
 
     })
 })
-export const {useViewAllLoanDisbursalByOrgIdQuery, useViewDisbursedLoanDetailsQuery} = loanDisbursalApi
+export const {useViewAllLoanDisbursalByOrgIdQuery, useViewDisbursedLoanDetailsQuery, useViewAllLoanDisbursalQuery} = loanDisbursalApi
