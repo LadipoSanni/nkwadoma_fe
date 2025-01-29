@@ -20,7 +20,7 @@
 
 }
 .loanRequestDetails::-webkit-scrollbar-thumb{
-    background-color: rgb(217, 217, 217);
+    background-color: #F9F9F9;
     width: 4px;
     height: 0.5rem;
     margin-right: 0.5rem;
