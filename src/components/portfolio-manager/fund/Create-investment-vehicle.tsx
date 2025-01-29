@@ -92,7 +92,8 @@ function CreateInvestmentVehicle({
         // /^[a-zA-Z\-_ ]*$/,
         // " sponsors can include letters, hyphens, and underscores only."
         /^[a-zA-Z][a-zA-Z\-' ]*$/,
-        "Sponsors can include letters, - and ' only and cannot start with -,' ."
+        // "Sponsors can include letters, - and ' only and cannot start with -,' ."
+        "Invalid sponsor name"
       )
       //  .matches(/^[a-zA-Z\s]+$/, 'Vehicle sponsor can only contain letters and spaces.')
       .test(
@@ -116,7 +117,8 @@ function CreateInvestmentVehicle({
         // "Fund manager can include letters, hyphens, and underscores only."
 
         /^[a-zA-Z][a-zA-Z\-' ]*$/,
-        "Fund can include letters, - and ' only and cannot start with - and ' ."
+        // "Fund can include letters, - and ' only and cannot start with - and ' ."
+        "Invalid fund manager name"
       )
 
       .max(100, "Fund manager cannot be more than 100 characters.")
@@ -176,7 +178,8 @@ function CreateInvestmentVehicle({
     .max(100, "Trustee cannot be more than 100 characters.")
     .matches(
       /^[a-zA-Z][a-zA-Z\-' ]*$/,
-      "Trustee can include letters, - and ' only and cannot start with - and ' ."
+      // "Trustee can include letters, - and ' only and cannot start with - and ' ."
+      "Invalid trustee name"
     )
     .required("Trustee is required"),
     custodian: Yup.string()
@@ -185,7 +188,8 @@ function CreateInvestmentVehicle({
     .max(100, "Custodian cannot be more than 100 characters.")
     .matches(
       /^[a-zA-Z][a-zA-Z\-' ]*$/,
-      "Custodian can include letters, - and ' only and cannot start with - and ' ."
+      // "Custodian can include letters, - and ' only and cannot start with - and ' ."
+      "Invalid custodian name"
     ),
   });
 
@@ -528,12 +532,15 @@ function CreateInvestmentVehicle({
                   placeholder={"Enter mandate..."}
                 />
                 {errors.mandate && touched.mandate && (
-                  <ErrorMessage
+               <div>
+               
+                <ErrorMessage
                     name="mandate"
                     component="div"
                     id="editCohortDescriptionError"
                     className="text-red-500 text-sm"
                   />
+               </div>  
                 )}
               </div>
               <div className="md:flex gap-4 justify-end mt-2 mb-4 md:mb-0">
