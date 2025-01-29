@@ -85,8 +85,8 @@ function LoanDetails() {
         }
     };
 
-
-
+    const startDate = dayjs(data?.data?.createdDate?.toString()).format('MMM D, YYYY')
+    const cohortStartDate = dayjs(data?.data?.cohortStartDate?.toString()).format('MMM D, YYYY')
 
     const handleNext = () => {
         if (currentTab == 1){
@@ -105,7 +105,7 @@ function LoanDetails() {
     };
 
     const getloaneeloanDetails = () => {
-        const loaneeeLoanBreakdowns =  data?.data?.loaneeLoanBreakdownResponse
+        const loaneeeLoanBreakdowns =  data?.data?.loaneeLoanBreakdowns
         const loaneeloanBreakDown :{ itemName: string; itemAmount: string; }[] = [ ]
         loaneeeLoanBreakdowns?.forEach((element:loaneeLoanBreakDown) => loaneeloanBreakDown?.push({itemName: element?.itemName, itemAmount: element?.itemAmount} ) )
         return loaneeloanBreakDown;
@@ -126,11 +126,12 @@ function LoanDetails() {
                     value={data?.data?.tuitionAmount}
                 />
         },
+            {
+                label: 'Start date', value: startDate
+            },
         {
-            label: 'Start date', value:
-                dayjs(data?.data?.createdDate?.toString()).format('MMM D, YYYY')
-
-        },
+                label: 'Cohort start date', value: cohortStartDate
+            },
         {
             label: 'Loan amount requested', value: <NumericFormat
                 id={'loanAmountRequested'}

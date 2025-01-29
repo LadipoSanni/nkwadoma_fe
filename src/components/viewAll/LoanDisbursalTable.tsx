@@ -91,7 +91,7 @@ function Index() {
                     data?.data?.body?.length > 0 ?
                         <div className={`md:w-full w-full h-full md:h-full `}>
                             <Tables
-                                tableData={data?.data?.body}
+                                tableData={data?.data?.body.slice().reverse()}
                                 isLoading={isLoading}
                                 handleRowClick={handleRowClick}
                                 tableHeader={loanDisbursalHeader}
