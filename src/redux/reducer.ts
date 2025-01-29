@@ -16,6 +16,7 @@ import { fundApi } from '@/service/admin/fund_query';
 import { loanOfferApi } from '@/service/admin/loan/loan-offer-api';
 import { loanDisbursalApi } from '@/service/admin/loan/Loan-disbursal-api';
 import loanReferralReducer from '@/service/users/loanRerralSlice';
+import cohortReducer from './slice/create/cohortSlice'
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -23,6 +24,7 @@ const appReducer = combineReducers({
     authSlice: authSliceReducer,
     cohortBreakDownSlice: cohortBreakDownReducer,
     loanReferral: loanReferralReducer,
+    cohort: cohortReducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
     [cohortApi.reducerPath]: cohortApi.reducer,
