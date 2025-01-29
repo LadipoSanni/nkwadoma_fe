@@ -100,7 +100,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     } else {
       setIsButtonDisabled(true);
     }
-    resetForm
+    // resetForm
   }, [name, selectedProgram, startDate, descriptionError]);
 
   const areLoanBreakdownsValid = () => {
@@ -332,7 +332,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
               <FormButtons
                 isButtonDisabled={isButtonDisabled}
                 setIsFormSubmitted={setIsFormSubmitted}
-                // setClearField={resetForm}
+                setClearField={resetForm}
               />
             </>
           ) : (
