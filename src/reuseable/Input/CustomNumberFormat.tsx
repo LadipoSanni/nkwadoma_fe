@@ -14,7 +14,7 @@ const CustomInputField: React.FC<FieldProps> = ({field, form}) => {
         let rawValue = e.target.value.replace(/,/g, '');
         rawValue = rawValue.replace(/[^0-9]/g, '').replace(/^0+/, '');
         const formattedValue = formatNumberWithCommas(rawValue);
-        if (rawValue.length > 15) {
+        if (rawValue.length > 16) {
             return;
         }
         form.setFieldValue(field.name, rawValue);
