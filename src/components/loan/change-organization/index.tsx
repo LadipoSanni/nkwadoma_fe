@@ -57,7 +57,7 @@ const ChangeInstitutionModal = () => {
     };
 
     const getLoanCounts = (index: number) => {
-        switch (currentTab){
+        switch (currentTab) {
             case 'Loan requests':
                 return roundUpAmount(data?.data?.at(index)?.loanRequestCount.toString());
             case 'Loan offers':
@@ -83,7 +83,7 @@ const ChangeInstitutionModal = () => {
     const handleContinue = () => {
         setCurrent('');
         setDisabled(true);
-        store.dispatch(setClickedOrganization(saveClickedId || { id: '', name: '', logoImage: '' }));
+        store.dispatch(setClickedOrganization(saveClickedId || {id: '', name: '', logoImage: ''}));
     }
 
     const getInitials = (name: string): string => {
@@ -130,72 +130,74 @@ const ChangeInstitutionModal = () => {
                             :
                             (<div
                                 className={`${styles.organizations} md:w-[30vw] md:h-fit  py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
-                                {searchResults ? (
-                                        searchResults?.data.length === 0 ? <SearchEmptyState name={"organization"}
-                                                                                             icon={MdSearch}/> : searchResults?.data.map((searchResult: OrganizationType, index: number) => {
+                                {searchTerm ? (
+                                        searchResults?.data.length === 0 || !searchResults ?
+                                            <SearchEmptyState name={"organization"}
+                                                              icon={MdSearch}/> :
+                                            searchResults?.data.map((searchResult: OrganizationType, index: number) => {
 
-                                            const initial = getInitials(searchResult.name)
-                                            return (
-                                                <button key={searchResult.id} id={"index" + index}
-                                                        onClick={() => {
-                                                            handleClick(searchResult?.id, searchResult?.name)
-                                                        }}
-                                                        className={` ${styles.institutionMiniCard2} md:flex  md:place-items-center md:px-2 py-2 px-2 md:justify-between grid md:py-4  w-[98%] h-fit gap-3 md:h-fit rounded-md border ${searchResult.id === current ? `border-meedlBlue` : `border-[#ECECEC]`}   `}>
+                                                const initial = getInitials(searchResult.name)
+                                                return (
+                                                    <button key={searchResult.id} id={"index" + index}
+                                                            onClick={() => {
+                                                                handleClick(searchResult?.id, searchResult?.name)
+                                                            }}
+                                                            className={` ${styles.institutionMiniCard2} md:flex  md:place-items-center md:px-2 py-2 px-2 md:justify-between grid md:py-4  w-[98%] h-fit gap-3 md:h-fit rounded-md border ${searchResult.id === current ? `border-meedlBlue` : `border-[#ECECEC]`}   `}>
 
-                                                    <div
-                                                        className={`flex md:flex gap-3 place-items-center md:place-items-center `}
-                                                    >
-                                                        <div id={`radioGroupOnOrganizationModal`}
-                                                             data-testid={`radioGroupOnOrganizationModal`}
-                                                             className={`flex w-fit h-fit px-1 py-1 ring-1 ${searchResult.id === current ? `ring-meedlBlue` : `ring-[#ECECEC]`} rounded-full items-center space-x-2`}>
-                                                            <div id={`radioGroupCheeckedOnOrganizationModal`}
-                                                                 data-testid={`radioGroupCheeckedOnOrganizationModal`}
-                                                                 className={` w-[0.5rem]  h-[0.5rem] rounded-full  ${searchResult.id === current ? `bg-meedlBlue md:bg-meedlBlue` : `bg-white`} `}></div>
-                                                        </div>
                                                         <div
-                                                            className={` md:grid grid place-content-center  md:place-content-center  px-2 py-3 md:object-fit bg-[#F7F7F7] md:bg-[#F7F7F7] object-fit rounded-full  md:rounded-full   md:w-[3rem] md:h-[2rem] w-[3rem] h-[3rem]   `}
-
+                                                            className={`flex md:flex gap-3 place-items-center md:place-items-center `}
                                                         >
-                                                            {
-                                                                searchResult.logoImage ? (
-                                                                    <Image
-                                                                        id={'organizationImageOnLoan'}
-                                                                        data-testid={'oranizationImageOnLoan'}
-                                                                        width={100}
-                                                                        height={100}
-                                                                        className={`rounded-full md:rounded-full`}
-                                                                        // style={{marginTop: 'auto', marginBottom: 'auto', backgroundColor: '#da9494'}}
-                                                                        src={searchResult.logoImage}
-                                                                        alt={'image'}
-                                                                    />
-                                                                ) : (
-                                                                    <div>{initial}</div>
-                                                                )
-                                                            }
+                                                            <div id={`radioGroupOnOrganizationModal`}
+                                                                 data-testid={`radioGroupOnOrganizationModal`}
+                                                                 className={`flex w-fit h-fit px-1 py-1 ring-1 ${searchResult.id === current ? `ring-meedlBlue` : `ring-[#ECECEC]`} rounded-full items-center space-x-2`}>
+                                                                <div id={`radioGroupCheeckedOnOrganizationModal`}
+                                                                     data-testid={`radioGroupCheeckedOnOrganizationModal`}
+                                                                     className={` w-[0.5rem]  h-[0.5rem] rounded-full  ${searchResult.id === current ? `bg-meedlBlue md:bg-meedlBlue` : `bg-white`} `}></div>
+                                                            </div>
+                                                            <div
+                                                                className={` md:grid grid place-content-center  md:place-content-center  px-2 py-3 md:object-fit bg-[#F7F7F7] md:bg-[#F7F7F7] object-fit rounded-full  md:rounded-full   md:w-[3rem] md:h-[2rem] w-[3rem] h-[3rem]   `}
 
+                                                            >
+                                                                {
+                                                                    searchResult.logoImage ? (
+                                                                        <Image
+                                                                            id={'organizationImageOnLoan'}
+                                                                            data-testid={'oranizationImageOnLoan'}
+                                                                            width={100}
+                                                                            height={100}
+                                                                            className={`rounded-full md:rounded-full`}
+                                                                            // style={{marginTop: 'auto', marginBottom: 'auto', backgroundColor: '#da9494'}}
+                                                                            src={searchResult.logoImage}
+                                                                            alt={'image'}
+                                                                        />
+                                                                    ) : (
+                                                                        <div>{initial}</div>
+                                                                    )
+                                                                }
+
+                                                            </div>
+                                                            <div
+                                                                className={` ${inter.className} text-black500 md:text-black500 grid md:grid md:place-content-start md:px-0 md:w-[60%] text-sm md:text-sm md:h-fit h-fit  break-words  `}>{searchResult.name}</div>
                                                         </div>
                                                         <div
-                                                            className={` ${inter.className} text-black500 md:text-black500 grid md:grid md:place-content-start md:px-0 md:w-[60%] text-sm md:text-sm md:h-fit h-fit  break-words  `}>{searchResult.name}</div>
-                                                    </div>
-                                                    <div
-                                                        className={`flex md:flex bg-grey105 md:bg-grey105 px-2 py-1 md:px-3 md:py-2  rounded-full md:rounded-full w-fit h-fit md:w-fit md:gap-2 md:h-fit md:place-items-between   place-items-center gap-3 `}>
+                                                            className={`flex md:flex bg-grey105 md:bg-grey105 px-2 py-1 md:px-3 md:py-2  rounded-full md:rounded-full w-fit h-fit md:w-fit md:gap-2 md:h-fit md:place-items-between   place-items-center gap-3 `}>
                                                 <span
                                                     className={`text-xs md:text-xs  md:break-normal  w-fit md:w-fit `}>{currentTab}</span>
-                                                        <div
-                                                            className={` w-fit h-fit ring-1 ring-[#E1EEFF] rounded-md  px-1 py-1 md:w-fit md:h-fit md:ring-1 md:ring-[#E1EEFF] md:rounded-md  md:px-1 md:py-1 `}
-                                                        >
                                                             <div
-                                                                className={`bg-[#E1EEFF]  h-fit  flex place-content-center w-fit`}>
+                                                                className={` w-fit h-fit ring-1 ring-[#E1EEFF] rounded-md  px-1 py-1 md:w-fit md:h-fit md:ring-1 md:ring-[#E1EEFF] md:rounded-md  md:px-1 md:py-1 `}
+                                                            >
+                                                                <div
+                                                                    className={`bg-[#E1EEFF]  h-fit  flex place-content-center w-fit`}>
                                                         <span
                                                             className={`text-xs mt-auto mb-auto text-meedlBlue`}>{getLoanCounts(index)}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </button>
-                                            )
-                                        })
+                                                    </button>
+                                                )
+                                            })
                                     ) :
-                                    (organisationList?.length === 0 ?
+                                    (organisationList?.length === 0 || !organisationList ?
                                         <TableEmptyState name={"organization"} icon={MdOutlineAccountBalance}
                                                          condition={true}/> : organisationList?.map((organization: OrganizationType, index: number) => {
 
@@ -281,7 +283,7 @@ const ChangeInstitutionModal = () => {
                                 height={'3.4rem'}
                                 data-testid={`continueButtonOnOrganizationModal`}
                                 buttonText={"Confirm"} width={"inherit"}
-                                isLoading={isLoading}
+                                // isLoading={isLoading}
                                 handleClick={handleContinue}
                             >
                             </ConfirmOrgButton>
