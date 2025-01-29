@@ -15,6 +15,7 @@ import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {ChangeOrganization} from "@/types/loan/loan-request.type";
+import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 
 
 interface OrganizationType {
@@ -126,8 +127,10 @@ const ChangeInstitutionModal = () => {
                                 className='w-full md:w-full rounded h-11 md:h-11 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 '
                             />
                         </div>
-                        {isLoading ? <SkeletonForLoanOrg/>
-                            :
+                        {isLoading ?
+                            <div className={`w-full h-fit md:w-full md:h-full`}>
+                                <SkeletonForLoanOrg/>
+                            </div> :
                             (<div
                                 className={`${styles.organizations} md:w-[30vw] md:h-fit  py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
                                 {searchTerm ? (
@@ -198,8 +201,11 @@ const ChangeInstitutionModal = () => {
                                             })
                                     ) :
                                     (organisationList?.length === 0 || !organisationList ?
-                                        <TableEmptyState name={"organization"} icon={MdOutlineAccountBalance}
-                                                         condition={true}/> : organisationList?.map((organization: OrganizationType, index: number) => {
+                                        <div className={`w-full h-fit md:w-full md:h-full`}>
+                                            <TableEmptyState name={"organization"} icon={MdOutlineAccountBalance}
+                                                             condition={true}/>
+                                        </div>
+                                        : organisationList?.map((organization: OrganizationType, index: number) => {
 
                                             const initial = getInitials(organization.name)
                                             return (
