@@ -66,8 +66,8 @@ function CreateInvestmentVehicle({
       .matches(
         // /^[a-zA-Z0-9\-_' ]*$/,
         // "name can include letters,numbers, hyphens,apostrophe and underscores only."
-        /^[a-zA-Z][a-zA-Z0-9\-_' ]*$/,
-        "Name can include letters, numbers, hyphens, apostrophes, and underscores only, and must start with a letter."
+        /^[a-zA-Z][a-zA-Z0-9\-' ]*$/,
+        "Name can include letters, numbers, hyphens and apostrophes only, and must start with a letter."
       )
       .test(
         "valid-name",
@@ -91,8 +91,8 @@ function CreateInvestmentVehicle({
       .matches(
         // /^[a-zA-Z\-_ ]*$/,
         // " sponsors can include letters, hyphens, and underscores only."
-        /^[a-zA-Z][a-zA-Z\-_' ]*$/,
-        "Sponsors can include letters, -,' and _ only and cannot start with -,' and _."
+        /^[a-zA-Z][a-zA-Z\-' ]*$/,
+        "Sponsors can include letters, - and ' only and cannot start with -,' ."
       )
       //  .matches(/^[a-zA-Z\s]+$/, 'Vehicle sponsor can only contain letters and spaces.')
       .test(
@@ -115,8 +115,8 @@ function CreateInvestmentVehicle({
         // /^[a-zA-Z\-_ ]*$/,
         // "Fund manager can include letters, hyphens, and underscores only."
 
-        /^[a-zA-Z][a-zA-Z\-_' ]*$/,
-        "Fund can include letters, -,' and _ only and cannot start with -,' and _."
+        /^[a-zA-Z][a-zA-Z\-' ]*$/,
+        "Fund can include letters, - and ' only and cannot start with - and ' ."
       )
 
       .max(100, "Fund manager cannot be more than 100 characters.")
@@ -175,8 +175,8 @@ function CreateInvestmentVehicle({
     .trim()
     .max(100, "Trustee cannot be more than 100 characters.")
     .matches(
-      /^[a-zA-Z][a-zA-Z\-_' ]*$/,
-      "Trustee can include letters, -,' and _ only and cannot start with -,' and _."
+      /^[a-zA-Z][a-zA-Z\-' ]*$/,
+      "Trustee can include letters, - and ' only and cannot start with - and ' ."
     )
     .required("Trustee is required"),
     custodian: Yup.string()
@@ -184,8 +184,8 @@ function CreateInvestmentVehicle({
     .required("Custodian is required")
     .max(100, "Custodian cannot be more than 100 characters.")
     .matches(
-      /^[a-zA-Z][a-zA-Z\-_' ]*$/,
-      "Custodian can include letters, -,' and _ only and cannot start with -,' and _."
+      /^[a-zA-Z][a-zA-Z\-' ]*$/,
+      "Custodian can include letters, - and ' only and cannot start with - and ' ."
     ),
   });
 
