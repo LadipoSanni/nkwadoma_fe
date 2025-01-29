@@ -116,7 +116,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     setDate(undefined);
     setName("");
     setDescription("");
-    setSelectedProgram(null);
+    setSelectedProgram("");
     setDescriptionError(null);
     setIsSelectOpen(false);
     setIsButtonDisabled(true);
@@ -126,7 +126,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     setLoanBreakdowns([{ itemName: "Tuition", itemAmount: "", currency: "NGN" }]);
     setProgramId("");
     setError("");
-    setUploadedUrl(null);
+    // setUploadedUrl(null);
     setInitialItemAmount("0.00");
   };
 
