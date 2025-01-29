@@ -19,7 +19,6 @@ interface TableRowData {
 
 function Index() {
     const router = useRouter();
-    // const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization)
 
     const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
 
@@ -97,8 +96,8 @@ function Index() {
                                 tableHeader={loanDisbursalHeader}
                                 tableHeight={52}
                                 sx='cursor-pointer'
-                                staticColunm='cohort'
-                                staticHeader='Cohort'
+                                staticColunm='firstName'
+                                staticHeader='Loanee'
                                 showKirkBabel={false}
                                 icon={MdOutlinePeople}
                                 sideBarTabName='Loans'
