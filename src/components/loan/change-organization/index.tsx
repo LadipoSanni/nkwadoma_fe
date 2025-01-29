@@ -8,12 +8,13 @@ import styles from "./index.module.css"
 import {store, useAppSelector} from "@/redux/store";
 import {setClickedOrganization} from "@/redux/slice/loan/selected-loan";
 import Image from "next/image";
-import {useSearchOrganisationByNameQuery, useViewAllOrganizationsQuery} from "@/service/admin/organization";
+import {useSearchOrganisationByNameQuery, useViewOrganizationsQuery} from "@/service/admin/organization";
 import ConfirmOrgButton from "@/reuseable/buttons/filter/LoaneeButton";
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import {ChangeOrganization} from "@/types/loan/loan-request.type";
 
 
 interface OrganizationType {
@@ -33,23 +34,16 @@ interface SaveClickedId {
 const ChangeInstitutionModal = () => {
 
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
-    // const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
-    // console.log(clickedOrganizationId)
-    // const clickedOrganization = useSelector((state: RootState) => state.selectedLoan.clickedOrganization);
     const [current, setCurrent] = useState<number | string>('')
     const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
 
     const [disabled, setDisabled] = React.useState(true)
-    const dataElement = {
-        pageNumber: 0,
-        pageSize: 100
-    }
     const [searchTerm, setSearchTerm] = useState('');
-    const {data, isLoading} = useViewAllOrganizationsQuery(dataElement);
+    const {data, isLoading} = useViewOrganizationsQuery(9);
     const {
         data: searchResults,
     } = useSearchOrganisationByNameQuery(searchTerm, {skip: !searchTerm});
-    const organisationList: OrganizationType[] = searchTerm ? searchResults?.data.body || [] : data?.data.body
+    const organisationList: ChangeOrganization[] = searchTerm.length > 0 ? searchResults?.data.body || [] : data?.data
 
     const handleClick = (id: string | number, name?: string, logoImage?: string) => {
         if (id === current) {
@@ -60,8 +54,20 @@ const ChangeInstitutionModal = () => {
             setDisabled(false);
         }
         setSaveClickedId({id, name: name || '', logoImage: logoImage || ''})
-        // store.dispatch(setClickedOrganization({id, name: name || '', logoImage: logoImage || ''}));
     };
+
+    const getLoanCounts = (index: number) => {
+        switch (currentTab){
+            case 'Loan requests':
+                return roundUpAmount(data?.data?.at(index)?.loanRequestCount.toString());
+            case 'Loan offers':
+                return roundUpAmount(data?.data?.at(index)?.loanOfferCount.toString());
+            case 'Disbursed loan':
+                return roundUpAmount(data?.data?.at(index)?.loanDisbursalCount.toString());
+            case 'Loan referrals':
+                return roundUpAmount(data?.data?.at(index)?.loanReferralCount.toString())
+        }
+    }
 
 
     const roundUpAmount = (number: string) => {
@@ -121,12 +127,6 @@ const ChangeInstitutionModal = () => {
                             />
                         </div>
                         {isLoading ? <SkeletonForLoanOrg/>
-                            //     :
-                            //     searchTerm.length === 0 ? (
-                            //     <TableEmptyState name={"organization"}
-                            //                      icon={MdOutlineAccountBalance}
-                            //                      condition={true}/>
-                            // )
                             :
                             (<div
                                 className={`${styles.organizations} md:w-[30vw] md:h-fit  py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
@@ -187,7 +187,7 @@ const ChangeInstitutionModal = () => {
                                                             <div
                                                                 className={`bg-[#E1EEFF]  h-fit  flex place-content-center w-fit`}>
                                                         <span
-                                                            className={`text-xs mt-auto mb-auto text-meedlBlue`}>{roundUpAmount(searchResult.loanRequestCount.toString())}</span>
+                                                            className={`text-xs mt-auto mb-auto text-meedlBlue`}>{getLoanCounts(index)}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -205,9 +205,6 @@ const ChangeInstitutionModal = () => {
                                                         onClick={() => {
                                                             handleClick(organization?.id, organization?.name, organization?.logoImage)
                                                         }}
-                                                    // onClick={() => {
-                                                    //     handleClick(organization?.id)
-                                                    // }}
                                                         className={` ${styles.institutionMiniCard2} md:flex  md:place-items-center md:px-2 py-2 px-2 md:justify-between grid md:py-4  w-[98%] h-fit gap-3 md:h-fit rounded-md border ${organization.id === current ? `border-meedlBlue` : `border-[#ECECEC]`}   `}>
 
                                                     <div
@@ -255,7 +252,7 @@ const ChangeInstitutionModal = () => {
                                                             <div
                                                                 className={`bg-[#E1EEFF]  h-fit  flex place-content-center w-fit`}>
                                                         <span
-                                                            className={`text-xs mt-auto mb-auto text-meedlBlue`}>{roundUpAmount(organization.loanRequestCount.toString())}</span>
+                                                            className={`text-xs mt-auto mb-auto text-meedlBlue`}>{getLoanCounts(index)}</span>
                                                             </div>
                                                         </div>
                                                     </div>
