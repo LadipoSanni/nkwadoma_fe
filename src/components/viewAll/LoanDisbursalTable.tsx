@@ -22,14 +22,13 @@ function Index() {
     // const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization)
 
     const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
-    const {id} = clickedOrganizationId || {};
 
-    const size = 1;
-    const page = 100;
+    const size = 100;
+    const page = 0;
 
     const {data, isLoading: isLoading} = useViewAllLoanDisbursalQuery(
         {
-            organizationId: id as string,
+            organizationId: clickedOrganizationId?.id,
             pageSize: size,
             pageNumber: page,
         },
@@ -84,7 +83,7 @@ function Index() {
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {
-                isLoading? (
+                isLoading ? (
                         <div className={`w-full h-fit md:w-full md:h-full`}>
                             <SkeletonForTable/>
                         </div>
