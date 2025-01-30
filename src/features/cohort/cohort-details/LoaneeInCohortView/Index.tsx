@@ -20,7 +20,8 @@ import {useToast} from "@/hooks/use-toast";
 import {cohortLoaneeResponse} from "@/types/Component.type";
 import Table from "@/reuseable/table/LoanProductTable"
 import Isloading from "@/reuseable/display/Isloading";
-// import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+
 
 interface userIdentity {
     firstName: string;
@@ -214,6 +215,8 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
                     { isReferred === "Not referred"?
+                       <div>
+                    {loaneeName && allLoanee.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :     
                         <SelectableTable
                             tableData={allLoanee}
                             tableHeader={loanProduct}
@@ -231,7 +234,12 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             enableButton={() =>setEnableButton(true) }
                             disabledButton={()=> setEnableButton(false) }
                             handleSelectedRow={handleSelectedRow}
-                        /> : <Table
+                        />
+    }
+                       </div>  : 
+                       <div>
+                         {loaneeName && allLoanee.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> : 
+                       <Table
                             tableData={allLoanee}
                             tableHeader={loanProduct}
                             handleRowClick={()=> {}}
@@ -245,6 +253,8 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             condition={true}
                             tableHeight={45}
                         />
+}
+                        </div>
                 }
                 </div>
             </div>

@@ -270,7 +270,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                       onOpenChange={toggleDropdown}
                       >
                       <SelectTrigger id='cohortInProgramSelectTrigger' className='flex justify-between w-72  focus:ring-0 focus:outline-none text-forgetPasswordBlue'>
-                      <SelectValue  placeholder="Select Program" className='' data-testid='Select Program'/>
+                      <SelectValue  placeholder="Select program" className='' data-testid='Select Program'/>
                       <div className='ml-4'>
                 {isDropdown ? (
           <ChevronUpIcon className="h-4 w-5 font-semibold" />
@@ -350,7 +350,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
           </div>
         </div>
         <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
-         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation} errorDeleted={deleteProgram}/>
+         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation} errorDeleted={deleteProgram} searchTerm={searchTerm}/>
          
         </div>
     </div>

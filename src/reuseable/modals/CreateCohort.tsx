@@ -138,8 +138,8 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     setInitialItemAmount("0.00");
   };
 
-  console.log('the program: ',selectedProgram)
-  console.log('the imageurl: ',setUploadedUrl)
+  // console.log('the program: ',selectedProgram)
+  // console.log('the imageurl: ',setUploadedUrl)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

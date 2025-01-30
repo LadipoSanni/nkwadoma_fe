@@ -42,6 +42,7 @@ export const store = configureStore({
             fundApi.middleware,
             loanOfferApi.middleware,
             loanDisbursalApi.middleware,
+            userApi.middleware,
         ]),
 });
 
