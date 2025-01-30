@@ -64,7 +64,7 @@ const TopBar = () => {
                                 {getFirstLetterOfWord(user_name)}
                             </div>
                         </div>
-                        <div onClick={toggleArrow} className={`cursor-pointer hidden md:grid md:gap-1 w-fit object-contain`}>
+                        <div onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : ''} hidden md:grid md:gap-1 w-fit object-contain`}>
                             <p className={`text-black500 ${styles.fullName}`}>{capitalizeFirstLetters(user_name)}</p>
                             <p className={`text-black500 ${styles.role}`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
                         </div>
