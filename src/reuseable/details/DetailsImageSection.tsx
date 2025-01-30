@@ -76,7 +76,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                             id="cohort-description"
                             data-testid="cohort-description"
                             style={{ height: "auto",  maxHeight: "230px",  overflowY: "auto", minWidth: "300px", maxWidth: "100%",  fontSize:"14px" }}
-                            // className={`${inter.className} text-grey400 text-sm w-full`}
+                            className={`${inter.className} text-grey400 text-sm w-full`}
                             dangerouslySetInnerHTML={{__html: cohortDescription}}
                         />
 
