@@ -11,7 +11,6 @@ import Isloading from "@/reuseable/display/Isloading";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 import {useGetAllInvestmentmentVehicleQuery} from "@/service/admin/fund_query";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
-import {validatePositiveNumber} from "@/utils/Format";
 import 'react-quill-new/dist/quill.snow.css'
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 
@@ -354,16 +353,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             type={"number"}
                                             className="w-full p-3 border rounded focus:outline-none mt-3 text-sm"
                                             placeholder="0"
-                                            onChange={validatePositiveNumber(`costOfFunds`, setFieldValue, 100, 1)}
-                                            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                            //     const rawValue = e.target.value.replace(/,/g, "");
-                                            //     if (/^(?!0$)\d*$/.test(rawValue)) {
-                                            //         let formattedValue = Number(rawValue).toLocaleString();
-                                            //         formattedValue += ".00";
-                                            //         setFieldValue("costOfFunds", rawValue)
-                                            //         e.target.value = formattedValue;
-                                            //     }
-                                            // }}
+                                            step="0.01"
+                                            onChange={(e: { target: { value: string; }; }) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    setFieldValue("costOfFunds", value);
+                                                }
+                                            }}
                                         />
                                         {
                                             errors.costOfFunds && touched.costOfFunds && (
@@ -557,10 +553,16 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         id="interest"
                                                         data-testid="interest"
                                                         name="interest"
-                                                        type={"number"}
+                                                        type="number"
                                                         className="w-20 p-3 border rounded focus:outline-none mt-2 text-sm"
-                                                        placeholder="0"
-                                                        onChange={validatePositiveNumber(`interest`, setFieldValue, 100, 1)}
+                                                        placeholder="0.0"
+                                                        step="0.01"
+                                                        onChange={(e: { target: { value: string; }; }) => {
+                                                            const value = e.target.value;
+                                                            if (/^\d*\.?\d*$/.test(value)) {
+                                                                setFieldValue("interest", value);
+                                                            }
+                                                        }}
                                                     />
                                                     {
                                                         errors.interest && touched.interest && (
