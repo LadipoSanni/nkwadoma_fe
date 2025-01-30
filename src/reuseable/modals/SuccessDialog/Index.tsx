@@ -22,13 +22,17 @@ interface VerificationSuccessDialogProps {
     message: string;
     buttonText: string;
     routeToOverview?: boolean;
+    stopCamera?: () => void;
 }
 
-const SuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ open, onClose, onContinue, title, message, buttonText, routeToOverview }) => {
+const SuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ open, onClose, onContinue, title, message, buttonText, routeToOverview, stopCamera }) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
     const handleContinue = () => {
+        if (stopCamera) {
+            stopCamera();
+        }
         dispatch(setCurrentStep(steps.length - 1));
         dispatch(setLoanReferralStatus('AUTHORIZED'));
         onContinue();
