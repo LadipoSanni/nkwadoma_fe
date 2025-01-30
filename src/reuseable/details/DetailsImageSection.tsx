@@ -47,26 +47,26 @@ const DetailsImageSection: React.FC<detailsProps> = ({
             <div id="cohort-image-section" data-testid="cohort-image-section"
                  className={`flex md:flex-col flex-col md:block space-y-3 md:max-w-md w-full`}>
                 <div id="cohort-image-card" data-testid="cohort-image-card">
-                    <Card className="rounded-lg md:max-w-md ">
+                    <Card className="rounded-lg md:max-w-sm ">
                         {imageSrc ? (
                             <Image
                                 src={imageSrc}
                                 alt="Cohort DetailsImageSection"
                                 width={500}
                                 height={500}
-                                className="w-full rounded-md h-64 object-cover"
+                                className="w-28 rounded-md h-28 object-cover"
                                 data-testid="cohort-image"
                             />
                         ) : Icon ? (
                             <div
-                                className="w-32 h-32 md:w-40 md:h-40 flex bg-[#D9EAFF] rounded-full justify-center items-center">
+                                className="w-28 h-28 flex bg-[#D9EAFF] rounded-full justify-center items-center">
                                 <Icon className="text-6xl text-meedlBlue"/>
                             </div>
                         ) : null}
                     </Card>
                 </div>
 
-                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col py-5 gap-4`}>
+                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col pt-4 gap-4`}>
                     <h1 id="cohort-title" data-testid="cohort-title"
                         className={`${cabinetGrotesk.className} text-3xl font-medium text-black`}>
                         {cohortTitle}
@@ -75,7 +75,8 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         <p
                             id="cohort-description"
                             data-testid="cohort-description"
-                            className={`${inter.className} text-grey400 break-words scrollbar-width:none overflow-y-auto h-24 text-sm`}
+                            style={{ height: "auto",  maxHeight: "260px",  overflowY: "auto", minWidth: "320px", maxWidth: "100%",  fontSize:"14px" }}
+                            className={`${inter.className} text-grey400 text-sm w-full`}
                             dangerouslySetInnerHTML={{__html: cohortDescription}}
                         />
 

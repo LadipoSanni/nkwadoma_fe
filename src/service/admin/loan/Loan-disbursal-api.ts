@@ -7,7 +7,7 @@ export const loanDisbursalApi = createApi({
     baseQuery: customFetchBaseQuery,
     reducerPath: 'loanDisbursalApi',
     endpoints: (builder) => ({
-        viewAllLoanDisbursal: builder.query({
+        viewAllLoanDisbursalByOrgId: builder.query({
             query: (data: {
                 organizationId: string | number | undefined,
                 pageSize?: number;
@@ -26,7 +26,18 @@ export const loanDisbursalApi = createApi({
             }),
             providesTags: ['loanDisbursal']
         }),
+        viewAllLoanDisbursal: builder.query({
+            query: (data: {
+                pageSize?: number;
+                pageNumber?: number;
+            }) => ({
+                url: `/loan/view-all-disbursal`,
+                method: 'GET',
+                params: data
+            }),
+            providesTags: ['loanDisbursal']
+        }),
 
     })
 })
-export const {useViewAllLoanDisbursalQuery, useViewDisbursedLoanDetailsQuery} = loanDisbursalApi
+export const {useViewAllLoanDisbursalByOrgIdQuery, useViewDisbursedLoanDetailsQuery, useViewAllLoanDisbursalQuery} = loanDisbursalApi

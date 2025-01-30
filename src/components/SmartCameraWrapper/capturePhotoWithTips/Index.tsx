@@ -140,7 +140,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
             case 'down':
                 return 40;
             default:
-                return 0;
+                return null;
         }
     };
     return (

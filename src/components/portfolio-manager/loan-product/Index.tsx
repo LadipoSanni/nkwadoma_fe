@@ -11,7 +11,6 @@ import Isloading from "@/reuseable/display/Isloading";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 import {useGetAllInvestmentmentVehicleQuery} from "@/service/admin/fund_query";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
-import {validatePositiveNumber} from "@/utils/Format";
 import 'react-quill-new/dist/quill.snow.css'
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 
@@ -86,13 +85,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .required("Product name is required")
             .test(
                 "valid-name",
-                "Name can include letters, numbers, hyphens, and underscores",
+                "Name must start with a letter and end with a letter/number",
                 (value = "") => {
-                    const regex = /^[a-zA-Z0-9\s-_]*$/;
-                    const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
-                    return regex.test(value) && !onlyNumbersOrSpecials.test(value);
+                    const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/;
+                    return regex.test(value);
                 }
             )
+
             .max(200, "Terms exceeds 100 characters"),
         // productSponsor: Yup.string()
         //     .trim()
@@ -354,16 +353,16 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             type={"number"}
                                             className="w-full p-3 border rounded focus:outline-none mt-3 text-sm"
                                             placeholder="0"
-                                            onChange={validatePositiveNumber(`costOfFunds`, setFieldValue, 100, 1)}
-                                            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                            //     const rawValue = e.target.value.replace(/,/g, "");
-                                            //     if (/^(?!0$)\d*$/.test(rawValue)) {
-                                            //         let formattedValue = Number(rawValue).toLocaleString();
-                                            //         formattedValue += ".00";
-                                            //         setFieldValue("costOfFunds", rawValue)
-                                            //         e.target.value = formattedValue;
-                                            //     }
-                                            // }}
+                                            step="0.01"
+                                            onWheel={(e: {
+                                                currentTarget: { blur: () => string; };
+                                            }) => e.currentTarget.blur()}
+                                            onChange={(e: { target: { value: string; }; }) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    setFieldValue("costOfFunds", value);
+                                                }
+                                            }}
                                         />
                                         {
                                             errors.costOfFunds && touched.costOfFunds && (
@@ -389,6 +388,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                 type={"number"}
                                                 className="w-full p-3 border rounded focus:outline-none mt-3 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                 placeholder="0"
+                                                onWheel={(e: {
+                                                    currentTarget: { blur: () => string; };
+                                                }) => e.currentTarget.blur()}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     let rawValue = e.target.value.replace(/,/g, "");
                                                     if (/^(?!0$)\d*$/.test(rawValue)) {
@@ -439,6 +441,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                     className="w-full p-3 border h-12 rounded focus:outline-none text-sm "
                                                     placeholder="0.00"
                                                     component={CustomInputField}
+                                                    onWheel={(e: {
+                                                        currentTarget: { blur: () => string; };
+                                                    }) => e.currentTarget.blur()}
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                         let rawValue = e.target.value.replace(/,/g, "");
                                                         if (/^(?!0$)\d*$/.test(rawValue)) {
@@ -487,6 +492,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                     className="w-full p-3 border rounded focus:outline-none text-sm"
                                                     component={CustomInputField}
                                                     placeholder="0.00"
+                                                    onWheel={(e: {
+                                                        currentTarget: { blur: () => string; };
+                                                    }) => e.currentTarget.blur()}
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                         let rawValue = e.target.value.replace(/,/g, "");
                                                         if (/^(?!0$)\d*$/.test(rawValue)) {
@@ -525,6 +533,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                 type={"number"}
                                                 className="w-full p-3 border rounded focus:outline-none mt-2 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                                 placeholder="0"
+                                                onWheel={(e: {
+                                                    currentTarget: { blur: () => string; };
+                                                }) => e.currentTarget.blur()}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                     let rawValue = e.target.value.replace(/,/g, "");
                                                     if (/^(?!0$)\d*$/.test(rawValue)) {
@@ -557,25 +568,25 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         id="interest"
                                                         data-testid="interest"
                                                         name="interest"
-                                                        type={"number"}
+                                                        type="number"
                                                         className="w-20 p-3 border rounded focus:outline-none mt-2 text-sm"
-                                                        placeholder="0"
-                                                        onChange={validatePositiveNumber(`interest`, setFieldValue, 100, 1)}
+                                                        placeholder="0.0"
+                                                        step="0.01"
+                                                        onWheel={(e: {
+                                                            currentTarget: { blur: () => string; };
+                                                        }) => e.currentTarget.blur()}
+                                                        onChange={(e: { target: { value: string; }; }) => {
+                                                            const value = e.target.value;
+                                                            if (/^\d*\.?\d*$/.test(value)) {
+                                                                setFieldValue("interest", value);
+                                                            }
+                                                        }}
                                                     />
                                                     {
                                                         errors.interest && touched.interest && (
                                                             <ErrorMessage
                                                                 name="interest"
                                                                 id='interestId'
-                                                                component="div"
-                                                                className="text-red-500 text-sm"
-                                                            />)
-                                                    }
-                                                    {
-                                                        errors.interest && touched.interest && (
-                                                            <ErrorMessage
-                                                                name="interest"
-                                                                id='interest'
                                                                 component="div"
                                                                 className="text-red-500 text-sm"
                                                             />)
@@ -593,6 +604,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         type={"number"}
                                                         className="w-full p-3 border mt-2 rounded focus:outline-none text-sm"
                                                         component={CustomInputField}
+                                                        onWheel={(e: {
+                                                            currentTarget: { blur: () => string; };
+                                                        }) => e.currentTarget.blur()}
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                             let rawValue = e.target.value.replace(/,/g, "");
                                                             if (/^(?!0$)\d*$/.test(rawValue)) {
