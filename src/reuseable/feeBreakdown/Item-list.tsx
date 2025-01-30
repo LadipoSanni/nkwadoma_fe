@@ -156,7 +156,7 @@ const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, s
                                                  onClick={() => handleDeleteItem(index)}/>
                                 }
                             </div>
-                        </div>NumericFormat
+                        </div>
                     </div>
                 </div>
             ))}
