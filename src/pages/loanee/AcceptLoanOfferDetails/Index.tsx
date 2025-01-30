@@ -14,6 +14,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useViewLoanOfferDetailsQuery, useRespondToLoanOfferMutation } from "@/service/admin/loan/loan-offer-api";
 import dynamic from "next/dynamic";
 import {useToast} from "@/hooks/use-toast";
+import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
+import styles from "@/pages/admin/loanOfferDetails/index.module.css";
 
 const AcceptLoanOfferDetails = dynamic(
     () => Promise.resolve(AcceptLoanOffer),
@@ -43,7 +45,7 @@ const AcceptLoanOffer: React.FC= () => {
 
     const { data } = useViewLoanOfferDetailsQuery(loanOfferId);
     const [respondToLoanOffer] = useRespondToLoanOfferMutation();
-    console.log(data, "details")
+    // console.log(data, "details")
 
 
     const backToOverview = () => {
@@ -89,35 +91,35 @@ const AcceptLoanOffer: React.FC= () => {
         switch (currentTab) {
             case 0:
                 return [
-                    { label: "First Name", value: firstName || "N/A" },
-                    { label: "Last Name", value: lastName || "N/A" },
-                    { label: "Email address", value: email || "N/A" },
-                    { label: "Phone number", value: phoneNumber || "N/A" },
-                    { label: "Date of birth", value: dateOfBirth || "N/A" },
-                    { label: "Marital status", value: maritalStatus || "N/A" },
-                    { label: "Nationality", value: nationality || "N/A" },
-                    { label: "State of origin", value: stateOfOrigin || "N/A" },
-                    { label: "State of residence", value: stateOfResidence || "N/A" },
-                    { label: "Residential address", value: residentialAddress || "N/A" }
+                    { label: "First Name", value: firstName },
+                    { label: "Last Name", value: lastName  },
+                    { label: "Email address", value: email },
+                    { label: "Phone number", value: phoneNumber  },
+                    { label: "Date of birth", value: dateOfBirth  },
+                    { label: "Marital status", value: maritalStatus  },
+                    { label: "Nationality", value: nationality },
+                    { label: "State of origin", value: stateOfOrigin },
+                    { label: "State of residence", value: stateOfResidence },
+                    { label: "Residential address", value: residentialAddress }
                 ];
             case 1:
                 return [
-                    { label: "Alternate email address", value: alternateEmail || "N/A" },
-                    { label: "Alternate phone number", value: alternatePhoneNumber || "N/A" },
-                    { label: "Alternate residential address", value: alternateContactAddress || "N/A" },
-                    { label: "Next of kin name", value: `${nextOfKinFirstName} ${nextOfKinLastName}` || "N/A" },
-                    { label: "Next of kin email address", value: nextOfKinEmail || "N/A" },
-                    { label: "Next of kin phone number", value: nextOfKinPhoneNumber || "N/A" },
-                    { label: "Next of kin relationship", value: nextOfKinRelationship || "N/A" },
-                    { label: "Next of kin contact address", value: nextOfKinContactAddress || "N/A" }
+                    { label: "Alternate email address", value: alternateEmail },
+                    { label: "Alternate phone number", value: alternatePhoneNumber },
+                    { label: "Alternate residential address", value: alternateContactAddress  },
+                    { label: "Next of kin name", value: `${nextOfKinFirstName} ${nextOfKinLastName}`},
+                    { label: "Next of kin email address", value: nextOfKinEmail },
+                    { label: "Next of kin phone number", value: nextOfKinPhoneNumber  },
+                    { label: "Next of kin relationship", value: nextOfKinRelationship },
+                    { label: "Next of kin contact address", value: nextOfKinContactAddress  }
                 ];
             case 2:
                 return [
-                    { label: "Tuition amount", value: tuitionAmount || "N/A" },
-                    { label: "Initial deposit", value: initialDeposit || "N/A" },
-                    { label: "Loan amount requested", value: amountRequested || "N/A" },
-                    { label: "Amount received", value: amountReceived || "N/A" },
-                    { label: "Loan breakdown", value: loanBreakdown || "N/A" }
+                    { label: "Tuition amount", value: tuitionAmount  },
+                    { label: "Initial deposit", value: initialDeposit },
+                    { label: "Loan amount requested", value: amountRequested  },
+                    { label: "Amount received", value: amountReceived  },
+                    { label: "Loan breakdown", value: loanBreakdown  }
                 ];
             default:
                 return [];
@@ -172,6 +174,9 @@ const AcceptLoanOffer: React.FC= () => {
         }
     };
 
+    const userFirstLetter : string| undefined = data?.data?.firstName ? getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName) : ''
+
+
     return (
         <div
             id="loanRequestDetails"
@@ -198,11 +203,11 @@ const AcceptLoanOffer: React.FC= () => {
                         className="h-[5.625rem] w-[5.625rem] md:w-[7.5rem] md:h-[7.5rem]"
                     >
                         <AvatarImage
-                            src="/234d70b3-ec71-4d68-8696-5f427a617fb7.jpeg"
+                            src={data?.data?.image}
                             alt="@shadcn"
                             style={{ objectFit: 'cover' }}
                         />
-                        <AvatarFallback>CN</AvatarFallback>
+                        <AvatarFallback>{userFirstLetter}</AvatarFallback>
                     </Avatar>
 
                     <div className="grid gap-1 mt-4">
@@ -233,12 +238,13 @@ const AcceptLoanOffer: React.FC= () => {
                     </div>
                 </div>
 
-                <div className="overflow-x-hidden overflow-y-auto md:w-[36.75rem] mt-4 w-full md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid">
-                    <div className="md:w-fit pl-1 h-fit md:h-fit flex md:flex">
+                <div className={`${styles.loanOfferDetails} md:w-fit md:bg-red-300 h-  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}>
+
+                    <div className={` ${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1  h-fit md:h-fit  flex md:flex`}>
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab} />
                     </div>
                     <div>
-                        <ul className="h-64 bg-grey105 overflow-auto">
+                        <ul className=" bg-grey105 ">
                             {getCurrentDataList().map((item, index) => (
                                 <li key={index} className="p-5 grid gap-9 rounded-md">
                                     <div className="md:flex md:justify-between md:items-center md:gap-0 grid gap-3">
@@ -246,7 +252,7 @@ const AcceptLoanOffer: React.FC= () => {
                                             {item.label}
                                         </div>
                                         <div className="text-black500 text-[14px] leading-[150%] font-normal">
-                                            {item.value}
+                                            {item.value ? item.value : 'Not provided'}
                                         </div>
                                     </div>
                                 </li>
@@ -278,7 +284,7 @@ const AcceptLoanOffer: React.FC= () => {
                         </ul>
                     </div>
 
-                    <div className="md:flex grid md:justify-end gap-5 mt-4">
+                    <div className="md:sticky md:bottom-0 md:py-3 md:bg-white md:flex grid md:justify-end gap-5 md:mt-0">
                         {currentTab !== 0 && (
                             <Button
                                 className="w-full md:w-[8.75rem] h-[3.5625rem] text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite"
