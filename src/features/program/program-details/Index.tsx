@@ -294,7 +294,7 @@ const ProgramDetails = () => {
                                 </h1>
                                 <div className={'grid gap-5'} id={`tagButtonDiv`}>
                                     <p id={`details`}
-                                       className={'text-sm font-normal w-[351px] text-grey400 break-words scrollbar-width:none overflow-y-auto max-h-24'}
+                                       className={'text-sm font-normal w-[351px] text-grey400 break-words scrollbar-width:none overflow-y-auto max-h-40'}
                                        dangerouslySetInnerHTML={{__html: progamDetail.programDescription}}
                                        />
                                       
