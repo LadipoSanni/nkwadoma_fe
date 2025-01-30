@@ -19,6 +19,7 @@ import { formatMonthInDate } from "@/utils/Format";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 
+
 interface breakDown {
     itemName: string;
     itemAmount: string
@@ -43,6 +44,7 @@ const CohortDetails = () => {
             setBreakdown(breakdowns)
         }
     }, [cohortBreakDown])
+
 
 
     const [details, setDetails] = useState({

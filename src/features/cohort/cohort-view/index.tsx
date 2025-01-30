@@ -1,5 +1,5 @@
 "use client"
-import React,{useState,useCallback,useEffect} from 'react'
+import React,{useState,useCallback,useRef,useEffect} from 'react'
 import { Input } from '@/components/ui/input'
 import { MdSearch } from 'react-icons/md'
 import { DropdownMenu, DropdownMenuContent,DropdownMenuTrigger,DropdownMenuItem,DropdownMenuLabel} from '@/components/ui/dropdown-menu'
@@ -20,6 +20,7 @@ import { useGetAllCohortByAParticularProgramQuery } from '@/service/admin/progra
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
 import {useToast} from "@/hooks/use-toast"
+
 
 
 
@@ -101,8 +102,7 @@ const CohortView = () => {
    const { data: programDatas, isLoading } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
   const { data: cohortsByProgram, refetch } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
-  
-   
+ 
 
   //  useEffect(const {toast} = useToast()() => { 
   //   if (cohortData && cohortData?.data) { 
@@ -348,6 +348,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                  <CreateCohort  triggerButtonStyle={`w-full`}/>
              </div>
           </div>
+        </div>
+        <div>
         </div>
         <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
          <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation} errorDeleted={deleteProgram} searchTerm={searchTerm}/>

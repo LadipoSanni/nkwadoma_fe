@@ -53,7 +53,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
     // const [stream, setStream] = useState<MediaStream|null>(null);
     const [verifyIdentity] = useVerifyIdentityMutation();
-    const videoRef = useRef<HTMLVideoElement>(null);
+    // const videoRef = useRef<HTMLVideoElement>(null);
     const dispatch = useDispatch();
 
     const handleCapture = async (imageFile: File) => {
