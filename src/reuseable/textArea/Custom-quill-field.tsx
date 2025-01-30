@@ -67,8 +67,8 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({ description, setDes
         ['bold', 'italic', 'underline'],
         ['link', 'formula'],
         [{ 'list': 'check' }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
-        [{ 'font': [] }],
+        // [{ 'size': ['small', false, 'large', 'huge'] }],
+        // [{ 'font': [] }],
         
     ];
 

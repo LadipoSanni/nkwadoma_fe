@@ -70,10 +70,10 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched }: FieldName) =>
         // [{ 'script': 'sub' }, { 'script': 'super' }],
         // [{ 'indent': '-1' }, { 'indent': '+1' }],
         // [{ 'direction': 'rtl' }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
+        // [{ 'size': ['small', false, 'large', 'huge'] }],
         // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
         // [{ 'color': [] }, { 'background': [] }],
-        [{ 'font': [] }],
+        // [{ 'font': [] }],
         // [{ 'align': [] }],
         // ['clean']
     ];
