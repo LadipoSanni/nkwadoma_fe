@@ -1,18 +1,18 @@
-import React, {useState} from 'react';
-import {Dialog, DialogClose, DialogContent, DialogHeader, DialogOverlay, DialogTitle} from '@/components/ui/dialog';
-import {FormProvider, SubmitHandler, useForm} from 'react-hook-form';
-import {Label} from '@/components/ui/label';
-import {Input} from '@/components/ui/input';
-import {cabinetGrotesk, inter} from "@/app/fonts";
-import {MdClose, MdHorizontalRule, MdOutlineAdd, MdOutlineCameraAlt} from "react-icons/md";
-import {Collapsible, CollapsibleContent, CollapsibleTrigger} from '@/components/ui/collapsible';
-import {Button} from '@/components/ui/button';
+import React, { useState, useRef } from 'react';
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogOverlay, DialogTitle } from '@/components/ui/dialog';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { cabinetGrotesk, inter } from "@/app/fonts";
+import { MdClose, MdHorizontalRule, MdOutlineAdd, MdOutlineCameraAlt } from "react-icons/md";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Button } from '@/components/ui/button';
 import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
 import CryptoJS from "crypto-js";
-import {useToast} from "@/hooks/use-toast"
-import {uploadImageToCloudinary} from "@/utils/UploadToCloudinary";
-import {useVerifyIdentityMutation} from "@/service/users/Loanee_query";
+import { useToast } from "@/hooks/use-toast";
+import { uploadImageToCloudinary } from "@/utils/UploadToCloudinary";
+import { useVerifyIdentityMutation } from "@/service/users/Loanee_query";
 
 interface IdentityVerificationModalProps {
     isOpen: boolean;
@@ -34,8 +34,8 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                                                                  onThirdStepContinue,
                                                                                  loanReferralId
                                                                              }) => {
-    const methods = useForm<FormData>({mode: 'onChange'});
-    const {toast} = useToast()
+    const methods = useForm<FormData>({ mode: 'onChange' });
+    const { toast } = useToast();
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
     const [isDataError, setDataError] = useState("");
@@ -48,18 +48,20 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
     const [showCamera, setShowCamera] = useState(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+    const [stream, setStream] = useState<MediaStream|null>(null);
     const [verifyIdentity] = useVerifyIdentityMutation();
+    const videoRef = useRef<HTMLVideoElement>(null);
 
     const handleCapture = async (imageFile: File) => {
         loaneeIdentityData.imageUrl = await uploadImageToCloudinary(imageFile);
         loaneeIdentityData.loanReferralId = loanReferralId;
         try {
-            const formData: FormData = loaneeIdentityData
+            const formData: FormData = loaneeIdentityData;
             const data = await verifyIdentity(formData).unwrap();
             toast({
                 description: data.data,
                 status: "success",
-            })
+            });
             onClose();
         } catch (error) {
             console.error("Error while submitting form:", error);
@@ -70,8 +72,8 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
         const encryptionKey = process.env.APP_DEV_IV_ENCRYPTION_SECRET_KEY;
-        const ivKey = process.env.APP_DEV_IV_KEY
-        let iv
+        const ivKey = process.env.APP_DEV_IV_KEY;
+        let iv;
         if (ivKey) {
             iv = CryptoJS.enc.Utf8.parse(ivKey);
         }
@@ -79,20 +81,44 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
         let secretKey;
         if (encryptionKey) {
             secretKey = CryptoJS.enc.Utf8.parse(encryptionKey.padEnd(16, " "));
-            data.bvn  = CryptoJS.AES.encrypt(data.bvn, secretKey, { iv: iv }).toString();
+            data.bvn = CryptoJS.AES.encrypt(data.bvn, secretKey, { iv: iv }).toString();
             data.nin = CryptoJS.AES.encrypt(data.nin, secretKey, { iv: iv }).toString();
-            setLoaneeIdentityData(data)
+            setLoaneeIdentityData(data);
             setIsSecondModalOpen(true);
             onClose();
-        }else {
+        } else {
             setDataError("Unable to encrypt data. Please try again later.");
         }
     };
 
+    // const stopCamera = () => {
+    //     const stream = videoRef.current?.srcObject as MediaStream;
+    //     if (stream) {
+    //         stream.getTracks().forEach((track) => {
+    //             if (track.readyState === 'live' && track.kind === 'video') {
+    //                 track.stop();
+    //             }
+    //         });
+    //     }
+    // };
+    const stopCamera = () => {
+        console.log("Stop camera called")
+        console.log("The stream is : ", stream)
+        if (stream) {
+            stream.getTracks().forEach((track) => {
+                console.log("The track is : ", track)
+                track.stop()
+            });
+            setStream(null)
+            if (videoRef.current) {
+                videoRef.current.srcObject = null;        }
+        }
+        console.log("Process has ended")
+    };
     return (
         <>
             <Dialog open={isOpen} onOpenChange={onClose}>
-                <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]"/>
+                <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]" />
                 <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6 py-5 pl-5 pr-2'}>
                     <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
                         <DialogTitle
@@ -100,7 +126,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                             your details</DialogTitle>
                         <DialogClose asChild>
                             <button id="createCohortDialogCloseButton" className="absolute right-5">
-                                <MdClose id={'createCohortCloseIcon'} className="h-6 w-6 text-neutral950"/>
+                                <MdClose id={'createCohortCloseIcon'} className="h-6 w-6 text-neutral950" />
                             </button>
                         </DialogClose>
                     </DialogHeader>
@@ -115,8 +141,8 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                         id="bvn"
                                         {...methods.register("bvn", {
                                             required: "BVN is required",
-                                            minLength: {value: 11, message: "BVN must be exactly 11 digits"},
-                                            maxLength: {value: 11, message: "BVN must be exactly 11 digits"}
+                                            minLength: { value: 11, message: "BVN must be exactly 11 digits" },
+                                            maxLength: { value: 11, message: "BVN must be exactly 11 digits" }
                                         })}
                                         placeholder="Enter BVN"
                                         className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
@@ -130,9 +156,9 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                                 <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>Why
                                                     do we need your Bank verification number?</p>
                                                 {isBVNOpen ? <MdHorizontalRule id="tuitionBreakdownArrowUp"
-                                                                               className={'h-5 w-5 text-primary200'}/> :
+                                                                               className={'h-5 w-5 text-primary200'} /> :
                                                     <MdOutlineAdd id="tuitionBreakdownArrowDown"
-                                                                  className={'h-5 w-5 text-primary200'}/>}
+                                                                  className={'h-5 w-5 text-primary200'} />}
                                             </div>
                                         </CollapsibleTrigger>
                                         <CollapsibleContent>
@@ -151,8 +177,8 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                         id="nin"
                                         {...methods.register("nin", {
                                             required: "NIN is required",
-                                            minLength: {value: 11, message: "NIN must be exactly 11 digits"},
-                                            maxLength: {value: 11, message: "NIN must be exactly 11 digits"}
+                                            minLength: { value: 11, message: "NIN must be exactly 11 digits" },
+                                            maxLength: { value: 11, message: "NIN must be exactly 11 digits" }
                                         })}
                                         placeholder="Enter NIN"
                                         className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
@@ -166,9 +192,9 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                                 <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>Why
                                                     do we need your National identification number?</p>
                                                 {isNINOpen ? <MdHorizontalRule id="tuitionBreakdownArrowUp"
-                                                                               className={'h-5 w-5 text-primary200'}/> :
+                                                                               className={'h-5 w-5 text-primary200'} /> :
                                                     <MdOutlineAdd id="tuitionBreakdownArrowDown"
-                                                                  className={'h-5 w-5 text-primary200'}/>}
+                                                                  className={'h-5 w-5 text-primary200'} />}
                                             </div>
                                         </CollapsibleTrigger>
                                         <CollapsibleContent>
@@ -196,7 +222,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             </Dialog>
 
             <Dialog open={isSecondModalOpen && !showSuccessDialog} onOpenChange={setIsSecondModalOpen}>
-                <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]"/>
+                <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]" />
                 <DialogContent className={'max-w-[425px] md:max-w-[460px] [&>button]:hidden gap-6 py-5 px-5'}>
                     <DialogHeader className={'flex py-3'} id="secondModalHeader">
                         <DialogTitle
@@ -205,11 +231,11 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                     </DialogHeader>
                     <div className={`${inter.className} grid gap-5`}>
                         {showCamera ? (
-                            <CapturePhotoWithTips onCapture={handleCapture}/>
+                            <CapturePhotoWithTips onCapture={handleCapture} />
                         ) : (
                             <>
                                 <div className={'h-20 w-20 rounded-full grid place-content-center bg-lightBlue500'}>
-                                    <MdOutlineCameraAlt className={'h-[36.571px] w-[36.571px]  text-meedlBlue'}/>
+                                    <MdOutlineCameraAlt className={'h-[36.571px] w-[36.571px]  text-meedlBlue'} />
                                 </div>
                                 <div className={'grid gap-4'}>
                                     <h1 className={'text-black500 text-[16px] leading-[150%] font-medium'}>Allow camera
@@ -243,8 +269,12 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             <SuccessDialog
                 open={showSuccessDialog}
                 onClose={() => setShowSuccessDialog(false)}
-                onContinue={onThirdStepContinue} title={'Verification successful'}
-                message={'Congratulations! You’ve successfully completed the verification process'} buttonText={'Continue '}/>
+                onContinue={onThirdStepContinue}
+                title={'Verification successful'}
+                message={'Congratulations! You’ve successfully completed the verification process'}
+                buttonText={'Continue '}
+                stopCamera={stopCamera}
+            />
         </>
     );
 };

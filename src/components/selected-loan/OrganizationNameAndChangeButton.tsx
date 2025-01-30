@@ -17,7 +17,7 @@ const OrganizationNameAndChangeButton = () => {
 
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
     const { name, logoImage } = clickedOrganization || {};
-    const initials = name ? getInitials(name) : 'N/A';
+    const initials = name ? getInitials(name) : 'AO';
 
     return (
         <div
@@ -35,7 +35,7 @@ const OrganizationNameAndChangeButton = () => {
             )}
             <div data-testid="organizationNameContainer" id="organizationNameContainer"
                  className={`${cabinetGroteskRegular.className} text-2xl`}>
-                {name}
+                {name || "All organizations"}
             </div>
             <ChangeInstitutionModal />
         </div>
