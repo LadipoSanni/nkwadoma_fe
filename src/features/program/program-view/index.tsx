@@ -28,6 +28,7 @@ import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 
+
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
@@ -401,12 +402,14 @@ const ProgramView = () => {
                         }}
                     >
                         {isLoading ? (<SkeletonForGrid/>) :
-                            (programView.length === 0 ? (
+                            (searchTerm && programView.length === 0? <div><SearchEmptyState icon={MdSearch} name='Program'/></div> : 
+                         ( 
+                         programView.length === 0 ?
                                 <TableEmptyState
                                     icon={Book}
                                     name='program'
-                                />
-                            ) : (programView.slice().reverse().map((program, index) => {
+                                /> :
+                            programView.slice().reverse().map((program, index) => {
 
                                     const tagButtonData = [{
                                         tagIcon: MdPersonOutline,
@@ -440,7 +443,9 @@ const ProgramView = () => {
                                         />
                                     )
                                 }
-                            )))}
+                            )) 
+
+                            )}
 
                     </div>
                 ) : (
