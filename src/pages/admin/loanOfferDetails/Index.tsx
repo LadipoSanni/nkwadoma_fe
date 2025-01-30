@@ -272,7 +272,7 @@ const LoanOfferDetails = () => {
                                             <div
                                                 className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
                                             <div
-                                                className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item.value : 'Not available'}</div>
+                                                className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item.value : 'Not provided'}</div>
                                         </div>
                                     </li>
                                 ))
