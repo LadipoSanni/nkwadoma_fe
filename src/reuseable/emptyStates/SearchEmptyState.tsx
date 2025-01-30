@@ -1,5 +1,5 @@
 import React, { ElementType } from 'react'
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+// import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 type Props = {
     name: string
