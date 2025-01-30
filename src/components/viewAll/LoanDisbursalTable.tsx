@@ -8,7 +8,10 @@ import {useRouter} from "next/navigation";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {store, useAppSelector} from "@/redux/store";
-import {useViewAllLoanDisbursalByOrgIdQuery} from "@/service/admin/loan/Loan-disbursal-api";
+import {
+    useViewAllLoanDisbursalByOrgIdQuery,
+    useViewAllLoanDisbursalQuery
+} from "@/service/admin/loan/Loan-disbursal-api";
 import {setClickedDisbursedLoanIdNumber} from "@/redux/slice/loan/selected-loan";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 
@@ -22,14 +25,19 @@ function Index() {
 
     const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
 
-    const size = 100;
-    const page = 0;
+    const request = {
+        pageSize: 100,
+        pageNumber: 0
+    }
+
+    const {data: allDisbursedLoan, isLoading: disbursedLoanIsLoading} = useViewAllLoanDisbursalQuery(request)
+    console.log(allDisbursedLoan)
 
     const {data, isLoading: isLoading} = useViewAllLoanDisbursalByOrgIdQuery(
         {
             organizationId: clickedOrganizationId?.id,
-            pageSize: size,
-            pageNumber: page,
+            pageSize: 100,
+            pageNumber: 0,
         },
         {refetchOnMountOrArgChange: true}
     );
@@ -81,42 +89,40 @@ function Index() {
         <div data-testid={'LoanDisbursalMainDivContainer'} id={`LoanDisbursalMainDivContainer`}
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
-            {
-                isLoading ? (
-                        <div className={`w-full h-fit md:w-full md:h-full`}>
-                            <SkeletonForTable/>
-                        </div>
-                    ) :
-                    data?.data?.body?.length > 0 ?
-                        <div className={`md:w-full w-full h-full md:h-full `}>
-                            <Tables
-                                tableData={data?.data?.body.slice().reverse()}
-                                isLoading={isLoading}
-                                handleRowClick={handleRowClick}
-                                tableHeader={loanDisbursalHeader}
-                                tableHeight={52}
-                                sx='cursor-pointer'
-                                staticColunm='firstName'
-                                staticHeader='Loanee'
-                                showKirkBabel={false}
-                                icon={MdOutlinePeople}
-                                sideBarTabName='Loans'
-                                optionalFilterName='graduate'
-                                condition={true}
-                            />
-                        </div> :
-                        <LoanEmptyState
-                            id={'LoanDisbursalEmptyState'}
-                            data-testid={'LoanDisbursalEmptyState'}
-                            icon={<Icon icon="material-symbols:money-bag-outline"
-                                        height={"2rem"}
-                                        width={"2em"}
-                                        color={'#142854'}
-                                        id={'loanDisbursalId'}
-                            ></Icon>} iconBg={'#D9EAFF'} title={'Disbursed loan will show here'}
-                            description={`There are no disbursed loans available yet`}/>
-
-
+            {isLoading || disbursedLoanIsLoading ? (
+                <div className={`w-full h-fit md:w-full md:h-fit`}>
+                    <SkeletonForTable/>
+                </div>
+            ) : data?.data?.body?.length === 0 || allDisbursedLoan?.data?.body?.length === 0 ?
+                (
+                    <LoanEmptyState
+                        id={'LoanRequestEmptyState'}
+                        icon={<Icon icon="material-symbols:money-bag-outline"
+                                    height={"2rem"}
+                                    width={"2em"}
+                                    color={'#142854'}
+                        ></Icon>} iconBg={'#D9EAFF'} title={'Loan disbursed will show here'}
+                        description={clickedOrganizationId?.id ? 'There are no loan disbursal in this organization yet' : `There are no loan disbursal available yet`}/>
+                ) :
+                (
+                    <div className={`md:w-full  w-full h-full md:h-full `}>
+                        <Tables
+                            tableData={clickedOrganizationId?.id ? data?.data?.body.slice().reverse() : allDisbursedLoan?.data?.body.slice().reverse()}
+                            isLoading={isLoading}
+                            handleRowClick={handleRowClick}
+                            tableHeader={loanDisbursalHeader}
+                            tableHeight={52}
+                            sx='cursor-pointer'
+                            staticColunm='firstName'
+                            staticHeader='Loanee'
+                            showKirkBabel={false}
+                            icon={MdOutlinePeople}
+                            sideBarTabName='Loans'
+                            optionalFilterName='graduate'
+                            condition={true}
+                        />
+                    </div>
+                )
             }
         </div>
     );
