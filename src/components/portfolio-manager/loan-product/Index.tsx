@@ -83,7 +83,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const validationSchema = Yup.object().shape({
         productName: Yup.string()
             .trim()
-            .required("Product Name is required")
+            .required("Product name is required")
             .test(
                 "valid-name",
                 "Name can include letters, numbers, hyphens, and underscores",

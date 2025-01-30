@@ -215,7 +215,7 @@ const LoanOfferDetails = () => {
                 data-testid={`ImageComponentOnLoanOfferDetails`}
                 className={`mt-10 mb-4 grid md:flex gap-3 h-fit md:justify-between md:gap-6 md:w-full md:h-fit`}
             >
-                <div>
+                <div className={`md:w-[40%]`}>
                     <Avatar id={'loaneeImageOnLoanOfferDetails'} data-testid={'loaneeImageOnLoanOfferDetails'}
                             className={`h-[5.625rem] w-[5.625rem] md:w-[7.5rem] md:h-[7.5rem]`}>
                         {/*`/234d70b3-ec71-4d68-8696-5f427a617fb7.jpeg`*/}
@@ -243,18 +243,20 @@ const LoanOfferDetails = () => {
                     </div>
                 </div>
                 <div
-                    className={` ${styles.loanOfferDetails} md:w-fit h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid md:gap-3`}
+                    className={` ${styles.loanOfferDetails} md:w-fit md:bg-white h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}
                 >
 
-                    <div className={`${styles.tabConnector} md:w-fit pl-1  h-fit md:h-fit  flex md:flex `}>
+                    <div className={`${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1  h-fit md:h-fit  flex md:flex `}>
                         <TabConnector tabNames={loanOfferDetailsTab} currentTab={currentTab}/>
                     </div>
-                    <div className={``}>
+                    <div className={`md:bg-white`}>
                         <ul className={'bg-grey105  '}>
                             {currentTab === 3 ? (
-                                <div className={`w-full px-4 md:w-full md:px-6 `}>
-                                    {/*<LoanTermsAndConditions />*/}
-                                </div>
+                                <div
+                                    dangerouslySetInnerHTML={{ __html: data?.data?.termsAndCondition ?? "" }}
+                                className={`w-full text-sm px-4 md:py-2 md:w-full md:px-6 `}>
+                                   </div>
+
                             ) : (
                                 getCurrentDataList().map((item, index) => (
                                     <li key={index} className={'p-5  grid gap-9 rounded-md'}>
@@ -263,7 +265,7 @@ const LoanOfferDetails = () => {
                                             <div
                                                 className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
                                             <div
-                                                className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value}</div>
+                                                className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item.value : 'N/A'}</div>
                                         </div>
                                     </li>
                                 ))
@@ -278,14 +280,14 @@ const LoanOfferDetails = () => {
 
                         </ul>
                     </div>
-                    <div className="  md:flex grid md:justify-end gap-5 md:mt-0">
+                    <div className=" md:sticky md:bottom-0 md:py-3 md:bg-white md:flex grid md:justify-end gap-5 md:mt-0">
                         {currentTab !== 0 && (
                             <Button
-                                className={'w-full md:w-fit md:px-6 md:py-4 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
+                                className={'w-full md:w-fit md:px-6 md:py-3 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
                                 onClick={handleBack} disabled={currentTab === 0}>Back</Button>
                         )}
 
-                        <Button className={'w-full justify-center md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                        <Button className={'w-full justify-center md:w-fit md:px-6 md:py-3 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                                 onClick={ currentTab === 3 ? disburseLoanOffer : handleNext}
                                 // disabled={currentTab === loanOfferDetailsTab.length - 1}
 

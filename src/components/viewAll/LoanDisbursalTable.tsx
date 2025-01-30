@@ -19,17 +19,15 @@ interface TableRowData {
 
 function Index() {
     const router = useRouter();
-    // const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization)
 
     const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
-    const {id} = clickedOrganizationId || {};
 
-    const size = 1;
-    const page = 100;
+    const size = 100;
+    const page = 0;
 
     const {data, isLoading: isLoading} = useViewAllLoanDisbursalQuery(
         {
-            organizationId: id as string,
+            organizationId: clickedOrganizationId?.id,
             pageSize: size,
             pageNumber: page,
         },
@@ -84,7 +82,7 @@ function Index() {
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {
-                isLoading? (
+                isLoading ? (
                         <div className={`w-full h-fit md:w-full md:h-full`}>
                             <SkeletonForTable/>
                         </div>
@@ -92,14 +90,14 @@ function Index() {
                     data?.data?.body?.length > 0 ?
                         <div className={`md:w-full w-full h-full md:h-full `}>
                             <Tables
-                                tableData={data?.data?.body}
+                                tableData={data?.data?.body.slice().reverse()}
                                 isLoading={isLoading}
                                 handleRowClick={handleRowClick}
                                 tableHeader={loanDisbursalHeader}
                                 tableHeight={52}
                                 sx='cursor-pointer'
-                                staticColunm='cohort'
-                                staticHeader='Cohort'
+                                staticColunm='firstName'
+                                staticHeader='Loanee'
                                 showKirkBabel={false}
                                 icon={MdOutlinePeople}
                                 sideBarTabName='Loans'

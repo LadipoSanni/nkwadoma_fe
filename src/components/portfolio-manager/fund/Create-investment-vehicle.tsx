@@ -63,19 +63,11 @@ function CreateInvestmentVehicle({
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .trim()
-      //  .matches(/^[a-zA-Z0-9_\-\/]+$/, 'Name can only contain letters, numbers, underscores, hyphens, and slashes.')
-      // .test(
-      //   "valid-name",
-      //   "Name cannot be only numbers or special characters.",
-      //   (value = "") => {
-      //     const hasLetter = /[a-zA-Z]/.test(value);
-      //     const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(value);
-      //     return hasLetter && !isOnlyNumbersOrSpecials;
-      //   }
-      // )
       .matches(
-        /^[a-zA-Z0-9\-_ ]*$/, 
-        "name can include letters,numbers, hyphens, and underscores only."
+        // /^[a-zA-Z0-9\-_' ]*$/,
+        // "name can include letters,numbers, hyphens,apostrophe and underscores only."
+        /^[a-zA-Z][a-zA-Z0-9\-' ]*$/,
+        "Name can include letters, numbers, hyphens and apostrophes only, and must start with a letter."
       )
       .test(
         "valid-name",
@@ -83,7 +75,7 @@ function CreateInvestmentVehicle({
         (value = "") => {
           const trimmedValue = value.trim();
           if (trimmedValue === "") {
-              return true; 
+            return true;
           }
           const hasLetter = /[a-zA-Z]/.test(value);
           const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
@@ -97,8 +89,11 @@ function CreateInvestmentVehicle({
       .required("vehicle sponsor is required")
       .max(100, "Program name cannot be more than 100 characters.")
       .matches(
-        /^[a-zA-Z\-_ ]*$/, 
-        " sponsors can include letters, hyphens, and underscores only."
+        // /^[a-zA-Z\-_ ]*$/,
+        // " sponsors can include letters, hyphens, and underscores only."
+        /^[a-zA-Z][a-zA-Z\-' ]*$/,
+        // "Sponsors can include letters, - and ' only and cannot start with -,' ."
+        "Invalid sponsor name"
       )
       //  .matches(/^[a-zA-Z\s]+$/, 'Vehicle sponsor can only contain letters and spaces.')
       .test(
@@ -107,7 +102,7 @@ function CreateInvestmentVehicle({
         (value = "") => {
           const trimmedValue = value.trim();
           if (trimmedValue === "") {
-              return true; 
+            return true;
           }
           const hasLetter = /[a-zA-Z]/.test(value);
           const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
@@ -116,19 +111,24 @@ function CreateInvestmentVehicle({
       ),
     fundManager: Yup.string()
       .trim()
-      
+
       .matches(
-        /^[a-zA-Z\-_ ]*$/, 
-        "Fund manager can include letters, hyphens, and underscores only."
+        // /^[a-zA-Z\-_ ]*$/,
+        // "Fund manager can include letters, hyphens, and underscores only."
+
+        /^[a-zA-Z][a-zA-Z\-' ]*$/,
+        // "Fund can include letters, - and ' only and cannot start with - and ' ."
+        "Invalid fund manager name"
       )
-      .max(100, "Program name cannot be more than 100 characters.")
+
+      .max(100, "Fund manager cannot be more than 100 characters.")
       .test(
         "valid-fundManager",
         "fund manager cannot be only numbers or special characters.",
         (value = "") => {
           const trimmedValue = value.trim();
           if (trimmedValue === "") {
-              return true; 
+            return true;
           }
           const hasLetter = /[a-zA-Z]/.test(value);
           const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
@@ -173,8 +173,24 @@ function CreateInvestmentVehicle({
         return sanitizedValue !== "";
       }),
     bankPartner: Yup.string().trim().required("Bank partner is required"),
-    trustee: Yup.string().trim().required("Trustee is required"),
-    custodian: Yup.string().trim().required("Custodian is required"),
+    trustee: Yup.string()
+    .trim()
+    .max(100, "Trustee cannot be more than 100 characters.")
+    .matches(
+      /^[a-zA-Z][a-zA-Z\-' ]*$/,
+      // "Trustee can include letters, - and ' only and cannot start with - and ' ."
+      "Invalid trustee name"
+    )
+    .required("Trustee is required"),
+    custodian: Yup.string()
+    .trim()
+    .required("Custodian is required")
+    .max(100, "Custodian cannot be more than 100 characters.")
+    .matches(
+      /^[a-zA-Z][a-zA-Z\-' ]*$/,
+      // "Custodian can include letters, - and ' only and cannot start with - and ' ."
+      "Invalid custodian name"
+    ),
   });
 
   const handleSubmit = async (values: typeof initialFormValue) => {
@@ -403,7 +419,6 @@ function CreateInvestmentVehicle({
                       3,
                       "Tenure must be a positive number, must not start with zero, and must be a maximum of three digits."
                     )}
-          
                   />
                   {errors.tenure && touched.tenure && (
                     <ErrorMessage
@@ -444,12 +459,12 @@ function CreateInvestmentVehicle({
                     name="trustee"
                     placeholder="Enter trustee"
                     className="w-full p-3 border rounded focus:outline-none mt-2"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setFieldValue(
-                        "trustee",
-                        e.target.value.replace(/[^a-zA-Z\s]/g, "")
-                      )
-                    }
+                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    //   setFieldValue(
+                    //     "trustee",
+                    //     e.target.value.replace(/[^a-zA-Z\s]/g, "")
+                    //   )
+                    // }
                   />
                   {errors.trustee && touched.trustee && (
                     <ErrorMessage
@@ -466,12 +481,12 @@ function CreateInvestmentVehicle({
                     name="custodian"
                     placeholder="Enter custodian"
                     className="w-full p-3 border rounded focus:outline-none mt-2"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setFieldValue(
-                        "custodian",
-                        e.target.value.replace(/[^a-zA-Z\s]/g, "")
-                      )
-                    }
+                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    //   setFieldValue(
+                    //     "custodian",
+                    //     e.target.value.replace(/[^a-zA-Z\s]/g, "")
+                    //   )
+                    // }
                   />
                   {errors.custodian && touched.custodian && (
                     <ErrorMessage
@@ -517,12 +532,15 @@ function CreateInvestmentVehicle({
                   placeholder={"Enter mandate..."}
                 />
                 {errors.mandate && touched.mandate && (
-                  <ErrorMessage
+               <div>
+               
+                <ErrorMessage
                     name="mandate"
                     component="div"
                     id="editCohortDescriptionError"
                     className="text-red-500 text-sm"
                   />
+               </div>  
                 )}
               </div>
               <div className="md:flex gap-4 justify-end mt-2 mb-4 md:mb-0">

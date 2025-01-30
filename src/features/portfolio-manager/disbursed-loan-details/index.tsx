@@ -1,7 +1,7 @@
 'use client'
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {store} from "@/redux/store";
+import {store, useAppSelector} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation";
 import {cabinetGroteskRegular, inter} from "@/app/fonts";
@@ -22,18 +22,14 @@ interface LoaneeLoanBreakDown {
 }
 
 const Index = () => {
-    // const [breakdown, setBreakdown] = useState<breakDown[]>([]);
-    // const clickedDisbursedLoanId = useAppSelector(state => state.selectedLoan.clickedDisbursedLoanIdNumber)
-    const clickedDisbursedLoanId = "e23454895768"
-    // console.log(clickedDisbursedLoanId)
+    const clickedDisbursedLoanId = useAppSelector(state => state.selectedLoan.clickedDisbursedLoanIdNumber)
     const router = useRouter()
     const [currentTab, setCurrentsTab] = useState(0);
-    const {data: details, isLoading} = useViewDisbursedLoanDetailsQuery(clickedDisbursedLoanId)
+    const {data: details, isLoading} = useViewDisbursedLoanDetailsQuery(clickedDisbursedLoanId as string)
 
     const backToViewAllDisbursedLoan = () => {
         store.dispatch(setCurrentTab('Disbursed loan'))
         router.push('/loan/loan-disbursal')
-
     }
 
     const breakDown = details?.data.loaneeLoanBreakDowns.map((item: LoaneeLoanBreakDown) => ({
@@ -61,6 +57,8 @@ const Index = () => {
         {label: 'State of origin', value: details?.data.userIdentity.stateOfOrigin},
         {label: 'State of residence', value: details?.data.userIdentity.stateOfResidence},
     ];
+    const createdDate = dayjs(details?.data.createdDate?.toString()).format('MMM D, YYYY');
+    const startDate = dayjs(details?.data.startData?.toString()).format('MMM D, YYYY');
 
     const loanDetails = [
         {
@@ -78,12 +76,8 @@ const Index = () => {
                     value={details?.data.tuitionAmount}
                 />
         },
-        {
-            label: 'Start date', value:
-            // dayjs(data?.data?.body?.data?.createdDate?.toString()).format('MMMM D, YYYY')
-                dayjs(details?.data.startDate?.toString()).format('MMMM D, YYYY')
-
-        },
+        { label: 'Start date', value: startDate},
+        { label: 'Created date', value: createdDate},
         {
             label: 'Loan amount requested', value: <NumericFormat
                 id={'LoanAmountRequestedOnDisbursedLoanDetails'}

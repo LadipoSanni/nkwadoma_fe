@@ -155,7 +155,7 @@ const LoanProductPage = () => {
                         <SkeletonForTable />
                     </div>
                 ) : searchTerm && searchResult && searchResult?.data.length === 0 ? (
-                    <SearchEmptyState searchTerm={searchTerm} icon={MdSearch} />
+                    <SearchEmptyState name={"loan product"} icon={MdSearch} />
                 ) : allLoanee.length > 0 ? (
                     <Tables
                         tableData={allLoanee.slice().reverse()}
@@ -178,13 +178,13 @@ const LoanProductPage = () => {
                     <TableEmptyState name={"loan product"} icon={MdOutlineInventory2} condition={true} />
                 )}
             </div>
-            <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>
+            <div className={`md:max-w-sm`} id={`CreateLoanProduct`}>
                 <TableModal
                     isOpen={createProduct}
                     closeModal={() => setCreateProduct(false)}
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
-                    headerTitle={`Create loan Product`}
+                    headerTitle={`Create loan product`}
                     width="36%"
                 >
                     <CreateLoanProduct setIsOpen={() => setCreateProduct(false)} />

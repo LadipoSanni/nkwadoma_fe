@@ -30,6 +30,11 @@ import { useToast } from "@/hooks/use-toast";
 import TotalInput from "@/reuseable/display/TotalInput";
 // import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
 import CustomQuillField from "../textArea/Custom-quill-field";
+// import { useDispatch, useSelector } from 'react-redux';
+// import { setSelectedProgram, setUploadedUrl } from '@/redux/slice/create/cohortSlice';
+// import { RootState } from '@/redux/store';
+
+
 
 interface createCohortProps {
   triggerButtonStyle: string;
@@ -51,6 +56,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const [startDate, setDate] = useState<Date>();
   const [programId, setProgramId] = useState("");
   const [name, setName] = useState("");
+  // const { selectedProgram, imageUrl } = useSelector((state: RootState) => state.cohort);
   const [cohortDescription, setDescription] = useState("");
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
@@ -71,6 +77,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   const [isItemListValid, setIsItemListValid] = useState(true);
   const [totalAmount, setTotalAmount] = useState(0);
   const [initialItemAmount, setInitialItemAmount] = useState("");
+  // const dispatch = useDispatch();
 
   const { data } = useGetAllProgramsQuery(
     { pageSize: size, pageNumber: page },
@@ -93,6 +100,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     } else {
       setIsButtonDisabled(true);
     }
+    // resetForm
   }, [name, selectedProgram, startDate, descriptionError]);
 
   const areLoanBreakdownsValid = () => {
@@ -116,7 +124,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     setDate(undefined);
     setName("");
     setDescription("");
-    setSelectedProgram(null);
+    setSelectedProgram("");
     setDescriptionError(null);
     setIsSelectOpen(false);
     setIsButtonDisabled(true);
@@ -129,6 +137,9 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     setUploadedUrl(null);
     setInitialItemAmount("0.00");
   };
+
+  console.log('the program: ',selectedProgram)
+  console.log('the imageurl: ',setUploadedUrl)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -176,7 +187,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     setDate(undefined);
     setName("");
     setDescription("");
-    setSelectedProgram(null);
+    setSelectedProgram("");
     setDescriptionError(null);
     setIsSelectOpen(false);
     setIsButtonDisabled(true);
@@ -264,10 +275,15 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
                 <ProgramSelect
                     selectedProgram={selectedProgram}
                     setSelectedProgram={setSelectedProgram}
+                    // setSelectedProgram={(value) => dispatch(setSelectedProgram(value))}
                     isSelectOpen={isSelectOpen}
                     setIsSelectOpen={setIsSelectOpen}
                     selectOptions={programView}
-                    setId={setProgramId} label={"Program"} placeholder={"Select program"}                />
+                    setId={setProgramId} 
+                    label={"Program"} 
+                    placeholder={"Select program"}   
+                    //label={selectedProgram ?? ""}          
+                       />
                 <DatePicker date={startDate} setDate={setDate} />
               </div>
               {/* <DescriptionTextarea
@@ -309,7 +325,8 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
               <FileUpload
                 handleDrop={handleDrop}
                 handleDragOver={handleDragOver}
-                setUploadedImageUrl={setUploadedUrl}
+                 setUploadedImageUrl={setUploadedUrl}
+                // setUploadedImageUrl={(url) => dispatch(setUploadedUrl(url))}
                 labelName="Cohort image (optional)"
               />
               <FormButtons

@@ -7,9 +7,10 @@
 
 }
 .loanOfferDetails::-webkit-scrollbar-thumb{
-    background-color: rgb(217, 217, 217);
+    background-color: #F9F9F9 ;
     width: 4px;
-    height: 1rem;
+    height: 9px;
+    border-radius: 1px;
     margin-right: 0.5rem;
 }
 .tabConnector{

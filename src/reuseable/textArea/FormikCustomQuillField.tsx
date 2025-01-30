@@ -48,8 +48,13 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
     const sanitizeContent = (content: string) => {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = content;
-        const textContent = tempDiv.textContent?.trim() || '';
-        return (textContent === '' || textContent === '<br>') ? '' : textContent;
+        // const textContent = tempDiv.textContent?.trim() || '';
+        const textContent = tempDiv.textContent || ''; 
+    //    const textContent = textContents.replace(/\n/g, ' ');
+    //     return (textContent === '' || textContent === '<br>') ? '' : textContent;
+     const newlineCount = (content.match(/<p><br><\/p>/g) || []).length; // Counting new line characters
+    const adjustedTextContent = textContent.replace(/\n/g, ' ') + ' '.repeat(newlineCount); // Treating new lines as spaces
+    return adjustedTextContent;
     };
 
     const handleChange = (value: string) => {
@@ -116,52 +121,103 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
                 placeholder={placeholder}
                 className="font-inter text-sm font-normal leading-[22px] pt-2 rounded-md"
             />
+             {/* {maximumDescription && (
+                <div className="text-gray-500 text-sm">
+                    {sanitizeContent(value).length}/{maximumDescription} characters
+                </div>
+            )} */}
         </div>
     );
 };
 
+// const FormikCustomQuillField: React.FC<FieldProps & CustomQuillFieldProps> = ({
+//     field,
+//     form: { setFieldValue, setFieldError },
+//     maximumDescription,
+//     onDescriptionChange,
+//     label,
+//     placeholder,
+//     name,
+//     // setError,
+// }) => {
+//     const handleChange = (value: string) => {
+//         const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
+//         const internalMaxDescription = maximumDescription ? maximumDescription + 7 : 2500 + 7;
+
+//         if (sanitizedValue.length === 0) {
+//             setFieldError(field.name, `${name} is required.`);
+//         } else if (sanitizedValue.length > internalMaxDescription) {
+//             setFieldError(field.name, `${name} Must be ${maximumDescription} characters or less.`);
+//         } else {
+//             setFieldError(field.name, undefined); 
+//         }
+
+//         setFieldValue(field.name, value); 
+//         if (onDescriptionChange) {
+//             onDescriptionChange(value);
+//         }
+//     };
+
+//     return (
+//         <CustomQuillField
+//             description={field.value}
+//             setDescription={handleChange}
+//             setError={(error) => setFieldError(field.name, error || undefined)} 
+//             maximumDescription={maximumDescription}
+//             onDescriptionChange={onDescriptionChange}
+//             label={label}
+//             placeholder={placeholder}
+//             name={name}
+//         />
+//     );
+// };
+
+// export default FormikCustomQuillField;
+
 const FormikCustomQuillField: React.FC<FieldProps & CustomQuillFieldProps> = ({
     field,
-    form: { setFieldValue, setFieldError },
+    form: { setFieldValue, setFieldError, setTouched },
     maximumDescription,
     onDescriptionChange,
     label,
     placeholder,
     name,
-    // setError,
-}) => {
+  }) => {
     const handleChange = (value: string) => {
-        const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
-        const internalMaxDescription = maximumDescription ? maximumDescription + 7 : 2500 + 7;
-
-        if (sanitizedValue.length === 0) {
-            setFieldError(field.name, `${name} is required.`);
-        } else if (sanitizedValue.length > internalMaxDescription) {
-            setFieldError(field.name, `${name} Must be ${maximumDescription} characters or less.`);
-        } else {
-            setFieldError(field.name, undefined); 
-        }
-
-        setFieldValue(field.name, value); 
-        if (onDescriptionChange) {
-            onDescriptionChange(value);
-        }
+      const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
+      const internalMaxDescription = maximumDescription ? maximumDescription + 7 : 2500 + 7;
+  
+      if (sanitizedValue.length === 0) {
+        setFieldError(field.name, `${name} is required.`);
+        setTouched({ [field.name]: true }); 
+      } else if (sanitizedValue.length > internalMaxDescription) {
+        setFieldError(field.name, `must be ${maximumDescription} characters or less.`);
+        setTouched({ [field.name]: true }); 
+      } else {
+        setFieldError(field.name, undefined); 
+        setTouched({ [field.name]: true }); 
+      }
+  
+      setFieldValue(field.name, value); 
+      if (onDescriptionChange) {
+        onDescriptionChange(value);
+      }
     };
-
+  
     return (
-        <CustomQuillField
-            description={field.value}
-            setDescription={handleChange}
-            setError={(error) => setFieldError(field.name, error || undefined)} 
-            maximumDescription={maximumDescription}
-            onDescriptionChange={onDescriptionChange}
-            label={label}
-            placeholder={placeholder}
-            name={name}
-        />
+      <CustomQuillField
+        description={field.value}
+        setDescription={handleChange}
+        setError={(error) => setFieldError(field.name, error || undefined)}
+        maximumDescription={maximumDescription}
+        onDescriptionChange={onDescriptionChange}
+        label={label}
+        placeholder={placeholder}
+        name={name}
+      />
     );
-};
-
-export default FormikCustomQuillField;
+  };
+  
+  export default FormikCustomQuillField;
 
 

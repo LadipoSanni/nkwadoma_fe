@@ -374,7 +374,7 @@ function Tables<T extends TableRowData>({
                                             </TableCell>
 
                                             <TableCell className="h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[50px]">
-                                                <div className={`text-center truncate pr-2 pl-2 pt-2 pb-2 `}>
+                                                <div className={`text-center truncate mt-auto mb-auto `}>
                                                     {renderCellContent(
                                                         tableHeader.find(
                                                             (header) => header.id === selectedColumn
