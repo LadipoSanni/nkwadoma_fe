@@ -15,6 +15,8 @@ import { setItemSessionStorage } from '@/utils/storage';
 import { useGetAllInvestmentmentVehicleQuery } from '@/service/admin/fund_query';
 import { formatMonthInDate } from '@/utils/Format';
 import { useSearchInvestmentVehicleByNameQuery } from '@/service/admin/fund_query';
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
+import { MdSearch } from 'react-icons/md'
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -129,7 +131,9 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
       </div>,
       value: "commercialFund",
       table: <div>
-        <Tables
+      {
+        searchTerm && commercial.length === 0? <div><SearchEmptyState icon={MdSearch} name='Commercial fund'/></div> :
+       <Tables
           tableData={commercial.slice().reverse()}
           handleRowClick={handleRowClick}
           tableHeader={fundHeader}
@@ -144,6 +148,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
            optionalFilterName='commercial'
            condition={true}
         />
+      }
       </div>
     },
     {
@@ -158,6 +163,8 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
       </div>,
       value: "endowmentFund",
       table: <div>
+        {
+          searchTerm && endowment.length === 0? <div><SearchEmptyState icon={MdSearch} name='Endowment fund'/></div> :
         <Tables
           tableData={endowment.slice().reverse()}
           handleRowClick={handleRowClick}
@@ -173,6 +180,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
             condition={true}
             sx='cursor-pointer'
         />
+        }
       </div>
     }
   ]
