@@ -12,7 +12,7 @@ import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery } from "@/
 import { getItemSessionStorage } from "@/utils/storage";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
-import { useToast } from '@/hooks/use-toast';
+// import { useToast } from '@/hooks/use-toast';
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import {MdOutlineDelete} from "react-icons/md";
 
@@ -79,7 +79,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
         emailAddress: '',
         initialDeposit: ''
     };
-    const {toast} = useToast();
+    // const {toast} = useToast();
 
     const toastPopUp = ToastPopUp({
         description: 'Cohort Trainee successfully added.',
