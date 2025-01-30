@@ -114,6 +114,7 @@
     max-width: 100%;
     overflow: auto;
     height: auto;
+    max-height: fit-content;
     display: flow-root;
     margin-top: auto;
     margin-bottom: auto;

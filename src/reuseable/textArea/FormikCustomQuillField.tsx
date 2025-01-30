@@ -27,7 +27,7 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
     name
 }) => {
     const [value, setValue] = useState("");
-    const internalMaxDescription = maximumDescription + 7;
+    const internalMaxDescription = maximumDescription ;
     const quillRef = useRef<ReactQuill | null>(null);
 
     useEffect(() => {
@@ -89,7 +89,7 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
         ['link'],
         [{ 'list': 'check' }],
         [{ 'size': ['small', false, 'large', 'huge'] }],
-        [{ 'font': [] }],
+        // [{ 'font': [] }],
     ];
 
     const quillModules = {
@@ -185,7 +185,7 @@ const FormikCustomQuillField: React.FC<FieldProps & CustomQuillFieldProps> = ({
   }) => {
     const handleChange = (value: string) => {
       const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
-      const internalMaxDescription = maximumDescription ? maximumDescription + 7 : 2500 + 7;
+      const internalMaxDescription = maximumDescription ? maximumDescription  : 2500 ;
   
       if (sanitizedValue.length === 0) {
         setFieldError(field.name, `${name} is required.`);

@@ -124,7 +124,7 @@ function Team() {
           tableHeight={48}
           icon={Book}
           condition={true}
-          sideBarTabName='Colleague'
+          sideBarTabName='colleague'
           staticHeader={"Full name"}
           staticColunm={"fullName"}
           isLoading={isLoading}
