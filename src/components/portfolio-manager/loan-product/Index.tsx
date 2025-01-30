@@ -571,15 +571,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                                 className="text-red-500 text-sm"
                                                             />)
                                                     }
-                                                    {
-                                                        errors.interest && touched.interest && (
-                                                            <ErrorMessage
-                                                                name="interest"
-                                                                id='interest'
-                                                                component="div"
-                                                                className="text-red-500 text-sm"
-                                                            />)
-                                                    }
                                                 </div>
                                             </div>
 
