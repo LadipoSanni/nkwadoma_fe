@@ -98,12 +98,12 @@ const InvestmentVehicle = () => {
   const fundHeader = [
     { title: <div className='h-11 flex justify-center items-center'>Vehicle</div> , sortable: true, id: 'name', selector: (row:TableRowData ) => row.name},
     { title: 'Start Date', sortable: true, id: 'startDate', selector: (row:TableRowData ) => formatMonthInDate(row?.startDate)},
-      { title: 'Tenure(Months)', sortable: true, id: 'tenure', selector: (row: TableRowData) => row.tenure },
-      { title: 'vehicle Size', sortable: true, id: 'size', selector: (row:TableRowData) => <div className=''>{formatAmount(row.size)}</div> },
-      { title: 'InterestRate (%)', sortable: true, id: ' rate', selector: (row:TableRowData) => row. rate},
-      { title: 'Amount Collected', sortable: true, id: 'amountRaised', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRaised)}</div> },
-      { title: 'Amount Disbursed', sortable: true, id: ' amountDisbursed', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountDisbursed)}</div> },
-      { title: 'Amount Available', sortable: true, id: 'amountAvailable', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountAvailable)}</div> },
+      { title: 'Tenure(months)', sortable: true, id: 'tenure', selector: (row: TableRowData) => row.tenure },
+      { title:<div className='md:pr-5 md:pl-8 relative md:right-6 '>vehicle size</div> , sortable: true, id: 'size', selector: (row:TableRowData) => <div className=''>{formatAmount(row.size)}</div> },
+      { title: 'Interest rate(%)', sortable: true, id: ' rate', selector: (row:TableRowData) => <div >{row.rate}</div>},
+      { title: 'Amount collected', sortable: true, id: 'amountRaised', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRaised)}</div> },
+      { title: 'Amount disbursed', sortable: true, id: ' amountDisbursed', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountDisbursed)}</div> },
+      { title: 'Amount available', sortable: true, id: 'amountAvailable', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountAvailable)}</div> },
   ]
     
     

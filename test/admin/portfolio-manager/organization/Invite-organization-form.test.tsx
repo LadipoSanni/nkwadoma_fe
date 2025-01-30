@@ -16,7 +16,7 @@ describe("InviteOrganizationForm", () => {
       })
 
       test("renders the form with initial elements", () => { 
-        expect(screen.getByPlaceholderText("Enter Name")).toBeInTheDocument(); 
+        expect(screen.getByPlaceholderText("Enter name")).toBeInTheDocument(); 
         expect(screen.getByPlaceholderText("Enter email address")).toBeInTheDocument(); 
         expect(screen.getByPlaceholderText("Enter website")).toBeInTheDocument(); 
         expect(screen.getByPlaceholderText("Enter registration number")).toBeInTheDocument(); 
@@ -26,7 +26,7 @@ describe("InviteOrganizationForm", () => {
     });
 
     test("renders the form with validation errors", () => { 
-        fireEvent.change(screen.getByPlaceholderText("Enter Name"), { target: { value: "Test123" } }); 
+        fireEvent.change(screen.getByPlaceholderText("Enter name"), { target: { value: "Test123" } }); 
         fireEvent.change(screen.getByPlaceholderText("Enter email address"), { target: { value: "test123@example.com" } }); 
         fireEvent.change(screen.getByPlaceholderText("Enter website"), { target: { value: "www.test" } }); 
     })
