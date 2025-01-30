@@ -85,13 +85,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .required("Product name is required")
             .test(
                 "valid-name",
-                "Name can include letters, numbers, hyphens, and underscores",
+                "Name must start with a letter and end with a letter/number",
                 (value = "") => {
-                    const regex = /^[a-zA-Z0-9\s-_]*$/;
-                    const onlyNumbersOrSpecials = /^[^a-zA-Z]*$/;
-                    return regex.test(value) && !onlyNumbersOrSpecials.test(value);
+                    const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/;
+                    return regex.test(value);
                 }
             )
+
             .max(200, "Terms exceeds 100 characters"),
         // productSponsor: Yup.string()
         //     .trim()
