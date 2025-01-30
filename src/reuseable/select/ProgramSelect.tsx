@@ -32,6 +32,7 @@ const ProgramSelect: React.FC<ProgramSelectProps> = ({
                                                          label
                                                      }) => {
     const uniqueId = `select${Math.random().toString(36).substring(2, 9)}`;
+    console.log("The p component: ",selectedProgram)
 
     return (
         <div id="programContainer" className={'grid gap-2 w-full'}>
@@ -48,7 +49,7 @@ const ProgramSelect: React.FC<ProgramSelectProps> = ({
                 onOpenChange={(open) => setIsSelectOpen(open)}>
                 <SelectTrigger id="programSelectTrigger"
                                className={`${selectedProgram ? 'text-black500' : 'text-black300'} mt-0 mb-0 h-[3.375rem] w-full border border-solid border-neutral650 `}>
-                    <SelectValue placeholder={placeholder}>{selectedProgram || placeholder}</SelectValue>
+                    <SelectValue placeholder={placeholder}>{selectedProgram }</SelectValue>
                     {isSelectOpen ? <MdKeyboardArrowUp className="h-[22px] w-[22px] text-neutral950"/> :
                         <MdKeyboardArrowDown className="h-[22px] w-[22px] text-neutral950"/>}
                 </SelectTrigger>
