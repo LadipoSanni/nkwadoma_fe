@@ -24,7 +24,7 @@ function SearchEmptyState({name,icon: Icon,className}: Props) {
                             </div>
                         }
                     </div>
-                    <h1 id='titleId' className={`font-semibold mb-2 `}><span className={`capitalize`}/>{capitalizeFirstLetters(name)}<span/> not found</h1>
+                    <h1 id='titleId' className={` mb-2 `}><span className={`capitalize`}/>{name}<span/> not found</h1>
                 </div>
             </div>
         </div>

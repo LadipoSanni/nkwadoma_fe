@@ -73,7 +73,7 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched }: FieldName) =>
         [{ 'size': ['small', false, 'large', 'huge'] }],
         // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
         // [{ 'color': [] }, { 'background': [] }],
-        [{ 'font': [] }],
+        // [{ 'font': [] }],
         // [{ 'align': [] }],
         // ['clean']
     ];

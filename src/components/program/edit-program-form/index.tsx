@@ -13,6 +13,7 @@ import { useUpdateProgramMutation } from '@/service/admin/program_query';
 import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
 
+
 interface ProgramDetail {
     id: string;
     programDescription: string;
