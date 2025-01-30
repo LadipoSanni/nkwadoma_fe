@@ -35,7 +35,7 @@ const OrganizationNameAndChangeButton = () => {
             )}
             <div data-testid="organizationNameContainer" id="organizationNameContainer"
                  className={`${cabinetGroteskRegular.className} text-2xl`}>
-                {name || "All organizations' loan management"}
+                {name || "All organizations"}
             </div>
             <ChangeInstitutionModal />
         </div>
