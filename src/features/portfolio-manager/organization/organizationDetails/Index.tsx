@@ -376,9 +376,10 @@ const OrganizationDetails = () => {
               handleRowClick={() => {}}
               // sx='cursor-pointer'
               icon={Book}
-              sideBarTabName="Program"
+              sideBarTabName="Admin"
               optionalRowsPerPage={10}
               tableCellStyle="h-12"
+              searchEmptyState={true}
             />
           </div>
 
