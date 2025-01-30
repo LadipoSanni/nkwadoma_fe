@@ -174,7 +174,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                     ({errors, isValid, touched, setFieldValue, values}) => (
                         <Form className={`${inter.className}`}>
                             <div
-                                className='grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto'
+                                className='grid grid-cols-1 gap-y-4 md:max-h-[540px] overflow-y-auto'
                                 style={{
                                     scrollbarWidth: 'none',
                                     msOverflowStyle: 'none',
@@ -187,7 +187,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         id="organizationName"
                                         name="name"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        placeholder="Enter Name"
+                                        placeholder="Enter name"
                                         //   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("name", e.target.value.replace(/[^A-Za-z]/g, ''))}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                             const value = e.target.value;
@@ -211,7 +211,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         id="phoneNumber"
                                         name="phoneNumber"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        placeholder="Enter Phone Number"
+                                        placeholder="Enter phone number"
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                             const value = e.target.value;
                                             const formattedValue = value.replace(/[^0-9]/g, '');
@@ -376,7 +376,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                             id="adminLastName"
                                             name="adminLastName"
                                             className="w-full p-3 border rounded focus:outline-none mt-3"
-                                            placeholder="Enter admin Last name"
+                                            placeholder="Enter admin last name"
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                 const value = e.target.value;
                                                 const formattedValue = value.replace(/[^A-Za-z]/g, '');

@@ -10,7 +10,8 @@ import CustomSelect from '@/reuseable/Input/Custom-select';
 // import { useQueryClient } from '@tanstack/react-query';
 import {useCreateProgramMutation} from "@/service/admin/program_query";
 import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
-import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
+// import  QuillFieldEditor  from '@/reuseable/textArea/Quill-field';
+import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 
 
 type Props = {
@@ -68,7 +69,7 @@ function CreateProgram({setIsOpen}:Props) {
       deliveryType:Yup.string()
       .required('Program delivery type is required'),
       programMode:Yup.string()
-      .required('Program Mode is required'),
+      .required('Program mode is required'),
       programDuration:  Yup.string()
       .matches(/^(?!0)\d+$/, 'Program duration must be a number and cannot start with zero.')
       .required('Program duration is required'),
@@ -302,11 +303,17 @@ function CreateProgram({setIsOpen}:Props) {
                       e.preventDefault(); 
                       setError('Program description must be 2500 characters or less'); } }}
                   />  */}
-                   <QuillFieldEditor
+                   {/* <QuillFieldEditor
                       name="programDescription"
                       errorMessage="Program description must be 2500 characters or less"
                       errors={errors}
                       touched={touched}
+                     /> */}
+                     <Field
+                      name="programDescription"
+                      component={FormikCustomQuillField}
+                      maximumDescription={2500}
+                      placeholder={"Enter program description..."}
                      />
                   {/* {
                     errors.programDescription && touched.programDescription &&  (
