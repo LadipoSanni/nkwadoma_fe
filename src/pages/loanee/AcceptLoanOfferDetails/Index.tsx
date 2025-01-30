@@ -15,7 +15,7 @@ import { useViewLoanOfferDetailsQuery, useRespondToLoanOfferMutation } from "@/s
 import dynamic from "next/dynamic";
 import {useToast} from "@/hooks/use-toast";
 import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
-import styles from "@/pages/admin/loanOfferDetails /index.module.css";
+import styles from "@/pages/admin/loanOfferDetails/index.module.css";
 
 const AcceptLoanOfferDetails = dynamic(
     () => Promise.resolve(AcceptLoanOffer),
