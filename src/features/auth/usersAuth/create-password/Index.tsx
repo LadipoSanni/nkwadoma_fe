@@ -158,7 +158,7 @@ const CreatePassword = () => {
                             value={password}
                             onChange={handlePasswordChange}
                             errorMessage={remainingCriteria.length === 1 ? remainingCriteria[0] : ''}
-                        />
+                        />x
                         <PasswordCriteria id={'createPasswordCriteria'} criteriaStatus={criteriaStatus} />
                         <AuthInputField
                             label={'Confirm Password'}
