@@ -15,6 +15,7 @@ import { useViewLoanOfferDetailsQuery, useRespondToLoanOfferMutation } from "@/s
 import dynamic from "next/dynamic";
 import {useToast} from "@/hooks/use-toast";
 import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
+import styles from "@/pages/admin/loanOfferDetails/index.module.css";
 
 const AcceptLoanOfferDetails = dynamic(
     () => Promise.resolve(AcceptLoanOffer),
@@ -237,12 +238,13 @@ const AcceptLoanOffer: React.FC= () => {
                     </div>
                 </div>
 
-                <div className="overflow-x-hidden overflow-y-auto md:w-[36.75rem] mt-4 w-full md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid">
-                    <div className="md:w-fit pl-1 h-fit md:h-fit flex md:flex">
+                <div className={`${styles.loanOfferDetails} md:w-fit md:bg-red-300 h-  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}>
+
+                    <div className={` ${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1  h-fit md:h-fit  flex md:flex`}>
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab} />
                     </div>
                     <div>
-                        <ul className="h-64 bg-grey105 overflow-auto">
+                        <ul className=" bg-grey105 ">
                             {getCurrentDataList().map((item, index) => (
                                 <li key={index} className="p-5 grid gap-9 rounded-md">
                                     <div className="md:flex md:justify-between md:items-center md:gap-0 grid gap-3">
@@ -282,7 +284,7 @@ const AcceptLoanOffer: React.FC= () => {
                         </ul>
                     </div>
 
-                    <div className="md:flex grid md:justify-end gap-5 mt-4">
+                    <div className="md:sticky md:bottom-0 md:py-3 md:bg-white md:flex grid md:justify-end gap-5 md:mt-0">
                         {currentTab !== 0 && (
                             <Button
                                 className="w-full md:w-[8.75rem] h-[3.5625rem] text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite"
