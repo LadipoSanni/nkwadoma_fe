@@ -4,6 +4,7 @@ import {cabinetGroteskRegular} from "@/app/fonts";
 import ChangeInstitutionModal from "@/components/loan/change-organization/index";
 import {useAppSelector} from "@/redux/store";
 import InitialsAvatar from '../../reuseable/avater/InitialAvater';
+import {useViewOrganizationsQuery} from "@/service/admin/organization";
 
 const OrganizationNameAndChangeButton = () => {
     const getInitials = (name: string): string => {
@@ -14,6 +15,9 @@ const OrganizationNameAndChangeButton = () => {
         }
         return initials.toUpperCase();
     };
+
+    const {data} = useViewOrganizationsQuery(9);
+    const firstOrganizationName = data?.data[1].name;
 
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
     const { name, logoImage } = clickedOrganization || {};
@@ -35,7 +39,7 @@ const OrganizationNameAndChangeButton = () => {
             )}
             <div data-testid="organizationNameContainer" id="organizationNameContainer"
                  className={`${cabinetGroteskRegular.className} text-2xl`}>
-                {name}
+                {name || firstOrganizationName}
             </div>
             <ChangeInstitutionModal />
         </div>

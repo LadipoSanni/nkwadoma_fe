@@ -273,7 +273,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                 {
                     ({errors, isValid, touched, setFieldValue, values}) => (
                         <Form className={`${inter.className}`}>
-                            <div className='grid grid-cols-1 md:max-h-[580px] overflow-y-auto'
+                            <div className='grid grid-cols-1 md:max-h-[540px] overflow-y-auto'
                                  style={{
                                      scrollbarWidth: 'none',
                                      msOverflowStyle: 'none',

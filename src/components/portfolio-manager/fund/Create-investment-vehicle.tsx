@@ -139,7 +139,7 @@ function CreateInvestmentVehicle({
     size: Yup.string().required("Vehicle size is required"),
     //  .matches(/^[1-9]\d*$/, 'Vehicle size must be a positive number and cannot start with zero'),
     minimumInvestmentAmount: Yup.string()
-      .required("Minimum investmentAmount is required")
+      .required("Minimum investment amount is required")
       .test(
         "minimum-less-or-equal-to-size",
         "Minimum Investment Amount must be less than or equal to Vehicle Size.",
@@ -242,7 +242,7 @@ function CreateInvestmentVehicle({
         }) => (
           <Form className={`${inter.className}`}>
             <div
-              className="grid grid-cols-1 gap-y-4 md:max-h-[580px] overflow-y-auto"
+              className="grid grid-cols-1 gap-y-4 md:max-h-[540px] overflow-y-auto"
               style={{
                 scrollbarWidth: "none",
                 msOverflowStyle: "none",
