@@ -48,7 +48,7 @@ const ViewOrganizationDetail = () => {
 
   const dataElement = {
     pageNumber: 0,
-    pageSize: 200
+    pageSize: 300
 }
   const {data: adminData,isLoading} = useViewOrganizationAdminQuery(dataElement)
   // console.log(adminData);

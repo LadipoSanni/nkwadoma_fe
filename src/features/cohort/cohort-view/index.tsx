@@ -26,6 +26,7 @@ import {useToast} from "@/hooks/use-toast"
 
 
 
+
 export const initialFormValue = {
   selectProgram:""
 }
@@ -93,7 +94,7 @@ const CohortView = () => {
   const [deleteProgram, setDeleteProgram] = useState("")
    const [isLoadings] = useState(false);
    const [page] = useState(0);
-   const size = 200;
+   const size = 300;
    const {toast} = useToast()
 
    const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
@@ -101,8 +102,7 @@ const CohortView = () => {
    const { data: programDatas, isLoading } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
   const { data: cohortsByProgram, refetch } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
-  
-   
+ 
 
   //  useEffect(const {toast} = useToast()() => { 
   //   if (cohortData && cohortData?.data) { 
@@ -348,6 +348,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                  <CreateCohort  triggerButtonStyle={`w-full`}/>
              </div>
           </div>
+        </div>
+        <div>
         </div>
         <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
          <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation} errorDeleted={deleteProgram} searchTerm={searchTerm}/>
