@@ -70,7 +70,7 @@ function Organization() {
     }
     const dataElement = {
         pageNumber: 0,
-        pageSize: 200
+        pageSize: 300
     }
     const [searchTerm, setSearchTerm] = useState('');
     const [organizationList, setOrganizationList] = useState<organizationListPros[]>([]);

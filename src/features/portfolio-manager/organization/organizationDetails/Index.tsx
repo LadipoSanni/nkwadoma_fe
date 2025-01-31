@@ -48,7 +48,7 @@ const OrganizationDetails = () => {
     {
       organizationId: orgId,
       pageNumber: page,
-      pageSize: 100,
+      pageSize: 300,
     },
     { skip: !orgId }
   );
