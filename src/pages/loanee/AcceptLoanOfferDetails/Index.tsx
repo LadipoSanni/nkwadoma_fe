@@ -24,27 +24,25 @@ const AcceptLoanOffer: React.FC= () => {
     const [currentTab, setCurrentTab] = useState(0);
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const router = useRouter()
-    const searchParams = useSearchParams()
-    const getUserToken  = () => {
-        if (searchParams){
-            const pathVariable = searchParams.get("loanOfferId")
-            if (pathVariable){
-                return pathVariable
-            }else {
-                return ''
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const getUserToken = () => {
+        if (searchParams) {
+            const pathVariable = searchParams.get("loanOfferId");
+            if (pathVariable) {
+                return pathVariable;
+            } else {
+                return '';
             }
-        }else {
-            return ""
+        } else {
+            return "";
         }
-    }
+    };
 
-    const loanOfferId: string = getUserToken()
+    const loanOfferId: string = getUserToken();
 
     const { data } = useViewLoanOfferDetailsQuery(loanOfferId);
     const [respondToLoanOffer] = useRespondToLoanOfferMutation();
-    console.log(data, "details")
-
 
     const backToOverview = () => {
         router.push("/overview");
@@ -144,8 +142,7 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-            const response = await respondToLoanOffer(payload);
-            console.log('response:: ', response);
+            await respondToLoanOffer(payload);
             toast({
                 description: 'Loan offer accepted successfully',
                 status: 'success'
@@ -153,12 +150,11 @@ const AcceptLoanOffer: React.FC= () => {
             router.push('/overview');
         } catch (error) {
             toast({
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
                 description: error.message ? error.message : 'Error occurred, please try again',
                 status: 'error'
             });
-            console.error('error:: ', error);
         }
     };
     const handleDecline = async () => {
@@ -169,13 +165,15 @@ const AcceptLoanOffer: React.FC= () => {
 
         try {
             await respondToLoanOffer(payload);
+            toast({
+                description: 'Loan offer declined',
+                status: 'error'
+            });
             router.push('/overview');
-
         } catch (error) {
-            console.error('error on accept loan offer as a loanee:: ',error);
+            console.error('error on decline loan offer as a loanee:: ', error);
         }
     };
-
     return (
         <div
             id="loanRequestDetails"
@@ -341,5 +339,4 @@ const AcceptLoanOffer: React.FC= () => {
         </div>
     );
 };
-
 export default AcceptLoanOfferDetails;
