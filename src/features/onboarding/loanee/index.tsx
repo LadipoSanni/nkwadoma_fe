@@ -22,14 +22,20 @@ const steps = [
     'Confirm loan application'
 ];
 
+interface BackendDetails {
+    loanReferralStatus: string;
+    id: string;
+}
+
 const LoaneeOnboarding = () => {
     const dispatch = useDispatch();
     const router = useRouter();
-    const {  currentStep } = useSelector((state: RootState) => state.loanReferral);
+    const { currentStep } = useSelector((state: RootState) => state.loanReferral);
     const [showModal, setShowModal] = useState(false);
     const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery({});
     const [respondToLoanReferral] = useRespondToLoanReferralMutation({});
     const [loanReferralId, setLoanReferralId] = useState("");
+    const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
 
     useEffect(() => {
         if (data?.statusCode === "OK" && data?.data?.id) {
@@ -37,8 +43,8 @@ const LoaneeOnboarding = () => {
             dispatch(setLoanReferralStatus(data.data.loanReferralStatus));
         }
         if (data?.statusCode === "OK" && data?.data) {
-            const backendDetails = data.data;
-            if (backendDetails.loanReferralStatus === "AUTHORIZED" && currentStep === steps.length - 1) {
+            setBackendDetails(data.data);
+            if (data.data.loanReferralStatus === "AUTHORIZED" && currentStep === steps.length - 1) {
                 router.push("/overview");
             }
         }
@@ -46,7 +52,11 @@ const LoaneeOnboarding = () => {
 
     const handleNext = () => {
         if (currentStep === 0) {
-            handleAcceptLoanReferral();
+            if (backendDetails?.loanReferralStatus === "PENDING") {
+                handleAcceptLoanReferral();
+            } else if (backendDetails?.loanReferralStatus === "AUTHORIZED") {
+                dispatch(setCurrentStep(currentStep + 1));
+            }
         } else if (currentStep === 1) {
             setShowModal(true);
         } else {
