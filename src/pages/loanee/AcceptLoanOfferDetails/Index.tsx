@@ -151,7 +151,7 @@ const AcceptLoanOffer: React.FC = () => {
             });
             router.push('/overview');
         } catch (error) {
-            const errorMessage = (error as any).message || 'Error occurred, please try again';
+            const errorMessage = (error instanceof Error) ? error.message : 'Error occurred, please try again';
             toast({
                 description: errorMessage,
                 status: 'error'
@@ -173,13 +173,14 @@ const AcceptLoanOffer: React.FC = () => {
             });
             router.push('/overview');
         } catch (error) {
-            const errorMessage = (error as any).message || 'Error occurred, please try again';
+            const errorMessage = (error instanceof Error) ? error.message : 'Error occurred, please try again';
             toast({
                 description: errorMessage,
                 status: 'error'
             });
         }
     };
+
     const userFirstLetter : string| undefined = data?.data?.firstName ? getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName) : ''
 
 
