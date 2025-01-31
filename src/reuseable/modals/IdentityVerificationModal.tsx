@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useRef } from 'react';
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogOverlay, DialogTitle } from '@/components/ui/dialog';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Label } from '@/components/ui/label';
@@ -13,8 +13,8 @@ import CryptoJS from "crypto-js";
 import { useToast } from "@/hooks/use-toast";
 import { uploadImageToCloudinary } from "@/utils/UploadToCloudinary";
 import { useVerifyIdentityMutation } from "@/service/users/Loanee_query";
-import { clearCameraStream } from '@/redux/slice/camera/camera-slice';
-import { useDispatch, useSelector } from 'react-redux';
+// import { clearCameraStream } from '@/redux/slice/camera/camera-slice';
+// import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 
 interface IdentityVerificationModalProps {
@@ -51,10 +51,10 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
     const [showCamera, setShowCamera] = useState(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-    // const [stream, setStream] = useState<MediaStream|null>(null);
+    const [stream, setStream] = useState<MediaStream|null>(null);
     const [verifyIdentity] = useVerifyIdentityMutation();
-    // const videoRef = useRef<HTMLVideoElement>(null);
-    const dispatch = useDispatch();
+    const videoRef = useRef<HTMLVideoElement>(null);
+    // const dispatch = useDispatch();
 
     const handleCapture = async (imageFile: File) => {
         loaneeIdentityData.imageUrl = await uploadImageToCloudinary(imageFile);
@@ -105,7 +105,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     //         });
     //     }
     // };
-    const stream = useSelector((state: RootState) => state.camera.stream)
+    // const stream = useSelector((state: RootState) => state.camera.stream)
 
     const stopCamera = () => {
         console.log("Stop camera called")
@@ -114,10 +114,10 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             stream.getTracks().forEach((track) => {
                 console.log("The track is : ", track)
                 track.stop() });
-            dispatch(clearCameraStream());
-            // setStream(null)
-        //     if (videoRef.current) {
-        //         videoRef.current.srcObject = null;        }
+            // dispatch(clearCameraStream());
+            setStream(null)
+            if (videoRef.current) {
+                videoRef.current.srcObject = null;        }
          }
         console.log("Process has ended")
     };
