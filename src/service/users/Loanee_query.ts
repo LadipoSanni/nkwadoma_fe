@@ -5,7 +5,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 export const loaneeApi = createApi({
     reducerPath: 'loaneeApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['loanee'],
+    tagTypes: ['loanee', 'accept-loan-offer'],
     endpoints: (builder) => ({
         // isIdentityVerified: builder.query({
         //     query: (param: {
@@ -38,7 +38,7 @@ export const loaneeApi = createApi({
                 method: "POST",
                 body: formData
             }),
-            invalidatesTags: ({id}) => [{type: 'loanee', id}],
+            invalidatesTags: ({id}) => [{type: 'loanee', id}, 'accept-loan-offer'],
         }),
         saveNextOfKinDetails: builder.mutation({
             query: (data)=> ({
