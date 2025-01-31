@@ -34,6 +34,7 @@ interface filterProps {
   handleSelectedValue: (value: string) => void;
   placeHolder: string;
   valueListData: string[];
+  disabled?: boolean;
 }
 
 function ProductFilter({
@@ -46,6 +47,7 @@ function ProductFilter({
   handleSelectedValue,
   placeHolder,
   valueListData,
+    disabled,
 }: filterProps) {
   const [isDropdown, setIsDropdown] = useState(false);
   const [isLoading] = useState(false);
@@ -61,10 +63,10 @@ function ProductFilter({
   return (
     <div className={`z-10 ${inter.className}`}>
       <DropdownMenu onOpenChange={toggleDropdown}>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger disabled={disabled} asChild>
           <Button
             variant={"default"}
-            className="w-full text-black  bg-neutral100 h-11 md:h-9 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none"
+            className={`w-full  ${ disabled ? `text-[#efefef]` : `text-black` }  bg-neutral100 h-11 md:h-9 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none`}
           >
             {filterName}
             <span className="ml-4">
