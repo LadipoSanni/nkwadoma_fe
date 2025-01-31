@@ -169,7 +169,7 @@ const AcceptLoanOffer: React.FC = () => {
             await respondToLoanOffer(payload);
             toast({
                 description: 'Loan offer declined',
-                status: 'success'
+                status: 'error'
             });
             router.push('/overview');
         } catch (error) {
