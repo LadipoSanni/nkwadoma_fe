@@ -97,7 +97,7 @@ const ProgramView = () => {
     const [editOpen, setEditOpen] = useState(false);
     const [page] = useState(0);
     // const [totalPage, setTotalPage] = useState(0);
-    const size = 100;
+    const size = 300;
     const [deleteProgram, setDeleteProgram] = useState("")
 
     const {data, isLoading} = useGetAllProgramsQuery({
