@@ -151,14 +151,14 @@ const AcceptLoanOffer: React.FC = () => {
             });
             router.push('/overview');
         } catch (error) {
+            const errorMessage = (error as any).message || 'Error occurred, please try again';
             toast({
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                description: error.message ? error.message : 'error occured pls try again',
+                description: errorMessage,
                 status: 'error'
-            })
+            });
         }
     };
+
     const handleDecline = async () => {
         const payload = {
             loanOfferId: loanOfferId,
@@ -169,19 +169,17 @@ const AcceptLoanOffer: React.FC = () => {
             await respondToLoanOffer(payload);
             toast({
                 description: 'Loan offer declined',
-                status: 'error'
+                status: 'success'
             });
             router.push('/overview');
         } catch (error) {
+            const errorMessage = (error as any).message || 'Error occurred, please try again';
             toast({
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                description: error.message ? error.message : 'error occured pls try again',
+                description: errorMessage,
                 status: 'error'
-            })
+            });
         }
     };
-
     const userFirstLetter : string| undefined = data?.data?.firstName ? getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName) : ''
 
 
