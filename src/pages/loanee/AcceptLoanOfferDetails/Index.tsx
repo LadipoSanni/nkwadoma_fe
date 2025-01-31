@@ -144,7 +144,8 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-            await respondToLoanOffer(payload);
+             await respondToLoanOffer(payload);
+            // console.log('response:', response, 'isSuccess', isSuccess)
             toast({
                 description: 'Loan offer accepted successfully',
                 status: 'success'
@@ -166,7 +167,8 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-            await respondToLoanOffer(payload);
+          await respondToLoanOffer(payload);
+            // console.log('response:', response, 'isSuccess::', isSuccess)
             toast({
                 description: 'Loan offer declined',
                 status: 'error'
@@ -245,9 +247,9 @@ const AcceptLoanOffer: React.FC= () => {
                     </div>
                 </div>
 
-                <div className={`${styles.loanOfferDetails} md:w-fit md:bg-red-300 h-  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}>
+                <div className={`${styles.loanOfferDetails} md:w-fit  h-fit  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}>
 
-                    <div className={` ${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1  h-fit md:h-fit  flex md:flex`}>
+                    <div className={` ${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1 px-3 py-3 h-fit md:h-fit  flex md:flex`}>
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab} />
                     </div>
                     <div>
@@ -291,10 +293,10 @@ const AcceptLoanOffer: React.FC= () => {
                         </ul>
                     </div>
 
-                    <div className="md:sticky md:bottom-0 md:py-3 md:bg-white md:flex grid md:justify-end gap-5 md:mt-0">
+                    <div className="md:sticky md:bottom-0 pb-3 md:py-3 md:bg-white md:flex   w-full justify-center grid md:justify-end gap-5 md:mt-0">
                         {currentTab !== 0 && (
                             <Button
-                                className="w-full md:w-[8.75rem] h-[3.5625rem] text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite"
+                                className="w-[80vw] mr-auto ml-auto  md:w-[8.75rem] h-[3.5625rem] text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite"
                                 onClick={handleBack}
                                 disabled={currentTab === 0}
                             >
@@ -337,7 +339,7 @@ const AcceptLoanOffer: React.FC= () => {
                             </DropdownMenu>
                         ) : (
                             <Button
-                                className="w-full md:w-[8.75rem] h-[3.5625rem] bg-meedlBlue hover:bg-meedlBlue"
+                                className="w-[80vw] mr-auto ml-auto md:w-[8.75rem] h-[3.5625rem] bg-meedlBlue hover:bg-meedlBlue"
                                 onClick={handleNext}
                                 disabled={currentTab === loanRequestDetailsTab.length - 1}
                             >

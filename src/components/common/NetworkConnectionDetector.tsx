@@ -11,12 +11,7 @@ const NetworkConnectionDetector = ({children}: props) => {
 
     const {toast} = useToast();
     useEffect(() => {
-        if (isOnline) {
-            toast({
-                status: 'success',
-                description: `welcome back online`,
-            })
-        }else {
+        if (!isOnline) {
             toast({
                 status: 'error',
                 description: `No internet connection`,
