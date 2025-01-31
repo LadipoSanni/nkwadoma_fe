@@ -45,8 +45,6 @@ const AcceptLoanOffer: React.FC= () => {
 
     const { data } = useViewLoanOfferDetailsQuery(loanOfferId);
     const [respondToLoanOffer] = useRespondToLoanOfferMutation();
-    // console.log(data, "details")
-
 
     const backToOverview = () => {
         router.push("/overview");
@@ -146,19 +144,21 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-            const response  = await respondToLoanOffer(payload);
-            console.log('response:: ', response);
+            await respondToLoanOffer(payload);
+            toast({
+                description: 'Loan offer accepted successfully',
+                status: 'success'
+            });
+            router.push('/overview');
         } catch (error) {
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                description: error.message ? error.message : 'error occured pls try again',
+                description: error.message ? error.message : 'Error occurred, please try again',
                 status: 'error'
-            })
-            console.error('erorr:; ',error);
+            });
         }
     };
-
     const handleDecline = async () => {
         const payload = {
             loanOfferId: loanOfferId,
@@ -167,10 +167,17 @@ const AcceptLoanOffer: React.FC= () => {
 
         try {
             await respondToLoanOffer(payload);
+            toast({
+                description: 'Loan offer declined',
+                status: 'error'
+            });
             router.push('/overview');
-
         } catch (error) {
-            console.error('error on accept loan offer as a loanee:: ',error);
+            const errorMessage = (error as Error).message ? (error as Error).message : 'Error occurred, please try again';
+            toast({
+                description: errorMessage,
+                status: 'error'
+            });
         }
     };
 
@@ -343,5 +350,4 @@ const AcceptLoanOffer: React.FC= () => {
         </div>
     );
 };
-
 export default AcceptLoanOfferDetails;
