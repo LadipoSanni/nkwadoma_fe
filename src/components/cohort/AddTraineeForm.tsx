@@ -82,7 +82,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
     // const {toast} = useToast();
 
     const toastPopUp = ToastPopUp({
-        description: 'Cohort Trainee successfully added.',
+        description: 'Cohort loanee successfully added.',
         status: 'success',
     });
 

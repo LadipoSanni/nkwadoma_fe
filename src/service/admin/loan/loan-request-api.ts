@@ -35,7 +35,8 @@ export const loanRequestApi = createApi({
                 url: `loan/${data.organizationId}/loan-requests?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}`,
                 // url: `/loan/${data.organizationId}/loan-requests?pageSize=${data.pageSize}?pageNumber=${data.pageNumber}`,
                 method: 'GET',
-            })
+            }),
+            providesTags: ['loanRequests']
         }),
 
 

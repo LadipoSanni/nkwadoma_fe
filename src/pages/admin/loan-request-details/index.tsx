@@ -70,7 +70,6 @@ function LoanDetails() {
         store.dispatch(setCurrentTab('Loan requests'))
         router.push("/loan/loan-request")
     }
-    console.log('loan request details : ', data)
     const loanRequestDetailsTab = [
         "Basic details",
         "Additional details",
@@ -185,9 +184,9 @@ function LoanDetails() {
     ]
 
     const additional = [
-        {label: 'Alternate email address', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateEmail},
-        {label: 'Alternate phone number', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.alternateContactAddress},
+        {label: 'Alternate email address', value: data?.data.alternateEmail},
+        {label: 'Alternate phone number', value: data?.data.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: data?.data.alternateContactAddress},
         {
             label: 'Next of kin name',
             value: data?.data?.nextOfKin?.firstName + " " + data?.data?.nextOfKin?.lastName
