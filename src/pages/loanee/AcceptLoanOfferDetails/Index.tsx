@@ -144,7 +144,15 @@ const AcceptLoanOffer: React.FC = () => {
         };
 
         try {
-            await respondToLoanOffer(payload);
+            const response = await respondToLoanOffer(payload);
+            if ('error' in response) {
+                const errorMessage = (response.error as { message?: string }).message || 'Error occurred, please try again';
+                toast({
+                    description: errorMessage,
+                    status: 'error'
+                });
+                return;
+            }
             toast({
                 description: 'Loan offer accepted successfully',
                 status: 'success'
@@ -166,10 +174,18 @@ const AcceptLoanOffer: React.FC = () => {
         };
 
         try {
-            await respondToLoanOffer(payload);
+            const response = await respondToLoanOffer(payload);
+            if ('error' in response) {
+                const errorMessage = (response.error as { message?: string }).message || 'Error occurred, please try again';
+                toast({
+                    description: errorMessage,
+                    status: 'error'
+                });
+                return;
+            }
             toast({
                 description: 'Loan offer declined',
-                status: 'error'
+                status: 'success'
             });
             router.push('/overview');
         } catch (error) {
