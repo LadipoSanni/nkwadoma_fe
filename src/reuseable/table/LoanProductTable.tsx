@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/menubar";
 import TableEmptyState from "../emptyStates/TableEmptyState";
 import SkeletonForTable from "../Skeleton-loading-state/Skeleton-for-table";
+import {MagnifyingGlassIcon} from "@radix-ui/react-icons";
 
 interface ColumnProps<T> {
   title: string | React.ReactNode;
@@ -68,9 +69,11 @@ interface Props<T extends TableRowData> {
   condition?: boolean;
   //   totalPages?: number;
   isLoading?: boolean;
+  searchEmptyState?: boolean;
 }
 
 function Tables<T extends TableRowData>({
+                                          searchEmptyState,
   tableHeader,
   tableData,
   handleRowClick,
@@ -157,13 +160,30 @@ function Tables<T extends TableRowData>({
       {isLoading ? (
         <SkeletonForTable />
       ) : tableData?.length === 0 ? (
-        <TableEmptyState
-          icon={icon}
-          name={sideBarTabName}
-          className={emptyStateStyle}
-          optionalFilterName={optionalFilterName}
-          condition={condition}
-        />
+          <div>
+            {searchEmptyState ?
+                <TableEmptyState
+                    icon={MagnifyingGlassIcon}
+                    name={sideBarTabName}
+                    className={emptyStateStyle}
+                    optionalFilterName={optionalFilterName}
+                    condition={condition}
+                    isSearch={true}
+                />
+                // <div>
+                //   <MagnifyingGlassIcon/>
+                // </div>
+                :
+                <TableEmptyState
+                    icon={icon}
+                    name={sideBarTabName}
+                    className={emptyStateStyle}
+                    optionalFilterName={optionalFilterName}
+                    condition={condition}
+                />
+            }
+          </div>
+
       ) : (
         <div>
           <div
@@ -390,7 +410,7 @@ function Tables<T extends TableRowData>({
                         </div>
                       </TableCell>
 
-                      <TableCell className="h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[50px]">
+                      <TableCell className="h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[1rem]">
                         <div className={`text-center truncate pr-2 pl-2 pt-2 pb-2 `}>
                           {/* {row[selectedColumn]} */}
                           {renderCellContent(
