@@ -30,6 +30,9 @@ import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/program_
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { useToast } from "@/hooks/use-toast";
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
+import { MdSearch } from 'react-icons/md'
+
 
 interface loanDetails {
     totalAmountRepaid?: number;
@@ -294,7 +297,7 @@ const ProgramDetails = () => {
                                 </h1>
                                 <div className={'grid gap-5'} id={`tagButtonDiv`}>
                                     <p id={`details`}
-                                       className={'text-sm font-normal w-[351px] text-grey400 break-words scrollbar-width:none overflow-y-auto max-h-24'}
+                                       className={'text-sm font-normal w-[351px] text-grey400 break-words scrollbar-width:none overflow-y-auto max-h-40'}
                                        dangerouslySetInnerHTML={{__html: progamDetail.programDescription}}
                                        />
                                       
@@ -329,7 +332,8 @@ const ProgramDetails = () => {
                 </TabsContent>
                 <TabsContent id={`tab2`} value="cohorts" className={'mt-4 grid gap-7'}>
                     <SearchInput id={'programCohortSearch'} value={searchTerm} onChange={handleSearchChange}/>
-                    <Tables
+                    <div>
+                        {searchTerm && cohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Cohort'/></div> : <Tables
                         tableData={cohorts}
                         tableHeader={ProgramHeader}
                         staticHeader={'Cohort'}
@@ -341,7 +345,12 @@ const ProgramDetails = () => {
                         }}
                         optionalRowsPerPage={10}
                         tableCellStyle={'h-12'}
+                        condition={true}
                     />
+}
+                    </div>
+
+                    
                 </TabsContent>
             </Tabs>
             {

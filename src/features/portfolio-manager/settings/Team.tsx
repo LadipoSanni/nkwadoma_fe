@@ -12,6 +12,8 @@ import { useViewOrganizationAdminQuery } from '@/service/admin/organization';
 // import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage';
 import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
+import { MdSearch } from 'react-icons/md'
 
 
 interface TableRowData {
@@ -31,7 +33,7 @@ function Team() {
 
     const dataElement = {
       pageNumber: 0,
-      pageSize: 200
+      pageSize: 300
   }
     const {data: adminData,isLoading} = useViewOrganizationAdminQuery(dataElement)
     console.log(adminData);
@@ -116,7 +118,9 @@ function Team() {
         />
          
         <div className='w-full mt-5'>
-         <Table
+         {
+         searchTerm && adminList.length === 0? <div><SearchEmptyState icon={MdSearch} name='Colleague'/></div> : 
+          <Table
           tableData={adminList.slice().reverse()}
           tableHeader={adminsHeader}
           handleRowClick={()=>{}}
@@ -129,6 +133,7 @@ function Team() {
           staticColunm={"fullName"}
           isLoading={isLoading}
          />
+}
         </div>
         <div>
         {

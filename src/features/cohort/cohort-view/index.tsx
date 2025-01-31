@@ -26,6 +26,7 @@ import {useToast} from "@/hooks/use-toast"
 
 
 
+
 export const initialFormValue = {
   selectProgram:""
 }
@@ -93,7 +94,7 @@ const CohortView = () => {
   const [deleteProgram, setDeleteProgram] = useState("")
    const [isLoadings] = useState(false);
    const [page] = useState(0);
-   const size = 200;
+   const size = 300;
    const {toast} = useToast()
 
    const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
@@ -101,8 +102,7 @@ const CohortView = () => {
    const { data: programDatas, isLoading } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
   const { data: cohortsByProgram, refetch } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
-  
-   
+ 
 
   //  useEffect(const {toast} = useToast()() => { 
   //   if (cohortData && cohortData?.data) { 
@@ -270,7 +270,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                       onOpenChange={toggleDropdown}
                       >
                       <SelectTrigger id='cohortInProgramSelectTrigger' className='flex justify-between w-72  focus:ring-0 focus:outline-none text-forgetPasswordBlue'>
-                      <SelectValue  placeholder="Select Program" className='' data-testid='Select Program'/>
+                      <SelectValue  placeholder="Select program" className='' data-testid='Select Program'/>
                       <div className='ml-4'>
                 {isDropdown ? (
           <ChevronUpIcon className="h-4 w-5 font-semibold" />
@@ -349,8 +349,10 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
              </div>
           </div>
         </div>
+        <div>
+        </div>
         <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
-         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation} errorDeleted={deleteProgram}/>
+         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation} errorDeleted={deleteProgram} searchTerm={searchTerm}/>
          
         </div>
     </div>

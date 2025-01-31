@@ -226,7 +226,7 @@ const Index = () => {
                                             <div
                                                 className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
                                             <div
-                                                className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value}</div>
+                                                className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item?.value : 'Not provided'}</div>
                                         </div>
                                     </li>
                                 ))

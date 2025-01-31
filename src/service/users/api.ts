@@ -6,7 +6,6 @@ export const userApi = createApi({
 
     reducerPath: 'userApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['authentication'],
     endpoints: (builder) => ({
         logout: builder.mutation({
             query:() => ({

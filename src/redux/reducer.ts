@@ -6,7 +6,6 @@ import authSliceReducer from '@/redux/slice/auth/slice';
 import { authApi } from '@/service/auths/api';
 import { programApi } from '@/service/admin/program_query';
 import { cohortApi } from '@/service/admin/cohort_query';
-import { userApi } from '@/service/users/api';
 import { organizationApi } from '@/service/admin/organization';
 import { loaneeApi } from '@/service/users/Loanee_query';
 import { loanProductApi } from '@/service/admin/loan_product';
@@ -17,6 +16,8 @@ import { loanOfferApi } from '@/service/admin/loan/loan-offer-api';
 import { loanDisbursalApi } from '@/service/admin/loan/Loan-disbursal-api';
 import loanReferralReducer from '@/service/users/loanRerralSlice';
 import cohortReducer from './slice/create/cohortSlice'
+import cameraReducer from  './slice/camera/camera-slice'
+import {userApi} from '@/service/users/api';
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -25,10 +26,11 @@ const appReducer = combineReducers({
     cohortBreakDownSlice: cohortBreakDownReducer,
     loanReferral: loanReferralReducer,
     cohort: cohortReducer,
+    camera: cameraReducer,
+    [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
     [cohortApi.reducerPath]: cohortApi.reducer,
-    [userApi.reducerPath]: userApi.reducer,
     [organizationApi.reducerPath]: organizationApi.reducer,
     [loaneeApi.reducerPath]: loaneeApi.reducer,
     [loanProductApi.reducerPath]: loanProductApi.reducer,

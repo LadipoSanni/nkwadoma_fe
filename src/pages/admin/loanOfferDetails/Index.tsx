@@ -47,7 +47,7 @@ const LoanOfferDetails = () => {
     const id: string = getId()
     const {data} = useViewLoanOfferDetailsQuery(id)
 
-    console.log('data', data)
+    // console.log('data', data)
     const getLoaneeLoanBreakdown= () => {
         const loaneeLoanBreakDown = data?.data?.loaneeBreakdown
         const items :{itemAmount: string, itemName: string}[] = []
@@ -162,6 +162,13 @@ const LoanOfferDetails = () => {
                 // @ts-expect-error
                 description:response?.error?.data?.message
             })
+        }else{
+            store.dispatch(setCurrentTab('Loan offer'))
+            router.push("/loan/loan-offer")
+            toast({
+                status: 'success',
+                description:'Loan disbursed successfully'
+            })
         }
 
 
@@ -265,7 +272,7 @@ const LoanOfferDetails = () => {
                                             <div
                                                 className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
                                             <div
-                                                className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item.value : 'N/A'}</div>
+                                                className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item.value : 'Not provided'}</div>
                                         </div>
                                     </li>
                                 ))

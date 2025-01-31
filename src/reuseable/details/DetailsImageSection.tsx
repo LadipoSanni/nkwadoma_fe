@@ -54,19 +54,19 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                                 alt="Cohort DetailsImageSection"
                                 width={500}
                                 height={500}
-                                className="w-28 rounded-md h-28 object-cover"
+                                className="w-full h-60 rounded-md object-cover"
                                 data-testid="cohort-image"
                             />
                         ) : Icon ? (
                             <div
-                                className="w-28 h-28 flex bg-[#D9EAFF] rounded-full justify-center items-center">
-                                <Icon className="text-6xl text-meedlBlue"/>
+                                className="h-[7.5rem] w-[7.5rem] flex bg-[#D9EAFF] rounded-full justify-center items-center">
+                                <Icon className="h-[50px] w-[50px] text-meedlBlue"/>
                             </div>
                         ) : null}
                     </Card>
                 </div>
 
-                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col pt-4 gap-4`}>
+                <div id="cohort-info" data-testid="cohort-info" className={`flex flex-col pt-3 gap-4`}>
                     <h1 id="cohort-title" data-testid="cohort-title"
                         className={`${cabinetGrotesk.className} text-3xl font-medium text-black`}>
                         {cohortTitle}
@@ -75,7 +75,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         <p
                             id="cohort-description"
                             data-testid="cohort-description"
-                            style={{ height: "auto",  maxHeight: "260px",  overflowY: "auto", minWidth: "320px", maxWidth: "100%",  fontSize:"14px" }}
+                            style={{ height: "auto",  maxHeight: "230px",  overflowY: "auto", minWidth: "300px", maxWidth: "100%",  fontSize:"14px" }}
                             className={`${inter.className} text-grey400 text-sm w-full`}
                             dangerouslySetInnerHTML={{__html: cohortDescription}}
                         />
@@ -83,7 +83,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         <div
                             id={`details`}
                             data-testid="details"
-                            className="grid md:grid-cols-2 md:gap-2 gap-4 grid-cols-1 mt-5"
+                            className="grid md:grid-cols-3 md:gap-2 gap-4 grid-cols-1 mt-5"
                         >
                             {tagButtonData.map((tagProps, index) => (
                                 <TagButton key={index} {...tagProps} />

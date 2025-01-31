@@ -14,6 +14,8 @@ import { DeleteCohort } from '@/reuseable/details/DeleteCohort'
 import { setItemSessionStorage } from '@/utils/storage';
 // import { useViewCohortDetailsQuery } from '@/service/admin/cohort_query'
 import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
+import { MdSearch } from 'react-icons/md'
 
 
 
@@ -42,10 +44,11 @@ interface cohortList {
   handleDelete?: (id: string) => void;
   isLoading?: boolean
   errorDeleted?: string
+  searchTerm?: string
 }
 
 
-const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted}:cohortList) => {
+const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,searchTerm}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
   // const [programId, setProgramId] = React.useState("")
@@ -194,7 +197,9 @@ useEffect(() => {
     {
       value: 'incoming',
       table: <div >
-             <Tables
+           {  
+           searchTerm && incomingCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Incoming cohort'/></div> :
+           <Tables
               tableData={incomingCohorts.slice().reverse()}
               handleRowClick={handleRowClick}
               tableHeader={ProgramHeader}
@@ -211,11 +216,14 @@ useEffect(() => {
               optionalRowsPerPage={10}
               isLoading={isLoading}
              />
+           }
              </div>
     },
      {
       value: 'current',
       table: <div>
+          {  
+           searchTerm && currentCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Current cohort'/></div> :
              <Tables
               tableData={currentCohorts.slice().reverse()}
               handleRowClick={handleRowClick}
@@ -234,11 +242,14 @@ useEffect(() => {
               condition={true}
               isLoading={isLoading}
              />
+          }
              </div>
     },
     {
       value: 'graduate',
       table: <div>
+         {  
+           searchTerm && graduatedCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Graduated cohort'/></div> :
              <Tables
               tableData={graduatedCohorts.slice().reverse()}
               handleRowClick={handleRowClick}
@@ -251,12 +262,13 @@ useEffect(() => {
               kirkBabDropdownOption={dropDownOption}
               icon={MdOutlinePeople}
               sideBarTabName='cohort'
-              optionalFilterName='graduate'
+              optionalFilterName='graduated'
               handleDropDownClick={handleDropdownClick}
                optionalRowsPerPage={10}
                condition={true}
                isLoading={isLoading}
              />
+         }
              </div>
     },
 

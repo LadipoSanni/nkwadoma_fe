@@ -14,6 +14,8 @@ import { formatAmount } from '@/utils/Format';
 import { useSearchOrganisationByNameQuery } from '@/service/admin/organization';
 import { setItemSessionStorage } from '@/utils/storage';
 import { useRouter } from 'next/navigation'
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
+import { MdSearch } from 'react-icons/md'
 
 
 
@@ -68,7 +70,7 @@ function Organization() {
     }
     const dataElement = {
         pageNumber: 0,
-        pageSize: 200
+        pageSize: 300
     }
     const [searchTerm, setSearchTerm] = useState('');
     const [organizationList, setOrganizationList] = useState<organizationListPros[]>([]);
@@ -142,6 +144,8 @@ function Organization() {
             </div>,
             value: "active",
             table: <div>
+               {
+                searchTerm && activeOrganization.length === 0? <div><SearchEmptyState icon={MdSearch} name='Active organization'/></div> :
                 <Tables
                     tableData={activeOrganization.slice().reverse()}
                     tableHeader={organizationHeader}
@@ -157,6 +161,7 @@ function Organization() {
                     condition={true}
                     icon={MdOutlineAccountBalance}
                 />
+               }
             </div>
         },
         {
@@ -171,7 +176,8 @@ function Organization() {
             </div>,
             value: "invite",
             table: <div>
-                <Tables
+
+               { searchTerm && invitedOrganization.length === 0? <div><SearchEmptyState icon={MdSearch} name='Invited organization'/></div> :<Tables
                     tableData={invitedOrganization.slice().reverse()}
                     tableHeader={organizationHeader}
                     tableHeight={52}
@@ -187,6 +193,7 @@ function Organization() {
                     condition={true}
 
                 />
+               }
             </div>
         },
         {
@@ -201,7 +208,9 @@ function Organization() {
             </div>,
             value: "deactivate",
             table: <div>
-                <Tables
+                {
+                    searchTerm && invitedOrganization.length === 0? <div><SearchEmptyState icon={MdSearch} name='Deactivated organization'/></div> :
+                    <Tables
                     tableData={deactivatedOrganization.slice().reverse()}
                     tableHeader={organizationHeader}
                     tableHeight={52}
@@ -216,6 +225,7 @@ function Organization() {
                     condition={true}
                     icon={MdOutlineAccountBalance}
                 />
+        }
             </div>
         }
     ]

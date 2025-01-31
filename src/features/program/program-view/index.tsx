@@ -4,7 +4,7 @@ import {cabinetGrotesk, inter} from '@/app/fonts';
 import SearchInput from "@/reuseable/Input/SearchInput";
 import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
 import DisplayOptions from "@/reuseable/display/DisplayOptions";
-import LoanProductTable from "@/reuseable/table/LoanProductTable";
+import Table from "@/reuseable/table/LoanProductTable";
 import CreateProgram from "@/components/program/create-program";
 import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
@@ -25,6 +25,9 @@ import TableEmptyState from '@/reuseable/emptyStates/TableEmptyState';
 import {setTimeout} from 'timers';
 import {useToast} from "@/hooks/use-toast"
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
+import { MdSearch } from 'react-icons/md'
+
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -94,7 +97,7 @@ const ProgramView = () => {
     const [editOpen, setEditOpen] = useState(false);
     const [page] = useState(0);
     // const [totalPage, setTotalPage] = useState(0);
-    const size = 100;
+    const size = 300;
     const [deleteProgram, setDeleteProgram] = useState("")
 
     const {data, isLoading} = useGetAllProgramsQuery({
@@ -399,12 +402,14 @@ const ProgramView = () => {
                         }}
                     >
                         {isLoading ? (<SkeletonForGrid/>) :
-                            (programView.length === 0 ? (
+                            (searchTerm && programView.length === 0? <div><SearchEmptyState icon={MdSearch} name='Program'/></div> : 
+                         ( 
+                         programView.length === 0 ?
                                 <TableEmptyState
                                     icon={Book}
                                     name='program'
-                                />
-                            ) : (programView.slice().reverse().map((program, index) => {
+                                /> :
+                            programView.slice().reverse().map((program, index) => {
 
                                     const tagButtonData = [{
                                         tagIcon: MdPersonOutline,
@@ -438,7 +443,9 @@ const ProgramView = () => {
                                         />
                                     )
                                 }
-                            )))}
+                            )) 
+
+                            )}
 
                     </div>
                 ) : (
@@ -450,7 +457,7 @@ const ProgramView = () => {
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
                         }}
                     >
-                        <LoanProductTable
+                     {searchTerm && programView.length === 0? <div><SearchEmptyState icon={MdSearch} name='Program'/></div> : <Table
                             tableData={programView.slice().reverse()}
                             tableHeader={ProgramHeader}
                             staticHeader={"Programs"}
@@ -466,6 +473,7 @@ const ProgramView = () => {
                             optionalRowsPerPage={10}
                             isLoading={isLoading}
                         />
+                }
                     </div>
                 )}
             </div>
