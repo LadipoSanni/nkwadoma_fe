@@ -410,7 +410,7 @@ function Tables<T extends TableRowData>({
                         </div>
                       </TableCell>
 
-                      <TableCell className="h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[50px]">
+                      <TableCell className="h-14 overflow-hidden whitespace-nowrap text-ellipsis max-w-[1rem]">
                         <div className={`text-center truncate pr-2 pl-2 pt-2 pb-2 `}>
                           {/* {row[selectedColumn]} */}
                           {renderCellContent(
