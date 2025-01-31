@@ -25,6 +25,7 @@ import DeactivateOrganization from "@/components/portfolio-manager/organization/
 import TableModal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import Link from "next/link";
 
 
 interface TableRowData {
@@ -302,13 +303,14 @@ const OrganizationDetails = () => {
                   className={"flex items-center gap-2"}
                 >
                   <IoGlobeOutline className={"h-5 w-5 text-meedlBlue"} />
-                  <p
+                  <Link
+                      href={organizationDetails?.data.websiteAddress}
                     className={
                       "text-meedlBlue text-[14px] font-medium leading-[150%]"
                     }
                   >
                     {organizationDetails?.data.websiteAddress}
-                  </p>
+                  </Link>
                 </div>
                 <div className="mt-5">
                   {  organizationDetails?.data.status == "INVITED"?

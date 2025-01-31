@@ -83,7 +83,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                         <div
                             id={`details`}
                             data-testid="details"
-                            className="grid md:grid-cols-3 md:gap-2 gap-4 grid-cols-1 mt-5"
+                            className="grid md:flex md:gap-3  gap-4 grid-cols-1 mt-5"
                         >
                             {tagButtonData.map((tagProps, index) => (
                                 <TagButton key={index} {...tagProps} />
