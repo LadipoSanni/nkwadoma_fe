@@ -16,6 +16,7 @@ import dynamic from "next/dynamic";
 import {useToast} from "@/hooks/use-toast";
 import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import styles from "@/pages/admin/loanOfferDetails/index.module.css";
+import {NumericFormat} from "react-number-format";
 
 const AcceptLoanOfferDetails = dynamic(
     () => Promise.resolve(AcceptLoanOffer),
@@ -113,11 +114,73 @@ const AcceptLoanOffer: React.FC= () => {
                 ];
             case 2:
                 return [
-                    { label: "Tuition amount", value: tuitionAmount  },
-                    { label: "Initial deposit", value: initialDeposit },
-                    { label: "Loan amount requested", value: amountRequested  },
-                    { label: "Amount received", value: amountReceived  },
-                    { label: "Loan breakdown", value: loanBreakdown  }
+                    { label: "Tuition amount", value:
+
+                            <NumericFormat
+                        id={'tuitionAmount'}
+                        name={'tuitionAmount'}
+                        type="text"
+                        thousandSeparator=","
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                        className='bg-grey105 flex md:place-items-end '
+                        prefix={'₦'}
+                        value={tuitionAmount}
+                    />
+                    },
+                    { label: "Initial deposit", value:
+                        <NumericFormat
+                        id={'initialDeposit'}
+                        name={'initialDeposit'}
+                        type="text"
+                        thousandSeparator=","
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                        className='bg-grey105 flex md:place-items-end '
+                        prefix={'₦'}
+                        value={initialDeposit}
+                    />
+                    },
+                    { label: "Loan amount requested", value:
+                        <NumericFormat
+                        id={'loanAmountRequested'}
+                        name={'loanAmountRequested'}
+                        type="text"
+                        thousandSeparator=","
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                        className='bg-grey105 flex md:place-items-end '
+                        prefix={'₦'}
+                        value={amountRequested}
+                        />
+                    },
+                    { label: "Amount received", value:
+                            <NumericFormat
+                                id={'loanAmountReceived'}
+                                name={'loanAmountReceived'}
+                                type="text"
+                                thousandSeparator=","
+                                decimalScale={2}
+                                fixedDecimalScale={true}
+                                className='bg-grey105 flex md:place-items-end '
+                                prefix={'₦'}
+                                value={amountReceived}
+                            />
+                    },
+                    { label: "Loan breakdown", value:
+
+                            <NumericFormat
+                        id={'loanBreakdown'}
+                        name={'loanBreakdown'}
+                        type="text"
+                        thousandSeparator=","
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                        className='bg-grey105 flex md:place-items-end '
+                        prefix={'₦'}
+                        value={loanBreakdown}
+                    />
+                    }
                 ];
             default:
                 return [];
