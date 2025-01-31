@@ -83,10 +83,10 @@ const AcceptLoanOffer: React.FC = () => {
             tuitionAmount,
             initialDeposit,
             amountRequested,
-            amountReceived,
-            loanBreakdown
+            // amountReceived,
         } = data.data;
 
+        // console.log('data:: ', data)
         switch (currentTab) {
             case 0:
                 return [
@@ -154,33 +154,33 @@ const AcceptLoanOffer: React.FC = () => {
                         value={amountRequested}
                         />
                     },
-                    { label: "Amount received", value:
-                            <NumericFormat
-                                id={'loanAmountReceived'}
-                                name={'loanAmountReceived'}
-                                type="text"
-                                thousandSeparator=","
-                                decimalScale={2}
-                                fixedDecimalScale={true}
-                                className='bg-grey105 flex md:place-items-end '
-                                prefix={'₦'}
-                                value={amountReceived}
-                            />
-                    },
-                    { label: "Loan breakdown", value:
-
-                            <NumericFormat
-                        id={'loanBreakdown'}
-                        name={'loanBreakdown'}
-                        type="text"
-                        thousandSeparator=","
-                        decimalScale={2}
-                        fixedDecimalScale={true}
-                        className='bg-grey105 flex md:place-items-end '
-                        prefix={'₦'}
-                        value={loanBreakdown}
-                    />
-                    }
+                    // { label: "Amount received", value:
+                    //         <NumericFormat
+                    //             id={'loanAmountReceived'}
+                    //             name={'loanAmountReceived'}
+                    //             type="text"
+                    //             thousandSeparator=","
+                    //             decimalScale={2}
+                    //             fixedDecimalScale={true}
+                    //             className='bg-grey105 flex md:place-items-end '
+                    //             prefix={'₦'}
+                    //             value={amountReceived}
+                    //         />
+                    // },
+                    // { label: "Loan breakdown", value:
+                    //
+                    //         <NumericFormat
+                    //     id={'loanBreakdown'}
+                    //     name={'loanBreakdown'}
+                    //     type="text"
+                    //     thousandSeparator=","
+                    //     decimalScale={2}
+                    //     fixedDecimalScale={true}
+                    //     className='bg-grey105 flex md:place-items-end '
+                    //     prefix={'₦'}
+                    //     value={loanBreakdown}
+                    // />
+                    // }
                 ];
             default:
                 return [];
@@ -370,59 +370,61 @@ const AcceptLoanOffer: React.FC = () => {
                         </ul>
                     </div>
 
-                    <div className="md:sticky md:bottom-0 pb-3 md:py-3 md:w-full    w-full justify-center grid d:flex  md:justify-end gap-5 md:mt-0">
-                        {currentTab !== 0 && (
-                            <Button
-                                className="w-[80vw] mr-auto ml-auto  md:w-[8.75rem] h-[3.5625rem] text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite"
-                                onClick={handleBack}
-                                disabled={currentTab === 0}
-                            >
-                                Back
-                            </Button>
-                        )}
-                        {currentTab === loanRequestDetailsTab.length - 1 ? (
-                            <DropdownMenu onOpenChange={(open) => setIsDropdownOpen(open)}>
-                                <DropdownMenuTrigger asChild>
-                                    <Button
-                                        className={`flex gap-2 w-full md:w-[10.875rem] h-[3.5625rem] ${
-                                            isCheckboxChecked ? 'bg-meedlBlue hover:bg-meedlBlue' : 'bg-blue100 hover:bg-blue100'
-                                        }`}
-                                        disabled={!isCheckboxChecked}
-                                    >
-                                        Make a decision
-                                        {isDropdownOpen && isCheckboxChecked ? (
-                                            <MdKeyboardArrowUp className="h-6 w-6 text-meedlWhite" />
-                                        ) : (
-                                            <MdKeyboardArrowDown className="h-6 w-6 text-meedlWhite" />
-                                        )}
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                {isCheckboxChecked && (
-                                    <DropdownMenuContent className="w-[176px] h-[86px] p-1 grid gap-1">
-                                        <DropdownMenuItem
-                                            className="rounded cursor-pointer p-2 flex items-center text-meedlBlue focus:text-meedlBlue hover:bg-lightBlue200"
-                                            onSelect={handleAccept}
+                    <div className="md:sticky md:bottom-0 pb-3 md:py-3 md:w-full    w-full justify-center grid md:bg-white  md:flex  md:justify-end gap-5 md:mt-0">
+                        <div className={`md:flex grid md:gap-4 gap-4 `}>
+                            {currentTab !== 0 && (
+                                <Button
+                                    className="w-[80vw] mr-auto ml-auto  md:w-[8.75rem] h-[3.5625rem] text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite"
+                                    onClick={handleBack}
+                                    disabled={currentTab === 0}
+                                >
+                                    Back
+                                </Button>
+                            )}
+                            {currentTab === loanRequestDetailsTab.length - 1 ? (
+                                <DropdownMenu onOpenChange={(open) => setIsDropdownOpen(open)}>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            className={`flex gap-2 w-full md:w-[10.875rem] h-[3.5625rem] ${
+                                                isCheckboxChecked ? 'bg-meedlBlue hover:bg-meedlBlue' : 'bg-blue100 hover:bg-blue100'
+                                            }`}
+                                            disabled={!isCheckboxChecked}
                                         >
-                                            Accept loan offer
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            className="rounded cursor-pointer p-2 flex items-center text-error500 focus:text-error500 hover:bg-error150"
-                                            onSelect={handleDecline}
-                                        >
-                                            Decline loan offer
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                )}
-                            </DropdownMenu>
-                        ) : (
-                            <Button
-                                className="w-[80vw] mr-auto ml-auto md:w-[8.75rem] h-[3.5625rem] bg-meedlBlue hover:bg-meedlBlue"
-                                onClick={handleNext}
-                                disabled={currentTab === loanRequestDetailsTab.length - 1}
-                            >
-                                Continue
-                            </Button>
-                        )}
+                                            Make a decision
+                                            {isDropdownOpen && isCheckboxChecked ? (
+                                                <MdKeyboardArrowUp className="h-6 w-6 text-meedlWhite" />
+                                            ) : (
+                                                <MdKeyboardArrowDown className="h-6 w-6 text-meedlWhite" />
+                                            )}
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    {isCheckboxChecked && (
+                                        <DropdownMenuContent className="w-[176px] h-[86px] p-1 grid gap-1">
+                                            <DropdownMenuItem
+                                                className="rounded cursor-pointer p-2 flex items-center text-meedlBlue focus:text-meedlBlue hover:bg-lightBlue200"
+                                                onSelect={handleAccept}
+                                            >
+                                                Accept loan offer
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                className="rounded cursor-pointer p-2 flex items-center text-error500 focus:text-error500 hover:bg-error150"
+                                                onSelect={handleDecline}
+                                            >
+                                                Decline loan offer
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    )}
+                                </DropdownMenu>
+                            ) : (
+                                <Button
+                                    className="w-[80vw] mr-auto ml-auto md:w-[8.75rem] h-[3.5625rem] bg-meedlBlue hover:bg-meedlBlue"
+                                    onClick={handleNext}
+                                    disabled={currentTab === loanRequestDetailsTab.length - 1}
+                                >
+                                    Continue
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
