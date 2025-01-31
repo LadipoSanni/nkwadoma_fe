@@ -2,8 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { MdCheckCircleOutline, MdOutlineCancel } from "react-icons/md";
 import { inter } from '@/app/fonts';
 import * as faceapi from 'face-api.js';
-import { useDispatch } from 'react-redux';
-import { setCameraStream } from "@/redux/slice/camera/camera-slice";
+// import { useDispatch } from 'react-redux';
+// import { setCameraStream } from "@/redux/slice/camera/camera-slice";
 
 interface CapturePhotoWithTipsProps {
     onCapture: (imageSrc: File) => void;
@@ -17,7 +17,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const [hasFaceBeenDetected, setHasFaceBeenDetected] = useState(false);
     const [modelLoadingError, setModelLoadingError] = useState<string | null>(null);
     const [step, setStep] = useState<string>('right');
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     useEffect(() => {
         const loadModels = async () => {
@@ -36,7 +36,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
 
         const startCamera = async () => {
             const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
-              dispatch(setCameraStream(stream));
+            //   dispatch(setCameraStream(stream));
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
             }
