@@ -1,17 +1,17 @@
 'use client'
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter, useSearchParams} from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { cabinetGroteskRegular, inter } from "@/app/fonts";
-import { Button } from "@/components/ui/button";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import {DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem} from '@/components/ui/dropdown-menu';
+import {cabinetGroteskRegular, inter} from "@/app/fonts";
+import {Button} from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
-import { FaCircle } from "react-icons/fa6";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import { Breakdown } from "@/reuseable/details/breakdown";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useViewLoanOfferDetailsQuery, useRespondToLoanOfferMutation } from "@/service/admin/loan/loan-offer-api";
+import {FaCircle} from "react-icons/fa6";
+import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
+import {Breakdown} from "@/reuseable/details/breakdown";
+import {Checkbox} from "@/components/ui/checkbox";
+import {useViewLoanOfferDetailsQuery, useRespondToLoanOfferMutation} from "@/service/admin/loan/loan-offer-api";
 import dynamic from "next/dynamic";
 import {useToast} from "@/hooks/use-toast";
 import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
@@ -22,21 +22,21 @@ const AcceptLoanOfferDetails = dynamic(
     {ssr: false}
 )
 
-const AcceptLoanOffer: React.FC= () => {
+const AcceptLoanOffer: React.FC = () => {
     const [currentTab, setCurrentTab] = useState(0);
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const router = useRouter()
     const searchParams = useSearchParams()
-    const getUserToken  = () => {
-        if (searchParams){
+    const getUserToken = () => {
+        if (searchParams) {
             const pathVariable = searchParams.get("loanOfferId")
-            if (pathVariable){
+            if (pathVariable) {
                 return pathVariable
-            }else {
+            } else {
                 return ''
             }
-        }else {
+        } else {
             return ""
         }
     }
@@ -144,22 +144,29 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-             await respondToLoanOffer(payload);
-            // console.log('response:', response, 'isSuccess', isSuccess)
+            const response = await respondToLoanOffer(payload);
+            if ('error' in response) {
+                const errorMessage = (response.error as { message?: string }).message || 'Error occurred, please try again';
+                toast({
+                    description: errorMessage,
+                    status: 'error'
+                });
+                return;
+            }
             toast({
                 description: 'Loan offer accepted successfully',
                 status: 'success'
             });
             router.push('/overview');
         } catch (error) {
+            const errorMessage = (error instanceof Error) ? error.message : 'Error occurred, please try again';
             toast({
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                description: error.message ? error.message : 'Error occurred, please try again',
+                description: errorMessage,
                 status: 'error'
             });
         }
     };
+
     const handleDecline = async () => {
         const payload = {
             loanOfferId: loanOfferId,
@@ -167,15 +174,22 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-          await respondToLoanOffer(payload);
-            // console.log('response:', response, 'isSuccess::', isSuccess)
+            const response = await respondToLoanOffer(payload);
+            if ('error' in response) {
+                const errorMessage = (response.error as { message?: string }).message || 'Error occurred, please try again';
+                toast({
+                    description: errorMessage,
+                    status: 'error'
+                });
+                return;
+            }
             toast({
                 description: 'Loan offer declined',
-                status: 'error'
+                status: 'success'
             });
             router.push('/overview');
         } catch (error) {
-            const errorMessage = (error as Error).message ? (error as Error).message : 'Error occurred, please try again';
+            const errorMessage = (error instanceof Error) ? error.message : 'Error occurred, please try again';
             toast({
                 description: errorMessage,
                 status: 'error'
