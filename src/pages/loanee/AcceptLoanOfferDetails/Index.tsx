@@ -370,7 +370,7 @@ const AcceptLoanOffer: React.FC = () => {
                         </ul>
                     </div>
 
-                    <div className="md:sticky md:bottom-0 pb-3 md:py-3 md:bg-white md:flex   w-full justify-center grid md:justify-end gap-5 md:mt-0">
+                    <div className="md:sticky md:bottom-0 pb-3 md:py-3 md:w-full    w-full justify-center grid d:flex  md:justify-end gap-5 md:mt-0">
                         {currentTab !== 0 && (
                             <Button
                                 className="w-[80vw] mr-auto ml-auto  md:w-[8.75rem] h-[3.5625rem] text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite"
