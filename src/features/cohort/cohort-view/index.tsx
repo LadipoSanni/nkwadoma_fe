@@ -94,7 +94,7 @@ const CohortView = () => {
   const [deleteProgram, setDeleteProgram] = useState("")
    const [isLoadings] = useState(false);
    const [page] = useState(0);
-   const size = 200;
+   const size = 300;
    const {toast} = useToast()
 
    const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  

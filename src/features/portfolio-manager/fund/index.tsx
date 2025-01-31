@@ -61,7 +61,7 @@ const InvestmentVehicle = () => {
 
   const dataElement = {
     pageNumber: 0,
-    pageSize: 200
+    pageSize: 300
 }
  
  const { data: investmentVehicleData } = useGetAllInvestmentmentVehicleQuery(dataElement)
