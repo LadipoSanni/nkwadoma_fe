@@ -70,7 +70,7 @@ function LoanDetails() {
         store.dispatch(setCurrentTab('Loan requests'))
         router.push("/loan/loan-request")
     }
-    console.log('loan request details : ', data)
+    // console.log('loan request details : ', data)
     const loanRequestDetailsTab = [
         "Basic details",
         "Additional details",
@@ -284,7 +284,7 @@ function LoanDetails() {
                                         <div
                                             className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
                                         <div
-                                            className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item.value : 'Not provided'}</div>
+                                            className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item.value : 'N/A'}</div>
                                     </div>
                                 </li>
                             ))
@@ -302,7 +302,7 @@ function LoanDetails() {
                         <Button
                             id={`backButtonOnIndex` + currentTab}
                             data-testid={`backButtonOnIndex` + currentTab}
-                            className={'w-full md:w-fit md:h-fit md:px-8 md:py-3 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
+                            className={'w-full md:w-fit md:px-6 md:py-4 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
                             onClick={handleBack} disabled={currentTab === 0}>Back</Button>
                     )}
                     {currentTab === 2 &&

@@ -148,6 +148,7 @@ const Login: React.FC = () => {
                         if (user_role) {
                             storeUserDetails(access_token, user_email, user_role, userName)
                             setUserRoles(user_roles)
+                            console.log('user role:: ', user_role)
                             switch (user_role) {
                                 case 'LOANEE' :
                                     store.dispatch(setCurrentNavbarItem("overview"))
