@@ -144,19 +144,23 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-            const response  = await respondToLoanOffer(payload);
+            const response = await respondToLoanOffer(payload);
             console.log('response:: ', response);
+            toast({
+                description: 'Loan offer accepted successfully',
+                status: 'success'
+            });
+            router.push('/overview');
         } catch (error) {
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                description: error.message ? error.message : 'error occured pls try again',
+                description: error.message ? error.message : 'Error occurred, please try again',
                 status: 'error'
-            })
-            console.error('erorr:; ',error);
+            });
+            console.error('error:: ', error);
         }
     };
-
     const handleDecline = async () => {
         const payload = {
             loanOfferId: loanOfferId,
