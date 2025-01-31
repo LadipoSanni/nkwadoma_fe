@@ -43,7 +43,7 @@ const AcceptLoanOffer: React.FC = () => {
 
     const loanOfferId: string = getUserToken()
 
-    const {data} = useViewLoanOfferDetailsQuery(loanOfferId);
+    const { data } = useViewLoanOfferDetailsQuery(loanOfferId);
     const [respondToLoanOffer] = useRespondToLoanOfferMutation();
 
     const backToOverview = () => {
@@ -89,35 +89,35 @@ const AcceptLoanOffer: React.FC = () => {
         switch (currentTab) {
             case 0:
                 return [
-                    {label: "First Name", value: firstName},
-                    {label: "Last Name", value: lastName},
-                    {label: "Email address", value: email},
-                    {label: "Phone number", value: phoneNumber},
-                    {label: "Date of birth", value: dateOfBirth},
-                    {label: "Marital status", value: maritalStatus},
-                    {label: "Nationality", value: nationality},
-                    {label: "State of origin", value: stateOfOrigin},
-                    {label: "State of residence", value: stateOfResidence},
-                    {label: "Residential address", value: residentialAddress}
+                    { label: "First Name", value: firstName },
+                    { label: "Last Name", value: lastName  },
+                    { label: "Email address", value: email },
+                    { label: "Phone number", value: phoneNumber  },
+                    { label: "Date of birth", value: dateOfBirth  },
+                    { label: "Marital status", value: maritalStatus  },
+                    { label: "Nationality", value: nationality },
+                    { label: "State of origin", value: stateOfOrigin },
+                    { label: "State of residence", value: stateOfResidence },
+                    { label: "Residential address", value: residentialAddress }
                 ];
             case 1:
                 return [
-                    {label: "Alternate email address", value: alternateEmail},
-                    {label: "Alternate phone number", value: alternatePhoneNumber},
-                    {label: "Alternate residential address", value: alternateContactAddress},
-                    {label: "Next of kin name", value: `${nextOfKinFirstName} ${nextOfKinLastName}`},
-                    {label: "Next of kin email address", value: nextOfKinEmail},
-                    {label: "Next of kin phone number", value: nextOfKinPhoneNumber},
-                    {label: "Next of kin relationship", value: nextOfKinRelationship},
-                    {label: "Next of kin contact address", value: nextOfKinContactAddress}
+                    { label: "Alternate email address", value: alternateEmail },
+                    { label: "Alternate phone number", value: alternatePhoneNumber },
+                    { label: "Alternate residential address", value: alternateContactAddress  },
+                    { label: "Next of kin name", value: `${nextOfKinFirstName} ${nextOfKinLastName}`},
+                    { label: "Next of kin email address", value: nextOfKinEmail },
+                    { label: "Next of kin phone number", value: nextOfKinPhoneNumber  },
+                    { label: "Next of kin relationship", value: nextOfKinRelationship },
+                    { label: "Next of kin contact address", value: nextOfKinContactAddress  }
                 ];
             case 2:
                 return [
-                    {label: "Tuition amount", value: tuitionAmount},
-                    {label: "Initial deposit", value: initialDeposit},
-                    {label: "Loan amount requested", value: amountRequested},
-                    {label: "Amount received", value: amountReceived},
-                    {label: "Loan breakdown", value: loanBreakdown}
+                    { label: "Tuition amount", value: tuitionAmount  },
+                    { label: "Initial deposit", value: initialDeposit },
+                    { label: "Loan amount requested", value: amountRequested  },
+                    { label: "Amount received", value: amountReceived  },
+                    { label: "Loan breakdown", value: loanBreakdown  }
                 ];
             default:
                 return [];
@@ -135,7 +135,7 @@ const AcceptLoanOffer: React.FC = () => {
             setCurrentTab(currentTab - 1);
         }
     };
-    const {toast} = useToast()
+    const {toast } = useToast()
 
     const handleAccept = async () => {
         const payload = {
@@ -151,16 +151,14 @@ const AcceptLoanOffer: React.FC = () => {
             });
             router.push('/overview');
         } catch (error) {
-            console.error('Error occurred:', error);
-            const errorMessage = (error as Error).message ? (error as Error).message : 'Error occurred, please try again';
-            console.error('Error message:', errorMessage);
             toast({
-                description: errorMessage,
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: error.message ? error.message : 'error occured pls try again',
                 status: 'error'
-            });
+            })
         }
     };
-
     const handleDecline = async () => {
         const payload = {
             loanOfferId: loanOfferId,
@@ -175,15 +173,16 @@ const AcceptLoanOffer: React.FC = () => {
             });
             router.push('/overview');
         } catch (error) {
-            const errorMessage = (error as Error).message ? (error as Error).message : 'Error occurred, please try again';
             toast({
-                description: errorMessage,
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: error.message ? error.message : 'error occured pls try again',
                 status: 'error'
-            });
+            })
         }
     };
 
-    const userFirstLetter: string | undefined = data?.data?.firstName ? getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName) : ''
+    const userFirstLetter : string| undefined = data?.data?.firstName ? getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName) : ''
 
 
     return (
@@ -214,7 +213,7 @@ const AcceptLoanOffer: React.FC = () => {
                         <AvatarImage
                             src={data?.data?.image}
                             alt="@shadcn"
-                            style={{objectFit: 'cover'}}
+                            style={{ objectFit: 'cover' }}
                         />
                         <AvatarFallback>{userFirstLetter}</AvatarFallback>
                     </Avatar>
@@ -235,7 +234,7 @@ const AcceptLoanOffer: React.FC = () => {
                             >
                                 {data?.data.programName}
                             </p>
-                            <FaCircle className="h-1 w-1 text-blue550"/>
+                            <FaCircle className="h-1 w-1 text-blue550" />
                             <p
                                 id="loaneeCohortOnLoanRequestDetails"
                                 data-testid="loaneeCohortOnLoanRequestDetails"
@@ -247,12 +246,10 @@ const AcceptLoanOffer: React.FC = () => {
                     </div>
                 </div>
 
-                <div
-                    className={`${styles.loanOfferDetails} md:w-fit md:bg-red-300 h-  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}>
+                <div className={`${styles.loanOfferDetails} md:w-fit md:bg-red-300 h-  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}>
 
-                    <div
-                        className={` ${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1  h-fit md:h-fit  flex md:flex`}>
-                        <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab}/>
+                    <div className={` ${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1  h-fit md:h-fit  flex md:flex`}>
+                        <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab} />
                     </div>
                     <div>
                         <ul className=" bg-grey105 ">
@@ -271,7 +268,7 @@ const AcceptLoanOffer: React.FC = () => {
                             {currentTab === 2 && (
                                 <section>
                                     <div className="px-5">
-                                        <Breakdown/>
+                                        <Breakdown />
                                     </div>
                                     <div className="flex items-start gap-4 bg-grey105 p-5">
                                         <Checkbox
@@ -295,8 +292,7 @@ const AcceptLoanOffer: React.FC = () => {
                         </ul>
                     </div>
 
-                    <div
-                        className="md:sticky md:bottom-0 md:py-3 md:bg-white md:flex grid md:justify-end gap-5 md:mt-0">
+                    <div className="md:sticky md:bottom-0 md:py-3 md:bg-white md:flex grid md:justify-end gap-5 md:mt-0">
                         {currentTab !== 0 && (
                             <Button
                                 className="w-full md:w-[8.75rem] h-[3.5625rem] text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite"
@@ -317,9 +313,9 @@ const AcceptLoanOffer: React.FC = () => {
                                     >
                                         Make a decision
                                         {isDropdownOpen && isCheckboxChecked ? (
-                                            <MdKeyboardArrowUp className="h-6 w-6 text-meedlWhite"/>
+                                            <MdKeyboardArrowUp className="h-6 w-6 text-meedlWhite" />
                                         ) : (
-                                            <MdKeyboardArrowDown className="h-6 w-6 text-meedlWhite"/>
+                                            <MdKeyboardArrowDown className="h-6 w-6 text-meedlWhite" />
                                         )}
                                     </Button>
                                 </DropdownMenuTrigger>
