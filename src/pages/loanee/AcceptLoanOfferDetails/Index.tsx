@@ -1,17 +1,17 @@
 'use client'
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter, useSearchParams} from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { cabinetGroteskRegular, inter } from "@/app/fonts";
-import { Button } from "@/components/ui/button";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import {DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem} from '@/components/ui/dropdown-menu';
+import {cabinetGroteskRegular, inter} from "@/app/fonts";
+import {Button} from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
-import { FaCircle } from "react-icons/fa6";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import { Breakdown } from "@/reuseable/details/breakdown";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useViewLoanOfferDetailsQuery, useRespondToLoanOfferMutation } from "@/service/admin/loan/loan-offer-api";
+import {FaCircle} from "react-icons/fa6";
+import {MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
+import {Breakdown} from "@/reuseable/details/breakdown";
+import {Checkbox} from "@/components/ui/checkbox";
+import {useViewLoanOfferDetailsQuery, useRespondToLoanOfferMutation} from "@/service/admin/loan/loan-offer-api";
 import dynamic from "next/dynamic";
 import {useToast} from "@/hooks/use-toast";
 import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
@@ -23,21 +23,21 @@ const AcceptLoanOfferDetails = dynamic(
     {ssr: false}
 )
 
-const AcceptLoanOffer: React.FC= () => {
+const AcceptLoanOffer: React.FC = () => {
     const [currentTab, setCurrentTab] = useState(0);
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const router = useRouter()
     const searchParams = useSearchParams()
-    const getUserToken  = () => {
-        if (searchParams){
+    const getUserToken = () => {
+        if (searchParams) {
             const pathVariable = searchParams.get("loanOfferId")
-            if (pathVariable){
+            if (pathVariable) {
                 return pathVariable
-            }else {
+            } else {
                 return ''
             }
-        }else {
+        } else {
             return ""
         }
     }
@@ -207,21 +207,29 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-            await respondToLoanOffer(payload);
+            const response = await respondToLoanOffer(payload);
+            if ('error' in response) {
+                const errorMessage = (response.error as { message?: string }).message || 'Error occurred, please try again';
+                toast({
+                    description: errorMessage,
+                    status: 'error'
+                });
+                return;
+            }
             toast({
                 description: 'Loan offer accepted successfully',
                 status: 'success'
             });
             router.push('/overview');
         } catch (error) {
+            const errorMessage = (error instanceof Error) ? error.message : 'Error occurred, please try again';
             toast({
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                description: error.message ? error.message : 'Error occurred, please try again',
+                description: errorMessage,
                 status: 'error'
             });
         }
     };
+
     const handleDecline = async () => {
         const payload = {
             loanOfferId: loanOfferId,
@@ -229,14 +237,22 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-            await respondToLoanOffer(payload);
+            const response = await respondToLoanOffer(payload);
+            if ('error' in response) {
+                const errorMessage = (response.error as { message?: string }).message || 'Error occurred, please try again';
+                toast({
+                    description: errorMessage,
+                    status: 'error'
+                });
+                return;
+            }
             toast({
                 description: 'Loan offer declined',
-                status: 'error'
+                status: 'success'
             });
             router.push('/overview');
         } catch (error) {
-            const errorMessage = (error as Error).message ? (error as Error).message : 'Error occurred, please try again';
+            const errorMessage = (error instanceof Error) ? error.message : 'Error occurred, please try again';
             toast({
                 description: errorMessage,
                 status: 'error'
@@ -308,9 +324,9 @@ const AcceptLoanOffer: React.FC= () => {
                     </div>
                 </div>
 
-                <div className={`${styles.loanOfferDetails} md:w-fit md:bg-red-300 h-  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}>
+                <div className={`${styles.loanOfferDetails} md:w-fit  h-fit  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}>
 
-                    <div className={` ${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1  h-fit md:h-fit  flex md:flex`}>
+                    <div className={` ${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1 px-3 py-3 h-fit md:h-fit  flex md:flex`}>
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab} />
                     </div>
                     <div>
@@ -354,10 +370,10 @@ const AcceptLoanOffer: React.FC= () => {
                         </ul>
                     </div>
 
-                    <div className="md:sticky md:bottom-0 md:py-3 md:bg-white md:flex grid md:justify-end gap-5 md:mt-0">
+                    <div className="md:sticky md:bottom-0 pb-3 md:py-3 md:bg-white md:flex   w-full justify-center grid md:justify-end gap-5 md:mt-0">
                         {currentTab !== 0 && (
                             <Button
-                                className="w-full md:w-[8.75rem] h-[3.5625rem] text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite"
+                                className="w-[80vw] mr-auto ml-auto  md:w-[8.75rem] h-[3.5625rem] text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite"
                                 onClick={handleBack}
                                 disabled={currentTab === 0}
                             >
@@ -400,7 +416,7 @@ const AcceptLoanOffer: React.FC= () => {
                             </DropdownMenu>
                         ) : (
                             <Button
-                                className="w-full md:w-[8.75rem] h-[3.5625rem] bg-meedlBlue hover:bg-meedlBlue"
+                                className="w-[80vw] mr-auto ml-auto md:w-[8.75rem] h-[3.5625rem] bg-meedlBlue hover:bg-meedlBlue"
                                 onClick={handleNext}
                                 disabled={currentTab === loanRequestDetailsTab.length - 1}
                             >
