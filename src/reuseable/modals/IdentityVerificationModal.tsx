@@ -15,7 +15,7 @@ import { uploadImageToCloudinary } from "@/utils/UploadToCloudinary";
 import { useVerifyIdentityMutation } from "@/service/users/Loanee_query";
 // import { clearCameraStream } from '@/redux/slice/camera/camera-slice';
 // import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
+// import { RootState } from '@/redux/store';
 
 interface IdentityVerificationModalProps {
     isOpen: boolean;
