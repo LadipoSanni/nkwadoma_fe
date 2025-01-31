@@ -101,7 +101,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .required("Fund product is required"),
         costOfFunds: Yup.string()
             .trim()
-            .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Cost of fund must be greater than 0 ")
+            // .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Cost of fund must be greater than 0 ")
             .transform((original) => original?.replace(/,/g, ""))
             .required("Cost of fund is required"),
         // tenorDuration: Yup.string()
@@ -166,7 +166,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .required("Loan product terms is required")
             .max(2500, "Terms exceeds 2500 characters")
-            .test("not-empty", "Mandate is required.", (value = "") => {
+            .test("not-empty", "Terms and condition is required.", (value = "") => {
                 const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
                 return sanitizedValue !== "";
             }),
@@ -308,7 +308,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         onChange={(value) => setFieldValue("investmentVehicleId", value)}
                                         name="FundProduct"
                                         placeHolder='Select fund'
-                                        // isItemDisabled={(item) => item !== 'tade'}
                                     />
                                     {errors.investmentVehicleId && touched.investmentVehicleId && (
                                         <ErrorMessage
@@ -345,25 +344,25 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         <div>
                                             <Label htmlFor="costOfFunds">Cost of funds (%)</Label>
                                         </div>
-
                                         <Field
                                             id="costOfFunds"
                                             data-testid="costOfFunds"
                                             name="costOfFunds"
-                                            type={"number"}
+                                            type="number"
                                             className="w-full p-3 border rounded focus:outline-none mt-3 text-sm"
-                                            placeholder="0"
+                                            placeholder="0.0"
                                             step="0.01"
                                             onWheel={(e: {
                                                 currentTarget: { blur: () => string; };
                                             }) => e.currentTarget.blur()}
                                             onChange={(e: { target: { value: string; }; }) => {
                                                 const value = e.target.value;
-                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                if (/^\d*\.?\d*$/.test(value) && Number(value) <= 100) {
                                                     setFieldValue("costOfFunds", value);
                                                 }
                                             }}
                                         />
+
                                         {
                                             errors.costOfFunds && touched.costOfFunds && (
                                                 <ErrorMessage
@@ -577,7 +576,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                                         }) => e.currentTarget.blur()}
                                                         onChange={(e: { target: { value: string; }; }) => {
                                                             const value = e.target.value;
-                                                            if (/^\d*\.?\d*$/.test(value)) {
+                                                            if (/^\d*\.?\d*$/.test(value) && Number(value) <= 100) {
                                                                 setFieldValue("interest", value);
                                                             }
                                                         }}
@@ -649,107 +648,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             className="text-red-500 text-sm"
                                         />
                                     )}
-                                    {/*<ReactQuill*/}
-                                    {/*    theme="snow"*/}
-                                    {/*    value={values.loanProductMandate || ``}*/}
-                                    {/*    onChange={(value) => {*/}
-                                    {/*        setFieldValue("loanProductMandate", value)*/}
-                                    {/*    }}*/}
-                                    {/*    placeholder="Enter description"*/}
-                                    {/*    className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
-                                    {/*/>*/}
-                                    {/*<Field*/}
-                                    {/*    as="textarea"*/}
-                                    {/*    id="loanProductMandateId"*/}
-                                    {/*    name="loanProductMandate"*/}
-                                    {/*    className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"*/}
-                                    {/*    placeholder="Enter description"*/}
-                                    {/*    rows={4}*/}
-                                    {/*    maxLength={maxChars}*/}
-                                    {/*    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {*/}
-                                    {/*        const value = e.target.value;*/}
-                                    {/*        console.log("Current value:", value);*/}
-                                    {/*        if (validateLength(value)) {*/}
-                                    {/*            setFieldValue("loanProductMandate", value);*/}
-                                    {/*            setMandateError('');*/}
-                                    {/*        } else {*/}
-                                    {/*            setMandateError('Mandate must be 2500 characters or less');*/}
-                                    {/*        }*/}
-                                    {/*    }}*/}
-
-                                    {/*    onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {*/}
-                                    {/*        const paste = e.clipboardData.getData('text');*/}
-                                    {/*        if (paste.length + values.loanProductMandate.length > maxChars) {*/}
-                                    {/*            e.preventDefault();*/}
-                                    {/*            setMandateError('Mandate must be 2500 characters or less');*/}
-                                    {/*        } else {*/}
-                                    {/*            setMandateError('');*/}
-                                    {/*        }*/}
-                                    {/*    }}*/}
-                                    {/*/>*/}
-                                    {/*{*/}
-                                    {/*    errors.loanProductMandate && touched.loanProductMandate && (*/}
-                                    {/*        <ErrorMessage*/}
-                                    {/*            name="loanProductMandate"*/}
-                                    {/*            component="div"*/}
-                                    {/*            id='loanProductMandateError'*/}
-                                    {/*            className="text-red-500 text-sm"*/}
-                                    {/*        />*/}
-                                    {/*    )*/}
-                                    {/*}*/}
-                                    {/*{mandateError && (*/}
-                                    {/*    <div className="text-red-500 text-sm">*/}
-                                    {/*        {mandateError}*/}
-                                    {/*    </div>*/}
-                                    {/*)}*/}
                                 </div>
-
-                                {/*<div className={`pt-4`}>*/}
-                                {/*    <Label htmlFor="loanProductTermsAndCondition">Loan product terms and*/}
-                                {/*        condition</Label>*/}
-                                {/*    <Field*/}
-                                {/*        as="textarea"*/}
-                                {/*        id="loanProductTermsAndConditionId"*/}
-                                {/*        name="loanProductTermsAndCondition"*/}
-                                {/*        className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"*/}
-                                {/*        placeholder="Enter terms and condition"*/}
-                                {/*        rows={4}*/}
-                                {/*        maxLength={maxChars}*/}
-                                {/*        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {*/}
-                                {/*            const value = e.target.value;*/}
-                                {/*            if (validateLength(value)) {*/}
-                                {/*                setFieldValue("loanProductTermsAndCondition", value);*/}
-                                {/*                setLoanProductTermsAndConditionError('');*/}
-                                {/*            } else {*/}
-                                {/*                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');*/}
-                                {/*            }*/}
-                                {/*        }}*/}
-                                {/*        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {*/}
-                                {/*            const paste = e.clipboardData.getData('text');*/}
-                                {/*            if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {*/}
-                                {/*                e.preventDefault();*/}
-                                {/*                setLoanProductTermsAndConditionError('Product condition must be 2500 characters or less');*/}
-                                {/*            } else {*/}
-                                {/*                setLoanProductTermsAndConditionError('');*/}
-                                {/*            }*/}
-                                {/*        }}*/}
-                                {/*    />*/}
-                                {/*    {*/}
-                                {/*        errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (*/}
-                                {/*            <ErrorMessage*/}
-                                {/*                name="loanProductTermsAndCondition"*/}
-                                {/*                component="div"*/}
-                                {/*                id='loanProductTermsAndConditionError'*/}
-                                {/*                className="text-red-500 text-sm"*/}
-                                {/*            />*/}
-                                {/*        )*/}
-                                {/*    }*/}
-                                {/*    {loanProductTermsAndConditionError && (*/}
-                                {/*        <div className="text-red-500 text-sm">*/}
-                                {/*            {loanProductTermsAndConditionError}*/}
-                                {/*        </div>*/}
-                                {/*    )}*/}
-                                {/*</div>*/}
                                 <div className="pt-4">
                                     <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product
                                         terms and
@@ -768,22 +667,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             className="text-red-500 text-sm"
                                         />
                                     )}
-                                    {/*<QuillField name={"loanProductTermsAndCondition"}*/}
-                                    {/*            errorMessage={"Product terms must be 2500 characters or less"}/>*/}
-                                    {/*<ReactQuill*/}
-                                    {/*    theme="snow"*/}
-                                    {/*    value={values.loanProductTermsAndCondition || ``}*/}
-                                    {/*    onChange={(value) => {*/}
-                                    {/*        setFieldValue("loanProductTermsAndCondition", value)*/}
-                                    {/*    }}*/}
-                                    {/*    placeholder="Enter terms and condition"*/}
-                                    {/*    className={`font-inter text-sm font-normal leading-[22px] pt-2 rounded-md`}*/}
-                                    {/*/>*/}
-                                    {/*{errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (*/}
-                                    {/*    <div className="text-red-500 text-sm mt-1">*/}
-                                    {/*        {errors.loanProductTermsAndCondition}*/}
-                                    {/*    </div>*/}
-                                    {/*)}*/}
                                 </div>
 
                                 <div className={`flex justify-end pt-5 gap-3 pb-5`}>
