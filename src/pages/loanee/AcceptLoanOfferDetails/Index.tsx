@@ -44,7 +44,7 @@ const AcceptLoanOffer: React.FC= () => {
     const loanOfferId: string = getUserToken()
 
     const { data } = useViewLoanOfferDetailsQuery(loanOfferId);
-    const [respondToLoanOffer, { isSuccess}] = useRespondToLoanOfferMutation();
+    const [respondToLoanOffer] = useRespondToLoanOfferMutation();
 
     const backToOverview = () => {
         router.push("/overview");
@@ -144,8 +144,8 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-            const response = await respondToLoanOffer(payload);
-            console.log('response:', response, 'isSuccess', isSuccess)
+             await respondToLoanOffer(payload);
+            // console.log('response:', response, 'isSuccess', isSuccess)
             toast({
                 description: 'Loan offer accepted successfully',
                 status: 'success'
@@ -167,8 +167,8 @@ const AcceptLoanOffer: React.FC= () => {
         };
 
         try {
-           const response=  await respondToLoanOffer(payload);
-            console.log('response:', response, 'isSuccess::', isSuccess)
+          await respondToLoanOffer(payload);
+            // console.log('response:', response, 'isSuccess::', isSuccess)
             toast({
                 description: 'Loan offer declined',
                 status: 'error'
