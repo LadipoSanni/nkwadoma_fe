@@ -151,12 +151,19 @@ const AcceptLoanOffer: React.FC= () => {
             });
             router.push('/overview');
         } catch (error) {
-            toast({
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                description: error.message ? error.message : 'Error occurred, please try again',
-                status: 'error'
-            });
+            const errorMessage = (error as Error).message ? (error as Error).message : 'Error occurred, please try again';
+            if (errorMessage === 'Loan offer decision made previously') {
+                toast({
+                    description: errorMessage,
+                    status: 'error'
+                });
+            } else {
+                toast({
+                    description: errorMessage,
+                    status: 'error'
+                });
+                // router.push('/overview');
+            }
         }
     };
     const handleDecline = async () => {
