@@ -55,16 +55,18 @@ const OrganizationAndFilter = () => {
             >
                 <div className='relative'>
                     <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                       <MdSearch className="h-6 w-6 text-grey200"/>
+                       <MdSearch className="h-6 w-6 text-[#efefef]"/>
                     </span>
                     <Input
+                        disabled={true}
                         id='searchLoan'
                         placeholder='Search'
-                        className='w-full lg:w-80 rounded h-11 md:h-9 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
+                        className='w-full lg:w-80 text-[#efefef] rounded h-11 md:h-9 focus-visible:ring-0 shadow-none  border-solid border border-neutral650   pl-10'
                     />
                 </div> 
                 <div>
-                    <ProductFilter 
+                    <ProductFilter
+                        disabled={true}
                     filterName='Program'
                     dropDownFilterName='Program'
                     initialFormValue={initialFormValue}

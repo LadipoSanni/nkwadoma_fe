@@ -38,6 +38,8 @@ const NetworkConnectionDetector = ({children}: props) => {
             window.removeEventListener('offline', callback);
         };
     }
+
+
     return (
         <div>
             {children}
