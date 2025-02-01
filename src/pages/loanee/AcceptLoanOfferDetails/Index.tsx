@@ -346,7 +346,7 @@ const AcceptLoanOffer: React.FC = () => {
                             {currentTab === 2 && (
                                 <section>
                                     <div className="px-5">
-                                        <Breakdown />
+                                        <Breakdown breakDown={data?.data?.loaneeBreakdown}/>
                                     </div>
                                     <div className="flex items-start gap-4 bg-grey105 p-5">
                                         <Checkbox
