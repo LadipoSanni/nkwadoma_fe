@@ -17,6 +17,7 @@ import {useToast} from "@/hooks/use-toast";
 import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import styles from "@/pages/admin/loanOfferDetails/index.module.css";
 import {NumericFormat} from "react-number-format";
+import Isloading from '@/reuseable/display/Isloading'
 
 const AcceptLoanOfferDetails = dynamic(
     () => Promise.resolve(AcceptLoanOffer),
@@ -45,7 +46,7 @@ const AcceptLoanOffer: React.FC = () => {
     const loanOfferId: string = getUserToken()
 
     const { data } = useViewLoanOfferDetailsQuery(loanOfferId);
-    const [respondToLoanOffer] = useRespondToLoanOfferMutation();
+    const [respondToLoanOffer, {isLoading}] = useRespondToLoanOfferMutation();
 
     const backToOverview = () => {
         router.push("/overview");
@@ -214,7 +215,7 @@ const AcceptLoanOffer: React.FC = () => {
                     description: errorMessage,
                     status: 'error'
                 });
-                console.log("The error: ",errorMessage)
+                // console.log("The error: ",errorMessage)
                 return;
             }
             toast({
@@ -402,10 +403,11 @@ const AcceptLoanOffer: React.FC = () => {
                                     {isCheckboxChecked && (
                                         <DropdownMenuContent className="w-[176px] h-[86px] p-1 grid gap-1">
                                             <DropdownMenuItem
+
                                                 className="rounded cursor-pointer p-2 flex items-center text-meedlBlue focus:text-meedlBlue hover:bg-lightBlue200"
                                                 onSelect={handleAccept}
                                             >
-                                                Accept loan offer
+                                                {isLoading ? <Isloading/> : 'Accept loan offer'}
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 className="rounded cursor-pointer p-2 flex items-center text-error500 focus:text-error500 hover:bg-error150"
