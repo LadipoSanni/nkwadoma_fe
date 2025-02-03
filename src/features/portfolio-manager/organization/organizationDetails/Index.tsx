@@ -71,6 +71,9 @@ const OrganizationDetails = () => {
   // const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
   const {data: searchResult} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !searchTerm})
 
+  const organizationLink = organizationDetails?.data.websiteAddress ? organizationDetails?.data.websiteAddress :
+      ''
+
   useEffect(() => {
     const id = getItemSessionStorage("organisationId");
     if (id) {
@@ -313,7 +316,7 @@ const OrganizationDetails = () => {
                 >
                   <IoGlobeOutline className={"h-5 w-5 text-meedlBlue"} />
                   <Link
-                      href={organizationDetails?.data.websiteAddress}
+                      href={organizationLink}
                     className={
                       "text-meedlBlue text-[14px] font-medium leading-[150%]"
                     }
