@@ -166,7 +166,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .trim()
             .required("Loan product terms is required")
             .max(2500, "Terms exceeds 2500 characters")
-            .test("not-empty", "Terms and condition is required.", (value = "") => {
+            .test("not-empty", "Terms and conditions is required.", (value = "") => {
                 const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
                 return sanitizedValue !== "";
             }),
@@ -652,7 +652,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                 <div className="pt-4">
                                     <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product
                                         terms and
-                                        condition</Label>
+                                        conditions</Label>
                                     <Field
                                         name="loanProductTermsAndCondition"
                                         component={FormikCustomQuillField}
