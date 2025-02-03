@@ -27,15 +27,15 @@ const Details = () => {
         { label: "Fund product", value: loanProduct?.data.investmentVehicleName },
         { label: "Product sponsor", value: loanProduct?.data.sponsor},
         { label: "Product size ", value: formatAmount(loanProduct?.data.loanProductSize)},
-        { label: "Tenor", value: loanProduct?.data.tenor },
-        { label: "Minimum repayment amount", value: formatAmount(loanProduct?.data.minimumRepaymentAmount)},
+        { label: "Tenor", value: loanProduct?.data.tenor + " months" },
+        { label: "Minimum repayment amount", value: formatAmount(loanProduct?.data.minRepaymentAmount)},
         { label: "Interest rate", value: loanProduct?.data.interestRate },
-        { label: "Obligor limit", value: formatAmount(loanProduct?.data.obligorLimit)},
-        { label: "Moratorium", value: loanProduct?.data.moratorium },
+        { label: "Obligor limit", value: formatAmount(loanProduct?.data.obligorLoanLimit)},
+        { label: "Moratorium", value: loanProduct?.data.moratorium + " months" },
         { label: "Amount disbursed", value: formatAmount(loanProduct?.data.totalAmountDisbursed)},
-        { label: "Amount repaid ", value: formatAmount(loanProduct?.data.minRepaymentAmount)},
+        { label: "Amount repaid ", value: formatAmount(loanProduct?.data.totalAmountRepaid)},
         { label: "Amount earned", value: formatAmount(loanProduct?.data.totalAmountEarned)},
-        { label: "Cost of funds", value: loanProduct?.data.costOfFunds || "0%"},
+        { label: "Cost of funds", value: loanProduct?.data.costOfFund + "%" || "0%"},
     ];
 
     return (
