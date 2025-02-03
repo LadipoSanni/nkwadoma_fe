@@ -134,7 +134,20 @@ export const organizationApi = createApi({
                method: 'GET'
            })
         }),
+        searchOrganizationAsPortfolioManager : builder.query({
+            query: (param:{
+                organizationId: string,
+                name: string,
+                pageSize: number,
+                pageNumber: number
+
+            })=> ({
+                 url: `/organization/search-admin`,
+               method: 'GET',
+               params: param
+            })
+        })
     })
 })
 
-export const { useViewOrganizationsQuery, useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery,useDeactivateOrganizationMutation,useActivateOrganizationMutation,useViewOrganizationAdminQuery} = organizationApi
+export const { useViewOrganizationsQuery, useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery,useDeactivateOrganizationMutation,useActivateOrganizationMutation,useViewOrganizationAdminQuery,useSearchOrganizationAsPortfolioManagerQuery} = organizationApi

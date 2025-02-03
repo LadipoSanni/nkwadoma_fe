@@ -214,6 +214,7 @@ const AcceptLoanOffer: React.FC = () => {
                     description: errorMessage,
                     status: 'error'
                 });
+                console.log("The error: ",errorMessage)
                 return;
             }
             toast({

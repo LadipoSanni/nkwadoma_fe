@@ -9,7 +9,7 @@ import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import Isloading from "@/reuseable/display/Isloading";
 import { useCreateInvestmentVehicleMutation } from "@/service/admin/fund_query";
 import { useToast } from "@/hooks/use-toast";
-import { validateNumber, validatePositiveNumber } from "@/utils/Format";
+import { validateNumber, validatePositiveNumberWithIndexNumbers } from "@/utils/Format";
 // import { formatNumberOnBlur } from '@/utils/Format';
 import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
@@ -390,7 +390,7 @@ function CreateInvestmentVehicle({
                     placeholder="0"
                     type="text"
                     className="w-full p-3 border rounded focus:outline-none mt-2"
-                    onChange={validatePositiveNumber(
+                    onChange={validatePositiveNumberWithIndexNumbers(
                       "rate",
                       setFieldValue,
                       100,
