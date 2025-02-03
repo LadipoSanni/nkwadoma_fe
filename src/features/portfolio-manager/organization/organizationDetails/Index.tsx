@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { getItemSessionStorage } from "@/utils/storage";
 import { formatAmount } from "@/utils/Format";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
+// import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization"
 import { Button } from "@/components/ui/button";
 import ActivateOrganization from "@/components/portfolio-manager/organization/ActivateOrganization";
 import DeactivateOrganization from "@/components/portfolio-manager/organization/DeactivateOrganization";
@@ -26,6 +26,7 @@ import TableModal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import Link from "next/link";
+import { useSearchOrganizationAsPortfolioManagerQuery } from "@/service/admin/organization";
 
 
 interface TableRowData {
@@ -60,7 +61,15 @@ const OrganizationDetails = () => {
     { skip: !orgId }
   );
 
-  const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
+  const param = {
+    organizationId: orgId,
+    name:searchTerm,
+    pageNumber: page,
+    pageSize: 300,
+  }
+
+  // const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
+  const {data: searchResult} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !searchTerm})
 
   useEffect(() => {
     const id = getItemSessionStorage("organisationId");
@@ -70,14 +79,14 @@ const OrganizationDetails = () => {
   }, []);
 
     useEffect(() => {
-      if (searchTerm && searchResults && searchResults.data) {
-        const admins = searchResults.data
+      if (searchTerm && searchResult && searchResult.data) {
+        const admins = searchResult?.data?.body
         setAdminList(admins);
       } else if (!searchTerm && adminData && adminData?.data) {
         const admins = adminData?.data?.body;
         setAdminList(admins);
       }
-    },[searchTerm, searchResults,adminData]);
+    },[searchTerm, searchResult,adminData]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value);

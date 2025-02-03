@@ -7,6 +7,7 @@ import {formatAmount} from '@/utils/Format';
 import {useGetInvestmentVehicleDetailQuery} from '@/service/admin/fund_query';
 import {getItemSessionStorage} from '@/utils/storage';
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 
 const Details = () => {
     const [investmentId, setInvestmentId] = useState("");
@@ -28,7 +29,7 @@ const Details = () => {
         {
             name: 'Vehicle status',
             value: <p
-                className='w-14 h-6 bg-success50 flex justify-center items-center rounded-lg'>{data?.data?.status || 'close'}</p>
+                className='pl-2 pr-2 h-6 bg-success50 flex justify-center items-center rounded-xl '>{capitalizeFirstLetters(data?.data?.fundRaisingStatus.replace(/_/g, ' ')) }</p>
         },
         {name: 'Interest rate', value: `${data?.data?.rate || 0}%`},
         {

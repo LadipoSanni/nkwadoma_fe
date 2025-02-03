@@ -16,7 +16,7 @@ import { setItemSessionStorage } from '@/utils/storage';
 import { useRouter } from 'next/navigation'
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
-
+// import DataTable from '@/reuseable/table/Table';
 
 
 
@@ -63,19 +63,21 @@ function Organization() {
    
 
     const [isOpen, setIsOpen] = useState(false);
+    const [pageNumber,setPageNumber] = useState(0);
+  const [pageSize] = useState(300);
     const router = useRouter()
 
     const handleInviteOrganizationClick = () => {
         setIsOpen(!isOpen);
     }
     const dataElement = {
-        pageNumber: 0,
-        pageSize: 300
+        pageNumber,
+        pageSize
     }
     const [searchTerm, setSearchTerm] = useState('');
     const [organizationList, setOrganizationList] = useState<organizationListPros[]>([]);
 
-    const {data} = useViewAllOrganizationsQuery(dataElement)
+    const {data,refetch} = useViewAllOrganizationsQuery(dataElement)
     const { data: searchResults } = useSearchOrganisationByNameQuery(searchTerm, { skip: !searchTerm });
 
     
@@ -89,9 +91,15 @@ function Organization() {
         } else if (!searchTerm && data && data?.data) {
             const organizations = data?.data?.body;
             setOrganizationList(organizations);
+            setPageNumber(data?.data?.pageNumber)
            
         }
-    },[searchTerm,searchResults,data])
+    },[searchTerm,searchResults,data,pageNumber])
+
+    useEffect(() => {
+        
+        refetch();
+      }, [pageNumber, refetch]);
 
     const handleRowClick = (row:TableRowData) => {
          router.push('/organizations/details')
@@ -161,6 +169,24 @@ function Organization() {
                     condition={true}
                     icon={MdOutlineAccountBalance}
                 />
+    //             <DataTable
+    //   tableData={organizationList.slice().reverse()}
+    //   tableHeader={organizationHeader}
+    //   tableHeight={52}
+    //   sx="cursor-pointer"
+    //   handleRowClick={handleRowClick}
+    //   tableCellStyle="h-12"
+    // //   optionalRowsPerPage={pageSize}
+    //   staticHeader="Name"
+    //   staticColunm="name"
+    //   sideBarTabName="organization"
+    //   optionalFilterName="active"
+    //   condition
+    //   icon={MdOutlineAccountBalance}
+    //   totalPages={data?.data?.totalPages}
+    //   pageNumber={pageNumber}
+    //   hasNextPage={data?.data?.hasNextPage}
+    // />
                }
             </div>
         },
@@ -231,6 +257,7 @@ function Organization() {
     ]
     return (
         <div className={`px-6 py-5 ${inter.className}`}>
+            
             <Tabs defaultValue='active'>
                 <TabsList className={`z-50 `}>
                     {tabData.map((tab, index) => (
