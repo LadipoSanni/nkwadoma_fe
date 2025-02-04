@@ -54,7 +54,7 @@ const Index = () => {
 
     return (
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
-             className={`grid md:px-3 md:overflow-hidden  md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
+             className={`grid md:px-3 md:overflow-hidden   place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {isLoading || isLoadingOrganizationLoanRequest ? (
                     <div className={`w-full h-fit md:w-full md:h-fit`}>
