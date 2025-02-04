@@ -5,6 +5,7 @@ import AuthButton from "@/reuseable/buttons/AuthButton";
 import {useRouter, useSearchParams} from "next/navigation";
 import {useResetPasswordMutation} from "@/service/auths/api";
 import {useToast} from "@/hooks/use-toast"
+import {inter} from "@/app/fonts";
 
 const Step3 = () => {
 
@@ -101,7 +102,7 @@ const Step3 = () => {
                 id={"resetPassword3StepInnerContainer"}
                 className={`w-[98%] md:w-[97%] grid grid-cols-1 gap-2 md:grid md:grid-cols-1 md:gap-0 content-between  h-fit md:h-fit`}>
                 <div id="resetPassword3HeaderContainer" className={`h-fit grid grid-2 md:h-[2rem] md:mb-4 md:grid md:gap-0 `}>
-                    <div id={"RESETPASSWORDStep3HEADER"} className={`font-semi-bold text-2xl  `}>Reset your password
+                    <div id={"RESETPASSWORDStep3HEADER"} className={`font-semi-bold text-2xl`}>Reset your password
                     </div>
                 </div>
                 <div className={`w-[100%] h-fit grid gap-3 mt-4 md:mb-4 `}>
@@ -131,7 +132,7 @@ const Step3 = () => {
                                 id={`loginOnResetPasswordStep1`}
                                 data-testid={`loginOnResetPasswordStep1`}
                                 onClick={login}
-                                className={` h-fit md:h-fit text-meedlBlue text-sm  underline`}>
+                                className={` ${inter.className} h-fit md:h-fit text-meedlBlue text-sm  underline`}>
                                 Log in
                             </button>
                         </div>
