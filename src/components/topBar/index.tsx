@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { IoMdMenu } from "react-icons/io";
 import { setShowMobileSideBar } from "@/redux/slice/layout/adminLayout";
-import { inter } from "@/app/fonts";
+import {inter500, inter} from "@/app/fonts";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { capitalizeFirstLetters, getFirstLetterOfWord } from "@/utils/GlobalMethods";
 import styles from "@/components/topBar/index.module.css";
@@ -42,7 +42,7 @@ const TopBar = () => {
                             id={'LayOutHamburger'} />
                     </div>
                     <div className={` relative flex place-items-center `}>
-                        <div className={` ${inter.className} text-xm font-bold md:text-lg md:font-bold md:text-black500 text-black500  `}>{currentTab}</div>
+                        <div className={` ${inter500.className} text-base md:text-base text-black500 md:text500 `}>{currentTab}</div>
                     </div>
                 </div>
 
@@ -60,7 +60,7 @@ const TopBar = () => {
                         <div
                             className={` flex place-content-center  object-fit  bg-[#E0FDEB]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
                             <div
-                                className={` grid place-content-center  mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `}>
+                                className={` ${inter.className} grid place-content-center  mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `}>
                                 {getFirstLetterOfWord(user_name)}
                             </div>
                         </div>
