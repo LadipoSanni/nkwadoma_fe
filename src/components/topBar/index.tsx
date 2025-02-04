@@ -6,7 +6,6 @@ import { setShowMobileSideBar } from "@/redux/slice/layout/adminLayout";
 import {inter500, inter} from "@/app/fonts";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { capitalizeFirstLetters, getFirstLetterOfWord } from "@/utils/GlobalMethods";
-import styles from "@/components/topBar/index.module.css";
 import { store, useAppSelector } from "@/redux/store";
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import AdminProfile from "@/features/profile/adminProfile/Index";
@@ -64,10 +63,10 @@ const TopBar = () => {
                                 {getFirstLetterOfWord(user_name)}
                             </div>
                         </div>
-                        <div onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : ''} hidden md:grid md:gap-1 w-fit object-contain`}>
-                            <p className={`text-black500 ${styles.fullName}`}>{capitalizeFirstLetters(user_name)}</p>
-                            <p className={`text-black500 ${styles.role}`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
-                        </div>
+                        <button onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : ''} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
+                            <p className={`text-black500 ${inter500.className} flex justify-start  text-sm `}>{capitalizeFirstLetters(user_name)}</p>
+                            <p className={`text-black400 ${inter.className} text-sm`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
+                        </button>
                         <div id={'toggleArrowDiv'} className={``}>
                             {user_role === 'ORGANIZATION_ADMIN' && (
                                 <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
