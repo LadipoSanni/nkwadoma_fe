@@ -173,14 +173,15 @@ function LoanDetails() {
     ]
 
     const basic = [
-        {label: 'Gender', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.gender},
-        {label: 'Email address', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.email},
-        {label: 'Phone number', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.phoneNumer},
-        {label: 'Date of birth', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.maritalStatus},
-        {label: 'Nationality', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.nationality},
-        {label: 'State of origin ', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfOrigin},
-        {label: 'State of residence', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfResidence},
+        {label: 'Gender', value: data?.data.userIdentity.gender},
+        {label: 'Email address', value: data?.data.userIdentity.email},
+        {label: 'Phone number', value: data?.data?.userIdentity.phoneNumber},
+        {label: 'Date of birth', value: data?.data?.userIdentity.dateOfBirth},
+        {label: 'Marital status', value: data?.data?.userIdentity.maritalStatus},
+        {label: 'Nationality', value: data?.data?.userIdentity?.nationality},
+        {label: 'State of origin ', value: data?.data?.userIdentity?.stateOfOrigin},
+        {label: 'State of residence', value: data?.data?.userIdentity?.stateOfResidence},
+        // {label: 'State of residence', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfResidence},
     ]
 
     const additional = [
