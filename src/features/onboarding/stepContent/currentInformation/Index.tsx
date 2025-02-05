@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { MdClose, MdPersonOutline } from "react-icons/md";
 import { cabinetGrotesk, inter } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useSaveNextOfKinDetailsMutation } from "@/service/users/Loanee_query";

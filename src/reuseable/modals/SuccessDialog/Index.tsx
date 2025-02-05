@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { cabinetGrotesk, inter } from '@/app/fonts';
 import { setCurrentStep, setLoanReferralStatus } from '@/service/users/loanRerralSlice';
-import { Dialog, DialogOverlay, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
