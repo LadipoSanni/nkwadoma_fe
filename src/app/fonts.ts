@@ -19,6 +19,14 @@ export const inter = Inter({
     preload: false
 
 });
+export const inter500 = Inter({
+    subsets: ['latin'],
+    display: 'swap',
+    style: 'normal',
+    weight: '500',
+    preload: false
+
+});
 
 export const cabinetGrotesk = localFont({
     src: "./fonts/CabinetGrotesk-Medium.woff",

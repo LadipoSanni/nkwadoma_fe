@@ -1,6 +1,7 @@
 import React from 'react'
 import { Pagination,PaginationPrevious,PaginationNext,PaginationContent, PaginationItem,PaginationEllipsis } from '@/components/ui/pagination'
 import { Button } from '@/components/ui/button'
+import { inter } from '@/app/fonts';
 
 interface Props<T> {
     page: number;
@@ -55,7 +56,7 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
         onClick={handlePreviousPage}
         className={`${
           page === 1 ? "invisible" : "visible"
-        } gap-1 pl-2.5 h-12`}
+        } gap-1 pl-2.5 h-fit`}
         style={{
           color: '#101828',
           borderRadius: 'var(--radius-xs, 4px)',
@@ -97,9 +98,9 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
                   <Button
                     className={`${
                       item === page
-                        ? 'bg-grey50 text-gray-500 hover:bg-gray50 '
-                        : 'bg-gray-50 text-gray-500 border-none shadow-none'
-                    } px-5 py-1 rounded-full h-10`}
+                        ? 'bg-grey50 text-[#101828] hover:bg-gray50 '
+                        : 'bg-gray-50 text-[#72757A] text-sm border-none shadow-none'
+                    } px-3 py-1 rounded-full w-fit h-fit  ${inter.className}`}
                     onClick={(e) => handlePageChange(e, Number(item))}
                   >
                     {item}
@@ -118,7 +119,7 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
         onClick={handleNextPage}
         className={`${
           page >= totalPages ? "invisible" : "visible"
-        } gap-1 pr-2.5  h-12 w-24`}
+        } gap-1 pr-2.5  h-fit  w-24`}
         style={{
           color: '#101828',
           borderRadius: 'var(--radius-xs, 4px)',
