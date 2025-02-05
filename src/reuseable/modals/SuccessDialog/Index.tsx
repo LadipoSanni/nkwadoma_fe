@@ -43,7 +43,7 @@ const SuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ open, onClose
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
-            <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]" />
+            {/*<DialogOverlay className="bg-[rgba(52,64,84,0.70)] " />*/}
             <DialogContent className={'max-w-[350px] md:max-w-[416px] [&>button]:hidden gap-5 py-5 px-5'}>
                 <DialogHeader>
                     <DialogTitle className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>

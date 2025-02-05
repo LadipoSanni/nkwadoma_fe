@@ -98,7 +98,7 @@ const InviteAdminDialog: React.FC<InviteAdminDialogProps> = ({ isModalOpen, setI
 
     return (
         <Dialog open={isModalOpen} onOpenChange={(open) => { setIsModalOpen(open); if (!open) resetForm(); }}>
-            <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]" />
+            {/*<DialogOverlay className="bg-[rgba(52,64,84,0.70)] " />*/}
             <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6 py-5 pl-5 pr-2'}>
                 <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
                     <DialogTitle className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Invite Admin</DialogTitle>
