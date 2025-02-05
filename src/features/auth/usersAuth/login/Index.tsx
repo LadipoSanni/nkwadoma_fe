@@ -4,7 +4,7 @@ import {useState} from "react";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInputField from "@/reuseable/Input/AuthInputField";
 import Link from 'next/link'
-import {cabinetGrotesk} from "@/app/fonts";
+import {cabinetGrotesk, inter} from "@/app/fonts";
 import {validateEmailInput} from "@/utils/GlobalMethods"
 import {useLoginMutation} from "@/service/auths/api"
 import {useToast} from "@/hooks/use-toast"
@@ -94,6 +94,7 @@ const Login: React.FC = () => {
         if(loanOfferId) {
                 const response = await login({email, password}).unwrap()
                 if (response?.data) {
+                    const refresh_token = response?.data?.refresh_token
                     const access_token = response?.data?.access_token
                     const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
                     //eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -109,7 +110,7 @@ const Login: React.FC = () => {
                         status: "success",
                     });
                     if (user_role) {
-                        storeUserDetails(access_token, user_email, user_role, userName)
+                        storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                         setUserRoles(user_roles)
                         store.dispatch(setCurrentNavbarItem("Accept loan offer"))
                         router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
@@ -135,9 +136,10 @@ const Login: React.FC = () => {
                 try {
                     const response = await login({email, password}).unwrap()
                     if (response?.data) {
+
                         const access_token = response?.data?.access_token
+                        const refresh_token = response?.data?.refresh_token
                         const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-                        // console.log('decoded: ', decode_access_token)
                         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-expect-error
                         const userName = decode_access_token?.name
@@ -151,7 +153,7 @@ const Login: React.FC = () => {
                             status: "success",
                         });
                         if (user_role) {
-                            storeUserDetails(access_token, user_email, user_role, userName)
+                            storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                             setUserRoles(user_roles)
                             switch (user_role) {
                                 case 'LOANEE' :
@@ -166,8 +168,6 @@ const Login: React.FC = () => {
                                     router.push("/loan/loan-request")
                                     break;
                             }
-
-
                         }
                     }
                 } catch (error) {
@@ -193,7 +193,7 @@ const Login: React.FC = () => {
     return (
 
         <form
-            className="w-full md:w-[50%] md:mr-10  h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
+            className="w-full md:mr-10  h-fit md:w-[54%] md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-4">
                 <h1 className={`${cabinetGrotesk.className} text-[#1A1A1A] mt-3  text-2xl leading-5`}>Log in to your
@@ -231,7 +231,7 @@ const Login: React.FC = () => {
                                     handleClick={(e)=>{handleLogin(e)}}>
                         </AuthButton>
                     </div>
-                    <p className="flex items-center justify-center text-sm text-forgetPasswordBlue leading-4">
+                    <p className={`${inter.className} flex items-center justify-center text-sm text-forgetPasswordBlue leading-4`}>
                         Forgot Password? <Link id={'resetPasswordLinkFromLogin'} href={"/auth/reset-password-request"}
                                                className="font-medium text-meedlBlue ml-1  underline">Reset it
                         here</Link>

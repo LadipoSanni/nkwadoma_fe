@@ -100,8 +100,10 @@ const CreatePassword = () => {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
             const access_token = response?.data?.accessToken
+            const refreshToken = response?.data?.refreshToken
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
+            console.log('response: ', response)
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             const userName = decode_access_token?.name
@@ -111,7 +113,7 @@ const CreatePassword = () => {
             clearData()
             await persistor.purge();
             if (user_role) {
-                storeUserDetails(access_token, user_email, user_role, userName)
+                storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
                 if (user_role === 'LOANEE') {
                     store.dispatch(setCurrentNavbarItem("overview"))
                     router.push("/onboarding")
@@ -148,7 +150,7 @@ const CreatePassword = () => {
             <h1 id={'create-password-title'}
                 className={`${cabinetGrotesk.className} antialiased text-meedlBlue font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
                 <main id={'create-password-main'} className={'grid gap-[24.14px]'}>
-                    <div id={'create-password-inputs'} className={'grid  gap-4'}>
+                    <div id={'create-password-inputs'} className={'grid gap-4'}>
                         <AuthInputField
                             label={'Password'}
                             id={'password'}
