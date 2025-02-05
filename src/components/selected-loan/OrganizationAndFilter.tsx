@@ -4,6 +4,7 @@ import {Input} from '@/components/ui/input'
 import OrganizationNameAndChangeButton from "@/components/selected-loan/OrganizationNameAndChangeButton";
 import {MdSearch} from "react-icons/md";
 import ProductFilter from '../loan/selected-loan/loan-request/Product-filter';
+import {inter} from "@/app/fonts";
 
 
 export const initialFormValue = {
@@ -51,7 +52,7 @@ const OrganizationAndFilter = () => {
             <div
                 id="filterAndSearchComponent"
                 data-testid="filterAndSearchComponent"
-                className={`flex gap-1 w-fit h-fit md:w-fit md:h-fit md:flex md:gap-1`}
+                className={`flex gap-1 w-fit h-fit md:w-fit md:h-fit md:flex md:gap-3`}
             >
                 <div className='relative'>
                     <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -61,7 +62,8 @@ const OrganizationAndFilter = () => {
                         disabled={true}
                         id='searchLoan'
                         placeholder='Search'
-                        className='w-full lg:w-80 text-[#efefef] rounded h-11 md:h-9 focus-visible:ring-0 shadow-none  border-solid border border-neutral650   pl-10'
+                        // text-[#475467]
+                        className={`w-full lg:w-80 text-sm text-[#efefef] ${inter.className} rounded-md h-11 md:h-9 focus-visible:ring-0 shadow-none  border-solid border border-neutral650   pl-10`}
                     />
                 </div> 
                 <div>
