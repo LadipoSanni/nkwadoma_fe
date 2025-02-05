@@ -6,7 +6,7 @@ import {Providers} from "@/app/provider";
 import styles from "./index.module.css"
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {useToast} from "@/hooks/use-toast";
-import {isTokenValid} from "@/utils/GlobalMethods";
+import {isTokenExpired} from "@/utils/GlobalMethods";
 import {clearData} from "@/utils/storage";
 import {redirect} from "next/navigation";
 
@@ -17,15 +17,14 @@ type props = {
 const AdminLayout = ({children}: props) => {
     const cookie = getUserDetailsFromStorage('access_token')
     const {toast} = useToast()
-    const response = isTokenValid(cookie ? cookie : '')
+    const response = isTokenExpired(cookie ? cookie : '')
 
-    console.log('response: ', response)
     useEffect(() => {
         checkUserToken(response)
     }, [response]);
 
     const checkUserToken = (isTokenValid: boolean) => {
-        if (!isTokenValid) {
+        if (isTokenValid) {
             clearData()
             toast({
                 description: "Session expired. Please login again",

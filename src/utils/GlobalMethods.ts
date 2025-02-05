@@ -16,19 +16,11 @@ export const isUserAdmin = (role: string) => {
     return ADMIN_ROLES.includes(role)
 }
 
-export const isTokenValid = (token: string): boolean => {
-    console.log('token:: ', token)
+export const isTokenExpired = (token: string): boolean => {
     try {
         const decoded: { exp: number } = jwtDecode(token);
         const expiryTime = decoded.exp  * 1000;
-        const currentTime = Date.now();
-
-        const rr = currentTime < expiryTime;
-        const jj =  !!(decoded && decoded.exp && isAfter(Date.now(), expiryTime));
-        console.log('isAfter:: ',  isAfter(Date.now(), expiryTime))
-
-        console.log('decoded:', decoded, 'exp: ', decoded.exp, 'check: ', rr, 'expirYtIME: ','jj:: ',jj, expiryTime, 'currentTime: ', currentTime);
-        return !!(decoded && decoded.exp && isAfter(Date.now(), decoded.exp));
+        return isAfter(Date.now(), expiryTime);
     } catch (e) {
         console.log("error:: ", e)
         return false;

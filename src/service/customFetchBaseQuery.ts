@@ -1,7 +1,7 @@
 
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { getUserDetails } from '@/features/auth/usersAuth/login/action';
-import {isTokenValid} from "@/utils/GlobalMethods";
+import {isTokenExpired} from "@/utils/GlobalMethods";
 
 
 
@@ -17,8 +17,7 @@ export const customFetchBaseQuery = fetchBaseQuery({
     prepareHeaders: (headers) => {
         const { storedAccessToken } = getUserDetails();
         const {storedRefreshToken} = getUserDetails();
-        const token = isTokenValid(storedAccessToken ? storedAccessToken : '') ? storedAccessToken : storedRefreshToken
-        console.log('token: ', token, 'storedAccessToken: ', storedAccessToken, 'storedRefreshToken: ', storedRefreshToken);
+        const token = isTokenExpired(storedAccessToken ? storedAccessToken : '') ? storedAccessToken : storedRefreshToken
         if (storedAccessToken) {
             headers.set('authorization', `Bearer ${token}`);
             headers.set('Content-type', 'application/json');
