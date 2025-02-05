@@ -9,6 +9,7 @@ export interface AuthButtonPropsType {
     disable: boolean,
     handleClick: (e?: React.MouseEvent<HTMLButtonElement> )=> void;
     isLoading?: boolean;
+    useCabinetGrotesk?: boolean;
 }
 
 
