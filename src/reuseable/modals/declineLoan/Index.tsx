@@ -46,13 +46,31 @@ const DeclineLoanModal: React.FC<DeclineLoanModalProps> = ({ isOpen, setIsOpen, 
             loanRequestDecision: 'DECLINED',
             declineReason: reason.trim()
         };
-        console.log('payload:: ', payload)
 
+        console.log('payload', payload);
         try {
-           await respondToLoanRequest(payload)
+           const response = await respondToLoanRequest(payload)
             setReason('');
             setIsOpen(false);
             setError(null);
+            console.log('response: ', response)
+            if (response?.error){
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                console.log('error message: ', response?.error?.data?.message)
+                toast({
+                    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-expect-error
+                    description: response?.error?.data?.message,
+                    status: 'error',
+                })
+            }else{
+                toast({
+
+                    description: 'loan request declined',
+                    status: 'success',
+                })
+            }
         } catch(error)  {
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
