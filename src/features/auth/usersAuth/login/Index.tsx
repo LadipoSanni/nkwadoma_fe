@@ -92,34 +92,35 @@ const Login: React.FC = () => {
 
     const routeLoanee = async (loanOfferId?: string) => {
         if(loanOfferId) {
-                const response = await login({email, password}).unwrap()
-                if (response?.data) {
-                    const refresh_token = response?.data?.refresh_token
-                    const access_token = response?.data?.access_token
-                    const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-                    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-expect-error
-                    const userName = decode_access_token?.name
-                    const user_email = decode_access_token?.email
-                    const user_roles = decode_access_token?.realm_access?.roles
-                    const user_role = user_roles.filter(getUserRoles).at(0)
-                    clearData()
-                    await persistor.purge();
-                    toast({
-                        description: "Login successful",
-                        status: "success",
-                    });
-                    if (user_role) {
-                        storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
-                        setUserRoles(user_roles)
+
+                // const response = await login({email, password}).unwrap()
+                // if (response?.data) {
+                //     const refresh_token = response?.data?.refresh_token
+                //     const access_token = response?.data?.access_token
+                //     const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+                //     //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //     // @ts-expect-error
+                //     const userName = decode_access_token?.name
+                //     const user_email = decode_access_token?.email
+                //     const user_roles = decode_access_token?.realm_access?.roles
+                //     const user_role = user_roles.filter(getUserRoles).at(0)
+                //     clearData()
+                //     await persistor.purge();
+                //     toast({
+                //         description: "Login successful",
+                //         status: "success",
+                //     });
+                    // if (user_role) {
+                    //     storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
+                    //     setUserRoles(user_roles)
                         store.dispatch(setCurrentNavbarItem("Accept loan offer"))
                         router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
-                    }
-                }else{
+                    // }
+                // }
+        }else{
                     store.dispatch(setCurrentNavbarItem("overview"))
                     router.push("/onboarding")
                 }
-        }
     }
 
 
