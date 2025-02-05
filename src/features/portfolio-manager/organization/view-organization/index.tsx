@@ -16,7 +16,7 @@ import { setItemSessionStorage } from '@/utils/storage';
 import { useRouter } from 'next/navigation'
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
-import DataTable from '@/reuseable/table/General-table';
+// import DataTable from '@/reuseable/table/Table';
 
 
 
@@ -182,21 +182,21 @@ function Organization() {
             table: <div>
                {
                 searchTerm && activeOrganization.length === 0? <div><SearchEmptyState icon={MdSearch} name='Active organization'/></div> :
-                // <Tables
-                //     tableData={activeOrganization}
-                //     tableHeader={organizationHeader}
-                //     tableHeight={52}
-                //     sx='cursor-pointer'
-                //     handleRowClick={handleRowClick}
-                //     tableCellStyle={'h-12'}
-                //     optionalRowsPerPage={10}
-                //     staticHeader='Name'
-                //     staticColunm='name'
-                //     sideBarTabName='organization'
-                //     optionalFilterName='active'
-                //     condition={true}
-                //     icon={MdOutlineAccountBalance}
-                // />
+                <Tables
+                    tableData={activeOrganization}
+                    tableHeader={organizationHeader}
+                    tableHeight={52}
+                    sx='cursor-pointer'
+                    handleRowClick={handleRowClick}
+                    tableCellStyle={'h-12'}
+                    optionalRowsPerPage={10}
+                    staticHeader='Name'
+                    staticColunm='name'
+                    sideBarTabName='organization'
+                    optionalFilterName='active'
+                    condition={true}
+                    icon={MdOutlineAccountBalance}
+                />
     //             <DataTable
     //   tableData={activeOrganization.slice().reverse()}
     //   tableHeader={organizationHeader}
@@ -216,30 +216,18 @@ function Organization() {
     //   hasNextPage={data?.data?.hasNextPage}
     //   setPageNumber={setPageNumber}
     // />
-    <DataTable
-    tableData={activeOrganization}
-        tableHeader={organizationHeader}
-        tableHeight={52}
-        sx='cursor-pointer'
-        handleRowClick={handleRowClick}
-        tableCellStyle={'h-12'}
-        optionalRowsPerPage={10}
-        staticHeader='Name'
-        staticColunm='name'
-        sideBarTabName='organization'
-        optionalFilterName='active'
-        condition={true}
-        icon={MdOutlineAccountBalance}
-        totalPages={Math.ceil(activeOrganization.length / 10)}
-        hasNextPage={data?.data?.hasNextPage || false}
-        fetchMoreData={(page: number) => {
-            setPageNumber(page);
-        }}
-        totalItemSize={300}
-        />
-     
-        }
-               
+               }
+               {/* <button className='bg-slate-100'
+               onClick={handleNextPage}
+               >
+                next
+               </button>
+               <div></div>
+               <button className='bg-slate-100'
+               onClick={handlePreviousPage}
+               >
+                back
+               </button> */}
             </div>
         },
         {

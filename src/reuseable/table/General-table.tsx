@@ -71,7 +71,7 @@ interface Props<T extends TableRowData> {
   searchEmptyState?: boolean;
   totalPages?: number;
   hasNextPage?: boolean;
-  fetchMoreData?: (page: number) => void;
+  fetchMoreData: (page: number) => void;
   totalItemSize?: number
 }
 
@@ -116,9 +116,9 @@ function Tables<T extends TableRowData>({
 
   useEffect(() => {
     if (pageNumber > 0 && hasNextPage) {
-        if(fetchMoreData){
+
         fetchMoreData(pageNumber);
-        }
+        
     }
 });
 
