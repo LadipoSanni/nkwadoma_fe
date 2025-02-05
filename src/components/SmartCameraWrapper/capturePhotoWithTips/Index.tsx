@@ -17,6 +17,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const [hasFaceBeenDetected, setHasFaceBeenDetected] = useState(false);
     const [modelLoadingError, setModelLoadingError] = useState<string | null>(null);
     const [step, setStep] = useState<string>('right');
+    const [capturedImage, setCapturedImage] = useState<string | null>(null);
     // const dispatch = useDispatch();
 
     useEffect(() => {
@@ -34,6 +35,10 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
             }
         };
 
+        loadModels();
+    }, []);
+
+    useEffect(() => {
         const startCamera = async () => {
             const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
             //   dispatch(setCameraStream(stream));
@@ -42,16 +47,21 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
             }
         };
 
+        startCamera();
+    }, []);
+
+    useEffect(() => {
         const detectFaceOrientation = async () => {
             if (!videoRef.current || !isModelLoaded) return;
 
             const video = videoRef.current;
-            const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.3 })).withFaceLandmarks();
+            const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.2 })).withFaceLandmarks();
 
             if (detection) {
                 setIsFaceDetected(true);
                 if (!hasFaceBeenDetected) {
                     setHasFaceBeenDetected(true);
+                    captureImage(video);
                 }
                 const landmarks = detection.landmarks;
                 const nose = landmarks.getNose();
@@ -87,22 +97,10 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                             setStep("down");
                         } else if (step === "down") {
                             setStep("complete");
-                        }
-                    }
-                }
-
-                if (newOrientation === "center") {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    const context = canvas.getContext('2d');
-                    if (context) {
-                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                        canvas.toBlob((blob) => {
-                            if (blob) {
-                                onCapture(new File([blob], "capture.png", { type: "image/png" }));
+                            if (capturedImage) {
+                                onCapture(new File([capturedImage], "capture.png", { type: "image/png" }));
                             }
-                        });
+                        }
                     }
                 }
             } else {
@@ -112,8 +110,17 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
             }
         };
 
-        loadModels();
-        startCamera();
+        const captureImage = (video: HTMLVideoElement) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            if (context) {
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageSrc = canvas.toDataURL('image/png');
+                setCapturedImage(imageSrc);
+            }
+        };
 
         let intervalId: NodeJS.Timeout | null = null;
         if (isModelLoaded) {
@@ -122,7 +129,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         return () => {
             if (intervalId) clearInterval(intervalId);
         };
-    }, [isModelLoaded, orientation, onCapture, hasFaceBeenDetected, step]);
+    }, [isModelLoaded, orientation, onCapture, hasFaceBeenDetected, step, capturedImage]);
 
     const frameClassName = isFaceDetected
         ? "absolute top-4 right-4 w-[270px] h-[270px] rounded-full overflow-hidden"
