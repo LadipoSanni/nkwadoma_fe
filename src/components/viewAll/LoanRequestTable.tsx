@@ -36,7 +36,7 @@ const Index = () => {
 
     // console.log('view all loan requests:: ', data,'viewAllLoanRequestsInAnOrganizationData:: ', viewAllLoanRequestsInAnOrganizationData, 'isLoadingOrganizationLoanRequest:: ', isLoadingOrganizationLoanRequest)
     const loanRequestHeader = [
-        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex justidy-start bg-red-300 gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
+        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex  gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
         { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) =>row.programName },
         { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohortName },
         { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMM D, YYYY')}</div> },
