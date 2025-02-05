@@ -15,14 +15,14 @@ export const loanRequestApi = createApi({
                 method: 'GET',
                 params: data
             }),
-            providesTags: ['loanRequests', 'accept-loan-offer']
+            providesTags: ['loanRequests', 'accept-loan-offer', 'create-loan-offer']
         }),
         respondToLoanRequest: builder.mutation({
             query: (data) => ({
                 url: '/loan/loan-request/response',
                 method: 'POST',
                 body: data
-            }), invalidatesTags: ['create-loan-offer']
+            }), invalidatesTags: ['create-loan-offer', 'loanRequests']
         }),
         viewLoanRequestDetails: builder.query({
             query: (id: string) => ({
@@ -36,7 +36,7 @@ export const loanRequestApi = createApi({
                 // url: `/loan/${data.organizationId}/loan-requests?pageSize=${data.pageSize}?pageNumber=${data.pageNumber}`,
                 method: 'GET',
             }),
-            providesTags: ['loanRequests']
+            providesTags: ['loanRequests', 'create-loan-offer', 'accept-loan-offer']
         }),
 
 
