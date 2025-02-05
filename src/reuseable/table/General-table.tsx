@@ -9,8 +9,7 @@ import {
   TableHeader,
 } from "@/components/ui/table";
 import TableContainer from "./TableContainer";
-// import Paginations from "./TablePagination";
-import Paginations from "./Pagination";
+import Paginations from "./General-table-pagination";
 import {
   Select,
   SelectTrigger,
@@ -65,18 +64,18 @@ interface Props<T extends TableRowData> {
   emptyStateStyle?: string;
   icon?: ElementType;
   optionalFilterName?: string;
-//   optionalRowsPerPage?: number;
+  optionalRowsPerPage?: number;
   tableCellStyle?: string;
   condition?: boolean;
   isLoading?: boolean;
   searchEmptyState?: boolean;
-  totalPages: number;
-  pageNumber: number;
-  hasNextPage: boolean;
-  setPageNumber: React.Dispatch<React.SetStateAction<number>>;
+  totalPages?: number;
+  hasNextPage?: boolean;
+  fetchMoreData?: (page: number) => void;
+  totalItemSize?: number
 }
 
-function DataTable<T extends TableRowData>({
+function Tables<T extends TableRowData>({
                                           searchEmptyState,
   tableHeader,
   tableData,
@@ -93,50 +92,76 @@ function DataTable<T extends TableRowData>({
   emptyStateStyle,
   icon,
   optionalFilterName,
-//   optionalRowsPerPage = 8,
+  optionalRowsPerPage = 10,
   tableCellStyle,
   condition,
   isLoading,
   totalPages,
-  pageNumber,
   hasNextPage,
-  setPageNumber
+  fetchMoreData,
+  totalItemSize
+  
 }: Props<T>) {
-  // const [page, setPage] = useState(pageNumber + 1);
-//   const rowsPerPage = optionalRowsPerPage;
   const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [pageNumber, setPageNumber] = useState<number>(0);
+  const [frontendPageNumber, setFrontendPageNumber] = useState(1);
+  const itemsPerPage = optionalRowsPerPage;
+  const totalFrontendPages = Math.ceil(totalItemSize ?? 0/ itemsPerPage);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-
+  useEffect(() => {
+    if (pageNumber > 0 && hasNextPage) {
+        if(fetchMoreData){
+        fetchMoreData(pageNumber);
+        }
+    }
+});
 
   if (!isMounted) return null;
 
-  
+//   const handlePageChange = (
+//     event: React.ChangeEvent<unknown>,
+//     newPage: number
+//   ) => {
+//     if (newPage <= totalFrontendPages) {
+//         setFrontendPageNumber(newPage);
+//     } else if (hasNextPage) {
+//         const newBackendPage = Math.floor((newPage - 1) / totalFrontendPages);
+//         setPageNumber(newBackendPage);
+//         setFrontendPageNumber(newPage - newBackendPage * totalFrontendPages);
+//     }
+//   };
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    newPage: number
-  ) => {
-    setPageNumber(newPage-1);
-  };
+const handlePageChange = (newPage: number) => {
+    if (newPage <= totalFrontendPages) {
+        setFrontendPageNumber(newPage);
+    } else if (hasNextPage) {
+        const newBackendPage = Math.floor((newPage - 1) / totalFrontendPages);
+        setPageNumber(newBackendPage);
+        setFrontendPageNumber(newPage - newBackendPage * totalFrontendPages);
+    }
+};
 
-  const handleNextPage = () => {
-        if (hasNextPage) {
-          setPageNumber((prevPage) => prevPage + 1);    
-     }
-   
-  };
+const handleNextPage = () => {
+    if (hasNextPage || frontendPageNumber < totalFrontendPages) {
+        handlePageChange(frontendPageNumber + 1);
+    }
+};
 
-  const handlePreviousPage = () => {
-        if (pageNumber  > 0) {
-          setPageNumber((prevPage) => prevPage - 1)
-          }
-  };
+const handlePreviousPage = () => {
+    if (frontendPageNumber + pageNumber * totalFrontendPages > 1) {
+        handlePageChange(frontendPageNumber - 1);
+    }
+};
+
+
+
+
 
   const handleDropdownOpen = () => {
     setDropdownOpen(!dropdownOpen);
@@ -161,7 +186,12 @@ function DataTable<T extends TableRowData>({
     return value;
   };
 
-  const isLastPage = pageNumber === totalPages;
+  const paginatedData = tableData?.slice(
+    (frontendPageNumber - 1) * itemsPerPage,
+    frontendPageNumber * itemsPerPage
+  );
+//   const totalPages = Math.ceil(tableData?.length / itemsPerPage)
+  const isLastPage = frontendPageNumber === totalPages;
 
   return (
     <div id="loanProductTableContainer" className={`w-[100%] `}>
@@ -240,7 +270,7 @@ function DataTable<T extends TableRowData>({
                   data-testid="datatable"
                   className=""
                 >
-                  {tableData?.map((row, rowIndex) => (
+                  {paginatedData?.map((row, rowIndex) => (
                     <TableRow
                       id={`dynamicTableBodyRow${rowIndex}`}
                       key={rowIndex}
@@ -324,11 +354,12 @@ function DataTable<T extends TableRowData>({
               </Table>
             </TableContainer>
             <Paginations
-              page={pageNumber + 1}
-              totalPage={totalPages}
+              page={frontendPageNumber}
+            //   tableData={tableData}
               handlePageChange={handlePageChange}
               handleNextPage={handleNextPage}
               handlePreviousPage={handlePreviousPage}
+              totalPage={totalPages ?? 0}
             />
           </div>
           <div
@@ -396,7 +427,7 @@ function DataTable<T extends TableRowData>({
                   </TableRow>
                 </TableHeader>
                 <TableBody id="dynamicTableBodyMobile" className="w-full">
-                  {tableData?.map((row, rowIndex) => (
+                  {paginatedData?.map((row, rowIndex) => (
                     <TableRow
                       key={rowIndex}
                       onClick={() => handleRowClick(row)}
@@ -431,18 +462,18 @@ function DataTable<T extends TableRowData>({
                           )}
                         </div>
                       </TableCell>
-                      {/* ${row[selectedColumn] === "Accepted"?"bg-error50 text-success600 pt-1 pb-1 pr-1 pl-1 rounded-xl w-24 relative ml-12 mr-12": row[selectedColumn] === "Declined"? 'text-error600 bg-error50 pt-1 pb-1 pr-1 pl-1 rounded-xl w-24 relative ml-12 mr-12 ': ""} */}
+                      
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
             <Paginations
-              page={pageNumber + 1}
-              totalPage={totalPages}
+              page={frontendPageNumber}
               handlePageChange={handlePageChange}
               handleNextPage={handleNextPage}
               handlePreviousPage={handlePreviousPage}
+              totalPage={totalPages ?? 0}
             />
           </div>
         </div>
@@ -451,4 +482,4 @@ function DataTable<T extends TableRowData>({
   );
 }
 
-export default DataTable;
+export default Tables;

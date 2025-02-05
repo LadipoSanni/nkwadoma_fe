@@ -16,7 +16,7 @@ import { setItemSessionStorage } from '@/utils/storage';
 import { useRouter } from 'next/navigation'
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
-// import DataTable from '@/reuseable/table/Table';
+import DataTable from '@/reuseable/table/General-table';
 
 
 
@@ -52,7 +52,8 @@ interface organizationListPros extends TableRowData{
     tin:string,
     invitedDate:string,
     numberOfLoanees:string,
-    status: string
+    status: string,
+    
 
 }
 
@@ -63,7 +64,7 @@ function Organization() {
    
 
     const [isOpen, setIsOpen] = useState(false);
-    const [pageNumber,setPageNumber] = useState(0);
+    const [pageNumber,setPageNumber] = useState<number>(0);
   const [pageSize] = useState(300);
     const router = useRouter()
 
@@ -84,17 +85,44 @@ function Organization() {
 
   
 
+    // useEffect(()=> {
+    //     if (searchTerm && searchResults && searchResults.data) {
+    //         const organizations = searchResults.data;
+    //         setOrganizationList(organizations);
+    //     } else if (!searchTerm && data && data?.data) {
+    //         const organizations = data?.data?.body;
+    //         setOrganizationList(organizations);
+    //         setPageNumber(data?.data?.pageNumber)
+           
+    //     }
+    // },[searchTerm,searchResults,data])
+
     useEffect(()=> {
+        const sortedOrganizations = (data?.data?.body.slice() ?? []).sort((a: organizationListPros, b: organizationListPros) => new Date(b.invitedDate).getTime() - new Date(a.invitedDate).getTime());
         if (searchTerm && searchResults && searchResults.data) {
             const organizations = searchResults.data;
             setOrganizationList(organizations);
         } else if (!searchTerm && data && data?.data) {
-            const organizations = data?.data?.body;
-            setOrganizationList(organizations);
+            // const organizations = data?.data?.body;
+            setOrganizationList(sortedOrganizations );
             setPageNumber(data?.data?.pageNumber)
            
         }
-    },[searchTerm,searchResults,data,pageNumber])
+    },[searchTerm,searchResults,data])
+
+    //  const handleNextPage = () => {
+    //     if(data?.data?.hasNextPage){
+    //         setPageNumber((prevPage) => prevPage + 1);
+    //     }
+    //  }
+
+    //  const handlePreviousPage = () => {
+    //     if(pageNumber > 0){
+    //         setPageNumber((prevPage) => prevPage - 1);
+    //     }
+    //  }
+
+    
 
     useEffect(() => {
         
@@ -154,23 +182,23 @@ function Organization() {
             table: <div>
                {
                 searchTerm && activeOrganization.length === 0? <div><SearchEmptyState icon={MdSearch} name='Active organization'/></div> :
-                <Tables
-                    tableData={activeOrganization.slice().reverse()}
-                    tableHeader={organizationHeader}
-                    tableHeight={52}
-                    sx='cursor-pointer'
-                    handleRowClick={handleRowClick}
-                    tableCellStyle={'h-12'}
-                    optionalRowsPerPage={10}
-                    staticHeader='Name'
-                    staticColunm='name'
-                    sideBarTabName='organization'
-                    optionalFilterName='active'
-                    condition={true}
-                    icon={MdOutlineAccountBalance}
-                />
+                // <Tables
+                //     tableData={activeOrganization}
+                //     tableHeader={organizationHeader}
+                //     tableHeight={52}
+                //     sx='cursor-pointer'
+                //     handleRowClick={handleRowClick}
+                //     tableCellStyle={'h-12'}
+                //     optionalRowsPerPage={10}
+                //     staticHeader='Name'
+                //     staticColunm='name'
+                //     sideBarTabName='organization'
+                //     optionalFilterName='active'
+                //     condition={true}
+                //     icon={MdOutlineAccountBalance}
+                // />
     //             <DataTable
-    //   tableData={organizationList.slice().reverse()}
+    //   tableData={activeOrganization.slice().reverse()}
     //   tableHeader={organizationHeader}
     //   tableHeight={52}
     //   sx="cursor-pointer"
@@ -186,8 +214,32 @@ function Organization() {
     //   totalPages={data?.data?.totalPages}
     //   pageNumber={pageNumber}
     //   hasNextPage={data?.data?.hasNextPage}
+    //   setPageNumber={setPageNumber}
     // />
-               }
+    <DataTable
+    tableData={activeOrganization}
+        tableHeader={organizationHeader}
+        tableHeight={52}
+        sx='cursor-pointer'
+        handleRowClick={handleRowClick}
+        tableCellStyle={'h-12'}
+        optionalRowsPerPage={10}
+        staticHeader='Name'
+        staticColunm='name'
+        sideBarTabName='organization'
+        optionalFilterName='active'
+        condition={true}
+        icon={MdOutlineAccountBalance}
+        totalPages={Math.ceil(activeOrganization.length / 10)}
+        hasNextPage={data?.data?.hasNextPage || false}
+        fetchMoreData={(page: number) => {
+            setPageNumber(page);
+        }}
+        totalItemSize={300}
+        />
+     
+        }
+               
             </div>
         },
         {
@@ -204,7 +256,7 @@ function Organization() {
             table: <div>
 
                { searchTerm && invitedOrganization.length === 0? <div><SearchEmptyState icon={MdSearch} name='Invited organization'/></div> :<Tables
-                    tableData={invitedOrganization.slice().reverse()}
+                    tableData={invitedOrganization}
                     tableHeader={organizationHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
@@ -237,7 +289,7 @@ function Organization() {
                 {
                     searchTerm && invitedOrganization.length === 0? <div><SearchEmptyState icon={MdSearch} name='Deactivated organization'/></div> :
                     <Tables
-                    tableData={deactivatedOrganization.slice().reverse()}
+                    tableData={deactivatedOrganization}
                     tableHeader={organizationHeader}
                     tableHeight={52}
                     sx='cursor-pointer'
