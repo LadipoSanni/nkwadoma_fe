@@ -15,16 +15,19 @@ type props = {
 }
 
 const AdminLayout = ({children}: props) => {
-    const cookie = getUserDetailsFromStorage('access_token')
+    const token = getUserDetailsFromStorage('access_token' )
+    const refreshToken = getUserDetailsFromStorage('refresh_token' )
+
     const {toast} = useToast()
-    const response = isTokenExpired(cookie ? cookie : '')
+    const response = isTokenExpired(token ? token : '')
+    const response2 = isTokenExpired(refreshToken ? refreshToken : '')
 
     useEffect(() => {
-        checkUserToken(response)
-    }, [response]);
+        checkUserToken(response, response2)
+    }, [response, response2]);
 
-    const checkUserToken = (isTokenValid: boolean) => {
-        if (isTokenValid) {
+    const checkUserToken = (isTokenExpired: boolean, isRefreshTokenExpired: boolean) => {
+        if (isTokenExpired && isRefreshTokenExpired) {
             clearData()
             toast({
                 description: "Session expired. Please login again",

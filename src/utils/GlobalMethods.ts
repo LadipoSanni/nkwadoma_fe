@@ -16,11 +16,15 @@ export const isUserAdmin = (role: string) => {
     return ADMIN_ROLES.includes(role)
 }
 
-export const isTokenExpired = (token: string): boolean => {
+export const isTokenExpired = (token?: string): boolean => {
     try {
-        const decoded: { exp: number } = jwtDecode(token);
-        const expiryTime = decoded.exp  * 1000;
-        return isAfter(Date.now(), expiryTime);
+        if (token) {
+
+            const decoded: { exp: number } = jwtDecode(token);
+            const expiryTime = decoded.exp  * 1000;
+            return isAfter(Date.now(), expiryTime);
+        }
+        return false;
     } catch (e) {
         console.log("error:: ", e)
         return false;
