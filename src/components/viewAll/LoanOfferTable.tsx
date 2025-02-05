@@ -32,7 +32,6 @@ const Index = () => {
         organizationId: clickedOrganization?.id
     }
     const {data: viewAllLoanRequestsInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewLoanInAnOrganizationQuery(requestBody)
-
     const loanOfferHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
         { title: 'Loan product', sortable: true, id: 'loanProduct', selector: (row: TableRowData) =>row.loanProductName },
