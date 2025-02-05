@@ -1,6 +1,6 @@
-import {isAfter} from "date-fns";
 import {jwtDecode} from "jwt-decode";
 import {ADMIN_ROLES} from "@/types/roles";
+import {isAfter} from "date-fns";
 
 export  function capitalizeFirstLetters(word: string | null| undefined) {
     if (word) {
@@ -17,8 +17,17 @@ export const isUserAdmin = (role: string) => {
 }
 
 export const isTokenValid = (token: string): boolean => {
+    console.log('token:: ', token)
     try {
         const decoded: { exp: number } = jwtDecode(token);
+        const expiryTime = decoded.exp  * 1000;
+        const currentTime = Date.now();
+
+        const rr = currentTime < expiryTime;
+        const jj =  !!(decoded && decoded.exp && isAfter(Date.now(), expiryTime));
+        console.log('isAfter:: ',  isAfter(Date.now(), expiryTime))
+
+        console.log('decoded:', decoded, 'exp: ', decoded.exp, 'check: ', rr, 'expirYtIME: ','jj:: ',jj, expiryTime, 'currentTime: ', currentTime);
         return !!(decoded && decoded.exp && isAfter(Date.now(), decoded.exp));
     } catch (e) {
         console.log("error:: ", e)

@@ -94,6 +94,7 @@ const Login: React.FC = () => {
         if(loanOfferId) {
                 const response = await login({email, password}).unwrap()
                 if (response?.data) {
+                    const refresh_token = response?.data?.refresh_token
                     const access_token = response?.data?.access_token
                     const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
                     //eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -109,7 +110,7 @@ const Login: React.FC = () => {
                         status: "success",
                     });
                     if (user_role) {
-                        storeUserDetails(access_token, user_email, user_role, userName)
+                        storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                         setUserRoles(user_roles)
                         store.dispatch(setCurrentNavbarItem("Accept loan offer"))
                         router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
@@ -135,9 +136,10 @@ const Login: React.FC = () => {
                 try {
                     const response = await login({email, password}).unwrap()
                     if (response?.data) {
+
                         const access_token = response?.data?.access_token
+                        const refresh_token = response?.data?.refresh_token
                         const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-                        // console.log('decoded: ', decode_access_token)
                         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-expect-error
                         const userName = decode_access_token?.name
@@ -151,7 +153,7 @@ const Login: React.FC = () => {
                             status: "success",
                         });
                         if (user_role) {
-                            storeUserDetails(access_token, user_email, user_role, userName)
+                            storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                             setUserRoles(user_roles)
                             switch (user_role) {
                                 case 'LOANEE' :
@@ -166,8 +168,6 @@ const Login: React.FC = () => {
                                     router.push("/loan/loan-request")
                                     break;
                             }
-
-
                         }
                     }
                 } catch (error) {

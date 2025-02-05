@@ -100,8 +100,10 @@ const CreatePassword = () => {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
             const access_token = response?.data?.accessToken
+            const refreshToken = response?.data?.refreshToken
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
+            console.log('response: ', response)
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             const userName = decode_access_token?.name
@@ -111,7 +113,7 @@ const CreatePassword = () => {
             clearData()
             await persistor.purge();
             if (user_role) {
-                storeUserDetails(access_token, user_email, user_role, userName)
+                storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
                 if (user_role === 'LOANEE') {
                     store.dispatch(setCurrentNavbarItem("overview"))
                     router.push("/onboarding")

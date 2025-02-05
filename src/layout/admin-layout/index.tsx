@@ -19,6 +19,7 @@ const AdminLayout = ({children}: props) => {
     const {toast} = useToast()
     const response = isTokenValid(cookie ? cookie : '')
 
+    console.log('response: ', response)
     useEffect(() => {
         checkUserToken(response)
     }, [response]);
