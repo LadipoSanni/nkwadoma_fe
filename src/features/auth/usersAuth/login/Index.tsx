@@ -4,7 +4,7 @@ import {useState} from "react";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import AuthInputField from "@/reuseable/Input/AuthInputField";
 import Link from 'next/link'
-import {cabinetGrotesk} from "@/app/fonts";
+import {cabinetGrotesk, inter} from "@/app/fonts";
 import {validateEmailInput} from "@/utils/GlobalMethods"
 import {useLoginMutation} from "@/service/auths/api"
 import {useToast} from "@/hooks/use-toast"
@@ -193,7 +193,7 @@ const Login: React.FC = () => {
     return (
 
         <form
-            className="w-full md:w-[50%] md:mr-10  h-fit   md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
+            className="w-full md:mr-10  h-fit md:w-[54%] md:h-fit bg-meedlWhite  border border-slate-200 rounded-xl">
             <div data-testid={`loginDivId`} id={`loginDivId`}
                  className="px-4 py-4">
                 <h1 className={`${cabinetGrotesk.className} text-[#1A1A1A] mt-3  text-2xl leading-5`}>Log in to your
@@ -231,7 +231,7 @@ const Login: React.FC = () => {
                                     handleClick={(e)=>{handleLogin(e)}}>
                         </AuthButton>
                     </div>
-                    <p className="flex items-center justify-center text-sm text-forgetPasswordBlue leading-4">
+                    <p className={`${inter.className} flex items-center justify-center text-sm text-forgetPasswordBlue leading-4`}>
                         Forgot Password? <Link id={'resetPasswordLinkFromLogin'} href={"/auth/reset-password-request"}
                                                className="font-medium text-meedlBlue ml-1  underline">Reset it
                         here</Link>

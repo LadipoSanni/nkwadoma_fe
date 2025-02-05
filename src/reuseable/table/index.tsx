@@ -158,11 +158,13 @@ function Tables<T extends TableRowData>({
                 <div>
                     <div
                         id="loanProductTableBorder"
-                        className="border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block "
+                        className="border-[1px] border-b-[#D0D5DD] border-[#D0D5DD] border-solid rounded-md hidden md:block "
                     >
                         <TableContainer
                             id="loanProductTableScrollbar"
                             style={{ height: `${tableHeight}vh` }}
+                            className={` `}
+
                         >
                             <Table id="dynamicTable" className="">
                                 <TableHeader
@@ -217,7 +219,7 @@ function Tables<T extends TableRowData>({
                                                 >
                                                     <div
                                                         id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
-                                                        className={`${Styles.tableBodyItem} ${tableStyle}  truncate pt-2 pb-2 pr-2 pl-2`}
+                                                        className={`${Styles.tableBodyItem} ${tableStyle}  truncate pt-2 pb-2 pr-2 `}
                                                     >
                                                         {renderCellContent(
                                                             column.selector
