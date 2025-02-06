@@ -117,6 +117,7 @@ function LoanDetails() {
                     id={'loanTuitionAmount'}
                     name={'loanTuitionAmount'}
                     type="text"
+                    disabled={true}
                     thousandSeparator=","
                     decimalScale={2}
                     fixedDecimalScale={true}
@@ -141,6 +142,7 @@ function LoanDetails() {
                 fixedDecimalScale={true}
                 className='bg-grey105 flex md:place-items-end '
                 prefix={'₦'}
+                disabled={true}
                 value={data?.data?.loanAmountRequested}
             />
         },
@@ -149,6 +151,7 @@ function LoanDetails() {
                 id={'depositOnLoanRequestDetails'}
                 name={'depositOnLoanRequestDetails'}
                 type="text"
+                disabled={true}
                 thousandSeparator=","
                 decimalScale={2}
                 fixedDecimalScale={true}

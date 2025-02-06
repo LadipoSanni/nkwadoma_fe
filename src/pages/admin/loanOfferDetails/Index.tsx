@@ -105,6 +105,7 @@ const LoanOfferDetails = () => {
                 decimalScale={2}
                 fixedDecimalScale={true}
                 prefix={'₦'}
+                disabled={true}
                 className='bg-grey105 flex md:place-items-end '
                 value={data?.data?.tuitionAmount}
             />},
@@ -117,6 +118,7 @@ const LoanOfferDetails = () => {
                 type="text"
                 thousandSeparator=","
                 decimalScale={2}
+                disabled={true}
                 fixedDecimalScale={true}
                 className='bg-grey105 flex md:place-items-end '
                 prefix={'₦'}
@@ -129,6 +131,7 @@ const LoanOfferDetails = () => {
                 thousandSeparator=","
                 decimalScale={2}
                 fixedDecimalScale={true}
+                disabled={true}
                 prefix={'₦'}
                 value={data?.data?.initialDeposit}
                 className='bg-grey105 flex md:place-items-end'
@@ -152,9 +155,9 @@ const LoanOfferDetails = () => {
             loanOfferId: id,
             loaneeId: data?.data?.loaneeId
         }
-        console.log('parane: ', body);
+        // console.log('parane: ', body);
         const response = await disburseLoan(body)
-        console.log('response: ', response)
+        // console.log('response: ', response)
         if (response?.error){
             toast({
                 status: 'error',
