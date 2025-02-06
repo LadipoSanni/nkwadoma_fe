@@ -1,8 +1,7 @@
 import React, {useState} from "react";
-// import * as Dialog from "@radix-ui/react-dialog";
-import { Dialog, DialogClose, DialogContent, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
+import * as Dialog from "@radix-ui/react-dialog";
 import {MdOutlineAccountBalance, MdSearch} from 'react-icons/md';
-import {inter, cabinetGroteskRegular} from "@/app/fonts";
+import {inter} from "@/app/fonts";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button"
 import styles from "./index.module.css"
@@ -13,7 +12,6 @@ import {useSearchOrganisationByNameQuery, useViewOrganizationsQuery} from "@/ser
 import ConfirmOrgButton from "@/reuseable/buttons/filter/LoaneeButton";
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
-import {Cross2Icon} from "@radix-ui/react-icons";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {ChangeOrganization} from "@/types/loan/loan-request.type";
 
@@ -97,23 +95,24 @@ const ChangeInstitutionModal = () => {
     };
 
     return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button id="changeOrganizationButton" data-testid={'changeOrganizationButton'} size={"lg"}
-                        variant={"secondary"}
-                        className={` ${inter.className} text-meedlBlue pt-0.5 underline w-fit h-fit md:font-size-0.875rem md:font-light px-1 bg-blue500 rounded `}>Change
-                </Button>
-            </DialogTrigger>
-            <div className='hidden'><DialogDescription></DialogDescription></div>
-            <DialogPortal>
-                <DialogOverlay className="fixed inset-0 bg-[#344054B2] data-[state=open]:animate-overlayShow"/>
-                <DialogContent
-                    className={`fixed left-1/2 top-1/2 ${styles.container} md:h-[75vh] md:w-[40vw] h-[90vh] w-[90vw] grid grid-rows-3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5 `}>
-                    <DialogTitle className={`${cabinetGroteskRegular.className}  text-2xl`}>
-                        Organization
-                    </DialogTitle>
+        // <Dialog.Root>
+        //     <Dialog.Trigger asChild>
+        //         <Button id="changeOrganizationButton" data-testid={'changeOrganizationButton'} size={"lg"}
+        //                 variant={"secondary"}
+        //                 className={` ${inter.className} text-meedlBlue pt-0.5 underline w-fit h-fit md:font-size-0.875rem md:font-light px-1 bg-blue500 rounded `}>Change
+        //         </Button>
+        //     </Dialog.Trigger>
+        //     <div className='hidden'><Dialog.DialogDescription></Dialog.DialogDescription></div>
+        //     <Dialog.Portal>
+        //         <Dialog.Overlay className="fixed inset-0 bg-[#344054B2] data-[state=open]:animate-overlayShow"/>
+        //         <Dialog.Content
+        //             className={`fixed left-1/2 top-1/2 ${styles.container} md:h-[75vh] md:w-[40vw] h-[90vh] w-[90vw] grid grid-rows-3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5 `}>
+        //             <Dialog.Title className={`${cabinetGroteskRegular.className}  text-2xl`}>
+        //                 Organization
+        //             </Dialog.Title>
+        <div>
                     <div
-                        className={` ${styles.innerContainer}  h-full md:h-full w-full md:w-full `}
+                        className={` h-full md:h-full w-full md:w-full `}
                     >
                         <div className='relative  '>
                              <span className="absolute inset-y-0 left-0 flex items-center pr-4 pl-3">
@@ -132,7 +131,7 @@ const ChangeInstitutionModal = () => {
                                 <SkeletonForLoanOrg/>
                             </div> :
                             (<div
-                                className={`${styles.organizations} md:w-[30vw] md:h-fit  py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
+                                className={`${styles.organizations} md:w-[30vw] max-h-[25rem]   py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
                                 {searchTerm ? (
                                         searchResults?.data.length === 0 || !searchResults ?
                                             <SearchEmptyState name={"organization"}
@@ -272,15 +271,15 @@ const ChangeInstitutionModal = () => {
                     </div>
 
                     <div
-                        className="absolute bottom-0 px-4 pb-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
-                        <DialogClose asChild>
+                        className="  pb-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
+                        <Dialog.Close asChild>
                             <Button
                                 id={'cancel'} data-testid={'cancel'} onClick={handleContinue}
                                 className={` border border-meedlBlue rounded-md text-sm h-fit md:w-fit md:px-10 md:py-4 py-4   text-meedlBlue`}
                             >
                                 Cancel
                             </Button>
-                        </DialogClose>
+                        </Dialog.Close>
                         <div className={`w-full  md:w-[8rem]`}>
                             <ConfirmOrgButton
                                 disable={disabled}
@@ -295,17 +294,18 @@ const ChangeInstitutionModal = () => {
                             </ConfirmOrgButton>
                         </div>
                     </div>
-                    <DialogClose asChild>
-                        <button
-                            className="absolute right-4 top-6  inline-flex size-[25px]  "
-                            aria-label="Close"
-                        >
-                            <Cross2Icon className={`text-[#939CB0] w-7 h-7`}/>
-                        </button>
-                    </DialogClose>
-                </DialogContent>
-            </DialogPortal>
-        </Dialog>
+</div>
+        //             <Dialog.Close asChild>
+        //                 <button
+        //                     className="absolute right-4 top-6  inline-flex size-[25px]  "
+        //                     aria-label="Close"
+        //                 >
+        //                     <Cross2Icon className={`text-[#939CB0] w-7 h-7`}/>
+        //                 </button>
+        //             </Dialog.Close>
+        //         </Dialog.Content>
+        //     </Dialog.Portal>
+        // </Dialog.Root>
     )
 
 }

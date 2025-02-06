@@ -76,7 +76,7 @@ const Index = () => {
                                     height={"2rem"}
                                     width={"2em"}
                                     color={'#142854'}
-                        ></Icon >} iconBg={'#D9EAFF'} title={'Loan request will show here'} description={clickedOrganization?.id ? 'There are no loan requests in this organization yet': `There are no loan requests available yet` } />
+                        ></Icon >} iconBg={'#D9EAFF'} title={'Loan offers will show here'} description={clickedOrganization?.id ? 'There are no loan offers in this organization yet': `There are no loan requests available yet` } />
                 ) :
                 (
                     <div className={`md:w-full  w-full h-full md:h-full `}>
