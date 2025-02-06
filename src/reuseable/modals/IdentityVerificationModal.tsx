@@ -292,7 +292,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                 onClose={() => setShowSuccessDialog(false)}
                 onContinue={onThirdStepContinue}
                 title={errorMessage ? 'Verification In Progress' : 'Verification successful'}
-                message={errorMessage ? errorMessage : 'Congratulations! You’ve successfully completed the verification process'}
+                message={errorMessage ? "Your verification is under review" : 'Congratulations! You’ve successfully completed the verification process'}
                 buttonText={'Continue '}
                 stopCamera={stopCamera}
             />
