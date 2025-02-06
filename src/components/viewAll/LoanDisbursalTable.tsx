@@ -102,7 +102,7 @@ function Index() {
                                     width={"2em"}
                                     color={'#142854'}
                         ></Icon>} iconBg={'#D9EAFF'} title={'Loan disbursed will show here'}
-                        description={clickedOrganizationId?.id ? 'There are no loan disbursals in this organization yet' : `There are no loan disbursal available yet`}/>
+                        description={clickedOrganizationId?.id ? 'There are no loan disbursal in this organization yet' : `There are no loan disbursal available yet`}/>
                 ) :
                 (
                     <div className={`md:w-full  w-full h-full md:h-full `}>
