@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import {MdOutlineAccountBalance, MdSearch} from 'react-icons/md';
-import {inter, cabinetGroteskRegular} from "@/app/fonts";
+import {inter} from "@/app/fonts";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button"
 import styles from "./index.module.css"
@@ -12,7 +12,6 @@ import {useSearchOrganisationByNameQuery, useViewOrganizationsQuery} from "@/ser
 import ConfirmOrgButton from "@/reuseable/buttons/filter/LoaneeButton";
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
-import {Cross2Icon} from "@radix-ui/react-icons";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {ChangeOrganization} from "@/types/loan/loan-request.type";
 
