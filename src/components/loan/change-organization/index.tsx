@@ -132,7 +132,7 @@ const ChangeInstitutionModal = () => {
                                 <SkeletonForLoanOrg/>
                             </div> :
                             (<div
-                                className={`${styles.organizations} md:w-[30vw] md:max-h-[30rem] max-h-[]  py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
+                                className={`${styles.organizations} md:w-[30vw] max-h-[25rem]   py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
                                 {searchTerm ? (
                                         searchResults?.data.length === 0 || !searchResults ?
                                             <SearchEmptyState name={"organization"}
