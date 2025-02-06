@@ -189,7 +189,9 @@ function LoanDetails() {
         {label: 'Alternate residential address', value: data?.data.alternateContactAddress},
         {
             label: 'Next of kin name',
-            value: data?.data?.nextOfKin?.firstName + " " + data?.data?.nextOfKin?.lastName
+            value: data?.data?.nextOfKin?.firstName && data?.data?.nextOfKin?.lastName
+                ? `${data?.data?.nextOfKin?.firstName} ${data?.data?.nextOfKin?.lastName}`
+                : 'Not provided'
         },
         {label: 'Next of kin email address', value: data?.data?.nextOfKin?.email},
         {label: 'Next of kin phone number', value: data?.data?.nextOfKin?.phoneNumber},
