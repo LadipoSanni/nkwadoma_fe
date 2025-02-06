@@ -90,7 +90,7 @@ function Index() {
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {isLoading || disbursedLoanIsLoading ? (
-                <div className={`w-full h-fit md:w-full md:h-fit`}>
+                <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
                     <SkeletonForTable/>
                 </div>
             ) : data?.data?.body?.length === 0 || allDisbursedLoan?.data?.body?.length === 0 ?
@@ -108,7 +108,7 @@ function Index() {
                     <div className={`md:w-full  w-full h-full md:h-full `}>
                         <Tables
                             tableData={clickedOrganizationId?.id ? data?.data?.body.slice().reverse() : allDisbursedLoan?.data?.body.slice().reverse()}
-                            isLoading={isLoading}
+                            isLoading={isLoading || disbursedLoanIsLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanDisbursalHeader}
                             tableHeight={52}

@@ -41,7 +41,7 @@ const Index = () => {
         pageSize: 100,
         organizationId: clickedOrganization?.id
     }
-    const {data: viewAllLoanOffersInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewLoanInAnOrganizationQuery(requestBody)
+    const {data: viewAllLoanOffersInAnOrganizationData, isLoading:isLoadingOrganizationLoanOffer } = useViewLoanInAnOrganizationQuery(requestBody)
     const sortedViewAllLoanOffer = (data?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
     const sortedViewAllLoanOfferInAnOrg = (viewAllLoanOffersInAnOrganizationData?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
 
@@ -64,8 +64,8 @@ const Index = () => {
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
              className={`grid md:px-3 md:overflow-hidden  md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
-            {isLoading || isLoadingOrganizationLoanRequest ? (
-                <div className={`w-full h-fit md:w-full md:h-fit`}>
+            {isLoading || isLoadingOrganizationLoanOffer ? (
+                <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
                     <SkeletonForTable />
                 </div>
             ) :sortedViewAllLoanOfferInAnOrg.length === 0 || data?.data?.body?.length === 0 ?
@@ -83,7 +83,7 @@ const Index = () => {
 
                         <Tables
                             tableData={clickedOrganization?.id  ? sortedViewAllLoanOfferInAnOrg : sortedViewAllLoanOffer}
-                            isLoading={isLoading}
+                            isLoading={isLoading || isLoadingOrganizationLoanOffer}
                             handleRowClick={handleRowClick}
                             tableHeader={loanOfferHeader}
                             tableHeight={52}
