@@ -57,7 +57,7 @@ const Index = () => {
              className={`grid md:px-3 md:overflow-hidden   place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {isLoading || isLoadingOrganizationLoanRequest ? (
-                    <div className={`w-full h-fit md:w-full md:h-fit`}>
+                    <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
                         <SkeletonForTable />
                     </div>
                 ) :viewAllLoanRequestsInAnOrganizationData?.data?.body?.length === 0 || data?.data?.body?.length === 0 ?
@@ -74,7 +74,7 @@ const Index = () => {
                     <div className={`md:w-full  w-full h-full md:h-full `}>
                         <Tables
                             tableData={clickedOrganization?.id  ? viewAllLoanRequestsInAnOrganizationData?.data?.body : data?.data?.body}
-                            isLoading={isLoading}
+                            isLoading={isLoading || isLoadingOrganizationLoanRequest}
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
                             tableHeight={52}
