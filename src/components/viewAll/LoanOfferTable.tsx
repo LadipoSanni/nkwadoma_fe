@@ -17,6 +17,16 @@ import { useViewAllLoanOfferQuery , useViewLoanInAnOrganizationQuery} from "@/se
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
+interface viewAllLoanOfferProps{
+    id: string,
+    amountRequested: number,
+    amountApproved: number,
+    dateOffered: string,
+    loanProductName: string,
+    firstName: string,
+    lastName: string,
+    loanOfferResponse: string
+}
 
 const Index = () => {
     const router = useRouter();
@@ -31,7 +41,10 @@ const Index = () => {
         pageSize: 100,
         organizationId: clickedOrganization?.id
     }
-    const {data: viewAllLoanRequestsInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewLoanInAnOrganizationQuery(requestBody)
+    const {data: viewAllLoanOffersInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewLoanInAnOrganizationQuery(requestBody)
+    const sortedViewAllLoanOffer = (data?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
+    const sortedViewAllLoanOfferInAnOrg = (viewAllLoanOffersInAnOrganizationData?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
+
     const loanOfferHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
         { title: 'Loan product', sortable: true, id: 'loanProduct', selector: (row: TableRowData) =>row.loanProductName },
@@ -55,7 +68,7 @@ const Index = () => {
                 <div className={`w-full h-fit md:w-full md:h-fit`}>
                     <SkeletonForTable />
                 </div>
-            ) :viewAllLoanRequestsInAnOrganizationData?.data?.body?.length === 0 || data?.data?.body?.length === 0 ?
+            ) :sortedViewAllLoanOfferInAnOrg.length === 0 || data?.data?.body?.length === 0 ?
                 (
                     <LoanEmptyState
                         id={'LoanRequestEmptyState'}
@@ -67,8 +80,9 @@ const Index = () => {
                 ) :
                 (
                     <div className={`md:w-full  w-full h-full md:h-full `}>
+
                         <Tables
-                            tableData={clickedOrganization?.id  ? viewAllLoanRequestsInAnOrganizationData?.data?.body : data?.data?.body.slice().reverse()}
+                            tableData={clickedOrganization?.id  ? sortedViewAllLoanOfferInAnOrg : sortedViewAllLoanOffer}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanOfferHeader}
