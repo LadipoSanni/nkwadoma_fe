@@ -11,9 +11,9 @@ import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import TabSwitch from "@/reuseable/details/TabSwitch";
 import {useViewDisbursedLoanDetailsQuery} from "@/service/admin/loan/Loan-disbursal-api";
-import {Skeleton} from "@/components/ui/skeleton";
 import Image from "next/image";
 import {Card} from "@/components/ui/card";
+import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage';
 
 
 interface LoaneeLoanBreakDown {
@@ -152,7 +152,7 @@ const Index = () => {
     const initial = getInitials(`${details?.data.firstName} ${details?.data.lastName}`);
 
     return (
-        <>{isLoading ? (<Skeleton/>) : (
+        <>{isLoading ? (<SkeletonForDetailPage/>) : (
             <div
                 id={'disbursedLoanMainContainer'}
                 data-testid={'disbursedLoanMainContainer'}
