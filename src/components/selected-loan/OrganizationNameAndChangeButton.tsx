@@ -5,7 +5,6 @@ import ChangeInstitutionModal from "@/components/loan/change-organization/index"
 import {useAppSelector} from "@/redux/store";
 import InitialsAvatar from '../../reuseable/avater/InitialAvater';
 import {Cross2Icon} from "@radix-ui/react-icons";
-import CreateInvestmentVehicle from "@/components/portfolio-manager/fund/Create-investment-vehicle";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Button} from "@/components/ui/button";
 
