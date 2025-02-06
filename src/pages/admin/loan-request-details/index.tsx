@@ -282,9 +282,9 @@ function LoanDetails() {
                                     <div
                                         className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                         <div
-                                            className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
+                                            className={`  ${inter.className} text-black300 text-[14px] leading-[150%] font-normal`}>{item.label}</div>
                                         <div
-                                            className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item.value : 'Not provided'}</div>
+                                            className={` ${inter.className}  text-black500 text-[14px] leading-[150%] font-normal`}> {item.value ? item.value : 'Not provided'}</div>
                                     </div>
                                 </li>
                             ))
@@ -302,7 +302,7 @@ function LoanDetails() {
                         <Button
                             id={`backButtonOnIndex` + currentTab}
                             data-testid={`backButtonOnIndex` + currentTab}
-                            className={'w-full md:w-fit md:h-fit md:px-8 md:py-3 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite'}
+                            className={` ${inter.className} w-full md:w-fit md:h-fit md:px-8 md:py-3 h-fit py-4 text-meedlBlue border border-meedlBlue bg-meedlWhite hover:bg-meedlWhite`}
                             onClick={handleBack} disabled={currentTab === 0}>Back</Button>
                     )}
                     {currentTab === 2 &&
@@ -340,7 +340,7 @@ function LoanDetails() {
                     <button
                         id={`continueButtonOnIndex` + currentTab}
                         data-testid={`continueButtonOnIndex` + currentTab}
-                        className={'w-full justify-center md:py-3 md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
+                        className={` ${inter.className} w-full justify-center md:py-3 md:w-fit md:px-8 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue`}
                         onClick={handleNext}
                         >
                         Continue
