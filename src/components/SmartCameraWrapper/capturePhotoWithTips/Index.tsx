@@ -60,8 +60,15 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
             if (detection) {
                 setIsFaceDetected(true);
                 if (!hasFaceBeenDetected) {
-                    setHasFaceBeenDetected(true);
-                    captureImage(video);
+                    const landmarks = detection.landmarks;
+                    const mouth = landmarks.getMouth()
+                    const nose = landmarks.getNose();
+                    const leftEye = landmarks.getLeftEye();
+                    const rightEye = landmarks.getRightEye();
+                    if (mouth && nose && leftEye && rightEye){
+                        setHasFaceBeenDetected(true);
+                        captureImage(video);
+                    }
                 }
                 const landmarks = detection.landmarks;
                 const nose = landmarks.getNose();
