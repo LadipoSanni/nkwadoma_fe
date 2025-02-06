@@ -27,7 +27,7 @@ export const loaneeApi = createApi({
                 method: "POST",
                 body: formData
             }),
-            invalidatesTags: ({id}) => [{type: 'loanee', id}],
+            // invalidatesTags: ({id}) => [{type: 'loanee', id}],
         }),
         respondToLoanReferral: builder.mutation({
             query: (formData: {
