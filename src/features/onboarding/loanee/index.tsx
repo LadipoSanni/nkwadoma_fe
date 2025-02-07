@@ -38,9 +38,7 @@ const LoaneeOnboarding = () => {
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
 
     useEffect(() => {
-        console.log('data:: ', data)
         if ( data?.data?.identityVerified  === true  ){
-            console.log('check 11')
             router.push('/overview')
 
         }
@@ -58,7 +56,6 @@ const LoaneeOnboarding = () => {
     }, [data, loanReferralDetailsIsLoading, currentStep, dispatch, router]);
 
     if(data?.data?.identityVerified){
-        console.log('outside useEffect')
         router.push("/overview")
     }
 
