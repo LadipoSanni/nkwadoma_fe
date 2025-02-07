@@ -19,7 +19,6 @@ export const isUserAdmin = (role: string) => {
 export const isTokenExpired = (token?: string): boolean => {
     try {
         if (token) {
-
             const decoded: { exp: number } = jwtDecode(token);
             const expiryTime = decoded.exp  * 1000;
             return isAfter(Date.now(), expiryTime);
