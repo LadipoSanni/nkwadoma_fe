@@ -1,0 +1,25 @@
+.tableHeaderItem{
+    font-size: 14px;
+    /* font-weight: 600; */
+    line-height: 14px;
+    text-align: left;
+    color: #404653;
+    display: flex;
+
+}
+
+.tableBodyItem{
+    /* font-size: 14px;
+    font-weight: 400;
+    line-height: 10px; */
+    /* text-align: left; */
+    color: #101828;
+
+}
+
+.thead {
+    position: sticky;
+    top: 0;
+    z-index: 100; 
+    background-color: white; 
+  }

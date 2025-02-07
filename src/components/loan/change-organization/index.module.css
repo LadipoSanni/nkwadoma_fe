@@ -1,0 +1,55 @@
+.container{
+    background-color: white;
+    display: grid;
+    grid-template-rows: 8% 82% 10%;
+}
+.innerContainer{
+    background-color: white;
+    display: grid;
+    grid-template-rows: 8% 92%;
+}
+.organizations{
+    width: 100%;
+    margin-top: 1rem;
+    height: 80%;
+    /*background-color: #e8899c;*/
+    display: grid;
+    gap: 10px;
+    overflow-y: scroll;
+}
+.institutionMiniCard{
+    object-fit: contain;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 1rem;
+    border-radius: 4px ;
+    border: 2px solid #eef0f3; ;
+
+}
+
+.institutionMiniCard2{
+    object-fit: contain;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 4px ;
+}
+
+.organizations::-webkit-scrollbar-track{
+    background-color: #F0F2F4;
+    width: 2px;
+}
+.organizations::-webkit-scrollbar-thumb{
+    background-color: #D9D9D9;
+    height: 1rem;
+    border-radius: 1rem;
+}
+
+@media only screen  and (min-width: 768px){
+    .organizations{
+        height: 90%;
+        display: grid;
+        gap: 10px;
+        overflow-y: scroll;
+    }
+
+}

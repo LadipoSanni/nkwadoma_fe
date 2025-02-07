@@ -1,0 +1,31 @@
+.loanOfferDetails {
+    background-color: #fff;
+    overflow-y: scroll;
+}
+.loanOfferDetails::-webkit-scrollbar-track{
+    background-color: #fff;
+
+}
+.loanOfferDetails::-webkit-scrollbar-thumb{
+    background-color: #F9F9F9 ;
+    width: 4px;
+    height: 9px;
+    border-radius: 1px;
+    margin-right: 0.5rem;
+}
+.tabConnector{
+    display: grid;
+}
+
+@media only screen and (max-width: 600px) {
+    .tabConnector {
+        display: flex;
+        grid-template-columns: max-content;
+        overflow-x: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .loanOfferDetails {
+
+    }
+}
