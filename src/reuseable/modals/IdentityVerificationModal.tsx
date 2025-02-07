@@ -71,12 +71,18 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             const data = await verifyIdentity(formData).unwrap();
             if (data) {
                 onClose();
-                setShowSuccessDialog(true);
+                if (data.message === "Identity verified") {
+                    setErrorMessage("");
+                    setShowSuccessDialog(true);
+                } else if (data.message === "Identity not verified" || data.message === "Verification server down") {
+                    setErrorMessage("Your verification is under review");
+                    setShowSuccessDialog(true);
+                }
             }
         } catch (error) {
             const err = error as ApiError;
             if (err.status === 400 && err.data?.message === "Verification server down") {
-                setErrorMessage("Verification server down. Please try again later.");
+                setErrorMessage("Your verification is under review");
             } else if (err.status === 500) {
                 setErrorMessage("Internal server error. Please try again later.");
             } else if (err.status === 404) {
@@ -89,6 +95,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
         }
         setIsSecondModalOpen(false);
     };
+
     const onSubmit: SubmitHandler<FormData> = (data) => {
         const encryptionKey = process.env.APP_DEV_IV_ENCRYPTION_SECRET_KEY;
         const ivKey = process.env.APP_DEV_IV_KEY;
