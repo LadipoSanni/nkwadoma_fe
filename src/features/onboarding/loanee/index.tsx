@@ -58,6 +58,7 @@ const LoaneeOnboarding = () => {
     }, [data, loanReferralDetailsIsLoading, currentStep, dispatch, router]);
 
     if(data?.data?.identityVerified){
+        console.log('outside useEffect')
         router.push("/overview")
     }
 
