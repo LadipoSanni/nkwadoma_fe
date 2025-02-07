@@ -67,11 +67,6 @@ export const formatNumberOnBlur = (
   setFieldValue(field, formattedValue);
 };
 
-// export const formatValueWithComma = (e: any) => {
-//     const numericValue = e?.target?.value?.replace(/\D+/g, '');
-//     return numericValue?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-// };
-
 export const formatAmount2 = (amount: number): string => {
   return new Intl.NumberFormat("en-NG", {
     style: "currency",
@@ -208,3 +203,27 @@ export const validateNumberLimit =
       );
     }
   };
+
+//   interface NestedData {
+//     body?: TableRowData[];
+// }
+
+ 
+// function sortOrganizationsByField(data: TableRowData, field: string) {
+  
+//   const nestedData = data?.data as NestedData;
+//   const body = nestedData?.body?.slice() ?? [];
+
+//   if (!Array.isArray(body)) {
+//       throw new Error("The body property is not an array");
+//   }
+
+//   return body.sort((a: TableRowData, b: TableRowData) => {
+//       const dateA = new Date(a[field] as string).getTime();
+//       const dateB = new Date(b[field] as string).getTime();
+//       return dateB - dateA;
+//   });
+// }
+
+
+
