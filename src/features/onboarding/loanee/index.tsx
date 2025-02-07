@@ -38,7 +38,7 @@ const LoaneeOnboarding = () => {
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
 
     useEffect(() => {
-        if (data?.data?.statusCode === 'OK' && data?.data?.identityVerified  && data?.data?.loanReferralStatus === 'AUTHORIZED'){
+        if (data?.data?.statusCode === 'OK' && data?.data?.identityVerified  === true && data.data.loanReferralStatus === "AUTHORIZED" ){
             router.push('/overview')
         }
         if (data?.statusCode === "OK" && data?.data?.id) {
