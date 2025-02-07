@@ -71,24 +71,24 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             const data = await verifyIdentity(formData).unwrap();
             if (data) {
                 onClose();
-                if (data.message === "Identity verified") {
+                if (data.data === "Identity verified") {
                     setErrorMessage("");
                     setShowSuccessDialog(true);
-                } else if (data.message === "Identity not verified" || data.message === "Verification server down") {
+                } else if (data.data === "Identity not verified" || data.data === "Verification server down") {
                     setErrorMessage("Your verification is under review");
                     setShowSuccessDialog(true);
                 }
             }
         } catch (error) {
             const err = error as ApiError;
-            if (err.status === 400 && err.data?.message === "Verification server down") {
+            if (err.status === 400 && err.data?.data === "Verification server down") {
                 setErrorMessage("Your verification is under review");
             } else if (err.status === 500) {
                 setErrorMessage("Internal server error. Please try again later.");
             } else if (err.status === 404) {
                 setErrorMessage("Verification service not found. Please contact support.");
             } else {
-                setErrorMessage(err ? err.data?.message : "An error occurred");
+                setErrorMessage(err ? err.data?.data : "An error occurred");
             }
             setShowSuccessDialog(true);
             console.log(error);
