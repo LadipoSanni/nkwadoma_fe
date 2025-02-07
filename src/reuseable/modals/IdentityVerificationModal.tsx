@@ -71,10 +71,10 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             const data = await verifyIdentity(formData).unwrap();
             if (data) {
                 onClose();
-                if (data.message === "Identity verified") {
+                if (data.data === "Identity verified") {
                     setErrorMessage("");
                     setShowSuccessDialog(true);
-                } else if (data.message === "Identity not verified" || data.message === "Verification server down") {
+                } else if (data.data === "Identity not verified" || data.data === "Verification server down") {
                     setErrorMessage("Your verification is under review");
                     setShowSuccessDialog(true);
                 }
@@ -91,7 +91,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                 setErrorMessage(err ? err.data?.message : "An error occurred");
             }
             setShowSuccessDialog(true);
-            console.log(error);
         }
         setIsSecondModalOpen(false);
     };
@@ -130,8 +129,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     // const stream = useSelector((state: RootState) => state.camera.stream)
 
     const stopCamera = () => {
-        console.log("Stop camera called")
-        console.log("The stream is : ", stream)
         if (stream) {
             stream.getTracks().forEach((track) => {
                 console.log("The track is : ", track)
@@ -141,7 +138,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             if (videoRef.current) {
                 videoRef.current.srcObject = null;        }
          }
-        console.log("Process has ended")
     };
     return (
         <>
