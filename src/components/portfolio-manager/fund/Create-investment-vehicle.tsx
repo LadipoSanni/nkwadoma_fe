@@ -10,7 +10,6 @@ import Isloading from "@/reuseable/display/Isloading";
 import { useCreateInvestmentVehicleMutation } from "@/service/admin/fund_query";
 import { useToast } from "@/hooks/use-toast";
 import { validateNumber, validatePositiveNumberWithIndexNumbers } from "@/utils/Format";
-// import { formatNumberOnBlur } from '@/utils/Format';
 import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 // import CustomNumberFormat from '@/reuseable/Input/CustomNumberFormat';
