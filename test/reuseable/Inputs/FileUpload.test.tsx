@@ -42,4 +42,12 @@ describe('FileUpload Component', () => {
         await waitFor(() => expect(screen.getByText(/Uploading.../i)).toBeInTheDocument());
     });
 
+    it('resets isFileSupported state when file is deleted', async () => {
+        render(<FileUpload handleDrop={() => {}} handleDragOver={() => {}} setUploadedImageUrl={() => {}} labelName='Cohort image (Optional)' />);
+        const fileInput = screen.getByLabelText(/Cohort image \(Optional\)/i);
+        const file = new File(['(⌐□_□)'], 'image.png', { type: 'image/png' });
+        fireEvent.change(fileInput, { target: { files: [file] } });
+        await waitFor(() => expect(screen.getByText(/Uploading.../i)).toBeInTheDocument());
+    });
+
 });
