@@ -107,14 +107,14 @@ const ProgramView = () => {
     const [deleteItem] = useDeleteProgramMutation()
     const {data: searchResults} = useSearchProgramQuery(searchTerm, {skip: !searchTerm});
 
-    useEffect(() => {
-        if (data && data?.data) {
-            const programs = data?.data?.body
-            setProgramView(programs)
-            // setTotalPage(data?.data?.totalPages)
-        }
+    // useEffect(() => {
+    //     if (data && data?.data) {
+    //         const programs = data?.data?.body
+    //         setProgramView(programs)
+    //         // setTotalPage(data?.data?.totalPages)
+    //     }
 
-    }, [data])
+    // }, [data])
 
 
     const handleRowClick = (row: TableRowData) => {
@@ -139,12 +139,14 @@ const ProgramView = () => {
             const programs = searchResults.data;
             setProgramView(programs);
         } else if
-        (data && data?.data) {
+        (!searchTerm && data && data?.data) {
             const programs = data?.data?.body
             setProgramView(programs)
+            // setProgramView((prevPrograms) => [...prevPrograms, ...programs]);
             // setSearchTerm("")
         }
     }, [searchTerm, searchResults, data]);
+    
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);

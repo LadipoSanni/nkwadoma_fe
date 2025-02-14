@@ -34,6 +34,7 @@ import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 
 
+
 interface loanDetails {
     totalAmountRepaid?: number;
     totalAmountDisbursed?: number;
@@ -100,13 +101,13 @@ const ProgramDetails = () => {
         }
     }, [])
 
-    const {data: program,isLoading:loading} = useGetProgramByIdQuery({id: programId}, {refetchOnMountOrArgChange: true});
+    const {data: program,isLoading:loading} = useGetProgramByIdQuery({id: programId}, {refetchOnMountOrArgChange: true, skip: !programId});
     const [deleteItem, {isLoading}] = useDeleteProgramMutation()
     const {data: cohortsByProgram} = useGetAllCohortByAParticularProgramQuery({
         programId: programId,
         pageSize: size,
         pageNumber: page
-    }, {refetchOnMountOrArgChange: true});
+    }, {refetchOnMountOrArgChange: true,skip: !programId});
     const {data: searchResults} = useSearchCohortsInAParticularProgramQuery({
         cohortName: searchTerm,
         programId: programId
