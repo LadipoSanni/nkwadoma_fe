@@ -39,7 +39,7 @@ function Index() {
             pageSize: 100,
             pageNumber: 0,
         },
-        {refetchOnMountOrArgChange: true}
+        {refetchOnMountOrArgChange: true, skip:!clickedOrganizationId}
     );
 
 
