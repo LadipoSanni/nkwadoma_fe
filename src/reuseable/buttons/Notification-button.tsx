@@ -1,8 +1,7 @@
 import React from 'react'
-import { Button } from '@/components/ui/button'
 import { ChevronLeft } from 'lucide-react'
 import { ChevronRight } from 'lucide-react'
-import { boolean } from 'yup';
+
 
 interface buttonInterface{
     handleLeftChange: () => void;
