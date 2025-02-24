@@ -41,7 +41,7 @@ const Index = () => {
         pageSize: 100,
         organizationId: clickedOrganization?.id
     }
-    const {data: viewAllLoanOffersInAnOrganizationData, isLoading:isLoadingOrganizationLoanOffer } = useViewLoanInAnOrganizationQuery(requestBody)
+    const {data: viewAllLoanOffersInAnOrganizationData, isLoading:isLoadingOrganizationLoanOffer } = useViewLoanInAnOrganizationQuery(requestBody, {skip:!clickedOrganization})
     const sortedViewAllLoanOffer = (data?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
     const sortedViewAllLoanOfferInAnOrg = (viewAllLoanOffersInAnOrganizationData?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
 
