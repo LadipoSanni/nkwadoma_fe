@@ -103,8 +103,6 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
 
 
     const handleSubmitStep1 = (values: typeof initialFormValue) => {
-
-        console.log('initial deposit: ',values.initialDeposit)
         setInitialDepositAmount(values.initialDeposit)
         setStep(2);
     };
