@@ -7,10 +7,12 @@ type Props = {
     optionalFilterName?:string,
     condition?: boolean,
     isSearch?: boolean,
+    notification?: boolean
+    message?: string
 
 }
 
-function TableEmptyState({name,icon: Icon,className, optionalFilterName,condition, isSearch}: Props) {
+function TableEmptyState({name,icon: Icon,className, optionalFilterName,condition, isSearch,notification,message}: Props) {
   // const lowercaseName = name?.charAt(0).toLowerCase() 
   // const remainingPart = name?.slice(1);
   // const title = `${lowercaseName}${remainingPart}`;
@@ -21,8 +23,10 @@ function TableEmptyState({name,icon: Icon,className, optionalFilterName,conditio
        {/*<div>*/}
         <div className='flex justify-center text-center' >
          {Icon && 
-          <div id='emptyStateIconId' data-testid="icon-container" className='bg-lightBlue500 w-20 h-20 flex justify-center items-center rounded-full mb-6'>
-         <Icon style={{fontSize:"2.0rem",color:"#142854"}}/>
+          <div id='emptyStateIconId' data-testid="icon-container" className='bg-lightBlue500 w-[70px] h-[70px] flex justify-center items-center rounded-full mb-5'>
+         <Icon 
+         style={{fontSize:"2.0rem",color:"#142854"}}
+         />
          </div>
          }
 
@@ -34,14 +38,18 @@ function TableEmptyState({name,icon: Icon,className, optionalFilterName,conditio
                </div>
                :
                    <div>
-                       <h1 id='titleId' className={`font-semibold mb-2 `}><span
+                       <h1 id='titleId' className={`font-normal mb-2 `}><span
                            className='capitalize'>{name + "s"}</span> will show here</h1>
 
-                       <p id='bodyMessageId' className='text-foundationBlue800 md:w-96 w-72 '>There are
+                      { !notification?<p id='bodyMessageId' className='text-foundationBlue800 md:w-96 w-72 text-[14px]'>There are
                            no {optionalFilterName} {name}s available yet. {!condition ?
                                <span> To create a  <span className='lowercase'>{name}</span>, click on the  <span
                                    className='font-semibold lowercase'>create {name}</span>  </span> : ""}</p>
-
+                           : <p className='text-foundationBlue800  text-[14px]'>{
+                            !notification? "" : <span className=''>{message}</span>
+                            }
+                            </p>}
+                     
                    </div>
                    }
                </div>

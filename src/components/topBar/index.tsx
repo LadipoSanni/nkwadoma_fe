@@ -10,6 +10,12 @@ import { store, useAppSelector } from "@/redux/store";
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import AdminProfile from "@/features/profile/adminProfile/Index";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
+import { useRouter} from "next/navigation";
+import { MdNotifications } from 'react-icons/md';
+import { Button } from '../ui/button';
+import { BellIcon } from '@radix-ui/react-icons';
+
 
 const TopBar = () => {
     const [arrowToggled, setArrowToggled] = useState(false);
@@ -17,6 +23,8 @@ const TopBar = () => {
     const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem);
     const user_role = getUserDetailsFromStorage('user_role');
     const user_name = getUserDetailsFromStorage("user_name");
+     const router = useRouter();
+     const [hasNotifications] = useState(false); 
 
     const toggleArrow = () => {
         setArrowToggled(!arrowToggled);
@@ -26,6 +34,11 @@ const TopBar = () => {
     const openMobileSideBar = () => {
         store.dispatch(setShowMobileSideBar(true));
     };
+
+    const handleNotification = () => {
+        router.push("/notification")
+       store.dispatch(setCurrentNavbarItem('Notification'))  
+    }
 
 
     return (
@@ -45,21 +58,38 @@ const TopBar = () => {
                     </div>
                 </div>
 
-                <div id="LayOutProfileAndNotification" className="flex items-center gap-5 md:gap-10">
+                <div id="LayOutProfileAndNotification" className="flex items-center   md:gap-2">
                     <div id={'bellDiv'}
                         className={` flex place-content-center object-fit h-[2.6rem]  w-[2.6rem] rounded-md mr-[1.7rem] `}>
                         {/*<Notifications />*/}
-                        {/*   <Badge*/}
-                        {/*      badgeContent={'33'}*/}
-                        {/*      color="success" sx={{marginTop: 'auto', marginBottom: 'auto', height: '70%', width: '70%'}} >*/}
-                        {/*             <FiBell className={` w-[100%] h-[100%] object-cover `}/>*/}
-                        {/*   </Badge>*/}
+                          <div>
+                            <Button 
+                            className='text-black shadow-none mt-1 cursor-pointer'
+                            onClick={handleNotification}
+                            >
+                                {
+                                 !hasNotifications? <div>
+                                   <MdNotifications
+                                  size={20}
+                                     /> 
+                                 </div> : 
+                                <BellIcon
+                                style={{ width: '18px',height: '20px'}}
+                               />
+                                }
+                            </Button>
+                          </div>
+                          {/* <Badge
+                         badgeContent={'33'}
+                        color="success" sx={{marginTop: 'auto', marginBottom: 'auto', height: '70%', width: '70%'}} >
+                        <FiBell className={` w-[100%] h-[100%] object-cover `}/>
+                          </Badge> */}
                     </div>
                     <div id={'fullNameDiv'} className="flex gap-2  justify-between items-center w-[fit-content]">
                         <div
                             className={` flex place-content-center  object-fit  bg-[#E0FDEB]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
                             <div
-                                className={` ${inter.className} grid place-content-center  mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `}>
+                                className={` ${inter.className} grid place-content-center  mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `} >
                                 {getFirstLetterOfWord(user_name)}
                             </div>
                         </div>

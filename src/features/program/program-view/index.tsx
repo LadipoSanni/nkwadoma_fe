@@ -14,7 +14,7 @@ import {setItemSessionStorage} from '@/utils/storage';
 import {Button} from "@/components/ui/button";
 import TableModal from "@/reuseable/modals/TableModal";
 import {useRouter} from 'next/navigation'
-import {DeleteCohort} from '@/reuseable/details/DeleteCohort'
+import DeleteProgram from '@/reuseable/details/DeleteCohort'
 import EditProgramForm from '@/components/program/edit-program-form';
 import {useGetAllProgramsQuery} from '@/service/admin/program_query';
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
@@ -504,7 +504,7 @@ const ProgramView = () => {
                     icon={Cross2Icon}
                     width='auto'
                 >
-                    <DeleteCohort
+                    <DeleteProgram
                         setIsOpen={() => setIsDeleteOpen(false)}
                         headerTitle='Program'
                         title='program'

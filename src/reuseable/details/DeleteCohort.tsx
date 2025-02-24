@@ -18,7 +18,7 @@ interface deleteCohortProps {
 }
 
 
-export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading}) => {
+ const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading}) => {
  
 
     const handleCanCelCohort = () => {
@@ -68,3 +68,5 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
         </div>
     )
 }
+
+export default DeleteCohort
