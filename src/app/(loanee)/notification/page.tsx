@@ -1,5 +1,5 @@
 import React from 'react'
-import Notification from '@/features/notication/view-notifications'
+import Notification from '@/features/notification/view-notifications'
 
 function page() {
   return (

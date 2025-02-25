@@ -11,10 +11,11 @@ import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import AdminProfile from "@/features/profile/adminProfile/Index";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
-import { useRouter} from "next/navigation";
+import { useRouter,usePathname} from "next/navigation";
 import { MdNotifications } from 'react-icons/md';
 import { Button } from '../ui/button';
 import { BellIcon } from '@radix-ui/react-icons';
+import { Badge } from '../ui/badge';
 
 
 const TopBar = () => {
@@ -24,7 +25,7 @@ const TopBar = () => {
     const user_role = getUserDetailsFromStorage('user_role');
     const user_name = getUserDetailsFromStorage("user_name");
      const router = useRouter();
-     const [hasNotifications] = useState(false); 
+     const pathname = usePathname();
 
     const toggleArrow = () => {
         setArrowToggled(!arrowToggled);
@@ -36,9 +37,12 @@ const TopBar = () => {
     };
 
     const handleNotification = () => {
-        router.push("/notification")
+        router.push("/notifications")
        store.dispatch(setCurrentNavbarItem('Notification'))  
     }
+    
+    // const isNotificationPage = pathname === "/notifications" ;
+    const isNotificationPage = /^\/notifications(?:\/.*)?$/.test(pathname || "");
 
 
     return (
@@ -61,21 +65,31 @@ const TopBar = () => {
                 <div id="LayOutProfileAndNotification" className="flex items-center   md:gap-2">
                     <div id={'bellDiv'}
                         className={` flex place-content-center object-fit h-[2.6rem]  w-[2.6rem] rounded-md mr-[1.7rem] `}>
-                        {/*<Notifications />*/}
-                          <div>
+    
+                          <div className='relative left-3 md:left-0'>
                             <Button 
-                            className='text-black shadow-none mt-1 cursor-pointer'
+                            className='text-black shadow-none mt-1 cursor-auto'
                             onClick={handleNotification}
                             >
                                 {
-                                 !hasNotifications? <div>
-                                   <MdNotifications
-                                  size={20}
+                                 isNotificationPage? 
+                                  <div className='cursor-auto'>
+                                    <MdNotifications
+                                  size={24}
                                      /> 
-                                 </div> : 
-                                <BellIcon
-                                style={{ width: '18px',height: '20px'}}
+                                  </div>
+                                    : 
+                                    <div className='cursor-pointer'>
+                               <BellIcon
+                                style={{ width: '22px',height: '21px',stroke: '#000', strokeWidth: '0.6'}}
                                />
+                               <div className='absolute'>
+                                <Badge
+                                 className="relative bg-[#142854] hover:bg-[#142854] bottom-7 left-2  text-white text-xs rounded-full w-4 h-5 flex items-center justify-center"
+                                >10
+                                </Badge>
+                                </div>
+                                    </div>
                                 }
                             </Button>
                           </div>

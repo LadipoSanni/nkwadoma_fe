@@ -154,7 +154,7 @@ function Notification() {
                style='md:w-full py-1'
           />
         </div>
-        <div className='flex justify-between items-center md:pr-7 mb-3 mt-3 md:px-3'>
+        <div className='flex justify-between items-center md:pr-7 mb-3 mt-7 md:px-3'>
         <div className="flex items-center">
             <input
                type="checkbox"
@@ -179,7 +179,7 @@ function Notification() {
             </button>
           </div>
         </div>
-         <div className='md:max-h-[30rem] max-h-[26rem]  overflow-y-auto'>
+         <div className='md:max-h-[60vh] max-h-[58vh]  overflow-y-auto'>
           <Tabs
           orientation="vertical"
           value={activeTab}
@@ -296,7 +296,7 @@ function Notification() {
                      {activeNotification?.callToActionRequired === true?
                      <Button 
                       // className='bg-[#142854] hover:bg-[#142854] h-[45px] text-[14px]'
-                       className='bg-[#F9F9F9] hover:bg-[#F9F9F9] text-white h-[45px] text-[14px] cursor-none shadow-none'
+                       className='bg-[#F9F9F9] hover:bg-[#F9F9F9] text-grey100 h-[45px] text-[14px] cursor-none shadow-none'
                       >
                         View loan offer
                         
