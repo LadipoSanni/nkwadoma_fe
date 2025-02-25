@@ -68,7 +68,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
     const onDrop = async (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         const droppedFile = event.dataTransfer.files?.[0];
-        const supportedTypes = ["image/svg+xml", "image/png", "image/jpg", "image.jpeg"];
+        const supportedTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg"];
 
         if (droppedFile) {
             if (!supportedTypes.includes(droppedFile.type)) {
