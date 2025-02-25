@@ -65,7 +65,6 @@ const InviteAdminDialog: React.FC<InviteAdminDialogProps> = ({ isModalOpen, setI
                     lastName,
                     role: 'PORTFOLIO_MANAGER'
                 }).unwrap();
-                console.log('Admin invited successfully');
                 setIsModalOpen(false);
                 resetForm();
             } catch (error) {

@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { MdCheckCircleOutline, MdOutlineCancel } from "react-icons/md";
 import { inter } from '@/app/fonts';
 import * as faceapi from 'face-api.js';
+import Isloading from "@/reuseable/display/Isloading";
 // import { useDispatch } from 'react-redux';
 // import { setCameraStream } from "@/redux/slice/camera/camera-slice";
 
@@ -60,8 +61,15 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
             if (detection) {
                 setIsFaceDetected(true);
                 if (!hasFaceBeenDetected) {
-                    setHasFaceBeenDetected(true);
-                    captureImage(video);
+                    const landmarks = detection.landmarks;
+                    const mouth = landmarks.getMouth()
+                    const nose = landmarks.getNose();
+                    const leftEye = landmarks.getLeftEye();
+                    const rightEye = landmarks.getRightEye();
+                    if (mouth && nose && leftEye && rightEye){
+                        setHasFaceBeenDetected(true);
+                        captureImage(video);
+                    }
                 }
                 const landmarks = detection.landmarks;
                 const nose = landmarks.getNose();
@@ -205,9 +213,9 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     </div>
                 </main>
 
-                <p className="text-black400 text-sm">
+                <div className="text-black400 text-sm">
                     {modelLoadingError ? (
-                        <span className="text-red-500">Error loading face detection: {modelLoadingError}</span>
+                        <span className="text-red-500">Error loading face detection</span>
                     ) : !isModelLoaded ? (
                         "Loading face detection models..."
                     ) : !hasFaceBeenDetected ? (
@@ -221,9 +229,10 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     ) : step === 'down' ? (
                         "Slowly turn your face down"
                     ) : (
-                        "Face capture complete"
+                        <span>Face capture complete <Isloading /></span>
+
                     )}
-                </p>
+                </div>
             </div>
             <section className="bg-gray-50 rounded p-5 space-y-3">
                 <h1 className="text-black500 text-[14px] leading-[21px] font-medium">Tips</h1>

@@ -1,5 +1,6 @@
 import React from 'react';
 import {  ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
+import {inter} from "@/app/fonts";
 interface props {
     id: string,
     textColor: string,
@@ -20,7 +21,7 @@ const BackButton = ({id,text, textColor, handleClick, iconRight}: props) => {
             {iconRight &&
                 <ArrowLeftIcon/>
             }
-            <span id={ text+`id`} data-testid={ text+`id`} className={` text-sm text-${textColor} `}>{text}</span>
+            <span id={ text+`id`} data-testid={ text+`id`} className={` ${inter.className} text-sm text-${textColor} `}>{text}</span>
             {!iconRight &&
                 <ArrowRightIcon/>
             }

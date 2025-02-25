@@ -135,4 +135,9 @@ input[type=number]::-webkit-outer-spin-button {
     transform-origin: 50% 50%;
   }
 
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
+
 }

@@ -39,7 +39,7 @@ function Index() {
             pageSize: 100,
             pageNumber: 0,
         },
-        {refetchOnMountOrArgChange: true}
+        {refetchOnMountOrArgChange: true, skip:!clickedOrganizationId}
     );
 
 
@@ -90,7 +90,7 @@ function Index() {
              className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {isLoading || disbursedLoanIsLoading ? (
-                <div className={`w-full h-fit md:w-full md:h-fit`}>
+                <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
                     <SkeletonForTable/>
                 </div>
             ) : data?.data?.body?.length === 0 || allDisbursedLoan?.data?.body?.length === 0 ?
@@ -102,13 +102,13 @@ function Index() {
                                     width={"2em"}
                                     color={'#142854'}
                         ></Icon>} iconBg={'#D9EAFF'} title={'Loan disbursed will show here'}
-                        description={clickedOrganizationId?.id ? 'There are no loan disbursals in this organization yet' : `There are no loan disbursal available yet`}/>
+                        description={clickedOrganizationId?.id ? 'There are no loan disbursal in this organization yet' : `There are no loan disbursal available yet`}/>
                 ) :
                 (
                     <div className={`md:w-full  w-full h-full md:h-full `}>
                         <Tables
                             tableData={clickedOrganizationId?.id ? data?.data?.body.slice().reverse() : allDisbursedLoan?.data?.body.slice().reverse()}
-                            isLoading={isLoading}
+                            isLoading={isLoading || disbursedLoanIsLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanDisbursalHeader}
                             tableHeight={52}
