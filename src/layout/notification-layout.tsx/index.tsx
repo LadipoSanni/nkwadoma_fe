@@ -42,7 +42,18 @@ function NotificationLayout({children}: Props) {
        const [hasNextPage,setHasNextPage] = useState(false)
        const [totalItem, setTotalItem] = useState(0)
        const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+       const [isMobile, setIsMobile] = useState(false);
        const router = useRouter();
+
+       useEffect(() => {
+        const mediaQuery = window.matchMedia('(max-width: 767px)'); 
+        setIsMobile(mediaQuery.matches);
+
+        const handleResize = () => setIsMobile(mediaQuery.matches);
+        mediaQuery.addEventListener('change', handleResize);
+
+        return () => mediaQuery.removeEventListener('change', handleResize);
+    }, []);
 
        useEffect(()=> {
            const paginated = getPaginatedData(pageNumber, pageSize, notificationMockData);
@@ -107,11 +118,21 @@ function NotificationLayout({children}: Props) {
             }
 
             const handleTabClick = (id: string) => {
-                router.push(`/notifications/${id}`);
+                router.push(`/notifications/notification/${id}`);
               };
-            
-           
 
+            const handleMobileClick = (id: string) => {
+                router.push(`/notifications/details/${id}`);
+            }
+
+            const handleClick = (id: string) => {
+                if (isMobile) {
+                    handleMobileClick(id);
+                } else {
+                    handleTabClick(id);
+                }
+            };
+            
   return (
     <div className={`w-full h-full md:flex ${inter.className}`}>
      <div className='md:border-r  lg:min-w-[28.125rem]'>
@@ -181,7 +202,7 @@ function NotificationLayout({children}: Props) {
                 <div className='flex-1 border-t '>
                   <TabsTrigger 
                   value={notification.type} className={`w-full py-3  data-[state=active]:bg-[#F9F9F9] flex justify-between px-0 rounded-none`}
-                onClick={() => handleTabClick(notification.id)}
+                onClick={() =>handleClick(notification.id)}
                   >
                   <div className='flex md:px-3 cursor-pointer' >
                   <div
@@ -192,11 +213,11 @@ function NotificationLayout({children}: Props) {
                type="checkbox"
                id='uniqueCheck'
                className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md  opacity-60 bg-white`}
-               onChange={(e) => {
-                e.stopPropagation();
+               onChange={() => {
                 handleCheckedRow(notification.id)
             }}
                checked={selectedRows.has(notification.id)}
+               onClick={(e) => e.stopPropagation()}
                 />
                 </div>
                 <div className='flex-col flex items-start'>

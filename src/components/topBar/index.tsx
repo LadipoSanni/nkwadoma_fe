@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import { IoMdMenu } from "react-icons/io";
 import { setShowMobileSideBar } from "@/redux/slice/layout/adminLayout";
 import {inter500, inter} from "@/app/fonts";
@@ -26,6 +26,18 @@ const TopBar = () => {
     const user_name = getUserDetailsFromStorage("user_name");
      const router = useRouter();
      const pathname = usePathname();
+     const [isMobile, setIsMobile] = useState(false);
+
+      useEffect(() => {
+             const mediaQuery = window.matchMedia('(max-width: 767px)'); 
+             setIsMobile(mediaQuery.matches);
+     
+             const handleResize = () => setIsMobile(mediaQuery.matches);
+             mediaQuery.addEventListener('change', handleResize);
+     
+             return () => mediaQuery.removeEventListener('change', handleResize);
+         }, []);
+     
 
     const toggleArrow = () => {
         setArrowToggled(!arrowToggled);
@@ -37,12 +49,18 @@ const TopBar = () => {
     };
 
     const handleNotification = () => {
-        router.push("/notifications")
+        router.push("/notifications/notification")
        store.dispatch(setCurrentNavbarItem('Notification'))  
     }
     
     // const isNotificationPage = pathname === "/notifications" ;
     const isNotificationPage = /^\/notifications(?:\/.*)?$/.test(pathname || "");
+
+    const mobileNotificationHeaderClick =() => {
+        if(isMobile && currentTab === "Notification"){
+            router.push("/notifications/notification")
+        }
+    }
 
 
     return (
@@ -58,7 +76,10 @@ const TopBar = () => {
                             id={'LayOutHamburger'} />
                     </div>
                     <div className={` relative flex place-items-center `}>
-                        <div className={` ${inter500.className} text-base md:text-base text-black500 md:text500 `}>{currentTab}</div>
+                        <div 
+                        className={` ${inter500.className} text-base md:text-base text-black500 md:text500 `}
+                        onClick={mobileNotificationHeaderClick}
+                        >{currentTab}</div>
                     </div>
                 </div>
 

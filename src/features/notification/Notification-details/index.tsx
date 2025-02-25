@@ -1,7 +1,8 @@
+
 import React from 'react'
 import {inter} from "@/app/fonts"
 import { Button } from '@/components/ui/button'
-import { notificationMockData } from '@/utils/Notification_mock-data';
+// import { notificationMockData } from '@/utils/Notification_mock-data';
 import { getInitials } from '@/utils/GlobalMethods';
 
 
@@ -24,7 +25,7 @@ interface NotificationDetailsPageProps{
 
 function NotificationDetailPage({notification}: NotificationDetailsPageProps) {
   return (
-    <div className={`w-full ${inter.className}`}>
+    <div className={`w-full pr-9 md:pr-16 ${inter.className}`}>
       <p className="font-medium">
                     {notification?.type}
      </p>
@@ -52,12 +53,12 @@ function NotificationDetailPage({notification}: NotificationDetailsPageProps) {
                              </span>,
                          </div>
                         <div>
-                        <p className="md:max-w-[36.2rem]">
+                        <p className="md">
                          {/* {getPaginatedDatas.find((item) => item.type === activeTab)?.message} */}
                          {notification?.message}
                          </p>
                         </div>
-                        <div className='mt-4 mb-4 md:max-w-[36.2rem]'>
+                        <div className='mt-4 mb-4'>
                          {notification?.callToActionRequired === true? (<p className='mb-4'>Click on the button to view the full details of your loan</p>): ""}
                          <p>If you have any question or further assistance, our customer service team is here to help you</p>
                         </div>
