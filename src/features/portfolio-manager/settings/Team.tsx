@@ -144,6 +144,7 @@ function Team() {
            headerTitle='Invite Colleague'
            closeOnOverlayClick={true}
            icon={Cross2Icon}
+            width='36%'
           >
            <InviteAdmin 
            setIsOpen={setIsModalOpen}
