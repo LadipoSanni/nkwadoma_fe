@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { MdClose, MdPersonOutline } from "react-icons/md";
 import { cabinetGrotesk, inter } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogOverlay, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useSaveNextOfKinDetailsMutation } from "@/service/users/Loanee_query";
@@ -218,7 +218,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
             </main>
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]" />
+                {/*<DialogOverlay className="" />*/}
                 <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6  py-5 pl-5 pr-2'}>
                     <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
                         <DialogTitle
@@ -318,7 +318,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                     setDescription={(description) => setValues((prev) => ({
                                         ...prev,
                                         contactAddress: description
-                                    }))} maximumDescription={500} label={'Current residential address'}
+                                    }))} maximumDescription={500} label={'Current next of kin’s residential address'}
                                     placeholder={'Enter residential address'} />
                             </div>
                             <div className={'grid gap-2'}>

@@ -38,6 +38,10 @@ const LoaneeOnboarding = () => {
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
 
     useEffect(() => {
+        if ( data?.data?.identityVerified  === true  ){
+            router.push('/overview')
+
+        }
         if (data?.statusCode === "OK" && data?.data?.id) {
             setLoanReferralId(data.data.id);
             dispatch(setLoanReferralStatus(data.data.loanReferralStatus));
@@ -48,7 +52,13 @@ const LoaneeOnboarding = () => {
                 router.push("/overview");
             }
         }
+
     }, [data, loanReferralDetailsIsLoading, currentStep, dispatch, router]);
+
+    if(data?.data?.identityVerified){
+        router.push("/overview")
+    }
+
 
     const handleNext = () => {
         if (currentStep === 0) {

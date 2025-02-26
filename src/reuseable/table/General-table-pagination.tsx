@@ -1,37 +1,31 @@
 import React from 'react'
 import { Pagination,PaginationPrevious,PaginationNext,PaginationContent, PaginationItem,PaginationEllipsis } from '@/components/ui/pagination'
 import { Button } from '@/components/ui/button'
-import { inter } from '@/app/fonts';
 
-interface Props<T> {
+interface Props {
     page: number;
-    rowsPerPage: number;
-    tableData: T[];
-    handlePageChange: (event: React.ChangeEvent<unknown>, newPage: number) => void;
+    // rowsPerPage: number;
+    // tableData: T[];
+    handlePageChange: (newPage: number) => void;
     handleNextPage: () => void;
     handlePreviousPage: () => void;
-    
+    totalPage: number
 }
 
-function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handleNextPage, handlePreviousPage }: Props<T>){
-  const totalPages = Math.ceil(tableData?.length / rowsPerPage);
+function Paginations({ page, handlePageChange, handleNextPage, handlePreviousPage,totalPage }: Props){
+  const totalPages = totalPage;
 
   const renderPaginationItems = () => {
     const items = [];
-
     
     if (totalPages > 0) items.push(1);
     if (totalPages > 1) items.push(2);
-
-    
     if (totalPages > 5) {
       if (page > 3) items.push('...'); 
 
-      
       for (let i = Math.max(3, page - 1); i <= Math.min(totalPages - 2, page + 1); i++) {
         items.push(i);
       }
-
       if (page < totalPages - 2) items.push('...'); 
 
      
@@ -56,7 +50,7 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
         onClick={handlePreviousPage}
         className={`${
           page === 1 ? "invisible" : "visible"
-        } gap-1 pl-2.5 h-fit`}
+        } gap-1 pl-2.5 h-12`}
         style={{
           color: '#101828',
           borderRadius: 'var(--radius-xs, 4px)',
@@ -70,22 +64,7 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
         <div className='hidden md:block'>
         <Pagination>
           
-        {/* <PaginationContent>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <PaginationItem key={index}>
-              <Button
-                className={`${
-                  index + 1 === page ? "bg-grey50 text-gray-500 hover:bg-gray50 " : "bg-gray-50 text-gray-500 border-none shadow-none"
-                } px-4 py-1 rounded-full`}
-                onClick={(e) => handlePageChange(e, index + 1)}
-              >
-                {index + 1}
-              </Button>
-            </PaginationItem>
-          ))}
-
-          {totalPages > 5 && <PaginationEllipsis />}
-        </PaginationContent> */}
+        
          <PaginationContent>
             {renderPaginationItems().map((item, index) => {
               if (item === '...') {
@@ -98,10 +77,10 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
                   <Button
                     className={`${
                       item === page
-                        ? 'bg-grey50 text-[#101828] hover:bg-gray50 '
-                        : 'bg-gray-50 text-[#72757A] text-sm border-none shadow-none'
-                    } px-3 py-1 rounded-full w-fit h-fit  ${inter.className}`}
-                    onClick={(e) => handlePageChange(e, Number(item))}
+                        ? 'bg-grey50 text-gray-500 hover:bg-gray50 '
+                        : 'bg-gray-50 text-gray-500 border-none shadow-none'
+                    } px-5 py-1 rounded-full h-10`}
+                    onClick={() => handlePageChange(Number(item))}
                   >
                     {item}
                   </Button>
@@ -119,7 +98,7 @@ function Paginations<T>({ page, rowsPerPage, tableData, handlePageChange, handle
         onClick={handleNextPage}
         className={`${
           page >= totalPages ? "invisible" : "visible"
-        } gap-1 pr-2.5  h-fit  w-24`}
+        } gap-1 pr-2.5  h-12 w-24`}
         style={{
           color: '#101828',
           borderRadius: 'var(--radius-xs, 4px)',

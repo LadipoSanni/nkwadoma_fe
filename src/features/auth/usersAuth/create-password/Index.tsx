@@ -24,6 +24,8 @@ const CreatePassword = () => {
     const [disableButton, setDisableButton] = useState(false)
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
 
+    const disable = !criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton;
+
 
 
 
@@ -32,7 +34,7 @@ const CreatePassword = () => {
         "Must contain one special character",
         "Must contain one uppercase character",
         "Must contain one lowercase character",
-        // "Must contain one digit"
+        "Must contain one digit"
     ];
 
     const validatePassword = (password: string) => {
@@ -41,7 +43,7 @@ const CreatePassword = () => {
             /[!@#$%^&*(),.?":{}|<>]/.test(password),
             /[A-Z]/.test(password),
             /[a-z]/.test(password),
-            // /\d/.test(password)
+            /\d/.test(password)
         ];
         setCriteriaStatus(criteria);
     };
@@ -100,18 +102,18 @@ const CreatePassword = () => {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
             const access_token = response?.data?.accessToken
+            const refreshToken = response?.data?.refreshToken
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
             const user_email = decode_access_token?.email
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             const userName = decode_access_token?.name
-            // const user_email = decode_access_token?.email
             const user_roles = decode_access_token?.realm_access?.roles
             const user_role = user_roles.filter(getUserRoles).at(0)
             clearData()
             await persistor.purge();
             if (user_role) {
-                storeUserDetails(access_token, user_email, user_role, userName)
+                storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
                 if (user_role === 'LOANEE') {
                     store.dispatch(setCurrentNavbarItem("overview"))
                     router.push("/onboarding")
@@ -127,19 +129,14 @@ const CreatePassword = () => {
 
 
         }catch (error){
-
-            // console.log("error: ", error)
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
                 description: error?.data?.message,
                 status: "error",
             })
-            // setDisableButton(false)
-
-
         }
-
+        setDisableButton(false)
     }
 
     return (
@@ -148,7 +145,7 @@ const CreatePassword = () => {
             <h1 id={'create-password-title'}
                 className={`${cabinetGrotesk.className} antialiased text-meedlBlue font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
                 <main id={'create-password-main'} className={'grid gap-[24.14px]'}>
-                    <div id={'create-password-inputs'} className={'grid  gap-4'}>
+                    <div id={'create-password-inputs'} className={'grid gap-4'}>
                         <AuthInputField
                             label={'Password'}
                             id={'password'}
@@ -174,7 +171,7 @@ const CreatePassword = () => {
                 <AuthButton
                     backgroundColor={criteriaStatus.every(Boolean) && password === confirmPassword ? '#142854' : '#D0D5DD'}
                     buttonText={'Create password'}
-                    disable={!criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton}
+                    disable={disable}
                     handleClick={(e)=>{handleCreatePassword(e)}}
                     id={"createPasswordButton"}
                     textColor={'#FFFFFF'}

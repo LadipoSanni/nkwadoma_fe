@@ -11,9 +11,9 @@ import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
 import TabSwitch from "@/reuseable/details/TabSwitch";
 import {useViewDisbursedLoanDetailsQuery} from "@/service/admin/loan/Loan-disbursal-api";
-import {Skeleton} from "@/components/ui/skeleton";
 import Image from "next/image";
 import {Card} from "@/components/ui/card";
+import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage';
 
 
 interface LoaneeLoanBreakDown {
@@ -71,6 +71,7 @@ const Index = () => {
                     decimalScale={2}
                     fixedDecimalScale={true}
                     // value={'200000'}
+                    disabled={true}
                     prefix={'₦'}
                     className='bg-grey105 flex md:place-items-end '
                     value={details?.data.tuitionAmount}
@@ -86,6 +87,7 @@ const Index = () => {
                 thousandSeparator=","
                 decimalScale={2}
                 fixedDecimalScale={true}
+                disabled={true}
                 // value={'200000'}
                 prefix={'₦'}
                 value={details?.data.loanAmountRequested}
@@ -105,6 +107,7 @@ const Index = () => {
                 // value={'200000'}
                 prefix={'₦'}
                 value={details?.data.initialDeposit}
+                disabled={true}
                 // placeholder={${detail.itemName}}
                 // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                 className='bg-grey105 flex md:place-items-end'
@@ -152,7 +155,7 @@ const Index = () => {
     const initial = getInitials(`${details?.data.firstName} ${details?.data.lastName}`);
 
     return (
-        <>{isLoading ? (<Skeleton/>) : (
+        <>{isLoading ? (<SkeletonForDetailPage/>) : (
             <div
                 id={'disbursedLoanMainContainer'}
                 data-testid={'disbursedLoanMainContainer'}

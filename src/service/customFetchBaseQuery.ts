@@ -1,9 +1,9 @@
 
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { getUserDetails } from '@/features/auth/usersAuth/login/action';
+import {isTokenExpired} from "@/utils/GlobalMethods";
 
-// import {getItemSessionStorage} from "@/utils/storage";
-// import fetch from 'node-fetch'; // Import node-fetch for SSR
+
 
 const baseUrl = process.env.APP_DEV_AUTH_URL;
 
@@ -16,8 +16,10 @@ export const customFetchBaseQuery = fetchBaseQuery({
         : undefined, 
     prepareHeaders: (headers) => {
         const { storedAccessToken } = getUserDetails();
-        if (storedAccessToken) {
-            headers.set('authorization', `Bearer ${storedAccessToken}`);
+        const {storedRefreshToken} = getUserDetails();
+        const token = isTokenExpired(storedAccessToken) ? storedRefreshToken : storedAccessToken
+        if (storedAccessToken || storedRefreshToken) {
+            headers.set('authorization', `Bearer ${token}`);
             headers.set('Content-type', 'application/json');
         }
 

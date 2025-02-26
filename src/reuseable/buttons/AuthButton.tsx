@@ -3,7 +3,7 @@ import React from 'react';
 import {AuthButtonPropsType} from "@/types/ButtonTypes";
 import {Button} from "@/components/ui/button"
 import Isloading from "@/reuseable/display/Isloading";
-
+import { inter, cabinetGrotesk} from "@/app/fonts";
 
 const AuthButton = ({
                         id,
@@ -14,7 +14,8 @@ const AuthButton = ({
                         backgroundColor,
                         disable,
                         isLoading,
-                        height
+                        height,
+                        useCabinetGrotesk
                     }: AuthButtonPropsType) => {
     return (
             <Button
@@ -30,8 +31,7 @@ const AuthButton = ({
                     color: `${textColor}`,
                     backgroundColor: `${disable ? "#D0D0D0" : backgroundColor}`
                 }}
-                className={`grid place-content-center rounded font-bold text-sm`}
-            >
+                className={`${useCabinetGrotesk ? cabinetGrotesk.className : inter.className} grid place-content-center rounded font-bold text-sm`}>
                 {isLoading ? <Isloading/> : buttonText}
 
             </Button>

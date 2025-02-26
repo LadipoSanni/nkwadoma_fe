@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { FiUploadCloud } from "react-icons/fi";
 import { Label } from "@/components/ui/label";
-import { MdOutlineDelete, MdOutlineEdit, MdCheck } from "react-icons/md";
+import { MdOutlineDelete, MdOutlineEdit, MdCheck, MdErrorOutline } from "react-icons/md";
 import { uploadImageToCloudinary } from '@/utils/UploadToCloudinary';
 
 interface FileUploadProps {
@@ -21,7 +21,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [fileName, setFileName] = useState("");
-    // const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+    const [isFileSupported, setIsFileSupported] = useState<boolean>(true);
 
     useEffect(() => {
         if (file) {
@@ -39,26 +39,28 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
 
     const onFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0];
-        const supportedTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/gif"];
+        const supportedTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg"];
 
         if (selectedFile) {
             if (!supportedTypes.includes(selectedFile.type)) {
                 setError("File not supported");
-                setFile(null);
+                setIsFileSupported(false);
+                setFile(selectedFile);
                 return;
             }
             setLoading(true);
             setFile(selectedFile);
             setError(null); // Clear any previous error
-           
-            try { 
-                const uploadedFileUrl = await uploadImageToCloudinary(selectedFile); 
-                setUploadedImageUrl(uploadedFileUrl); 
-            } catch (uploadError) 
-            { setError("Failed to upload image"); 
-            console.error(uploadError); 
-        }
-        await new Promise(resolve => setTimeout(resolve, 2000));
+            setIsFileSupported(true);
+
+            try {
+                const uploadedFileUrl = await uploadImageToCloudinary(selectedFile);
+                setUploadedImageUrl(uploadedFileUrl);
+            } catch (uploadError) {
+                setError("Failed to upload image");
+                console.error(uploadError);
+            }
+            await new Promise(resolve => setTimeout(resolve, 2000));
             setLoading(false);
         }
     };
@@ -66,25 +68,26 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
     const onDrop = async (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         const droppedFile = event.dataTransfer.files?.[0];
-        const supportedTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/gif"];
+        const supportedTypes = ["image/svg+xml", "image/png", "image/jpg", "image.jpeg"];
 
         if (droppedFile) {
             if (!supportedTypes.includes(droppedFile.type)) {
                 setError("File not supported");
-                setFile(null);
+                setIsFileSupported(false);
+                setFile(droppedFile);
                 return;
             }
             setLoading(true);
             setFile(droppedFile);
             setError(null); // Clear any previous error
+            setIsFileSupported(true);
             handleDrop(event);
-            try { 
-                const uploadedFileUrl = await uploadImageToCloudinary(droppedFile); 
-                setUploadedImageUrl(uploadedFileUrl);  
-            } 
-            catch (uploadError) { 
-                setError("Failed to upload image"); 
-                console.error(uploadError); 
+            try {
+                const uploadedFileUrl = await uploadImageToCloudinary(droppedFile);
+                setUploadedImageUrl(uploadedFileUrl);
+            } catch (uploadError) {
+                setError("Failed to upload image");
+                console.error(uploadError);
             }
             await new Promise(resolve => setTimeout(resolve, 2000));
             setLoading(false);
@@ -99,6 +102,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
 
     const onDelete = () => {
         setFile(null);
+        setIsFileSupported(true);
     };
 
     return (
@@ -114,7 +118,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
                 <input
                     id="fileInput"
                     type="file"
-                    accept=".svg,.png,.jpg,.jpeg,.gif"
+                    accept=".svg,.png,.jpg,.jpeg"
                     style={{ display: 'none' }}
                     ref={fileInputRef}
                     onChange={onFileChange}
@@ -127,9 +131,17 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
                             {loading ? (
                                 <div className="w-5 h-5 border-2 border-l-[2px] border-l-meedlBlue border-lightBlue550 rounded-full animate-spin"></div>
                             ) : (
-                                <div className={'flex justify-center items-center h-5 w-5 rounded-full bg-green500'}>
-                                    <MdCheck className="text-meedlWhite w-3 h-3" />
-                                </div>
+                                <>
+                                    {error ? (
+                                        <div className={'flex justify-center items-center h-5 w-5 rounded-full bg-error450'}>
+                                            <MdErrorOutline className="text-meedlWhite w-3 h-3" />
+                                        </div>
+                                    ) : (
+                                        <div className={'flex justify-center items-center h-5 w-5 rounded-full bg-green500'}>
+                                            <MdCheck className="text-meedlWhite w-3 h-3" />
+                                        </div>
+                                    )}
+                                </>
                             )}
                             <div className={'flex flex-col items-start'}>
                                 <p className="text-black500 font-normal text-sm truncate md:whitespace-normal">
@@ -160,20 +172,17 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
                         </div>
                     </>
                 ) : (
-                    <>
-                        <div id="uploadIconContainer" className={'h-11 w-11 bg-meedlWhite flex justify-center items-center rounded-md'}>
-                            <FiUploadCloud className={'w-6 h-[22px]'} />
-                        </div>
-                        <div id="uploadTextContainer" className={'grid gap-1 place-items-center'}>
-                            <p className={'font-normal text-black300 text-[14px] leading-[150%]'}><span className={'underline text-meedlBlue'}>Click to upload</span> or drag and drop</p>
-                            <p className={'text-black300 leading-[150%] text-[14px] font-normal'}>SVG, PNG, JPG OR GIF (max. 800x400px) </p>
-                        </div>
-                    </>
-                )}
-                {error && (
-                    <p className="text-red-500 font-normal text-[12px] leading-[150%]">
-                        {error}
-                    </p>
+                    isFileSupported && (
+                        <>
+                            <div id="uploadIconContainer" className={'h-11 w-11 bg-meedlWhite flex justify-center items-center rounded-md'}>
+                                <FiUploadCloud className={'w-6 h-[22px]'} />
+                            </div>
+                            <div id="uploadTextContainer" className={'grid gap-1 place-items-center'}>
+                                <p className={'font-normal text-black300 text-[14px] leading-[150%]'}><span className={'underline text-meedlBlue'}>Click to upload</span> or drag and drop</p>
+                                <p className={'text-black300 leading-[150%] text-[14px] font-normal'}>SVG, PNG OR JPG  (max. 800x400px) </p>
+                            </div>
+                        </>
+                    )
                 )}
             </div>
         </div>
