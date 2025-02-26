@@ -2,8 +2,8 @@
 import React from 'react'
 import {inter} from "@/app/fonts"
 import { Button } from '@/components/ui/button'
-// import { notificationMockData } from '@/utils/Notification_mock-data';
 import { getInitials } from '@/utils/GlobalMethods';
+import SkeletonforNotificationDetails from '@/reuseable/Skeleton-loading-state/Skeleton-for-notification-details';
 
 
 interface NotificationProps{
@@ -24,8 +24,11 @@ interface NotificationDetailsPageProps{
 }
 
 function NotificationDetailPage({notification}: NotificationDetailsPageProps) {
+  const loading = false
   return (
     <div className={`w-full pr-9 md:pr-16 ${inter.className}`}>
+      { loading? <div><SkeletonforNotificationDetails/></div> :
+      <div>
       <p className="font-medium">
                     {notification?.type}
      </p>
@@ -74,6 +77,8 @@ function NotificationDetailPage({notification}: NotificationDetailsPageProps) {
                            : ""}
                          </div>
                         </div>
+    </div>
+}
     </div>
   )
 }

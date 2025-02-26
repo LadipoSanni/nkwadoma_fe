@@ -13,6 +13,7 @@ import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import { BellIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
+import SkeletonForViewNotification from '@/reuseable/Skeleton-loading-state/Skeleton-for-view-notification';
 
 
 interface Props{
@@ -44,6 +45,7 @@ function NotificationLayout({children}: Props) {
        const [isDeleteOpen, setIsDeleteOpen] = useState(false);
        const [isMobile, setIsMobile] = useState(false);
        const router = useRouter();
+       const loading = false
 
        useEffect(() => {
         const mediaQuery = window.matchMedia('(max-width: 767px)'); 
@@ -133,9 +135,12 @@ function NotificationLayout({children}: Props) {
                 }
             };
             
+            
   return (
     <div className={`w-full h-full md:flex ${inter.className}`}>
      <div className='md:border-r  lg:min-w-[28.125rem]'>
+    { loading? <div><SkeletonForViewNotification/></div> :
+   <div>
       {
         getPaginatedDatas.length === 0? (
         <div className='relative bottom-24 top-24 '>
@@ -263,6 +268,8 @@ function NotificationLayout({children}: Props) {
             </div> 
             </div> )
               }
+   </div> }
+              
             </div>
             <div className='px-5 w-full flex-grow hidden md:block'>
                 {children}
