@@ -79,7 +79,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
             }
             setLoading(true);
             setFile(droppedFile);
-            setError(null); // Clear any previous error
+            setError(null); 
             setIsFileSupported(true);
             handleDrop(event);
             try {

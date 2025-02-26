@@ -160,11 +160,13 @@ function NotificationLayout({children}: Props) {
                value={searchTerm}
                onChange={handleSearchChange}
                style='md:w-full py-1'
+               testId='ProgramSearch'
           />
         </div>
         <div className='flex justify-between items-center md:pr-7 mb-3 mt-7 md:px-3'>
         <div className="flex items-center">
             <input
+             data-testid="AllNotifications" 
                type="checkbox"
               checked={selectAll}
               onChange={handleSelectAllChange}
@@ -178,6 +180,7 @@ function NotificationLayout({children}: Props) {
             disabled={selectedRows.size === 0} 
             className={selectedRows.size === 0? "cursor-none " : "cursor-pointer "}
             onClick={handleDeleteOpen}
+            data-testid="DeleteNotification"
             >
               <Trash2 
               color={selectedRows.size > 0 ? '#D42620' : '#B6BCCA'}
@@ -210,6 +213,7 @@ function NotificationLayout({children}: Props) {
                   
                   >
                   <input 
+                  data-testid="UniqueCheck" 
                type="checkbox"
                id='uniqueCheck'
                className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md  opacity-60 bg-white`}
@@ -229,7 +233,7 @@ function NotificationLayout({children}: Props) {
                   <div className='mr-3'>
                     {
                       notification.read === false?
-                   <div className='text-5xl text-[#06792D]'>.</div>
+                   <div data-testid="read" className='text-5xl text-[#06792D]'>.</div>
                    : ""
                     }
                   </div>
@@ -253,6 +257,8 @@ function NotificationLayout({children}: Props) {
             pageNumber={pageNumber}
             hasNextPage={hasNextPage}
             style='mt-4 px-4'
+            testIdNext='handleNext'
+            testIdPrevious='handlePrevious'
           />
             </div> 
             </div> )
