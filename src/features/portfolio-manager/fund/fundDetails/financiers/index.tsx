@@ -9,6 +9,7 @@ import { formatAmount } from '@/utils/Format';
 import { Book } from "lucide-react";
 import Modal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
+
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
 import { financiers } from '@/utils/cohort/trainee-details-mock-data/Index';
 
