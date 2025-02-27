@@ -1,30 +1,26 @@
 "use client";
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import InfoCard from '@/reuseable/details/InfoCard';
 import {MdOutlinePayments} from 'react-icons/md';
 import InfoPanel from '@/reuseable/details/InfoPanel';
 import {formatAmount} from '@/utils/Format';
 import {useGetInvestmentVehicleDetailQuery} from '@/service/admin/fund_query';
-import {getItemSessionStorage} from '@/utils/storage';
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import {useAppSelector} from "@/redux/store";
 
 const Details = () => {
-    const [investmentId, setInvestmentId] = useState("");
+    const currentVehicleId = useAppSelector(state => (state.vehicle.currentVehicleId))
+    const [investmentId] = useState(currentVehicleId);
 
     const {data, isLoading} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
 
-    useEffect(() => {
-        const id = getItemSessionStorage('investmentVehicleId');
-        if (id) {
-            setInvestmentId(id);
-            console.log('InvestmentId set:', id);
-        }
-    }, []);
+
+
 
 
     const detailInfo = [
-        {name: 'Vehicle type', value: data?.data?.investmentVehicleType || 'N/A'},
+        {name: 'Vehicle type', value: capitalizeFirstLetters(data?.data?.investmentVehicleType )|| 'N/A'},
         {name: 'Vehicle size', value: formatAmount(data?.data?.size?.toString() || '0')},
         {
             name: 'Vehicle status',

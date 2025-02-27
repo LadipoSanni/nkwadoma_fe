@@ -23,7 +23,7 @@ export const fundApi = createApi({
           method: "GET",
         }),
         // providesTags: (result, error, arg) => [{ type: 'vehicle', id: arg.id }],
-        providesTags: ['funds'],
+        providesTags: ['vehicle'],
       }),
        createInvestmentVehicle: builder.mutation({
         query: (data:{

@@ -20,7 +20,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout'],
+    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle'],
 };
 
 const persistedReducer = persistReducer(persistConfig, appReducer);
