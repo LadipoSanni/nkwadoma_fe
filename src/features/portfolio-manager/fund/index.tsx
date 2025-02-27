@@ -28,7 +28,7 @@ const tabData = [
       value: "commercialFund"
     },
     {
-      name:"Endowment funds",
+      name:"Endowment ",
       value: "endowmentFund"
     },
 ]

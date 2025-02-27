@@ -85,7 +85,7 @@ const LoanProductPage = () => {
             selector: (row: TableRowData) => row.numberOfLoanees
         },
         {
-            title: 'Cost of funds (%)',
+            title: 'Cost of vehicle (%)',
             sortable: true,
             id: 'costOfFund',
             selector: (row: TableRowData) => row.costOfFund
