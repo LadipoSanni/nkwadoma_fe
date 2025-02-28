@@ -1,3 +1,4 @@
+
 import { cleanup, screen, render,fireEvent} from "@testing-library/react";
 import InviteFinancier from "@/components/portfolio-manager/fund/financier/Invite-financier";
 import { Formik,Form } from 'formik';
@@ -5,7 +6,9 @@ import { Formik,Form } from 'formik';
 
 describe("Invite financier", () => {
     const mockHandleBack = jest.fn();
+
   // const mockSetFieldValue = jest.fn();
+
     
     beforeEach(() => {
         jest.clearAllMocks();
@@ -15,6 +18,7 @@ describe("Invite financier", () => {
           jest.spyOn(console, 'warn').mockReturnValue();
           jest.spyOn(console, 'error').mockReturnValue();
       })
+
 
       // const errors = {
       //   firstName: '',
@@ -28,6 +32,7 @@ describe("Invite financier", () => {
       //   email: false,
       //   companyName: false
       // };
+
 
       const setup = (financierType = '', errors = {}, touched = {}, isloading = false, isValid = true) => {
         render(
