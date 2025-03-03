@@ -1,6 +1,7 @@
+'use client'
 import React from 'react';
-import {  ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
-import {inter} from "@/app/fonts";
+import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import { inter500} from "@/app/fonts";
 interface props {
     id: string,
     textColor: string,
@@ -19,11 +20,13 @@ const BackButton = ({id,text, textColor, handleClick, iconRight}: props) => {
             onClick={handleClick}
         >
             {iconRight &&
-                <ArrowLeftIcon/>
+                <MdArrowBack  style={{color: `${textColor}`}}/>
             }
-            <span id={ text+`id`} data-testid={ text+`id`} className={` ${inter.className} text-sm text-${textColor} `}>{text}</span>
+            <span
+                style={{color: `${textColor}`}}
+                id={ text+`id`} data-testid={ text+`id`} className={` ${inter500.className} text-[14px]  text-${textColor} `}>{text}</span>
             {!iconRight &&
-                <ArrowRightIcon/>
+                <MdArrowForward style={{color: `${textColor}`}}/>
             }
 
         </button>
