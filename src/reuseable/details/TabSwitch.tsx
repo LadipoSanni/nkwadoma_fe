@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from "@/components/selected-loan/SelectedLoan.module.css";
+import {inter500, inter} from "@/app/fonts";
 
 interface props {
     tabContent: string[],
@@ -31,7 +32,7 @@ const TabSwitch = ({tabContent, currentTab, componentId, handleChange}: props) =
                 <div
                     data-testid={'TabSwitchStatusBoxName'}
                     id={"TabSwitchStatusBoxName"}
-                    className={`flex gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
+                    className={`  ${index === currentTab ? `text-black500 ${inter500.className}` : `text-black300 ${inter.className}`}  flex gap-1 text-nowrap whitespace-nowrap text-[14px] w-object-fit md:w-auto md:text-[14px]`}
                 >{name}</div>
 
             </button>

@@ -2,7 +2,7 @@ import FinancierDetails from "@/pages/admin/financier-details";
 import {render, screen, waitFor} from '@testing-library/react'
 import {userEvent} from "@testing-library/user-event";
 import {Providers} from "@/app/provider";
-import {useRouter} from "next/router";
+ import {useRouter} from "next/router";
 
 jest.mock('next/navigation', ()=> ({
     useRouter: jest.fn()
@@ -26,16 +26,24 @@ describe('testing financier details page', () => {
         expect(backbuttonToViewAllFinancier).toBeInTheDocument()
 
     })
-    // test('that on clicking back button, it should route to view all financiers', async () => {
-    //     const mockBack = jest.fn();
-    //     useRouter.mockReturnValue({ back: mockBack });
-    //     const backbuttonToViewAllFinancier = screen.getByTestId('backButtonToViewAllFinancier')
-    //     // const viewAllFinancierTable = await screen.getAllByTestId("loanProductTableContainer")
-    //     await userEvent.click(backbuttonToViewAllFinancier)
-    //     expect(mockBack).toHaveBeenCalledTimes(1);
-    //
-    //     // await waitFor(() => expect(viewAllFinancierTable).toBeInTheDocument())
+    test('that on clicking back button, it should route to view all financiers', async () => {
+        const mockBack = jest.fn();
+        (useRouter as jest.Mock).mockReturnValue({back: mockBack});
+        const backbuttonToViewAllFinancier = screen.getByTestId('backButtonToViewAllFinancier')
+        // const viewAllFinancierTable = await screen.getAllByTestId("loanProductTableContainer")
+        await userEvent.click(backbuttonToViewAllFinancier)
+        expect(mockBack).toHaveBeenCalledTimes(1);
+    })
+
+        // await waitFor(() => expect(viewAllFinancierTable).toBeInTheDocument())
     // })
+
+    test('should contain the financier name and email', () => {
+        const financierFullName = screen.getByTestId('financierName')
+        const financierEmail = screen.getByTestId('financierEmail')
+        expect(financierFullName).toBeInTheDocument()
+        expect(financierEmail).toBeInTheDocument()
+    })
 
 
 })

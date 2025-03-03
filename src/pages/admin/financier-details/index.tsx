@@ -5,9 +5,10 @@ import {useRouter} from "next/navigation";
 import {Card} from "@/components/ui/card";
 import Image from "next/image";
 import {cabinetGroteskRegular, inter, cabinetGroteskMediumBold, cabinetGroteskBold} from "@/app/fonts";
-import styles from "@/pages/admin/loan-request-details/index.module.css";
+import styles from "./index.module.css";
 import TabSwitch from "@/reuseable/details/TabSwitch";
 import {Breakdown} from "@/reuseable/details/breakdown";
+import {NumericFormat} from "react-number-format";
 
 const FinancierDetails = () => {
 
@@ -28,7 +29,44 @@ const FinancierDetails = () => {
     }
 
     const basicDetails = [
-        {label: 'Financier type', value: <div className={` w-fit h-fit bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
+        {label: 'Financier type', value: <div className={` w-fit h-fit rounded-md px-3 bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
+        {label: 'Alternate phone number', value: ''},
+        {label: 'Alternate residential address', value: ''},
+        {
+            label: 'Next of kin name',
+            value: ''
+        },
+        {label: 'Next of kin email address', value: ''},
+        {label: 'Next of kin phone number', value: ''},
+        {label: 'Next of kin relationship', value:''},
+        {label: 'Financier type', value: <div className={` w-fit h-fit rounded-md bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
+        {label: 'Alternate phone number', value: ''},
+        {label: 'Alternate residential address', value: ''},
+        {
+            label: 'Next of kin name',
+            value: ''
+        },
+        {label: 'Next of kin email address', value: ''},
+        {label: 'Next of kin phone number', value: ''},
+        {label: 'Next of kin relationship', value:''},{label: 'Financier type', value: <div className={` w-fit h-fit rounded-md bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
+        {label: 'Alternate phone number', value: ''},
+        {label: 'Alternate residential address', value: ''},
+        {
+            label: 'Next of kin name',
+            value: ''
+        },
+        {label: 'Next of kin email address', value: ''},
+        {label: 'Next of kin phone number', value: ''},
+        {label: 'Next of kin relationship', value:''},{label: 'Financier type', value: <div className={` w-fit h-fit rounded-md bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
+        {label: 'Alternate phone number', value: ''},
+        {label: 'Alternate residential address', value: ''},
+        {
+            label: 'Next of kin name',
+            value: ''
+        },
+        {label: 'Next of kin email address', value: ''},
+        {label: 'Next of kin phone number', value: ''},
+        {label: 'Next of kin relationship', value:''},{label: 'Financier type', value: <div className={` w-fit h-fit rounded-md bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
         {label: 'Alternate phone number', value: ''},
         {label: 'Alternate residential address', value: ''},
         {
@@ -41,17 +79,50 @@ const FinancierDetails = () => {
     ]
 
     const investmentDetails  = [
-        {label: 'Investment details', value: ''},
-        {label: 'Financier type', value: <div className={` w-fit h-fit bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
-        {label: 'Alternate phone number', value: ''},
-        {label: 'Alternate residential address', value: ''},
+        {label: 'No. of investments', value: '20'},
+        {label: 'Total amount invested', value: <NumericFormat
+                id={'totalAmountInvested'}
+                name={'totalAmountInvested'}
+                type="text"
+                disabled={true}
+                thousandSeparator=","
+                decimalScale={2}
+                fixedDecimalScale={true}
+                prefix={'₦'}
+                value={'1,000,000,000.00 '}
+                className='bg-grey105 flex md:place-items-end'
+
+            />},
+        {label: 'Total income earned', value: <NumericFormat
+                id={'totalAmountInvested'}
+                name={'totalAmountInvested'}
+                type="text"
+                disabled={true}
+                thousandSeparator=","
+                decimalScale={2}
+                fixedDecimalScale={true}
+                prefix={'₦'}
+                value={'1,000,000,000.00 '}
+                className='bg-grey105 flex md:place-items-end'
+
+            />},
         {
-            label: 'Next of kin name',
-            value: ''
+            label: 'Portfolio value',
+            value: <NumericFormat
+                id={'totalAmountInvested'}
+                name={'totalAmountInvested'}
+                type="text"
+                disabled={true}
+                thousandSeparator=","
+                decimalScale={2}
+                fixedDecimalScale={true}
+                prefix={'₦'}
+                value={'1,000,000,000.00 '}
+                className='bg-grey105 flex md:place-items-end'
+
+            />
         },
-        {label: 'Next of kin email address', value: ''},
-        {label: 'Next of kin phone number', value: ''},
-        {label: 'Next of kin relationship', value:''},
+
     ]
 
     const getCurrentDataList = () => {
@@ -69,25 +140,22 @@ const FinancierDetails = () => {
     return (
         <div id={'financierDetailsPage'}
              data-testid={'financierDetailsPage'}
-             className={` w-full md:w-full h-full md:h-full md:grid m px-4 py-2  md:px-8 md:py-4`}
+             className={` w-full md:w-full h-full md:h-fit  grid gap-2 md:grid md:gap-8 px-4 py-2  md:px-8 md:py-4`}
         >
             <BackButton handleClick={navigateToViewAllFinancier} iconRight={true} text={"Back to financiers"}
                         id={"backButtonToViewAllFinancier"} textColor={'#142854'}/>
+
             <div
                 id={'financierDetailsPageContainer'}
                 data-testid={'financierDetailsPageContainer'}
-                className={` md:flex md:justify-between md:h-full md:w-full bg-purple-600 md:bg-purple-600  w-full h-full  `}
+                className={` md:flex md:justify-between md:h-full md:w-full   w-full h-full  `}
             >
                 <div>
-                    <Card id={"financierDetailsDetails"} data-testid={"financierDetailsDetails"}
-                        // className={`h-[8rem] w-[8rem] md:w-[8rem] md:h-[8rem]`}
-                          className="rounded-lg md:max-w-md "
-                    >
+
                             <div
                                 className={` ${cabinetGroteskMediumBold.className} md:text-[28px] w-32 h-32 md:w-20 md:h-20 text-[#885A3C]  flex bg-[#FEF6F0] rounded-full justify-center items-center`}>
                                 {initial}
                             </div>
-                    </Card>
                     <div
                         className={`grid gap-2 mt-4`}
                     >
@@ -96,15 +164,15 @@ const FinancierDetails = () => {
                              className={`${cabinetGroteskMediumBold.className} text-black text-xl md:text-[28px]  `}>
                             Rebecca Kuroebi
                         </div>
-                        <span id={'email'}
-                              data-testid={'email'}
+                        <span id={'financierEmail'}
+                              data-testid={'financierEmail'}
                               className={`${inter.className} text-sm text-black400`}>
                             rebecca@semicolon.africa
                         </span>
                     </div>
                 </div>
                 <div
-                    className={`  overflow-x-hidden overflow-y-auto md:w-[35rem] mt-4   w-full md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid `}
+                    className={`  overflow-x-hidden overflow-y-auto md:w-[35rem]    w-full md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid `}
                 >
                     <div
                         className={` ${styles.tabConnector} md:w-full pl-1  h-fit md:h-fit  flex md:flex `}
@@ -114,20 +182,19 @@ const FinancierDetails = () => {
                                    tabContent={tabContent} handleChange={handleTabChange}/>
                     </div>
                     <div className={`px `}>
-                        <div className={`bg-grey105  `}>
+                        <div className={`bg-grey105 ${styles.container} `}>
                             {getCurrentDataList().map((item, index) => (
-                                <li key={"key" + index} className={'p-5  grid gap-9 rounded-md'}>
+                                <li key={"key" + index} className={'p-5  grid gap-4 rounded-md'}>
                                     <div
                                         className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                         <div
-                                            className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
+                                            className={` ${inter.className}text-black300 text-[14px] `}>{item.label}</div>
                                         <div
-                                            className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item?.value : 'Not provided'}</div>
+                                            className={` ${inter.className} text-black500 text-[14px] `}> {item.value ? item?.value : 'Not provided'} </div>
                                     </div>
                                 </li>
                             ))
                             }
-
                         </div>
                     </div>
                 </div>
