@@ -2,12 +2,9 @@
 import React from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter} from "next/navigation";
-import {Card} from "@/components/ui/card";
-import Image from "next/image";
-import {cabinetGroteskRegular, inter, cabinetGroteskMediumBold, cabinetGroteskBold} from "@/app/fonts";
+import { inter, cabinetGroteskMediumBold} from "@/app/fonts";
 import styles from "./index.module.css";
 import TabSwitch from "@/reuseable/details/TabSwitch";
-import {Breakdown} from "@/reuseable/details/breakdown";
 import {NumericFormat} from "react-number-format";
 
 const FinancierDetails = () => {
@@ -29,53 +26,16 @@ const FinancierDetails = () => {
     }
 
     const basicDetails = [
-        {label: 'Financier type', value: <div className={` w-fit h-fit rounded-md px-3 bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
-        {label: 'Alternate phone number', value: ''},
-        {label: 'Alternate residential address', value: ''},
+        {label: 'Financier type', value: <div className={` w-fit h-fit rounded-full px-2 bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
+        {label: 'phone number', value: '+2348095953713'},
+        {label: 'Address', value: '300, Herbert Macaulay Way, Alagomeji, Sabo, Yaba'},
         {
-            label: 'Next of kin name',
-            value: ''
+            label: 'Company email address',
+            value: 'admin@semicolon.africa'
         },
-        {label: 'Next of kin email address', value: ''},
-        {label: 'Next of kin phone number', value: ''},
-        {label: 'Next of kin relationship', value:''},
-        {label: 'Financier type', value: <div className={` w-fit h-fit rounded-md bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
-        {label: 'Alternate phone number', value: ''},
-        {label: 'Alternate residential address', value: ''},
-        {
-            label: 'Next of kin name',
-            value: ''
-        },
-        {label: 'Next of kin email address', value: ''},
-        {label: 'Next of kin phone number', value: ''},
-        {label: 'Next of kin relationship', value:''},{label: 'Financier type', value: <div className={` w-fit h-fit rounded-md bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
-        {label: 'Alternate phone number', value: ''},
-        {label: 'Alternate residential address', value: ''},
-        {
-            label: 'Next of kin name',
-            value: ''
-        },
-        {label: 'Next of kin email address', value: ''},
-        {label: 'Next of kin phone number', value: ''},
-        {label: 'Next of kin relationship', value:''},{label: 'Financier type', value: <div className={` w-fit h-fit rounded-md bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
-        {label: 'Alternate phone number', value: ''},
-        {label: 'Alternate residential address', value: ''},
-        {
-            label: 'Next of kin name',
-            value: ''
-        },
-        {label: 'Next of kin email address', value: ''},
-        {label: 'Next of kin phone number', value: ''},
-        {label: 'Next of kin relationship', value:''},{label: 'Financier type', value: <div className={` w-fit h-fit rounded-md bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
-        {label: 'Alternate phone number', value: ''},
-        {label: 'Alternate residential address', value: ''},
-        {
-            label: 'Next of kin name',
-            value: ''
-        },
-        {label: 'Next of kin email address', value: ''},
-        {label: 'Next of kin phone number', value: ''},
-        {label: 'Next of kin relationship', value:''},
+        {label: 'Organization admin name', value: 'Rebecca Kuroebi'},
+        {label: 'Organization admin email address', value: 'rebecca@semicolon.africa'},
+
     ]
 
     const investmentDetails  = [
@@ -148,7 +108,7 @@ const FinancierDetails = () => {
             <div
                 id={'financierDetailsPageContainer'}
                 data-testid={'financierDetailsPageContainer'}
-                className={` md:flex md:justify-between md:h-full md:w-full   w-full h-full  `}
+                className={` md:flex md:justify-between grid gap-4 md:h-full md:w-full   w-full h-full  `}
             >
                 <div>
 
@@ -184,13 +144,13 @@ const FinancierDetails = () => {
                     <div className={`px `}>
                         <div className={`bg-grey105 ${styles.container} `}>
                             {getCurrentDataList().map((item, index) => (
-                                <li key={"key" + index} className={'p-5  grid gap-4 rounded-md'}>
+                                <li key={"key" + index} className={'p-4  grid gap-4 rounded-md'}>
                                     <div
                                         className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                         <div
-                                            className={` ${inter.className}text-black300 text-[14px] `}>{item.label}</div>
+                                            className={` ${inter.className}text-black300 md:text-black300 md:text-[14px] text-[14px] `}>{item.label}</div>
                                         <div
-                                            className={` ${inter.className} text-black500 text-[14px] `}> {item.value ? item?.value : 'Not provided'} </div>
+                                            className={` ${inter.className}  md:max-w-[40%] md:text-[14px] md:text-black500  md:break-all break-all text-black500 text-[14px] `}> {item.value ? item?.value : 'Not provided'} </div>
                                     </div>
                                 </li>
                             ))
