@@ -1,4 +1,4 @@
-import { cleanup, screen, render,fireEvent, waitFor} from "@testing-library/react";
+import { cleanup, screen, render,fireEvent} from "@testing-library/react";
 import InviteFinancier from "@/components/portfolio-manager/fund/financier/Invite-financier";
 import { Formik,Form } from 'formik';
 
