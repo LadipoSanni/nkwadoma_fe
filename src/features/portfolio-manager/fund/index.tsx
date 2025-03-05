@@ -17,6 +17,7 @@ import { formatMonthInDate } from '@/utils/Format';
 import { useSearchInvestmentVehicleByNameQuery } from '@/service/admin/fund_query';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
+import Draft from "@/features/portfolio-manager/fund/draft/Index";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -58,8 +59,9 @@ const InvestmentVehicle = () => {
   const [modalType, setModalType] = useState('');
   const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+    const [draft, setDraft] = React.useState(false);
 
-  const dataElement = {
+    const dataElement = {
     pageNumber: 0,
     pageSize: 300
 }
@@ -80,7 +82,7 @@ const InvestmentVehicle = () => {
   },[searchTerm,searchData,investmentVehicleData])
 
   const handleDraftClick = () => {
-
+      setDraft(true);
   }
    const handleCreateInvestmentVehicleClick = () => {
     setModalType('commercial');
@@ -219,11 +221,25 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
            closeOnOverlayClick={true}
            icon={Cross2Icon}
           >
-          
             {modalType === 'commercial' ? ( <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='sponsor' investmentVehicleType='COMMERCIAL' />  ) : ( <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='donor' investmentVehicleType='ENDOWMENT'/> )}
           </TableModal>
         }
       </div>
+        <div>
+            {
+                <TableModal isOpen={draft}
+                            closeModal={()=> setDraft(false)}
+                            className={`pb-1`}
+                            headerTitle={"Draft"}
+                            closeOnOverlayClick={true}
+                            icon={Cross2Icon}
+                            width={"36%"}
+                >
+                    <Draft setIsOpen={() => setDraft(false)} />
+
+                </TableModal>
+            }
+        </div>
      
     </div>
   )
