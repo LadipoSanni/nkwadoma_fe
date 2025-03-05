@@ -269,7 +269,7 @@ const AcceptLoanOffer: React.FC = () => {
         <div
             id="loanRequestDetails"
             data-testid="loanRequestDetails"
-            className={`w-full h-full ${inter.className}`}
+            className={`w-full h-full md:px-10 ${inter.className}`}
         >
             <BackButton
                 handleClick={backToOverview}
