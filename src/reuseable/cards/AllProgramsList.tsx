@@ -35,8 +35,8 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
     const shortDescription = description.length > 90
         ? description.substring(0, 80)
         : description;
-    
-    const shortTitle =title.length > 20? title.substring(0,20) : title;
+
+    const shortTitle = title.length > 15 ? `${title.substring(0, 20)}...` : title;
 
     return (
         <Card  id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full md:max-w-lg h-60  border border-grey50 rounded-lg cursor-pointer pt-0" onClick={() => handleProgramDetailsOnclick(id)} >
