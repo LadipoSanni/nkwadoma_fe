@@ -9,6 +9,7 @@ import {useSendEmailToResetPasswordMutation} from "@/service/auths/api";
 import {useToast} from "@/hooks/use-toast"
 import {setUserPasswordInput} from "@/redux/slice/auth/slice";
 import {store} from "@/redux/store";
+import {cabinetGrotesk} from "@/app/fonts";
 
 
 const Step1 = () => {
@@ -89,16 +90,16 @@ const Step1 = () => {
 
         <form
             id="resetPasswordComponent"
-            className={` py-4 border border-slate-200 px-4 w-[95vw] md:mr-10 rounded-xl h-fit  bg-white grid md:px-3 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[44%] md:h-fit md:rounded-xl`}
+            className={` py-4 border border-slate-200 px-4 w-[95vw] md:mr-10 rounded-xl h-fit bg-white grid md:px-3 md:grid md:place-items-center  md:border md:border-slate-200 md:w-[54%] md:h-fit md:rounded-xl`}
         >
             <div
                 id={"resetPasswordInnerContainer"}
                 className={`w-[98%] md:w-full grid grid-cols-1 content-between  h-[98%] md:h-full`}>
                 <div id="resetPasswordHeaderContainer"
                      className={`h-fit grid grid-2 md:h-fit mb-[1rem] pt-2 md:grid md:gap-2 `}>
-                    <div id={"RESETPASSWORDHEADER"} className={`font-semi-bold text-2xl `}>{RESETPASSWORDHEADER}</div>
+                    <div id={"RESETPASSWORDHEADER"} className={` ${cabinetGrotesk.className} font-semi-bold text-2xl `}>{RESETPASSWORDHEADER}</div>
                     <div id={"RESETPASSWORDTEXT"}
-                         className={` text-[#667085] tracking-wide text-xs w-[80%]`}>{RESETPASSWORDTEXT}</div>
+                         className={`${cabinetGrotesk.className} text-[#667085] tracking-wide text-xs w-[80%]`}>{RESETPASSWORDTEXT}</div>
                 </div>
                 <div
                     id="buttonsContainer"
@@ -114,18 +115,18 @@ const Step1 = () => {
                             <AuthButton disable={disableButton} backgroundColor={'#142854'} textColor={"white"}
                                         id={"resetPasswordSubmitEmailButton"}
                                         isLoading={isLoading}
-                                        buttonText={"Submit email"} width={"inherit"}
+                                        buttonText={"Submit email"} width={"inherit"}  useCabinetGrotesk={true}
                                         handleClick={(e)=>{handleReset(e)}}></AuthButton>
                         </div>
                         <div className={`flex gap-2 place-self-center place-content-center  mt-1 `}>
-                            <div className={`text-grey1 text-sm `}>Remember your password?</div>
+                            <div className={`${cabinetGrotesk.className} text-grey1 text-sm `}>Remember your password?</div>
                             <button
                                 id={`loginOnResetPasswordStep1`}
                                 data-testid={`loginOnResetPasswordStep1`}
                                 onClick={(e)=> {
                                     login(e)
                                 }}
-                                className={` h-fit md:h-fit text-meedlBlue text-sm  underline`}>
+                                className={`${cabinetGrotesk.className} h-fit md:h-fit text-meedlBlue text-sm  underline`}>
                                 Log in
                             </button>
                         </div>

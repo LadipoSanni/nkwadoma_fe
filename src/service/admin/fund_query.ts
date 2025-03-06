@@ -4,7 +4,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 export const fundApi = createApi({
     reducerPath: 'fundApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['funds'],
+    tagTypes: ['vehicle'],
     endpoints: (builder) => ({
       getAllInvestmentmentVehicle: builder.query({
         query: (param: {
@@ -15,15 +15,15 @@ export const fundApi = createApi({
           method: "GET",
           params: param,
         }),
-        providesTags: ['funds'],
+        providesTags: ['vehicle'],
       }),
       getInvestmentVehicleDetail: builder.query({
         query:({id}) => ({
           url: `/investment-vehicle-details/${id}`,
           method: "GET",
         }),
-        // providesTags: (result, error, arg) => [{ type: 'funds', id: arg.id }],
-        providesTags: ['funds'],
+        // providesTags: (result, error, arg) => [{ type: 'vehicle', id: arg.id }],
+        providesTags: ['vehicle'],
       }),
        createInvestmentVehicle: builder.mutation({
         query: (data:{
@@ -45,7 +45,7 @@ export const fundApi = createApi({
                 method: 'POST',
                 body: data
         }),
-        invalidatesTags: ['funds']
+        invalidatesTags: ['vehicle']
        }),
        searchInvestmentVehicleByName: builder.query({
         query: (investmentVehicleName) => ({

@@ -10,7 +10,7 @@ const FundTabs: React.FC<props> = ({ children }) => {
    
     return (
         <div>
-            <TabSwitch tabData={fundTabData} defaultTab="/funds/details" backClickRoutePath="/funds" backClickName="fund" condition={true}>
+            <TabSwitch tabData={fundTabData} defaultTab="/funds/details" backClickRoutePath="/vehicle" backClickName="fund" condition={true}>
                 {children}
             </TabSwitch>
         </div>

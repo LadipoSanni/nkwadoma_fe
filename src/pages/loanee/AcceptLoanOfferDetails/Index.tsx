@@ -269,7 +269,7 @@ const AcceptLoanOffer: React.FC = () => {
         <div
             id="loanRequestDetails"
             data-testid="loanRequestDetails"
-            className={`w-full h-full ${inter.className}`}
+            className={`w-full h-full md:px-10 ${inter.className}`}
         >
             <BackButton
                 handleClick={backToOverview}
@@ -413,7 +413,7 @@ const AcceptLoanOffer: React.FC = () => {
                                                 className="rounded cursor-pointer p-2 flex items-center text-error500 focus:text-error500 hover:bg-error150"
                                                 onSelect={handleDecline}
                                             >
-                                                Decline loan offer
+                                                {isLoading ? <Isloading/> : 'Decline loan offer'}
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     )}

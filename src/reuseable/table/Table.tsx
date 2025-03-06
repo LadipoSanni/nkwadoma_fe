@@ -73,6 +73,7 @@ interface Props<T extends TableRowData> {
   totalPages: number;
   pageNumber: number;
   hasNextPage: boolean;
+  setPageNumber: React.Dispatch<React.SetStateAction<number>>;
 }
 
 function DataTable<T extends TableRowData>({
@@ -98,9 +99,10 @@ function DataTable<T extends TableRowData>({
   isLoading,
   totalPages,
   pageNumber,
-  hasNextPage
+  hasNextPage,
+  setPageNumber
 }: Props<T>) {
-  const [page, setPage] = useState(pageNumber + 1);
+  // const [page, setPage] = useState(pageNumber + 1);
 //   const rowsPerPage = optionalRowsPerPage;
   const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -111,6 +113,7 @@ function DataTable<T extends TableRowData>({
   }, []);
 
 
+  
 
   if (!isMounted) return null;
 
@@ -120,21 +123,19 @@ function DataTable<T extends TableRowData>({
     event: React.ChangeEvent<unknown>,
     newPage: number
   ) => {
-    setPage(newPage);
+    setPageNumber(newPage-1);
   };
 
   const handleNextPage = () => {
-    
-        if (hasNextPage === true) {
-            setPage(page + 1);
-          
+        if (hasNextPage) {
+          setPageNumber((prevPage) => prevPage + 1);    
      }
    
   };
 
   const handlePreviousPage = () => {
-        if (page  > 1) {
-            setPage(page - 1);
+        if (pageNumber  > 0) {
+          setPageNumber((prevPage) => prevPage - 1)
           }
   };
 
@@ -161,12 +162,7 @@ function DataTable<T extends TableRowData>({
     return value;
   };
 
-//   const paginatedData = tableData?.slice(
-//     (page - 1) * rowsPerPage,
-//     page * rowsPerPage
-//   );
-//   const totalPages = Math.ceil(tableData?.length / rowsPerPage);
-  const isLastPage = page === totalPages;
+  const isLastPage = pageNumber === totalPages;
 
   return (
     <div id="loanProductTableContainer" className={`w-[100%] `}>
@@ -329,7 +325,7 @@ function DataTable<T extends TableRowData>({
               </Table>
             </TableContainer>
             <Paginations
-              page={page}
+              page={pageNumber + 1}
               totalPage={totalPages}
               handlePageChange={handlePageChange}
               handleNextPage={handleNextPage}
@@ -443,10 +439,8 @@ function DataTable<T extends TableRowData>({
               </Table>
             </TableContainer>
             <Paginations
-              page={page}
-            //   rowsPerPage={rowsPerPage}
-            //   tableData={tableData}
-             totalPage={totalPages}
+              page={pageNumber + 1}
+              totalPage={totalPages}
               handlePageChange={handlePageChange}
               handleNextPage={handleNextPage}
               handlePreviousPage={handlePreviousPage}

@@ -1,5 +1,5 @@
 import React, { useState,useRef } from 'react';
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogOverlay, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
 import CryptoJS from "crypto-js";
-import { useToast } from "@/hooks/use-toast";
 import { uploadImageToCloudinary } from "@/utils/UploadToCloudinary";
 import { useVerifyIdentityMutation } from "@/service/users/Loanee_query";
 // import { clearCameraStream } from '@/redux/slice/camera/camera-slice';
@@ -22,6 +21,14 @@ interface IdentityVerificationModalProps {
     loanReferralId: string;
     onClose: () => void;
     onThirdStepContinue: () => void;
+}
+
+interface ApiError {
+    status: number;
+    data: {
+        message: string;
+    }
+
 }
 
 type FormData = {
@@ -38,7 +45,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                                                                  loanReferralId
                                                                              }) => {
     const methods = useForm<FormData>({ mode: 'onChange' });
-    const { toast } = useToast();
     const [isBVNOpen, setIsBVNOpen] = useState(false);
     const [isNINOpen, setIsNINOpen] = useState(false);
     const [isDataError, setDataError] = useState("");
@@ -52,6 +58,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const [showCamera, setShowCamera] = useState(false);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
     const [stream, setStream] = useState<MediaStream|null>(null);
+    const [errorMessage, setErrorMessage] = useState("");
     const [verifyIdentity] = useVerifyIdentityMutation();
     const videoRef = useRef<HTMLVideoElement>(null);
     // const dispatch = useDispatch();
@@ -62,16 +69,30 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
         try {
             const formData: FormData = loaneeIdentityData;
             const data = await verifyIdentity(formData).unwrap();
-            toast({
-                description: data.data,
-                status: "success",
-            });
-            onClose();
+            if (data) {
+                onClose();
+                if (data.data === "Identity verified") {
+                    setErrorMessage("");
+                    setShowSuccessDialog(true);
+                } else if (data.data === "Identity not verified" || data.data === "Verification server down") {
+                    setErrorMessage("Your verification is under review");
+                    setShowSuccessDialog(true);
+                }
+            }
         } catch (error) {
-            console.error("Error while submitting form:", error);
+            const err = error as ApiError;
+            if (err.status === 400 && err.data?.message === "Verification server down") {
+                setErrorMessage("Your verification is under review");
+            } else if (err.status === 500) {
+                setErrorMessage("Internal server error. Please try again later.");
+            } else if (err.status === 404) {
+                setErrorMessage("Verification service not found. Please contact support.");
+            } else {
+                setErrorMessage(err ? err.data?.message : "An error occurred");
+            }
+            setShowSuccessDialog(true);
         }
         setIsSecondModalOpen(false);
-        setShowSuccessDialog(true);
     };
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
@@ -108,8 +129,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     // const stream = useSelector((state: RootState) => state.camera.stream)
 
     const stopCamera = () => {
-        console.log("Stop camera called")
-        console.log("The stream is : ", stream)
         if (stream) {
             stream.getTracks().forEach((track) => {
                 console.log("The track is : ", track)
@@ -119,12 +138,11 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             if (videoRef.current) {
                 videoRef.current.srcObject = null;        }
          }
-        console.log("Process has ended")
     };
     return (
         <>
             <Dialog open={isOpen} onOpenChange={onClose}>
-                <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]" />
+                {/*<DialogOverlay className="bg-[rgba(52,64,84,0.70)] " />*/}
                 <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6 py-5 pl-5 pr-2'}>
                     <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
                         <DialogTitle
@@ -228,7 +246,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             </Dialog>
 
             <Dialog open={isSecondModalOpen && !showSuccessDialog} onOpenChange={setIsSecondModalOpen}>
-                <DialogOverlay className="bg-[rgba(52,64,84,0.70)] backdrop-blur-[6px]" />
+                {/*<DialogOverlay className="bg-[rgba(52,64,84,0.70)] " />*/}
                 <DialogContent className={'max-w-[425px] md:max-w-[460px] [&>button]:hidden gap-6 py-5 px-5'}>
                     <DialogHeader className={'flex py-3'} id="secondModalHeader">
                         <DialogTitle
@@ -258,7 +276,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                         <Button
                                             className="h-[3.5625rem] w-[8.75rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md"
                                             onClick={() => {
-                                                console.log('Setting showCamera to true');
+                                                // console.log('Setting showCamera to true');
                                                 setShowCamera(true);
                                             }}
                                         >
@@ -276,11 +294,12 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                 open={showSuccessDialog}
                 onClose={() => setShowSuccessDialog(false)}
                 onContinue={onThirdStepContinue}
-                title={'Verification successful'}
-                message={'Congratulations! You’ve successfully completed the verification process'}
+                title={errorMessage ? 'Verification In Progress' : 'Verification successful'}
+                message={errorMessage ? "Your verification is under review" : 'Congratulations! You’ve successfully completed the verification process'}
                 buttonText={'Continue '}
                 stopCamera={stopCamera}
             />
+
         </>
     );
 };
