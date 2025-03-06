@@ -172,7 +172,7 @@ function CreateInvestmentVehicle({
         "Tenor must be a three-digit positive number and cannot start with zero."
       ),
     rate: Yup.number()
-      .min(1, "Rate must be at least 1.")
+      .min(0, "Rate must be at least 1.")
       .max(100, "Rate must be at most 100.")
       .required("Rate is required"),
     mandate: Yup.string()
@@ -402,7 +402,12 @@ function CreateInvestmentVehicle({
                     placeholder="0"
                     type="text"
                     className="w-full p-3 border rounded focus:outline-none mt-2"
-                    onChange={validatePositiveNumberWithIndexNumbers(
+                    onChange={investmentVehicleType === 'ENDOWMENT'?  validatePositiveNumberWithIndexNumbers(
+                      "rate",
+                      setFieldValue,
+                      100,
+                      0
+                    ) : validatePositiveNumberWithIndexNumbers(
                       "rate",
                       setFieldValue,
                       100,

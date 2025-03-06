@@ -4,20 +4,20 @@ import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Tables from '@/reuseable/table/LoanProductTable'
 import { inter } from '@/app/fonts'
 import InvestmentActionBar from '@/components/portfolio-manager/fund/Investment-action-bar'
-// import { fund } from '@/utils/LoanRequestMockData/Index';
 import { formatAmount} from '@/utils/Format';
 import { MdOutlinePayments } from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
 import { useRouter } from 'next/navigation'
-import { setItemSessionStorage } from '@/utils/storage';
 import { useGetAllInvestmentmentVehicleQuery } from '@/service/admin/fund_query';
 import { formatMonthInDate } from '@/utils/Format';
 import { useSearchInvestmentVehicleByNameQuery } from '@/service/admin/fund_query';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 import Draft from "@/features/portfolio-manager/fund/draft/Index";
+import {store} from "@/redux/store";
+import {setCurrentVehicleId} from "@/redux/slice/vehicle/vehicle";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -29,7 +29,7 @@ const tabData = [
       value: "commercialFund"
     },
     {
-      name:"Endowment funds",
+      name:"Endowment ",
       value: "endowmentFund"
     },
 ]
@@ -112,8 +112,8 @@ const InvestmentVehicle = () => {
     
     
   const handleRowClick = (row:TableRowData) => {
-    router.push('/funds/details')  
-    setItemSessionStorage('investmentVehicleId', String(row.id));
+      store.dispatch(setCurrentVehicleId(String(row.id)));
+      router.push('/vehicle/details')
 }
 
 
@@ -241,7 +241,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
                 </TableModal>
             }
         </div>
-     
+
     </div>
   )
 }

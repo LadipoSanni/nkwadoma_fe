@@ -74,7 +74,6 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, setDate }) => {
             mode="single"
             selected={date}
             onSelect={handleDateSelect}
-            initialFocus
             // disabled={(date) =>
             //   date && date.getTime() < new Date().setHours(0, 0, 0, 0)
             // }
