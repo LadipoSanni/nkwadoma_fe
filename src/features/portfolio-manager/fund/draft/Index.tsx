@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
-import { inter } from "@/app/fonts";
+import React, {useState} from "react";
+import {inter} from "@/app/fonts";
 import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
-import CreateInvestmentVehicle from "@/components/portfolio-manager/fund/Create-investment-vehicle";
+import UpdateDraft from "./UpdateDraft";
 
 interface saveToDraftProps {
     setIsOpen?: (b: boolean) => void;
@@ -140,10 +140,12 @@ const drafts: DraftItem[] = [
     },
 ];
 
-const Draft = ({ setIsOpen }: saveToDraftProps) => {
+const Draft = ({setIsOpen}: saveToDraftProps) => {
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [disabled, setDisabled] = useState(true);
     const [step, setStep] = useState(1);
+    const [isChecked, setIsChecked] = useState(false);
+    console.log(isChecked)
 
     const handleClick = (id: number) => {
         if (id === selectedId) {
@@ -161,9 +163,25 @@ const Draft = ({ setIsOpen }: saveToDraftProps) => {
         }
     };
 
-    const handleClose = () => {
+    const handleSaveAndBackToAllDraft = () => {
         setStep(1);
-        if (setIsOpen) setIsOpen(false);
+        if (setIsOpen) setIsOpen(true);
+    };
+
+    const handleSaveCurrentDraft = async (checked: boolean) => {
+        setIsChecked(checked);
+        // if (selectedId) {
+        //     try {
+        //         await updateDraft({
+        //             id: selectedId,
+        //             isChecked: checked,
+        //         }).unwrap();
+        //         console.log("Checkbox state updated successfully!");
+        setStep(1);
+        //     } catch (error) {
+        //         console.error("Error updating checkbox state:", error);
+        //     }
+        // }
     };
 
     const selectedDraft = drafts.find((draft) => draft.id === selectedId);
@@ -172,7 +190,8 @@ const Draft = ({ setIsOpen }: saveToDraftProps) => {
         <div>
             {step === 1 ? (
                 <div className="w-full">
-                    <div className="space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                    <div
+                        className="space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                         {drafts.map((draft) => (
                             <div
                                 key={draft.id}
@@ -210,16 +229,19 @@ const Draft = ({ setIsOpen }: saveToDraftProps) => {
                     {selectedDraft && (
                         <>
                             {selectedDraft.draftType === "COMMERCIAL" ? (
-                                <CreateInvestmentVehicle
-                                    setIsOpen={handleClose}
-                                    type="sponsor"
+                                <UpdateDraft
+                                    setIsOpen={handleSaveAndBackToAllDraft}
+                                    handleSaveCurrentDraft={handleSaveCurrentDraft}
                                     investmentVehicleType="COMMERCIAL"
+                                    type='sponsor'
                                 />
                             ) : (
-                                <CreateInvestmentVehicle
-                                    setIsOpen={handleClose}
-                                    type="donor"
+                                <UpdateDraft
                                     investmentVehicleType="ENDOWMENT"
+                                    handleSaveCurrentDraft={handleSaveCurrentDraft}
+                                    type="donor"
+                                    setIsOpen={handleSaveAndBackToAllDraft}
+
                                 />
                             )}
                         </>
