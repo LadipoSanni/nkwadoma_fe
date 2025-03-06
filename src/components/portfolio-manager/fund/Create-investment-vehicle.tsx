@@ -5,15 +5,12 @@ import * as Yup from "yup";
 import { Label } from "@/components/ui/label";
 import { inter } from "@/app/fonts";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
-// import RichTextEditor from '@/reuseable/Input/Ritch-text-editor';
 import Isloading from "@/reuseable/display/Isloading";
 import { useCreateInvestmentVehicleMutation } from "@/service/admin/fund_query";
 import { useToast } from "@/hooks/use-toast";
 import { validateNumber, validatePositiveNumberWithIndexNumbers } from "@/utils/Format";
-// import { formatNumberOnBlur } from '@/utils/Format';
 import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
-// import CustomNumberFormat from '@/reuseable/Input/CustomNumberFormat';
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 
 interface ApiError {
@@ -50,9 +47,23 @@ function CreateInvestmentVehicle({
 }: props) {
   const [selectCurrency, setSelectCurrency] = useState("NGN");
   const [isError, setError] = useState("");
-  const [createInvestmentVehicle, { isLoading }] =
+    const [isChecked, setIsChecked] = useState(false);
+    const [createInvestmentVehicle, { isLoading }] =
     useCreateInvestmentVehicleMutation();
-  const { toast } = useToast();
+    // const [updateCheckboxState, { isLoading, isError }] = useUpdateCheckboxStateMutation();
+
+    const { toast } = useToast();
+
+    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = e.target.checked;
+        setIsChecked(checked);
+        // try {
+        //     await updateCheckboxState(checked).unwrap();
+            console.log("Checkbox state updated successfully!");
+        // } catch (error) {
+        //     console.error("Error updating checkbox state:", error);
+        // }
+    }
 
   const handleCloseModal = () => {
     if (setIsOpen) {
@@ -192,6 +203,7 @@ function CreateInvestmentVehicle({
       "Invalid custodian name"
     ),
   });
+
 
   const handleSubmit = async (values: typeof initialFormValue) => {
     const formData = {
@@ -543,29 +555,47 @@ function CreateInvestmentVehicle({
                </div>  
                 )}
               </div>
-              <div className="md:flex gap-4 justify-end mt-2 mb-4 md:mb-0">
-                <Button
-                  variant={"outline"}
-                  type="reset"
-                  className="w-full md:w-36 h-[57px] mb-4"
-                  // onClick={() => handleReset(resetForm)}
-                  onClick={handleCloseModal}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant={"default"}
-                  className={`w-full md:w-36 h-[57px] ${
-                    !isValid
-                      ? "bg-neutral650 cursor-not-allowed "
-                      : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
-                  }`}
-                  type="submit"
-                  disabled={!isValid}
-                >
-                  {isLoading ? <Isloading /> : "Publish"}
-                </Button>
-              </div>
+                <div className={`flex justify-between mt-2 mb-4 md:mb-0`}>
+                    <div className={`space-x-1 pt-3`}>
+                        <input
+                            type="checkbox"
+                            id={`draftClickId`}
+                            checked={isChecked}
+                            onChange={handleChange}
+                            className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md`}
+                        />
+                        <label
+                            htmlFor="terms"
+                            className={`${inter.className} text-sm text-[#212221] font-medium `}
+                        >
+                            Save to draft
+                        </label>
+                    </div>
+                    <div className="md:flex gap-4 justify-end ">
+                        <Button
+                            variant={"outline"}
+                            type="reset"
+                            className="w-20 md:w-32 h-[57px] mb-4"
+                            // onClick={() => handleReset(resetForm)}
+                            onClick={handleCloseModal}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant={"default"}
+                            className={` md:w-32 w-20 h-[57px] ${
+                                !isValid
+                                    ? "bg-neutral650 cursor-not-allowed "
+                                    : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
+                            }`}
+                            type="submit"
+                            disabled={!isValid}
+                        >
+                            {isLoading ? <Isloading /> : "Publish"}
+                        </Button>
+                    </div>
+                </div>
+
             </div>
             <p
               className={`text-error500 flex justify-center items-center ${

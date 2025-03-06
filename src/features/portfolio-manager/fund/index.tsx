@@ -220,6 +220,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
            headerTitle='Create Investment'
            closeOnOverlayClick={true}
            icon={Cross2Icon}
+           width={"36%"}
           >
             {modalType === 'commercial' ? ( <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='sponsor' investmentVehicleType='COMMERCIAL' />  ) : ( <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='donor' investmentVehicleType='ENDOWMENT'/> )}
           </TableModal>
@@ -233,7 +234,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
                             headerTitle={"Draft"}
                             closeOnOverlayClick={true}
                             icon={Cross2Icon}
-                            width={"36%"}
+                            width={"38%"}
                 >
                     <Draft setIsOpen={() => setDraft(false)} />
 
