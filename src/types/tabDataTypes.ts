@@ -1,6 +1,6 @@
 export const fundTabData = [ 
-    { name: "Details", value: "/funds/details" },
-     { name: "Financiers", value: "/funds/financiers" }, 
+    { name: "Details", value: "/vehicle/details" },
+     { name: "Financiers", value: "/vehicle/financiers" },
 ];
 
 export const loanProductTab = [
