@@ -17,7 +17,8 @@ const LoaneeLayoutComponent: React.FC<LoaneeLayoutProps> = ({children}) => {
                 <div id={'TopBarAndCenterComponent'}
                      className={` w-[100%] absolute bottom-0 px-5 bg-gray md:pt-7 py-4 pb-6  h-[92%]  grid  md:w-[84vw] md:h-[90vh] `}>
                     <div data-testid="AcceptedTraineeDashboardContent" id="AcceptTrContent"
-                         className="md:px-0 pl-3 pr-1.5 md:py-5 pt-3 h-full rounded-md bg-meedlWhite">
+                         className="md:px-0 pl-3 pr-1.5 md:py-5 pt-3 h-full rounded-md bg-meedlWhite"
+                         >
                         {children}
                     </div>
                 </div>

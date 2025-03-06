@@ -14,7 +14,7 @@ import {setItemSessionStorage} from '@/utils/storage';
 import {Button} from "@/components/ui/button";
 import TableModal from "@/reuseable/modals/TableModal";
 import {useRouter} from 'next/navigation'
-import {DeleteCohort} from '@/reuseable/details/DeleteCohort'
+import DeleteProgram from '@/reuseable/details/DeleteCohort'
 import EditProgramForm from '@/components/program/edit-program-form';
 import {useGetAllProgramsQuery} from '@/service/admin/program_query';
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
@@ -107,14 +107,14 @@ const ProgramView = () => {
     const [deleteItem] = useDeleteProgramMutation()
     const {data: searchResults} = useSearchProgramQuery(searchTerm, {skip: !searchTerm});
 
-    useEffect(() => {
-        if (data && data?.data) {
-            const programs = data?.data?.body
-            setProgramView(programs)
-            // setTotalPage(data?.data?.totalPages)
-        }
+    // useEffect(() => {
+    //     if (data && data?.data) {
+    //         const programs = data?.data?.body
+    //         setProgramView(programs)
+    //         // setTotalPage(data?.data?.totalPages)
+    //     }
 
-    }, [data])
+    // }, [data])
 
 
     const handleRowClick = (row: TableRowData) => {
@@ -139,12 +139,14 @@ const ProgramView = () => {
             const programs = searchResults.data;
             setProgramView(programs);
         } else if
-        (data && data?.data) {
+        (!searchTerm && data && data?.data) {
             const programs = data?.data?.body
             setProgramView(programs)
+            // setProgramView((prevPrograms) => [...prevPrograms, ...programs]);
             // setSearchTerm("")
         }
     }, [searchTerm, searchResults, data]);
+    
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -502,7 +504,7 @@ const ProgramView = () => {
                     icon={Cross2Icon}
                     width='auto'
                 >
-                    <DeleteCohort
+                    <DeleteProgram
                         setIsOpen={() => setIsDeleteOpen(false)}
                         headerTitle='Program'
                         title='program'

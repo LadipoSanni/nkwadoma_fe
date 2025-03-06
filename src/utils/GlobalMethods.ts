@@ -65,3 +65,12 @@ export const validateEmailInput = (input: string ) => {
     return !!RegExp(validRegex).exec(input);
 
 }
+
+export const getInitials = (name: string): string => {
+    if (!name) return ""; 
+    const trimmedName = name.trim();
+    const nameParts = trimmedName.split(" ").filter((part) => part.length > 0);
+    const firstNameInitial = nameParts[0]?.charAt(0).toUpperCase() || "";
+    const lastNameInitial = nameParts.length > 1 ? nameParts[nameParts.length - 1]?.charAt(0).toUpperCase() : "";
+    return `${firstNameInitial}${lastNameInitial}`;
+  };
