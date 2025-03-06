@@ -95,6 +95,11 @@ function Tables<T extends TableRowData>({
   tableCellStyle,
   condition,
   isLoading,
+<<<<<<< HEAD
+=======
+  totalPages,
+  pageNumber,
+>>>>>>> dd6f4420 (financier)
   hasNextPage,
   setPageNumber,
 }: Props<T>) {
