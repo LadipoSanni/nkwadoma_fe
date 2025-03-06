@@ -6,7 +6,6 @@ import {inter} from "@/app/fonts";
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {MdPersonOutline} from "react-icons/md";
-import {BiArrowBack} from "react-icons/bi";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
@@ -153,7 +152,7 @@ const CohortDetails = () => {
     return (
         <>{isLoading? (<SkeletonForDetailPage/>): (
             <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
-                <div className={` pb-4 `} id={`backClickContainer`}>
+                <div className={` pb-4 `} id={`backClickContainer`} data-testid={'backClickContainer'}>
                     <BackButton handleClick={handleBackClick} iconRight={true} text={"Back to cohort"}
                                 id={"backClick"} textColor={'#142854'}/>
                 </div>

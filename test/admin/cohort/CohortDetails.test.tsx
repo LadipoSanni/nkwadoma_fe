@@ -50,7 +50,7 @@ describe("cohort-details Component", () => {
             </Providers>
         );
 
-        const assert = screen.getByTestId("backClickText");
+        const assert = screen.getByTestId("backClickContainer");
         expect(assert).toBeInTheDocument();
     });
 
@@ -61,9 +61,9 @@ describe("cohort-details Component", () => {
             </Providers>
         );
 
-        const assert = screen.getByTestId("backClick");
+        const assert = screen.getByTestId("backClickContainer");
         expect(assert).toBeInTheDocument();
-        const check = screen.getByTestId("backClick");
+        const check = screen.getByTestId("backClickContainer");
 
         fireEvent.click(check);
         expect(handleBackClick).toHaveBeenCalledTimes(0);
