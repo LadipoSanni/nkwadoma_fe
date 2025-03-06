@@ -60,10 +60,7 @@ function LoanDetails() {
         }
 
     }
-    const onSubmit = (data: { amountApproved: string, loanProduct: string }) => {
-        // this is so it doesn't throw unuse variable error
-        console.log("data: ", data)
-    }
+
     const id: string = getId()
     const {data, isLoading} = useViewLoanRequestDetailsQuery(id)
     const backToLoanRequest = () => {
@@ -241,7 +238,7 @@ function LoanDetails() {
                     <div
                         id={"loanRequestDetails"}
                         data-testid={"loanRequestDetails"}
-                        className={`  md:px-8 w-full h-full  px-3 pt-4 md:pt-4 `}
+                        className={`  md:px-8 w-full h-full md:grid md:gap-4 px-3 pt-4 md:pt-4 `}
                     >
                         <BackButton handleClick={backToLoanRequest} iconRight={true} text={"Back to loan request"}
                                     id={"loanRequestDetailsBackButton"} textColor={'#142854'}/>
@@ -378,7 +375,7 @@ function LoanDetails() {
                                         </button>
                                     }
                                     <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer}
-                                                     setIsOpen={open} onSubmit={onSubmit}/>
+                                                     setIsOpen={open} />
                                     <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()}
                                                       setIsOpen={setOpenDeclineOffer} loanProductId={id}
                                                       title={"Decline loan request"}/>

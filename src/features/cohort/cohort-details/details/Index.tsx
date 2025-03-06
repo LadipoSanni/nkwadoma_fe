@@ -18,6 +18,7 @@ import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohor
 import { formatMonthInDate } from "@/utils/Format";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import BackButton from "@/components/back-button";
 
 
 interface breakDown {
@@ -152,13 +153,9 @@ const CohortDetails = () => {
     return (
         <>{isLoading? (<SkeletonForDetailPage/>): (
             <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
-                <div className={` `} id={`backClickContainer`}>
-                    <div className={`flex py-2 space-x-1 text-meedlBlue`} id={`backClick`}
-                         data-testid={`backClick `}>
-                        <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`} onClick={handleBackClick}/>
-                        <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
-                            onClick={handleBackClick}>Back to cohort</h1>
-                    </div>
+                <div className={` pb-4 `} id={`backClickContainer`}>
+                    <BackButton handleClick={handleBackClick} iconRight={true} text={"Back to cohort"}
+                                id={"backClick"} textColor={'#142854'}/>
                 </div>
 
                 <Tabs
