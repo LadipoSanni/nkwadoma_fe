@@ -71,12 +71,18 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             const data = await verifyIdentity(formData).unwrap();
             if (data) {
                 onClose();
-                setShowSuccessDialog(true);
+                if (data.data === "Identity verified") {
+                    setErrorMessage("");
+                    setShowSuccessDialog(true);
+                } else if (data.data === "Identity not verified" || data.data === "Verification server down") {
+                    setErrorMessage("Your verification is under review");
+                    setShowSuccessDialog(true);
+                }
             }
         } catch (error) {
             const err = error as ApiError;
             if (err.status === 400 && err.data?.message === "Verification server down") {
-                setErrorMessage("Verification server down. Please try again later.");
+                setErrorMessage("Your verification is under review");
             } else if (err.status === 500) {
                 setErrorMessage("Internal server error. Please try again later.");
             } else if (err.status === 404) {
@@ -85,10 +91,10 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                 setErrorMessage(err ? err.data?.message : "An error occurred");
             }
             setShowSuccessDialog(true);
-            console.log(error);
         }
         setIsSecondModalOpen(false);
     };
+
     const onSubmit: SubmitHandler<FormData> = (data) => {
         const encryptionKey = process.env.APP_DEV_IV_ENCRYPTION_SECRET_KEY;
         const ivKey = process.env.APP_DEV_IV_KEY;
@@ -123,8 +129,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     // const stream = useSelector((state: RootState) => state.camera.stream)
 
     const stopCamera = () => {
-        console.log("Stop camera called")
-        console.log("The stream is : ", stream)
         if (stream) {
             stream.getTracks().forEach((track) => {
                 console.log("The track is : ", track)
@@ -134,7 +138,6 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
             if (videoRef.current) {
                 videoRef.current.srcObject = null;        }
          }
-        console.log("Process has ended")
     };
     return (
         <>

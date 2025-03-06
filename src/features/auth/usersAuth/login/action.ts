@@ -26,7 +26,7 @@ export function getUserDetails () {
          const storedAccessToken = getItemSessionStorage("access_token")
          const storedUserEmail = getItemSessionStorage("user_email")
          const storedUserRole = getItemSessionStorage("user_role")
-         const storedRefreshToken = getItemFromLocalStorage("refresh_token")
+         const storedRefreshToken = getItemSessionStorage("refresh_token")
 
     return {
         storedRefreshToken,

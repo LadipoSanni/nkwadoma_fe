@@ -18,7 +18,7 @@ export const customFetchBaseQuery = fetchBaseQuery({
         const { storedAccessToken } = getUserDetails();
         const {storedRefreshToken} = getUserDetails();
         const token = isTokenExpired(storedAccessToken) ? storedRefreshToken : storedAccessToken
-        if (storedAccessToken) {
+        if (storedAccessToken || storedRefreshToken) {
             headers.set('authorization', `Bearer ${token}`);
             headers.set('Content-type', 'application/json');
         }

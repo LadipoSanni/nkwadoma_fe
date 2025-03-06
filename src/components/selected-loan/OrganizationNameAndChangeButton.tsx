@@ -1,11 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import OrganizationImage from "@/reuseable/profile/Organization-image";
-import {cabinetGroteskRegular} from "@/app/fonts";
+import {cabinetGroteskRegular, inter} from "@/app/fonts";
 import ChangeInstitutionModal from "@/components/loan/change-organization/index";
 import {useAppSelector} from "@/redux/store";
 import InitialsAvatar from '../../reuseable/avater/InitialAvater';
+import {Cross2Icon} from "@radix-ui/react-icons";
+import TableModal from "@/reuseable/modals/TableModal";
+import {Button} from "@/components/ui/button";
 
 const OrganizationNameAndChangeButton = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const getInitials = (name: string): string => {
         const nameArray = name.split(' ');
         let initials = nameArray.map(word => word[0]).join('');
@@ -37,7 +41,26 @@ const OrganizationNameAndChangeButton = () => {
                  className={`${cabinetGroteskRegular.className} text-2xl`}>
                 {name || "All organizations"}
             </div>
-            <ChangeInstitutionModal />
+            <Button id="changeOrganizationButton" data-testid={'changeOrganizationButton'} size={"lg"}
+                    variant={"secondary"}
+                    className={` ${inter.className} text-meedlBlue pt-0.5 underline w-fit h-fit md:font-size-0.875rem md:font-light px-1 bg-blue500 rounded `}
+                    onClick={()=> setIsModalOpen(true)}
+            >Change
+            </Button>
+            {
+                <TableModal
+                    isOpen={isModalOpen}
+                    closeModal={()=> setIsModalOpen(false)}
+                    className='pb-1'
+                    headerTitle='Organization'
+                    closeOnOverlayClick={true}
+                    icon={Cross2Icon}
+                    width={"40%"}
+                >
+                    <ChangeInstitutionModal />
+                </TableModal>
+            }
+            {/*<ChangeInstitutionModal />*/}
         </div>
     );
 };

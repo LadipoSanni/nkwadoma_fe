@@ -32,9 +32,8 @@ const Index = () => {
         pageSize: 100,
         organizationId: clickedOrganization?.id
     }
-    const {data: viewAllLoanRequestsInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewLoanRequestsOfCurrentOrganizationQuery(requestBody)
+    const {data: viewAllLoanRequestsInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewLoanRequestsOfCurrentOrganizationQuery(requestBody, {skip:!clickedOrganization})
 
-    // console.log('view all loan requests:: ', data,'viewAllLoanRequestsInAnOrganizationData:: ', viewAllLoanRequestsInAnOrganizationData, 'isLoadingOrganizationLoanRequest:: ', isLoadingOrganizationLoanRequest)
     const loanRequestHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex  gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
         { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) =>row.programName },
@@ -57,7 +56,7 @@ const Index = () => {
              className={`grid md:px-3 md:overflow-hidden   place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {isLoading || isLoadingOrganizationLoanRequest ? (
-                    <div className={`w-full h-fit md:w-full md:h-fit`}>
+                    <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
                         <SkeletonForTable />
                     </div>
                 ) :viewAllLoanRequestsInAnOrganizationData?.data?.body?.length === 0 || data?.data?.body?.length === 0 ?
@@ -74,7 +73,7 @@ const Index = () => {
                     <div className={`md:w-full  w-full h-full md:h-full `}>
                         <Tables
                             tableData={clickedOrganization?.id  ? viewAllLoanRequestsInAnOrganizationData?.data?.body : data?.data?.body}
-                            isLoading={isLoading}
+                            isLoading={isLoading || isLoadingOrganizationLoanRequest}
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
                             tableHeight={52}

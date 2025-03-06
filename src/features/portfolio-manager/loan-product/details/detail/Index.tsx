@@ -35,7 +35,7 @@ const Details = () => {
         { label: "Amount disbursed", value: formatAmount(loanProduct?.data.totalAmountDisbursed)},
         { label: "Amount repaid ", value: formatAmount(loanProduct?.data.totalAmountRepaid)},
         { label: "Amount earned", value: formatAmount(loanProduct?.data.totalAmountEarned)},
-        { label: "Cost of funds", value: loanProduct?.data.costOfFund + "%" || "0%"},
+        { label: "Cost of vehicle", value: loanProduct?.data.costOfFund + "%" || "0%"},
     ];
 
     return (
