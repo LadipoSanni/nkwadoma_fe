@@ -63,7 +63,7 @@ function NotificationLayout({children}: Props) {
             setPageNumber(paginated.pageNumber)
             setHasNextPage(paginated.hasNextPage)
             setTotalItem(paginated.totalItems)
-            console.log("The paginated data: ",paginated)
+            // console.log("The paginated data: ",paginated)
          },[pageNumber])
 
         
@@ -91,7 +91,7 @@ function NotificationLayout({children}: Props) {
               setSelectAll(!selectAll);
            }
 
-           console.log("The selected row: ",selectedRows)
+           
 
            const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                       setSearchTerm(event.target.value);
@@ -178,7 +178,7 @@ function NotificationLayout({children}: Props) {
               id={`selectAll`}
               className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md mr-2 opacity-60`}
             />
-            <span >All Notifications</span>
+            <span className='font-medium' >All Notifications</span>
           </div>
           <div>
             <button 
@@ -221,7 +221,7 @@ function NotificationLayout({children}: Props) {
                   data-testid="UniqueCheck" 
                type="checkbox"
                id='uniqueCheck'
-               className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md  opacity-60 bg-white`}
+               className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md  bg-white`}
                onChange={() => {
                 handleCheckedRow(notification.id)
             }}
@@ -231,7 +231,7 @@ function NotificationLayout({children}: Props) {
                 </div>
                 <div className='flex-col flex items-start'>
                   <div className="text-[14px] font-medium text-[#212221] ">{notification.type}</div>
-                <div className='font-thin'>{notification.subtitle}</div>
+                <div className='font-normal'>{notification.subtitle}</div>
                 </div>
                   
                   </div>

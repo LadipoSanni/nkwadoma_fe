@@ -1,5 +1,5 @@
-import React, { useState, useEffect, ElementType } from "react";
-import Styles from "./styles.module.css";
+import React, { useState, useEffect, ElementType } from 'react';
+
 import {
   Table,
   TableRow,
@@ -7,9 +7,9 @@ import {
   TableCell,
   TableBody,
   TableHeader,
-} from "@/components/ui/table";
-import TableContainer from "./TableContainer";
-import Paginations from "./General-table-pagination";
+} from '@/components/ui/table';
+import TableContainer from './TableContainer';
+import Paginations from './Pagination';
 import {
   Select,
   SelectTrigger,
@@ -17,20 +17,20 @@ import {
   SelectItem,
   SelectValue,
   SelectGroup,
-} from "@/components/ui/select";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/select';
+import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
+import { DotsVerticalIcon } from '@radix-ui/react-icons';
+import { Button } from '@/components/ui/button';
 import {
   Menubar,
   MenubarTrigger,
   MenubarContent,
   MenubarMenu,
   MenubarItem,
-} from "@/components/ui/menubar";
-import TableEmptyState from "../emptyStates/TableEmptyState";
-import SkeletonForTable from "../Skeleton-loading-state/Skeleton-for-table";
-import {MagnifyingGlassIcon} from "@radix-ui/react-icons";
+} from '@/components/ui/menubar';
+import TableEmptyState from '../emptyStates/TableEmptyState';
+import SkeletonForTable from '../Skeleton-loading-state/Skeleton-for-table';
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 
 interface ColumnProps<T> {
   title: string | React.ReactNode;
@@ -69,14 +69,14 @@ interface Props<T extends TableRowData> {
   condition?: boolean;
   isLoading?: boolean;
   searchEmptyState?: boolean;
-  totalPages?: number;
-  hasNextPage?: boolean;
-  fetchMoreData: (page: number) => void;
-  totalItemSize?: number
+  totalPages: number;
+  pageNumber: number;
+  hasNextPage: boolean;
+  setPageNumber: React.Dispatch<React.SetStateAction<number>>;
 }
 
 function Tables<T extends TableRowData>({
-                                          searchEmptyState,
+  searchEmptyState,
   tableHeader,
   tableData,
   handleRowClick,
@@ -92,145 +92,102 @@ function Tables<T extends TableRowData>({
   emptyStateStyle,
   icon,
   optionalFilterName,
-  optionalRowsPerPage = 10,
+  optionalRowsPerPage = 10, // Frontend page size
   tableCellStyle,
   condition,
   isLoading,
-  totalPages,
   hasNextPage,
-  fetchMoreData,
-  totalItemSize
-  
+  setPageNumber,
 }: Props<T>) {
+  const [frontendPage, setFrontendPage] = useState(1); // Frontend page
   const [selectedColumn, setSelectedColumn] = useState(tableHeader[1].id);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const [pageNumber, setPageNumber] = useState<number>(0);
-  const [frontendPageNumber, setFrontendPageNumber] = useState(1);
-  const itemsPerPage = optionalRowsPerPage;
-  const totalFrontendPages = Math.ceil(totalItemSize ?? 0/ itemsPerPage);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (pageNumber > 0 && hasNextPage) {
-
-        fetchMoreData(pageNumber);
-        
-    }
-});
-
   if (!isMounted) return null;
 
-//   const handlePageChange = (
-//     event: React.ChangeEvent<unknown>,
-//     newPage: number
-//   ) => {
-//     if (newPage <= totalFrontendPages) {
-//         setFrontendPageNumber(newPage);
-//     } else if (hasNextPage) {
-//         const newBackendPage = Math.floor((newPage - 1) / totalFrontendPages);
-//         setPageNumber(newBackendPage);
-//         setFrontendPageNumber(newPage - newBackendPage * totalFrontendPages);
-//     }
-//   };
+  // Frontend pagination logic
+  const startIndex = (frontendPage - 1) * optionalRowsPerPage;
+  const endIndex = startIndex + optionalRowsPerPage;
+  const paginatedData = tableData.slice(startIndex, endIndex);
 
-const handlePageChange = (newPage: number) => {
-    if (newPage <= totalFrontendPages) {
-        setFrontendPageNumber(newPage);
-    } else if (hasNextPage) {
-        const newBackendPage = Math.floor((newPage - 1) / totalFrontendPages);
-        setPageNumber(newBackendPage);
-        setFrontendPageNumber(newPage - newBackendPage * totalFrontendPages);
+  const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
+    setFrontendPage(newPage);
+  };
+
+  const handleNextPage = () => {
+    if (endIndex >= tableData.length && hasNextPage) {
+      
+      setPageNumber((prevPage) => prevPage + 1);
+      setFrontendPage(1); 
+    } else if (endIndex < tableData.length) {
+    
+      setFrontendPage((prevPage) => prevPage + 1);
     }
-};
+  };
 
-const handleNextPage = () => {
-    if (hasNextPage || frontendPageNumber < totalFrontendPages) {
-        handlePageChange(frontendPageNumber + 1);
+  const handlePreviousPage = () => {
+    if (frontendPage > 1) {
+      setFrontendPage((prevPage) => prevPage - 1);
     }
-};
-
-const handlePreviousPage = () => {
-    if (frontendPageNumber + pageNumber * totalFrontendPages > 1) {
-        handlePageChange(frontendPageNumber - 1);
-    }
-};
-
-
-
-
+  };
 
   const handleDropdownOpen = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
   const renderCellContent = (
-    value:
-      | string
-      | number
-      | boolean
-      | React.ReactNode
-      | object
-      | null
-      | undefined
+    value: string | number | boolean | React.ReactNode | object | null | undefined
   ) => {
     if (React.isValidElement(value)) {
       return value;
     }
-    if (typeof value === "object" && value !== null) {
+    if (typeof value === 'object' && value !== null) {
       return JSON.stringify(value);
     }
     return value;
   };
 
-  const paginatedData = tableData?.slice(
-    (frontendPageNumber - 1) * itemsPerPage,
-    frontendPageNumber * itemsPerPage
-  );
-//   const totalPages = Math.ceil(tableData?.length / itemsPerPage)
-  const isLastPage = frontendPageNumber === totalPages;
+  const isLastPage = frontendPage === Math.ceil(tableData.length / optionalRowsPerPage);
 
   return (
-    <div id="loanProductTableContainer" className={`w-[100%] `}>
+    <div id="loanProductTableContainer" className={`w-[100%]`}>
       {isLoading ? (
         <SkeletonForTable />
       ) : tableData?.length === 0 ? (
-          <div>
-            {searchEmptyState ?
-                <TableEmptyState
-                    icon={MagnifyingGlassIcon}
-                    name={sideBarTabName}
-                    className={emptyStateStyle}
-                    optionalFilterName={optionalFilterName}
-                    condition={condition}
-                    isSearch={true}
-                />
-                // <div>
-                //   <MagnifyingGlassIcon/>
-                // </div>
-                :
-                <TableEmptyState
-                    icon={icon}
-                    name={sideBarTabName}
-                    className={emptyStateStyle}
-                    optionalFilterName={optionalFilterName}
-                    condition={condition}
-                />
-            }
-          </div>
-
+        <div>
+          {searchEmptyState ? (
+            <TableEmptyState
+              icon={MagnifyingGlassIcon}
+              name={sideBarTabName}
+              className={emptyStateStyle}
+              optionalFilterName={optionalFilterName}
+              condition={condition}
+              isSearch={true}
+            />
+          ) : (
+            <TableEmptyState
+              icon={icon}
+              name={sideBarTabName}
+              className={emptyStateStyle}
+              optionalFilterName={optionalFilterName}
+              condition={condition}
+            />
+          )}
+        </div>
       ) : (
         <div>
           <div
             id="loanProductTableBorder"
-            className="border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block "
+            className="border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block"
           >
             <TableContainer
               id="loanProductTableScrollbar"
-              style={{ height: `${tableHeight}vh`, overflow: "auto" }}
+              style={{ height: `${tableHeight}vh`, overflow: 'auto' }}
             >
               <Table id="dynamicTable" className="">
                 <TableHeader
@@ -240,20 +197,15 @@ const handlePreviousPage = () => {
                   <TableRow
                     id="dynamicTableHeadRow"
                     className={` sticky top-0     bg-[#F0F2F4]  hover:bg-[#fafbfc]`}
-                    style={{ position: "sticky", top: 0, background: "#fff" }}
+                    style={{ position: 'sticky', top: 0, background: '#fff' }}
                   >
                     {tableHeader.map((column) => (
                       <TableHead
                         key={column.id}
                         id={`dynamicTableHeadCell${column.id}`}
-                        // className={`${Styles.tableHeaderItem} `}
-                        // className={`px-[12px] py-[10px] text-[#101828]`}
                         className="bg-[#F0F2F4] h-10 hover:bg-[#F0F2F4]"
                       >
-                        <div
-                          id={`dynamicTableHeadCellDiv${column.id}`}
-                          className={`${Styles.tableHeaderItem} `}
-                        >
+                        <div id={`dynamicTableHeadCellDiv${column.id}`}>
                           {column.title}
                         </div>
                       </TableHead>
@@ -261,42 +213,32 @@ const handlePreviousPage = () => {
                     {showKirkBabel ? (
                       <TableHead className="bg-[#F0F2F4] h-12 hover:bg-[#F0F2F4]"></TableHead>
                     ) : (
-                      ""
+                      ''
                     )}
                   </TableRow>
                 </TableHeader>
-                <TableBody
-                  id="dynamicTableBody"
-                  data-testid="datatable"
-                  className=""
-                >
-                  {paginatedData?.map((row, rowIndex) => (
+                <TableBody id="dynamicTableBody" data-testid="datatable" className="">
+                  {paginatedData.map((row, rowIndex) => (
                     <TableRow
                       id={`dynamicTableBodyRow${rowIndex}`}
                       key={rowIndex}
-                      // onClick={() => handleRowClick(row)}
                       className={`${sx}`}
                     >
                       {tableHeader.map((column) => (
                         <TableCell
                           onClick={() => handleRowClick(row)}
-                          key={`${column.id}${rowIndex} `}
+                          key={`${column.id}${rowIndex}`}
                           id={`dynamicTableCell${column.id}${rowIndex}`}
-                          // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                           className={`h-1 ${
-                            isLastPage ? "border-b border-solid " : ""
-                          } ${tableCellStyle} overflow-hidden whitespace-nowrap text-ellipsis max-w-[80px]  `}
+                            isLastPage ? 'border-b border-solid ' : ''
+                          } ${tableCellStyle} overflow-hidden whitespace-nowrap text-ellipsis max-w-[80px]`}
                         >
                           <div
                             id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
-                            className={`${Styles.tableBodyItem} ${tableStyle}  truncate pt-2 pb-2 pr-2 pl-2`}
-                            // style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", maxWidth: "200px",  }}
+                            className={`${tableStyle} truncate pt-2 pb-2 pr-2 pl-2`}
                           >
-                            {/* {column.selector ? column.selector(row) : row[column.id]} */}
                             {renderCellContent(
-                              column.selector
-                                ? column.selector(row)
-                                : row[column.id]
+                              column.selector ? column.selector(row) : row[column.id]
                             )}
                           </div>
                         </TableCell>
@@ -304,49 +246,43 @@ const handlePreviousPage = () => {
                       {showKirkBabel ? (
                         <TableCell
                           className={`w-0 ${
-                            isLastPage ? "border-b border-solid" : ""
+                            isLastPage ? 'border-b border-solid' : ''
                           }`}
                         >
-                          {
-                            <Menubar
-                            // onClick={}
-                            >
-                              <MenubarMenu>
-                                <MenubarTrigger
-                                  asChild
-                                  className={`border-none shadow-none cursor-pointer hover:bg-b`}
-                                >
-                                  <Button className="border-none shadow-none" id="kirkBabButton">
-                                    <DotsVerticalIcon className="w-5 h-6 text-grey500 font-extrabold" />
-                                  </Button>
-                                </MenubarTrigger>
-                                <MenubarContent className="bg-white shadow-md rounded-md mr-11 relative bottom-6 min-w-[8rem] mt-3">
-                                  {kirkBabDropdownOption?.map(
-                                    (option, index) => (
-                                      <MenubarItem
-                                       id={`${index}optionItem`}
-                                        key={index}
-                                        className={`cursor-pointer mt-2 pr-8  ${
-                                          option.id === "3"
-                                            ? "text-error500 focus:text-error500"
-                                            : ""
-                                        }`}
-                                        onClick={() =>
-                                          handleDropDownClick &&
-                                          handleDropDownClick(option.id, row)
-                                        }
-                                      >
-                                        {option.name}
-                                      </MenubarItem>
-                                    )
-                                  )}
-                                </MenubarContent>
-                              </MenubarMenu>
-                            </Menubar>
-                          }
+                          <Menubar>
+                            <MenubarMenu>
+                              <MenubarTrigger
+                                asChild
+                                className={`border-none shadow-none cursor-pointer hover:bg-b`}
+                              >
+                                <Button className="border-none shadow-none" id="kirkBabButton">
+                                  <DotsVerticalIcon className="w-5 h-6 text-grey500 font-extrabold" />
+                                </Button>
+                              </MenubarTrigger>
+                              <MenubarContent className="bg-white shadow-md rounded-md mr-11 relative bottom-6 min-w-[8rem] mt-3">
+                                {kirkBabDropdownOption?.map((option, index) => (
+                                  <MenubarItem
+                                    id={`${index}optionItem`}
+                                    key={index}
+                                    className={`cursor-pointer mt-2 pr-8 ${
+                                      option.id === '3'
+                                        ? 'text-error500 focus:text-error500'
+                                        : ''
+                                    }`}
+                                    onClick={() =>
+                                      handleDropDownClick &&
+                                      handleDropDownClick(option.id, row)
+                                    }
+                                  >
+                                    {option.name}
+                                  </MenubarItem>
+                                ))}
+                              </MenubarContent>
+                            </MenubarMenu>
+                          </Menubar>
                         </TableCell>
                       ) : (
-                        ""
+                        ''
                       )}
                     </TableRow>
                   ))}
@@ -354,12 +290,11 @@ const handlePreviousPage = () => {
               </Table>
             </TableContainer>
             <Paginations
-              page={frontendPageNumber}
-            //   tableData={tableData}
+              page={frontendPage}
+              totalPage={Math.ceil(tableData.length / optionalRowsPerPage)}
               handlePageChange={handlePageChange}
               handleNextPage={handleNextPage}
               handlePreviousPage={handlePreviousPage}
-              totalPage={totalPages ?? 0}
             />
           </div>
           <div
@@ -469,11 +404,12 @@ const handlePreviousPage = () => {
               </Table>
             </TableContainer>
             <Paginations
-              page={frontendPageNumber}
+              page={frontendPage}
+              totalPage={Math.ceil(tableData.length / optionalRowsPerPage)}
               handlePageChange={handlePageChange}
               handleNextPage={handleNextPage}
               handlePreviousPage={handlePreviousPage}
-              totalPage={totalPages ?? 0}
+              // totalPage={totalPages ?? 0}
             />
           </div>
         </div>
