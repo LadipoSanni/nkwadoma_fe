@@ -42,7 +42,6 @@ const AdminLayout = ({children}: props) => {
         <Providers>
             <div id={'AdminLayout'}
                  className={`h-screen w-screen grid md:flex md:overflow-hidden md:relative md:w-screen md:h-screen`}
-
             >
                 <SideBar/>
                 <div id={'LayoutMainComponent'}
