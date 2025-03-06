@@ -86,7 +86,9 @@ import { Providers } from '@/app/provider';
 
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
+    useNavigation: jest.fn(),
 }));
+
 import {useRouter} from "next/navigation";
 
 describe('program-view Component', () => {
@@ -102,13 +104,13 @@ describe('program-view Component', () => {
     });
 
     test('renders program-view component', () => {
-        act(() => {
+        // act(() => {
             render(
                 <Providers>
                     <ProgramView />
                 </Providers>
             );
-        });
+        // });
         expect(screen.getByText('Create program')).toBeInTheDocument();
     });
 

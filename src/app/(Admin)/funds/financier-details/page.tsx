@@ -1,10 +1,9 @@
 import React from 'react';
+import FinancierDetails from "@/pages/admin/financier-details";
 
 const Page = () => {
     return (
-        <div className={'font-normal md:px-10'}>
-            Repayment
-        </div>
+        <FinancierDetails/>
     );
 };
 
