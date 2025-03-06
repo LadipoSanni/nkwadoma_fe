@@ -9,7 +9,7 @@ import { formatAmount } from '@/utils/Format';
 import { Book } from "lucide-react";
 import Modal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
-import InviteFinanciers from '@/components/portfolio-manager/fund/Invite-financiers';
+import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers_step';
 import { financiers } from '@/utils/cohort/trainee-details-mock-data/Index';
 
 
@@ -84,7 +84,7 @@ function Financiers() {
           icon={Cross2Icon}
           width='36%'
           >
-           <InviteFinanciers organizationId='1' setIsOpen={()=> setIsOpen(false)}/>
+           <InviteFinanciers investmentId='1' setIsOpen={setIsOpen}/>
           </Modal>
         </div>
     </div>

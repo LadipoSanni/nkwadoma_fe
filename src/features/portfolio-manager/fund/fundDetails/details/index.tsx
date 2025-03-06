@@ -17,8 +17,6 @@ const Details = () => {
 
 
 
-
-
     const detailInfo = [
         {name: 'Vehicle type', value: capitalizeFirstLetters(data?.data?.investmentVehicleType )|| 'N/A'},
         {name: 'Vehicle size', value: formatAmount(data?.data?.size?.toString() || '0')},
