@@ -1,8 +1,8 @@
 "use client";
-import React, {useState} from "react";
-import {inter} from "@/app/fonts";
+import React, { useState } from "react";
+import { inter } from "@/app/fonts";
 import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
-import UpdateInvestmentVehicleDraft from "./UpdateInvestmentVehicleDraft";
+import CreateInvestmentVehicle from "@/components/portfolio-manager/fund/Create-investment-vehicle";
 
 interface saveToDraftProps {
     setIsOpen?: (b: boolean) => void;
@@ -12,16 +12,17 @@ interface DraftItem {
     id: number;
     name: string;
     lastUpdated: string;
-    sponsors: string
-    fundManager: string
-    minimumInvestmentAmount: number
+    sponsors: string;
+    fundManager: string;
+    minimumInvestmentAmount: number;
     bankPartner: string;
-    custodian:string;
+    custodian: string;
     mandate: string;
     rate: number;
     size: number;
     tenure: number;
-    trustee: string
+    trustee: string;
+    draftType: "COMMERCIAL" | "ENDOWMENT";
 }
 
 const drafts: DraftItem[] = [
@@ -39,6 +40,7 @@ const drafts: DraftItem[] = [
         size: 1000000,
         tenure: 5,
         trustee: "Women in STEM Foundation",
+        draftType: "COMMERCIAL",
     },
     {
         id: 2,
@@ -54,6 +56,7 @@ const drafts: DraftItem[] = [
         size: 2000000,
         tenure: 7,
         trustee: "Global Youth Trust",
+        draftType: "ENDOWMENT",
     },
     {
         id: 3,
@@ -69,6 +72,7 @@ const drafts: DraftItem[] = [
         size: 3000000,
         tenure: 10,
         trustee: "Green Future Foundation",
+        draftType: "ENDOWMENT",
     },
     {
         id: 4,
@@ -84,6 +88,7 @@ const drafts: DraftItem[] = [
         size: 2500000,
         tenure: 6,
         trustee: "Universal Health Trust",
+        draftType: "ENDOWMENT",
     },
     {
         id: 5,
@@ -99,7 +104,9 @@ const drafts: DraftItem[] = [
         size: 1800000,
         tenure: 8,
         trustee: "Education for All Trust",
-    },{
+        draftType: "ENDOWMENT",
+    },
+    {
         id: 6,
         name: "Education First Initiative",
         sponsors: "UNESCO",
@@ -113,7 +120,9 @@ const drafts: DraftItem[] = [
         size: 1800000,
         tenure: 8,
         trustee: "Education for All Trust",
-    },{
+        draftType: "COMMERCIAL",
+    },
+    {
         id: 7,
         name: "Education First Initiative",
         sponsors: "UNESCO",
@@ -127,14 +136,13 @@ const drafts: DraftItem[] = [
         size: 1800000,
         tenure: 8,
         trustee: "Education for All Trust",
+        draftType: "COMMERCIAL",
     },
 ];
-
 
 const Draft = ({ setIsOpen }: saveToDraftProps) => {
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [disabled, setDisabled] = useState(true);
-    const [updateInvestmentVehicle, setUpdateInvestmentVehicle] = React.useState(false);
     const [step, setStep] = useState(1);
 
     const handleClick = (id: number) => {
@@ -149,11 +157,16 @@ const Draft = ({ setIsOpen }: saveToDraftProps) => {
 
     const handleUpdateInvestmentVehicleDraft = () => {
         if (selectedId) {
-            console.log("Selected Draft ID:", selectedId);
-            setUpdateInvestmentVehicle(true);
+            setStep(2);
         }
-        setStep(2);
     };
+
+    const handleClose = () => {
+        setStep(1);
+        if (setIsOpen) setIsOpen(false);
+    };
+
+    const selectedDraft = drafts.find((draft) => draft.id === selectedId);
 
     return (
         <div>
@@ -194,7 +207,23 @@ const Draft = ({ setIsOpen }: saveToDraftProps) => {
                 </div>
             ) : (
                 <div>
-                    <UpdateInvestmentVehicleDraft draftId={selectedId} />
+                    {selectedDraft && (
+                        <>
+                            {selectedDraft.draftType === "COMMERCIAL" ? (
+                                <CreateInvestmentVehicle
+                                    setIsOpen={handleClose}
+                                    type="sponsor"
+                                    investmentVehicleType="COMMERCIAL"
+                                />
+                            ) : (
+                                <CreateInvestmentVehicle
+                                    setIsOpen={handleClose}
+                                    type="donor"
+                                    investmentVehicleType="ENDOWMENT"
+                                />
+                            )}
+                        </>
+                    )}
                 </div>
             )}
         </div>
