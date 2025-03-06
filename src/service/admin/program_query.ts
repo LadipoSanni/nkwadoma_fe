@@ -62,7 +62,8 @@ export const programApi = createApi({
                 method: "PATCH",
                 body: data,
             }),
-             invalidatesTags:  ({ id }) => [{ type: 'program', id }],  
+            //  invalidatesTags:  ({ id }) => [{ type: 'program', id }], 
+            invalidatesTags: ['program'], 
         }),
         getAllCohortByAParticularProgram: builder.query({
             query: (param: {

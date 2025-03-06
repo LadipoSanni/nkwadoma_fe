@@ -25,9 +25,9 @@ describe("CohortTabs", () => {
     })
 
     const mockCohorts = [ {
-       id: '1', name: 'Cohort 1', cohortDescriptions: 'Description 1', startDate: '2024-01-01', expectedEndDate: '2024-12-31', totalCohortFee: 1000, imageUrl: '', cohortStatus: 'CURRENT', tuitionAmount: 500, programId: "13"}, 
-       { id: '2', name: 'Cohort 2', cohortDescriptions: 'Description 2', startDate: '2024-01-01', expectedEndDate: '2024-12-31', totalCohortFee: 2000, imageUrl: '', cohortStatus: 'INCOMING', tuitionAmount: 1000,programId: "17" }, 
-       { id: '3', name: 'Cohort 3', cohortDescriptions: 'Description 3', startDate: '2024-01-01', expectedEndDate: '2024-12-31', totalCohortFee: 3000, imageUrl: '', cohortStatus: 'GRADUATED', tuitionAmount: 1500, programId: "18"}, 
+       id: '1', name: 'Cohort 1', cohortDescriptions: 'Description 1', startDate: '2024-01-01', expectedEndDate: '2024-12-31', totalCohortFee: 1000, imageUrl: '', cohortStatus: 'CURRENT', tuitionAmount: 500, programId: "13",numberOfLoanees:4}, 
+       { id: '2', name: 'Cohort 2', cohortDescriptions: 'Description 2', startDate: '2024-01-01', expectedEndDate: '2024-12-31', totalCohortFee: 2000, imageUrl: '', cohortStatus: 'INCOMING', tuitionAmount: 1000,programId: "17",numberOfLoanees:4 }, 
+       { id: '3', name: 'Cohort 3', cohortDescriptions: 'Description 3', startDate: '2024-01-01', expectedEndDate: '2024-12-31', totalCohortFee: 3000, imageUrl: '', cohortStatus: 'GRADUATED', tuitionAmount: 1500, programId: "18",numberOfLoanees:7}, 
       ];
 
    
