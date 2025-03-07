@@ -18,7 +18,7 @@ import {useRouter} from "next/navigation";
 import {unformatAmount} from "@/utils/Format";
 
 interface CreateLoanOfferProps {
-    onSubmit: (data: { amountApproved: string, loanProduct: string }) => void;
+    onSubmit?: (data: { amountApproved: string, loanProduct: string }) => void;
     isOpen: boolean;
     setIsOpen: (value: boolean) => void;
     loanRequestId: string;
@@ -68,11 +68,12 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
             declineReason: ""
         };
          const response=  await respondToLoanRequest(data);
-        console.log('response:: ', response)
-        onSubmit({
-            amountApproved: amount,
-            loanProduct: selectedLoanProductId
-        });
+       if (onSubmit){
+           onSubmit({
+               amountApproved: amount,
+               loanProduct: selectedLoanProductId
+           });
+       }
 
         if (response?.data?.message === 'Loan request approved successfully'){
             store.dispatch(setCurrentTab('Loan requests'))
