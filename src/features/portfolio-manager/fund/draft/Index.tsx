@@ -8,6 +8,56 @@ import {drafts} from "@/utils/LoanRequestMockData/cohortProduct";
 interface saveToDraftProps {
     setIsOpen?: (b: boolean) => void;
 }
+export const handleClick = (
+    id: number,
+    selectedId: number | null,
+    setSelectedId: (id: number | null) => void,
+    setDisabled: (disabled: boolean) => void
+) => {
+    if (id === selectedId) {
+        setSelectedId(null);
+        setDisabled(true);
+    } else {
+        setSelectedId(id);
+        setDisabled(false);
+    }
+};
+
+export const handleUpdateInvestmentVehicleDraft = (
+    selectedId: number | null,
+    setStep: (step: number) => void
+) => {
+    if (selectedId) {
+        setStep(2);
+    }
+};
+
+export const handleSaveAndBackToAllDraft = (
+    setStep: (step: number) => void,
+    setIsOpen?: (b: boolean) => void
+) => {
+    setStep(1);
+    if (setIsOpen) setIsOpen(true);
+};
+
+export const handleSaveCurrentDraft = async (checked: boolean,
+                                             setIsChecked: (checked: boolean) => void,
+                                             setStep: (step: number) => void,
+) => {
+    setIsChecked(checked);
+    // if (selectedId) {
+    //     try {
+    //         await updateDraft({
+    //             id: selectedId,
+    //             isChecked: checked,
+    //         }).unwrap();
+    //         console.log("Checkbox state updated successfully!");
+    setStep(1);
+    //     } catch (error) {
+    //         console.error("Error updating checkbox state:", error);
+    //     }
+    // }
+};
 
 const Draft = ({setIsOpen}: saveToDraftProps) => {
     const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -15,43 +65,6 @@ const Draft = ({setIsOpen}: saveToDraftProps) => {
     const [step, setStep] = useState(1);
     const [isChecked, setIsChecked] = useState(false);
     console.log(isChecked)
-
-    const handleClick = (id: number) => {
-        if (id === selectedId) {
-            setSelectedId(null);
-            setDisabled(true);
-        } else {
-            setSelectedId(id);
-            setDisabled(false);
-        }
-    };
-
-    const handleUpdateInvestmentVehicleDraft = () => {
-        if (selectedId) {
-            setStep(2);
-        }
-    };
-
-    const handleSaveAndBackToAllDraft = () => {
-        setStep(1);
-        if (setIsOpen) setIsOpen(true);
-    };
-
-    const handleSaveCurrentDraft = async (checked: boolean) => {
-        setIsChecked(checked);
-        // if (selectedId) {
-        //     try {
-        //         await updateDraft({
-        //             id: selectedId,
-        //             isChecked: checked,
-        //         }).unwrap();
-        //         console.log("Checkbox state updated successfully!");
-        setStep(1);
-        //     } catch (error) {
-        //         console.error("Error updating checkbox state:", error);
-        //     }
-        // }
-    };
 
     const selectedDraft = drafts.find((draft) => draft.id === selectedId);
 
@@ -67,7 +80,7 @@ const Draft = ({setIsOpen}: saveToDraftProps) => {
                                 className={`p-4 border rounded-lg cursor-pointer transition ${
                                     selectedId === draft.id ? "bg-[#F9F9F9]" : "ring-[#ECECEC]"
                                 }`}
-                                onClick={() => handleClick(draft.id)}
+                                onClick={() => handleClick(draft.id, selectedId, setSelectedId, setDisabled)}
                             >
                                 <h3 className={`${inter.className} font-medium text-sm leading-5 text-meedlBlack`}>
                                     {draft.name}
@@ -89,7 +102,7 @@ const Draft = ({setIsOpen}: saveToDraftProps) => {
                             data-testid="continueButtonModal"
                             buttonText="Continue"
                             width="32%"
-                            handleClick={handleUpdateInvestmentVehicleDraft}
+                            handleClick={() => handleUpdateInvestmentVehicleDraft(selectedId, setStep)}
                         />
                     </div>
                 </div>
@@ -99,18 +112,21 @@ const Draft = ({setIsOpen}: saveToDraftProps) => {
                         <>
                             {selectedDraft.draftType === "COMMERCIAL" ? (
                                 <UpdateDraft
-                                    setIsOpen={handleSaveAndBackToAllDraft}
-                                    handleSaveCurrentDraft={handleSaveCurrentDraft}
+                                    setIsOpen={() => handleSaveAndBackToAllDraft(setStep, setIsOpen)}
+                                    handleSaveCurrentDraft={(checked: boolean) =>
+                                        handleSaveCurrentDraft(checked, setIsChecked, setStep)
+                                    }
                                     investmentVehicleType="COMMERCIAL"
                                     type='sponsor'
                                 />
                             ) : (
                                 <UpdateDraft
                                     investmentVehicleType="ENDOWMENT"
-                                    handleSaveCurrentDraft={handleSaveCurrentDraft}
+                                    handleSaveCurrentDraft={(checked: boolean) =>
+                                        handleSaveCurrentDraft(checked, setIsChecked, setStep)
+                                    }
                                     type="donor"
-                                    setIsOpen={handleSaveAndBackToAllDraft}
-
+                                    setIsOpen={() => handleSaveAndBackToAllDraft(setStep, setIsOpen)}
                                 />
                             )}
                         </>
