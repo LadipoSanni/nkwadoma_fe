@@ -1,13 +1,16 @@
 "use client";
 import React, {useState} from "react";
 import {inter} from "@/app/fonts";
-import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
+import ContinueDraftButton from "@/reuseable/buttons/UpdateDraftButton";
 import UpdateDraft from "./UpdateDraft";
 import {drafts} from "@/utils/LoanRequestMockData/cohortProduct";
 
 interface saveToDraftProps {
     setIsOpen?: (b: boolean) => void;
+    investmentVehicleType?: string;
+    type?: string
 }
+
 export const handleClick = (
     id: number,
     selectedId: number | null,
@@ -23,50 +26,24 @@ export const handleClick = (
     }
 };
 
-export const handleUpdateInvestmentVehicleDraft = (
-    selectedId: number | null,
+export const handleContinueButton = (
     setStep: (step: number) => void
 ) => {
-    if (selectedId) {
-        setStep(2);
-    }
+    setStep(2);
 };
 
 export const handleSaveAndBackToAllDraft = (
     setStep: (step: number) => void,
-    setIsOpen?: (b: boolean) => void
 ) => {
     setStep(1);
-    if (setIsOpen) setIsOpen(true);
 };
 
-export const handleSaveCurrentDraft = async (checked: boolean,
-                                             setIsChecked: (checked: boolean) => void,
-                                             setStep: (step: number) => void,
-) => {
-    setIsChecked(checked);
-    // if (selectedId) {
-    //     try {
-    //         await updateDraft({
-    //             id: selectedId,
-    //             isChecked: checked,
-    //         }).unwrap();
-    //         console.log("Checkbox state updated successfully!");
-    setStep(1);
-    //     } catch (error) {
-    //         console.error("Error updating checkbox state:", error);
-    //     }
-    // }
-};
-
-const Draft = ({setIsOpen}: saveToDraftProps) => {
+const Draft = ({investmentVehicleType, type}: saveToDraftProps) => {
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [disabled, setDisabled] = useState(true);
     const [step, setStep] = useState(1);
-    const [isChecked, setIsChecked] = useState(false);
-    console.log(isChecked)
 
-    const selectedDraft = drafts.find((draft) => draft.id === selectedId);
+    // const selectedDraft = drafts.find((draft) => draft.id === selectedId);
 
     return (
         <div>
@@ -93,7 +70,7 @@ const Draft = ({setIsOpen}: saveToDraftProps) => {
                     </div>
 
                     <div className="flex justify-end py-4">
-                        <UpdateDraftButton
+                        <ContinueDraftButton
                             disable={disabled}
                             backgroundColor="#142854"
                             textColor="white"
@@ -102,35 +79,17 @@ const Draft = ({setIsOpen}: saveToDraftProps) => {
                             data-testid="continueButtonModal"
                             buttonText="Continue"
                             width="32%"
-                            handleClick={() => handleUpdateInvestmentVehicleDraft(selectedId, setStep)}
+                            handleClick={() => handleContinueButton(setStep)}
                         />
                     </div>
                 </div>
             ) : (
                 <div>
-                    {selectedDraft && (
-                        <>
-                            {selectedDraft.draftType === "COMMERCIAL" ? (
-                                <UpdateDraft
-                                    setIsOpen={() => handleSaveAndBackToAllDraft(setStep, setIsOpen)}
-                                    handleSaveCurrentDraft={(checked: boolean) =>
-                                        handleSaveCurrentDraft(checked, setIsChecked, setStep)
-                                    }
-                                    investmentVehicleType="COMMERCIAL"
-                                    type='sponsor'
-                                />
-                            ) : (
-                                <UpdateDraft
-                                    investmentVehicleType="ENDOWMENT"
-                                    handleSaveCurrentDraft={(checked: boolean) =>
-                                        handleSaveCurrentDraft(checked, setIsChecked, setStep)
-                                    }
-                                    type="donor"
-                                    setIsOpen={() => handleSaveAndBackToAllDraft(setStep, setIsOpen)}
-                                />
-                            )}
-                        </>
-                    )}
+                    <UpdateDraft
+                        handleSaveAndBackToAllDraft={() => handleSaveAndBackToAllDraft(setStep)}
+                        investmentVehicleType={investmentVehicleType}
+                        type={type}
+                    />
                 </div>
             )}
         </div>
