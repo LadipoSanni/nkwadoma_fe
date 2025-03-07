@@ -36,44 +36,23 @@ const initialFormValue = {
 };
 
 interface props {
-    setIsOpen?: (e: boolean) => void;
     type?: string;
     investmentVehicleType?: string;
-    handleSaveCurrentDraft: (checked: boolean) => void;
+    handleSaveAndBackToAllDraft: () => void;
 }
 
 function UpdateDraft({
-                                          setIsOpen,
                                           type,
                                           investmentVehicleType,
-                                          handleSaveCurrentDraft
+                         handleSaveAndBackToAllDraft
+
                                       }: props) {
     const [selectCurrency, setSelectCurrency] = useState("NGN");
     const [isError, setError] = useState("");
-    const [isChecked, setIsChecked] = useState(false);
     const [createInvestmentVehicle, {isLoading}] =
         useCreateInvestmentVehicleMutation();
-    // const [updateCheckboxState, { isLoading, isError }] = useUpdateCheckboxStateMutation();
 
     const {toast} = useToast();
-
-    // const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const checked = e.target.checked;
-    //     setIsChecked(checked);
-    //     // try {
-    //     //     await updateCheckboxState(checked).unwrap();
-    //     console.log("Checkbox state updated successfully!");
-    //     // } catch (error) {
-    //     //     console.error("Error updating checkbox state:", error);
-    //     // }
-    // }
-
-    const handleCloseModal = () => {
-        if (setIsOpen) {
-            setIsOpen(false);
-            setIsChecked(isChecked)
-        }
-    };
 
     const validationSchema = Yup.object().shape({
         name: Yup.string()
@@ -225,7 +204,6 @@ function UpdateDraft({
                     description: create.message,
                     status: "success",
                 });
-                handleCloseModal();
             }
         } catch (err) {
             const error = err as ApiError;
@@ -534,31 +512,17 @@ function UpdateDraft({
                                 )}
                             </div>
                             <div className={`flex justify-between mb-4 md:mb-0`}>
-                                <div className={`space-x-1 pt-3`}>
-                                    <input
-                                        type="checkbox"
-                                        id={`draftClickId`}
-                                        checked={isChecked}
-                                        onChange={(e) => handleSaveCurrentDraft(e.target.checked)}
-                                        className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md`}
-                                    />
-                                    <label
-                                        htmlFor="terms"
-                                        className={`${inter.className} text-sm text-[#212221] font-medium `}
+                                <div className={`space-x-1 `}>
+                                    <Button
+                                        variant={"outline"}
+                                        type="button"
+                                        className="w-full lg:w-36 md:w-32 h-[57px] mb-4 border-solid border-[#142854] text-[#142854]"
+                                        onClick={handleSaveAndBackToAllDraft}
                                     >
-                                        Save to draft
-                                    </label>
+                                        Save
+                                    </Button>
                                 </div>
-                                <div className="md:flex gap-4 justify-end ">
-                                    {/*<Button*/}
-                                    {/*    variant={"outline"}*/}
-                                    {/*    type="reset"*/}
-                                    {/*    className="w-20 md:w-32 h-[57px] mb-4"*/}
-                                    {/*    // onClick={() => handleReset(resetForm)}*/}
-                                    {/*    onClick={handleCloseModal}*/}
-                                    {/*>*/}
-                                    {/*    Cancel*/}
-                                    {/*</Button>*/}
+                                <div className="md:flex gap-4 ">
                                     <Button
                                         variant={"default"}
                                         className={` md:w-32 w-20 h-[57px] ${
