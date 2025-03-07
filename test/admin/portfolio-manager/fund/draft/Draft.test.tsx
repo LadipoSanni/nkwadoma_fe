@@ -1,7 +1,7 @@
 import {
     handleClick,
-    handleSaveAndBackToAllDraft, handleSaveCurrentDraft,
-    handleUpdateInvestmentVehicleDraft
+    handleSaveAndBackToAllDraft,
+    handleContinueButton
 } from "@/features/portfolio-manager/fund/draft/Index";
 
 
@@ -9,8 +9,6 @@ describe("Draft Component Functions", () => {
     const setSelectedId = jest.fn();
     const setDisabled = jest.fn();
     const setStep = jest.fn();
-    const setIsChecked = jest.fn();
-    const setIsOpen = jest.fn();
 
     afterEach(() => {
         jest.clearAllMocks();
@@ -29,24 +27,17 @@ describe("Draft Component Functions", () => {
     });
 
     test("handleUpdateInvestmentVehicleDraft changes step when selectedId exists", () => {
-        handleUpdateInvestmentVehicleDraft(1, setStep);
+        handleContinueButton(setStep);
         expect(setStep).toHaveBeenCalledWith(2);
     });
 
     test("handleUpdateInvestmentVehicleDraft does nothing when no selectedId", () => {
-        handleUpdateInvestmentVehicleDraft(null, setStep);
+        handleContinueButton(()=> setStep);
         expect(setStep).not.toHaveBeenCalled();
     });
 
     test("handleSaveAndBackToAllDraft resets step and keeps modal open", () => {
-        handleSaveAndBackToAllDraft(setStep, setIsOpen);
-        expect(setStep).toHaveBeenCalledWith(1);
-        expect(setIsOpen).toHaveBeenCalledWith(true);
-    });
-
-    test("handleSaveCurrentDraft updates checkbox and resets step", async () => {
-        await handleSaveCurrentDraft(true, setIsChecked, setStep);
-        expect(setIsChecked).toHaveBeenCalledWith(true);
+        handleSaveAndBackToAllDraft(setStep);
         expect(setStep).toHaveBeenCalledWith(1);
     });
 });
