@@ -19,7 +19,7 @@ function SearchEmptyState({name,icon: Icon,className}: Props) {
                 <div>
                     <div className='flex justify-center text-center' >
                         {Icon &&
-                            <div id='emptyStateIconId' data-testid="icon-container" className='bg-lightBlue500 w-20 h-20 flex justify-center items-center rounded-full mb-6'>
+                            <div id='emptyStateIconId' data-testid="icon-container" className='bg-lightBlue500 w-[70px] h-[70px] flex justify-center items-center rounded-full mb-6'>
                                 <Icon style={{fontSize:"2.0rem",color:"#142854"}}/>
                             </div>
                         }

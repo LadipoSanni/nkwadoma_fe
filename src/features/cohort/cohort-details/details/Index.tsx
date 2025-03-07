@@ -8,7 +8,7 @@ import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {MdPersonOutline} from "react-icons/md";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
+import DeleteCohort from "@/reuseable/details/DeleteCohort";
 import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";

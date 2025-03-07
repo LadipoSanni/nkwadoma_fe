@@ -46,6 +46,7 @@ const ViewOrganizationDetail = () => {
   const[] = useState('');
   const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
 
+  
   const dataElement = {
     pageNumber: 0,
     pageSize: 300
