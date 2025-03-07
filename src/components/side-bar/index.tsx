@@ -129,11 +129,11 @@ const SideBar = () => {
     ]
 
     const INSTITUTION_ADMIN: navbarRouterItemsProps[] = [
-        {icon: <MdOutlineHome color={'#d7d7d7'} className={`h-[1.2rem] w-[1.2rem]`}/>,id: 'Overview', name: 'Overview', isActive: false},
-        {id: 'program', name: 'Program', route: '/program', isActive: true, icon: <Icon icon="mynaui:book" color={current === 'Program' ? '#142854' : '#667085'} height={"1.2rem"} width={"1.3rem"}>         </Icon>},
-        {id: 'cohort', name: 'Cohort', route: '/cohort', isActive: true, icon: <MdOutlinePeopleAlt className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}/>},
-        {id: 'loan', name: 'Loan', isActive: false, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.3rem"} color={'#d7d7d7'} className={`h-[1.2rem] w-[1.2rem]`}></Icon>},
-        {id: 'loanee', name: 'Loanee', isActive: false, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={`h-[1.2rem] w-[1.2rem]`}/>},
+        {icon: <MdOutlineHome color={'#d7d7d7'} className={`h-[1.3rem] w-[1.3rem]`}/>,id: 'Overview', name: 'Overview', isActive: false},
+        {id: 'program', name: 'Program', route: '/program', isActive: true, icon: <Icon icon="mynaui:book" color={current === 'Program' ? '#142854' : '#667085'} height={"1.3rem"} width={"1.3rem"}>         </Icon>},
+        {id: 'cohort', name: 'Cohort', route: '/cohort', isActive: true, icon: <MdOutlinePeopleAlt className={` h-[1.3rem] w-[1.3rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}/>},
+        {id: 'loan', name: 'Loan', isActive: false, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.3rem"} color={'#d7d7d7'} className={`h-[1.3rem] w-[1.3rem]`}></Icon>},
+        {id: 'loanee', name: 'Loanee', isActive: false, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={`h-[1.3rem] w-[1.3rem]`}/>},
     ]
 
 
@@ -170,7 +170,7 @@ const settingsAndHelpItems: navbarItemsProps[] = [];
             id: 'settings',
             name: 'Settings',
             icon: <GearIcon color={currentNavBottom === 'Settings' ? '#142854' : '#939CB0'}
-                className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
+                className={`text-navbarIconColor h-[1.3rem] w-[1.3rem] `}/>,
             handleClick: handleClick
         });
 
