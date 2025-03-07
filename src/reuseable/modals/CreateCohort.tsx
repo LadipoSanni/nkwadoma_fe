@@ -103,6 +103,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
     // resetForm
   }, [name, selectedProgram, startDate, descriptionError]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const areLoanBreakdownsValid = () => {
     return loanBreakdowns.every(item => item.itemName && item.itemAmount);
   };

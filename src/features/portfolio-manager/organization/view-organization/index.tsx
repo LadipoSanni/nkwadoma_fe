@@ -327,6 +327,7 @@ function Organization() {
                     headerTitle='Invite organization'
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
+                    width='36%'
                 >
                     <InviteOrganizationForm
                         setIsOpen={setIsOpen}

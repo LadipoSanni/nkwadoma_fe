@@ -1,0 +1,33 @@
+.tabConnector{
+    display: grid;
+}
+
+.container {
+    display: grid;
+    max-height: 60vh;
+    overflow-y: scroll;
+}
+.container::-webkit-scrollbar {
+    width: 5px;
+}
+.container::-webkit-scrollbar-track {
+    /*width: 1px;*/
+    background-color: #F0F2F4;
+
+}
+.container::-webkit-scrollbar-thumb {
+    background-color: #D9D9D9;
+}
+
+
+@media only screen and (max-width: 600px){
+
+    .tabConnector{
+        display: flex;
+        grid-template-columns: max-content;
+        overflow-x: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+}

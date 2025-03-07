@@ -1,4 +1,4 @@
-import {render, screen, cleanup, fireEvent} from '@testing-library/react';
+import {render, screen, cleanup} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import React from "react";
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
@@ -8,8 +8,8 @@ const dataList = [
 ];
 
 const breakDown = [
-    { title: 'Title 1', amount: 'Amount 1' },
-    { title: 'Title 2', amount: 'Amount 2' }
+    { itemName: 'Item 1', itemAmount: '100' },
+    { itemName: 'Item 2', itemAmount: '200' },
 ];
 
 describe('CreateProgramButton Component', () => {

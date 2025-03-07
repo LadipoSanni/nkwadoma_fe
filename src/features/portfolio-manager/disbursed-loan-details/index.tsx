@@ -5,7 +5,7 @@ import {store, useAppSelector} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation";
 import {cabinetGroteskRegular, inter} from "@/app/fonts";
-import styles from "@/pages/admin/loan-request-details/index.module.css";
+import styles from "./index.module.css";
 import {Breakdown} from "@/reuseable/details/breakdown";
 import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
@@ -56,6 +56,7 @@ const Index = () => {
         {label: 'Nationality', value: details?.data.userIdentity.nationality},
         {label: 'State of origin', value: details?.data.userIdentity.stateOfOrigin},
         {label: 'State of residence', value: details?.data.userIdentity.stateOfResidence},
+
     ];
     const createdDate = dayjs(details?.data.createdDate?.toString()).format('MMM D, YYYY');
     const startDate = dayjs(details?.data.startData?.toString()).format('MMM D, YYYY');
@@ -70,7 +71,6 @@ const Index = () => {
                     thousandSeparator=","
                     decimalScale={2}
                     fixedDecimalScale={true}
-                    // value={'200000'}
                     disabled={true}
                     prefix={'₦'}
                     className='bg-grey105 flex md:place-items-end '
@@ -88,11 +88,8 @@ const Index = () => {
                 decimalScale={2}
                 fixedDecimalScale={true}
                 disabled={true}
-                // value={'200000'}
                 prefix={'₦'}
                 value={details?.data.loanAmountRequested}
-                // placeholder={${detail.itemName}}
-                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                 className='bg-grey105 flex md:place-items-end'
             />
         },
@@ -104,15 +101,13 @@ const Index = () => {
                 thousandSeparator=","
                 decimalScale={2}
                 fixedDecimalScale={true}
-                // value={'200000'}
                 prefix={'₦'}
                 value={details?.data.initialDeposit}
                 disabled={true}
-                // placeholder={${detail.itemName}}
-                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                 className='bg-grey105 flex md:place-items-end'
             />
         },
+
 
 
     ]
@@ -170,7 +165,6 @@ const Index = () => {
                 >
                     <div>
                         <Card id={"loaneeImageOnDisbursedLoanDetails"} data-testid={"loaneeImageOnDisbursedLoanDetails"}
-                            // className={`h-[8rem] w-[8rem] md:w-[8rem] md:h-[8rem]`}
                               className="rounded-lg md:max-w-md "
                         >
                             {details?.data.image ? (
@@ -221,15 +215,16 @@ const Index = () => {
                                        tabContent={tabContent} handleChange={handleTabChange}/>
                         </div>
                         <div className={`px - 2`}>
-                            <div className={`bg-grey105 `}>
+                            <div className={`bg-grey105  ${styles.container}`}>
                                 {getCurrentDataList().map((item, index) => (
-                                    <li key={"key" + index} className={'p-5  grid gap-9 rounded-md'}>
+                                    <li key={"key" + index} className={'p-4  grid gap-4 rounded-md'}>
                                         <div
                                             className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                             <div
-                                                className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
+                                                className={` ${inter.className} text-black300 md:text-black300 md:text-[14px] text-[14px`}>{item.label}</div>
+                                            {/*{item.value ? item?.value : 'Not provided'}*/}
                                             <div
-                                                className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item?.value : 'Not provided'}</div>
+                                                className={`text-black500 ${inter.className} md:max-w-[40%] md:text-[14px] md:text-black500 md:break-all break-all text-black500 text-[14px]`}> 300, Herbert Macaulay Way, Alagomeji, Sabo, Yaba</div>
                                         </div>
                                     </li>
                                 ))

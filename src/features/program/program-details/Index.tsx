@@ -21,7 +21,7 @@ import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import EditProgramForm from "@/components/program/edit-program-form";
-import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
+import DeleteCohort from "@/reuseable/details/DeleteCohort";
 import {useGetProgramByIdQuery, useSearchCohortsInAParticularProgramQuery} from "@/service/admin/program_query";
 import {getItemSessionStorage} from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
@@ -32,6 +32,7 @@ import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-f
 import { useToast } from "@/hooks/use-toast";
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
+
 
 
 interface loanDetails {
@@ -100,13 +101,13 @@ const ProgramDetails = () => {
         }
     }, [])
 
-    const {data: program,isLoading:loading} = useGetProgramByIdQuery({id: programId}, {refetchOnMountOrArgChange: true});
+    const {data: program,isLoading:loading} = useGetProgramByIdQuery({id: programId}, {refetchOnMountOrArgChange: true, skip: !programId});
     const [deleteItem, {isLoading}] = useDeleteProgramMutation()
     const {data: cohortsByProgram} = useGetAllCohortByAParticularProgramQuery({
         programId: programId,
         pageSize: size,
         pageNumber: page
-    }, {refetchOnMountOrArgChange: true});
+    }, {refetchOnMountOrArgChange: true,skip: !programId});
     const {data: searchResults} = useSearchCohortsInAParticularProgramQuery({
         cohortName: searchTerm,
         programId: programId

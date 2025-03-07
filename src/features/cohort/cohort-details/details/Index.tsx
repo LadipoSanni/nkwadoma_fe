@@ -6,10 +6,9 @@ import {inter} from "@/app/fonts";
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {MdPersonOutline} from "react-icons/md";
-import {BiArrowBack} from "react-icons/bi";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
+import DeleteCohort from "@/reuseable/details/DeleteCohort";
 import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
@@ -18,6 +17,7 @@ import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohor
 import { formatMonthInDate } from "@/utils/Format";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import BackButton from "@/components/back-button";
 
 
 interface breakDown {
@@ -152,13 +152,9 @@ const CohortDetails = () => {
     return (
         <>{isLoading? (<SkeletonForDetailPage/>): (
             <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
-                <div className={` `} id={`backClickContainer`}>
-                    <div className={`flex py-2 space-x-1 text-meedlBlue`} id={`backClick`}
-                         data-testid={`backClick `}>
-                        <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`} onClick={handleBackClick}/>
-                        <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
-                            onClick={handleBackClick}>Back to cohort</h1>
-                    </div>
+                <div className={` pb-4 `} id={`backClickContainer`} data-testid={'backClickContainer'}>
+                    <BackButton handleClick={handleBackClick} iconRight={true} text={"Back to cohort"}
+                                id={"backClick"} textColor={'#142854'}/>
                 </div>
 
                 <Tabs
