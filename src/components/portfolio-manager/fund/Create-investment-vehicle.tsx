@@ -48,23 +48,11 @@ function CreateInvestmentVehicle({
                                  }: props) {
     const [selectCurrency, setSelectCurrency] = useState("NGN");
     const [isError, setError] = useState("");
-    const [isChecked, setIsChecked] = useState(false);
     const [createInvestmentVehicle, {isLoading}] =
         useCreateInvestmentVehicleMutation();
     // const [updateCheckboxState, { isLoading, isError }] = useUpdateCheckboxStateMutation();
 
     const {toast} = useToast();
-
-    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const checked = e.target.checked;
-        setIsChecked(checked);
-        // try {
-        //     await updateCheckboxState(checked).unwrap();
-        console.log("Checkbox state updated successfully!");
-        // } catch (error) {
-        //     console.error("Error updating checkbox state:", error);
-        // }
-    }
 
     const handleCloseModal = () => {
         if (setIsOpen) {
