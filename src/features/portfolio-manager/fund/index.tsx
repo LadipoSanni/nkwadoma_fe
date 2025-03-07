@@ -81,7 +81,10 @@ const InvestmentVehicle = () => {
     }
   },[searchTerm,searchData,investmentVehicleData])
 
-  const handleDraftClick = () => {
+  const handleCommercialFundDraftClick = () => {
+      setDraft(true);
+  } 
+  const handleEndowmentFundDraftClick = () => {
       setDraft(true);
   }
    const handleCreateInvestmentVehicleClick = () => {
@@ -127,7 +130,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
            id='commercialFundId'
             value={searchTerm}
            onChange={handleSearchChange}
-           handleDraftClick={handleDraftClick}
+           handleDraftClick={handleCommercialFundDraftClick}
            handleCreateInvestmentVehicleClick={handleCreateInvestmentVehicleClick}
         />
       </div>,
@@ -159,7 +162,7 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
           id='endowmentFundId'
            value={searchTerm}
           onChange={handleSearchChange}
-          handleDraftClick={handleDraftClick}
+          handleDraftClick={handleEndowmentFundDraftClick}
           handleCreateInvestmentVehicleClick={handleCreateInvestmentDonorClick}
          />
       </div>,
@@ -236,7 +239,8 @@ const endowment = viewAllInvestmentVehicle.filter( vehicle => vehicle.investment
                             icon={Cross2Icon}
                             width={"38%"}
                 >
-                    <Draft setIsOpen={() => setDraft(false)} />
+                    {/*<Draft setIsOpen={() => setCommercialFundDraft(false)} />*/}
+                    {modalType === 'commercial' ? ( <Draft setIsOpen={()=>setIsModalOpen(false)}/>) : (<Draft setIsOpen={()=> setIsModalOpen(false)} />)}
 
                 </TableModal>
             }
