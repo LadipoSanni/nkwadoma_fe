@@ -50,7 +50,6 @@ function CreateInvestmentVehicle({
     const [isError, setError] = useState("");
     const [createInvestmentVehicle, {isLoading}] =
         useCreateInvestmentVehicleMutation();
-    // const [updateCheckboxState, { isLoading, isError }] = useUpdateCheckboxStateMutation();
 
     const {toast} = useToast();
 
