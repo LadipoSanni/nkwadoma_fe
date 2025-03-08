@@ -559,8 +559,8 @@ function CreateInvestmentVehicle({
                                     Cancel
                                 </Button>
                                 <Button
-                                    variant={"default"}
-                                    className={`w-full md:w-36 w-20 h-[57px] ${
+                                    variant={"secondary"}
+                                    className={`w-full md:w-36 h-[57px] ${
                                         !isValid
                                             ? "bg-neutral650 cursor-not-allowed "
                                             : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
