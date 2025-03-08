@@ -1,76 +1,111 @@
-"use client";
-import React, {useState} from "react";
-import {inter} from "@/app/fonts";
-import ContinueDraftButton from "@/reuseable/buttons/UpdateDraftButton";
-import UpdateDraft from "./UpdateDraft";
-import {drafts} from "@/utils/LoanRequestMockData/cohortProduct";
+"use client"
+import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
+import React, { useState } from "react";
+import { inter } from "@/app/fonts";
+import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
+import { useGetInvestmentVehiclesByTypeAndStatusQuery } from "@/service/admin/fund_query";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
+import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
 
 interface saveToDraftProps {
     setIsOpen?: (b: boolean) => void;
     investmentVehicleType?: string;
-    type?: string
+    type?: string;
+}
+
+export interface Draft {
+    id: string;
+    name: string;
+    investmentVehicleType: string;
+    mandate: string;
+    sponsors: string;
+    tenure: number;
+    size: number;
+    rate: number;
+    trustee: string;
+    custodian: string;
+    bankPartner: string;
+    fundManager: string;
+    minimumInvestmentAmount: number;
+    status: string;
+    startDate: string;
+    totalAmountInInvestmentVehicle: number;
 }
 
 export const handleClick = (
-    id: number,
-    selectedId: number | null,
-    setSelectedId: (id: number | null) => void,
-    setDisabled: (disabled: boolean) => void
+    draft: Draft,
+    selectedDraft: Draft | null,
+    setSelectedDraft: (draft: Draft | null) => void,
+    setDisabled: (disabled: boolean) => void,
+    dispatch: AppDispatch
 ) => {
-    if (id === selectedId) {
-        setSelectedId(null);
+    if (draft.id === selectedDraft?.id) {
+        setSelectedDraft(null);
         setDisabled(true);
+        dispatch(clearSaveClickedDraft());
     } else {
-        setSelectedId(id);
+        setSelectedDraft(draft);
         setDisabled(false);
+        dispatch(setSaveClickedDraft(draft));
     }
 };
 
-export const handleContinueButton = (
-    setStep: (step: number) => void
-) => {
+export const handleContinueButton = (setStep: (step: number) => void) => {
     setStep(2);
 };
 
-export const handleSaveAndBackToAllDraft = (
-    setStep: (step: number) => void,
-) => {
+export const handleSaveAndBackToAllDraft = (setStep: (step: number) => void) => {
     setStep(1);
 };
 
-const Draft = ({investmentVehicleType, type}: saveToDraftProps) => {
-    const [selectedId, setSelectedId] = useState<number | null>(null);
+const Draft = ({ investmentVehicleType, type }: saveToDraftProps) => {
+    const [selectedDraft, setSelectedDraft] = useState<Draft | null>(null);
     const [disabled, setDisabled] = useState(true);
     const [step, setStep] = useState(1);
 
-    // const selectedDraft = drafts.find((draft) => draft.id === selectedId);
+    const dispatch = useDispatch();
+    const saveClickedDraft = useSelector((state: RootState) => state.vehicle.saveClickedDraft);
+    console.log(saveClickedDraft);
+
+    const { data, error, isLoading } = useGetInvestmentVehiclesByTypeAndStatusQuery({
+        pageSize: 1,
+        pageNumber: 1,
+        type: "COMMERCIAL",
+        status: "DRAFT",
+    });
 
     return (
         <div>
             {step === 1 ? (
                 <div className="w-full">
-                    <div
-                        className="space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                        {drafts.map((draft) => (
+                    <div className="space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                        {isLoading && <p>Loading...</p>}
+                        {error && <p>Error: {JSON.stringify(error)}</p>}
+                        {data?.data.map((draft: Draft) => (
                             <div
                                 key={draft.id}
                                 className={`p-4 border rounded-lg cursor-pointer transition ${
-                                    selectedId === draft.id ? "bg-[#F9F9F9]" : "ring-[#ECECEC]"
+                                    selectedDraft?.id === draft.id ? "bg-[#F9F9F9]" : "ring-[#ECECEC]"
                                 }`}
-                                onClick={() => handleClick(draft.id, selectedId, setSelectedId, setDisabled)}
+                                onClick={() =>
+                                    handleClick(draft, selectedDraft, setSelectedDraft, setDisabled, dispatch)
+                                }
                             >
-                                <h3 className={`${inter.className} font-medium text-sm leading-5 text-meedlBlack`}>
+                                <h3
+                                    className={`${inter.className} font-medium text-sm leading-5 text-meedlBlack capitalize`}
+                                >
                                     {draft.name}
                                 </h3>
                                 <p className={`${inter.className} font-medium text-sm leading-5 text-[#999999]`}>
-                                    Last updated on {draft.lastUpdated}
+                                    Last updated on {"Dec, 4th 2025"}
                                 </p>
                             </div>
                         ))}
                     </div>
 
                     <div className="flex justify-end py-4">
-                        <ContinueDraftButton
+                        <UpdateDraftButton
                             disable={disabled}
                             backgroundColor="#142854"
                             textColor="white"
