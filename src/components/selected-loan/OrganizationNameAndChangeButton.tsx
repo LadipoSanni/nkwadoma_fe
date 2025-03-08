@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import OrganizationImage from "@/reuseable/profile/Organization-image";
-import {cabinetGroteskMediumBold, cabinetGroteskRegular, inter} from "@/app/fonts";
+import {cabinetGroteskMediumBold, inter} from "@/app/fonts";
 import ChangeInstitutionModal from "@/components/loan/change-organization/index";
 import {useAppSelector} from "@/redux/store";
 import InitialsAvatar from '../../reuseable/avater/InitialAvater';
