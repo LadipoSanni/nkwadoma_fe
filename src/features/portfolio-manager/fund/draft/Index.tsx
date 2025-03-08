@@ -7,6 +7,7 @@ import { useGetInvestmentVehiclesByTypeAndStatusQuery } from "@/service/admin/fu
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
+import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 
 interface saveToDraftProps {
     setIsOpen?: (b: boolean) => void;
@@ -68,7 +69,7 @@ const Draft = ({ investmentVehicleType, type }: saveToDraftProps) => {
     const saveClickedDraft = useSelector((state: RootState) => state.vehicle.saveClickedDraft);
     console.log(saveClickedDraft);
 
-    const { data, error, isLoading } = useGetInvestmentVehiclesByTypeAndStatusQuery({
+    const { data, isLoading } = useGetInvestmentVehiclesByTypeAndStatusQuery({
         pageSize: 1,
         pageNumber: 1,
         type: "COMMERCIAL",
@@ -76,16 +77,15 @@ const Draft = ({ investmentVehicleType, type }: saveToDraftProps) => {
     });
 
     return (
-        <div>
+        <div className={`${inter.className}`}>
             {step === 1 ? (
                 <div className="w-full">
                     <div className="space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                        {isLoading && <p>Loading...</p>}
-                        {error && <p>Error: {JSON.stringify(error)}</p>}
+                        {isLoading && <SkeletonForLoanOrg/>}
                         {data?.data.map((draft: Draft) => (
                             <div
                                 key={draft.id}
-                                className={`p-4 border rounded-lg cursor-pointer transition ${
+                                className={`${inter.className} p-4 border rounded-lg cursor-pointer transition ${
                                     selectedDraft?.id === draft.id ? "bg-[#F9F9F9]" : "ring-[#ECECEC]"
                                 }`}
                                 onClick={() =>
@@ -113,7 +113,7 @@ const Draft = ({ investmentVehicleType, type }: saveToDraftProps) => {
                             height="3.4rem"
                             data-testid="continueButtonModal"
                             buttonText="Continue"
-                            width="32%"
+                            width="24%"
                             handleClick={() => handleContinueButton(setStep)}
                         />
                     </div>
