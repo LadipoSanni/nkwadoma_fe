@@ -95,21 +95,6 @@ const ChangeInstitutionModal = () => {
     };
 
     return (
-        // <Dialog.Root>
-        //     <Dialog.Trigger asChild>
-        //         <Button id="changeOrganizationButton" data-testid={'changeOrganizationButton'} size={"lg"}
-        //                 variant={"secondary"}
-        //                 className={` ${inter.className} text-meedlBlue pt-0.5 underline w-fit h-fit md:font-size-0.875rem md:font-light px-1 bg-blue500 rounded `}>Change
-        //         </Button>
-        //     </Dialog.Trigger>
-        //     <div className='hidden'><Dialog.DialogDescription></Dialog.DialogDescription></div>
-        //     <Dialog.Portal>
-        //         <Dialog.Overlay className="fixed inset-0 bg-[#344054B2] data-[state=open]:animate-overlayShow"/>
-        //         <Dialog.Content
-        //             className={`fixed left-1/2 top-1/2 ${styles.container} md:h-[75vh] md:w-[40vw] h-[90vh] w-[90vw] grid grid-rows-3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5 `}>
-        //             <Dialog.Title className={`${cabinetGroteskRegular.className}  text-2xl`}>
-        //                 Organization
-        //             </Dialog.Title>
         <div>
                     <div
                         className={` h-full md:h-full w-full md:w-full `}
@@ -295,17 +280,6 @@ const ChangeInstitutionModal = () => {
                         </div>
                     </div>
 </div>
-        //             <Dialog.Close asChild>
-        //                 <button
-        //                     className="absolute right-4 top-6  inline-flex size-[25px]  "
-        //                     aria-label="Close"
-        //                 >
-        //                     <Cross2Icon className={`text-[#939CB0] w-7 h-7`}/>
-        //                 </button>
-        //             </Dialog.Close>
-        //         </Dialog.Content>
-        //     </Dialog.Portal>
-        // </Dialog.Root>
     )
 
 }
