@@ -1,6 +1,6 @@
 import React from 'react';
 import {navbarItemsProps} from "@/types/Component.type";
-import {inter} from "@/app/fonts";
+import { inter500} from "@/app/fonts";
 
 interface Props {
     items: navbarItemsProps[],
@@ -27,7 +27,7 @@ const NavbarContainer = ({items, current}: Props) => {
                     >{item?.icon}</div>
                     <span id={'navbarItemName' + item.id}
                          data-testid={`navbarItemName` + item.id}
-                         className={` ${current === item.name ? 'text-[#142854]' : 'text-[#626F8C]'} text-xs mt-auto mb-auto font-thin   ${inter.className} `}>{item.name}</span>
+                         className={` ${current === item.name ? 'text-[#142854]' : 'text-[#626F8C]'} text-xs mt-auto mb-auto font-thin   ${inter500.className} `}>{item.name}</span>
 
                 </button>
                 ))}
