@@ -1,6 +1,6 @@
 import React from 'react'
 import {navbarRouterItemsProps} from "@/types/Component.type";
-import {inter} from "@/app/fonts";
+import { inter500,inter, } from "@/app/fonts";
 interface Props <T extends navbarRouterItemsProps> {
     navbarItems: T[] | undefined,
     currentTab: string | undefined | string[] | null,
@@ -36,10 +36,11 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                     <div className={` flex gap-2`}>
                         <div id={'navbarRouteIcon' + item.id}
                              data-testid={'navbarRouteIcon' + item.id}
+                             className={` mt-auto mb-auto`}
                         >{item?.icon}</div>
                         <span id={'navbarRouterName' + item.id}
                               data-testid={`navbarRouteName` + item.id}
-                              className={`text-xs mt-auto mb-auto font-thin   ${inter.className}  ${item.isActive ? `${(currentTab !== item.name ? tabNameStyle : currentTabNameStyle)}` : 'text-[#d7d7d7]'} `}>{item.name}</span>
+                              className={`text-xs mt-auto mb-auto  ${currentTab === item?.name ? ` ${inter500.className} ` : ` ${inter.className}`}   ${item.isActive ? `${(currentTab !== item.name ? tabNameStyle : currentTabNameStyle)}` : 'text-[#d7d7d7]'} `}>{item.name}</span>
 
                     </div>
                 </button>
