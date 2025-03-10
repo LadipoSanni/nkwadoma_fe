@@ -10,7 +10,10 @@ import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
 import {useRouter} from 'next/navigation'
-import {useGetAllInvestmentmentVehicleQuery} from '@/service/admin/fund_query';
+import {
+    useGetAllInvestmentmentVehicleQuery,
+    useGetInvestmentVehiclesByTypeAndStatusQuery
+} from '@/service/admin/fund_query';
 import {formatMonthInDate} from '@/utils/Format';
 import {useSearchInvestmentVehicleByNameQuery} from '@/service/admin/fund_query';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
@@ -69,6 +72,22 @@ const InvestmentVehicle = () => {
     const {data: investmentVehicleData} = useGetAllInvestmentmentVehicleQuery(dataElement)
     const {data: searchData} = useSearchInvestmentVehicleByNameQuery(searchTerm, {skip: !searchTerm})
     const router = useRouter()
+    const [activeTab, setActiveTab] = useState('commercialFund');
+    const getVehicleTypeFromTab = (tabValue: string) => {
+        return tabValue === 'commercialFund' ? 'COMMERCIAL' : 'ENDOWMENT';
+    };
+    const { refetch } = useGetInvestmentVehiclesByTypeAndStatusQuery({
+        pageSize: 10,
+        pageNumber: 0,
+        type: getVehicleTypeFromTab(activeTab),
+        status: "DRAFT",
+    }, { skip: !draft });
+
+    useEffect(() => {
+        if (draft) {
+            refetch();
+        }
+    }, [draft, refetch]);
 
 
     useEffect(() => {
@@ -98,9 +117,12 @@ const InvestmentVehicle = () => {
         setIsModalOpen(true);
     }
 
+    const handleTabChange = (value: string) => {
+        setActiveTab(value);
+    };
+
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
-
     };
 
     const fundHeader = [
@@ -231,7 +253,7 @@ const InvestmentVehicle = () => {
 
     return (
         <div className={`px-6 py-5 ${inter.className}`}>
-            <Tabs defaultValue='commercialFund'>
+            <Tabs defaultValue='commercialFund' onValueChange={handleTabChange}>
                 <TabsList className={`z-50 `}>
                     {tabData.map((tab, index) => (
                         <TabsTrigger data-testid={`tabDataName${tab.value}`} value={tab.value} key={index}>
@@ -273,18 +295,20 @@ const InvestmentVehicle = () => {
             </div>
             <div>
                 {
-                    <TableModal isOpen={draft}
-                                closeModal={() => setDraft(false)}
-                                className={`pb-1`}
-                                headerTitle={"Draft"}
-                                closeOnOverlayClick={true}
-                                icon={Cross2Icon}
-                                width={"38%"}
+                    <TableModal
+                        isOpen={draft}
+                        closeModal={() => setDraft(false)}
+                        className={`pb-1`}
+                        headerTitle={"Draft"}
+                        closeOnOverlayClick={true}
+                        icon={Cross2Icon}
+                        width={"38%"}
                     >
-                        {modalType === 'commercial' ? (<Draft setIsOpen={() => setIsModalOpen(false)} type='sponsor'
-                                                              investmentVehicleType='COMMERCIAL'/>) : (
-                            <Draft setIsOpen={() => setIsModalOpen(false)} type='donor'
-                                   investmentVehicleType='ENDOWMENT'/>)}
+                        {activeTab === 'commercialFund' ? (
+                            <Draft setIsOpen={() => setDraft(false)} type='sponsor' investmentVehicleType='COMMERCIAL' />
+                        ) : (
+                            <Draft setIsOpen={() => setDraft(false)} type='donor' investmentVehicleType='ENDOWMENT'  />
+                        )}
                     </TableModal>
                 }
             </div>

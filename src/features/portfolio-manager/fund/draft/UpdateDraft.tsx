@@ -12,6 +12,8 @@ import {validateNumber, validatePositiveNumberWithIndexNumbers} from "@/utils/Fo
 import {validateText, validateNumberLimit} from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
+import { useSelector } from "react-redux";
+import {RootState} from "@/redux/store";
 
 interface ApiError {
     status: number;
@@ -19,21 +21,6 @@ interface ApiError {
         message: string;
     };
 }
-
-const initialFormValue = {
-    name: "",
-    sponsors: "",
-    fundManager: "",
-    minimumInvestmentAmount: "",
-    mandate: "",
-    tenure: "",
-    size: "",
-    rate: "",
-    bankPartner: "",
-    trustee: "",
-    custodian: "",
-    investmentVehicleType: "",
-};
 
 interface props {
     type?: string;
@@ -53,6 +40,22 @@ function UpdateDraft({
         useCreateInvestmentVehicleMutation();
 
     const {toast} = useToast();
+    const draftData = useSelector((state: RootState) => state.vehicle.saveClickedDraft);
+
+    const initialFormValue = {
+        name: draftData?.name || "",
+        sponsors: draftData?.sponsors || "",
+        fundManager: draftData?.fundManager || "",
+        minimumInvestmentAmount: draftData?.minimumInvestmentAmount || "",
+        mandate: draftData?.mandate || "",
+        tenure: draftData?.sponsors || "",
+        size: draftData?.sponsors || "",
+        rate: draftData?.sponsors || "",
+        bankPartner: draftData?.sponsors || "",
+        trustee: draftData?.sponsors || "",
+        custodian: draftData?.sponsors || "",
+        investmentVehicleType: draftData?.sponsors || "",
+    };
 
     const validationSchema = Yup.object().shape({
         name: Yup.string()

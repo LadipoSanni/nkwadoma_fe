@@ -3,7 +3,9 @@ import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
 import React, { useState } from "react";
 import { inter } from "@/app/fonts";
 import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
-import { useGetInvestmentVehiclesByTypeAndStatusQuery } from "@/service/admin/fund_query";
+import {
+    useGetInvestmentVehiclesByTypeAndStatusQuery
+} from "@/service/admin/fund_query";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
@@ -11,27 +13,27 @@ import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-
 
 interface saveToDraftProps {
     setIsOpen?: (b: boolean) => void;
-    investmentVehicleType?: string;
+    investmentVehicleType: string;
     type?: string;
 }
 
 export interface Draft {
     id: string;
     name: string;
-    investmentVehicleType: string;
+    investmentVehicleType: string | undefined;
     mandate: string;
     sponsors: string;
-    tenure: number;
-    size: number;
-    rate: number;
-    trustee: string;
+    tenure: string | number;
+    size: string | number;
+    rate: number | string;
+    trustee: string ;
     custodian: string;
     bankPartner: string;
     fundManager: string;
-    minimumInvestmentAmount: number;
+    minimumInvestmentAmount: number | string;
     status: string;
     startDate: string;
-    totalAmountInInvestmentVehicle: number;
+    // lastUpdatedDate: string;
 }
 
 export const handleClick = (
@@ -70,9 +72,9 @@ const Draft = ({ investmentVehicleType, type }: saveToDraftProps) => {
     console.log(saveClickedDraft);
 
     const { data, isLoading } = useGetInvestmentVehiclesByTypeAndStatusQuery({
-        pageSize: 1,
-        pageNumber: 1,
-        type: "COMMERCIAL",
+        pageSize: 20,
+        pageNumber: 0,
+        type: investmentVehicleType,
         status: "DRAFT",
     });
 

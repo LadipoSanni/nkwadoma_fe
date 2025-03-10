@@ -1,22 +1,22 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 export interface Draft {
-    id: string;
+    // draftId: string;
     name: string;
-    investmentVehicleType: string;
+    investmentVehicleType: string | undefined,
     mandate: string;
     sponsors: string;
-    tenure: number;
-    size: number;
-    rate: number;
+    tenure: string | number,
+    size: string | number,
+    rate: number | string;
     trustee: string;
     custodian: string;
     bankPartner: string;
     fundManager: string;
-    minimumInvestmentAmount: number;
     status: string;
     startDate: string;
-    totalAmountInInvestmentVehicle: number;
+    minimumInvestmentAmount: number | string;
+    // lastUpdatedDate: string;
 }
 
 interface vehicleState {
