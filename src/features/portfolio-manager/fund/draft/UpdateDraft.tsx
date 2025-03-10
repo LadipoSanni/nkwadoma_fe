@@ -12,7 +12,7 @@ import {validateNumber, validatePositiveNumberWithIndexNumbers} from "@/utils/Fo
 import {validateText, validateNumberLimit} from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 import {RootState} from "@/redux/store";
 
 interface ApiError {
@@ -29,11 +29,11 @@ interface props {
 }
 
 function UpdateDraft({
-                                          type,
-                                          investmentVehicleType,
+                         type,
+                         investmentVehicleType,
                          handleSaveAndBackToAllDraft
 
-                                      }: props) {
+                     }: props) {
     const [selectCurrency, setSelectCurrency] = useState("NGN");
     const [isError, setError] = useState("");
     const [createInvestmentVehicle, {isLoading}] =
@@ -43,18 +43,19 @@ function UpdateDraft({
     const draftData = useSelector((state: RootState) => state.vehicle.saveClickedDraft);
 
     const initialFormValue = {
+        id: draftData?.id,
         name: draftData?.name || "",
         sponsors: draftData?.sponsors || "",
         fundManager: draftData?.fundManager || "",
         minimumInvestmentAmount: draftData?.minimumInvestmentAmount || "",
         mandate: draftData?.mandate || "",
-        tenure: draftData?.sponsors || "",
-        size: draftData?.sponsors || "",
-        rate: draftData?.sponsors || "",
-        bankPartner: draftData?.sponsors || "",
-        trustee: draftData?.sponsors || "",
-        custodian: draftData?.sponsors || "",
-        investmentVehicleType: draftData?.sponsors || "",
+        tenure: draftData?.tenure || "",
+        size: draftData?.size || "",
+        rate: draftData?.rate || "",
+        bankPartner: draftData?.bankPartner || "",
+        trustee: draftData?.trustee || "",
+        custodian: draftData?.custodian || "",
+        investmentVehicleType: draftData?.investmentVehicleType || "",
     };
 
     const validationSchema = Yup.object().shape({
@@ -187,6 +188,7 @@ function UpdateDraft({
 
     const handleSubmit = async (values: typeof initialFormValue) => {
         const formData = {
+            id: values.id,
             name: values.name,
             sponsors: values.sponsors,
             fundManager: values.fundManager,
