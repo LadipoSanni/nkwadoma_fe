@@ -4,6 +4,8 @@ import {inter} from "@/app/fonts"
 import { Button } from '@/components/ui/button'
 import { getInitials } from '@/utils/GlobalMethods';
 import SkeletonforNotificationDetails from '@/reuseable/Skeleton-loading-state/Skeleton-for-notification-details';
+import BackButton from '@/components/back-button';
+import { useRouter } from 'next/navigation';
 
 
 interface NotificationProps{
@@ -25,10 +27,24 @@ interface NotificationDetailsPageProps{
 
 function NotificationDetailPage({notification}: NotificationDetailsPageProps) {
   const loading = false
+
+  const router = useRouter();
+  const handleBack = () => {
+    router.back()
+  }
+
   return (
     <div className={`w-full pr-9 md:pr-16 ${inter.className}`}>
       { loading? <div><SkeletonforNotificationDetails/></div> :
       <div>
+      <div className='md:hidden mt-3 mb-7'>
+        <BackButton 
+      id="notificationBackButton" 
+      handleClick={handleBack} textColor='' 
+      iconRight={true}
+      text='Back'
+      />
+      </div>
       <p className="font-medium">
                     {notification?.type}
      </p>

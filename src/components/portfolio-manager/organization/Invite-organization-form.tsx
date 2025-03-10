@@ -174,7 +174,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                     ({errors, isValid, touched, setFieldValue, values}) => (
                         <Form className={`${inter.className}`}>
                             <div
-                                className='grid grid-cols-1 gap-y-4 md:max-h-[540px] overflow-y-auto'
+                                className='grid grid-cols-1 gap-y-4 md:max-h-[67.5vh] overflow-y-auto'
                                 style={{
                                     scrollbarWidth: 'none',
                                     msOverflowStyle: 'none',

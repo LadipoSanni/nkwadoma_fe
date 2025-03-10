@@ -1,11 +1,22 @@
 import { cleanup, screen, render} from "@testing-library/react";
 import NotificationDetailPage from "@/features/notification/Notification-details";
 import { getInitials } from "@/utils/GlobalMethods";
+import { useRouter } from 'next/navigation';
+
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
 
 describe('NotificationDetail Component',()=> {
+  const mockPush = jest.fn();
     beforeEach(() => {
         jest.clearAllMocks();
           cleanup();
+
+          (useRouter as jest.Mock).mockReturnValue({
+            push: mockPush,
+          });
   
           jest.spyOn(console, 'log').mockReturnValue();
           jest.spyOn(console, 'warn').mockReturnValue();
