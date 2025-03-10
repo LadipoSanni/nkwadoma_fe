@@ -50,7 +50,7 @@ const Draft = ({investmentVehicleType, type}: saveToDraftProps) => {
             {step === 1 ? (
                 <div className="w-full">
                     <div
-                        className="space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                        className="space-y-3 md:max-h-[67.5vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                         {drafts.map((draft) => (
                             <div
                                 key={draft.id}
