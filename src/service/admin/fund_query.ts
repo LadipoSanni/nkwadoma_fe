@@ -62,7 +62,7 @@ export const fundApi = createApi({
                 bankPartner: string,
                 fundManager: string,
                 sponsors: string,
-                minimumInvestmentAmount: string
+                minimumInvestmentAmount: number | string
 
             }) => ({
                 url: `/investment-vehicle`,
