@@ -34,7 +34,7 @@ export default function TableModal({isOpen, children, closeModal, closeOnOverlay
       >
       <Dialog.DialogContent
        className={`${styles.body} ${className || ""} px-5`}
-       style={{ ...style, "--modal-width": width } as React.CSSProperties}
+       style={{ ...style, "--modal-width": width} as React.CSSProperties}
       >
         <div className="mt-3 ">
         <Dialog.DialogTitle>

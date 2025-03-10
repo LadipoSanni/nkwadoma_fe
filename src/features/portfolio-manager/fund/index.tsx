@@ -229,65 +229,59 @@ const InvestmentVehicle = () => {
     ]
 
 
-    return (
-        <div className={`px-6 py-5 ${inter.className}`}>
-            <Tabs defaultValue='commercialFund'>
-                <TabsList className={`z-50 `}>
-                    {tabData.map((tab, index) => (
-                        <TabsTrigger data-testid={`tabDataName${tab.value}`} value={tab.value} key={index}>
-                            {tab.name}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
-                {
-                    tabContent.map((tab, index) => (
-                        <TabsContent key={index} value={tab.value} className='mt-5'>
-                            <div className='mt-8'>
-                                {tab.actionBar}
-                            </div>
-                            <div className='mt-6'>
-                                {tab.table}
-                            </div>
-                        </TabsContent>
-                    ))
-                }
-            </Tabs>
-            <div>
-                {
-                    <TableModal
-                        isOpen={isModalOpen}
-                        closeModal={() => setIsModalOpen(false)}
-                        className='pb-1'
-                        headerTitle='Create Investment'
-                        closeOnOverlayClick={true}
-                        icon={Cross2Icon}
-                        width={"36%"}
-                    >
-                        {modalType === 'commercial' ? (
-                            <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='sponsor'
-                                                     investmentVehicleType='COMMERCIAL'/>) : (
-                            <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='donor'
-                                                     investmentVehicleType='ENDOWMENT'/>)}
-                    </TableModal>
-                }
-            </div>
-            <div>
-                {
-                    <TableModal isOpen={draft}
-                                closeModal={() => setDraft(false)}
-                                className={`pb-1`}
-                                headerTitle={"Draft"}
-                                closeOnOverlayClick={true}
-                                icon={Cross2Icon}
-                                width={"38%"}
-                    >
-                        {modalType === 'commercial' ? (<Draft setIsOpen={() => setIsModalOpen(false)} type='sponsor'
-                                                              investmentVehicleType='COMMERCIAL'/>) : (
-                            <Draft setIsOpen={() => setIsModalOpen(false)} type='donor'
-                                   investmentVehicleType='ENDOWMENT'/>)}
-                    </TableModal>
-                }
-            </div>
+  return (
+    <div className={`px-6 py-5 ${inter.className}`}>
+     <Tabs defaultValue='commercialFund'>
+      <TabsList className= {`z-50 `}>
+      {tabData.map((tab,index) => (
+            <TabsTrigger data-testid={`tabDataName${tab.value}`}  value={tab.value} key={index}>
+                {tab.name}
+          </TabsTrigger>
+          ))}
+      </TabsList>
+      {
+          tabContent.map((tab, index) => (
+            <TabsContent key={index} value={tab.value}  className='mt-5'>
+                <div className='mt-8'>
+                  {tab.actionBar}
+                </div>
+                <div className='mt-6'>
+                  {tab.table}
+                </div>
+            </TabsContent>
+          ))
+        }
+     </Tabs>
+      <div>
+        {
+          <TableModal
+           isOpen={isModalOpen}
+           closeModal={()=> setIsModalOpen(false)}
+           className='pb-1'
+           headerTitle='Create Investment'
+           closeOnOverlayClick={true}
+           icon={Cross2Icon}
+           width={"38%"}
+          >
+            {modalType === 'commercial' ? ( <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='sponsor' investmentVehicleType='COMMERCIAL' />  ) : ( <CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='donor' investmentVehicleType='ENDOWMENT'/> )}
+          </TableModal>
+        }
+      </div>
+        <div>
+            {
+                <TableModal isOpen={draft}
+                            closeModal={()=> setDraft(false)}
+                            className={`pb-1`}
+                            headerTitle={"Draft"}
+                            closeOnOverlayClick={true}
+                            icon={Cross2Icon}
+                            width={"38%"}
+                >
+                    <Draft setIsOpen={() => setDraft(false)} />
+
+                </TableModal>
+            }
+        </div>
 
         </div>
     )

@@ -23,8 +23,8 @@ export function Toaster() {
 
         const IconComponent = status === "success" ? MdOutlineCheck : Cross2Icon
         return (
-          <Toast key={id} {...props} className={`border border-l-[8px]  ${status === "success"? "border-l-green500" : "border-l-error500"}`}>
-            <div className="grid gap-1 ">
+          <Toast key={id} {...props} className={`border border-l-[8px]  ${status === "success"? "border-l-green500" : "border-l-error500"}`} style={{zIndex: 700}}>
+            <div className="grid gap-1 " style={{zIndex: 700}}>
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
                <ToastDescription><div className="flex gap-2 items-center">
