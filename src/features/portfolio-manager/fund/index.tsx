@@ -76,12 +76,12 @@ const InvestmentVehicle = () => {
     const getVehicleTypeFromTab = (tabValue: string) => {
         return tabValue === 'commercialFund' ? 'COMMERCIAL' : 'ENDOWMENT';
     };
-    const { refetch } = useGetInvestmentVehiclesByTypeAndStatusQuery({
-        pageSize: 10,
+    const {refetch} = useGetInvestmentVehiclesByTypeAndStatusQuery({
+        pageSize: 30,
         pageNumber: 0,
         type: getVehicleTypeFromTab(activeTab),
         status: "DRAFT",
-    }, { skip: !draft });
+    }, {skip: !draft});
 
     useEffect(() => {
         if (draft) {
@@ -305,9 +305,9 @@ const InvestmentVehicle = () => {
                         width={"38%"}
                     >
                         {activeTab === 'commercialFund' ? (
-                            <Draft setIsOpen={() => setDraft(false)} type='sponsor' investmentVehicleType='COMMERCIAL' />
+                            <Draft setIsOpen={() => setDraft(false)} type='sponsor' investmentVehicleType='COMMERCIAL'/>
                         ) : (
-                            <Draft setIsOpen={() => setDraft(false)} type='donor' investmentVehicleType='ENDOWMENT'  />
+                            <Draft setIsOpen={() => setDraft(false)} type='donor' investmentVehicleType='ENDOWMENT'/>
                         )}
                     </TableModal>
                 }
