@@ -36,28 +36,23 @@ const initialFormValue = {
 };
 
 interface props {
-    setIsOpen?: (e: boolean) => void;
     type?: string;
     investmentVehicleType?: string;
+    handleSaveAndBackToAllDraft: () => void;
 }
 
-function CreateInvestmentVehicle({
-                                     setIsOpen,
-                                     type,
-                                     investmentVehicleType,
-                                 }: props) {
+function UpdateDraft({
+                                          type,
+                                          investmentVehicleType,
+                         handleSaveAndBackToAllDraft
+
+                                      }: props) {
     const [selectCurrency, setSelectCurrency] = useState("NGN");
     const [isError, setError] = useState("");
     const [createInvestmentVehicle, {isLoading}] =
         useCreateInvestmentVehicleMutation();
 
     const {toast} = useToast();
-
-    const handleCloseModal = () => {
-        if (setIsOpen) {
-            setIsOpen(false);
-        }
-    };
 
     const validationSchema = Yup.object().shape({
         name: Yup.string()
@@ -136,7 +131,6 @@ function CreateInvestmentVehicle({
             )
             .required("Fund manager is required"),
         size: Yup.string().required("Vehicle size is required"),
-        //  .matches(/^[1-9]\d*$/, 'Vehicle size must be a positive number and cannot start with zero'),
         minimumInvestmentAmount: Yup.string()
             .required("Minimum investment amount is required")
             .test(
@@ -147,14 +141,9 @@ function CreateInvestmentVehicle({
                     return !value || !size || parseFloat(value) <= parseFloat(size);
                 }
             ),
-        //  .matches(/^[1-9]\d*$/, 'minimum investmentAmount must be a positive number and cannot start with zero'),
         tenure: Yup.string()
             .trim()
             .required("Tenor size is required")
-            // .matches(
-            //   /^[1-9]\d*$/,
-            //   "Tenor must be a positive number and cannot start with zero."
-            // )
             .matches(
                 /^[1-9]\d{0,2}$/,
                 "Tenor must be a three-digit positive number and cannot start with zero."
@@ -215,7 +204,6 @@ function CreateInvestmentVehicle({
                     description: create.message,
                     status: "success",
                 });
-                handleCloseModal();
             }
         } catch (err) {
             const error = err as ApiError;
@@ -242,7 +230,7 @@ function CreateInvestmentVehicle({
                   }) => (
                     <Form className={`${inter.className}`}>
                         <div
-                            className="grid grid-cols-1 gap-y-4 md:max-h-[67.5vh] overflow-y-auto"
+                            className="grid grid-cols-1 gap-y-4 md:max-h-[540px] overflow-y-auto"
                             style={{
                                 scrollbarWidth: "none",
                                 msOverflowStyle: "none",
@@ -504,31 +492,6 @@ function CreateInvestmentVehicle({
                             </div>
                             <div className="relative bottom-3">
                                 <Label htmlFor="mandate">Vehicle mandate</Label>
-
-                                {/* <Field
-                 as="textarea"
-                id="mandate"
-                name="mandate"
-                className="w-full p-3 border rounded focus:outline-none mt-2 resize-none "
-                placeholder="Enter cohort description"
-                rows={4}
-                maxLength={maxChars}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { 
-                  const value = e.target.value; 
-                  if (value.length <= maxChars) { 
-                    setFieldValue("mandate", value);
-                    setError('')
-                   } }} 
-                onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => { 
-                  const paste = e.clipboardData.getData('text'); 
-                  if (paste.length + values.mandate.length > maxChars) { 
-                    e.preventDefault(); 
-                    setError('Mandate must be 2500 characters or less'); } 
-                    else {
-                      setError('')
-                    }
-                  }}
-                /> */}
                                 <Field
                                     name="mandate"
                                     component={FormikCustomQuillField}
@@ -548,29 +511,33 @@ function CreateInvestmentVehicle({
                                     </div>
                                 )}
                             </div>
-                            <div className={`lg:flex gap-4 flex justify-end mt-2 mb-4 md:mb-0`}>
-                                <Button
-                                    variant={"outline"}
-                                    type="reset"
-                                    className="w-full lg:w-36 md:w-32 h-[57px] mb-4 border-solid border-[#142854] text-[#142854]"
-                                    // onClick={() => handleReset(resetForm)}
-                                    onClick={handleCloseModal}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    variant={"default"}
-                                    className={`w-full md:w-36 w-20 h-[57px] ${
-                                        !isValid
-                                            ? "bg-neutral650 cursor-not-allowed "
-                                            : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
-                                    }`}
-                                    type="submit"
-                                    disabled={!isValid}
-                                >
-                                    {isLoading ? <Isloading/> : "Publish"}
-                                </Button>
+                            <div className={`flex justify-between mb-4 md:mb-0`}>
+                                <div className={`space-x-1 `}>
+                                    <Button
+                                        variant={"outline"}
+                                        type="button"
+                                        className="w-full lg:w-36 md:w-32 h-[57px] mb-4 border-solid border-[#142854] text-[#142854]"
+                                        onClick={handleSaveAndBackToAllDraft}
+                                    >
+                                        Save
+                                    </Button>
+                                </div>
+                                <div className="md:flex gap-4 ">
+                                    <Button
+                                        variant={"default"}
+                                        className={` md:w-32 w-20 h-[57px] ${
+                                            !isValid
+                                                ? "bg-neutral650 cursor-not-allowed "
+                                                : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
+                                        }`}
+                                        type="submit"
+                                        disabled={!isValid}
+                                    >
+                                        {isLoading ? <Isloading/> : "Publish"}
+                                    </Button>
+                                </div>
                             </div>
+
                         </div>
                         <p
                             className={`text-error500 flex justify-center items-center ${
@@ -586,4 +553,4 @@ function CreateInvestmentVehicle({
     );
 }
 
-export default CreateInvestmentVehicle;
+export default UpdateDraft;
