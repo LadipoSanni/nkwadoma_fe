@@ -56,11 +56,12 @@ export const handleContinueButton = (setStep: (step: number) => void) => {
     setStep(2);
 };
 
+
 export const handleSaveAndBackToAllDraft = (setStep: (step: number) => void) => {
     setStep(1);
 };
 
-const Draft = ({investmentVehicleType, type}: saveToDraftProps) => {
+const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
     const [selectedDraft, setSelectedDraft] = useState<Draft | null>(null);
     const [disabled, setDisabled] = useState(true);
     const [step, setStep] = useState(1);
@@ -74,6 +75,8 @@ const Draft = ({investmentVehicleType, type}: saveToDraftProps) => {
         type: investmentVehicleType,
         status: "DRAFT",
     });
+
+    // const [createInvestmentVehicle, {isLoading}] = useCreateInvestmentVehicleMutation();
 
 
     return (
@@ -105,16 +108,16 @@ const Draft = ({investmentVehicleType, type}: saveToDraftProps) => {
                         ))}
                     </div>
 
-                    <div className="flex justify-end py-4">
+                    <div className="md:flex md:justify-end py-4 w-full">
                         <UpdateDraftButton
                             disable={disabled}
                             backgroundColor="#142854"
                             textColor="white"
                             id="continueButton"
                             height="3.4rem"
+                            width={''}
                             data-testid="continueButtonModal"
                             buttonText="Continue"
-                            width="24%"
                             handleClick={() => handleContinueButton(setStep)}
                         />
                     </div>
@@ -125,6 +128,7 @@ const Draft = ({investmentVehicleType, type}: saveToDraftProps) => {
                         handleSaveAndBackToAllDraft={() => handleSaveAndBackToAllDraft(setStep)}
                         investmentVehicleType={investmentVehicleType}
                         type={type}
+                        setIsOpen={setIsOpen}
                     />
                 </div>
             )}
