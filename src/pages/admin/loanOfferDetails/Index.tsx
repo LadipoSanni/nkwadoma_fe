@@ -85,6 +85,23 @@ const LoanOfferDetails = () => {
         {label: 'State of origin ', value: data?.data?.stateOfOrigin},
         {label: 'State of residence', value: data?.data?.stateOfResidence},
         {label: "Residential address", value: data?.data?.residentialAddress},
+        {label: 'Gender', value: data?.data?.gender},
+        {label: 'Email address', value: data?.data?.email},
+        {label: 'Phone number', value: data?.data?.phoneNumer},
+        {label: 'Date of birth', value: data?.data?.dateOfBirth},
+        {label: 'Marital status', value: data?.data?.maritalStatus},
+        {label: 'Nationality', value: data?.data?.nationality},
+        {label: 'State of origin ', value: data?.data?.stateOfOrigin},
+        {label: 'State of residence', value: data?.data?.stateOfResidence},
+        {label: "Residential address", value: data?.data?.residentialAddress},{label: 'Gender', value: data?.data?.gender},
+        {label: 'Email address', value: data?.data?.email},
+        {label: 'Phone number', value: data?.data?.phoneNumer},
+        {label: 'Date of birth', value: data?.data?.dateOfBirth},
+        {label: 'Marital status', value: data?.data?.maritalStatus},
+        {label: 'Nationality', value: data?.data?.nationality},
+        {label: 'State of origin ', value: data?.data?.stateOfOrigin},
+        {label: 'State of residence', value: data?.data?.stateOfResidence},
+        {label: "Residential address", value: data?.data?.residentialAddress},
     ];
 
     const additionalDetails = [
