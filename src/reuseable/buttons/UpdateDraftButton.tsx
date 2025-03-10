@@ -31,7 +31,7 @@ const UpdateDraftButton = ({
                     color: `${textColor}`,
                     backgroundColor: `${disable ? "#D0D0D0" : backgroundColor}`
                 }}
-                className={`${inter.className} grid place-content-center p-5 rounded-md font-bold text-sm`}
+                className={`${inter.className} grid place-content-center p-5 rounded-md font-bold text-sm w-full md:w-40`}
             >
                 {isLoading ? <Isloading/> : buttonText}
 
