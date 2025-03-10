@@ -954,4 +954,136 @@ export const organizationList = [
   }
 ]
 
+interface DraftItem {
+  id: number;
+  name: string;
+  lastUpdated: string;
+  sponsors: string;
+  fundManager: string;
+  minimumInvestmentAmount: number;
+  bankPartner: string;
+  custodian: string;
+  mandate: string;
+  rate: number;
+  size: number;
+  tenure: number;
+  trustee: string;
+  draftType: "COMMERCIAL" | "ENDOWMENT";
+}
+
+export const drafts: DraftItem[] = [  {
+    id: 1,
+    name: "Girls in Tech",
+    sponsors: "Google",
+    lastUpdated: "13th Jan, 2025",
+    fundManager: "Tech Fund Managers Ltd",
+    minimumInvestmentAmount: 5000,
+    bankPartner: "Chase Bank",
+    custodian: "Custodian Trust Ltd",
+    mandate: "Support women in technology",
+    rate: 3.5,
+    size: 1000000,
+    tenure: 5,
+    trustee: "Women in STEM Foundation",
+    draftType: "COMMERCIAL",
+  },
+  {
+    id: 2,
+    name: "Empower the Youth Fund",
+    sponsors: "WhatsApp",
+    lastUpdated: "20th Jan, 2025",
+    fundManager: "Youth Empowerment Fund Ltd",
+    minimumInvestmentAmount: 10000,
+    bankPartner: "Standard Chartered",
+    custodian: "Safe Custody Ltd",
+    mandate: "Empowering young entrepreneurs",
+    rate: 4.2,
+    size: 2000000,
+    tenure: 7,
+    trustee: "Global Youth Trust",
+    draftType: "ENDOWMENT",
+  },
+  {
+    id: 3,
+    name: "Green Energy Initiative",
+    sponsors: "Tesla",
+    lastUpdated: "25th Jan, 2025",
+    fundManager: "Eco Fund Managers",
+    minimumInvestmentAmount: 15000,
+    bankPartner: "Bank of America",
+    custodian: "Eco Custodians Ltd",
+    mandate: "Invest in renewable energy projects",
+    rate: 5.0,
+    size: 3000000,
+    tenure: 10,
+    trustee: "Green Future Foundation",
+    draftType: "ENDOWMENT",
+  },
+  {
+    id: 4,
+    name: "Health for All Fund",
+    sponsors: "Pfizer",
+    lastUpdated: "30th Jan, 2025",
+    fundManager: "Global Health Investments",
+    minimumInvestmentAmount: 20000,
+    bankPartner: "Citi Bank",
+    custodian: "Health Custody Services",
+    mandate: "Expand access to healthcare",
+    rate: 3.8,
+    size: 2500000,
+    tenure: 6,
+    trustee: "Universal Health Trust",
+    draftType: "ENDOWMENT",
+  },
+  {
+    id: 5,
+    name: "Education First Initiative",
+    sponsors: "UNESCO",
+    lastUpdated: "5th Feb, 2025",
+    fundManager: "Education Growth Fund",
+    minimumInvestmentAmount: 8000,
+    bankPartner: "HSBC",
+    custodian: "Safe Learning Custodians",
+    mandate: "Increase global literacy rates",
+    rate: 4.0,
+    size: 1800000,
+    tenure: 8,
+    trustee: "Education for All Trust",
+    draftType: "ENDOWMENT",
+  },
+  {
+    id: 6,
+    name: "Education First Initiative",
+    sponsors: "UNESCO",
+    lastUpdated: "5th Feb, 2025",
+    fundManager: "Education Growth Fund",
+    minimumInvestmentAmount: 8000,
+    bankPartner: "HSBC",
+    custodian: "Safe Learning Custodians",
+    mandate: "Increase global literacy rates",
+    rate: 4.0,
+    size: 1800000,
+    tenure: 8,
+    trustee: "Education for All Trust",
+    draftType: "COMMERCIAL",
+  },
+  {
+    id: 7,
+    name: "Education First Initiative",
+    sponsors: "UNESCO",
+    lastUpdated: "5th Feb, 2025",
+    fundManager: "Education Growth Fund",
+    minimumInvestmentAmount: 8000,
+    bankPartner: "HSBC",
+    custodian: "Safe Learning Custodians",
+    mandate: "Increase global literacy rates",
+    rate: 4.0,
+    size: 1800000,
+    tenure: 8,
+    trustee: "Education for All Trust",
+    draftType: "COMMERCIAL",
+  },
+];
+
+
 
