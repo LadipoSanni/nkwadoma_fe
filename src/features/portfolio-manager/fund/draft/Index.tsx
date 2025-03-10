@@ -1,13 +1,11 @@
 "use client"
 import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
-import React, { useState } from "react";
-import { inter } from "@/app/fonts";
+import React, {useState} from "react";
+import {inter} from "@/app/fonts";
 import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
-import {
-    useGetInvestmentVehiclesByTypeAndStatusQuery
-} from "@/service/admin/fund_query";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "@/redux/store";
+import {useGetInvestmentVehiclesByTypeAndStatusQuery} from "@/service/admin/fund_query";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "@/redux/store";
 import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 
@@ -23,17 +21,17 @@ export interface Draft {
     investmentVehicleType: string | undefined;
     mandate: string;
     sponsors: string;
-    tenure: string | number;
-    size: string | number;
+    tenure: number | string;
+    size: number | string;
     rate: number | string;
-    trustee: string ;
+    trustee: string;
     custodian: string;
     bankPartner: string;
     fundManager: string;
     minimumInvestmentAmount: number | string;
     status: string;
     startDate: string;
-    // lastUpdatedDate: string;
+    lastUpdatedDate?: string;
 }
 
 export const handleClick = (
@@ -62,7 +60,7 @@ export const handleSaveAndBackToAllDraft = (setStep: (step: number) => void) => 
     setStep(1);
 };
 
-const Draft = ({ investmentVehicleType, type }: saveToDraftProps) => {
+const Draft = ({investmentVehicleType, type}: saveToDraftProps) => {
     const [selectedDraft, setSelectedDraft] = useState<Draft | null>(null);
     const [disabled, setDisabled] = useState(true);
     const [step, setStep] = useState(1);
@@ -71,18 +69,20 @@ const Draft = ({ investmentVehicleType, type }: saveToDraftProps) => {
     const saveClickedDraft = useSelector((state: RootState) => state.vehicle.saveClickedDraft);
     console.log(saveClickedDraft);
 
-    const { data, isLoading } = useGetInvestmentVehiclesByTypeAndStatusQuery({
-        pageSize: 20,
+    const {data, isLoading} = useGetInvestmentVehiclesByTypeAndStatusQuery({
+        pageSize: 30,
         pageNumber: 0,
         type: investmentVehicleType,
         status: "DRAFT",
     });
 
+
     return (
         <div className={`${inter.className}`}>
             {step === 1 ? (
                 <div className="w-full">
-                    <div className="space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                    <div
+                        className="space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                         {isLoading && <SkeletonForLoanOrg/>}
                         {data?.data.map((draft: Draft) => (
                             <div
@@ -100,7 +100,7 @@ const Draft = ({ investmentVehicleType, type }: saveToDraftProps) => {
                                     {draft.name}
                                 </h3>
                                 <p className={`${inter.className} font-medium text-sm leading-5 text-[#999999]`}>
-                                    Last updated on {"Dec, 4th 2025"}
+                                    Last updated on {draft.lastUpdatedDate || ""}
                                 </p>
                             </div>
                         ))}
