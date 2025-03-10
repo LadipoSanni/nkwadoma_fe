@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "@/redux/store";
 import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
+import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
 
 interface saveToDraftProps {
     setIsOpen?: (b: boolean) => void;

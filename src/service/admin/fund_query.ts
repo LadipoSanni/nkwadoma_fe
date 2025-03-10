@@ -30,52 +30,61 @@ export const fundApi = createApi({
     baseQuery: customFetchBaseQuery,
     tagTypes: ['vehicle'],
     endpoints: (builder) => ({
-        getAllInvestmentmentVehicle: builder.query({
-            query: (param: {
-                pageSize?: number;
-                pageNumber?: number;
-            }) => ({
-                url: '/view-all-investment-vehicle',
+      getAllInvestmentmentVehicle: builder.query({
+        query: (param: {
+            pageSize?: number;
+            pageNumber?: number;
+        }) => ({
+          url: '/view-all-investment-vehicle',
+          method: "GET",
+          params: param,
+        }),
+        providesTags: ['vehicle'],
+      }),
+      getInvestmentVehicleDetail: builder.query({
+        query:({id}) => ({
+          url: `/investment-vehicle-details/${id}`,
+          method: "GET",
+        }),
+        // providesTags: (result, error, arg) => [{ type: 'vehicle', id: arg.id }],
+        providesTags: ['vehicle'],
+      }),
+       createInvestmentVehicle: builder.mutation({
+        query: (data:{
+        name:  string,
+        investmentVehicleType: string | undefined,
+        mandate: string,
+       tenure: string,
+       size: string,
+       rate: string,
+       trustee: string,
+       custodian: string,
+       bankPartner: string,
+       fundManager: string,
+       sponsors: string,
+       minimumInvestmentAmount: number | string,
+       investmentVehicleStatus?: string
+
+        }) => ({
+                url: `/investment-vehicle`,
+                method: 'POST',
+                body: data
+        }),
+        invalidatesTags: ['vehicle']
+       }),
+       searchInvestmentVehicleByName: builder.query({
+           query: (investmentVehicleName) => ({
+               url: `/investmentvehicle/search/${investmentVehicleName}`,
+               method: 'GET'
+           }),
+       }),
+        getPublishedInvestmentVehicleByName: builder.query({
+            query: (param: { status: string }) => ({
+                url: '/view-all-investment-vehicle-by-status',
                 method: "GET",
                 params: param,
             }),
             providesTags: ['vehicle'],
-        }),
-        getInvestmentVehicleDetail: builder.query({
-            query: ({id}) => ({
-                url: `/investment-vehicle-details/${id}`,
-                method: "GET",
-            }),
-            // providesTags: (result, error, arg) => [{ type: 'vehicle', id: arg.id }],
-            providesTags: ['vehicle'],
-        }),
-        createInvestmentVehicle: builder.mutation({
-            query: (data: {
-                name: string,
-                investmentVehicleType: string | undefined,
-                mandate: string,
-                tenure: string,
-                size: string,
-                rate: string,
-                trustee: string,
-                custodian: string,
-                bankPartner: string,
-                fundManager: string,
-                sponsors: string,
-                minimumInvestmentAmount: number | string
-
-            }) => ({
-                url: `/investment-vehicle`,
-                method: 'POST',
-                body: data
-            }),
-            invalidatesTags: ['vehicle']
-        }),
-        searchInvestmentVehicleByName: builder.query({
-            query: (investmentVehicleName) => ({
-                url: `/investmentvehicle/search/${investmentVehicleName}`,
-                method: 'GET'
-            }),
         }),
         getInvestmentVehiclesByTypeAndStatus: builder.query<
             InvestmentVehicleResponse,
@@ -101,5 +110,7 @@ export const {
     useGetInvestmentVehicleDetailQuery,
     useCreateInvestmentVehicleMutation,
     useSearchInvestmentVehicleByNameQuery,
+    useGetPublishedInvestmentVehicleByNameQuery,
     useGetInvestmentVehiclesByTypeAndStatusQuery,
+
 } = fundApi;

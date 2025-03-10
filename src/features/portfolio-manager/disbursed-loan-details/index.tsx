@@ -221,10 +221,14 @@ const Index = () => {
                                         <div
                                             className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                             <div
+                                                id={`loanDisbursalDetailsName`}
+                                                data-testid={`loanDisbursalDetailsName`}
                                                 className={` ${inter.className} text-black300 md:text-black300 md:text-[14px] text-[14px`}>{item.label}</div>
-                                            {/*{item.value ? item?.value : 'Not provided'}*/}
+
                                             <div
-                                                className={`text-black500 ${inter.className} md:max-w-[40%] md:text-[14px] md:text-black500 md:break-all break-all text-black500 text-[14px]`}> 300, Herbert Macaulay Way, Alagomeji, Sabo, Yaba</div>
+                                                id={`loanDisbursalDetailsValue`}
+                                                data-testid={`loanDisbursalDetailsValue`}
+                                                className={`text-black500 ${inter.className} md:max-w-[40%] md:text-[14px] md:text-black500 md:break-all break-all text-black500 text-[14px]`}> {item.value ? item?.value : 'Not provided'} </div>
                                         </div>
                                     </li>
                                 ))

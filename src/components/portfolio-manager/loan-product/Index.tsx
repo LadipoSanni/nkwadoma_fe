@@ -9,7 +9,9 @@ import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
-import {useGetAllInvestmentmentVehicleQuery} from "@/service/admin/fund_query";
+import {
+    useGetPublishedInvestmentVehicleByNameQuery
+} from "@/service/admin/fund_query";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import 'react-quill-new/dist/quill.snow.css'
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
@@ -40,12 +42,8 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     // const [loanProductTermsAndConditionError, setLoanProductTermsAndConditionError] = useState('');
     // const [step, setStep] = useState(1);
     const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
-    const dataElement = {
-        pageNumber: 0,
-        pageSize: 200
-    }
-    const {data: investmentVehicleData} = useGetAllInvestmentmentVehicleQuery(dataElement);
 
+    const {data: investmentVehicleData} = useGetPublishedInvestmentVehicleByNameQuery({status: "PUBLISHED"});
     useEffect(() => {
         if (investmentVehicleData) {
             const obj: { [key: string]: string } = {};
@@ -272,7 +270,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                 {
                     ({errors, isValid, touched, setFieldValue, values}) => (
                         <Form className={`${inter.className}`}>
-                            <div className='grid grid-cols-1 md:max-h-[540px] overflow-y-auto'
+                            <div className='grid grid-cols-1 md:max-h-[67.5vh] overflow-y-auto'
                                  style={{
                                      scrollbarWidth: 'none',
                                      msOverflowStyle: 'none',

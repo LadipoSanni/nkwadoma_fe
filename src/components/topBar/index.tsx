@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState,useEffect} from 'react';
+import React, { useState} from 'react';
 import { IoMdMenu } from "react-icons/io";
 import { setShowMobileSideBar } from "@/redux/slice/layout/adminLayout";
 import {inter500, inter} from "@/app/fonts";
@@ -26,17 +26,17 @@ const TopBar = () => {
     const user_name = getUserDetailsFromStorage("user_name");
      const router = useRouter();
      const pathname = usePathname();
-     const [isMobile, setIsMobile] = useState(false);
+    //  const [isMobile, setIsMobile] = useState(false);
 
-      useEffect(() => {
-             const mediaQuery = window.matchMedia('(max-width: 767px)'); 
-             setIsMobile(mediaQuery.matches);
+    //   useEffect(() => {
+    //          const mediaQuery = window.matchMedia('(max-width: 767px)'); 
+    //          setIsMobile(mediaQuery.matches);
      
-             const handleResize = () => setIsMobile(mediaQuery.matches);
-             mediaQuery.addEventListener('change', handleResize);
+    //          const handleResize = () => setIsMobile(mediaQuery.matches);
+    //          mediaQuery.addEventListener('change', handleResize);
      
-             return () => mediaQuery.removeEventListener('change', handleResize);
-         }, []);
+    //          return () => mediaQuery.removeEventListener('change', handleResize);
+    //      }, []);
      
 
     const toggleArrow = () => {
@@ -56,11 +56,11 @@ const TopBar = () => {
     // const isNotificationPage = pathname === "/notifications" ;
     const isNotificationPage = /^\/notifications(?:\/.*)?$/.test(pathname || "");
 
-    const mobileNotificationHeaderClick =() => {
-        if(isMobile && currentTab === "Notification"){
-            router.push("/notifications/notification")
-        }
-    }
+    // const mobileNotificationHeaderClick =() => {
+    //     if(isMobile && currentTab === "Notification"){
+    //         router.push("/notifications/notification")
+    //     }
+    // }
 
 
     return (
@@ -78,7 +78,7 @@ const TopBar = () => {
                     <div className={` relative flex place-items-center `}>
                         <div 
                         className={` ${inter500.className} text-base md:text-base text-black500 md:text500 `}
-                        onClick={mobileNotificationHeaderClick}
+                        // onClick={mobileNotificationHeaderClick}
                         >{currentTab}</div>
                     </div>
                 </div>
@@ -124,7 +124,7 @@ const TopBar = () => {
                         <div
                             className={` flex place-content-center  object-fit  bg-[#E0FDEB]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
                             <div
-                                className={` ${inter.className} grid place-content-center  mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `} >
+                                className={` ${inter500.className} grid place-content-center  mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `} >
                                 {getFirstLetterOfWord(user_name)}
                             </div>
                         </div>
