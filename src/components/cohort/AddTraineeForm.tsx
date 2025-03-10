@@ -199,7 +199,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                 {({ errors, isValid, touched, setFieldValue }) => (
                     <Form className={`${inter.className}`}>
                         {step === 1 ? (
-                            <div className="grid grid-cols-1 gap-y-4  md:max-h-[520px] overflow-y-auto">
+                            <div className="grid grid-cols-1 gap-y-4  md:max-h-[67.5vh] overflow-y-auto">
                                 <div>
                                     <Label htmlFor="firstName">First name</Label>
                                     <Field
