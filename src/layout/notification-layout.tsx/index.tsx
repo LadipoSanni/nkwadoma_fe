@@ -158,7 +158,7 @@ function NotificationLayout({children}: Props) {
           />
         </div>
       ) : (
-          <div>
+          <div className='h-full'>
         <div className='md:px-3 md:pr-7'>
         <SearchInput
               id={'ProgramSearchInput'}
@@ -195,7 +195,13 @@ function NotificationLayout({children}: Props) {
             </button>
           </div>
         </div>
-         <div className='md:max-h-[60vh] max-h-[58vh]  overflow-y-auto'>
+         <div className='md:max-h-[56vh] max-h-[58vh]  overflow-y-auto'
+         style={{
+          overflowX: "hidden",  
+          overflowY: "auto",    
+        }}
+        
+         >
           <Tabs
           orientation="vertical" 
           >

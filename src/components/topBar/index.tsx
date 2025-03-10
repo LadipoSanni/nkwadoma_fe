@@ -56,11 +56,11 @@ const TopBar = () => {
     // const isNotificationPage = pathname === "/notifications" ;
     const isNotificationPage = /^\/notifications(?:\/.*)?$/.test(pathname || "");
 
-    const mobileNotificationHeaderClick =() => {
-        if(isMobile && currentTab === "Notification"){
-            router.push("/notifications/notification")
-        }
-    }
+    // const mobileNotificationHeaderClick =() => {
+    //     if(isMobile && currentTab === "Notification"){
+    //         router.push("/notifications/notification")
+    //     }
+    // }
 
 
     return (
@@ -78,7 +78,7 @@ const TopBar = () => {
                     <div className={` relative flex place-items-center `}>
                         <div 
                         className={` ${inter500.className} text-base md:text-base text-black500 md:text500 `}
-                        onClick={mobileNotificationHeaderClick}
+                        // onClick={mobileNotificationHeaderClick}
                         >{currentTab}</div>
                     </div>
                 </div>
