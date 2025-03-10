@@ -85,23 +85,6 @@ const LoanOfferDetails = () => {
         {label: 'State of origin ', value: data?.data?.stateOfOrigin},
         {label: 'State of residence', value: data?.data?.stateOfResidence},
         {label: "Residential address", value: data?.data?.residentialAddress},
-        {label: 'Gender', value: data?.data?.gender},
-        {label: 'Email address', value: data?.data?.email},
-        {label: 'Phone number', value: data?.data?.phoneNumer},
-        {label: 'Date of birth', value: data?.data?.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.maritalStatus},
-        {label: 'Nationality', value: data?.data?.nationality},
-        {label: 'State of origin ', value: data?.data?.stateOfOrigin},
-        {label: 'State of residence', value: data?.data?.stateOfResidence},
-        {label: "Residential address", value: data?.data?.residentialAddress},{label: 'Gender', value: data?.data?.gender},
-        {label: 'Email address', value: data?.data?.email},
-        {label: 'Phone number', value: data?.data?.phoneNumer},
-        {label: 'Date of birth', value: data?.data?.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.maritalStatus},
-        {label: 'Nationality', value: data?.data?.nationality},
-        {label: 'State of origin ', value: data?.data?.stateOfOrigin},
-        {label: 'State of residence', value: data?.data?.stateOfResidence},
-        {label: "Residential address", value: data?.data?.residentialAddress},
     ];
 
     const additionalDetails = [
@@ -175,14 +158,11 @@ const LoanOfferDetails = () => {
     const {toast} = useToast()
     const disburseLoanOffer = async () => {
 
-        console.log('start disbursment progress')
         const body = {
             loanOfferId: id,
             loaneeId: data?.data?.loaneeId
         }
-        console.log('parane: ', body);
         const response = await disburseLoan(body)
-        console.log('response: ', response)
         if (response?.error) {
             toast({
                 status: 'error',
@@ -257,7 +237,6 @@ const LoanOfferDetails = () => {
                         <div className={`md:w-[40%]`}>
                             <Avatar id={'loaneeImageOnLoanOfferDetails'} data-testid={'loaneeImageOnLoanOfferDetails'}
                                     className={`h-[5.625rem] w-[5.625rem] md:w-[7.5rem] md:h-[7.5rem]`}>
-                                {/*`/234d70b3-ec71-4d68-8696-5f427a617fb7.jpeg`*/}
                                 <AvatarImage src={data?.data?.image} alt="@shadcn"
                                              style={{objectFit: 'cover'}}/>
                                 <AvatarFallback>{userFirstLetter}</AvatarFallback>
@@ -333,8 +312,6 @@ const LoanOfferDetails = () => {
                                 <Button
                                     className={'w-full justify-center md:w-fit md:px-6 md:py-3 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                                     onClick={currentTab === 3 ? disburseLoanOffer : handleNext}
-                                    // disabled={currentTab === loanOfferDetailsTab.length - 1}
-
                                 >
                                     {isLoading && <Loader2 className="animate-spin"/>}
                                     {currentTab === 3 ? 'Disburse loan' : 'Continue'}
