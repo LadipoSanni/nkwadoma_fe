@@ -70,7 +70,7 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
     useSelector((state: RootState) => state.vehicle.saveClickedDraft);
 
     const {data, isLoading} = useGetInvestmentVehiclesByTypeAndStatusQuery({
-        pageSize: 30,
+        pageSize: 50,
         pageNumber: 0,
         type: investmentVehicleType,
         status: "DRAFT",

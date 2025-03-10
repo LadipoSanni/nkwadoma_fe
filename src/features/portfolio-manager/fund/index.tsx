@@ -77,7 +77,7 @@ const InvestmentVehicle = () => {
         return tabValue === 'commercialFund' ? 'COMMERCIAL' : 'ENDOWMENT';
     };
     const {refetch} = useGetInvestmentVehiclesByTypeAndStatusQuery({
-        pageSize: 30,
+        pageSize: 50,
         pageNumber: 0,
         type: getVehicleTypeFromTab(activeTab),
         status: "DRAFT",
