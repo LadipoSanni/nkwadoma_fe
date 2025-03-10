@@ -14,6 +14,7 @@ import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 import {useSelector} from "react-redux";
 import {RootState} from "@/redux/store";
+import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 
 interface ApiError {
     status: number;
@@ -26,12 +27,13 @@ interface props {
     type?: string;
     investmentVehicleType?: string;
     handleSaveAndBackToAllDraft: () => void;
+    setIsOpen?: (b: boolean) => void;
 }
 
 function UpdateDraft({
                          type,
                          investmentVehicleType,
-                         handleSaveAndBackToAllDraft
+                         handleSaveAndBackToAllDraft, setIsOpen
 
                      }: props) {
     const [selectCurrency, setSelectCurrency] = useState("NGN");
@@ -185,8 +187,19 @@ function UpdateDraft({
             ),
     });
 
+    const networkPopUp = ToastPopUp({
+        description: "No internet connection",
+        status: "error",
+    });
 
     const handleSubmit = async (values: typeof initialFormValue) => {
+        if (!navigator.onLine) {
+            networkPopUp.showToast();
+            if (setIsOpen) {
+                setIsOpen(false);
+            }
+            return;
+        }
         const formData = {
             id: values.id,
             name: values.name,
@@ -209,10 +222,14 @@ function UpdateDraft({
                     description: create.message,
                     status: "success",
                 });
+                if (setIsOpen) {
+                    setIsOpen(false);
+                }
             }
         } catch (err) {
             const error = err as ApiError;
-            setError(error?.data?.message);
+            setError(error ? error?.data?.message : "Error occurred");
+            // setError(error?.data?.message : "An error occured");
         }
     };
 
@@ -516,7 +533,7 @@ function UpdateDraft({
                                     </div>
                                 )}
                             </div>
-                            <div className={`flex justify-between mb-4 md:mb-0`}>
+                            <div className={`md:flex md:justify-between mb-4 md:mb-0`}>
                                 <div className={`space-x-1 `}>
                                     <Button
                                         variant={"outline"}
@@ -530,7 +547,7 @@ function UpdateDraft({
                                 <div className="md:flex gap-4 ">
                                     <Button
                                         variant={"default"}
-                                        className={` md:w-32 w-20 h-[57px] ${
+                                        className={`w-full md:w-32 lg:w-36  h-[57px] ${
                                             !isValid
                                                 ? "bg-neutral650 cursor-not-allowed "
                                                 : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
