@@ -66,8 +66,7 @@ const Draft = ({investmentVehicleType, type}: saveToDraftProps) => {
     const [step, setStep] = useState(1);
 
     const dispatch = useDispatch();
-    const saveClickedDraft = useSelector((state: RootState) => state.vehicle.saveClickedDraft);
-    console.log(saveClickedDraft);
+    useSelector((state: RootState) => state.vehicle.saveClickedDraft);
 
     const {data, isLoading} = useGetInvestmentVehiclesByTypeAndStatusQuery({
         pageSize: 30,
