@@ -67,14 +67,7 @@ const ProgramView = () => {
     const [view, setView] = useState<string>('grid');
     const [searchTerm, setSearchTerm] = useState('');
     const {toast} = useToast()
-    // const [dummyData, setDummyData] = useState<{
-    //     cohorts: number;
-    //     description: string;
-    //     months: number;
-    //     title: string;
-    //     trainees: number;
-    //     programId: string;
-    // }[]>([]);
+
     const router = useRouter()
 
     const [programView, setProgramView] = useState<viewAllProgramProps[]>([])
@@ -97,7 +90,6 @@ const ProgramView = () => {
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [page] = useState(0);
-    // const [totalPage, setTotalPage] = useState(0);
     const size = 300;
     const [deleteProgram, setDeleteProgram] = useState("")
 
@@ -108,19 +100,11 @@ const ProgramView = () => {
     const [deleteItem] = useDeleteProgramMutation()
     const {data: searchResults} = useSearchProgramQuery(searchTerm, {skip: !searchTerm});
 
-    // useEffect(() => {
-    //     if (data && data?.data) {
-    //         const programs = data?.data?.body
-    //         setProgramView(programs)
-    //         // setTotalPage(data?.data?.totalPages)
-    //     }
 
-    // }, [data])
 
 
     const handleRowClick = (row: TableRowData) => {
         router.push('/program/details')
-        // console.log('The row: ',row.id)
         setItemSessionStorage("programId", String(row.id))
 
 
@@ -161,7 +145,9 @@ const ProgramView = () => {
             sortable: true,
             id: 'programStatus',
             selector: (row: TableRowData) => <span
-                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.programStatus === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"} `}>{capitalizeFirstLetters(String(row.programStatus ?? "Declined"))}</span>
+                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.programStatus === "ACTIVE" ? "text-success600 bg-success50" : "text-error600 bg-error50"} `}>
+                {capitalizeFirstLetters(String(row.programStatus ?? "Declined"))}
+            </span>
         },
         {
             title: 'No. of Cohorts',
@@ -197,17 +183,7 @@ const ProgramView = () => {
 
     ]
 
-    // useEffect(() => {
-    //     const data = Array.from({length: 9}, (_, index) => ({
-    //         cohorts: Math.floor(Math.random() * 20) + 1,
-    //         description: `Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes.${index + 1}`,
-    //         months: Math.floor(Math.random() * 12) + 1,
-    //         title: `Program Thinking ${index + 1}`,
-    //         trainees: Math.floor(Math.random() * 100) + 1,
-    //         programId: `${index + 1}`
-    //     }));
-    //     setDummyData(data);
-    // }, []);
+
     const {data: program, isLoading: loading, refetch} = useGetProgramByIdQuery({id: programId}, {
         skip: !programId,
         refetchOnMountOrArgChange: true
@@ -330,11 +306,7 @@ const ProgramView = () => {
     }, [editOpen, program])
 
 
-    // const tagButtonData = [
-    //     {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
-    //     {tagIcon: MdOutlineDateRange, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
-    //     {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "cohorts"},
-    // ];
+
 
     const [isOpen, setIsOpen] = React.useState(false);
 

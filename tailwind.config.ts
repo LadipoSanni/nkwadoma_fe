@@ -61,7 +61,7 @@ const config: Config = {
   			green400: '#389457',
   			green500: '#06792D',
   			green600: '#056E29',
-			green650: 'B4E5C8',
+			green650: '#B4E5C8',
   			green700: '#045620',
 			green750: '#0D9B48',
   			green800: '#034319',
