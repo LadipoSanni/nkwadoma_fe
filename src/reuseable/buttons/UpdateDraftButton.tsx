@@ -3,6 +3,7 @@ import React from 'react';
 import {AuthButtonPropsType} from "@/types/ButtonTypes";
 import {Button} from "@/components/ui/button"
 import Isloading from "@/reuseable/display/Isloading";
+import { inter } from '../textArea/FormikCustomQuillField';
 
 
 const UpdateDraftButton = ({
@@ -30,7 +31,7 @@ const UpdateDraftButton = ({
                     color: `${textColor}`,
                     backgroundColor: `${disable ? "#D0D0D0" : backgroundColor}`
                 }}
-                className={`grid place-content-center rounded font-bold text-sm`}
+                className={`${inter.className} grid place-content-center p-5 rounded-md font-bold text-sm w-full md:w-40`}
             >
                 {isLoading ? <Isloading/> : buttonText}
 

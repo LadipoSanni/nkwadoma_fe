@@ -8,10 +8,14 @@ import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import Isloading from "@/reuseable/display/Isloading";
 import {useCreateInvestmentVehicleMutation} from "@/service/admin/fund_query";
 import {useToast} from "@/hooks/use-toast";
+import {useSelector} from "react-redux";
+import {RootState} from "@/redux/store";
 import {validateNumber, validatePositiveNumberWithIndexNumbers} from "@/utils/Format";
 import {validateText, validateNumberLimit} from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
+import styles from "@/components/selected-loan/SelectedLoan.module.css";
+
 
 interface ApiError {
     status: number;
@@ -20,46 +24,54 @@ interface ApiError {
     };
 }
 
-const initialFormValue = {
-    name: "",
-    sponsors: "",
-    fundManager: "",
-    minimumInvestmentAmount: "",
-    mandate: "",
-    tenure: "",
-    size: "",
-    rate: "",
-    bankPartner: "",
-    trustee: "",
-    custodian: "",
-    investmentVehicleType: "",
-};
 
 interface props {
+    setIsOpen?: (e: boolean) => void;
     type?: string;
     investmentVehicleType?: string;
     handleSaveAndBackToAllDraft: () => void;
 }
 
 function UpdateDraft({
-                                          type,
-                                          investmentVehicleType,
+                         setIsOpen,
+                         type,
+                         investmentVehicleType,
                          handleSaveAndBackToAllDraft
-
-                                      }: props) {
+                     }: props) {
     const [selectCurrency, setSelectCurrency] = useState("NGN");
     const [isError, setError] = useState("");
-    const [createInvestmentVehicle, {isLoading}] =
-        useCreateInvestmentVehicleMutation();
-
+    const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
+    const [createInvestmentVehicle, {isLoading}] = useCreateInvestmentVehicleMutation();
     const {toast} = useToast();
+
+    const draftData = useSelector((state: RootState) => state.vehicle.saveClickedDraft);
+
+    const initialFormValue = {
+        id: draftData?.id,
+        name: draftData?.name || "",
+        sponsors: draftData?.sponsors || "",
+        fundManager: draftData?.fundManager || "",
+        minimumInvestmentAmount: draftData?.minimumInvestmentAmount || "",
+        mandate: draftData?.mandate || "",
+        tenure: draftData?.tenure || "",
+        size: draftData?.size || "",
+        rate: draftData?.rate || "",
+        bankPartner: draftData?.bankPartner || "",
+        trustee: draftData?.trustee || "",
+        custodian: draftData?.custodian || "",
+        investmentVehicleType: draftData?.investmentVehicleType || "",
+    };
+
+    const handleCloseModal = () => {
+        if (setIsOpen) {
+            setIsOpen(false);
+        }
+    };
 
     const validationSchema = Yup.object().shape({
         name: Yup.string()
             .trim()
             .matches(
-                // /^[a-zA-Z0-9\-_' ]*$/,
-                // "name can include letters,numbers, hyphens,apostrophe and underscores only."
                 /^[a-zA-Z][a-zA-Z0-9\-' ]*$/,
                 "Name can include letters, numbers, hyphens and apostrophes only, and must start with a letter."
             )
@@ -83,13 +95,9 @@ function UpdateDraft({
             .required("vehicle sponsor is required")
             .max(100, "Program name cannot be more than 100 characters.")
             .matches(
-                // /^[a-zA-Z\-_ ]*$/,
-                // " sponsors can include letters, hyphens, and underscores only."
                 /^[a-zA-Z][a-zA-Z\-' ]*$/,
-                // "Sponsors can include letters, - and ' only and cannot start with -,' ."
                 "Invalid sponsor name"
             )
-            //  .matches(/^[a-zA-Z\s]+$/, 'Vehicle sponsor can only contain letters and spaces.')
             .test(
                 "valid-sponsor",
                 "Sponsor cannot be only numbers or special characters.",
@@ -107,11 +115,7 @@ function UpdateDraft({
             .trim()
 
             .matches(
-                // /^[a-zA-Z\-_ ]*$/,
-                // "Fund manager can include letters, hyphens, and underscores only."
-
                 /^[a-zA-Z][a-zA-Z\-' ]*$/,
-                // "Fund can include letters, - and ' only and cannot start with - and ' ."
                 "Invalid fund manager name"
             )
 
@@ -141,6 +145,7 @@ function UpdateDraft({
                     return !value || !size || parseFloat(value) <= parseFloat(size);
                 }
             ),
+        //  .matches(/^[1-9]\d*$/, 'minimum investmentAmount must be a positive number and cannot start with zero'),
         tenure: Yup.string()
             .trim()
             .required("Tenor size is required")
@@ -166,7 +171,6 @@ function UpdateDraft({
             .max(100, "Trustee cannot be more than 100 characters.")
             .matches(
                 /^[a-zA-Z][a-zA-Z\-' ]*$/,
-                // "Trustee can include letters, - and ' only and cannot start with - and ' ."
                 "Invalid trustee name"
             )
             .required("Trustee is required"),
@@ -176,20 +180,83 @@ function UpdateDraft({
             .max(100, "Custodian cannot be more than 100 characters.")
             .matches(
                 /^[a-zA-Z][a-zA-Z\-' ]*$/,
-                // "Custodian can include letters, - and ' only and cannot start with - and ' ."
                 "Invalid custodian name"
             ),
     });
 
+    const draftValidationSchema = Yup.object().shape({
+        name: Yup.string()
+            .trim()
+            .required("Name is required"),
+    });
+
+
+    const handleDraft = async (values: typeof initialFormValue) => {
+        setVehicleTypeStatus("DRAFT")
+        const formData = {
+            id: values.id,
+            name: values.name,
+            sponsors: values.sponsors,
+            fundManager: values.fundManager,
+            minimumInvestmentAmount: values.minimumInvestmentAmount,
+            mandate: values.mandate,
+            tenure: values.tenure || "1",
+            size: values.size,
+            rate: values.rate,
+            bankPartner: values.bankPartner,
+            trustee: values.trustee,
+            custodian: values.custodian,
+            investmentVehicleType: investmentVehicleType,
+            investmentVehicleStatus: "DRAFT"
+        };
+        try {
+            const create = await createInvestmentVehicle(formData).unwrap();
+            if (create) {
+                toast({
+                    description: "Draft changes saved successfully",
+                    status: "success",
+                });
+                handleSaveAndBackToAllDraft();
+            }
+        } catch (err) {
+            const error = err as ApiError;
+            setError(error?.data?.message);
+        }
+    };
+
+    const handleSaveDraft = async (
+        values: typeof initialFormValue,
+        setFieldError: (field: string, message: string) => void
+    ) => {
+        try {
+            await draftValidationSchema.validate(values, {abortEarly: false});
+            await handleDraft(values);
+        } catch (validationErrors) {
+            if (validationErrors instanceof Yup.ValidationError) {
+                const errors = validationErrors.inner.reduce((acc, err) => {
+                    acc[err.path || ""] = err.message;
+                    return acc;
+                }, {} as Record<string, string>);
+                setFieldError("name", errors.name);
+                if (errors.name) {
+                    toast({
+                        description: errors.name,
+                        status: "error",
+                    });
+                }
+            }
+        }
+    };
 
     const handleSubmit = async (values: typeof initialFormValue) => {
+        setVehicleTypeStatus("PUBLISH")
         const formData = {
             name: values.name,
             sponsors: values.sponsors,
             fundManager: values.fundManager,
             minimumInvestmentAmount: values.minimumInvestmentAmount,
             mandate: values.mandate,
-            tenure: values.tenure,
+            tenure: values.tenure || "1",
             size: values.size,
             rate: values.rate,
             bankPartner: values.bankPartner,
@@ -204,6 +271,7 @@ function UpdateDraft({
                     description: create.message,
                     status: "success",
                 });
+                handleCloseModal();
             }
         } catch (err) {
             const error = err as ApiError;
@@ -211,7 +279,7 @@ function UpdateDraft({
         }
     };
 
-    // const maxChars = 1500;
+
     return (
         <div id="createInvestmentVehicleId">
             <Formik
@@ -226,306 +294,290 @@ function UpdateDraft({
                       touched,
                       setFieldValue,
                       setFieldError,
-                      // values
+                      values
                   }) => (
                     <Form className={`${inter.className}`}>
                         <div
-                            className="grid grid-cols-1 gap-y-4 md:max-h-[540px] overflow-y-auto"
+                            className={`grid grid-cols-1 gap-y-4`}
                             style={{
                                 scrollbarWidth: "none",
                                 msOverflowStyle: "none",
                             }}
                         >
-                            <div>
-                                <Label htmlFor="name">Name</Label>
-                                <Field
-                                    id="name"
-                                    name="name"
-                                    placeholder="Enter name"
-                                    className="w-full p-3 border rounded focus:outline-none mt-2"
-                                    onChange={validateText("name", setFieldValue)}
-                                    //   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("name", e.target.value.replace(/[^a-zA-Z0-9_\-\/]/g,''))}
-                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    //     const value = e.target.value; const regex = /^[a-zA-Z][a-zA-Z0-9_\-\/]*$/;
-                                    //      if (regex.test(value) || value === "") {
-                                    //          setFieldValue("name", value);
-                                    //         }
-
-                                    //          else {
-                                    //          setFieldValue("name", value.replace(/[^a-zA-Z0-9_\-\/]/g, '').replace(/^[^a-zA-Z]/, ''));
-                                    //         } }}
-                                />
-                                {errors.name && touched.name && (
-                                    <ErrorMessage
+                            <div className={`${styles.scrollBarNone} grid grid-cols-1 gap-y-4 md:max-h-[67.5vh] overflow-y-auto`}>
+                                <div>
+                                    <Label htmlFor="name">Name</Label>
+                                    <Field
+                                        id="name"
                                         name="name"
-                                        component="div"
-                                        className="text-red-500 text-sm"
-                                    />
-                                )}
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-4 w-full">
-                                <div>
-                                    <Label htmlFor="sponsors">Vehicle {type}</Label>
-                                    <Field
-                                        id="sponsors"
-                                        name="sponsors"
-                                        placeholder="Enter vehicle sponsor"
+                                        placeholder="Enter name"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("sponsor", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
-                                        onChange={validateText("sponsors", setFieldValue)}
+                                        onChange={validateText("name", setFieldValue)}
                                     />
-                                    {errors.sponsors && touched.sponsors && (
+                                    {errors.name && touched.name && (
                                         <ErrorMessage
-                                            name="sponsors"
+                                            name="name"
                                             component="div"
                                             className="text-red-500 text-sm"
                                         />
                                     )}
                                 </div>
-                                <div>
-                                    <Label htmlFor="fundManager">Fund manager</Label>
-                                    <Field
-                                        id="fundManager"
-                                        name="fundManager"
-                                        placeholder="Enter fund manager"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("fundManager", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
-                                        onChange={validateText("fundManager", setFieldValue)}
-                                    />
-                                    {errors.fundManager && touched.fundManager && (
-                                        <ErrorMessage
-                                            name="fundManager"
-                                            component="div"
-                                            className="text-red-500 text-sm"
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-4 w-full">
-                                <div>
-                                    <Label htmlFor="size">Vehicle size</Label>
-                                    <div className="flex gap-2 items-center justify-center">
-                                        <CurrencySelectInput
-                                            selectedcurrency={selectCurrency}
-                                            setSelectedCurrency={setSelectCurrency}
-                                        />
+                                <div className="grid md:grid-cols-2 gap-4 w-full">
+                                    <div>
+                                        <Label htmlFor="sponsors">Vehicle {type}</Label>
                                         <Field
-                                            id="size"
-                                            name="size"
-                                            type="text"
-                                            component={CustomInputField}
-                                            //  className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2 "
-                                            onChange={validateNumber("size", setFieldValue)}
+                                            id="sponsors"
+                                            name="sponsors"
+                                            placeholder="Enter vehicle sponsor"
+                                            className="w-full p-3 border rounded focus:outline-none mt-2"
+                                            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("sponsor", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                                            onChange={validateText("sponsors", setFieldValue)}
                                         />
-                                    </div>
-                                    <div className="relative bottom-5">
-                                        {errors.size && touched.size && (
+                                        {errors.sponsors && touched.sponsors && (
                                             <ErrorMessage
-                                                name="size"
+                                                name="sponsors"
+                                                component="div"
+                                                className="text-red-500 text-sm"
+                                            />
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="fundManager">Fund manager</Label>
+                                        <Field
+                                            id="fundManager"
+                                            name="fundManager"
+                                            placeholder="Enter fund manager"
+                                            className="w-full p-3 border rounded focus:outline-none mt-2"
+                                            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("fundManager", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
+                                            onChange={validateText("fundManager", setFieldValue)}
+                                        />
+                                        {errors.fundManager && touched.fundManager && (
+                                            <ErrorMessage
+                                                name="fundManager"
                                                 component="div"
                                                 className="text-red-500 text-sm"
                                             />
                                         )}
                                     </div>
                                 </div>
-                                <div>
-                                    <Label
-                                        htmlFor=" minimumInvestmentAmount"
-                                        style={{
-                                            whiteSpace: "nowrap",
-                                            overflow: "hidden",
-                                            textOverflow: "ellipsis",
-                                            display: "inline-block",
-                                            maxWidth: "100%",
-                                        }}
-                                    >
-                                        Minimum investment amount
-                                    </Label>
-                                    <div className="flex gap-2 items-center justify-center">
-                                        <CurrencySelectInput
-                                            selectedcurrency={selectCurrency}
-                                            setSelectedCurrency={setSelectCurrency}
-                                        />
-                                        <Field
-                                            id="minimumInvestemntAmount"
-                                            name="minimumInvestmentAmount"
-                                            // className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2"
-                                            component={CustomInputField}
-                                            onChange={validateNumber(
-                                                "minimumInvestmentAmount",
-                                                setFieldValue
-                                            )}
-                                        />
-                                    </div>
-                                    <div className="relative bottom-5">
-                                        {errors.minimumInvestmentAmount &&
-                                            touched.minimumInvestmentAmount && (
+                                <div className="grid md:grid-cols-2 gap-4 w-full">
+                                    <div>
+                                        <Label htmlFor="size">Vehicle size</Label>
+                                        <div className="flex gap-2 items-center justify-center">
+                                            <CurrencySelectInput
+                                                selectedcurrency={selectCurrency}
+                                                setSelectedCurrency={setSelectCurrency}
+                                            />
+                                            <Field
+                                                id="size"
+                                                name="size"
+                                                type="text"
+                                                component={CustomInputField}
+                                                //  className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2 "
+                                                onChange={validateNumber("size", setFieldValue)}
+                                            />
+                                        </div>
+                                        <div className="relative bottom-5">
+                                            {errors.size && touched.size && (
                                                 <ErrorMessage
-                                                    name="minimumInvestmentAmount"
+                                                    name="size"
                                                     component="div"
                                                     className="text-red-500 text-sm"
                                                 />
                                             )}
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-4 w-full relative bottom-4">
-                                <div>
-                                    <Label htmlFor="rate">Interest rate (%)</Label>
-                                    <Field
-                                        id="rate"
-                                        name="rate"
-                                        placeholder="0"
-                                        type="text"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        onChange={investmentVehicleType === 'ENDOWMENT' ? validatePositiveNumberWithIndexNumbers(
-                                            "rate",
-                                            setFieldValue,
-                                            100,
-                                            0
-                                        ) : validatePositiveNumberWithIndexNumbers(
-                                            "rate",
-                                            setFieldValue,
-                                            100,
-                                            1
-                                        )}
-                                    />
-                                    {errors.rate && touched.rate && (
-                                        <ErrorMessage
-                                            name="rate"
-                                            component="div"
-                                            className="text-red-500 text-sm"
-                                        />
-                                    )}
-                                </div>
-                                <div>
-                                    <Label htmlFor="tenure">Tenor (months)</Label>
-                                    <Field
-                                        id="tenure"
-                                        name="tenure"
-                                        placeholder="0"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        onChange={validateNumberLimit(
-                                            "tenure",
-                                            setFieldValue,
-                                            setFieldError,
-                                            3,
-                                            "Tenure must be a positive number, must not start with zero, and must be a maximum of three digits."
-                                        )}
-                                    />
-                                    {errors.tenure && touched.tenure && (
-                                        <ErrorMessage
-                                            name="tenure"
-                                            component="div"
-                                            className="text-red-500 text-sm"
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                            <div className="relative bottom-3">
-                                <Label htmlFor="name">Bank partner</Label>
-                                <Field
-                                    id="bankPartner"
-                                    name="bankPartner"
-                                    placeholder="Enter bank partner"
-                                    className="w-full p-3 border rounded focus:outline-none mt-2"
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setFieldValue(
-                                            "bankPartner",
-                                            e.target.value.replace(/[^a-zA-Z\s]/g, "")
-                                        )
-                                    }
-                                />
-                                {errors.bankPartner && touched.bankPartner && (
-                                    <ErrorMessage
-                                        name="bankPartner"
-                                        component="div"
-                                        className="text-red-500 text-sm"
-                                    />
-                                )}
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-4 w-full relative bottom-3">
-                                <div>
-                                    <Label htmlFor="trustee">Trustee</Label>
-                                    <Field
-                                        id="trustee"
-                                        name="trustee"
-                                        placeholder="Enter trustee"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        //   setFieldValue(
-                                        //     "trustee",
-                                        //     e.target.value.replace(/[^a-zA-Z\s]/g, "")
-                                        //   )
-                                        // }
-                                    />
-                                    {errors.trustee && touched.trustee && (
-                                        <ErrorMessage
-                                            name="trustee"
-                                            component="div"
-                                            className="text-red-500 text-sm"
-                                        />
-                                    )}
-                                </div>
-                                <div>
-                                    <Label htmlFor="custodian">Custodian</Label>
-                                    <Field
-                                        id="custodian"
-                                        name="custodian"
-                                        placeholder="Enter custodian"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        //   setFieldValue(
-                                        //     "custodian",
-                                        //     e.target.value.replace(/[^a-zA-Z\s]/g, "")
-                                        //   )
-                                        // }
-                                    />
-                                    {errors.custodian && touched.custodian && (
-                                        <ErrorMessage
-                                            name="custodian"
-                                            component="div"
-                                            className="text-red-500 text-sm"
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                            <div className="relative bottom-3">
-                                <Label htmlFor="mandate">Vehicle mandate</Label>
-                                <Field
-                                    name="mandate"
-                                    component={FormikCustomQuillField}
-                                    maximumDescription={2500}
-                                    // label={"Mandate"}
-                                    placeholder={"Enter mandate..."}
-                                />
-                                {errors.mandate && touched.mandate && (
                                     <div>
-
+                                        <Label
+                                            htmlFor=" minimumInvestmentAmount"
+                                            style={{
+                                                whiteSpace: "nowrap",
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                                display: "inline-block",
+                                                maxWidth: "100%",
+                                            }}
+                                        >
+                                            Minimum investment amount
+                                        </Label>
+                                        <div className="flex gap-2 items-center justify-center">
+                                            <CurrencySelectInput
+                                                selectedcurrency={selectCurrency}
+                                                setSelectedCurrency={setSelectCurrency}
+                                            />
+                                            <Field
+                                                id="minimumInvestemntAmount"
+                                                name="minimumInvestmentAmount"
+                                                // className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2"
+                                                component={CustomInputField}
+                                                onChange={validateNumber(
+                                                    "minimumInvestmentAmount",
+                                                    setFieldValue
+                                                )}
+                                            />
+                                        </div>
+                                        <div className="relative bottom-5">
+                                            {errors.minimumInvestmentAmount &&
+                                                touched.minimumInvestmentAmount && (
+                                                    <ErrorMessage
+                                                        name="minimumInvestmentAmount"
+                                                        component="div"
+                                                        className="text-red-500 text-sm"
+                                                    />
+                                                )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-4 w-full relative bottom-4">
+                                    <div>
+                                        <Label htmlFor="rate">Interest rate (%)</Label>
+                                        <Field
+                                            id="rate"
+                                            name="rate"
+                                            placeholder="0"
+                                            type="text"
+                                            className="w-full p-3 border rounded focus:outline-none mt-2"
+                                            onChange={investmentVehicleType === 'ENDOWMENT' ? validatePositiveNumberWithIndexNumbers(
+                                                "rate",
+                                                setFieldValue,
+                                                100,
+                                                0
+                                            ) : validatePositiveNumberWithIndexNumbers(
+                                                "rate",
+                                                setFieldValue,
+                                                100,
+                                                1
+                                            )}
+                                        />
+                                        {errors.rate && touched.rate && (
+                                            <ErrorMessage
+                                                name="rate"
+                                                component="div"
+                                                className="text-red-500 text-sm"
+                                            />
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="tenure">Tenor (months)</Label>
+                                        <Field
+                                            id="tenure"
+                                            name="tenure"
+                                            placeholder="0"
+                                            className="w-full p-3 border rounded focus:outline-none mt-2"
+                                            onChange={validateNumberLimit(
+                                                "tenure",
+                                                setFieldValue,
+                                                setFieldError,
+                                                3,
+                                                "Tenure must be a positive number, must not start with zero, and must be a maximum of three digits."
+                                            )}
+                                        />
+                                        {errors.tenure && touched.tenure && (
+                                            <ErrorMessage
+                                                name="tenure"
+                                                component="div"
+                                                className="text-red-500 text-sm"
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="relative bottom-3">
+                                    <Label htmlFor="name">Bank partner</Label>
+                                    <Field
+                                        id="bankPartner"
+                                        name="bankPartner"
+                                        placeholder="Enter bank partner"
+                                        className="w-full p-3 border rounded focus:outline-none mt-2"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                            setFieldValue(
+                                                "bankPartner",
+                                                e.target.value.replace(/[^a-zA-Z\s]/g, "")
+                                            )
+                                        }
+                                    />
+                                    {errors.bankPartner && touched.bankPartner && (
                                         <ErrorMessage
-                                            name="mandate"
+                                            name="bankPartner"
                                             component="div"
-                                            id="editCohortDescriptionError"
                                             className="text-red-500 text-sm"
                                         />
+                                    )}
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-4 w-full relative bottom-3">
+                                    <div>
+                                        <Label htmlFor="trustee">Trustee</Label>
+                                        <Field
+                                            id="trustee"
+                                            name="trustee"
+                                            placeholder="Enter trustee"
+                                            className="w-full p-3 border rounded focus:outline-none mt-2"
+                                        />
+                                        {errors.trustee && touched.trustee && (
+                                            <ErrorMessage
+                                                name="trustee"
+                                                component="div"
+                                                className="text-red-500 text-sm"
+                                            />
+                                        )}
                                     </div>
-                                )}
+                                    <div>
+                                        <Label htmlFor="custodian">Custodian</Label>
+                                        <Field
+                                            id="custodian"
+                                            name="custodian"
+                                            placeholder="Enter custodian"
+                                            className="w-full p-3 border rounded focus:outline-none mt-2"
+                                        />
+                                        {errors.custodian && touched.custodian && (
+                                            <ErrorMessage
+                                                name="custodian"
+                                                component="div"
+                                                className="text-red-500 text-sm"
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="relative bottom-3">
+                                    <Label htmlFor="mandate">Vehicle mandate</Label>
+                                    <Field
+                                        name="mandate"
+                                        component={FormikCustomQuillField}
+                                        maximumDescription={2500}
+                                        // label={"Mandate"}
+                                        placeholder={"Enter mandate..."}
+                                    />
+                                    {errors.mandate && touched.mandate && (
+                                        <div>
+
+                                            <ErrorMessage
+                                                name="mandate"
+                                                component="div"
+                                                id="editCohortDescriptionError"
+                                                className="text-red-500 text-sm"
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                            <div className={`flex justify-between mb-4 md:mb-0`}>
-                                <div className={`space-x-1 `}>
+                            <div className={`md:flex md:justify-between mb-4`}>
+                                <div className={`space-x-1`}
+                                     onClick={() => handleSaveDraft(values, setFieldError)}
+                                >
                                     <Button
                                         variant={"outline"}
                                         type="button"
-                                        className="w-full lg:w-36 md:w-32 h-[57px] mb-4 border-solid border-[#142854] text-[#142854]"
-                                        onClick={handleSaveAndBackToAllDraft}
+                                        id={`draftClickId`}
+                                        className="w-full lg:w-36 md:w-32 h-[57px] border-solid border-[#142854] text-[#142854]"
+                                        onClick={() => handleSaveDraft(values, setFieldError)}
+                                        disabled={!values.name}
                                     >
-                                        Save
+                                        {vehicleTypeStatus === "DRAFT" && isLoading ? <Isloading color="black"/> : "Save"}
                                     </Button>
                                 </div>
                                 <div className="md:flex gap-4 ">
                                     <Button
-                                        variant={"default"}
-                                        className={` md:w-32 w-20 h-[57px] ${
+                                        variant={"secondary"}
+                                        className={` w-full md:w-32 lg:w-36 h-[57px] ${
                                             !isValid
                                                 ? "bg-neutral650 cursor-not-allowed "
                                                 : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
@@ -533,11 +585,10 @@ function UpdateDraft({
                                         type="submit"
                                         disabled={!isValid}
                                     >
-                                        {isLoading ? <Isloading/> : "Publish"}
+                                        {vehicleTypeStatus === "PUBLISH" && isLoading ? <Isloading/> : "Publish"}
                                     </Button>
                                 </div>
                             </div>
-
                         </div>
                         <p
                             className={`text-error500 flex justify-center items-center ${

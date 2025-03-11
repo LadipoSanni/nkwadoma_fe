@@ -51,3 +51,13 @@
     line-height: 16px;
     text-align: left;
 }
+
+.scrollBarNone {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.scrollBarNone::-webkit-scrollbar {
+    display: none;
+}
+

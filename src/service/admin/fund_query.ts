@@ -1,6 +1,30 @@
 import {createApi} from '@reduxjs/toolkit/query/react'
 import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 
+interface InvestmentVehicle {
+    id: string;
+    name: string;
+    investmentVehicleType: 'COMMERCIAL' | 'ENDOWMENT';
+    mandate: string;
+    sponsors: string;
+    tenure: number;
+    size: number;
+    rate: number;
+    trustee: string;
+    custodian: string;
+    bankPartner: string;
+    fundManager: string;
+    minimumInvestmentAmount: number;
+    status: string;
+    startDate: string;
+    totalAmountInInvestmentVehicle:number;
+}
+interface InvestmentVehicleResponse {
+    data: InvestmentVehicle[];
+    total: number;
+    pageSize: number;
+    pageNumber: number;
+}
 export const fundApi = createApi({
     reducerPath: 'fundApi',
     baseQuery: customFetchBaseQuery,
@@ -30,15 +54,15 @@ export const fundApi = createApi({
         name:  string,
         investmentVehicleType: string | undefined,
         mandate: string,
-       tenure: string,
-       size: string,
-       rate: string,
+       tenure: string | number,
+       size: string | number,
+       rate: string | number,
        trustee: string,
        custodian: string,
        bankPartner: string,
        fundManager: string,
        sponsors: string,
-       minimumInvestmentAmount: string,
+       minimumInvestmentAmount: number | string,
        investmentVehicleStatus?: string
 
         }) => ({
@@ -62,7 +86,23 @@ export const fundApi = createApi({
             }),
             providesTags: ['vehicle'],
         }),
-    })
+        getInvestmentVehiclesByTypeAndStatus: builder.query<
+            InvestmentVehicleResponse,
+            { pageSize: number; pageNumber: number; type: string; status: string }
+        >({
+            query: ({ pageSize, pageNumber, type, status }) => ({
+                url: '/view-all-investment-vehicle-by-type-and-status',
+                method: 'GET',
+                params: {
+                    pageSize,
+                    pageNumber,
+                    type,
+                    status,
+                },
+            }),
+            providesTags: ['vehicle'],
+        }),
+    }),
 })
 
 export const {
@@ -71,4 +111,6 @@ export const {
     useCreateInvestmentVehicleMutation,
     useSearchInvestmentVehicleByNameQuery,
     useGetPublishedInvestmentVehicleByNameQuery,
+    useGetInvestmentVehiclesByTypeAndStatusQuery,
+
 } = fundApi;

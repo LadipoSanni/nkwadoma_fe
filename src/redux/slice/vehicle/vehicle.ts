@@ -1,12 +1,31 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
+export interface Draft {
+    id: string;
+    name: string;
+    investmentVehicleType: string | undefined,
+    mandate: string;
+    sponsors: string;
+    tenure: number | string,
+    size: number | string,
+    rate: number | string;
+    trustee: string;
+    custodian: string;
+    bankPartner: string;
+    fundManager: string;
+    status: string;
+    startDate: string;
+    minimumInvestmentAmount: number | string;
+}
 
 interface vehicleState {
     currentVehicleId: string;
+    saveClickedDraft: Draft | null;
 }
 
-const initialState : vehicleState = {
+const initialState: vehicleState = {
     currentVehicleId: '',
+    saveClickedDraft: null,
 }
 
 export const vehicleSlice = createSlice({
@@ -15,10 +34,15 @@ export const vehicleSlice = createSlice({
     reducers: {
         setCurrentVehicleId: (state, action: PayloadAction<string>) => {
             state.currentVehicleId = action.payload;
-        }
+        },
+        setSaveClickedDraft: (state, action: PayloadAction<Draft>) => {
+            state.saveClickedDraft = action.payload;
+        },
+        clearSaveClickedDraft: (state) => {
+            state.saveClickedDraft = null;
+        },
     }
 })
 
-export const {setCurrentVehicleId} = vehicleSlice.actions;
-
+export const {setCurrentVehicleId, setSaveClickedDraft, clearSaveClickedDraft} = vehicleSlice.actions;
 export default vehicleSlice.reducer;
