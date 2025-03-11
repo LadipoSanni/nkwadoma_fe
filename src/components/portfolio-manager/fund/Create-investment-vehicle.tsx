@@ -628,7 +628,7 @@ function CreateInvestmentVehicle({
                             Cancel
                         </Button>
                         <Button
-                            variant={"secondary"}
+                            variant={"default"}
                             className={` w-full lg:w-36 h-[57px] ${
                                 !isValid
                                     ? "bg-neutral650 cursor-not-allowed "
