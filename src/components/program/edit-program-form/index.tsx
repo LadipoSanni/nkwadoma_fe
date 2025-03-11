@@ -33,7 +33,7 @@ interface ProgramDetail {
 
 
 type Props = {
-    programId : string;
+    programId? : string;
    setIsOpen? : (e:boolean) => void;
    programDetail?: ProgramDetail
 }

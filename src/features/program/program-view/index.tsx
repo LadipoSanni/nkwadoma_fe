@@ -10,7 +10,6 @@ import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
 import {MdGridView, MdOutlineDateRange, MdOutlinePeopleAlt, MdOutlineViewList, MdPersonOutline} from "react-icons/md";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {setItemSessionStorage} from '@/utils/storage';
 import {Button} from "@/components/ui/button";
 import TableModal from "@/reuseable/modals/TableModal";
 import {useRouter} from 'next/navigation'
@@ -27,6 +26,8 @@ import {useToast} from "@/hooks/use-toast"
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
+import {store} from "@/redux/store";
+import {setCurrentProgramId} from "@/redux/slice/program/programSlice";
 
 
 interface TableRowData {
@@ -66,14 +67,7 @@ const ProgramView = () => {
     const [view, setView] = useState<string>('grid');
     const [searchTerm, setSearchTerm] = useState('');
     const {toast} = useToast()
-    // const [dummyData, setDummyData] = useState<{
-    //     cohorts: number;
-    //     description: string;
-    //     months: number;
-    //     title: string;
-    //     trainees: number;
-    //     programId: string;
-    // }[]>([]);
+
     const router = useRouter()
 
     const [programView, setProgramView] = useState<viewAllProgramProps[]>([])
@@ -96,7 +90,6 @@ const ProgramView = () => {
     const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [page] = useState(0);
-    // const [totalPage, setTotalPage] = useState(0);
     const size = 300;
     const [deleteProgram, setDeleteProgram] = useState("")
 
@@ -107,30 +100,21 @@ const ProgramView = () => {
     const [deleteItem] = useDeleteProgramMutation()
     const {data: searchResults} = useSearchProgramQuery(searchTerm, {skip: !searchTerm});
 
-    // useEffect(() => {
-    //     if (data && data?.data) {
-    //         const programs = data?.data?.body
-    //         setProgramView(programs)
-    //         // setTotalPage(data?.data?.totalPages)
-    //     }
 
-    // }, [data])
 
 
     const handleRowClick = (row: TableRowData) => {
+        store.dispatch(setCurrentProgramId(String(row?.id)))
         router.push('/program/details')
-        // console.log('The row: ',row.id)
-        setItemSessionStorage("programId", String(row.id))
 
 
     }
 
 
     const handleProgramDetailsOnclick = (id: string) => {
-        router.push('/program/details')
+        store.dispatch(setCurrentProgramId(id))
         setProgramId(id)
-        setItemSessionStorage("programId", id)
-
+        router.push('/program/details')
     }
 
 
@@ -160,7 +144,9 @@ const ProgramView = () => {
             sortable: true,
             id: 'programStatus',
             selector: (row: TableRowData) => <span
-                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.programStatus === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"} `}>{capitalizeFirstLetters(String(row.programStatus ?? "Declined"))}</span>
+                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.programStatus === "ACTIVE" ? "text-success600 bg-success50" : "text-error600 bg-error50"} `}>
+                {capitalizeFirstLetters(String(row.programStatus ?? "Declined"))}
+            </span>
         },
         {
             title: 'No. of Cohorts',
@@ -196,17 +182,7 @@ const ProgramView = () => {
 
     ]
 
-    // useEffect(() => {
-    //     const data = Array.from({length: 9}, (_, index) => ({
-    //         cohorts: Math.floor(Math.random() * 20) + 1,
-    //         description: `Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes.${index + 1}`,
-    //         months: Math.floor(Math.random() * 12) + 1,
-    //         title: `Program Thinking ${index + 1}`,
-    //         trainees: Math.floor(Math.random() * 100) + 1,
-    //         programId: `${index + 1}`
-    //     }));
-    //     setDummyData(data);
-    // }, []);
+
     const {data: program, isLoading: loading, refetch} = useGetProgramByIdQuery({id: programId}, {
         skip: !programId,
         refetchOnMountOrArgChange: true
@@ -220,8 +196,8 @@ const ProgramView = () => {
 
     const handleDropdownClick = async (id: string, row: rowData) => {
         if (id === "1") {
+            store.dispatch(setCurrentProgramId(String(row?.id)))
             router.push('/program/details')
-            setItemSessionStorage("programId", String(row.id))
 
 
         } else if (id === "2") {
@@ -245,8 +221,8 @@ const ProgramView = () => {
 
     const handleCardDropDownClick = async (optionId: string, id: string) => {
         if (optionId === "1") {
+            store.dispatch(setCurrentProgramId(id))
             router.push(`/program/details`);
-            setItemSessionStorage("programId", id)
         } else if (optionId === "2") {
             setProgramId(id);
             if (programId) {
@@ -329,11 +305,7 @@ const ProgramView = () => {
     }, [editOpen, program])
 
 
-    // const tagButtonData = [
-    //     {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
-    //     {tagIcon: MdOutlineDateRange, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
-    //     {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "cohorts"},
-    // ];
+
 
     const [isOpen, setIsOpen] = React.useState(false);
 
