@@ -1,5 +1,4 @@
 "use client"
-import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
 import React, {useState} from "react";
 import {inter} from "@/app/fonts";
 import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
