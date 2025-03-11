@@ -213,7 +213,7 @@ function UpdateDraft({
             const create = await createInvestmentVehicle(formData).unwrap();
             if (create) {
                 toast({
-                    description: "Successfully added to draft",
+                    description: "Draft changes saved successfully",
                     status: "success",
                 });
                 handleSaveAndBackToAllDraft();
