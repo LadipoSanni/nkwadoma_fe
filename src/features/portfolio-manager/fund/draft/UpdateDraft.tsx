@@ -546,7 +546,7 @@ function UpdateDraft({
                                 </div>
                                 <div className="md:flex gap-4 ">
                                     <Button
-                                        variant={"default"}
+                                        variant={"secondary"}
                                         className={`w-full md:w-32 lg:w-36  h-[57px] ${
                                             !isValid
                                                 ? "bg-neutral650 cursor-not-allowed "
