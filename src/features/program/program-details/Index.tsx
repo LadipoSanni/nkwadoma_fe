@@ -23,7 +23,6 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import EditProgramForm from "@/components/program/edit-program-form";
 import DeleteCohort from "@/reuseable/details/DeleteCohort";
 import {useGetProgramByIdQuery, useSearchCohortsInAParticularProgramQuery} from "@/service/admin/program_query";
-import {getItemSessionStorage} from "@/utils/storage";
 import {formatAmount} from '@/utils/Format'
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
 import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/program_query";
@@ -32,6 +31,7 @@ import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-f
 import { useToast } from "@/hooks/use-toast";
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
+import {useAppSelector} from "@/redux/store";
 
 
 
@@ -68,9 +68,10 @@ interface ApiError {
 
 
 const ProgramDetails = () => {
+    const id = useAppSelector(state => (state.program.currentProgramId))
     const [isOpen, setIsOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-    const [programId, setProgramId] = useState('');
+    const [programId] = useState(id);
     const [deleteProgram, setDeleteProgram] = useState("")
     const {toast} = useToast()
     const [page] = useState(0);
@@ -94,12 +95,7 @@ const ProgramDetails = () => {
     const [cohorts, setCohorts] = useState<ViewAllProgramProps[]>([])
     const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        const id = getItemSessionStorage("programId")
-        if (id) {
-            setProgramId(id)
-        }
-    }, [])
+
 
     const {data: program,isLoading:loading} = useGetProgramByIdQuery({id: programId}, {refetchOnMountOrArgChange: true, skip: !programId});
     const [deleteItem, {isLoading}] = useDeleteProgramMutation()
@@ -116,7 +112,6 @@ const ProgramDetails = () => {
 
     useEffect(() => {
         if (program?.data) {
-            console.log(program.data)
             const detail = program?.data
             setProgramDetail({
                 id: detail?.id || "",
