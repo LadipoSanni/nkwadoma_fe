@@ -1,20 +1,20 @@
-import React, {useState} from "react";
-import {Button} from "@/components/ui/button";
-import {Formik, Form, Field, ErrorMessage} from "formik";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import {Label} from "@/components/ui/label";
-import {inter} from "@/app/fonts";
+import { Label } from "@/components/ui/label";
+import { inter } from "@/app/fonts";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import Isloading from "@/reuseable/display/Isloading";
-import {useCreateInvestmentVehicleMutation} from "@/service/admin/fund_query";
-import {useToast} from "@/hooks/use-toast";
-import {validateNumber, validatePositiveNumberWithIndexNumbers} from "@/utils/Format";
-import {validateText, validateNumberLimit} from "@/utils/Format";
-import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
-import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
+import { useCreateInvestmentVehicleMutation } from "@/service/admin/fund_query";
+import { useToast } from "@/hooks/use-toast";
 import {useSelector} from "react-redux";
 import {RootState} from "@/redux/store";
-import ToastPopUp from "@/reuseable/notification/ToastPopUp";
+import { validateNumber, validatePositiveNumberWithIndexNumbers } from "@/utils/Format";
+import { validateText, validateNumberLimit } from "@/utils/Format";
+import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
+import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
+
 
 interface ApiError {
     status: number;
@@ -23,25 +23,25 @@ interface ApiError {
     };
 }
 
+
 interface props {
+    setIsOpen?: (e: boolean) => void;
     type?: string;
     investmentVehicleType?: string;
     handleSaveAndBackToAllDraft: () => void;
-    setIsOpen?: (b: boolean) => void;
 }
-
 function UpdateDraft({
-                         type,
-                         investmentVehicleType,
-                         handleSaveAndBackToAllDraft, setIsOpen
-
-                     }: props) {
+                                     setIsOpen,
+                                     type,
+                                     investmentVehicleType,
+                         handleSaveAndBackToAllDraft
+                                 }: props) {
     const [selectCurrency, setSelectCurrency] = useState("NGN");
     const [isError, setError] = useState("");
-    const [createInvestmentVehicle, {isLoading}] =
-        useCreateInvestmentVehicleMutation();
+    const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
+    const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
+    const { toast } = useToast();
 
-    const {toast} = useToast();
     const draftData = useSelector((state: RootState) => state.vehicle.saveClickedDraft);
 
     const initialFormValue = {
@@ -60,12 +60,16 @@ function UpdateDraft({
         investmentVehicleType: draftData?.investmentVehicleType || "",
     };
 
+    const handleCloseModal = () => {
+        if (setIsOpen) {
+            setIsOpen(false);
+        }
+    };
+
     const validationSchema = Yup.object().shape({
         name: Yup.string()
             .trim()
             .matches(
-                // /^[a-zA-Z0-9\-_' ]*$/,
-                // "name can include letters,numbers, hyphens,apostrophe and underscores only."
                 /^[a-zA-Z][a-zA-Z0-9\-' ]*$/,
                 "Name can include letters, numbers, hyphens and apostrophes only, and must start with a letter."
             )
@@ -89,13 +93,9 @@ function UpdateDraft({
             .required("vehicle sponsor is required")
             .max(100, "Program name cannot be more than 100 characters.")
             .matches(
-                // /^[a-zA-Z\-_ ]*$/,
-                // " sponsors can include letters, hyphens, and underscores only."
                 /^[a-zA-Z][a-zA-Z\-' ]*$/,
-                // "Sponsors can include letters, - and ' only and cannot start with -,' ."
                 "Invalid sponsor name"
             )
-            //  .matches(/^[a-zA-Z\s]+$/, 'Vehicle sponsor can only contain letters and spaces.')
             .test(
                 "valid-sponsor",
                 "Sponsor cannot be only numbers or special characters.",
@@ -113,11 +113,7 @@ function UpdateDraft({
             .trim()
 
             .matches(
-                // /^[a-zA-Z\-_ ]*$/,
-                // "Fund manager can include letters, hyphens, and underscores only."
-
                 /^[a-zA-Z][a-zA-Z\-' ]*$/,
-                // "Fund can include letters, - and ' only and cannot start with - and ' ."
                 "Invalid fund manager name"
             )
 
@@ -143,10 +139,11 @@ function UpdateDraft({
                 "minimum-less-or-equal-to-size",
                 "Minimum Investment Amount must be less than or equal to Vehicle Size.",
                 function (value) {
-                    const {size} = this.parent;
+                    const { size } = this.parent;
                     return !value || !size || parseFloat(value) <= parseFloat(size);
                 }
             ),
+        //  .matches(/^[1-9]\d*$/, 'minimum investmentAmount must be a positive number and cannot start with zero'),
         tenure: Yup.string()
             .trim()
             .required("Tenor size is required")
@@ -172,7 +169,6 @@ function UpdateDraft({
             .max(100, "Trustee cannot be more than 100 characters.")
             .matches(
                 /^[a-zA-Z][a-zA-Z\-' ]*$/,
-                // "Trustee can include letters, - and ' only and cannot start with - and ' ."
                 "Invalid trustee name"
             )
             .required("Trustee is required"),
@@ -182,32 +178,84 @@ function UpdateDraft({
             .max(100, "Custodian cannot be more than 100 characters.")
             .matches(
                 /^[a-zA-Z][a-zA-Z\-' ]*$/,
-                // "Custodian can include letters, - and ' only and cannot start with - and ' ."
                 "Invalid custodian name"
             ),
     });
 
-    const networkPopUp = ToastPopUp({
-        description: "No internet connection",
-        status: "error",
+    const draftValidationSchema = Yup.object().shape({
+        name: Yup.string()
+            .trim()
+            .required("Name is required"),
     });
 
-    const handleSubmit = async (values: typeof initialFormValue) => {
-        if (!navigator.onLine) {
-            networkPopUp.showToast();
-            if (setIsOpen) {
-                setIsOpen(false);
-            }
-            return;
-        }
+    const handleDraft = async (values: typeof initialFormValue) => {
+        setVehicleTypeStatus("DRAFT")
         const formData = {
-            id: values.id,
+            id:values.id,
             name: values.name,
             sponsors: values.sponsors,
             fundManager: values.fundManager,
             minimumInvestmentAmount: values.minimumInvestmentAmount,
             mandate: values.mandate,
-            tenure: values.tenure,
+            tenure: values.tenure || "1",
+            size: values.size,
+            rate: values.rate,
+            bankPartner: values.bankPartner,
+            trustee: values.trustee,
+            custodian: values.custodian,
+            investmentVehicleType: investmentVehicleType,
+            investmentVehicleStatus : "DRAFT"
+        };
+        try {
+            const create = await createInvestmentVehicle(formData).unwrap();
+            if (create) {
+                toast({
+                    description: "Successfully added to draft",
+                    status: "success",
+                });
+                handleCloseModal();
+            }
+        } catch (err) {
+            const error = err as ApiError;
+            setError(error?.data?.message);
+        }
+        handleSaveAndBackToAllDraft();
+    };
+
+    const handleSaveDraft = async (
+        values: typeof initialFormValue,
+        setFieldError: (field: string, message: string) => void
+    ) => {
+        try {
+            await draftValidationSchema.validate(values, { abortEarly: false });
+
+            await handleDraft(values);
+        } catch (validationErrors) {
+            if (validationErrors instanceof Yup.ValidationError) {
+                const errors = validationErrors.inner.reduce((acc, err) => {
+                    acc[err.path || ""] = err.message;
+                    return acc;
+                }, {} as Record<string, string>);
+                setFieldError("name", errors.name);
+                if(errors.name){
+                    toast({
+                        description:  errors.name,
+                        status: "error",
+                    });
+                }
+            }
+        }
+    };
+
+    const handleSubmit = async (values: typeof initialFormValue) => {
+        setVehicleTypeStatus("PUBLISH")
+        const formData = {
+            name: values.name,
+            sponsors: values.sponsors,
+            fundManager: values.fundManager,
+            minimumInvestmentAmount: values.minimumInvestmentAmount,
+            mandate: values.mandate,
+            tenure: values.tenure || "1",
             size: values.size,
             rate: values.rate,
             bankPartner: values.bankPartner,
@@ -222,18 +270,16 @@ function UpdateDraft({
                     description: create.message,
                     status: "success",
                 });
-                if (setIsOpen) {
-                    setIsOpen(false);
-                }
+                handleCloseModal();
             }
         } catch (err) {
             const error = err as ApiError;
-            setError(error ? error?.data?.message : "Error occurred");
-            // setError(error?.data?.message : "An error occured");
+            setError(error?.data?.message);
         }
     };
 
-    // const maxChars = 1500;
+
+
     return (
         <div id="createInvestmentVehicleId">
             <Formik
@@ -248,11 +294,11 @@ function UpdateDraft({
                       touched,
                       setFieldValue,
                       setFieldError,
-                      // values
+                      values
                   }) => (
                     <Form className={`${inter.className}`}>
                         <div
-                            className="grid grid-cols-1 gap-y-4 md:max-h-[540px] overflow-y-auto"
+                            className="grid grid-cols-1 gap-y-4 md:max-h-[67.5vh] overflow-y-auto"
                             style={{
                                 scrollbarWidth: "none",
                                 msOverflowStyle: "none",
@@ -266,16 +312,6 @@ function UpdateDraft({
                                     placeholder="Enter name"
                                     className="w-full p-3 border rounded focus:outline-none mt-2"
                                     onChange={validateText("name", setFieldValue)}
-                                    //   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("name", e.target.value.replace(/[^a-zA-Z0-9_\-\/]/g,''))}
-                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    //     const value = e.target.value; const regex = /^[a-zA-Z][a-zA-Z0-9_\-\/]*$/;
-                                    //      if (regex.test(value) || value === "") {
-                                    //          setFieldValue("name", value);
-                                    //         }
-
-                                    //          else {
-                                    //          setFieldValue("name", value.replace(/[^a-zA-Z0-9_\-\/]/g, '').replace(/^[^a-zA-Z]/, ''));
-                                    //         } }}
                                 />
                                 {errors.name && touched.name && (
                                     <ErrorMessage
@@ -400,7 +436,7 @@ function UpdateDraft({
                                         placeholder="0"
                                         type="text"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        onChange={investmentVehicleType === 'ENDOWMENT' ? validatePositiveNumberWithIndexNumbers(
+                                        onChange={investmentVehicleType === 'ENDOWMENT'?  validatePositiveNumberWithIndexNumbers(
                                             "rate",
                                             setFieldValue,
                                             100,
@@ -474,12 +510,6 @@ function UpdateDraft({
                                         name="trustee"
                                         placeholder="Enter trustee"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        //   setFieldValue(
-                                        //     "trustee",
-                                        //     e.target.value.replace(/[^a-zA-Z\s]/g, "")
-                                        //   )
-                                        // }
                                     />
                                     {errors.trustee && touched.trustee && (
                                         <ErrorMessage
@@ -496,12 +526,6 @@ function UpdateDraft({
                                         name="custodian"
                                         placeholder="Enter custodian"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        //   setFieldValue(
-                                        //     "custodian",
-                                        //     e.target.value.replace(/[^a-zA-Z\s]/g, "")
-                                        //   )
-                                        // }
                                     />
                                     {errors.custodian && touched.custodian && (
                                         <ErrorMessage
@@ -534,20 +558,25 @@ function UpdateDraft({
                                 )}
                             </div>
                             <div className={`md:flex md:justify-between mb-4 md:mb-0`}>
-                                <div className={`space-x-1 `}>
+                                <div className={`space-x-1`}
+                                     onClick={()=> handleSaveDraft(values,setFieldError)}
+                                >
                                     <Button
                                         variant={"outline"}
                                         type="button"
+                                        id={`draftClickId`}
                                         className="w-full lg:w-36 md:w-32 h-[57px] mb-4 border-solid border-[#142854] text-[#142854]"
-                                        onClick={handleSaveAndBackToAllDraft}
+                                        onClick={()=> handleSaveDraft(values,setFieldError)}
+                                        disabled={!values.name}
                                     >
                                         Save
                                     </Button>
+                                    { vehicleTypeStatus === "DRAFT" && isLoading? <Isloading color="black"/> : ""}
                                 </div>
                                 <div className="md:flex gap-4 ">
                                     <Button
                                         variant={"secondary"}
-                                        className={`w-full md:w-32 lg:w-36  h-[57px] ${
+                                        className={` w-full lg:w-36 h-[57px] ${
                                             !isValid
                                                 ? "bg-neutral650 cursor-not-allowed "
                                                 : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
@@ -555,11 +584,10 @@ function UpdateDraft({
                                         type="submit"
                                         disabled={!isValid}
                                     >
-                                        {isLoading ? <Isloading/> : "Publish"}
+                                        {vehicleTypeStatus === "PUBLISH" && isLoading ? <Isloading /> : "Publish"}
                                     </Button>
                                 </div>
                             </div>
-
                         </div>
                         <p
                             className={`text-error500 flex justify-center items-center ${
