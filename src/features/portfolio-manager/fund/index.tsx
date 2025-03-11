@@ -302,7 +302,7 @@ const InvestmentVehicle = () => {
                         headerTitle={"Draft"}
                         closeOnOverlayClick={true}
                         icon={Cross2Icon}
-                        width={"38%"}
+                        width={"36%"}
                     >
                         {activeTab === 'commercialFund' ? (
                             <Draft setIsOpen={() => setDraft(false)} type='sponsor' investmentVehicleType='COMMERCIAL'/>
