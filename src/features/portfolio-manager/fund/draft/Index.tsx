@@ -8,6 +8,8 @@ import {AppDispatch, RootState} from "@/redux/store";
 import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
+import styles from "@/components/selected-loan/SelectedLoan.module.css"
+
 
 interface saveToDraftProps {
     setIsOpen?: (b: boolean) => void;
@@ -76,21 +78,19 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
         status: "DRAFT",
     });
 
-    // const [createInvestmentVehicle, {isLoading}] = useCreateInvestmentVehicleMutation();
-
 
     return (
         <div className={`${inter.className}`}>
             {step === 1 ? (
                 <div className="w-full">
                     <div
-                        className="space-y-3 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                        className={`${styles.scrollbarNone} space-y-3  md:max-h-[67.5vh] overflow-y-auto`}>
                         {isLoading && <SkeletonForLoanOrg/>}
                         {data?.data.map((draft: Draft) => (
                             <div
                                 key={draft.id}
                                 className={`${inter.className} p-4 border rounded-lg cursor-pointer transition ${
-                                    selectedDraft?.id === draft.id ? "bg-[#F9F9F9]" : "ring-[#ECECEC]"
+                                    selectedDraft?.id === draft.id ? "bg-[#F9F9F9] border-[#142854]" : ""
                                 }`}
                                 onClick={() =>
                                     handleClick(draft, selectedDraft, setSelectedDraft, setDisabled, dispatch)
