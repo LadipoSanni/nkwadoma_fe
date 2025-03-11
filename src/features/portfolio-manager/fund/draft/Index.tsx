@@ -8,7 +8,9 @@ import {AppDispatch, RootState} from "@/redux/store";
 import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
-import styles from "@/components/selected-loan/SelectedLoan.module.css"
+import styles from "@/components/selected-loan/SelectedLoan.module.css";
+import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
+import {MdOutlineArticle} from "react-icons/md";
 
 
 interface saveToDraftProps {
@@ -84,28 +86,38 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
             {step === 1 ? (
                 <div className="w-full">
                     <div
-                        className={`${styles.scrollBarNone} space-y-3  md:max-h-[61.5vh] overflow-y-auto`}>
-                        {isLoading && <SkeletonForLoanOrg/>}
-                        {data?.data.map((draft: Draft) => (
-                            <div
-                                key={draft.id}
-                                className={`${inter.className} p-4 border rounded-lg cursor-pointer transition ${
-                                    selectedDraft?.id === draft.id ? "bg-[#F9F9F9] border-[#142854]" : ""
-                                }`}
-                                onClick={() =>
-                                    handleClick(draft, selectedDraft, setSelectedDraft, setDisabled, dispatch)
-                                }
-                            >
-                                <h3
-                                    className={`${inter.className} font-medium text-sm leading-5 text-meedlBlack capitalize`}
+                        className={`${styles.scrollBarNone} space-y-3 md:max-h-[61.5vh] overflow-y-auto`}
+                    >
+                        {isLoading ? (
+                            <SkeletonForLoanOrg />
+                        ) : data?.data?.length === 0 ? (
+                            <TableEmptyState
+                                name={"Draft"}
+                                icon={MdOutlineArticle }
+                                condition={false}
+                            />
+                        ) :  (
+                            data?.data?.map((draft: Draft) => (
+                                <div
+                                    key={draft.id}
+                                    className={`${inter.className} p-4 border rounded-lg cursor-pointer transition ${
+                                        selectedDraft?.id === draft.id ? "bg-[#F9F9F9] border-[#142854]" : ""
+                                    }`}
+                                    onClick={() =>
+                                        handleClick(draft, selectedDraft, setSelectedDraft, setDisabled, dispatch)
+                                    }
                                 >
-                                    {draft.name}
-                                </h3>
-                                <p className={`${inter.className} font-medium text-sm leading-5 text-[#999999]`}>
-                                    Last updated on {draft.lastUpdatedDate || ""}
-                                </p>
-                            </div>
-                        ))}
+                                    <h3
+                                        className={`${inter.className} font-medium text-sm leading-5 text-meedlBlack capitalize`}
+                                    >
+                                        {draft.name}
+                                    </h3>
+                                    <p className={`${inter.className} font-medium text-sm leading-5 text-[#999999]`}>
+                                        Last updated on {draft.lastUpdatedDate || ""}
+                                    </p>
+                                </div>
+                            ))
+                        )}
                     </div>
 
                     <div className="md:flex md:justify-end py-4 w-full">
