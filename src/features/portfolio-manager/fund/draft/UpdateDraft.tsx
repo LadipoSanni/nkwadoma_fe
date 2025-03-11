@@ -304,7 +304,7 @@ function UpdateDraft({
                                 msOverflowStyle: "none",
                             }}
                         >
-                            <div className={`${styles.scrollbarNone} md:max-h-[67.5vh] overflow-y-auto`}>
+                            <div className={`${styles.scrollBarNone} md:max-h-[67.5vh] overflow-y-auto`}>
                                 <div>
                                     <Label htmlFor="name">Name</Label>
                                     <Field

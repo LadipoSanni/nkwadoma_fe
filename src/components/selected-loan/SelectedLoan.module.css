@@ -52,12 +52,12 @@
     text-align: left;
 }
 
-.scrollbarNone {
+.scrollBarNone {
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
 
-.scrollbarNone::-webkit-scrollbar {
+.scrollBarNone::-webkit-scrollbar {
     display: none;
 }
 

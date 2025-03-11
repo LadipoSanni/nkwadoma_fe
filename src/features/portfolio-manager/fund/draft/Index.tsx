@@ -84,7 +84,7 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
             {step === 1 ? (
                 <div className="w-full">
                     <div
-                        className={`${styles.scrollbarNone} space-y-3  md:max-h-[67.5vh] overflow-y-auto`}>
+                        className={`${styles.scrollBarNone} space-y-3  md:max-h-[61.5vh] overflow-y-auto`}>
                         {isLoading && <SkeletonForLoanOrg/>}
                         {data?.data.map((draft: Draft) => (
                             <div
