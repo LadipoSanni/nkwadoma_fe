@@ -13,3 +13,8 @@ export const settingsTab = [
     { name: "Team", value: "/settings/team" },
     { name: "Roles & Permissions", value: "/settings/roles-&-permissions" },
 ]
+
+export const vehicleTab = [
+    {name: "Commercial fund", value: "/vehicle/commercial-vehicle"},
+    {name: "Endownment fund", value: "/vehicle/endownment-vehicle"}
+]

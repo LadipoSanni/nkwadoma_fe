@@ -190,6 +190,7 @@ const InvestmentVehicle = () => {
                     onChange={handleSearchChange}
                     handleDraftClick={handleCommercialFundDraftClick}
                     handleCreateInvestmentVehicleClick={handleCreateInvestmentVehicleClick}
+                    buttonName='Set up commercial fund'
                 />
             </div>,
             value: "commercialFund",
@@ -223,6 +224,7 @@ const InvestmentVehicle = () => {
                     onChange={handleSearchChange}
                     handleDraftClick={handleEndowmentFundDraftClick}
                     handleCreateInvestmentVehicleClick={handleCreateInvestmentDonorClick}
+                    buttonName='Set up endownment fund'
                 />
             </div>,
             value: "endowmentFund",

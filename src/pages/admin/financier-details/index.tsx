@@ -11,7 +11,7 @@ const FinancierDetails = () => {
 
     const router = useRouter();
     const navigateToViewAllFinancier = () => {
-        router.push("/funds/financiers");
+        router.push("/vehicle/financiers");
     }
     // const initial = getInitials(`${details?.data.firstName} ${details?.data.lastName}`);
     const initial = 'RK';

@@ -9,7 +9,7 @@ import { getPaginatedData } from '@/utils/Mock-paginated-data';
 import NotificationButton from '@/reuseable/buttons/Notification-button';
 import EmptyState from '@/reuseable/emptyStates/TableEmptyState';
 import  DeleteNotification  from '@/reuseable/details/DeleteCohort';
-import TableModal from '@/reuseable/modals/TableModal';
+import DeleteModal from '@/reuseable/modals/Delete-modal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import { BellIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
@@ -281,7 +281,7 @@ function NotificationLayout({children}: Props) {
                 {children}
             </div>
             <div>
-          <TableModal
+          <DeleteModal
            isOpen={isDeleteOpen}
            closeOnOverlayClick={true}
            closeModal={()=> setIsDeleteOpen(false)}
@@ -294,8 +294,9 @@ function NotificationLayout({children}: Props) {
               title="notification"
               handleDelete={handleDeleteNotification}
               id='1'
+
            />
-          </TableModal>
+          </DeleteModal>
         </div> 
     </div>
   )

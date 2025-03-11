@@ -80,7 +80,7 @@ function inviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
           
           : 
           <div>
-          <Label htmlFor='companyName'>Full name</Label>
+          <Label htmlFor='companyName'>Company name</Label>
           <Field
            id="companyName"
            name="companyName"

@@ -25,7 +25,7 @@ const Details = () => {
         {
             name: 'Vehicle status',
             value: <p
-                className='pl-2 pr-2 h-6 bg-success50 flex justify-center items-center rounded-xl '>{capitalizeFirstLetters(data?.data?.fundRaisingStatus.replace(/_/g, ' ')) }</p>
+                className='pl-2 pr-2 h-6 bg-success50 flex justify-center items-center rounded-xl '>{capitalizeFirstLetters(data?.data?.fundRaisingStatus?.replace(/_/g, ' ')) }</p>
         },
         {name: 'Interest rate', value: `${data?.data?.rate || 0}%`},
         {

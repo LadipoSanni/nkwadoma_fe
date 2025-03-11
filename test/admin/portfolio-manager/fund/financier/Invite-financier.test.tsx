@@ -77,7 +77,7 @@ describe("Invite financier", () => {
      
       test('Displays company financier input field correctly', () => {
         setup('Company');
-        expect(screen.getByLabelText('Full name')).toBeInTheDocument();
+        expect(screen.getByLabelText('Company name')).toBeInTheDocument();
       });
 
       test('Displays first name field correctly', () => {
