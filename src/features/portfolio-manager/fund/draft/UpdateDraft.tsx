@@ -6,7 +6,6 @@ import {Label} from "@/components/ui/label";
 import {inter} from "@/app/fonts";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import Isloading from "@/reuseable/display/Isloading";
-import {useCreateInvestmentVehicleMutation} from "@/service/admin/fund_query";
 import {useToast} from "@/hooks/use-toast";
 import {useSelector} from "react-redux";
 import {RootState} from "@/redux/store";
@@ -15,6 +14,7 @@ import {validateText, validateNumberLimit} from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 import styles from "@/components/selected-loan/SelectedLoan.module.css";
+import {useCreateInvestmentVehicleMutation, usePublishInvestmentMutation} from "@/service/admin/fund_query";
 
 
 interface ApiError {
@@ -41,7 +41,8 @@ function UpdateDraft({
     const [selectCurrency, setSelectCurrency] = useState("NGN");
     const [isError, setError] = useState("");
     const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
-    const [createInvestmentVehicle, {isLoading}] = useCreateInvestmentVehicleMutation();
+    const [publishInvestmentVehicle, {isLoading:publishLoading}] = usePublishInvestmentMutation();
+    const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
     const {toast} = useToast();
 
     const draftData = useSelector((state: RootState) => state.vehicle.saveClickedDraft);
@@ -145,7 +146,6 @@ function UpdateDraft({
                     return !value || !size || parseFloat(value) <= parseFloat(size);
                 }
             ),
-        //  .matches(/^[1-9]\d*$/, 'minimum investmentAmount must be a positive number and cannot start with zero'),
         tenure: Yup.string()
             .trim()
             .required("Tenor size is required")
@@ -207,13 +207,13 @@ function UpdateDraft({
             trustee: values.trustee,
             custodian: values.custodian,
             investmentVehicleType: investmentVehicleType,
-            investmentVehicleStatus: "DRAFT"
+            investmentVehicleStatus : "DRAFT"
         };
         try {
-            const create = await createInvestmentVehicle(formData).unwrap();
+            const create = await createInvestmentVehicle(formData);
             if (create) {
                 toast({
-                    description: "Draft changes saved successfully",
+                    description: "draft successfully updated",
                     status: "success",
                 });
                 handleSaveAndBackToAllDraft();
@@ -248,37 +248,32 @@ function UpdateDraft({
         }
     };
 
-    const handleSubmit = async (values: typeof initialFormValue) => {
-        setVehicleTypeStatus("PUBLISH")
-        const formData = {
-            name: values.name,
-            sponsors: values.sponsors,
-            fundManager: values.fundManager,
-            minimumInvestmentAmount: values.minimumInvestmentAmount,
-            mandate: values.mandate,
-            tenure: values.tenure || "1",
-            size: values.size,
-            rate: values.rate,
-            bankPartner: values.bankPartner,
-            trustee: values.trustee,
-            custodian: values.custodian,
-            investmentVehicleType: investmentVehicleType,
-        };
+    const handleSubmit = async () => {
+        if (!draftData || !draftData.id) {
+            setError("An error occurred");
+            toast({
+                description: "An error occurred",
+                status: "error",
+            });
+            return;
+        }
+
         try {
-            const create = await createInvestmentVehicle(formData).unwrap();
-            if (create) {
-                toast({
-                    description: create.message,
-                    status: "success",
-                });
-                handleCloseModal();
-            }
+            await publishInvestmentVehicle(draftData.id).unwrap();
+            toast({
+                description: "Investment published successfully",
+                status: "success",
+            });
+            handleCloseModal();
         } catch (err) {
             const error = err as ApiError;
-            setError(error?.data?.message);
+            setError(error?.data?.message || "Failed to publish investment");
+            toast({
+                description: error?.data?.message || "Failed to publish investment",
+                status: "error",
+            });
         }
     };
-
 
     return (
         <div id="createInvestmentVehicleId">
@@ -585,7 +580,7 @@ function UpdateDraft({
                                         type="submit"
                                         disabled={!isValid}
                                     >
-                                        {vehicleTypeStatus === "PUBLISH" && isLoading ? <Isloading/> : "Publish"}
+                                        {vehicleTypeStatus === "PUBLISH" && publishLoading ? <Isloading/> : "Publish"}
                                     </Button>
                                 </div>
                             </div>
