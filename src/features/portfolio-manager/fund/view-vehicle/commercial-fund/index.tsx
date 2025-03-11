@@ -7,7 +7,7 @@ import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-
 import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 
-function commercialFund() {
+function CommercialFund() {
     const [searchTerm, setSearchTerm] = useState('');
     const [modalType, setModalType] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,4 +56,4 @@ function commercialFund() {
   )
 }
 
-export default commercialFund
+export default CommercialFund
