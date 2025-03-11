@@ -9,7 +9,7 @@ import { formatAmount } from '@/utils/Format';
 import { Book } from "lucide-react";
 import Modal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
-
+import { useRouter } from 'next/navigation'
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
 import { financiers } from '@/utils/cohort/trainee-details-mock-data/Index';
 
@@ -22,6 +22,7 @@ interface TableRowData {
 function Financiers() {
     const [searchTerm, setSearchTerm] = useState('');
     const [isOpen, setIsOpen] = useState(false);
+    const router = useRouter()
 
     const handleOpenModal = () => {
       setIsOpen(true)
@@ -30,6 +31,12 @@ function Financiers() {
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
+
+     const handleRowClick = (row:TableRowData) => {
+             router.push('/funds/financier-details')
+            console.log(row?.name)
+            
+        }
 
     const financierHeader = [
       { title: 'Financier', sortable: true, id: 'name', selector: (row:TableRowData ) => row.name },
@@ -65,7 +72,7 @@ function Financiers() {
           <LoanProductTable
              tableData={financiers}
              tableHeader={financierHeader}
-             handleRowClick={()=>{}}
+             handleRowClick={handleRowClick}
              optionalRowsPerPage={10}
              tableHeight={48}
             icon={Book}

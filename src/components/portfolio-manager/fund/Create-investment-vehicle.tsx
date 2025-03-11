@@ -307,12 +307,14 @@ function CreateInvestmentVehicle({
         }) => (
           <Form className={`${inter.className}`}>
             <div
-              className="grid grid-cols-1 gap-y-4 md:max-h-[67.5vh] overflow-y-auto"
-              style={{
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
-              }}
+              className="grid grid-cols-1 gap-y-4"
             >
+              <div className="lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto"
+                 style={{
+                  scrollbarWidth: "none",
+                  msOverflowStyle: "none",
+                }}
+              >
               <div>
                 <Label htmlFor="name">Name</Label>
                 <Field
@@ -597,6 +599,7 @@ function CreateInvestmentVehicle({
                </div>  
                 )}
               </div>
+              </div>
                 <div className={`lg:flex lg:justify-between items-center  `}>
                     <div className={`space-x-1 hidden  lg:flex items-center cursor-pointer`} 
                     onClick={()=> handleSaveDraft(values,setFieldError)}
@@ -631,7 +634,7 @@ function CreateInvestmentVehicle({
                             variant={"default"}
                             className={` w-full lg:w-36 h-[57px] ${
                                 !isValid
-                                    ? "bg-neutral650 cursor-not-allowed "
+                                    ? "bg-neutral650 cursor-auto hover:bg-neutral650 "
                                     : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
                             }`}
                             type="submit"

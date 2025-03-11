@@ -10,10 +10,11 @@ interface props {
     onChange: React.ChangeEventHandler<HTMLInputElement>;
     handleDraftClick: ()=> void;
     handleCreateInvestmentVehicleClick: ()=> void;
+    buttonName: string
 
 }
 
-function InvestmentActionBar({id,value,onChange,handleDraftClick,handleCreateInvestmentVehicleClick}:props) {
+function InvestmentActionBar({id,value,onChange,handleDraftClick,handleCreateInvestmentVehicleClick,buttonName}:props) {
    
    
   return (
@@ -38,10 +39,10 @@ function InvestmentActionBar({id,value,onChange,handleDraftClick,handleCreateInv
            <div className='md:mt-0 mt-3'>
            <Button
            variant={`secondary`}
-           className='h-[45px] w-full font-semibold md:w-[217px]'
+           className='h-[45px] w-full font-semibold lg:w-[25vh]'
            onClick={handleCreateInvestmentVehicleClick}
            >
-            Create investment vehicle
+            {buttonName}
            </Button>
            </div>
            </div>
