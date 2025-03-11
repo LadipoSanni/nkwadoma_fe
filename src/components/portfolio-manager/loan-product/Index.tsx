@@ -15,6 +15,7 @@ import {
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import 'react-quill-new/dist/quill.snow.css'
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
+import styles from "@/components/selected-loan/SelectedLoan.module.css"
 
 
 interface CreateLoanProductProps {
@@ -270,12 +271,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                 {
                     ({errors, isValid, touched, setFieldValue, values}) => (
                         <Form className={`${inter.className}`}>
-                            <div className='grid grid-cols-1 md:max-h-[67.5vh] overflow-y-auto'
+                            <div className='grid grid-cols-1'
                                  style={{
                                      scrollbarWidth: 'none',
                                      msOverflowStyle: 'none',
                                  }}
                             >
+                                <div className={`${styles.scrollBarNone} space-y-3  md:max-h-[60.5vh] overflow-y-auto`}>
                                 <div>
                                     <Label htmlFor="productName">Product name</Label>
                                     <Field
@@ -665,6 +667,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             className="text-red-500 text-sm"
                                         />
                                     )}
+                                </div>
                                 </div>
 
                                 <div className={`flex justify-end pt-5 gap-3 pb-5`}>
