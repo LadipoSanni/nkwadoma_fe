@@ -48,7 +48,7 @@ function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRouteP
   }
 
   return (
-    <div className={`px-4 md:px-8 py-3 ${inter.className}`}>
+    <div className={`px-4 md:px-6 py-3 ${inter.className}`}>
       {!condition? "" :
        <div className={`flex py-3 space-x-1 text-meedlBlue cursor-pointer`} id={`backClick${backClickName}`} onClick={handleRouteBack}>
        <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`}/>
