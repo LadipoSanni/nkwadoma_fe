@@ -13,6 +13,7 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import {setItemSessionStorage} from '@/utils/storage';
 import {Button} from "@/components/ui/button";
 import TableModal from "@/reuseable/modals/TableModal";
+import DeleteModal from '@/reuseable/modals/Delete-modal';
 import {useRouter} from 'next/navigation'
 import DeleteProgram from '@/reuseable/details/DeleteCohort'
 import EditProgramForm from '@/components/program/edit-program-form';
@@ -497,7 +498,7 @@ const ProgramView = () => {
                     </TableModal>
                 )
                 }
-                <TableModal
+                <DeleteModal
                     isOpen={isDeleteOpen}
                     closeOnOverlayClick={true}
                     closeModal={() => setIsDeleteOpen(false)}
@@ -512,7 +513,7 @@ const ProgramView = () => {
                         id={programId}
                         errorDeleted={deleteProgram}
                     />
-                </TableModal>
+                </DeleteModal>
             </div>
 
         </main>

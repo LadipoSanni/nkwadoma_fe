@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { formatAmount } from '@/utils/Format'
 import { formatMonthInDate } from '@/utils/Format'
 import TableModal from '@/reuseable/modals/TableModal'
+import DeleteModal from '@/reuseable/modals/Delete-modal'
 import { Cross2Icon } from "@radix-ui/react-icons";
 import EditCohortForm from './EditCohortForm'
 import { inter } from '@/app/fonts'
@@ -313,7 +314,7 @@ useEffect(() => {
         </TableModal>
         )
            }
-        <TableModal
+        <DeleteModal
         isOpen={isDeleteOpen}
         closeModal={() => setIsDeleteOpen(false)}
         closeOnOverlayClick={true}
@@ -328,7 +329,7 @@ useEffect(() => {
         id={cohortId}
         errorDeleted={errorDeleted}
         />
-        </TableModal>
+        </DeleteModal>
 
       </div>
     </div>
