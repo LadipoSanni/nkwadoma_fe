@@ -10,7 +10,6 @@ import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
 import {MdGridView, MdOutlineDateRange, MdOutlinePeopleAlt, MdOutlineViewList, MdPersonOutline} from "react-icons/md";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {setItemSessionStorage} from '@/utils/storage';
 import {Button} from "@/components/ui/button";
 import TableModal from "@/reuseable/modals/TableModal";
 import DeleteModal from '@/reuseable/modals/Delete-modal';
@@ -28,6 +27,8 @@ import {useToast} from "@/hooks/use-toast"
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
+import {store} from "@/redux/store";
+import {setCurrentProgramId} from "@/redux/slice/program/programSlice";
 
 
 interface TableRowData {
@@ -104,18 +105,17 @@ const ProgramView = () => {
 
 
     const handleRowClick = (row: TableRowData) => {
+        store.dispatch(setCurrentProgramId(String(row?.id)))
         router.push('/program/details')
-        setItemSessionStorage("programId", String(row.id))
 
 
     }
 
 
     const handleProgramDetailsOnclick = (id: string) => {
-        router.push('/program/details')
+        store.dispatch(setCurrentProgramId(id))
         setProgramId(id)
-        setItemSessionStorage("programId", id)
-
+        router.push('/program/details')
     }
 
 
@@ -197,8 +197,8 @@ const ProgramView = () => {
 
     const handleDropdownClick = async (id: string, row: rowData) => {
         if (id === "1") {
+            store.dispatch(setCurrentProgramId(String(row?.id)))
             router.push('/program/details')
-            setItemSessionStorage("programId", String(row.id))
 
 
         } else if (id === "2") {
@@ -222,8 +222,8 @@ const ProgramView = () => {
 
     const handleCardDropDownClick = async (optionId: string, id: string) => {
         if (optionId === "1") {
+            store.dispatch(setCurrentProgramId(id))
             router.push(`/program/details`);
-            setItemSessionStorage("programId", id)
         } else if (optionId === "2") {
             setProgramId(id);
             if (programId) {

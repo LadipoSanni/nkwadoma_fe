@@ -18,6 +18,7 @@ import loanReferralReducer from '@/service/users/loanRerralSlice';
 import cohortReducer from './slice/create/cohortSlice'
 import cameraReducer from  './slice/camera/camera-slice'
 import vehicleReducer from './slice/vehicle/vehicle'
+import programSliceReducer from './slice/program/programSlice'
 import {userApi} from '@/service/users/api';
 
 const appReducer = combineReducers({
@@ -29,6 +30,7 @@ const appReducer = combineReducers({
     cohort: cohortReducer,
     camera: cameraReducer,
     vehicle: vehicleReducer,
+    program: programSliceReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
