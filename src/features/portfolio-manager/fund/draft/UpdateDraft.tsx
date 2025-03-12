@@ -214,7 +214,7 @@ function UpdateDraft({
             const create = await publishInvestmentVehicle(formData);
             if (create) {
                 toast({
-                    description: "draft successfully updated",
+                    description: "Draft successfully updated",
                     status: "success",
                 });
                 handleSaveAndBackToAllDraft();
