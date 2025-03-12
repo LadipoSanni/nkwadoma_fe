@@ -102,6 +102,14 @@ export const fundApi = createApi({
             }),
             providesTags: ['vehicle'],
         }),
+
+        publishInvestment: builder.mutation<void, string>({
+            query: (id) => ({
+                url: `investment/publish/${id}`,
+                method: 'POST',
+            }),
+            invalidatesTags:[`vehicle`],
+        }),
     }),
 })
 
@@ -112,5 +120,5 @@ export const {
     useSearchInvestmentVehicleByNameQuery,
     useGetPublishedInvestmentVehicleByNameQuery,
     useGetInvestmentVehiclesByTypeAndStatusQuery,
-
+    usePublishInvestmentMutation,
 } = fundApi;
