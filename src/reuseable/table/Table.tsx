@@ -162,7 +162,7 @@ function DataTable<T extends TableRowData>({
     return value;
   };
 
-  const isLastPage = pageNumber === totalPages;
+  const isLastPage = pageNumber + 1 === totalPages;
 
   return (
     <div id="loanProductTableContainer" className={`w-[100%] `}>

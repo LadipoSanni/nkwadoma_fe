@@ -6,7 +6,6 @@ import Draft from "@/features/portfolio-manager/fund/draft/Index";
 import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
 import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
-import { useGetInvestmentVehiclesByTypeAndStatusQuery } from '@/service/admin/fund_query';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import {MdSearch} from 'react-icons/md'
 import {useSearchInvestmentVehicleByNameQuery} from '@/service/admin/fund_query'
@@ -17,6 +16,8 @@ import {formatMonthInDate} from '@/utils/Format';
 import {formatAmount} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
+import {useGetInvestmentVehiclesByTypeAndStatusQuery} from "@/service/admin/fund_query";
+
 
 
 
@@ -49,16 +50,15 @@ function EndownmentFund() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [pageNumber,setPageNumber] = useState(0)
     const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
-    const [status,setStatus] = useState("PUBLISHED")
     const [hasNextPage] = useState(false)
     const totalPage = 1
     const router = useRouter()
 
-    const {data:investmentVehicleData} = useGetInvestmentVehiclesByTypeAndStatusQuery({
+    const {data:investmentVehicleData,isLoading} = useGetInvestmentVehiclesByTypeAndStatusQuery({
         pageSize: 10,
         pageNumber: pageNumber,
         type: 'ENDOWMENT',
-        status: status
+        status: "PUBLISHED"
     })
      const {data: searchData} = useSearchInvestmentVehicleByNameQuery(searchTerm, {skip: !searchTerm})
 
@@ -69,7 +69,6 @@ function EndownmentFund() {
              } else if (investmentVehicleData && investmentVehicleData.data) {
                  setViewAllInvestmentVehicle(investmentVehicleData?.data)
                 //  setNextPage(investmentVehicleData?.hasNextPage)
-                 setStatus(status)
              }
          }, [searchTerm, searchData, investmentVehicleData])
 
@@ -79,10 +78,10 @@ function EndownmentFund() {
             setSearchTerm(event.target.value);
     };
 
-    const handleCommercialFundDraftClick = () => {
+    const handleEndowerFundDraftClick = () => {
         setModalType("draft")
         setIsModalOpen(true);
-        setStatus("DRAFT")
+    
     }
 
     const handleCreateInvestmentVehicleClick = () => {
@@ -152,7 +151,7 @@ function EndownmentFund() {
                     id='endowmentFundId'
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    handleDraftClick={handleCommercialFundDraftClick}
+                    handleDraftClick={handleEndowerFundDraftClick}
                     handleCreateInvestmentVehicleClick={handleCreateInvestmentVehicleClick}
                     buttonName='Set up endownment fund'
                 />
@@ -178,6 +177,7 @@ function EndownmentFund() {
                 pageNumber={pageNumber}
                 setPageNumber={setPageNumber}
                  totalPages={totalPage}
+                 isLoading={isLoading}
                 />
                 </div>}
         </div>
@@ -186,7 +186,7 @@ function EndownmentFund() {
           isOpen={isModalOpen}
                     closeModal={()=> setIsModalOpen(false)}
                     className='pb-1'
-                    headerTitle={modalType === "createEndownmentVehicle"? "Create Investment Vehicle" : "Draft" }
+                    headerTitle={modalType === "createEndownmentVehicle"? "Endownment fund" : "Draft" }
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
                     width={"38%"}
