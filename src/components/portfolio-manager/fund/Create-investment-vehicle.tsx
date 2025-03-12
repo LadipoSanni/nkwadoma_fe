@@ -307,9 +307,9 @@ function CreateInvestmentVehicle({
         }) => (
           <Form className={`${inter.className}`}>
             <div
-              className="grid grid-cols-1 gap-y-4"
+              className=""
             >
-              <div className="lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto"
+              <div className="grid grid-cols-1 gap-y-4 lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto"
                  style={{
                   scrollbarWidth: "none",
                   msOverflowStyle: "none",

@@ -39,7 +39,7 @@ function InvestmentActionBar({id,value,onChange,handleDraftClick,handleCreateInv
            <div className='md:mt-0 mt-3'>
            <Button
            variant={`secondary`}
-           className='h-[45px] w-full font-semibold lg:w-[25vh]'
+           className='h-[45px] w-full font-semibold md:w-[200px]'
            onClick={handleCreateInvestmentVehicleClick}
            >
             {buttonName}

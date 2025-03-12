@@ -82,7 +82,7 @@ describe("InvestmentActionBar", () => {
     });
 
     test("Drafts button is clickable", () => {
-        render(<InvestmentActionBar {...defaultProps} buttonName="Create investment vehicle"/>);
+        render(<InvestmentActionBar {...defaultProps} buttonName="Create investment vehicle" />);
         const button = screen.getByText("Drafts");
         expect(button).toBeEnabled();
     });
