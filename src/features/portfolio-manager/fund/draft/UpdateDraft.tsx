@@ -14,7 +14,7 @@ import {validateText, validateNumberLimit} from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 import styles from "@/components/selected-loan/SelectedLoan.module.css";
-import {useCreateInvestmentVehicleMutation, usePublishInvestmentMutation} from "@/service/admin/fund_query";
+import {useCreateInvestmentVehicleMutation} from "@/service/admin/fund_query";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 
 
