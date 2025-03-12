@@ -50,7 +50,7 @@ function EndownmentFund() {
     const [pageNumber,setPageNumber] = useState(0)
     const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
     const [status,setStatus] = useState("PUBLISHED")
-    const [hasNextPage,setNextPage] = useState(false)
+    const [hasNextPage] = useState(false)
     const totalPage = 1
     const router = useRouter()
 
