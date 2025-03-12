@@ -14,7 +14,8 @@ import {validateText, validateNumberLimit} from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 import styles from "@/components/selected-loan/SelectedLoan.module.css";
-import {useCreateInvestmentVehicleMutation, usePublishInvestmentMutation} from "@/service/admin/fund_query";
+import {useCreateInvestmentVehicleMutation} from "@/service/admin/fund_query";
+import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 
 
 interface ApiError {
@@ -41,8 +42,8 @@ function UpdateDraft({
     const [selectCurrency, setSelectCurrency] = useState("NGN");
     const [isError, setError] = useState("");
     const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
-    const [publishInvestmentVehicle, {isLoading:publishLoading}] = usePublishInvestmentMutation();
-    const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
+    // const [publishInvestmentVehicle, {isLoading:publishLoading}] = usePublishInvestmentMutation();
+    const [publishInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
     const {toast} = useToast();
 
     const draftData = useSelector((state: RootState) => state.vehicle.saveClickedDraft);
@@ -210,10 +211,10 @@ function UpdateDraft({
             investmentVehicleStatus : "DRAFT"
         };
         try {
-            const create = await createInvestmentVehicle(formData);
+            const create = await publishInvestmentVehicle(formData);
             if (create) {
                 toast({
-                    description: "draft successfully updated",
+                    description: "Draft successfully updated",
                     status: "success",
                 });
                 handleSaveAndBackToAllDraft();
@@ -248,32 +249,81 @@ function UpdateDraft({
         }
     };
 
-    const handleSubmit = async () => {
-        if (!draftData || !draftData.id) {
-            setError("An error occurred");
-            toast({
-                description: "An error occurred",
-                status: "error",
-            });
+
+
+    const networkPopUp = ToastPopUp({
+        description: "No internet connection",
+        status: "error",
+    });
+
+
+    const handleSubmit = async (values: typeof initialFormValue) => {
+        if (!navigator.onLine) {
+            networkPopUp.showToast();
+            if (setIsOpen) {
+                setIsOpen(false);
+            }
             return;
         }
-
+        const formData = {
+            id: values.id,
+            name: values.name,
+            sponsors: values.sponsors,
+            fundManager: values.fundManager,
+            minimumInvestmentAmount: values.minimumInvestmentAmount,
+            mandate: values.mandate,
+            tenure: values.tenure,
+            size: values.size,
+            rate: values.rate,
+            bankPartner: values.bankPartner,
+            trustee: values.trustee,
+            custodian: values.custodian,
+            investmentVehicleType: investmentVehicleType,
+        };
         try {
-            await publishInvestmentVehicle(draftData.id).unwrap();
-            toast({
-                description: "Investment published successfully",
-                status: "success",
-            });
-            handleCloseModal();
+            const publish = await publishInvestmentVehicle(formData).unwrap();
+            if (publish) {
+                toast({
+                    description: publish.message,
+                    status: "success",
+                });
+                handleCloseModal();
+            }
         } catch (err) {
             const error = err as ApiError;
-            setError(error?.data?.message || "Failed to publish investment");
-            toast({
-                description: error?.data?.message || "Failed to publish investment",
-                status: "error",
-            });
+            setError(error?.data?.message);
+            // setError(error ? error?.data?.message : "An error occurred");
+            // setError(error?.data?.message : "An error occured");
         }
     };
+
+
+    // const handleSubmit = async () => {
+    //     if (!draftData || !draftData.id) {
+    //         setError("An error occurred");
+    //         toast({
+    //             description: "An error occurred",
+    //             status: "error",
+    //         });
+    //         return;
+    //     }
+    //
+    //     try {
+    //         await publishInvestmentVehicle(draftData.id).unwrap();
+    //         toast({
+    //             description: "Investment published successfully",
+    //             status: "success",
+    //         });
+    //         handleCloseModal();
+    //     } catch (err) {
+    //         const error = err as ApiError;
+    //         setError(error?.data?.message || "Failed to publish investment");
+    //         toast({
+    //             description: error?.data?.message || "Failed to publish investment",
+    //             status: "error",
+    //         });
+    //     }
+    // };
 
     return (
         <div id="createInvestmentVehicleId">
@@ -580,7 +630,7 @@ function UpdateDraft({
                                         type="submit"
                                         disabled={!isValid}
                                     >
-                                        {vehicleTypeStatus === "PUBLISH" && publishLoading ? <Isloading/> : "Publish"}
+                                        {vehicleTypeStatus === "PUBLISH" && isLoading ? <Isloading/> : "Publish"}
                                     </Button>
                                 </div>
                             </div>

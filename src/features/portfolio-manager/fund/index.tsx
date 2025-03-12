@@ -282,7 +282,7 @@ const InvestmentVehicle = () => {
                         isOpen={isModalOpen}
                         closeModal={() => setIsModalOpen(false)}
                         className='pb-1'
-                        headerTitle={modalType === 'commercial'? "Commercial fund": "Endownment fund"}
+                        headerTitle='Create Investment'
                         closeOnOverlayClick={true}
                         icon={Cross2Icon}
                         width={"36%"}
