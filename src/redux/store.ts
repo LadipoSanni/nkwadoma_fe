@@ -15,7 +15,7 @@ import { fundApi } from '@/service/admin/fund_query';
 import { loanOfferApi } from '@/service/admin/loan/loan-offer-api';
 import { loanDisbursalApi } from '@/service/admin/loan/Loan-disbursal-api';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-
+import { notificationApi } from '@/service/notification/notification_query';
 
 const persistConfig = {
     key: 'root',
@@ -43,6 +43,7 @@ export const store = configureStore({
             loanOfferApi.middleware,
             loanDisbursalApi.middleware,
             userApi.middleware,
+            notificationApi.middleware
         ]),
 });
 
