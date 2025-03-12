@@ -16,7 +16,8 @@ import {formatMonthInDate} from '@/utils/Format';
 import {formatAmount} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
-import { viewInvestmentVehiclesByTypeAndStatus } from '@/service/custom-hook/view-query-BytypeAndStatus';
+import {useGetInvestmentVehiclesByTypeAndStatusQuery} from "@/service/admin/fund_query";
+
 
 
 
@@ -53,7 +54,7 @@ function EndownmentFund() {
     const totalPage = 1
     const router = useRouter()
 
-    const {data:investmentVehicleData,isLoading} = viewInvestmentVehiclesByTypeAndStatus({
+    const {data:investmentVehicleData,isLoading} = useGetInvestmentVehiclesByTypeAndStatusQuery({
         pageSize: 10,
         pageNumber: pageNumber,
         type: 'ENDOWMENT',
