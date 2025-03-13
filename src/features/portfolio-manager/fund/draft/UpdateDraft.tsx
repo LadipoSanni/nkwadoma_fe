@@ -201,7 +201,7 @@ function UpdateDraft({
             fundManager: values.fundManager,
             minimumInvestmentAmount: values.minimumInvestmentAmount,
             mandate: values.mandate,
-            tenure: values.tenure || "1",
+            tenure: values.tenure,
             size: values.size,
             rate: values.rate,
             bankPartner: values.bankPartner,
@@ -349,7 +349,7 @@ function UpdateDraft({
                                 msOverflowStyle: "none",
                             }}
                         >
-                            <div className={`${styles.scrollBarNone} grid grid-cols-1 gap-y-4 md:max-h-[67.5vh] overflow-y-auto`}>
+                            <div className={`${styles.scrollBarNone} grid grid-cols-1 gap-y-4 lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto`}>
                                 <div>
                                     <Label htmlFor="name">Name</Label>
                                     <Field
