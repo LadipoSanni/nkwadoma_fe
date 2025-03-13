@@ -9,13 +9,17 @@ import {Icon} from "@iconify/react";
 import loadingLoop from "@iconify/icons-line-md/loading-loop";
 
 
+interface FormValues {
+    selectValue: string;
+}
+
 interface DropdownSelectProps {
     selectValue: string;
     listOfItems: { id: string; name: string }[];
-    initialFormValue: any;
-    validationSchema: Yup.ObjectSchema<any>;
+    initialFormValue: FormValues;
+    validationSchema: Yup.ObjectSchema<FormValues>;
     handleSelectChange: (value: string) => void;
-    handleSubmit: (values: any) => void;
+    handleSubmit: (values: FormValues) => void;
     handleReset: () => void;
     isDropdownOpen: boolean;
     toggleDropdown: () => void;
@@ -39,7 +43,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
                     <Button id='dropdownSelectButton' variant={'default'} className='w-full text-black bg-neutral100 h-11 border-1 hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none'>
-                        {!selectValue ? "Select" : selectValue}
+                        {!selectValue ? "Type" : selectValue}
                         <span className='ml-4'>
               {isDropdownOpen ? (
                   <ChevronUpIcon className="h-4 w-5 font-semibold" />
@@ -50,7 +54,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className='mt-2 relative left-[-30px] md:left-[-100px] px-4 pb-6 z-[1000rem]'>
-                    <DropdownMenuLabel data-testid="dropdownLabel">Select Item</DropdownMenuLabel>
+                    <DropdownMenuLabel data-testid="dropdownLabel">Type</DropdownMenuLabel>
                     <Formik
                         initialValues={initialFormValue}
                         onSubmit={handleSubmit}
@@ -68,7 +72,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
                                     onOpenChange={toggleDropdown}
                                 >
                                     <SelectTrigger id='dropdownSelectTrigger' className='flex justify-between w-72 focus:ring-0 focus:outline-none text-forgetPasswordBlue'>
-                                        <SelectValue placeholder="Select item" className='' data-testid='Select Item' />
+                                        <SelectValue placeholder="Select type" className='' data-testid='Select Item' />
                                         <div className='ml-4'>
                                             {isDropdownOpen ? (
                                                 <ChevronUpIcon className="h-4 w-5 font-semibold" />

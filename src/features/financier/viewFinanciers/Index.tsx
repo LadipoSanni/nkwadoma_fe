@@ -14,12 +14,29 @@ import InviteFinanciers from '@/components/portfolio-manager/fund/financier/fina
 import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
+interface FormValues {
+    financier: string;
+}
+
+interface FinancierRow {
+    id: string;
+    name: string;
+    type: string;
+    investments: number;
+    amountInvested: number;
+    amountEarned: number;
+    payout: number;
+    portfolioValue: number;
+}
+
+
+
 const ViewFinanciers = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFinancier, setSelectedFinancier] = useState('');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false); // New state for modal visibility
+    const [isLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const listOfFinanciers = [
         { id: '1', name: 'Individual' },
@@ -27,7 +44,7 @@ const ViewFinanciers = () => {
     ];
 
     const initialFormValue = {
-        financier: '',
+        financier: 'Individual',
     };
 
     const validationSchema = Yup.object().shape({
@@ -42,7 +59,7 @@ const ViewFinanciers = () => {
         setSelectedFinancier(financier);
     };
 
-    const handleSubmit = (values: any) => {
+    const handleSubmit = (values: FormValues) => {
         console.log('Form submitted with values:', values);
     };
 
@@ -72,7 +89,7 @@ const ViewFinanciers = () => {
 
     const FinancierHeader = [
         { title: 'Name', id: 'name' },
-        { title: 'Type', id: 'type', selector: (row: any) => (
+        { title: 'Type', id: 'type', selector: (row: FinancierRow) => (
 
             <span
             className={`${
@@ -89,18 +106,11 @@ const ViewFinanciers = () => {
         { title: 'Portfolio Value', id: 'portfolioValue' }
     ];
 
-    const handleRowClick = (row: any) => {
+    const handleRowClick = (row: FinancierRow) => {
         console.log('Row clicked:', row);
     };
 
-    const handleDropdownClick = (id: string, row: any) => {
-        console.log('Dropdown option clicked:', id, row);
-    };
 
-    const dropDownOption = [
-        { name: 'Option 1', id: '1' },
-        { name: 'Option 2', id: '2' }
-    ];
 
     return (
         <main className={'mt-7 mx-5'}>
@@ -152,11 +162,8 @@ const ViewFinanciers = () => {
                         tableHeight={59}
                         handleRowClick={handleRowClick}
                         sx="cursor-pointer"
-                        showKirkBabel={true}
-                        kirkBabDropdownOption={dropDownOption}
                         icon={Book}
                         sideBarTabName="financier"
-                        handleDropDownClick={handleDropdownClick}
                         optionalRowsPerPage={10}
                         isLoading={isLoading}
                     />
