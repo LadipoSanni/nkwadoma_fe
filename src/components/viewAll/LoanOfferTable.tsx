@@ -74,7 +74,7 @@ const Index = () => {
                         id={'LoanRequestEmptyState'}
                         icon={<Icon icon="material-symbols:money-bag-outline"
                                     height={"2rem"}
-                                    width={"2em"}
+                                    width={"2rem"}
                                     color={'#142854'}
                         ></Icon >} iconBg={'#D9EAFF'} title={'Loan offers will show here'} description={clickedOrganization?.id ? 'There are no loan offer in this organization yet': `There are no loan offer available yet` } />
                 ) :
