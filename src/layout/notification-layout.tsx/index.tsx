@@ -66,7 +66,6 @@ function NotificationLayout({children}: Props) {
             // console.log("The paginated data: ",paginated)
          },[pageNumber])
 
-        
          const handleCheckedRow = (id: string) => {
             setSelectedRows((prevSelected) => {
               const newSelected = new Set(prevSelected);

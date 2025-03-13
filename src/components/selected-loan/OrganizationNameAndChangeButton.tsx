@@ -55,7 +55,7 @@ const OrganizationNameAndChangeButton = () => {
                     headerTitle='Organization'
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
-                    width={"40%"}
+                    width={"36%"}
                 >
                     <ChangeInstitutionModal />
                 </TableModal>

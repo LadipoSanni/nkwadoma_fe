@@ -277,7 +277,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                      msOverflowStyle: 'none',
                                  }}
                             >
-                                <div className={`${styles.scrollBarNone} space-y-3  md:max-h-[60.5vh] overflow-y-auto`}>
+                                <div className={`${styles.scrollBarNone} space-y-3  lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto`}>
                                 <div>
                                     <Label htmlFor="productName">Product name</Label>
                                     <Field
