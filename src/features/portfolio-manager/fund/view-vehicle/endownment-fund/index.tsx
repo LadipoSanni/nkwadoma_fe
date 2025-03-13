@@ -57,8 +57,9 @@ function EndownmentFund() {
     const {data:investmentVehicleData,isLoading} = useGetInvestmentVehiclesByTypeAndStatusQuery({
         pageSize: 10,
         pageNumber: pageNumber,
-        type: 'ENDOWMENT',
-        status: "PUBLISHED"
+        investmentVehicleType: 'ENDOWMENT',
+        investmentVehicleStatus: "PUBLISHED",
+        // fundRaisingStatus: 'FUND_RAISING',
     })
      const {data: searchData} = useSearchInvestmentVehicleByNameQuery(searchTerm, {skip: !searchTerm})
 
