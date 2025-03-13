@@ -116,7 +116,7 @@ const ChangeInstitutionModal = () => {
                                 <SkeletonForLoanOrg/>
                             </div> :
                             (<div
-                                className={`${styles.organizations} md:w-[30vw] max-h-[25rem]   py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
+                                className={`${styles.organizations} space-y-3 lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto  py-2 grid md:grid`}>
                                 {searchTerm ? (
                                         searchResults?.data.length === 0 || !searchResults ?
                                             <SearchEmptyState name={"organization"}
@@ -256,7 +256,7 @@ const ChangeInstitutionModal = () => {
                     </div>
 
                     <div
-                        className="  pb-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
+                        className="  py-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
                         <Dialog.Close asChild>
                             <Button
                                 id={'cancel'} data-testid={'cancel'} onClick={handleContinue}

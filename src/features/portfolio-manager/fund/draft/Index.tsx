@@ -9,8 +9,8 @@ import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
 import styles from "@/components/selected-loan/SelectedLoan.module.css";
-import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {MdOutlineArticle} from "react-icons/md";
+import LoanEmptyState from "@/reuseable/emptyStates/Index";
 
 
 interface saveToDraftProps {
@@ -86,16 +86,19 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
             {step === 1 ? (
                 <div className="w-full">
                     <div
-                        className={`${styles.scrollBarNone} space-y-3 md:max-h-[61.5vh] overflow-y-auto`}
+                        className={`${styles.scrollBarNone} space-y-3 lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto`}
                     >
                         {isLoading ? (
                             <SkeletonForLoanOrg />
                         ) : data?.data?.length === 0 ? (
-                            <TableEmptyState
-                                name={"Draft"}
-                                icon={MdOutlineArticle }
-                                condition={false}
-                            />
+                                <div className='flex justify-center items-center pt-10 pb-10'>
+                                    <LoanEmptyState
+                                        id={'LoanRequestEmptyState'}
+                                        icon={<MdOutlineArticle className={`w-10 h-10`} color={'#142854'}
+                                        ></MdOutlineArticle>} iconBg={'#D9EAFF'} title={'Drafts will show here'}
+                                        description={'There are no drafts available yet'}/>
+                                </div>
+
                         ) :  (
                             data?.data?.map((draft: Draft) => (
                                 <div
