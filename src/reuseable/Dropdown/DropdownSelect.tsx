@@ -11,6 +11,7 @@ import loadingLoop from "@iconify/icons-line-md/loading-loop";
 
 interface FormValues {
     selectValue: string;
+    financier: string;
 }
 
 interface DropdownSelectProps {

@@ -15,6 +15,7 @@ import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
 interface FormValues {
+    selectValue: string;
     financier: string;
 }
 
@@ -43,11 +44,13 @@ const ViewFinanciers = () => {
         { id: '2', name: 'Corporate' },
     ];
 
-    const initialFormValue = {
+    const initialFormValue: FormValues = {
+        selectValue: '',
         financier: 'Individual',
     };
 
     const validationSchema = Yup.object().shape({
+        selectValue: Yup.string().required('Select value is required'),
         financier: Yup.string().required('Financier is required'),
     });
 
