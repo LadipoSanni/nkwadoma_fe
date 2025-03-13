@@ -1,3 +1,4 @@
+'use client'
 import React, {useEffect} from 'react';
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {redirect} from "next/navigation";
@@ -31,7 +32,6 @@ const Index : React.FC<AuthProps> = ({children}) => {
         }
     }
 
-    
 
 
     return token ? (
