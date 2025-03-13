@@ -19,12 +19,24 @@ interface InvestmentVehicle {
     startDate: string;
     totalAmountInInvestmentVehicle:number;
 }
+// interface InvestmentVehicleResponse {
+//     data: InvestmentVehicle[];
+//     total: number;
+//     pageSize: number;
+//     pageNumber: number;
+// }
 interface InvestmentVehicleResponse {
-    data: InvestmentVehicle[];
-    total: number;
-    pageSize: number;
-    pageNumber: number;
+    message: string;
+    data: {
+        body: InvestmentVehicle[];
+        totalPages: number;
+        pageNumber: number;
+        pageSize: number;
+    };
+    statusCode: string;
+    timeStamp: string | null;
 }
+
 export const fundApi = createApi({
     reducerPath: 'fundApi',
     baseQuery: customFetchBaseQuery,
@@ -86,19 +98,12 @@ export const fundApi = createApi({
             }),
             providesTags: ['vehicle'],
         }),
-        getInvestmentVehiclesByTypeAndStatus: builder.query<
-            InvestmentVehicleResponse,
-            { pageSize: number; pageNumber: number; type: string; status: string }
-        >({
-            query: ({ pageSize, pageNumber, type, status }) => ({
-                url: '/view-all-investment-vehicle-by-type-and-status',
+
+        getInvestmentVehiclesByTypeAndStatus: builder.query<InvestmentVehicleResponse, { pageSize: number; pageNumber: number; investmentVehicleType: string; investmentVehicleStatus: string; fundRaisingStatus?: string; }>({
+            query: ({pageSize, pageNumber, investmentVehicleType, investmentVehicleStatus, fundRaisingStatus}) => ({
+                url: 'investment-vehicle/all/view/by',
                 method: 'GET',
-                params: {
-                    pageSize,
-                    pageNumber,
-                    type,
-                    status,
-                },
+                params: {pageSize, pageNumber, investmentVehicleType, investmentVehicleStatus, fundRaisingStatus,},
             }),
             providesTags: ['vehicle'],
         }),
