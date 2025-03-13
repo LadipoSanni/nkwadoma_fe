@@ -90,6 +90,7 @@ const SideBar = () => {
         {id: 'loanee', name: 'Loanee', isActive: false, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={` h-[1.2rem] w-[1.2rem]   `}/>},
         {id: 'vehicle', name: 'Vehicle', isActive: true, route: '/vehicle', icon: <MdOutlinePayments color={current === 'Vehicle' ? '#142854' : '#939CB0'} className={` h-[1.2rem] w-[1.2rem]  `}/>},
         {id: 'investors', name: 'Investors', isActive: false, icon: <MdOutlineBusinessCenter color={'#d7d7d7'} className={` h-[1.2rem] w-[1.2rem]  `}/>},
+        {id: 'financier', name: 'Financier', route: '/financier', isActive: true, icon: <MdOutlineBusinessCenter  color={current === 'Financier' ? '#142854' : '#939CB0'} className={'h-[1.2rem] w-[1.2rem]'} /> },
 
     ]
 

@@ -61,6 +61,7 @@ const TopBar = () => {
     //         router.push("/notifications/notification")
     //     }
     // }
+    const count = 10
 
 
     return (
@@ -105,10 +106,11 @@ const TopBar = () => {
                                 style={{ width: '22px',height: '21px',stroke: '#000', strokeWidth: '0.6'}}
                                />
                                <div className='absolute'>
-                                <Badge
-                                 className="relative bg-[#142854] hover:bg-[#142854] bottom-7 left-2  text-white text-xs rounded-full w-4 h-5 flex items-center justify-center"
-                                >10
-                                </Badge>
+                                {count < 1? "" : <Badge
+                                 className={`relative bg-[#142854] hover:bg-[#142854] bottom-7 left-2  text-white text-xs rounded-full  flex items-center justify-center ${count > 99 ? "w-7 h-6"  : "w-4 h-5"}`}
+                                >
+                                  {count > 99 ? "99+" : count }
+                                </Badge>}
                                 </div>
                                     </div>
                                 }

@@ -600,8 +600,8 @@ function CreateInvestmentVehicle({
                 )}
               </div>
               </div>
-                <div className={`lg:flex lg:justify-between items-center  `}>
-                    <div className={`space-x-1 hidden  lg:flex items-center cursor-pointer`} 
+                {/* <div className={`lg:flex lg:justify-between items-center  `}> */}
+                    {/* <div className={`space-x-1 hidden  lg:flex items-center cursor-pointer`} 
                     onClick={()=> handleSaveDraft(values,setFieldError)}
                     // onChange={handleChange}
                     >
@@ -619,16 +619,19 @@ function CreateInvestmentVehicle({
                         >
                             Save to draft
                         </p>
-                    </div>
-                    <div className= "lg:flex gap-4 justify-end mt-2 mb-4 md:mb-0">
+                    </div> */}
+                    <div className= "md:flex gap-4 justify-end mt-2 mb-4 md:mb-0">
                         <Button
                             variant={"outline"}
-                            type="reset"
+                             type="button"
                            className='w-full lg:w-36 h-[57px] mb-4 border-solid border-[#142854] text-[#142854]'
                             // onClick={() => handleReset(resetForm)}
-                            onClick={handleCloseModal}
+                            onClick={()=> handleSaveDraft(values,setFieldError)}
                         >
-                            Cancel
+                          {
+                            vehicleTypeStatus === "DRAFT" && isLoading?  <Isloading /> : "Save to draft"
+                          }
+                            
                         </Button>
                         <Button
                             variant={"default"}
@@ -642,7 +645,7 @@ function CreateInvestmentVehicle({
                         >
                             {vehicleTypeStatus === "PUBLISH" && isLoading ? <Isloading /> : "Publish"}
                         </Button>
-                        <div className={`space-x-1 lg:hidden mt-5  flex items-center justify-center cursor-pointer`}
+                        {/* <div className={`space-x-1 lg:hidden mt-5  flex items-center justify-center cursor-pointer`}
                         onClick={()=> handleSaveDraft(values,setFieldError)}
                         >
                         { vehicleTypeStatus === "DRAFT" && isLoading? (<div><Isloading color="black" height={28}/></div>) : ( <input
@@ -658,9 +661,9 @@ function CreateInvestmentVehicle({
                         >
                             Save to draft
                         </p>
+                    </div> */}
                     </div>
-                    </div>
-                </div>
+                {/* </div> */}
 
             </div>
             <p

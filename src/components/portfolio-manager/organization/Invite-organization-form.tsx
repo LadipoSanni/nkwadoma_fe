@@ -173,14 +173,15 @@ function InviteOrganizationForm({setIsOpen}: props) {
                 {
                     ({errors, isValid, touched, setFieldValue, values}) => (
                         <Form className={`${inter.className}`}>
-                            <div
-                                className='grid grid-cols-1 gap-y-4 md:max-h-[67.5vh] overflow-y-auto'
+                            <div >
+                                <div
+                                className='grid grid-cols-1 gap-y-4 md:max-h-[56.5vh] overflow-y-auto'
                                 style={{
                                     scrollbarWidth: 'none',
                                     msOverflowStyle: 'none',
 
                                 }}
-                            >
+                                >
                                 <div className=''>
                                     <Label htmlFor="Name">Name</Label>
                                     <Field
@@ -433,6 +434,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
              </div>
 
              </div> */}
+             </div>
 
                                 <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>
                                     <Button
