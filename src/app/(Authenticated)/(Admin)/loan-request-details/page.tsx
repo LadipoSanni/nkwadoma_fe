@@ -1,9 +1,12 @@
 import React from 'react';
 import LoanDetails from "../../../../pages/admin/loan-request-details";
+import CustomAuthorization from "@/features/auth/authorization";
 
 const Page = () => {
     return (
-        <LoanDetails/>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+            <LoanDetails/>
+        </CustomAuthorization>
     );
 };
 
