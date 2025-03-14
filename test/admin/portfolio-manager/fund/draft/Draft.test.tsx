@@ -3,7 +3,7 @@ import {
     handleSaveAndBackToAllDraft,
     handleContinueButton, Draft
 } from "@/features/portfolio-manager/fund/draft/Index";
-import vehicleReducer, {setSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
+import vehicleReducer, {setSaveClickedDraft, clearSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
 import { configureStore } from "@reduxjs/toolkit";
 
 describe("Draft Component Functions", () => {
@@ -23,12 +23,12 @@ describe("Draft Component Functions", () => {
         minimumInvestmentAmount: 1000,
         status: "DRAFT",
         startDate: "2025-01-01",
-        totalAmountInInvestmentVehicle: 500000,
     };
 
     const setSelectedDraft = jest.fn();
     const setDisabled = jest.fn();
     const setStep = jest.fn();
+    const dispatch = jest.fn();
 
     const createTestStore = () =>
         configureStore({
@@ -69,13 +69,15 @@ describe("Draft Component Functions", () => {
     });
 
     test("handleSaveAndBackToAllDraft resets step and keeps modal open", () => {
-        handleSaveAndBackToAllDraft(setStep);
+    handleSaveAndBackToAllDraft(setStep, setSelectedDraft, setDisabled, dispatch);
         expect(setStep).toHaveBeenCalledWith(1);
+    expect(setStep).toHaveBeenCalledTimes(1);
     });
 
     test("resets step to 1", () => {
-        handleSaveAndBackToAllDraft(setStep);
-        expect(setStep).toHaveBeenCalledWith(1);
+        handleSaveAndBackToAllDraft(setStep, setSelectedDraft, setDisabled, dispatch);
+            expect(setStep).toHaveBeenCalledWith(1);
+        expect(setStep).toHaveBeenCalledTimes(1);
     });
 
     test("continue button changes step to 2", () => {
@@ -98,5 +100,31 @@ describe("Draft Component Functions", () => {
         expect(setSelectedDraft).toHaveBeenCalledWith(null);
         expect(setDisabled).toHaveBeenCalledWith(true);
         expect(store.getState().vehicle.saveClickedDraft).toBeNull();
+    });
+
+    test("calls all expected functions with correct arguments", () => {
+        handleSaveAndBackToAllDraft(setStep, setSelectedDraft, setDisabled, dispatch);
+        expect(setStep).toHaveBeenCalledWith(1);
+        expect(setSelectedDraft).toHaveBeenCalledWith(null);
+        expect(setDisabled).toHaveBeenCalledWith(true);
+        expect(dispatch).toHaveBeenCalledWith(clearSaveClickedDraft());
+    });
+
+    test("resets selectedDraft to null", () => {
+        handleSaveAndBackToAllDraft(setStep, setSelectedDraft, setDisabled, dispatch);
+        expect(setSelectedDraft).toHaveBeenCalledWith(null);
+        expect(setSelectedDraft).toHaveBeenCalledTimes(1);
+    });
+
+    test("sets disabled to true", () => {
+        handleSaveAndBackToAllDraft(setStep, setSelectedDraft, setDisabled, dispatch);
+        expect(setDisabled).toHaveBeenCalledWith(true);
+        expect(setDisabled).toHaveBeenCalledTimes(1);
+    });
+
+    test("dispatches clearSaveClickedDraft action", () => {
+        handleSaveAndBackToAllDraft(setStep, setSelectedDraft, setDisabled, dispatch);
+        expect(dispatch).toHaveBeenCalledWith(clearSaveClickedDraft());
+        expect(dispatch).toHaveBeenCalledTimes(1);
     });
 });

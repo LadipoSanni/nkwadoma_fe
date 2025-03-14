@@ -1,11 +1,12 @@
 import React from 'react'
 import ViewOrganizationDetail from '@/features/portfolio-manager/organization/view-organization-detail.tsx'
+import CustomAuthorization from "@/features/auth/authorization";
 
 const page = () => {
   return (
-    <div>
+    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
         <ViewOrganizationDetail />
-    </div>
+    </CustomAuthorization>
   )
 }
 
