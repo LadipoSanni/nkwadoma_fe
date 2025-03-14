@@ -1,6 +1,6 @@
 "use client"
-import React, {useEffect, useState} from 'react';
-import {redirect, useRouter} from "next/navigation";
+import React, { useState} from 'react';
+import { useRouter} from "next/navigation";
 import {persistor, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import Image from "next/image"
@@ -25,19 +25,12 @@ const SideBar = () => {
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
     const [logout] = useLogoutMutation()
-
-
-    const [role, setRole] = useState('')
     const user_role = getUserDetailsFromStorage('user_role')
 
 
-    useEffect(() => {
-        if (!user_role) {
-            redirect("/auth/login")
-        }else {
-            setRole(user_role)
-        }
-    }, [user_role]);
+    const [role] = useState(user_role)
+
+
 
 
     const closeSideBar = () => {
@@ -66,15 +59,11 @@ const SideBar = () => {
 
     const handleLogout =  async () => {
         store.dispatch(setCurrentNavBottomItem("Logout"))
+        await logout({})
         clearData()
         await persistor.purge();
-     try{
-          await logout({})
          store.dispatch(setCurrentNavBottomItem(""))
          router.push("/auth/login")
-     }catch (error){
-         console.log("error:: ", error)
-     }
     }
 
 
@@ -193,7 +182,7 @@ const settingsAndHelpItems: navbarItemsProps[] = [];
         {name: 'LOANEE', value: LOANEE }
     ]
 
-    const getUserSideBarByRole = (userrole: string): navbarRouterItemsProps[] | undefined => {
+    const getUserSideBarByRole = (userrole?: string): navbarRouterItemsProps[] | undefined => {
         for (let i = 0; i < sideBarContent.length; i++) {
             if (sideBarContent.at(i)?.name === userrole) {
                 if (sideBarContent.at(i)?.value) {
