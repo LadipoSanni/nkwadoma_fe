@@ -2,7 +2,7 @@ import React from 'react';
 import SelectedLoanHeader from "@/components/selected-loan/SelectedLoanHeader";
 import styles from "./SelectedLoan.module.css"
 
-type props = {
+interface props  {
     children: React.ReactNode;
 }
 

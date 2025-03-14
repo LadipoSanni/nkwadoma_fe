@@ -13,6 +13,7 @@ import { Book } from 'lucide-react';
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
 import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { formatAmount } from '@/utils/Format';
 
 interface FormValues {
     selectValue: string;
@@ -91,22 +92,17 @@ const ViewFinanciers = () => {
     ];
 
     const FinancierHeader = [
-        { title: 'Name', id: 'name' },
+        { title: 'Name', id: 'name', selector: (row: FinancierRow) => row.name },
         { title: 'Type', id: 'type', selector: (row: FinancierRow) => (
-
-            <span
-            className={`${
-                row.type === 'Individual' ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'
-            } rounded-[32px] px-2 h-5 `}
-        >
+                <span className={`${row.type === 'Individual' ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
             {row.type}
         </span>
-        ) },
-        { title: 'No. of Investments', id: 'investments' },
-        { title: 'Amount Invested', id: 'amountInvested' },
-        { title: 'Amount Earned', id: 'amountEarned' },
-        { title: 'Payout', id: 'payout' },
-        { title: 'Portfolio Value', id: 'portfolioValue' }
+            ) },
+        { title: 'No. of Investments', id: 'investments', selector: (row: FinancierRow) => row.investments || 0 },
+        { title: 'Amount Invested', id: 'amountInvested', selector: (row: FinancierRow) => formatAmount(row.amountInvested) },
+        { title: 'Amount Earned', id: 'amountEarned', selector: (row: FinancierRow) => formatAmount(row.amountEarned) },
+        { title: 'Payout', id: 'payout', selector: (row: FinancierRow) => formatAmount(row.payout) },
+        { title: 'Portfolio Value', id: 'portfolioValue', selector: (row: FinancierRow) => formatAmount(row.portfolioValue) }
     ];
 
     const handleRowClick = (row: FinancierRow) => {
