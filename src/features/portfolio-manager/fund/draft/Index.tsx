@@ -59,10 +59,16 @@ export const handleClick = (
 export const handleContinueButton = (setStep: (step: number) => void) => {
     setStep(2);
 };
-
-
-export const handleSaveAndBackToAllDraft = (setStep: (step: number) => void) => {
+export const handleSaveAndBackToAllDraft = (
+    setStep: (step: number) => void,
+    setSelectedDraft: (draft: Draft | null) => void,
+    setDisabled: (disabled: boolean) => void,
+    dispatch: AppDispatch
+) => {
     setStep(1);
+    setSelectedDraft(null);
+    setDisabled(true);
+    dispatch(clearSaveClickedDraft());
 };
 
 const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
@@ -142,7 +148,9 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
             ) : (
                 <div>
                     <UpdateDraft
-                        handleSaveAndBackToAllDraft={() => handleSaveAndBackToAllDraft(setStep)}
+                        handleSaveAndBackToAllDraft={() =>
+                            handleSaveAndBackToAllDraft(setStep, setSelectedDraft, setDisabled, dispatch)
+                        }
                         investmentVehicleType={investmentVehicleType}
                         type={type}
                         setIsOpen={setIsOpen}
