@@ -1,7 +1,6 @@
 'use client'
 import React from 'react';
-import {getUserDetails, getUserRoleSS} from "@/features/auth/usersAuth/login/action";
-import {getItemSessionStorage} from "@/utils/storage";
+import { getUserRoleSS} from "@/features/auth/usersAuth/login/action";
 
 interface Props {
     children: React.ReactNode;
@@ -13,9 +12,6 @@ const CustomAuthorization : React.FC<Props> = ({children, authorizedRoles}) => {
 
 
     const user_roles = getUserRoleSS()
-    const {storedUserRole} = getUserDetails()
-    const ll = getItemSessionStorage("userRoles");
-    console.log('ll: ', ll,'authorizedRoles: ', authorizedRoles, 'user stored roles: ', user_roles, 'storedUserRole: ', storedUserRole)
     return authorizedRoles?.some((role) => user_roles?.includes(role)) ? (
         <>{children}</>
     ) : (
