@@ -21,6 +21,7 @@ import vehicleReducer from './slice/vehicle/vehicle'
 import programSliceReducer from './slice/program/programSlice'
 import {userApi} from '@/service/users/api';
 import { notificationApi } from '@/service/notification/notification_query';
+import notificationReducer  from './slice/notification/notification';
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -32,6 +33,7 @@ const appReducer = combineReducers({
     camera: cameraReducer,
     vehicle: vehicleReducer,
     program: programSliceReducer,
+    notification: notificationReducer ,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,

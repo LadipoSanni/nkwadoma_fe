@@ -7,15 +7,19 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
     tagTypes:['notification'],
     endpoints: (builder) => ({
         viewAllNotification: builder.query({
-            query:() => ({
+            query:(param: {
+                pageSize: number;
+                pageNumber: number;
+            }) => ({
                 url:'/view-all-notification',
-                method: 'GET'
+                method: 'GET',
+                params: param,
             }),
             providesTags:['notification']
         }),
-        numberOfUnredNotification: builder.query({
+        numberOfNotification: builder.query({
             query:() => ({
-                url:'/unread-notification-count',
+                url:'/notification-count',
                 method: 'GET'
             }),
             providesTags:['notification']  
@@ -34,4 +38,4 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
     })
   })
 
-  export const {useNumberOfUnredNotificationQuery,useViewAllNotificationQuery,useLazyViewNotificationDetailsQuery} = notificationApi
+  export const {useNumberOfNotificationQuery,useViewAllNotificationQuery,useViewNotificationDetailsQuery} = notificationApi
