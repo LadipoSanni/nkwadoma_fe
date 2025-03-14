@@ -2,8 +2,6 @@
 import {
     setItemSessionStorage,
     getItemSessionStorage,
-    setItemToLocalStorage,
-    getItemFromLocalStorage
 } from "@/utils/storage";
 
 
@@ -16,10 +14,12 @@ export  function storeUserDetails (access_token: string, user_email: string, use
 }
 
 export function setUserRoles (userRoles: string[]) {
-    setItemToLocalStorage("userRoles", JSON.stringify(userRoles))
+    setItemSessionStorage("userRoles", JSON.stringify(userRoles))
 }
 export function getUserRoleSS () {
-    return getItemFromLocalStorage("userRoles")
+    const data = getItemSessionStorage("userRoles")
+    if (data){
+        return JSON?.parse(data)}
 }
 
 export function getUserDetails () {

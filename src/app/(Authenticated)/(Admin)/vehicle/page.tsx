@@ -1,12 +1,13 @@
 import React from 'react'
 import InvestmentVehicle from '@/features/portfolio-manager/fund'
+import CustomAuthorization from "@/features/auth/authorization";
 
 
 function page() {
   return (
-    <div>
+    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
    <InvestmentVehicle />  
-    </div>
+    </CustomAuthorization>
   )
 }
 

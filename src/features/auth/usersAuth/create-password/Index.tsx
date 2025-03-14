@@ -8,7 +8,7 @@ import {useCreatePasswordMutation} from "@/service/auths/api";
 import {useRouter, useSearchParams} from 'next/navigation'
 import { useToast} from "@/hooks/use-toast";
 import {jwtDecode} from "jwt-decode";
-import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
+import {setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
@@ -114,6 +114,7 @@ const CreatePassword = () => {
             await persistor.purge();
             if (user_role) {
                 storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
+                setUserRoles(user_roles)
                 if (user_role === 'LOANEE') {
                     store.dispatch(setCurrentNavbarItem("overview"))
                     router.push("/onboarding")
