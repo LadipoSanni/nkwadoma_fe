@@ -230,34 +230,35 @@ const settingsAndHelpItems: navbarItemsProps[] = [];
                     ></button>
                 </div>
             }
-                <aside
-                    id={'adminMediumSideBar'}
-                    data-testid={'adminMediumSideBar'}
-                    className={`hidden md:grid  md:bg-meedlWhite md:w-[16vw]  md:px-4  md:border-r md:border-r-[blue300] md:z-0 md:h-[100%]`}
-                >
-                    <div className={`  md:grid md:gap-4    md:h-fit `}>
-                        <div className={`md:h-[10vh] md:mt-auto md:mb-auto md:w-full   md:grid   `}>
-                            <Image
-                                id={'meddleMainLogoOnAdminLayout'}
-                                data-testid={'meddleMainLogoOnAdminLayout'}
-                                width={100}
-                                height={50}
-                                style={{marginTop: 'auto', marginBottom: 'auto'}}
-                                src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
-                            />
-                        </div>
-                        <div className={` hidden  md:grid md:h-fit  md:w-full `}>
-                            <NavbarRouter currentTab={current} handleClick={clickNavbar}
-                                          navbarItems={getUserSideBarByRole(role)}/>
-                        </div>
-                    </div>
+            <aside
+                id={'adminMediumSideBar'}
+                data-testid={'adminMediumSideBar'}
+                className={`hidden md:grid  md:bg-meedlWhite md:content-between md:w-[16vw]  md:px-4  md:py-6 md:border-r md:border-r-[blue300] md:z-0 md:h-[100%]`}
+            >
 
-                    <div className={`md:absolute md:grid m md:bottom-5 gap-3  md:h-fit `}>
-                        <div className={` hidden md:grid  md:h-fit  md:w-full `}>
-                            < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
-                        </div>
+
+                <div className={`  md:grid md:gap-8    md:h-fit `}>
+                    <div className={`md:h-fit md:mt-2  m md:w-fit   md:grid   `}>
+                        <Image
+                            id={'meddleMainLogoOnAdminLayout'}
+                            data-testid={'meddleMainLogoOnAdminLayout'}
+                            width={100}
+                            height={50}
+                            src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
+                        />
                     </div>
-                </aside>
+                    <div className={` hidden md:mt-3  md:grid md:h-fit  md:w-full `}>
+                        <NavbarRouter currentTab={current} handleClick={clickNavbar}
+                                      navbarItems={getUserSideBarByRole(role)}/>
+                    </div>
+                </div>
+
+                <div className={` `}>
+                    < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
+                </div>
+
+            </aside>
+
 
 
         </div>
