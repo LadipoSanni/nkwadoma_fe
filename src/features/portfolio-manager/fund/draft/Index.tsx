@@ -92,7 +92,12 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
 
     useEffect(() => {
         if (data?.data?.body) {
-            setDrafts((prevDrafts) => [...prevDrafts, ...data.data.body]);
+            setDrafts((prevDrafts) => {
+                const newDrafts = data.data.body.filter(
+                    (newDraft: Draft) => !prevDrafts.some((prevDraft) => prevDraft.id === newDraft.id)
+                );
+                return [...prevDrafts, ...newDrafts];
+            });
             setHasMore(data.data.hasNextPage);
         }
     }, [data]);
