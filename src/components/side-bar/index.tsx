@@ -1,6 +1,6 @@
 "use client"
-import React, {useEffect, useState} from 'react';
-import {redirect, useRouter} from "next/navigation";
+import React, { useState} from 'react';
+import { useRouter} from "next/navigation";
 import {persistor, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import Image from "next/image"
@@ -25,19 +25,12 @@ const SideBar = () => {
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
     const [logout] = useLogoutMutation()
-
-
-    const [role, setRole] = useState('')
     const user_role = getUserDetailsFromStorage('user_role')
 
 
-    useEffect(() => {
-        if (!user_role) {
-            redirect("/auth/login")
-        }else {
-            setRole(user_role)
-        }
-    }, [user_role]);
+    const [role] = useState(user_role)
+
+
 
 
     const closeSideBar = () => {
@@ -66,15 +59,11 @@ const SideBar = () => {
 
     const handleLogout =  async () => {
         store.dispatch(setCurrentNavBottomItem("Logout"))
+        await logout({})
         clearData()
         await persistor.purge();
-     try{
-          await logout({})
          store.dispatch(setCurrentNavBottomItem(""))
          router.push("/auth/login")
-     }catch (error){
-         console.log("error:: ", error)
-     }
     }
 
 
@@ -193,7 +182,7 @@ const settingsAndHelpItems: navbarItemsProps[] = [];
         {name: 'LOANEE', value: LOANEE }
     ]
 
-    const getUserSideBarByRole = (userrole: string): navbarRouterItemsProps[] | undefined => {
+    const getUserSideBarByRole = (userrole?: string): navbarRouterItemsProps[] | undefined => {
         for (let i = 0; i < sideBarContent.length; i++) {
             if (sideBarContent.at(i)?.name === userrole) {
                 if (sideBarContent.at(i)?.value) {
@@ -241,34 +230,35 @@ const settingsAndHelpItems: navbarItemsProps[] = [];
                     ></button>
                 </div>
             }
-                <aside
-                    id={'adminMediumSideBar'}
-                    data-testid={'adminMediumSideBar'}
-                    className={`hidden md:grid  md:bg-meedlWhite md:w-[16vw]  md:px-4  md:border-r md:border-r-[blue300] md:z-0 md:h-[100%]`}
-                >
-                    <div className={`  md:grid md:gap-4    md:h-fit `}>
-                        <div className={`md:h-[10vh] md:mt-auto md:mb-auto md:w-full   md:grid   `}>
-                            <Image
-                                id={'meddleMainLogoOnAdminLayout'}
-                                data-testid={'meddleMainLogoOnAdminLayout'}
-                                width={100}
-                                height={50}
-                                style={{marginTop: 'auto', marginBottom: 'auto'}}
-                                src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
-                            />
-                        </div>
-                        <div className={` hidden  md:grid md:h-fit  md:w-full `}>
-                            <NavbarRouter currentTab={current} handleClick={clickNavbar}
-                                          navbarItems={getUserSideBarByRole(role)}/>
-                        </div>
-                    </div>
+            <aside
+                id={'adminMediumSideBar'}
+                data-testid={'adminMediumSideBar'}
+                className={`hidden md:grid  md:bg-meedlWhite md:content-between md:w-[16vw]  md:px-4  md:py-6 md:border-r md:border-r-[blue300] md:z-0 md:h-[100%]`}
+            >
 
-                    <div className={`md:absolute md:grid m md:bottom-5 gap-3  md:h-fit `}>
-                        <div className={` hidden md:grid  md:h-fit  md:w-full `}>
-                            < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
-                        </div>
+
+                <div className={`  md:grid md:gap-8    md:h-fit `}>
+                    <div className={`md:h-fit md:mt-2  m md:w-fit   md:grid   `}>
+                        <Image
+                            id={'meddleMainLogoOnAdminLayout'}
+                            data-testid={'meddleMainLogoOnAdminLayout'}
+                            width={100}
+                            height={50}
+                            src={'/Meedle Logo Primary Main.svg'} alt={'meedleYellowLogo'}
+                        />
                     </div>
-                </aside>
+                    <div className={` hidden md:mt-3  md:grid md:h-fit  md:w-full `}>
+                        <NavbarRouter currentTab={current} handleClick={clickNavbar}
+                                      navbarItems={getUserSideBarByRole(role)}/>
+                    </div>
+                </div>
+
+                <div className={` `}>
+                    < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
+                </div>
+
+            </aside>
+
 
 
         </div>

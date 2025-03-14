@@ -1,5 +1,5 @@
 import React from 'react';
-import DisbursedLoanDetails from "../../../features/portfolio-manager/disbursed-loan-details";
+import DisbursedLoanDetails from "../../../../features/portfolio-manager/disbursed-loan-details";
 
 const Page = () => {
     return (
