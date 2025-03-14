@@ -32,6 +32,7 @@ interface InvestmentVehicleFundRaisingResponse {
         totalPages: number;
         pageNumber: number;
         pageSize: number;
+        hasNextPage: boolean;
     };
     statusCode: string;
     timeStamp: string | null;
