@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {inter} from "@/app/fonts";
 import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery} from "@/service/admin/fund_query";
@@ -11,7 +11,7 @@ import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
 import styles from "@/components/selected-loan/SelectedLoan.module.css";
 import {MdOutlineArticle} from "react-icons/md";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
-
+import InfiniteScroll from "react-infinite-scroll-component";
 
 interface saveToDraftProps {
     setIsOpen?: (b: boolean) => void;
@@ -59,50 +59,81 @@ export const handleClick = (
 export const handleContinueButton = (setStep: (step: number) => void) => {
     setStep(2);
 };
-
-
-export const handleSaveAndBackToAllDraft = (setStep: (step: number) => void) => {
+export const handleSaveAndBackToAllDraft = (
+    setStep: (step: number) => void,
+    setSelectedDraft: (draft: Draft | null) => void,
+    setDisabled: (disabled: boolean) => void,
+    dispatch: AppDispatch
+) => {
     setStep(1);
+    setSelectedDraft(null);
+    setDisabled(true);
+    dispatch(clearSaveClickedDraft());
 };
 
 const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
     const [selectedDraft, setSelectedDraft] = useState<Draft | null>(null);
     const [disabled, setDisabled] = useState(true);
     const [step, setStep] = useState(1);
-
+    const [pageNumber, setPageNumber] = useState(0);
+    const [drafts, setDrafts] = useState<Draft[]>([]);
+    const [hasMore, setHasMore] = useState(true);
 
     const dispatch = useDispatch();
     useSelector((state: RootState) => state.vehicle.saveClickedDraft);
 
-    const {data, isLoading} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
+    const {data, isLoading,isFetching} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
         pageSize: 10,
-        pageNumber: 0,
+        pageNumber,
         investmentVehicleType: investmentVehicleType,
         investmentVehicleStatus: "DRAFT",
         // fundRaisingStatus: 'FUND_RAISING',
     });
 
+    useEffect(() => {
+        if (data?.data?.body) {
+            setDrafts((prevDrafts) => {
+                const newDrafts = data.data.body.filter(
+                    (newDraft: Draft) => !prevDrafts.some((prevDraft) => prevDraft.id === newDraft.id)
+                );
+                return [...prevDrafts, ...newDrafts];
+            });
+            setHasMore(data.data.hasNextPage);
+        }
+    }, [data]);
+
+    const loadMore = () => {
+        if (!isFetching && hasMore) {
+            setPageNumber((prevPage) => prevPage + 1);
+        }
+    };
 
     return (
         <div className={`${inter.className}`}>
             {step === 1 ? (
                 <div className="w-full">
-                    <div
-                        className={`${styles.scrollBarNone} space-y-3 lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto`}
+                    <InfiniteScroll
+                        dataLength={drafts.length}
+                        next={loadMore}
+                        hasMore={hasMore}
+                        loader={isFetching ? <SkeletonForLoanOrg /> : null}
+                        height="56.5vh"
+                        className={`${styles.scrollBarNone} space-y-3`}
                     >
-                        {isLoading ? (
+                        {isLoading && drafts.length === 0 ? (
                             <SkeletonForLoanOrg />
-                        ) : data?.data?.body.length === 0 ? (
-                                <div className='flex justify-center items-center pt-10 pb-10'>
-                                    <LoanEmptyState
-                                        id={'LoanRequestEmptyState'}
-                                        icon={<MdOutlineArticle className={`w-10 h-10`} color={'#142854'}
-                                        ></MdOutlineArticle>} iconBg={'#D9EAFF'} title={'Drafts will show here'}
-                                        description={'There are no drafts available yet'}/>
-                                </div>
-
-                        ) :  (
-                            data?.data?.body.map((draft: Draft) => (
+                        ) : drafts.length === 0 ? (
+                            <div className="flex justify-center items-center pt-20">
+                                <LoanEmptyState
+                                    id="LoanRequestEmptyState"
+                                    icon={<MdOutlineArticle className="w-10 h-10" color="#142854" />}
+                                    iconBg="#D9EAFF"
+                                    title="Drafts will show here"
+                                    description="There are no drafts available yet"
+                                />
+                            </div>
+                        ) : (
+                            drafts.map((draft: Draft) => (
                                 <div
                                     key={draft.id}
                                     className={`${inter.className} p-4 border rounded-lg cursor-pointer transition ${
@@ -123,7 +154,7 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
                                 </div>
                             ))
                         )}
-                    </div>
+                    </InfiniteScroll>
 
                     <div className="md:flex md:justify-end py-4 w-full">
                         <UpdateDraftButton
@@ -142,7 +173,9 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
             ) : (
                 <div>
                     <UpdateDraft
-                        handleSaveAndBackToAllDraft={() => handleSaveAndBackToAllDraft(setStep)}
+                        handleSaveAndBackToAllDraft={() =>
+                            handleSaveAndBackToAllDraft(setStep, setSelectedDraft, setDisabled, dispatch)
+                        }
                         investmentVehicleType={investmentVehicleType}
                         type={type}
                         setIsOpen={setIsOpen}
