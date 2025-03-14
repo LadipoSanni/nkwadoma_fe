@@ -57,10 +57,10 @@ function EndownmentFund() {
     const {data:investmentVehicleData,isLoading} = useGetInvestmentVehiclesByTypeAndStatusQuery({
         pageSize: 10,
         pageNumber: pageNumber,
-        investmentVehicleType: 'ENDOWMENT',
-        investmentVehicleStatus: "PUBLISHED",
-        // fundRaisingStatus: 'FUND_RAISING',
+        type: 'ENDOWMENT',
+        status: "PUBLISHED",
     })
+
      const {data: searchData} = useSearchInvestmentVehicleByNameQuery(searchTerm, {skip: !searchTerm})
 
      useEffect(() => {
