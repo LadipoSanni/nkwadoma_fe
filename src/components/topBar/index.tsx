@@ -130,7 +130,7 @@ const TopBar = () => {
                                 {getFirstLetterOfWord(user_name)}
                             </div>
                         </div>
-                        <button onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : ''} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
+                        <button onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : 'cursor-text'} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
                             <p className={`text-black500 ${inter500.className} flex justify-start  text-sm `}>{capitalizeFirstLetters(user_name)}</p>
                             <p className={`text-black400 ${inter.className} flex justify-start text-sm`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
                         </button>
