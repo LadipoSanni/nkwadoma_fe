@@ -2,7 +2,7 @@
 import React, {useState} from "react";
 import {inter} from "@/app/fonts";
 import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
-import {useGetInvestmentVehiclesByTypeAndStatusQuery} from "@/service/admin/fund_query";
+import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery} from "@/service/admin/fund_query";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "@/redux/store";
 import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
@@ -74,7 +74,7 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
     const dispatch = useDispatch();
     useSelector((state: RootState) => state.vehicle.saveClickedDraft);
 
-    const {data, isLoading} = useGetInvestmentVehiclesByTypeAndStatusQuery({
+    const {data, isLoading} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
         pageSize: 10,
         pageNumber: 0,
         investmentVehicleType: investmentVehicleType,

@@ -19,13 +19,13 @@ interface InvestmentVehicle {
     startDate: string;
     totalAmountInInvestmentVehicle:number;
 }
-// interface InvestmentVehicleResponse {
-//     data: InvestmentVehicle[];
-//     total: number;
-//     pageSize: number;
-//     pageNumber: number;
-// }
 interface InvestmentVehicleResponse {
+    data: InvestmentVehicle[];
+    total: number;
+    pageSize: number;
+    pageNumber:number;
+}
+interface InvestmentVehicleFundRaisingResponse {
     message: string;
     data: {
         body: InvestmentVehicle[];
@@ -99,11 +99,27 @@ export const fundApi = createApi({
             providesTags: ['vehicle'],
         }),
 
-        getInvestmentVehiclesByTypeAndStatus: builder.query<InvestmentVehicleResponse, { pageSize: number; pageNumber: number; investmentVehicleType: string; investmentVehicleStatus: string; fundRaisingStatus?: string; }>({
+        getInvestmentVehiclesByTypeAndStatusAndFundRaising: builder.query<InvestmentVehicleFundRaisingResponse, { pageSize: number; pageNumber: number; investmentVehicleType: string; investmentVehicleStatus: string; fundRaisingStatus?: string; }>({
             query: ({pageSize, pageNumber, investmentVehicleType, investmentVehicleStatus, fundRaisingStatus}) => ({
                 url: 'investment-vehicle/all/view/by',
                 method: 'GET',
                 params: {pageSize, pageNumber, investmentVehicleType, investmentVehicleStatus, fundRaisingStatus,},
+            }),
+            providesTags: ['vehicle'],
+        }),
+        getInvestmentVehiclesByTypeAndStatus: builder.query<
+            InvestmentVehicleResponse,
+            { pageSize: number; pageNumber: number; type: string; status: string }
+        >({
+            query: ({ pageSize, pageNumber, type, status }) => ({
+                url: '/view-all-investment-vehicle-by-type-and-status',
+                method: 'GET',
+                params: {
+                    pageSize,
+                    pageNumber,
+                    type,
+                    status,
+                },
             }),
             providesTags: ['vehicle'],
         }),
@@ -125,5 +141,6 @@ export const {
     useSearchInvestmentVehicleByNameQuery,
     useGetPublishedInvestmentVehicleByNameQuery,
     useGetInvestmentVehiclesByTypeAndStatusQuery,
+    useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
     usePublishInvestmentMutation,
 } = fundApi;
