@@ -12,7 +12,7 @@ import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-
 import {useRouter} from 'next/navigation'
 import {
     useGetAllInvestmentmentVehicleQuery,
-    useGetInvestmentVehiclesByTypeAndStatusQuery
+    useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery
 } from '@/service/admin/fund_query';
 import {formatMonthInDate} from '@/utils/Format';
 import {useSearchInvestmentVehicleByNameQuery} from '@/service/admin/fund_query';
@@ -76,11 +76,12 @@ const InvestmentVehicle = () => {
     const getVehicleTypeFromTab = (tabValue: string) => {
         return tabValue === 'commercialFund' ? 'COMMERCIAL' : 'ENDOWMENT';
     };
-    const {refetch} = useGetInvestmentVehiclesByTypeAndStatusQuery({
+    const {refetch} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
         pageSize: 50,
         pageNumber: 0,
-        type: getVehicleTypeFromTab(activeTab),
-        status: "DRAFT",
+        investmentVehicleType: getVehicleTypeFromTab(activeTab),
+        investmentVehicleStatus: "DRAFT",
+        // fundRaisingStatus: 'FUND_RAISING',
     }, {skip: !draft});
 
     useEffect(() => {

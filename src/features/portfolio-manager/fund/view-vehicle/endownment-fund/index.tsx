@@ -58,8 +58,9 @@ function EndownmentFund() {
         pageSize: 10,
         pageNumber: pageNumber,
         type: 'ENDOWMENT',
-        status: "PUBLISHED"
+        status: "PUBLISHED",
     })
+
      const {data: searchData} = useSearchInvestmentVehicleByNameQuery(searchTerm, {skip: !searchTerm})
 
      useEffect(() => {
