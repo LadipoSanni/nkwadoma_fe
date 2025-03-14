@@ -134,7 +134,6 @@ const Login: React.FC = () => {
                         if (user_role) {
                             storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                             setUserRoles(user_roles)
-                            console.log('user roles: ', user_roles)
                             switch (user_role) {
                                 case 'LOANEE' :
                                    await routeLoanee(loanOfferId)

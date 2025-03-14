@@ -1,5 +1,6 @@
 import React from 'react';
 import SelectedLoan from "@/components/selected-loan/SelectedLoan";
+import CustomAuthorization from "@/features/auth/authorization";
 
 
 
@@ -7,8 +8,11 @@ export default function Layout  ({children}: Readonly<{
     children: React.ReactNode;
 }>)  {
     return (
-        // eslint-disable-next-line react/no-children-prop
-        <SelectedLoan children={children}/>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+            <SelectedLoan>
+                {children}
+           </SelectedLoan>
+        </CustomAuthorization>
     );
 };
 

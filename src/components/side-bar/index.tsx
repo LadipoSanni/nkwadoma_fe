@@ -63,6 +63,7 @@ const SideBar = () => {
         clearData()
         await persistor.purge();
          router.push("/auth/login")
+        store.dispatch(setCurrentNavBottomItem(""))
 
     }
 

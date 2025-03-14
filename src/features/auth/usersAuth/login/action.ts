@@ -17,7 +17,9 @@ export function setUserRoles (userRoles: string[]) {
     setItemSessionStorage("userRoles", JSON.stringify(userRoles))
 }
 export function getUserRoleSS () {
-    return getItemSessionStorage("userRoles")
+    const data = getItemSessionStorage("userRoles")
+    if (data){
+        return JSON?.parse(data)}
 }
 
 export function getUserDetails () {
