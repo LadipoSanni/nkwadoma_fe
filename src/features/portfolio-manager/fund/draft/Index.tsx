@@ -2,15 +2,15 @@
 import React, {useState} from "react";
 import {inter} from "@/app/fonts";
 import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
-import {useGetInvestmentVehiclesByTypeAndStatusQuery} from "@/service/admin/fund_query";
+import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery} from "@/service/admin/fund_query";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "@/redux/store";
 import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
 import styles from "@/components/selected-loan/SelectedLoan.module.css";
-import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {MdOutlineArticle} from "react-icons/md";
+import LoanEmptyState from "@/reuseable/emptyStates/Index";
 
 
 interface saveToDraftProps {
@@ -70,14 +70,16 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
     const [disabled, setDisabled] = useState(true);
     const [step, setStep] = useState(1);
 
+
     const dispatch = useDispatch();
     useSelector((state: RootState) => state.vehicle.saveClickedDraft);
 
-    const {data, isLoading} = useGetInvestmentVehiclesByTypeAndStatusQuery({
-        pageSize: 50,
+    const {data, isLoading} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
+        pageSize: 10,
         pageNumber: 0,
-        type: investmentVehicleType,
-        status: "DRAFT",
+        investmentVehicleType: investmentVehicleType,
+        investmentVehicleStatus: "DRAFT",
+        // fundRaisingStatus: 'FUND_RAISING',
     });
 
 
@@ -86,18 +88,21 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
             {step === 1 ? (
                 <div className="w-full">
                     <div
-                        className={`${styles.scrollBarNone} space-y-3 md:max-h-[61.5vh] overflow-y-auto`}
+                        className={`${styles.scrollBarNone} space-y-3 lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto`}
                     >
                         {isLoading ? (
                             <SkeletonForLoanOrg />
-                        ) : data?.data?.length === 0 ? (
-                            <TableEmptyState
-                                name={"Draft"}
-                                icon={MdOutlineArticle }
-                                condition={false}
-                            />
+                        ) : data?.data?.body.length === 0 ? (
+                                <div className='flex justify-center items-center pt-10 pb-10'>
+                                    <LoanEmptyState
+                                        id={'LoanRequestEmptyState'}
+                                        icon={<MdOutlineArticle className={`w-10 h-10`} color={'#142854'}
+                                        ></MdOutlineArticle>} iconBg={'#D9EAFF'} title={'Drafts will show here'}
+                                        description={'There are no drafts available yet'}/>
+                                </div>
+
                         ) :  (
-                            data?.data?.map((draft: Draft) => (
+                            data?.data?.body.map((draft: Draft) => (
                                 <div
                                     key={draft.id}
                                     className={`${inter.className} p-4 border rounded-lg cursor-pointer transition ${

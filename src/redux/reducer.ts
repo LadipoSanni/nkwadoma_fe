@@ -20,6 +20,7 @@ import cameraReducer from  './slice/camera/camera-slice'
 import vehicleReducer from './slice/vehicle/vehicle'
 import programSliceReducer from './slice/program/programSlice'
 import {userApi} from '@/service/users/api';
+import { notificationApi } from '@/service/notification/notification_query';
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -42,6 +43,7 @@ const appReducer = combineReducers({
     [fundApi.reducerPath]: fundApi.reducer,
     [loanOfferApi.reducerPath]: loanOfferApi.reducer,
     [loanDisbursalApi.reducerPath]: loanDisbursalApi.reducer,
+    [notificationApi.reducerPath]:  notificationApi.reducer
 });
 
 export default appReducer;

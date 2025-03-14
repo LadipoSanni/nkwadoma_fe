@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminLayout from "@/layout/admin-layout/index";
+import AdminLayout from "@/layout/admin-layout";
 
 
 

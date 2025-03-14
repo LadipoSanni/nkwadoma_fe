@@ -12,7 +12,7 @@ import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-
 import {useRouter} from 'next/navigation'
 import {
     useGetAllInvestmentmentVehicleQuery,
-    useGetInvestmentVehiclesByTypeAndStatusQuery
+    useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery
 } from '@/service/admin/fund_query';
 import {formatMonthInDate} from '@/utils/Format';
 import {useSearchInvestmentVehicleByNameQuery} from '@/service/admin/fund_query';
@@ -33,7 +33,7 @@ const tabData = [
         value: "commercialFund"
     },
     {
-        name: "Endowment ",
+        name: "Endowment funds",
         value: "endowmentFund"
     },
 ]
@@ -76,11 +76,12 @@ const InvestmentVehicle = () => {
     const getVehicleTypeFromTab = (tabValue: string) => {
         return tabValue === 'commercialFund' ? 'COMMERCIAL' : 'ENDOWMENT';
     };
-    const {refetch} = useGetInvestmentVehiclesByTypeAndStatusQuery({
+    const {refetch} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
         pageSize: 50,
         pageNumber: 0,
-        type: getVehicleTypeFromTab(activeTab),
-        status: "DRAFT",
+        investmentVehicleType: getVehicleTypeFromTab(activeTab),
+        investmentVehicleStatus: "DRAFT",
+        // fundRaisingStatus: 'FUND_RAISING',
     }, {skip: !draft});
 
     useEffect(() => {
@@ -282,7 +283,7 @@ const InvestmentVehicle = () => {
                         isOpen={isModalOpen}
                         closeModal={() => setIsModalOpen(false)}
                         className='pb-1'
-                        headerTitle={modalType === 'commercial'? "Commercial fund": "Endownment fund"}
+                        headerTitle={modalType === 'commercial' ? "Commerciial fund" : "Endowment fund"}
                         closeOnOverlayClick={true}
                         icon={Cross2Icon}
                         width={"36%"}

@@ -23,8 +23,20 @@ interface InvestmentVehicleResponse {
     data: InvestmentVehicle[];
     total: number;
     pageSize: number;
-    pageNumber: number;
+    pageNumber:number;
 }
+interface InvestmentVehicleFundRaisingResponse {
+    message: string;
+    data: {
+        body: InvestmentVehicle[];
+        totalPages: number;
+        pageNumber: number;
+        pageSize: number;
+    };
+    statusCode: string;
+    timeStamp: string | null;
+}
+
 export const fundApi = createApi({
     reducerPath: 'fundApi',
     baseQuery: customFetchBaseQuery,
@@ -86,6 +98,15 @@ export const fundApi = createApi({
             }),
             providesTags: ['vehicle'],
         }),
+
+        getInvestmentVehiclesByTypeAndStatusAndFundRaising: builder.query<InvestmentVehicleFundRaisingResponse, { pageSize: number; pageNumber: number; investmentVehicleType: string; investmentVehicleStatus: string; fundRaisingStatus?: string; }>({
+            query: ({pageSize, pageNumber, investmentVehicleType, investmentVehicleStatus, fundRaisingStatus}) => ({
+                url: 'investment-vehicle/all/view/by',
+                method: 'GET',
+                params: {pageSize, pageNumber, investmentVehicleType, investmentVehicleStatus, fundRaisingStatus,},
+            }),
+            providesTags: ['vehicle'],
+        }),
         getInvestmentVehiclesByTypeAndStatus: builder.query<
             InvestmentVehicleResponse,
             { pageSize: number; pageNumber: number; type: string; status: string }
@@ -120,5 +141,6 @@ export const {
     useSearchInvestmentVehicleByNameQuery,
     useGetPublishedInvestmentVehicleByNameQuery,
     useGetInvestmentVehiclesByTypeAndStatusQuery,
+    useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
     usePublishInvestmentMutation,
 } = fundApi;

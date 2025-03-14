@@ -5,8 +5,10 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill/dist/quill.snow.css';
 import { FieldProps } from 'formik';
 import { Inter } from 'next/font/google';
-export const inter = Inter({ subsets: ['latin'] });
 
+
+
+export const inter = Inter({ subsets: ['latin'] });
 
 interface CustomQuillFieldProps {
     description: string;
@@ -105,11 +107,15 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({
                 {`
                 .ql-editor {
                         font-family: 'Inter', sans-serif !important;
+                        font-size: 16px !important; 
+                        line-height: 24px !important;
                     }
                     .ql-editor.ql-blank::before {
                         color: #999; 
                         font-style: normal; 
                         font-family: 'Inter', sans-serif; 
+                        font-size: 16px !important;
+                        line-height: 24px !important;
                     }
                     .ql-toolbar .ql-picker-label {
                         min-width: 0 !important; 

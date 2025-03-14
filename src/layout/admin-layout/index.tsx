@@ -1,41 +1,17 @@
 'use client'
-import React, {useEffect} from 'react';
+import React from 'react';
 import SideBar from "@/components/side-bar/index";
 import TopBar from "@/components/topBar/index";
 import {Providers} from "@/app/provider";
 import styles from "./index.module.css"
-import {getUserDetailsFromStorage} from "@/components/topBar/action";
-import {useToast} from "@/hooks/use-toast";
-import {isTokenExpired} from "@/utils/GlobalMethods";
-import {clearData} from "@/utils/storage";
-import {redirect} from "next/navigation";
+
 
 type props = {
     children: React.ReactNode;
 }
 
 const AdminLayout = ({children}: props) => {
-    const token = getUserDetailsFromStorage('access_token' )
-    const refreshToken = getUserDetailsFromStorage('refresh_token' )
 
-    const {toast} = useToast()
-    const response = isTokenExpired(token ? token : '')
-    const response2 = isTokenExpired(refreshToken ? refreshToken : '')
-
-    useEffect(() => {
-        checkUserToken(response, response2)
-    }, [response, response2]);
-
-    const checkUserToken = (isTokenExpired: boolean, isRefreshTokenExpired: boolean) => {
-        if (isTokenExpired && isRefreshTokenExpired) {
-            clearData()
-            toast({
-                description: "Session expired. Please login again",
-                status: "error",
-            });
-            redirect("/auth/login")
-        }
-    }
 
 
     return (
