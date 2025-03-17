@@ -4,8 +4,8 @@ import SearchInput from '@/reuseable/Input/SearchInput'
 import {inter} from "@/app/fonts"
 import { Trash2 } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { notificationMockData } from '@/utils/Notification_mock-data';
-import { getPaginatedData } from '@/utils/Mock-paginated-data';
+// import { notificationMockData } from '@/utils/Notification_mock-data';
+// import { getPaginatedData } from '@/utils/Mock-paginated-data';
 import NotificationButton from '@/reuseable/buttons/Notification-button';
 import EmptyState from '@/reuseable/emptyStates/TableEmptyState';
 import  DeleteNotification  from '@/reuseable/details/DeleteCohort';
@@ -14,38 +14,37 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import { BellIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
 import SkeletonForViewNotification from '@/reuseable/Skeleton-loading-state/Skeleton-for-view-notification';
-
+import { useViewAllNotificationQuery } from '@/service/notification/notification_query';
+import {useAppSelector} from "@/redux/store";
 
 interface Props{
     children: ReactNode
 }
 
-interface notificationProps{
-    id: string,
-    type: string,
-    subtitle: string,
-    message: string,
-    read: boolean,
-    senderName: string,
-    senderEmail: string;
-    timeSent?: string;
-    receiverName?: string
-    callToActionRequired?: boolean
+interface notificationProp {
+  id: string,
+  title: string,
+  contentDetail: string,
+  read: boolean
 }
 
 function NotificationLayout({children}: Props) {
+       const totalNotification = useAppSelector(state => (state.notification.totalNotifications))
        const [searchTerm, setSearchTerm] = useState('');
        const [selectAll, setSelectAll] = useState(false);
        const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
        const [pageNumber,setPageNumber] = useState(0)
        const pageSize = 10
-       const [getPaginatedDatas, setPaginatedData] = useState<notificationProps[]>([])
+      //  const [getPaginatedDatas, setPaginatedData] = useState<notificationProps[]>([])
        const [hasNextPage,setHasNextPage] = useState(false)
-       const [totalItem, setTotalItem] = useState(0)
+      //  const [totalPage,setTotalPage] = useState(0)
+       const [notificationDatas,setNotificationData]= useState<notificationProp[]>([])
+      //  const [totalItem, setTotalItem] = useState(0)
        const [isDeleteOpen, setIsDeleteOpen] = useState(false);
        const [isMobile, setIsMobile] = useState(false);
        const router = useRouter();
-       const loading = false
+      
+       const {data,isLoading} = useViewAllNotificationQuery({pageSize: pageSize,pageNumber: pageNumber})
 
        useEffect(() => {
         const mediaQuery = window.matchMedia('(max-width: 767px)'); 
@@ -58,14 +57,22 @@ function NotificationLayout({children}: Props) {
     }, []);
 
        useEffect(()=> {
-           const paginated = getPaginatedData(pageNumber, pageSize, notificationMockData);
-            setPaginatedData(paginated.notifications)
-            setPageNumber(paginated.pageNumber)
-            setHasNextPage(paginated.hasNextPage)
-            setTotalItem(paginated.totalItems)
+          if(data && data?.data){
+             setNotificationData(data?.data?.body)
+             setHasNextPage(data?.data?.hasNextPage)
+            //  setTotalPage(data?.data?.totalPages)
+             setPageNumber(data?.data?.pageNumber)
+             
+          }
+          //  const paginated = getPaginatedData(pageNumber, pageSize, notificationMockData);
+          //   setPaginatedData(paginated.notifications)
+          //   setPageNumber(paginated.pageNumber)
+          //   setHasNextPage(paginated.hasNextPage)
+          //   setTotalItem(paginated.totalItems)
             // console.log("The paginated data: ",paginated)
-         },[pageNumber])
+         },[data])
 
+       
          const handleCheckedRow = (id: string) => {
             setSelectedRows((prevSelected) => {
               const newSelected = new Set(prevSelected);
@@ -84,7 +91,7 @@ function NotificationLayout({children}: Props) {
                 setSelectedRows(new Set());
                }else {
                 const allRowIndexes: Set<string> = new Set();
-                getPaginatedDatas?.forEach((data) => allRowIndexes.add(String(data.id)));
+                notificationDatas?.forEach((data) => allRowIndexes.add(String(data.id)));
                 setSelectedRows(allRowIndexes);
               }
               setSelectAll(!selectAll);
@@ -107,8 +114,8 @@ function NotificationLayout({children}: Props) {
                  }
                }
            
-               const trackCountFirst = pageNumber * pageSize + 1;
-               const trackCountLast = Math.min((pageNumber + 1) * pageSize, totalItem);
+               const trackCountFirst = pageNumber  * pageSize + 1;
+               const trackCountLast = Math.min((pageNumber + 1) * pageSize, totalNotification);
 
                const handleDeleteOpen = () =>{
                 setIsDeleteOpen(true)
@@ -138,10 +145,10 @@ function NotificationLayout({children}: Props) {
   return (
     <div className={`w-full h-full md:flex ${inter.className}`}>
      <div className='md:border-r  lg:min-w-[28.125rem]'>
-    { loading? <div><SkeletonForViewNotification/></div> :
+    { isLoading ? <div><SkeletonForViewNotification/></div> :
    <div>
       {
-        getPaginatedDatas.length === 0? (
+        notificationDatas.length === 0? (
         <div className='relative bottom-24 top-24 '>
           <EmptyState
            icon={() => (
@@ -209,12 +216,12 @@ function NotificationLayout({children}: Props) {
 
           >
           {
-            getPaginatedDatas.map((notification, index)=> (
+            notificationDatas.map((notification, index)=> (
               <div key={index} className='flex items-center w-full'>
         
                 <div className='flex-1 border-t '>
                   <TabsTrigger 
-                  value={notification.type} className={`w-full py-3  data-[state=active]:bg-[#F9F9F9] flex justify-between px-0 rounded-none`}
+                  value={notification.title} className={`w-full py-3  data-[state=active]:bg-[#F9F9F9] flex justify-between px-0 rounded-none`}
                 onClick={() =>handleClick(notification.id)}
                   >
                   <div className='flex md:px-3 cursor-pointer' >
@@ -235,8 +242,8 @@ function NotificationLayout({children}: Props) {
                 />
                 </div>
                 <div className='flex-col flex items-start'>
-                  <div className="text-[14px] font-medium text-[#212221] ">{notification.type}</div>
-                <div className='font-normal'>{notification.subtitle}</div>
+                  <div className="text-[14px] font-medium text-[#212221] ">{notification.title}</div>
+                <div className='font-normal'>{notification.contentDetail}</div>
                 </div>
                   
                   </div>
@@ -259,7 +266,7 @@ function NotificationLayout({children}: Props) {
           </div>   
           <div className='border-t flex justify-end'>
           <NotificationButton
-            totalItem={totalItem}
+            totalItem={totalNotification}
             handleLeftChange={handleLeftChange}
             handleRightChange={handleRightChange}
             trackCountFirst={trackCountFirst}
