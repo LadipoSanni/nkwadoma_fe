@@ -82,8 +82,7 @@ function Organization() {
     const { data: searchResults } = useSearchOrganisationByNameQuery(searchTerm, { skip: !searchTerm });
 
     
-   console.log("the data: ",data)
-  
+   
 
     // useEffect(()=> {
     //     if (searchTerm && searchResults && searchResults.data) {
