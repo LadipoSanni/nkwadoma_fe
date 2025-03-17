@@ -8,7 +8,7 @@ type Props = {
   description?: string,
 }
 
-function InfoCard({icon: Icon,fundTitle,description}: Props) {
+function          InfoCard({icon: Icon,fundTitle,description}: Props) {
   return (
     <div 
     // className='mb-9 md:mb-0 w-full'

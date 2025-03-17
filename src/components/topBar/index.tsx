@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState} from 'react';
+import React, { useState,useEffect} from 'react';
 import { IoMdMenu } from "react-icons/io";
 import { setShowMobileSideBar } from "@/redux/slice/layout/adminLayout";
 import {inter500, inter} from "@/app/fonts";
@@ -16,6 +16,9 @@ import { MdNotifications } from 'react-icons/md';
 import { Button } from '../ui/button';
 import { BellIcon } from '@radix-ui/react-icons';
 import { Badge } from '../ui/badge';
+import { useNumberOfNotificationQuery } from '@/service/notification/notification_query';
+import { setCurrentTotalNotification } from '@/redux/slice/notification/notification';
+
 
 
 const TopBar = () => {
@@ -37,8 +40,18 @@ const TopBar = () => {
      
     //          return () => mediaQuery.removeEventListener('change', handleResize);
     //      }, []);
-     
 
+
+    const {data,refetch} = useNumberOfNotificationQuery({})
+
+    useEffect(()=>{
+        if (data?.data?.allNotificationsCount !== undefined) {
+            store.dispatch(setCurrentTotalNotification(data.data.allNotificationsCount));
+        }        
+        refetch()
+    },[data,refetch])
+     
+   
     const toggleArrow = () => {
         setArrowToggled(!arrowToggled);
         setIsPopoverOpen(!isPopoverOpen);
@@ -61,7 +74,7 @@ const TopBar = () => {
     //         router.push("/notifications/notification")
     //     }
     // }
-    const count = 10
+    
 
 
     return (
@@ -106,11 +119,12 @@ const TopBar = () => {
                                 style={{ width: '22px',height: '21px',stroke: '#000', strokeWidth: '0.6'}}
                                />
                                <div className='absolute'>
-                                {count < 1? "" : <Badge
-                                 className={`relative bg-[#142854] hover:bg-[#142854] bottom-7 left-2  text-white text-xs rounded-full  flex items-center justify-center ${count > 99 ? "w-7 h-6"  : "w-4 h-5"}`}
+                                { data === undefined || data?.data?.unreadCount === null ? "" :
+                                (data?.data?.unreadCount  === 0? "" : <Badge
+                                 className={`relative bg-[#142854] hover:bg-[#142854] bottom-7 left-2  text-white text-xs rounded-full  flex items-center justify-center ${data?.data?.unreadCount > 99 ? "w-7 h-6"  : "w-4 h-5"}`}
                                 >
-                                  {count > 99 ? "99+" : count }
-                                </Badge>}
+                                  {data?.data?.unreadCount > 99 ? "99+" : data?.data?.unreadCount }
+                                </Badge>)}
                                 </div>
                                     </div>
                                 }
@@ -130,7 +144,7 @@ const TopBar = () => {
                                 {getFirstLetterOfWord(user_name)}
                             </div>
                         </div>
-                        <button onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : ''} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
+                        <button onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : 'cursor-text'} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
                             <p className={`text-black500 ${inter500.className} flex justify-start  text-sm `}>{capitalizeFirstLetters(user_name)}</p>
                             <p className={`text-black400 ${inter.className} flex justify-start text-sm`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
                         </button>
