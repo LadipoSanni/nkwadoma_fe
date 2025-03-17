@@ -81,9 +81,6 @@ function Organization() {
     const {data,refetch} = useViewAllOrganizationsQuery(dataElement)
     const { data: searchResults } = useSearchOrganisationByNameQuery(searchTerm, { skip: !searchTerm });
 
-    
-   
-
     // useEffect(()=> {
     //     if (searchTerm && searchResults && searchResults.data) {
     //         const organizations = searchResults.data;
