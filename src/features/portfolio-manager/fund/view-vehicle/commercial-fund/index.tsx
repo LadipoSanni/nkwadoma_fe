@@ -8,7 +8,6 @@ import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import {MdSearch} from 'react-icons/md'
-import {useSearchInvestmentVehicleByNameQuery} from '@/service/admin/fund_query'
 import Table from '@/reuseable/table/Table';
 import {store} from "@/redux/store";
 import {setCurrentVehicleId} from "@/redux/slice/vehicle/vehicle";
@@ -16,7 +15,7 @@ import {formatMonthInDate} from '@/utils/Format';
 import {formatAmount} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
-import {useGetInvestmentVehiclesByTypeAndStatusQuery} from "@/service/admin/fund_query";
+import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -48,26 +47,36 @@ function CommercialFund() {
     const [isModalOpen, setIsModalOpen] = useState(false);
        const [pageNumber,setPageNumber] = useState(0)
         const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
-        const [hasNextPage] = useState(false)
-        const totalPage = 1
+        const [hasNextPage,setNextPage] = useState(false)
+        const [totalPage,setTotalPage] = useState(0)
+        const param = {
+            investmentVehicleType: "COMMERCIAL",
+            pageSize: 10,
+            pageNumber: pageNumber
+        }
         const router = useRouter()
     
-        const {data:investmentVehicleData,isLoading} = useGetInvestmentVehiclesByTypeAndStatusQuery({
+        const {data:investmentVehicleData,isLoading} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
             pageSize: 10,
             pageNumber: pageNumber,
-            type: 'COMMERCIAL',
-            status: "PUBLISHED"
+            investmentVehicleType: 'COMMERCIAL',
+            investmentVehicleStatus: "PUBLISHED"
         })
-         const {data: searchData} = useSearchInvestmentVehicleByNameQuery(searchTerm, {skip: !searchTerm})
+        
+         const {data: searchData} = useSearchInvestmentVehicleByNameAndTypeQuery({ investmentVehicleName: searchTerm,param},{skip: !searchTerm})
     
          useEffect(() => {
                  if (searchTerm && searchData && searchData?.data) {
-                     const result = searchData?.data
+                     const result = searchData?.data?.body
                      setViewAllInvestmentVehicle(result)
-                 } else if (investmentVehicleData && investmentVehicleData.data) {
-                     setViewAllInvestmentVehicle(investmentVehicleData?.data)
-                    //  setNextPage(investmentVehicleData?.hasNextPage)
-                    
+                     setNextPage(searchData?.data?.hasNextPage)
+                     setTotalPage(searchData?.data?.totalPages)
+                     setPageNumber(searchData?.data?.pageNumber)
+                 } else if (!searchTerm && investmentVehicleData && investmentVehicleData.data) {
+                     setViewAllInvestmentVehicle(investmentVehicleData?.data?.body)
+                    setNextPage(investmentVehicleData?.data?.hasNextPage)
+                    setTotalPage(investmentVehicleData?.data?.totalPages)
+                    setPageNumber(investmentVehicleData?.data?.pageNumber)
                  }
              }, [searchTerm, searchData, investmentVehicleData])
     

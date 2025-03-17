@@ -78,8 +78,8 @@ const SideBar = () => {
         {id: 'loanProduct', name: 'Loan product', route: '/loan-product', isActive: true, icon: <MdOutlineInventory2 color={current === 'Loan Product' ? '#142854' : '#939CB0'}></MdOutlineInventory2>},
         {id: 'organizations', name: 'Organizations', route: '/organizations', isActive: true, icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={current === 'Organizations' ? '#142854' : '#939CB0'}></MdOutlineAccountBalance>},
         {id: 'loanee', name: 'Loanee', isActive: false, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={` h-[1.2rem] w-[1.2rem]   `}/>},
-        {id: 'vehicle', name: 'Vehicle', isActive: true, route: '/vehicle', icon: <MdOutlinePayments color={current === 'Vehicle' ? '#142854' : '#939CB0'} className={` h-[1.2rem] w-[1.2rem]  `}/>},
-        {id: 'investors', name: 'Investors', isActive: false, icon: <MdOutlineBusinessCenter color={'#d7d7d7'} className={` h-[1.2rem] w-[1.2rem]  `}/>},
+        {id: 'vehicle', name: 'Investment vehicle', isActive: true, route: '/vehicle/commercial-vehicle', icon: <MdOutlinePayments color={current === 'Vehicle' ? '#142854' : '#939CB0'} className={` h-[1.2rem] w-[1.2rem]  `}/>},
+        // {id: 'investors', name: 'Investors', isActive: false, icon: <MdOutlineBusinessCenter color={'#d7d7d7'} className={` h-[1.2rem] w-[1.2rem]  `}/>},
         {id: 'financier', name: 'Financier', route: '/financier', isActive: true, icon: <MdOutlineBusinessCenter  color={current === 'Financier' ? '#142854' : '#939CB0'} className={'h-[1.2rem] w-[1.2rem]'} /> },
 
     ]

@@ -32,7 +32,7 @@ interface InvestmentVehicleFundRaisingResponse {
         totalPages: number;
         pageNumber: number;
         pageSize: number;
-        hasNextPage: boolean;
+        hasNextPage: boolean
     };
     statusCode: string;
     timeStamp: string | null;
@@ -110,8 +110,7 @@ export const fundApi = createApi({
         }),
         getInvestmentVehiclesByTypeAndStatus: builder.query<
             InvestmentVehicleResponse,
-            { pageSize: number; pageNumber: number; type: string; status: string }
-        >({
+            { pageSize: number; pageNumber: number; type: string; status: string } >({
             query: ({ pageSize, pageNumber, type, status }) => ({
                 url: '/view-all-investment-vehicle-by-type-and-status',
                 method: 'GET',
@@ -132,6 +131,20 @@ export const fundApi = createApi({
             }),
             invalidatesTags:[`vehicle`],
         }),
+        searchInvestmentVehicleByNameAndType: builder.query({
+            query: ({ investmentVehicleName, param }: { 
+                investmentVehicleName: string; 
+                param: { 
+                    investmentVehicleType: string; 
+                    pageSize: number; 
+                    pageNumber: number; 
+                }; 
+            }) => ({
+                url: `/investmentvehicle/search/${investmentVehicleName}`,
+                method: 'GET',
+                params: param
+            }),
+        }),
     }),
 })
 
@@ -144,4 +157,5 @@ export const {
     useGetInvestmentVehiclesByTypeAndStatusQuery,
     useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
     usePublishInvestmentMutation,
+    useSearchInvestmentVehicleByNameAndTypeQuery
 } = fundApi;
