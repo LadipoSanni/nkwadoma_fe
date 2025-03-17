@@ -9,19 +9,6 @@ import { useRouter } from 'next/navigation';
 import { useViewNotificationDetailsQuery } from '@/service/notification/notification_query';
 
 
-// interface NotificationProps{
-//     id: string,
-//     type: string,
-//     subtitle: string,
-//     message: string,
-//     read: boolean,
-//     senderName: string,
-//     senderEmail: string;
-//     timeSent?: string;
-//     receiverName?: string
-//     callToActionRequired?: boolean
-// }
-
 // interface NotificationDetailsPageProps{
 //     notification?: NotificationProps
 // }
