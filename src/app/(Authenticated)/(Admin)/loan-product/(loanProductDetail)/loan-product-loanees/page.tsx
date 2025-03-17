@@ -1,11 +1,12 @@
 import React from 'react'
 import Loanees from "@/features/portfolio-manager/loan-product/details/loanee/Index";
+import CustomAuthorization from '@/features/auth/authorization';
 
 function page() {
     return (
-        <div>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
             <Loanees/>
-        </div>
+        </CustomAuthorization>
     )
 }
 
