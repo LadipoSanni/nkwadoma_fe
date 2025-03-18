@@ -146,10 +146,20 @@ function NotificationLayout({children}: Props) {
     <div className={`w-full h-full md:flex ${inter.className}`}>
      <div className='md:border-r  lg:min-w-[28.125rem]'>
     { isLoading ? <div><SkeletonForViewNotification/></div> :
-   <div>
-      {
+          <div className='h-full'>
+        <div className='md:px-3 md:pr-7'>
+        <SearchInput
+              id={'ProgramSearchInput'}
+               value={searchTerm}
+               onChange={handleSearchChange}
+               style='md:w-full py-1'
+               testId='ProgramSearch'
+          />
+        </div>
+         <div>
+           {
         notificationDatas.length === 0? (
-        <div className='relative bottom-24 top-24 '>
+        <div className='relative bottom-14 top-14 '>
           <EmptyState
            icon={() => (
             <BellIcon
@@ -164,16 +174,7 @@ function NotificationLayout({children}: Props) {
           />
         </div>
       ) : (
-          <div className='h-full'>
-        <div className='md:px-3 md:pr-7'>
-        <SearchInput
-              id={'ProgramSearchInput'}
-               value={searchTerm}
-               onChange={handleSearchChange}
-               style='md:w-full py-1'
-               testId='ProgramSearch'
-          />
-        </div>
+         <div>
         <div className='flex justify-between items-center md:pr-7 mb-3 mt-7 md:px-3'>
         <div className="flex items-center">
             <input
@@ -278,9 +279,12 @@ function NotificationLayout({children}: Props) {
             testIdPrevious='handlePrevious'
           />
             </div> 
-            </div> )
-              }
-   </div> }
+            </div>
+            ) }
+            </div>
+            </div>
+            
+    }
               
             </div>
             <div className='px-5 w-full flex-grow hidden md:block'>
