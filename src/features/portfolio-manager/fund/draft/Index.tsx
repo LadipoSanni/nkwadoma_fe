@@ -82,7 +82,7 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
     const dispatch = useDispatch();
     useSelector((state: RootState) => state.vehicle.saveClickedDraft);
 
-    const {data, isLoading,isFetching} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
+    const { data, isLoading, isFetching, refetch } = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
         pageSize: 10,
         pageNumber,
         investmentVehicleType: investmentVehicleType,
@@ -101,6 +101,14 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
             setHasMore(data.data.hasNextPage);
         }
     }, [data]);
+
+    useEffect(() => {
+        if (step === 1) {
+            setDrafts([]);
+            setPageNumber(0);
+            refetch();
+        }
+    }, [step, refetch]);
 
     const loadMore = () => {
         if (!isFetching && hasMore) {
