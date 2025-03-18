@@ -1,9 +1,12 @@
 import React from 'react';
 import AcceptLoanOfferDetails from '@/pages/loanee/AcceptLoanOfferDetails/Index';
+import CustomAuthorization from "@/features/auth/authorization";
 
 const AcceptLoanOfferPage = () => {
   return(
-     <AcceptLoanOfferDetails  />
+      <CustomAuthorization authorizedRoles={['LOANEE']}>
+        <AcceptLoanOfferDetails  />
+      </CustomAuthorization>
 )
 };
 
