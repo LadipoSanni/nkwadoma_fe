@@ -1,10 +1,13 @@
 import React from 'react';
 import LoaneeOnboarding from "@/features/onboarding/loanee";
+import CustomAuthorization from "@/features/auth/authorization";
 
 
 const Page = () => {
     return (
-        <LoaneeOnboarding/>
+        <CustomAuthorization authorizedRoles={['LOANEE']}>
+            <LoaneeOnboarding/>
+        </CustomAuthorization>
     );
 };
 
