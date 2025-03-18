@@ -211,7 +211,7 @@ function UpdateDraft({
             investmentVehicleStatus : "DRAFT"
         };
         try {
-            const create = await publishInvestmentVehicle(formData);
+            const create = await publishInvestmentVehicle(formData).unwrap();
             if (create) {
                 toast({
                     description: "Draft successfully updated",
