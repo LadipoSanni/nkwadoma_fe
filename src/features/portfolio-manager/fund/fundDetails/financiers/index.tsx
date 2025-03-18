@@ -80,7 +80,7 @@ function Financiers() {
             condition={true}
             staticHeader={"Financier"}
             staticColunm={"financier"}
-            
+            sx='cursor-pointer'
           />
         </div>
         <div>

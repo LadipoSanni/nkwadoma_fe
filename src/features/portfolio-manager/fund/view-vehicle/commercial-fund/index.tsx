@@ -10,7 +10,7 @@ import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import {MdSearch} from 'react-icons/md'
 import Table from '@/reuseable/table/Table';
 import {store} from "@/redux/store";
-import {setCurrentVehicleId} from "@/redux/slice/vehicle/vehicle";
+import {setCurrentVehicleId,setVehicleType} from "@/redux/slice/vehicle/vehicle";
 import {formatMonthInDate} from '@/utils/Format';
 import {formatAmount} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
@@ -80,9 +80,7 @@ function CommercialFund() {
                  }
              }, [searchTerm, searchData, investmentVehicleData])
     
-         console.log(investmentVehicleData)
     
-
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             setSearchTerm(event.target.value);
     };
@@ -100,6 +98,7 @@ function CommercialFund() {
 
      const handleRowClick = (row: TableRowData) => {
                 store.dispatch(setCurrentVehicleId(String(row.id)));
+                store.dispatch(setVehicleType("commercialFund"))
                 router.push('/vehicle/details')
     }
 
