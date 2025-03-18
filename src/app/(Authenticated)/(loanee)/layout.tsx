@@ -10,7 +10,7 @@ const LoaneeLayout: React.FC<LoaneeLayoutProps> = ({ children }) => {
     return (
         // <CustomAuthorization authorizedRoles={['LOANEE']}>
         //     <LoaneeLayoutComponent>
-        <div>
+        <div className={` `}>
             {children}
         </div>
             // </LoaneeLayoutComponent>

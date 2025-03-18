@@ -68,8 +68,8 @@ const SideBar = () => {
     }
 
 
-    const currentTextLiterals = `text-[#626F8C]`;
-    const textLiterals = `text-navbarIconColor`;
+    const currentTextLiterals = `text-[#142854] md:text-[#142854] `;
+    const textLiterals = `text-[#626F8C] md:text-[#626F8C] `;
 
 
     const PORTFOLIO_MANAGER: navbarRouterItemsProps[] = [
@@ -87,7 +87,7 @@ const SideBar = () => {
     const LOANEE : navbarRouterItemsProps[] = [
         {
             icon: <MdOutlineHome
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
+                className={` h-[1.2rem] w-[1.2rem] ${current === 'Overview' ? currentTextLiterals : textLiterals} `}
             />,
             id: 'overview',
             isActive: true,
@@ -96,7 +96,7 @@ const SideBar = () => {
         },
         {
             icon: <MdOutlineReceiptLong
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
+                className={` h-[1.2rem] w-[1.2rem] ${current === 'Wallet' ? currentTextLiterals : textLiterals} `}
             />,
             id: 'wallet',
             name: "Wallet",
@@ -106,7 +106,7 @@ const SideBar = () => {
         {
             icon: <Icon
                 icon='iconoir:hand-cash'
-                color={current === 'Loan' ? '#142854' : '#667085'}
+                color={current === 'Repayment' ? '#142854' : '#626F8C'}
                 height={"1.2rem"}
                 width={"1.3rem"}
             />,
