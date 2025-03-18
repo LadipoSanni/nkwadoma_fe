@@ -21,11 +21,13 @@ export interface Draft {
 interface vehicleState {
     currentVehicleId: string;
     saveClickedDraft: Draft | null;
+    vehicleType: string
 }
 
 const initialState: vehicleState = {
     currentVehicleId: '',
     saveClickedDraft: null,
+    vehicleType:""
 }
 
 export const vehicleSlice = createSlice({
@@ -41,8 +43,12 @@ export const vehicleSlice = createSlice({
         clearSaveClickedDraft: (state) => {
             state.saveClickedDraft = null;
         },
+        setVehicleType: (state, action: PayloadAction<string>) => {
+            state.vehicleType = action.payload
+    },
+       
     }
 })
 
-export const {setCurrentVehicleId, setSaveClickedDraft, clearSaveClickedDraft} = vehicleSlice.actions;
+export const {setCurrentVehicleId, setSaveClickedDraft, clearSaveClickedDraft,setVehicleType} = vehicleSlice.actions;
 export default vehicleSlice.reducer;
