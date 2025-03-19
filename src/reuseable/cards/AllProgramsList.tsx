@@ -30,11 +30,16 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
         }
     };
 
+    const stripHtmlTags = (html: string) => {
+        const div = document.createElement('div');
+        div.innerHTML = html.replace(/<\/p><p>/g, ' ');
+        return div.textContent || div.innerText || '';
+    };
 
-
-    const shortDescription = description.length > 90
-        ? description.substring(0, 80)
-        : description;
+    const plainTextDescription = stripHtmlTags(description);
+    const shortDescription = plainTextDescription.length > 90
+        ? plainTextDescription.substring(0, 80)
+        : plainTextDescription;
 
     const shortTitle = title.length > 15 ? `${title.substring(0, 20)}...` : title;
 
@@ -57,14 +62,14 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
 
             <CardContent id={`contentId`} data-testid={`contentId`}>
                 <CardDescription id={`description-${id}`} data-testid="description"
-                                 className={`${inter.className}  text-sm text-grey450 line-clamp-2`}
+                                 className={`${inter.className}  text-sm text-grey450 line-clamp-2 h-10`}
                                  
                       >  
                         <span
                          dangerouslySetInnerHTML={{ __html: shortDescription}}
                         />                       
                     
-                    {description.length > 90 && (
+                    {plainTextDescription.length > 90 && (
                         <span
                             id={`readMore-${id}`}
                             data-testid="readMore"
