@@ -155,6 +155,7 @@ const ProgramDetails = () => {
         {label: "Completion rate", value: "0%"},
         {label: "Employment rate", value: "0%"},
         {label: "Average starting income", value: formatAmount(0)},
+
     ];
 
     const loanDetail = [

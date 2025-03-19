@@ -49,16 +49,16 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         <TabsContent value={"trainee-details-mock-data"} id="cohort-details-content"
                                      data-testid="cohort-details-content" className={`py-2`}>
                             <div
-                                className="bg-[#F9F9F9] h-96 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                className="bg-[#F9F9F9] grid gap-6 max-h-96 px-5 w-full py-2 overflow-y-auto rounded-sm">
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
-                                         className="flex md:flex-row py-5 md:py-8 flex-col w-full justify-between font-medium text-sm">
+                                         className="flex md:flex-row py-5 md:py-2 flex-col w-full justify-between font-medium text-sm">
                                         <div className="text-black300">
-                                            <span>{item.label}</span>
+                                            <span className={` text-[14px] ${inter.className} `}>{item.label}</span>
                                         </div>
                                         <div className="text-meedlBlack">
-                                            <span>{item.value}</span>
+                                            <span className={` text-[14px] ${inter.className} `}>{item.value}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -85,16 +85,16 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                 />
                                 :
                                 <div
-                                    className="bg-[#F9F9F9] h-96 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                    className="bg-[#F9F9F9] grid gap-6  max-h-96 px-5 w-full py-2 overflow-y-auto rounded-sm">
                                     {isNotTableDataList?.map((item, index) => (
                                         <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                              key={index}
-                                             className="flex md:flex-row py-5 md:py-8 flex-col w-full justify-between font-medium text-sm">
+                                             className="flex md:flex-row py-5  md:py-2 flex-col w-full justify-between font-medium text-sm">
                                             <div className="text-black300">
-                                                <span>{item.detail}</span>
+                                                <span className={`${inter.className} text-[14px] `}>{item.detail}</span>
                                             </div>
                                             <div className="text-meedlBlack">
-                                                <span>{item.value}</span>
+                                                <span className={` ${inter.className} text-[14px]`}>{item.value}</span>
                                             </div>
                                         </div>
                                     ))}
