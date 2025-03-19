@@ -13,7 +13,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
 
 
     const currentTabStyle =  'rounded bg-[#f6f6f8]';
-    const currentTabNameStyle =  `text-meedleBlue`
+    const currentTabNameStyle =  `text-meedleBlue md:text-meedlBlue`
     const tabNameStyle =  `text-[#626F8C]`;
     const noStyle = ``;
 
