@@ -205,7 +205,7 @@ const Index = () => {
                         </div>
                     </div>
                     <div
-                        className={`  overflow-x-hidden overflow-y-auto md:w-[35rem] mt-4   w-full md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid `}
+                        className={`md:w-[35rem] mt-4  w-full md:h-96 border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid `}
                     >
                         <div
                             className={` ${styles.tabConnector} md:w-full pl-1  h-fit md:h-fit  flex md:flex `}
@@ -214,8 +214,8 @@ const Index = () => {
                             <TabSwitch componentId={'disbursedLoanTabSwitch'} currentTab={currentTab}
                                        tabContent={tabContent} handleChange={handleTabChange}/>
                         </div>
-                        <div className={`px - 2`}>
-                            <div className={`bg-grey105  ${styles.container}`}>
+                        <div className={`px-2`}>
+                            <div className={`bg-grey105  h-72 ${styles.container}`}>
                                 {getCurrentDataList().map((item, index) => (
                                     <li key={"key" + index} className={'p-4  grid gap-4 rounded-md'}>
                                         <div
