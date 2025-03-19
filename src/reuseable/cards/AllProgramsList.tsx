@@ -57,7 +57,7 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
 
             <CardContent id={`contentId`} data-testid={`contentId`}>
                 <CardDescription id={`description-${id}`} data-testid="description"
-                                 className={`${inter.className}  text-sm text-grey450 line-clamp-2`}
+                                 className={`${inter.className}  text-sm text-grey450 line-clamp-2 h-10`}
                                  
                       >  
                         <span
