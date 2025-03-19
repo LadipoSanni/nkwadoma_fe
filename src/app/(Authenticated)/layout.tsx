@@ -1,5 +1,6 @@
 import React from 'react';
 import Authentication from "@/features/auth/Authentication";
+import MeedlLayout from '@/layout/meedl-layout';
 
 interface Props {
     children: React.ReactNode;
@@ -7,11 +8,11 @@ interface Props {
 
 const Layout : React.FC<Props> = ({children}) => {
     return (
-        <div>
-            <Authentication>
-            {children}
-            </Authentication>
-        </div>
+        <Authentication>
+            <MeedlLayout>
+               {children}
+            </MeedlLayout>
+        </Authentication>
     );
 };
 

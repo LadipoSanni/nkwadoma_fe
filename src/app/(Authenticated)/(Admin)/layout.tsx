@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminLayout from "@/layout/admin-layout";
+// import MeedlLayout from "../../../layout/meedl-layout";
 import CustomAuthorization from '@/features/auth/authorization';
 
 
@@ -13,9 +13,9 @@ const Layout: React.FC<props> = ({ children }) => {
 
     return (
         <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN']}>
-            <AdminLayout>
+            {/*<MeedlLayout>*/}
                 {children}
-            </AdminLayout>
+            {/*</MeedlLayout>*/}
         </CustomAuthorization>
 
     );

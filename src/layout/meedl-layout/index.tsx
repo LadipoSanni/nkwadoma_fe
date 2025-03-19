@@ -10,7 +10,7 @@ type props = {
     children: React.ReactNode;
 }
 
-const AdminLayout = ({children}: props) => {
+const MeedlLayout = ({children}: props) => {
 
 
 
@@ -36,4 +36,4 @@ const AdminLayout = ({children}: props) => {
     );
 };
 
-export default AdminLayout;
+export default MeedlLayout;
