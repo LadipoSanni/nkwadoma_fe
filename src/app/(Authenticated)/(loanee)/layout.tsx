@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import LoaneeLayoutComponent from '@/layout/Loaneelayout/LoaneeLayoutComponent'
+// import LoaneeLayoutComponent from '@/layout/Loaneelayout/LoaneeLayoutComponent'
 // import CustomAuthorization from "@/features/auth/authorization";
 
 interface LoaneeLayoutProps {
@@ -9,9 +9,11 @@ interface LoaneeLayoutProps {
 const LoaneeLayout: React.FC<LoaneeLayoutProps> = ({ children }) => {
     return (
         // <CustomAuthorization authorizedRoles={['LOANEE']}>
-            <LoaneeLayoutComponent>
-                {children}
-            </LoaneeLayoutComponent>
+        //     <LoaneeLayoutComponent>
+        <div className={` `}>
+            {children}
+        </div>
+            // </LoaneeLayoutComponent>
         // </CustomAuthorization>
 
     );

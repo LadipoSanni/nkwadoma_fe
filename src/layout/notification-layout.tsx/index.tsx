@@ -147,7 +147,7 @@ function NotificationLayout({children}: Props) {
      <div className='md:border-r  lg:min-w-[28.125rem]'>
     { isLoading ? <div><SkeletonForViewNotification/></div> :
           <div className='h-full'>
-        <div className='md:px-3 md:pr-7'>
+        <div className='md:px-3 px-3 pt-4 md:pt-4 md:pr-7'>
         <SearchInput
               id={'ProgramSearchInput'}
                value={searchTerm}
