@@ -1,7 +1,7 @@
 "use client"
 import React, {ElementType} from 'react';
 import {Card, CardHeader, CardTitle, CardDescription, CardContent} from '@/components/ui/card';
-import {inter} from "@/app/fonts";
+import {inter, inter500} from "@/app/fonts";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import { FiMoreVertical } from 'react-icons/fi';
 import {TagButton} from "@/reuseable/tagButton/TagButton";
@@ -46,13 +46,13 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
     return (
         <Card  id={`allProgramsCard-${id}`} data-testid="allProgramsCard"  className="w-full md:max-w-lg h-[13.8125rem]  border border-grey50 rounded-lg cursor-pointer pt-0" onClick={() => handleProgramDetailsOnclick(id)} >
             <CardHeader id={`header-${id}`} data-testid="header" className="flex flex-row justify-between items-center" >
-               <CardTitle id={`title`} data-testid="title" className={`${inter.className} text-lg font-medium text-[#101828]`} >
+               <CardTitle id={`title`} data-testid="title" className={`${inter500.className} text-lg font-medium text-[#101828]`} >
                 {shortTitle}
                 {title.length > 90 && (
                         <span
                             id={`readMore-${id}`}
                             data-testid="readMore"
-                            className="${inter.className} text-grey450 ml-2"
+                            className={`${inter500.className} text-grey450 ml-2`}
                         >
               { "...."}
             </span>)}
