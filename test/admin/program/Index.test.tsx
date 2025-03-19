@@ -79,9 +79,8 @@
 //     });
 // });
 import React from 'react';
-import {cleanup, fireEvent, render, screen, act} from '@testing-library/react';
+import {cleanup, render, screen} from '@testing-library/react';
 import ProgramView from '@/features/program/program-view';
-import ProgramDetails from '@/features/program/program-details/Index';
 import { Providers } from '@/app/provider';
 
 jest.mock('next/navigation', () => ({
