@@ -30,7 +30,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
 
     return (
         <div id="cohort-details" data-testid="cohort-details"
-             className={`${inter.className} border border-slate-200 rounded-md md:p-3 px-2 py-3`}>
+             className={`${inter.className} border border-slate-200 h-96 rounded-md md:p-3 px-2 py-3`}>
             <div id="tabs-section" data-testid="tabs-section" className={`md:p-3 px-2 py-3 `}>
                 <div className={`w-full rounded-md`}>
                     <Tabs
@@ -49,7 +49,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         <TabsContent value={"trainee-details-mock-data"} id="cohort-details-content"
                                      data-testid="cohort-details-content" className={`py-2`}>
                             <div
-                                className="bg-[#F9F9F9] h-96 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                className="bg-[#F9F9F9] h-72 px-5 w-full py-2 overflow-y-auto rounded-sm">
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
@@ -85,7 +85,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                 />
                                 :
                                 <div
-                                    className="bg-[#F9F9F9] h-96 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                    className="bg-[#F9F9F9] h-72 px-5 w-full py-2 overflow-y-auto rounded-sm">
                                     {isNotTableDataList?.map((item, index) => (
                                         <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                              key={index}

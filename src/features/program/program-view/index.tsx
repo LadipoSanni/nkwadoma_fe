@@ -106,7 +106,7 @@ const ProgramView = () => {
 
     const handleRowClick = (row: TableRowData) => {
         store.dispatch(setCurrentProgramId(String(row?.id)))
-        router.push('/program/details')
+        router.push('/program/program-details')
 
 
     }
@@ -115,7 +115,7 @@ const ProgramView = () => {
     const handleProgramDetailsOnclick = (id: string) => {
         store.dispatch(setCurrentProgramId(id))
         setProgramId(id)
-        router.push('/program/details')
+        router.push('/program/program-details')
     }
 
 

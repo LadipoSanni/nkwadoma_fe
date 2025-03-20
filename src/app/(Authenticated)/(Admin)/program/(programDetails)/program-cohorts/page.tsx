@@ -1,11 +1,11 @@
 import React from 'react';
-import ProgramDetails from "@/features/program/program-details/Index";
 import CustomAuthorization from "@/features/auth/authorization";
+import ProgramCohortDetails from "@/features/program/details/cohort/Index";
 
 const Page = () => {
     return (
         <CustomAuthorization authorizedRoles={['ORGANIZATION_ADMIN']}>
-            <ProgramDetails/>
+            <ProgramCohortDetails/>
         </CustomAuthorization>
     );
 };

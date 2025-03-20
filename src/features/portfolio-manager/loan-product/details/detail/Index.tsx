@@ -53,7 +53,7 @@ const Details = () => {
                                              icon={MdOutlineInventory2}
                         />
                     </div>
-                    <div className={`md:w-6/12 min-w-sm md:pt-0 h-[96%]`} id={`secondSection`}>
+                    <div className={`md:w-6/12 min-w-sm md:pt-0 h-`} id={`secondSection`}>
                         <ThreeTabs
                             isTable={false} isNotTableDataList={loanProduct?.data.termsAndCondition} dataList={dataList}
                             tabTitle1={"Product details"} tabTitle2={"Terms and conditions"}
