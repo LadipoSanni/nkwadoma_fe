@@ -6,58 +6,26 @@ import {
     MdOutlinePeopleAlt,
     MdOutlineDateRange,
     MdPersonOutline,
-    MdOutlineArrowBack,
-    MdOutlinePerson
 } from "react-icons/md";
 import {FiBook} from "react-icons/fi";
 import {TagButton} from "@/reuseable/tagButton/TagButton";
 import {Button} from "@/components/ui/button";
 import Kebab from "@/reuseable/Kebab/Kebab";
 import {IoEllipsisHorizontalSharp} from "react-icons/io5";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import SearchInput from "@/reuseable/Input/SearchInput";
-import Tables from "@/reuseable/table/LoanProductTable";
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import EditProgramForm from "@/components/program/edit-program-form";
 import DeleteCohort from "@/reuseable/details/DeleteCohort";
-import {useGetProgramByIdQuery, useSearchCohortsInAParticularProgramQuery} from "@/service/admin/program_query";
+import {useGetProgramByIdQuery} from "@/service/admin/program_query";
 import {formatAmount} from '@/utils/Format'
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
-import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/program_query";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { useToast } from "@/hooks/use-toast";
-import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
-import { MdSearch } from 'react-icons/md'
 import {useAppSelector} from "@/redux/store";
 
 
-
-interface loanDetails {
-    totalAmountRepaid?: number;
-    totalAmountDisbursed?: number;
-    totalAmountOutstanding?: number;
-    totalAmountRecieved?: number;
-    totalAmountRequested?: number;
-}
-
-interface TableRowData {
-    [key: string]: string | number | null | React.ReactNode | loanDetails;
-}
-
-interface viewAllProgramProps {
-    programId?: string;
-    cohortDescription?: string;
-    name?: string;
-    tuitionAmount?: number;
-    numberOfLoanees?: number;
-    loanDetails?: loanDetails
-}
-
-
-type ViewAllProgramProps = viewAllProgramProps & TableRowData;
 
 interface ApiError {
     status: number;
@@ -74,8 +42,7 @@ const ProgramDetails = () => {
     const [programId] = useState(id);
     const [deleteProgram, setDeleteProgram] = useState("")
     const {toast} = useToast()
-    const [page] = useState(0);
-    const size = 100;
+
     const [progamDetail, setProgramDetail] = useState({
             id: "",
             programDescription: "",
@@ -92,22 +59,10 @@ const ProgramDetails = () => {
             numberOfLoanees: 0
         }
     )
-    const [cohorts, setCohorts] = useState<ViewAllProgramProps[]>([])
-    const [searchTerm, setSearchTerm] = useState('');
-
-
 
     const {data: program,isLoading:loading} = useGetProgramByIdQuery({id: programId}, {refetchOnMountOrArgChange: true, skip: !programId});
     const [deleteItem, {isLoading}] = useDeleteProgramMutation()
-    const {data: cohortsByProgram} = useGetAllCohortByAParticularProgramQuery({
-        programId: programId,
-        pageSize: size,
-        pageNumber: page
-    }, {refetchOnMountOrArgChange: true,skip: !programId});
-    const {data: searchResults} = useSearchCohortsInAParticularProgramQuery({
-        cohortName: searchTerm,
-        programId: programId
-    }, {skip: !searchTerm || !programId})
+
 
 
     useEffect(() => {
@@ -130,24 +85,6 @@ const ProgramDetails = () => {
             });
         }
     }, [program])
-
-    useEffect(() => {
-        if (cohortsByProgram?.data) {
-            setCohorts(cohortsByProgram.data.body)
-        }
-    }, [cohortsByProgram])
-
-    useEffect(() => {
-        if (searchTerm && searchResults && searchResults.data) {
-            const cohorts = searchResults.data;
-            setCohorts(cohorts);
-        } else if (cohortsByProgram && cohortsByProgram?.data) {
-            const cohorts = cohortsByProgram.data.body;
-            setCohorts(cohorts);
-
-        }
-
-    }, [searchTerm, searchResults, cohortsByProgram])
 
     const dataList = [
         {label: "Program mode", value: capitalizeFirstLetters(progamDetail.mode.replace(/_/g, ' '))},
@@ -179,39 +116,7 @@ const ProgramDetails = () => {
         {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: "Cohorts", textColor: "text-success700"},
         {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: "Loanees", textColor: "text-warning900" },
     ];
-    const ProgramHeader = [
-        {title: "Cohort", sortable: true, id: "name"},
-        {
-            title: "No of loanees", sortable: true, id: "noOfTrainees",
-            selector: (row: ViewAllProgramProps) => row.numberOfLoanees
-        },
 
-        {
-            title: "Tuition",
-            sortable: true,
-            id: "tuitionAmount",
-            selector: (row: ViewAllProgramProps) => formatAmount(row.tuitionAmount)
-        },
-        {
-            title: "Amount Requested",
-            sortable: true,
-            id: "amountRequested",
-            selector: (row: ViewAllProgramProps) => formatAmount(row.loanDetails?.totalAmountRequested)
-        },
-        {
-            title: "Amount Received",
-            sortable: true,
-            id: "amountReceived",
-            selector: (row: ViewAllProgramProps) => formatAmount(row.loanDetails?.totalAmountRecieved)
-        },
-        {
-            title: "Amount Outstanding",
-            sortable: true,
-            id: "totalAmountOutstanding",
-            selector: (row: ViewAllProgramProps) => formatAmount(row.loanDetails?.totalAmountOutstanding)
-        },
-
-    ];
     const programOptions = [
         {name: 'Delete program', id: '3'},
     ]
@@ -248,40 +153,18 @@ const ProgramDetails = () => {
         }
     }
 
-    const handleBackClick = () => {
-        router.push('/program')
-    }
-
     const handleModalClick = () => {
         setIsOpen(true)
     }
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
-    };
 
 
     return (
         <>
           {loading ? ( <SkeletonForDetailPage /> ) : (
-        <main className={`${inter.className} grid gap-7 pt-6 md:px-10 px-2 w-full`} id={"mainDiv"}>
-            <div className={`flex gap-2 w-[9.2rem] items-center cursor-pointer text-meedlBlue`} id={`backClick`}
-                 data-testid={`backClick`} onClick={handleBackClick}>
-                <MdOutlineArrowBack className={'h-5 w-5 text-meedlBlue'}/>
-                <h1 id={`backClickText`} className={'text-meedlBlue text-[14px] font-medium leading-[21px]'}
-                    data-testid={`backClickText`}>Back to programs</h1>
-            </div>
-
-            <Tabs defaultValue="details">
-                <TabsList className={'p-0.5 gap-1 h-[2.0625rem] items-center cursor-pointer rounded-md bg-neutral100'}>
-                    <TabsTrigger value="details" id={`tabTrigger1`}
-                                 className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] w-[3.875rem] data-[state=active]:shadow-custom'}>Details</TabsTrigger>
-                    <TabsTrigger value="cohorts" id={`tabTrigger2`}
-                                 className={'py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom'}>Cohorts</TabsTrigger>
-                </TabsList>
-                <TabsContent value="details" className={'mt-4'} id={`content`}>
-                    <section className={`p- flex md:flex-row flex-col md:gap-0 gap-5 md:justify-between`} id={`section`}>
-                        <div className={'flex flex-col gap-10'} id={`status`}>
+        <main className={`${inter.className} w-full h-full`} id={"mainDiv"}>
+                    <section className={`p- flex md:flex-row py-2 flex-col md:gap-0 md:justify-between`} id={`section`}>
+                        <div className={'flex flex-col gap-5'} id={`status`}>
                             <div
                                 id={`fibookIcon`}
                                 className={'grid place-items-center h-[7.5rem] w-[7.5rem] bg-lightBlue500 rounded-full'}>
@@ -312,7 +195,6 @@ const ProgramDetails = () => {
                                         className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
                                     program</Button>
                                 {
-                                // progamDetail.numberOfLoanees > 0? "" :
                                  <div role={"button"}
                                      id="kebabId"
                                      className={`w-12 h-12 flex justify-center items-center border border-meedlBlue rounded-full`}>
@@ -321,35 +203,12 @@ const ProgramDetails = () => {
                                 </div>}
                             </div>
                         </div>
+
                         <div id={`container`} className={`md:w-6/12 md:pt-0 pt-0`}>
                             <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail} dataList={dataList}
-                                                 tabTitle1={"Program details"} tabTitle2={"Loan details"}/>
+                                                 tabTitle1={"Program program-details"} tabTitle2={"Loan program-details"}/>
                         </div>
                     </section>
-                </TabsContent>
-                <TabsContent id={`tab2`} value="cohorts" className={'mt-4 grid gap-7'}>
-                    <SearchInput id={'programCohortSearch'} value={searchTerm} onChange={handleSearchChange}/>
-                    <div>
-                        {searchTerm && cohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Cohort'/></div> : <Tables
-                        tableData={cohorts}
-                        tableHeader={ProgramHeader}
-                        staticHeader={'Cohort'}
-                        staticColunm={'name'}
-                        tableHeight={45}
-                        icon={MdOutlinePerson}
-                        sideBarTabName={"Cohort"}
-                        handleRowClick={() => {
-                        }}
-                        optionalRowsPerPage={10}
-                        tableCellStyle={'h-12'}
-                        condition={true}
-                    />
-}
-                    </div>
-
-                    
-                </TabsContent>
-            </Tabs>
             {
                 <>
                     <TableModal
