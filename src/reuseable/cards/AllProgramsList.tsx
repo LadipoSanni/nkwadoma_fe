@@ -57,12 +57,12 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
               { "...."}
             </span>)}
                 </CardTitle>
-                   <div onClick={(e) => e.stopPropagation()}><Kebab kebabOptions={dropdownOption} icon={FiMoreVertical} handleDropDownClick={handleCardDropDownClick}/></div> 
+                   <div onClick={(e) => e.stopPropagation()}><Kebab  kebabOptions={dropdownOption} icon={FiMoreVertical} handleDropDownClick={handleCardDropDownClick}/></div>
             </CardHeader>
 
             <CardContent id={`contentId`} data-testid={`contentId`}>
                 <CardDescription id={`description-${id}`} data-testid="description"
-                                 className={`${inter.className}  text-sm text-grey450 line-clamp-2 h-10`}
+                                 className={`${inter.className}  text-sm text-[#4D4E4D] md:text-[#4D4E4D] line-clamp-2 h-10`}
                                  
                       >  
                         <span
@@ -73,7 +73,7 @@ const AllProgramsCard: React.FC<ProgramList> = ({id, title, description, tagButt
                         <span
                             id={`readMore-${id}`}
                             data-testid="readMore"
-                            className="${inter.className} text-grey450 ml-2"
+                            className="${inter.className} text-[#4D4E4D] md:text-[#4D4E4D] ml-2"
                         >
               { "...."}
             </span>
