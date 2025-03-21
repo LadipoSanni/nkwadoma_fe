@@ -306,13 +306,16 @@ const ViewOrganizationDetail = () => {
                   className={"flex items-center gap-2"}
                 >
                   <IoGlobeOutline className={"h-5 w-5 text-meedlBlue"} />
-                  <p
+                  <a
                     className={
                       "text-meedlBlue text-[14px] font-medium leading-[150%]"
                     }
+                    href={organizationDetail?.data.websiteAddress}
+                    target='_blank'
+                    rel='noopener noreferrer'
                   >
                     {organizationDetail?.data.websiteAddress}
-                  </p>
+                  </a>
                 </div>
               </div>
             </section>
