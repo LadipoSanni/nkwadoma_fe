@@ -28,7 +28,6 @@ describe("Draft Component Functions", () => {
     const setSelectedDraft = jest.fn();
     const setDisabled = jest.fn();
     const setStep = jest.fn();
-    const dispatch = jest.fn();
 
     const createTestStore = () =>
         configureStore({
