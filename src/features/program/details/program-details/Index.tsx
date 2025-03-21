@@ -162,7 +162,7 @@ const ProgramDetails = () => {
     return (
         <>
           {loading ? ( <SkeletonForDetailPage /> ) : (
-        <main className={`${inter.className} w-full h-full`} id={"mainDiv"}>
+        <main className={`${inter.className} w-full max-h-full`} id={"mainDiv"}>
                     <section className={`p- flex md:flex-row py-2 flex-col md:gap-0 md:justify-between`} id={`section`}>
                         <div className={'flex flex-col gap-5'} id={`status`}>
                             <div
