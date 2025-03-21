@@ -3,17 +3,16 @@ import React, {useEffect, useState} from "react";
 import {inter} from "@/app/fonts";
 import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery} from "@/service/admin/fund_query";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "@/redux/store";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "@/redux/store";
 import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/vehicle";
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
-import styles from "@/components/selected-loan/SelectedLoan.module.css";
-import {MdOutlineArticle} from "react-icons/md";
+import { MdOutlineArticle } from "react-icons/md";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-interface saveToDraftProps {
+interface SaveToDraftProps {
     setIsOpen?: (b: boolean) => void;
     investmentVehicleType: string;
     type?: string;
@@ -59,19 +58,18 @@ export const handleClick = (
 export const handleContinueButton = (setStep: (step: number) => void) => {
     setStep(2);
 };
+
 export const handleSaveAndBackToAllDraft = (
     setStep: (step: number) => void,
     setSelectedDraft: (draft: Draft | null) => void,
-    setDisabled: (disabled: boolean) => void,
-    dispatch: AppDispatch
+    setDisabled: (disabled: boolean) => void
 ) => {
     setStep(1);
     setSelectedDraft(null);
     setDisabled(true);
-    dispatch(clearSaveClickedDraft());
 };
 
-const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
+const Draft = ({investmentVehicleType, type, setIsOpen}: SaveToDraftProps) => {
     const [selectedDraft, setSelectedDraft] = useState<Draft | null>(null);
     const [disabled, setDisabled] = useState(true);
     const [step, setStep] = useState(1);
@@ -80,19 +78,23 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
     const [hasMore, setHasMore] = useState(true);
 
     const dispatch = useDispatch();
-    useSelector((state: RootState) => state.vehicle.saveClickedDraft);
 
-    const { data, isLoading, isFetching, refetch } = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
-        pageSize: 10,
-        pageNumber,
-        investmentVehicleType: investmentVehicleType,
-        investmentVehicleStatus: "DRAFT",
-        // fundRaisingStatus: 'FUND_RAISING',
-    });
+    const { data, isLoading, isFetching, refetch } = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery(
+        {
+            pageSize: 10,
+            pageNumber,
+            investmentVehicleType,
+            investmentVehicleStatus: "DRAFT",
+        },
+        { refetchOnMountOrArgChange: true }
+    );
 
     useEffect(() => {
         if (data?.data?.body) {
             setDrafts((prevDrafts) => {
+                if (pageNumber === 0) {
+                    return data.data.body;
+                }
                 const newDrafts = data.data.body.filter(
                     (newDraft: Draft) => !prevDrafts.some((prevDraft) => prevDraft.id === newDraft.id)
                 );
@@ -100,13 +102,12 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
             });
             setHasMore(data.data.hasNextPage);
         }
-    }, [data]);
+    }, [data, pageNumber]);
 
     useEffect(() => {
         if (step === 1) {
-            setDrafts([]);
-            setPageNumber(0);
             refetch();
+            setPageNumber(0);
         }
     }, [step, refetch]);
 
@@ -126,7 +127,7 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
                         hasMore={hasMore}
                         loader={isFetching ? <SkeletonForLoanOrg /> : null}
                         height="56.5vh"
-                        className={`${styles.scrollBarNone} space-y-3`}
+                        className={`px-2 space-y-3`}
                     >
                         {isLoading && drafts.length === 0 ? (
                             <SkeletonForLoanOrg />
@@ -182,7 +183,7 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: saveToDraftProps) => {
                 <div>
                     <UpdateDraft
                         handleSaveAndBackToAllDraft={() =>
-                            handleSaveAndBackToAllDraft(setStep, setSelectedDraft, setDisabled, dispatch)
+                            handleSaveAndBackToAllDraft(setStep, setSelectedDraft, setDisabled)
                         }
                         investmentVehicleType={investmentVehicleType}
                         type={type}
