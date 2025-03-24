@@ -163,7 +163,7 @@ const ProgramDetails = () => {
         <>
           {loading ? ( <SkeletonForDetailPage /> ) : (
         <main className={`${inter.className} w-full max-h-full`} id={"mainDiv"}>
-                    <section className={`p- flex md:flex-row py-2 flex-col md:gap-0 md:justify-between`} id={`section`}>
+                    <section className={`p- flex md:flex-row flex-col md:gap-0 md:justify-between`} id={`section`}>
                         <div className={'flex flex-col gap-5'} id={`status`}>
                             <div
                                 id={`fibookIcon`}
@@ -189,7 +189,7 @@ const ProgramDetails = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div id={`buttons`} className={'flex justify-between'}>
+                            <div id={`buttons`} className={'flex md:justify-between gap-5'}>
                                 <Button onClick={handleModalClick}
                                         id="editButton"
                                         className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
@@ -204,7 +204,7 @@ const ProgramDetails = () => {
                             </div>
                         </div>
 
-                        <div id={`container`} className={`md:w-6/12 md:pt-0 pt-0`}>
+                        <div id={`container`} className={`md:w-6/12 max:h-96 md:pt-0 pt-5 pb-5`}>
                             <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail} dataList={dataList}
                                                  tabTitle1={"Program program-details"} tabTitle2={"Loan program-details"}/>
                         </div>
