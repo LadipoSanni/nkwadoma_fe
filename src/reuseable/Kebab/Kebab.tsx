@@ -36,7 +36,7 @@ const Kebab = ({handleDropDownClick, kebabOptions, className, icon: Icon}: Props
                             { Icon && <Icon
                                 id="kebabIcon"
                                 data-testid="kebab-icon"
-                                className="w-5 h-6 text-grey500 font-extrabold"
+                                className="w-5 h-6 text-[#939CB0] md:text-[#939CB0] font-extrabold"
                             />}
                         </Button>
                     </MenubarTrigger>

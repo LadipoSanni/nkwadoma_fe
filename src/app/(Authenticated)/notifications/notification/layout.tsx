@@ -1,5 +1,6 @@
 import React,{ReactNode} from 'react'
 import NotificationLayout from '@/layout/notification-layout.tsx';
+import CustomAuthorization from '@/features/auth/authorization';
 
 interface notificationProps{
    children: ReactNode; 
@@ -7,9 +8,11 @@ interface notificationProps{
 
 function NotificationLayouts({children}: notificationProps) {
   return (
+    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN','LOANEE']}>
     <NotificationLayout
     >{children}
     </NotificationLayout>
+    </CustomAuthorization>
   )
 }
 

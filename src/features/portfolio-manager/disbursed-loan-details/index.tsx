@@ -154,14 +154,14 @@ const Index = () => {
             <div
                 id={'disbursedLoanMainContainer'}
                 data-testid={'disbursedLoanMainContainer'}
-                className={'md:px-8 w-full h-full  px-3 pt-4 md:pt-4'}
+                className={'md:px-8 w-full max:h-96  px-3 pt-4 md:pt-4'}
             >
                 <BackButton handleClick={backToViewAllDisbursedLoan} iconRight={true} text={"Back to disbursed loan"}
                             id={"disbursedLoanDetailsBackButton"} textColor={'#142854'}/>
                 <div
                     id={'disbursedLoanDetailsPageContainer'}
                     data-testid={'disbursedLoanDetailsPageContainer'}
-                    className={` md:flex md:justify-between  md-8 w-full h-full  px-3 pt-4 md:pt-4 `}
+                    className={` md:flex md:justify-between  md-8 w-full  px-3 pt-4 md:pt-4 `}
                 >
                     <div>
                         <Card id={"loaneeImageOnDisbursedLoanDetails"} data-testid={"loaneeImageOnDisbursedLoanDetails"}
@@ -205,17 +205,17 @@ const Index = () => {
                         </div>
                     </div>
                     <div
-                        className={`  overflow-x-hidden overflow-y-auto md:w-[35rem] mt-4   w-full md:h-fit border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid `}
+                        className={`md:w-[35rem] mt-4 mb-5 w-full max:h-96  border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid `}
                     >
                         <div
-                            className={` ${styles.tabConnector} md:w-full pl-1  h-fit md:h-fit  flex md:flex `}
+                            className={` ${styles.tabConnector} md:w-full pl-1 h-fit md:h-fit  flex md:flex `}
 
                         >
                             <TabSwitch componentId={'disbursedLoanTabSwitch'} currentTab={currentTab}
                                        tabContent={tabContent} handleChange={handleTabChange}/>
                         </div>
-                        <div className={`px - 2`}>
-                            <div className={`bg-grey105  ${styles.container}`}>
+                        <div className={`px-2`}>
+                            <div className={`bg-grey105 md:h-72 md:overflow-y-auto overflow-hidden`}>
                                 {getCurrentDataList().map((item, index) => (
                                     <li key={"key" + index} className={'p-4  grid gap-4 rounded-md'}>
                                         <div

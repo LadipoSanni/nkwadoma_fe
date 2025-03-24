@@ -18,3 +18,8 @@ export const vehicleTab = [
     {name: "Commercial fund", value: "/vehicle/commercial-vehicle"},
     {name: "Endowment fund", value: "/vehicle/endownment-vehicle"}
 ]
+
+export const programDetailTab = [
+    {name: "Details", value: "/program/program-details"},
+    {name: "Cohort", value: "/program/program-cohorts"}
+]

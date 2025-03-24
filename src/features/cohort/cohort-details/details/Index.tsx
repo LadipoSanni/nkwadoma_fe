@@ -151,7 +151,7 @@ const CohortDetails = () => {
 
     return (
         <>{isLoading? (<SkeletonForDetailPage/>): (
-            <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
+            <main className={`${inter.className}  py-3 md:px-10 px-3 w-full overflow-y-auto`} id={`cohortDetails`}>
                 <div className={` pb-4 `} id={`backClickContainer`} data-testid={'backClickContainer'}>
                     <BackButton handleClick={handleBackClick} iconRight={true} text={"Back to cohort"}
                                 id={"backClick"} textColor={'#142854'}/>
@@ -176,7 +176,7 @@ const CohortDetails = () => {
 
                     <div id={`tabsContentDiv`}>
                         <TabsContent value="details" className={'mt-4'} id={`tabsContent`}>
-                            <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
+                            <div className={`py-1 flex md:flex-row flex-col  h-full md:justify-between`} id={`sections`}>
                                 <div id={`firstSection`}>
                                     <DetailsImageSection imageSrc={details.imageUrl} cohortTitle={details.name}
                                                          cohortDescription={details.cohortDescription}
@@ -186,7 +186,7 @@ const CohortDetails = () => {
                                                          icon={FiBook}
                                     />
                                 </div>
-                                <div className={`md:w-6/12 min-w-sm pt-0 h-[96%]`} id={`secondSection`}>
+                                <div className={`md:w-6/12 min-w-sm pt-0 `} id={`secondSection`}>
                                     <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail}
                                                          dataList={dataList}
                                                          tabTitle1={"Cohort details"} tabTitle2={"Loan details"}

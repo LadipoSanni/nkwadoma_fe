@@ -32,7 +32,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
 
     return (
         <div id="cohort-details" data-testid="cohort-details"
-             className={`${inter.className} border border-slate-200 rounded-md md:p-3 px-2 py-3`}>
+             className={`${inter.className} border border-slate-200 max:h-96 rounded-md md:p-3 px-2 `}>
             <div id="tabs-section" data-testid="tabs-section" className={`md:p-3 px-2 py-3 `}>
                 <div className={`w-full rounded-md`}>
                     <Tabs
@@ -41,7 +41,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                         defaultValue={"productDetails"}
                         className={`shadow-none`}
                     >
-                        <div className={`md:block hidden`}>
+                        <div className={`${styles.scrollBarNone} overflow-x-auto`}>
                             <TabsList id="tabs-list" data-testid="tabs-list" className={`p-1`}>
                                 <TabsTrigger id='productDetails' value={"productDetails"}
                                              data-testid="productDetails ">{tabTitle1}
@@ -50,22 +50,12 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                 {/*<TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>*/}
                             </TabsList>
                         </div>
-                        <div className={`block md:hidden`}>
-                            <TabsList id="tabs-list" data-testid="tabs-list" className={`${styles.tab}  overflow--auto shadow-none p-1`}>
-                                <TabsTrigger id='productDetails' value={"productDetails"}
-                                             data-testid="productDetails ">{tabTitle1}
-                                </TabsTrigger>
-                                <TabsTrigger id='termsAndCondition' value={"termsAndCondition"} data-testid="termsAndCondition">{tabTitle2}</TabsTrigger>
-                                {/*<TabsTrigger id='disbursementTerms' value={"disbursementTerms"} data-testid="disbursementTerms">{tabTitle3}</TabsTrigger>*/}
-                            </TabsList>
-                        </div>
-
                         <div>
 
                         <TabsContent value={"productDetails"} id="cohort-details-content"
                                      data-testid="productDetails" className={`py-3`}>
                             <div
-                                className="bg-[#F9F9F9] h-96 px-5 w-full overflow-y-auto rounded-sm">
+                                className="bg-[#F9F9F9] md:h-72 px-5 w-full overflow-y-auto rounded-sm">
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
@@ -101,7 +91,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                     />
                                     :
                                     <div
-                                        className="bg-[#F9F9F9] h-96 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                        className="bg-[#F9F9F9] md:h-72 px-5 w-full py-2 overflow-y-auto rounded-sm">
                                         <p
                                             id={`data-item`}
                                             data-testid={`data-iteM`}
