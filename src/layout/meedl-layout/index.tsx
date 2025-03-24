@@ -26,7 +26,7 @@ const MeedlLayout = ({children}: props) => {
                     <div id={'TopBarAndCenterComponent'}
                          className={` w-[100%] py-4 absolute bottom-0 px-4  md:py-4 md:px-4  h-[92%] bg-[#f0f2f4] grid  md:w-[84vw] md:max:h-[90vh] md:bg-[#f0f2f4] `}>
                         <div
-                            className={`bg-white ${styles.container} relative  w-full h-full  md:w-full md:h-full md:bg-white rounded-md md:rounded-md z-0`}>
+                            className={`bg-white ${styles.container} relative  w-full h-full  md:w-full md:h-full md:bg-white overflow-x-hidden rounded-md md:rounded-md z-0`}>
                             {children}
                         </div>
                     </div>
