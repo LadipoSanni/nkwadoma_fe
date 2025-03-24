@@ -1,4 +1,4 @@
-name: Build, Test, and Deploy
+name: Build and Test on pull request
 
 on:
   push:
@@ -12,10 +12,10 @@ env:
   NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
   APP_DEV_IV_KEY: ${{ vars.APP_DEV_IV_KEY }}
   APP_DEV_IV_ENCRYPTION_SECRET_KEY: ${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}
-
+  
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,9 +28,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Run ECR Login and Start Services
-        run: |
-          chmod +x start.sh
-          ./start.sh  
+        run:  chmod +x start.sh ./start.sh  
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -72,22 +70,10 @@ jobs:
           echo "TAG=${{ env.TAG }}"
           echo "BRANCH_NAME=${{ env.BRANCH_NAME }}"
           echo "COMMIT_AUTHOR=${{ env.COMMIT_AUTHOR }}"
+          echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}"
 
-  deploy:
-    needs: build
-    runs-on: self-hosted
-    if: github.ref == 'refs/heads/dev'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
 
-      # - name: Deploy to AWS Amplify
-      #   run: |
-      #     aws amplify start-job \
-      #       --app-id ${{ secrets.AMPLIFY_APP_ID }} \
-      #       --branch-name main \
-      #       --job-type RELEASE
- # send_notification:
+  # send_notification:
   #   name: Send Email Notification
   #   needs: [build]
   #   runs-on: ubuntu-latest
