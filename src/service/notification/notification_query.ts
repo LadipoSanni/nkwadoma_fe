@@ -30,12 +30,35 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
                 method: 'GET',
                 params: {notificationId},
             }),
-            // providesTags:['notification']   
-            providesTags: (notificationId) => [
-                { type: 'notification', id: notificationId }, 
-            ],
+            onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+                try {
+                  await queryFulfilled;
+                  dispatch(notificationApi.util.invalidateTags(['notification']));
+                } catch (error) {
+                  console.error('Error fetching notification details:', error);
+                }
+              },    
+        }),
+        deleteNotification: builder.mutation({
+            query: (notificationIds: string[]) => ({
+                url: '/notification/delete', 
+                method: 'DELETE',              
+                params: { notificationIds },  
+              }),  
+              invalidatesTags: ['notification'] 
+        }),
+        searchNotification: builder.query({
+            query: ({param}:{param: { 
+                title: string; 
+                pageSize: number; 
+                pageNumber: number; 
+            }}) => ({
+                url:"/search-notification",
+                method:"GET",
+                params: param
+            })
         })
     })
   })
 
-  export const {useNumberOfNotificationQuery,useViewAllNotificationQuery,useViewNotificationDetailsQuery} = notificationApi
+  export const {useNumberOfNotificationQuery,useViewAllNotificationQuery,useViewNotificationDetailsQuery,useDeleteNotificationMutation,useSearchNotificationQuery} = notificationApi

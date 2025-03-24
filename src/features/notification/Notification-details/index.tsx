@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React,{useEffect} from 'react'
 import {inter} from "@/app/fonts"
 import { Button } from '@/components/ui/button'
 import { getInitials } from '@/utils/GlobalMethods';
@@ -24,11 +24,11 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     router.back()
   }
 
-  const {data:notification,isLoading} = useViewNotificationDetailsQuery(notificationId,{skip: !notificationId})
+  const {data:notification,isLoading,isSuccess: isNotificationDetailsSuccess} = useViewNotificationDetailsQuery(notificationId,{skip: !notificationId})
 
 
   return (
-    <div className={`w-full pr-9 md:pr-16 ${inter.className}`}>
+    <div className={`w-full pr-9 md:pr-16 py-4 px-4 md:px-0 ${inter.className}`}>
       { isLoading? <div><SkeletonforNotificationDetails/></div> :
       <div>
       <div className='md:hidden mt-3 mb-7'>

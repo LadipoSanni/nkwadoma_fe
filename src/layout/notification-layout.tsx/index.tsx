@@ -14,8 +14,11 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import { BellIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
 import SkeletonForViewNotification from '@/reuseable/Skeleton-loading-state/Skeleton-for-view-notification';
-import { useViewAllNotificationQuery } from '@/service/notification/notification_query';
+import { useViewAllNotificationQuery,useDeleteNotificationMutation,useSearchNotificationQuery } from '@/service/notification/notification_query';
 import {useAppSelector} from "@/redux/store";
+import {useToast} from "@/hooks/use-toast"
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
+import { MdSearch } from 'react-icons/md'
 
 interface Props{
     children: ReactNode
@@ -27,6 +30,14 @@ interface notificationProp {
   contentDetail: string,
   read: boolean
 }
+
+interface ApiError {
+  status: number;
+  data: {
+      message: string;
+  };
+}
+
 
 function NotificationLayout({children}: Props) {
        const totalNotification = useAppSelector(state => (state.notification.totalNotifications))
@@ -43,8 +54,17 @@ function NotificationLayout({children}: Props) {
        const [isDeleteOpen, setIsDeleteOpen] = useState(false);
        const [isMobile, setIsMobile] = useState(false);
        const router = useRouter();
+       const {toast} = useToast()
+       const param = {
+        title : searchTerm,
+        pageSize: 10,
+        pageNumber: pageNumber
+    }
+
+       const [deleteNotification,{isLoading:isloading}] = useDeleteNotificationMutation()
       
        const {data,isLoading} = useViewAllNotificationQuery({pageSize: pageSize,pageNumber: pageNumber})
+       const {data: searchData} = useSearchNotificationQuery({param},{skip: !searchTerm})
 
        useEffect(() => {
         const mediaQuery = window.matchMedia('(max-width: 767px)'); 
@@ -57,10 +77,15 @@ function NotificationLayout({children}: Props) {
     }, []);
 
        useEffect(()=> {
-          if(data && data?.data){
+        if (searchTerm && searchData && searchData?.data) {
+          const result = searchData?.data?.body
+          setNotificationData(result)
+          setHasNextPage(searchData?.data?.hasNextPage)
+          setPageNumber(searchData?.data?.pageNumber)
+        } 
+        else  if(!searchTerm && data && data?.data){
              setNotificationData(data?.data?.body)
              setHasNextPage(data?.data?.hasNextPage)
-            //  setTotalPage(data?.data?.totalPages)
              setPageNumber(data?.data?.pageNumber)
              
           }
@@ -70,7 +95,7 @@ function NotificationLayout({children}: Props) {
           //   setHasNextPage(paginated.hasNextPage)
           //   setTotalItem(paginated.totalItems)
             // console.log("The paginated data: ",paginated)
-         },[data])
+         },[searchTerm, searchData,data])
 
        
          const handleCheckedRow = (id: string) => {
@@ -84,7 +109,7 @@ function NotificationLayout({children}: Props) {
               return newSelected;
             });
           };
-        
+            
         
            const handleSelectAllChange = () => {
                if(selectAll){
@@ -102,6 +127,7 @@ function NotificationLayout({children}: Props) {
            const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                       setSearchTerm(event.target.value);
                   };
+
                const handleLeftChange = () => {
                  if (pageNumber > 0) {
                    setPageNumber(pageNumber - 1);
@@ -121,8 +147,25 @@ function NotificationLayout({children}: Props) {
                 setIsDeleteOpen(true)
             }
         
-            const handleDeleteNotification = () => {
-        
+            const handleDeleteNotification = async (ids: string[]) => {
+                try{
+                  const deleteNotifications = await deleteNotification(ids).unwrap()
+                  if(deleteNotifications){
+                    setTimeout(() => {
+                      toast({
+                        description: deleteNotifications?.data?.message || `${selectedRows.size === 1? "Notification deleted successfully" : "Notifications deleted successfully"} `,
+                        status: "success",
+                    })
+                    })
+                  }
+
+                }catch(error){
+                  const err = error as ApiError;
+                  toast({
+                    description: err?.data?.message || "Error deleting notification",
+                    status: "error",
+                })
+                }
             }
 
             const handleTabClick = (id: string) => {
@@ -158,8 +201,11 @@ function NotificationLayout({children}: Props) {
         </div>
          <div>
            {
+            searchTerm && notificationDatas.length === 0? <div className='relative bottom-8 top-8'>
+              <SearchEmptyState icon={MdSearch} name='Notification'/>
+            </div> :
         notificationDatas.length === 0? (
-        <div className='relative bottom-14 top-14 '>
+        <div className='relative bottom-8 top-8 '>
           <EmptyState
            icon={() => (
             <BellIcon
@@ -175,7 +221,7 @@ function NotificationLayout({children}: Props) {
         </div>
       ) : (
          <div>
-        <div className='flex justify-between items-center md:pr-7 mb-3 mt-7 md:px-3'>
+        <div className='flex justify-between items-center md:pr-7 mb-3 mt-7 md:px-3  px-4'>
         <div className="flex items-center">
             <input
              data-testid="AllNotifications" 
@@ -218,11 +264,12 @@ function NotificationLayout({children}: Props) {
           >
           {
             notificationDatas.map((notification, index)=> (
-              <div key={index} className='flex items-center w-full'>
+              <div key={index} className={`flex items-center w-full border-t md:border-none ${selectedRows.has(notification.id)? "bg-[#F9F9F9]" : ""} `}>
+              <div key={index} className='flex items-center w-full px-4 md:px-0'>
         
-                <div className='flex-1 border-t '>
+                <div className='flex-1 md:border-t  '>
                   <TabsTrigger 
-                  value={notification.title} className={`w-full py-3  data-[state=active]:bg-[#F9F9F9] flex justify-between px-0 rounded-none`}
+                  value={notification.title} className={`w-full py-3  data-[state=active]:bg-[#F9F9F9] flex justify-between px-0 rounded-none  ${selectedRows.has(notification.id)? "bg-[#F9F9F9]" : ""}`}
                 onClick={() =>handleClick(notification.id)}
                   >
                   <div className='flex md:px-3 cursor-pointer' >
@@ -243,8 +290,8 @@ function NotificationLayout({children}: Props) {
                 />
                 </div>
                 <div className='flex-col flex items-start'>
-                  <div className="text-[14px] font-medium text-[#212221] ">{notification.title}</div>
-                <div className='font-normal'>{notification.contentDetail}</div>
+                  <div className="text-[14px] font-medium text-[#212221]">{notification.title}</div>
+                <div className='font-normal max-w-64 whitespace-nowrap overflow-hidden text-ellipsis'>{notification.contentDetail}</div>
                 </div>
                   
                   </div>
@@ -259,6 +306,7 @@ function NotificationLayout({children}: Props) {
                 </TabsTrigger>
                 </div>
               
+              </div>
               </div>
             ))
           }
@@ -302,9 +350,9 @@ function NotificationLayout({children}: Props) {
               setIsOpen={() => setIsDeleteOpen(false)}
               headerTitle='notification'
               title="notification"
-              handleDelete={handleDeleteNotification}
-              id='1'
-
+              handleMultipleDelete={handleDeleteNotification}
+              isLoading={isloading}
+              ids={Array.from(selectedRows)}
            />
           </DeleteModal>
         </div> 
