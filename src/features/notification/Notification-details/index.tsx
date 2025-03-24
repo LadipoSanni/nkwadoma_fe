@@ -1,5 +1,5 @@
 
-import React,{useEffect} from 'react'
+import React from 'react'
 import {inter} from "@/app/fonts"
 import { Button } from '@/components/ui/button'
 import { getInitials } from '@/utils/GlobalMethods';
@@ -24,7 +24,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     router.back()
   }
 
-  const {data:notification,isLoading,isSuccess: isNotificationDetailsSuccess} = useViewNotificationDetailsQuery(notificationId,{skip: !notificationId})
+  const {data:notification,isLoading} = useViewNotificationDetailsQuery(notificationId,{skip: !notificationId})
 
 
   return (
