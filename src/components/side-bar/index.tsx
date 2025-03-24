@@ -11,6 +11,7 @@ import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {useLogoutMutation} from "@/service/users/api";
 import {clearData} from "@/utils/storage";
 import {
+    getFinancierSideBarItems,
     getInstituteAdminSideBarItems,
     getLoaneeSideBarItems, getLogoutItem,
     getPortfolioManagerSideBarItems,
@@ -77,7 +78,8 @@ const SideBar = () => {
     const sideBarContent = [
         {name: "PORTFOLIO_MANAGER", value: getPortfolioManagerSideBarItems(current)},
         {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
-        {name: 'LOANEE', value: getLoaneeSideBarItems(current) }
+        {name: 'LOANEE', value: getLoaneeSideBarItems(current) },
+        {name: 'FINANCIAL', value: getFinancierSideBarItems(current)},
     ]
 
     const getUserSideBarByRole = (userrole?: string): navbarRouterItemsProps[] | undefined => {
