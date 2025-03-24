@@ -47,16 +47,16 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
 
     React.useImperativeHandle(ref, () => triggerRef.current!);
 
-    const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === "Enter") {
-        setIsPopoverOpen(true);
-      } else if (event.key === "Backspace" && !event.currentTarget.value) {
-        const newSelectedValues = [...selectedValues];
-        newSelectedValues.pop();
-        setSelectedValues(newSelectedValues);
-        onValueChange(newSelectedValues);
-      }
-    };
+    // const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    //   if (event.key === "Enter") {
+    //     setIsPopoverOpen(true);
+    //   } else if (event.key === "Backspace" && !event.currentTarget.value) {
+    //     const newSelectedValues = [...selectedValues];
+    //     newSelectedValues.pop();
+    //     setSelectedValues(newSelectedValues);
+    //     onValueChange(newSelectedValues);
+    //   }
+    // };
 
     const toggleOption = (option: string) => {
       const newSelectedValues = selectedValues.includes(option)
@@ -71,9 +71,9 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       onValueChange([]);
     };
 
-    const handleTogglePopover = () => {
-      setIsPopoverOpen((prev) => !prev);
-    };
+    // const handleTogglePopover = () => {
+    //   setIsPopoverOpen((prev) => !prev);
+    // };
 
     const toggleAll = () => {
       if (selectedValues.length === options.length) {
@@ -118,7 +118,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
             onClear={handleClear}
             onClose={() => setIsPopoverOpen(false)}
             onToggleAll={toggleAll}
-            onInputKeyDown={handleInputKeyDown}
+            // onInputKeyDown={handleInputKeyDown}
             id={id}
             restrictedItems={restrictedItems}
             

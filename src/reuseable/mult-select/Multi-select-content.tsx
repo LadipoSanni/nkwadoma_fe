@@ -8,7 +8,6 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
@@ -21,7 +20,7 @@ interface MultiSelectContentProps {
   onClear: () => void;
   onClose: () => void;
   onToggleAll: () => void;
-  onInputKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+//   onInputKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   selectAllcondition?: boolean;
   id?: string;
   restrictedItems?: string[]; 
@@ -34,7 +33,7 @@ export const MultiSelectContent = ({
   onClear,
   onClose,
   onToggleAll,
-  onInputKeyDown,
+//   onInputKeyDown,
   selectAllcondition = false,
   id,
   restrictedItems = [], 
