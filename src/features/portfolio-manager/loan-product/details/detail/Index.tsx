@@ -43,7 +43,7 @@ const Details = () => {
             loading? (
                 <SkeletonForDetailPage/>
             ): (
-                <div className={`py-2 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
+                <div className={`py-2 flex md:flex-row flex-col md:justify-between overflow-y-auto`} id={`sections`}>
                     <div id={`firstSection`}>
                         <DetailsImageSection imageSrc={loanProduct?.data.imageUrl} cohortTitle={loanProduct?.data.name}
                                              cohortDescription={loanProduct?.data.mandate}
@@ -53,7 +53,7 @@ const Details = () => {
                                              icon={MdOutlineInventory2}
                         />
                     </div>
-                    <div className={`md:w-6/12 min-w-sm md:pt-0 h-`} id={`secondSection`}>
+                    <div className={`md:w-6/12 min-w-sm md:pt-0 pb-4 max:h-96`} id={`secondSection`}>
                         <ThreeTabs
                             isTable={false} isNotTableDataList={loanProduct?.data.termsAndCondition} dataList={dataList}
                             tabTitle1={"Product details"} tabTitle2={"Terms and conditions"}
