@@ -1,5 +1,5 @@
 "use client"
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {inter} from "@/app/fonts";
 import UpdateDraftButton from "@/reuseable/buttons/UpdateDraftButton";
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery} from "@/service/admin/fund_query";
@@ -76,6 +76,7 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: SaveToDraftProps) => {
     const [pageNumber, setPageNumber] = useState(0);
     const [drafts, setDrafts] = useState<Draft[]>([]);
     const [hasMore, setHasMore] = useState(true);
+    const draftRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     const dispatch = useDispatch();
 
@@ -111,6 +112,46 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: SaveToDraftProps) => {
         }
     }, [step, refetch]);
 
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Enter" && selectedDraft && step === 1) {
+                handleContinueButton(setStep);
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [selectedDraft, step]);
+
+    useEffect(() => {
+        const handleKeyUp = (event: KeyboardEvent) => {
+            if (step !== 1 || drafts.length === 0) return;
+
+            const currentIndex = selectedDraft ? drafts.findIndex((d) => d.id === selectedDraft.id) : -1;
+
+            if (event.key === "ArrowDown") {
+                event.preventDefault();
+                const nextIndex = currentIndex < drafts.length - 1 ? currentIndex + 1 : 0;
+                const nextDraft = drafts[nextIndex];
+                handleClick(nextDraft, selectedDraft, setSelectedDraft, setDisabled, dispatch);
+                draftRefs.current[nextIndex]?.focus();
+            } else if (event.key === "ArrowUp") {
+                event.preventDefault();
+                const prevIndex = currentIndex > 0 ? currentIndex - 1 : drafts.length - 1;
+                const prevDraft = drafts[prevIndex];
+                handleClick(prevDraft, selectedDraft, setSelectedDraft, setDisabled, dispatch);
+                draftRefs.current[prevIndex]?.focus();
+            }
+        };
+
+        document.addEventListener("keyup", handleKeyUp);
+        return () => {
+            document.removeEventListener("keyup", handleKeyUp);
+        };
+    }, [drafts, selectedDraft, step, dispatch]);
+
     const loadMore = () => {
         if (!isFetching && hasMore) {
             setPageNumber((prevPage) => prevPage + 1);
@@ -142,10 +183,12 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: SaveToDraftProps) => {
                                 />
                             </div>
                         ) : (
-                            drafts.map((draft: Draft) => (
+                            drafts.map((draft: Draft, index) => (
                                 <div
                                     key={draft.id}
-                                    className={`${inter.className} p-4 border rounded-lg cursor-pointer transition ${
+                                    ref={(el) => (draftRefs.current[index] = el)} // Assign ref to each draft
+                                    tabIndex={0}
+                                    className={`${inter.className} p-4 border rounded-lg cursor-pointer transition outline-none ${
                                         selectedDraft?.id === draft.id ? "bg-[#F9F9F9] border-[#142854]" : ""
                                     }`}
                                     onClick={() =>
