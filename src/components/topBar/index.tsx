@@ -29,17 +29,7 @@ const TopBar = () => {
     const user_name = getUserDetailsFromStorage("user_name");
      const router = useRouter();
      const pathname = usePathname();
-    //  const [isMobile, setIsMobile] = useState(false);
 
-    //   useEffect(() => {
-    //          const mediaQuery = window.matchMedia('(max-width: 767px)'); 
-    //          setIsMobile(mediaQuery.matches);
-     
-    //          const handleResize = () => setIsMobile(mediaQuery.matches);
-    //          mediaQuery.addEventListener('change', handleResize);
-     
-    //          return () => mediaQuery.removeEventListener('change', handleResize);
-    //      }, []);
 
 
     const {data,refetch} = useNumberOfNotificationQuery({})
@@ -66,112 +56,18 @@ const TopBar = () => {
        store.dispatch(setCurrentNavbarItem('Notification'))  
     }
     
-    // const isNotificationPage = pathname === "/notifications" ;
     const isNotificationPage = /^\/notifications(?:\/.*)?$/.test(pathname || "");
 
-    // const mobileNotificationHeaderClick =() => {
-    //     if(isMobile && currentTab === "Notification"){
-    //         router.push("/notifications/notification")
-    //     }
-    // }
+
     
 
 
     return (
         <header
             id="adminlayoutHeader"
-            className="bg-meedlWhite md:bg-meedlWhite  flex items-center h-[8vh] px-4 md:px-4 border-b border-b-[blue300] md:border-b md:border-b-[blue300] w-full pt-2 md:h-[10vh] md:w-[84vw] static md:static right-0 justify-between "
+            className="bg-meedlWhite md:bg-meedlWhite  flex items-center h-[8vh] px-4 md:px-4 border-b border-b-[blue300] md:border-b md:border-b-[blue300] w-full  md:h-[12vh] md:w-[84vw] static md:static right-0 justify-between "
         >
-            <div className={'flex  w-full  mr-auto ml-auto  place-content-between'}>
-                <div className={`flex gap-2 h-[1rem] mt-auto mb-auto place-content-center `}>
-                    <div id={'buttonsDiv'} className={`relative  flex place-items-center md:hidden`}>
-                        <IoMdMenu color='#667085' style={{ height: '1rem', width: '1rem' }}
-                            onClick={openMobileSideBar}
-                            id={'LayOutHamburger'} />
-                    </div>
-                    <div className={` relative flex place-items-center `}>
-                        <div 
-                        className={` ${inter500.className} text-base md:text-base text-black500 md:text500 `}
-                        // onClick={mobileNotificationHeaderClick}
-                        >{currentTab}</div>
-                    </div>
-                </div>
 
-                <div id="LayOutProfileAndNotification" className="flex items-center   md:gap-2">
-                    <div id={'bellDiv'}
-                        className={` flex place-content-center object-fit h-[2.6rem]  w-[2.6rem] rounded-md mr-[1.7rem] `}>
-    
-                          <div className='relative left-3 md:left-0'>
-                            <Button 
-                            className='text-black shadow-none mt-1 cursor-auto'
-                            onClick={handleNotification}
-                            >
-                                {
-                                 isNotificationPage? 
-                                  <div className='cursor-auto'>
-                                    <MdNotifications
-                                  size={24}
-                                     /> 
-                                  </div>
-                                    : 
-                                    <div className='cursor-pointer'>
-                               <BellIcon
-                                style={{ width: '22px',height: '21px',stroke: '#000', strokeWidth: '0.6'}}
-                               />
-                               <div className='absolute'>
-                                { data === undefined || data?.data?.unreadCount === null ? "" :
-                                (data?.data?.unreadCount  === 0? "" : <Badge
-                                 className={`relative bg-[#142854] hover:bg-[#142854] bottom-7 left-2  text-white text-xs rounded-full  flex items-center justify-center ${data?.data?.unreadCount > 99 ? "w-7 h-6"  : "w-4 h-5"}`}
-                                >
-                                  {data?.data?.unreadCount > 99 ? "99+" : data?.data?.unreadCount }
-                                </Badge>)}
-                                </div>
-                                    </div>
-                                }
-                            </Button>
-                          </div>
-                          {/* <Badge
-                         badgeContent={'33'}
-                        color="success" sx={{marginTop: 'auto', marginBottom: 'auto', height: '70%', width: '70%'}} >
-                        <FiBell className={` w-[100%] h-[100%] object-cover `}/>
-                          </Badge> */}
-                    </div>
-                    <div id={'fullNameDiv'} className="flex gap-2  justify-between items-center w-[fit-content]">
-                        <div
-                            className={` flex place-content-center  object-fit  bg-[#E0FDEB]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
-                            <div
-                                className={` ${inter500.className} grid place-content-center  mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `} >
-                                {getFirstLetterOfWord(user_name)}
-                            </div>
-                        </div>
-                        <button onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : 'cursor-text'} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
-                            <p className={`text-black500 ${inter500.className} flex justify-start  text-sm `}>{capitalizeFirstLetters(user_name)}</p>
-                            <p className={`text-black400 ${inter.className} flex justify-start text-sm`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
-                        </button>
-                        <div id={'toggleArrowDiv'} className={``}>
-                            {user_role === 'ORGANIZATION_ADMIN' && (
-                                <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-                                    <PopoverTrigger asChild>
-                                        {arrowToggled ? (
-                                            <ChevronUpIcon
-                                                className={'h-4 cursor-pointer  w-5 stroke-2 text-primary200'}
-                                                onClick={toggleArrow} />
-                                        ) : (
-                                            <ChevronDownIcon
-                                                className={'h-4 cursor-pointer w-5 stroke-2 text-primary200'}
-                                                onClick={toggleArrow} />
-                                        )}
-                                    </PopoverTrigger>
-                                    <PopoverContent
-                                        className={"h-[146px] w-[17.1875rem] absolute top-3 -right-2  p-3 rounded-md bg-meedlWhite shadow-boxShadowLight"}>
-                                        <AdminProfile closePopover={() => setIsPopoverOpen(false)} />
-                                    </PopoverContent>
-                                </Popover>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
         </header>
     );
 };
