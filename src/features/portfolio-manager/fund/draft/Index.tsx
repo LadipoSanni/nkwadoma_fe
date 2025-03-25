@@ -186,7 +186,7 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: SaveToDraftProps) => {
                             drafts.map((draft: Draft, index) => (
                                 <div
                                     key={draft.id}
-                                    ref={(el) => (draftRefs.current[index] = el)} // Assign ref to each draft
+                                    ref={(el) => (draftRefs.current[index] = el)}
                                     tabIndex={0}
                                     className={`${inter.className} p-4 border rounded-lg cursor-pointer transition outline-none ${
                                         selectedDraft?.id === draft.id ? "bg-[#F9F9F9] border-[#142854]" : ""
