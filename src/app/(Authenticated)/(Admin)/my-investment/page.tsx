@@ -4,9 +4,9 @@ import PerformanceCard from "@/reuseable/cards/perfomance-card/performanceCard";
 
 const Page = () => {
     return (
-        <div>
+        <div className={ ``}>
             <Index maxHeight={'20rem'} maxWidth={'30rem'} componentId={'e'} />
-            <PerformanceCard/>
+            <PerformanceCard maxWidth={'50%'}/>
         </div>
     );
 };
