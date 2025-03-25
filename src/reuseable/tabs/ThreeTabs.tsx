@@ -32,7 +32,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
 
     return (
         <div id="cohort-details" data-testid="cohort-details"
-             className={`${inter.className} border border-slate-200 max:h-96 rounded-md md:p-3 px-2 `}>
+             className={`${inter.className} border border-slate-200 max:md:h-72 md:p-3 px-2 py-3 rounded-md`}>
             <div id="tabs-section" data-testid="tabs-section" className={`md:p-3 px-2 py-3 `}>
                 <div className={`w-full rounded-md`}>
                     <Tabs
@@ -55,7 +55,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                         <TabsContent value={"productDetails"} id="cohort-details-content"
                                      data-testid="productDetails" className={`py-3`}>
                             <div
-                                className="bg-[#F9F9F9] md:h-72 px-5 w-full overflow-y-auto rounded-sm">
+                                className="bg-[#F9F9F9] md:h-72 px-5 w-full md:overflow-y-auto rounded-sm">
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
@@ -91,7 +91,7 @@ export const ThreeTabs: React.FC<detailContainerProps> = ({
                                     />
                                     :
                                     <div
-                                        className="bg-[#F9F9F9] md:h-72 px-5 w-full py-2 overflow-y-auto rounded-sm">
+                                        className="bg-[#F9F9F9] md:h-72 px-5 w-full py-2 md:overflow-y-auto rounded-sm">
                                         <p
                                             id={`data-item`}
                                             data-testid={`data-iteM`}
