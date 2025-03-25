@@ -3,22 +3,23 @@ import DeleteIcon from '../../../public/Icon - Delete.png'
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {inter, cabinetGrotesk} from "@/app/fonts";
-// import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import Isloading from "../display/Isloading";
 
 interface deleteCohortProps {
-    id?: string,
+    id?: string ;
     setIsOpen?: (e: boolean | undefined) => void,
     headerTitle: string,
     title: string,
     handleDelete?: (id: string) => void;
+    handleMultipleDelete?: (id: string[]) => void;
     isLoading?: boolean
-    errorDeleted?: string
+    errorDeleted?: string;
+    ids?: string[];
 
 }
 
 
- const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading}) => {
+ const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading,ids,handleMultipleDelete}) => {
  
 
     const handleCanCelCohort = () => {
@@ -32,6 +33,11 @@ interface deleteCohortProps {
         if(handleDelete){
             handleDelete(id ?? "");
             if (setIsOpen) setIsOpen(false); 
+        }else {
+             if(handleMultipleDelete){
+             handleMultipleDelete(ids ?? [])
+             if (setIsOpen) setIsOpen(false); 
+             }
         }
      
     }
