@@ -229,7 +229,7 @@ function NotificationLayout({children}: Props) {
               checked={selectAll}
               onChange={handleSelectAllChange}
               id={`selectAll`}
-              className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md mr-2 opacity-60`}
+              className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md mr-2`}
             />
             <span className='font-medium' >All Notifications</span>
           </div>
@@ -264,7 +264,7 @@ function NotificationLayout({children}: Props) {
           >
           {
             notificationDatas.map((notification, index)=> (
-              <div key={index} className={`flex items-center w-full border-t md:border-none ${selectedRows.has(notification.id)? "bg-[#F9F9F9]" : ""} `}>
+              <div key={index} className={`flex items-center w-full border-t md:border-none ${selectedRows.has(notification.id)? "bg-[#F9F9F9] " : ""} `}>
               <div key={index} className='flex items-center w-full px-4 md:px-0'>
         
                 <div className='flex-1 md:border-t  '>
