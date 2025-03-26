@@ -157,6 +157,7 @@ function NotificationLayout({children}: Props) {
                         status: "success",
                     })
                     })
+                    router.push("/notifications/notification")
                   }
 
                 }catch(error){
