@@ -30,7 +30,7 @@ describe('test performance card', ()=> {
         )
 
         const displayedValue = screen.getByDisplayValue(value);
-        console.log('displayedValue', displayedValue);
+        // console.log('displayedValue', displayedValue);
         expect(displayedValue).toHaveDisplayValue('₦20,000.00');
     })
 
