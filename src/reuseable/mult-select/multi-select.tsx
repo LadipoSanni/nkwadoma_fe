@@ -31,7 +31,7 @@ function Multiselect({
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState<"bottom" | "top">("bottom");
-  const [focusedOption, setFocusedOption] = useState<string | null>(null);
+//   const [focusedOption, setFocusedOption] = useState<string | null>(null);
   const selectRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 

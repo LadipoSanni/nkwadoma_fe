@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { inter } from "@/app/fonts";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import Isloading from "@/reuseable/display/Isloading";
-import { useCreateInvestmentVehicleMutation } from "@/service/admin/fund_query";
-import { useToast } from "@/hooks/use-toast";
+// import { useCreateInvestmentVehicleMutation } from "@/service/admin/fund_query";
+// import { useToast } from "@/hooks/use-toast";
 import { validateNumber, validatePositiveNumberWithIndexNumbers } from "@/utils/Format";
 import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
@@ -40,19 +40,19 @@ import { format, parseISO } from "date-fns";
   };
 
 interface Props {
-    type?: string;
+    // type?: string;
   investmentVehicleType?: string;
     
 }
 
-function Setup({type,investmentVehicleType}: Props) {
+function Setup({investmentVehicleType}: Props) {
     const [selectCurrency, setSelectCurrency] = useState("NGN");
-  const [isError, setError] = useState("");
-  const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
-  const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
-  const { toast } = useToast();
+//   const [isError, setError] = useState("");
+//   const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
+//   const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
+//   const { toast } = useToast();
    const router = useRouter();
-
+    const isLoading = false
 
    const handlenext = () => {
 
@@ -164,8 +164,8 @@ function Setup({type,investmentVehicleType}: Props) {
              handlenext()
        }
 
-    function handleSaveDraft(values: { name: string; fundManager: string; minimumInvestmentAmount: string; mandate: string; tenure: string; size: string; rate: string; bankPartner: string; trustee: string; custodian: string; investmentVehicleType: string; startDate: string; }, setFieldError: (field: string, message: string | undefined) => void): void {
-        throw new Error('Function not implemented.');
+    function handleSaveDraft() {
+       
     }
 
   return (
@@ -461,10 +461,11 @@ function Setup({type,investmentVehicleType}: Props) {
                              type="button"
                            className='w-full lg:w-36 h-[48px] mb-4 border-solid border-[#142854] text-[#142854]'
                             // onClick={() => handleReset(resetForm)}
-                            onClick={()=> handleSaveDraft(values,setFieldError)}
+                            onClick={()=> handleSaveDraft}
                         >
                           {
-                            vehicleTypeStatus === "DRAFT" && isLoading?  <Isloading /> : "Save to draft"
+                            // vehicleTypeStatus === "DRAFT" && 
+                            isLoading?  <Isloading /> : "Save to draft"
                           }
                             
                         </Button>
@@ -478,7 +479,9 @@ function Setup({type,investmentVehicleType}: Props) {
                             type="submit"
                             disabled={!isValid}
                         >
-                            {vehicleTypeStatus === "PUBLISH" && isLoading ? <Isloading /> : "Save and continue"}
+                            {
+                            // vehicleTypeStatus === "PUBLISH" &&
+                             isLoading ? <Isloading /> : "Save and continue"}
                         </Button>
                     </div>
             </div>
