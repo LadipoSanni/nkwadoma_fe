@@ -1,103 +1,76 @@
-"use client"
-import React from 'react';
-import 'react-quill/dist/quill.snow.css'; // Import the styles
-import 'react-quill-new/dist/quill.snow.css';
+// "use client"
+// import React from 'react';
+// import AllInvestmentCard from "@/reuseable/cards/All_investment_card";
+//
+// const DescriptionEditor: React.FC = () => {
+//
+//     return (
+//         <div className="pt-4">
+//             <AllInvestmentCard/>
+//         </div>
+//
+//     );
+// };
+//
+// export default DescriptionEditor;
+//
+//
+import * as React from "react"
 
-const DescriptionEditor: React.FC = () => {
+import { Button } from "@/components/ui/button"
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
+export function DescriptionEditor() {
     return (
-        <div className="pt-4">
-            {/*<Label htmlFor="loanProductTermsAndConditionId">Loan product terms and*/}
-            {/*    condition</Label>*/}
-            {/*<ReactQuill*/}
-            {/*    theme="snow"*/}
-            {/*    value={values.loanProductTermsAndCondition}*/}
-            {/*    onChange={(content) => {*/}
-            {/*        if (content.length <= maxChars) {*/}
-            {/*            setFieldValue("loanProductTermsAndCondition", content);*/}
-            {/*            setError(''); // Clear error when within limit.*/}
-            {/*        } else {*/}
-            {/*            setError('Product condition must be 2500 characters or less');*/}
-            {/*        }*/}
-            {/*    }}*/}
-            {/*    // onPaste={(e: React.ClipboardEvent<HTMLDivElement>) => {*/}
-            {/*    //     const paste = e.clipboardData.getData('text');*/}
-            {/*    //     if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {*/}
-            {/*    //         e.preventDefault();*/}
-            {/*    //         setError('Product condition must be 2500 characters or less');*/}
-            {/*    //     }*/}
-            {/*    // }}*/}
-            {/*    modules={{*/}
-            {/*        toolbar: [*/}
-            {/*            ['bold', 'italic', 'underline', 'strike'],        // Text formatting options*/}
-            {/*            [{list: 'ordered'}, {list: 'bullet'}],       // Lists*/}
-            {/*            ['link'],                                         // Links*/}
-            {/*            ['clean'],                                        // Remove formatting*/}
-            {/*        ],*/}
-            {/*    }}*/}
-            {/*    formats={[*/}
-            {/*        'bold', 'italic', 'underline', 'strike',*/}
-            {/*        'list', 'bullet',*/}
-            {/*        'link',*/}
-            {/*    ]}*/}
-            {/*    className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"*/}
-            {/*    placeholder="Enter terms and condition"*/}
-            {/*/>*/}
-            {/*{*/}
-            {/*    errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (*/}
-            {/*        <ErrorMessage*/}
-            {/*            name="loanProductTermsAndCondition"*/}
-            {/*            component="div"*/}
-            {/*            id="loanProductTermsAndConditionError"*/}
-            {/*            className="text-red-500 text-sm"*/}
-            {/*        />*/}
-            {/*    )*/}
-            {/*}*/}
-            {/*{error && <div className="text-red-500 text-sm">{error}</div>}*/}
-
-
-            {/*<div className={`pt-4`}>*/}
-            {/*    <Label htmlFor="loanProductTermsAndCondition">Loan product terms and*/}
-            {/*        condition</Label>*/}
-            {/*    <Field*/}
-            {/*        as="textarea"*/}
-            {/*        id="loanProductTermsAndConditionId"*/}
-            {/*        name="loanProductTermsAndCondition"*/}
-            {/*        className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"*/}
-            {/*        placeholder="Enter terms and condition"*/}
-            {/*        rows={4}*/}
-            {/*        maxLength={maxChars}*/}
-            {/*        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {*/}
-            {/*            const value = e.target.value;*/}
-            {/*            if (value.length <= maxChars) {*/}
-            {/*                setFieldValue("loanProductTermsAndCondition", value);*/}
-            {/*            }*/}
-            {/*        }}*/}
-            {/*        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {*/}
-            {/*            const paste = e.clipboardData.getData('text');*/}
-            {/*            if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {*/}
-            {/*                e.preventDefault();*/}
-            {/*                // setFieldValue("loanProductTermsAndCondition", paste);*/}
-            {/*                setError('Product condition must be 2500 characters or less');*/}
-            {/*            }*/}
-            {/*        }}*/}
-            {/*    />*/}
-            {/*    {*/}
-            {/*        errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (*/}
-            {/*            <ErrorMessage*/}
-            {/*                name="loanProductTermsAndCondition"*/}
-            {/*                component="div"*/}
-            {/*                id='loanProductTermsAndConditionError'*/}
-            {/*                className="text-red-500 text-sm"*/}
-            {/*            />*/}
-            {/*        )*/}
-            {/*    }*/}
-            {/*</div>*/}
-        </div>
-
-    );
-};
-
-export default DescriptionEditor;
-
-
+        <Card className="w-[350px]">
+            <CardHeader>
+                <CardTitle>Create project</CardTitle>
+                <CardDescription>Deploy your new project in one-click.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form>
+                    <div className="grid w-full items-center gap-4">
+                        <div className="flex flex-col space-y-1.5">
+                            <Label htmlFor="name">Name</Label>
+                            <Input id="name" placeholder="Name of your project" />
+                        </div>
+                        <div className="flex flex-col space-y-1.5">
+                            <Label htmlFor="framework">Framework</Label>
+                            <Select>
+                                <SelectTrigger id="framework">
+                                    <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent position="popper">
+                                    <SelectItem value="next">Next.js</SelectItem>
+                                    <SelectItem value="sveltekit">SvelteKit</SelectItem>
+                                    <SelectItem value="astro">Astro</SelectItem>
+                                    <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                </form>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+                <Button variant="outline">Cancel</Button>
+                <Button>Deploy</Button>
+            </CardFooter>
+        </Card>
+    )
+}
