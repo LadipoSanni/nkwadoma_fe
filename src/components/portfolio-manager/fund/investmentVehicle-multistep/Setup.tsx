@@ -192,7 +192,7 @@ function Setup({investmentVehicleType}: Props) {
         })=> (
             <Form className={`${inter.className}`}>
             <div>
-            <div className="grid grid-cols-1 gap-y-4 md:max-h-[55vh]  overflow-y-auto "
+            <div className="grid grid-cols-1 gap-y-4 md:max-h-[52vh]  overflow-y-auto "
                 //  style={{
                 //   scrollbarWidth: "none",
                 //   msOverflowStyle: "none",
@@ -457,6 +457,7 @@ function Setup({investmentVehicleType}: Props) {
             </div>  
             <div className= "md:flex gap-4 justify-between mt-6  md:mb-0">
                         <Button
+                            id='saveInvestment'
                             variant={"outline"}
                              type="button"
                            className='w-full lg:w-36 h-[48px] mb-4 border-solid border-[#142854] text-[#142854]'
@@ -470,6 +471,7 @@ function Setup({investmentVehicleType}: Props) {
                             
                         </Button>
                         <Button
+                            id='submitInvestment'
                             variant={"default"}
                             className={` w-full lg:w-36 h-[48px] ${
                                 !isValid
