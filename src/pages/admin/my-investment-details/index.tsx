@@ -93,17 +93,15 @@ const MyInvestmentDetails = () => {
                     </div>
 
                     <p className={` ${cabinetGroteskMediumBold.className}  md:text-[32px] text-[24px] md:text-[#212221] `}>Software Engineering Fund</p>
-                    <div className={` bg-grey105 md:bg-grey105 grid h-fit md:h-fit  gap-8 px-3  `}>
+                    <div className={` bg-grey105 md:bg-purple-200 grid h-fit md:h-fit  gap-8 px-3  `}>
                         {investmentBasicDetails.map((item, index) => (
-                            <li key={"key" + index} className={' grid gap-9 rounded-md'}>
-                                <div
-                                    className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
+                                <div key={"key" + index}
+                                     className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                     <div
                                         className={`  ${inter.className} text-black300 text-[14px]  font-normal`}>{item.label}</div>
                                     <div
                                         className={` ${inter.className}  text-black500 text-[14px] le font-normal`}> {item.value ? item.value : 'Not provided'}</div>
                                 </div>
-                            </li>
                         ))}
                     </div>
 
