@@ -2,11 +2,16 @@ import React from "react";
 import {cabinetGrotesk} from '@/app/fonts'
 import {Button} from "@/components/ui/button"
 
-const cardData = [{
-    title: "Wallet balance", amount: "₦0.00", linkText: "Go to wallet"
-}, {
-    title: "Loan balance", amount: "₦0.00", linkText: "Go to repayment"
-}];
+const cardData = [
+    {
+        title: "Wallet balance", amount: "₦0.00", linkText: "Go to wallet"
+    }, {
+        title: "Loan balance", amount: "₦0.00", linkText: "Go to repayment"
+    },
+    {
+        title: "Wallet balance", amount: "₦0.00", linkText: "Go to wallet"
+    },
+];
 
 const BalanceCard = () => {
     return (<div id={'balanceCard'} className={'md:flex grid gap-6'}>
