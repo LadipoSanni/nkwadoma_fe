@@ -12,6 +12,7 @@ import { validateNumber, validatePositiveNumberWithIndexNumbers } from "@/utils/
 import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
+import ChooseVisibility from "./Choose-visibility";
 
 
 interface ApiError {
@@ -48,14 +49,19 @@ function CreateInvestmentVehicle({
 }: props) {
   const [selectCurrency, setSelectCurrency] = useState("NGN");
   const [isError, setError] = useState("");
-    const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
-    const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
-    const { toast } = useToast();
+  const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
+  const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
+  const { toast } = useToast();
+  const [step, setStep] = useState(1);
 
   const handleCloseModal = () => {
     if (setIsOpen) {
       setIsOpen(false);
     }
+  };
+
+  const handleContinue = () => {
+    setStep(2); 
   };
 
   const validationSchema = Yup.object().shape({
@@ -247,7 +253,7 @@ function CreateInvestmentVehicle({
             status: "error",
           });
         }
-        console.log("The error",errors.name)
+        
       }
     }
   };
@@ -279,7 +285,8 @@ function CreateInvestmentVehicle({
           description: create.message,
           status: "success",
         });
-        handleCloseModal();
+        // handleCloseModal();
+        handleContinue()
       }
     } catch (err) {
       const error = err as ApiError;
@@ -291,6 +298,7 @@ function CreateInvestmentVehicle({
 
   return (
     <div id="createInvestmentVehicleId">
+      { step === 1?
       <Formik
         initialValues={initialFormValue}
         onSubmit={handleSubmit}
@@ -675,7 +683,12 @@ function CreateInvestmentVehicle({
             </p>
           </Form>
         )}
-      </Formik>
+      </Formik> 
+      : 
+      <div>
+        <ChooseVisibility/>
+      </div>
+      }
     </div>
   );
 }
