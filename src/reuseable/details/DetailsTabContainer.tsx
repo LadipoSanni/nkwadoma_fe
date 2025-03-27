@@ -71,7 +71,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         </TabsContent>
 
                         <TabsContent value={"trainee"} id="trainee-content" data-testid="trainee-content"
-                                     className={`py-3 w-full `}>
+                                     className={`py-2 w-full `}>
                             {isTable ?
                                 <Tables
                                     tableData={traineeData}
