@@ -22,15 +22,14 @@ const PerformanceCard = ({maxWidth, isSmall,title, value, isValueInPercentage, s
     return (
         <div
             id={'performanceCard'} data-testid="performanceCard"
-            className={` ${isSmall ? ` md:w-[${maxWidth}] w-[${maxWidth}] ` : `md:min-w-fit min-w-fit max-w[${maxWidth}] md:max-w-[${maxWidth}]`} md:min-w-fit min-w-fit max-w[${maxWidth}] md:max-w-[${maxWidth}] py-3 px-3 ] md:h-[9.5rem] h-fit max-h-[10rem] md:max-h-[10rem] ${showContainerBorder ? 'md:border md:border-blue550 border border-blue550' : ''}  rounded-md `}>
+            className={` ${isSmall ? ` md:w-[${maxWidth}] w-full ` : `md:min-w-fit min-w-fit max-w[${maxWidth}] md:max-w-[${maxWidth}]`} md:min-w-fit min-w-fit max-w[${maxWidth}] md:max-w-[${maxWidth}]    ${showContainerBorder ? 'md:border md:border-blue550 border border-blue550 py-3 px-3 md:h-[9.5rem] h-fit max-h-[10rem] md:max-h-[10rem] ' : ' md:max-h-[7rem] max-h-fit '}  rounded-md `}>
             <div className={` ${isSmall? `md:w-full w-full  ` : `md:min-w-fit  min-w-fit w-[${maxWidth}] md:w-[${maxWidth}] `} h-full bg-grey105 md:bg-grey105 px-4 py-4 grid gap-2 content-between`}>
                 <p id={title} data-testid={title} aria-labelledby={title} className={`md:text-[16px] text-[14px] ${inter.className} text-black300`}>{title}</p>
                 <div className={` grid gap-2 md:flex justify-between w-full  `}>
                     {isValueInPercentage ?
-                        <p className={` ${cabinetGroteskBold.className} md:text-[36px] text-[24px] text-meedlBlue `}>{value}%</p>
+                        <p className={` ${cabinetGroteskBold.className} md:text-[36px] text-[24px] x text-meedlBlue `}>{value}%</p>
                         :
                         <NumericFormat
-                            width={'fit-content'}
                             id={'performancePercentageAmount'}
                             name={'performancePercentageAmount'}
                             type="text"
@@ -39,7 +38,7 @@ const PerformanceCard = ({maxWidth, isSmall,title, value, isValueInPercentage, s
                             decimalScale={0}
                             fixedDecimalScale={true}
                             prefix={'₦'}
-                            className={`${cabinetGroteskBold.className} md:bg-purple-300 bg-grey105 w-fit md:w-fit  md:text-[36px] text-[24px] text-meedlBlue  `}
+                            className={`${cabinetGroteskBold.className} md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue  `}
                             value={value}
                         />
                     }
