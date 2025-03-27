@@ -198,7 +198,7 @@ const ProgramView = () => {
     const handleDropdownClick = async (id: string, row: rowData) => {
         if (id === "1") {
             store.dispatch(setCurrentProgramId(String(row?.id)))
-            router.push('/program/details')
+            router.push('/program/program-details')
 
 
         } else if (id === "2") {
@@ -223,7 +223,8 @@ const ProgramView = () => {
     const handleCardDropDownClick = async (optionId: string, id: string) => {
         if (optionId === "1") {
             store.dispatch(setCurrentProgramId(id))
-            router.push(`/program/details`);
+            router.push(`/program/program-details`);
+
         } else if (optionId === "2") {
             setProgramId(id);
             if (programId) {
