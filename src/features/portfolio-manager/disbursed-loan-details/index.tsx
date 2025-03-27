@@ -156,7 +156,7 @@ const Index = () => {
                 data-testid={'disbursedLoanMainContainer'}
                 className={'md:px-8 w-full max:h-96  px-3 pt-4 md:pt-4'}
             >
-                <BackButton handleClick={backToViewAllDisbursedLoan} iconRight={true} text={"Back to disbursed loan"}
+                <BackButton handleClick={backToViewAllDisbursedLoan} iconBeforeLetters={true} text={"Back to disbursed loan"}
                             id={"disbursedLoanDetailsBackButton"} textColor={'#142854'}/>
                 <div
                     id={'disbursedLoanDetailsPageContainer'}

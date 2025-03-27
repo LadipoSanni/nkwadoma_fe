@@ -35,7 +35,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
         <BackButton 
       id="notificationBackButton" 
       handleClick={handleBack} textColor='' 
-      iconRight={true}
+      iconBeforeLetters={true}
       text='Back'
       />
       </div>
