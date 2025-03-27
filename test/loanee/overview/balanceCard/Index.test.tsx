@@ -3,6 +3,11 @@ import {cleanup, render, screen} from '@testing-library/react';
 import BalanceCard from '@/reuseable/cards/BalanceCard/Index';
 import { Providers } from '@/app/provider';
 
+const loaneeCardData = [
+    { title: "Wallet balance", amount: "₦0.00", linkText: "Go to wallet" },
+    { title: "Loan balance", amount: "₦0.00", linkText: "Go to repayment" }
+];
+
 describe('BalanceCard Component', () => {
     beforeEach(() => {
         cleanup();
@@ -11,17 +16,17 @@ describe('BalanceCard Component', () => {
     test('renders BalanceCard component', () => {
         render(
             <Providers>
-                <BalanceCard />
+                <BalanceCard cardData={loaneeCardData} />
             </Providers>
         );
         expect(screen.getByText('Wallet balance')).toBeInTheDocument();
         expect(screen.getByText('Loan balance')).toBeInTheDocument();
-        });
+    });
 
     test('renders buttons with correct text', () => {
         render(
             <Providers>
-                <BalanceCard />
+                <BalanceCard cardData={loaneeCardData} />
             </Providers>
         );
         expect(screen.getByText('Go to wallet')).toBeInTheDocument();
@@ -31,7 +36,7 @@ describe('BalanceCard Component', () => {
     test('renders buttons with correct styles', () => {
         render(
             <Providers>
-                <BalanceCard />
+                <BalanceCard cardData={loaneeCardData} />
             </Providers>
         );
         const buttons = screen.getAllByRole('button');
