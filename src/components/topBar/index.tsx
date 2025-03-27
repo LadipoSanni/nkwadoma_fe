@@ -32,12 +32,12 @@ const TopBar = () => {
     //  const [isMobile, setIsMobile] = useState(false);
 
     //   useEffect(() => {
-    //          const mediaQuery = window.matchMedia('(max-width: 767px)'); 
+    //          const mediaQuery = window.matchMedia('(max-width: 767px)');
     //          setIsMobile(mediaQuery.matches);
-     
+
     //          const handleResize = () => setIsMobile(mediaQuery.matches);
     //          mediaQuery.addEventListener('change', handleResize);
-     
+
     //          return () => mediaQuery.removeEventListener('change', handleResize);
     //      }, []);
 
@@ -90,7 +90,7 @@ const TopBar = () => {
                             id={'LayOutHamburger'} />
                     </div>
                     <div className={` relative flex place-items-center `}>
-                        <div 
+                        <div
                         className={` ${inter500.className} text-base md:text-base text-black500 md:text500 `}
                         // onClick={mobileNotificationHeaderClick}
                         >{currentTab}</div>
@@ -100,20 +100,20 @@ const TopBar = () => {
                 <div id="LayOutProfileAndNotification" className="flex items-center   md:gap-2">
                     <div id={'bellDiv'}
                         className={` flex place-content-center object-fit h-[2.6rem]  w-[2.6rem] rounded-md mr-[1.7rem] `}>
-    
+
                           <div className='relative left-3 md:left-0'>
-                            <Button 
+                            <Button
                             className='text-black shadow-none mt-1 cursor-auto'
                             onClick={handleNotification}
                             >
                                 {
-                                 isNotificationPage? 
+                                 isNotificationPage?
                                   <div className='cursor-auto'>
                                     <MdNotifications
                                   size={24}
-                                     /> 
+                                     />
                                   </div>
-                                    : 
+                                    :
                                     <div className='cursor-pointer'>
                                <BellIcon
                                 style={{ width: '22px',height: '21px',stroke: '#000', strokeWidth: '0.6'}}

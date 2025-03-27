@@ -10,9 +10,11 @@ import InviteFinancier from './Invite-financier';
 interface Props{
   setIsOpen?: (e: boolean) => void;
   investmentId?: string
+  amountCommitedAndDesignationCondition?: boolean
+
 }
 
-function InviteFinanciers({setIsOpen,investmentId}: Props) {
+function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCondition}: Props) {
   const [step, setStep] = useState(1);
 
   const initialFormValue = {
@@ -21,7 +23,10 @@ function InviteFinanciers({setIsOpen,investmentId}: Props) {
     firstName: "",
     lastName: "",
     email:"",
-    financierType: "" 
+    financierType: "",
+    investmentVehicleDesignation: [] as string[],
+    amountCommited: ''
+    // investmentVehicleDesignation: ""
 }
 
  const validationschema = Yup.object().shape({
@@ -59,7 +64,15 @@ function InviteFinanciers({setIsOpen,investmentId}: Props) {
                 is: 'Company', 
                 then: (schema) => schema.required('Company name is required'),
                 otherwise: (schema) => schema.notRequired(),
-            })
+            }),
+            // amountCommited: Yup.string()
+            // .required("Vehicle size is required"),
+            // investmentVehicleDesignation: Yup.array()
+            // .of(Yup.string()) 
+            // .min(1, "At least one designation is required") 
+            // .required("Designation is required"),
+
+          
     })
  
 
@@ -100,7 +113,7 @@ const handleSubmit = (values: typeof initialFormValue) => {
        validationSchema={validationschema}
       >
         {({errors,isValid,touched,setFieldValue,values}) => (
-          <Form>
+          <Form className='z-10'>
          {
         step === 1? (
         <div>
@@ -121,6 +134,8 @@ const handleSubmit = (values: typeof initialFormValue) => {
          errors={errors}
          touched={touched}
          setFieldValue={setFieldValue}
+        //  values={values.investmentVehicleDesignation}
+        amountCommitedAndDesignationCondition={amountCommitedAndDesignationCondition || false}
         />
         </div>
         )

@@ -5,17 +5,17 @@ import {Skeleton} from '@/components/ui/skeleton'
 function SkeletonForGrid() {
 
     const skeletonList = [
-        {value: <Skeleton className="h-72 w-full bg-[#F9F9F9] "/>},
-        {value: <Skeleton className="h-72 w-full bg-[#F9F9F9]  "/>},
-        {value: <Skeleton className="h-72 w-full bg-[#F9F9F9]"/>},
-        {value: <Skeleton className="h-72 w-full bg-[#F9F9F9]"/>},
-        {value: <Skeleton className="h-72 w-full bg-[#F9F9F9]"/>},
-        {value: <Skeleton className="h-72 w-full bg-[#F9F9F9]"/>},
-        {value: <Skeleton className="h-72 w-full bg-[#F9F9F9]"/>},
-        {value: <Skeleton className="h-72 w-full bg-[#F9F9F9]"/>},
+        {value: <Skeleton className="h-[13.8125rem] md:max-w-lg bg-[#F9F9F9] "/>},
+        {value: <Skeleton className="h-[13.8125rem] md:max-w-lg bg-[#F9F9F9]  "/>},
+        {value: <Skeleton className="h-[13.8125rem] md:max-w-lg bg-[#F9F9F9]"/>},
+        {value: <Skeleton className="h-[13.8125rem] md:max-w-lg bg-[#F9F9F9]"/>},
+        {value: <Skeleton className="h-[13.8125rem] md:max-w-lg bg-[#F9F9F9]"/>},
+        {value: <Skeleton className="h-[13.8125rem] md:max-w-lg bg-[#F9F9F9]"/>},
+        {value: <Skeleton className="h-[13.8125rem] md:max-w-lg bg-[#F9F9F9]"/>},
+        {value: <Skeleton className="h-[13.8125rem] md:max-w-lg bg-[#F9F9F9]"/>},
     ]
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {skeletonList.map((item, index) => (
                 <div key={index}>
                     {item.value}

@@ -28,7 +28,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
 
 
   return (
-    <div className={`w-full pr-9 md:pr-16 ${inter.className}`}>
+    <div className={`w-full pr-9 md:pr-16 py-4 px-4 md:px-0 ${inter.className}`}>
       { isLoading? <div><SkeletonforNotificationDetails/></div> :
       <div>
       <div className='md:hidden mt-3 mb-7'>

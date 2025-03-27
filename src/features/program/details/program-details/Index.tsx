@@ -204,9 +204,9 @@ const ProgramDetails = () => {
                             </div>
                         </div>
 
-                        <div id={`container`} className={`md:w-6/12 max:h-96 md:pt-0 pt-5 pb-5`}>
+                        <div id={`container`} className={`md:w-6/12 max:md:h-80 h-96 md:pt-0 pt-5`}>
                             <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail} dataList={dataList}
-                                                 tabTitle1={"Program program-details"} tabTitle2={"Loan program-details"}/>
+                                                 tabTitle1={"program-details"} tabTitle2={"Loan program-details"}/>
                         </div>
                     </section>
             {

@@ -6,7 +6,7 @@ import {traineeData} from "@/utils/cohort/trainee-details-mock-data/Index";
 import {MdOutlinePerson} from "react-icons/md";
 import {Breakdown} from "@/reuseable/details/breakdown";
 import Tables from "@/reuseable/table/LoanProductTable";
-import style from "@/components/selected-loan/SelectedLoan.module.css";
+import styles from "@/components/selected-loan/SelectedLoan.module.css"
 
 interface detailContainerProps {
     dataList?: { label: string; value: string | React.ReactNode; }[];
@@ -31,7 +31,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
 
     return (
         <div id="cohort-details" data-testid="cohort-details"
-             className={`${inter.className} border max:h-96 border-slate-200 rounded-md md:p-3 px-2`}>
+             className={`${inter.className} border border-slate-200 rounded-md max:md:h-80 md:p-3 px-2 py-3 `}>
             <div id="tabs-section" data-testid="tabs-section" className={`md:p-3 px-2 py-3 `}>
                 <div className={`w-full rounded-md`}>
                     <Tabs
@@ -40,7 +40,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         defaultValue={"trainee-details-mock-data"}
                         className={`shadow-none`}
                     >
-                        <div className={`${style.scrollBarNone} overflow-x-auto`}>
+                        <div className={`max-md:overflow-x-auto ${styles.scrollBarNone}`}>
                         <TabsList id="tabs-list" data-testid="tabs-list" className={`p-1`}>
                             <TabsTrigger id='tabTitleOne' value={"trainee-details-mock-data"}
                                          data-testid="cohort-details-tab ">{tabTitle1}
@@ -52,16 +52,16 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         <TabsContent value={"trainee-details-mock-data"} id="cohort-details-content"
                                      data-testid="cohort-details-content" className={`py-2`}>
                             <div
-                                    className="bg-[#F9F9F9] grid gap-6 max:md:h-72 px-5 w-full py-2 rounded-sm">
+                                className={`bg-[#F9F9F9] md:h-72 px-5 w-full py-2 md:overflow-y-auto rounded-sm`}>
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
-                                         className="flex md:flex-row py-5 md:py-2 flex-col w-full justify-between font-medium text-sm">
+                                         className="flex md:flex-row py-5 md:py-8 flex-col w-full justify-between font-medium text-sm">
                                         <div className="text-black300">
-                                            <span className={` text-[14px] ${inter.className} `}>{item.label}</span>
+                                            <span>{item.label}</span>
                                         </div>
                                         <div className="text-meedlBlack">
-                                            <span className={` text-[14px] ${inter.className} `}>{item.value}</span>
+                                            <span>{item.value}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -71,7 +71,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         </TabsContent>
 
                         <TabsContent value={"trainee"} id="trainee-content" data-testid="trainee-content"
-                                     className={`py-3 w-full `}>
+                                     className={`py-2 w-full `}>
                             {isTable ?
                                 <Tables
                                     tableData={traineeData}
@@ -88,16 +88,16 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                 />
                                 :
                                 <div
-                                    className="bg-[#F9F9F9] grid gap-6 max:md:h-72 px-5 w-full py-1 rounded-sm">
+                                    className="bg-[#F9F9F9] md:h-72 px-5 w-full py-2 md:overflow-y-auto rounded-sm">
                                     {isNotTableDataList?.map((item, index) => (
                                         <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                              key={index}
-                                             className="flex md:flex-row py-5  md:py-2 flex-col w-full justify-between font-medium text-sm">
+                                             className="flex md:flex-row py-5 md:py-8 flex-col w-full justify-between font-medium text-sm">
                                             <div className="text-black300">
-                                                <span className={`${inter.className} text-[14px] `}>{item.detail}</span>
+                                                <span>{item.detail}</span>
                                             </div>
                                             <div className="text-meedlBlack">
-                                                <span className={` ${inter.className} text-[14px]`}>{item.value}</span>
+                                                <span>{item.value}</span>
                                             </div>
                                         </div>
                                     ))}

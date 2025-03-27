@@ -92,7 +92,7 @@ function Financiers() {
           icon={Cross2Icon}
           width='36%'
           >
-           <InviteFinanciers investmentId='1' setIsOpen={setIsOpen}/>
+           <InviteFinanciers investmentId='1' setIsOpen={setIsOpen} amountCommitedAndDesignationCondition={true}/>
           </Modal>
         </div>
     </div>
