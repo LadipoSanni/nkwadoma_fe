@@ -94,6 +94,8 @@ function CommercialFund() {
     const handleCreateInvestmentVehicleClick = () => {
         setModalType("createInvestmentVehicle")
         setIsModalOpen(true);
+        // router.push("/vehicle/setup")
+        // store.dispatch(setVehicleType("commercialFund"))    
     }
 
      const handleRowClick = (row: TableRowData) => {

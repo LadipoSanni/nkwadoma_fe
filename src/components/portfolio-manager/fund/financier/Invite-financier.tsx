@@ -2,12 +2,12 @@ import React,{useState} from 'react'
 import { Field, ErrorMessage } from "formik";
 import { Label } from "@/components/ui/label";
 import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
-//  import CustomSelectCheckbox from './Check-box-customSelect';
- import { MultiSelect } from '@/reuseable/mult-select';
+//  import { MultiSelect } from '@/reuseable/mult-select';
  import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
  import { validateNumber} from "@/utils/Format";
  import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 //  import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
+import Multiselect from '@/reuseable/mult-select/multi-select';
 
 
 // interface ApiError {
@@ -45,7 +45,7 @@ function InviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
   return (
     <div>
     <div
-    className='grid grid-cols-1 gap-y-4 lg:max-h-[55.5vh] md:max-h-[50vh] overflow-y-auto '
+    className='grid grid-cols-1 gap-y-4 lg:max-h-[55.5vh] md:max-h-[50vh] overflow-y-auto z-20'
     style={{
       scrollbarWidth: "none",
       msOverflowStyle: "none",
@@ -145,16 +145,8 @@ function InviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
     <div>
    <div>
    <Label htmlFor='investmentVehicleDesignation'>Designation</Label>
-   {/* <CustomSelectCheckbox
-   id='designationId'
-   triggerId='designationTriggerId'
-   selectContent={designations}
-   name='investmentVehicleDesignation'
-   placeHolder='Select designation'
-   value={values}
-   onChange={(selectedValues) => console.log(selectedValues)}
-   /> */}
-   <MultiSelect
+
+   {/* <MultiSelect
     options={designations}
     // onValueChange={(values) => console.log(values)}
     placeholder='Select designation'
@@ -164,17 +156,14 @@ function InviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
     id='designationId'
     selcetButtonId='designationbuttonId'
      restrictedItems={["LEAD","SPONSOR"]}
-   />
-     {/* <CustomSelectObj
-      triggerId='investmentVehicleDesignationTriggerId'
-        id="investmentVehicleDesignationId"
-        selectContent={designations}
-        placeHolder='Select designation'
-        value={values}
-        name='investmentVehicleDesignation'
-        onChange={(value) => setFieldValue("investmentVehicleDesignation",value)}
-    />  
-  */}
+   /> */}
+    <Multiselect
+        multiselectList={designations}
+        onValueChange={(values) => setFieldValue("investmentVehicleDesignation", values)}
+        placeholder='Select designation'
+        restrictedItems={["LEAD","SPONSOR"]}
+      />
+    
    {
        errors.investmentVehicleDesignation && touched.investmentVehicleDesignation && (
            <ErrorMessage
@@ -185,7 +174,6 @@ function InviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
        )
    }
    </div >
-  
    <div className='mt-4 '>
    <Label htmlFor='amountCommited'>Amount commited</Label>
    <div className="flex gap-2 items-center justify-center relative bottom-1">
