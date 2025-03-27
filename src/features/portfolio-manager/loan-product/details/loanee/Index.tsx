@@ -36,7 +36,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 
-export function DescriptionEditor() {
+export function Loanees() {
     return (
         <Card className="w-[350px]">
             <CardHeader>

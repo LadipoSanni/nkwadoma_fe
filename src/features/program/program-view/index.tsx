@@ -370,7 +370,7 @@ const ProgramView = () => {
                 {view === 'grid' ? (
                     <div
                         id={'programGrid'}
-                        className={'grid gap-6 pr-2 overflow-y-auto'}
+                        className={'grid gap-6 pr-2 overflow-y-auto overflow-x-hidden'}
                         style={{
                             height: '62vh',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'

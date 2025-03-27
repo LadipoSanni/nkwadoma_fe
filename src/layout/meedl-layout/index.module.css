@@ -6,6 +6,7 @@
 @media only screen and (max-width: 600px){
     .container{
         overflow-y: auto;
+        overflow-x: hidden;
         /*-ms-overflow-style: none;*/
         /*scrollbar-width: 5px;*/
     }
