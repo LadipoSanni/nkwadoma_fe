@@ -40,7 +40,7 @@ const MeedlBarChart = ({componentId, dataKey,chartData, maxHeight, maxWidth}: Pr
                  className={`  w-full h-fit   `}
             >
 
-                <ChartContainer config={chartConfig} className={ ` mr-auto ml-auto min-h-[200px] h-[300px] w-[70vw] md:w-[${maxWidth}] max-h-[${maxHeight ? maxHeight : '100%'}]  `}>
+                <ChartContainer config={chartConfig} className={ ` mr-auto  ml-auto min-h-[200px] h-[300px] w-[70vw] md:w-[${maxWidth}] max-h-[${maxHeight ? maxHeight : '100%'}]  `}>
                     <BarChart accessibilityLayer  data={chartData}>
                         <XAxis
                             dataKey="month"

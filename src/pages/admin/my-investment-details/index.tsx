@@ -97,8 +97,8 @@ const MyInvestmentDetails = () => {
                         {investmentBasicDetails.map((item, index) => (
                                 <div key={"key" + index}
                                      className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
-                                    <div
-                                        className={`  ${inter.className} text-black300 text-[14px]  font-normal`}>{item.label}</div>
+                                    <p
+                                        className={`  ${inter.className} text-black300 text-[14px]  font-normal`}>{item.label}</p>
                                     <div
                                         className={` ${inter.className}  text-black500 text-[14px] le font-normal`}> {item.value ? item.value : 'Not provided'}</div>
                                 </div>
@@ -107,7 +107,7 @@ const MyInvestmentDetails = () => {
 
                     <p></p>
                 </div>
-                <div className={`md:w-[60%] w-full  md:max-h-[99%]`}>
+                <div className={`md:w-[60%] w-full grid md:grid gap-2 md:gap-2  md:max-h-[99%]`}>
                     <TabSwitch componentId={'myInvestmentDetailsTabSwitch'} currentTab={currentTab}
                                tabContent={tabContent} handleChange={handleTabChange}/>
                     <div className={`w-full ${styles.container} md:w-full md:max-h-[70vh] md:overf  pt-4 grid gap-4  `}>

@@ -43,14 +43,14 @@ const TabSwitch = ({tabContent, currentTab, componentId, handleChange}: props) =
         <div
             id={componentId}
             data-testid={componentId}
-            className={` ${styles.tab} flex bg-[#fafbfc]  w-auto ml-1 mt-1 md:w-fit h-fit md:h-fit md:rounded-md rounded-md `}
+            className={` ${styles.tab} flex bg-[#F2F2F2] md:bg-[#F2F2F2]   w-auto ml-1 mt-1 md:w-fit h-fit md:h-fit md:rounded-md rounded-md `}
         >
             {tabContent?.map((item, index) => (
                 <div
                     key={item}
                     id={"index" + item}
                     data-testid={"index" + item}
-                    className={`flex place-self-center w-auto  md:h-auto md:px-2 md:w-auto `}
+                    className={`flex place-self-center w-auto  md:h-auto md:px- md:w-auto `}
                 >
                     <MenuItem name={item} index={index} handleChange={handleChange}/>
                 </div>
