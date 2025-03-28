@@ -5,7 +5,7 @@ import {setMarketInvestmentVehicleId} from "@/redux/slice/program/programSlice";
 import {store} from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
-// import { useSelector } from 'react-redux';
+import { useRouter } from "next/navigation";
 
 
 const dummyInvestments = [
@@ -26,25 +26,26 @@ const dummyInvestments = [
     { id: "15", type: "Endowment", status: "Closed", title: "Non-Profit Development Grant", interest: 6 }
 ];
 
-export const HandleCardDetails = (id: string) => {
-    store.dispatch(setMarketInvestmentVehicleId(id))
-}
+export const HandleCardDetails = (id: string, router: ReturnType<typeof useRouter>) => {
+    store.dispatch(setMarketInvestmentVehicleId(id));
+    router.push("/marketplace/details");
+};
 
-export const handleSearchChange = () =>{
+export const handleSearchChange = (setSearchTerm: (value: string) => void) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
 
-}
 
 export const handleSelectChange = (value: string, setSelectedValue: (value: string) => void) => {
     setSelectedValue(value);
-    console.log('Selected:', value);
 };
 
 const MarketPlaceView = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    console.log(setSearchTerm);
+    console.log(setSearchTerm)
     const [selectedValue, setSelectedValue] = useState<string>('');
-    // console.log(setSelectedValue);
-
+    const router = useRouter();
 
     return (
         <main id={"marketplaceView"} className={`pt-6 px-3`}>
@@ -52,7 +53,7 @@ const MarketPlaceView = () => {
                     <SearchInput
                         id={'ProgramSearchInput'}
                         value={searchTerm}
-                        onChange={handleSearchChange}
+                        onChange={handleSearchChange(setSearchTerm)}
                         style={`md:w-20 w-full`}
                     />
                     <CustomSelect
@@ -96,7 +97,7 @@ const MarketPlaceView = () => {
                             status={investment.status}
                             borderClass={borderClass}
                             percentage={investment.interest}
-                            HandleCardDetails={HandleCardDetails}
+                            HandleCardDetails={() => HandleCardDetails(investment.id, router)}
                         />
                     );
                 })}
