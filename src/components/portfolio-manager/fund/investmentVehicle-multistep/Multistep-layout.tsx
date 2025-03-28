@@ -32,7 +32,7 @@ function MultistepLayout({children}:props) {
          <BackButton
            id="createFundBackButton" 
            handleClick={handleBack}
-           iconRight={true}
+           iconBeforeLetters={true}
            text='Back'
            textColor='' 
          />
