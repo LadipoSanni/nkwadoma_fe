@@ -1,9 +1,8 @@
 'use client'
 import React, {useEffect} from 'react';
 import {inter, inter500} from "@/app/fonts";
-import {store, useAppSelector} from "@/redux/store";
+import { useAppSelector} from "@/redux/store";
 import { useRouter } from 'next/navigation';
-import { markStepCompleted } from '@/redux/slice/multiselect/kyc-multiselect';
 
 
 
