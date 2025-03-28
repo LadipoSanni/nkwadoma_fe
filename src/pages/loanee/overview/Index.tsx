@@ -1,15 +1,23 @@
 import React from 'react';
-import BalanceCard from '@/reuseable/cards/BalanceCard/Index'
-import {inter} from '@/app/fonts'
+import BalanceCard from '@/reuseable/cards/BalanceCard/Index';
+import {inter} from '@/app/fonts';
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Icon} from "@iconify/react";
 
+const loaneeCardData = [
+    {
+        title: "Wallet balance", amount: "₦0.00", linkText: "Go to wallet"
+    },
+    {
+        title: "Loan balance", amount: "₦0.00", linkText: "Go to repayment"
+    }
+];
 
 const LoaneeOverview = () => {
     return (
         <main id={'OverviewTr'}
-              className={` md:pt-8 ${inter.className} h-full w-full bg-learnSpaceWhite rounded-[8px] md:px-10`}>
-            <BalanceCard/>
+              className={`md:pt-8 ${inter.className} h-full w-full bg-learnSpaceWhite rounded-[8px] md:px-10`}>
+            <BalanceCard cardData={loaneeCardData} />
             <TableEmptyState
                 name={'Repayment'}
                 icon={() => (

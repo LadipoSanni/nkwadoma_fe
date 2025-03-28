@@ -198,7 +198,7 @@ const ProgramView = () => {
     const handleDropdownClick = async (id: string, row: rowData) => {
         if (id === "1") {
             store.dispatch(setCurrentProgramId(String(row?.id)))
-            router.push('/program/details')
+            router.push('/program/program-details')
 
 
         } else if (id === "2") {
@@ -223,7 +223,8 @@ const ProgramView = () => {
     const handleCardDropDownClick = async (optionId: string, id: string) => {
         if (optionId === "1") {
             store.dispatch(setCurrentProgramId(id))
-            router.push(`/program/details`);
+            router.push(`/program/program-details`);
+
         } else if (optionId === "2") {
             setProgramId(id);
             if (programId) {
@@ -370,7 +371,7 @@ const ProgramView = () => {
                 {view === 'grid' ? (
                     <div
                         id={'programGrid'}
-                        className={'grid gap-6 pr-2 overflow-y-auto'}
+                        className={'grid gap-6 pr-2 overflow-y-auto overflow-x-hidden'}
                         style={{
                             height: '62vh',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'

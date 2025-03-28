@@ -186,7 +186,7 @@ const CohortDetails = () => {
                                                          icon={FiBook}
                                     />
                                 </div>
-                                <div className={`md:w-6/12 min-w-sm pt-0 h-96`} id={`secondSection`}>
+                                <div className={`md:w-6/12 min-w-sm pt-0 max:md:h-80 h-80`} id={`secondSection`}>
                                     <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail}
                                                          dataList={dataList}
                                                          tabTitle1={"Cohort details"} tabTitle2={"Loan details"}
