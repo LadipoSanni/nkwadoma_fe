@@ -1,11 +1,20 @@
+'use client'
 import React from 'react';
 import {inter500, inter} from '@/app/fonts'
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input"
 import {Button} from  "@/components/ui/button"
+import {useRouter} from 'next/navigation'
+import {store} from "@/redux/store";
+import { markStepCompleted } from '@/redux/slice/multiselect/kyc-multiselect';
 
 
 const IdentificationStep = () => {
+    const route = useRouter()
+    const handleOnClick = () => {
+        store.dispatch(markStepCompleted("identification"))
+        route.push('/kyc/sof')
+    }
     return (
         <main className={`${inter.className} w-[27.5rem] grid gap-10`}>
             <div className={`${inter500.className} grid gap-1`}>
@@ -35,7 +44,7 @@ const IdentificationStep = () => {
                     />
                 </div>
                 <div className={'flex justify-end mt-5'}>
-                <Button className={'h-[3.5625rem] w-[8.75rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md flex justify-end'}>Save & continue</Button>
+                <Button onClick={handleOnClick} type={'button'} className={'h-[3.5625rem] w-[8.75rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md flex justify-end'}>Save & continue</Button>
                 </div>
 
             </form>

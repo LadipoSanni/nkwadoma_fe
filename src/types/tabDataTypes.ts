@@ -30,3 +30,10 @@ export const steps = [
     { id: 'visibility', title: 'Visibility' },
     
   ];
+
+export const kycSteps = [
+    { id: 'identification', title: 'Identification' },
+    { id:"sof", title: 'Source of funds' },
+    { id: 'beneficial-owner', title: 'Beneficial Owner' },
+
+];

@@ -1,5 +1,5 @@
 import React from 'react'
-import MultistepLayout from '@/layout/multistep-layout/Multistep-layout'
+import KycStepLayout from '@/layout/kycStepLayout/Index'
 import CustomAuthorization from '@/features/auth/authorization';
 
 
@@ -10,9 +10,9 @@ type props = {
 const MultistepInvestmentVehicleLayout: React.FC<props> =({children}) => {
     return (
         <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
-            <MultistepLayout>
+            <KycStepLayout>
                 {children}
-            </MultistepLayout>
+            </KycStepLayout>
         </CustomAuthorization>
     )
 }
