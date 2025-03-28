@@ -40,7 +40,7 @@ interface ApiError {
 
 
 function NotificationLayout({children}: Props) {
-       const totalNotification = useAppSelector(state => (state.notification.totalNotifications))
+       const totalNotification = useAppSelector(state => (state?.notification?.totalNotifications))
        const [searchTerm, setSearchTerm] = useState('');
        const [selectAll, setSelectAll] = useState(false);
        const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());

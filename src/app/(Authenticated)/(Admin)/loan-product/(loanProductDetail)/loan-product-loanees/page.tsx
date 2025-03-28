@@ -1,6 +1,6 @@
 import React from 'react'
-import Loanees from "@/features/portfolio-manager/loan-product/details/loanee/Index";
 import CustomAuthorization from '@/features/auth/authorization';
+import {Loanees} from "@/features/portfolio-manager/loan-product/details/loanee/Index";
 
 function page() {
     return (

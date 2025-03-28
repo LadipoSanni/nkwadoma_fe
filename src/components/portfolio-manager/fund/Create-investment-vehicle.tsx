@@ -12,7 +12,7 @@ import { validateNumber, validatePositiveNumberWithIndexNumbers } from "@/utils/
 import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
-import ChooseVisibility from "./Choose-visibility";
+import ChooseVisibility from "./investmentVehicle-multistep/Choose-visibility";
 
 
 interface ApiError {

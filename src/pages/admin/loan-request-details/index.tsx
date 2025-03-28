@@ -240,7 +240,7 @@ function LoanDetails() {
                         data-testid={"loanRequestDetails"}
                         className={`  md:px-8 w-full h-full md:grid md:gap-4 px-3 pt-4 md:pt-4 `}
                     >
-                        <BackButton handleClick={backToLoanRequest} iconRight={true} text={"Back to loan request"}
+                        <BackButton handleClick={backToLoanRequest} iconBeforeLetters={true} text={"Back to loan request"}
                                     id={"loanRequestDetailsBackButton"} textColor={'#142854'}/>
                         <div
                             id={`ImageComponentOnLoanRequestDetails`}

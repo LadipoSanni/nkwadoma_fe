@@ -60,9 +60,9 @@ const SideBar = () => {
     const handleLogout =  async () => {
         store.dispatch(setCurrentNavBottomItem("Logout"))
         await logout({})
+        router.push("/auth/login")
         clearData()
         await persistor.purge();
-         router.push("/auth/login")
         store.dispatch(setCurrentNavBottomItem(""))
 
     }
