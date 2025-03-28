@@ -49,7 +49,7 @@ function Status() {
     <div className={`${inter.className} xl:px-36 grid grid-cols-1 gap-y-8 relative md:right-6 lg:right-0`}>
       <div className='grid grid-cols-1 gap-y-1'>
         <h1 className='text-[18px] font-normal'>Status</h1>
-        <p className='text-[14px] font-thin'>Select the status of your commercial fund</p>
+        <p className='text-[14px] font-normal'>Select the status of your commercial fund</p>
        </div>
        <div>
         <Tabs defaultValue='operation'>
