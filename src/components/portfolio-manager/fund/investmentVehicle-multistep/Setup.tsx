@@ -176,7 +176,7 @@ function Setup({investmentVehicleType}: Props) {
         <div className='xl:px-36 grid grid-cols-1 gap-y-6 '>
        <div className='grid grid-cols-1 gap-y-1'>
         <h1 className='text-[18px] font-normal'>Set up commercial fund</h1>
-        <p className='text-[14px] font-thin'>Provide details of your commercial fund</p>
+        <p className='text-[14px] font-normal'>Provide details of your commercial fund</p>
        </div>
        <div>
        <Formik
