@@ -1,7 +1,7 @@
 'use client'
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {cabinetGroteskMediumBold, inter, inter500} from "@/app/fonts";
+import { cabinetGroteskMediumBold600, inter, inter500} from "@/app/fonts";
 // import dayjs from "dayjs";
 import TabSwitch from "@/reuseable/details/TabSwitch";
 import PerformanceCard from "@/reuseable/cards/perfomance-card/performanceCard";
@@ -51,9 +51,15 @@ const MyInvestmentDetails = () => {
         {label: 'Investment start date', value: '23 jan,2024'},
         {label: 'Date invested', value: '21, june, 2023'},
         {label: 'Maturity date', value: '21, june, 2023 '},
-        {label: 'Status', value: <div>
-                        Fundraising <span className={`border border-green650 md:border md:text-[12px] text-green750 md:text-green750 text-[12px] ${inter500.className} w-fit md:w-fit h-fit md:h-fit px-1 py-1 md:py-1 md:px-1 rounded-md md:rounded-md  md:border-green650 `}>Open</span>
-                                  </div>
+        {label: 'Status', value:
+                <div className={`flex gap-2 md:gap-2 md:flex`}>
+                        Fundraising
+                    <div
+                        className={` w-fit md:w-fit md:h-fit h-fit md:py-0 py-0 md:px-1 px-1 md:rounded-md rounded-md border md:border border-green650 md:border-green650`}>
+                        <span
+                            className={` ${inter500.className} md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[14px] text-[14px] text-green750 md:text-green750 `}>Open</span>
+                    </div>
+                </div>
         },
     ]
 
@@ -92,8 +98,8 @@ const MyInvestmentDetails = () => {
 
                     </div>
 
-                    <p className={` ${cabinetGroteskMediumBold.className}  md:text-[32px] text-[24px] md:text-[#212221] `}>Software Engineering Fund</p>
-                    <div className={` bg-grey105 md:bg-purple-200 grid h-fit md:h-fit  gap-8 px-3  `}>
+                    <p className={` ${cabinetGroteskMediumBold600.className}  md:text-[32px] text-[24px] md:text-[#212221] `}>Software Engineering Fund</p>
+                    <div className={` bg-grey105 md:bg-grey105 grid h-fit md:h-fit  gap-8 py-3 md:py-3 px-3  `}>
                         {investmentBasicDetails.map((item, index) => (
                                 <div key={"key" + index}
                                      className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
@@ -121,8 +127,10 @@ const MyInvestmentDetails = () => {
                             <div className={`bg-grey105 grid gap-4 md:grid md:gap-3  md:bg-grey105 `}>
                                 <PerformanceCard isSmall={false} showContainerBorder={false} percentage={'26.8'} showPerformancePercentage={true} maxWidth={'100%'} title={'Portfolio percentage'} value={30} isValueInPercentage={true} showMonthPick={false} didValueIncrease={true}/>
                                 <div className={` w-full md:w-full grid md:grid gap-3 md:gap-3 `}>
-                                    <TabSwitch componentId={'myInvestmentBarChartTabSwitch'} currentTab={currentBartChart}
-                                               tabContent={barChartTabContent} handleChange={handleBarChartTabChange}/>
+                                    <div className={` md:px-4 px-4  `}>
+                                        <TabSwitch componentId={'myInvestmentBarChartTabSwitch'} currentTab={currentBartChart}
+                                                   tabContent={barChartTabContent} handleChange={handleBarChartTabChange}/>
+                                    </div>
 
                                     <MeedlBarChart dataKey={'value'} maxWidth={'100%'} maxHeight={'30rem'} chartData={chartData} componentId={'details'}/>
                                 </div>

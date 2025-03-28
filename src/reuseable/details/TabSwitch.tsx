@@ -43,7 +43,7 @@ const TabSwitch = ({tabContent, currentTab, componentId, handleChange}: props) =
         <div
             id={componentId}
             data-testid={componentId}
-            className={` ${styles.tab} flex bg-[#F2F2F2] md:bg-[#F2F2F2]   w-auto ml-1 mt-1 md:w-fit h-fit md:h-fit md:rounded-md rounded-md `}
+            className={` ${styles.tab} flex bg-[#F2F2F2] md:bg-[#F2F2F2] w-fit    ml-1 mt-1 md:w-fit h-fit md:h-fit md:rounded-md rounded-md `}
         >
             {tabContent?.map((item, index) => (
                 <div
