@@ -19,7 +19,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const [modelLoadingError, setModelLoadingError] = useState<string | null>(null);
     const [step, setStep] = useState<string>('right');
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
-    // const dispatch = useDispatch();
+    const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
 
     useEffect(() => {
         const loadModels = async () => {
@@ -41,14 +41,25 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
 
     useEffect(() => {
         const startCamera = async () => {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
-            //   dispatch(setCameraStream(stream));
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+                setCameraStream(stream);
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                }
+            } catch (err) {
+                console.error("Error starting the camera", err);
+                setModelLoadingError("Camera access denied. Please allow camera access to use this feature.");
             }
         };
 
         startCamera();
+        return () => {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                setCameraStream(null);
+            }
+        };
     }, []);
 
     useEffect(() => {
@@ -107,6 +118,15 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                             setStep("complete");
                             if (capturedImage) {
                                 onCapture(new File([capturedImage], "capture.png", { type: "image/png" }));
+                                if (cameraStream) {
+                                    cameraStream.getTracks().forEach(track => {
+                                        track.stop();
+                                    });
+                                    setCameraStream(null);
+                                }
+                                if (videoRef.current) {
+                                    videoRef.current.srcObject = null;
+                                }
                             }
                         }
                     }
@@ -137,7 +157,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         return () => {
             if (intervalId) clearInterval(intervalId);
         };
-    }, [isModelLoaded, orientation, onCapture, hasFaceBeenDetected, step, capturedImage]);
+    }, [isModelLoaded, orientation, onCapture, hasFaceBeenDetected, step, capturedImage, cameraStream]);
 
     const frameClassName = isFaceDetected
         ? "absolute top-4 right-4 w-[270px] h-[270px] rounded-full overflow-hidden"
