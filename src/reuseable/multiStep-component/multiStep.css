@@ -98,3 +98,12 @@
   .step-item.disabled .step-title {
     color: #6A6B6A;
   }
+
+  .step-circle-solid-completed {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid #142854;
+    background-color: #142854; 
+    z-index: 1;
+  }

@@ -1,5 +1,5 @@
 import React from 'react'
-import StatusReusable from './status-reusable'
+import StatusReusable from './status-reusable-form'
 
 
 function Operation() {
@@ -12,6 +12,8 @@ function Operation() {
       selectStatus={status}
       selectState={state}
       isStateRequired={true}
+      fundId=''
+      statusType='Operation'
      /> 
     </div>
   )

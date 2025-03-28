@@ -54,9 +54,9 @@ function Status() {
        <div>
         <Tabs defaultValue='operation'>
             <div className='relative right-2'>
-            <TabsList className={`z-50  bg-white`}>
+            <TabsList id='clickswitch' className={`z-50  bg-white`}>
               {tabData.map((tab, index) => (
-                <TabsTrigger className='bg-[#F6F6F6] lg:mx-1 mx-[1px] py-2 rounded-3xl data-[state=active]:bg-[#E8EAEE] data-[state=active]:text-[#142854] data-[state=active]:border-[#142854] data-[state=active]:border' id={`${tab.name}-${index}`} data-testid={`tabDataName${tab.value}`} value={tab.value} key={index}>
+                <TabsTrigger className='bg-[#F6F6F6] lg:mx-1 mx-[1px] py-2 rounded-3xl data-[state=active]:bg-[#E8EAEE] data-[state=active]:text-[#142854] data-[state=active]:border-[#142854] data-[state=active]:border' id={`${tab.value}-${index}`} data-testid={`tabDataName${tab.value}`} value={tab.value} key={index} onClick={(e)=> e.preventDefault}>
                     {tab.name}
                 </TabsTrigger>
             ))}

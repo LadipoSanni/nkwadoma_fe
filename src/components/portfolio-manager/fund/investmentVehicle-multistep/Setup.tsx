@@ -15,6 +15,8 @@ import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField"
 import {useRouter } from 'next/navigation';
 import DatePickerInput from "@/reuseable/Input/DatePickerInput";
 import { format, parseISO } from "date-fns";
+import {store} from "@/redux/store";
+import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 
 
 // interface ApiError {
@@ -160,6 +162,7 @@ function Setup({investmentVehicleType}: Props) {
       });
 
        const handleSubmit = (values: typeof initialFormValue) => {
+             store.dispatch(markStepCompleted("setup"))
              console.log(values)
              handlenext()
        }
@@ -192,7 +195,7 @@ function Setup({investmentVehicleType}: Props) {
         })=> (
             <Form className={`${inter.className}`}>
             <div>
-            <div className="grid grid-cols-1 gap-y-4 md:max-h-[52vh]  overflow-y-auto "
+            <div className="grid grid-cols-1 gap-y-4 md:max-h-[48vh] md:relative overflow-y-auto "
                 //  style={{
                 //   scrollbarWidth: "none",
                 //   msOverflowStyle: "none",
