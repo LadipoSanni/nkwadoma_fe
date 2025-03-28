@@ -1,10 +1,11 @@
 import React from 'react'
+import InvestmentVehicleStatus from '@/features/portfolio-manager/fund/InvestmentVehicle-multistep/status'
 
 function page() {
   return (
-    <div>
-      
-    </div>
+    <>
+      <InvestmentVehicleStatus/>
+    </>
   )
 }
 

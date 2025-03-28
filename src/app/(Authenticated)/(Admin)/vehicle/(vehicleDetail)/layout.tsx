@@ -10,7 +10,7 @@ type props = {
 }
 
 const FundTabs: React.FC<props> = ({ children }) => {
-   const vehicleType = useAppSelector(state => (state.vehicle.vehicleType))
+   const vehicleType = useAppSelector(state => (state?.vehicle.vehicleType))
 
     return (
         <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
