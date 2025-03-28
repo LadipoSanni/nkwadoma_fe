@@ -4,6 +4,7 @@ import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
 import {setMarketInvestmentVehicleId} from "@/redux/slice/program/programSlice";
 import {store} from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
+import CustomSelect from "@/reuseable/Input/Custom-select";
 // import { useSelector } from 'react-redux';
 
 
@@ -33,23 +34,36 @@ export const handleSearchChange = () =>{
 
 }
 
+export const handleSelectChange = (value: string, setSelectedValue: (value: string) => void) => {
+    setSelectedValue(value);
+    console.log('Selected:', value);
+};
+
 const MarketPlaceView = () => {
-    // const marketInvestmentVehicleId = useSelector(
-    //     (state: RootState) => state.program.marketInvestmentVehicleId
-    // );
-    //
-    // console.log(marketInvestmentVehicleId);
     const [searchTerm, setSearchTerm] = useState("");
     console.log(setSearchTerm);
+    const [selectedValue, setSelectedValue] = useState<string>('');
+    // console.log(setSelectedValue);
+
 
     return (
-        <main id={"marketplaceView"} className={`pt-2 px-2 max:h-96`}>
-            <div id={"searchDiv"} className={`py-4 px-4`}>
-                <SearchInput
-                    id={'ProgramSearchInput'}
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                />
+        <main id={"marketplaceView"} className={`pt-6 px-3`}>
+            <div id={"searchDiv"} className={`px-2 flex md:flex-row flex-col gap-3`}>
+                    <SearchInput
+                        id={'ProgramSearchInput'}
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        style={`md:w-20 w-full`}
+                    />
+                    <CustomSelect
+                        id="marketplaceSelect"
+                        value={selectedValue}
+                        onChange={(value) => handleSelectChange(value, setSelectedValue)}
+                        selectContent={['Commercial Investment', 'Endowment Investment']}
+                        placeHolder="Type"
+                        triggerId="marketplaceTrigger"
+                        className={`h-11 md:w-sm w-full mt-0 bg-[#D0D5DD]`}
+                    />
             </div>
 
             <div id={"card-segmentId"}
