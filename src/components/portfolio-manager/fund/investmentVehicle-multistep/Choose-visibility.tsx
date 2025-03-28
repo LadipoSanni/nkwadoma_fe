@@ -29,7 +29,6 @@ function ChooseVisibility() {
     const isLoading = false
     const completedStep = useAppSelector(state => (state?.vehicleMultistep.completedSteps))
 
-    console.log("The step: ",completedStep)
     
        useEffect(()=> {
          if(!completedStep.includes("setup")){

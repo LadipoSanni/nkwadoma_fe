@@ -46,7 +46,7 @@ function StatusReusable({
     state: "",
   };
 
-  console.log("The step: ",completedStep)
+  
 
    useEffect(()=> {
      if(!completedStep.includes("setup")){
