@@ -273,7 +273,7 @@ const AcceptLoanOffer: React.FC = () => {
         >
             <BackButton
                 handleClick={backToOverview}
-                iconRight={true}
+                iconBeforeLetters={true}
                 text="Back to overview"
                 id="loanRequestDetailsBackButton"
                 textColor="#142854"

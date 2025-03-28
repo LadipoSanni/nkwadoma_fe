@@ -7,19 +7,22 @@ interface Props {
     componentId?: string;
     maxWidth: string;
     maxHeight: string;
+    chartData: {month: string, value: number}[];
+    dataKey: string;
+    // chartConfig: {}
 }
 
-const Index = ({componentId, maxHeight, maxWidth}: Props) => {
+const MeedlBarChart = ({componentId, dataKey,chartData, maxHeight, maxWidth}: Props) => {
 
 
-    const chartData = [
-        { month: "Jan", desktop: 186, },
-        { month: "Feb", desktop: 305,  },
-        { month: "March", desktop: 237, },
-        { month: "April", desktop: 73, },
-        { month: "May", desktop: 209,  },
-        { month: "June", desktop: 214,  },
-    ]
+    // const chartData = [
+    //     { month: "Jan", desktop: 186, },
+    //     { month: "Feb", desktop: 305,  },
+    //     { month: "March", desktop: 237, },
+    //     { month: "April", desktop: 73, },
+    //     { month: "May", desktop: 209,  },
+    //     { month: "June", desktop: 214,  },
+    // ]
 
     const chartConfig = {
         desktop: {
@@ -34,9 +37,10 @@ const Index = ({componentId, maxHeight, maxWidth}: Props) => {
     return (
             <div id={componentId}
                  data-testid={componentId}
-                 className={`  w-fit h-full  `}
+                 className={`  w-full h-fit   `}
             >
-                <ChartContainer config={chartConfig} className={ ` min-h-[200px] h-[300px] w-30 max-h-[${maxHeight ? maxHeight : '100%'}]  max-w-[${maxWidth}] `}>
+
+                <ChartContainer config={chartConfig} className={ ` mr-auto  ml-auto min-h-[200px] h-[300px] w-[70vw] md:w-[${maxWidth}] max-h-[${maxHeight ? maxHeight : '100%'}]  `}>
                     <BarChart accessibilityLayer  data={chartData}>
                         <XAxis
                             dataKey="month"
@@ -47,7 +51,7 @@ const Index = ({componentId, maxHeight, maxWidth}: Props) => {
                             className={` text-[10px] text-[#757575] `}
                         />
                         <ChartTooltip content={<ChartTooltipContent />} />
-                        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={0} />
+                        <Bar  dataKey={dataKey} fill="var(--color-desktop)" radius={0} />
                         {/*<Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />*/}
                     </BarChart>
                 </ChartContainer>
@@ -55,4 +59,4 @@ const Index = ({componentId, maxHeight, maxWidth}: Props) => {
     );
 };
 
-export default Index;
+export default MeedlBarChart;

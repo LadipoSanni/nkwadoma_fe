@@ -153,7 +153,7 @@ const CohortDetails = () => {
         <>{isLoading? (<SkeletonForDetailPage/>): (
             <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
                 <div className={` pb-4 `} id={`backClickContainer`} data-testid={'backClickContainer'}>
-                    <BackButton handleClick={handleBackClick} iconRight={true} text={"Back to cohort"}
+                    <BackButton handleClick={handleBackClick} iconBeforeLetters={true} text={"Back to cohort"}
                                 id={"backClick"} textColor={'#142854'}/>
                 </div>
 
