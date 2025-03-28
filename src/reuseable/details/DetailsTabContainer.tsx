@@ -52,7 +52,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         <TabsContent value={"trainee-details-mock-data"} id="cohort-details-content"
                                      data-testid="cohort-details-content" className={`py-2`}>
                             <div
-                                    className="bg-[#F9F9F9] grid gap-6 max:md:h-72 px-5 w-full py-2 rounded-sm">
+                                className={`bg-[#F9F9F9] grid gap-6 md:h-64 px-5 w-full py-2 md:overflow-y-auto rounded-sm`}>
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
@@ -71,7 +71,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         </TabsContent>
 
                         <TabsContent value={"trainee"} id="trainee-content" data-testid="trainee-content"
-                                     className={`py-3 w-full `}>
+                                     className={`py-2 w-full `}>
                             {isTable ?
                                 <Tables
                                     tableData={traineeData}
@@ -88,7 +88,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                 />
                                 :
                                 <div
-                                    className="bg-[#F9F9F9] grid gap-6 max:md:h-72 px-5 w-full py-1 rounded-sm">
+                                    className="bg-[#F9F9F9] grid md:h-64 gap-6 px-5 w-full py-2 md:overflow-y-auto rounded-sm">
                                     {isNotTableDataList?.map((item, index) => (
                                         <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                              key={index}

@@ -40,7 +40,7 @@ function Financiers() {
 
     const financierHeader = [
       { title: 'Financier', sortable: true, id: 'name', selector: (row:TableRowData ) => row.name },
-      { title: 'Type', sortable: true, id: 'type', selector: (row: TableRowData) => <div className={`${row.type === "Individual"? "text-[#68442E] bg-warning50 ": "text-[#142854] bg-[#EEF5FF]"} rounded-xl w-20 h-6 flex items-center justify-center`}>{row.type}</div> },
+      { title: 'Type', sortable: true, id: 'type', selector: (row: TableRowData) => <div className='w-full flex justify-center items-center '><div className={`${row.type === "Individual"? "text-[#68442E] bg-warning50 ": "text-[#142854] bg-[#EEF5FF]"} px-2 rounded-xl relative xl:right-[0.8rem] -z-50 `}>{row.type}</div></div> },
       { title: 'No. of investments', sortable: true, id: 'number_of_investments', selector: (row:TableRowData) => row.number_of_investments|| 0 },
       { title: 'Amount invested', sortable: true, id: 'amount_invested', selector: (row:TableRowData) => formatAmount(row.amount_invested)},
       { title: 'Amount earned', sortable: true, id: 'amount_earned', selector: (row:TableRowData) =>formatAmount(row.amount_earned)},
@@ -79,7 +79,7 @@ function Financiers() {
             sideBarTabName='financier'
             condition={true}
             staticHeader={"Financier"}
-            staticColunm={"financier"}
+            staticColunm={"name"}
             sx='cursor-pointer'
           />
         </div>
@@ -92,7 +92,12 @@ function Financiers() {
           icon={Cross2Icon}
           width='36%'
           >
-           <InviteFinanciers investmentId='1' setIsOpen={setIsOpen}/>
+           <InviteFinanciers 
+           investmentId='1' 
+           setIsOpen={setIsOpen} 
+           amountCommitedAndDesignationCondition={true}
+           isDesignationRequired={true}
+           />
           </Modal>
         </div>
     </div>

@@ -12,6 +12,7 @@ env:
   NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
   APP_DEV_IV_KEY: ${{ vars.APP_DEV_IV_KEY }}
   APP_DEV_IV_ENCRYPTION_SECRET_KEY: ${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}
+  NEXT_PUBLIC_API_BASE_URL: http://172.16.1.52:8768 
   
 jobs:
   build:
@@ -44,6 +45,7 @@ jobs:
           echo "NEXT_PUBLIC_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}" >> .env
           echo "APP_DEV_IV_KEY=${{ vars.APP_DEV_IV_KEY }}" >> .env
           echo "APP_DEV_IV_ENCRYPTION_SECRET_KEY=${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}" >> .env
+          echo "NEXT_PUBLIC_API_BASE_URL: http://172.16.1.52:8768" >> .env
 
       - name: Install and build the app
         run: |

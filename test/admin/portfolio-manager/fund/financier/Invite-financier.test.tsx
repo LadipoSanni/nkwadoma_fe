@@ -55,6 +55,8 @@ describe("Invite financier", () => {
                 errors={errors}
                 touched={touched}
                 setFieldValue={setFieldValue}
+                amountCommitedAndDesignationCondition={false}
+                // values={[]}
               />
                 </Form>
               
@@ -118,13 +120,13 @@ describe("Invite financier", () => {
 
       test('Enables invite button when form is valid', () => {
         setup();
-        const inviteButton = screen.getByText('Invite'); // Adjust the text based on your button content
+        const inviteButton = screen.getByText('Invite'); 
         expect(inviteButton).not.toBeDisabled();
       });
 
       test('Correctly passes props to SubmitAndCancelButton', () => {
         setup();
-        const submitButton = screen.getByText('Invite'); // Adjust the text based on your button content
+        const submitButton = screen.getByText('Invite'); 
         expect(submitButton).toBeInTheDocument();
       });
     

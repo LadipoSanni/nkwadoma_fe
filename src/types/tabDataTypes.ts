@@ -23,3 +23,10 @@ export const programDetailTab = [
     {name: "Details", value: "/program/program-details"},
     {name: "Cohort", value: "/program/program-cohorts"}
 ]
+
+export const steps = [
+    { id: 'setup', title: 'Setup' },
+    { id: 'status', title: 'Status' },
+    { id: 'visibility', title: 'Visibility' },
+    
+  ];
