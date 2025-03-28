@@ -18,7 +18,7 @@ function MarketplaceInvestmentLayout({children}:props) {
     const completedSteps = marketplaceInvestment.slice(0, currentIndex).map(step => step.id);
 
     const handleBack=()=> {
-        router.push("/marketplace")
+        router.push("/marketplace/details")
 
     }
     return (
