@@ -4,7 +4,6 @@ import BackButton from "@/components/back-button";
 import { cabinetGroteskMediumBold600, inter, inter500} from "@/app/fonts";
 // import dayjs from "dayjs";
 import TabSwitch from "@/reuseable/details/TabSwitch";
-import PerformanceCard from "@/reuseable/cards/perfomance-card/performanceCard";
 import styles from './index.module.css';
 import PerformanceDisplay from "@/pages/admin/my-investment-details/performanceDisplay";
 import InvestmentMandate from "@/pages/admin/my-investment-details/investment-mandate";
