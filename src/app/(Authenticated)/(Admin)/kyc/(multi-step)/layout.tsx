@@ -1,5 +1,5 @@
 import React from 'react'
-import MultistepLayout from '@/components/portfolio-manager/fund/investmentVehicle-multistep/Multistep-layout'
+import MultistepLayout from '@/layout/multistep-layout/Multistep-layout'
 import CustomAuthorization from '@/features/auth/authorization';
 
 

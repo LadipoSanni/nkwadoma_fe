@@ -7,10 +7,10 @@ import {Button} from  "@/components/ui/button"
 
 const IdentificationStep = () => {
     return (
-        <main className={'w-[27.5rem] grid gap-10'}>
+        <main className={`${inter.className} w-[27.5rem] grid gap-10`}>
             <div className={`${inter500.className} grid gap-1`}>
                 <h1 className={`text-meedlBlack text-[18px] leading-[150%] font-medium`}>Identification</h1>
-                <p className={`${inter.className} text-black400 text-[14px] leading-[150%] font-normal`}>Add
+                <p className={`text-black400 text-[14px] leading-[150%] font-normal`}>Add
                     identification details</p>
             </div>
 
