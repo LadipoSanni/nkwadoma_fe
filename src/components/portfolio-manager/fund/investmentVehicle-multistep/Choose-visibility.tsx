@@ -56,7 +56,7 @@ function ChooseVisibility() {
         <div className='xl:px-40 lg:px-8 grid grid-cols-1 gap-y-6 '>
         <div className='grid grid-cols-1 gap-y-1'>
         <h1 className='text-[18px] font-normal'>Visibility</h1>
-        <p className='text-[14px] font-thin'>Select the visibility of your commercial fund</p>
+        <p className='text-[14px] font-normal'>Select the visibility of your commercial fund</p>
        </div>
          <div>
         <Formik
@@ -115,7 +115,7 @@ function ChooseVisibility() {
               </span>
               <span className="text-[14px]">Public</span> 
             </label>
-            <p className='text-[14px] font-thin px-8 text-[#6A6B6A]'>This commercial fund will be visible to the public</p>
+            <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This commercial fund will be visible to the public</p>
             {values.status === "Public" && (
                       <div className='lg:px-8 mt-5'>
                       <div className="px-4 lg:flex items-center cursor-auto   lg:justify-between  bg-[#F9F9F9] py-3 rounded-lg">
@@ -169,7 +169,7 @@ function ChooseVisibility() {
               </span>
               <span className="text-[14px]">Private</span>
             </label>
-            <p className='text-[14px] font-thin px-8 text-[#6A6B6A]'>This commercial fund will be visible to selected people</p>
+            <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This commercial fund will be visible to selected people</p>
             {
                 values.status === "Private" && (
                     <div className='mt-5 px-8 '>
@@ -210,7 +210,7 @@ function ChooseVisibility() {
               </span>
               <span className="text-[14px]">Only me</span>
             </label>
-            <p className='text-[14px] font-thin px-8 text-[#6A6B6A]'>This commercial fund will be visible to only portfolio manager</p>
+            <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This commercial fund will be visible to the creator</p>
           </div>
              </div>
              <div className="md:flex justify-end w-full mt-4">

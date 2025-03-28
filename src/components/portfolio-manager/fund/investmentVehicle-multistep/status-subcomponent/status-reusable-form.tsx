@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Label } from "@/components/ui/label";
-import { Formik, Form,  ErrorMessage } from "formik";
+import { Formik, Form,  ErrorMessage,FormikProps } from "formik";
 import * as Yup from "yup";
 import CustomSelectObj from "@/reuseable/Input/Custom-select-obj";
 import Isloading from "@/reuseable/display/Isloading";
@@ -40,6 +40,7 @@ function StatusReusable({
   const isLoading = false;
   const router = useRouter();
   const completedStep = useAppSelector(state => (state?.vehicleMultistep.completedSteps))
+  const formikRef = React.useRef<FormikProps<typeof initialFormValue>>(null);
 
   const initialFormValue = {
     status: initialStatus,
@@ -53,6 +54,13 @@ function StatusReusable({
       router.push('/vehicle/setup');
      }
    },[completedStep, router])
+
+   useEffect(() => {
+    if (formikRef.current && !isStateRequired) {
+      formikRef.current.setFieldTouched("state", false, false);
+      formikRef.current.validateForm();
+    }
+  }, [isStateRequired]);
 
   const validationSchema = React.useMemo(
     () =>
@@ -80,25 +88,15 @@ function StatusReusable({
   return (
     <div className="md:pr-8">
       <Formik
+        innerRef={formikRef}
         initialValues={initialFormValue}
         onSubmit={handleSubmit}
         validateOnMount={true}
         validationSchema={validationSchema}
         enableReinitialize={true}
       >
-        {({ errors, isValid, touched, setFieldValue, values, setFieldTouched, validateForm }) => {
-          
-          // useEffect(() => {
-          //   if (!isStateRequired) {
-          //     setFieldTouched("state", false, false); 
-          //     validateForm(); 
-          //   }
-          // }, [setFieldTouched, validateForm]);
-          if (!isStateRequired) {
-            setFieldTouched("state", false, false);
-            validateForm();
-          }
-  
+        {({ errors, isValid, touched, setFieldValue, values}) => {
+         
           return (
             <Form id="reusableForm">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-4 gap-x-4">
