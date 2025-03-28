@@ -22,6 +22,7 @@ import programSliceReducer from './slice/program/programSlice'
 import {userApi} from '@/service/users/api';
 import { notificationApi } from '@/service/notification/notification_query';
 import notificationReducer  from './slice/notification/notification';
+import vehicleMultistepReducer from './slice/multiselect/vehicle-multiselect'
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -34,6 +35,7 @@ const appReducer = combineReducers({
     vehicle: vehicleReducer,
     program: programSliceReducer,
     notification: notificationReducer ,
+    vehicleMultistep:vehicleMultistepReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,

@@ -15,6 +15,8 @@ import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField"
 import {useRouter } from 'next/navigation';
 import DatePickerInput from "@/reuseable/Input/DatePickerInput";
 import { format, parseISO } from "date-fns";
+import {store} from "@/redux/store";
+import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 
 
 // interface ApiError {
@@ -160,6 +162,7 @@ function Setup({investmentVehicleType}: Props) {
       });
 
        const handleSubmit = (values: typeof initialFormValue) => {
+             store.dispatch(markStepCompleted("setup"))
              console.log(values)
              handlenext()
        }
@@ -192,7 +195,7 @@ function Setup({investmentVehicleType}: Props) {
         })=> (
             <Form className={`${inter.className}`}>
             <div>
-            <div className="grid grid-cols-1 gap-y-4 md:max-h-[55vh]  overflow-y-auto "
+            <div className="grid grid-cols-1 gap-y-4 md:max-h-[48vh] md:relative overflow-y-auto "
                 //  style={{
                 //   scrollbarWidth: "none",
                 //   msOverflowStyle: "none",
@@ -457,6 +460,7 @@ function Setup({investmentVehicleType}: Props) {
             </div>  
             <div className= "md:flex gap-4 justify-between mt-6  md:mb-0">
                         <Button
+                            id='saveInvestment'
                             variant={"outline"}
                              type="button"
                            className='w-full lg:w-36 h-[48px] mb-4 border-solid border-[#142854] text-[#142854]'
@@ -470,6 +474,7 @@ function Setup({investmentVehicleType}: Props) {
                             
                         </Button>
                         <Button
+                            id='submitInvestment'
                             variant={"default"}
                             className={` w-full lg:w-36 h-[48px] ${
                                 !isValid

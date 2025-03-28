@@ -80,7 +80,7 @@ function financierSelectType({financierType,handleCloseModal,handleContinue,setF
                   </svg>
                 )}
               </span>
-              <span className="text-gray-700">Company</span>
+              <span className="text-gray-700 ">Company</span>
             </label>
           </div>
           </div>
