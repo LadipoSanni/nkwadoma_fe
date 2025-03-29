@@ -33,7 +33,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
 
     return (
         <div id={`investment-card`} data-testid="investment-card"
-             className={`${inter.className} max-w-[18rem] md:h-[20.5rem] h-[20.5rem]`}>
+             className={`${inter.className} md:h-80 h-72`}>
             <div id="investment-type-segment" data-testid={`investment-type-segment`} style={{backgroundColor}}
                  className="h-[10.75rem] rounded-md">
                 <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>

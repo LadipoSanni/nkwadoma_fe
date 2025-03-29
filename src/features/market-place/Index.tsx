@@ -48,7 +48,7 @@ const MarketPlaceView = () => {
     const router = useRouter();
 
     return (
-        <main id={"marketplaceView"} className={`pt-6 px-3`}>
+        <main id={"marketplaceView"} className={`py-9 px-5`}>
             <div id={"searchDiv"} className={`px-2 flex md:flex-row flex-col gap-3`}>
                     <SearchInput
                         id={'ProgramSearchInput'}
@@ -68,7 +68,7 @@ const MarketPlaceView = () => {
             </div>
 
             <div id={"card-segmentId"}
-                 className="grid grid-cols-1 px-4 md:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5">
+                 className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[62vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5">
             {dummyInvestments.map((investment) => {
                     const backgroundColor = investment.type === "Commercial" ? "#D9EAFF" : "#E6F2EA";
                     const imageSrc = investment.type === "Commercial"
