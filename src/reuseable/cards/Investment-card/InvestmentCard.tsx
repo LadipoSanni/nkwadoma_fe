@@ -12,7 +12,7 @@ interface InvestmentCardProps {
     investmentVehicleName: string;
     status: string;
     percentage: number;
-    HandleCardDetails: (id: string, router: ReturnType<typeof useRouter>) => void;
+    HandleCardDetails: (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => void;
     statusClass: string;
     borderClass:string;
 }
@@ -76,7 +76,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                 </div>
 
                 <div id={"HandleCardDetailsId"} className={`${inter.className} py-3 font-normal text-sm text-meedlBlue underline cursor-pointer`}
-                     onClick={() => HandleCardDetails(id, router)}
+                     onClick={() => HandleCardDetails(id, investmentVehicleType, router)}
                 >
                     View details
                 </div>
