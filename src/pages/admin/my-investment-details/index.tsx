@@ -26,7 +26,7 @@ const MyInvestmentDetails = () => {
 
     const SecondChartData = [
         { month: "Jan", value: 186, },
-        { month: "Feb", value: 305,  },
+        { month: "Feb", value: 505,  },
         { month: "March", value: 237, },
         { month: "April", value: 73, },
         { month: "May", value: 209,  },
