@@ -3,96 +3,223 @@ import React from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
-import {cabinetGroteskMediumBold600, inter, inter500} from "@/app/fonts";
+import {cabinetGrotesk, cabinetGroteskMediumBold600, inter, inter500} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
+import styles from "../../market-place/Index.module.css";
 
+
+interface SectionProps {
+    index: number;
+    title: string;
+    content: React.ReactNode;
+    subtitle?: string;
+    isList?: boolean;
+    parentIndex?: number;
+}
+
+const Section: React.FC<SectionProps> = ({index, title, content, subtitle, isList = false, parentIndex}) => {
+
+    const number = parentIndex !== undefined ? `${parentIndex + 1}.${index + 1}` : `${index + 1}.`;
+
+    return (
+        <div className="space-y-6">
+            {title && (
+                <h1 className={`${cabinetGrotesk.className} text-2xl font-extralight flex items-start gap-2 mb-4`}>
+                    <span>{number}</span>
+                    <span>{title}</span>
+                </h1>
+            )}
+            {subtitle && (
+                <h3 className="font-medium text-lg flex items-start gap-2 md-[15px]">
+                    {parentIndex !== undefined && <span>{number}</span>}
+                    <span>{subtitle}</span>
+                </h3>
+            )}
+            {isList ? (
+                <ul className={`${inter.className} list-disc pl-5 text-gray-700 font-normal text-base space-y-4`}>
+                    {content}
+                </ul>
+            ) : (
+                <p className={`${inter.className} font-normal text-base`}>{content}</p>
+            )}
+        </div>
+    );
+};
 
 const MarketPlaceDetails = () => {
     const router = useRouter();
+
     const handleBack = () => {
-        router.push("/marketplace")
+        router.push("/marketplace");
+    };
+
+    // const {
+    //     marketInvestmentVehicleId,
+    //     vehicleType
+    // } = useSelector((state: RootState) => state.program.savedMarketplaceData) || {};
+    //
+    // console.log(marketInvestmentVehicleId, vehicleType);
+
+    const HandleInvest = () => {
+        // vehicleType
+        router.push("/marketplace/confirmTransfer");
+
     }
 
     const investmentBasicDetails = [
-        {label: 'Investment start date', value: '23 jan,2024'},
-        {label: 'Date invested', value: '21, june, 2023'},
-        {label: 'Maturity date', value: '21, june, 2023 '},
+        {label: 'Maturity date', value: '13 Aug, 2026'},
+        {label: 'Interest rate', value: '20%'},
+        {label: 'Minimum amount', value: '₦900,000'},
         {
-            label: 'Status', value:
-                <div className={`flex gap-2 md:gap-2 md:flex`}>
+            label: 'Status',
+            value: (
+                <div className="flex gap-2 md:gap-2 md:flex">
                     Fundraising
                     <div
-                        className={` w-fit md:w-fit md:h-fit h-fit md:py-0 py-0 md:px-1 px-1 md:rounded-md rounded-md border md:border border-green650 md:border-green650`}>
-                        <span
-                            className={` ${inter500.className} md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[14px] text-[14px] text-green750 md:text-green750 `}>Open</span>
+                        className="w-fit md:w-fit md:h-fit h-fit md:py-0 py-0 md:px-1 px-1 md:rounded-md rounded-md border md:border border-green650 md:border-green650">
+            <span
+                className={`${inter500.className} md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[14px] text-[14px] text-green750 md:text-green750`}>
+              Open
+            </span>
                     </div>
                 </div>
+            ),
         },
-    ]
+    ];
+
+    const purposeAndObjectiveData = [
+        {
+            title: "Purpose & Objectives",
+            content: "The Tech Innovators Fund aims to generate high returns by investing in early-stage and growth-stage software engineering companies. The fund prioritizes companies developing innovative software solutions with scalable business models and strong market potential.",
+            isList: false,
+        },
+        {
+            title: "Investment Strategy",
+            subsections: [
+                {
+                    subtitle: "Target Sectors",
+                    content: (
+                        <>
+                            <li>Artificial Intelligence & Machine Learning</li>
+                            <li>Cloud Computing & SaaS Platforms</li>
+                            <li>Cybersecurity</li>
+                            <li>Fintech & Blockchain</li>
+                            <li>Enterprise Software & Automation</li>
+                        </>
+                    ),
+                    isList: true,
+                },
+                {
+                    subtitle: "Investment Stages",
+                    content: <li>Pre-seed, Seed, Series A, and Growth-stage startups</li>,
+                    isList: true,
+                },
+            ],
+        },
+    ];
 
     return (
-        <main id={`mainDiv`} className={`md:px-10 px-4 w-full`}>
-            <div id={"backButtonId"} className={`py-2`}>
+        <main id="mainDiv" className="md:px-10 py-6 px-3 w-full md:gap-10 gap-8">
+            <div id="backButtonId">
                 <BackButton
                     id="createFundBackButton"
                     handleClick={handleBack}
                     iconBeforeLetters={true}
-                    text='Back'
-                    textColor=''
+                    text="Back"
+                    textColor=""
                 />
             </div>
 
-            <div id={"detailsPurposeAndObjectiveDiv"} className={`flex md:flex-row flex-col`}>
-                <div id={"purpposeDiv"} className={`w-full max-w-[33%] grid gap-3 md:grid md:gap-4 h-fit md:h-fit `}>
-                    <div
-                        className={` w-full md:w-full h-[13rem] md:h-[10rem] rounded-md md:rounded-md bg-[#D9EAFF] md:bg-[#D9EAFF]`}>
-                        <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>
-                            <div id={"investmentTypeId"}
-                                 className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center shadow">
+            <div
+                id="detailsPurposeAndObjectiveDiv"
+                className={`w-full md:w-full grid md:flex md:justify-between gap-3.5 gap- md:pt-4 pt-4`}
+            >
+                <div
+                    id="purpposeDiv"
+                    className={`${styles.container} w-full md:w-1/3 grid  md:h-[70vh] md:max-h-none `}
+                >
+                    <div className="w-full md:w-full rounded-md md:rounded-md bg-[#D9EAFF]">
+                        <div id="type" data-testid="type" className="py-5 px-4 flex flex-col">
+                            <div
+                                id="investmentTypeId"
+                                className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center "
+                            >
                                 Commercial
                             </div>
                         </div>
-                        <div id={"imageId"} className="object-right-bottom justify-end flex ">
+                        <div id="imageId" className="object-right-bottom justify-end flex">
                             <Image
-                                src={"/asset/image/BlueCircles.svg"}
+                                src="/asset/image/Asset.svg"
                                 alt="circle"
                                 width={104}
                                 height={29}
-                                className="rounded-[32px] object-right-bottom "
+                                className="rounded-[32px] object-right-bottom"
                                 data-testid="circle-image"
                                 loading="lazy"
                             />
                         </div>
                     </div>
-                    <div id={"keyValuePairId"} className={""}>
-                        <p className={` ${cabinetGroteskMediumBold600.className} font-medium text-2xl text-[#212221] `}>Software
-                            Engineering Fund</p>
-                        <div className={` bg-grey105 md:bg-grey105 grid h-fit md:h-fit  gap-7 py-2 md:py-3 px-3  `}>
-                            {investmentBasicDetails.map((item, index) => (
-                                <div key={"key" + index}
-                                     className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
-                                    <p
-                                        className={`  ${inter.className} text-black300 text-[14px]  font-normal`}>{item.label}</p>
-                                    <div
-                                        className={` ${inter.className}  text-black500 text-[14px] le font-normal`}> {item.value ? item.value : 'Not provided'}</div>
+
+                    <p
+                        className={`id="keyValuePairId" ${cabinetGroteskMediumBold600.className} md:text-[32px] text-[24px] md:text-[#212221]`}
+                    >
+                        Software Engineering Fund
+                    </p>
+                    <div
+                        className="bg-[#F9F9F9] h-fit md:grid px-5 w-full">
+                        {investmentBasicDetails?.map((item, index) => (
+                            <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
+                                 key={"key" + index}
+                                 className="flex md:flex-row md:py-6 py-4 flex-col w-full justify-between font-normal text-meedlBlack text-[14px]">
+                                <div id={`itemsId`}
+                                     className={` ${inter.className} text-[#6A6B6A] text-[14px] font-normal`}>
+                                    <span id={`item`}>{item.label}</span>
                                 </div>
-                            ))}
-                        </div>
+                                <div id={`valueId`}
+                                     className={`${inter.className}  text-[#212221] text-[14px] font-normal`}>
+                                    <span id={`value`}>{item.value ? item.value : 'Not provided'}</span>
+                                </div>
+                            </div>
+                        ))}
                     </div>
 
-                    <Button type={"button"} size={"lg"} variant={"secondary"}
-                            className={"bg-meedlBlue text-meedlWhite"}>
-                        Invest
-                    </Button>
-
+                    <div className={`pt-4`}>
+                        <Button type="button" size="lg" variant="secondary"
+                                className={`${inter.className} bg-meedlBlue w-full text-meedlWhite`} onClick={HandleInvest}>
+                            Invest
+                        </Button>
+                    </div>
                 </div>
 
-                <div id={"purposeAndObjectiveDiv"}>
-
+                <div
+                    id="purposeAndObjectiveDiv"
+                    className={`${styles.container} text-[#212221] w-full md:w-3/5 md:h-[75vh] md:max-h-none rounded-[20px] border border-[#D7D7D7] bg-grey105 md:p-10 py-2 px-5 space-y-6`}
+                >
+                    {purposeAndObjectiveData.map((section, index) => (
+                        <div key={index}>
+                            <Section
+                                index={index}
+                                title={section.title}
+                                content={section.content || ""}
+                                isList={section.isList}
+                            />
+                            {section.subsections && section.subsections.map((subsection, subIndex) => (
+                                <Section
+                                    key={`${index}-${subIndex}`}
+                                    index={subIndex}
+                                    parentIndex={index}
+                                    title=""
+                                    subtitle={subsection.subtitle}
+                                    content={subsection.content}
+                                    isList={subsection.isList}
+                                />
+                            ))}
+                        </div>
+                    ))}
                 </div>
             </div>
         </main>
     );
-}
+};
 
 export default MarketPlaceDetails;
