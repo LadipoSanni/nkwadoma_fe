@@ -26,8 +26,15 @@ const dummyInvestments = [
     { id: "15", type: "Endowment", status: "Closed", title: "Non-Profit Development Grant", interest: 6 }
 ];
 
-export const HandleCardDetails = (id: string, router: ReturnType<typeof useRouter>) => {
-    store.dispatch(setMarketInvestmentVehicleId(id));
+export const HandleCardDetails = (
+    id: string,
+    type: string,
+    router: ReturnType<typeof useRouter>
+) => {
+    store.dispatch(setMarketInvestmentVehicleId({
+        marketInvestmentVehicleId: id,
+        vehicleType: type
+    }));
     router.push("/marketplace/details");
 };
 
@@ -45,7 +52,7 @@ const MarketPlaceView = () => {
     const [searchTerm, setSearchTerm] = useState("");
     console.log(setSearchTerm)
     const [selectedValue, setSelectedValue] = useState<string>('');
-    const router = useRouter();
+    // const router = useRouter();
 
     return (
         <main id={"marketplaceView"} className={`py-9 px-5`}>
@@ -68,7 +75,7 @@ const MarketPlaceView = () => {
             </div>
 
             <div id={"card-segmentId"}
-                 className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[62vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5">
+                 className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5">
             {dummyInvestments.map((investment) => {
                     const backgroundColor = investment.type === "Commercial" ? "#D9EAFF" : "#E6F2EA";
                     const imageSrc = investment.type === "Commercial"
@@ -97,7 +104,7 @@ const MarketPlaceView = () => {
                             status={investment.status}
                             borderClass={borderClass}
                             percentage={investment.interest}
-                            HandleCardDetails={() => HandleCardDetails(investment.id, router)}
+                            HandleCardDetails={HandleCardDetails}
                         />
                     );
                 })}
