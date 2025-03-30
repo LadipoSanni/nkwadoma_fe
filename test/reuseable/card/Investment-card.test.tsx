@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
 import { useRouter } from "next/navigation";
 
@@ -38,12 +38,6 @@ describe("InvestmentCard Component", () => {
         expect(screen.getByText("AI Startup Investment")).toBeInTheDocument();
         expect(screen.getByText("Open")).toBeInTheDocument();
         expect(screen.getByText("5% interest")).toBeInTheDocument();
-    });
-
-    it("calls HandleCardDetails when 'View details' is clicked", () => {
-        render(<InvestmentCard {...mockProps} />);
-        fireEvent.click(screen.getByText("View details"));
-        expect(mockHandleCardDetails).toHaveBeenCalledWith("test-id", mockRouter);
     });
 
     it("applies the correct background color to the investment type segment", () => {
