@@ -13,7 +13,7 @@ interface PerformanceProps {
 
 const PerformanceDisplay = ({barChartTabContent, currentBartChart,handleBarChartTabChange, chartData}:PerformanceProps) => {
     return (
-        <div className={` grid md:grid gap-4 md:gap-4 `}>
+        <div id={`performanceMainContainer`} data-testid={'performanceMainContainer'} className={` grid md:grid gap-4 md:gap-4 `}>
             <PerformanceCard showContainerBorder={true} percentage={20} showPerformancePercentage={false} maxWidth={'100%'} title={'Amount invested'} value={20000000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
             <PerformanceCard showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={true} maxWidth={'100%'} title={'New asset value '} value={20000000000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
             <div className={` w-[100%] md:w-[100%] h-fit md:h-fit b grid gap-4 md:flex md:gap-3  `}>
