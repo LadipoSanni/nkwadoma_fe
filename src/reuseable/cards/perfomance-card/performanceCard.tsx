@@ -51,7 +51,7 @@ const PerformanceCard = ({id, showMonthPick,maxWidth, isSmall,title, value, isVa
                             decimalScale={0}
                             fixedDecimalScale={true}
                             prefix={'₦'}
-                            className={`${cabinetGroteskBold.className} md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue  `}
+                            className={`${cabinetGroteskBold.className} md:min-w-fit md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue  `}
                             value={value}
                         />
                     }
