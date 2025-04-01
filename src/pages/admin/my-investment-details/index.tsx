@@ -57,7 +57,7 @@ const MyInvestmentDetails = () => {
                     <div
                         className={` w-fit md:w-fit md:h-fit h-fit md:py-0 py-0 md:px-1 px-1 md:rounded-md rounded-md border md:border border-green650 md:border-green650`}>
                         <span
-                            className={` ${inter500.className} md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[14px] text-[14px] text-green750 md:text-green750 `}>Open</span>
+                            className={` ${inter500.className} md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[11px] text-[14px] text-green750 md:text-green750 `}>Open</span>
                     </div>
                 </div>
         },
@@ -98,14 +98,16 @@ const MyInvestmentDetails = () => {
 
                     </div>
 
-                    <p className={` ${cabinetGroteskMediumBold600.className}  md:text-[32px] text-[24px] md:text-[#212221] `}>Software Engineering Fund</p>
+                    <p id={'titleOnInvestmentetails'} className={` ${cabinetGroteskMediumBold600.className}  md:text-[32px] text-[24px] md:text-[#212221] `}>Software Engineering Fund</p>
                     <div className={` bg-grey105 md:bg-grey105 grid h-fit md:h-fit  gap-8 py-3 md:py-3 px-3  `}>
                         {investmentBasicDetails.map((item, index) => (
                                 <div key={"key" + index}
                                      className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                     <p
+                                        id={'label' + index}
                                         className={`  ${inter.className} text-black300 text-[14px]  font-normal`}>{item.label}</p>
                                     <div
+                                        id={'value' + index}
                                         className={` ${inter.className}  text-black500 text-[14px] le font-normal`}> {item.value ? item.value : 'Not provided'}</div>
                                 </div>
                         ))}
