@@ -7,7 +7,7 @@ describe('test performance card', ()=> {
 
     test('performance card exist', ()=> {
         render(
-            <PerformanceCard showContainerBorder={false} percentage={20} showPerformancePercentage={true} maxWidth={'100%'} title={'Percentage '} value={20000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
+            <PerformanceCard id={'performanceCard'} showContainerBorder={false} percentage={20} showPerformancePercentage={true} maxWidth={'100%'} title={'Percentage '} value={20000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
         )
         expect(screen.getByTestId('performanceCard')).toBeInTheDocument();
     })
@@ -15,7 +15,7 @@ describe('test performance card', ()=> {
     test('performance card display title passed into component', ()=> {
         const title = 'test title';
         render(
-            <PerformanceCard showContainerBorder={false} percentage={20} showPerformancePercentage={true} maxWidth={'100%'} title={title} value={20000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
+            <PerformanceCard id={'testing'} showContainerBorder={false} percentage={20} showPerformancePercentage={true} maxWidth={'100%'} title={title} value={20000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
 
         )
         const titleTag = screen.getByText(title)
@@ -25,7 +25,7 @@ describe('test performance card', ()=> {
     test('performance card display value passed into component', ()=> {
         const value = '₦20,000';
         render(
-            <PerformanceCard showContainerBorder={false} percentage={20} showPerformancePercentage={false} maxWidth={'100%'} title={'title'} value={20000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
+            <PerformanceCard id={'testing'} showContainerBorder={false} percentage={20} showPerformancePercentage={false} maxWidth={'100%'} title={'title'} value={20000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
 
         )
 
@@ -37,7 +37,7 @@ describe('test performance card', ()=> {
     test('performance card display percentage when showPerformancePercentage parameter is true', ()=> {
         const expectedPercentage = '20%'
          render(
-            <PerformanceCard showContainerBorder={false} percentage={20} showPerformancePercentage={true} maxWidth={'100%'} title={'title'} value={20000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
+            <PerformanceCard id={'testing'} showContainerBorder={false} percentage={20} showPerformancePercentage={true} maxWidth={'100%'} title={'title'} value={20000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
         )
         const performancePercentage = screen.getByText(expectedPercentage)
         expect(performancePercentage).toHaveTextContent(expectedPercentage);
@@ -46,7 +46,7 @@ describe('test performance card', ()=> {
     test('performance card does not display percentage when showPerformancePercentage parameter is false', ()=> {
         const expectedPercentage = '20%'
         render(
-            <PerformanceCard showContainerBorder={false} percentage={20} showPerformancePercentage={false} maxWidth={'100%'} title={'title'} value={20000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
+            <PerformanceCard id={'testing'} showContainerBorder={false} percentage={20} showPerformancePercentage={false} maxWidth={'100%'} title={'title'} value={20000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
         )
         expect(screen.queryByText(expectedPercentage)).not.toBeInTheDocument();
     })
