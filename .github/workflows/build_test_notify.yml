@@ -12,7 +12,7 @@ env:
   NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
   APP_DEV_IV_KEY: ${{ vars.APP_DEV_IV_KEY }}
   APP_DEV_IV_ENCRYPTION_SECRET_KEY: ${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}
-  APP_DEV_AUTH_URL: ${{APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app}
+  APP_DEV_AUTH_URL: ${{APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app/api/v1}}
   
 jobs:
   build:
@@ -45,7 +45,7 @@ jobs:
           echo "NEXT_PUBLIC_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}" >> .env
           echo "APP_DEV_IV_KEY=${{ vars.APP_DEV_IV_KEY }}" >> .env
           echo "APP_DEV_IV_ENCRYPTION_SECRET_KEY=${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}" >> .env
-          echo "APP_DEV_AUTH_URL=${{ APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app }}" >> .env
+          echo "APP_DEV_AUTH_URL=${{ APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app/api/v1 }}" >> .env
 
        
       - name: Install and build the app
