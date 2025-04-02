@@ -1,18 +1,18 @@
 "use client"
 import React from 'react';
-import {useRouter} from 'next/navigation';
+// import {useRouter} from 'next/navigation';
 
 const ConfirmTransfer = () => {
-    const router = useRouter();
-
-    const handleCont = () => {
-        router.push('/marketplace/transfer');
-    }
+    // const router = useRouter();
+    //
+    // const handleCont = () => {
+    //     router.push('/marketplace/transfer');
+    // }
     return (
         <div>
-            <button onClick={handleCont}>
-                Back
-            </button>
+            {/*<button onClick={handleCont}>*/}
+            {/*    Back*/}
+            {/*</button>*/}
         </div>
     );
 }
