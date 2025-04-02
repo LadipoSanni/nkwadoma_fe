@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main", "dev", "prod-support"]
   pull_request:
-    branches: ["main", "dev", "prod-support"]
+    branches: ["main", "dev", "systest", "prod-support"]
 
 env:
   EMAILS: 'sam@semicolon.africa,ladipo@semicolon.africa,t.lemon@semicolon.africa,divinemercy601@gmail.com,qudusa55@gmail.com,o.koleaje@semicolon.africa,ned@semicolon.africa,tade@semicolon.africa,moyinoluwa@semicolon.africa,mariam@semicolon.africa,i.james@semicolon.africa,david@semicolon.africa,abigail@semicolon.africa,precious@semicolon.africa,dapo@semicolon.africa,pauline@semicolon.africa,davidoso@semicolon.africa,henry@semicolon.africa'
@@ -12,7 +12,11 @@ env:
   NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
   APP_DEV_IV_KEY: ${{ vars.APP_DEV_IV_KEY }}
   APP_DEV_IV_ENCRYPTION_SECRET_KEY: ${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}
+
   NEXT_PUBLIC_API_BASE_URL: http://172.16.1.52:8768 
+
+  APP_DEV_AUTH_URL: ${{APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app/api/v1}}
+
   
 jobs:
   build:
@@ -45,8 +49,13 @@ jobs:
           echo "NEXT_PUBLIC_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}" >> .env
           echo "APP_DEV_IV_KEY=${{ vars.APP_DEV_IV_KEY }}" >> .env
           echo "APP_DEV_IV_ENCRYPTION_SECRET_KEY=${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}" >> .env
+
           echo "NEXT_PUBLIC_API_BASE_URL: http://172.16.1.52:8768" >> .env
 
+          echo "APP_DEV_AUTH_URL=${{ APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app/api/v1 }}" >> .env
+
+
+       
       - name: Install and build the app
         run: |
           npm install
