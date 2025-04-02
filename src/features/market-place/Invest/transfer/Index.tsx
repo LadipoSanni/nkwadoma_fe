@@ -20,7 +20,7 @@ function Transfer() {
     const router = useRouter();
     const isLoading = false
 
-    const handlenext = () => {
+    const HandleNext = () => {
         router.push('/marketplace/confirmTransfer');
     }
 
@@ -30,7 +30,7 @@ function Transfer() {
 
     const handleSubmit = (values: typeof initialFormValue) => {
         console.log(values)
-        handlenext()
+        HandleNext()
     }
 
     return (
@@ -75,6 +75,7 @@ function Transfer() {
                                                     type="text"
                                                     component={CustomInputField}
                                                     onChange={validateNumber("amount", setFieldValue)}
+                                                    placeholder="0.00"
                                                 />
                                             </div>
                                             <div className="relative bottom-3">
