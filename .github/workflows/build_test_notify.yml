@@ -15,7 +15,7 @@ env:
 
   NEXT_PUBLIC_API_BASE_URL: APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app/api/v1
 
-  APP_DEV_AUTH_URL: ${{ APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app/api/v1 }}
+  APP_DEV_AUTH_URL: https://4354-62-173-45-238.ngrok-free.app/api/v1
 
   
 jobs:
