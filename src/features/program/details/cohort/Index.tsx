@@ -10,6 +10,7 @@ import {
     useSearchCohortsInAParticularProgramQuery
 } from "@/service/admin/program_query";
 import {useAppSelector} from "@/redux/store";
+import CreateCohort from "@/reuseable/modals/CreateCohort";
 
 
 
@@ -112,7 +113,14 @@ const ProgramCohortDetails= ()=> {
         return (
             <div>
                 <div id={`tab2`} className={'mt-4 grid gap-7'}>
-                    <SearchInput id={'programCohortSearch'} value={searchTerm} onChange={handleSearchChange}/>
+                    <div className={`md:mt-0 mt-4 flex md:flex-row flex-col justify-between`}>
+                        <div className={``}>
+                            <SearchInput id={'programCohortSearch'} value={searchTerm} onChange={handleSearchChange}/>
+                        </div>
+                        <div className=''>
+                            <CreateCohort  triggerButtonStyle={`w-full`}/>
+                        </div>
+                    </div>
                     <div>
                         {searchTerm && cohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Cohort'/></div> : <Tables
                             tableData={cohorts}
