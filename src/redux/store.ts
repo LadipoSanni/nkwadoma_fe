@@ -20,7 +20,7 @@ import { notificationApi } from '@/service/notification/notification_query';
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep'],
+    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep', 'marketPlace'],
 };
 
 const persistedReducer = persistReducer(persistConfig, appReducer);
