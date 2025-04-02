@@ -64,7 +64,7 @@ const MarketPlaceDetails = () => {
 
     const HandleInvest = () => {
         // vehicleType
-        router.push("/marketplace/confirmTransfer");
+        router.push("/marketplace/transfer");
         console.log(marketInvestmentVehicleId);
     }
 
