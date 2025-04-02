@@ -111,7 +111,7 @@ const ProgramCohortDetails= ()=> {
     ];
         return (
             <div>
-                <div id={`tab2`} className={'mt-4 grid gap-7'}>
+                <div id={`tab2`} className={'grid gap-4'}>
                     <SearchInput id={'programCohortSearch'} value={searchTerm} onChange={handleSearchChange}/>
                     <div>
                         {searchTerm && cohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Cohort'/></div> : <Tables

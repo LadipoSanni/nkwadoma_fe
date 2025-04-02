@@ -220,7 +220,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
 
   return (
     <div className=''>
-        <div id='cohortName' className='md:px-8 px-4'>
+        <div id='cohortName' className='md:px-6 px-4'>
           {/* <h1 className={`mt-5 font-semibold text-2xl mb-4 normal-case z-50 ${cabinetGrotesk.className}`}>Cohort</h1> */}
           <div id='buttonFilterCreate' className={`md:flex justify-between items-center z-50 relative top-6 bottom-2 ${inter.className}`}>
             <div id='buttonFilter' className='flex gap-4'>

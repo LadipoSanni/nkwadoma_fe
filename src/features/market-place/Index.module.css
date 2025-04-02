@@ -7,8 +7,6 @@
     .container{
         overflow-y: auto;
         overflow-x: hidden;
-        padding-right: 10px;
-
     }
     .container::-webkit-scrollbar {
         width: 2px;

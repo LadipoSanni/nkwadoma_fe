@@ -45,8 +45,6 @@ const MyInvestmentDetails = () => {
         { month: "September", value: 214,  },
     ]
 
-
-
     const investmentBasicDetails = [
         {label: 'Investment start date', value: '23 jan,2024'},
         {label: 'Date invested', value: '21, june, 2023'},
