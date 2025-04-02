@@ -58,7 +58,7 @@ const MarketPlaceDetails = () => {
     const {
         marketInvestmentVehicleId,
         vehicleType
-    } = useSelector((state: RootState) => state.program.savedMarketplaceData) || {};
+    } = useSelector((state: RootState) => state.marketPlace.savedMarketplaceData) || {};
 
     // console.log(marketInvestmentVehicleId, vehicleType);
 
