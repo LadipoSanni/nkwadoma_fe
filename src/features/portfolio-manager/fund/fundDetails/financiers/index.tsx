@@ -1,9 +1,9 @@
 'use client'
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
 import {inter} from '@/app/fonts'
 import { Button } from '@/components/ui/button';
-import LoanProductTable from "@/reuseable/table/LoanProductTable";
+// import LoanProductTable from "@/reuseable/table/LoanProductTable";
 // import { investmentVehicleData } from '@/utils/cohort/trainee-details-mock-data/Index';
 import { formatAmount } from '@/utils/Format';
 import { Book } from "lucide-react";
@@ -11,18 +11,93 @@ import Modal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import { useRouter } from 'next/navigation'
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
-import { financiers } from '@/utils/cohort/trainee-details-mock-data/Index';
-
-
+// import { financiers } from '@/utils/cohort/trainee-details-mock-data/Index';
+import {useAppSelector} from "@/redux/store";
+import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
+import Table from '@/reuseable/table/Table';
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import { setCurrentFinancierId,setFinancierMode } from '@/redux/financier/financier';
+import {store} from "@/redux/store";
 
 interface TableRowData {
-  [key: string]: string | number | null | React.ReactNode;
- }
+    [key: string]: string | number | null | React.ReactNode;
+}
+
+interface financials {
+  financierType: string,
+  organizationName: string,
+  userIdentity: {
+    email: string,
+    firstName: string,
+    lastName: string,
+
+  }
+
+}
+
+type viewAllfinancier = financials & TableRowData
+
+// "body": [
+//             {
+//                 "id": "cb17b0bd-cb02-412a-b1a9-734f35d41ae1",
+//                 "nextOfKin": null,
+//                 "financierType": "INDIVIDUAL",
+//                 "investmentVehicleRole": null,
+//                 "organizationName": null,
+//                 "userIdentity": {
+//                     "id": "b354f928-1f0a-4c99-a50b-f6bf7cbebb4e",
+//                     "email": "winekop762@codverts.com",
+//                     "firstName": "jons",
+//                     "lastName": "manson",
+//                     "phoneNumber": null,
+//                     "emailVerified": false,
+//                     "image": null,
+//                     "gender": null,
+//                     "dateOfBirth": null,
+//                     "stateOfOrigin": null,
+//                     "maritalStatus": null,
+//                     "stateOfResidence": null,
+//                     "nationality": null,
+//                     "residentialAddress": null,
+//                     "role": "LOANEE",
+//                     "createdBy": "0eb44164-a559-45d1-8342-383968a4b799",
+//                     "alternateEmail": null,
+//                     "alternatePhoneNumber": null,
+//                     "alternateContactAddress": null,
+//                     "identityVerified": false
+//                 },
+//                 "invitedBy": null,
+//                 "investmentVehicleId": null
+//             }
+//         ],
+
 
 function Financiers() {
     const [searchTerm, setSearchTerm] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter()
+    const currentVehicleId = useAppSelector(state => (state.vehicle.currentVehicleId))
+    const [investmentId] = useState(currentVehicleId);
+     const [hasNextPage,setNextPage] = useState(false)
+     const [totalPage,setTotalPage] = useState(0)
+     const [pageNumber,setPageNumber] = useState(0)
+     const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
+    const param = {
+      pageNumber: pageNumber,
+      pageSize: 10,
+      investmentVehicleId: currentVehicleId
+      }
+
+    const {data,isLoading} = useViewFinanciersByInvestmentmentVehicleQuery(param,{skip: !currentVehicleId})
+
+    useEffect(()=>{
+      if(data && data.data){
+       setFinanciers(data?.data?.body)
+       setNextPage(data?.data?.hasNextPage)
+       setTotalPage(data?.data?.totalPages)
+       setPageNumber(data?.data?.pageNumber)
+      }
+   },[data])
 
     const handleOpenModal = () => {
       setIsOpen(true)
@@ -33,19 +108,27 @@ function Financiers() {
     };
 
      const handleRowClick = (row:TableRowData) => {
+            store.dispatch(setCurrentFinancierId(String(row?.id)))
+             store.dispatch(setFinancierMode("investment"))
+             console.log('Row clicked:', row?.id);
              router.push('/funds/financier-details')
-            console.log(row?.name)
+           
             
         }
 
     const financierHeader = [
-      { title: 'Financier', sortable: true, id: 'name', selector: (row:TableRowData ) => row.name },
-      { title: 'Type', sortable: true, id: 'type', selector: (row: TableRowData) => <div className='w-full flex justify-center items-center '><div className={`${row.type === "Individual"? "text-[#68442E] bg-warning50 ": "text-[#142854] bg-[#EEF5FF]"} px-2 rounded-xl relative xl:right-[0.8rem] -z-50 `}>{row.type}</div></div> },
-      { title: 'No. of investments', sortable: true, id: 'number_of_investments', selector: (row:TableRowData) => row.number_of_investments|| 0 },
-      { title: 'Amount invested', sortable: true, id: 'amount_invested', selector: (row:TableRowData) => formatAmount(row.amount_invested)},
-      { title: 'Amount earned', sortable: true, id: 'amount_earned', selector: (row:TableRowData) =>formatAmount(row.amount_earned)},
-      { title: 'Payout', sortable: true, id: 'payout', selector: (row:TableRowData) => formatAmount(row.payout)},
-      { title: 'Portfolio value', sortable: true, id: 'portfolio_value', selector: (row:TableRowData) => formatAmount(row.portfolio_value)},
+      { title: 'Financier', sortable: true, id: 'name', selector: (row:viewAllfinancier ) => row.userIdentity?.firstName? row.userIdentity?.firstName + " " + row.userIdentity?.lastName : row?.organizationName},
+      // { title: 'Type', sortable: true, id: 'type', selector: (row:viewAllfinancier) => <div className='w-full flex justify-center items-center '><div className={`${row.financierType === "INDIVIDUAL"? "text-[#68442E] bg-warning50 ": "text-[#142854] bg-[#EEF5FF]"} px-2 rounded-xl relative md:right-[12px]  `}>{capitalizeFirstLetters(row.financierType)}</div></div> },
+      { title: <div className='relative md:left-4'>Type</div>, id: 'type', selector: (row:viewAllfinancier) => (
+        <span className={`${row.financierType ===  "INDIVIDUAL" ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
+    {capitalizeFirstLetters(row.financierType)}
+</span>
+    ) },
+      { title: 'No. of investments', sortable: true, id: 'number_of_investments', selector: (row:viewAllfinancier) => row.number_of_investments|| 0 },
+      { title: 'Amount invested', sortable: true, id: 'amount_invested', selector: (row:viewAllfinancier) => formatAmount(row.amount_invested)},
+      { title: 'Amount earned', sortable: true, id: 'amount_earned', selector: (row:viewAllfinancier) =>formatAmount(row.amount_earned)},
+      { title: 'Payout', sortable: true, id: 'payout', selector: (row:viewAllfinancier) => formatAmount(row.payout)},
+      { title: 'Portfolio value', sortable: true, id: 'portfolio_value', selector: (row:viewAllfinancier) => formatAmount(row.portfolio_value)},
   
     ]
   return (
@@ -69,11 +152,10 @@ function Financiers() {
          </Button>
         </div>
         <div className='mt-6 '>
-          <LoanProductTable
+          <Table
              tableData={financiers}
              tableHeader={financierHeader}
              handleRowClick={handleRowClick}
-             optionalRowsPerPage={10}
              tableHeight={48}
             icon={Book}
             sideBarTabName='financier'
@@ -81,6 +163,11 @@ function Financiers() {
             staticHeader={"Financier"}
             staticColunm={"name"}
             sx='cursor-pointer'
+            hasNextPage={hasNextPage}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+            totalPages={totalPage}
+            isLoading={isLoading}
           />
         </div>
         <div>
@@ -93,7 +180,7 @@ function Financiers() {
           width='36%'
           >
            <InviteFinanciers 
-           investmentId='1' 
+           investmentId={investmentId} 
            setIsOpen={setIsOpen} 
            amountCommitedAndDesignationCondition={true}
            isDesignationRequired={true}

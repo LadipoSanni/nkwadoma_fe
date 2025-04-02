@@ -13,6 +13,7 @@ type Props = {
   isSelectAll?: boolean;
   isShowButton?: boolean;
   restrictedItems?: string[];
+  className?: string
 };
 
 function Multiselect({
@@ -22,7 +23,8 @@ function Multiselect({
   isSearch,
   isSelectAll,
   isShowButton,
-  restrictedItems = []
+  restrictedItems = [],
+  className
 }: Props) {
   const [searchText, setSearchText] = useState("");
   const [filterOptions, setFilterOptions] = useState<
@@ -122,7 +124,7 @@ function Multiselect({
   return (
     <div className="relative w-full" ref={selectRef}>
       <div
-        className="flex items-center justify-between p-2 border border-gray-300 rounded-md cursor-pointer bg-white w-full min-h-[3.3rem] h-auto shadow-none"
+        className={`${className} flex items-center justify-between p-2 border border-gray-300 rounded-md cursor-pointer bg-white w-full min-h-[3.2rem] h-auto shadow-none`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex flex-wrap gap-2 flex-1">
@@ -186,14 +188,14 @@ function Multiselect({
             </div>
           )}
 
-          <div className="max-h-60 overflow-y-auto z-50">
+          <div className="max-h-60 overflow-y-auto ">
             {filterOptions.length > 0 ? (
               filterOptions.map((option) => {
                 const isDisabled = isOptionDisabled(option.value);
                 return (
                   <div
                     key={option.value}
-                    className={`flex items-center gap-1 px-2 py-1 hover:bg-[#F4F5F5] cursor-pointer data-[state=active]:bg-[#F4F5F5] ${
+                    className={`flex items-center gap-1 px-2 py-1 hover:bg-[#F4F5F5] cursor-pointer data-[state=active]:bg-[#F4F5F5] z-50${
                       isDisabled ? "opacity-50 pointer-events-none" : ""
                     } ${selectedOptions.includes(option.value) ? "" : ""}`}
                     onClick={() => !isDisabled && toggleOption(option.value)}
@@ -205,7 +207,7 @@ function Multiselect({
                       className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md mr-2`}
                       disabled={isDisabled}
                     />
-                    <span className="text-[14px] text-[#212221] font-thin">
+                    <span className="text-[14px] text-[#212221] ">
                       {option.label}
                     </span>
                   </div>
