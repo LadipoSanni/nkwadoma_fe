@@ -35,7 +35,7 @@ function Transfer() {
 
     return (
         <div className={`${inter.className} `}>
-            <div className='xl:px-36 grid grid-cols-1 gap-y-6 w-3/4'>
+            <div className='xl:px-36 grid grid-cols-1 gap-y-6 lg:w-5/6 md:4/5 w-full'>
                 <div className='grid grid-cols-1 gap-y-1'>
                     <h1 className='text-[18px] font-normal'>Transfer funds</h1>
                     <p className='text-[14px] font-normal'>Add the investment amount and the investment terms and conditions</p>
@@ -89,11 +89,11 @@ function Transfer() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className= "md:flex md:justify-end mt-6  md:mb-0">
+                                    <div className= "md:flex md:justify-end mt-6 w-full md:mb-0">
                                         <Button
                                             id='submitAmount'
                                             variant={"default"}
-                                            className={` w-full lg:w-32 h-[48px] ${
+                                            className={` w-full md:w-32 h-[48px] ${
                                                 !isValid
                                                     ? "bg-neutral650 cursor-auto hover:bg-neutral650 "
                                                     : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
