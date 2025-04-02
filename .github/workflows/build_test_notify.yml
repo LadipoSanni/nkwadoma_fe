@@ -12,12 +12,9 @@ env:
   NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
   APP_DEV_IV_KEY: ${{ vars.APP_DEV_IV_KEY }}
   APP_DEV_IV_ENCRYPTION_SECRET_KEY: ${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}
+  APP_DEV_AUTH_URL: "https://4354-62-173-45-238.ngrok-free.app/api/v1"
+  NEXT_PUBLIC_API_BASE_URL: "http://172.16.1.52:8768/api/v1"
 
-  NEXT_PUBLIC_API_BASE_URL: APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app/api/v1
-
-  APP_DEV_AUTH_URL: https://4354-62-173-45-238.ngrok-free.app/api/v1
-
-  
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -33,10 +30,12 @@ jobs:
           aws-region: us-east-1
 
       - name: Run ECR Login and Start Services
-        run:  chmod +x start.sh ./start.sh  
+        run: |
+          chmod +x start.sh
+          ./start.sh  
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
@@ -49,13 +48,9 @@ jobs:
           echo "NEXT_PUBLIC_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}" >> .env
           echo "APP_DEV_IV_KEY=${{ vars.APP_DEV_IV_KEY }}" >> .env
           echo "APP_DEV_IV_ENCRYPTION_SECRET_KEY=${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}" >> .env
+          echo "NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}" >> .env
+          echo "APP_DEV_AUTH_URL=${{ env.APP_DEV_AUTH_URL }}" >> .env
 
-          echo "NEXT_PUBLIC_API_BASE_URL=${{ NEXT_PUBLIC_API_BASE_URL:http://172.16.1.52:8768/api/v1 }}" >> .env
-
-          echo "APP_DEV_AUTH_URL=${{ APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app/api/v1 }}" >> .env
-
-
-       
       - name: Install and build the app
         run: |
           npm install
