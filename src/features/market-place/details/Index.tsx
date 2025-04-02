@@ -166,7 +166,7 @@ const MarketPlaceDetails = () => {
                                 loading="lazy"
                             />
                         </div>
-                    </div>;
+                    </div>
 
                     <p
                         className={`id="keyValuePairId" ${cabinetGroteskMediumBold600.className} md:text-[32px] text-[24px] md:text-[#212221]`}
