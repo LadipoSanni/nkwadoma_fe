@@ -62,7 +62,7 @@ function Transfer() {
                                              paddingRight: "10px",
                                          }}
                                     >
-                                        <div>
+                                        <div className={`w-full`}>
                                             <Label htmlFor="size">Amount</Label>
                                             <div className="flex gap-2 items-center justify-center">
                                                 <CurrencySelectInput
@@ -88,7 +88,7 @@ function Transfer() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className= "md:flex justify-end mt-6  md:mb-0">
+                                    <div className= "md:flex md:justify-end mt-6  md:mb-0">
                                         <Button
                                             id='submitAmount'
                                             variant={"default"}
