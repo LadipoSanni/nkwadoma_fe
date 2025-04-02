@@ -35,7 +35,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                  className="h-[10.75rem]">
                 <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>
                     <div id={"investmentTypeId"}
-                        className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center shadow">
+                        className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center">
                         {investmentVehicleType}
                     </div>
                 </div>
