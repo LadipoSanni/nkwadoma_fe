@@ -13,7 +13,7 @@ env:
   APP_DEV_IV_KEY: ${{ vars.APP_DEV_IV_KEY }}
   APP_DEV_IV_ENCRYPTION_SECRET_KEY: ${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}
 
-  NEXT_PUBLIC_API_BASE_URL: http://172.16.1.52:8768 
+  NEXT_PUBLIC_API_BASE_URL: APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app/api/v1
 
   APP_DEV_AUTH_URL: ${{APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app/api/v1}}
 
@@ -50,7 +50,7 @@ jobs:
           echo "APP_DEV_IV_KEY=${{ vars.APP_DEV_IV_KEY }}" >> .env
           echo "APP_DEV_IV_ENCRYPTION_SECRET_KEY=${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}" >> .env
 
-          echo "NEXT_PUBLIC_API_BASE_URL: http://172.16.1.52:8768" >> .env
+          echo "NEXT_PUBLIC_API_BASE_URL=${{ NEXT_PUBLIC_API_BASE_URL:http://172.16.1.52:8768/api/v1 }}" >> .env
 
           echo "APP_DEV_AUTH_URL=${{ APP_DEV_AUTH_URL:https://4354-62-173-45-238.ngrok-free.app/api/v1 }}" >> .env
 
