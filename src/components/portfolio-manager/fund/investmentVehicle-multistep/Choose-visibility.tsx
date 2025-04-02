@@ -42,22 +42,22 @@ function ChooseVisibility() {
     const isLoading = false
     const completedStep = useAppSelector(state => (state?.vehicleMultistep.completedSteps))
    
-    const financiersData = [
-      { id: '1', name: 'Joseph Isa' },
-      { id: '2', name: 'Philip Adebayo' },
-      { id: '3', name: 'Victoria Ezeoke' },
-      { id: '4', name: 'Michael Opuogbo' },
-      { id: '5', name: 'Stephen Okeke' },
-      { id: '6', name: 'Timothy Usman' },
-    ];
+    // const financiersData = [
+    //   { id: '1', name: 'Joseph Isa' },
+    //   { id: '2', name: 'Philip Adebayo' },
+    //   { id: '3', name: 'Victoria Ezeoke' },
+    //   { id: '4', name: 'Michael Opuogbo' },
+    //   { id: '5', name: 'Stephen Okeke' },
+    //   { id: '6', name: 'Timothy Usman' },
+    // ];
 
-    const designations = [
-      { label: "Lead", value: "LEAD" },
-      { label: "Sponsor", value: "SPONSOR" },
-      { label: "Investor", value: "INVESTOR" },
-      { label: "Endower", value: "ENDOWER" },
-      { label: "Donor", value: "DONOR" },
-    ]
+    // const designations = [
+    //   { label: "Lead", value: "LEAD" },
+    //   { label: "Sponsor", value: "SPONSOR" },
+    //   { label: "Investor", value: "INVESTOR" },
+    //   { label: "Endower", value: "ENDOWER" },
+    //   { label: "Donor", value: "DONOR" },
+    // ]
     
        useEffect(()=> {
          if(!completedStep.includes("setup")){
@@ -80,53 +80,53 @@ function ChooseVisibility() {
         });
       };
 
-      const addFinancierRow = (
-        setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-        values: typeof initialFormValue 
-      ) => {
-        setFieldValue('financiers', [
-          ...values.financiers,
-          { financierId: '', role: [] }, 
-        ]);
-      };
+      // const addFinancierRow = (
+      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+      //   values: typeof initialFormValue 
+      // ) => {
+      //   setFieldValue('financiers', [
+      //     ...values.financiers,
+      //     { financierId: '', role: [] }, 
+      //   ]);
+      // };
 
-      const removeFinancierRow = (
-        setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-        values: typeof initialFormValue,
-        index: number
-      ) => {
-        const newFinanciers = [...values.financiers];
-        newFinanciers.splice(index, 1);
-        setFieldValue('financiers', newFinanciers);
-      };
+      // const removeFinancierRow = (
+      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+      //   values: typeof initialFormValue,
+      //   index: number
+      // ) => {
+      //   const newFinanciers = [...values.financiers];
+      //   newFinanciers.splice(index, 1);
+      //   setFieldValue('financiers', newFinanciers);
+      // };
 
-      const updateFinancierId = (
-        setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-        values: typeof initialFormValue,
-        index: number,
-        financierId: string
-      ) => {
-        const newFinanciers = [...values.financiers];
-        newFinanciers[index] = {
-          ...newFinanciers[index],
-          financierId
-        };
-        setFieldValue('financiers', newFinanciers);
-      };
+      // const updateFinancierId = (
+      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+      //   values: typeof initialFormValue,
+      //   index: number,
+      //   financierId: string
+      // ) => {
+      //   const newFinanciers = [...values.financiers];
+      //   newFinanciers[index] = {
+      //     ...newFinanciers[index],
+      //     financierId
+      //   };
+      //   setFieldValue('financiers', newFinanciers);
+      // };
     
-      const updateFinancierRoles = (
-        setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-        values: typeof initialFormValue,
-        index: number,
-        roles: string[]
-      ) => {
-        const newFinanciers = [...values.financiers];
-        newFinanciers[index] = {
-          ...newFinanciers[index],
-          role: roles
-        };
-        setFieldValue('financiers', newFinanciers);
-      };
+      // const updateFinancierRoles = (
+      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+      //   values: typeof initialFormValue,
+      //   index: number,
+      //   roles: string[]
+      // ) => {
+      //   const newFinanciers = [...values.financiers];
+      //   newFinanciers[index] = {
+      //     ...newFinanciers[index],
+      //     role: roles
+      //   };
+      //   setFieldValue('financiers', newFinanciers);
+      // };
 
   return (
     <div className={`${inter.className} `}>
