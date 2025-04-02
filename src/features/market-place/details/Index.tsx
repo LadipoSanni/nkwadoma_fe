@@ -6,6 +6,8 @@ import Image from "next/image";
 import {cabinetGrotesk, cabinetGroteskMediumBold600, inter, inter500} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import styles from "../../market-place/Index.module.css";
+import {useSelector} from "react-redux";
+import {RootState} from "@/redux/store";
 
 
 interface SectionProps {
@@ -53,17 +55,17 @@ const MarketPlaceDetails = () => {
         router.push("/marketplace");
     };
 
-    // const {
-    //     marketInvestmentVehicleId,
-    //     vehicleType
-    // } = useSelector((state: RootState) => state.program.savedMarketplaceData) || {};
-    //
+    const {
+        marketInvestmentVehicleId,
+        vehicleType
+    } = useSelector((state: RootState) => state.program.savedMarketplaceData) || {};
+
     // console.log(marketInvestmentVehicleId, vehicleType);
 
     const HandleInvest = () => {
         // vehicleType
         router.push("/marketplace/confirmTransfer");
-
+        console.log(marketInvestmentVehicleId);
     }
 
     const investmentBasicDetails = [
@@ -117,6 +119,12 @@ const MarketPlaceDetails = () => {
             ],
         },
     ];
+    // const bgColor = vehicleType === "commercial" ? "#D9EAFF" : "#E6F2EA";
+    const bgColor = vehicleType === "Commercial" ? "bg-[#D9EAFF]" : "bg-[#E6F2EA]";
+    const imageSrc =
+        vehicleType === "Commercial"
+            ? "/asset/image/Asset.svg"
+            : "/asset/image/Circles.svg";
 
     return (
         <main id="mainDiv" className="md:px-10 py-6 px-3 w-full md:gap-10 gap-8">
@@ -138,18 +146,18 @@ const MarketPlaceDetails = () => {
                     id="purpposeDiv"
                     className={`${styles.container} w-full md:w-1/3 grid  md:h-[70vh] md:max-h-none `}
                 >
-                    <div className="w-full md:w-full rounded-md md:rounded-md bg-[#D9EAFF]">
+                    <div id="backgroundId" className={`w-full md:w-full rounded-md md:rounded-md ${bgColor}`}>
                         <div id="type" data-testid="type" className="py-5 px-4 flex flex-col">
                             <div
                                 id="investmentTypeId"
-                                className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center "
+                                className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center"
                             >
-                                Commercial
+                                {vehicleType}
                             </div>
                         </div>
                         <div id="imageId" className="object-right-bottom justify-end flex">
                             <Image
-                                src="/asset/image/Asset.svg"
+                                src={imageSrc}
                                 alt="circle"
                                 width={104}
                                 height={29}
