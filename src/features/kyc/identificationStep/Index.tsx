@@ -16,7 +16,7 @@ const IdentificationStep = () => {
         route.push('/kyc/sof')
     }
     return (
-        <main className={`${inter.className} w-[27.5rem] grid gap-10`}>
+        <main className={`${inter.className} xl:px-36  grid-cols-1 gap-y-6  grid gap-10`}>
             <div className={`${inter500.className} grid gap-1`}>
                 <h1 className={`text-meedlBlack text-[18px] leading-[150%] font-medium`}>Identification</h1>
                 <p className={`text-black400 text-[14px] leading-[150%] font-normal`}>Add
