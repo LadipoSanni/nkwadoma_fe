@@ -10,7 +10,7 @@ import {
     useSearchCohortsInAParticularProgramQuery
 } from "@/service/admin/program_query";
 import {useAppSelector} from "@/redux/store";
-import CreateCohort from "@/reuseable/modals/CreateCohort";
+import CreateCohortInProgram from "@/components/program/create-cohort/Index";
 
 
 
@@ -118,7 +118,7 @@ const ProgramCohortDetails= ()=> {
                             <SearchInput id={'programCohortSearch'} value={searchTerm} onChange={handleSearchChange}/>
                         </div>
                         <div className=''>
-                            <CreateCohort  triggerButtonStyle={`w-full`}/>
+                            <CreateCohortInProgram  triggerButtonStyle={`w-full`}/>
                         </div>
                     </div>
                     <div>
