@@ -117,7 +117,7 @@ const Login: React.FC = () => {
         }
     }
 
-    const destructureLoginEndpointCall = (response: object) => {
+    const destructureLoginEndpointCallResponse = (response: object) => {
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         const access_token = response?.data?.access_token
@@ -147,7 +147,6 @@ const Login: React.FC = () => {
     const {toast} = useToast()
     const handleLogin = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
-        console.log('network: ', navigator.onLine)
         if (!navigator.onLine) {
                 toast({
                     description: "No internet connection",
@@ -156,7 +155,6 @@ const Login: React.FC = () => {
         } else {
                 try {
                     const response = await login({email, password}).unwrap()
-                    console.log('response: ', response )
                     if (response?.data) {
                         const  {
                             access_token,
@@ -165,8 +163,7 @@ const Login: React.FC = () => {
                             user_email,
                             user_roles,
                             user_role
-
-                        } = destructureLoginEndpointCall(response)
+                        } = destructureLoginEndpointCallResponse(response)
 
                         clearData()
                         await persistor.purge();
