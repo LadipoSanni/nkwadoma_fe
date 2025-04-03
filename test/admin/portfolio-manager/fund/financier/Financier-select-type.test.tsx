@@ -57,51 +57,53 @@ jest.mock('next/navigation', () => ({
         setup();
         const individualOption = screen.getByLabelText('Individual');
         fireEvent.click(individualOption);
-        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'Individual');
+        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'INDIVIDUAL');
       });
 
       test('Handles company option selection correctly', () => {
         setup();
         const companyOption = screen.getByLabelText('Company');
         fireEvent.click(companyOption);
-        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'Company');
+        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'COOPERATE');
       });
 
       test('Calls setFieldValue with "Individual" when individual option is selected', () => {
         setup();
         const individualOption = screen.getByLabelText('Individual');
         fireEvent.click(individualOption);
-        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'Individual');
+        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'INDIVIDUAL');
       });
 
       test('Calls setFieldValue with "Company" when company option is selected', () => {
         setup();
         const companyOption = screen.getByLabelText('Company');
         fireEvent.click(companyOption);
-        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'Company');
+        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'COOPERATE');
       });
 
       test('Marks individual option as checked when financierType is "Individual"', () => {
-        setup('Individual');
+        setup('INDIVIDUAL');
         const individualOption = screen.getByLabelText('Individual') as HTMLInputElement;
         expect(individualOption.checked).toBe(true);
       });
     
       test('Marks company option as checked when financierType is "Company"', () => {
-        setup('Company');
+        setup('COOPERATE');
         const companyOption = screen.getByLabelText('Company') as HTMLInputElement;
         expect(companyOption.checked).toBe(true);
       });
 
       test('Correctly styles individual option when selected', () => {
-        setup('Individual');
+        setup('INDIVIDUAL');
         expect(screen.getByLabelText('Individual').closest('div')).toHaveClass('bg-[#F9F9F9]');
       });
     
       test('Correctly styles company option when selected', () => {
-        setup('Company');
+        setup('COOPERATE'); 
+        
         expect(screen.getByLabelText('Company').closest('div')).toHaveClass('bg-[#F9F9F9]');
       });
+      
 
       test('Calls handleCloseModal when cancel button is clicked', () => {
         setup();
@@ -133,14 +135,14 @@ jest.mock('next/navigation', () => ({
         setup();
         const individualOption = screen.getByLabelText('Individual');
         fireEvent.click(individualOption);
-        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'Individual');
+        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'INDIVIDUAL');
       });
     
       test('Handles mouse click correctly for company option', () => {
         setup();
         const companyOption = screen.getByLabelText('Company');
         fireEvent.click(companyOption);
-        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'Company');
+        expect(mockSetFieldValue).toHaveBeenCalledWith('financierType', 'COOPERATE');
       });
     
     })
