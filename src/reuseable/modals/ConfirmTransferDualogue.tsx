@@ -40,7 +40,7 @@ const ConfirmTransferDialogue: React.FC<ConfirmTransferProps> = ({headerTitle, a
                         className={`${inter.className} h-12 md:w-36 w-full bg-meedlBlue text-sm py-3 px-5 font-semibold leading-6 text-meedlWhite`}
                         id="MarketButton"
                         onClick={handleMarketPlace}>
-                    Go to market
+                    Go to marketplace
                 </Button>
             </div>
 
