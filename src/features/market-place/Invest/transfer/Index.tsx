@@ -1,3 +1,4 @@
+"use client";
 import React,{ useState } from 'react'
 import { Button } from "@/components/ui/button";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -97,6 +98,7 @@ function Transfer() {
                                                 <input
                                                     type="checkbox"
                                                     id={`agreeToTermsAndCondition`}
+                                                    data-testid="agreeToTermsAndCondition"
                                                     className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md`}
                                                     checked={isChecked}
                                                     onChange={(e) => setIsChecked(e.target.checked)}
@@ -105,7 +107,7 @@ function Transfer() {
                                             <div>
                                                 <p className={`${inter.className} text-sm font-normal text-meedlBlack `}>I
                                                     have read, understood and I agree to the <span
-                                                        className="underline text-meedlBlue font-semibold"> Terms and conditions</span>
+                                                        className="underline text-meedlBlue font-semibold cursor-pointer"> Terms and conditions</span>
                                                 </p>
                                             </div>
                                         </div>
@@ -114,7 +116,7 @@ function Transfer() {
                                         <Button
                                             id='submitAmount'
                                             variant={"default"}
-                                            className={` w-full md:w-32 h-[48px] ${
+                                            className={` w-full md:w-32 py-3 px-5 font h-11 ${
                                                 !isValid || !isChecked
                                                     ? "bg-neutral650 cursor-auto hover:bg-neutral650 "
                                                     : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
