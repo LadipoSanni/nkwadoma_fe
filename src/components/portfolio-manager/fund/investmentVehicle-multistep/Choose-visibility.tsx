@@ -10,25 +10,54 @@ import {store} from "@/redux/store";
 import {useAppSelector} from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useRouter } from "next/navigation";
+// import CustomSelectId from '@/reuseable/Input/custom-select-id';
+// import Multiselect from '@/reuseable/mult-select/multi-select';
+// import { Trash2 } from 'lucide-react';
+
+interface Financier {
+  financierId: string;
+  role: string[];
+}
 
 const initialFormValue = {
-    status:"",
-    financiers: [],
-    investmentId: ''
-
-  };
-   
-
+  status: "",
+  financiers: [{ financierId: "", role: [] }] as Financier[],
+  investmentId: ''
+};
 
 function ChooseVisibility() {
     const [copied, setCopied] = useState(false);
     const router = useRouter();
+
     const validationSchema = Yup.object().shape({
         status: Yup.string().required("Visibility is required"),
-    })
+        financiers: Yup.array().when('status', {
+          is: (val: unknown): val is string => val === 'Private',
+          then: (schema) => schema.min(1, "At least one financier is required for private funds"),
+          otherwise: (schema) => schema,
+        }),
+      });
+
+
     const isLoading = false
     const completedStep = useAppSelector(state => (state?.vehicleMultistep.completedSteps))
+   
+    // const financiersData = [
+    //   { id: '1', name: 'Joseph Isa' },
+    //   { id: '2', name: 'Philip Adebayo' },
+    //   { id: '3', name: 'Victoria Ezeoke' },
+    //   { id: '4', name: 'Michael Opuogbo' },
+    //   { id: '5', name: 'Stephen Okeke' },
+    //   { id: '6', name: 'Timothy Usman' },
+    // ];
 
+    // const designations = [
+    //   { label: "Lead", value: "LEAD" },
+    //   { label: "Sponsor", value: "SPONSOR" },
+    //   { label: "Investor", value: "INVESTOR" },
+    //   { label: "Endower", value: "ENDOWER" },
+    //   { label: "Donor", value: "DONOR" },
+    // ]
     
        useEffect(()=> {
          if(!completedStep.includes("setup")){
@@ -50,6 +79,54 @@ function ChooseVisibility() {
         //   setTimeout(() => setCopied(false), 2000); 
         });
       };
+
+      // const addFinancierRow = (
+      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+      //   values: typeof initialFormValue 
+      // ) => {
+      //   setFieldValue('financiers', [
+      //     ...values.financiers,
+      //     { financierId: '', role: [] }, 
+      //   ]);
+      // };
+
+      // const removeFinancierRow = (
+      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+      //   values: typeof initialFormValue,
+      //   index: number
+      // ) => {
+      //   const newFinanciers = [...values.financiers];
+      //   newFinanciers.splice(index, 1);
+      //   setFieldValue('financiers', newFinanciers);
+      // };
+
+      // const updateFinancierId = (
+      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+      //   values: typeof initialFormValue,
+      //   index: number,
+      //   financierId: string
+      // ) => {
+      //   const newFinanciers = [...values.financiers];
+      //   newFinanciers[index] = {
+      //     ...newFinanciers[index],
+      //     financierId
+      //   };
+      //   setFieldValue('financiers', newFinanciers);
+      // };
+    
+      // const updateFinancierRoles = (
+      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+      //   values: typeof initialFormValue,
+      //   index: number,
+      //   roles: string[]
+      // ) => {
+      //   const newFinanciers = [...values.financiers];
+      //   newFinanciers[index] = {
+      //     ...newFinanciers[index],
+      //     role: roles
+      //   };
+      //   setFieldValue('financiers', newFinanciers);
+      // };
 
   return (
     <div className={`${inter.className} `}>
@@ -147,7 +224,7 @@ function ChooseVisibility() {
                 name="Private"
                 value="Private"
                 checked={values.status === 'Private'}
-                onChange={() => setFieldValue('status', 'Public')}
+                onChange={() => setFieldValue('status', "Private")}
                 className="hidden" 
                 id="private" 
               />
@@ -172,8 +249,62 @@ function ChooseVisibility() {
             <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This commercial fund will be visible to selected people</p>
             {
                 values.status === "Private" && (
+                  
                     <div className='mt-5 px-8 '>
-                        <Label className='text-[#212221]'>Financier</Label>
+
+                        <div className="grid grid-cols-2 gap-4 mt-6">
+                      <Label className='text-[#212221]'>Financier</Label>
+                      <Label className='text-[#212221]'>Role</Label>
+                    </div>
+                    {/* <div className=''>
+                      {
+                        values.financiers.map((financier, index) => (
+                          <div key={index} className="grid grid-cols-2 gap-6 mb-4 items-center relative">
+                        <CustomSelectId
+                          value={financier.financierId}
+                          onChange={(value) => updateFinancierId(setFieldValue, values, index, value)}
+                          selectContent={financiersData}
+                          placeholder="Select financier"
+                          triggerId={`financier-select-${index}`}
+                          className="w-full"
+                          />
+
+<div className="flex items-center gap-2 mb-2">
+          <Multiselect
+            multiselectList={designations}
+            onValueChange={(selectedRoles) => 
+              updateFinancierRoles(setFieldValue, values, index, selectedRoles)
+            }
+            placeholder="Select roles"
+            className='min-h-[2.9rem]'
+          />
+          
+          {index > 0 && (
+            <div className=''>
+            <button
+              type="button"
+              onClick={() => removeFinancierRow(setFieldValue, values, index)}
+              className="text-red-500 hover:text-red-700"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+            </div>
+           
+          )}
+         
+        </div>
+          </div>
+                        ))
+                      }
+                    <Button
+          type="button"
+          onClick={() => addFinancierRow(setFieldValue, values)}
+          className="mt-2 bg-blue-500 text-white"
+        >
+                            Add Financier
+          </Button>   
+                    </div> */}
+
                     </div>
                 )
             }
