@@ -1,6 +1,7 @@
 import React from "react"
 import {cabinetGrotesk, inter} from "@/app/fonts";
 import Image, {StaticImageData} from 'next/image';
+import {useRouter} from "next/navigation";
 
 
 interface InvestmentCardProps {
@@ -11,7 +12,7 @@ interface InvestmentCardProps {
     investmentVehicleName: string;
     status: string;
     percentage: number;
-    HandleCardDetails: (id: string) => void;
+    HandleCardDetails: (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => void;
     statusClass: string;
     borderClass:string;
 }
@@ -28,11 +29,13 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                                                            statusClass,
                                                            borderClass,
                                                        }) => {
+    const router = useRouter();
+
     return (
         <div id={`investment-card`} data-testid="investment-card"
-             className={`${inter.className} max-w-[18rem] md:h-[20.5rem] h-[20.5rem]`}>
+             className={`${inter.className} md:h-80 h-72`}>
             <div id="investment-type-segment" data-testid={`investment-type-segment`} style={{backgroundColor}}
-                 className="h-[10.75rem]">
+                 className="h-[10.75rem] rounded-md">
                 <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>
                     <div id={"investmentTypeId"}
                         className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center">
@@ -45,7 +48,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                         alt="circle"
                         width={104}
                         height={29}
-                        className="rounded-[32px] object-right-bottom "
+                        className="rounded-[32px] object-right-bottom flex  "
                         data-testid="circle-image"
                         loading="lazy"
                     />
@@ -73,7 +76,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                 </div>
 
                 <div id={"HandleCardDetailsId"} className={`${inter.className} py-3 font-normal text-sm text-meedlBlue underline cursor-pointer`}
-                     onClick={() => HandleCardDetails(id)}
+                     onClick={() => HandleCardDetails(id, investmentVehicleType, router)}
                 >
                     View details
                 </div>
