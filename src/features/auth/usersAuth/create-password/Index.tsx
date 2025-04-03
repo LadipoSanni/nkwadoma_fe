@@ -82,6 +82,33 @@ const CreatePassword = () => {
         }
     }
 
+    const destructureLoginEndpointCallResponse = (response: object) => {
+        console.log('response gotten: ', response)
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const access_token = response?.data?.access_token
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const refresh_token = response?.data?.refresh_token
+        const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const userName = decode_access_token?.name
+        const user_email = decode_access_token?.email
+        const user_roles = decode_access_token?.realm_access?.roles
+        const user_role = user_roles.filter(getUserRoles).at(0)
+        console.log('decoded: ', decode_access_token, 'acee: ', access_token, 'refresh_token: ', refresh_token, 'user name: ', userName)
+        return {
+            access_token,
+            refresh_token,
+            decode_access_token,
+            userName,
+            user_email,
+            user_roles,
+            user_role,
+
+        }
+    }
 
     const {toast} = useToast()
 
@@ -100,31 +127,44 @@ const CreatePassword = () => {
 
         try {
             const response = await createPassword({token: token
-                , password: password}).unwrap()
-            const access_token = response?.data?.accessToken
-            const refreshToken = response?.data?.refreshToken
-            const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-            const user_email = decode_access_token?.email
-            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            const userName = decode_access_token?.name
-            const user_roles = decode_access_token?.realm_access?.roles
-            const user_role = user_roles.filter(getUserRoles).at(0)
-            clearData()
-            await persistor.purge();
+                , password: password}).unwrap();
+            const  {
+                access_token,
+                refresh_token,
+                userName,
+                user_email,
+                user_roles,
+                user_role,
+                decode_access_token
+            } = destructureLoginEndpointCallResponse(response)
+            // const access_token = response?.data?.accessToken
+            // const refreshToken = response?.data?.refreshToken
+            // const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+            // const user_email = decode_access_token?.email
+            // //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // // @ts-expect-error
+            // const userName = decode_access_token?.name
+            // const user_roles = decode_access_token?.realm_access?.roles
+            // const user_role = user_roles.filter(getUserRoles).at(0)
+            // clearData()
+            // await persistor.purge();
+            console.log('response: ', response)
+            console.log('access_token: ', access_token, 'refresh_token: ', refresh_token, 'userName: ', userName, 'user_email: ', user_email,
+                'user_roles: ', user_roles, 'user_role: ', user_role)
+            console.log('decode access_token: ', decode_access_token)
             if (user_role) {
-                storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
+                storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                 setUserRoles(user_roles)
-                if (user_role === 'LOANEE') {
-                    store.dispatch(setCurrentNavbarItem("overview"))
-                    router.push("/onboarding")
-                } else if(user_role === 'ORGANIZATION_ADMIN') {
-                    store.dispatch(setCurrentNavbarItem("Program"))
-                    router.push("/program")
-                }else if(user_role === 'PORTFOLIO_MANAGER'){
-                    store.dispatch(setCurrentNavbarItem("Loan"))
-                    router.push("/loan/loan-request")
-                }
+                // if (user_role === 'LOANEE') {
+                //     store.dispatch(setCurrentNavbarItem("overview"))
+                //     router.push("/onboarding")
+                // } else if(user_role === 'ORGANIZATION_ADMIN') {
+                //     store.dispatch(setCurrentNavbarItem("Program"))
+                //     router.push("/program")
+                // }else if(user_role === 'PORTFOLIO_MANAGER'){
+                //     store.dispatch(setCurrentNavbarItem("Loan"))
+                //     router.push("/loan/loan-request")
+                // }
 
             }
 
