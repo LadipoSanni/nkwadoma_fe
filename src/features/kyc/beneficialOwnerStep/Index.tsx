@@ -46,7 +46,7 @@ const BeneficialOwnerStep = () => {
             <Tabs
                 value={selectedForm}
                 onValueChange={(value) => setSelectedForm(value as "entity" | "individual")}
-            > <TabsList className="flex gap-4">
+            > <TabsList className="flex gap-3 bg-transparent p-0 justify-start">
                 <TabsTrigger
                     value="entity"
                     className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:text-meedlBlue data-[state=inactive]:text-black300"
