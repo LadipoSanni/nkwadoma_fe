@@ -74,3 +74,12 @@ export const getInitials = (name: string): string => {
     const lastNameInitial = nameParts.length > 1 ? nameParts[nameParts.length - 1]?.charAt(0).toUpperCase() : "";
     return `${firstNameInitial}${lastNameInitial}`;
   };
+
+  export function getInitial(firstName: string, lastName: string) {
+    if (!firstName || !lastName || typeof firstName !== 'string' || typeof lastName !== 'string') {
+        return "";
+    }
+    const firstInitial = firstName.charAt(0).toUpperCase();
+    const lastInitial = lastName.charAt(0).toUpperCase();
+    return firstInitial + lastInitial;
+}

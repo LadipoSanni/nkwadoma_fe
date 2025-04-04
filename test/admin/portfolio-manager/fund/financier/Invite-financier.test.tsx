@@ -71,7 +71,7 @@ describe("Invite financier", () => {
       });
 
       test('Displays individual fields when financierType is "Individual"', () => {
-        setup('Individual');
+        setup('INDIVIDUAL');
         expect(screen.getByPlaceholderText('Enter first name')).toBeInTheDocument();
         expect(screen.getByPlaceholderText('Enter last name')).toBeInTheDocument();
       });
@@ -83,17 +83,17 @@ describe("Invite financier", () => {
       });
 
       test('Displays first name field correctly', () => {
-        setup('Individual');
+        setup('INDIVIDUAL');
         expect(screen.getByPlaceholderText('Enter first name')).toBeInTheDocument();
       });
     
       test('Displays last name field correctly', () => {
-        setup('Individual');
+        setup('INDIVIDUAL');
         expect(screen.getByPlaceholderText('Enter last name')).toBeInTheDocument();
       });
 
       test('Handles unchange', async () => {
-        setup('Individual');
+        setup('INDIVIDUAL');
         const firstNameInput = screen.getByPlaceholderText('Enter first name');
         const lastNameInput = screen.getByPlaceholderText('Enter last name');
         const emailInput = screen.getByPlaceholderText('Enter email address');
