@@ -295,9 +295,9 @@ const LoanOfferDetails = () => {
                                                 <div
                                                     className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                                     <div
-                                                        className={` ${inter.className} max-w-[40%] text-black300 text-[14px] `}>{item.label}</div>
+                                                        className={` ${inter.className} md:max-w-[40%] text-black300 text-[14px] `}>{item.label}</div>
                                                     <div
-                                                        className={` ${inter.className} max-w-[50%] text-black500 text-[14px] leading-6  break-all  `}> {item.value ? item.value : 'Not provided'}</div>
+                                                        className={` ${inter.className} md:max-w-[50%] text-black500 text-[14px] leading-6  break-all  `}> {item.value ? item.value : 'Not provided'}</div>
                                                 </div>
                                             </li>
                                         ))

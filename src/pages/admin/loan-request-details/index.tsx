@@ -187,8 +187,7 @@ function LoanDetails() {
         {label: 'Nationality', value: data?.data?.userIdentity?.nationality},
         {label: 'State of origin ', value: data?.data?.userIdentity?.stateOfOrigin},
         {label: 'State of residence', value: data?.data?.userIdentity?.stateOfResidence},
-        {label: 'Residential address', value:
-            '316, Herbert Macaulay Way, Alagomeji, Sabo, Yaba 316, Herbert Macaulay Way, Alagomeji, Sabo, Yaba'
+        {label: 'Residential address', value: data?.data?.userIdentity?.residentialAddress
         },
     ]
 
@@ -303,9 +302,9 @@ function LoanDetails() {
                                                 <div
                                                     className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                                     <div
-                                                        className={`  ${inter.className} break-all max-w-[40%] text-black300 text-[14px] `}>{item.label}</div>
+                                                        className={`  ${inter.className} break-all md:max-w-[40%] text-black300 text-[14px] `}>{item.label}</div>
                                                     <div
-                                                        className={` ${inter.className} break-all max-w-[50%]   text-black500 text-[14px] `}> {item.value ? item.value : 'Not provided'}</div>
+                                                        className={` ${inter.className} break-all md:max-w-[50%]   text-black500 text-[14px] `}> {item.value ? item.value : 'Not provided'}</div>
                                                 </div>
                                             </li>
                                         ))
