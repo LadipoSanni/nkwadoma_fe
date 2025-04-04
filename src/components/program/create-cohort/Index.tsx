@@ -48,22 +48,14 @@ interface ApiError {
 }
 
 const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
-    // const = useSelector((state: RootState) => state.program.currentProgramId) || {};
     const currentProgramId = useSelector((state: RootState) => state.program.currentProgramId);
-    console.log(currentProgramId, "currentProgramId")
 
     const [startDate, setDate] = useState<Date>();
-    // const [programId, setProgramId] = useState("");
     const [name, setName] = useState("");
-    // const { selectedProgram, imageUrl } = useSelector((state: RootState) => state.cohort);
     const [cohortDescription, setDescription] = useState("");
-    const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [createButtonDisabled, setCreateButtonDisabled] = useState(true)
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-    // const [loanBreakdowns, setLoanBreakdowns] = useState<
-    //   { itemName: string; itemAmount: string; currency: string }[]
-    // >([]);
     const [loanBreakdowns, setLoanBreakdowns] = useState<{ itemName: string; itemAmount: string; currency: string }[]>([ { itemName: "Tuition", itemAmount: "", currency: "NGN" }  ]);
     const [programView, setProgramView] = useState<viewAllProgramProps[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,7 +67,6 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
     const [isItemListValid, setIsItemListValid] = useState(true);
     const [totalAmount, setTotalAmount] = useState(0);
     const [initialItemAmount, setInitialItemAmount] = useState("");
-    // const dispatch = useDispatch();
 
     const { data } = useGetAllProgramsQuery(
         { pageSize: size, pageNumber: page },
@@ -94,13 +85,12 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
     const { toast } = useToast();
 
     useEffect(() => {
-        if (name && selectedProgram && startDate && !descriptionError) {
+        if (name && startDate && cohortDescription && !descriptionError) {
             setIsButtonDisabled(false);
         } else {
             setIsButtonDisabled(true);
         }
-        // resetForm
-    }, [name, selectedProgram, startDate, descriptionError]);
+    }, [name, startDate, cohortDescription, descriptionError]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const areLoanBreakdownsValid = () => {
@@ -124,7 +114,6 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
         setDate(undefined);
         setName("");
         setDescription("");
-        setSelectedProgram("");
         setDescriptionError(null);
         // setIsSelectOpen(false);
         setIsButtonDisabled(true);
@@ -136,9 +125,6 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
         setUploadedUrl(null);
         setInitialItemAmount("0.00");
     };
-
-    // console.log('the program: ',selectedProgram)
-    // console.log('the imageurl: ',setUploadedUrl)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -186,12 +172,9 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
         setDate(undefined);
         setName("");
         setDescription("");
-        setSelectedProgram("");
         setDescriptionError(null);
-        // setIsSelectOpen(false);
         setIsButtonDisabled(true);
         setCreateButtonDisabled(true);
-        // setLoanBreakdowns([]);
         setLoanBreakdowns([{ itemName: "Tuition", itemAmount: "", currency: "NGN" }]);
         setError("");
         setUploadedUrl(null);
@@ -206,10 +189,6 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
     };
 
     const handleSelectClick = () => {
-        // setLoanBreakdowns([
-        //   ...loanBreakdowns,
-        //   { itemName: "", itemAmount: "", currency: "NGN" },
-        // ]);
         setLoanBreakdowns([ loanBreakdowns[0],
             ...loanBreakdowns.slice(1),
             { itemName: "", itemAmount: "", currency: "NGN" }  ]);
@@ -298,7 +277,6 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
                                 handleDrop={handleDrop}
                                 handleDragOver={handleDragOver}
                                 setUploadedImageUrl={setUploadedUrl}
-                                // setUploadedImageUrl={(url) => dispatch(setUploadedUrl(url))}
                                 labelName="Cohort image (optional)"
                             />
                             <FormButtons
@@ -310,13 +288,6 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
                     ) : (
                         <main id="feeBreakdownContainer" className={"grid gap-5"}>
                             <FeeBreakdownHeader />
-                            {/* <InitialItem
-              itemAmount={itemAmount}
-              setItemAmount={handleItemAmountChange}
-              itemAmountError={itemAmountError}
-              itemName="Tuition"
-              currency="NGN"
-              /> */}
                             <ItemList
                                 items={loanBreakdowns}
                                 setItems={setLoanBreakdowns}
