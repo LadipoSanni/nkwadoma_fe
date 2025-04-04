@@ -69,7 +69,6 @@ function LoanDetails() {
     }
     const id: string = getId()
     const {data, isLoading} = useViewLoanRequestDetailsQuery(id)
-    console.log('data: ', data)
     const backToLoanRequest = () => {
         store.dispatch(setCurrentTab('Loan requests'))
         router.push("/loan/loan-request")
