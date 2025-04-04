@@ -68,7 +68,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
             .matches(/^\S*$/, 'Email address should not contain spaces')
             .required('Email address is required'),
         initialDeposit: Yup.string()
-            .required('Initial deposit is required')
+            // .required('Initial deposit is required')
             .matches(/^[1-9]\d*$/, 'Initial deposit must be a positive number and cannot start with zero'),
 
     });
