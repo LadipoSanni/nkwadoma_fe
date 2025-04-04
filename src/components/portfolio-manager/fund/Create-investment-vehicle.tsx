@@ -277,6 +277,7 @@ function CreateInvestmentVehicle({
       trustee: values.trustee,
       custodian: values.custodian,
       investmentVehicleType: investmentVehicleType,
+      
     };
     try {
       const create = await createInvestmentVehicle(formData).unwrap();

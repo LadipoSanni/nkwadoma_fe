@@ -37,39 +37,7 @@ interface financials {
 
 type viewAllfinancier = financials & TableRowData
 
-// "body": [
-//             {
-//                 "id": "cb17b0bd-cb02-412a-b1a9-734f35d41ae1",
-//                 "nextOfKin": null,
-//                 "financierType": "INDIVIDUAL",
-//                 "investmentVehicleRole": null,
-//                 "organizationName": null,
-//                 "userIdentity": {
-//                     "id": "b354f928-1f0a-4c99-a50b-f6bf7cbebb4e",
-//                     "email": "winekop762@codverts.com",
-//                     "firstName": "jons",
-//                     "lastName": "manson",
-//                     "phoneNumber": null,
-//                     "emailVerified": false,
-//                     "image": null,
-//                     "gender": null,
-//                     "dateOfBirth": null,
-//                     "stateOfOrigin": null,
-//                     "maritalStatus": null,
-//                     "stateOfResidence": null,
-//                     "nationality": null,
-//                     "residentialAddress": null,
-//                     "role": "LOANEE",
-//                     "createdBy": "0eb44164-a559-45d1-8342-383968a4b799",
-//                     "alternateEmail": null,
-//                     "alternatePhoneNumber": null,
-//                     "alternateContactAddress": null,
-//                     "identityVerified": false
-//                 },
-//                 "invitedBy": null,
-//                 "investmentVehicleId": null
-//             }
-//         ],
+
 
 
 function Financiers() {

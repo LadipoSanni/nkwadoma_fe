@@ -16,6 +16,8 @@ import {formatAmount} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
+import { resetVehicleState } from '@/redux/slice/multiselect/vehicle-multiselect';
+
 
 
 
@@ -80,6 +82,7 @@ function EndownmentFund() {
                   setTotalPage(investmentVehicleData?.data?.totalPages)
                   setPageNumber(investmentVehicleData?.data?.pageNumber)
              }
+             store.dispatch(resetVehicleState())
          }, [searchTerm, searchData, investmentVehicleData])
 
      
@@ -95,14 +98,16 @@ function EndownmentFund() {
     }
 
     const handleCreateInvestmentVehicleClick = () => {
-        setModalType("createEndownmentVehicle")
-        setIsModalOpen(true);
+        // setModalType("createEndownmentVehicle")
+        // setIsModalOpen(true);
+        router.push("/vehicle/setup")
+        store.dispatch(setVehicleType("endowment")) 
     }
 
 
     const handleRowClick = (row: TableRowData) => {
             store.dispatch(setCurrentVehicleId(String(row.id)));
-            store.dispatch(setVehicleType("endowmentFund"))
+            store.dispatch(setVehicleType("endowment"))
             router.push('/vehicle/details')
         }
 

@@ -20,7 +20,7 @@ function MultistepLayout({children}:props) {
   const completedSteps = steps.slice(0, currentIndex).map(step => step.id);
 
   const handleBack=()=> {
-    if(vehicleType === "commercialFund"){
+    if(vehicleType === "commercial"){
         router.push("/vehicle/commercial-vehicle")
     }else {
         router.push("/vehicle/endownment-vehicle")

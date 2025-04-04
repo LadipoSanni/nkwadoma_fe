@@ -47,7 +47,7 @@ const Index = () => {
         setCurrentsTab(index)
     }
 
-    const basicDetails = [
+    const basicDasyncetails = [
         {label: 'Gender', value: details?.data.userIdentity.gender},
         {label: 'Email address', value: details?.data.userIdentity.email},
         {label: 'Phone number', value: details?.data.userIdentity.phoneNumber},
