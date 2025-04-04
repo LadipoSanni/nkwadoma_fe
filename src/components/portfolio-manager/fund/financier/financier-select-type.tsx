@@ -19,24 +19,24 @@ function financierSelectType({financierType,handleCloseModal,handleContinue,setF
           </p>
           <div className='gap-y-4 grid grid-cols-1 text-[14px]'>
           <div 
-          className={`h-[61px] flex items-center border-[1px] rounded-xl cursor-pointer ${financierType === 'Individual' ? 'bg-[#F9F9F9]' : ''}`}
-        onClick={() => setFieldValue('financierType', 'Individual')}
+          className={`h-[61px] flex items-center border-[1px] rounded-xl cursor-pointer ${financierType === 'INDIVIDUAL' ? 'bg-[#F9F9F9]' : ''}`}
+        onClick={() => setFieldValue('financierType', 'INDIVIDUAL')}
           >
           <label className="flex items-center space-x-2 ">
               <input
                 type="radio"
                 name="financierType"
-                value="Individual"
-                checked={financierType === 'Individual'}
-                onChange={() => setFieldValue('financierType', 'Individual')}
+                value="INDIVIDUAL"
+                checked={financierType === 'INDIVIDUAL'}
+                onChange={() => setFieldValue('financierType', 'INDIVIDUAL')}
                 className="hidden" 
                 id="individual" 
               />
               <span className="relative w-5 h-5 border-[1px] border-[#D7D7D7] rounded-full flex items-center justify-center cursor-pointer">
-                {financierType === 'Individual' && (
+                {financierType === 'INDIVIDUAL' && (
                   <span className="absolute w-5 h-5 bg-meedlBlue rounded-full"></span>
                 )}
-                {financierType === 'Individual' && (
+                {financierType === 'INDIVIDUAL' && (
                   <svg
                     className="absolute w-4 h-4 text-white"
                     fill="none"
@@ -51,24 +51,24 @@ function financierSelectType({financierType,handleCloseModal,handleContinue,setF
               <span className="text-gray-700">Individual</span>
             </label>
           </div>
-          <div className={`h-[61px] flex items-center border-[1px] rounded-xl cursor-pointer ${financierType === 'Company' ? 'bg-[#F9F9F9]' : ''}`} 
-        onClick={() => setFieldValue('financierType', 'Company')}
+          <div className={`h-[61px] flex items-center border-[1px] rounded-xl cursor-pointer ${financierType === 'COOPERATE' ? 'bg-[#F9F9F9]' : ''}`} 
+        onClick={() => setFieldValue('financierType', 'COOPERATE')}
           >
           <label className="flex items-center space-x-2 ">
               <input
                 type="radio"
                 name="financierType"
-                value="Company"
-                checked={financierType === 'Company'}
-                onChange={() => setFieldValue('financierType', 'Company')}
+                value="COOPERATE"
+                checked={financierType === 'COOPERATE'}
+                onChange={() => setFieldValue('financierType', 'COOPERATE')}
                 className="hidden" 
-                id="company" 
+                id="Cooperate" 
               />
               <span className="relative w-5 h-5 border-[1px] border-[#D7D7D7] rounded-full flex items-center justify-center cursor-pointer">
-                {financierType === 'Company' && (
+                {financierType === 'COOPERATE' && (
                   <span className="absolute w-5 h-5 bg-meedlBlue  rounded-full"></span>
                 )}
-                {financierType === 'Company' && (
+                {financierType === 'COOPERATE' && (
                   <svg
                     className="absolute w-4 h-4 text-white"
                     fill="none"

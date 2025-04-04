@@ -52,7 +52,7 @@ function InviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
     }}
     >
        {
-         financierType === "Individual"? 
+         financierType === "INDIVIDUAL"? 
          <div className='grid grid-cols-1 gap-y-4'>
            <div>
                <Label htmlFor='firstName'>First name</Label>
@@ -100,46 +100,69 @@ function InviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
                                  />
                                )}
            </div>
+           <div>
+        <Label htmlFor='email'>Email</Label>
+        <Field
+            id="email"
+            name="email"
+            className="w-full p-3 border rounded focus:outline-none mt-2"
+            placeholder="Enter email address"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("email", e.target.value.replace(/\s+/g, ''))}
+        />
+          {
+            errors.email && touched.email && (
+                <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="text-red-500 text-sm"
+                />
+            )
+        }
+        </div>
          </div>
           
           : 
-          <div>
-          <Label htmlFor='companyName'>Company name</Label>
+            <div className='grid grid-cols-1 gap-y-4'>
+               <div>
+          <Label htmlFor='organizationName'>Company name</Label>
           <Field
-           id="companyName"
-           name="companyName"
-           placeholder="Enter full name"
+           id="organizationName"
+           name="organizationName"
+           placeholder="Enter organization name"
            className="w-full p-3 border rounded focus:outline-none mt-2"
             
           />
-           {errors.companyName && touched.companyName && (
+           {errors.organizationName && touched.organizationName && (
                             <ErrorMessage
-                              name="companyName"
+                              name="organizationName"
                               component="div"
                               className="text-red-500 text-sm"
                             />
                           )}
       </div>
+       <div>
+       <Label htmlFor='organizationEmail'>Email</Label>
+       <Field
+           id="organizationEmail"
+           name="organizationEmail"
+           className="w-full p-3 border rounded focus:outline-none mt-2"
+           placeholder="Enter email address"
+           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("organizationEmail", e.target.value.replace(/\s+/g, ''))}
+       />
+         {
+           errors.organizationEmail && touched.organizationEmail && (
+               <ErrorMessage
+                   name="organizationEmail"
+                   component="div"
+                   className="text-red-500 text-sm"
+               />
+           )
        }
-   <div>
-   <Label htmlFor='email'>Email</Label>
-   <Field
-       id="email"
-       name="email"
-       className="w-full p-3 border rounded focus:outline-none mt-2"
-       placeholder="Enter email address"
-       onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("email", e.target.value.replace(/\s+/g, ''))}
-   />
-     {
-       errors.email && touched.email && (
-           <ErrorMessage
-               name="email"
-               component="div"
-               className="text-red-500 text-sm"
-           />
-       )
-   }
-   </div>
+       </div>
+            </div>
+         
+       }
+  
     <div>
     {!amountCommitedAndDesignationCondition? "" :
     <div>
