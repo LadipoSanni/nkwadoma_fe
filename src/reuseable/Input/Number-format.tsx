@@ -13,8 +13,8 @@ const formatNumberWithCommas = (value: string | number | undefined | null) => {
 };
 
 interface CustomInputFieldProps extends FieldProps {
-  saveToRedux?: (values: any) => void;
-  values?: any;
+  saveToRedux?: (values: string| number | boolean | undefined) => void;
+  values?: string;
 }
 
 const NumberFormat: React.FC<CustomInputFieldProps> = ({ field, form, saveToRedux, values }) => {
