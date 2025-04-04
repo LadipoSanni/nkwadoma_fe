@@ -6,15 +6,30 @@ import { inter, cabinetGroteskMediumBold} from "@/app/fonts";
 import styles from "./index.module.css";
 import TabSwitch from "@/reuseable/details/TabSwitch";
 import {NumericFormat} from "react-number-format";
+import {useAppSelector} from "@/redux/store";
+import { useViewFinancierDetailQuery } from '@/service/admin/financier';
+import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import { getInitial } from '@/utils/GlobalMethods';
 
 const FinancierDetails = () => {
-
+    const currentFinancierId = useAppSelector(state => (state.financier.currentFinancierId))
+    const financierMode = useAppSelector(state => (state.financier.financierMode))
     const router = useRouter();
+
+    const  {data, isLoading} = useViewFinancierDetailQuery(currentFinancierId,{skip : !currentFinancierId})
+
+    console.log(data?.data?.userIdentity)
+
     const navigateToViewAllFinancier = () => {
-        router.push("/vehicle/financiers");
+        if(financierMode === "platform"){
+            router.push("/financier");
+        }else {
+          router.push("/vehicle/financiers");
+        }
     }
     // const initial = getInitials(`${details?.data.firstName} ${details?.data.lastName}`);
-    const initial = 'RK';
+    const initial = getInitial(data?.data?.userIdentity?.firstName ,data?.data?.userIdentity?.lastName);
     const [currentTab, setCurrentTab] = React.useState(0);
 
     const tabContent = [
@@ -26,20 +41,20 @@ const FinancierDetails = () => {
     }
 
     const basicDetails = [
-        {label: 'Financier type', value: <div className={` w-fit h-fit rounded-full px-2 bg-[#EEF5FF] text-[#142854] `}>corporate</div>},
-        {label: 'phone number', value: '+2348095953713'},
-        {label: 'Address', value: '300, Herbert Macaulay Way, Alagomeji, Sabo, Yaba'},
+        {label: 'Financier type', value: <div className={` w-fit h-fit rounded-full px-2 bg-[#EEF5FF] text-[#142854] `}>{capitalizeFirstLetters(data?.data?.financierType)}</div>},
+        {label: 'phone number', value:  data?.data?.userIdentity?.phoneNumber},
+        {label: 'Address', value: data?.data?.userIdentity?.residentialAddress},
         {
             label: 'Company email address',
-            value: 'admin@semicolon.africa'
+            value:  data?.data?.userIdentity?.email
         },
-        {label: 'Organization admin name', value: 'Rebecca Kuroebi'},
-        {label: 'Organization admin email address', value: 'rebecca@semicolon.africa'},
+        {label: 'Organization admin name', value: data?.data?.userIdentity?.firstName  + " " +  data?.data?.userIdentity?.lastName },
+        {label: 'Organization admin email address', value: ''},
 
     ]
 
     const investmentDetails  = [
-        {label: 'No. of investments', value: '20'},
+        {label: 'No. of investments', value: 0},
         {label: 'Total amount invested', value: <NumericFormat
                 id={'totalAmountInvested'}
                 name={'totalAmountInvested'}
@@ -49,7 +64,7 @@ const FinancierDetails = () => {
                 decimalScale={2}
                 fixedDecimalScale={true}
                 prefix={'₦'}
-                value={'1,000,000,000.00 '}
+                value={'0'}
                 className='bg-grey105 flex md:place-items-end'
 
             />},
@@ -62,7 +77,7 @@ const FinancierDetails = () => {
                 decimalScale={2}
                 fixedDecimalScale={true}
                 prefix={'₦'}
-                value={'1,000,000,000.00 '}
+                value={'0'}
                 className='bg-grey105 flex md:place-items-end'
 
             />},
@@ -77,7 +92,7 @@ const FinancierDetails = () => {
                 decimalScale={2}
                 fixedDecimalScale={true}
                 prefix={'₦'}
-                value={'1,000,000,000.00 '}
+                value={'0'}
                 className='bg-grey105 flex md:place-items-end'
 
             />
@@ -98,6 +113,8 @@ const FinancierDetails = () => {
 
 
     return (
+        <>
+        {isLoading ? (<SkeletonForDetailPage/>) : (
         <div id={'financierDetailsPage'}
              data-testid={'financierDetailsPage'}
              className={` w-full md:w-full h-full md:h-fit  grid gap-2 md:grid md:gap-8 px-4 py-2  md:px-8 md:py-4`}
@@ -122,12 +139,12 @@ const FinancierDetails = () => {
                         <div id={'financierName'}
                              data-testid={'financierName'}
                              className={`${cabinetGroteskMediumBold.className} text-black text-xl md:text-[28px]  `}>
-                            Rebecca Kuroebi
+                            {data?.data?.userIdentity?.firstName  + " " +  data?.data?.userIdentity?.lastName}
                         </div>
                         <span id={'financierEmail'}
                               data-testid={'financierEmail'}
                               className={`${inter.className} text-sm text-black400`}>
-                            rebecca@semicolon.africa
+                            {data?.data?.userIdentity?.email}
                         </span>
                     </div>
                 </div>
@@ -163,6 +180,8 @@ const FinancierDetails = () => {
 
 
         </div>
+        )}
+        </>
     );
 };
 

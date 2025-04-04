@@ -16,11 +16,12 @@ import { loanOfferApi } from '@/service/admin/loan/loan-offer-api';
 import { loanDisbursalApi } from '@/service/admin/loan/Loan-disbursal-api';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { notificationApi } from '@/service/notification/notification_query';
+import { financierApi } from '@/service/admin/financier';
 
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep', 'marketPlace'],
+    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`],
 };
 
 const persistedReducer = persistReducer(persistConfig, appReducer);
@@ -43,7 +44,8 @@ export const store = configureStore({
             loanOfferApi.middleware,
             loanDisbursalApi.middleware,
             userApi.middleware,
-            notificationApi.middleware
+            notificationApi.middleware,
+            financierApi.middleware
         ]),
 });
 

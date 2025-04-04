@@ -23,6 +23,8 @@ import {userApi} from '@/service/users/api';
 import { notificationApi } from '@/service/notification/notification_query';
 import notificationReducer  from './slice/notification/notification';
 import vehicleMultistepReducer from './slice/multiselect/vehicle-multiselect'
+import { financierApi } from '@/service/admin/financier';
+import financierReducer  from './financier/financier';
 import MarketPlaceReducer from "./slice/investors/MarketPlaceSlice";
 
 const appReducer = combineReducers({
@@ -38,6 +40,7 @@ const appReducer = combineReducers({
     notification: notificationReducer ,
     vehicleMultistep:vehicleMultistepReducer,
     marketPlace: MarketPlaceReducer,
+    financier:financierReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
@@ -49,7 +52,8 @@ const appReducer = combineReducers({
     [fundApi.reducerPath]: fundApi.reducer,
     [loanOfferApi.reducerPath]: loanOfferApi.reducer,
     [loanDisbursalApi.reducerPath]: loanDisbursalApi.reducer,
-    [notificationApi.reducerPath]:  notificationApi.reducer
+    [notificationApi.reducerPath]:  notificationApi.reducer,
+    [financierApi.reducerPath]: financierApi.reducer
 });
 
 export default appReducer;
