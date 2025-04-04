@@ -17,7 +17,7 @@ import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
 import { resetVehicleState } from '@/redux/slice/multiselect/vehicle-multiselect';
-
+import { setInvestmentVehicleType } from '@/redux/slice/vehicle/vehicle';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -98,7 +98,8 @@ function CommercialFund() {
         // setModalType("createInvestmentVehicle")
         // setIsModalOpen(true);
         router.push("/vehicle/setup")
-        store.dispatch(setVehicleType("commercial"))    
+        store.dispatch(setVehicleType("commercial"))
+        store.dispatch(setInvestmentVehicleType("COMMERCIAL"))    
     }
 
      const handleRowClick = (row: TableRowData) => {

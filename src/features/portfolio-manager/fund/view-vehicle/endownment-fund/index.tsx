@@ -17,6 +17,7 @@ import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
 import { resetVehicleState } from '@/redux/slice/multiselect/vehicle-multiselect';
+import { setInvestmentVehicleType } from '@/redux/slice/vehicle/vehicle';
 
 
 
@@ -102,6 +103,7 @@ function EndownmentFund() {
         // setIsModalOpen(true);
         router.push("/vehicle/setup")
         store.dispatch(setVehicleType("endowment")) 
+        store.dispatch(setInvestmentVehicleType("ENDOWMENT"))    
     }
 
 

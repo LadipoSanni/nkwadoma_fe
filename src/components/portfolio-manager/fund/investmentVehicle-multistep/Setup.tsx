@@ -18,8 +18,8 @@ import { format, parseISO } from "date-fns";
 import {store} from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 import {useAppSelector} from "@/redux/store";
-import { setCreateInvestmentField,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
-import NumberFormat from '@/reuseable/Input/Number-format';
+import { setCreateInvestmentField,clearSaveCreateInvestmentField,setDraftId,clearDraftId} from '@/redux/slice/vehicle/vehicle';
+// import NumberFormat from '@/reuseable/Input/Number-format';
 
 interface ApiError {
     status: number;
@@ -28,9 +28,7 @@ interface ApiError {
     };
   }
   
-
 interface Props {
-    // type?: string;
   investmentVehicleType?: string;
     
 }
@@ -39,54 +37,36 @@ function Setup({investmentVehicleType}: Props) {
     const [selectCurrency, setSelectCurrency] = useState("NGN");
      const [isError, setError] = useState("");
      const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
-      const vehicleType = useAppSelector(state => (state?.vehicle.vehicleType))
+      const vehicleType = useAppSelector(state => (state?.vehicle?.vehicleType))
       const savedFormData = useAppSelector(state => (state?.vehicle?.CreateInvestmentField))
+      const draftId = useAppSelector(state => (state?.vehicle?.setDraftId))
       const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
       const { toast } = useToast();
        const router = useRouter();
-    
+      console.log("redux id :", draftId)
      
     const initialFormValue = {
-      id: "",
-      name: "",
-      fundManager: "",
-      minimumInvestmentAmount: "",
-      mandate: "",
-      tenure: "",
-      size: "",
-      rate: "",
-      bankPartner: "",
-      trustee: "",
-      custodian: "",
-      investmentVehicleType: investmentVehicleType ||  "",
-      startDate: "",
+      id: draftId || "",
+       name: savedFormData?.name || "",
+      fundManager: savedFormData?.fundManager|| "",
+      minimumInvestmentAmount: savedFormData?.minimumInvestmentAmount || "",
+      mandate: savedFormData?.mandate || "",
+      tenure: savedFormData?.tenure || "",
+      size: savedFormData?.size || "",
+      rate: savedFormData?.rate || "",
+      bankPartner: savedFormData?.bankPartner || "",
+      trustee: savedFormData?.trustee || "",
+      custodian:savedFormData?.custodian || "",
+      investmentVehicleType: savedFormData?.investmentVehicleType || "",
+      startDate: savedFormData?.startDate || "",
     };
 
-    const initialValues = savedFormData? 
-    {
-      id: savedFormData.id,
-      name: savedFormData.name,
-      fundManager: savedFormData.fundManager,
-      minimumInvestmentAmount: savedFormData.minimumInvestmentAmount,
-      mandate: savedFormData.mandate,
-      tenure: savedFormData.tenure,
-      size: savedFormData.size,
-      rate: savedFormData.rate,
-      bankPartner: savedFormData.bankPartner,
-      trustee: savedFormData.trustee,
-      custodian:savedFormData.custodian,
-      investmentVehicleType: savedFormData.investmentVehicleType,
-      startDate: savedFormData.startDate
-
-    } : initialFormValue
 
    const handlenext = () => {
       router.push("/vehicle/status")
    }
 
-   console.log("the data: ",savedFormData)
-
-
+  //  console.log("the data: ",savedFormData)
     const validationSchema = Yup.object().shape({
         name: Yup.string()
           .trim()
@@ -187,9 +167,105 @@ function Setup({investmentVehicleType}: Props) {
               .nullable()
       });
 
+
+      const draftValidationSchema = Yup.object().shape({
+          name: Yup.string()
+            .trim()
+            .required("Name is required"), 
+        });
+
+        const handleDraft = async (values: typeof initialFormValue)=> {
+          setVehicleTypeStatus("DRAFT")
+          const formData = {
+            id:draftId,
+            name: values.name,
+            fundManager: values.fundManager,
+            minimumInvestmentAmount: values.minimumInvestmentAmount,
+            mandate: values.mandate,
+            tenure: values.tenure || "1",
+            size: values.size,
+            rate: values.rate,
+            bankPartner: values.bankPartner,
+            trustee: values.trustee,
+            custodian: values.custodian,
+            investmentVehicleType: investmentVehicleType,
+            investmentVehicleStatus : "DRAFT",
+            startDate: values.startDate,
+            sponsors: '',
+          };
+          try {
+            const create = await createInvestmentVehicle(formData).unwrap();
+            if (create) {
+              toast({
+                description: "Successfully added to draft",
+                status: "success",
+              });
+              store.dispatch(clearSaveCreateInvestmentField())
+               store.dispatch(clearDraftId())
+               if(vehicleType === "commercial"){
+                 router.push("/vehicle/commercial-vehicle")
+               }else {
+                router.push("/vehicle/endownment-vehicle")
+               }
+            }
+          } catch (err) {
+            const error = err as ApiError;
+            setError(error?.data?.message);
+          }
+        }
+
+       const handleSaveDraft = async (
+           values: typeof initialFormValue,
+           setFieldError: (field: string, message: string) => void
+         ) => {
+           try {
+             await draftValidationSchema.validate(values, { abortEarly: false });
+         
+             await handleDraft(values);
+           } catch (validationErrors) {
+             if (validationErrors instanceof Yup.ValidationError) {
+               const errors = validationErrors.inner.reduce((acc, err) => {
+                 acc[err.path || ""] = err.message;
+                 return acc;
+               }, {} as Record<string, string>);
+               setFieldError("name", errors.name); 
+               if(errors.name){
+                 toast({
+                   description:  errors.name,
+                   status: "error",
+                 });
+               }
+               
+             }
+           }
+         };
+
+         const saveToRedux = (values: typeof initialFormValue) => {
+          const investmentVehicleData  = {
+           id: draftId,
+           name: values.name,
+           investmentVehicleType: values.investmentVehicleType,
+           mandate: values.mandate,
+           tenure: values.tenure,
+           size: values.size,
+           rate: values.rate,
+           trustee: values.trustee,
+           custodian: values.custodian,
+           bankPartner: values.bankPartner,
+           fundManager: values.fundManager,
+           startDate: values.startDate,
+           minimumInvestmentAmount: values.minimumInvestmentAmount,
+           sponsors: '',
+          }
+          store.dispatch(setCreateInvestmentField(investmentVehicleData))
+      }
+
+       
+
        const handleSubmit = async (values: typeof initialFormValue) => {
-            setVehicleTypeStatus("PUBLISH")
+            setVehicleTypeStatus("SAVE-AND-CONTINUE")
              const formData = {
+              id:draftId,
               name: values.name,
               fundManager: values.fundManager,
               minimumInvestmentAmount: values.minimumInvestmentAmount,
@@ -208,49 +284,21 @@ function Setup({investmentVehicleType}: Props) {
             try {
               const create = await createInvestmentVehicle(formData).unwrap();
               if (create) {
-                toast({
-                  description: create.message,
-                  status: "success",
-                });
+                 const id = create?.data?.id
+                 store.dispatch(setDraftId(id))
+                 saveToRedux(values);
                 store.dispatch(markStepCompleted("setup"))
-                handlenext()
+                handlenext()    
                
               }
             } catch (err) {
               const error = err as ApiError;
               setError(error?.data?.message);
-            }
-
-
-            //  store.dispatch(clearSaveCreateInvestmentField())
-             console.log("the data: ",savedFormData)
+            }  
              
        }
 
 
-       const saveToRedux = (values: typeof initialFormValue) => {
-           const investmentVehicleData  = {
-            id: values.id,
-            name: values.name,
-            investmentVehicleType: values.investmentVehicleType,
-            mandate: values.mandate,
-            tenure: values.tenure,
-            size: values.size,
-            rate: values.rate,
-            trustee: values.trustee,
-            custodian: values.custodian,
-            bankPartner: values.bankPartner,
-            fundManager: values.fundManager,
-            startDate: values.startDate,
-            minimumInvestmentAmount: values.minimumInvestmentAmount,
-           }
-           store.dispatch(setCreateInvestmentField(investmentVehicleData))
-       }
-
-    function handleSaveDraft() {
-      store.dispatch(clearSaveCreateInvestmentField())
-      console.log("the data: ",savedFormData)
-    }
 
   return (
     <div className={`${inter.className} `}>
@@ -261,7 +309,7 @@ function Setup({investmentVehicleType}: Props) {
        </div>
        <div>
        <Formik
-        initialValues={initialValues}
+        initialValues={initialFormValue}
         onSubmit={handleSubmit}
         validateOnMount={true}
         validationSchema={validationSchema}
@@ -273,9 +321,7 @@ function Setup({investmentVehicleType}: Props) {
           touched,
           setFieldValue,
           setFieldError,
-           values,
-           handleChange,
-           handleBlur
+           values
         })=> (
             <Form className={`${inter.className}`}>
             <div>
@@ -295,14 +341,7 @@ function Setup({investmentVehicleType}: Props) {
                 name="name"
                 placeholder="Enter name"
                 className="w-full p-3 border rounded focus:outline-none mt-2 text-[14px]"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  validateText("name", setFieldValue)(e);
-                  handleChange(e); 
-                }}
-                onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                  handleBlur(e); 
-                  saveToRedux(values); 
-                }}
+                onChange={validateText("name", setFieldValue)}
             />
             {errors.name && touched.name && (
                 <ErrorMessage
@@ -317,12 +356,15 @@ function Setup({investmentVehicleType}: Props) {
                 <Label htmlFor="name" className='text-[14px]'>Start date</Label>
               <DatePickerInput
               selectedDate={parseISO(values.startDate ?? "")}
-              onDateChange={(date) => {
-                const formattedDate = format(date, "yyyy-MM-dd");
-                setFieldValue("startDate", formattedDate).then(() => {
-                  saveToRedux({ ...values, startDate: formattedDate });
-                });
-              }}
+              // onDateChange={(date) => {
+              //   const formattedDate = format(date, "yyyy-MM-dd");
+              //   setFieldValue("startDate", formattedDate).then(() => {
+              //     saveToRedux({ ...values, startDate: formattedDate });
+              //   });
+              // }}
+              onDateChange={(date) =>
+                setFieldValue("startDate", format(date, "yyyy-MM-dd"))
+                }
                  className="p-6 mt-2 text-[14px] text-[#6A6B6A]"
                  disabledDate={
                       (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
@@ -338,25 +380,24 @@ function Setup({investmentVehicleType}: Props) {
                 </div>
                   <div className='lg:flex gap-2'>
                   <div className='md:mt-4 lg:mt-0'>
-                        <Label htmlFor="rate">Interest rate...</Label>
+                        <Label htmlFor="rate">Interest rate</Label>
                         <Field
                         id="rate"
                         name="rate"
                         placeholder="0"
                         type="text"
                         className="w-full  p-3 border rounded focus:outline-none mt-2"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const handler =
-                            investmentVehicleType === "ENDOWMENT"
-                              ? validatePositiveNumberWithIndexNumbers("rate", setFieldValue, 100, 0)
-                              : validatePositiveNumberWithIndexNumbers("rate", setFieldValue, 100, 1);
-                          handler(e);
-                          handleChange(e);
-                        }}
-                        onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                          handleBlur(e);
-                          saveToRedux(values);
-                        }}
+                         onChange={investmentVehicleType === 'ENDOWMENT'?  validatePositiveNumberWithIndexNumbers(
+                          "rate",
+                          setFieldValue,
+                          100,
+                          0
+                        ) : validatePositiveNumberWithIndexNumbers(
+                          "rate",
+                          setFieldValue,
+                          100,
+                          1
+                        )}
                         />
                         {errors.rate && touched.rate && (
                         <ErrorMessage
@@ -373,20 +414,13 @@ function Setup({investmentVehicleType}: Props) {
                                   name="tenure"
                                   placeholder="0"
                                   className="w-full  p-3 border rounded focus:outline-none mt-2"
-                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    validateNumberLimit(
-                                      "tenure",
-                                      setFieldValue,
-                                      setFieldError,
-                                      3,
-                                      "Tenure must be a positive number, must not start with zero, and must be a maximum of three digits."
-                                    )(e);
-                                    handleChange(e);
-                                  }}
-                                  onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                                    handleBlur(e);
-                                    saveToRedux(values);
-                                  }}
+                                   onChange={validateNumberLimit(
+                                    "tenure",
+                                    setFieldValue,
+                                    setFieldError,
+                                    3,
+                                    "Tenure must be a positive number, must not start with zero, and must be a maximum of three digits."
+                                  )}
                                 />
                                 {errors.tenure && touched.tenure && (
                                   <ErrorMessage
@@ -413,11 +447,6 @@ function Setup({investmentVehicleType}: Props) {
                       component={CustomInputField}
                        className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2 "
                       onChange={validateNumber("size", setFieldValue)}
-                    
-                    onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                      handleBlur(e);
-                      saveToRedux(values);
-                    }}
                     />
 
                     
@@ -448,21 +477,11 @@ function Setup({investmentVehicleType}: Props) {
                       name="minimumInvestmentAmount"
                       className="text-[14px] relative"
                       component={CustomInputField}
-                      // onChange={
-                      //   validateNumber(
-                      //   "minimumInvestmentAmount",
-                      //   setFieldValue
-                      // )}
-                      onChange={(value: string) => {
-                        // Save to Redux on change
-                        saveToRedux({ ...values, minimumInvestmentAmount: value });
-                        
-                      }}
-
-                      onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                        handleBlur(e);
-                        saveToRedux(values);
-                      }}
+                      onChange={
+                        validateNumber(
+                        "minimumInvestmentAmount",
+                        setFieldValue
+                      )}
                     />
                   </div>
                   <div className="relative bottom-3">
@@ -484,15 +503,12 @@ function Setup({investmentVehicleType}: Props) {
                     name="bankPartner"
                     placeholder="Enter bank partner"
                     className="w-full p-3 border rounded focus:outline-none mt-2 text-[14px]"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
-                      setFieldValue("bankPartner", value);
-                      handleChange(e);
-                    }}
-                    onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                      handleBlur(e);
-                      saveToRedux(values);
-                    }}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setFieldValue(
+                          "bankPartner",
+                          e.target.value.replace(/[^a-zA-Z\s]/g, "")
+                        )
+                      }
                     />
                     {errors.bankPartner && touched.bankPartner && (
                     <ErrorMessage
@@ -510,14 +526,7 @@ function Setup({investmentVehicleType}: Props) {
                     placeholder="Enter fund manager"
                     className="w-full p-3 border rounded focus:outline-none mt-2  text-[14px]"
                     // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("fundManager", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            validateText("fundManager", setFieldValue)(e);
-                            handleChange(e);
-                          }}
-                          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                            handleBlur(e);
-                            saveToRedux(values);
-                          }}
+                     onChange={validateText("fundManager", setFieldValue)}
                     />
                     {errors.fundManager && touched.fundManager && (
                     <ErrorMessage
@@ -536,11 +545,6 @@ function Setup({investmentVehicleType}: Props) {
                     name="trustee"
                     placeholder="Enter trustee"
                     className="w-full p-3 border rounded focus:outline-none mt-3 text-[14px]"
-                    onChange={handleChange}
-                    onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                    handleBlur(e);
-                    saveToRedux(values);
-                  }}
                     />
                     {errors.trustee && touched.trustee && (
                     <ErrorMessage
@@ -557,11 +561,6 @@ function Setup({investmentVehicleType}: Props) {
                     name="custodian"
                     placeholder="Enter custodian"
                     className="w-full p-3 border rounded focus:outline-none mt-3 text-[14px]"
-                    onChange={handleChange}
-                    onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                      handleBlur(e);
-                      saveToRedux(values);
-                    }}
                     />
                     {errors.custodian && touched.custodian && (
                     <ErrorMessage
@@ -580,15 +579,6 @@ function Setup({investmentVehicleType}: Props) {
                   maximumDescription={2500}
                   // label={"Mandate"}
                   placeholder={"Enter mandate..."}
-                  onChange={(value: string) => {
-                    setFieldValue("mandate", value).then(() => {
-                      saveToRedux({ ...values, mandate: value });
-                    });
-                  }}
-                  onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                    handleBlur(e);
-                    saveToRedux(values);
-                  }}
                 />
                 {errors.mandate && touched.mandate && (
                <div>
@@ -609,16 +599,14 @@ function Setup({investmentVehicleType}: Props) {
                             variant={"outline"}
                              type="button"
                            className='w-full lg:w-36 h-[48px] mb-4 border-solid border-[#142854] text-[#142854] cursor-pointer'
-                            // onClick={() => handleReset(resetForm)}
-                            onClick={()=> handleSaveDraft}
+                            onClick={()=> handleSaveDraft(values,setFieldError)}
                         >
-                          {/* {
-                            // vehicleTypeStatus === "DRAFT" && 
+                          {
+                             vehicleTypeStatus === "DRAFT" && 
                             isLoading?  <Isloading /> : "Save to draft"
-                          }
-                             */}
-                             Save to drafts
+                          }       
                         </Button>
+
                         <Button
                             id='submitInvestment'
                             variant={"default"}
@@ -631,11 +619,18 @@ function Setup({investmentVehicleType}: Props) {
                             disabled={!isValid}
                         >
                             {
-                            // vehicleTypeStatus === "PUBLISH" &&
+                            vehicleTypeStatus === "SAVE-AND-CONTINUE" &&
                              isLoading ? <Isloading /> : "Save and continue"}
                         </Button>
                     </div>
             </div>
+            <p
+              className={`text-error500 flex justify-center items-center ${
+                isError ? "mb-3" : ""
+              }`}
+            >
+              {isError}
+            </p>
             </Form>
         )}
        </Formik>

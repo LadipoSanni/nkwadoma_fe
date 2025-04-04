@@ -40,13 +40,19 @@ interface vehicleState {
     saveClickedDraft: Draft | null;
     vehicleType: string
     CreateInvestmentField: InvestmentVehicleField | null
+    setInvestmentVehicleType: string
+    setDraftId: string
+    
 }
 
 const initialState: vehicleState = {
     currentVehicleId: '',
     saveClickedDraft: null,
     vehicleType:"",
-    CreateInvestmentField: null
+    CreateInvestmentField: null,
+    setInvestmentVehicleType: "",
+    setDraftId: "",
+    
 }
 
 export const vehicleSlice = createSlice({
@@ -71,9 +77,18 @@ export const vehicleSlice = createSlice({
         clearSaveCreateInvestmentField: (state) => {
             state.CreateInvestmentField= null;
         },
+        setInvestmentVehicleType: (state, action: PayloadAction<string>) => {
+            state.setInvestmentVehicleType = action.payload;
+        },
+        setDraftId: (state, action: PayloadAction<string>) => {
+            state.setDraftId = action.payload;
+        },
+        clearDraftId: (state) => {
+            state.setDraftId = "";
+        },
        
     }
 })
 
-export const {setCurrentVehicleId, setSaveClickedDraft, clearSaveClickedDraft,setVehicleType,setCreateInvestmentField,clearSaveCreateInvestmentField} = vehicleSlice.actions;
+export const {setCurrentVehicleId, setSaveClickedDraft, clearSaveClickedDraft,setVehicleType,setCreateInvestmentField,clearSaveCreateInvestmentField,setInvestmentVehicleType,setDraftId,clearDraftId} = vehicleSlice.actions;
 export default vehicleSlice.reducer;
