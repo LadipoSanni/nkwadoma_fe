@@ -79,8 +79,8 @@ const MarketPlaceView = () => {
             {dummyInvestments.map((investment) => {
                     const backgroundColor = investment.type === "Commercial" ? "#D9EAFF" : "#E6F2EA";
                     const imageSrc = investment.type === "Commercial"
-                        ? "/asset/image/Asset.svg"
-                        :"/asset/image/Circles.svg";
+                        ? "/asset/image/BlueCircles.svg"
+                        :"/asset/image/GreenCircles.svg";
                     const statusClass = investment.status === "Open"
                         ? "bg-green-100 text-[#0D9B48] border-[#B4E5C8} "
                         : "bg-red-100 text-red-600 border-[#F2BCBA]";
