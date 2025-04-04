@@ -150,6 +150,19 @@ export const cohortApi = createApi({
             }),
             invalidatesTags: ['cohort'],
         }),
+        getAllCohortByAParticularProgram: builder.query({
+            query: (param: {
+                programId?:string,
+                pageSize?: number;
+                pageNumber?: number;
+            }) => ({
+                url: '/cohort/all',
+                method: "GET",
+                params: param,
+
+            }),
+            providesTags: ['cohort'],
+        }),
     })
 })
 
@@ -166,6 +179,7 @@ export const {
     useDeleteCohortMutation, useEditCohortMutation,
     useGetCohortDetailsQuery, useReferLoaneeMutation,
     useSearchForLoaneeInACohortQuery,
-    useGetCohortDetailsBreakdownQuery
+    useGetCohortDetailsBreakdownQuery,
+    useGetAllCohortByAParticularProgramQuery,
 } = cohortApi;
 
