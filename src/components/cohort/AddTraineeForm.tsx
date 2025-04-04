@@ -47,8 +47,9 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
 
     useEffect(() => {
         if (data?.data) {
-            setCohortBreakDown(data.data);
-            calculateTotal(data.data, tuitionFee);
+            setCohortBreakDown(data?.data);
+            calculateTotal(data?.data, tuitionFee);
+            deductInitialDepositFromTotal(data.data)
         }
     }, [data, tuitionFee, initialDepositAmount]);
 
@@ -101,7 +102,8 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
 
 
 
-    const handleSubmitStep1 = () => {
+    const handleSubmitStep1 = (values: typeof initialFormValue) => {
+        setInitialDepositAmount(values.initialDeposit)
         setStep(2);
     };
 
@@ -159,6 +161,13 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
             setAmountError({error:'amount can not be greater than cohort amount', index})
         }
     };
+    const deductInitialDepositFromTotal = (items: cohortBreakDown[] ) => {
+        const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
+        const totalWithTuition = total + (tuitionFee ? parseFloat(tuitionFee) : 0);
+        const totalWithInitialDepositDeducted  = totalWithTuition - (initialDepositAmount ? parseFloat(initialDepositAmount) : 0);
+        setTotalItemAmount(totalWithInitialDepositDeducted);
+    }
+
 
     const deductFromTotal = (items: cohortBreakDown[],itemAmount: number ) => {
         const total = items.reduce((sum, item) => sum + parseFloat(item.itemAmount || '0'), 0);
@@ -190,7 +199,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                 {({ errors, isValid, touched, setFieldValue }) => (
                     <Form className={`${inter.className}`}>
                         {step === 1 ? (
-                            <div className="grid grid-cols-1 gap-y-4  md:max-h-[520px] overflow-y-auto">
+                            <div className="grid grid-cols-1 gap-y-4  md:max-h-[67.5vh] overflow-y-auto px-2">
                                 <div>
                                     <Label htmlFor="firstName">First name</Label>
                                     <Field
@@ -257,6 +266,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
                                                     if (/^\d*$/.test(value)) {
                                                         if (Number(e.target.value) < Number(totalItemAmount) || Number(e.target.value) === Number(totalItemAmount)) {
                                                             setInitialDepositError('')
+                                                            setInitialDepositAmount(value)
                                                             void setFieldValue("initialDeposit", e.target.value);
                                                         }else {
                                                             void setFieldValue("initialDeposit", '');
