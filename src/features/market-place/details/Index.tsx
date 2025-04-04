@@ -24,7 +24,7 @@ const Section: React.FC<SectionProps> = ({index, title, content, subtitle, isLis
     const number = parentIndex !== undefined ? `${parentIndex + 1}.${index + 1}` : `${index + 1}.`;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-3">
             {title && (
                 <h1 className={`${cabinetGrotesk.className} text-2xl font-extralight flex items-start gap-2 mb-4`}>
                     <span>{number}</span>
@@ -211,17 +211,21 @@ const MarketPlaceDetails = () => {
                                 content={section.content || ""}
                                 isList={section.isList}
                             />
-                            {section.subsections && section.subsections.map((subsection, subIndex) => (
-                                <Section
-                                    key={`${index}-${subIndex}`}
-                                    index={subIndex}
-                                    parentIndex={index}
-                                    title=""
-                                    subtitle={subsection.subtitle}
-                                    content={subsection.content}
-                                    isList={subsection.isList}
-                                />
-                            ))}
+                            {section.subsections && (
+                                <div className="space-y-4">
+                                    {section.subsections.map((subsection, subIndex) => (
+                                        <Section
+                                            key={`${index}-${subIndex}`}
+                                            index={subIndex}
+                                            parentIndex={index}
+                                            title=""
+                                            subtitle={subsection.subtitle}
+                                            content={subsection.content}
+                                            isList={subsection.isList}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
