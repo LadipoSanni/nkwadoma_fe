@@ -32,7 +32,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, setDate }) => {
         <SelectTrigger
             id="dateButton"
             className={cn(
-                "flex justify-between text-black500 p-4 border border-solid border-neutral650 font-normal w-full h-[3.375rem]",
+                "flex justify-between shadow-none text-black500 mt-0 mb-0 p-4 border border-solid border-neutral650 font-normal w-full h-[3.375rem]",
                 !date && "text-muted-foreground"
             )}
         >
@@ -44,6 +44,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ date, setDate }) => {
               mode="single"
               selected={date}
               onSelect={handleDateSelect}
+
           />
         </SelectContent>
       </Select>
