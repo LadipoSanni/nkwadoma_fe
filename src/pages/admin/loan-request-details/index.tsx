@@ -273,20 +273,18 @@ function LoanDetails() {
                                         {data?.data?.lastName}
                                     </p>
                                     <div
-                                        className={`flex gap-2   `}
+                                        className={`flex gap-2  ${inter.className}  break-all   text-sm text-black400  `}
                                     >
                                       <span id={'loaneeProgramOnLoanRequestDetails'} data-testid={'loaneeProgramOnLoanRequestDetails'}
-                                          className={`${inter.className} text-sm text-black400`}>
-                                          {/*{data?.data?.programName}*/}
-                                          We are here in the name of God to enhace the grace
+                                          className={`${inter.className}  break-all   text-sm text-black400`}>
+                                          {data?.data?.programName}
                                       </span>
                                           <h1
                                               className={` w-1 h-1 mt-auto mb-auto rounded-full bg-[#D7D7D7] `}></h1>
                                           <span id={'loaneeCohortOnLoanRequestDetails'}
                                               data-testid={'loaneeCohortOnLoanRequestDetails'}
                                               className={`${inter.className} text-sm text-black400`}>
-                                              {/*{data?.data?.cohortName}*/}
-                                              Helping children with hearing diability on the coloer
+                                              {data?.data?.cohortName}
                                           </span>
                                     </div>
                                 </div>
