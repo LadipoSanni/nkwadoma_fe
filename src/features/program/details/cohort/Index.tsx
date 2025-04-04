@@ -6,11 +6,11 @@ import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {formatAmount} from "@/utils/Format";
 import {
-    useGetAllCohortByAParticularProgramQuery,
     useSearchCohortsInAParticularProgramQuery
 } from "@/service/admin/program_query";
 import {useAppSelector} from "@/redux/store";
 import CreateCohortInProgram from "@/components/program/create-cohort/Index";
+import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/cohort_query";
 
 
 
