@@ -7,7 +7,10 @@ import {
     AvatarFallback,
     AvatarImage,
 } from "@/components/ui/avatar"
-import {cabinetGroteskMediumBold, cabinetGroteskRegular, inter} from "@/app/fonts";
+import {
+    cabinetGroteskMediumBold,
+    inter,
+} from "@/app/fonts";
 import TabConnector from "@/reuseable/details/tab-connector";
 import styles from "./index.module.css"
 import {useViewLoanRequestDetailsQuery} from "@/service/admin/loan/loan-request-api";
@@ -84,7 +87,6 @@ function LoanDetails() {
         }
     };
 
-    const startDate = dayjs(data?.data?.createdDate?.toString()).format('MMM D, YYYY')
     const cohortStartDate = dayjs(data?.data?.cohortStartDate?.toString()).format('MMM D, YYYY')
 
     const handleNext = () => {
@@ -115,7 +117,7 @@ function LoanDetails() {
 
     const loanDetil = [
         {
-            label: 'Tuition', value:
+            label: 'Tuition amount ', value:
                 <NumericFormat
                     id={'loanTuitionAmount'}
                     name={'loanTuitionAmount'}
@@ -129,9 +131,7 @@ function LoanDetails() {
                     value={data?.data?.tuitionAmount}
                 />
         },
-        {
-            label: 'Start date', value: startDate
-        },
+
         {
             label: 'Cohort start date', value: cohortStartDate
         },
@@ -187,7 +187,8 @@ function LoanDetails() {
         {label: 'Nationality', value: data?.data?.userIdentity?.nationality},
         {label: 'State of origin ', value: data?.data?.userIdentity?.stateOfOrigin},
         {label: 'State of residence', value: data?.data?.userIdentity?.stateOfResidence},
-        // {label: 'State of residence', value: data?.data?.loaneeLoanBreakdowns?.[0]?.loanee?.userIdentity?.stateOfResidence},
+        {label: 'Residential address', value: data?.data?.userIdentity?.residentialAddress
+        },
     ]
 
     const additional = [
@@ -251,7 +252,9 @@ function LoanDetails() {
                             className={`  mt-4 mb-4 grid md:flex gap-3 h-fit md:justify-between md:gap-6 md:w-full  md:h-fit   `}
                         >
 
-                            <div>
+                            <div
+                                className={` w-full grid md:grid gap-3 md:gap-3 h-fit md:w-[34%] md:md:max-h-[70vh] `}
+                            >
                                 <Avatar id={'loaneeImageOnLoanRequestDetails'}
                                         data-testid={'loaneeImageOnLoanRequestDetails'}
                                         className={`h-[8rem] w-[8rem] md:w-[8rem] md:h-[8rem] `}>
@@ -259,32 +262,33 @@ function LoanDetails() {
                                     <AvatarFallback>{userFirstLetter}</AvatarFallback>
                                 </Avatar>
 
-                                <div
-                                    className={`grid gap-2 mt-4`}
-                                >
-                                    <div id={'loaneeNameOnLoanRequestDetails'}
+                                <div className={`grid md:grid gap-2 md:gap-2 `}>
+                                    <p id={'loaneeNameOnLoanRequestDetails'}
                                          data-testid={'loaneeNameOnLoanRequestDetails'}
-                                         className={`${cabinetGroteskRegular.className} text-black flex text-xl gap-2 md:flex md:gap-2 md:text-3xl  `}>
-                                        <span
-                                            className={`${cabinetGroteskMediumBold.className} text-black  gap-2 text-3xl md:text-3xl`}>{data?.data?.firstName}</span>
-                                        <span
-                                            className={`${cabinetGroteskMediumBold.className} text-black  gap-2 text-3xl  md:text-3xl`}>{data?.data?.lastName}</span>
-                                    </div>
+                                         className={`${cabinetGroteskMediumBold.className} text-black break-all  flex text-xl gap-2 md:flex md:gap-2 md:text-[28px]  `}>
+                                        {data?.data?.firstName}
+                                        &ensp;
+                                        {data?.data?.lastName}
+                                    </p>
                                     <div
-                                        className={`flex gap-2   `}
+                                        className={`flex gap-2  ${inter.className}  break-all   text-sm text-black400  `}
                                     >
-                        <span id={'loaneeProgramOnLoanRequestDetails'} data-testid={'loaneeProgramOnLoanRequestDetails'}
-                              className={`${inter.className} text-sm text-black400`}> {data?.data?.programName}</span>
-                                        <span
-                                            className={` w-1 h-1 mt-auto mb-auto rounded-full bg-[#D7D7D7] `}></span>
-                                        <span id={'loaneeCohortOnLoanRequestDetails'}
+                                      <span id={'loaneeProgramOnLoanRequestDetails'} data-testid={'loaneeProgramOnLoanRequestDetails'}
+                                          className={`${inter.className}  break-all   text-sm text-black400`}>
+                                          {data?.data?.programName}
+                                      </span>
+                                          <h1
+                                              className={` w-1 h-1 mt-auto mb-auto rounded-full bg-[#D7D7D7] `}></h1>
+                                          <span id={'loaneeCohortOnLoanRequestDetails'}
                                               data-testid={'loaneeCohortOnLoanRequestDetails'}
-                                              className={`${inter.className} text-sm text-black400`}>{data?.data?.cohortName}</span>
+                                              className={`${inter.className} text-sm text-black400`}>
+                                              {data?.data?.cohortName}
+                                          </span>
                                     </div>
                                 </div>
                             </div>
                             <div
-                                className={` ${styles.loanRequestDetails} md:w-fit h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4  grid gap-3 md:grid md:gap-3`}
+                                className={` ${styles.loanRequestDetails} md:max-w-[50%]  h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4  grid gap-3 md:grid md:gap-3`}
                             >
                                 <div
                                     className={` ${styles.tabConnector} md:w-fit py-3 pl-1 md:sticky md:top-0 md:py-3 md:bg-white h-fit md:h-fit  flex md:flex `}
@@ -298,9 +302,9 @@ function LoanDetails() {
                                                 <div
                                                     className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                                     <div
-                                                        className={`  ${inter.className} text-black300 text-[14px] leading-[150%] font-normal`}>{item.label}</div>
+                                                        className={`  ${inter.className} break-all md:max-w-[40%] text-black300 text-[14px] `}>{item.label}</div>
                                                     <div
-                                                        className={` ${inter.className}  text-black500 text-[14px] leading-[150%] font-normal`}> {item.value ? item.value : 'Not provided'}</div>
+                                                        className={` ${inter.className} break-all md:max-w-[50%]   text-black500 text-[14px] `}> {item.value ? item.value : 'Not provided'}</div>
                                                 </div>
                                             </li>
                                         ))
