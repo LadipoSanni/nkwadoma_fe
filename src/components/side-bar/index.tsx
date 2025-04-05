@@ -27,6 +27,7 @@ const SideBar = () => {
     const [logout] = useLogoutMutation()
     const loaneeRefferalStatus = useAppSelector(state => state.loanReferral.loanReferralStatus)
 
+    const [isLoaneeVerified, setIsLoaneeVerified] = useState(loaneeRefferalStatus)
 
     const [role, setRole] = useState('')
     const user_role = getUserDetailsFromStorage('user_role')
@@ -100,7 +101,7 @@ const SideBar = () => {
                 className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
             />,
             id: 'overview',
-            isActive: loaneeRefferalStatus,
+            isActive: isLoaneeVerified,
             name: "Overview",
             route: '/overview'
         },
