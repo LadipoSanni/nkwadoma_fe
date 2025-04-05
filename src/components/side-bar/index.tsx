@@ -25,6 +25,7 @@ const SideBar = () => {
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
     const [logout] = useLogoutMutation()
+    const loaneeRefferalStatus = useAppSelector(state => state.loanReferral.loanReferralStatus)
 
 
     const [role, setRole] = useState('')
@@ -99,7 +100,7 @@ const SideBar = () => {
                 className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
             />,
             id: 'overview',
-            isActive: true,
+            isActive: loaneeRefferalStatus,
             name: "Overview",
             route: '/overview'
         },

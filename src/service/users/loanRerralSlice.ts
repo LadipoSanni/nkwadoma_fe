@@ -3,11 +3,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface LoanReferralState {
     loanReferralStatus: string;
     currentStep: number;
+    isLoaneeIdentityVerified: boolean;
 }
 
 const initialState: LoanReferralState = {
     loanReferralStatus: '',
     currentStep: 0,
+    isLoaneeIdentityVerified: false,
 };
 
 const loanReferralSlice = createSlice({
@@ -20,8 +22,11 @@ const loanReferralSlice = createSlice({
         setCurrentStep(state, action: PayloadAction<number>) {
             state.currentStep = action.payload;
         },
+        setLoaneeIdentityVerifiedStatus(state, action: PayloadAction<boolean>) {
+            state.isLoaneeIdentityVerified = action.payload;
+        },
     },
 });
 
-export const { setLoanReferralStatus, setCurrentStep } = loanReferralSlice.actions;
+export const { setLoanReferralStatus, setCurrentStep, setLoaneeIdentityVerifiedStatus } = loanReferralSlice.actions;
 export default loanReferralSlice.reducer;

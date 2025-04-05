@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { RootState } from '@/redux/store';
-import { setLoanReferralStatus, setCurrentStep } from '@/service/users/loanRerralSlice';
+import { setLoanReferralStatus, setCurrentStep, setLoaneeIdentityVerifiedStatus } from '@/service/users/loanRerralSlice';
 import { useViewLoanReferralDetailsQuery, useRespondToLoanReferralMutation } from "@/service/users/Loanee_query";
 import { Button } from '@/components/ui/button';
 import StepContent from '@/features/onboarding/stepContent/Index';
@@ -39,8 +39,8 @@ const LoaneeOnboarding = () => {
 
     useEffect(() => {
         if ( data?.data?.identityVerified  === true  ){
+            dispatch(setLoaneeIdentityVerifiedStatus(true))
             router.push('/overview')
-
         }
         if (data?.statusCode === "OK" && data?.data?.id) {
             setLoanReferralId(data.data.id);
@@ -49,6 +49,7 @@ const LoaneeOnboarding = () => {
         if (data?.statusCode === "OK" && data?.data) {
             setBackendDetails(data.data);
             if (data.data.loanReferralStatus === "AUTHORIZED" && currentStep === steps.length - 1) {
+                dispatch(setLoaneeIdentityVerifiedStatus(true))
                 router.push("/overview");
             }
         }
