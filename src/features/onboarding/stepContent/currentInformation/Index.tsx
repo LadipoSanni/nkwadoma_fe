@@ -11,6 +11,9 @@ import ProgramSelect from "@/reuseable/select/ProgramSelect";
 import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
 import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
 import Isloading from "@/reuseable/display/Isloading";
+import {useAppSelector} from "@/redux/store";
+import {setLoaneeCurrentInfo} from "@/service/users/loanRerralSlice";
+import {LoaneeCurentInformation} from "@/types/loanee";
 
 interface CurrentInformationProps {
     setCurrentStep?: (step: number) => void;
@@ -21,7 +24,8 @@ interface CurrentInformationProps {
 const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep }) => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [values, setValues] = useState({
+    const storedLoaneeCurrentInfo = useAppSelector(state => state.loanReferral.loaneeCurrentInfo)
+    const [values, setValues] = useState<LoaneeCurentInformation >({
         firstName: "",
         lastName: "",
         email: "",
@@ -46,6 +50,8 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         alternateEmail: false,
         alternatePhoneNumber: false,
     });
+
+    console.log('storedLoaneeCurrentInfo:: ', storedLoaneeCurrentInfo)
 
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -78,7 +84,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
             newErrors.phoneNumber = "";
         }
 
-        if (values.alternateEmail && !validateEmail(values.alternateEmail)) {
+        if (values?.alternateEmail && !validateEmail(values.alternateEmail)) {
             newErrors.alternateEmail = "Invalid email address";
         } else {
             newErrors.alternateEmail = "";
@@ -112,8 +118,11 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         };
         try {
             await saveNextOfKinDetails(dataToSubmit);
-            setIsFormSubmitted(true);
             setIsModalOpen(false);
+            dispatch(setLoaneeCurrentInfo(values))
+            setValues(storedLoaneeCurrentInfo)
+            console.log('after setting storedLoaneeCurrentInfo:: ', storedLoaneeCurrentInfo)
+            setIsFormSubmitted(true);
         } catch (error) {
             console.error(error);
         }

@@ -41,7 +41,8 @@ const LoaneeOnboarding = () => {
 
     useEffect(() => {
         if ( data?.data?.identityVerified  === true  ){
-            dispatch(setLoaneeIdentityVerifiedStatus(true))
+            console.log('identity verified: ', data?.data?.identityVerified)
+            dispatch(setLoaneeIdentityVerifiedStatus(data?.data?.identityVerified))
             router.push('/overview')
         }
         if (data?.statusCode === "OK" && data?.data?.id) {
@@ -53,7 +54,7 @@ const LoaneeOnboarding = () => {
         if (data?.statusCode === "OK" && data?.data) {
             setBackendDetails(data.data);
             if (data.data.loanReferralStatus === "AUTHORIZED" && currentStep === steps.length - 1) {
-                dispatch(setLoaneeIdentityVerifiedStatus(true))
+                // dispatch(setLoaneeIdentityVerifiedStatus(true))
                 router.push("/overview");
             }
         }

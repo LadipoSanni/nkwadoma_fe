@@ -5,14 +5,24 @@ interface LoanReferralState {
     loanReferralStatus: string;
     currentStep: number;
     isLoaneeIdentityVerified: boolean;
-    loaneeCurrentInfo : LoaneeCurentInformation | [];
+    loaneeCurrentInfo : LoaneeCurentInformation ;
 }
 
 const initialState: LoanReferralState = {
     loanReferralStatus: '',
     currentStep: 0,
     isLoaneeIdentityVerified: false,
-    loaneeCurrentInfo : [],
+    loaneeCurrentInfo : {
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        nextOfKinRelationship: "",
+        contactAddress: "",
+        alternateEmail: "",
+        alternatePhoneNumber: "",
+        alternateContactAddress: "",
+    },
 };
 
 const loanReferralSlice = createSlice({
@@ -28,7 +38,7 @@ const loanReferralSlice = createSlice({
         setLoaneeIdentityVerifiedStatus(state, action: PayloadAction<boolean>) {
             state.isLoaneeIdentityVerified = action.payload;
         },
-        setLoaneeCurrentInfo(state, action: PayloadAction<LoaneeCurentInformation | []>) {
+        setLoaneeCurrentInfo(state, action: PayloadAction<LoaneeCurentInformation >) {
             state.loaneeCurrentInfo = action.payload;
         }
     },

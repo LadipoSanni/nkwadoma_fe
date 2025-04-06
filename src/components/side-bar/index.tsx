@@ -69,20 +69,17 @@ const SideBar = () => {
 
     const handleLogout =  async () => {
         store.dispatch(setCurrentNavBottomItem("Logout"))
+         await logout({})
         clearData()
-        await persistor.purge();
-     try{
-          await logout({})
+        await persistor.purge()
          store.dispatch(setCurrentNavBottomItem(""))
          router.push("/auth/login")
-     }catch (error){
-         console.log("error:: ", error)
-     }
+
     }
 
 
-    const currentTextLiterals = `text-[#626F8C]`;
-    const textLiterals = `text-navbarIconColor`;
+    const currentTextLiterals = `text-[#626F8C] md:text-[#626F8C]`;
+    const textLiterals = `text-navbarIconColor md:text-navbarIconColor`;
 
 
     const PORTFOLIO_MANAGER: navbarRouterItemsProps[] = [
@@ -99,7 +96,7 @@ const SideBar = () => {
     const LOANEE : navbarRouterItemsProps[] = [
         {
             icon: <MdOutlineHome
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
+                className={` h-[1.2rem] w-[1.2rem] ${isLoaneeVerified ? `${current === 'Overview' ? currentTextLiterals : textLiterals} ` : 'text-navbarIconColor md:text-navbarIconColor'} `}
             />,
             id: 'overview',
             isActive: isLoaneeVerified,
