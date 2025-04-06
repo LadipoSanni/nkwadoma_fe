@@ -27,11 +27,12 @@ const SideBar = () => {
     const [logout] = useLogoutMutation()
     const loaneeRefferalStatus = useAppSelector(state => state.loanReferral.loanReferralStatus)
 
-    const [isLoaneeVerified, setIsLoaneeVerified] = useState(loaneeRefferalStatus)
+    const [isLoaneeVerified] = useState(Boolean(loaneeRefferalStatus))
 
     const [role, setRole] = useState('')
     const user_role = getUserDetailsFromStorage('user_role')
 
+    console.log('isLoanee verified:: ', isLoaneeVerified)
 
     useEffect(() => {
         if (!user_role) {

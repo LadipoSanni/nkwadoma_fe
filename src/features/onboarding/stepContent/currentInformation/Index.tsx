@@ -10,6 +10,7 @@ import { useSaveNextOfKinDetailsMutation } from "@/service/users/Loanee_query";
 import ProgramSelect from "@/reuseable/select/ProgramSelect";
 import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
 import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
+import Isloading from "@/reuseable/display/Isloading";
 
 interface CurrentInformationProps {
     setCurrentStep?: (step: number) => void;
@@ -48,7 +49,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
 
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-    const [saveNextOfKinDetails] = useSaveNextOfKinDetailsMutation();
+    const [saveNextOfKinDetails, {isLoading}] = useSaveNextOfKinDetailsMutation();
     const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
 
@@ -347,8 +348,10 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                         className="h-[3.5625rem] w-[8.75rem] border border-meedlBlue text-meedlBlue px-4 py-2 bg-gray-300 rounded-md">Cancel</Button>
                                 </DialogClose>
                                 <Button type="submit"
-                                    className={`h-[3.5625rem] w-[8.75rem] px-4 py-2 ${isButtonDisabled ? 'bg-neutral650' : 'bg-meedlBlue'} hover:bg-meedlBlue text-white rounded-md`}
-                                    disabled={isButtonDisabled}>Continue</Button>
+                                    className={`h-[3.5625rem] w-[8.75rem] px-4 py-2 ${isButtonDisabled ? 'bg-neutral650 hover:bg-neutral650' : ' hover:bg-meedlBlue bg-meedlBlue'}  text-white rounded-md`}
+                                    disabled={isButtonDisabled || isLoading}>
+                                    {isLoading ? <Isloading/> : 'Continue'}
+                                </Button>
                             </div>
                         </main>
                     </form>

@@ -1,15 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {LoaneeCurentInformation} from "@/types/loanee";
 
 interface LoanReferralState {
     loanReferralStatus: string;
     currentStep: number;
     isLoaneeIdentityVerified: boolean;
+    loaneeCurrentInfo : LoaneeCurentInformation | [];
 }
 
 const initialState: LoanReferralState = {
     loanReferralStatus: '',
     currentStep: 0,
     isLoaneeIdentityVerified: false,
+    loaneeCurrentInfo : [],
 };
 
 const loanReferralSlice = createSlice({
@@ -25,8 +28,11 @@ const loanReferralSlice = createSlice({
         setLoaneeIdentityVerifiedStatus(state, action: PayloadAction<boolean>) {
             state.isLoaneeIdentityVerified = action.payload;
         },
+        setLoaneeCurrentInfo(state, action: PayloadAction<LoaneeCurentInformation | []>) {
+            state.loaneeCurrentInfo = action.payload;
+        }
     },
 });
 
-export const { setLoanReferralStatus, setCurrentStep, setLoaneeIdentityVerifiedStatus } = loanReferralSlice.actions;
+export const { setLoanReferralStatus, setCurrentStep,setLoaneeCurrentInfo, setLoaneeIdentityVerifiedStatus } = loanReferralSlice.actions;
 export default loanReferralSlice.reducer;
