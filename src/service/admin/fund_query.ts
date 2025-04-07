@@ -95,7 +95,7 @@ export const fundApi = createApi({
             providesTags: ['vehicle'],
         }),
 
-        getInvestmentVehiclesByTypeAndStatusAndFundRaising: builder.query<InvestmentVehicleFundRaisingResponse, { pageSize: number; pageNumber: number; investmentVehicleType: string; investmentVehicleStatus: string; fundRaisingStatus?: string; }>({
+        getInvestmentVehiclesByTypeAndStatusAndFundRaising: builder.query<InvestmentVehicleFundRaisingResponse, { pageSize: number; pageNumber: number; investmentVehicleType?: string; investmentVehicleStatus?: string; fundRaisingStatus?: string; }>({
             query: ({pageSize, pageNumber, investmentVehicleType, investmentVehicleStatus, fundRaisingStatus}) => ({
                 url: 'investment-vehicle/all/view/by',
                 method: 'GET',
