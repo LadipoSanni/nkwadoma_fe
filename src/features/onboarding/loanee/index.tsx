@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import {RootState, store} from '@/redux/store';
+import {RootState, store, useAppSelector} from '@/redux/store';
 import { setLoanReferralStatus, setCurrentStep, setLoaneeIdentityVerifiedStatus } from '@/service/users/loanRerralSlice';
 import { useViewLoanReferralDetailsQuery, useRespondToLoanReferralMutation } from "@/service/users/Loanee_query";
 import { Button } from '@/components/ui/button';
@@ -32,38 +32,41 @@ interface BackendDetails {
 const LoaneeOnboarding = () => {
     const dispatch = useDispatch();
     const router = useRouter();
-    const { currentStep } = useSelector((state: RootState) => state.loanReferral);
+    const { currentStep, isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
     const [showModal, setShowModal] = useState(false);
     const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery({});
     const [respondToLoanReferral, {isLoading}] = useRespondToLoanReferralMutation({});
     const [loanReferralId, setLoanReferralId] = useState("");
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
 
+
     useEffect(() => {
         if ( data?.data?.identityVerified  === true  ){
-            console.log('identity verified: ', data?.data?.identityVerified)
-            dispatch(setLoaneeIdentityVerifiedStatus(data?.data?.identityVerified))
+            dispatch(setLoaneeIdentityVerifiedStatus(true))
+            store.dispatch(setCurrentNavBottomItem('Overview'))
+            store.dispatch(setCurrentNavbarItem('Overview'))
             router.push('/overview')
         }
         if (data?.statusCode === "OK" && data?.data?.id) {
-            setLoanReferralId(data.data.id);
-            dispatch(setLoanReferralStatus(data.data.loanReferralStatus));
+            setLoanReferralId(data?.data?.id);
+            dispatch(setLoanReferralStatus(data?.data?.loanReferralStatus));
             store.dispatch(setCurrentNavBottomItem(''))
             store.dispatch(setCurrentNavbarItem(''))
         }
+
         if (data?.statusCode === "OK" && data?.data) {
             setBackendDetails(data.data);
-            if (data.data.loanReferralStatus === "AUTHORIZED" && currentStep === steps.length - 1) {
-                // dispatch(setLoaneeIdentityVerifiedStatus(true))
-                router.push("/overview");
-            }
+            // if (data?.data?.loanReferralStatus === "AUTHORIZED" && currentStep === steps.length - 1) {
+            //     console.log('current step: ', currentStep)
+            //     console.log('current step - 1: ',steps.length - 1)
+            //     console.log('found the bug')
+            //     router.push("/overview");
+            // }
         }
 
-    }, [data, loanReferralDetailsIsLoading, currentStep, dispatch, router]);
+    }, [data, loanReferralDetailsIsLoading, currentStep]);
 
-    if(data?.data?.identityVerified){
-        router.push("/overview")
-    }
+
 
 
     const handleNext = () => {

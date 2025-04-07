@@ -1,7 +1,7 @@
 "use client"
 import React, {useEffect, useState} from 'react';
 import {redirect, useRouter} from "next/navigation";
-import {persistor, store, useAppSelector} from "@/redux/store";
+import {persistor, RootState, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
@@ -14,6 +14,7 @@ import {MdOutlineAccountBalance, MdOutlineInventory2,MdOutlineReceiptLong, MdOut
 import {useLogoutMutation} from "@/service/users/api";
 import {clearData} from "@/utils/storage";
 import {GearIcon} from "@radix-ui/react-icons";
+import {useSelector} from "react-redux";
 
 
 
@@ -25,14 +26,13 @@ const SideBar = () => {
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
     const [logout] = useLogoutMutation()
-    const loaneeRefferalStatus = useAppSelector(state => state.loanReferral.loanReferralStatus)
+    const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
 
-    const [isLoaneeVerified] = useState(Boolean(loaneeRefferalStatus))
+
 
     const [role, setRole] = useState('')
     const user_role = getUserDetailsFromStorage('user_role')
 
-    console.log('isLoanee verified:: ', isLoaneeVerified)
 
     useEffect(() => {
         if (!user_role) {
@@ -96,10 +96,10 @@ const SideBar = () => {
     const LOANEE : navbarRouterItemsProps[] = [
         {
             icon: <MdOutlineHome
-                className={` h-[1.2rem] w-[1.2rem] ${isLoaneeVerified ? `${current === 'Overview' ? currentTextLiterals : textLiterals} ` : 'text-navbarIconColor md:text-navbarIconColor'} `}
+                className={` h-[1.2rem] w-[1.2rem] ${isLoaneeIdentityVerified ? `${current === 'Overview' ? currentTextLiterals : textLiterals} ` : 'text-navbarIconColor md:text-navbarIconColor'} `}
             />,
             id: 'overview',
-            isActive: isLoaneeVerified,
+            isActive: isLoaneeIdentityVerified,
             name: "Overview",
             route: '/overview'
         },

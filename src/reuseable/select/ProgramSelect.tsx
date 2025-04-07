@@ -32,7 +32,6 @@ const ProgramSelect: React.FC<ProgramSelectProps> = ({
                                                          label
                                                      }) => {
     const uniqueId = `select${Math.random().toString(36).substring(2, 9)}`;
-    console.log("The p component: ",selectedProgram)
 
     return (
         <div id="programContainer" className={'grid gap-2 w-full'}>

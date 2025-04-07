@@ -11,7 +11,6 @@ import ProgramSelect from "@/reuseable/select/ProgramSelect";
 import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
 import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
 import Isloading from "@/reuseable/display/Isloading";
-import {useAppSelector} from "@/redux/store";
 import {setLoaneeCurrentInfo} from "@/service/users/loanRerralSlice";
 import {LoaneeCurentInformation} from "@/types/loanee";
 
@@ -24,7 +23,6 @@ interface CurrentInformationProps {
 const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep }) => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const storedLoaneeCurrentInfo = useAppSelector(state => state.loanReferral.loaneeCurrentInfo)
     const [values, setValues] = useState<LoaneeCurentInformation >({
         firstName: "",
         lastName: "",
@@ -51,7 +49,6 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         alternatePhoneNumber: false,
     });
 
-    console.log('storedLoaneeCurrentInfo:: ', storedLoaneeCurrentInfo)
 
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -120,8 +117,6 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
             await saveNextOfKinDetails(dataToSubmit);
             setIsModalOpen(false);
             dispatch(setLoaneeCurrentInfo(values))
-            setValues(storedLoaneeCurrentInfo)
-            console.log('after setting storedLoaneeCurrentInfo:: ', storedLoaneeCurrentInfo)
             setIsFormSubmitted(true);
         } catch (error) {
             console.error(error);
@@ -228,7 +223,6 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
             </main>
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                {/*<DialogOverlay className="" />*/}
                 <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6  py-5 pl-5 pr-2'}>
                     <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
                         <DialogTitle
