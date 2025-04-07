@@ -76,17 +76,16 @@ export function Loanees() {
     };
     const LoanProductLoaneeHeader = [
         {
-            title: "Name", sortable: true, id: "name"
+            title: "Name", sortable: true, id: "name",
+            selector: (row: ViewAllLoaneeInLoanProductProps) => row.name
         },
         {
             title: "Status", sortable: true, id: "status",
-            // selector: (row: ViewAllLoaneeInLoanProductProps) => row.numberOfLoanees
+            selector: (row: ViewAllLoaneeInLoanProductProps) => row.numberOfLoanees
         },
         {
-            title: "Institution",
-            sortable: true,
-            id: "institution",
-            // selector: (row: ViewAllLoaneeInLoanProductProps) => formatAmount(row.loanDetails?.totalAmountOutstanding)
+            title: "Institution", sortable: true, id: "institution",
+            selector: (row: ViewAllLoaneeInLoanProductProps) => row.loanDetails
         },
 
     ];
