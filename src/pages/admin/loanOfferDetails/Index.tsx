@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {cabinetGroteskMediumBold, cabinetGroteskRegular, ibmPlexSans} from "@/app/fonts";
+import {cabinetGroteskMediumBold, ibmPlexSans, inter} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
 import {FaCircle} from "react-icons/fa6";
@@ -48,7 +48,6 @@ const LoanOfferDetails = () => {
     const id: string = getId()
     const {data, isLoading: loading} = useViewLoanOfferDetailsQuery(id)
 
-    // console.log('data', data)
     const getLoaneeLoanBreakdown = () => {
         const loaneeLoanBreakDown = data?.data?.loaneeBreakdown
         const items: { itemAmount: string, itemName: string }[] = []
@@ -73,6 +72,7 @@ const LoanOfferDetails = () => {
         "Additional details",
         "Loan terms"
     ];
+
 
 
     const basicDetails = [
@@ -158,14 +158,14 @@ const LoanOfferDetails = () => {
     const {toast} = useToast()
     const disburseLoanOffer = async () => {
 
-        console.log('start disbursment progress')
+        // console.log('start disbursment progress')
         const body = {
             loanOfferId: id,
             loaneeId: data?.data?.loaneeId
         }
-        console.log('parane: ', body);
+        // console.log('parane: ', body);
         const response = await disburseLoan(body)
-        console.log('response: ', response)
+        // console.log('response: ', response)
         if (response?.error) {
             toast({
                 status: 'error',
@@ -237,50 +237,57 @@ const LoanOfferDetails = () => {
                         data-testid={`ImageComponentOnLoanOfferDetails`}
                         className={`mt-10 mb-4 grid md:flex gap-3 h-fit md:justify-between md:gap-6 md:w-full md:h-fit`}
                     >
-                        <div className={`md:w-[40%]`}>
+                        <div className={`md:max-w-[40%] grid gap-2 md:grid md:gap-2 h-fit md:h-fit `}>
                             <Avatar id={'loaneeImageOnLoanOfferDetails'} data-testid={'loaneeImageOnLoanOfferDetails'}
                                     className={`h-[5.625rem] w-[5.625rem] md:w-[7.5rem] md:h-[7.5rem]`}>
-                                {/*`/234d70b3-ec71-4d68-8696-5f427a617fb7.jpeg`*/}
                                 <AvatarImage src={data?.data?.image} alt="@shadcn"
                                              style={{objectFit: 'cover'}}/>
                                 <AvatarFallback>{userFirstLetter}</AvatarFallback>
                             </Avatar>
-
-                            <div className={`grid gap-1 mt-4`}>
-                                <div id={'loaneeNameOnLoanRequestDetails'}
-                                     data-testid={'loaneeNameOnLoanRequestDetails'}
-                                     className={`${cabinetGroteskRegular.className} text-black flex text-xl gap-2 md:flex md:gap-2 md:text-3xl  `}>
-                            <span
-                                className={`${cabinetGroteskMediumBold.className} text-black  gap-2 text-3xl md:text-3xl`}>{data?.data?.firstName}</span>
-                                    <span
-                                        className={`${cabinetGroteskMediumBold.className} text-black  gap-2 text-3xl  md:text-3xl`}>{data?.data?.lastName}</span>
-                                </div>
-                                <div className={`flex gap-2 items-center`}>
-                                    <p id={'loaneeProgramOnLoanOfferDetails'}
-                                       data-testid={'loaneeProgramOnLoanOfferDetails'}
-                                       className={` text-sm text-black400`}>{data?.data?.programName}</p>
-                                    <FaCircle className={'h-1 w-1 text-blue550'}/>
-                                    <p id={'loaneeCohortOnLoanRequestDetails'}
-                                       data-testid={'loaneeCohortOnLoaOfferDetails'}
-                                       className={`text-sm text-black400`}>{data?.data?.cohortName}</p>
+                            <div className={`grid md:grid gap-2 md:gap-2 `}>
+                                <p id={'loaneeNameOnLoanRequestDetails'}
+                                   data-testid={'loaneeNameOnLoanRequestDetails'}
+                                   className={`${cabinetGroteskMediumBold.className} text-black break-all  flex text-xl gap-2 md:flex md:gap-2 md:text-[28px]  `}>
+                                    {data?.data?.firstName}
+                                    &ensp;
+                                    {data?.data?.lastName}
+                                </p>
+                                <div
+                                    className={`flex gap-2  ${inter.className}  break-all   text-sm text-black400  `}
+                                >
+                                      <span id={'loaneeProgramOnLoanRequestDetails'} data-testid={'loaneeProgramOnLoanRequestDetails'}
+                                            className={`${inter.className}  break-all   text-sm text-black400`}>
+                                          {data?.data?.programName}
+                                      </span>
+                                    <FaCircle className={'h-1 w- mt-auto mb-auto text-blue550'}/>
+                                    <span id={'loaneeCohortOnLoanRequestDetails'}
+                                          data-testid={'loaneeCohortOnLoanRequestDetails'}
+                                          className={`${inter.className} text-sm text-black400`}>
+                                              {data?.data?.cohortName}
+                                          </span>
                                 </div>
                             </div>
+
+
                         </div>
                         <div
-                            className={` ${styles.loanOfferDetails} md:w-fit md:bg-white h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}
+                            className={` ${styles.loanOfferDetails} md:w-fit md:bg-white md:max-w-[60%]   h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}
                         >
 
                             <div
-                                className={`${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1 py-3  h-fit md:h-fit  flex md:flex `}>
-                                <TabConnector tabNames={loanOfferDetailsTab} currentTab={currentTab}/>
+                                className={` ${styles.tabConnector} md:w-full py-3 pl-1 md:sticky md:top-0 md:py-3 md:bg-white h-fit md:h-fit  flex md:flex `}
+                            >
+                                    <TabConnector tabNames={loanOfferDetailsTab} currentTab={currentTab}/>
                             </div>
-                            <div className={`md:bg-white`}>
-                                <ul className={'bg-grey105'}>
+
+                            <div className={` w-full md:max-w-[100%] px-2 md:px-0 md:bg-white`}>
+                                <ul className={' md:max-w-[100%] w-full break-all bg-grey105'}>
                                     {currentTab === 3 ? (
                                         <div
                                             dangerouslySetInnerHTML={{__html: data?.data?.termsAndCondition ?? ""}}
-                                            className={`w-full text-sm px-4 md:py-2 md:w-full md:px-6 `}>
+                                            className={`w-full md:break-all  md:max-w-[60%]  text-sm px-4 md:py-2 md:w-full md:px-6 `}>
                                         </div>
+
 
                                     ) : (
                                         getCurrentDataList().map((item, index) => (
@@ -288,9 +295,9 @@ const LoanOfferDetails = () => {
                                                 <div
                                                     className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                                     <div
-                                                        className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
+                                                        className={` ${inter.className} md:max-w-[40%] text-black300 text-[14px] `}>{item.label}</div>
                                                     <div
-                                                        className={'text-black500 text-[14px] leading-[150%] font-normal'}> {item.value ? item.value : 'Not provided'}</div>
+                                                        className={` ${inter.className} md:max-w-[50%] text-black500 text-[14px] leading-6  break-all  `}> {item.value ? item.value : 'Not provided'}</div>
                                                 </div>
                                             </li>
                                         ))
