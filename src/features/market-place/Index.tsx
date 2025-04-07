@@ -1,11 +1,11 @@
 "use client"
 import React, {useState} from 'react';
 import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
-import {setMarketInvestmentVehicleId} from "@/redux/slice/program/programSlice";
 import {store} from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
+import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
 
 
 const dummyInvestments = [
