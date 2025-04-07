@@ -64,9 +64,10 @@ export const fundApi = createApi({
       }),
        createInvestmentVehicle: builder.mutation({
         query: (data:{
+        id?: string
         name:  string,
         investmentVehicleType: string | undefined,
-        mandate: string,
+        mandate: string ,
        tenure: string | number,
        size: string | number,
        rate: string | number,
@@ -76,7 +77,8 @@ export const fundApi = createApi({
        fundManager: string,
        sponsors: string,
        minimumInvestmentAmount: number | string,
-       investmentVehicleStatus?: string
+       investmentVehicleStatus?: string,
+       startDate?:string
 
         }) => ({
                 url: `/investment-vehicle`,

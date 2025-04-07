@@ -1,12 +1,14 @@
 "use client"
 import Setup from "@/components/portfolio-manager/fund/investmentVehicle-multistep/Setup";
+import {useAppSelector} from "@/redux/store";
 
 
 const SetupInvestmentVehicle = () => {
-
+ const investmentVehicleType = useAppSelector(state => (state?.vehicle?.setInvestmentVehicleType))
+ 
   return (
     <div >
-       <Setup/>
+       <Setup investmentVehicleType={investmentVehicleType}/>
     </div>
     
   );
