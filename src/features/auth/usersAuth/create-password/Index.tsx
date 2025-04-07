@@ -10,9 +10,8 @@ import { useToast} from "@/hooks/use-toast";
 import {jwtDecode} from "jwt-decode";
 import {setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {ADMIN_ROLES} from "@/types/roles";
-import {persistor, store} from "@/redux/store";
+import { store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
-import {clearData} from "@/utils/storage";
 
 
 const CreatePassword = () => {
@@ -164,7 +163,7 @@ const CreatePassword = () => {
                 user_role,
                 decode_access_token
             } = destructureLoginEndpointCallResponse(response)
-            console.log('decode: ', decode_access_token)
+            console.log('decode: ', decode_access_token, 'roles: ', user_roles)
 
             if (user_role) {
                 storeUserDetails(access_token, user_email, user_role, userName, refresh_token)

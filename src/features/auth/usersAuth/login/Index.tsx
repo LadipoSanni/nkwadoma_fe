@@ -80,7 +80,6 @@ const Login: React.FC = () => {
 
     const getUserRoles = (returnsRole: string) => {
         if (returnsRole) {
-            // ADMIN_ROLES.filter(returnsRole)
             for (let i = 0; i < ADMIN_ROLES.length; i++) {
                 if (ADMIN_ROLES.at(i) === returnsRole) {
                     return ADMIN_ROLES.at(i)
