@@ -38,7 +38,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                  className="rounded-md">
                 <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>
                     <div id={"investmentTypeId"}
-                        className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center">
+                        className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center lowercase  ">
                         {investmentVehicleType}
                     </div>
                 </div>
@@ -68,7 +68,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                         </span>
                     </div>
                 </div>
-                <div id={"investmentVehicleNameId"} className={`${cabinetGrotesk.className} pt-3 font-medium text-xl text-[#212221]`}>
+                <div id={"investmentVehicleNameId"} className={`${cabinetGrotesk.className} pt-3 font-medium text-xl text-[#212221] capitalize `}>
                     {investmentVehicleName}
                 </div>
                 <div id={"percentageId"} className={`${inter.className} text-[#4D4E4D] font-normal text-sm`}>
