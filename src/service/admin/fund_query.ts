@@ -19,12 +19,7 @@ interface InvestmentVehicle {
     startDate: string;
     totalAmountInInvestmentVehicle:number;
 }
-interface InvestmentVehicleResponse {
-    data: InvestmentVehicle[];
-    total: number;
-    pageSize: number;
-    pageNumber:number;
-}
+
 interface InvestmentVehicleFundRaisingResponse {
     message: string;
     data: {
