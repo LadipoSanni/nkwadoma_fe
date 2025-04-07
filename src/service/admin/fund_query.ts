@@ -147,6 +147,17 @@ export const fundApi = createApi({
                 params: param
             }),
         }),
+        createInvestmentVehicleStatus: builder.mutation({
+            query: (data: {
+                investmentVehicleId: string,
+                fundRaising: string,
+                deployingStatus: string
+            }) => ({
+                url: "/investment-vehicle/status",
+                method: "POST",
+                body: data
+            })
+        })
     }),
 })
 
@@ -159,5 +170,6 @@ export const {
     useGetInvestmentVehiclesByTypeAndStatusQuery,
     useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
     usePublishInvestmentMutation,
-    useSearchInvestmentVehicleByNameAndTypeQuery
+    useSearchInvestmentVehicleByNameAndTypeQuery,
+    useCreateInvestmentVehicleStatusMutation
 } = fundApi;

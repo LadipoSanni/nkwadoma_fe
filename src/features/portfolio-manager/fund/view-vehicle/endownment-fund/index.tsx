@@ -93,8 +93,11 @@ function EndownmentFund() {
     };
 
     const handleEndowerFundDraftClick = () => {
-        setModalType("draft")
-        setIsModalOpen(true);
+        // setModalType("draft")
+        // setIsModalOpen(true);
+        router.push("/vehicle/draft")
+        store.dispatch(setVehicleType("endowment")) 
+        store.dispatch(setInvestmentVehicleType("ENDOWMENT")) 
     
     }
 

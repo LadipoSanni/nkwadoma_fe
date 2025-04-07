@@ -89,8 +89,11 @@ function CommercialFund() {
     };
 
     const handleCommercialFundDraftClick = () => {
-        setModalType("draft")
-        setIsModalOpen(true);
+        // setModalType("draft")
+        // setIsModalOpen(true);
+        router.push("/vehicle/draft")
+        store.dispatch(setVehicleType("commercial"))
+        store.dispatch(setInvestmentVehicleType("COMMERCIAL"))    
       
     }
 
