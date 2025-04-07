@@ -21,7 +21,7 @@ import { financierApi } from '@/service/admin/financier';
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier'],
+    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`],
 };
 
 const persistedReducer = persistReducer(persistConfig, appReducer);

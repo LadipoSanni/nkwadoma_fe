@@ -24,7 +24,7 @@ const Section: React.FC<SectionProps> = ({index, title, content, subtitle, isLis
     const number = parentIndex !== undefined ? `${parentIndex + 1}.${index + 1}` : `${index + 1}.`;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-3">
             {title && (
                 <h1 className={`${cabinetGrotesk.className} text-2xl font-extralight flex items-start gap-2 mb-4`}>
                     <span>{number}</span>
@@ -58,13 +58,13 @@ const MarketPlaceDetails = () => {
     const {
         marketInvestmentVehicleId,
         vehicleType
-    } = useSelector((state: RootState) => state.program.savedMarketplaceData) || {};
+    } = useSelector((state: RootState) => state.marketPlace.savedMarketplaceData) || {};
 
     // console.log(marketInvestmentVehicleId, vehicleType);
 
     const HandleInvest = () => {
         // vehicleType
-        router.push("/marketplace/confirmTransfer");
+        router.push("/marketplace/transfer");
         console.log(marketInvestmentVehicleId);
     }
 
@@ -123,8 +123,8 @@ const MarketPlaceDetails = () => {
     const bgColor = vehicleType === "Commercial" ? "bg-[#D9EAFF]" : "bg-[#E6F2EA]";
     const imageSrc =
         vehicleType === "Commercial"
-            ? "/asset/image/Asset.svg"
-            : "/asset/image/Circles.svg";
+            ? "/asset/image/BlueCircles.svg"
+            : "/asset/image/GreenCircles.svg";
 
     return (
         <main id="mainDiv" className="md:px-10 py-6 px-3 w-full md:gap-10 gap-8">
@@ -161,7 +161,7 @@ const MarketPlaceDetails = () => {
                                 alt="circle"
                                 width={104}
                                 height={29}
-                                className="rounded-[32px] object-right-bottom"
+                                className="object-right-bottom"
                                 data-testid="circle-image"
                                 loading="lazy"
                             />
@@ -211,17 +211,21 @@ const MarketPlaceDetails = () => {
                                 content={section.content || ""}
                                 isList={section.isList}
                             />
-                            {section.subsections && section.subsections.map((subsection, subIndex) => (
-                                <Section
-                                    key={`${index}-${subIndex}`}
-                                    index={subIndex}
-                                    parentIndex={index}
-                                    title=""
-                                    subtitle={subsection.subtitle}
-                                    content={subsection.content}
-                                    isList={subsection.isList}
-                                />
-                            ))}
+                            {section.subsections && (
+                                <div className="space-y-4">
+                                    {section.subsections.map((subsection, subIndex) => (
+                                        <Section
+                                            key={`${index}-${subIndex}`}
+                                            index={subIndex}
+                                            parentIndex={index}
+                                            title=""
+                                            subtitle={subsection.subtitle}
+                                            content={subsection.content}
+                                            isList={subsection.isList}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

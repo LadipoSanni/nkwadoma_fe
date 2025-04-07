@@ -13,10 +13,12 @@ import {Icon} from "@iconify/react";
 import CohortTabs from '../../../components/cohort/CohortTabs'
 import CreateCohort from "@/reuseable/modals/CreateCohort";
 import { inter } from '@/app/fonts'
-import { useGetAllCohortsByOrganisationQuery } from '@/service/admin/cohort_query'
+import {
+    useGetAllCohortByAParticularProgramQuery,
+    useGetAllCohortsByOrganisationQuery
+} from '@/service/admin/cohort_query'
 import { useSearchCohortByOrganisationQuery } from '@/service/admin/cohort_query'
 // import { debounce } from 'lodash';
-import { useGetAllCohortByAParticularProgramQuery } from '@/service/admin/program_query'
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
 import {useToast} from "@/hooks/use-toast"
