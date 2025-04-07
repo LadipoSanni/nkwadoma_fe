@@ -22,6 +22,7 @@ import Draft from "@/features/portfolio-manager/fund/draft/Index";
 import {store} from "@/redux/store";
 import {setCurrentVehicleId} from "@/redux/slice/vehicle/vehicle";
 
+
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
