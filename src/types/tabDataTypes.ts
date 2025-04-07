@@ -28,7 +28,7 @@ export const steps = [
     { id: 'setup', title: 'Setup' },
     { id: 'status', title: 'Status' },
     { id: 'visibility', title: 'Visibility' },
-    
+
   ];
 
 export const kycSteps = [
@@ -37,3 +37,8 @@ export const kycSteps = [
     { id: 'beneficial-owner', title: 'Beneficial Owner' },
 
 ];
+
+export const marketplaceInvestment = [
+    { id: 'transfer', title: 'Transfer funds' },
+    { id: 'confirmTransfer', title: 'Confirm transfer' },
+  ];

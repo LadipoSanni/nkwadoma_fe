@@ -1,4 +1,4 @@
-import FinancierDetails from "@/pages/admin/financier-details";
+import FinancierDetails from "@/features/portfolio-manager/fund/fundDetails/financiers/financier-details";
 import {render, screen} from '@testing-library/react'
 import {Providers} from "@/app/provider";
 

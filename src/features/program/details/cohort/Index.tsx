@@ -6,10 +6,11 @@ import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {formatAmount} from "@/utils/Format";
 import {
-    useGetAllCohortByAParticularProgramQuery,
     useSearchCohortsInAParticularProgramQuery
 } from "@/service/admin/program_query";
 import {useAppSelector} from "@/redux/store";
+import CreateCohortInProgram from "@/components/program/create-cohort/Index";
+import {useGetAllCohortByAParticularProgramQuery} from "@/service/admin/cohort_query";
 
 
 
@@ -112,7 +113,14 @@ const ProgramCohortDetails= ()=> {
         return (
             <div>
                 <div id={`tab2`} className={'mt-4 grid gap-7'}>
-                    <SearchInput id={'programCohortSearch'} value={searchTerm} onChange={handleSearchChange}/>
+                    <div className={`md:mt-0 mt-4 flex md:flex-row flex-col justify-between`}>
+                        <div className={``}>
+                            <SearchInput id={'programCohortSearch'} value={searchTerm} onChange={handleSearchChange}/>
+                        </div>
+                        <div className=''>
+                            <CreateCohortInProgram  triggerButtonStyle={`w-full`}/>
+                        </div>
+                    </div>
                     <div>
                         {searchTerm && cohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Cohort'/></div> : <Tables
                             tableData={cohorts}

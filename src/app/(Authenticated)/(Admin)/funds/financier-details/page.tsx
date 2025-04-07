@@ -1,5 +1,5 @@
 import React from 'react';
-import FinancierDetails from "@/pages/admin/financier-details";
+import FinancierDetails from "@/features/portfolio-manager/fund/fundDetails/financiers/financier-details";
 import CustomAuthorization from "@/features/auth/authorization";
 
 const Page = () => {

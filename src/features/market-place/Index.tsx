@@ -1,11 +1,11 @@
 "use client"
 import React, {useState} from 'react';
 import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
-import {setMarketInvestmentVehicleId} from "@/redux/slice/program/programSlice";
 import {store} from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
-// import { useSelector } from 'react-redux';
+import { useRouter } from "next/navigation";
+import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
 
 
 const dummyInvestments = [
@@ -26,33 +26,41 @@ const dummyInvestments = [
     { id: "15", type: "Endowment", status: "Closed", title: "Non-Profit Development Grant", interest: 6 }
 ];
 
-export const HandleCardDetails = (id: string) => {
-    store.dispatch(setMarketInvestmentVehicleId(id))
-}
+export const HandleCardDetails = (
+    id: string,
+    type: string,
+    router: ReturnType<typeof useRouter>
+) => {
+    store.dispatch(setMarketInvestmentVehicleId({
+        marketInvestmentVehicleId: id,
+        vehicleType: type
+    }));
+    router.push("/marketplace/details");
+};
 
-export const handleSearchChange = () =>{
+export const handleSearchChange = (setSearchTerm: (value: string) => void) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
 
-}
 
 export const handleSelectChange = (value: string, setSelectedValue: (value: string) => void) => {
     setSelectedValue(value);
-    console.log('Selected:', value);
 };
 
 const MarketPlaceView = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    console.log(setSearchTerm);
+    console.log(setSearchTerm)
     const [selectedValue, setSelectedValue] = useState<string>('');
-    // console.log(setSelectedValue);
-
+    // const router = useRouter();
 
     return (
-        <main id={"marketplaceView"} className={`pt-6 px-3`}>
+        <main id={"marketplaceView"} className={`py-9 px-5`}>
             <div id={"searchDiv"} className={`px-2 flex md:flex-row flex-col gap-3`}>
                     <SearchInput
                         id={'ProgramSearchInput'}
                         value={searchTerm}
-                        onChange={handleSearchChange}
+                        onChange={handleSearchChange(setSearchTerm)}
                         style={`md:w-20 w-full`}
                     />
                     <CustomSelect
@@ -62,17 +70,17 @@ const MarketPlaceView = () => {
                         selectContent={['Commercial Investment', 'Endowment Investment']}
                         placeHolder="Type"
                         triggerId="marketplaceTrigger"
-                        className={`h-11 md:w-sm w-full mt-0 bg-[#D0D5DD]`}
+                        className={`h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]`}
                     />
             </div>
 
             <div id={"card-segmentId"}
-                 className="grid grid-cols-1 px-4 md:grid-cols-2 lg:grid-cols-4 max:md:h-96 h-96 overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5">
+                 className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5">
             {dummyInvestments.map((investment) => {
                     const backgroundColor = investment.type === "Commercial" ? "#D9EAFF" : "#E6F2EA";
                     const imageSrc = investment.type === "Commercial"
-                        ? "/asset/image/Circles.svg"
-                        : "/asset/image/Asset.svg";
+                        ? "/asset/image/BlueCircles.svg"
+                        :"/asset/image/GreenCircles.svg";
                     const statusClass = investment.status === "Open"
                         ? "bg-green-100 text-[#0D9B48] border-[#B4E5C8} "
                         : "bg-red-100 text-red-600 border-[#F2BCBA]";

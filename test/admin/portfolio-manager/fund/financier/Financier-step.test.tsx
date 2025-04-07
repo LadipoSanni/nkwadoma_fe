@@ -1,12 +1,10 @@
-import { cleanup, screen, render,fireEvent, waitFor} from "@testing-library/react";
+import { cleanup, screen, render,fireEvent} from "@testing-library/react";
 import FiinancierStep from "@/components/portfolio-manager/fund/financier/financiers-step";
-import { Formik,Form } from 'formik';
+import { Providers } from "@/app/provider";
 
 
 
 describe("Invite financier", () => {
-    const mockHandleBack = jest.fn();
-  const mockSetFieldValue = jest.fn();
     
     beforeEach(() => {
         jest.clearAllMocks();
@@ -17,28 +15,19 @@ describe("Invite financier", () => {
           jest.spyOn(console, 'error').mockReturnValue();
       })
 
-      const errors = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        companyName: ''
-      };
-      const touched = {
-        firstName: false,
-        lastName: false,
-        email: false,
-        companyName: false
-      };
+      
 
       const mockSetIsOpen = jest.fn();
 
       const setup = (props = {}) => {
         render(
+          <Providers>
           <FiinancierStep
             setIsOpen={mockSetIsOpen}
             investmentId="test-id"
             {...props}
           />
+          </Providers>
         );
       };
 

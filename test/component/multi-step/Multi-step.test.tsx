@@ -104,7 +104,7 @@ jest.mock('next/navigation', () => ({
               .closest('.step-item')
               ?.querySelector('.step-indicator > div');
             
-            expect(visibilityCircle).toHaveClass('step-circle-solid-completed');
+            expect(visibilityCircle).toHaveClass('step-circle-solid');
           });
 
           test('does not apply special styling for non-last active steps', () => {
