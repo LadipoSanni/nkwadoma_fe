@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import {RootState, store, useAppSelector} from '@/redux/store';
+import {RootState, store} from '@/redux/store';
 import { setLoanReferralStatus, setCurrentStep, setLoaneeIdentityVerifiedStatus } from '@/service/users/loanRerralSlice';
 import { useViewLoanReferralDetailsQuery, useRespondToLoanReferralMutation } from "@/service/users/Loanee_query";
 import { Button } from '@/components/ui/button';
@@ -32,7 +32,7 @@ interface BackendDetails {
 const LoaneeOnboarding = () => {
     const dispatch = useDispatch();
     const router = useRouter();
-    const { currentStep, isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
+    const { currentStep } = useSelector((state: RootState) => state.loanReferral);
     const [showModal, setShowModal] = useState(false);
     const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery({});
     const [respondToLoanReferral, {isLoading}] = useRespondToLoanReferralMutation({});
