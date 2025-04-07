@@ -110,6 +110,33 @@ const CreatePassword = () => {
         }
     }
 
+    const routeLoanee = async (loanOfferId?: string) => {
+        if(loanOfferId) {
+            store.dispatch(setCurrentNavbarItem("Accept loan offer"))
+            router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
+
+        }else{
+            store.dispatch(setCurrentNavbarItem("overview"))
+            router.push("/onboarding")
+        }
+    }
+
+    const routeUserToTheirDashboard = async (userRole?: string) => {
+        switch (userRole) {
+            case 'LOANEE' :
+                await routeLoanee()
+                break;
+            case 'ORGANIZATION_ADMIN':
+                store.dispatch(setCurrentNavbarItem("Program"))
+                router.push("/program")
+                break;
+            case 'PORTFOLIO_MANAGER':
+                store.dispatch(setCurrentNavbarItem("Loan"))
+                router.push("/loan/loan-request")
+                break;
+        }
+    }
+
     const {toast} = useToast()
 
 
@@ -137,34 +164,12 @@ const CreatePassword = () => {
                 user_role,
                 decode_access_token
             } = destructureLoginEndpointCallResponse(response)
-            // const access_token = response?.data?.accessToken
-            // const refreshToken = response?.data?.refreshToken
-            // const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-            // const user_email = decode_access_token?.email
-            // //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // // @ts-expect-error
-            // const userName = decode_access_token?.name
-            // const user_roles = decode_access_token?.realm_access?.roles
-            // const user_role = user_roles.filter(getUserRoles).at(0)
-            // clearData()
-            // await persistor.purge();
-            console.log('response: ', response)
-            console.log('access_token: ', access_token, 'refresh_token: ', refresh_token, 'userName: ', userName, 'user_email: ', user_email,
-                'user_roles: ', user_roles, 'user_role: ', user_role)
-            console.log('decode access_token: ', decode_access_token)
+            console.log('decode: ', decode_access_token)
+
             if (user_role) {
                 storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                 setUserRoles(user_roles)
-                // if (user_role === 'LOANEE') {
-                //     store.dispatch(setCurrentNavbarItem("overview"))
-                //     router.push("/onboarding")
-                // } else if(user_role === 'ORGANIZATION_ADMIN') {
-                //     store.dispatch(setCurrentNavbarItem("Program"))
-                //     router.push("/program")
-                // }else if(user_role === 'PORTFOLIO_MANAGER'){
-                //     store.dispatch(setCurrentNavbarItem("Loan"))
-                //     router.push("/loan/loan-request")
-                // }
+                await routeUserToTheirDashboard(user_role)
 
             }
 

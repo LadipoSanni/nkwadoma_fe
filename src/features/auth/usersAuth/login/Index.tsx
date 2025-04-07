@@ -179,7 +179,7 @@ const Login: React.FC = () => {
                         if (user_role) {
                             storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                             setUserRoles(user_roles)
-                            // await routeUserToTheirDashboard(user_role)
+                            await routeUserToTheirDashboard(user_role)
                         }
                     }
                 } catch (error) {
