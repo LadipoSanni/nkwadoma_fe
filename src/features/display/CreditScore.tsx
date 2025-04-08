@@ -3,9 +3,10 @@ import {inter, inter700} from "@/app/fonts";
 
 interface Props {
     creditScore: number;
+    creditScoreDescriptionId?: string;
 }
 
-const CreditScore = ({creditScore}: Props) => {
+const CreditScore = ({creditScore, creditScoreDescriptionId}: Props) => {
 
     const style = [
         {textColor: "#E80000", textBorderColor: "#F2BCBA", textBackgroundColor: "#FBE9E9",},
@@ -71,12 +72,15 @@ const CreditScore = ({creditScore}: Props) => {
             data-testid="CreditScoreComponent"
             className={` flex md:flex w-fit h-fit md:h-fit  md:w-fit gap-2 md:gap-2  `}
         >
-            <p className={` ${inter.className} mt-auto mb-auto md:mt-auto md:mb-auto text-[14px] md:text-[14px] text-[#212221] md:text-#212221]  `}>{description}</p>
+            <p id={'creditScoreDescription'} data-testid={creditScoreDescriptionId ? creditScoreDescriptionId :'creditScoreDescription'} className={` ${inter.className} mt-auto mb-auto md:mt-auto md:mb-auto text-[14px] md:text-[14px] text-[#212221] md:text-#212221]  `}>{description}</p>
             <div
+
                 className={` w-fit md:w-fit md:h-fit h-fit md:py-1 py-1 md:px-1 px-1 md:rounded-md rounded-md border md:border  `}
                 style={{border: `${result?.textBorderColor}`, borderWidth: `${creditScore === 0 ? '1px' : '0.1rem'}`, borderStyle: 'solid'}}
             >
                         <p
+                            id={'creditScore'}
+                            data-testid={'creditScore'}
                             className={` ${inter700.className} md:px-1.5 px-1.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[11px] text-[11px]  `}
                             style={{backgroundColor: `${result?.textBackgroundColor}`, color: `${result?.textColor}`}}
                         >{creditScore}</p>
