@@ -7,16 +7,7 @@ export const loaneeApi = createApi({
     baseQuery: customFetchBaseQuery,
     tagTypes: ['loanee', 'accept-loan-offer'],
     endpoints: (builder) => ({
-        // isIdentityVerified: builder.query({
-        //     query: (param: {
-        //         loanReferralId: string|undefined
-        //     }) => ({
-        //         url: `/identity/verification/is-verified`,
-        //         method: "POST",
-        //         params: param
-        //     }),
-        //     providesTags: [`loanee`]
-        // }),
+
         verifyIdentity: builder.mutation({
             query: (formData: {
                 bvn: string
@@ -38,7 +29,7 @@ export const loaneeApi = createApi({
                 method: "POST",
                 body: formData
             }),
-            invalidatesTags: ({id}) => [{type: 'loanee', id}, 'accept-loan-offer'],
+            invalidatesTags:  [ 'loanee',  'accept-loan-offer'],
         }),
         saveNextOfKinDetails: builder.mutation({
             query: (data)=> ({
