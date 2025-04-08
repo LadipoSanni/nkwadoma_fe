@@ -243,6 +243,8 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const handleRetake = () => {
         setIsPreview(false);
         setCapturedImage(null);
+        setIsFaceDetected(false);
+        setHasFaceBeenDetected(false);
         setStep("right");
 
         const startCamera = async () => {
@@ -259,7 +261,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
 
         startCamera();
     };
-
     const frameClassName = isFaceDetected
         ? "absolute top-4 right-4 w-[270px] h-[270px] rounded-full overflow-hidden"
         : "absolute w-[419px] h-[279px] overflow-hidden ";
