@@ -53,7 +53,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         startCamera();
 
         return () => {
-            // Clean up video stream when component unmounts
             if (videoRef.current && videoRef.current.srcObject) {
                 const stream = videoRef.current.srcObject as MediaStream;
                 const tracks = stream.getTracks();
@@ -96,7 +95,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                 const landmarks = detection.landmarks;
                 const nose = landmarks.getNose();
                 const leftEye = landmarks.getLeftEye();
-                const mouth = landmarks.getMouth()
+                // const mouth = landmarks.getMouth()
                 const rightEye = landmarks.getRightEye();
 
                 const noseX = nose[3].x;
@@ -115,7 +114,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     newOrientation = "up";
                 } else if (noseY > leftEyeY && noseY > rightEyeY) {
                     newOrientation = "down";
-                } else if (landmarks) {
+                } else if (detection) {
                     newOrientation = "center";
                 }
 
@@ -170,7 +169,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         setCapturedImage(null);
         setStep("right");
 
-        // Restart the camera stream
         const startCamera = async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
@@ -217,7 +215,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
             <div className="grid place-items-center gap-5">
                 <div
                     className={` ${isFaceDetected || hasFaceBeenDetected ? 'relative w-[300px] h-[300px]' : ' w-[419px] h-[279px] '}`}>
-                    {(isFaceDetected || hasFaceBeenDetected) && step !== "preview" && (
+                    {(isFaceDetected || hasFaceBeenDetected) && step !== "preview" &&  step !== "complete" &&(
                         <svg viewBox="0 0 300 301"
                              className="absolute top-0 left-0 w-full h-full transition-opacity duration-500">
                             <path
@@ -240,7 +238,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     )}
 
                     {isPreview && capturedImage ? (
-                        // Preview the captured image
                         <div className="absolute top-0 right-[-60px] rounded-md w-[419px] h-[279px] overflow-hidden">
                             <img
                                 src={capturedImage}
@@ -250,7 +247,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                             />
                         </div>
                     ) : (
-                        // Video feed
                         <div className={frameClassName} style={{transform: 'scaleX(-1)'}}>
                             {!hasFaceBeenDetected && (
                                 <div className="absolute inset-0 flex justify-center items-center">
