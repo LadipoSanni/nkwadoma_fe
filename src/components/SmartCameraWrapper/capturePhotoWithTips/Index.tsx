@@ -19,6 +19,8 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
     const [isPreview, setIsPreview] = useState(false);
     const [countDown,setCountdown] = useState(5)
+    const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+
 
     useEffect(() => {
         const loadModels = async () => {
@@ -42,6 +44,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         const startCamera = async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+                setCameraStream(stream)
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
                 }
@@ -343,13 +346,21 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const handleProceed = () => {
         setStep("complete");
         if (capturedImage) {
-            // Convert base64 to file
             fetch(capturedImage)
                 .then(res => res.blob())
                 .then(blob => {
                     onCapture(new File([blob], "capture.png", { type: "image/png" }));
                 });
         }
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => {
+                    track.stop();
+                });
+                setCameraStream(null);
+            }
+            if (videoRef.current) {
+                videoRef.current.srcObject = null;
+            }
     };
 
     const handleRetake = () => {
