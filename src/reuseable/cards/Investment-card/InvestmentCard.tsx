@@ -37,9 +37,13 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
             <div id="investment-type-segment" data-testid={`investment-type-segment`} style={{backgroundColor}}
                  className="rounded-md">
                 <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>
-                    <div id={"investmentTypeId"}
-                        className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center lowercase  ">
-                        {investmentVehicleType}
+                    <div
+                        id="investmentTypeId"
+                        className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center"
+                    >
+                        {investmentVehicleType
+                            ? investmentVehicleType.charAt(0).toUpperCase() + investmentVehicleType.slice(1).toLowerCase()
+                            : ""}
                     </div>
                 </div>
                 <div id={"imageId"} className="object-right-bottom justify-end flex ">
