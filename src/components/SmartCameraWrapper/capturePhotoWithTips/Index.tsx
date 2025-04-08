@@ -74,85 +74,12 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     };
 
     useEffect(() => {
-        // const detectFaceOrientation = async () => {
-        //     if (!videoRef.current || !isModelLoaded) return;
-
-        //     const video = videoRef.current;
-        //     const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.2 })).withFaceLandmarks();
-
-        //     if (detection) {
-        //         setIsFaceDetected(true);
-        //         if (!hasFaceBeenDetected) {
-        //             const landmarks = detection.landmarks;
-        //             const mouth = landmarks.getMouth()
-        //             const nose = landmarks.getNose();
-        //             const leftEye = landmarks.getLeftEye();
-        //             const rightEye = landmarks.getRightEye();
-        //             if (mouth && nose && leftEye && rightEye) {
-        //                 setHasFaceBeenDetected(true);
-        //             }
-        //         }
-        //         const landmarks = detection.landmarks;
-        //         const nose = landmarks.getNose();
-        //         const leftEye = landmarks.getLeftEye();
-        //         // const mouth = landmarks.getMouth()
-        //         const rightEye = landmarks.getRightEye();
-
-        //         const noseX = nose[3].x;
-        //         const noseY = nose[3].y;
-        //         const leftEyeX = leftEye[0].x;
-        //         const leftEyeY = leftEye[0].y;
-        //         const rightEyeX = rightEye[3].x;
-        //         const rightEyeY = rightEye[3].y;
-
-        //         let newOrientation: string | null = "center";
-        //         if (noseX > rightEyeX) {
-        //             newOrientation = "left";
-        //         } else if (noseX < leftEyeX) {
-        //             newOrientation = "right";
-        //         } else if (noseY < leftEyeY && noseY < rightEyeY) {
-        //             newOrientation = "up";
-        //         } else if (noseY > leftEyeY && noseY > rightEyeY) {
-        //             newOrientation = "down";
-        //         } else if (detection) {
-        //             newOrientation = "center";
-        //         }
-
-        //         if (newOrientation !== orientation) {
-        //             setOrientation(newOrientation);
-        //             if (newOrientation === step) {
-        //                 if (step === "right") {
-        //                     setStep("left");
-        //                 } else if (step === "left") {
-        //                     setStep("up");
-        //                 } else if (step === "up") {
-        //                     setStep("down");
-        //                 } else if (step === "down") {
-        //                     setStep("center");
-        //                 } else if (step === "center") {
-        //                     captureImage(video);
-        //                     setStep("preview");
-        //                     setIsPreview(true);
-        //                 }
-        //             }
-        //         }
-        //     } else {
-        //         if (!hasFaceBeenDetected) {
-        //             setIsFaceDetected(false);
-        //         }
-        //     }
-        // };
-
-
-   const detectFaceOrientation = async () => {
+        const detectFaceOrientation = async () => {
             if (!videoRef.current || !isModelLoaded) return;
-        
+
             const video = videoRef.current;
-            const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ 
-                inputSize: 320, 
-                scoreThreshold: 0.2 
-            })).withFaceLandmarks();
-        
+            const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.2 })).withFaceLandmarks();
+
             if (detection) {
                 setIsFaceDetected(true);
                 if (!hasFaceBeenDetected) {
@@ -165,62 +92,49 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                         setHasFaceBeenDetected(true);
                     }
                 }
-                
-                if (step !== 'center') {
-                    const landmarks = detection.landmarks;
-                    const nose = landmarks.getNose();
-                    const leftEye = landmarks.getLeftEye();
-                    const mouth = landmarks.getMouth()
-                    const rightEye = landmarks.getRightEye();
-        
-                    const noseX = nose[3].x;
-                    const noseY = nose[3].y;
-                    const leftEyeX = leftEye[0].x;
-                    const leftEyeY = leftEye[0].y;
-                    const rightEyeX = rightEye[3].x;
-                    const rightEyeY = rightEye[3].y;
-        
-                    const faceWidth = Math.abs(rightEyeX - leftEyeX);
-                    const xThreshold = faceWidth * 0.1; // 10% of face width
-                    const yThreshold = faceWidth * 0.1; // 10% of face width
-        
-                    const centerX = (leftEyeX + rightEyeX) / 2;
-                    const centerY = (leftEyeY + rightEyeY) / 2;
-        
-                    let newOrientation: string | null = null;
-                    
-                    if (noseX > centerX + xThreshold) {
-                        newOrientation = "left";
-                    } else if (noseX < centerX - xThreshold) {
-                        newOrientation = "right";
-                    } else if (noseY < centerY - yThreshold) {
-                        newOrientation = "up";
-                    } else if (noseY > centerY + yThreshold) {
-                        newOrientation = "down";
-                    } else {
-                        newOrientation = "center";
-                    }
-        
-                    if (newOrientation !== orientation) {
-                        setOrientation(newOrientation);
-                        if (newOrientation === step) {
-                            if (step === "right") {
-                                setStep("left");
-                            } else if (step === "left") {
-                                setStep("up");
-                            } else if (step === "up") {
-                                setStep("down");
-                            } else if (step === "down") {
-                                setStep("center");
-                            }
+                const landmarks = detection.landmarks;
+                const nose = landmarks.getNose();
+                const leftEye = landmarks.getLeftEye();
+                // const mouth = landmarks.getMouth()
+                const rightEye = landmarks.getRightEye();
+
+                const noseX = nose[3].x;
+                const noseY = nose[3].y;
+                const leftEyeX = leftEye[0].x;
+                const leftEyeY = leftEye[0].y;
+                const rightEyeX = rightEye[3].x;
+                const rightEyeY = rightEye[3].y;
+
+                let newOrientation: string | null = "center";
+                if (noseX > rightEyeX) {
+                    newOrientation = "left";
+                } else if (noseX < leftEyeX) {
+                    newOrientation = "right";
+                } else if (noseY < leftEyeY && noseY < rightEyeY) {
+                    newOrientation = "up";
+                } else if (noseY > leftEyeY && noseY > rightEyeY) {
+                    newOrientation = "down";
+                } else if (detection) {
+                    newOrientation = "center";
+                }
+
+                if (newOrientation !== orientation) {
+                    setOrientation(newOrientation);
+                    if (newOrientation === step) {
+                        if (step === "right") {
+                            setStep("left");
+                        } else if (step === "left") {
+                            setStep("up");
+                        } else if (step === "up") {
+                            setStep("down");
+                        } else if (step === "down") {
+                            setStep("center");
+                        } else if (step === "center") {
+                            captureImage(video);
+                            setStep("preview");
+                            setIsPreview(true);
                         }
                     }
-                } else {
-                    setTimeout(() => {
-                        captureImage(video);
-                        setStep("preview");
-                        setIsPreview(true);
-                    }, 1000); 
                 }
             } else {
                 if (!hasFaceBeenDetected) {
@@ -228,6 +142,92 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                 }
             }
         };
+
+
+//    const detectFaceOrientation = async () => {
+//             if (!videoRef.current || !isModelLoaded) return;
+        
+//             const video = videoRef.current;
+//             const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ 
+//                 inputSize: 320, 
+//                 scoreThreshold: 0.2 
+//             })).withFaceLandmarks();
+        
+//             if (detection) {
+//                 setIsFaceDetected(true);
+//                 if (!hasFaceBeenDetected) {
+//                     const landmarks = detection.landmarks;
+//                     const mouth = landmarks.getMouth()
+//                     const nose = landmarks.getNose();
+//                     const leftEye = landmarks.getLeftEye();
+//                     const rightEye = landmarks.getRightEye();
+//                     if (mouth && nose && leftEye && rightEye) {
+//                         setHasFaceBeenDetected(true);
+//                     }
+//                 }
+                
+//                 if (step !== 'center') {
+//                     const landmarks = detection.landmarks;
+//                     const nose = landmarks.getNose();
+//                     const leftEye = landmarks.getLeftEye();
+//                     const mouth = landmarks.getMouth()
+//                     const rightEye = landmarks.getRightEye();
+        
+//                     const noseX = nose[3].x;
+//                     const noseY = nose[3].y;
+//                     const leftEyeX = leftEye[0].x;
+//                     const leftEyeY = leftEye[0].y;
+//                     const rightEyeX = rightEye[3].x;
+//                     const rightEyeY = rightEye[3].y;
+        
+//                     const faceWidth = Math.abs(rightEyeX - leftEyeX);
+//                     const xThreshold = faceWidth * 0.1; // 10% of face width
+//                     const yThreshold = faceWidth * 0.1; // 10% of face width
+        
+//                     const centerX = (leftEyeX + rightEyeX) / 2;
+//                     const centerY = (leftEyeY + rightEyeY) / 2;
+        
+//                     let newOrientation: string | null = null;
+                    
+//                     if (noseX > centerX + xThreshold) {
+//                         newOrientation = "left";
+//                     } else if (noseX < centerX - xThreshold) {
+//                         newOrientation = "right";
+//                     } else if (noseY < centerY - yThreshold) {
+//                         newOrientation = "up";
+//                     } else if (noseY > centerY + yThreshold) {
+//                         newOrientation = "down";
+//                     } else {
+//                         newOrientation = "center";
+//                     }
+        
+//                     if (newOrientation !== orientation) {
+//                         setOrientation(newOrientation);
+//                         if (newOrientation === step) {
+//                             if (step === "right") {
+//                                 setStep("left");
+//                             } else if (step === "left") {
+//                                 setStep("up");
+//                             } else if (step === "up") {
+//                                 setStep("down");
+//                             } else if (step === "down") {
+//                                 setStep("center");
+//                             }
+//                         }
+//                     }
+//                 } else {
+//                     setTimeout(() => {
+//                         captureImage(video);
+//                         setStep("preview");
+//                         setIsPreview(true);
+//                     }, 1000); 
+//                 }
+//             } else {
+//                 if (!hasFaceBeenDetected) {
+//                     setIsFaceDetected(false);
+//                 }
+//             }
+//         };
 
         let intervalId: NodeJS.Timeout | null = null;
         if (isModelLoaded && !isPreview) {
