@@ -87,7 +87,7 @@ const handleRowClick = (row: TableRowData) => {
         bankPartner:row?.bankPartner? String(row?.bankPartner) : "",
         fundManager:row?.fundManager? String(row?.fundManager) : "",
         startDate: row?.startDate ? String(row.startDate) : "",
-        minimumInvestmentAmount:String(row?.minimumInvestmentAmount),
+        minimumInvestmentAmount:row?.minimumInvestmentAmount? String(row?.minimumInvestmentAmount) : "",
         sponsors: '',
        }
     store.dispatch(setCreateInvestmentField(investmentVehicleData))

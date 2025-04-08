@@ -6,6 +6,12 @@ import CouponDistribution from './status-subcomponent/Coupon-distribution'
 import Closure from './status-subcomponent/Closure'
 import {useAppSelector} from "@/redux/store";
 
+
+
+interface Props {
+    disabledTabs?: string[];
+}
+
 const tabData = [
     {
         name: "Operation",
@@ -23,7 +29,7 @@ const tabData = [
 
 
 
-function Status() {
+const Status = ({disabledTabs}: Props)=> {
     const vehicleType = useAppSelector(state => (state?.vehicle?.vehicleType))
     const tabContent = [
         {
@@ -57,7 +63,14 @@ function Status() {
             <div className='relative right-2'>
             <TabsList id='clickswitch' className={`z-50  bg-white`}>
               {tabData.map((tab, index) => (
-                <TabsTrigger className='bg-[#F6F6F6] mx-1  py-2 rounded-3xl data-[state=active]:bg-[#E8EAEE] data-[state=active]:text-[#142854] data-[state=active]:border-[#142854] data-[state=active]:border' id={`${tab.value}-${index}`} data-testid={`tabDataName${tab.value}`} value={tab.value} key={index} onClick={(e)=> e.preventDefault}>
+                <TabsTrigger 
+                className='bg-[#F6F6F6] mx-1  py-2 rounded-3xl data-[state=active]:bg-[#E8EAEE] data-[state=active]:text-[#142854] data-[state=active]:border-[#142854] data-[state=active]:border' 
+                id={`${tab.value}-${index}`} 
+                data-testid={`tabDataName${tab.value}`} 
+                value={tab.value} 
+                key={index} onClick={(e)=> e.preventDefault}
+                disabled={disabledTabs?.includes(tab.value)}
+                >
                     {tab.name}
                 </TabsTrigger>
             ))}
