@@ -3,7 +3,6 @@ import { inter, inter500 } from '@/app/fonts';
 import * as faceapi from 'face-api.js';
 import Isloading from "@/reuseable/display/Isloading";
 import { MdThumbUpOffAlt, MdCheckCircle } from "react-icons/md";
-import Image from "next/image";
 
 interface CapturePhotoWithTipsProps {
     onCapture: (imageSrc: File) => void;
@@ -264,7 +263,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
 
                 <div className={`${inter500.className} text-black400 text-[16px] leading-[150%] `}>
                     {modelLoadingError ? (
-                        <span className="text-red-500">Error loading face detection: {modelLoadin gError}</span>
+                        <span className="text-red-500">Error loading face detection: {modelLoadingError}</span>
                     ) : !isModelLoaded ? (
                         "Loading face detection models..."
                     ) : !hasFaceBeenDetected ? (
