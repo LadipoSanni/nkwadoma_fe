@@ -201,14 +201,14 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     return (
         <main className={`grid gap-5 ${inter.className}`}>
             <div className="grid place-items-center gap-5">
-                <main
+                <div
                     className={` ${isFaceDetected || hasFaceBeenDetected ? 'relative w-[300px] h-[300px]' : ' w-[419px] h-[279px] '}`}>
-                    {(isFaceDetected || hasFaceBeenDetected) && (
+                    {(isFaceDetected || hasFaceBeenDetected) && step !== "preview" && (
                         <svg viewBox="0 0 300 301"
-                             className={`absolute top-0 left-0 w-full h-full transition-opacity duration-500 ${step === "preview" ? "hidden" : "block"}`}>
+                             className="absolute top-0 left-0 w-full h-full transition-opacity duration-500">
                             <path
                                 d="M300 150.5C300 233.343 232.843 300.5 150 300.5C67.1573 300.5 0 233.343 0 150.5C0 67.6573 67.1573 0.5 150 0.5C232.843 0.5 300 67.6573 300 150.5ZM10.4561 150.5C10.4561 227.568 72.932 290.044 150 290.044C227.068 290.044 289.544 227.568 289.544 150.5C289.544 73.432 227.068 10.9561 150 10.9561C72.932 10.9561 10.4561 73.432 10.4561 150.5Z"
-                                className="fill-greyBase200 "
+                                className="fill-greyBase200"
                             />
                             <circle
                                 className="transition-all duration-300"
@@ -260,7 +260,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                             />
                         </div>
                     )}
-                </main>
+                </div>
 
                 <div className={`${inter500.className} text-black400 text-[16px] leading-[150%] `}>
                     {modelLoadingError ? (
