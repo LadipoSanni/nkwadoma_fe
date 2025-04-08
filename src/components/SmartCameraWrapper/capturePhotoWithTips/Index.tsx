@@ -199,7 +199,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     };
 
     return (
-        <main className={`grid gap-5 ${inter.className}`}>
+        <div className={`grid gap-5 ${inter.className}`}>
             <div className="grid place-items-center gap-5">
                 <div
                     className={` ${isFaceDetected || hasFaceBeenDetected ? 'relative w-[300px] h-[300px]' : ' w-[419px] h-[279px] '}`}>
@@ -325,7 +325,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     </section>
                 )}
             </>
-        </main>
+        </div>
     );
 };
 
