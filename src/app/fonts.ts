@@ -19,6 +19,16 @@ export const inter = Inter({
     preload: false
 
 });
+
+export const inter700 = Inter({
+    subsets: ['latin'],
+    display: 'swap',
+    style: 'normal',
+    weight: '700',
+    preload: false
+
+});
+
 export const inter500 = Inter({
     subsets: ['latin'],
     display: 'swap',
