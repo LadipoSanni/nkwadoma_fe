@@ -63,6 +63,11 @@ export const loanProductApi = createApi({
             query: ({ loanProductId, pageSize, pageNumber }) =>
                 `loanProduct/loanees/${loanProductId}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
         }),
+
+        searchLoaneesInALoanProduct: builder.query({
+            query: ({ loanProductId, name, pageSize = 10, pageNumber = 0 }) =>
+                `loanProduct/search-loanees/${loanProductId}?name=${name}&pageSize=${pageSize}&pageNumber=${pageNumber}`,
+        }),
     }),
 })
 export const {
@@ -71,5 +76,6 @@ export const {
     useCreateLoanProductMutation,
     useGetLoanProductDetailsByIdQuery,
     useGetAllLoaneeInALoanProductQuery,
+    useSearchLoaneesInALoanProductQuery,
 } = loanProductApi;
 
