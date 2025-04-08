@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import storage from 'redux-persist/lib/storage/session';
 import appReducer from '@/redux/reducer';
 import { authApi } from '@/service/auths/api';
 import { programApi } from '@/service/admin/program_query';
@@ -20,7 +20,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout'],
+    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'loanReferral'],
 };
 
 const persistedReducer = persistReducer(persistConfig, appReducer);
