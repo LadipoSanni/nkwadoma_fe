@@ -166,8 +166,7 @@ function LoanDetails() {
             />
         },
         {
-            label: 'Credit score', value:
-            <CreditScore creditScore={data?.data?.creditScore}/>
+            label: 'Credit score', value: <CreditScore creditScore={data?.data?.creditScore}/>
         },
 
     ]
