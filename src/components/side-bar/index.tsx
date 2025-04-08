@@ -1,7 +1,7 @@
 "use client"
 import React, {useEffect, useState} from 'react';
 import {redirect, useRouter} from "next/navigation";
-import {persistor, store, useAppSelector} from "@/redux/store";
+import {persistor, RootState, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
@@ -14,6 +14,7 @@ import {MdOutlineAccountBalance, MdOutlineInventory2,MdOutlineReceiptLong, MdOut
 import {useLogoutMutation} from "@/service/users/api";
 import {clearData} from "@/utils/storage";
 import {GearIcon} from "@radix-ui/react-icons";
+import {useSelector} from "react-redux";
 
 
 
@@ -25,6 +26,8 @@ const SideBar = () => {
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
     const [logout] = useLogoutMutation()
+    const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
+
 
 
     const [role, setRole] = useState('')
@@ -66,20 +69,17 @@ const SideBar = () => {
 
     const handleLogout =  async () => {
         store.dispatch(setCurrentNavBottomItem("Logout"))
+         await logout({})
         clearData()
-        await persistor.purge();
-     try{
-          await logout({})
+        await persistor.purge()
          store.dispatch(setCurrentNavBottomItem(""))
          router.push("/auth/login")
-     }catch (error){
-         console.log("error:: ", error)
-     }
+
     }
 
 
-    const currentTextLiterals = `text-[#626F8C]`;
-    const textLiterals = `text-navbarIconColor`;
+    const currentTextLiterals = `text-[#626F8C] md:text-[#626F8C]`;
+    const textLiterals = `text-navbarIconColor md:text-navbarIconColor`;
 
 
     const PORTFOLIO_MANAGER: navbarRouterItemsProps[] = [
@@ -96,10 +96,10 @@ const SideBar = () => {
     const LOANEE : navbarRouterItemsProps[] = [
         {
             icon: <MdOutlineHome
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
+                className={` h-[1.2rem] w-[1.2rem] ${isLoaneeIdentityVerified ? `${current === 'Overview' ? currentTextLiterals : textLiterals} ` : 'text-navbarIconColor md:text-navbarIconColor'} `}
             />,
             id: 'overview',
-            isActive: true,
+            isActive: isLoaneeIdentityVerified,
             name: "Overview",
             route: '/overview'
         },
