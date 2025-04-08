@@ -6,7 +6,7 @@ import Status from '@/components/portfolio-manager/fund/investmentVehicle-multis
 function InvestmentVehicleStatus() {
   return (
     <div>
-      <Status/>
+      <Status disabledTabs={["coupon","closure"]}/>
     </div>
   )
 }
