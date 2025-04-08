@@ -8,10 +8,10 @@ import { MdClose, MdHorizontalRule, MdOutlineAdd, MdOutlineCameraAlt } from "rea
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 import CapturePhotoWithTips from "@/components/SmartCameraWrapper/capturePhotoWithTips/Index";
+import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
 import CryptoJS from "crypto-js";
 import { uploadImageToCloudinary } from "@/utils/UploadToCloudinary";
 import { useVerifyIdentityMutation } from "@/service/users/Loanee_query";
-import WarningModal from "@/reuseable/modals/WarningDialog/WarningModal";
 // import { clearCameraStream } from '@/redux/slice/camera/camera-slice';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { RootState } from '@/redux/store';
@@ -290,7 +290,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                 </DialogContent>
             </Dialog>
 
-            <WarningModal
+            <SuccessDialog
                 open={showSuccessDialog}
                 onClose={() => setShowSuccessDialog(false)}
                 onContinue={onThirdStepContinue}
