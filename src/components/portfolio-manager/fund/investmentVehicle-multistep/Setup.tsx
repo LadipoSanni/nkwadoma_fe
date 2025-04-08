@@ -483,7 +483,7 @@ function Setup({investmentVehicleType}: Props) {
                 )} 
                 </div>
             </div>  
-            <div className= "md:flex gap-24 justify-between mt-6  md:mb-0 lg:px-8 relative lg:right-10">
+            <div className= "md:flex lg:gap-24 gap-6 justify-between mt-6  md:mb-0 lg:px-8 relative lg:right-10">
                         <Button
                             id='saveInvestment'
                             variant={"outline"}

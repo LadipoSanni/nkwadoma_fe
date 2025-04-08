@@ -11,7 +11,9 @@ import {formatMonthInDate} from '@/utils/Format';
 import {formatAmount} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery} from "@/service/admin/fund_query";
-import { investmentVehicleData } from '@/utils/cohort/trainee-details-mock-data/Index';
+import { setCreateInvestmentField,setDraftId,clearDraftId} from '@/redux/slice/vehicle/vehicle';
+import {store} from "@/redux/store";
+
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -41,13 +43,15 @@ function ViewDraft() {
     const router = useRouter();
     const vehicleType = useAppSelector(state => (state.vehicle?.vehicleType))
     const investmentType = useAppSelector(state => (state?.vehicle?.setInvestmentVehicleType))
+    // const savedFormData = useAppSelector(state => (state?.vehicle?.CreateInvestmentField))
+    // const draftId = useAppSelector(state => (state?.vehicle?.setDraftId))
     const [searchTerm, setSearchTerm] = useState("")
     const [pageNumber, setPageNumber] = useState(0);
      const [hasNextPage,setNextPage] = useState(false)
      const [totalPage,setTotalPage] = useState(0)
       const [investmentVehicleDraft, setinvestmentVehicleDraft] = useState<investmentVehicleProps[]>([]);
 
-    const { data, isLoading, refetch} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery(
+    const { data, isLoading} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery(
             {
                 pageSize: 10,
                 pageNumber,
@@ -57,7 +61,6 @@ function ViewDraft() {
             { refetchOnMountOrArgChange: true }
         );
 
-        console.log("the data: ",data)
 
  useEffect(() => {
         
@@ -69,8 +72,30 @@ function ViewDraft() {
     }
    },[data])
 
+const handleRowClick = (row: TableRowData) => {
+       store.dispatch(setDraftId(String(row?.id)))
+    const investmentVehicleData  = {
+        id: String(row?.id),
+        name: String(row?.name),
+        investmentVehicleType: String(row?.investmentVehicleType),
+        mandate: String(row?.mandate),
+        tenure: String(row?.tenure),
+        size: String(row?.size),
+        rate: String(row?.rate),
+        trustee: String(row?.trustee),
+        custodian: String(row?.custodian),
+        bankPartner: String(row?.bankPartner),
+        fundManager: String(row?.fundManager),
+        startDate: row?.startDate ? String(row.startDate) : "",
+        minimumInvestmentAmount:String(row?.minimumInvestmentAmount),
+        sponsors: '',
+       }
+    store.dispatch(setCreateInvestmentField(investmentVehicleData))
+    router.push('/vehicle/setup')
+    }
 
     const handleBack=()=> {
+        store.dispatch(clearDraftId())
         if(vehicleType === "commercial"){
             router.push("/vehicle/commercial-vehicle")
         }else {
@@ -129,7 +154,7 @@ function ViewDraft() {
        ]
 
        const tableData = investmentVehicleDraft as unknown as TableRowData[]
-       console.log("invest: ", investmentVehicleDraft)
+       
 
   return (
     <div className='px-5 py-5'>
@@ -157,7 +182,7 @@ function ViewDraft() {
            <Table
            tableData={tableData} 
            tableHeader={draftHeader}
-           handleRowClick={()=>""}
+           handleRowClick={handleRowClick}
            tableHeight={50}
             sx='cursor-pointer'
             tableCellStyle={'h-12'}

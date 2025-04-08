@@ -3,8 +3,6 @@ import { MdCheckCircleOutline, MdOutlineCancel } from "react-icons/md";
 import { inter } from '@/app/fonts';
 import * as faceapi from 'face-api.js';
 import Isloading from "@/reuseable/display/Isloading";
-import { useToast } from "@/hooks/use-toast";
-import styles from "./index.module.css"
 // import { useDispatch } from 'react-redux';
 // import { setCameraStream } from "@/redux/slice/camera/camera-slice";
 
@@ -22,8 +20,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const [step, setStep] = useState<string>('right');
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
     const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
-    const { toast } = useToast();
-    const lastToastTime = useRef(15000);
 
     useEffect(() => {
         const loadModels = async () => {
@@ -85,7 +81,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                         setHasFaceBeenDetected(true);
                         captureImage(video);
                     }
-                    
                 }
                 const landmarks = detection.landmarks;
                 const nose = landmarks.getNose();
@@ -137,13 +132,8 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     }
                 }
             } else {
-                if (!hasFaceBeenDetected && Date.now() - lastToastTime.current > 20000) {
+                if (!hasFaceBeenDetected) {
                     setIsFaceDetected(false);
-                    toast({
-                        description: "position your face within the frame",
-                        status: "warning",
-                      });
-                      lastToastTime.current = Date.now();
                 }
             }
         };
@@ -249,7 +239,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     ) : !isModelLoaded ? (
                         "Loading face detection models..."
                     ) : !hasFaceBeenDetected ? (
-                        <span className={`${styles.animatedtext}`}>Position your face within the frame</span>
+                        "Position your face within the frame"
                     ) : step === 'right' ? (
                         "Slowly turn your face to the right"
                     ) : step === 'left' ? (
@@ -288,3 +278,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
 };
 
 export default CapturePhotoWithTips;
+
+
+
