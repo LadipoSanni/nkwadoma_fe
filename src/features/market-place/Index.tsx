@@ -7,7 +7,7 @@ import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
 import { useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery } from "@/service/admin/fund_query";
-import SkeletonForGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-grid";
+import SkeletonForMarketPlaceVehicles from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
 
 export const HandleCardDetails = (
     id: string,
@@ -77,7 +77,7 @@ const MarketPlaceView = () => {
                 className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
             >
                 {isLoading || isFetching ? (
-                        <SkeletonForGrid/>
+                        <SkeletonForMarketPlaceVehicles/>
                 ) : filteredVehicles.length === 0 ? (
                     <p className="text-gray-500">No investments found</p>
                 ) : (
@@ -91,7 +91,7 @@ const MarketPlaceView = () => {
                                 ? "/asset/image/BlueCircles.svg"
                                 : "/asset/image/GreenCircles.svg";
 
-                        const status = "Open"; // You can update this based on real logic if needed
+                        const status = "Open";
                         const statusClass =
                             status === "Open"
                                 ? "bg-green-100 text-[#0D9B48] border-[#B4E5C8]"
