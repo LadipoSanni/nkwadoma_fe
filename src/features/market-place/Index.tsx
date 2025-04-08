@@ -1,11 +1,11 @@
 "use client"
 import React, {useState} from 'react';
 import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
-import {setMarketInvestmentVehicleId} from "@/redux/slice/program/programSlice";
 import {store} from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
+import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
 
 
 const dummyInvestments = [
@@ -79,8 +79,8 @@ const MarketPlaceView = () => {
             {dummyInvestments.map((investment) => {
                     const backgroundColor = investment.type === "Commercial" ? "#D9EAFF" : "#E6F2EA";
                     const imageSrc = investment.type === "Commercial"
-                        ? "/asset/image/Asset.svg"
-                        :"/asset/image/Circles.svg";
+                        ? "/asset/image/BlueCircles.svg"
+                        :"/asset/image/GreenCircles.svg";
                     const statusClass = investment.status === "Open"
                         ? "bg-green-100 text-[#0D9B48] border-[#B4E5C8} "
                         : "bg-red-100 text-red-600 border-[#F2BCBA]";

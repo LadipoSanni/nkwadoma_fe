@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import {
   Select,
   SelectTrigger,
@@ -8,6 +8,8 @@ import {
   SelectGroup,
 } from '@/components/ui/select';
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
+import { MdCheck } from "react-icons/md";
+
 
 type SelectItemType = {
   id: string ;
@@ -24,6 +26,8 @@ type Props = {
   placeholder?: string;
   triggerId?: string;
   isItemDisabled?: (item: SelectItemType) => boolean;
+  additionalContent?: ReactNode | ((props: { closeDropdown: () => void }) => ReactNode);
+  selectItemCss?: string
 };
 
 function CustomSelectId({
@@ -36,15 +40,22 @@ function CustomSelectId({
   placeholder = 'Select an option',
   triggerId,
   isItemDisabled,
+  additionalContent,
+  selectItemCss
 }: Props) {
+
   const [isOpen, setIsOpen] = useState(false);
+  const closeDropdown = () => {
+    setIsOpen(false);
+  };
 
   return (
     <Select
       name={name}
       value={value}
-      onValueChange={onChange} // Pass the selected ID directly to onChange
-      onOpenChange={(open) => setIsOpen(open)} // Sync open state
+      onValueChange={onChange}
+      onOpenChange={(open) => setIsOpen(open)} 
+      open={isOpen}
     >
       <SelectTrigger
         id={triggerId}
@@ -56,7 +67,7 @@ function CustomSelectId({
           placeholder={placeholder}
           id={id ? `select-${id}` : undefined}
         >
-          {/* Display the name corresponding to the selected ID */}
+          
           {value
             ? selectContent.find((item) => String(item.id) === value)?.name
             : placeholder}
@@ -73,18 +84,37 @@ function CustomSelectId({
         style={{ zIndex: 1000 }}
       >
         <SelectGroup>
-          {selectContent.map((item) => (
-            <SelectItem
-              key={item.id}
-              value={String(item.id)} // Send ID to onChange
-              data-testid={`select-item-${item.id}`}
-              className="cursor-pointer hover:bg-gray-50"
-              disabled={isItemDisabled ? isItemDisabled(item) : false}
-            >
-              {item.name} {/* Display name in dropdown */}
-            </SelectItem>
-          ))}
+        {selectContent.map((item) => {
+            const disabled = isItemDisabled ? isItemDisabled(item) : false;
+            const selected = value === item.id;
+            
+            return (
+              <SelectItem
+                key={item.id}
+                value={String(item.id)}
+                data-testid={`select-item-${item.id}`}
+                className={`${selectItemCss} cursor-pointer hover:bg-gray-50 ${
+                  disabled ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+                disabled={disabled}
+              >
+                <div className="flex items-center justify-end w-full">
+                  <span className='w-full'>{item.name}</span>
+                  <div className='flex items-center justify-center absolute right-2 '>
+                  {(disabled || selected) && (
+                    <MdCheck className="h-4 w-4 text-[#BABABA] ml-2 " />
+                  )}
+                  </div>
+                </div>
+              </SelectItem>
+            );
+          })}
         </SelectGroup>
+        {additionalContent &&
+          (typeof additionalContent === "function"
+            ? additionalContent({ closeDropdown })
+            : additionalContent)
+            }
       </SelectContent>
     </Select>
   );

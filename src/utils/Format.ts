@@ -80,7 +80,6 @@ export const validateText =
   (field: string, setFieldValue: (field: string, value: string) => void) =>
   (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    //  const validValue = value.replace(/[^a-zA-Z\s]/g, '');
     const validValue = value.replace(
       /[^a-zA-Z0-9!@#$%^&*(),.?":{}|<>_\-\/\s]/g,
       ""

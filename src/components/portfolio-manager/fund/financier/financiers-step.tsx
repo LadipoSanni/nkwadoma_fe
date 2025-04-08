@@ -20,10 +20,11 @@ interface Props{
   investmentId?: string
   amountCommitedAndDesignationCondition?: boolean
   isDesignationRequired?: boolean
+  context?: string
 
 }
 
-function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCondition,isDesignationRequired}: Props) {
+function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCondition,isDesignationRequired,context}: Props) {
   const [step, setStep] = useState(1);
   const [inviteFinancier, {isLoading}] = useInviteFinancierMutation()
   const [error, setError] = useState("");
@@ -191,6 +192,7 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
            handleCloseModal={handleCloseModal}
            handleContinue={handleContinue}
            setFieldValue={setFieldValue}
+           context={context}
           />
         </div>
       ) : (

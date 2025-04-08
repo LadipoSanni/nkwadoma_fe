@@ -7,15 +7,18 @@ interface Props {
     handleCloseModal: () => void
     handleContinue: () => void
     setFieldValue: (field: string, value: string | number | boolean, shouldValidate?: boolean) => void;
+    context?: string
     
 }
 
-function financierSelectType({financierType,handleCloseModal,handleContinue,setFieldValue}: Props) {
+function financierSelectType({financierType,handleCloseModal,handleContinue,setFieldValue,context = "Select the type of financier you want to invite"}: Props) {
   return (
     <div>
          <div>
           <p className='mb-6 mt-6'>
-          Select the type of financier you want to invite
+            {
+             context  
+            }
           </p>
           <div className='gap-y-4 grid grid-cols-1 text-[14px]'>
           <div 

@@ -25,6 +25,7 @@ import notificationReducer  from './slice/notification/notification';
 import vehicleMultistepReducer from './slice/multiselect/vehicle-multiselect'
 import { financierApi } from '@/service/admin/financier';
 import financierReducer  from './financier/financier';
+import MarketPlaceReducer from "./slice/investors/MarketPlaceSlice";
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -38,6 +39,7 @@ const appReducer = combineReducers({
     program: programSliceReducer,
     notification: notificationReducer ,
     vehicleMultistep:vehicleMultistepReducer,
+    marketPlace: MarketPlaceReducer,
     financier:financierReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,

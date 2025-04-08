@@ -2,10 +2,10 @@
 import React,{useState,useEffect} from 'react'
 import InvestmentActionBar from '@/components/portfolio-manager/fund/Investment-action-bar'
 import {inter} from '@/app/fonts'
-import Draft from "@/features/portfolio-manager/fund/draft/Index";
-import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
-import TableModal from '@/reuseable/modals/TableModal';
-import {Cross2Icon} from "@radix-ui/react-icons";
+// import Draft from "@/features/portfolio-manager/fund/draft/Index";
+// import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
+// import TableModal from '@/reuseable/modals/TableModal';
+// import {Cross2Icon} from "@radix-ui/react-icons";
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import {MdSearch} from 'react-icons/md'
 import Table from '@/reuseable/table/Table';
@@ -16,6 +16,8 @@ import {formatAmount} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
+import { resetVehicleState } from '@/redux/slice/multiselect/vehicle-multiselect';
+import { setInvestmentVehicleType } from '@/redux/slice/vehicle/vehicle';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -43,8 +45,8 @@ interface investmentVehicleProps     {
 
 function CommercialFund() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [modalType, setModalType] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [modalType, setModalType] = useState('');
+    // const [isModalOpen, setIsModalOpen] = useState(false);
        const [pageNumber,setPageNumber] = useState(0)
         const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
         const [hasNextPage,setNextPage] = useState(false)
@@ -78,6 +80,7 @@ function CommercialFund() {
                     setTotalPage(investmentVehicleData?.data?.totalPages)
                     setPageNumber(investmentVehicleData?.data?.pageNumber)
                  }
+                 store.dispatch(resetVehicleState())
              }, [searchTerm, searchData, investmentVehicleData])
     
     
@@ -86,8 +89,11 @@ function CommercialFund() {
     };
 
     const handleCommercialFundDraftClick = () => {
-        setModalType("draft")
-        setIsModalOpen(true);
+        // setModalType("draft")
+        // setIsModalOpen(true);
+        router.push("/vehicle/draft")
+        store.dispatch(setVehicleType("commercial"))
+        store.dispatch(setInvestmentVehicleType("COMMERCIAL"))    
       
     }
 
@@ -95,12 +101,13 @@ function CommercialFund() {
         // setModalType("createInvestmentVehicle")
         // setIsModalOpen(true);
         router.push("/vehicle/setup")
-        store.dispatch(setVehicleType("commercialFund"))    
+        store.dispatch(setVehicleType("commercial"))
+        store.dispatch(setInvestmentVehicleType("COMMERCIAL"))    
     }
 
      const handleRowClick = (row: TableRowData) => {
                 store.dispatch(setCurrentVehicleId(String(row.id)));
-                store.dispatch(setVehicleType("commercialFund"))
+                store.dispatch(setVehicleType("commercial"))
                 router.push('/vehicle/details')
     }
 
@@ -191,7 +198,7 @@ function CommercialFund() {
                 </div>}
         </div>
        <div>
-        <TableModal
+        {/* <TableModal
           isOpen={isModalOpen}
                     closeModal={()=> setIsModalOpen(false)}
                     className='pb-1'
@@ -199,10 +206,10 @@ function CommercialFund() {
                     closeOnOverlayClick={true}
                     icon={Cross2Icon}
                     width={"38%"}
-        >
-            {modalType === "createInvestmentVehicle"? (<CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='sponsor' investmentVehicleType='COMMERCIAL' />): (  <Draft setIsOpen={() => setIsModalOpen(false)} type='sponsor' investmentVehicleType='COMMERCIAL'/>)}
-
-        </TableModal>
+        > */}
+            {/* {modalType === "createInvestmentVehicle"? (<CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='sponsor' investmentVehicleType='COMMERCIAL' />): (  <Draft setIsOpen={() => setIsModalOpen(false)} type='sponsor' investmentVehicleType='COMMERCIAL'/>)} */}
+           
+        {/* </TableModal> */}
        </div>
        
     </div>
