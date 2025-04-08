@@ -1,5 +1,5 @@
 import React from "react";
-import {cabinetGrotesk} from '@/app/fonts';
+import {cabinetGrotesk, inter} from '@/app/fonts';
 import {Button} from "@/components/ui/button";
 
 interface CardData {
@@ -14,7 +14,7 @@ interface BalanceCardProps {
 
 const BalanceCard: React.FC<BalanceCardProps> = ({ cardData }) => {
     return (
-        <div id={'balanceCard'} className={'md:flex grid gap-6'}>
+        <div id={'balanceCard'} className={`${inter.className}  md:flex grid gap-6`}>
             {cardData.map((card, index) => (
                 <main key={index} className="grid gap-5 px-3 pt-3 pb-5 w-full rounded-md border border-">
                     <div id={`balanceCardBlock${index}`} className="bg-grey105 p-5 grid gap-5">
