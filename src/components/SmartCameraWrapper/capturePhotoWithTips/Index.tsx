@@ -135,10 +135,13 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                         } else if (step === "down") {
                             setStep("center");
                         } else if (step === "center") {
-                           
-                            captureImage(video);
-                            setStep("preview");
-                            setIsPreview(true);
+                            setTimeout(() => {
+                                if (videoRef.current) { 
+                                    captureImage(video);
+                                    setStep("preview");
+                                    setIsPreview(true);
+                                }
+                            }, 1000); 
                         }
                     }
                 }
