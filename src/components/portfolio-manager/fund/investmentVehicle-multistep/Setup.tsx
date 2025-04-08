@@ -215,7 +215,7 @@ function Setup({investmentVehicleType}: Props) {
         })=> (
             <Form className={`${inter.className}`}>
             <div>
-            <div className="grid grid-cols-1 gap-y-4 md:max-h-[50vh] md:relative overflow-y-auto lg:px-14 relative  lg:right-16 "
+            <div className="grid grid-cols-1 gap-y-4 md:max-h-[50vh] md:relative overflow-y-auto lg:px-16 relative  lg:right-16  "
                 style={{
                     overflowY: "auto",
                     marginRight: "-10px",  
@@ -298,7 +298,7 @@ function Setup({investmentVehicleType}: Props) {
                         )}
                 </div>  
                <div className='md:mt-4 lg:mt-0'>
-                                <Label htmlFor="tenure">Tenor (months)</Label>
+                                <Label htmlFor="tenure">Tenor(months)</Label>
                                 <Field
                                   id="tenure"
                                   name="tenure"
