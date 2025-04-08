@@ -141,7 +141,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                                     setStep("preview");
                                     setIsPreview(true);
                                 }
-                            }, 1000); 
+                            }, 5000);
                         }
                     }
                 }
