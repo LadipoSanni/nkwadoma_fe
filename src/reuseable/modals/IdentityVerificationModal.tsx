@@ -229,12 +229,12 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                         </CollapsibleContent>
                                     </Collapsible>
                                 </div>
-                                <div className="flex justify-end gap-5 mt-3">
+                                <div className="md:flex grid md:justify-end gap-5 mt-3">
                                     <Button type="button" onClick={onClose}
-                                            className="h-[3.5625rem] w-[8.75rem]  border border-meedlBlue text-meedlBlue px-4 py-2 bg-gray-300 rounded-md">Cancel
+                                            className="h-[3.5625rem] md:w-[8.75rem] w-full  border border-meedlBlue text-meedlBlue px-4 py-2 bg-gray-300 rounded-md">Cancel
                                     </Button>
                                     <Button type="submit"
-                                            className={`h-[3.5625rem] w-[8.75rem] px-4 py-2 ${!methods.formState.isValid ? 'bg-[#D0D5DD]' : 'bg-meedlBlue'} hover:bg-meedlBlue text-white rounded-md`}
+                                            className={`h-[3.5625rem] md:w-[8.75rem] w-full px-4 py-2 ${!methods.formState.isValid ? 'bg-[#D0D5DD]' : 'bg-meedlBlue'} hover:bg-meedlBlue text-white rounded-md`}
                                             disabled={!methods.formState.isValid}>Continue
                                     </Button>
                                 </div>

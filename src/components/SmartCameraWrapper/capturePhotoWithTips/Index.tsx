@@ -379,16 +379,16 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
 
             <>
                 {step === 'preview' ? (
-                    <div className="flex justify-between gap-2">
+                    <div className="md:flex grid md:justify-between gap-2">
                         <button
                             onClick={handleRetake}
-                            className="py-5 px-4 bg-white border border-meedlBlue  rounded-md text-meedlBlue text-sm"
+                            className="md:w-[8.75rem] h-[61px]  w-full py-5 px-4 bg-white border border-meedlBlue  rounded-md text-meedlBlue text-sm"
                         >
                             Retake selfie
                         </button>
                         <button
                             onClick={handleProceed}
-                            className="py-2 px-4 bg-meedlBlue rounded-md text-white text-sm"
+                            className="md:w-[12.063rem] h-[61px] w-full py-2 px-4 bg-meedlBlue rounded-md text-white text-sm"
                         >
                             Proceed with this selfie
                         </button>
