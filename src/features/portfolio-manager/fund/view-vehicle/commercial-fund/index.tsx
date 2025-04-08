@@ -45,8 +45,8 @@ interface investmentVehicleProps     {
 
 function CommercialFund() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [modalType, setModalType] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [modalType, setModalType] = useState('');
+    // const [isModalOpen, setIsModalOpen] = useState(false);
        const [pageNumber,setPageNumber] = useState(0)
         const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
         const [hasNextPage,setNextPage] = useState(false)
