@@ -115,7 +115,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
                     newOrientation = "up";
                 } else if (noseY > leftEyeY && noseY > rightEyeY) {
                     newOrientation = "down";
-                } else if (mouth && nose && leftEye && rightEye) {
+                } else if (landmarks) {
                     newOrientation = "center";
                 }
 
@@ -169,6 +169,21 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         setIsPreview(false);
         setCapturedImage(null);
         setStep("right");
+
+        // Restart the camera stream
+        const startCamera = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                }
+            } catch (error) {
+                console.error("Error restarting camera:", error);
+                setModelLoadingError("Could not restart camera");
+            }
+        };
+
+        startCamera();
     };
 
     const frameClassName = isFaceDetected
@@ -226,7 +241,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
 
                     {isPreview && capturedImage ? (
                         // Preview the captured image
-                        <div className="absolute top-0 right-0 rounded-md w-[419px] h-[279px] overflow-hidden">
+                        <div className="absolute top-0 right-[-60px] rounded-md w-[419px] h-[279px] overflow-hidden">
                             <img
                                 src={capturedImage}
                                 alt="Captured selfie"
