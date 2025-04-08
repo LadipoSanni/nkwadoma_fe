@@ -1,92 +1,66 @@
 "use client";
-import React, {useEffect, useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import SearchInput from "@/reuseable/Input/SearchInput";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import Tables from "@/reuseable/table/LoanProductTable";
-import {
-    useSearchCohortsInAParticularProgramQuery
-} from "@/service/admin/program_query";
 import {useAppSelector} from "@/redux/store";
-import {useGetAllLoaneeInALoanProductQuery} from "@/service/admin/loan_product";
+import {useGetAllLoaneeInALoanProductQuery, useSearchLoaneesInALoanProductQuery} from "@/service/admin/loan_product";
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
-
-interface loanDetails {
-    name?: string;
-    status?: number;
-    institutes?: string;
-}
 
 interface TableRowData {
-    [key: string]: string | number | null | React.ReactNode | loanDetails;
+    [key: string]: string | number | null | React.ReactNode ;
 }
 
-interface viewAllProgramProps {
-    programId?: string;
-    cohortDescription?: string;
-    name?: string;
-    tuitionAmount?: number;
-    numberOfLoanees?: number;
-    loanDetails?: loanDetails
+interface loanDetails extends TableRowData{
+    firstName: string;
+    lastName: string;
+    performance: string;
+    instituteName: string;
 }
-
-
-type ViewAllLoaneeInLoanProductProps = viewAllProgramProps & TableRowData;
 
 export function Loanees() {
-    const loanProductId = useAppSelector(state => (state.selectedLoan.clickedLoanProductId))
-    console.log(loanProductId, "this is the iduietyeiru")
-    const [programId] = useState(loanProductId);
-    const [cohorts, setCohorts] = useState<ViewAllLoaneeInLoanProductProps[]>([])
+    const id = useAppSelector(state => (state.selectedLoan.clickedLoanProductId))
+    const [loanProductId] = useState(id);
+    const [loanees, setLoanees] = useState<loanDetails[]>([])
     const [searchTerm, setSearchTerm] = useState('');
     const [page] = useState(0);
     const size = 100;
 
-    const {data: cohortsByProgram} = useGetAllLoaneeInALoanProductQuery({
-        loanProductId: loanProductId,
+    const {data: allLoanee} = useGetAllLoaneeInALoanProductQuery({
+        loanProductId: id,
         pageSize: size,
         pageNumber: page
-    }, {refetchOnMountOrArgChange: true, skip: !programId});
+    }, {refetchOnMountOrArgChange: true, skip: !loanProductId});
 
-    const {data: searchResults} = useSearchCohortsInAParticularProgramQuery({
-        cohortName: searchTerm,
-        programId: programId
-    }, {skip: !searchTerm || !programId})
-
-    useEffect(() => {
-        if (cohortsByProgram?.data) {
-            setCohorts(cohortsByProgram.data.body)
-        }
-    }, [cohortsByProgram])
+    const {data: searchResults, isLoading} = useSearchLoaneesInALoanProductQuery({
+        loanProductId: id,
+        name: searchTerm,
+    }, {skip: !searchTerm || !loanProductId})
 
     useEffect(() => {
-        if (searchTerm && searchResults && searchResults.data) {
-            const cohorts = searchResults.data;
-            setCohorts(cohorts);
-        } else if (cohortsByProgram && cohortsByProgram?.data) {
-            const cohorts = cohortsByProgram.data.body;
-            setCohorts(cohorts);
-
+        if (searchTerm && searchResults?.data?.body) {
+            setLoanees(searchResults.data.body);
+        } else if (!searchTerm && allLoanee?.data?.body) {
+            setLoanees(allLoanee.data.body);
         }
-
-    }, [searchTerm, searchResults, cohortsByProgram])
+    }, [searchTerm, searchResults?.data?.body, allLoanee?.data?.body]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
     const LoanProductLoaneeHeader = [
-        {
-            title: "Name", sortable: true, id: "name",
-            selector: (row: ViewAllLoaneeInLoanProductProps) => row.name
+        {title: "Name", sortable: true, id: "name",
+            selector: (row: TableRowData) =>
+                `${(row.firstName as string).charAt(0).toUpperCase()}${(row.firstName as string).slice(1).toLowerCase()} ${(row.lastName as string).charAt(0).toUpperCase()}${(row.lastName as string).slice(1).toLowerCase()}`
         },
-        {
-            title: "Status", sortable: true, id: "status",
-            selector: (row: ViewAllLoaneeInLoanProductProps) => row.numberOfLoanees
+        {title: "Status", sortable: true, id: "performance", selector: (row: TableRowData) => <span
+                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.performance  === "PERFORMANCE" ? "text-success600 bg-success50" : "text-error600 bg-error50"} `}>
+                {capitalizeFirstLetters(String(row.performance ?? "Not provided"))}
+            </span>
         },
-        {
-            title: "Institution", sortable: true, id: "institution",
-            selector: (row: ViewAllLoaneeInLoanProductProps) => row.loanDetails
-        },
+        {title: "Institution", sortable: true, id: "instituteName", selector: (row: TableRowData) => row.instituteName},
 
     ];
     return (
@@ -94,9 +68,9 @@ export function Loanees() {
             <div id={`loanProductTab2`} className={'grid gap-4'}>
                 <SearchInput id={'loanProductLoaneeSearch'} value={searchTerm} onChange={handleSearchChange}/>
                 <div>
-                    {searchTerm && cohorts.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='Loanee'/></div> :
+                    {searchTerm && loanees.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='Loanee'/></div> :
                         <Tables
-                            tableData={cohorts}
+                            tableData={loanees}
                             tableHeader={LoanProductLoaneeHeader}
                             staticHeader={'Loan product'}
                             staticColunm={'name'}
@@ -108,6 +82,7 @@ export function Loanees() {
                             optionalRowsPerPage={10}
                             tableCellStyle={'h-12'}
                             condition={true}
+                            isLoading={isLoading}
                         />}
                 </div>
             </div>
