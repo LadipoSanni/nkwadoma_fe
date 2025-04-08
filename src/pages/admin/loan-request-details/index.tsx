@@ -167,15 +167,7 @@ function LoanDetails() {
         },
         {
             label: 'Credit score', value:
-                // <div className={`flex gap-2 `}>
-                //     <span>Good</span>
-                //     <div
-                //         className={` w-fit md:w-fit md:h-fit h-fit md:py-0 py-0 md:px-1 px-1 md:rounded-md rounded-md border md:border border-green650 md:border-green650`}>
-                //         <span
-                //             className={`md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-xs text-xs text-green750 md:text-green750 `}>{data?.data?.creditScore}</span>
-                //     </div>
-                // </div>
-            <CreditScore/>
+            <CreditScore creditScore={data?.data?.creditScore}/>
         },
 
     ]

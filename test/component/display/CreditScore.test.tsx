@@ -5,14 +5,14 @@ describe('test credit score', () => {
 
     test('that credit score component exist ', () => {
         render(
-            <CreditScore/>
+            <CreditScore creditScore={1}/>
         )
         expect(screen.getByTestId('CreditScoreComponent')).toBeInTheDocument()
     })
 
     test('should contain credit score description and score ', ()=> {
         render(
-            <CreditScore/>
+            <CreditScore creditScore={0}/>
         )
         const score = screen.getByTestId('creditScore')
         const description = screen.getByTestId('creditScoreDescription')
