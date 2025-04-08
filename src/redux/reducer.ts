@@ -26,6 +26,7 @@ import vehicleMultistepReducer from './slice/multiselect/vehicle-multiselect'
 import { financierApi } from '@/service/admin/financier';
 import financierReducer  from './financier/financier';
 import MarketPlaceReducer from "./slice/investors/MarketPlaceSlice";
+import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -53,7 +54,8 @@ const appReducer = combineReducers({
     [loanOfferApi.reducerPath]: loanOfferApi.reducer,
     [loanDisbursalApi.reducerPath]: loanDisbursalApi.reducer,
     [notificationApi.reducerPath]:  notificationApi.reducer,
-    [financierApi.reducerPath]: financierApi.reducer
+    [financierApi.reducerPath]: financierApi.reducer,
+    [financierOnboardingAndDashboardApi.reducerPath]: financierOnboardingAndDashboardApi.reducer,
 });
 
 export default appReducer;

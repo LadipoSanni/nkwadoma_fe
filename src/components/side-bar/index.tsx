@@ -86,6 +86,7 @@ const SideBar = () => {
         for (let i = 0; i < sideBarContent.length; i++) {
             if (sideBarContent.at(i)?.name === userrole) {
                 if (sideBarContent.at(i)?.value) {
+                    console.log('side bar items:: ', sideBarContent.at(i)?.value)
                     return sideBarContent.at(i)?.value as navbarRouterItemsProps[]
                 }
             }
