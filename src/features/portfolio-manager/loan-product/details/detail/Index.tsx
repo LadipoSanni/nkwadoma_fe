@@ -6,12 +6,15 @@ import { useGetLoanProductDetailsByIdQuery } from "@/service/admin/loan_product"
 import {formatAmount} from "@/utils/Format";
 import { MdOutlineInventory2 } from "react-icons/md";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import {useAppSelector} from "@/redux/store";
 
 
 
 const Details = () => {
 
-    const loanProductId = sessionStorage.getItem("LoanProductId") ?? undefined;
+    // const loanProductId = sessionStorage.getItem("LoanProductId") ?? undefined;
+const loanProductId = useAppSelector(state => (state.selectedLoan.clickedLoanProductId))
+
     const { data: loanProduct, isLoading:loading } = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
 
 
