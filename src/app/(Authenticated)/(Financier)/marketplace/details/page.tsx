@@ -1,5 +1,5 @@
 import React from 'react';
-import MarketPlaceDetails from "@/features/market-place/details/Index";
+import MarketPlaceDetails from "@/features/market-place/details";
 
 const Page = () => {
     return (

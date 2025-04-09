@@ -1,11 +1,10 @@
-"use client"
 import React from 'react';
-import Transfer from "@/features/market-place/Invest/transfer/Index";
+import ConfirmTransfer from "@/features/market-place/Invest/confirm-transfer";
 
 const Page = () => {
     return (
         <>
-            <Transfer/>
+            <ConfirmTransfer/>
         </>
     );
 }

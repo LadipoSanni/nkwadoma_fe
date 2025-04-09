@@ -17,6 +17,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
     const tabNameStyle =  `text-[#626F8C]`;
     const noStyle = ``;
 
+    console.log('navbarItems:: ', navbarItems)
 
 
     return(
