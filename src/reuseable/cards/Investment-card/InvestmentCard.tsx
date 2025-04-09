@@ -7,7 +7,7 @@ import {useRouter} from "next/navigation";
 interface InvestmentCardProps {
     id: string;
     backgroundColor: string;
-    imageSrc?: string | StaticImageData;
+    imageSrc: string | StaticImageData;
     investmentVehicleType: string;
     investmentVehicleName: string;
     status: string;
@@ -48,7 +48,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                 </div>
                 <div id={"imageId"} className="object-right-bottom justify-end flex ">
                     <Image
-                        src={imageSrc || "/default-image.png"}
+                        src={imageSrc}
                         alt="circle"
                         width={104}
                         height={29}

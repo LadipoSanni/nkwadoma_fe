@@ -101,8 +101,8 @@ const MarketPlaceView = () => {
                                 : "#E6F2EA";
                         const imageSrc =
                             vehicle.investmentVehicleType === "COMMERCIAL"
-                                ? "/asset/image/BlueCircles.svg"
-                                : "/asset/image/GreenCircles.svg";
+                                ? "/BlueCircles.svg"
+                                : "/GreenCircles.svg";
 
                         const status = "Open";
                         const statusClass =

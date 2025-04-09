@@ -123,8 +123,8 @@ const MarketPlaceDetails = () => {
     const bgColor = vehicleType === "Commercial" ? "bg-[#D9EAFF]" : "bg-[#E6F2EA]";
     const imageSrc =
         vehicleType === "Commercial"
-            ? "/asset/image/BlueCircles.svg"
-            : "/asset/image/GreenCircles.svg";
+            ? "/BlueCircles.svg"
+            : "/GreenCircles.svg";
 
     return (
         <main id="mainDiv" className="md:px-10 py-6 px-3 w-full md:gap-10 gap-8">
