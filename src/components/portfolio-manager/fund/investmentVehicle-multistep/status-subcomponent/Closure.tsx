@@ -18,8 +18,6 @@ function Closure() {
        <StatusReusable
       selectStatus={status}
       selectState={state}
-      fundId=''
-      statusType='Operation'
       onStatusChange={handleStatusChange}
       isStateRequired={currentStatus === "MATURITY"? false : true }
       readonly={currentStatus === "MATURITY"? true : false}

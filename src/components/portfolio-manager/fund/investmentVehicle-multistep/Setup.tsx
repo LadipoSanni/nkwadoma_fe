@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { inter } from "@/app/fonts";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import Isloading from "@/reuseable/display/Isloading";
-// import { useCreateInvestmentVehicleMutation } from "@/service/admin/fund_query";
-// import { useToast } from "@/hooks/use-toast";
+import { useCreateInvestmentVehicleMutation } from "@/service/admin/fund_query";
+import { useToast } from "@/hooks/use-toast";
 import { validateNumber, validatePositiveNumberWithIndexNumbers } from "@/utils/Format";
 import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
@@ -17,166 +17,185 @@ import DatePickerInput from "@/reuseable/Input/DatePickerInput";
 import { format, parseISO } from "date-fns";
 import {store} from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
+import {useAppSelector} from "@/redux/store";
+import { setCreateInvestmentField,clearSaveCreateInvestmentField,setDraftId,clearDraftId} from '@/redux/slice/vehicle/vehicle';
+import { validationSchema,draftValidationSchema } from '@/utils/validation-schema';
 
-
-// interface ApiError {
-//     status: number;
-//     data: {
-//       message: string;
-//     };
-//   }
+interface ApiError {
+    status: number;
+    data: {
+      message: string;
+    };
+  }
   
-  const initialFormValue = {
-    name: "",
-    fundManager: "",
-    minimumInvestmentAmount: "",
-    mandate: "",
-    tenure: "",
-    size: "",
-    rate: "",
-    bankPartner: "",
-    trustee: "",
-    custodian: "",
-    investmentVehicleType: "",
-    startDate: "",
-  };
-
 interface Props {
-    // type?: string;
   investmentVehicleType?: string;
     
 }
 
 function Setup({investmentVehicleType}: Props) {
     const [selectCurrency, setSelectCurrency] = useState("NGN");
-//   const [isError, setError] = useState("");
-//   const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
-//   const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
-//   const { toast } = useToast();
-   const router = useRouter();
-    const isLoading = false
+     const [isError, setError] = useState("");
+     const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
+      const vehicleType = useAppSelector(state => (state?.vehicle?.vehicleType))
+      const savedFormData = useAppSelector(state => (state?.vehicle?.CreateInvestmentField))
+      const draftId = useAppSelector(state => (state?.vehicle?.setDraftId))
+      const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
+      const { toast } = useToast();
+       const router = useRouter();
+     
+    const initialFormValue = {
+      id: draftId || "",
+       name: savedFormData?.name || "",
+      fundManager: savedFormData?.fundManager|| "",
+      minimumInvestmentAmount: savedFormData?.minimumInvestmentAmount || "",
+      mandate: savedFormData?.mandate || "",
+      tenure: savedFormData?.tenure || "",
+      size: savedFormData?.size || "",
+      rate: savedFormData?.rate || "",
+      bankPartner: savedFormData?.bankPartner || "",
+      trustee: savedFormData?.trustee || "",
+      custodian:savedFormData?.custodian || "",
+      investmentVehicleType: savedFormData?.investmentVehicleType || "",
+      startDate: savedFormData?.startDate || "",
+    };
 
    const handlenext = () => {
-
       router.push("/vehicle/status")
    }
 
-    const validationSchema = Yup.object().shape({
-        name: Yup.string()
-          .trim()
-          .matches(
-            // /^[a-zA-Z0-9\-_' ]*$/,
-            // "name can include letters,numbers, hyphens,apostrophe and underscores only."
-            /^[a-zA-Z][a-zA-Z0-9\-' ]*$/,
-            "Name can include letters, numbers, hyphens and apostrophes only, and must start with a letter."
-          )
-          .test(
-            "valid-name",
-            "Name cannot be only numbers or special characters.",
-            (value = "") => {
-              const trimmedValue = value.trim();
-              if (trimmedValue === "") {
-                return true;
-              }
-              const hasLetter = /[a-zA-Z]/.test(value);
-              const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
-              return hasLetter && !isOnlyNumbersOrSpecials;
+        const handleDraft = async (values: typeof initialFormValue)=> {
+          setVehicleTypeStatus("DRAFT")
+          const formData = {
+            id:draftId,
+            name: values.name,
+            fundManager: values.fundManager,
+            minimumInvestmentAmount: values.minimumInvestmentAmount,
+            mandate: values.mandate,
+            tenure: values.tenure || "1",
+            size: values.size,
+            rate: values.rate,
+            bankPartner: values.bankPartner,
+            trustee: values.trustee,
+            custodian: values.custodian,
+            investmentVehicleType: investmentVehicleType,
+            investmentVehicleStatus : "DRAFT",
+            startDate: values.startDate,
+            sponsors: '',
+          };
+          try {
+            const create = await createInvestmentVehicle(formData).unwrap();
+            if (create) {
+              toast({
+                description: "Successfully added to draft",
+                status: "success",
+              });
+              store.dispatch(clearSaveCreateInvestmentField())
+               store.dispatch(clearDraftId())
+               if(vehicleType === "commercial"){
+                 router.push("/vehicle/commercial-vehicle")
+               }else {
+                router.push("/vehicle/endownment-vehicle")
+               }
             }
-          )
-          .max(200, "Name cannot be more than 200 characters.")
-          .required("Name is required"),
-        fundManager: Yup.string()
-          .trim()
-          .matches(
-            /^[a-zA-Z][a-zA-Z\-' ]*$/,
-            "Invalid fund manager name"
-          )
-          .max(100, "Fund manager cannot be more than 100 characters.")
-          .test(
-            "valid-fundManager",
-            "fund manager cannot be only numbers or special characters.",
-            (value = "") => {
-              const trimmedValue = value.trim();
-              if (trimmedValue === "") {
-                return true;
-              }
-              const hasLetter = /[a-zA-Z]/.test(value);
-              const isOnlyNumbersOrSpecials = /^[^a-zA-Z]+$/.test(trimmedValue);
-              return hasLetter && !isOnlyNumbersOrSpecials;
-            }
-          )
-          .required("Fund manager is required"),
-        size: Yup.string().required("Vehicle size is required"),
-        //  .matches(/^[1-9]\d*$/, 'Vehicle size must be a positive number and cannot start with zero'),
-        minimumInvestmentAmount: Yup.string()
-          .required("Minimum investment amount is required")
-          .test(
-            "minimum-less-or-equal-to-size",
-            "Minimum Investment Amount must be less than or equal to Vehicle Size.",
-            function (value) {
-              const { size } = this.parent;
-              return !value || !size || parseFloat(value) <= parseFloat(size);
-            }
-          ),
-        //  .matches(/^[1-9]\d*$/, 'minimum investmentAmount must be a positive number and cannot start with zero'),
-        tenure: Yup.string()
-          .trim()
-          .required("Tenor is required")
-          .matches(
-            /^[1-9]\d{0,2}$/,
-            "Tenor must be a three-digit positive number and cannot start with zero."
-          ),
-        rate: Yup.number()
-          .min(0, "Rate must be at least 1.")
-          .max(100, "Rate must be at most 100.")
-          .required("Rate is required"),
-        mandate: Yup.string()
-          .trim()
-          .max(2500, "Mandate must be 2500 characters or less")
-          .required("mandate is required")
-          .test("not-empty", "Mandate is required.", (value = "") => {
-            const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
-            return sanitizedValue !== "";
-          }),
-        bankPartner: Yup.string().trim().required("Bank partner is required"),
-        trustee: Yup.string()
-        .trim()
-        .max(100, "Trustee cannot be more than 100 characters.")
-        .matches(
-          /^[a-zA-Z][a-zA-Z\-' ]*$/,
-          // "Trustee can include letters, - and ' only and cannot start with - and ' ."
-          "Invalid trustee name"
-        )
-        .required("Trustee is required"),
-        custodian: Yup.string()
-        .trim()
-        .required("Custodian is required")
-        .max(100, "Custodian cannot be more than 100 characters.")
-        .matches(
-          /^[a-zA-Z][a-zA-Z\-' ]*$/,
-          "Invalid custodian name"
-        ),
-        startDate: Yup.date()
-              .required("Start date is required")
-              .nullable()
-      });
+          } catch (err) {
+            const error = err as ApiError;
+            setError(error?.data?.message);
+          }
+        }
 
-       const handleSubmit = (values: typeof initialFormValue) => {
-             store.dispatch(markStepCompleted("setup"))
-             console.log(values)
-             handlenext()
+       const handleSaveDraft = async (
+           values: typeof initialFormValue,
+           setFieldError: (field: string, message: string) => void
+         ) => {
+           try {
+             await draftValidationSchema.validate(values, { abortEarly: false });
+         
+             await handleDraft(values);
+           } catch (validationErrors) {
+             if (validationErrors instanceof Yup.ValidationError) {
+               const errors = validationErrors.inner.reduce((acc, err) => {
+                 acc[err.path || ""] = err.message;
+                 return acc;
+               }, {} as Record<string, string>);
+               setFieldError("name", errors.name); 
+               if(errors.name){
+                 toast({
+                   description:  errors.name,
+                   status: "error",
+                 });
+               }
+               
+             }
+           }
+         };
+
+         const saveToRedux = (values: typeof initialFormValue) => {
+          const investmentVehicleData  = {
+           id: draftId,
+           name: values.name,
+           investmentVehicleType: values.investmentVehicleType,
+           mandate: values.mandate,
+           tenure: values.tenure,
+           size: values.size,
+           rate: values.rate,
+           trustee: values.trustee,
+           custodian: values.custodian,
+           bankPartner: values.bankPartner,
+           fundManager: values.fundManager,
+           startDate: values.startDate,
+           minimumInvestmentAmount: values.minimumInvestmentAmount,
+           sponsors: '',
+          }
+          store.dispatch(setCreateInvestmentField(investmentVehicleData))
+      }
+
+       
+
+       const handleSubmit = async (values: typeof initialFormValue) => {
+            setVehicleTypeStatus("SAVE-AND-CONTINUE")
+             const formData = {
+              id:draftId,
+              name: values.name,
+              fundManager: values.fundManager,
+              minimumInvestmentAmount: values.minimumInvestmentAmount,
+              mandate: values.mandate,
+              tenure: values.tenure || "1",
+              size: values.size,
+              rate: values.rate,
+              bankPartner: values.bankPartner,
+              trustee: values.trustee,
+              custodian: values.custodian,
+              investmentVehicleType: investmentVehicleType,
+              investmentVehicleStatus : "DRAFT",
+              startDate: values.startDate,
+              sponsors: '',
+            };
+            try {
+              const create = await createInvestmentVehicle(formData).unwrap();
+              if (create) {
+                 const id = create?.data?.id
+                 store.dispatch(setDraftId(id))
+                 saveToRedux(values);
+                store.dispatch(markStepCompleted("setup"))
+                handlenext()    
+               
+              }
+            } catch (err) {
+              const error = err as ApiError;
+              setError(error?.data?.message);
+            }  
+             
        }
 
-    function handleSaveDraft() {
-       
-    }
+
 
   return (
     <div className={`${inter.className} `}>
         <div className='xl:px-36 grid grid-cols-1 gap-y-6 '>
        <div className='grid grid-cols-1 gap-y-1'>
-        <h1 className='text-[18px] font-normal'>Set up commercial fund</h1>
-        <p className='text-[14px] font-normal'>Provide details of your commercial fund</p>
+        <h1 className='text-[18px] font-normal'>Set up {vehicleType} fund</h1>
+        <p className='text-[14px] font-normal'>Provide details of your {vehicleType} fund</p>
        </div>
        <div>
        <Formik
@@ -184,6 +203,7 @@ function Setup({investmentVehicleType}: Props) {
         onSubmit={handleSubmit}
         validateOnMount={true}
         validationSchema={validationSchema}
+        enableReinitialize={true}
        >
         {({
           errors,
@@ -195,11 +215,7 @@ function Setup({investmentVehicleType}: Props) {
         })=> (
             <Form className={`${inter.className}`}>
             <div>
-            <div className="grid grid-cols-1 gap-y-4 md:max-h-[48vh] md:relative overflow-y-auto "
-                //  style={{
-                //   scrollbarWidth: "none",
-                //   msOverflowStyle: "none",
-                // }}
+            <div className="grid grid-cols-1 gap-y-4 md:max-h-[50vh] md:relative overflow-y-auto lg:px-16 relative  lg:right-16  "
                 style={{
                     overflowY: "auto",
                     marginRight: "-10px",  
@@ -230,7 +246,13 @@ function Setup({investmentVehicleType}: Props) {
                 <Label htmlFor="name" className='text-[14px]'>Start date</Label>
               <DatePickerInput
               selectedDate={parseISO(values.startDate ?? "")}
-                onDateChange={(date) =>
+              // onDateChange={(date) => {
+              //   const formattedDate = format(date, "yyyy-MM-dd");
+              //   setFieldValue("startDate", formattedDate).then(() => {
+              //     saveToRedux({ ...values, startDate: formattedDate });
+              //   });
+              // }}
+              onDateChange={(date) =>
                 setFieldValue("startDate", format(date, "yyyy-MM-dd"))
                 }
                  className="p-6 mt-2 text-[14px] text-[#6A6B6A]"
@@ -248,23 +270,23 @@ function Setup({investmentVehicleType}: Props) {
                 </div>
                   <div className='lg:flex gap-2'>
                   <div className='md:mt-4 lg:mt-0'>
-                        <Label htmlFor="rate">Interest rate...</Label>
+                        <Label htmlFor="rate">Interest rate</Label>
                         <Field
                         id="rate"
                         name="rate"
                         placeholder="0"
                         type="text"
                         className="w-full  p-3 border rounded focus:outline-none mt-2"
-                        onChange={investmentVehicleType === 'ENDOWMENT'?  validatePositiveNumberWithIndexNumbers(
-                            "rate",
-                            setFieldValue,
-                            100,
-                            0
+                         onChange={investmentVehicleType === 'ENDOWMENT'?  validatePositiveNumberWithIndexNumbers(
+                          "rate",
+                          setFieldValue,
+                          100,
+                          0
                         ) : validatePositiveNumberWithIndexNumbers(
-                            "rate",
-                            setFieldValue,
-                            100,
-                            1
+                          "rate",
+                          setFieldValue,
+                          100,
+                          1
                         )}
                         />
                         {errors.rate && touched.rate && (
@@ -276,13 +298,13 @@ function Setup({investmentVehicleType}: Props) {
                         )}
                 </div>  
                <div className='md:mt-4 lg:mt-0'>
-                                <Label htmlFor="tenure">Tenor (months)</Label>
+                                <Label htmlFor="tenure">Tenor(months)</Label>
                                 <Field
                                   id="tenure"
                                   name="tenure"
                                   placeholder="0"
                                   className="w-full  p-3 border rounded focus:outline-none mt-2"
-                                  onChange={validateNumberLimit(
+                                   onChange={validateNumberLimit(
                                     "tenure",
                                     setFieldValue,
                                     setFieldError,
@@ -313,9 +335,11 @@ function Setup({investmentVehicleType}: Props) {
                       name="size"
                       type="text"
                       component={CustomInputField}
-                      //  className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2 "
+                       className="w-full p-3  h-[3.2rem]  border rounded focus:outline-none mb-2 "
                       onChange={validateNumber("size", setFieldValue)}
                     />
+
+                    
                   </div>
                   <div className="relative bottom-3">
                     {errors.size && touched.size && (
@@ -343,7 +367,8 @@ function Setup({investmentVehicleType}: Props) {
                       name="minimumInvestmentAmount"
                       className="text-[14px] relative"
                       component={CustomInputField}
-                      onChange={validateNumber(
+                      onChange={
+                        validateNumber(
                         "minimumInvestmentAmount",
                         setFieldValue
                       )}
@@ -370,10 +395,10 @@ function Setup({investmentVehicleType}: Props) {
                     className="w-full p-3 border rounded focus:outline-none mt-2 text-[14px]"
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setFieldValue(
-                        "bankPartner",
-                        e.target.value.replace(/[^a-zA-Z\s]/g, "")
+                          "bankPartner",
+                          e.target.value.replace(/[^a-zA-Z\s]/g, "")
                         )
-                    }
+                      }
                     />
                     {errors.bankPartner && touched.bankPartner && (
                     <ErrorMessage
@@ -391,7 +416,7 @@ function Setup({investmentVehicleType}: Props) {
                     placeholder="Enter fund manager"
                     className="w-full p-3 border rounded focus:outline-none mt-2  text-[14px]"
                     // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("fundManager", e.target.value.replace(/[^a-zA-Z\s]/g, ''))}
-                    onChange={validateText("fundManager", setFieldValue)}
+                     onChange={validateText("fundManager", setFieldValue)}
                     />
                     {errors.fundManager && touched.fundManager && (
                     <ErrorMessage
@@ -458,21 +483,20 @@ function Setup({investmentVehicleType}: Props) {
                 )} 
                 </div>
             </div>  
-            <div className= "md:flex gap-4 justify-between mt-6  md:mb-0">
+            <div className= "md:flex lg:gap-24 gap-6 justify-between mt-6  md:mb-0 lg:px-8 relative lg:right-10">
                         <Button
                             id='saveInvestment'
                             variant={"outline"}
                              type="button"
-                           className='w-full lg:w-36 h-[48px] mb-4 border-solid border-[#142854] text-[#142854]'
-                            // onClick={() => handleReset(resetForm)}
-                            onClick={()=> handleSaveDraft}
+                           className='w-full lg:w-36 h-[48px] mb-4 border-solid border-[#142854] text-[#142854] cursor-pointer'
+                            onClick={()=> handleSaveDraft(values,setFieldError)}
                         >
                           {
-                            // vehicleTypeStatus === "DRAFT" && 
+                             vehicleTypeStatus === "DRAFT" && 
                             isLoading?  <Isloading /> : "Save to draft"
-                          }
-                            
+                          }       
                         </Button>
+
                         <Button
                             id='submitInvestment'
                             variant={"default"}
@@ -485,11 +509,18 @@ function Setup({investmentVehicleType}: Props) {
                             disabled={!isValid}
                         >
                             {
-                            // vehicleTypeStatus === "PUBLISH" &&
+                            vehicleTypeStatus === "SAVE-AND-CONTINUE" &&
                              isLoading ? <Isloading /> : "Save and continue"}
                         </Button>
                     </div>
             </div>
+            <p
+              className={`text-error500 flex justify-center items-center ${
+                isError ? "mb-3" : ""
+              }`}
+            >
+              {isError}
+            </p>
             </Form>
         )}
        </Formik>

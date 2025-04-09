@@ -278,3 +278,6 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
 };
 
 export default CapturePhotoWithTips;
+
+
+

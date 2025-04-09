@@ -10,9 +10,15 @@ import {store} from "@/redux/store";
 import {useAppSelector} from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useRouter } from "next/navigation";
-// import CustomSelectId from '@/reuseable/Input/custom-select-id';
+import CustomSelectId from '@/reuseable/Input/custom-select-id';
 // import Multiselect from '@/reuseable/mult-select/multi-select';
-// import { Trash2 } from 'lucide-react';
+import { MdDeleteOutline } from 'react-icons/md';
+import { MdAdd } from 'react-icons/md';
+import style from "./multistep.module.css"
+import { MultiSelect } from '@/reuseable/mult-select';
+import Modal from '@/reuseable/modals/TableModal';
+import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
+import {Cross2Icon} from "@radix-ui/react-icons";
 
 interface Financier {
   financierId: string;
@@ -27,37 +33,52 @@ const initialFormValue = {
 
 function ChooseVisibility() {
     const [copied, setCopied] = useState(false);
+    const [selectedFinancierIds, setSelectedFinancierIds] = useState<string[]>([]);
+    const [isOpen, setIsOpen] = useState(false);
+
     const router = useRouter();
+    
 
     const validationSchema = Yup.object().shape({
         status: Yup.string().required("Visibility is required"),
-        financiers: Yup.array().when('status', {
-          is: (val: unknown): val is string => val === 'Private',
-          then: (schema) => schema.min(1, "At least one financier is required for private funds"),
-          otherwise: (schema) => schema,
-        }),
+        financiers: Yup.array().test(
+          'private-validation',
+          'At least one financier with role is required for private funds',
+          function(value) {
+            if (this.parent.status === 'Private') {
+              return (
+                Array.isArray(value) &&
+                value.length > 0 &&
+                value.every(f => f.financierId && f.role.length > 0)
+              );
+            }
+            return true;
+          }
+        )
       });
 
 
     const isLoading = false
     const completedStep = useAppSelector(state => (state?.vehicleMultistep.completedSteps))
+    const vehicleType = useAppSelector(state => (state.vehicle.vehicleType))
+    
    
-    // const financiersData = [
-    //   { id: '1', name: 'Joseph Isa' },
-    //   { id: '2', name: 'Philip Adebayo' },
-    //   { id: '3', name: 'Victoria Ezeoke' },
-    //   { id: '4', name: 'Michael Opuogbo' },
-    //   { id: '5', name: 'Stephen Okeke' },
-    //   { id: '6', name: 'Timothy Usman' },
-    // ];
+    const financiersData = [
+      { id: '1', name: 'Joseph Isa' },
+      { id: '2', name: 'Philip Adebayo' },
+      { id: '3', name: 'Victoria Ezeoke' },
+      { id: '4', name: 'Michael Opuogbo' },
+      { id: '5', name: 'Stephen Okeke' },
+      { id: '6', name: 'Timothy Usman' },
+    ];
 
-    // const designations = [
-    //   { label: "Lead", value: "LEAD" },
-    //   { label: "Sponsor", value: "SPONSOR" },
-    //   { label: "Investor", value: "INVESTOR" },
-    //   { label: "Endower", value: "ENDOWER" },
-    //   { label: "Donor", value: "DONOR" },
-    // ]
+    const designations = [
+      { label: "Lead", value: "LEAD" },
+      { label: "Sponsor", value: "SPONSOR" },
+      { label: "Investor", value: "INVESTOR" },
+      { label: "Endower", value: "ENDOWER" },
+      { label: "Donor", value: "DONOR" },
+    ]
     
        useEffect(()=> {
          if(!completedStep.includes("setup")){
@@ -67,9 +88,19 @@ function ChooseVisibility() {
     
     
     const handleSubmit = (values: typeof initialFormValue) => {
-       store.dispatch(markStepCompleted("setup"))
+        store.dispatch(markStepCompleted("setup"))
+      if(vehicleType === "commercial"){
+        router.push("/vehicle/commercial-vehicle")
+    }else {
+        router.push("/vehicle/endownment-vehicle")
+    }
         console.log(values)
+      
         
+    }
+
+    const handleOpenModal = () => {
+      setIsOpen(true)
     }
 
     const handleCopyLink = () => {
@@ -80,60 +111,76 @@ function ChooseVisibility() {
         });
       };
 
-      // const addFinancierRow = (
-      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-      //   values: typeof initialFormValue 
-      // ) => {
-      //   setFieldValue('financiers', [
-      //     ...values.financiers,
-      //     { financierId: '', role: [] }, 
-      //   ]);
-      // };
+      const addFinancierRow = (
+        setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+        values: typeof initialFormValue 
+      ) => {
+        setFieldValue('financiers', [
+          ...values.financiers,
+          { financierId: '', role: [] }, 
+        ]);
+      };
 
-      // const removeFinancierRow = (
-      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-      //   values: typeof initialFormValue,
-      //   index: number
-      // ) => {
-      //   const newFinanciers = [...values.financiers];
-      //   newFinanciers.splice(index, 1);
-      //   setFieldValue('financiers', newFinanciers);
-      // };
+      const removeFinancierRow = (
+        setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+        values: typeof initialFormValue,
+        index: number
+    ) => {
+        const removedId = values.financiers[index].financierId;
+        if (removedId) {
+            setSelectedFinancierIds(selectedFinancierIds.filter(id => id !== removedId));
+        }
+        
+        const newFinanciers = [...values.financiers];
+        newFinanciers.splice(index, 1);
+        setFieldValue('financiers', newFinanciers);
+    };
 
-      // const updateFinancierId = (
-      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-      //   values: typeof initialFormValue,
-      //   index: number,
-      //   financierId: string
-      // ) => {
-      //   const newFinanciers = [...values.financiers];
-      //   newFinanciers[index] = {
-      //     ...newFinanciers[index],
-      //     financierId
-      //   };
-      //   setFieldValue('financiers', newFinanciers);
-      // };
+      const updateFinancierId = (
+        setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+        values: typeof initialFormValue,
+        index: number,
+        financierId: string
+    ) => {
+        const newFinanciers = [...values.financiers];
+        const previousId = newFinanciers[index].financierId;
+
+        let updatedSelectedIds = [...selectedFinancierIds];
+        
+        if (previousId) {
+            updatedSelectedIds = updatedSelectedIds.filter(id => id !== previousId);
+        }
+        if (financierId) {
+            updatedSelectedIds.push(financierId);
+        }    
+        setSelectedFinancierIds(updatedSelectedIds);
+        newFinanciers[index] = {
+            ...newFinanciers[index],
+            financierId
+        };
+        setFieldValue('financiers', newFinanciers);
+    };
     
-      // const updateFinancierRoles = (
-      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-      //   values: typeof initialFormValue,
-      //   index: number,
-      //   roles: string[]
-      // ) => {
-      //   const newFinanciers = [...values.financiers];
-      //   newFinanciers[index] = {
-      //     ...newFinanciers[index],
-      //     role: roles
-      //   };
-      //   setFieldValue('financiers', newFinanciers);
-      // };
+      const updateFinancierRoles = (
+        setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+        values: typeof initialFormValue,
+        index: number,
+        roles: string[]
+      ) => {
+        const newFinanciers = [...values.financiers];
+        newFinanciers[index] = {
+          ...newFinanciers[index],
+          role: roles
+        };
+        setFieldValue('financiers', newFinanciers);
+      };
 
   return (
     <div className={`${inter.className} `}>
-        <div className='xl:px-40 lg:px-8 grid grid-cols-1 gap-y-6 '>
+        <div className='xl:px-[11rem] lg:px-8 grid grid-cols-1 gap-y-6 '>
         <div className='grid grid-cols-1 gap-y-1'>
         <h1 className='text-[18px] font-normal'>Visibility</h1>
-        <p className='text-[14px] font-normal'>Select the visibility of your commercial fund</p>
+        <p className='text-[14px] font-normal'>Select the visibility of your {vehicleType} fund</p>
        </div>
          <div>
         <Formik
@@ -192,7 +239,7 @@ function ChooseVisibility() {
               </span>
               <span className="text-[14px]">Public</span> 
             </label>
-            <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This commercial fund will be visible to the public</p>
+            <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This {vehicleType} fund will be visible to the public</p>
             {values.status === "Public" && (
                       <div className='lg:px-8 mt-5'>
                       <div className="px-4 lg:flex items-center cursor-auto   lg:justify-between  bg-[#F9F9F9] py-3 rounded-lg">
@@ -246,65 +293,174 @@ function ChooseVisibility() {
               </span>
               <span className="text-[14px]">Private</span>
             </label>
-            <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This commercial fund will be visible to selected people</p>
+            <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This {vehicleType} fund will be visible to selected people</p>
             {
                 values.status === "Private" && (
                   
-                    <div className='mt-5 px-8 '>
+                    <div className=' px-6 relative top-4 left-3  '>
 
-                        <div className="grid grid-cols-2 gap-4 mt-6">
+                        <div className="lg:grid grid-cols-2 gap-4 hidden ">
+                          
                       <Label className='text-[#212221]'>Financier</Label>
                       <Label className='text-[#212221]'>Role</Label>
                     </div>
-                    {/* <div className=''>
-                      {
-                        values.financiers.map((financier, index) => (
-                          <div key={index} className="grid grid-cols-2 gap-6 mb-4 items-center relative">
-                        <CustomSelectId
-                          value={financier.financierId}
-                          onChange={(value) => updateFinancierId(setFieldValue, values, index, value)}
-                          selectContent={financiersData}
-                          placeholder="Select financier"
-                          triggerId={`financier-select-${index}`}
-                          className="w-full"
+                      <div className={`lg:-space-y-4 space-y-2 md:max-h-[35vh]  ${style.container}`}>
+                        {
+                           values.financiers.map((financier, index) => (
+                            <div key={index} className=''>
+                            <div className={`grid grid-cols-2 gap-4 items-center  `}>
+                              <div className='hidden lg:block'>
+                              <CustomSelectId
+                                value={financier.financierId}
+                                onChange={(value) => updateFinancierId(setFieldValue, values, index, value)}
+                                selectContent={financiersData}
+                                placeholder="Select financier"
+                                triggerId={`financier-select-${index}`}
+                                className="w-full"
+                                isItemDisabled={(item) => selectedFinancierIds.includes(item.id) && item.id !== financier.financierId}
+                                additionalContent={({ closeDropdown }) => (
+                                  <div className="relative py-2 top-1 px-2 flex items-center text-[#142854]">
+                                    <div className="z-50">
+                                      <MdAdd color="#142854" className="h-[16px] w-[16px]" />
+                                    </div>
+                                    <div className="relative right-3">
+                                      <Button
+                                        type="button"
+                                        onClick={() => {
+                                          handleOpenModal();
+                                          closeDropdown(); 
+                                        }}
+                                        className="text-[#142854] border-none shadow-none"
+                                      >
+                                        Add new Financier
+                                      </Button>
+                                    </div>
+                                  </div>
+                                )}
+                                selectItemCss='text-[#6A6B6A]'
                           />
+                              </div>
 
-<div className="flex items-center gap-2 mb-2">
-          <Multiselect
-            multiselectList={designations}
-            onValueChange={(selectedRoles) => 
-              updateFinancierRoles(setFieldValue, values, index, selectedRoles)
-            }
-            placeholder="Select roles"
-            className='min-h-[2.9rem]'
-          />
-          
-          {index > 0 && (
-            <div className=''>
-            <button
-              type="button"
-              onClick={() => removeFinancierRow(setFieldValue, values, index)}
-              className="text-red-500 hover:text-red-700"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
-            </div>
-           
-          )}
-         
-        </div>
-          </div>
-                        ))
-                      }
-                    <Button
-          type="button"
-          onClick={() => addFinancierRow(setFieldValue, values)}
-          className="mt-2 bg-blue-500 text-white"
-        >
-                            Add Financier
-          </Button>   
-                    </div> */}
-
+                              <div className='flex items-center gap-2 relative bottom-1'>
+                                <div className={`w-full hidden lg:block  ${index > 0? "pr-1" : "pr-6"}`}>
+                                <MultiSelect
+                                 modalPopover={true}
+                                 options={designations}
+                                onValueChange={(selectedRoles) => 
+                                  updateFinancierRoles(setFieldValue, values, index, selectedRoles)
+                                }
+                                placeholder="Select roles"
+                                className={`min-h-[48px]`}
+                                restrictedItems={["LEAD","SPONSOR"]}
+                                id='designationId'
+                                selcetButtonId='designationbuttonId'
+                              /> 
+                                </div>
+                             
+                              <div className='hidden lg:block'>
+                              {index > 0 && (
+                                  <div className=''>
+                                  <button
+                                    type="button"
+                                    onClick={() => removeFinancierRow(setFieldValue, values, index)}
+                                    className="text-[#939CB0] "
+                                  >
+                                    <MdDeleteOutline className="h-5 w-5" />
+                                  </button>
+                                  </div>
+                                
+                                )}
+                              </div>
+                              </div>
+                              
+                            </div>
+                            <div className='lg:hidden grid grid-cols-1 '>
+                              <div>
+                              <Label className='text-[#212221]'>Financier</Label>
+                              <div className={`w-full -mt-2 `}>
+                              <CustomSelectId
+                                value={financier.financierId}
+                                onChange={(value) => updateFinancierId(setFieldValue, values, index, value)}
+                                selectContent={financiersData}
+                                placeholder="Select financier"
+                                triggerId={`financier-select-${index}`}
+                                className="w-full"
+                                isItemDisabled={(item) => selectedFinancierIds.includes(item.id) && item.id !== financier.financierId}
+                                additionalContent={({ closeDropdown }) => (
+                                  <div className="relative py-2 top-1 px-2 flex items-center text-[#142854]">
+                                    <div className="z-50">
+                                      <MdAdd color="#142854" className="h-[16px] w-[16px]" />
+                                    </div>
+                                    <div className="relative right-3">
+                                      <Button
+                                        type="button"
+                                        onClick={() => {
+                                          handleOpenModal();
+                                          closeDropdown(); 
+                                        }}
+                                        className="text-[#142854] border-none shadow-none"
+                                      >
+                                        Add new Financier
+                                      </Button>
+                                    </div>
+                                  </div>
+                                )}
+                                selectItemCss='text-[#6A6B6A]'
+                                />
+                                </div>
+                              </div>
+                              <div className='relative bottom-3'>
+                              <Label className='text-[#212221]'>Role</Label>
+                              <div className={`w-full mt-1`}>
+                                 <MultiSelect
+                                 modalPopover={true}
+                                 options={designations}
+                                onValueChange={(selectedRoles) => 
+                                  updateFinancierRoles(setFieldValue, values, index, selectedRoles)
+                                }
+                                placeholder="Select roles"
+                                className={`min-h-[48px]`}
+                                restrictedItems={["LEAD","SPONSOR"]}
+                                id='designationId'
+                                selcetButtonId='designationbuttonId'
+                                
+                              /> 
+                                </div>
+                                <div className='lg:hidden mt-3'>
+                              {index > 0 && (
+                                  <div className=''>
+                                  <button
+                                    type="button"
+                                    onClick={() => removeFinancierRow(setFieldValue, values, index)}
+                                    className="text-[#939CB0] "
+                                  >
+                                    <MdDeleteOutline className="h-5 w-5" />
+                                  </button>
+                                  </div>
+                                
+                                )}
+                              </div>
+                              </div>
+                            </div>
+                            </div>
+                           ))
+                        }
+                        
+                      </div>
+                      <div className='relative  lg:py-0 top-1 lg:top-0 flex items-center text-[#142854]'>
+                          <div className='z-50'> <MdAdd color='#142854'className='h-[16px] w-[16px]'/> </div>
+                        <div className='relative right-3 '>
+                        <Button
+                          type="button"
+                          onClick={() => addFinancierRow(setFieldValue, values)}
+                          className=" text-[#142854]  border-none  shadow-none"
+                          >
+                            Add 
+                          </Button>   
+                        </div>
+                       
+                        </div> 
+                
                     </div>
                 )
             }
@@ -341,7 +497,7 @@ function ChooseVisibility() {
               </span>
               <span className="text-[14px]">Only me</span>
             </label>
-            <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This commercial fund will be visible to the creator</p>
+            <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This {vehicleType} fund will be visible to the creator</p>
           </div>
              </div>
              <div className="md:flex justify-end w-full mt-4">
@@ -366,6 +522,22 @@ function ChooseVisibility() {
          </Formik>
          </div>
         </div>
+        <Modal
+          isOpen={isOpen}
+          closeModal={() => setIsOpen(false)}
+          headerTitle='Invite new financier'
+          closeOnOverlayClick={true}
+          icon={Cross2Icon}
+          width='36%'
+          >
+           <InviteFinanciers 
+           investmentId={'1'} 
+           setIsOpen={setIsOpen} 
+           amountCommitedAndDesignationCondition={true}
+           isDesignationRequired={true}
+           context='Select the type of financial you want to add'
+           />
+          </Modal>
     </div>
   )
 }

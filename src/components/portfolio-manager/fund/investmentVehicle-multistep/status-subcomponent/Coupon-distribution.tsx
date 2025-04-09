@@ -10,8 +10,6 @@ function CouponDistribution() {
        <StatusReusable
       selectStatus={status}
       selectState={state}
-      fundId=''
-      statusType='Coupondistribution'
       readonly={true}
      /> 
     </div>

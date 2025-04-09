@@ -19,7 +19,12 @@ interface InvestmentVehicle {
     startDate: string;
     totalAmountInInvestmentVehicle:number;
 }
-
+interface InvestmentVehicleResponse {
+    data: InvestmentVehicle[];
+    total: number;
+    pageSize: number;
+    pageNumber:number;
+}
 interface InvestmentVehicleFundRaisingResponse {
     message: string;
     data: {
@@ -59,9 +64,10 @@ export const fundApi = createApi({
       }),
        createInvestmentVehicle: builder.mutation({
         query: (data:{
+        id?: string
         name:  string,
         investmentVehicleType: string | undefined,
-        mandate: string,
+        mandate: string ,
        tenure: string | number,
        size: string | number,
        rate: string | number,
@@ -71,7 +77,8 @@ export const fundApi = createApi({
        fundManager: string,
        sponsors: string,
        minimumInvestmentAmount: number | string,
-       investmentVehicleStatus?: string
+       investmentVehicleStatus?: string,
+       startDate?:string
 
         }) => ({
                 url: `/investment-vehicle`,
@@ -103,6 +110,21 @@ export const fundApi = createApi({
             }),
             providesTags: ['vehicle'],
         }),
+        getInvestmentVehiclesByTypeAndStatus: builder.query<
+            InvestmentVehicleResponse,
+            { pageSize: number; pageNumber: number; type: string; status: string } >({
+            query: ({ pageSize, pageNumber, type, status }) => ({
+                url: '/view-all-investment-vehicle-by-type-and-status',
+                method: 'GET',
+                params: {
+                    pageSize,
+                    pageNumber,
+                    type,
+                    status,
+                },
+            }),
+            providesTags: ['vehicle'],
+        }),
 
         searchInvestmentVehicleByNameAndType: builder.query({
             query: ({ investmentVehicleName, param }: { 
@@ -118,6 +140,17 @@ export const fundApi = createApi({
                 params: param
             }),
         }),
+        createInvestmentVehicleStatus: builder.mutation({
+            query: (data: {
+                investmentVehicleId: string,
+                fundRaising: string,
+                deployingStatus: string
+            }) => ({
+                url: "/investment-vehicle/status",
+                method: "POST",
+                body: data
+            })
+        })
     }),
 })
 
@@ -127,6 +160,8 @@ export const {
     useCreateInvestmentVehicleMutation,
     useSearchInvestmentVehicleByNameQuery,
     useGetPublishedInvestmentVehicleByNameQuery,
+    useGetInvestmentVehiclesByTypeAndStatusQuery,
     useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
-    useSearchInvestmentVehicleByNameAndTypeQuery
+    useSearchInvestmentVehicleByNameAndTypeQuery,
+    useCreateInvestmentVehicleStatusMutation
 } = fundApi;
