@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {cabinetGroteskMediumBold, ibmPlexSans, inter} from "@/app/fonts";
+import {cabinetGroteskMediumBold, inter} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import TabConnector from "@/reuseable/details/tab-connector";
 import {FaCircle} from "react-icons/fa6";
@@ -19,6 +19,7 @@ import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import {Loader2} from "lucide-react";
 import {useToast} from "@/hooks/use-toast";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import CreditScore from "@/features/display/CreditScore";
 
 
 const LoanOfferDetailsContent = dynamic(
@@ -146,24 +147,16 @@ const LoanOfferDetails = () => {
             />
         },
         {
-            label: "Credit score",
-            value: <div className="flex gap-2"> <span
-                className="flex py-[3px] px-1 items-center justify-center rounded-md border border-green650 bg-meedlWhite"><span
-                className={`${ibmPlexSans.className} bg-green150 h-[15px] w-[26px] rounded-[3px] text-green750 text-[11px] leading-[18px] font-medium text-center`}>
-                {data?.data?.creditScore}
-            </span></span>
-            </div>
+            label: "Credit score", value:  <CreditScore creditScore={data?.data?.creditScore}/>,
         },
     ];
     const {toast} = useToast()
     const disburseLoanOffer = async () => {
 
-        // console.log('start disbursment progress')
         const body = {
             loanOfferId: id,
             loaneeId: data?.data?.loaneeId
         }
-        // console.log('parane: ', body);
         const response = await disburseLoan(body)
         // console.log('response: ', response)
         if (response?.error) {
@@ -323,7 +316,6 @@ const LoanOfferDetails = () => {
                                 <Button
                                     className={'w-full justify-center md:w-fit md:px-6 md:py-3 md:rounded-md text-white  md:text-meedlWhite rounded-md flex gap-2 h-fit py-4 bg-meedlBlue hover:bg-meedlBlue'}
                                     onClick={currentTab === 3 ? disburseLoanOffer : handleNext}
-                                    // disabled={currentTab === loanOfferDetailsTab.length - 1}
 
                                 >
                                     {isLoading && <Loader2 className="animate-spin"/>}

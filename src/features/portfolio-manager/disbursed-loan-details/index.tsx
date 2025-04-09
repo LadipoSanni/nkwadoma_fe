@@ -224,7 +224,7 @@ const Index = () => {
                                 {getCurrentDataList().map((item, index) => (
                                     <li key={"key" + index} className={'p-5  grid gap-9 rounded-md'}>
                                         <div
-                                            className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
+                                            className={'md:flex md:py-2 md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                             <div
                                                 className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
                                             <div
