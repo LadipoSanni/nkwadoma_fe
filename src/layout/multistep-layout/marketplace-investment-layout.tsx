@@ -28,7 +28,7 @@ function MarketplaceInvestmentLayout({children}:props) {
                     id="createFundBackButton"
                     handleClick={handleBack}
                     iconBeforeLetters={true}
-                    text='Back'
+                    text='Back to investment'
                     textColor=''
                 />
             </div>
