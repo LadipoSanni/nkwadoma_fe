@@ -65,8 +65,6 @@ const Login: React.FC = () => {
             setValidEmail(false)
             setShowEmailMessage(true)
         }
-
-
     }
 
     const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,20 +83,25 @@ const Login: React.FC = () => {
                     return ADMIN_ROLES.at(i)
                 }
             }
-
         }
     }
 
     const routeLoanee = async (loanOfferId?: string) => {
         if(loanOfferId) {
-                        store.dispatch(setCurrentNavbarItem("Accept loan offer"))
-                        router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
+            store.dispatch(setCurrentNavbarItem("Accept loan offer"))
+            router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
 
         }else{
-                    store.dispatch(setCurrentNavbarItem("overview"))
-                    router.push("/onboarding")
-                }
+            store.dispatch(setCurrentNavbarItem("overview"))
+            router.push("/onboarding")
+        }
     }
+
+    // const routeFinancier = async (financierType: string) => {
+    //     // store.dispatch()
+    //     store.dispatch(setCurrentNavbarItem("Overview"))
+    //     router.push('/my-investment/details')
+    // }
 
     const routeUserToTheirDashboard = async (userRole?: string) => {
         switch (userRole) {
@@ -116,6 +119,7 @@ const Login: React.FC = () => {
             case "FINANCIER":
                 store.dispatch(setCurrentNavbarItem("Overview"))
                 router.push('/my-investment/details')
+                // routeFinancier()
                 break;
         }
     }
