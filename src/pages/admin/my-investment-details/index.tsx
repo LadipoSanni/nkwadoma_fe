@@ -1,17 +1,23 @@
 'use client'
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import BackButton from "@/components/back-button";
 import { cabinetGroteskMediumBold600, inter, inter500} from "@/app/fonts";
-// import dayjs from "dayjs";
 import TabSwitch from "@/reuseable/details/TabSwitch";
 import styles from './index.module.css';
 import PerformanceDisplay from "@/pages/admin/my-investment-details/performanceDisplay";
 import InvestmentMandate from "@/pages/admin/my-investment-details/investment-mandate";
+// import {useViewFinancierDashboardQuery} from "@/service/financier/api";
 
 
 const MyInvestmentDetails = () => {
     const [currentTab, setCurrentsTab] = useState(0);
     const [currentBartChart, setCurrentBartChart] = useState(0);
+    // const {data} =  useViewFinancierDashboardQuery({})
+
+    // useEffect(() => {
+    //     console.log('response: ', data)
+    // })
+
     const initialChartData = [
             { month: "Jan", value: 186, },
             { month: "Feb", value: 305,  },

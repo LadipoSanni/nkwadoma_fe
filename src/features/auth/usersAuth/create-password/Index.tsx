@@ -10,9 +10,8 @@ import { useToast} from "@/hooks/use-toast";
 import {jwtDecode} from "jwt-decode";
 import {setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {ADMIN_ROLES} from "@/types/roles";
-import {persistor, store} from "@/redux/store";
+import { store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
-import {clearData} from "@/utils/storage";
 
 
 const CreatePassword = () => {
@@ -82,6 +81,60 @@ const CreatePassword = () => {
         }
     }
 
+    const destructureLoginEndpointCallResponse = (response: object) => {
+        console.log('response gotten: ', response)
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const access_token = response?.data?.access_token
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const refresh_token = response?.data?.refresh_token
+        const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const userName = decode_access_token?.name
+        const user_email = decode_access_token?.email
+        const user_roles = decode_access_token?.realm_access?.roles
+        const user_role = user_roles.filter(getUserRoles).at(0)
+        console.log('decoded: ', decode_access_token, 'acee: ', access_token, 'refresh_token: ', refresh_token, 'user name: ', userName)
+        return {
+            access_token,
+            refresh_token,
+            decode_access_token,
+            userName,
+            user_email,
+            user_roles,
+            user_role,
+
+        }
+    }
+
+    const routeLoanee = async (loanOfferId?: string) => {
+        if(loanOfferId) {
+            store.dispatch(setCurrentNavbarItem("Accept loan offer"))
+            router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
+
+        }else{
+            store.dispatch(setCurrentNavbarItem("overview"))
+            router.push("/onboarding")
+        }
+    }
+
+    const routeUserToTheirDashboard = async (userRole?: string) => {
+        switch (userRole) {
+            case 'LOANEE' :
+                await routeLoanee()
+                break;
+            case 'ORGANIZATION_ADMIN':
+                store.dispatch(setCurrentNavbarItem("Program"))
+                router.push("/program")
+                break;
+            case 'PORTFOLIO_MANAGER':
+                store.dispatch(setCurrentNavbarItem("Loan"))
+                router.push("/loan/loan-request")
+                break;
+        }
+    }
 
     const {toast} = useToast()
 
@@ -100,31 +153,22 @@ const CreatePassword = () => {
 
         try {
             const response = await createPassword({token: token
-                , password: password}).unwrap()
-            const access_token = response?.data?.accessToken
-            const refreshToken = response?.data?.refreshToken
-            const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-            const user_email = decode_access_token?.email
-            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            const userName = decode_access_token?.name
-            const user_roles = decode_access_token?.realm_access?.roles
-            const user_role = user_roles.filter(getUserRoles).at(0)
-            clearData()
-            await persistor.purge();
+                , password: password}).unwrap();
+            const  {
+                access_token,
+                refresh_token,
+                userName,
+                user_email,
+                user_roles,
+                user_role,
+                decode_access_token
+            } = destructureLoginEndpointCallResponse(response)
+            console.log('decode: ', decode_access_token, 'roles: ', user_roles)
+
             if (user_role) {
-                storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
+                storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                 setUserRoles(user_roles)
-                if (user_role === 'LOANEE') {
-                    store.dispatch(setCurrentNavbarItem("overview"))
-                    router.push("/onboarding")
-                } else if(user_role === 'ORGANIZATION_ADMIN') {
-                    store.dispatch(setCurrentNavbarItem("Program"))
-                    router.push("/program")
-                }else if(user_role === 'PORTFOLIO_MANAGER'){
-                    store.dispatch(setCurrentNavbarItem("Loan"))
-                    router.push("/loan/loan-request")
-                }
+                await routeUserToTheirDashboard(user_role)
 
             }
 

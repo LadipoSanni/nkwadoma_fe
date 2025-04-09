@@ -79,8 +79,9 @@ const SideBar = () => {
         {name: "PORTFOLIO_MANAGER", value: getPortfolioManagerSideBarItems(current)},
         {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
         {name: 'LOANEE', value: getLoaneeSideBarItems(current) },
-        {name: 'FINANCIAL', value: getFinancierSideBarItems(current)},
+        {name: 'FINANCIER', value: getFinancierSideBarItems(current)},
     ]
+
 
     const getUserSideBarByRole = (userrole?: string): navbarRouterItemsProps[] | undefined => {
         for (let i = 0; i < sideBarContent.length; i++) {
