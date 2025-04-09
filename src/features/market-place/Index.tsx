@@ -7,7 +7,9 @@ import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
 import { useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery } from "@/service/admin/fund_query";
-import SkeletonForMarketPlaceVehicles from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
+import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
+import LoanEmptyState from "@/reuseable/emptyStates/Index";
+import {MdOutlinePayments} from "react-icons/md";
 
 export const HandleCardDetails = (
     id: string,
@@ -72,16 +74,27 @@ const MarketPlaceView = () => {
                 />
             </div>
 
-            <div
-                id="card-segmentId"
-                className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
-            >
-                {isLoading || isFetching ? (
-                        <SkeletonForMarketPlaceVehicles/>
-                ) : filteredVehicles.length === 0 ? (
-                    <p className="text-gray-500">No investments found</p>
+
+            {isLoading || isFetching ? (
+                <div className="w-full">
+                    <MarketPlaceInvestmentGrid />
+                </div>
+            ) : filteredVehicles.length === 0 ? (
+                <div className={`flex justify-center items-center text-center md:mt-36 mt-28`}>
+                    <LoanEmptyState
+                        id="Vehicles"
+                        icon={<MdOutlinePayments className="w-10 h-10" color="#142854" />}
+                        iconBg="#D9EAFF"
+                        title="Investment Vehicles will show here"
+                        description="There are no Investments available yet"
+                    />
+                </div>
                 ) : (
-                    filteredVehicles.map((vehicle) => {
+                <div
+                    id="card-segmentId"
+                    className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
+                >
+                    {filteredVehicles.map((vehicle) => {
                         const backgroundColor =
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -121,9 +134,9 @@ const MarketPlaceView = () => {
                                 }
                             />
                         );
-                    })
-                )}
-            </div>
+                    })}
+                </div>
+            )}
         </main>
     );
 };
