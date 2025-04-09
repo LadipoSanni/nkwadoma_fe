@@ -86,7 +86,7 @@ const MarketPlaceView = () => {
                         icon={<MdOutlinePayments className="w-10 h-10" color="#142854" />}
                         iconBg="#D9EAFF"
                         title="Investment Vehicles will show here"
-                        description="There are no Investments available yet"
+                        description="There are no investments veehicle available yet"
                     />
                 </div>
                 ) : (
