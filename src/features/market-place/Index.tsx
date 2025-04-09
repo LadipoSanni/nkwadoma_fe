@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
 import { store } from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
@@ -9,7 +9,14 @@ import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlac
 import { useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery } from "@/service/admin/fund_query";
 import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
-import {MdOutlinePayments} from "react-icons/md";
+import { MdOutlinePayments } from "react-icons/md";
+
+interface InvestmentVehicle {
+    id: string;
+    investmentVehicleType: "COMMERCIAL" | "ENDOWMENT";
+    name: string;
+    rate?: number;
+}
 
 export const HandleCardDetails = (
     id: string,
@@ -29,17 +36,62 @@ const MarketPlaceView = () => {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
+    const [hasMore, setHasMore] = useState(true);
+    const [pageNumber, setPageNumber] = useState(0);
+    const [allVehicles, setAllVehicles] = useState<InvestmentVehicle[]>([]);
+
+    const observer = useRef<IntersectionObserver | null>(null);
+    // const lastCardRef = useRef<HTMLDivElement | null>(null);
 
     const { data, isLoading, isFetching } =
         useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
-            pageSize: 100,
-            pageNumber: 0,
+            pageSize: 48,
+            pageNumber: pageNumber,
             investmentVehicleStatus: "PUBLISHED",
         });
 
-    const vehicles = data?.data?.body || [];
+    useEffect(() => {
+        setPageNumber(0);
+        setAllVehicles([]);
+    }, [searchTerm, selectedValue]);
 
-    const filteredVehicles = vehicles.filter((vehicle) => {
+    useEffect(() => {
+        if (data?.data?.body) {
+            console.log("API Response:", data.data.body);
+            setAllVehicles(prev => {
+                const newVehicles = pageNumber === 0 ? data.data.body : [...prev, ...data.data.body];
+                const uniqueVehicles = Array.from(
+                    new Map(newVehicles.map(vehicle => [vehicle.id, vehicle])).values()
+                );
+                return uniqueVehicles;
+            });
+            setHasMore(data.data.hasNextPage);
+        }
+    }, [data, pageNumber]);
+
+    const lastCardObserver = useCallback(
+        (node: HTMLDivElement | null) => {
+            if (isLoading || isFetching) return;
+
+            if (observer.current) observer.current.disconnect();
+
+            observer.current = new IntersectionObserver(
+                entries => {
+                    if (entries[0].isIntersecting && hasMore) {
+                        setPageNumber(prevPage => prevPage + 1);
+                    }
+                },
+                {
+                    rootMargin: "100px",
+                }
+            );
+
+            if (node) observer.current.observe(node);
+        },
+        [isLoading, isFetching, hasMore]
+    );
+
+    const filteredVehicles = allVehicles.filter((vehicle) => {
         const matchesSearch = vehicle.name
             .toLowerCase()
             .includes(searchTerm.toLowerCase());
@@ -74,8 +126,7 @@ const MarketPlaceView = () => {
                 />
             </div>
 
-
-            {isLoading || isFetching ? (
+            {isLoading && pageNumber === 0 ? (
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
@@ -89,12 +140,12 @@ const MarketPlaceView = () => {
                         description="There are no investments veehicle available yet"
                     />
                 </div>
-                ) : (
+            ) : (
                 <div
                     id="card-segmentId"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
-                    {filteredVehicles.map((vehicle) => {
+                    {filteredVehicles.map((vehicle, index) => {
                         const backgroundColor =
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -117,24 +168,35 @@ const MarketPlaceView = () => {
                                 ? vehicle.name.slice(0, 20) + "..."
                                 : vehicle.name;
 
-                        return (
-                            <InvestmentCard
-                                key={vehicle.id}
-                                id={vehicle.id}
-                                backgroundColor={backgroundColor}
-                                investmentVehicleType={vehicle.investmentVehicleType}
-                                imageSrc={imageSrc}
-                                investmentVehicleName={truncatedTitle}
-                                statusClass={statusClass}
-                                status={status}
-                                borderClass={borderClass}
-                                percentage={vehicle.rate || 0}
-                                HandleCardDetails={() =>
-                                    HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router)
-                                }
-                            />
-                        );
+                        const cardProps = {
+                            id: vehicle.id,
+                            backgroundColor,
+                            investmentVehicleType: vehicle.investmentVehicleType,
+                            imageSrc,
+                            investmentVehicleName: truncatedTitle,
+                            statusClass,
+                            status,
+                            borderClass,
+                            percentage: vehicle.rate || 0,
+                            HandleCardDetails: () =>
+                                HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router),
+                        };
+
+                        if (filteredVehicles.length === index + 1) {
+                            return (
+                                <div key={`wrapper-${vehicle.id}`} ref={lastCardObserver}>
+                                    <InvestmentCard key={vehicle.id} {...cardProps} />
+                                </div>
+                            );
+                        }
+
+                        return <InvestmentCard key={vehicle.id} {...cardProps} />;
                     })}
+                    {isFetching && pageNumber > 0 && (
+                        <div className="col-span-full text-center py-4">
+                            Loading more...
+                        </div>
+                    )}
                 </div>
             )}
         </main>
