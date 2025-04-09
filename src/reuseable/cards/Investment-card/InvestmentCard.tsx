@@ -7,7 +7,7 @@ import {useRouter} from "next/navigation";
 interface InvestmentCardProps {
     id: string;
     backgroundColor: string;
-    imageSrc?: string | StaticImageData;
+    imageSrc: string | StaticImageData;
     investmentVehicleType: string;
     investmentVehicleName: string;
     status: string;
@@ -37,14 +37,18 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
             <div id="investment-type-segment" data-testid={`investment-type-segment`} style={{backgroundColor}}
                  className="rounded-md">
                 <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>
-                    <div id={"investmentTypeId"}
-                        className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center">
-                        {investmentVehicleType}
+                    <div
+                        id="investmentTypeId"
+                        className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center"
+                    >
+                        {investmentVehicleType
+                            ? investmentVehicleType.charAt(0).toUpperCase() + investmentVehicleType.slice(1).toLowerCase()
+                            : ""}
                     </div>
                 </div>
                 <div id={"imageId"} className="object-right-bottom justify-end flex ">
                     <Image
-                        src={imageSrc || "/default-image.png"}
+                        src={imageSrc}
                         alt="circle"
                         width={104}
                         height={29}
@@ -68,7 +72,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                         </span>
                     </div>
                 </div>
-                <div id={"investmentVehicleNameId"} className={`${cabinetGrotesk.className} pt-3 font-medium text-xl text-[#212221]`}>
+                <div id={"investmentVehicleNameId"} className={`${cabinetGrotesk.className} pt-3 font-medium text-xl text-[#212221] capitalize `}>
                     {investmentVehicleName}
                 </div>
                 <div id={"percentageId"} className={`${inter.className} text-[#4D4E4D] font-normal text-sm`}>
