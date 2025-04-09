@@ -1,5 +1,5 @@
 import React from 'react';
-import ConfirmTransfer from "@/features/market-place/Invest/confirm-transfer";
+import ConfirmTransfer from "@/features/market-place/Invest/confirm-transfer/Index";
 
 const Page = () => {
     return (

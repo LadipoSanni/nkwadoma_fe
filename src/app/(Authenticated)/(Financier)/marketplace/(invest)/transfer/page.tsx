@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import Transfer from "@/features/market-place/Invest/transfer";
+import Transfer from "@/features/market-place/Invest/transfer/Index";
 
 const Page = () => {
     return (

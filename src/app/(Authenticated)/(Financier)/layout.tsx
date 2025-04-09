@@ -12,7 +12,7 @@ const Layout: React.FC<props> = ({ children }) => {
 
 
     return (
-        <CustomAuthorization authorizedRoles={['FINANCIER']}>
+        <CustomAuthorization authorizedRoles={['']}>
             {children}
         </CustomAuthorization>
 
