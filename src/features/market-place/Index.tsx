@@ -114,5 +114,5 @@ const MarketPlaceView = () => {
 };
 
 export default MarketPlaceView;
-;
+
 
