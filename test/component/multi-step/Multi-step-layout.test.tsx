@@ -85,7 +85,7 @@ describe('MultistepLayout Component', () => {
   describe('handleBack navigation', () => {
     test('navigates to commercial-vehicle when vehicleType is commercialFund', () => {
       (usePathname as jest.Mock).mockReturnValue('/vehicle/setup');
-      (useAppSelector as jest.Mock).mockReturnValue('commercialFund');
+      (useAppSelector as jest.Mock).mockReturnValue('commercial');
       
       render(<MultistepLayout>{mockChildren}</MultistepLayout>);
       

@@ -1,0 +1,14 @@
+
+@keyframes pendulum {
+    0%, 100% {
+      transform: translateY(-10px);
+    }
+    50% {
+      transform: translateY(10px);
+    }
+  }
+  
+  .animated_text {
+    display: inline-block;
+    animation: pendulum 2s ease-in-out infinite;
+  }

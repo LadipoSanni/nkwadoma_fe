@@ -2,10 +2,10 @@
 import React,{useState,useEffect} from 'react'
 import InvestmentActionBar from '@/components/portfolio-manager/fund/Investment-action-bar'
 import {inter} from '@/app/fonts'
-import Draft from "@/features/portfolio-manager/fund/draft/Index";
-import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
-import TableModal from '@/reuseable/modals/TableModal';
-import {Cross2Icon} from "@radix-ui/react-icons";
+// import Draft from "@/features/portfolio-manager/fund/draft/Index";
+// import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
+// import TableModal from '@/reuseable/modals/TableModal';
+// import {Cross2Icon} from "@radix-ui/react-icons";
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import {MdSearch} from 'react-icons/md'
 import Table from '@/reuseable/table/Table';
@@ -16,6 +16,9 @@ import {formatAmount} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
+import { resetVehicleState } from '@/redux/slice/multiselect/vehicle-multiselect';
+import { setInvestmentVehicleType } from '@/redux/slice/vehicle/vehicle';
+
 
 
 
@@ -45,8 +48,8 @@ interface investmentVehicleProps     {
 
 function EndownmentFund() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [modalType, setModalType] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [modalType, setModalType] = useState('');
+    // const [isModalOpen, setIsModalOpen] = useState(false);
     const [pageNumber,setPageNumber] = useState(0)
     const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
     const [hasNextPage,setNextPage] = useState(false)
@@ -80,6 +83,7 @@ function EndownmentFund() {
                   setTotalPage(investmentVehicleData?.data?.totalPages)
                   setPageNumber(investmentVehicleData?.data?.pageNumber)
              }
+             store.dispatch(resetVehicleState())
          }, [searchTerm, searchData, investmentVehicleData])
 
      
@@ -89,20 +93,26 @@ function EndownmentFund() {
     };
 
     const handleEndowerFundDraftClick = () => {
-        setModalType("draft")
-        setIsModalOpen(true);
+        // setModalType("draft")
+        // setIsModalOpen(true);
+        router.push("/vehicle/draft")
+        store.dispatch(setVehicleType("endowment")) 
+        store.dispatch(setInvestmentVehicleType("ENDOWMENT")) 
     
     }
 
     const handleCreateInvestmentVehicleClick = () => {
-        setModalType("createEndownmentVehicle")
-        setIsModalOpen(true);
+        // setModalType("createEndownmentVehicle")
+        // setIsModalOpen(true);
+        router.push("/vehicle/setup")
+        store.dispatch(setVehicleType("endowment")) 
+        store.dispatch(setInvestmentVehicleType("ENDOWMENT"))    
     }
 
 
     const handleRowClick = (row: TableRowData) => {
             store.dispatch(setCurrentVehicleId(String(row.id)));
-            store.dispatch(setVehicleType("endowmentFund"))
+            store.dispatch(setVehicleType("endowment"))
             router.push('/vehicle/details')
         }
 
@@ -193,7 +203,7 @@ function EndownmentFund() {
                 </div>}
         </div>
        <div>
-        <TableModal
+        {/* <TableModal
           isOpen={isModalOpen}
                     closeModal={()=> setIsModalOpen(false)}
                     className='pb-1'
@@ -204,7 +214,7 @@ function EndownmentFund() {
         >
             {modalType === "createEndownmentVehicle"? (<CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='donor' investmentVehicleType='ENDOWMENT' />): (  <Draft setIsOpen={() => setIsModalOpen(false)} type='donor' investmentVehicleType='ENDOWMENT'/>)}
 
-        </TableModal>
+        </TableModal> */}
        </div>
     </div>
   )

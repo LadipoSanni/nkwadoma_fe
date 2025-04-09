@@ -12,8 +12,6 @@ function Operation() {
       selectStatus={status}
       selectState={state}
       isStateRequired={true}
-      fundId=''
-      statusType='Operation'
      /> 
     </div>
   )
