@@ -131,13 +131,13 @@ const MarketPlaceView = () => {
                     <MarketPlaceInvestmentGrid />
                 </div>
             ) : filteredVehicles.length === 0 ? (
-                <div className={`flex justify-center items-center text-center md:mt-36 mt-28`}>
+                <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
                     <LoanEmptyState
                         id="Vehicles"
                         icon={<MdOutlinePayments className="w-10 h-10" color="#142854" />}
                         iconBg="#D9EAFF"
                         title="Investment Vehicles will show here"
-                        description="There are no investments veehicle available yet"
+                        description="There are no investment vehicles available yet"
                     />
                 </div>
             ) : (
