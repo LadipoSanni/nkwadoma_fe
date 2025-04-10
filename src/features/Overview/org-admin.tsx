@@ -3,7 +3,7 @@ import React from 'react';
 const OrgAdmin = () => {
     return (
         <div>
-            
+            Org-admin overview
         </div>
     );
 };

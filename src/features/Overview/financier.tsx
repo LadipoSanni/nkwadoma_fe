@@ -3,9 +3,7 @@ import FinancierOverview from "@/pages/financier/overview/Index";
 
 const Financier = () => {
     return (
-        <div>
             <FinancierOverview />
-        </div>
     );
 };
 

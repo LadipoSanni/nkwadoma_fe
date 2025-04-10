@@ -118,7 +118,7 @@ const Login: React.FC = () => {
                 break;
             case "FINANCIER":
                 store.dispatch(setCurrentNavbarItem("Overview"))
-                router.push('/my-investment/details')
+                router.push('/Overview')
                 // routeFinancier()
                 break;
         }
