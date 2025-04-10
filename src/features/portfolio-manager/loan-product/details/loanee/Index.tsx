@@ -6,7 +6,6 @@ import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {useAppSelector} from "@/redux/store";
 import {useGetAllLoaneeInALoanProductQuery, useSearchLoaneesInALoanProductQuery} from "@/service/admin/loan_product";
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 
 interface TableRowData {
@@ -28,7 +27,7 @@ export function Loanees() {
     const [page] = useState(0);
     const size = 100;
 
-    const {data: allLoanee} = useGetAllLoaneeInALoanProductQuery({
+    const {data: allLoanee, isLoading:allLoaneeIsLoading} = useGetAllLoaneeInALoanProductQuery({
         loanProductId: id,
         pageSize: size,
         pageNumber: page
@@ -57,7 +56,7 @@ export function Loanees() {
         },
         {title: "Status", sortable: true, id: "performance", selector: (row: TableRowData) => <span
                 className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.performance  === "PERFORMANCE" ? "text-success600 bg-success50" : "text-error600 bg-error50"} `}>
-                {capitalizeFirstLetters(String(row.performance ?? "No record"))}
+                {row.performance ?? "No record"}
             </span>
         },
         {title: "Institution", sortable: true, id: "instituteName", selector: (row: TableRowData) => row.instituteName},
@@ -72,17 +71,17 @@ export function Loanees() {
                         <Tables
                             tableData={loanees}
                             tableHeader={LoanProductLoaneeHeader}
-                            staticHeader={'Loan product'}
+                            staticHeader={'Loanee'}
                             staticColunm={'name'}
                             tableHeight={45}
                             icon={MdOutlinePerson}
-                            sideBarTabName={"Loan product"}
+                            sideBarTabName={"Loanee"}
                             handleRowClick={() => {
                             }}
                             optionalRowsPerPage={10}
                             tableCellStyle={'h-12'}
                             condition={true}
-                            isLoading={isLoading}
+                            isLoading={isLoading || allLoaneeIsLoading}
                         />}
                 </div>
             </div>
