@@ -1,5 +1,6 @@
 import React from 'react';
 import MarketplaceInvestmentLayout from "@/layout/multistep-layout/marketplace-investment-layout";
+import CustomAuthorization from "@/features/auth/authorization";
 
 
 type props = {
@@ -8,9 +9,12 @@ type props = {
 const InvestLayout: React.FC<props> = ({children}) => {
 
     return (
-        <MarketplaceInvestmentLayout>
-            {children}
-        </MarketplaceInvestmentLayout>
+        <CustomAuthorization authorizedRoles={['FINANCIER']}>
+            <MarketplaceInvestmentLayout>
+                {children}
+            </MarketplaceInvestmentLayout>
+        </CustomAuthorization>
+
     );
 }
 

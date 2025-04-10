@@ -133,6 +133,10 @@ const CreatePassword = () => {
                 store.dispatch(setCurrentNavbarItem("Loan"))
                 router.push("/loan/loan-request")
                 break;
+            case "FINANCIER":
+                store.dispatch(setCurrentNavbarItem("Overview"))
+                router.push('/Overview')
+                break;
         }
     }
 
@@ -161,15 +165,11 @@ const CreatePassword = () => {
                 user_email,
                 user_roles,
                 user_role,
-                decode_access_token
             } = destructureLoginEndpointCallResponse(response)
-            console.log('decode: ', decode_access_token, 'roles: ', user_roles)
-
             if (user_role) {
                 storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                 setUserRoles(user_roles)
                 await routeUserToTheirDashboard(user_role)
-
             }
 
 

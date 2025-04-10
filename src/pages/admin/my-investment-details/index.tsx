@@ -6,17 +6,12 @@ import TabSwitch from "@/reuseable/details/TabSwitch";
 import styles from './index.module.css';
 import PerformanceDisplay from "@/pages/admin/my-investment-details/performanceDisplay";
 import InvestmentMandate from "@/pages/admin/my-investment-details/investment-mandate";
-// import {useViewFinancierDashboardQuery} from "@/service/financier/api";
 
 
 const MyInvestmentDetails = () => {
     const [currentTab, setCurrentsTab] = useState(0);
     const [currentBartChart, setCurrentBartChart] = useState(0);
-    // const {data} =  useViewFinancierDashboardQuery({})
 
-    // useEffect(() => {
-    //     console.log('response: ', data)
-    // })
 
     const initialChartData = [
             { month: "Jan", value: 186, },

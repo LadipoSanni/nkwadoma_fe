@@ -97,11 +97,7 @@ const Login: React.FC = () => {
         }
     }
 
-    // const routeFinancier = async (financierType: string) => {
-    //     // store.dispatch()
-    //     store.dispatch(setCurrentNavbarItem("Overview"))
-    //     router.push('/my-investment/details')
-    // }
+
 
     const routeUserToTheirDashboard = async (userRole?: string) => {
         switch (userRole) {
@@ -119,7 +115,6 @@ const Login: React.FC = () => {
             case "FINANCIER":
                 store.dispatch(setCurrentNavbarItem("Overview"))
                 router.push('/Overview')
-                // routeFinancier()
                 break;
         }
     }
@@ -162,7 +157,6 @@ const Login: React.FC = () => {
         } else {
                 try {
                     const response = await login({email, password}).unwrap()
-                    // console.log('response: ', response)
                     if (response?.data) {
                         const  {
                             access_token,
@@ -171,7 +165,6 @@ const Login: React.FC = () => {
                             user_email,
                             user_roles,
                             user_role,
-                            // decode_access_token
                         } = destructureLoginEndpointCallResponse(response)
 
                         clearData()
@@ -180,9 +173,6 @@ const Login: React.FC = () => {
                             description: "Login successful",
                             status: "success",
                         });
-                        // console.log('access_token: ', access_token, 'refresh_token: ', refresh_token, 'userName: ', userName, 'user_email: ', user_email,
-                        //     'user_roles: ', user_roles, 'user_role: ', user_role)
-                        // console.log('decode access_token: ', decode_access_token)
                         if (user_role) {
                             storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                             setUserRoles(user_roles)
