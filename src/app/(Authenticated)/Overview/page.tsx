@@ -1,10 +1,13 @@
 import React from 'react';
+import CustomAuthorization from "@/features/auth/authorization";
+import Index from "@/features/Overview";
 
 const Page = () => {
     return (
-        <div>
-            
-        </div>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN', 'LOANEE', 'FINANCIER']} >
+            <Index/>
+        </CustomAuthorization>
+
     );
 };
 
