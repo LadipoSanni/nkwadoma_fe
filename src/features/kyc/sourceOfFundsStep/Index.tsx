@@ -1,14 +1,22 @@
 'use client'
-import React, {useEffect} from 'react';
-import {inter, inter500} from "@/app/fonts";
-import {useAppSelector} from "@/redux/store";
-import {useRouter} from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { inter, cabinetGroteskMediumBold } from '@/app/fonts'
+import { useAppSelector } from "@/redux/store";
+import { useRouter } from 'next/navigation';
 import Multiselect from '@/reuseable/mult-select/multi-select';
-import {Formik, Form} from 'formik';
-import {Button} from "@/components/ui/button";
+import { Formik, Form } from 'formik';
+import { Button } from "@/components/ui/button";
+import { store } from "@/redux/store";
+import { markStepCompleted } from '@/redux/slice/multiselect/kyc-multiselect';
+import Isloading from '@/reuseable/display/Isloading';
+
+interface FormValues {
+    sourceOfFund: string[];
+}
 
 const SourceOfFundsStep = () => {
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
     const completedStep = useAppSelector(state => (state?.kycMultistep.completedSteps));
 
     useEffect(() => {
@@ -31,43 +39,60 @@ const SourceOfFundsStep = () => {
         router.back();
     };
 
+    const handleSubmit = async (values: FormValues) => {
+        if (values.sourceOfFund.length === 0) {
+            return;
+        }
+
+        try {
+            setIsLoading(true);
+            console.log('Form values:', values);
+            await store.dispatch(markStepCompleted("sourceOfFunds"));
+            router.push('/kyc/beneficial-owner');
+        } finally {
+            setIsLoading(true);
+        }
+    };
 
     return (
         <Formik
-            initialValues={{investmentVehicleDesignation: []}}
-            onSubmit={(values) => {
-                console.log(values);
-            }}
+            initialValues={{ sourceOfFund: [] }}
+            onSubmit={handleSubmit}
         >
-            {({setFieldValue}) => (
+            {({ values, setFieldValue }) => (
                 <Form>
-                    <main className={`${inter.className} xl:px-36  grid-cols-1 gap-y-6  grid gap-10`}>
-                        <div className={`${inter500.className} grid gap-1`}>
-                            <h1 className={`text-meedlBlack text-[18px] leading-[150%] font-medium`}>Source of
-                                funds</h1>
-                            <p className={`text-black400 text-[14px] leading-[150%] font-normal`}>Add source</p>
+                    <main className={`${inter.className} xl:px-36  grid-cols-1 gap-y-6  grid gap-10 `}>
+                        <div className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
+                            <h1 className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>Source of funds</h1>
                         </div>
 
-                        <div>
+                        <div className={'md:w-[27.5rem] w-full grid gap-10'}>
                             <Multiselect
                                 multiselectList={sourceOptions}
-                                onValueChange={(values) => setFieldValue("investmentVehicleDesignation", values)}
+                                onValueChange={(values) => setFieldValue("sourceOfFund", values)}
                                 placeholder='Select sources'
                             />
-                        </div>
 
-                        <div className={'flex justify-between'}>
-                            <Button onClick={handleBackClick} type={'button'}
-                                    className={'h-[3.5625rem] w-[8.75rem] px-4 py-2 bg-gray-500 hover:bg-gray-600 text-meedlBlue border border-meedlBlue rounded-md'}>
-                                Back
-                            </Button>
-                            <Button
-                                type={'submit'}
-                                onClick={() => router.push('/kyc/beneficial-owner')}
-                                className={'h-[3.5625rem] w-[8.75rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md'}
-                            >
-                                Save & continue
-                            </Button>
+                            <div className={'md:flex md:justify-between grid gap-5'}>
+                                <Button
+                                    onClick={handleBackClick}
+                                    type={'button'}
+                                    className={'h-[2.8125rem] md:w-[4.625rem] w-full px-4 py-2 bg-gray-500 hover:bg-gray-600 text-meedlBlue border border-meedlBlue rounded-md order-2 md:order-1'}
+                                >
+                                    Back
+                                </Button>
+                                <Button
+                                    type={'submit'}
+                                    disabled={values.sourceOfFund.length === 0 || isLoading}
+                                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${values.sourceOfFund.length === 0 ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
+                                >
+                                    {isLoading ? (
+                                        <Isloading color="white" height={24} width={24} />
+                                    ) : (
+                                        'Save & continue'
+                                    )}
+                                </Button>
+                            </div>
                         </div>
                     </main>
                 </Form>
