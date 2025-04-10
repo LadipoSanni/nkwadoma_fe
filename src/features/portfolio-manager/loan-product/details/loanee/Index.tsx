@@ -57,7 +57,7 @@ export function Loanees() {
         },
         {title: "Status", sortable: true, id: "performance", selector: (row: TableRowData) => <span
                 className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.performance  === "PERFORMANCE" ? "text-success600 bg-success50" : "text-error600 bg-error50"} `}>
-                {capitalizeFirstLetters(String(row.performance ?? "No record"))}
+                {row.performance ?? "No record"}
             </span>
         },
         {title: "Institution", sortable: true, id: "instituteName", selector: (row: TableRowData) => row.instituteName},
