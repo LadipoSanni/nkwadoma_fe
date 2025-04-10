@@ -27,7 +27,7 @@ export function Loanees() {
     const [page] = useState(0);
     const size = 100;
 
-    const {data: allLoanee} = useGetAllLoaneeInALoanProductQuery({
+    const {data: allLoanee, isLoading:allLoaneeIsLoading} = useGetAllLoaneeInALoanProductQuery({
         loanProductId: id,
         pageSize: size,
         pageNumber: page
@@ -81,7 +81,7 @@ export function Loanees() {
                             optionalRowsPerPage={10}
                             tableCellStyle={'h-12'}
                             condition={true}
-                            isLoading={isLoading}
+                            isLoading={isLoading || allLoaneeIsLoading}
                         />}
                 </div>
             </div>
