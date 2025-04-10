@@ -3,6 +3,8 @@ import { inter, inter500 } from '@/app/fonts';
 import * as faceapi from 'face-api.js';
 import Isloading from "@/reuseable/display/Isloading";
 import { MdThumbUpOffAlt, MdCheckCircle } from "react-icons/md";
+import Image from "next/image";
+import { useToast } from "@/hooks/use-toast";
 
 interface CapturePhotoWithTipsProps {
     onCapture: (imageSrc: File) => void;
@@ -20,6 +22,7 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
     const [isPreview, setIsPreview] = useState(false);
     const [countDown,setCountdown] = useState(5)
     const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+    const { toast } = useToast();
 
 
     useEffect(() => {
@@ -40,31 +43,61 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         loadModels();
     }, []);
 
+    // useEffect(() => {
+    //     const startCamera = async () => {
+    //         try {
+    //             const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+    //             setCameraStream(stream)
+    //             if (videoRef.current) {
+    //                 videoRef.current.srcObject = stream;
+    //             }
+    //         } catch (error) {
+    //             console.error("Error accessing camera:", error);
+    //             setModelLoadingError("Could not access camera");
+    //         }
+    //     };
+
+    //     startCamera();
+
+    //     return () => {
+    //         if (videoRef.current && videoRef.current.srcObject) {
+    //             const stream = videoRef.current.srcObject as MediaStream;
+    //             const tracks = stream.getTracks();
+    //             tracks.forEach(track => track.stop());
+    //         }
+    //     };
+    // }, []);
+
     useEffect(() => {
+        let stream: MediaStream | null = null;  
+        
         const startCamera = async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
-                setCameraStream(stream)
+                stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+                setCameraStream(stream);
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
                 }
             } catch (error) {
-                console.error("Error accessing camera:", error);
+                console.debug("Error accessing camera:", error);
                 setModelLoadingError("Could not access camera");
+                toast({
+                    description: "Turn on your camera",
+                    status: "error"
+                })
             }
         };
-
+    
         startCamera();
-
+    
         return () => {
-            if (videoRef.current && videoRef.current.srcObject) {
-                const stream = videoRef.current.srcObject as MediaStream;
+            if (stream) {  
                 const tracks = stream.getTracks();
                 tracks.forEach(track => track.stop());
             }
         };
-    }, []);
-
+    }, [toast]);
+    
     const captureImage = (video: HTMLVideoElement) => {
         const canvas = document.createElement('canvas');
         canvas.width = video.videoWidth;
@@ -370,17 +403,39 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
         setHasFaceBeenDetected(false);
         setStep("right");
 
+        // const startCamera = async () => {
+        //     try {
+        //         const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+        //         if (videoRef.current) {
+        //             videoRef.current.srcObject = stream;
+        //         }
+        //     } catch (error) {
+        //         console.error("Error restarting camera:", error);
+        //         setModelLoadingError("Could not restart camera");
+        //     }
+        // };
+
         const startCamera = async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+                setCameraStream(stream);  // Store the new stream
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
                 }
             } catch (error) {
-                console.error("Error restarting camera:", error);
+                console.debug("Error restarting camera:", error);
                 setModelLoadingError("Could not restart camera");
+                toast({
+                    description: "Your camera is turn off",
+                    status: "error"
+                })
             }
         };
+    
+       
+        if (cameraStream) {
+            cameraStream.getTracks().forEach(track => track.stop());
+        }
 
         startCamera();
     };
@@ -439,12 +494,21 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
 
                     {isPreview && capturedImage ? (
                         <div className="absolute top-0 right-[-60px] rounded-md w-[419px] h-[279px] overflow-hidden">
-                            <img
+                            {/* <img
                                 src={capturedImage}
                                 alt="Captured selfie"
                                 className="w-full h-full object-cover"
                                 style={{transform: 'scaleX(-1)'}}
-                            />
+                            /> */}
+                              <Image
+            src={capturedImage}
+            alt="Captured selfie"
+            width={419}
+            height={279}
+            className="w-full h-full object-cover"
+            style={{ transform: 'scaleX(-1)' }}
+            unoptimized={true} 
+        />
                         </div>
                     ) : (
                         <div className={frameClassName} style={{transform: 'scaleX(-1)'}}>
