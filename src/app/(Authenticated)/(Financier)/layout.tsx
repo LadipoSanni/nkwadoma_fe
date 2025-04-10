@@ -1,6 +1,6 @@
 import React from 'react';
 // import MeedlLayout from "../../../layout/meedl-layout";
-import CustomAuthorization from '@/features/auth/authorization';
+// import CustomAuthorization from '@/features/auth/authorization';
 
 
 
@@ -12,9 +12,12 @@ const Layout: React.FC<props> = ({ children }) => {
 
 
     return (
-        <CustomAuthorization authorizedRoles={['']}>
+        // <CustomAuthorization authorizedRoles={['']}>
+        <div>
             {children}
-        </CustomAuthorization>
+        </div>
+
+        // </CustomAuthorization>
 
     );
 };
