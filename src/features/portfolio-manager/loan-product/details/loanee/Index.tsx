@@ -6,7 +6,6 @@ import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import Tables from "@/reuseable/table/LoanProductTable";
 import {useAppSelector} from "@/redux/store";
 import {useGetAllLoaneeInALoanProductQuery, useSearchLoaneesInALoanProductQuery} from "@/service/admin/loan_product";
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 
 interface TableRowData {
