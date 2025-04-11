@@ -53,6 +53,7 @@ function CommercialFund() {
         const [totalPage,setTotalPage] = useState(0)
         const param = {
             investmentVehicleType: "COMMERCIAL",
+             investmentVehicleStatus: "PUBLISHED",
             pageSize: 10,
             pageNumber: pageNumber
         }

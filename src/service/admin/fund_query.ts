@@ -1,6 +1,11 @@
 import {createApi} from '@reduxjs/toolkit/query/react'
 import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 
+interface Financier {
+    id: string;
+    investmentVehicleDesignation: string[];
+  }
+
 interface InvestmentVehicle {
     id: string;
     name: string;
@@ -131,6 +136,7 @@ export const fundApi = createApi({
                 investmentVehicleName: string; 
                 param: { 
                     investmentVehicleType: string; 
+                    investmentVehicleStatus: string
                     pageSize: number; 
                     pageNumber: number; 
                 }; 
@@ -143,10 +149,21 @@ export const fundApi = createApi({
         createInvestmentVehicleStatus: builder.mutation({
             query: (data: {
                 investmentVehicleId: string,
-                fundRaising: string,
-                deployingStatus: string
+                fundRaising?: string,
+                deployingStatus?: string
             }) => ({
                 url: "/investment-vehicle/status",
+                method: "POST",
+                body: data
+            })
+        }),
+        chooseInvestmentVehicleVisibility: builder.mutation({
+            query: (data: {
+                investmentVehicleId: string,
+                visibility: string,
+                financiers?: Financier[],
+            }) => ({
+                url: "/investment-vehicle/visibility",
                 method: "POST",
                 body: data
             })
@@ -163,5 +180,6 @@ export const {
     useGetInvestmentVehiclesByTypeAndStatusQuery,
     useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
     useSearchInvestmentVehicleByNameAndTypeQuery,
-    useCreateInvestmentVehicleStatusMutation
+    useCreateInvestmentVehicleStatusMutation,
+    useChooseInvestmentVehicleVisibilityMutation
 } = fundApi;

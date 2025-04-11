@@ -56,6 +56,7 @@ function EndownmentFund() {
     const [totalPage,setTotalPage] = useState(0)
     const param = {
         investmentVehicleType: "ENDOWMENT",
+        investmentVehicleStatus: "PUBLISHED",
         pageSize: 10,
         pageNumber: pageNumber
     }
