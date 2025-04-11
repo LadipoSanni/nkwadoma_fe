@@ -1,118 +1,206 @@
-"use client"
-import React, {useState} from 'react';
+"use client";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
-import {store} from "@/redux/store";
+import { store } from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
-import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
+import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
+import { useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery } from "@/service/admin/fund_query";
+import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
+import LoanEmptyState from "@/reuseable/emptyStates/Index";
+import { MdOutlinePayments } from "react-icons/md";
 
-
-const dummyInvestments = [
-    { id: "1", type: "Commercial", status: "Open", title: "Software Engineering Fund", interest: 2 },
-    { id: "2", type: "Endowment", status: "Closed", title: "Product Design Fund", interest: 20 },
-    { id: "3", type: "Commercial", status: "Open", title: "AI Startup Investment", interest: 5 },
-    { id: "4", type: "Endowment", status: "Closed", title: "Healthcare Innovation Fund", interest: 15 },
-    { id: "5", type: "Commercial", status: "Open", title: "Blockchain Research Grant", interest: 10 },
-    { id: "6", type: "Endowment", status: "Open", title: "Renewable Energy Project", interest: 8 },
-    { id: "7", type: "Commercial", status: "Closed", title: "E-commerce Growth Fund", interest: 12 },
-    { id: "8", type: "Endowment", status: "Open", title: "Education Scholarship Endowment", interest: 7 },
-    { id: "9", type: "Commercial", status: "Open", title: "Real Estate Expansion Fund", interest: 9 },
-    { id: "10", type: "Endowment", status: "Closed", title: "Non-Profit Development Grant", interest: 6 },
-    { id: "11", type: "Endowment", status: "Open", title: "Renewable Energy Project", interest: 8 },
-    { id: "12", type: "Commercial", status: "Closed", title: "E-commerce Growth Fund", interest: 12 },
-    { id: "13", type: "Endowment", status: "Open", title: "Education Scholarship Endowment", interest: 7 },
-    { id: "14", type: "Commercial", status: "Open", title: "Real Estate Expansion Fund", interest: 9 },
-    { id: "15", type: "Endowment", status: "Closed", title: "Non-Profit Development Grant", interest: 6 }
-];
+interface InvestmentVehicle {
+    id: string;
+    investmentVehicleType: "COMMERCIAL" | "ENDOWMENT";
+    name: string;
+    rate?: number;
+}
 
 export const HandleCardDetails = (
     id: string,
     type: string,
     router: ReturnType<typeof useRouter>
 ) => {
-    store.dispatch(setMarketInvestmentVehicleId({
-        marketInvestmentVehicleId: id,
-        vehicleType: type
-    }));
+    store.dispatch(
+        setMarketInvestmentVehicleId({
+            marketInvestmentVehicleId: id,
+            vehicleType: type,
+        })
+    );
     router.push("/marketplace/details");
 };
 
-export const handleSearchChange = (setSearchTerm: (value: string) => void) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
-    };
-
-
-export const handleSelectChange = (value: string, setSelectedValue: (value: string) => void) => {
-    setSelectedValue(value);
-};
-
 const MarketPlaceView = () => {
+    const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
-    console.log(setSearchTerm)
-    const [selectedValue, setSelectedValue] = useState<string>('');
-    // const router = useRouter();
+    const [selectedValue, setSelectedValue] = useState<string>("");
+    const [hasMore, setHasMore] = useState(true);
+    const [pageNumber, setPageNumber] = useState(0);
+    const [allVehicles, setAllVehicles] = useState<InvestmentVehicle[]>([]);
+
+    const observer = useRef<IntersectionObserver | null>(null);
+    // const lastCardRef = useRef<HTMLDivElement | null>(null);
+
+    const { data, isLoading, isFetching } =
+        useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
+            pageSize: 48,
+            pageNumber: pageNumber,
+            investmentVehicleStatus: "PUBLISHED",
+        });
+
+    useEffect(() => {
+        setPageNumber(0);
+        setAllVehicles([]);
+    }, [searchTerm, selectedValue]);
+
+    useEffect(() => {
+        if (data?.data?.body) {
+            console.log("API Response:", data.data.body);
+            setAllVehicles(prev => {
+                const newVehicles = pageNumber === 0 ? data.data.body : [...prev, ...data.data.body];
+                const uniqueVehicles = Array.from(
+                    new Map(newVehicles.map(vehicle => [vehicle.id, vehicle])).values()
+                );
+                return uniqueVehicles;
+            });
+            setHasMore(data.data.hasNextPage);
+        }
+    }, [data, pageNumber]);
+
+    const lastCardObserver = useCallback(
+        (node: HTMLDivElement | null) => {
+            if (isLoading || isFetching) return;
+
+            if (observer.current) observer.current.disconnect();
+
+            observer.current = new IntersectionObserver(
+                entries => {
+                    if (entries[0].isIntersecting && hasMore) {
+                        setPageNumber(prevPage => prevPage + 1);
+                    }
+                },
+                {
+                    rootMargin: "100px",
+                }
+            );
+
+            if (node) observer.current.observe(node);
+        },
+        [isLoading, isFetching, hasMore]
+    );
+
+    const filteredVehicles = allVehicles.filter((vehicle) => {
+        const matchesSearch = vehicle.name
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
+
+        const typeMatch =
+            selectedValue === "" ||
+            (selectedValue === "Commercial Investment" &&
+                vehicle.investmentVehicleType === "COMMERCIAL") ||
+            (selectedValue === "Endowment Investment" &&
+                vehicle.investmentVehicleType === "ENDOWMENT");
+
+        return matchesSearch && typeMatch;
+    });
 
     return (
-        <main id={"marketplaceView"} className={`py-9 px-5`}>
-            <div id={"searchDiv"} className={`px-2 flex md:flex-row flex-col gap-3`}>
-                    <SearchInput
-                        id={'ProgramSearchInput'}
-                        value={searchTerm}
-                        onChange={handleSearchChange(setSearchTerm)}
-                        style={`md:w-20 w-full`}
-                    />
-                    <CustomSelect
-                        id="marketplaceSelect"
-                        value={selectedValue}
-                        onChange={(value) => handleSelectChange(value, setSelectedValue)}
-                        selectContent={['Commercial Investment', 'Endowment Investment']}
-                        placeHolder="Type"
-                        triggerId="marketplaceTrigger"
-                        className={`h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]`}
-                    />
+        <main id="marketplaceView" className="py-9 px-5">
+            <div id="searchDiv" className="px-2 flex md:flex-row flex-col gap-3">
+                <SearchInput
+                    id="ProgramSearchInput"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style="md:w-20 w-full"
+                />
+                <CustomSelect
+                    id="marketplaceSelect"
+                    value={selectedValue}
+                    onChange={(value) => setSelectedValue(value)}
+                    selectContent={["Commercial Investment", "Endowment Investment"]}
+                    placeHolder="Type"
+                    triggerId="marketplaceTrigger"
+                    className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                />
             </div>
 
-            <div id={"card-segmentId"}
-                 className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5">
-            {dummyInvestments.map((investment) => {
-                    const backgroundColor = investment.type === "Commercial" ? "#D9EAFF" : "#E6F2EA";
-                    const imageSrc = investment.type === "Commercial"
-                        ? "/asset/image/BlueCircles.svg"
-                        :"/asset/image/GreenCircles.svg";
-                    const statusClass = investment.status === "Open"
-                        ? "bg-green-100 text-[#0D9B48] border-[#B4E5C8} "
-                        : "bg-red-100 text-red-600 border-[#F2BCBA]";
-                    const borderClass = investment.status === "Open"
-                        ? "border-[#B4E5C8]"
-                        : "border-[#F2BCBA]";
+            {isLoading && pageNumber === 0 ? (
+                <div className="w-full">
+                    <MarketPlaceInvestmentGrid />
+                </div>
+            ) : filteredVehicles.length === 0 ? (
+                <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
+                    <LoanEmptyState
+                        id="Vehicles"
+                        icon={<MdOutlinePayments className="w-10 h-10" color="#142854" />}
+                        iconBg="#D9EAFF"
+                        title="Investment Vehicles will show here"
+                        description="There are no investment vehicles available yet"
+                    />
+                </div>
+            ) : (
+                <div
+                    id="card-segmentId"
+                    className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
+                >
+                    {filteredVehicles.map((vehicle, index) => {
+                        const backgroundColor =
+                            vehicle.investmentVehicleType === "COMMERCIAL"
+                                ? "#D9EAFF"
+                                : "#E6F2EA";
+                        const imageSrc =
+                            vehicle.investmentVehicleType === "COMMERCIAL"
+                                ? "/BlueCircles.svg"
+                                : "/GreenCircles.svg";
 
-                    const truncatedTitle = investment.title.length > 10
-                        ? investment.title.slice(0, 20) + "..."
-                        : investment.title;
+                        const status = "Open";
+                        const statusClass =
+                            status === "Open"
+                                ? "bg-green-100 text-[#0D9B48] border-[#B4E5C8]"
+                                : "bg-red-100 text-red-600 border-[#F2BCBA]";
+                        const borderClass =
+                            status === "Open" ? "border-[#B4E5C8]" : "border-[#F2BCBA]";
 
-                    return (
-                        <InvestmentCard
-                            key={investment.id}
-                            id={investment.id}
-                            backgroundColor={backgroundColor}
-                            investmentVehicleType={investment.type}
-                            imageSrc={imageSrc}
-                            investmentVehicleName={truncatedTitle}
-                            statusClass={statusClass}
-                            status={investment.status}
-                            borderClass={borderClass}
-                            percentage={investment.interest}
-                            HandleCardDetails={HandleCardDetails}
-                        />
-                    );
-                })}
-            </div>
+                        const truncatedTitle =
+                            vehicle.name.length > 20
+                                ? vehicle.name.slice(0, 20) + "..."
+                                : vehicle.name;
+
+                        const cardProps = {
+                            id: vehicle.id,
+                            backgroundColor,
+                            investmentVehicleType: vehicle.investmentVehicleType,
+                            imageSrc,
+                            investmentVehicleName: truncatedTitle,
+                            statusClass,
+                            status,
+                            borderClass,
+                            percentage: vehicle.rate || 0,
+                            HandleCardDetails: () =>
+                                HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router),
+                        };
+
+                        if (filteredVehicles.length === index + 1) {
+                            return (
+                                <div key={`wrapper-${vehicle.id}`} ref={lastCardObserver}>
+                                    <InvestmentCard key={vehicle.id} {...cardProps} />
+                                </div>
+                            );
+                        }
+
+                        return <InvestmentCard key={vehicle.id} {...cardProps} />;
+                    })}
+                    {isFetching && pageNumber > 0 && (
+                        <div className="col-span-full text-center py-4">
+                            Loading more...
+                        </div>
+                    )}
+                </div>
+            )}
         </main>
     );
 };
 
 export default MarketPlaceView;
-;
-

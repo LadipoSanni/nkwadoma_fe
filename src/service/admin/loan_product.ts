@@ -53,12 +53,29 @@ export const loanProductApi = createApi({
             }),
             providesTags: [`loanProduct`]
         }),
+
+        getAllLoaneeInALoanProduct: builder.query<
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            any, {
+            loanProductId: string;
+            pageSize: number;
+            pageNumber: number }>({
+            query: ({ loanProductId, pageSize, pageNumber }) =>
+                `loanProduct/loanees/${loanProductId}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
+        }),
+
+        searchLoaneesInALoanProduct: builder.query({
+            query: ({ loanProductId, name, pageSize = 10, pageNumber = 0 }) =>
+                `loanProduct/search-loanees/${loanProductId}?name=${name}&pageSize=${pageSize}&pageNumber=${pageNumber}`,
+        }),
     }),
 })
 export const {
     useViewAllLoanProductQuery,
     useSearchLoanProductQuery,
     useCreateLoanProductMutation,
-    useGetLoanProductDetailsByIdQuery
+    useGetLoanProductDetailsByIdQuery,
+    useGetAllLoaneeInALoanProductQuery,
+    useSearchLoaneesInALoanProductQuery,
 } = loanProductApi;
 

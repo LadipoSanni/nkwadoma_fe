@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Page = () => {
+const OrgAdmin = () => {
     return (
         <div>
-            
+            Org-admin overview
         </div>
     );
 };
 
-export default Page;
+export default OrgAdmin;

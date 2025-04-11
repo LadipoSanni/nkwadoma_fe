@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState} from "react";
 import { Label } from "@/components/ui/label";
 import { Formik, Form,  ErrorMessage,FormikProps } from "formik";
 import * as Yup from "yup";
@@ -9,6 +9,16 @@ import { useRouter } from "next/navigation";
 import {store} from "@/redux/store";
 import {useAppSelector} from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
+import { useCreateInvestmentVehicleStatusMutation } from "@/service/admin/fund_query";
+import { useToast } from "@/hooks/use-toast";
+
+interface ApiError {
+  status: number;
+  data: {
+    message: string;
+  };
+}
+
 
 
 type SelectOption = {
@@ -19,9 +29,7 @@ type SelectOption = {
 interface Props {
   selectStatus?: Array<SelectOption>;
   selectState?: Array<SelectOption>;
-  fundId?: string;
   isStateRequired?: boolean;
-  statusType?: string;
   readonly?: boolean;
   onStatusChange?: (status: string) => void;
   initialStatus?: string; 
@@ -30,19 +38,24 @@ interface Props {
 function StatusReusable({
   selectStatus,
   selectState,
-  fundId,
   isStateRequired,
-  statusType,
   readonly,
   onStatusChange,
   initialStatus = "", 
 }: Props) {
-  const isLoading = false;
+  // const isLoading = false;
   const router = useRouter();
   const completedStep = useAppSelector(state => (state?.vehicleMultistep.completedSteps))
+  const draftId = useAppSelector(state => (state?.vehicle?.setDraftId))
+  const [isError, setError] = useState("");
   const formikRef = React.useRef<FormikProps<typeof initialFormValue>>(null);
+  const [setVehicleStatus,{isLoading}] = useCreateInvestmentVehicleStatusMutation();
+  const { toast } = useToast();
+
+  console.log(draftId)
 
   const initialFormValue = {
+    investmentVehicleId: '',
     status: initialStatus,
     state: "",
   };
@@ -73,11 +86,28 @@ function StatusReusable({
     [isStateRequired]
   );
 
-  function handleSubmit() {
-    store.dispatch(markStepCompleted("setup"))
-    router.push("/vehicle/visibility");
-    if (fundId) fundId = "";
-    if (statusType) statusType = "";
+  async function  handleSubmit(values: typeof initialFormValue)  {
+    const formData = {
+      investmentVehicleId: draftId,
+      fundRaising: values.status,
+      deployingStatus: values.state
+    }
+    try {
+      const create = await setVehicleStatus(formData).unwrap()
+      if(create){
+        toast({
+          description: create.message,
+          status: "success",
+        });
+        store.dispatch(markStepCompleted("setup"))
+        router.push("/vehicle/visibility");
+      }
+      
+    } catch (err) {
+      const error = err as ApiError;
+       setError(error?.data?.message);
+    }
+
   }
 
   const handleBack = () => {
@@ -172,6 +202,13 @@ function StatusReusable({
                   {isLoading ? <Isloading /> : "Publish"}
                 </button>
               </div>
+              <p
+              className={`text-error500 flex justify-center items-center ${
+                isError ? "mb-3" : ""
+              }`}
+            >
+              {isError}
+            </p>
             </Form>
           );
         }}

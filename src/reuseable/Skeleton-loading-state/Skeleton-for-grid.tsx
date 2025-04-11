@@ -15,7 +15,7 @@ function SkeletonForGrid() {
         {value: <Skeleton className="h-[13.8125rem] md:max-w-lg bg-[#F9F9F9]"/>},
     ]
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-rows-1 md:grid-rows-2 lg:grid-rows-3 gap-4">
             {skeletonList.map((item, index) => (
                 <div key={index}>
                     {item.value}
