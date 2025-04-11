@@ -11,6 +11,8 @@ import {useAppSelector} from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useCreateInvestmentVehicleStatusMutation } from "@/service/admin/fund_query";
 import { useToast } from "@/hooks/use-toast";
+import { clearSaveCreateInvestmentField } from '@/redux/slice/vehicle/vehicle'
+import { setPublicVehicleUrl } from "@/redux/slice/vehicle/vehicle";
 
 interface ApiError {
   status: number;
@@ -45,14 +47,13 @@ function StatusReusable({
 }: Props) {
   // const isLoading = false;
   const router = useRouter();
-  const completedStep = useAppSelector(state => (state?.vehicleMultistep.completedSteps))
+  const completedStep = useAppSelector(state => (state?.vehicleMultistep?.completedSteps))
   const draftId = useAppSelector(state => (state?.vehicle?.setDraftId))
   const [isError, setError] = useState("");
   const formikRef = React.useRef<FormikProps<typeof initialFormValue>>(null);
   const [setVehicleStatus,{isLoading}] = useCreateInvestmentVehicleStatusMutation();
   const { toast } = useToast();
 
-  console.log(draftId)
 
   const initialFormValue = {
     investmentVehicleId: '',
@@ -87,19 +88,31 @@ function StatusReusable({
   );
 
   async function  handleSubmit(values: typeof initialFormValue)  {
-    const formData = {
-      investmentVehicleId: draftId,
-      fundRaising: values.status,
-      deployingStatus: values.state
+    const formData: {
+      investmentVehicleId: string;
+      fundRaising?: string;
+      deployingStatus?: string;
+    } = {
+      investmentVehicleId: draftId
+    };
+  
+    if (values.status === "fundRaising") {
+      formData.fundRaising = values.state;
+    } else if (values.status === "deployingStatus") {
+      formData.deployingStatus = values.state;
     }
+  
     try {
       const create = await setVehicleStatus(formData).unwrap()
       if(create){
+        const urlLink = create?.data?.investmentVehicleLink
+        store.dispatch(setPublicVehicleUrl(urlLink))
         toast({
           description: create.message,
           status: "success",
         });
         store.dispatch(markStepCompleted("setup"))
+        store.dispatch(clearSaveCreateInvestmentField())
         router.push("/vehicle/visibility");
       }
       

@@ -105,8 +105,8 @@ const ViewFinanciers = () => {
         setSelectedFinancier(financier);
     };
 
-    const handleSubmit = (values: FormValues) => {
-        console.log('Form submitted with values:', values);
+    const handleSubmit = () => {
+        // console.log('Form submitted with values:', values);
     };
 
     const toggleDropdown = () => {
