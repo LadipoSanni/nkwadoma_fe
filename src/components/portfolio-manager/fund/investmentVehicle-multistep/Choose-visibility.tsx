@@ -22,7 +22,7 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import { useViewAllFinanciersQuery } from '@/service/admin/financier';
 import { useChooseInvestmentVehicleVisibilityMutation } from '@/service/admin/fund_query';
 import { useToast } from "@/hooks/use-toast";
-import { clearDraftId} from '@/redux/slice/vehicle/vehicle';
+import { clearDraftId,clearPublicVehicleUrl} from '@/redux/slice/vehicle/vehicle';
 
 
 interface ApiError {
@@ -149,6 +149,7 @@ function ChooseVisibility() {
                 status: "success",
               });
               store.dispatch(clearDraftId())
+              store.dispatch(clearPublicVehicleUrl())
               if(vehicleType === "commercial"){
                 router.push("/vehicle/commercial-vehicle")
             }else {

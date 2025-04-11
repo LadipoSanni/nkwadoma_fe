@@ -11,7 +11,6 @@ import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import { MdCheck } from "react-icons/md";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SkeletonForLoanOrg from '../Skeleton-loading-state/Skeleton-for-loan-organizations';
-import EmptyState from '@/reuseable/emptyStates/TableEmptyState';
 import GeneralEmptyState from '../emptyStates/General-emptystate';
 import { MdOutlinePeopleOutline } from 'react-icons/md';
 
