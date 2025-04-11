@@ -38,11 +38,12 @@ const PerformanceCard = ({id, showMonthPick,maxWidth, isSmall,title, value, isVa
                         </div>
                     }
                 </div>
-                <div className={` grid gap-2 md:flex justify-between w-full  `}>
+                <div className={` grid gap-2 md:flex justify-between w-fit md:w-fit  bg-purple-200 `}>
                     {isValueInPercentage ?
                         <p id={'amountPercentage'} className={` ${cabinetGroteskBold.className} md:text-[36px] text-[24px] x text-meedlBlue `}>{value}%</p>
                         :
                         <NumericFormat
+                            width={'1rem'}
                             id={'performancePercentageAmount'}
                             name={'performancePercentageAmount'}
                             type="text"
@@ -51,7 +52,7 @@ const PerformanceCard = ({id, showMonthPick,maxWidth, isSmall,title, value, isVa
                             decimalScale={0}
                             fixedDecimalScale={true}
                             prefix={'₦'}
-                            className={`${cabinetGroteskBold.className} md:min-w-fit md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue  `}
+                            className={`${cabinetGroteskBold.className} md:min-w-fit md:bg-red-100 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue  `}
                             value={value}
                         />
                     }

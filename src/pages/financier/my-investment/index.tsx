@@ -6,10 +6,14 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
-import { useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery } from "@/service/admin/fund_query";
-import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
-import LoanEmptyState from "@/reuseable/emptyStates/Index";
-import { MdOutlinePayments } from "react-icons/md";
+import {
+    useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
+} from "@/service/admin/fund_query";
+// import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
+// import LoanEmptyState from "@/reuseable/emptyStates/Index";
+// import { MdOutlinePayments } from "react-icons/md";
+import {useViewMyInvestmentQuery} from '@/service/financier/api'
+import dynamic from "next/dynamic";
 
 interface InvestmentVehicle {
     id: string;
@@ -17,6 +21,11 @@ interface InvestmentVehicle {
     name: string;
     rate?: number;
 }
+
+const MyInvestmentContent = dynamic(
+    () => Promise.resolve(MyInvestment),
+    {ssr: false}
+)
 
 export const HandleCardDetails = (
     id: string,
@@ -29,10 +38,10 @@ export const HandleCardDetails = (
             vehicleType: type,
         })
     );
-    router.push("/marketplace/details");
+    router.push("/my-investment/details");
 };
 
-const MarketPlaceView = () => {
+const MyInvestment = () => {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
@@ -49,6 +58,14 @@ const MarketPlaceView = () => {
             pageNumber: pageNumber,
             investmentVehicleStatus: "PUBLISHED",
         });
+    console.log('data', data);
+
+    const {data: datss} = useViewMyInvestmentQuery({})
+
+    console.log('datss', datss)
+
+    // const hh = datss?.data?.investmentSummaries?.name
+    // const hh2 = datss?.data?.investmentSummaries?.name
 
     useEffect(() => {
         setPageNumber(0);
@@ -57,7 +74,7 @@ const MarketPlaceView = () => {
 
     useEffect(() => {
         if (data?.data?.body) {
-            console.log("API Response:", data.data.body);
+            // console.log("API Response:", data.data.body);
             setAllVehicles(prev => {
                 const newVehicles = pageNumber === 0 ? data.data.body : [...prev, ...data.data.body];
                 const uniqueVehicles = Array.from(
@@ -91,6 +108,41 @@ const MarketPlaceView = () => {
         [isLoading, isFetching, hasMore]
     );
 
+    const dd= [
+        {
+
+            id: 'string',
+            investmentVehicleType: "COMMERCIAL" ,
+            name: 'string',
+            rate: 4,
+        },
+        {
+
+            id: 'string',
+            investmentVehicleType: "COMMERCIAL" ,
+            name: 'string',
+            rate: 4,
+        },{
+
+            id: 'string',
+            investmentVehicleType: "COMMERCIAL" ,
+            name: 'string',
+            rate: 4,
+        },{
+
+            id: 'string',
+            investmentVehicleType: "COMMERCIAL" ,
+            name: 'string',
+            rate: 4,
+        },{
+
+            id: 'string',
+            investmentVehicleType: "COMMERCIAL" ,
+            name: 'string',
+            rate: 4,
+        },
+    ]
+
     const filteredVehicles = allVehicles.filter((vehicle) => {
         const matchesSearch = vehicle.name
             .toLowerCase()
@@ -107,7 +159,7 @@ const MarketPlaceView = () => {
     });
 
     return (
-        <main id="marketplaceView" className="py-9 px-5">
+        <main id="marketplaceView" className="py-9 px-5 h ">
             <div id="searchDiv" className="px-2 flex md:flex-row flex-col gap-3">
                 <SearchInput
                     id="ProgramSearchInput"
@@ -126,28 +178,28 @@ const MarketPlaceView = () => {
                 />
             </div>
 
-            {isLoading && pageNumber === 0 ? (
-                <div className="w-full">
-                    <MarketPlaceInvestmentGrid />
-                </div>
-            ) : filteredVehicles.length === 0 ? (
-                <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
-                    <LoanEmptyState
-                        id="Vehicles"
-                        icon={<MdOutlinePayments className="w-10 h-10" color="#142854" />}
-                        iconBg="#D9EAFF"
-                        title="Investment Vehicles will show here"
-                        description="There are no investment vehicles available yet"
-                    />
-                </div>
-            ) : (
+            {/*{isLoading && pageNumber === 0 ? (*/}
+            {/*    <div className="w-full">*/}
+            {/*        <MarketPlaceInvestmentGrid />*/}
+            {/*    </div>*/}
+            {/*) : filteredVehicles.length === 0 ? (*/}
+            {/*    <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">*/}
+            {/*        <LoanEmptyState*/}
+            {/*            id="Vehicles"*/}
+            {/*            icon={<MdOutlinePayments className="w-10 h-10" color="#142854" />}*/}
+            {/*            iconBg="#D9EAFF"*/}
+            {/*            title="Investment Vehicles will show here"*/}
+            {/*            description="There are no investment vehicles available yet"*/}
+            {/*        />*/}
+            {/*    </div>*/}
+            {/*) : (*/}
                 <div
                     id="card-segmentId"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
-                    {filteredVehicles.map((vehicle, index) => {
+                    {dd.map((vehicle, index) => {
                         const backgroundColor =
-                            vehicle.investmentVehicleType === "COMMERCIAL"
+                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
                                 : "#E6F2EA";
                         const imageSrc =
@@ -198,9 +250,9 @@ const MarketPlaceView = () => {
                         </div>
                     )}
                 </div>
-            )}
+            {/*)}*/}
         </main>
     );
 };
 
-export default MarketPlaceView;
+export default MyInvestmentContent;
