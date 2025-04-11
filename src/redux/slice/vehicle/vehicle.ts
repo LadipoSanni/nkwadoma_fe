@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { clear } from "@testing-library/user-event/dist/cjs/utility/clear.js";
 
 export interface Draft {
     id: string;
@@ -42,7 +43,7 @@ interface vehicleState {
     CreateInvestmentField: InvestmentVehicleField | null
     setInvestmentVehicleType: string
     setDraftId: string
-    
+    setPublicVehicleUrl: string
 }
 
 const initialState: vehicleState = {
@@ -52,7 +53,7 @@ const initialState: vehicleState = {
     CreateInvestmentField: null,
     setInvestmentVehicleType: "",
     setDraftId: "",
-    
+    setPublicVehicleUrl: ""
 }
 
 export const vehicleSlice = createSlice({
@@ -86,9 +87,14 @@ export const vehicleSlice = createSlice({
         clearDraftId: (state) => {
             state.setDraftId = "";
         },
-       
+        setPublicVehicleUrl: (state, action: PayloadAction<string>) => {
+            state.setPublicVehicleUrl = action.payload;
+        },
+        clearPublicVehicleUrl:(state) => {
+            state.setPublicVehicleUrl = ""
+        }
     }
 })
 
-export const {setCurrentVehicleId, setSaveClickedDraft, clearSaveClickedDraft,setVehicleType,setCreateInvestmentField,clearSaveCreateInvestmentField,setInvestmentVehicleType,setDraftId,clearDraftId} = vehicleSlice.actions;
+export const {setCurrentVehicleId, setSaveClickedDraft, clearSaveClickedDraft,setVehicleType,setCreateInvestmentField,clearSaveCreateInvestmentField,setInvestmentVehicleType,setDraftId,clearDraftId,setPublicVehicleUrl,clearPublicVehicleUrl} = vehicleSlice.actions;
 export default vehicleSlice.reducer;

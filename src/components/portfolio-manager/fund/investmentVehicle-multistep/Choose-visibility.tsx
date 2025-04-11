@@ -19,59 +19,107 @@ import { MultiSelect } from '@/reuseable/mult-select';
 import Modal from '@/reuseable/modals/TableModal';
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
 import {Cross2Icon} from "@radix-ui/react-icons";
+import { useViewAllFinanciersQuery } from '@/service/admin/financier';
+import { useChooseInvestmentVehicleVisibilityMutation } from '@/service/admin/fund_query';
+import { useToast } from "@/hooks/use-toast";
+import { clearDraftId} from '@/redux/slice/vehicle/vehicle';
+
+
+interface ApiError {
+  status: number;
+  data: {
+    message: string;
+  };
+}
 
 interface Financier {
-  financierId: string;
-  role: string[];
+  id: string;
+  investmentVehicleDesignation: string[];
 }
 
 const initialFormValue = {
   status: "",
-  financiers: [{ financierId: "", role: [] }] as Financier[],
-  investmentId: ''
+  financiers: [{ id: "",  investmentVehicleDesignation: [] }] as Financier[],
+  investmentVehicleId: ''
 };
+
+interface Financials {
+  id: string,
+  organizationName: string,
+  userIdentity: {
+    firstName: string,
+    lastName: string,
+
+  }
+}
 
 function ChooseVisibility() {
     const [copied, setCopied] = useState(false);
     const [selectedFinancierIds, setSelectedFinancierIds] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
-
+    const [pageNumber,setPageNumber] = useState(0)
+    const investmentVehicleId = useAppSelector(state => (state?.vehicle?.setDraftId))
+    const urlLink = useAppSelector(state => (state?.vehicle?.setPublicVehicleUrl))
+    const [viewAllfinanciers,setAllfinanciers] = useState<Financials[]>([])
+    const [hasNextPage, setNextPage] = useState(true);
+    const [isFinancier,setFinancier] = useState(false)
+    const [isError, setError] = useState("");
+    const { toast } = useToast();
     const router = useRouter();
-    
+    const param = {
+      pageNumber: pageNumber,
+      pageSize: 10,
+      }
+
+     const {data,isLoading: isloading, isFetching} = useViewAllFinanciersQuery(param,{skip: !isFinancier})
+     const [chooseVisibility, {isLoading}] = useChooseInvestmentVehicleVisibilityMutation()
 
     const validationSchema = Yup.object().shape({
-        status: Yup.string().required("Visibility is required"),
-        financiers: Yup.array().test(
-          'private-validation',
-          'At least one financier with role is required for private funds',
-          function(value) {
-            if (this.parent.status === 'Private') {
-              return (
-                Array.isArray(value) &&
-                value.length > 0 &&
-                value.every(f => f.financierId && f.role.length > 0)
-              );
-            }
-            return true;
+      status: Yup.string().required("Visibility is required"),
+      financiers: Yup.array().test(
+        'private-validation',
+        'At least one financier with investment vehicle designation is required for private funds',
+        function(value) {
+          if (this.parent.status === 'Private') {
+            return (
+              Array.isArray(value) &&
+              value.length > 0 &&
+              value.every(f => 
+                f?.id && 
+                Array.isArray(f?.investmentVehicleDesignation) && 
+                f.investmentVehicleDesignation.length > 0
+              )
+            );
           }
-        )
-      });
+          return true;
+        }
+      )
+    });
 
+    const completedStep = useAppSelector(state => (state?.vehicleMultistep?.completedSteps))
+    const vehicleType = useAppSelector(state => (state.vehicle?.vehicleType))
 
-    const isLoading = false
-    const completedStep = useAppSelector(state => (state?.vehicleMultistep.completedSteps))
-    const vehicleType = useAppSelector(state => (state.vehicle.vehicleType))
+    useEffect(()=> {
+       if(data && data?.data && data?.data?.body){
+           setAllfinanciers((prev) => {
+            if(pageNumber === 0) {
+               return data?.data?.body
+            }
+             const newFinanciers = data?.data?.body.filter(
+              (newFinancier: Financials) => !prev.some((prevfinancier) => prevfinancier.id === newFinancier.id)
+             );
+             return [...prev, ...newFinanciers]
+           });
+           setNextPage(data?.data?.hasNextPage)
+       }
+    },[data, pageNumber]);
+
+    const loadMore = () => {
+      if (!isFetching && hasNextPage) {
+          setPageNumber((prevPage) => prevPage + 1);
+      }
+  };
     
-   
-    const financiersData = [
-      { id: '1', name: 'Joseph Isa' },
-      { id: '2', name: 'Philip Adebayo' },
-      { id: '3', name: 'Victoria Ezeoke' },
-      { id: '4', name: 'Michael Opuogbo' },
-      { id: '5', name: 'Stephen Okeke' },
-      { id: '6', name: 'Timothy Usman' },
-    ];
-
     const designations = [
       { label: "Lead", value: "LEAD" },
       { label: "Sponsor", value: "SPONSOR" },
@@ -87,15 +135,31 @@ function ChooseVisibility() {
        },[completedStep, router])
     
     
-    const handleSubmit = (values: typeof initialFormValue) => {
-        store.dispatch(markStepCompleted("setup"))
-      if(vehicleType === "commercial"){
-        router.push("/vehicle/commercial-vehicle")
-    }else {
-        router.push("/vehicle/endownment-vehicle")
-    }
-        console.log(values)
-      
+    const handleSubmit = async (values: typeof initialFormValue) => {
+        const formData = {
+          investmentVehicleId: investmentVehicleId,
+          visibility: values.status,
+          financiers: values.financiers
+        }
+         try {
+          const visibility = await chooseVisibility(formData).unwrap();
+             if(visibility){
+              toast({
+                description: visibility.message,
+                status: "success",
+              });
+              store.dispatch(clearDraftId())
+              if(vehicleType === "commercial"){
+                router.push("/vehicle/commercial-vehicle")
+            }else {
+                router.push("/vehicle/endownment-vehicle")
+            }
+             }
+         } catch (err) {
+          const error = err as ApiError;
+          setError(error?.data?.message);
+         }
+     
         
     }
 
@@ -104,10 +168,10 @@ function ChooseVisibility() {
     }
 
     const handleCopyLink = () => {
-        const url = "meedl.com/tech5investment";
+        const url = urlLink;
         navigator.clipboard.writeText(url).then(() => {
           setCopied(true);
-        //   setTimeout(() => setCopied(false), 2000); 
+          setTimeout(() => setCopied(false), 2000); 
         });
       };
 
@@ -117,7 +181,7 @@ function ChooseVisibility() {
       ) => {
         setFieldValue('financiers', [
           ...values.financiers,
-          { financierId: '', role: [] }, 
+          { financierId: '', investmentVehicleDesignation: [] }, 
         ]);
       };
 
@@ -126,7 +190,7 @@ function ChooseVisibility() {
         values: typeof initialFormValue,
         index: number
     ) => {
-        const removedId = values.financiers[index].financierId;
+        const removedId = values.financiers[index].id;
         if (removedId) {
             setSelectedFinancierIds(selectedFinancierIds.filter(id => id !== removedId));
         }
@@ -140,23 +204,23 @@ function ChooseVisibility() {
         setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
         values: typeof initialFormValue,
         index: number,
-        financierId: string
+        id: string
     ) => {
         const newFinanciers = [...values.financiers];
-        const previousId = newFinanciers[index].financierId;
+        const previousId = newFinanciers[index].id;
 
         let updatedSelectedIds = [...selectedFinancierIds];
         
         if (previousId) {
             updatedSelectedIds = updatedSelectedIds.filter(id => id !== previousId);
         }
-        if (financierId) {
-            updatedSelectedIds.push(financierId);
+        if (id) {
+            updatedSelectedIds.push(id);
         }    
         setSelectedFinancierIds(updatedSelectedIds);
         newFinanciers[index] = {
             ...newFinanciers[index],
-            financierId
+            id
         };
         setFieldValue('financiers', newFinanciers);
     };
@@ -165,12 +229,12 @@ function ChooseVisibility() {
         setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
         values: typeof initialFormValue,
         index: number,
-        roles: string[]
+        investmentVehicleDesignation: string[]
       ) => {
         const newFinanciers = [...values.financiers];
         newFinanciers[index] = {
           ...newFinanciers[index],
-          role: roles
+          investmentVehicleDesignation: investmentVehicleDesignation
         };
         setFieldValue('financiers', newFinanciers);
       };
@@ -202,30 +266,28 @@ function ChooseVisibility() {
                 style={{
                     overflowY: "auto",
                     marginRight: "-10px",  
-                    paddingRight: "10px",  
-                    // scrollbarWidth: "thin", 
-                    // scrollbarColor: "#142854 #f1f1f1",  
+                    paddingRight: "10px",    
                   }}
              >
               <div 
-          className={`py-5  border-[1px] rounded-xl cursor-pointer px-4 ${values.status === 'Public' ? 'border-[#142854]' : ''}`}
-        onClick={() => setFieldValue('status', 'Public')}
+          className={`py-5  border-[1px] rounded-xl cursor-pointer px-4 ${values.status === 'PUBLIC' ? 'border-[#142854]' : ''}`}
+        onClick={() => setFieldValue('status', 'PUBLIC')}
           >
           <label className="flex items-center space-x-2 ">
               <input
                 type="radio"
                 name="Public"
-                value="Public"
-                checked={values.status === 'Public'}
-                onChange={() => setFieldValue('status', 'Public')}
+                value="PUBLIC"
+                checked={values.status === 'PUBLIC'}
+                onChange={() => setFieldValue('status', 'PUBLIC')}
                 className="hidden" 
                 id="public" 
               />
               <span className="relative w-4 h-4 border-[1px] border-[#D7D7D7] rounded-full flex items-center justify-center cursor-pointer">
-                {values.status === 'Public' && (
+                {values.status === 'PUBLIC' && (
                   <span className="absolute w-4 h-4 bg-meedlBlue rounded-full"></span>
                 )}
-                {values.status === 'Public' && (
+                {values.status === 'PUBLIC' && (
                   <svg
                     className="absolute w-3 h-3 text-white"
                     fill="none"
@@ -240,12 +302,16 @@ function ChooseVisibility() {
               <span className="text-[14px]">Public</span> 
             </label>
             <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This {vehicleType} fund will be visible to the public</p>
-            {values.status === "Public" && (
+            {values.status === "PUBLIC" && (
                       <div className='lg:px-8 mt-5'>
                       <div className="px-4 lg:flex items-center cursor-auto   lg:justify-between  bg-[#F9F9F9] py-3 rounded-lg">
-                        <p className="text-[14px] text-[#212221] text-center lg:text-start lg:flex justify-center cursor-auto">
-                          meedl.com/tech5investment
+                        <div className="text-[14px] text-[#212221] text-center lg:text-start lg:flex justify-center cursor-auto">
+                        <p 
+                        className="lg:max-w-[14rem]  truncate text-ellipsis whitespace-nowrap"
+                        >
+                         {urlLink}
                         </p>
+                        </div>
                         <div className='flex justify-center mt-3 lg:mt-0'>
                         <Button
                           type="button"
@@ -262,24 +328,24 @@ function ChooseVisibility() {
                     )}
           </div>
           <div 
-          className={`py-5  border-[1px] rounded-xl cursor-pointer px-4 ${values.status === 'Private' ? 'border-[#142854]' : ''}`}
-        onClick={() => setFieldValue('status', 'Private')}
+          className={`py-5  border-[1px] rounded-xl cursor-pointer px-4 ${values.status === 'PRIVATE' ? 'border-[#142854]' : ''}`}
+        onClick={() => setFieldValue('status', 'PRIVATE')}
           >
           <label className="flex items-center space-x-2 ">
               <input
                 type="radio"
                 name="Private"
-                value="Private"
-                checked={values.status === 'Private'}
-                onChange={() => setFieldValue('status', "Private")}
+                value="PRIVATE"
+                checked={values.status === 'PRIVATE'}
+                onChange={() => setFieldValue('status', "PRIVATE")}
                 className="hidden" 
                 id="private" 
               />
               <span className="relative w-4 h-4 border-[1px] border-[#D7D7D7] rounded-full flex items-center justify-center cursor-pointer">
-                {values.status === 'Private' && (
+                {values.status === 'PRIVATE' && (
                   <span className="absolute w-4 h-4 bg-meedlBlue rounded-full"></span>
                 )}
-                {values.status === 'Private' && (
+                {values.status === 'PRIVATE' && (
                   <svg
                     className="absolute w-3 h-3 text-white"
                     fill="none"
@@ -295,7 +361,7 @@ function ChooseVisibility() {
             </label>
             <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This {vehicleType} fund will be visible to selected people</p>
             {
-                values.status === "Private" && (
+                values.status === "PRIVATE" && (
                   
                     <div className=' px-6 relative top-4 left-3  '>
 
@@ -311,13 +377,13 @@ function ChooseVisibility() {
                             <div className={`grid grid-cols-2 gap-4 items-center  `}>
                               <div className='hidden lg:block'>
                               <CustomSelectId
-                                value={financier.financierId}
+                                value={financier.id}
                                 onChange={(value) => updateFinancierId(setFieldValue, values, index, value)}
-                                selectContent={financiersData}
+                                selectContent={viewAllfinanciers}
                                 placeholder="Select financier"
                                 triggerId={`financier-select-${index}`}
                                 className="w-full"
-                                isItemDisabled={(item) => selectedFinancierIds.includes(item.id) && item.id !== financier.financierId}
+                                isItemDisabled={(item) => selectedFinancierIds.includes(item.id) && item.id !== financier.id}
                                 additionalContent={({ closeDropdown }) => (
                                   <div className="relative py-2 top-1 px-2 flex items-center text-[#142854]">
                                     <div className="z-50">
@@ -338,6 +404,32 @@ function ChooseVisibility() {
                                   </div>
                                 )}
                                 selectItemCss='text-[#6A6B6A]'
+                                infinityScroll={{
+                                  hasMore: hasNextPage,
+                                  loadMore: loadMore,
+                                  loader: isFetching
+                                }}
+                                isLoading={isloading}
+                                isFinancier={setFinancier}
+                                button={({ closeDropdown }) => (
+                                  <div className="relative left-2 right-2 flex items-center justify-center ">
+                                    <div className="z-50">
+                                      <MdAdd color="#142854" className="h-[16px] w-[16px]" />
+                                    </div>
+                                    <div className="relative right-3">
+                                      <Button
+                                        type="button"
+                                        onClick={() => {
+                                          handleOpenModal();
+                                          closeDropdown(); 
+                                        }}
+                                        className="text-black text-[12px] border-none shadow-none"
+                                      >
+                                        Add Financier
+                                      </Button>
+                                    </div>
+                                  </div>
+                                )}
                           />
                               </div>
 
@@ -379,13 +471,13 @@ function ChooseVisibility() {
                               <Label className='text-[#212221]'>Financier</Label>
                               <div className={`w-full -mt-2 `}>
                               <CustomSelectId
-                                value={financier.financierId}
+                                value={financier.id}
                                 onChange={(value) => updateFinancierId(setFieldValue, values, index, value)}
-                                selectContent={financiersData}
+                                selectContent={viewAllfinanciers}
                                 placeholder="Select financier"
                                 triggerId={`financier-select-${index}`}
                                 className="w-full"
-                                isItemDisabled={(item) => selectedFinancierIds.includes(item.id) && item.id !== financier.financierId}
+                                isItemDisabled={(item) => selectedFinancierIds.includes(item.id) && item.id !== financier.id}
                                 additionalContent={({ closeDropdown }) => (
                                   <div className="relative py-2 top-1 px-2 flex items-center text-[#142854]">
                                     <div className="z-50">
@@ -406,6 +498,32 @@ function ChooseVisibility() {
                                   </div>
                                 )}
                                 selectItemCss='text-[#6A6B6A]'
+                                infinityScroll={{
+                                  hasMore: hasNextPage,
+                                  loadMore: loadMore,
+                                  loader: isFetching
+                                }}
+                                isLoading={isloading}
+                                isFinancier={setFinancier}
+                                button={({ closeDropdown }) => (
+                                  <div className="relative left-2 right-2 flex items-center justify-center ">
+                                  <div className="z-50">
+                                    <MdAdd color="#142854" className="h-[16px] w-[16px]" />
+                                  </div>
+                                  <div className="relative right-3">
+                                    <Button
+                                      type="button"
+                                      onClick={() => {
+                                        handleOpenModal();
+                                        closeDropdown(); 
+                                      }}
+                                      className="text-black text-[12px] border-none shadow-none"
+                                    >
+                                      Add Financier
+                                    </Button>
+                                  </div>
+                                </div>
+                                )}
                                 />
                                 </div>
                               </div>
@@ -466,24 +584,24 @@ function ChooseVisibility() {
             }
           </div>
           <div 
-          className={`py-5  border-[1px] rounded-xl cursor-pointer px-4 ${values.status === 'Default' ? 'border-[#142854]' : ''}`}
-          onClick={() => setFieldValue('status', 'Default')}
+          className={`py-5  border-[1px] rounded-xl cursor-pointer px-4 ${values.status === 'DEFAULT' ? 'border-[#142854]' : ''}`}
+          onClick={() => setFieldValue('status', 'DEFAULT')}
           >
           <label className="flex items-center space-x-2 ">
               <input
                 type="radio"
                 name="Default"
-                value="Default"
-                checked={values.status === 'Default'}
-                onChange={() => setFieldValue('status', 'Default')}
+                value="DEFAULT"
+                checked={values.status === 'DEFAULT'}
+                onChange={() => setFieldValue('status', 'DEFAULT')}
                 className="hidden" 
                 id="default" 
               />
               <span className="relative w-4 h-4 border-[1px] border-[#D7D7D7] rounded-full flex items-center justify-center cursor-pointer">
-                {values.status === 'Default' && (
+                {values.status === 'DEFAULT' && (
                   <span className="absolute w-4 h-4 bg-meedlBlue rounded-full"></span>
                 )}
-                {values.status === 'Default' && (
+                {values.status === 'DEFAULT' && (
                   <svg
                     className="absolute w-3 h-3 text-white"
                     fill="none"
@@ -515,11 +633,19 @@ function ChooseVisibility() {
                 </button>
               </div>
             </Form>
+            
         )
 
         }
        
          </Formik>
+         <p
+              className={`text-error500 flex justify-center items-center ${
+                isError ? "mb-3" : ""
+              }`}
+            >
+              {isError}
+            </p>
          </div>
         </div>
         <Modal
@@ -531,10 +657,10 @@ function ChooseVisibility() {
           width='36%'
           >
            <InviteFinanciers 
-           investmentId={'1'} 
+          //  investmentId={'1'} 
            setIsOpen={setIsOpen} 
-           amountCommitedAndDesignationCondition={true}
-           isDesignationRequired={true}
+          //  amountCommitedAndDesignationCondition={true}
+          //  isDesignationRequired={true}
            context='Select the type of financial you want to add'
            />
           </Modal>

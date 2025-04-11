@@ -162,6 +162,7 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: SaveToDraftProps) => {
         <div className={`${inter.className}`}>
             {step === 1 ? (
                 <div className="w-full">
+      
                     <InfiniteScroll
                         dataLength={drafts.length}
                         next={loadMore}

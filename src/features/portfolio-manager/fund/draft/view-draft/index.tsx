@@ -3,17 +3,16 @@ import React,{useState,useEffect} from 'react'
 import BackButton from '@/components/back-button';
 import {useAppSelector} from "@/redux/store";
 import { useRouter } from 'next/navigation';
-// import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
-// import { MdSearch } from 'react-icons/md'
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
+import { MdSearch } from 'react-icons/md'
 import Table from '@/reuseable/table/Table';
 import SearchInput from "@/reuseable/Input/SearchInput";
 import {formatMonthInDate} from '@/utils/Format';
 import {formatAmount} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
-import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery} from "@/service/admin/fund_query";
+import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
 import { setCreateInvestmentField,setDraftId,clearDraftId} from '@/redux/slice/vehicle/vehicle';
 import {store} from "@/redux/store";
-
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -43,13 +42,19 @@ function ViewDraft() {
     const router = useRouter();
     const vehicleType = useAppSelector(state => (state.vehicle?.vehicleType))
     const investmentType = useAppSelector(state => (state?.vehicle?.setInvestmentVehicleType))
-    // const savedFormData = useAppSelector(state => (state?.vehicle?.CreateInvestmentField))
-    // const draftId = useAppSelector(state => (state?.vehicle?.setDraftId))
     const [searchTerm, setSearchTerm] = useState("")
     const [pageNumber, setPageNumber] = useState(0);
      const [hasNextPage,setNextPage] = useState(false)
      const [totalPage,setTotalPage] = useState(0)
       const [investmentVehicleDraft, setinvestmentVehicleDraft] = useState<investmentVehicleProps[]>([]);
+      const param = {
+        investmentVehicleType: investmentType,
+        investmentVehicleStatus: "DRAFT",
+        pageSize: 10,
+        pageNumber: pageNumber
+    }
+    const {data: searchData} = useSearchInvestmentVehicleByNameAndTypeQuery({ investmentVehicleName: searchTerm,param},{skip: !searchTerm})
+    
 
     const { data, isLoading} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery(
             {
@@ -63,14 +68,20 @@ function ViewDraft() {
 
 
  useEffect(() => {
-        
-    if(data && data.data) {
+    if (searchTerm && searchData && searchData?.data) {
+        const result = searchData?.data?.body
+        setinvestmentVehicleDraft(result)
+        setNextPage(searchData?.data?.hasNextPage)
+        setTotalPage(searchData?.data?.totalPages)
+        setPageNumber(searchData?.data?.pageNumber)
+    } 
+    else if(data && data.data) {
         setinvestmentVehicleDraft(data?.data?.body)
        setNextPage(data.data?.hasNextPage)
        setTotalPage(data.data?.totalPages)
        setPageNumber(data?.data?.pageNumber)
     }
-   },[data])
+   },[searchTerm, searchData,data])
 
 const handleRowClick = (row: TableRowData) => {
        store.dispatch(setDraftId(String(row?.id)))
@@ -178,7 +189,10 @@ const handleRowClick = (row: TableRowData) => {
           onChange={handleChange}
          />
         </div>
-         <div>
+         <div> 
+         { searchTerm && investmentVehicleDraft.length === 0? <div>
+                <SearchEmptyState icon={MdSearch} name='Draft'/>
+            </div> :
            <Table
            tableData={tableData} 
            tableHeader={draftHeader}
@@ -197,7 +211,7 @@ const handleRowClick = (row: TableRowData) => {
              setPageNumber={setPageNumber}
              totalPages={totalPage}
              isLoading={isLoading}
-           />
+           /> }
          </div>
          </div>
     </div>
