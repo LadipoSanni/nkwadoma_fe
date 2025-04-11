@@ -6,11 +6,14 @@ import TabSwitch from "@/reuseable/details/TabSwitch";
 import styles from './index.module.css';
 import PerformanceDisplay from "@/pages/admin/my-investment-details/performanceDisplay";
 import InvestmentMandate from "@/pages/admin/my-investment-details/investment-mandate";
+import {useRouter} from "next/navigation";
+import Image from "next/image";
 
 
 const MyInvestmentDetails = () => {
     const [currentTab, setCurrentsTab] = useState(0);
     const [currentBartChart, setCurrentBartChart] = useState(0);
+    const router = useRouter();
 
 
     const initialChartData = [
@@ -21,7 +24,7 @@ const MyInvestmentDetails = () => {
     const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialChartData);
 
     const handleBackButton = () => {
-
+        router.push(`/my-investment`)
     }
     // const investmentStartDate = dayjs(data?.data?.createdDate?.toString()).format('MMM D, YYYY')
 
@@ -87,15 +90,50 @@ const MyInvestmentDetails = () => {
         setCurrentsTab(index)
     }
 
+    const investmentVehicleType = 'COMMERCIAL';
+    const imageSrc =
+        investmentVehicleType === "COMMERCIAL"
+            ? "/BlueCircles.svg"
+            : "/GreenCircles.svg";
+    const backgroundColor =
+        investmentVehicleType === "COMMERCIAL"
+            ? "#D9EAFF"
+            : "#E6F2EA";
+
 
     return (
         <div className={`md:h-[100%] pt-3 px-3 grid md:grid gap-5 md:gap-6 md:pt-4 md:px-8 w-full h-full md:w-full `}>
             <BackButton id={'backToViewMyInvestments'} text={'Back to investment'} textColor={'#142854'} handleClick={handleBackButton} iconBeforeLetters={true} />
             <div className={`w-full h-full md:w-full grid md:flex md:justify-between md:h-[100%] `}>
                 <div className={`w-full md:w-[33%] grid gap-4 md:grid md:gap-4 h-fit md:h-fit `}>
-                    <div className={` w-full md:w-full h-[15rem] md:h-[12rem] rounded-md md:rounded-md bg-[#D9EAFF] md:bg-[#D9EAFF] `}>
+                    {/*<div className={` w-full md:w-full h-[15rem] md:h-[12rem] rounded-md md:rounded-md bg-[#D9EAFF] md:bg-[#D9EAFF] `}>*/}
 
+                    {/*</div>*/}
+                    <div id="investment-type-segment" data-testid={`investment-type-segment`} style={{backgroundColor}}
+                         className="rounded-md">
+                        <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>
+                            <div
+                                id="investmentTypeId"
+                                className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center"
+                            >
+                                {investmentVehicleType
+                                    ? investmentVehicleType.charAt(0).toUpperCase() + investmentVehicleType.slice(1).toLowerCase()
+                                    : ""}
+                            </div>
+                        </div>
+                        <div id={"imageId"} className="object-right-bottom justify-end flex ">
+                            <Image
+                                src={imageSrc}
+                                alt="circle"
+                                width={104}
+                                height={29}
+                                className="object-right-bottom flex  "
+                                data-testid="circle-image"
+                                loading="lazy"
+                            />
+                        </div>
                     </div>
+
 
                     <p id={'titleOnInvestmentetails'} className={` ${cabinetGroteskMediumBold600.className}  md:text-[32px] text-[24px] md:text-[#212221] `}>Software Engineering Fund</p>
                     <div className={` bg-grey105 md:bg-grey105 grid h-fit md:h-fit  gap-8 py-3 md:py-3 px-3  `}>

@@ -9,9 +9,9 @@ import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlac
 import {
     useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
 } from "@/service/admin/fund_query";
-import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
-import LoanEmptyState from "@/reuseable/emptyStates/Index";
-import { MdOutlinePayments } from "react-icons/md";
+// import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
+// import LoanEmptyState from "@/reuseable/emptyStates/Index";
+// import { MdOutlinePayments } from "react-icons/md";
 import {useViewMyInvestmentQuery} from '@/service/financier/api'
 
 interface InvestmentVehicle {
@@ -58,8 +58,8 @@ const MyInvestment = () => {
 
     console.log('datss', datss)
 
-    const hh = datss?.data?.investmentSummaries?.name
-    const hh2 = datss?.data?.investmentSummaries?.name
+    // const hh = datss?.data?.investmentSummaries?.name
+    // const hh2 = datss?.data?.investmentSummaries?.name
 
     useEffect(() => {
         setPageNumber(0);
@@ -109,7 +109,32 @@ const MyInvestment = () => {
             investmentVehicleType: "COMMERCIAL" ,
             name: 'string',
             rate: 4,
-        }
+        },
+        {
+
+            id: 'string',
+            investmentVehicleType: "COMMERCIAL" ,
+            name: 'string',
+            rate: 4,
+        },{
+
+            id: 'string',
+            investmentVehicleType: "COMMERCIAL" ,
+            name: 'string',
+            rate: 4,
+        },{
+
+            id: 'string',
+            investmentVehicleType: "COMMERCIAL" ,
+            name: 'string',
+            rate: 4,
+        },{
+
+            id: 'string',
+            investmentVehicleType: "COMMERCIAL" ,
+            name: 'string',
+            rate: 4,
+        },
     ]
 
     const filteredVehicles = allVehicles.filter((vehicle) => {
@@ -128,7 +153,7 @@ const MyInvestment = () => {
     });
 
     return (
-        <main id="marketplaceView" className="py-9 px-5">
+        <main id="marketplaceView" className="py-9 px-5 h ">
             <div id="searchDiv" className="px-2 flex md:flex-row flex-col gap-3">
                 <SearchInput
                     id="ProgramSearchInput"
@@ -166,7 +191,7 @@ const MyInvestment = () => {
                     id="card-segmentId"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
-                    {filteredVehicles.map((vehicle, index) => {
+                    {dd.map((vehicle, index) => {
                         const backgroundColor =
                              vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
