@@ -1,5 +1,4 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import { clear } from "@testing-library/user-event/dist/cjs/utility/clear.js";
 
 export interface Draft {
     id: string;

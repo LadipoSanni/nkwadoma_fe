@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import Isloading from "@/reuseable/display/Isloading";
 import {store} from "@/redux/store";
 import {useAppSelector} from "@/redux/store";
-import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
+// import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useRouter } from "next/navigation";
 import CustomSelectId from '@/reuseable/Input/custom-select-id';
 // import Multiselect from '@/reuseable/mult-select/multi-select';
