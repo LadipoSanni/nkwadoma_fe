@@ -31,6 +31,14 @@ export const steps = [
 
   ];
 
+export const kycSteps = [
+    { id: 'identification', title: 'Identification' },
+    { id:"sof", title: 'Source of funds' },
+    { id: 'beneficial-owner', title: 'Beneficial Owner' },
+    { id: 'declaration', title: 'Declaration' },
+
+];
+
 export const marketplaceInvestment = [
     { id: 'transfer', title: 'Transfer funds' },
     { id: 'confirmTransfer', title: 'Confirm transfer' },
