@@ -13,6 +13,7 @@ import {
 // import LoanEmptyState from "@/reuseable/emptyStates/Index";
 // import { MdOutlinePayments } from "react-icons/md";
 import {useViewMyInvestmentQuery} from '@/service/financier/api'
+import dynamic from "next/dynamic";
 
 interface InvestmentVehicle {
     id: string;
@@ -20,6 +21,11 @@ interface InvestmentVehicle {
     name: string;
     rate?: number;
 }
+
+const MyInvestmentContent = dynamic(
+    () => Promise.resolve(MyInvestment),
+    {ssr: false}
+)
 
 export const HandleCardDetails = (
     id: string,
@@ -249,4 +255,4 @@ const MyInvestment = () => {
     );
 };
 
-export default MyInvestment;
+export default MyInvestmentContent;
