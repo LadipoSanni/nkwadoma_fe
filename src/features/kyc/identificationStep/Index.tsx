@@ -34,17 +34,17 @@ const IdentificationStep = () => {
     }
 
     return (
-        <main className={`${inter.className} xl:px-36  grid-cols-1 gap-y-6  grid gap-10`}>
-            <div className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
-                <h1 className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>Identification</h1>
+        <main id="identificationStepMain" className={`${inter.className} xl:px-36  grid-cols-1 gap-y-6  grid gap-10`}>
+            <div id="identificationHeader" className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
+                <h1 id="identificationTitle" className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>Identification</h1>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className={'grid gap-5 md:w-[27.5rem] w-full'}>
-                <div className={'grid gap-2'}>
-                    <Label htmlFor="nin" className="block text-sm font-medium text-labelBlue">National identification number</Label>
+            <form id="identificationForm" onSubmit={handleSubmit(onSubmit)} className={'grid gap-5 md:w-[27.5rem] w-full'}>
+                <div id="ninContainer" className={'grid gap-2'}>
+                    <Label htmlFor="nin" id="ninLabel" className="block text-sm font-medium text-labelBlue">National identification number</Label>
                     <Input
                         type="number"
-                        id="nin"
+                        id="ninInput"
                         placeholder="Enter NIN"
                         {...register("nin", {
                             required: "NIN is required",
@@ -55,14 +55,14 @@ const IdentificationStep = () => {
                         })}
                         className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
                     />
-                    {errors.nin && <p className="text-red-500 text-sm">{errors.nin.message}</p>}
+                    {errors.nin && <p id="ninError" className="text-red-500 text-sm">{errors.nin.message}</p>}
                 </div>
 
-                <div className={'grid gap-2'}>
-                    <Label htmlFor="bvn" className="block text-sm font-medium text-labelBlue">Bank verification number</Label>
+                <div id="bvnContainer" className={'grid gap-2'}>
+                    <Label htmlFor="bvn" id="bvnLabel" className="block text-sm font-medium text-labelBlue">Bank verification number</Label>
                     <Input
                         type="number"
-                        id="bvn"
+                        id="bvnInput"
                         placeholder="Enter BVN"
                         {...register("bvn", {
                             required: "BVN is required",
@@ -73,12 +73,13 @@ const IdentificationStep = () => {
                         })}
                         className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
                     />
-                    {errors.bvn && <p className="text-red-500 text-sm">{errors.bvn.message}</p>}
+                    {errors.bvn && <p id="bvnError" className="text-red-500 text-sm">{errors.bvn.message}</p>}
                 </div>
 
-                <div className={'flex justify-end mt-5'}>
+                <div id="buttonContainer" className={'flex justify-end mt-5'}>
                     <Button
                         type="submit"
+                        id="saveContinueButton"
                         disabled={!isValid || isLoading}
                         className={`h-[2.8125rem] md:w-[9.3125rem] w-full text-[14px] leading-[150%] px-4 py-2 ${!isValid ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} font-semibold text-meedlWhite rounded-md flex items-center justify-center gap-2`}
                     >

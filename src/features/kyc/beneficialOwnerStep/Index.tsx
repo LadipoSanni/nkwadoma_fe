@@ -14,7 +14,6 @@ import {MdKeyboardArrowUp, MdKeyboardArrowDown} from 'react-icons/md';
 
 const BeneficialOwnerStep = () => {
     const [selectedForm, setSelectedForm] = useState<"entity" | "individual">("entity");
-    // const [searchQuery, setSearchQuery] = useState("");
     const [searchQuery] = useState("");
     const [entityName, setEntityName] = useState("");
     const [rcNumber, setRcNumber] = useState("");
@@ -64,34 +63,37 @@ const BeneficialOwnerStep = () => {
     };
 
     return (
-        <main className={`${inter.className} xl:px-36 grid-cols-1 gap-y-6 grid gap-10`}>
-            <div className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
-                <h1 className="text-meedlBlack text-[24px] leading-[120%] font-medium">Beneficial owner</h1>
+        <main id="beneficialOwnerStepMain" className={`${inter.className} xl:px-36 grid-cols-1 gap-y-6 grid gap-10`}>
+            <div id="beneficialOwnerHeader" className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
+                <h1 id="beneficialOwnerTitle" className="text-meedlBlack text-[24px] leading-[120%] font-medium">Beneficial owner</h1>
             </div>
-            <section className={'md:w-[27.5rem] w-full'}>
+            <section id="beneficialOwnerSection" className={'md:w-[27.5rem] w-full'}>
                 <Tabs
+                    id="beneficialOwnerTabs"
                     value={selectedForm}
                     onValueChange={(value) => setSelectedForm(value as "entity" | "individual")}
                     className={'grid gap-7'}
                 >
-                    <TabsList className="flex gap-3 bg-transparent p-0 justify-start">
+                    <TabsList id="beneficialOwnerTabsList" className="flex gap-3 bg-transparent p-0 justify-start">
                         <TabsTrigger
+                            id="entityTabTrigger"
                             value="entity"
                             className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:text-meedlBlue data-[state=inactive]:text-black300"
                         >
                             Entity
                         </TabsTrigger>
                         <TabsTrigger
+                            id="individualTabTrigger"
                             value="individual"
                             className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:text-meedlBlue data-[state=inactive]:text-black300"
                         >
                             Individual
                         </TabsTrigger>
                     </TabsList>
-                    <TabsContent value="entity">
-                        <main className="grid gap-5">
-                            <div className="grid gap-2">
-                                <Label htmlFor="entityName" className="block text-sm font-medium text-labelBlue">
+                    <TabsContent id="entityTabContent" value="entity">
+                        <main id="entityFormMain" className="grid gap-5">
+                            <div id="entityNameContainer" className="grid gap-2">
+                                <Label htmlFor="entityName" id="entityNameLabel" className="block text-sm font-medium text-labelBlue">
                                     Entity name
                                 </Label>
                                 <Input
@@ -102,8 +104,8 @@ const BeneficialOwnerStep = () => {
                                     className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                 />
                             </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="rcNumber" className="block text-sm font-medium text-labelBlue">
+                            <div id="rcNumberContainer" className="grid gap-2">
+                                <Label htmlFor="rcNumber" id="rcNumberLabel" className="block text-sm font-medium text-labelBlue">
                                     RC number
                                 </Label>
                                 <Input
@@ -114,8 +116,8 @@ const BeneficialOwnerStep = () => {
                                     className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                 />
                             </div>
-                            <div className="grid gap-2">
-                                <Label htmlFor="countryOfIncorporation" className="block text-sm font-medium text-labelBlue">
+                            <div id="countryOfIncorporationContainer" className="grid gap-2">
+                                <Label htmlFor="countryOfIncorporation" id="countryOfIncorporationLabel" className="block text-sm font-medium text-labelBlue">
                                     Country of incorporation
                                 </Label>
                                 <Select
@@ -123,27 +125,27 @@ const BeneficialOwnerStep = () => {
                                     onOpenChange={(open) => setIsOpen(open)}
                                 >
                                     <SelectTrigger
-                                        id="countryOfIncorporation"
+                                        id="countryOfIncorporationTrigger"
                                         onKeyDown={handleKeyDown}
                                         className={'mt-0 h-[3.375rem] px-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 flex items-center justify-between'}
                                     >
                                         {selectedCountry ? (
-                                            <div className="flex items-center">
+                                            <div id="selectedCountryContainer" className="flex items-center">
                                                 {countries[selectedCountry as keyof typeof countries]?.name}
                                             </div>
                                         ) : (
-                                            <span className="text-grey250">Select country</span>
+                                            <span id="selectCountryPlaceholder" className="text-grey250">Select country</span>
                                         )}
                                         {isOpen ? (
-                                            <MdKeyboardArrowUp className="h-6 w-6 text-grey250"/>
+                                            <MdKeyboardArrowUp id="countrySelectArrowUp" className="h-6 w-6 text-grey250"/>
                                         ) : (
-                                            <MdKeyboardArrowDown className="h-6 w-6 text-grey250"/>
+                                            <MdKeyboardArrowDown id="countrySelectArrowDown" className="h-6 w-6 text-grey250"/>
                                         )}
                                     </SelectTrigger>
-                                    <SelectContent className="p-0 h-[13.3125rem] md:w-[27.5rem] w-full">
-                                        <div className="px-2 py-1">
+                                    <SelectContent id="countrySelectContent" className="p-0 h-[13.3125rem] md:w-[27.5rem] w-full">
+                                        <div id="countryOptionsContainer" className="px-2 py-1">
                                             {filteredCountryOptions.map((option) => (
-                                                <SelectItem key={option.value} value={option.value}>
+                                                <SelectItem id={`countryOption-${option.value}`} key={option.value} value={option.value}>
                                                     <div className="flex items-center">
                                                         <ReactCountryFlag
                                                             countryCode={option.value}
@@ -162,8 +164,9 @@ const BeneficialOwnerStep = () => {
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <div className={'flex justify-between'}>
+                            <div id="entityFormButtons" className={'flex justify-between'}>
                                 <Button
+                                    id="entityFormBackButton"
                                     onClick={handleBackClick}
                                     type={'button'}
                                     className={'h-[2.813rem] w-[4.625rem] px-4 py-2 bg-gray-500 hover:bg-gray-600 text-meedlBlue border border-meedlBlue rounded-md'}
@@ -171,6 +174,7 @@ const BeneficialOwnerStep = () => {
                                     Back
                                 </Button>
                                 <Button
+                                    id="entityFormSaveContinueButton"
                                     type={'submit'}
                                     onClick={() => router.push('/kyc/declaration')}
                                     disabled={!isFormValid}
@@ -181,7 +185,7 @@ const BeneficialOwnerStep = () => {
                             </div>
                         </main>
                     </TabsContent>
-                    <TabsContent value="individual">
+                    <TabsContent id="individualTabContent" value="individual">
                         <IndividualOwnerForm/>
                     </TabsContent>
                 </Tabs>
