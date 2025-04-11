@@ -82,7 +82,7 @@ const CreatePassword = () => {
     }
 
     const destructureLoginEndpointCallResponse = (response: object) => {
-        console.log('response gotten: ', response)
+        // console.log('response gotten: ', response)
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         const access_token = response?.data?.access_token
@@ -96,7 +96,7 @@ const CreatePassword = () => {
         const user_email = decode_access_token?.email
         const user_roles = decode_access_token?.realm_access?.roles
         const user_role = user_roles.filter(getUserRoles).at(0)
-        console.log('decoded: ', decode_access_token, 'acee: ', access_token, 'refresh_token: ', refresh_token, 'user name: ', userName)
+        // console.log('decoded: ', decode_access_token, 'acee: ', access_token, 'refresh_token: ', refresh_token, 'user name: ', userName)
         return {
             access_token,
             refresh_token,
