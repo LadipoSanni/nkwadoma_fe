@@ -40,7 +40,7 @@ describe('BalanceCard Component', () => {
             </Providers>
         );
         const buttons = screen.getAllByRole('button');
-        expect(buttons[0]).toHaveClass('w-[92]px bg-blue500 hover:bg-blue500');
-        expect(buttons[1]).toHaveClass('w-[107]px bg-blue500 hover:bg-blue500');
+        expect(buttons[0]).toHaveClass('w-auto bg-blue500 hover:bg-blue500');
+        expect(buttons[1]).toHaveClass('w-auto bg-blue500 hover:bg-blue500');
     });
 });

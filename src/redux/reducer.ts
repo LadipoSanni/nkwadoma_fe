@@ -26,6 +26,8 @@ import vehicleMultistepReducer from './slice/multiselect/vehicle-multiselect'
 import { financierApi } from '@/service/admin/financier';
 import financierReducer  from './financier/financier';
 import MarketPlaceReducer from "./slice/investors/MarketPlaceSlice";
+import kycMultistepReducer from './slice/multiselect/kyc-multiselect'
+
 import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
 
 const appReducer = combineReducers({
@@ -42,6 +44,7 @@ const appReducer = combineReducers({
     vehicleMultistep:vehicleMultistepReducer,
     marketPlace: MarketPlaceReducer,
     financier:financierReducer,
+    kycMultistep:kycMultistepReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
