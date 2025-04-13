@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Service
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  # Backend Service
+  backend:
+    image: 357586184453.dkr.ecr.us-east-1.amazonaws.com/nkwadoma:alpha
+    environment:
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: ${FLYWAY_BASELINE_ON_MIGRATE}
+      SPRING_FLYWAY_BASELINE_VERSION: ${FLYWAY_BASELINE_VERSION}
+      PROFILE: dev
+      PORT: 8081
+
+      # Database Configuration
+      DATABASE_URL: jdbc:postgresql://postgres:5432/postgres
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+
+      CREDIT_REGISTRY_EMAIL: ${CREDIT_REGISTRY_EMAIL}
+      CREDIT_REGISTRY_SUBSCRIBER_ID: ${CREDIT_REGISTRY_SUBSCRIBER_ID}
+      CREDIT_REGISTRY_PASSWORD: ${CREDIT_REGISTRY_PASSWORD}
+      CREDIT_REGISTRY_BASE_URL: ${CREDIT_REGISTRY_BASE_URL}
+      TEST_BVN: ${TEST_BVN}
+
+      # Application Configuration
+      SPRING_APPLICATION_NAME: nkwadoma
+
+      # Keycloak Configuration
+      KEYCLOAK_SERVER_URL: ${KEYCLOAK_SERVER_URL}
+      KEYCLOAK_AUTH_PASSWORD: ${KEYCLOAK_AUTH_PASSWORD}
+      KEYCLOAK_AUTH_USER: ${KEYCLOAK_AUTH_USER}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
+
+      # Frontend and External Service URLs
+      FRONTEND_URL: ${FRONTEND_URL}
+      PREMBLY_URL: ${PREMBLY_URL}
+      PREMBLY_APP_ID: ${PREMBLY_APP_ID}
+      PREMBLY_APP_KEY: ${PREMBLY_APP_KEY}
+
+      # Mail Configuration
+      MAIL_HOST: smtp-relay.brevo.com
+      MAIL_PORT: 465
+      MAIL_USERNAME: support@learnspace.africa
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_SENDER: ${MAIL_SENDER}
+
+      # Super Admin Information
+      SUPERADMIN_CREATEDBY: ${SUPERADMIN_CREATEDBY}
+      SUPERADMIN_EMAIL: ${SUPERADMIN_EMAIL}
+      SUPERADMIN_FIRSTNAME: ${SUPERADMIN_FIRSTNAME}
+      SUPERADMIN_LASTNAME: ${SUPERADMIN_LASTNAME}
+
+      # JWT Configuration
+      JWT_SECRET: ${JWT_SECRET}
+      EXPIRATION: ${EXPIRATION}
+
+
+      # Swagger Configuration
+      SPRINGDOC_SWAGGER_UI_CONFIG_URL: /v3/api-docs/swagger-config
+      SPRINGDOC_API_DOCS_PATH: /v3/api-docs
+      SPRINGDOC_SWAGGER_UI_DISABLE_SWAGGER_DEFAULT_URL: true
+      SPRINGDOC_SWAGGER_UI_OPERATIONS_SORTER: alpha
+      SPRINGDOC_SWAGGER_UI_TAGS_SORTER: alpha
+      SPRINGDOC_SWAGGER_UI_PATH: /swagger-ui.html
+      SPRINGDOC_SWAGGER_UI_FILTER: true
+      SPRINGDOC_SWAGGER_UI_URL: /v3/api-docs
+
+      # Spring Security OAuth2 Configuration
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-${KEYCLOAK_CLIENT_ID}}
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-${KEYCLOAK_CLIENT_SECRET}}
+      KEYCLOAK_PRINCIPAL_ATTRIBUTE: preferred_username
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/nkwadoma
+
+      # Logging Configuration
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
+
+
+      
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+      # - keycloak
+
+
+volumes:
+  postgres_data:
+

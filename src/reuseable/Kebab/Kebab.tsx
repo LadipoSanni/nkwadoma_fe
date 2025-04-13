@@ -1,0 +1,135 @@
+"use client"
+import React, {ElementType} from 'react';
+import {
+    Menubar,
+    MenubarTrigger,
+    MenubarContent,
+    MenubarMenu,
+    MenubarItem,
+} from '@/components/ui/menubar';
+import {Button} from '@/components/ui/button';
+import {inter} from "@/app/fonts";
+
+interface Props {
+    handleDropDownClick?: (id: string) => void;
+    kebabOptions?: { id: string, name: string }[];
+    className?: string;
+    icon? : ElementType;
+}
+
+const Kebab = ({handleDropDownClick, kebabOptions, className, icon: Icon}: Props) => {
+    return (
+        <div id="kebabWrapper" data-testid="kebab-wrapper" className="relative">
+            <Menubar id="menubar" data-testid="menubar">
+                <MenubarMenu data-testid="menubar-menu">
+                    <MenubarTrigger
+                        asChild
+                        className="border-none shadow-none cursor-pointer focus:ring-0 focus-visible:ring-0 px-0 items-center"
+                        id="menubarTfrigger"
+                        data-testid="menubar-trigger"
+                    >
+                        <Button
+                            id="kebabButton"
+                            data-testid="kebab-button"
+                            className="border-none shadow-none"
+                        >
+                            { Icon && <Icon
+                                id="kebabIcon"
+                                data-testid="kebab-icon"
+                                className="w-5 h-6 text-grey500 font-extrabold"
+                            />}
+                        </Button>
+                    </MenubarTrigger>
+                    <MenubarContent
+                        id="menubarContent"
+                        data-testid="menubar-content"
+                        className={`${inter.className} pr-8 px-2 mt-0 bg-meedlWhite gap-3 shadow-grey100 rounded-md w-full absolute left-auto right-[-18px] z-10`}
+                    >
+                        {kebabOptions?.map((option, index) => (
+                            <MenubarItem
+                                key={index}
+                                id={`menubarItem-${index}`}
+                                data-testid={`menubar-item-${index}`}
+                                className={`cursor-pointer mt-2 ${className} ${
+                                    option.id === "3" ? "text-error500 focus:text-error500 focus:bg-error50 hover:bg-error50" : ""
+                                }`}
+                                onClick={() => handleDropDownClick && handleDropDownClick(option.id)}
+                            >
+                                {option.name}
+                            </MenubarItem>
+                        ))}
+                    </MenubarContent>
+
+                    {/*<MenubarContent*/}
+                    {/*    id="menubarContent"*/}
+                    {/*    data-testid="menubar-content"*/}
+                    {/*    className={`${inter.className} pr-8 px-2 bg-meedlWhite gap-3 shadow-grey100 right-full rounded-md w-full relative`}*/}
+                    {/*    style={{ right: "auto", left: 0 }}*/}
+                    {/*>*/}
+                    {/*    {*/}
+                    {/*        kebabOptions?.map((option, index) => (*/}
+                    {/*            <MenubarItem*/}
+                    {/*                key={index}*/}
+                    {/*                id={`menubarItem-${index}`}*/}
+                    {/*                data-testid={`menubar-item-${index}`}*/}
+                    {/*                className={`cursor-pointer mt-2 ${className} ${option.id === '3' && 'text-error500 focus:text-error500 focus:bg-error50 hover:bg-error50'} `}*/}
+                    {/*                onClick={() => handleDropDownClick && handleDropDownClick(option.id)}*/}
+                    {/*            >*/}
+                    {/*                {option.name}*/}
+                    {/*            </MenubarItem>*/}
+                    {/*        ))*/}
+                    {/*    }*/}
+                    {/*</MenubarContent>*/}
+                </MenubarMenu>
+            </Menubar>
+
+
+
+
+
+            {/*<Menubar id="menubar" data-testid="menubar">*/}
+            {/*    <MenubarMenu data-testid="menubar-menu">*/}
+            {/*        <MenubarTrigger*/}
+            {/*            asChild*/}
+            {/*            className="border-none shadow-none cursor-pointer focus:ring-0 focus-visible:ring-0"*/}
+            {/*            id="menubarTfrigger"*/}
+            {/*            data-testid="menubar-trigger"*/}
+            {/*        >*/}
+            {/*            <Button*/}
+            {/*                id="kebabButton"*/}
+            {/*                data-testid="kebab-button"*/}
+            {/*                className="border-none shadow-none"*/}
+            {/*            >*/}
+            {/*                { Icon && <Icon*/}
+            {/*                    id="kebabIcon"*/}
+            {/*                    data-testid="kebab-icon"*/}
+            {/*                    className="w-5 h-6 text-grey500 font-extrabold"*/}
+            {/*                />}*/}
+            {/*            </Button>*/}
+            {/*        </MenubarTrigger>*/}
+            {/*        <MenubarContent*/}
+            {/*            id="menubarContent"*/}
+            {/*            data-testid="menubar-content"*/}
+            {/*            className={`${inter.className} bg-meedlWhite gap-3 shadow-grey100 z-0 rounded-md min-w-[10rem] right-[-30px] absolute w-full md:min-w-[12rem]`}*/}
+            {/*        >*/}
+            {/*            {*/}
+            {/*                kebabOptions?.map((option, index) => (*/}
+            {/*                    <MenubarItem*/}
+            {/*                        key={index}*/}
+            {/*                        id={`menubarItem-${index}`}*/}
+            {/*                        data-testid={`menubar-item-${index}`}*/}
+            {/*                        className={`cursor-pointer pr-8 mt-2 ${className} ${option.id === '3' && 'text-error500 focus:text-error500 focus:bg-error50 hover:bg-error50'} `}*/}
+            {/*                        onClick={() => handleDropDownClick && handleDropDownClick(option.id)}*/}
+            {/*                    >*/}
+            {/*                        {option.name}*/}
+            {/*                    </MenubarItem>*/}
+            {/*                ))*/}
+            {/*            }*/}
+            {/*        </MenubarContent>*/}
+            {/*    </MenubarMenu>*/}
+            {/*</Menubar>*/}
+        </div>
+    );
+}
+
+export default Kebab;

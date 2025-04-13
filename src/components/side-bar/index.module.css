@@ -1,0 +1,11 @@
+
+.blurryContainer{
+    /*#717987*/
+    background: #606670;
+    /*filter: blur(1px);*/
+    /*-webkit-filter: blur(1px);*/
+    -webkit-backdrop-filter: blur(5px);
+
+    backdrop-filter: blur(5px);
+    /*backdrop-filter: blur(15px);*/
+}

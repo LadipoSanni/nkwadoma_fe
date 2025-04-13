@@ -1,0 +1,153 @@
+name: Build and Test on pull request
+
+on:
+  push:
+    branches: ["main", "dev", "prod-support"]
+  pull_request:
+    branches: ["main", "dev", "prod-support"]
+
+env:
+  EMAILS: 'sam@semicolon.africa,ladipo@semicolon.africa,t.lemon@semicolon.africa,divinemercy601@gmail.com,qudusa55@gmail.com,o.koleaje@semicolon.africa,ned@semicolon.africa,tade@semicolon.africa,moyinoluwa@semicolon.africa,mariam@semicolon.africa,i.james@semicolon.africa,david@semicolon.africa,abigail@semicolon.africa,precious@semicolon.africa,dapo@semicolon.africa,pauline@semicolon.africa,davidoso@semicolon.africa,henry@semicolon.africa'
+  NEXT_PUBLIC_UPLOAD_PRESET: ${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}
+  NEXT_PUBLIC_CLOUD_NAME: ${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}
+  APP_DEV_IV_KEY: ${{ vars.APP_DEV_IV_KEY }}
+  APP_DEV_IV_ENCRYPTION_SECRET_KEY: ${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}
+  
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Run ECR Login and Start Services
+        run:  chmod +x start.sh ./start.sh  
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install --force
+
+      - name: Create .env file
+        run: |
+          echo "NEXT_PUBLIC_UPLOAD_PRESET=${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}" > .env
+          echo "NEXT_PUBLIC_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}" >> .env
+          echo "APP_DEV_IV_KEY=${{ vars.APP_DEV_IV_KEY }}" >> .env
+          echo "APP_DEV_IV_ENCRYPTION_SECRET_KEY=${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}" >> .env
+
+      - name: Install and build the app
+        run: |
+          npm install
+          npm run build
+        
+      - name: Run Unit Tests
+        run: npm test -- --ci
+
+      - name: Set environment variables
+        id: vars
+        run: |
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          TAG="commit-${COMMIT_HASH}-timestamp-${TIMESTAMP}"
+          echo "TAG=${TAG}" >> $GITHUB_ENV
+          BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+          COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an <%ae>')
+          echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
+          echo "COMMIT_AUTHOR=${COMMIT_AUTHOR}" >> $GITHUB_ENV
+
+      - name: Debug Environment Variables
+        run: |
+          echo "TAG=${{ env.TAG }}"
+          echo "BRANCH_NAME=${{ env.BRANCH_NAME }}"
+          echo "COMMIT_AUTHOR=${{ env.COMMIT_AUTHOR }}"
+          echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}"
+
+
+  # send_notification:
+  #   name: Send Email Notification
+  #   needs: [build]
+  #   runs-on: ubuntu-latest
+  #   if: always()
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - name: Set environment variables
+  #       run: |
+  #         if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+  #           BRANCH_NAME="${GITHUB_HEAD_REF}"
+  #         else
+  #           BRANCH_NAME=$(git symbolic-ref --short -q HEAD || echo "$GITHUB_REF_NAME")
+  #         fi
+
+  #         echo "TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+  #         echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
+  #         echo "COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an <%ae>')" >> $GITHUB_ENV
+
+  #         COMMIT_MESSAGE=$(git log -1 --pretty=%B | tr -d '\r' | sed ':a;N;$!ba;s/\n/\\n/g')
+  #         echo "COMMIT_MESSAGE<<EOF" >> $GITHUB_ENV
+  #         echo "$COMMIT_MESSAGE" >> $GITHUB_ENV
+  #         echo "EOF" >> $GITHUB_ENV
+
+  #     - name: Debug - Print environment variables
+  #       run: |
+  #         echo "TAG: ${{ env.TAG }}"
+  #         echo "BRANCH_NAME: ${{ env.BRANCH_NAME }}"
+  #         echo "COMMIT_AUTHOR: ${{ env.COMMIT_AUTHOR }}"
+  #         echo "COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}"
+
+  #     - name: Send build success email notification
+  #       if: >
+  #         success() &&
+  #         needs.build.result == 'success'
+  #       env:
+  #         SMTP_SERVER: semicolon.africa
+  #         SMTP_PORT: 465
+  #         SMTP_USERNAME: builds@semicolon.africa
+  #         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+  #       run: |
+  #         chmod +x .github/workflows/scripts/send_success_email.sh
+  #         .github/workflows/scripts/send_success_email.sh \
+  #           "$SMTP_SERVER" \
+  #           "$SMTP_PORT" \
+  #           "$SMTP_USERNAME" \
+  #           "$SMTP_PASSWORD" \
+  #           "${{ env.EMAILS }}" \
+  #           "${{ env.TAG }}" \
+  #           "${{ env.BRANCH_NAME }}" \
+  #           "${{ env.COMMIT_AUTHOR }}" \
+  #           "${{ env.COMMIT_MESSAGE }}"
+
+  #     - name: Send build failure email notification
+  #       if: >
+  #         failure() ||
+  #         needs.build.result == 'failure'
+  #       env:
+  #         SMTP_SERVER: semicolon.africa
+  #         SMTP_PORT: 465
+  #         SMTP_USERNAME: builds@semicolon.africa
+  #         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+  #       run: |
+  #         chmod +x .github/workflows/scripts/send_failure_email.sh
+  #         .github/workflows/scripts/send_failure_email.sh \
+  #           "$SMTP_SERVER" \
+  #           "$SMTP_PORT" \
+  #           "$SMTP_USERNAME" \
+  #           "$SMTP_PASSWORD" \
+  #           "${{ env.EMAILS }}" \
+  #           "${{ env.TAG }}" \
+  #           "${{ env.BRANCH_NAME }}" \
+  #           "${{ env.COMMIT_AUTHOR }}" \
+  #           "${{ env.COMMIT_MESSAGE }}"
+
+
