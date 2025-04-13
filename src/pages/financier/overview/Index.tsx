@@ -7,6 +7,9 @@ import MyInvestments from "@/features/financier/summary/myInvestments/Index"
 import InvestmentMarketplace from '@/features/financier/summary/investmentMarketplace/Index'
 import {useRouter} from 'next/navigation';
 import styles from "./index.module.css"
+import { useViewFinancierDashboardQuery } from '@/service/financier/api';
+import {setFinancierType} from "@/redux/financier/financier";
+import {store} from "@/redux/store";
 
 const financialCardData = [
     {
@@ -22,9 +25,12 @@ const financialCardData = [
 
 const FinancierOverview = () => {
     const router = useRouter();
+    const {data} = useViewFinancierDashboardQuery({})
     const handleClick = () => {
         router.push('/kyc/identification')
     }
+    console.log('data?.data?.financierType: ', data?.data?.financierType);
+    store.dispatch(setFinancierType(data?.data?.financierType))
     return (
         <main className={`px-5 h-[85vh] ${styles.container}  pb-8`}>
 

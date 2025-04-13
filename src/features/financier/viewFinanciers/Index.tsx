@@ -16,7 +16,7 @@ import { Cross2Icon } from '@radix-ui/react-icons';
 import { formatAmount } from '@/utils/Format';
 import { useViewAllFinanciersQuery,useSearchFinancierQuery } from '@/service/admin/financier';
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
-import { setCurrentFinancierId,setFinancierMode } from '@/redux/financier/unpersist-financier';
+import { setCurrentFinancierId,setFinancierMode } from '@/redux/financier/financier';
 import {store} from "@/redux/store";
 import { useRouter } from 'next/navigation'
 
