@@ -24,7 +24,7 @@ import { notificationApi } from '@/service/notification/notification_query';
 import notificationReducer  from './slice/notification/notification';
 import vehicleMultistepReducer from './slice/multiselect/vehicle-multiselect'
 import { financierApi } from '@/service/admin/financier';
-import financierReducer  from './financier/financier';
+import financierReducer  from './financier/unpersist-financier';
 import MarketPlaceReducer from "./slice/investors/MarketPlaceSlice";
 import kycMultistepReducer from './slice/multiselect/kyc-multiselect'
 

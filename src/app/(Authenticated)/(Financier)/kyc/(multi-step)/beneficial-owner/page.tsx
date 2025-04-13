@@ -1,5 +1,5 @@
 import React from 'react';
-import BeneficialOwnerStep from "@/features/kyc/beneficialOwnerStep/Index";
+import BeneficialOwnerStep from "@/features/kyc/beneficialOwnerStep";
 
 const Page = () => {
     return (

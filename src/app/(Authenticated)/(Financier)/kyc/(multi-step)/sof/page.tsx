@@ -1,10 +1,10 @@
 import React from 'react';
-import Declaration from '@/features/kyc/Declaration/Index'
+import SourceOfFundsStep from '@/features/kyc/sourceOfFundsStep'
 
 
 const Page = () => {
     return (
-        <Declaration/>
+        <SourceOfFundsStep/>
     );
 };
 
