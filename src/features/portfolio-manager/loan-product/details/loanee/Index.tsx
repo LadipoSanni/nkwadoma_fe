@@ -59,7 +59,7 @@ export function Loanees() {
                 {row.performance ?? "No record"}
             </span>
         },
-        {title: "Institution", sortable: true, id: "instituteName", selector: (row: TableRowData) => row.instituteName},
+        {title: "Organization", sortable: true, id: "instituteName", selector: (row: TableRowData) => row.instituteName},
 
     ];
     return (
