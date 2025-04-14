@@ -2,8 +2,8 @@
 import React from 'react';
 import {cabinetGroteskBold, inter, inter500} from "@/app/fonts";
 import { MdArrowUpward, MdOutlineArrowDownward } from "react-icons/md";
-import {NumericFormat} from "react-number-format";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import {formatAmount} from "@/utils/Format";
 
 
 interface PerformanceCardProps {
@@ -38,23 +38,12 @@ const PerformanceCard = ({id, showMonthPick,maxWidth, isSmall,title, value, isVa
                         </div>
                     }
                 </div>
-                <div className={` grid gap-2 md:flex justify-between w-fit md:w-fit  bg-purple-200 `}>
+                <div className={` grid gap-2 md:flex justify-between min-w-fit md:min-w-fit w-full md:w-full  `}>
                     {isValueInPercentage ?
                         <p id={'amountPercentage'} className={` ${cabinetGroteskBold.className} md:text-[36px] text-[24px] x text-meedlBlue `}>{value}%</p>
                         :
-                        <NumericFormat
-                            width={'1rem'}
-                            id={'performancePercentageAmount'}
-                            name={'performancePercentageAmount'}
-                            type="text"
-                            disabled={true}
-                            thousandSeparator=","
-                            decimalScale={0}
-                            fixedDecimalScale={true}
-                            prefix={'₦'}
-                            className={`${cabinetGroteskBold.className} md:min-w-fit md:bg-red-100 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue  `}
-                            value={value}
-                        />
+
+                        <p id={'performancePercentageAmount'} data-testid={'performancePercentageAmount'} className={` ${cabinetGroteskBold.className} md:min-w-fit md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue `}>{formatAmount(value)}</p>
                     }
                     { showPerformancePercentage && <div
                         id={'performancePercentageDiv'}
