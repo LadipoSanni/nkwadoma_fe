@@ -18,7 +18,8 @@ interface MultiSelectProps
   className?: string;
   id?: string
   selcetButtonId?: string
-  restrictedItems?: string[]
+  restrictedItems?: string[];
+  horizontalScroll?: boolean;
 }
 
 export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
@@ -35,6 +36,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       id,
       selcetButtonId,
       restrictedItems,
+      horizontalScroll,
       ...props
      
     },
@@ -100,6 +102,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
             isOpen={isPopoverOpen}
             className={className}
             selectButtonId={selcetButtonId}
+            horizontalScroll={horizontalScroll}
             {...props}
           />
         </PopoverTrigger>

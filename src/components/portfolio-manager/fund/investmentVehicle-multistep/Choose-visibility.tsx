@@ -23,7 +23,7 @@ import { useViewAllFinanciersQuery } from '@/service/admin/financier';
 import { useChooseInvestmentVehicleVisibilityMutation } from '@/service/admin/fund_query';
 import { useToast } from "@/hooks/use-toast";
 import { clearDraftId,clearPublicVehicleUrl} from '@/redux/slice/vehicle/vehicle';
-
+import { clearSaveCreateInvestmentField,clearSaveInvestmentStatus } from '@/redux/slice/vehicle/vehicle'
 
 interface ApiError {
   status: number;
@@ -76,19 +76,36 @@ function ChooseVisibility() {
 
     const validationSchema = Yup.object().shape({
       status: Yup.string().required("Visibility is required"),
+      // financiers: Yup.array().test(
+      //   'private-validation',
+      //   'At least one financier with investment vehicle designation is required for private funds',
+      //   function(value) {
+      //     if (this.parent.status === 'PRIVATE') {
+      //       return (
+      //         Array.isArray(value) &&
+      //         value.length > 0 &&
+      //         value.every(f => 
+      //           f?.id && 
+      //           Array.isArray(f?.investmentVehicleDesignation) && 
+      //           f.investmentVehicleDesignation.length > 0
+      //         )
+      //       );
+      //     }
+      //     return true;
+      //   }
+      // )
       financiers: Yup.array().test(
         'private-validation',
-        'At least one financier with investment vehicle designation is required for private funds',
+        'Each financier must have at least one designation',
         function(value) {
-          if (this.parent.status === 'Private') {
-            return (
-              Array.isArray(value) &&
-              value.length > 0 &&
-              value.every(f => 
-                f?.id && 
-                Array.isArray(f?.investmentVehicleDesignation) && 
-                f.investmentVehicleDesignation.length > 0
-              )
+          if (this.parent.status === 'PRIVATE') {
+
+            if (!value || value.length === 0) return false;
+            
+            return value.every(f => 
+              f?.id?.trim() &&  
+              Array.isArray(f?.investmentVehicleDesignation) && 
+              f.investmentVehicleDesignation.length > 0
             );
           }
           return true;
@@ -150,6 +167,8 @@ function ChooseVisibility() {
               });
               store.dispatch(clearDraftId())
               store.dispatch(clearPublicVehicleUrl())
+              store.dispatch(clearSaveCreateInvestmentField())
+              store.dispatch(clearSaveInvestmentStatus())
               if(vehicleType === "commercial"){
                 router.push("/vehicle/commercial-vehicle")
             }else {
@@ -183,7 +202,7 @@ function ChooseVisibility() {
         setFieldValue('financiers', [
           ...values.financiers,
           { financierId: '', investmentVehicleDesignation: [] }, 
-        ]);
+        ], true);
       };
 
       const removeFinancierRow = (
@@ -240,9 +259,13 @@ function ChooseVisibility() {
         setFieldValue('financiers', newFinanciers);
       };
 
+      const handleBack =() => {
+        router.push("/vehicle/status")
+      }
+
   return (
     <div className={`${inter.className} `}>
-        <div className='xl:px-[11rem] lg:px-8 grid grid-cols-1 gap-y-6 '>
+        <div className='xl:px-[6rem] lg:px-8 grid grid-cols-1 gap-y-6 '>
         <div className='grid grid-cols-1 gap-y-1'>
         <h1 className='text-[18px] font-normal'>Visibility</h1>
         <p className='text-[14px] font-normal'>Select the visibility of your {vehicleType} fund</p>
@@ -364,7 +387,7 @@ function ChooseVisibility() {
             {
                 values.status === "PRIVATE" && (
                   
-                    <div className=' px-6 relative top-4 left-3  '>
+                    <div className=' md:px-3 px-6 relative top-4 md:left-6 left-2 '>
 
                         <div className="lg:grid grid-cols-2 gap-4 hidden ">
                           
@@ -447,6 +470,7 @@ function ChooseVisibility() {
                                 restrictedItems={["LEAD","SPONSOR"]}
                                 id='designationId'
                                 selcetButtonId='designationbuttonId'
+                                horizontalScroll={true}
                               /> 
                                 </div>
                              
@@ -619,7 +643,17 @@ function ChooseVisibility() {
             <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This {vehicleType} fund will be visible to the creator</p>
           </div>
              </div>
-             <div className="md:flex justify-end w-full mt-4">
+             <div className="md:flex justify-between w-full mt-4">
+               <Button
+               variant={"outline"}
+               type="button"
+               id='backToStatus'
+               className='w-full md:w-24 h-[48px] mb-4 border-solid border-[#142854] text-[#142854] cursor-pointer'
+               onClick={handleBack}
+               >
+                Back
+               </Button>
+                
                 <button
                   id="submitInvestment"
                   className={`w-full md:w-24 h-[46px] rounded-md ${
@@ -630,7 +664,7 @@ function ChooseVisibility() {
                   type="submit"
                   disabled={!isValid}
                 >
-                  {isLoading ? <Isloading /> : "Finish"}
+                  {isLoading ? <Isloading /> : "Publish"}
                 </button>
               </div>
             </Form>

@@ -202,7 +202,7 @@ const ViewFinanciers = () => {
                     tableData={financiers}
                     tableHeader={financierHeader}
                     handleRowClick={handleRowClick}
-                    tableHeight={48}
+                    tableHeight={58}
                    icon={Book}
                    sideBarTabName='financier'
                    condition={true}

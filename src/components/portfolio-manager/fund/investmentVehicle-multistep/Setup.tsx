@@ -256,9 +256,9 @@ function Setup({investmentVehicleType}: Props) {
                 setFieldValue("startDate", format(date, "yyyy-MM-dd"))
                 }
                  className="p-6 mt-2 text-[14px] text-[#6A6B6A]"
-                 disabledDate={
-                      (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
-                    }
+                //  disabledDate={
+                //       (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
+                //     }
               />  
                {errors.startDate && touched.startDate && (
                 <ErrorMessage

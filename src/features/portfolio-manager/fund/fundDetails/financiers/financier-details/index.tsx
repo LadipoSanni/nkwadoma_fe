@@ -5,12 +5,13 @@ import {useRouter} from "next/navigation";
 import { inter, cabinetGroteskMediumBold} from "@/app/fonts";
 import styles from "./index.module.css";
 import TabSwitch from "@/reuseable/details/TabSwitch";
-import {NumericFormat} from "react-number-format";
+// import {NumericFormat} from "react-number-format";
 import {useAppSelector} from "@/redux/store";
 import { useViewFinancierDetailQuery } from '@/service/admin/financier';
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import { getInitial } from '@/utils/GlobalMethods';
+import { formatAmount } from '@/utils/Format';
 
 const FinancierDetails = () => {
     const currentFinancierId = useAppSelector(state => (state.financier.currentFinancierId))
@@ -29,7 +30,8 @@ const FinancierDetails = () => {
         }
     }
     // const initial = getInitials(`${details?.data.firstName} ${details?.data.lastName}`);
-    const initial = getInitial(data?.data?.userIdentity?.firstName ,data?.data?.userIdentity?.lastName);
+    const initial = getInitial(data?.data?.firstName ,data?.data?.lastName);
+    const companyInitial = getInitial(data?.data?.organizationName )
     const [currentTab, setCurrentTab] = React.useState(0);
 
     const tabContent = [
@@ -42,60 +44,65 @@ const FinancierDetails = () => {
 
     const basicDetails = [
         {label: 'Financier type', value: <div className={` w-fit h-fit rounded-full px-2 bg-[#EEF5FF] text-[#142854] `}>{capitalizeFirstLetters(data?.data?.financierType)}</div>},
-        {label: 'phone number', value:  data?.data?.userIdentity?.phoneNumber},
-        {label: 'Address', value: data?.data?.userIdentity?.residentialAddress},
+        {label: 'phone number', value:  data?.data?.phoneNumber ?? "Not provided"},
+        {label: 'Address', value: data?.data?.address ?? "Not provided"},
         {
             label: 'Company email address',
-            value:  data?.data?.userIdentity?.email
+            value:  data?.data?.email
         },
-        {label: 'Organization admin name', value: data?.data?.userIdentity?.firstName  + " " +  data?.data?.userIdentity?.lastName },
+        {label: 'Organization admin name', value: data?.data?.firstName  + " " +  data?.data?.lastName },
         {label: 'Organization admin email address', value: ''},
 
     ]
 
     const investmentDetails  = [
-        {label: 'No. of investments', value: 0},
-        {label: 'Total amount invested', value: <NumericFormat
-                id={'totalAmountInvested'}
-                name={'totalAmountInvested'}
-                type="text"
-                disabled={true}
-                thousandSeparator=","
-                decimalScale={2}
-                fixedDecimalScale={true}
-                prefix={'₦'}
-                value={'0'}
-                className='bg-grey105 flex md:place-items-end'
+        {label: 'No. of investments', value: data?.data?.totalNumberOfInvestment},
+        {label: 'Total amount invested', value:  formatAmount(data?.data?.totalNumberOfInvestment)
+        // <NumericFormat
+        //         id={'totalAmountInvested'}
+        //         name={'totalAmountInvested'}
+        //         type="text"
+        //         disabled={true}
+        //         thousandSeparator=","
+        //         decimalScale={2}
+        //         fixedDecimalScale={true}
+        //         prefix={'₦'}
+        //         value={data?.data?.totalNumberOfInvestment}
+        //         className='bg-grey105 flex md:place-items-end'
 
-            />},
-        {label: 'Total income earned', value: <NumericFormat
-                id={'totalAmountInvested'}
-                name={'totalAmountInvested'}
-                type="text"
-                disabled={true}
-                thousandSeparator=","
-                decimalScale={2}
-                fixedDecimalScale={true}
-                prefix={'₦'}
-                value={'0'}
-                className='bg-grey105 flex md:place-items-end'
+        //     />
+        },
+        {label: 'Total income earned', value: formatAmount(data?.data?.totalIncomeEarned)
+            //  <NumericFormat
+            //     id={'totalAmountInvested'}
+            //     name={'totalAmountInvested'}
+            //     type="text"
+            //     disabled={true}
+            //     thousandSeparator=","
+            //     decimalScale={2}
+            //     fixedDecimalScale={true}
+            //     prefix={'₦'}
+            //     value={'0'}
+            //     className='bg-grey105 flex md:place-items-end'
 
-            />},
+            // />
+        },
         {
             label: 'Portfolio value',
-            value: <NumericFormat
-                id={'totalAmountInvested'}
-                name={'totalAmountInvested'}
-                type="text"
-                disabled={true}
-                thousandSeparator=","
-                decimalScale={2}
-                fixedDecimalScale={true}
-                prefix={'₦'}
-                value={'0'}
-                className='bg-grey105 flex md:place-items-end'
+            value: formatAmount(data?.data?.portfolioValue)
+            // <NumericFormat
+            //     id={'totalAmountInvested'}
+            //     name={'totalAmountInvested'}
+            //     type="text"
+            //     disabled={true}
+            //     thousandSeparator=","
+            //     decimalScale={2}
+            //     fixedDecimalScale={true}
+            //     prefix={'₦'}
+            //     value={'0'}
+            //     className='bg-grey105 flex md:place-items-end'
 
-            />
+            // />
         },
 
     ]
@@ -131,7 +138,7 @@ const FinancierDetails = () => {
 
                             <div
                                 className={` ${cabinetGroteskMediumBold.className} md:text-[28px] w-32 h-32 md:w-20 md:h-20 text-[#885A3C]  flex bg-[#FEF6F0] rounded-full justify-center items-center`}>
-                                {initial}
+                                {data?.data?.organizationName === null? initial : companyInitial}
                             </div>
                     <div
                         className={`grid gap-2 mt-4`}
@@ -139,7 +146,7 @@ const FinancierDetails = () => {
                         <div id={'financierName'}
                              data-testid={'financierName'}
                              className={`${cabinetGroteskMediumBold.className} text-black text-xl md:text-[28px]  `}>
-                            {data?.data?.userIdentity?.firstName  + " " +  data?.data?.userIdentity?.lastName}
+                            {data?.data?.organizationName === null? data?.data?.firstName  + " " +  data?.data?.lastName : data?.data?.organizationName}
                         </div>
                         <span id={'financierEmail'}
                               data-testid={'financierEmail'}
@@ -167,7 +174,7 @@ const FinancierDetails = () => {
                                         <div
                                             className={` ${inter.className}text-black300 md:text-black300 md:text-[14px] text-[14px] `}>{item.label}</div>
                                         <div
-                                            className={` ${inter.className}  md:max-w-[40%] md:text-[14px] md:text-black500  md:break-all break-all text-black500 text-[14px] `}> {item.value ? item?.value : 'Not provided'} </div>
+                                            className={` ${inter.className}  md:max-w-[40%] md:text-[14px] md:text-black500  md:break-all break-all text-black500 text-[14px] `}> {item?.value } </div>
                                     </div>
                                 </li>
                             ))
@@ -186,3 +193,7 @@ const FinancierDetails = () => {
 };
 
 export default FinancierDetails;
+
+function NumericAmount(arg0: any) {
+    throw new Error('Function not implemented.');
+}
