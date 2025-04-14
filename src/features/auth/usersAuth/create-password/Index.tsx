@@ -166,12 +166,12 @@ const CreatePassword = () => {
                 user_roles,
                 user_role,
             } = destructureLoginEndpointCallResponse(response)
+            console.log('user role: ', user_role)
             if (user_role) {
                 storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                 setUserRoles(user_roles)
                 await routeUserToTheirDashboard(user_role)
             }
-
 
         }catch (error){
             toast({
