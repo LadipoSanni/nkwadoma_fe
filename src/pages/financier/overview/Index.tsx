@@ -10,6 +10,7 @@ import styles from "./index.module.css"
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
 import {setFinancierType} from "@/redux/financier/financier";
 import {store} from "@/redux/store";
+import dynamic from "next/dynamic";
 
 const financialCardData = [
     {
@@ -23,7 +24,12 @@ const financialCardData = [
     }
 ];
 
-const FinancierOverview = () => {
+const FinancierOverview = dynamic(
+    () => Promise.resolve(FinancierOverviewContent),
+    {ssr: false}
+)
+
+const FinancierOverviewContent = () => {
     const router = useRouter();
     const {data} = useViewFinancierDashboardQuery({})
     const handleClick = () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import IdentificationStep from '@/features/kyc/identificationStep'
+import IdentificationStep from '@/features/kyc/identificationStep/Index'
 
 const Page = () => {
     return (
