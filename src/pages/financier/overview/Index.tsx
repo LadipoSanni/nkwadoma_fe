@@ -29,7 +29,7 @@ const FinancierOverview = () => {
     const handleClick = () => {
         router.push('/kyc/identification')
     }
-    console.log('data?.data?.financierType: ', data?.data?.financierType);
+    // console.log('dj: ', data)
     store.dispatch(setFinancierType(data?.data?.financierType))
     return (
         <main className={`px-5 h-[85vh] ${styles.container}  pb-8`}>
