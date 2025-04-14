@@ -10,7 +10,7 @@ interface InvestmentCardProps {
     imageSrc: string | StaticImageData;
     investmentVehicleType: string;
     investmentVehicleName: string;
-    status: string;
+    statuses: string;
     percentage: number;
     HandleCardDetails: (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => void;
     statusClass: string;
@@ -23,7 +23,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                                                            investmentVehicleType,
                                                            imageSrc,
                                                            investmentVehicleName,
-                                                           status,
+                                                           statuses,
                                                            percentage,
                                                            HandleCardDetails,
                                                            statusClass,
@@ -67,8 +67,8 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                     </span>
                     <div id={"statusDivId"} className={`bg-meedlWhite p-1 border rounded-lg ${borderClass}`}>
                         <span id={"statusId"}
-                            className={`text-sm font-medium px-1 py-1 rounded-lg ${statusClass}`}>
-                            {status}
+                            className={`text-sm font-medium px-1 py-1 rounded-lg lowercase ${statusClass}`}>
+                            {statuses}
                         </span>
                     </div>
                 </div>
