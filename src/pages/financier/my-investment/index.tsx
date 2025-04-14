@@ -111,32 +111,32 @@ const MyInvestment = () => {
     const dd= [
         {
 
-            id: 'string',
+            id: 'strrring',
             investmentVehicleType: "COMMERCIAL" ,
-            name: 'string',
+            name: 'bod',
             rate: 4,
         },
         {
 
-            id: 'string',
+            id: 'srtring',
+            investmentVehicleType: "COMMERCIAL" ,
+            name: 'required',
+            rate: 4,
+        },{
+
+            id: 'advance',
             investmentVehicleType: "COMMERCIAL" ,
             name: 'string',
             rate: 4,
         },{
 
-            id: 'string',
+            id: 'worm',
             investmentVehicleType: "COMMERCIAL" ,
             name: 'string',
             rate: 4,
         },{
 
-            id: 'string',
-            investmentVehicleType: "COMMERCIAL" ,
-            name: 'string',
-            rate: 4,
-        },{
-
-            id: 'string',
+            id: 'related',
             investmentVehicleType: "COMMERCIAL" ,
             name: 'string',
             rate: 4,
