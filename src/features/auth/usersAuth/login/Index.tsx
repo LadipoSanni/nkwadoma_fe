@@ -15,6 +15,7 @@ import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
+import {encryptText} from "@/utils/encrypt";
 
 
 interface CustomJwtPayload {
@@ -42,6 +43,7 @@ const Login: React.FC = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [showEmailMessage, setShowEmailMessage] = useState(false)
+    const encryptedPassword =  encryptText(password)
 
     const getUserLoanOfferId = () => {
         if (searchParams){
@@ -53,6 +55,7 @@ const Login: React.FC = () => {
     }
 
     const loanOfferId =  getUserLoanOfferId()
+
 
 
 
@@ -106,14 +109,16 @@ const Login: React.FC = () => {
     const {toast} = useToast()
     const handleLogin = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
-            if (!navigator.onLine) {
+
+
+        if (!navigator.onLine) {
                 toast({
                     description: "No internet connection",
                     status: "error",
                 })
             } else {
                 try {
-                    const response = await login({email, password}).unwrap()
+                    const response = await login({email:email, password:encryptedPassword}).unwrap()
                     if (response?.data) {
 
                         const access_token = response?.data?.access_token
@@ -134,19 +139,20 @@ const Login: React.FC = () => {
                         if (user_role) {
                             storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                             setUserRoles(user_roles)
-                            switch (user_role) {
-                                case 'LOANEE' :
-                                   await routeLoanee(loanOfferId)
-                                    break;
-                                case 'ORGANIZATION_ADMIN':
-                                    store.dispatch(setCurrentNavbarItem("Program"))
-                                    router.push("/program")
-                                    break;
-                                case 'PORTFOLIO_MANAGER':
-                                    store.dispatch(setCurrentNavbarItem("Loan"))
-                                    router.push("/loan/loan-request")
-                                    break;
-                            }
+                            console.log('decode_access_token: ', decode_access_token, 'user_email: ', user_email, 'user_role: ', user_role)
+                            // switch (user_role) {
+                            //     case 'LOANEE' :
+                            //        await routeLoanee(loanOfferId)
+                            //         break;
+                            //     case 'ORGANIZATION_ADMIN':
+                            //         store.dispatch(setCurrentNavbarItem("Program"))
+                            //         router.push("/program")
+                            //         break;
+                            //     case 'PORTFOLIO_MANAGER':
+                            //         store.dispatch(setCurrentNavbarItem("Loan"))
+                            //         router.push("/loan/loan-request")
+                            //         break;
+                            // }
                         }
                     }
                 } catch (error) {

@@ -1,27 +1,17 @@
-export async function   encryptText  (text: string){
-    const publicKeyBase64 = process.env.APP_DEV_IV_ENCRYPTION_SECRET_KEY || "";
+import CryptoJS from "crypto-js";
 
-    const publicKeyBytes = Uint8Array.from(atob(publicKeyBase64), (c) => c.charCodeAt(0));
-    const publicKey = await crypto.subtle.importKey(
-        "spki",
-        publicKeyBytes.buffer,
-        {
-            name: "RSA-OAEP",
-            hash: { name: "SHA-256" },
-        },
-        false,
-        ["encrypt"]
-    );
+export  function  encryptText  (text: string){
+    const encryptionKey = process.env.APP_DEV_IV_ENCRYPTION_SECRET_KEY;
+    const ivKey = process.env.APP_DEV_IV_KEY;
+    let iv;
+    if (ivKey) {
+        iv = CryptoJS.enc.Utf8.parse(ivKey);
+    }
 
-    const encoder = new TextEncoder();
-    const encodedPassword = encoder.encode(text);
-
-    const encryptedPassword = await crypto.subtle.encrypt(
-        { name: "RSA-OAEP" },
-        publicKey,
-        encodedPassword
-    );
-
-    return btoa(String.fromCharCode(...new Uint8Array(encryptedPassword)));
-    // return text;
+    let secretKey;
+    if (encryptionKey) {
+        secretKey = CryptoJS.enc.Utf8.parse(encryptionKey.padEnd(16, " "));
+        text = CryptoJS.AES.encrypt(text, secretKey, {iv: iv}).toString();
+        return text;
+    }
 }
