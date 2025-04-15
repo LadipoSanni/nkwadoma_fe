@@ -2,7 +2,7 @@
 import React,{useState,useEffect} from 'react'
 import { inter } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
-import { Formik, Form } from "formik";
+import { Formik, Form, FormikErrors } from "formik";
 import * as Yup from "yup";
 import { Label } from '@/components/ui/label';
 import Isloading from "@/reuseable/display/Isloading";
@@ -195,14 +195,30 @@ function ChooseVisibility() {
         });
       };
 
+      // const addFinancierRow = (
+      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+      //   values: typeof initialFormValue 
+      // ) => {
+      //   setFieldValue('financiers', [
+      //     ...values.financiers,
+      //     { financierId: '', investmentVehicleDesignation: [] }, 
+      //   ], true);
+      // };
+
       const addFinancierRow = (
         setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-        values: typeof initialFormValue 
+        values: typeof initialFormValue,
+        validateForm: (values?: any) => Promise<FormikErrors<typeof initialFormValue>> // Correct type
       ) => {
-        setFieldValue('financiers', [
-          ...values.financiers,
-          { financierId: '', investmentVehicleDesignation: [] }, 
-        ], true);
+        setFieldValue(
+          'financiers',
+          [
+            ...values.financiers,
+            { id: '', investmentVehicleDesignation: [] }
+          ],
+          true
+        );
+        validateForm(); // No change needed here
       };
 
       const removeFinancierRow = (
@@ -220,45 +236,43 @@ function ChooseVisibility() {
         setFieldValue('financiers', newFinanciers);
     };
 
-      const updateFinancierId = (
-        setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-        values: typeof initialFormValue,
-        index: number,
-        id: string
+    const updateFinancierId = (
+      setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+      values: typeof initialFormValue,
+      index: number,
+      id: string
     ) => {
-        const newFinanciers = [...values.financiers];
-        const previousId = newFinanciers[index].id;
-
-        let updatedSelectedIds = [...selectedFinancierIds];
-        
-        if (previousId) {
-            updatedSelectedIds = updatedSelectedIds.filter(id => id !== previousId);
-        }
-        if (id) {
-            updatedSelectedIds.push(id);
-        }    
-        setSelectedFinancierIds(updatedSelectedIds);
-        newFinanciers[index] = {
-            ...newFinanciers[index],
-            id
-        };
-        setFieldValue('financiers', newFinanciers);
+      const newFinanciers = [...values.financiers];
+      const previousId = newFinanciers[index].id;
+    
+      let updatedSelectedIds = [...selectedFinancierIds];
+      if (previousId) {
+        updatedSelectedIds = updatedSelectedIds.filter(id => id !== previousId);
+      }
+      if (id) {
+        updatedSelectedIds.push(id);
+      }
+      setSelectedFinancierIds(updatedSelectedIds);
+      newFinanciers[index] = {
+        ...newFinanciers[index],
+        id
+      };
+      setFieldValue('financiers', newFinanciers, true); // Enable validation
     };
     
-      const updateFinancierRoles = (
-        setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-        values: typeof initialFormValue,
-        index: number,
-        investmentVehicleDesignation: string[]
-      ) => {
-        const newFinanciers = [...values.financiers];
-        newFinanciers[index] = {
-          ...newFinanciers[index],
-          investmentVehicleDesignation: investmentVehicleDesignation
-        };
-        setFieldValue('financiers', newFinanciers);
+    const updateFinancierRoles = (
+      setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+      values: typeof initialFormValue,
+      index: number,
+      investmentVehicleDesignation: string[]
+    ) => {
+      const newFinanciers = [...values.financiers];
+      newFinanciers[index] = {
+        ...newFinanciers[index],
+        investmentVehicleDesignation
       };
-
+      setFieldValue('financiers', newFinanciers, true); // Enable validation
+    };
       const handleBack =() => {
         router.push("/vehicle/status")
       }
@@ -283,7 +297,8 @@ function ChooseVisibility() {
           // touched,
           setFieldValue,
           // setFieldError,
-           values
+           values,
+           validateForm
         })=> (
             <Form className={`${inter.className}`}>
              <div className='grid grid-cols-1 gap-y-4 lg:pr-16 rounded-lg  md:max-h-[50vh]  overflow-y-auto'
@@ -595,7 +610,7 @@ function ChooseVisibility() {
                         <div className='relative right-3 '>
                         <Button
                           type="button"
-                          onClick={() => addFinancierRow(setFieldValue, values)}
+                          onClick={() => addFinancierRow(setFieldValue, values,validateForm)}
                           className=" text-[#142854]  border-none  shadow-none"
                           >
                             Add 
