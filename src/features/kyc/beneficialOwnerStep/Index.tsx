@@ -78,14 +78,14 @@ const BeneficialOwnerStep = () => {
                         <TabsTrigger
                             id="entityTabTrigger"
                             value="entity"
-                            className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:text-meedlBlue data-[state=inactive]:text-black300"
+                            className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:bg-blue50 data-[state=active]:text-meedlBlue data-[state=inactive]:text-black300"
                         >
                             Entity
                         </TabsTrigger>
                         <TabsTrigger
                             id="individualTabTrigger"
                             value="individual"
-                            className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:text-meedlBlue data-[state=inactive]:text-black300"
+                            className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:bg-blue50 data-[state=active]:text-meedlBlue data-[state=inactive]:text-black300"
                         >
                             Individual
                         </TabsTrigger>
