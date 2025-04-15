@@ -23,6 +23,7 @@ const Section: React.FC<SectionProps> = ({index, title, content, subtitle, isLis
 
     const number = parentIndex !== undefined ? `${parentIndex + 1}.${index + 1}` : `${index + 1}.`;
 
+
     return (
         <div className="space-y-3">
             {title && (
@@ -57,8 +58,11 @@ const MarketPlaceDetails = () => {
 
     const {
         marketInvestmentVehicleId,
-        vehicleType
+        vehicleType,
+        status
     } = useSelector((state: RootState) => state.marketPlace.savedMarketplaceData) || {};
+
+    console.log(vehicleType, status, marketInvestmentVehicleId, "STATUSSSSS type and id")
 
     // console.log(marketInvestmentVehicleId, vehicleType);
 
@@ -192,8 +196,14 @@ const MarketPlaceDetails = () => {
                     </div>
 
                     <div className={`pt-4`}>
-                        <Button type="button" size="lg" variant="secondary"
-                                className={`${inter.className} bg-meedlBlue w-full text-meedlWhite`} onClick={HandleInvest}>
+                        <Button type="button" id={`invest-button`} size="lg" variant="secondary"
+                                // className={`${inter.className} bg-meedlBlue w-full text-meedlWhite`}
+                                onClick={HandleInvest}
+                                // disabled={color === 'black'}
+                                disabled={status === 'CLOSE'}
+                                className={`${inter.className} ${status === 'CLOSE'? " bg-black  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
+
+                        >
                             Invest
                         </Button>
                     </div>

@@ -180,7 +180,7 @@ const MarketPlaceView = () => {
                                 ? "/BlueCircles.svg"
                                 : "/GreenCircles.svg";
 
-                        const status = vehicle.fundRaisingStatus || vehicle.deployingStatus || "Unknown";
+                        const status = vehicle.fundRaisingStatus || vehicle.deployingStatus || "";
                         const statusClass =
                             status === "OPEN"
                                 ? "bg-green-100 text-[#0D9B48] border-[#B4E5C8]"
@@ -190,7 +190,7 @@ const MarketPlaceView = () => {
                         const borderClass =
                             status === "OPEN" ? "border-[#B4E5C8]" : status === "CLOSE" ? "border-[#F2BCBA]" : "border-gray-300";
                         // const statusKey = vehicle.fundRaisingStatus ? "fundRaisingStatus" : "deployingStatus";
-                        const statusValue = vehicle.fundRaisingStatus || vehicle.deployingStatus || "Unknown";
+                        const statusValue = vehicle.fundRaisingStatus || vehicle.deployingStatus || "";
                         const statuses = ` ${statusValue}`;
                         // fundRaising = `${statusKey}`;
 
