@@ -24,8 +24,11 @@ import { validationSchema,draftValidationSchema } from '@/utils/validation-schem
 interface ApiError {
     status: number;
     data: {
-      message: string;
+      name: {
+        message: string;
+      };
     };
+   
   }
   
 interface Props {
@@ -100,9 +103,10 @@ function Setup({investmentVehicleType}: Props) {
             }
           } catch (err) {
             const error = err as ApiError;
-            setError(error?.data?.message);
+            setError(error?.data?.name?.message);
           }
         }
+       
 
        const handleSaveDraft = async (
            values: typeof initialFormValue,
@@ -183,7 +187,7 @@ function Setup({investmentVehicleType}: Props) {
               }
             } catch (err) {
               const error = err as ApiError;
-              setError(error?.data?.message);
+              setError(error?.data?.name?.message);
             }  
              
        }
@@ -483,7 +487,7 @@ function Setup({investmentVehicleType}: Props) {
                 )} 
                 </div>
             </div>  
-            <div className= "md:flex lg:gap-24 gap-6 justify-between mt-6  md:mb-0 lg:px-8 relative lg:right-10">
+            <div className= "lg:flex lg:gap-24 gap-6 justify-between mt-6  md:mb-0 lg:px-8 relative lg:right-10">
                         <Button
                             id='saveInvestment'
                             variant={"outline"}
