@@ -31,7 +31,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
 
     return (
         <div id="cohort-details" data-testid="cohort-details"
-             className={`${inter.className} border max:h-96 border-slate-200 rounded-md md:p-3 px-2`}>
+             className={`${inter.className} border border-slate-200 rounded-md md:p-3 px-2`}>
             <div id="tabs-section" data-testid="tabs-section" className={`md:p-3 px-2 py-3 `}>
                 <div className={`w-full rounded-md`}>
                     <Tabs
@@ -52,7 +52,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         <TabsContent value={"trainee-details-mock-data"} id="cohort-details-content"
                                      data-testid="cohort-details-content" className={`py-2`}>
                             <div
-                                className={`bg-[#F9F9F9] grid gap-6 md:h-64 px-5 w-full py-2 md:overflow-y-auto rounded-sm`}>
+                                className={`bg-[#F9F9F9] grid gap-4 min-h-[45vh] md:max-h-[60vh] px-5 py-2 overflow-x-hidden w-full md:overflow-y-auto rounded-sm`}>
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}
@@ -88,7 +88,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                                 />
                                 :
                                 <div
-                                    className="bg-[#F9F9F9] grid md:h-64 gap-6 px-5 w-full py-2 md:overflow-y-auto rounded-sm">
+                                    className="bg-[#F9F9F9] grid gap-2 min-h-[40vh] md:max-h-[40vh]  px-5 w-full py-2 md:overflow-y-auto rounded-sm">
                                     {isNotTableDataList?.map((item, index) => (
                                         <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                              key={index}
