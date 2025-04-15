@@ -1,8 +1,10 @@
 import React from 'react';
-import {cabinetGrotesk, inter} from '@/app/fonts'
+import {cabinetGrotesk, inter, inter500} from '@/app/fonts'
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Icon} from "@iconify/react";
 import {useRouter} from 'next/navigation';
+import {MdOutlineAccountBalance} from 'react-icons/md';
+import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
 
 const InvestmentMarketplace = () => {
     const router = useRouter();
@@ -26,25 +28,24 @@ const InvestmentMarketplace = () => {
                 </h5>
                 <p
                     onClick={handleRoute}
-                    className={'cursor-pointer text-meedlBlue underline text-[14px] font-normal leading-[150%]'}
+                    className={'hidden cursor-pointer text-meedlBlue underline text-[14px] font-normal leading-[150%]'}
                     id={'investmentMarketplaceViewAll'}
                 >
                     View all
                 </p>
             </div>
             <div id={'investmentMarketplaceEmptyState'}>
-                <TableEmptyState
+                <GeneralEmptyState
                     name={'investment'}
                     icon={() => (
-                        <Icon
-                            icon='iconoir:hand-cash'
-                            color={'#142854'}
-                            height={"40px"}
-                            width={"40px"}
+                        <MdOutlineAccountBalance
+                            className={'h-8 w-8 text-meedlBlue'}
                             id={'investmentMarketplaceIcon'}
                         />
                     )}
-                    condition={true}
+                    message={<div className={'grid gap-2'}><h1 className={`${inter500.className} text-black500 text-[18px] leading-[150%]`}>All investments will show here</h1> <p className={'text-lightBlue850 text-[14px] leading-[150%]'}>There are no investments
+                        available yet</p></div>}
+                    // condition={true}
                 />
             </div>
         </section>

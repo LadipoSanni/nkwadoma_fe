@@ -1,8 +1,9 @@
 import React from 'react';
-import {cabinetGrotesk, inter} from '@/app/fonts'
+import {cabinetGrotesk, inter, inter500 } from '@/app/fonts'
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Icon} from "@iconify/react";
 import {useRouter} from 'next/navigation';
+import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
 
 const MyInvestments = () => {
     const router = useRouter();
@@ -26,14 +27,14 @@ const MyInvestments = () => {
                 </h5>
                 <p
                     onClick={handleRoute}
-                    className={'cursor-pointer text-meedlBlue underline text-[14px] font-normal leading-[150%]'}
+                    className={'hidden cursor-pointer text-meedlBlue underline text-[14px] font-normal leading-[150%]'}
                     id="myInvestmentsViewAll"
                 >
                     View all
                 </p>
             </div>
             <div id="myInvestmentsEmptyState">
-                <TableEmptyState
+                <GeneralEmptyState
                     name={'investment'}
                     icon={() => (
                         <Icon
@@ -44,7 +45,9 @@ const MyInvestments = () => {
                             id="myInvestmentsIcon"
                         />
                     )}
-                    condition={true}
+                    message={<div className={'grid gap-2'}><h1 className={`text-black500 ${inter500.className} text-[18px] leading-[150%]`}>My investments will show here</h1> <p className={'text-lightBlue850 text-[14px] leading-[150%]'}>There are no investments
+                        available yet</p></div>}
+                    // condition={true}
                 />
             </div>
         </section>

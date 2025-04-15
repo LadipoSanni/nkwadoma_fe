@@ -31,9 +31,9 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ cardData }) => {
                         </div>
                         <div id={`balanceLinkBlock${index}`}
                              className="grid place-items-end items-center h-[4.54vh]">
-                            <Button className="bg-blue500 hover:bg-blue500 w-auto px-4">
+                            <Button className="bg-grey50 shadow-none cursor-not-allowed hover:bg-grey50 w-auto px-4">
                                 <h2 id={`cardLinkText${index}`}
-                                    className="text-meedlBlue text-[14px] gap-2 flex font-normal leading-[150%] underline">{card.linkText}</h2>
+                                    className="text-black300 text-[14px] gap-2 flex font-normal leading-[150%] underline">{card.linkText}</h2>
                             </Button>
                         </div>
                     </main>
