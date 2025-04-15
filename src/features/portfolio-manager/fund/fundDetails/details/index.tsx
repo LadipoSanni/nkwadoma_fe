@@ -49,7 +49,7 @@ const Details = () => {
                         <InfoCard
                             icon={MdOutlinePayments}
                             fundTitle={data?.data?.name}
-                            description={data?.data?.mandate}
+                            description={""}
                         />
                     </div>
                     <div className='w-full'>

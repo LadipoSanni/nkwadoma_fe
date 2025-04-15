@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { validateNumber, validatePositiveNumberWithIndexNumbers } from "@/utils/Format";
 import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
-import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
+// import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 import {useRouter } from 'next/navigation';
 import DatePickerInput from "@/reuseable/Input/DatePickerInput";
 import { format, parseISO } from "date-fns";
@@ -20,6 +20,7 @@ import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect
 import {useAppSelector} from "@/redux/store";
 import { setCreateInvestmentField,clearSaveCreateInvestmentField,setDraftId,clearDraftId} from '@/redux/slice/vehicle/vehicle';
 import { validationSchema,draftValidationSchema } from '@/utils/validation-schema';
+import PdfAndDocFileUpload from '@/reuseable/Input/Pdf&docx-fileupload';
 
 interface ApiError {
     status: number;
@@ -191,6 +192,14 @@ function Setup({investmentVehicleType}: Props) {
             }  
              
        }
+
+        const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+           event.preventDefault();
+         };
+       
+         const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+           event.preventDefault();
+         };
 
 
 
@@ -467,13 +476,24 @@ function Setup({investmentVehicleType}: Props) {
                 </div>
                 <div className='relative md:bottom-9 bottom-2'>
                    <Label htmlFor="mandate">Vehicle mandate</Label>  
-                   <Field
+                   {/* <Field
                   name="mandate"
                   component={FormikCustomQuillField}
                   maximumDescription={2500}
                   // label={"Mandate"}
                   placeholder={"Enter mandate..."}
-                />
+                /> */}
+                   <div className='mt-4'>
+                   <PdfAndDocFileUpload
+                    handleDrop={handleDrop}
+                    handleDragOver={handleDragOver}
+                    setUploadedDocUrl={(url: string | null) => 
+                      setFieldValue("mandate", url)
+                    }
+                    initialDocUrl={values.mandate}
+                  />
+                   
+                   </div>
                 {errors.mandate && touched.mandate && (
                <div>
                

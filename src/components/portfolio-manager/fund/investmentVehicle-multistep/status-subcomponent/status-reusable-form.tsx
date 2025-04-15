@@ -10,7 +10,7 @@ import {store} from "@/redux/store";
 import {useAppSelector} from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useCreateInvestmentVehicleStatusMutation } from "@/service/admin/fund_query";
-import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast";
 import { setPublicVehicleUrl,setInvestmentStatus } from "@/redux/slice/vehicle/vehicle";
 
 interface ApiError {
@@ -51,7 +51,7 @@ function StatusReusable({
   const [isError, setError] = useState("");
   const formikRef = React.useRef<FormikProps<typeof initialFormValue>>(null);
   const [setVehicleStatus,{isLoading}] = useCreateInvestmentVehicleStatusMutation();
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const savedstatus = useAppSelector(state => (state?.vehicle?.setInvestmentStatus))
 
   const initialFormValue = {
@@ -113,10 +113,10 @@ function StatusReusable({
         const urlLink = create?.data?.investmentVehicleLink
         store.dispatch(setPublicVehicleUrl(urlLink))
         saveToRedux(values)
-        toast({
-          description: create.message,
-          status: "success",
-        });
+        // toast({
+        //   description: create.message,
+        //   status: "success",
+        // });
         store.dispatch(markStepCompleted("setup"))
         router.push("/vehicle/visibility");
       }
