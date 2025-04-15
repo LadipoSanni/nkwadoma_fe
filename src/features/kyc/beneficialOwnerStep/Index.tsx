@@ -10,6 +10,7 @@ import IndividualOwnerForm from '@/reuseable/forms/IndividualOwnerForm/Index';
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
+import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import {MdOutlineSearch} from "react-icons/md";
 
 const BeneficialOwnerStep = () => {
@@ -78,94 +79,50 @@ const BeneficialOwnerStep = () => {
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent id="entityTabContent" value="entity">
-                        <main id="entityFormMain" className="grid gap-5">
-                            <div id="entityNameContainer" className="grid gap-2">
-                                <Label htmlFor="entityName" id="entityNameLabel"
-                                       className="block text-sm font-medium text-labelBlue">
-                                    Entity name
-                                </Label>
-                                <Input
-                                    id="entityName"
-                                    value={entityName}
-                                    onChange={(e) => setEntityName(e.target.value)}
-                                    placeholder="Enter name"
-                                    className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                                />
-                            </div>
-                            <div id="rcNumberContainer" className="grid gap-2">
-                                <Label htmlFor="rcNumber" id="rcNumberLabel"
-                                       className="block text-sm font-medium text-labelBlue">
-                                    RC number
-                                </Label>
-                                <Input
-                                    id="rcNumber"
-                                    value={rcNumber}
-                                    onChange={(e) => setRcNumber(e.target.value)}
-                                    placeholder="Enter number"
-                                    className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                                />
-                            </div>
-                            <div id="countryOfIncorporationContainer" className="grid gap-2">
-                                <Label htmlFor="countryOfIncorporation" id="countryOfIncorporationLabel"
-                                       className="block text-sm font-medium text-labelBlue">
-                                    Country of incorporation
-                                </Label>
-                                <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-                                    <PopoverTrigger asChild>
-                                        <button
-                                            id="countryOfIncorporationTrigger"
-                                            className="mt-0 h-[3.375rem] px-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 flex items-center justify-between"
-                                        >
-                                            {selectedCountry ? (
-                                                <div id="selectedCountryContainer" className="flex items-center">
-                                                    <ReactCountryFlag
-                                                        countryCode={selectedCountry}
-                                                        svg
-                                                        style={{
-                                                            width: "1em",
-                                                            height: "1em",
-                                                            marginRight: "0.5em",
-                                                        }}
-                                                    />
-                                                    {countries[selectedCountry as keyof typeof countries]?.name}
-                                                </div>
-                                            ) : (
-                                                <span id="selectCountryPlaceholder" className="text-grey250">Select country</span>
-                                            )}
-                                        </button>
-                                    </PopoverTrigger>
-                                    <PopoverContent
-                                        className="p-0 max-h-[13.3125rem] md:w-[27.5rem] w-full overflow-y-auto">
-                                        <div className="sticky top-0 bg-white z-10 px-2 py-1">
-                                            <div
-                                                className="flex gap-2 p-2 items-center border-[0.5px] border-blue550 rounded h-[2.3125rem]">
-                                                <MdOutlineSearch className="text-primary200 h-[18px] w-[18px]"/>
-                                                <Input
-                                                    type="text"
-                                                    placeholder="Search country"
-                                                    value={searchQuery}
-                                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                                    className="w-full p-0 text-black300 focus-visible:ring-0 focus:outline-none border-none"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div id="countryOptionsContainer" className="px-2 py-1">
-                                            {countryOptions
-                                                .filter((option) =>
-                                                    option.label.toLowerCase().includes(searchQuery.toLowerCase())
-                                                )
-                                                .map((option) => (
-                                                    <div
-                                                        id={`countryOption-${option.value}`}
-                                                        key={option.value}
-                                                        onClick={() => {
-                                                            handleCountryChange(option.value);
-                                                            setIsPopoverOpen(false); // Close the popover
-                                                        }}
-                                                        className="flex items-center text-black300 text-[14px] leading-[150%] cursor-pointer hover:text-black500 hover:bg-blue500 p-2 rounded"
-                                                    >
+                        <main id="entityFormMain" className="grid gap-10">
+                            <section className={'grid p-5 gap-5 border rounded-md border-lightBlue250'}>
+
+                                <div id="entityNameContainer" className="grid gap-2">
+                                    <Label htmlFor="entityName" id="entityNameLabel"
+                                           className="block text-sm font-medium text-labelBlue">
+                                        Entity name
+                                    </Label>
+                                    <Input
+                                        id="entityName"
+                                        value={entityName}
+                                        onChange={(e) => setEntityName(e.target.value)}
+                                        placeholder="Enter name"
+                                        className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                    />
+                                </div>
+                                <div id="rcNumberContainer" className="grid gap-2">
+                                    <Label htmlFor="rcNumber" id="rcNumberLabel"
+                                           className="block text-sm font-medium text-labelBlue">
+                                        RC number
+                                    </Label>
+                                    <Input
+                                        id="rcNumber"
+                                        value={rcNumber}
+                                        onChange={(e) => setRcNumber(e.target.value)}
+                                        placeholder="Enter number"
+                                        className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                    />
+                                </div>
+                                <div id="countryOfIncorporationContainer" className="grid gap-2">
+                                    <Label htmlFor="countryOfIncorporation" id="countryOfIncorporationLabel"
+                                           className="block text-sm font-medium text-labelBlue">
+                                        Country of incorporation
+                                    </Label>
+                                    <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                                        <PopoverTrigger asChild>
+                                            <button
+                                                id="countryOfIncorporationTrigger"
+                                                className="mt-0 h-[3.375rem] px-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 flex items-center justify-between"
+                                            >
+                                                {selectedCountry ? (
+                                                    <div id="selectedCountryContainer" className="flex items-center">
                                                         <ReactCountryFlag
-                                                            countryCode={option.value}
+                                                            countryCode={selectedCountry}
                                                             svg
                                                             style={{
                                                                 width: "1em",
@@ -173,12 +130,62 @@ const BeneficialOwnerStep = () => {
                                                                 marginRight: "0.5em",
                                                             }}
                                                         />
-                                                        {option.label}
+                                                        {countries[selectedCountry as keyof typeof countries]?.name}
                                                     </div>
-                                                ))}
-                                        </div>
-                                    </PopoverContent>
-                                </Popover></div>
+                                                ) : (
+                                                    <span id="selectCountryPlaceholder" className="text-grey250">Select country</span>
+                                                )}
+                                                {isPopoverOpen ? (
+                                                    <MdKeyboardArrowUp className="ml-2 h-[22px] w-[22px]  text-primary200" />
+                                                ) : (
+                                                    <MdKeyboardArrowDown className="ml-2 h-[22px] w-[22px]  text-primary200" />
+                                                )}
+                                            </button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="p-0 max-h-[13.3125rem] md:w-[27.5rem] w-full overflow-y-auto">
+                                            <div className="sticky top-0 bg-white z-10 px-2 py-1">
+                                                <div className="flex gap-2 p-2 items-center border-[0.5px] border-blue550 rounded h-[2.3125rem]">
+                                                    <MdOutlineSearch className="text-primary200 h-[18px] w-[18px]" />
+                                                    <Input
+                                                        type="text"
+                                                        placeholder="Search country"
+                                                        value={searchQuery}
+                                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                                        className="w-full p-0 text-black300 focus-visible:ring-0 focus:outline-none border-none"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div id="countryOptionsContainer" className="px-2 py-1">
+                                                {countryOptions
+                                                    .filter((option) =>
+                                                        option.label.toLowerCase().includes(searchQuery.toLowerCase())
+                                                    )
+                                                    .map((option) => (
+                                                        <div
+                                                            id={`countryOption-${option.value}`}
+                                                            key={option.value}
+                                                            onClick={() => {
+                                                                handleCountryChange(option.value);
+                                                                setIsPopoverOpen(false);
+                                                            }}
+                                                            className="flex items-center text-black300 text-[14px] leading-[150%] cursor-pointer hover:text-black500 hover:bg-blue500 p-2 rounded"
+                                                        >
+                                                            <ReactCountryFlag
+                                                                countryCode={option.value}
+                                                                svg
+                                                                style={{
+                                                                    width: "1em",
+                                                                    height: "1em",
+                                                                    marginRight: "0.5em",
+                                                                }}
+                                                            />
+                                                            {option.label}
+                                                        </div>
+                                                    ))}
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>                                </div>
+                            </section>
                             <div id="entityFormButtons" className={'flex justify-between'}>
                                 <Button
                                     id="entityFormBackButton"
