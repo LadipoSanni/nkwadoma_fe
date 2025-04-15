@@ -1,4 +1,3 @@
-'use client'
 import React, { useState} from 'react';
 import AuthInputField from "@/reuseable/Input/AuthInputField";
 import { cabinetGrotesk } from "@/app/fonts";
@@ -10,8 +9,9 @@ import { useToast} from "@/hooks/use-toast";
 import {jwtDecode} from "jwt-decode";
 import {setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {ADMIN_ROLES} from "@/types/roles";
-import { store} from "@/redux/store";
+import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
+import {clearData} from "@/utils/storage";
 
 
 const CreatePassword = () => {
@@ -35,6 +35,7 @@ const CreatePassword = () => {
         "Must contain one lowercase character",
         "Must contain one digit"
     ];
+
 
     const validatePassword = (password: string) => {
         const criteria = [
@@ -61,12 +62,12 @@ const CreatePassword = () => {
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
     const getUserToken = () => {
-            if (searchParams){
-                const pathVariable = searchParams.get("token")
-                if (pathVariable){
-                    return pathVariable
-                }
+        if (searchParams){
+            const pathVariable = searchParams.get("token")
+            if (pathVariable){
+                return pathVariable
             }
+        }
     }
 
     const getUserRoles = (returnsRole: string) => {
@@ -81,49 +82,24 @@ const CreatePassword = () => {
         }
     }
 
-    const destructureLoginEndpointCallResponse = (response: object) => {
-        // console.log('response gotten: ', response)
-        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const access_token = response?.data?.access_token
-        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const refresh_token = response?.data?.refresh_token
-        const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const userName = decode_access_token?.name
-        const user_email = decode_access_token?.email
-        const user_roles = decode_access_token?.realm_access?.roles
-        const user_role = user_roles.filter(getUserRoles).at(0)
-        // console.log('decoded: ', decode_access_token, 'acee: ', access_token, 'refresh_token: ', refresh_token, 'user name: ', userName)
-        return {
-            access_token,
-            refresh_token,
-            decode_access_token,
-            userName,
-            user_email,
-            user_roles,
-            user_role,
 
-        }
+    const {toast} = useToast()
+
+
+    interface CustomJwtPayload {
+        email: string;
+        realm_access: {
+            roles: string[];
+        };
+
     }
 
-    const routeLoanee = async (loanOfferId?: string) => {
-        if(loanOfferId) {
-            store.dispatch(setCurrentNavbarItem("Accept loan offer"))
-            router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
-
-        }else{
-            store.dispatch(setCurrentNavbarItem("overview"))
-            router.push("/onboarding")
-        }
-    }
 
     const routeUserToTheirDashboard = async (userRole?: string) => {
         switch (userRole) {
             case 'LOANEE' :
-                await routeLoanee()
+                store.dispatch(setCurrentNavbarItem("overview"))
+                router.push("/onboarding")
                 break;
             case 'ORGANIZATION_ADMIN':
                 store.dispatch(setCurrentNavbarItem("Program"))
@@ -140,16 +116,6 @@ const CreatePassword = () => {
         }
     }
 
-    const {toast} = useToast()
-
-
-    interface CustomJwtPayload {
-        email: string;
-        realm_access: {
-            roles: string[];
-        };
-
-    }
     const handleCreatePassword = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
         setDisableButton(true)
@@ -157,21 +123,25 @@ const CreatePassword = () => {
 
         try {
             const response = await createPassword({token: token
-                , password: password}).unwrap();
-            const  {
-                access_token,
-                refresh_token,
-                userName,
-                user_email,
-                user_roles,
-                user_role,
-            } = destructureLoginEndpointCallResponse(response)
-            console.log('user role: ', user_role)
+                , password: password}).unwrap()
+            const access_token = response?.data?.accessToken
+            const refreshToken = response?.data?.refreshToken
+            const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+            const user_email = decode_access_token?.email
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            const userName = decode_access_token?.name
+            const user_roles = decode_access_token?.realm_access?.roles
+            const user_role = user_roles.filter(getUserRoles).at(0)
+            clearData()
+            await persistor.purge();
             if (user_role) {
-                storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
+                storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
                 setUserRoles(user_roles)
                 await routeUserToTheirDashboard(user_role)
+
             }
+
 
         }catch (error){
             toast({
@@ -186,43 +156,43 @@ const CreatePassword = () => {
 
     return (
         <form id={'create-password-block'}
-                 className={'bg-white shadow-custom h-fit rounded-xl w-full md:w-[60%] md:mr-10 md:bg-meedlWhite md:ml-40 md:h-fit mb-10 py-6 px-5 grid gap-3 '}>
+              className={'bg-white shadow-custom h-fit rounded-xl w-full md:w-[60%] md:mr-10 md:bg-meedlWhite md:ml-40 md:h-fit mb-10 py-6 px-5 grid gap-3 '}>
             <h1 id={'create-password-title'}
                 className={`${cabinetGrotesk.className} antialiased text-meedlBlue font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
-                <main id={'create-password-main'} className={'grid gap-[24.14px]'}>
-                    <div id={'create-password-inputs'} className={'grid gap-4'}>
-                        <AuthInputField
-                            label={'Password'}
-                            id={'password'}
-                            type={'password'}
-                            endAdornment={'Show'}
-                            placeholder={'Enter password'}
-                            value={password}
-                            onChange={handlePasswordChange}
-                            errorMessage={remainingCriteria.length === 1 ? remainingCriteria[0] : ''}
-                        />
-                        <PasswordCriteria id={'createPasswordCriteria'} criteriaStatus={criteriaStatus} />
-                        <AuthInputField
-                            label={'Confirm Password'}
-                            id={'confirmPassword'}
-                            type={'password'}
-                            endAdornment={'show'}
-                            placeholder={'Enter password'}
-                            value={confirmPassword}
-                            onChange={handleConfirmPasswordChange}
-                        />
-                    </div>
-                </main>
-                <AuthButton
-                    backgroundColor={criteriaStatus.every(Boolean) && password === confirmPassword ? '#142854' : '#D0D5DD'}
-                    buttonText={'Create password'}
-                    disable={disable}
-                    handleClick={(e)=>{handleCreatePassword(e)}}
-                    id={"createPasswordButton"}
-                    textColor={'#FFFFFF'}
-                    width={'100%'}
-                    isLoading={isLoading}
-                />
+            <main id={'create-password-main'} className={'grid gap-[24.14px]'}>
+                <div id={'create-password-inputs'} className={'grid gap-4'}>
+                    <AuthInputField
+                        label={'Password'}
+                        id={'password'}
+                        type={'password'}
+                        endAdornment={'Show'}
+                        placeholder={'Enter password'}
+                        value={password}
+                        onChange={handlePasswordChange}
+                        errorMessage={remainingCriteria.length === 1 ? remainingCriteria[0] : ''}
+                    />
+                    <PasswordCriteria id={'createPasswordCriteria'} criteriaStatus={criteriaStatus} />
+                    <AuthInputField
+                        label={'Confirm Password'}
+                        id={'confirmPassword'}
+                        type={'password'}
+                        endAdornment={'show'}
+                        placeholder={'Enter password'}
+                        value={confirmPassword}
+                        onChange={handleConfirmPasswordChange}
+                    />
+                </div>
+            </main>
+            <AuthButton
+                backgroundColor={criteriaStatus.every(Boolean) && password === confirmPassword ? '#142854' : '#D0D5DD'}
+                buttonText={'Create password'}
+                disable={disable}
+                handleClick={(e)=>{handleCreatePassword(e)}}
+                id={"createPasswordButton"}
+                textColor={'#FFFFFF'}
+                width={'100%'}
+                isLoading={isLoading}
+            />
         </form>
     );
 };
