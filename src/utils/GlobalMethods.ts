@@ -1,6 +1,7 @@
 import {jwtDecode} from "jwt-decode";
 import {ADMIN_ROLES} from "@/types/roles";
 import {isAfter} from "date-fns";
+import {StaticImageData} from "next/image";
 
 export  function capitalizeFirstLetters(word: string | null| undefined) {
     if (word) {
@@ -83,3 +84,16 @@ export const getInitials = (name: string): string => {
     const lastInitial = lastName.charAt(0).toUpperCase();
     return firstInitial + lastInitial;
 }
+
+export  const isValidUrl = (url: string  | StaticImageData) => {
+    if (typeof url !== "string") {
+        return true;
+    }
+    try {
+        new URL(url);
+        return true;
+    } catch {
+        return false;
+    }
+};
+
