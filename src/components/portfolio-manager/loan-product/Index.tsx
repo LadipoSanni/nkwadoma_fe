@@ -40,7 +40,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
     const { data: investmentVehicleData } =
         useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
-            pageSize: 48,
+            pageSize: 300,
             pageNumber: 0,
             investmentVehicleStatus: "PUBLISHED",
         });
