@@ -132,7 +132,7 @@ function Multiselect({
             selectedOptions.map((opt) => (
               <Badge
                 key={opt}
-                className={`h-7 text-foreground bg-[#F6F6F6] hover:bg-[#F6F6F6] font-normal`}
+                className={`h-7 text-foreground bg-[#F6F6F6] hover:bg-[#F6F6F6] font-normal shadow-none`}
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleOption(opt);
