@@ -1,7 +1,5 @@
 import React from 'react';
 import {cabinetGrotesk, inter, inter500} from '@/app/fonts'
-import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
-import {Icon} from "@iconify/react";
 import {useRouter} from 'next/navigation';
 import {MdOutlineAccountBalance} from 'react-icons/md';
 import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
