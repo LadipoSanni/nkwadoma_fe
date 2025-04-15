@@ -59,7 +59,6 @@ const MarketPlaceDetails = () => {
     const {
         marketInvestmentVehicleId,
         vehicleType,
-        status
     } = useSelector((state: RootState) => state.marketPlace.savedMarketplaceData) || {};
     // console.log(marketInvestmentVehicleId, vehicleType);
 
@@ -194,11 +193,11 @@ const MarketPlaceDetails = () => {
 
                     <div className={`pt-4`}>
                         <Button type="button" id={`invest-button`} size="lg" variant="secondary"
-                                // className={`${inter.className} bg-meedlBlue w-full text-meedlWhite`}
+                                className={`${inter.className} bg-meedlBlue w-full text-meedlWhite`}
                                 onClick={HandleInvest}
                                 // disabled={color === 'black'}
-                                disabled={status === 'CLOSE'}
-                                className={`${inter.className} ${status === 'CLOSE'? " bg-black  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
+                                // disabled={status === 'CLOSE'}
+                                // className={`${inter.className} ${status === 'CLOSE'? " bg-black  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
 
                         >
                             Invest

@@ -24,13 +24,11 @@ export const HandleCardDetails = (
     id: string,
     type: string,
     router: ReturnType<typeof useRouter>,
-    status: string,
 ) => {
     store.dispatch(
         setMarketInvestmentVehicleId({
             marketInvestmentVehicleId: id,
             vehicleType: type,
-            status
         })
     );
     router.push("/marketplace/details");
@@ -210,7 +208,7 @@ const MarketPlaceView = () => {
                             borderClass,
                             percentage: vehicle.rate || 0,
                             HandleCardDetails: () =>
-                                HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router, statuses),
+                                HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router),
                         };
 
                         if (filteredVehicles.length === index + 1) {
