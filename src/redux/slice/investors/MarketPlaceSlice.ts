@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface MarketData {
     marketInvestmentVehicleId: string;
     vehicleType: string;
-    status: string | null;
+    status: string;
 }
 
 interface ProgramSliceState {
