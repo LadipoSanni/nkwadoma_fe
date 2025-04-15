@@ -139,20 +139,19 @@ const Login: React.FC = () => {
                         if (user_role) {
                             storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                             setUserRoles(user_roles)
-                            console.log('decode_access_token: ', decode_access_token, 'user_email: ', user_email, 'user_role: ', user_role)
-                            // switch (user_role) {
-                            //     case 'LOANEE' :
-                            //        await routeLoanee(loanOfferId)
-                            //         break;
-                            //     case 'ORGANIZATION_ADMIN':
-                            //         store.dispatch(setCurrentNavbarItem("Program"))
-                            //         router.push("/program")
-                            //         break;
-                            //     case 'PORTFOLIO_MANAGER':
-                            //         store.dispatch(setCurrentNavbarItem("Loan"))
-                            //         router.push("/loan/loan-request")
-                            //         break;
-                            // }
+                            switch (user_role) {
+                                case 'LOANEE' :
+                                   await routeLoanee(loanOfferId)
+                                    break;
+                                case 'ORGANIZATION_ADMIN':
+                                    store.dispatch(setCurrentNavbarItem("Program"))
+                                    router.push("/program")
+                                    break;
+                                case 'PORTFOLIO_MANAGER':
+                                    store.dispatch(setCurrentNavbarItem("Loan"))
+                                    router.push("/loan/loan-request")
+                                    break;
+                            }
                         }
                     }
                 } catch (error) {
@@ -168,7 +167,6 @@ const Login: React.FC = () => {
                 }
             }
         }
-    // }
 
 
     const isFormValid = validEmail && password.length >= 8;

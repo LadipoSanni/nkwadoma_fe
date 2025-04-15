@@ -15,7 +15,7 @@ const Step3 = () => {
     // const [disableButton, setDisableButton] = useState(true)
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
     const searchParams = useSearchParams()
-    const [resetPassword, { data}] = useResetPasswordMutation()
+    const [resetPassword] = useResetPasswordMutation()
     const encryptedPassword =  encryptText(newPassword)
 
 
@@ -46,10 +46,10 @@ const Step3 = () => {
 
         try{
 
-            await resetPassword({token: token, password: encryptedPassword}).unwrap()
-            if(data?.message){
+            const response =  await resetPassword({token: token, password: encryptedPassword}).unwrap()
+            if(response?.message){
                 toast({
-                    description: data?.message,
+                    description: response?.message,
                     status: "success",
                 })
                 router.push("/auth/login")
