@@ -206,19 +206,23 @@ function ChooseVisibility() {
       // };
 
       const addFinancierRow = (
-        setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
+        setFieldValue: (
+          field: string, 
+          value: unknown, 
+          shouldValidate?: boolean
+        ) => void,
         values: typeof initialFormValue,
-        validateForm: (values?: any) => Promise<FormikErrors<typeof initialFormValue>> // Correct type
+        validateForm: (values?: Partial<typeof initialFormValue>) => Promise<FormikErrors<typeof initialFormValue>>
       ) => {
-        setFieldValue(
-          'financiers',
-          [
+        const newValues = {
+          ...values,
+          financiers: [
             ...values.financiers,
             { id: '', investmentVehicleDesignation: [] }
-          ],
-          true
-        );
-        validateForm(); // No change needed here
+          ]
+        };
+        setFieldValue('financiers', newValues.financiers, true);
+        validateForm(newValues);
       };
 
       const removeFinancierRow = (
