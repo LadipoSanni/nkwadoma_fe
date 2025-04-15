@@ -17,18 +17,20 @@ interface InvestmentVehicle {
     name: string;
     rate?: number;
     fundRaisingStatus: string | null;
-    deployingStatus: string | null;
+    deployingStatus: string;
 }
 
 export const HandleCardDetails = (
     id: string,
     type: string,
-    router: ReturnType<typeof useRouter>
+    router: ReturnType<typeof useRouter>,
+    status: string,
 ) => {
     store.dispatch(
         setMarketInvestmentVehicleId({
             marketInvestmentVehicleId: id,
             vehicleType: type,
+            status
         })
     );
     router.push("/marketplace/details");
@@ -208,7 +210,7 @@ const MarketPlaceView = () => {
                             borderClass,
                             percentage: vehicle.rate || 0,
                             HandleCardDetails: () =>
-                                HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router),
+                                HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router, statuses),
                         };
 
                         if (filteredVehicles.length === index + 1) {
