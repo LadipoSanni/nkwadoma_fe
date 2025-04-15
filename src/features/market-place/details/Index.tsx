@@ -61,9 +61,6 @@ const MarketPlaceDetails = () => {
         vehicleType,
         status
     } = useSelector((state: RootState) => state.marketPlace.savedMarketplaceData) || {};
-
-    console.log(vehicleType, status, marketInvestmentVehicleId, "STATUSSSSS type and id")
-
     // console.log(marketInvestmentVehicleId, vehicleType);
 
     const HandleInvest = () => {
