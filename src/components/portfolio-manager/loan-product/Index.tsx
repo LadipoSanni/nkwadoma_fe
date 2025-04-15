@@ -10,7 +10,7 @@ import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 import {
-    useGetPublishedInvestmentVehicleByNameQuery
+    useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
 } from "@/service/admin/fund_query";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import 'react-quill-new/dist/quill.snow.css'
@@ -29,11 +29,6 @@ interface ApiError {
     };
 }
 
-interface InvestmentVehicle {
-    id: string;
-    name: string;
-}
-
 
 const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
@@ -43,12 +38,17 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     // const [loanProductTermsAndConditionError, setLoanProductTermsAndConditionError] = useState('');
     // const [step, setStep] = useState(1);
     const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
+    const { data: investmentVehicleData } =
+        useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
+            pageSize: 48,
+            pageNumber: 0,
+            investmentVehicleStatus: "PUBLISHED",
+        });
 
-    const {data: investmentVehicleData} = useGetPublishedInvestmentVehicleByNameQuery({status: "PUBLISHED"});
     useEffect(() => {
-        if (investmentVehicleData) {
+        if (investmentVehicleData?.data?.body) {
             const obj: { [key: string]: string } = {};
-            investmentVehicleData.data.forEach((vehicle: InvestmentVehicle) => {
+            investmentVehicleData.data.body.forEach((vehicle: { id: string; name: string }) => {
                 obj[vehicle.name] = vehicle.id;
             });
             setInvestmentVehicleObj(obj);
@@ -176,12 +176,10 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         //     .test("no-html-tags", "Loan disbursement terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value))
     });
 
-    interface Vehicle {
-        id: string;
-        name: string;
-    }
+    const investmentVehicleNames = investmentVehicleData?.data?.body
+        ?.map((vehicle: { name: string }) => vehicle.name)
+        ?.sort((a, b) => a.localeCompare(b)) || [];
 
-    const investmentVehicleNames = investmentVehicleData?.data?.map((vehicle: Vehicle) => vehicle.name) || [];
     // const bankPartner = ["Patner 1", "Partner 2",];
     // const maxChars = 2500;
     //
