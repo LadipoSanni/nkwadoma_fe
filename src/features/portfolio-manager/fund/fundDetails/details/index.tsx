@@ -60,13 +60,11 @@ const Details = () => {
         setDocError(null);
         
         try {
-            // Basic extension check
             if (fileExtension !== 'pdf' && fileExtension !== 'docx') {
                 setDocError('Invalid document format');
                 return;
             }
 
-            // Advanced verification (skip for Cloudinary)
             if (!isCloudinaryUrl) {
                 const docExists = await verifyDocumentExists(docUrl);
                 if (!docExists) {
@@ -90,7 +88,6 @@ const Details = () => {
         {
             name: 'Vehicle status',
             value: <p
-                // className='pl-2 pr-2 h-6 bg-success50 flex justify-center items-center rounded-xl '
                 >{data?.data?.fundRaisingStatus === null ? "Deploying" : "fundRaising" } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus) }</span></span> </p>
         },
         {name: 'Vehicle visibility', value: <div className='flex items-center gap-1'>
