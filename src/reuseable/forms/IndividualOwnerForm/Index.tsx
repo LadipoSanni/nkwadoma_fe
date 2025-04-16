@@ -215,18 +215,18 @@ const IndividualOwnerForm: React.FC = () => {
                 </section>
 
 
-                <div className="flex justify-between sticky bottom-0 bg-white p-4">
+                <div className="md:flex grid gap-4 justify-between sticky bottom-0 bg-white p-4">
                     <Button
                         onClick={handleBackClick}
                         type="button"
-                        className="h-[2.813rem] w-[4.625rem] px-4 py-2 bg-gray-500 hover:bg-gray-600 text-meedlBlue border border-meedlBlue rounded-md"
+                        className="h-[2.813rem] w-full md:w-[4.625rem] px-4 py-2 bg-gray-500 hover:bg-gray-600 text-meedlBlue border border-meedlBlue rounded-md  order-2 md:order-1"
                     >
                         Back
                     </Button>
                     <Button
                         type="submit"
                         onClick={() => route.push('/kyc/declaration')}
-                        className="h-[2.8125rem] md:w-[9.3125rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md"
+                        className="h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md  order-1 md:order-2"
                     >
                         Save & continue
                     </Button>
