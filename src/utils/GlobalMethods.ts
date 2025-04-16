@@ -1,6 +1,7 @@
 import {jwtDecode} from "jwt-decode";
 import {ADMIN_ROLES} from "@/types/roles";
 import {isAfter} from "date-fns";
+import {StaticImageData} from "next/image";
 
 export  function capitalizeFirstLetters(word: string | null| undefined) {
     if (word) {
@@ -93,16 +94,16 @@ export function getInitial(arg1: string | { firstName?: string, lastName?: strin
 
     if (typeof arg1 === 'string' && arg1.trim().length > 0) {
         const words = arg1.trim().split(/\s+/);
-        
+
         if (words.length === 1) {
             return words[0].charAt(0).toUpperCase();
         }
-        
+
         const firstInitial = words[0].charAt(0).toUpperCase();
         const secondInitial = words[1].charAt(0).toUpperCase();
         return firstInitial + secondInitial;
     }
-    
+
     if (arg1 && typeof arg1 === 'object' && arg1.firstName && arg1.lastName) {
         const firstInitial = arg1.firstName.charAt(0).toUpperCase();
         const lastInitial = arg1.lastName.charAt(0).toUpperCase();
@@ -111,3 +112,16 @@ export function getInitial(arg1: string | { firstName?: string, lastName?: strin
 
     return "";
 }
+
+export  const isValidUrl = (url: string  | StaticImageData) => {
+    if (typeof url !== "string") {
+        return true;
+    }
+    try {
+        new URL(url);
+        return true;
+    } catch {
+        return false;
+    }
+};
+

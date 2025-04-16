@@ -10,6 +10,7 @@ import {IoEllipsisHorizontalSharp} from "react-icons/io5";
 import TableModal from '@/reuseable/modals/TableModal'
 import {Cross2Icon} from "@radix-ui/react-icons";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
+import { isValidUrl } from "@/utils/GlobalMethods";
 
 
 interface detailsProps {
@@ -48,7 +49,7 @@ const DetailsImageSection: React.FC<detailsProps> = ({
                  className={`flex md:flex-col flex-col md:block space-y-3 md:max-w-md w-full`}>
                 <div id="cohort-image-card" data-testid="cohort-image-card">
                     <Card className="rounded-lg md:max-w-sm ">
-                        {imageSrc ? (
+                        {imageSrc && isValidUrl(imageSrc) ? (
                             <Image
                                 src={imageSrc}
                                 alt="Cohort DetailsImageSection"
