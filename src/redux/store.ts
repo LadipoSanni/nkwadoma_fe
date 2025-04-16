@@ -18,6 +18,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { notificationApi } from '@/service/notification/notification_query';
 import { financierApi } from '@/service/admin/financier';
 import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
+import {marketplaceApi} from "@/service/financier/marketplace";
 
 const persistConfig = {
     key: 'root',
@@ -48,6 +49,7 @@ export const store = configureStore({
             notificationApi.middleware,
             financierApi.middleware,
             financierOnboardingAndDashboardApi.middleware,
+            marketplaceApi.middleware,
         ]),
 });
 
