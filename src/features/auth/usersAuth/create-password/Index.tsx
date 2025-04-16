@@ -97,7 +97,6 @@ const CreatePassword = () => {
 
 
     const routeUserToTheirDashboard = async (userRole?: string) => {
-        console.log('it gets here on the route method and role:: ', userRole)
         switch (userRole) {
             case 'LOANEE' :
                 store.dispatch(setCurrentNavbarItem("overview"))
@@ -112,7 +111,6 @@ const CreatePassword = () => {
                 router.push("/loan/loan-request")
                 break;
             case "FINANCIER":
-                console.log('case financier')
                 store.dispatch(setCurrentNavbarItem("Overview"))
                 router.push('/Overview')
                 break;
