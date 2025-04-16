@@ -6,10 +6,10 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
-import { useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery } from "@/service/admin/fund_query";
 import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import { MdOutlinePayments } from "react-icons/md";
+import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery} from "@/service/financier/marketplace";
 
 interface InvestmentVehicle {
     id: string;
@@ -46,7 +46,7 @@ const MarketPlaceView = () => {
     // const lastCardRef = useRef<HTMLDivElement | null>(null);
 
     const { data, isLoading, isFetching } =
-        useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
+        useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery({
             pageSize: 48,
             pageNumber: pageNumber,
             investmentVehicleStatus: "PUBLISHED",
@@ -78,19 +78,7 @@ const MarketPlaceView = () => {
             setHasMore(data.data.hasNextPage);
         }
     }, [data, pageNumber]);
-// useEffect(() => {
-//         if (data?.data?.body) {
-//             console.log("API Response:", data.data.body);
-//             setAllVehicles(prev => {
-//                 const newVehicles = pageNumber === 0 ? data.data.body : [...prev, ...data.data.body];
-//                 const uniqueVehicles = Array.from(
-//                     new Map(newVehicles.map(vehicle => [vehicle.id, vehicle])).values()
-//                 );
-//                 return uniqueVehicles;
-//             });
-//             setHasMore(data.data.hasNextPage);
-//         }
-//     }, [data, pageNumber]);
+
 
     const lastCardObserver = useCallback(
         (node: HTMLDivElement | null) => {
@@ -114,21 +102,6 @@ const MarketPlaceView = () => {
         [isLoading, isFetching, hasMore]
     );
 
-    const filteredVehicles = allVehicles.filter((vehicle) => {
-        const matchesSearch = vehicle.name
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase());
-
-        const typeMatch =
-            selectedValue === "" ||
-            (selectedValue === "Commercial Investment" &&
-                vehicle.investmentVehicleType === "COMMERCIAL") ||
-            (selectedValue === "Endowment Investment" &&
-                vehicle.investmentVehicleType === "ENDOWMENT");
-
-        return matchesSearch && typeMatch;
-    });
-
     return (
         <main id="marketplaceView" className="py-9 px-5">
             <div id="searchDiv" className="px-2 flex md:flex-row flex-col gap-3">
@@ -142,7 +115,7 @@ const MarketPlaceView = () => {
                     id="marketplaceSelect"
                     value={selectedValue}
                     onChange={(value) => setSelectedValue(value)}
-                    selectContent={["Commercial Investment", "Endowment Investment"]}
+                    selectContent={["Commercial", "Endowment"]}
                     placeHolder="Type"
                     triggerId="marketplaceTrigger"
                     className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
@@ -153,7 +126,7 @@ const MarketPlaceView = () => {
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
-            ) : filteredVehicles.length === 0 ? (
+            ) : allVehicles.length === 0 ? (
                 <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
                     <LoanEmptyState
                         id="Vehicles"
@@ -168,7 +141,7 @@ const MarketPlaceView = () => {
                     id="card-segmentId"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
-                    {filteredVehicles.map((vehicle, index) => {
+                    {allVehicles.map((vehicle, index) => {
                         const backgroundColor =
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -211,7 +184,7 @@ const MarketPlaceView = () => {
                                 HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router),
                         };
 
-                        if (filteredVehicles.length === index + 1) {
+                        if (allVehicles.length === index + 1) {
                             return (
                                 <div key={`wrapper-${vehicle.id}`} ref={lastCardObserver}>
                                     <InvestmentCard key={vehicle.id} {...cardProps} />
