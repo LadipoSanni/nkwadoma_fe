@@ -47,7 +47,7 @@ const loanProductId = useAppSelector(state => (state.selectedLoan.clickedLoanPro
                 <SkeletonForDetailPage/>
             ): (
                 <div className={`py-2 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
-                    <div id={`firstSection`}>
+                    <div id={`firstSection`} className={`w-full md:w-2/5 md:h-[70vh] md:max-h-none`}>
                         <DetailsImageSection imageSrc={loanProduct?.data.imageUrl} cohortTitle={loanProduct?.data.name}
                                              cohortDescription={loanProduct?.data.mandate}
                                              handleDropdownClicked={handleDropdownClick}
@@ -56,7 +56,7 @@ const loanProductId = useAppSelector(state => (state.selectedLoan.clickedLoanPro
                                              icon={MdOutlineInventory2}
                         />
                     </div>
-                    <div className={`md:w-6/12 md:pt-0 max:md:h-72 h-96 `} id={`secondSection`}>
+                    <div className={`w-full md:w-1/2 md:pt-0`} id={`secondSection`}>
                         <ThreeTabs
                             isTable={false} isNotTableDataList={loanProduct?.data.termsAndCondition} dataList={dataList}
                             tabTitle1={"Product details"} tabTitle2={"Terms and conditions"}

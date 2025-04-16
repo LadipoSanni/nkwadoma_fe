@@ -177,7 +177,7 @@ const CohortDetails = () => {
                     <div id={`tabsContentDiv`}>
                         <TabsContent value="details" className={'mt-4'} id={`tabsContent`}>
                             <div className={`py-1 flex md:flex-row flex-col  h-full md:justify-between`} id={`sections`}>
-                                <div id={`firstSection`}>
+                                <div className={`w-full md:w-1/3 md:h-[70vh] md:max-h-none`} id={`firstSection`}>
                                     <DetailsImageSection imageSrc={details.imageUrl} cohortTitle={details.name}
                                                          cohortDescription={details.cohortDescription}
                                                          handleDropdownClicked={handleDropdownClick}
@@ -186,7 +186,7 @@ const CohortDetails = () => {
                                                          icon={FiBook}
                                     />
                                 </div>
-                                <div className={`md:w-6/12 min-w-sm pt-0 max:md:h-80 h-80`} id={`secondSection`}>
+                                <div className={`w-full md:w-1/2 overflow-x-hidden`} id={`secondSection`}>
                                     <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail}
                                                          dataList={dataList}
                                                          tabTitle1={"Cohort details"} tabTitle2={"Loan details"}

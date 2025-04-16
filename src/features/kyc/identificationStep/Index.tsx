@@ -50,7 +50,7 @@ const IdentificationStep = () => {
                             required: "NIN is required",
                             pattern: {
                                 value: /^\d{11}$/,
-                                message: "NIN must be exactly 11 digits"
+                                message: "NIN must be 11 digits"
                             }
                         })}
                         className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
@@ -68,7 +68,7 @@ const IdentificationStep = () => {
                             required: "BVN is required",
                             pattern: {
                                 value: /^\d{11}$/,
-                                message: "BVN must be exactly 11 digits"
+                                message: "BVN must be 11 digits"
                             }
                         })}
                         className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
