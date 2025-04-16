@@ -6,7 +6,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {useResetPasswordMutation} from "@/service/auths/api";
 import {useToast} from "@/hooks/use-toast"
 import {inter} from "@/app/fonts";
-import {encryptText} from "@/utils/encrypt";
+// import {encryptText} from "@/utils/encrypt";
 
 const Step3 = () => {
 
@@ -16,7 +16,7 @@ const Step3 = () => {
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
     const searchParams = useSearchParams()
     const [resetPassword] = useResetPasswordMutation()
-    const encryptedPassword =  encryptText(newPassword)
+    // const encryptedPassword =  encryptText(newPassword)
 
 
     const criteriaMessages = [
@@ -46,7 +46,7 @@ const Step3 = () => {
 
         try{
 
-            const response =  await resetPassword({token: token, password: encryptedPassword}).unwrap()
+            const response =  await resetPassword({token: token, password: newPassword}).unwrap()
             if(response?.message){
                 toast({
                     description: response?.message,

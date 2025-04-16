@@ -285,7 +285,7 @@ function LoanDetails() {
                                 </div>
                             </div>
                             <div
-                                className={` ${styles.loanRequestDetails} md:max-w-[50%]  h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4  grid gap-3 md:grid md:gap-3`}
+                                className={` ${styles.loanRequestDetails} md:max-w-[50%]  h-full md:overflow-x-auto  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4  grid gap-3 md:grid md:gap-3`}
                             >
                                 <div
                                     className={` ${styles.tabConnector} md:w-fit py-3 pl-1 md:sticky md:top-0 md:py-3 md:bg-white h-fit md:h-fit  flex md:flex `}

@@ -15,7 +15,7 @@ import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
-import {encryptText} from "@/utils/encrypt";
+// import {encryptText} from "@/utils/encrypt";
 
 
 interface CustomJwtPayload {
@@ -43,7 +43,7 @@ const Login: React.FC = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [showEmailMessage, setShowEmailMessage] = useState(false)
-    const encryptedPassword =  encryptText(password)
+    // const encryptedPassword =  encryptText(password)
 
     const getUserLoanOfferId = () => {
         if (searchParams){
@@ -159,7 +159,7 @@ const Login: React.FC = () => {
                 })
         } else {
                 try {
-                    const response = await login({email:email, password:encryptedPassword}).unwrap()
+                    const response = await login({email:email, password:password}).unwrap()
                     if (response?.data) {
                         const  {
                             access_token,
