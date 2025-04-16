@@ -97,7 +97,6 @@ const CreatePassword = () => {
 
 
     const routeUserToTheirDashboard = async (userRole?: string) => {
-        console.log('it gets here on the route method and role:: ', userRole)
         switch (userRole) {
             case 'LOANEE' :
                 store.dispatch(setCurrentNavbarItem("overview"))
