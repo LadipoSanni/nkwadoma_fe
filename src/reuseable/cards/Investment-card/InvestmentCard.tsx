@@ -15,6 +15,7 @@ interface InvestmentCardProps {
     HandleCardDetails: (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => void;
     statusClass: string;
     borderClass:string;
+    typeTextColor:string;
 }
 
 const InvestmentCard: React.FC<InvestmentCardProps> = ({
@@ -28,6 +29,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                                                            HandleCardDetails,
                                                            statusClass,
                                                            borderClass,
+                                                           typeTextColor,
                                                        }) => {
     const router = useRouter();
 
@@ -39,8 +41,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                 <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>
                     <div
                         id="investmentTypeId"
-                        className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center"
-                    >
+                        className={`bg-white text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center ${typeTextColor}`}>
                         {investmentVehicleType
                             ? investmentVehicleType.charAt(0).toUpperCase() + investmentVehicleType.slice(1).toLowerCase()
                             : ""}
