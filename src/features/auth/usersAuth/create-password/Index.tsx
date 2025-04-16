@@ -12,6 +12,7 @@ import {setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/ac
 import {ADMIN_ROLES} from "@/types/roles";
 import { store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
+import {encryptText} from "@/utils/encrypt";
 
 
 const CreatePassword = () => {
@@ -22,10 +23,18 @@ const CreatePassword = () => {
     const searchParams = useSearchParams()
     const [disableButton, setDisableButton] = useState(false)
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
+    const encryptedPassword =  encryptText(password)
+
 
     const disable = !criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton;
 
+    interface CustomJwtPayload {
+        email: string;
+        realm_access: {
+            roles: string[];
+        };
 
+    }
 
 
     const criteriaMessages = [
@@ -140,16 +149,10 @@ const CreatePassword = () => {
         }
     }
 
+
     const {toast} = useToast()
 
 
-    interface CustomJwtPayload {
-        email: string;
-        realm_access: {
-            roles: string[];
-        };
-
-    }
     const handleCreatePassword = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
         setDisableButton(true)
@@ -166,7 +169,6 @@ const CreatePassword = () => {
                 user_roles,
                 user_role,
             } = destructureLoginEndpointCallResponse(response)
-            console.log('user role: ', user_role)
             if (user_role) {
                 storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                 setUserRoles(user_roles)

@@ -10,6 +10,9 @@ import { useSaveNextOfKinDetailsMutation } from "@/service/users/Loanee_query";
 import ProgramSelect from "@/reuseable/select/ProgramSelect";
 import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
 import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
+import Isloading from "@/reuseable/display/Isloading";
+import {setLoaneeCurrentInfo} from "@/service/users/loanRerralSlice";
+import {LoaneeCurentInformation} from "@/types/loanee";
 
 interface CurrentInformationProps {
     setCurrentStep?: (step: number) => void;
@@ -20,7 +23,7 @@ interface CurrentInformationProps {
 const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep }) => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [values, setValues] = useState({
+    const [values, setValues] = useState<LoaneeCurentInformation >({
         firstName: "",
         lastName: "",
         email: "",
@@ -37,6 +40,8 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         phoneNumber: "",
         alternateEmail: "",
         alternatePhoneNumber: "",
+        firstName: "",
+        lastName: "",
     });
 
     const [touched, setTouched] = useState({
@@ -44,11 +49,14 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         phoneNumber: false,
         alternateEmail: false,
         alternatePhoneNumber: false,
+        firstName: false,
+        lastName: false,
     });
+
 
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-    const [saveNextOfKinDetails] = useSaveNextOfKinDetailsMutation();
+    const [saveNextOfKinDetails, {isLoading}] = useSaveNextOfKinDetailsMutation();
     const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
 
@@ -62,6 +70,11 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         return phoneRegex.test(phoneNumber);
     };
 
+    const validateName = ( name: string ) => {
+        const nameRegex = /^[a-zA-Z ]{2,30}$/;
+        return nameRegex.test(name);
+    }
+
     useEffect(() => {
         const newErrors = { ...errors };
 
@@ -70,14 +83,23 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         } else {
             newErrors.email = "";
         }
-
+        if (!validateName(values.firstName)){
+            newErrors.firstName = "Invalid name input";
+        }else{
+            newErrors.firstName = "";
+        }
+        if (!validateName(values.lastName)){
+            newErrors.lastName = "Invalid name input";
+        }else{
+            newErrors.lastName = "";
+        }
         if (!validatePhoneNumber(values.phoneNumber)) {
             newErrors.phoneNumber = "Invalid phone number";
         } else {
             newErrors.phoneNumber = "";
         }
 
-        if (values.alternateEmail && !validateEmail(values.alternateEmail)) {
+        if (values?.alternateEmail && !validateEmail(values.alternateEmail)) {
             newErrors.alternateEmail = "Invalid email address";
         } else {
             newErrors.alternateEmail = "";
@@ -111,8 +133,9 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         };
         try {
             await saveNextOfKinDetails(dataToSubmit);
-            setIsFormSubmitted(true);
             setIsModalOpen(false);
+            dispatch(setLoaneeCurrentInfo(values))
+            setIsFormSubmitted(true);
         } catch (error) {
             console.error(error);
         }
@@ -218,7 +241,6 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
             </main>
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                {/*<DialogOverlay className="" />*/}
                 <DialogContent className={'max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-6  py-5 pl-5 pr-2'}>
                     <DialogHeader className={'flex py-3'} id="createCohortDialogHeader">
                         <DialogTitle
@@ -274,6 +296,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
                                     value={values.firstName}
                                     onChange={handleChange} />
+                                {touched.firstName && errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
                             </div>
                             <div className={'grid gap-2'}>
                                 <Label htmlFor="nextOfKinLastName"
@@ -284,6 +307,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
                                     value={values.lastName}
                                     onChange={handleChange} />
+                                {touched.lastName && errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
                             </div>
                             <div className={'grid gap-2'}>
                                 <Label htmlFor="nextOfKinEmail"
@@ -347,8 +371,10 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                         className="h-[3.5625rem] w-[8.75rem] border border-meedlBlue text-meedlBlue px-4 py-2 bg-gray-300 rounded-md">Cancel</Button>
                                 </DialogClose>
                                 <Button type="submit"
-                                    className={`h-[3.5625rem] w-[8.75rem] px-4 py-2 ${isButtonDisabled ? 'bg-neutral650' : 'bg-meedlBlue'} hover:bg-meedlBlue text-white rounded-md`}
-                                    disabled={isButtonDisabled}>Continue</Button>
+                                    className={`h-[3.5625rem] w-[8.75rem] px-4 py-2 ${isButtonDisabled ? 'bg-neutral650 hover:bg-neutral650' : ' hover:bg-meedlBlue bg-meedlBlue'}  text-white rounded-md`}
+                                    disabled={isButtonDisabled || isLoading}>
+                                    {isLoading ? <Isloading/> : 'Continue'}
+                                </Button>
                             </div>
                         </main>
                     </form>

@@ -56,14 +56,13 @@ const Index = () => {
         {label: 'Nationality', value: details?.data.userIdentity.nationality},
         {label: 'State of origin', value: details?.data.userIdentity.stateOfOrigin},
         {label: 'State of residence', value: details?.data.userIdentity.stateOfResidence},
-
+        {label: 'Residential address', value: details?.deta?.userIdentity?.residentialAddress},
     ];
-    const createdDate = dayjs(details?.data.createdDate?.toString()).format('MMM D, YYYY');
     const startDate = dayjs(details?.data.startData?.toString()).format('MMM D, YYYY');
 
     const loanDetails = [
         {
-            label: 'Tuition', value:
+            label: 'Tuition amount', value:
                 <NumericFormat
                     id={'loanTuitionAmountOnDisbursedLoan'}
                     name={'loanTuitionAmountOnDisbursedLoan'}
@@ -78,7 +77,6 @@ const Index = () => {
                 />
         },
         { label: 'Start date', value: startDate},
-        { label: 'Created date', value: createdDate},
         {
             label: 'Loan amount requested', value: <NumericFormat
                 id={'LoanAmountRequestedOnDisbursedLoanDetails'}
@@ -162,6 +160,7 @@ const Index = () => {
                     id={'disbursedLoanDetailsPageContainer'}
                     data-testid={'disbursedLoanDetailsPageContainer'}
                     className={` md:flex md:justify-between  md-8 w-full  px-3 pt-4 md:pt-4 `}
+                    className={` md:flex md:justify-between grid gap-4  md-8 w-full h-full  px-3 pt-4 md:pt-4 `}
                 >
                     <div>
                         <Card id={"loaneeImageOnDisbursedLoanDetails"} data-testid={"loaneeImageOnDisbursedLoanDetails"}
@@ -205,27 +204,28 @@ const Index = () => {
                         </div>
                     </div>
                     <div
-                        className={`md:w-[35rem] mt-4 mb-5 w-full max:h-96  border border-gray500 rounded-md md:px-4 md:py-4 py-3 grid gap-3 md:grid `}
+                        className={`  md:max-w-[50%]  h-full  md:max-h-[70vh] md:pt-2  overflow-x-hidden overflow-y-hidden md:w-[35rem]  w-full md:h-fit border border-gray500 rounded-md md:px-4 md:pb-4 py-3 grid gap-3 md:grid `}
                     >
                         <div
-                            className={` ${styles.tabConnector} md:w-full pl-1 h-fit md:h-fit  flex md:flex `}
+                            className={` ${styles.tabConnector} md:w-full py-3 pl-1 md:sticky md:top-0 md:py-3 md:bg-white h-fit md:h-full  flex md:flex `}
 
                         >
                             <TabSwitch componentId={'disbursedLoanTabSwitch'} currentTab={currentTab}
                                        tabContent={tabContent} handleChange={handleTabChange}/>
                         </div>
-                        <div className={`px-2`}>
-                            <div className={`bg-grey105 md:h-72 md:overflow-y-auto overflow-hidden`}>
+                        <div className={`px ${styles.loanRequestDetails} md:h-fit md:max-h-[90%] w-full - 2`}>
+                            <div className={`bg-grey105 `}>
                                 {getCurrentDataList().map((item, index) => (
-                                    <li key={"key" + index} className={'p-4  grid gap-4 rounded-md'}>
+                                    <li key={"key" + index} className={'p-5  grid gap-9 rounded-md'}>
                                         <div
-                                            className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
+                                            className={'md:flex md:py-2 md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                             <div
                                                 id={`loanDisbursalDetailsName`}
                                                 data-testid={`loanDisbursalDetailsName`}
                                                 className={` ${inter.className} text-black300 md:text-black300 md:text-[14px] text-[14px`}>{item.label}</div>
 
                                             <div
+                                                className={'text-black500  break-all md:max-w-[50%]  text-[14px] leading-[150%] font-normal'}> {item.value ? item?.value : 'Not provided'}</div>
                                                 id={`loanDisbursalDetailsValue`}
                                                 data-testid={`loanDisbursalDetailsValue`}
                                                 className={`text-black500 ${inter.className} md:max-w-[40%] md:text-[14px] md:text-black500 md:break-all break-all text-black500 text-[14px]`}> {item.value ? item?.value : 'Not provided'} </div>
