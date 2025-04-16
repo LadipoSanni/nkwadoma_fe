@@ -30,7 +30,8 @@ interface MultiSelectTriggerProps
   onToggleOption: (value: string) => void;
   isOpen: boolean;
   className?: string;
-  selectButtonId?: string
+  selectButtonId?: string;
+  horizontalScroll?: boolean;
 }
 
 export const MultiSelectTrigger = React.forwardRef<
@@ -48,6 +49,7 @@ export const MultiSelectTrigger = React.forwardRef<
       isOpen,
       className,
       selectButtonId,
+      horizontalScroll = false,
       ...props
     },
     ref
@@ -65,7 +67,19 @@ export const MultiSelectTrigger = React.forwardRef<
       >
         {selectedValues.length > 0 ? (
           <div className="flex justify-between items-center w-full">
-            <div className="flex flex-wrap items-center gap-1 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+            <div 
+            // className="flex flex-wrap items-center gap-1 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
+            className={cn(
+              "flex items-center gap-1",
+              horizontalScroll
+                ? "overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
+                : "flex-wrap"
+            )}
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+            >
               {selectedValues.map((value) => {
                 const option = options.find((o) => o.value === value);
                 const IconComponent = option?.icon;

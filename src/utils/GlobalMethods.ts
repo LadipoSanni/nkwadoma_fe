@@ -75,11 +75,39 @@ export const getInitials = (name: string): string => {
     return `${firstNameInitial}${lastNameInitial}`;
   };
 
-  export function getInitial(firstName: string, lastName: string) {
-    if (!firstName || !lastName || typeof firstName !== 'string' || typeof lastName !== 'string') {
-        return "";
+//   export function getInitial(firstName: string, lastName: string) {
+//     if (!firstName || !lastName || typeof firstName !== 'string' || typeof lastName !== 'string') {
+//         return "";
+//     }
+//     const firstInitial = firstName.charAt(0).toUpperCase();
+//     const lastInitial = lastName.charAt(0).toUpperCase();
+//     return firstInitial + lastInitial;
+// }
+
+export function getInitial(arg1: string | { firstName?: string, lastName?: string } | null | undefined, arg2?: string): string {
+    if (typeof arg1 === 'string' && typeof arg2 === 'string') {
+        const firstInitial = arg1.charAt(0).toUpperCase();
+        const lastInitial = arg2.charAt(0).toUpperCase();
+        return firstInitial + lastInitial;
     }
-    const firstInitial = firstName.charAt(0).toUpperCase();
-    const lastInitial = lastName.charAt(0).toUpperCase();
-    return firstInitial + lastInitial;
+
+    if (typeof arg1 === 'string' && arg1.trim().length > 0) {
+        const words = arg1.trim().split(/\s+/);
+        
+        if (words.length === 1) {
+            return words[0].charAt(0).toUpperCase();
+        }
+        
+        const firstInitial = words[0].charAt(0).toUpperCase();
+        const secondInitial = words[1].charAt(0).toUpperCase();
+        return firstInitial + secondInitial;
+    }
+    
+    if (arg1 && typeof arg1 === 'object' && arg1.firstName && arg1.lastName) {
+        const firstInitial = arg1.firstName.charAt(0).toUpperCase();
+        const lastInitial = arg1.lastName.charAt(0).toUpperCase();
+        return firstInitial + lastInitial;
+    }
+
+    return "";
 }

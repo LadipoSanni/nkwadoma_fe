@@ -134,7 +134,7 @@ const ViewFinanciers = () => {
     // ];
 
     const financierHeader = [
-        { title: 'Name', id: 'name', selector: (row: viewAllfinancier) => row.userIdentity?.firstName? row.userIdentity?.firstName + " " + row.userIdentity?.lastName : row?.organizationName},
+        { title: 'Name', id: 'name', selector: (row: viewAllfinancier) => row?.financierType === "INDIVIDUAL"? row.userIdentity?.firstName + " " + row.userIdentity?.lastName : row?.organizationName},
         { title: 'Type', id: 'type', selector: (row: viewAllfinancier) => (
                 <span className={`${row.financierType === "INDIVIDUAL"  ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
             {capitalizeFirstLetters(row.financierType)}
@@ -202,7 +202,7 @@ const ViewFinanciers = () => {
                     tableData={financiers}
                     tableHeader={financierHeader}
                     handleRowClick={handleRowClick}
-                    tableHeight={48}
+                    tableHeight={58}
                    icon={Book}
                    sideBarTabName='financier'
                    condition={true}
