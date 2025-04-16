@@ -25,6 +25,7 @@ interface DropdownSelectProps {
     isDropdownOpen: boolean;
     toggleDropdown: () => void;
     isLoading: boolean;
+    disabled?: boolean;
 }
 
 const DropdownSelect: React.FC<DropdownSelectProps> = ({
@@ -38,12 +39,20 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
                                                            isDropdownOpen,
                                                            toggleDropdown,
                                                            isLoading,
+                                                           disabled
                                                        }) => {
     return (
         <div className='z-10'>
             <DropdownMenu onOpenChange={toggleDropdown}>
-                <DropdownMenuTrigger asChild>
-                    <Button id='dropdownSelectButton' variant={'default'} className='w-full text-black bg-neutral100 h-11 border-1 hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none'>
+                <DropdownMenuTrigger asChild disabled={disabled}>
+                    <Button 
+                    id='dropdownSelectButton' 
+                    variant={'default'} 
+                    className={`w-full text-black bg-neutral100 h-11 border-1 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none ${
+                        disabled ? 'opacity-40 cursor-auto' : 'hover:bg-neutral100'
+                    }`}
+                    disabled={disabled} 
+                    >
                         {!selectValue ? "Type" : selectValue}
                         <span className='ml-4'>
               {isDropdownOpen ? (

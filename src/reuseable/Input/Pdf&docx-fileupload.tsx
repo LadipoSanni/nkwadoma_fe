@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useState, useEffect } from 'react';
 import { FiUploadCloud } from 'react-icons/fi';
 import { Label } from '@/components/ui/label';
@@ -11,7 +12,10 @@ interface FileUploadProps {
   labelName?: string;
   initialDocUrl?: string | null;
   className?: string;
+  cloudinaryFolderName?: string
 }
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; 
 
 const truncateFileName = (name: string, length: number) => {
   return name.length > length ? name.substring(0, length) + '...' : name;
@@ -23,7 +27,8 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
   setUploadedDocUrl,
   labelName,
   initialDocUrl,
-  className = ''
+  className = '',
+  cloudinaryFolderName
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -35,7 +40,6 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
   const [isFileSupported, setIsFileSupported] = useState<boolean>(true);
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(initialDocUrl || null);
 
-
   function extractFileName(url: string): string {
     try {
       const parsed = new URL(url);
@@ -45,7 +49,6 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
     }
   }
 
-  
   useEffect(() => {
     if (initialDocUrl && !file) {
       setUploadedFileUrl(initialDocUrl);
@@ -64,21 +67,32 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, [file, initialDocUrl]);
 
-  const onFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
+  const validateFile = (file: File): boolean => {
     const supportedTypes = [
       'application/pdf',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ];
 
-    if (!selectedFile) return;
-
-    if (!supportedTypes.includes(selectedFile.type)) {
+    if (!supportedTypes.includes(file.type)) {
       setError('Only PDF and DOCX files are supported');
       setIsFileSupported(false);
-      setFile(selectedFile);
-      return;
+      return false;
     }
+
+    if (file.size > MAX_FILE_SIZE) {
+      setError('File size exceeds 10MB limit');
+      setIsFileSupported(false);
+      return false;
+    }
+
+    return true;
+  };
+
+  const onFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (!selectedFile) return;
+
+    if (!validateFile(selectedFile)) return;
 
     setLoading(true);
     setFile(selectedFile);
@@ -87,7 +101,7 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
     setIsFileSupported(true);
 
     try {
-      const uploadedFileUrl = await uploadDocumentToCloudinary(selectedFile, 'investment-vehicle-documents');
+      const uploadedFileUrl = await uploadDocumentToCloudinary(selectedFile, cloudinaryFolderName);
       setUploadedFileUrl(uploadedFileUrl);
       setUploadedDocUrl(uploadedFileUrl);
     } catch (uploadError) {
@@ -101,19 +115,9 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
   const onDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     const droppedFile = event.dataTransfer.files?.[0];
-    const supportedTypes = [
-      'application/pdf',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    ];
-
     if (!droppedFile) return;
 
-    if (!supportedTypes.includes(droppedFile.type)) {
-      setError('Only PDF and DOCX files are supported');
-      setIsFileSupported(false);
-      setFile(droppedFile);
-      return;
-    }
+    if (!validateFile(droppedFile)) return;
 
     setLoading(true);
     setFile(droppedFile);
