@@ -91,7 +91,7 @@ const IndividualOwnerForm: React.FC = () => {
     return (
         <div className="w-full h-[calc(100vh-300px)] overflow-y-auto">
             <form onSubmit={handleSubmit} className="space-y-6">
-                <section className={'grid gap-5 p-5 rounded-md border-[0.5px] border-blue550'}>
+                <section className={'grid gap-5 p-5 rounded-md border-[0.5px] border-lightBlue250'}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <Label htmlFor="firstName">First name</Label>
@@ -230,7 +230,8 @@ const IndividualOwnerForm: React.FC = () => {
                     >
                         Save & continue
                     </Button>
-                </div>            </form>
+                </div>
+            </form>
         </div>
     );
 };
