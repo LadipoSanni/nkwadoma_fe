@@ -8,6 +8,9 @@ import {useGetInvestmentVehicleDetailQuery} from '@/service/admin/fund_query';
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import {useAppSelector} from "@/redux/store";
+import { MdEdit } from "react-icons/md";
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 const Details = () => {
     const currentVehicleId = useAppSelector(state => (state.vehicle.currentVehicleId))
@@ -15,9 +18,34 @@ const Details = () => {
 
     const {data, isLoading} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
 
+    const getFilenameFromUrl = (url: string) => {
+        try {
+            const urlObj = new URL(url);
+            return urlObj.pathname.split('/').pop();
+        } catch {
+            return url?.split('/').pop() || 'No file available';
+        }
+    };
 
+    const pdfUrl = data?.data?.mandate;
+    const pdfFilename = getFilenameFromUrl(pdfUrl);
+    const pdf = ""
 
-
+    const handleViewPdf = () => {
+        if (pdfUrl) {
+          // Try both methods - one may work depending on Cloudinary settings
+          try {
+            window.open(pdfUrl, '_blank', 'noopener,noreferrer');
+          } catch (e) {
+            const link = document.createElement('a');
+            link.href = pdfUrl;
+            link.download = pdfFilename || 'document.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
+        }
+      };
 
     const detailInfo = [
         {name: 'Vehicle type', value: capitalizeFirstLetters(data?.data?.investmentVehicleType )|| 'N/A'},
@@ -25,8 +53,15 @@ const Details = () => {
         {
             name: 'Vehicle status',
             value: <p
-                className='pl-2 pr-2 h-6 bg-success50 flex justify-center items-center rounded-xl '>{capitalizeFirstLetters(data?.data?.fundRaisingStatus?.replace(/_/g, ' ')) }</p>
+                // className='pl-2 pr-2 h-6 bg-success50 flex justify-center items-center rounded-xl '
+                >{data?.data?.fundRaisingStatus === null ? "Deploying" : "fundRaising" } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus) }</span></span> </p>
         },
+        {name: 'Vehicle visibility', value: <div className='flex items-center gap-1'>
+            {capitalizeFirstLetters(data?.data?.investmentVehicleVisibility )}
+             <span>
+                <MdEdit color='#939CB0'/>
+             </span>
+                                         </div>},
         {name: 'Interest rate', value: `${data?.data?.rate || 0}%`},
         {
             name: 'Total amount in vehicle',
@@ -44,13 +79,44 @@ const Details = () => {
             {isLoading ? (<SkeletonForDetailPage/>) : (
                 <div
                     className='flex flex-col md:flex-row md:justify-between'
-                >
-                    <div className='w-full'>
+                > 
+                  <div className='w-full'>
+                    <div >
                         <InfoCard
                             icon={MdOutlinePayments}
                             fundTitle={data?.data?.name}
                             description={""}
                         />
+                    </div>
+                     <div className='border-[1px] border-solid px-3 py-2 md:max-w-72 lg:max-w-[29vw] border-[#D7D7D7] rounded-md grid grid-cols-1 gap-y-3 mb-5'>
+                       <p>Mandate</p>
+                       <div className='bg-[#F9F9F9] flex justify-between px-3 py-4 rounded-lg'>
+                          <div className='flex gap-2 '>
+                            <Image
+                              src={"/pdf.png"}
+                               alt='image'
+                               width={16}
+                               height={16}
+                               priority 
+                               style={{
+                                width: 'auto',
+                                height: 'auto'
+                              }}
+                            />
+                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-none lg:whitespace-normal  lg:overflow-visible'>{pdfFilename}</p>
+                          </div>
+                           <Button 
+                           type='button' 
+                           variant={"default"} 
+                           className='bg-[#D9EAFF] text-black text-[12px] font-medium hover:bg-[#D9EAFF] underline rounded-2xl h-7 w-[6.7vh]'
+                           onClick={handleViewPdf}
+                           disabled={!pdf}
+                           aria-label={`View ${pdfFilename}`}
+                            >
+                            {pdfUrl ? 'View' : 'No PDF'}
+                           </Button>
+                       </div>
+                     </div>
                     </div>
                     <div className='w-full'>
                         <InfoPanel infoList={detailInfo}/>
