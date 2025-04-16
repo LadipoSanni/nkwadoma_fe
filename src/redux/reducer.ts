@@ -29,6 +29,7 @@ import MarketPlaceReducer from "./slice/investors/MarketPlaceSlice";
 import kycMultistepReducer from './slice/multiselect/kyc-multiselect'
 
 import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
+import {marketplaceApi} from "@/service/financier/marketplace";
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -59,6 +60,7 @@ const appReducer = combineReducers({
     [notificationApi.reducerPath]:  notificationApi.reducer,
     [financierApi.reducerPath]: financierApi.reducer,
     [financierOnboardingAndDashboardApi.reducerPath]: financierOnboardingAndDashboardApi.reducer,
+    [marketplaceApi.reducerPath]: marketplaceApi.reducer,
 });
 
 export default appReducer;
