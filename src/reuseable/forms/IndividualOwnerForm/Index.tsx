@@ -89,130 +89,133 @@ const IndividualOwnerForm: React.FC = () => {
     };
 
     return (
-        <div className="w-full h-[calc(100vh-400px)] overflow-y-auto pr-4">
+        <div className="w-full h-[calc(100vh-300px)] overflow-y-auto">
             <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <Label htmlFor="firstName">First name</Label>
-                        <Input
-                            id="firstName"
-                            name="firstName"
-                            placeholder="Enter first name"
-                            value={formData.firstName}
-                            onChange={handleInputChange}
-                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                            required
-                        />
+                <section className={'grid gap-5 p-5 rounded-md border-[0.5px] border-blue550'}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="firstName">First name</Label>
+                            <Input
+                                id="firstName"
+                                name="firstName"
+                                placeholder="Enter first name"
+                                value={formData.firstName}
+                                onChange={handleInputChange}
+                                className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="lastName">Last name</Label>
+                            <Input
+                                id="lastName"
+                                name="lastName"
+                                placeholder="Enter last name"
+                                value={formData.lastName}
+                                onChange={handleInputChange}
+                                className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                required
+                            />
+                        </div>
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="lastName">Last name</Label>
-                        <Input
-                            id="lastName"
-                            name="lastName"
-                            placeholder="Enter last name"
-                            value={formData.lastName}
-                            onChange={handleInputChange}
-                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                            required
-                        />
-                    </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <Label>Date of birth</Label>
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    className="w-full h-[3.375rem] border border-solid border-neutral650 flex justify-between items-center font-normal focus:outline-none focus:ring-0"
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <Label>Date of birth</Label>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        className="w-full h-[3.375rem] border border-solid border-neutral650 flex justify-between items-center font-normal focus:outline-none focus:ring-0"
+                                    >
+                                        <span>{formData.dob ? formData.dob.toLocaleDateString() : "Select date"}</span>
+                                        <MdOutlineDateRange className="h-5 w-5 text-neutral950"/>
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0 shadow-none " align="start">
+                                    <Calendar
+                                        mode="single"
+                                        selected={formData.dob}
+                                        onSelect={handleDateSelect}
+                                        initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover></div>
+                        <div className="space-y-2">
+                            <Label>Relationship</Label>
+                            <Select
+                                onValueChange={handleRelationshipSelect}
+                                value={formData.relationship}
+                                onOpenChange={(open) => setIsOpen(open)}
+                            >
+                                <SelectTrigger
+                                    className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 flex justify-between items-center"
                                 >
-                                    <span>{formData.dob ? formData.dob.toLocaleDateString() : "Select date"}</span>
-                                    <MdOutlineDateRange className="h-5 w-5 text-neutral950"/>
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0 shadow-none " align="start">
-                                <Calendar
-                                    mode="single"
-                                    selected={formData.dob}
-                                    onSelect={handleDateSelect}
-                                    initialFocus
-                                />
-                            </PopoverContent>
-                        </Popover></div>
+                                    <SelectValue placeholder="Select relationship"/>
+                                    {isOpen ? (
+                                        <MdKeyboardArrowUp className="h-5 w-5 text-neutral950"/>
+                                    ) : (
+                                        <MdKeyboardArrowDown className="h-5 w-5 text-neutral950"/>
+                                    )}
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="father">Father</SelectItem>
+                                    <SelectItem value="mother">Mother</SelectItem>
+                                    <SelectItem value="brother">Brother</SelectItem>
+                                    <SelectItem value="sister">Sister</SelectItem>
+                                    <SelectItem value="friend">Friend</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
                     <div className="space-y-2">
-                        <Label>Relationship</Label>
-                        <Select
-                            onValueChange={handleRelationshipSelect}
-                            value={formData.relationship}
-                            onOpenChange={(open) => setIsOpen(open)}
-                        >
-                            <SelectTrigger
-                                className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 flex justify-between items-center"
-                            >
-                                <SelectValue placeholder="Select relationship"/>
-                                {isOpen ? (
-                                    <MdKeyboardArrowUp className="h-5 w-5 text-neutral950"/>
-                                ) : (
-                                    <MdKeyboardArrowDown className="h-5 w-5 text-neutral950"/>
-                                )}
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="father">Father</SelectItem>
-                                <SelectItem value="mother">Mother</SelectItem>
-                                <SelectItem value="brother">Brother</SelectItem>
-                                <SelectItem value="sister">Sister</SelectItem>
-                                <SelectItem value="friend">Friend</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <Label htmlFor="ownership">Ownership / Share (%)</Label>
+                        <Input
+                            id="ownership"
+                            name="ownership"
+                            type="number"
+                            max="100"
+                            placeholder="0"
+                            value={formData.ownership}
+                            onChange={handleNumberInputChange}
+                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md w-full md:w-[47%] h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                            required
+                        />
                     </div>
-                </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="ownership">Ownership / Share (%)</Label>
-                    <Input
-                        id="ownership"
-                        name="ownership"
-                        type="number"
-                        max="100"
-                        placeholder="0"
-                        value={formData.ownership}
-                        onChange={handleNumberInputChange}
-                        className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md w-full md:w-[47%] h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                        required
-                    />
-                </div>
-
-                <div className="space-y-4">
-                    <Label>Proof of beneficial ownership</Label>
-                    <div className="flex gap-3">
-                        {proofOptions.map((option) => (
-                            <label
-                                key={option.id}
-                                className={`rounded-[20px] px-3 py-2 text-[14px] leading-[150%] font-medium bg-blue50 hover:bg-blue50 cursor-pointer
+                    <div className="space-y-4">
+                        <Label>Proof of beneficial ownership</Label>
+                        <div className="flex gap-3">
+                            {proofOptions.map((option) => (
+                                <label
+                                    key={option.id}
+                                    className={`rounded-[20px] px-3 py-2 text-[14px] leading-[150%] font-medium bg-blue50 hover:bg-blue50 cursor-pointer
                 ${formData.proofType === option.id ? 'border border-meedlBlue bg-blue50 text-meedlBlue' : 'text-black300'}`}
-                            >
-                                <input
-                                    type="radio"
-                                    name="proofType"
-                                    value={option.id}
-                                    checked={formData.proofType === option.id}
-                                    onChange={(e) => handleProofTypeChange(e.target.value)}
-                                    className="hidden"
-                                />
-                                <span className="text-sm">{option.label}</span>
-                            </label>
-                        ))}
+                                >
+                                    <input
+                                        type="radio"
+                                        name="proofType"
+                                        value={option.id}
+                                        checked={formData.proofType === option.id}
+                                        onChange={(e) => handleProofTypeChange(e.target.value)}
+                                        className="hidden"
+                                    />
+                                    <span className="text-sm">{option.label}</span>
+                                </label>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <FileUpload
-                    handleDrop={handleDrop}
-                    handleDragOver={handleDragOver}
-                    setUploadedImageUrl={setUploadedImageUrl}
-                />
+                    <FileUpload
+                        handleDrop={handleDrop}
+                        handleDragOver={handleDragOver}
+                        setUploadedImageUrl={setUploadedImageUrl}
+                    />
+                </section>
 
-                <div className="flex justify-between">
+
+                <div className="flex justify-between sticky bottom-0 bg-white p-4">
                     <Button
                         onClick={handleBackClick}
                         type="button"
@@ -227,8 +230,7 @@ const IndividualOwnerForm: React.FC = () => {
                     >
                         Save & continue
                     </Button>
-                </div>
-            </form>
+                </div>            </form>
         </div>
     );
 };

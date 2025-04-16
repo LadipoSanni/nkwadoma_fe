@@ -55,7 +55,7 @@ const BeneficialOwnerStep = () => {
                 <h1 id="beneficialOwnerTitle"
                     className="text-meedlBlack text-[24px] leading-[120%] font-medium">Beneficial owner</h1>
             </div>
-            <section id="beneficialOwnerSection" className={'md:w-[27.5rem] w-full'}>
+            <section id="beneficialOwnerSection" className={'md:w-[30rem] w-full'}>
                 <Tabs
                     id="beneficialOwnerTabs"
                     value={selectedForm}
