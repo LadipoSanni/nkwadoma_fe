@@ -29,23 +29,14 @@ const Details = () => {
 
     const pdfUrl = data?.data?.mandate;
     const pdfFilename = getFilenameFromUrl(pdfUrl);
+
     const pdf = ""
 
     const handleViewPdf = () => {
         if (pdfUrl) {
-          // Try both methods - one may work depending on Cloudinary settings
-          try {
             window.open(pdfUrl, '_blank', 'noopener,noreferrer');
-          } catch (e) {
-            const link = document.createElement('a');
-            link.href = pdfUrl;
-            link.download = pdfFilename || 'document.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }
         }
-      };
+    };
 
     const detailInfo = [
         {name: 'Vehicle type', value: capitalizeFirstLetters(data?.data?.investmentVehicleType )|| 'N/A'},
