@@ -10,7 +10,7 @@ import IndividualOwnerForm from '@/reuseable/forms/IndividualOwnerForm/Index';
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
+import {MdKeyboardArrowUp, MdKeyboardArrowDown} from "react-icons/md";
 import {MdOutlineSearch} from "react-icons/md";
 
 const BeneficialOwnerStep = () => {
@@ -136,16 +136,20 @@ const BeneficialOwnerStep = () => {
                                                     <span id="selectCountryPlaceholder" className="text-grey250">Select country</span>
                                                 )}
                                                 {isPopoverOpen ? (
-                                                    <MdKeyboardArrowUp className="ml-2 h-[22px] w-[22px]  text-primary200" />
+                                                    <MdKeyboardArrowUp
+                                                        className="ml-2 h-[22px] w-[22px]  text-primary200"/>
                                                 ) : (
-                                                    <MdKeyboardArrowDown className="ml-2 h-[22px] w-[22px]  text-primary200" />
+                                                    <MdKeyboardArrowDown
+                                                        className="ml-2 h-[22px] w-[22px]  text-primary200"/>
                                                 )}
                                             </button>
                                         </PopoverTrigger>
-                                        <PopoverContent className="p-0 max-h-[13.3125rem] md:w-[27.5rem] w-full overflow-y-auto">
+                                        <PopoverContent
+                                            className="p-0 max-h-[13.3125rem] md:w-[27.5rem] w-full overflow-y-auto">
                                             <div className="sticky top-0 bg-white z-10 px-2 py-1">
-                                                <div className="flex gap-2 p-2 items-center border-[0.5px] border-blue550 rounded h-[2.3125rem]">
-                                                    <MdOutlineSearch className="text-primary200 h-[18px] w-[18px]" />
+                                                <div
+                                                    className="flex gap-2 p-2 items-center border-[0.5px] border-blue550 rounded h-[2.3125rem]">
+                                                    <MdOutlineSearch className="text-primary200 h-[18px] w-[18px]"/>
                                                     <Input
                                                         type="text"
                                                         placeholder="Search country"
@@ -184,7 +188,8 @@ const BeneficialOwnerStep = () => {
                                                     ))}
                                             </div>
                                         </PopoverContent>
-                                    </Popover>                                </div>
+                                    </Popover>
+                                </div>
                             </section>
                             <div id="entityFormButtons" className={'flex justify-between'}>
                                 <Button
