@@ -50,7 +50,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
             }
             setLoading(true);
             setFile(selectedFile);
-            setError(null); // Clear any previous error
+            setError(null); 
             setIsFileSupported(true);
 
             try {

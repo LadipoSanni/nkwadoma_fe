@@ -165,8 +165,8 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                         id="bvn"
                                         {...methods.register("bvn", {
                                             required: "BVN is required",
-                                            minLength: { value: 11, message: "BVN must be exactly 11 digits" },
-                                            maxLength: { value: 11, message: "BVN must be exactly 11 digits" }
+                                            minLength: { value: 11, message: "BVN must be 11 digits" },
+                                            maxLength: { value: 11, message: "BVN must be 11 digits" }
                                         })}
                                         placeholder="Enter BVN"
                                         className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
@@ -201,8 +201,8 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                         id="nin"
                                         {...methods.register("nin", {
                                             required: "NIN is required",
-                                            minLength: { value: 11, message: "NIN must be exactly 11 digits" },
-                                            maxLength: { value: 11, message: "NIN must be exactly 11 digits" }
+                                            minLength: { value: 11, message: "NIN must be 11 digits" },
+                                            maxLength: { value: 11, message: "NIN must be 11 digits" }
                                         })}
                                         placeholder="Enter NIN"
                                         className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'}
