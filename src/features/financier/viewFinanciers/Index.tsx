@@ -32,14 +32,14 @@ interface TableRowData {
 }
 
 interface financials {
-  financierType: string,
-  organizationName: string,
-  userIdentity: {
-    email: string,
-    firstName: string,
-    lastName: string,
+    financierType: string,
+    organizationName: string,
+    userIdentity: {
+        email: string,
+        firstName: string,
+        lastName: string,
 
-  }
+    }
 
 }
 
@@ -53,34 +53,34 @@ const ViewFinanciers = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false);
-     const [hasNextPage,setNextPage] = useState(false)
+    const [hasNextPage,setNextPage] = useState(false)
     const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
     const router = useRouter()
     const param = {
         pageNumber: pageNumber,
         pageSize: 10,
-        }
-       
-        const {data,isLoading} = useViewAllFinanciersQuery(param)
-         const {data:searchData} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10},{skip: !searchTerm})
+    }
 
-        useEffect(()=>{
-              if(searchTerm && searchData && searchData?.data){
-                const result = searchData?.data?.body
-                setFinanciers(result)
-                setNextPage(searchData?.data?.hasNextPage)
-                setTotalPage(searchData?.data?.totalPages)
-                setPageNumber(searchData?.data?.pageNumber)
-              }
-              else if(data && data.data){
-               setFinanciers(data?.data?.body)
-               setNextPage(data?.data?.hasNextPage)
-               setTotalPage(data?.data?.totalPages)
-               setPageNumber(data?.data?.pageNumber)
-              }
-           },[searchTerm, searchData,data])
-        
+    const {data,isLoading} = useViewAllFinanciersQuery(param)
+    const {data:searchData} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10},{skip: !searchTerm})
+
+    useEffect(()=>{
+        if(searchTerm && searchData && searchData?.data){
+            const result = searchData?.data?.body
+            setFinanciers(result)
+            setNextPage(searchData?.data?.hasNextPage)
+            setTotalPage(searchData?.data?.totalPages)
+            setPageNumber(searchData?.data?.pageNumber)
+        }
+        else if(data && data.data){
+            setFinanciers(data?.data?.body)
+            setNextPage(data?.data?.hasNextPage)
+            setTotalPage(data?.data?.totalPages)
+            setPageNumber(data?.data?.pageNumber)
+        }
+    },[searchTerm, searchData,data])
+
 
     const listOfFinanciers = [
         { id: '1', name: 'Individual' },
@@ -134,7 +134,7 @@ const ViewFinanciers = () => {
     // ];
 
     const financierHeader = [
-        { title: 'Name', id: 'name', selector: (row: viewAllfinancier) => row.userIdentity?.firstName? row.userIdentity?.firstName + " " + row.userIdentity?.lastName : row?.organizationName},
+        { title: 'Name', id: 'name', selector: (row: viewAllfinancier) => row?.financierType === "INDIVIDUAL"? row.userIdentity?.firstName + " " + row.userIdentity?.lastName : row?.organizationName},
         { title: 'Type', id: 'type', selector: (row: viewAllfinancier) => (
                 <span className={`${row.financierType === "INDIVIDUAL"  ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
             {capitalizeFirstLetters(row.financierType)}
@@ -199,22 +199,22 @@ const ViewFinanciers = () => {
                     </div>
                 ) : (
                     <Table
-                    tableData={financiers}
-                    tableHeader={financierHeader}
-                    handleRowClick={handleRowClick}
-                    tableHeight={48}
-                   icon={Book}
-                   sideBarTabName='financier'
-                   condition={true}
-                   staticHeader={"Financier"}
-                   staticColunm={"name"}
-                   sx='cursor-pointer'
-                   hasNextPage={hasNextPage}
-                   pageNumber={pageNumber}
-                   setPageNumber={setPageNumber}
-                   totalPages={totalPage}
-                   isLoading={isLoading}
-                 />
+                        tableData={financiers}
+                        tableHeader={financierHeader}
+                        handleRowClick={handleRowClick}
+                        tableHeight={58}
+                        icon={Book}
+                        sideBarTabName='financier'
+                        condition={true}
+                        staticHeader={"Financier"}
+                        staticColunm={"name"}
+                        sx='cursor-pointer'
+                        hasNextPage={hasNextPage}
+                        pageNumber={pageNumber}
+                        setPageNumber={setPageNumber}
+                        totalPages={totalPage}
+                        isLoading={isLoading}
+                    />
                 )}
             </div>
 

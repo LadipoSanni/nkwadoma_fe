@@ -164,7 +164,7 @@ const ProgramDetails = () => {
           {loading ? ( <SkeletonForDetailPage /> ) : (
         <main className={`${inter.className} w-full max-h-full`} id={"mainDiv"}>
                     <section className={`p- flex md:flex-row flex-col md:gap-0 md:justify-between`} id={`section`}>
-                        <div className={'flex flex-col gap-5'} id={`status`}>
+                        <div className={'flex flex-col gap-5 md:h-[70vh] md:max-h-none'} id={`status`}>
                             <div
                                 id={`fibookIcon`}
                                 className={'grid place-items-center h-[7.5rem] w-[7.5rem] bg-lightBlue500 rounded-full'}>
@@ -204,7 +204,7 @@ const ProgramDetails = () => {
                             </div>
                         </div>
 
-                        <div id={`container`} className={`md:w-6/12 max:md:h-80 h-96 md:pt-0 pt-5`}>
+                        <div id={`container`} className={`w-full md:w-1/2 md:pt-0 pt-5 overflow-x-hidden`}>
                             <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail} dataList={dataList}
                                                  tabTitle1={"program-details"} tabTitle2={"Loan program-details"}/>
                         </div>

@@ -10,9 +10,8 @@ import {store} from "@/redux/store";
 import {useAppSelector} from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useCreateInvestmentVehicleStatusMutation } from "@/service/admin/fund_query";
-import { useToast } from "@/hooks/use-toast";
-import { clearSaveCreateInvestmentField } from '@/redux/slice/vehicle/vehicle'
-import { setPublicVehicleUrl } from "@/redux/slice/vehicle/vehicle";
+// import { useToast } from "@/hooks/use-toast";
+import { setPublicVehicleUrl,setInvestmentStatus } from "@/redux/slice/vehicle/vehicle";
 
 interface ApiError {
   status: number;
@@ -52,16 +51,22 @@ function StatusReusable({
   const [isError, setError] = useState("");
   const formikRef = React.useRef<FormikProps<typeof initialFormValue>>(null);
   const [setVehicleStatus,{isLoading}] = useCreateInvestmentVehicleStatusMutation();
-  const { toast } = useToast();
-
+  // const { toast } = useToast();
+  const savedstatus = useAppSelector(state => (state?.vehicle?.setInvestmentStatus))
 
   const initialFormValue = {
     investmentVehicleId: '',
-    status: initialStatus,
-    state: "",
+    status: savedstatus?.status || initialStatus || "",
+    state: savedstatus?.state || "",
   };
 
-  
+  const saveToRedux = (values: typeof initialFormValue) => {
+    const investmentVehicleStatus = {
+       state: values.state,
+       status: values.status
+    }
+    store.dispatch(setInvestmentStatus(investmentVehicleStatus))
+  }
 
    useEffect(()=> {
      if(!completedStep.includes("setup")){
@@ -107,12 +112,12 @@ function StatusReusable({
       if(create){
         const urlLink = create?.data?.investmentVehicleLink
         store.dispatch(setPublicVehicleUrl(urlLink))
-        toast({
-          description: create.message,
-          status: "success",
-        });
+        saveToRedux(values)
+        // toast({
+        //   description: create.message,
+        //   status: "success",
+        // });
         store.dispatch(markStepCompleted("setup"))
-        store.dispatch(clearSaveCreateInvestmentField())
         router.push("/vehicle/visibility");
       }
       
@@ -204,7 +209,7 @@ function StatusReusable({
                 </Button>
                 <button
                   id="submitInvestment"
-                  className={`w-full md:w-24 h-[46px] rounded-md ${
+                  className={`w-full md:w-40 h-[46px] rounded-md ${
                     !isValid
                       ? "bg-neutral650 cursor-auto text-white hover:bg-neutral650"
                       : "hover:bg-meedlBlue bg-meedlBlue text-white cursor-pointer"
@@ -212,7 +217,7 @@ function StatusReusable({
                   type="submit"
                   disabled={!isValid}
                 >
-                  {isLoading ? <Isloading /> : "Publish"}
+                  {isLoading ? <Isloading /> : "Save & Continue"}
                 </button>
               </div>
               <p

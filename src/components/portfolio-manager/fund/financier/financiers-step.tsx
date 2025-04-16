@@ -50,7 +50,7 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
            .matches(/^[A-Za-z]+$/, 'First name should only contain letters')
            .max(100, "First name cannot be more than 50 characters.")
            .when('financierType', {
-            is: 'Individual', 
+            is: 'INDIVIDUAL', 
             then: (schema) => schema.required('First name is required'),
             otherwise: (schema) => schema.notRequired(),
         }),
@@ -59,7 +59,7 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
            .matches(/^[A-Za-z]+$/, 'Last name should only contain letters')
            .max(100, "Last name cannot be more than 50 characters.")
            .when('financierType', {
-            is: 'Individual', 
+            is: 'INDIVIDUAL', 
             then: (schema) => schema.required('Last Name is required'),
             otherwise: (schema) => schema.notRequired(),
         }),

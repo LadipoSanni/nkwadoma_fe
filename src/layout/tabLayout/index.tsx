@@ -18,9 +18,10 @@ type Props = {
   backClickRoutePath?: string;
   condition?: boolean;
   disabledTabs?: string[];
+  style?: string
 };
 
-function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRoutePath,condition,disabledTabs}: Props) {
+function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRoutePath,condition,disabledTabs,style}: Props) {
   const navigate = useRouter();
   const [activeTab, setActiveTab] = useState(defaultTab);
 
@@ -48,7 +49,7 @@ function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRouteP
   }
 
   return (
-    <div className={`px-4 md:px-6 ${inter.className}`}>
+    <div className={`px-4 md:px-6 ${inter.className} ${style}`}>
       {!condition? "" :
        <div className={`flex py-3 space-x-1 text-meedlBlue cursor-pointer`} id={`backClick${backClickName}`} onClick={handleRouteBack}>
        <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`}/>
