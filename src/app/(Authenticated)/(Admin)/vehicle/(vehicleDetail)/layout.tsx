@@ -14,7 +14,7 @@ const FundTabs: React.FC<props> = ({ children }) => {
 
     return (
         <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
-            <TabSwitch tabData={fundTabData} defaultTab="/funds/details" backClickRoutePath={vehicleType === "commercial"? "/vehicle/commercial-vehicle" : "/vehicle/endownment-vehicle"} backClickName="fund" condition={true}>
+            <TabSwitch tabData={fundTabData} defaultTab="/funds/details" backClickRoutePath={vehicleType === "commercial"? "/vehicle/commercial-vehicle" : "/vehicle/endownment-vehicle"} backClickName="fund" condition={true} style="lg:px-8">
                 {children}
             </TabSwitch>
         </CustomAuthorization>

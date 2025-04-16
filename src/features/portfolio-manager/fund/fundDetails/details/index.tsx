@@ -15,6 +15,8 @@ import { Button } from '@/components/ui/button';
 const Details = () => {
     const currentVehicleId = useAppSelector(state => (state.vehicle.currentVehicleId))
     const [investmentId] = useState(currentVehicleId);
+    const [isVerifying, setIsVerifying] = useState(false);
+    const [docError, setDocError] = useState<string | null>(null);
 
     const {data, isLoading} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
 
@@ -27,14 +29,56 @@ const Details = () => {
         }
     };
 
-    const pdfUrl = data?.data?.mandate;
-    const pdfFilename = getFilenameFromUrl(pdfUrl);
+    const verifyDocumentExists = async (url: string): Promise<boolean> => {
+        if (url.includes('cloudinary.com')) {
+            return url.toLowerCase().endsWith('.pdf') || 
+                   url.toLowerCase().endsWith('.docx');
+        }
 
-    const pdf = ""
+        try {
+            const response = await fetch(url, { method: 'HEAD' });
+            const contentType = response.headers.get('content-type') || '';
+            return response.ok && (
+                contentType.includes('application/pdf') || 
+                contentType.includes('application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            );
+        } catch {
+            return false;
+        }
+    };
 
-    const handleViewPdf = () => {
-        if (pdfUrl) {
-            window.open(pdfUrl, '_blank', 'noopener,noreferrer');
+    const docUrl = data?.data?.mandate;
+    const docFilename = getFilenameFromUrl(docUrl);
+    const isCloudinaryUrl = docUrl?.includes('cloudinary.com');
+    const fileExtension = docFilename?.split('.').pop()?.toLowerCase();
+
+    
+    const handleViewDocument = async () => {
+        if (!docUrl) return;
+        
+        setIsVerifying(true);
+        setDocError(null);
+        
+        try {
+            if (fileExtension !== 'pdf' && fileExtension !== 'docx') {
+                setDocError('Invalid document format');
+                return;
+            }
+
+            if (!isCloudinaryUrl) {
+                const docExists = await verifyDocumentExists(docUrl);
+                if (!docExists) {
+                    setDocError('Document not found');
+                    return;
+                }
+            }
+
+            window.open(docUrl, '_blank', 'noopener,noreferrer');
+        } catch (error) {
+            setDocError('Error opening document');
+            console.error('Document open error:', error);
+        } finally {
+            setIsVerifying(false);
         }
     };
 
@@ -44,7 +88,6 @@ const Details = () => {
         {
             name: 'Vehicle status',
             value: <p
-                // className='pl-2 pr-2 h-6 bg-success50 flex justify-center items-center rounded-xl '
                 >{data?.data?.fundRaisingStatus === null ? "Deploying" : "fundRaising" } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus) }</span></span> </p>
         },
         {name: 'Vehicle visibility', value: <div className='flex items-center gap-1'>
@@ -81,7 +124,8 @@ const Details = () => {
                     </div>
                      <div className='border-[1px] border-solid px-3 py-2 md:max-w-72 lg:max-w-[29vw] border-[#D7D7D7] rounded-md grid grid-cols-1 gap-y-3 mb-5'>
                        <p>Mandate</p>
-                       <div className='bg-[#F9F9F9] flex justify-between px-3 py-4 rounded-lg'>
+                       <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
+                       
                           <div className='flex gap-2 '>
                             <Image
                               src={"/pdf.png"}
@@ -94,20 +138,25 @@ const Details = () => {
                                 height: 'auto'
                               }}
                             />
-                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-none lg:whitespace-normal  lg:overflow-visible'>{pdfFilename}</p>
+                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{docFilename}</p>
                           </div>
+                         
                            <Button 
+                            id='view-document'
                            type='button' 
                            variant={"default"} 
                            className='bg-[#D9EAFF] text-black text-[12px] font-medium hover:bg-[#D9EAFF] underline rounded-2xl h-7 w-[6.7vh]'
-                           onClick={handleViewPdf}
-                           disabled={!pdf}
-                           aria-label={`View ${pdfFilename}`}
+                            onClick={handleViewDocument}
+                            disabled={!docUrl || isVerifying}
+                            aria-label={`View ${docFilename}`}
                             >
-                            {pdfUrl ? 'View' : 'No PDF'}
+                             {isVerifying ? 'Verifying...' : (docUrl ? 'View' : 'No Document')}
                            </Button>
                        </div>
                      </div>
+                     {docError && (
+                            <p className='text-red-500 text-xs mt-1 mb-3'>{docError}</p>
+                            )}
                     </div>
                     <div className='w-full'>
                         <InfoPanel infoList={detailInfo}/>
