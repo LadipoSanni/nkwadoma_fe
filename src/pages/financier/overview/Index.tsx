@@ -17,7 +17,7 @@ const financialCardData = [
         title: "Number of investments", amount: "0", linkText: "View"
     },
     {
-        title: "Amount invested", amount: "0", linkText: "View"
+        title: "Amount invested", amount: "₦0", linkText: "View"
     },
     {
         title: "Portfolio value", amount: "0", linkText: "View"
