@@ -16,12 +16,14 @@ interface InvestmentVehicle {
     investmentVehicleType: "COMMERCIAL" | "ENDOWMENT";
     name: string;
     rate?: number;
+    fundRaisingStatus: string | null;
+    deployingStatus: string;
 }
 
 export const HandleCardDetails = (
     id: string,
     type: string,
-    router: ReturnType<typeof useRouter>
+    router: ReturnType<typeof useRouter>,
 ) => {
     store.dispatch(
         setMarketInvestmentVehicleId({
@@ -60,14 +62,35 @@ const MarketPlaceView = () => {
             console.log("API Response:", data.data.body);
             setAllVehicles(prev => {
                 const newVehicles = pageNumber === 0 ? data.data.body : [...prev, ...data.data.body];
-                const uniqueVehicles = Array.from(
-                    new Map(newVehicles.map(vehicle => [vehicle.id, vehicle])).values()
+                const validVehicles = newVehicles.filter(
+                    (vehicle): vehicle is InvestmentVehicle =>
+                        vehicle &&
+                        typeof vehicle.id === "string" &&
+                        typeof vehicle.investmentVehicleType === "string" &&
+                        typeof vehicle.name === "string" &&
+                        "fundRaisingStatus" in vehicle &&
+                        "deployingStatus" in vehicle
                 );
+                const uniqueVehicles = Array.from(new Map(validVehicles.map(v => [v.id, v])).values());
                 return uniqueVehicles;
             });
+
             setHasMore(data.data.hasNextPage);
         }
     }, [data, pageNumber]);
+// useEffect(() => {
+//         if (data?.data?.body) {
+//             console.log("API Response:", data.data.body);
+//             setAllVehicles(prev => {
+//                 const newVehicles = pageNumber === 0 ? data.data.body : [...prev, ...data.data.body];
+//                 const uniqueVehicles = Array.from(
+//                     new Map(newVehicles.map(vehicle => [vehicle.id, vehicle])).values()
+//                 );
+//                 return uniqueVehicles;
+//             });
+//             setHasMore(data.data.hasNextPage);
+//         }
+//     }, [data, pageNumber]);
 
     const lastCardObserver = useCallback(
         (node: HTMLDivElement | null) => {
@@ -155,13 +178,19 @@ const MarketPlaceView = () => {
                                 ? "/BlueCircles.svg"
                                 : "/GreenCircles.svg";
 
-                        const status = "Open";
+                        const status = vehicle.fundRaisingStatus || vehicle.deployingStatus || "";
                         const statusClass =
-                            status === "Open"
+                            status === "OPEN"
                                 ? "bg-green-100 text-[#0D9B48] border-[#B4E5C8]"
-                                : "bg-red-100 text-red-600 border-[#F2BCBA]";
+                                : status === "CLOSE"
+                                    ? "bg-red-100 text-red-600 border-[#F2BCBA]"
+                                    : "bg-gray-100 text-gray-600 border-gray-300";
                         const borderClass =
-                            status === "Open" ? "border-[#B4E5C8]" : "border-[#F2BCBA]";
+                            status === "OPEN" ? "border-[#B4E5C8]" : status === "CLOSE" ? "border-[#F2BCBA]" : "border-gray-300";
+                        // const statusKey = vehicle.fundRaisingStatus ? "fundRaisingStatus" : "deployingStatus";
+                        const statusValue = vehicle.fundRaisingStatus || vehicle.deployingStatus || "";
+                        const statuses = ` ${statusValue}`;
+                        // fundRaising = `${statusKey}`;
 
                         const truncatedTitle =
                             vehicle.name.length > 20
@@ -175,7 +204,7 @@ const MarketPlaceView = () => {
                             imageSrc,
                             investmentVehicleName: truncatedTitle,
                             statusClass,
-                            status,
+                            statuses,
                             borderClass,
                             percentage: vehicle.rate || 0,
                             HandleCardDetails: () =>
