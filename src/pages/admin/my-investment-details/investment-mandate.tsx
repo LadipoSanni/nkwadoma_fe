@@ -3,7 +3,7 @@ import React from 'react';
 
 const InvestmentMandate = () => {
     return (
-        <div className={`w-full md:w-full h-fit md:h-fit gap-4 md:gap-8 px-8 py-8 border border-[#D7D7D7] md:border md:border-[#D7D7D7] bg-[#F9F9F9] md:bg-[#F9F9F9] rounded md:rounded-md `}>
+        <div className={`w-full md:w-full h-fit md:h-fit gap-4 md:gap-8 px-8 py-8 border border-[#D7D7D7] md:border md:border-[#D7D7D7] bg-[#F9F9F9] md:bg-[#F9F9F9] rounded-lg md:rounded-lg `}>
             <p className={` ${cabinetGroteskBold.className} text-[32px] md:text-[32px] text-[#212221] md:text-[#212221]  `}>Meedl Village Limited Privacy Policy</p>
             <div className={`text-[14px] md:text-[14px] grid gap-8 ${inter.className}`}>
                 <div >                Meedl Village Limited (“<span className={` ${inter500.className}`}>we</span>” or “<span className={` ${inter500.className}`}>our</span>” or “<span className={` ${inter500.className}`}>use</span>”) is committed to protecting your privacy and ensuring compliance with applicable data protection laws and regulations. This Privacy Policy outlines how we collect, use, and safeguard your information when you use the Meedl platform (“<span className={` ${inter500.className}`}>Platform</span>”), including compliance with the Nigerian Data Protection Act (NDPA), Nigeria Data Protection Regulation (NDPR), and relevant provisions of the 1999 Constitution of the Federal Republic of Nigeria (as amended).
