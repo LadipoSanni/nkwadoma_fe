@@ -32,22 +32,23 @@ describe("InvestmentCard Component", () => {
     });
 
     it("renders the component correctly", () => {
-        render(<InvestmentCard statuses={""} {...mockProps} />);
+        render(<InvestmentCard {...mockProps} />);
         expect(screen.getByTestId("investment-card")).toBeInTheDocument();
         expect(screen.getByText("Commercial")).toBeInTheDocument();
         expect(screen.getByText("AI Startup Investment")).toBeInTheDocument();
+        expect(screen.getByText("Open")).toBeInTheDocument();
         expect(screen.getByText("5% interest")).toBeInTheDocument();
     });
 
     it("applies the correct background color to the investment type segment", () => {
-        render(<InvestmentCard statuses={""} {...mockProps} />);
+        render(<InvestmentCard {...mockProps} />);
         const segment = screen.getByTestId("investment-type-segment");
         expect(segment).toHaveStyle(`background-color: ${mockProps.backgroundColor}`);
     });
 
     it("displays the correct status class", () => {
-        render(<InvestmentCard statuses={""} {...mockProps} />);
-        // const statusElement = screen.getByText("Open").parentElement;
+        render(<InvestmentCard {...mockProps} />);
+        const statusElement = screen.getByText("Open").parentElement;
     });
 
     it("renders correctly with a different status and percentage", () => {
@@ -57,7 +58,8 @@ describe("InvestmentCard Component", () => {
             percentage: 10,
             statusClass: "bg-red-100 text-[#FF0000] border-[#FFCCCC]",
         };
-        render(<InvestmentCard statuses={""} {...customProps} />);
+        render(<InvestmentCard {...customProps} />);
+        expect(screen.getByText("Closed")).toBeInTheDocument();
         expect(screen.getByText("10% interest")).toBeInTheDocument();
     });
 
@@ -66,19 +68,19 @@ describe("InvestmentCard Component", () => {
             ...mockProps,
             investmentVehicleName: "This is a very long investment vehicle name that should truncate or wrap",
         };
-        render(<InvestmentCard statuses={""} {...longNameProps} />);
+        render(<InvestmentCard {...longNameProps} />);
         expect(screen.getByText(longNameProps.investmentVehicleName)).toBeInTheDocument();
     });
 
     it("does not break with zero percentage", () => {
         const zeroPercentProps = { ...mockProps, percentage: 0 };
-        render(<InvestmentCard statuses={""} {...zeroPercentProps} />);
+        render(<InvestmentCard {...zeroPercentProps} />);
         expect(screen.getByText("0% interest")).toBeInTheDocument();
         expect(screen.getByTestId("investment-card")).toBeInTheDocument();
     });
 
     it("renders 'Fundraising' text consistently", () => {
-        render(<InvestmentCard statuses={""} {...mockProps} />);
+        render(<InvestmentCard {...mockProps} />);
         expect(screen.getByText("Fundraising")).toBeInTheDocument();
     });
 });
