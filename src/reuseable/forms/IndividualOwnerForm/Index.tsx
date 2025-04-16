@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import React, {useState} from 'react';
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {Select, SelectTrigger, SelectValue, SelectContent, SelectItem} from "@/components/ui/select";
+import {Calendar} from "@/components/ui/calendar";
+import {Popover, PopoverTrigger, PopoverContent} from "@/components/ui/popover";
 import FileUpload from "@/reuseable/Input/FileUpload";
-import { useRouter } from "next/navigation";
+import {MdOutlineDateRange, MdKeyboardArrowUp, MdKeyboardArrowDown} from 'react-icons/md'
+import {useRouter} from "next/navigation";
 
 interface FormData {
     firstName: string;
@@ -29,6 +29,7 @@ const IndividualOwnerForm: React.FC = () => {
         proofType: 'national_id',
         proofFile: null,
     });
+    const [isOpen, setIsOpen] = useState(false);
     const route = useRouter();
 
     const handleBackClick = () => {
@@ -36,12 +37,12 @@ const IndividualOwnerForm: React.FC = () => {
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setFormData((prev) => ({...prev, [name]: value}));
     };
 
     const handleNumberInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
 
         const sanitizedValue = value.replace(/^0+(?=\d)/, '');
 
@@ -51,21 +52,21 @@ const IndividualOwnerForm: React.FC = () => {
         }));
     };
     const handleDateSelect = (date: Date | undefined) => {
-        setFormData((prev) => ({ ...prev, dob: date }));
+        setFormData((prev) => ({...prev, dob: date}));
     };
 
     const handleRelationshipSelect = (value: string) => {
-        setFormData((prev) => ({ ...prev, relationship: value }));
+        setFormData((prev) => ({...prev, relationship: value}));
     };
 
     const handleProofTypeChange = (value: string) => {
-        setFormData((prev) => ({ ...prev, proofType: value }));
+        setFormData((prev) => ({...prev, proofType: value}));
     };
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            setFormData((prev) => ({ ...prev, proofFile: e.dataTransfer.files[0] }));
+            setFormData((prev) => ({...prev, proofFile: e.dataTransfer.files[0]}));
         }
     };
 
@@ -78,8 +79,8 @@ const IndividualOwnerForm: React.FC = () => {
     };
 
     const proofOptions = [
-        { id: 'national_id', label: 'National ID card' },
-        { id: 'voters_card', label: "Voter's card" },
+        {id: 'national_id', label: 'National ID card'},
+        {id: 'voters_card', label: "Voter's card"},
     ];
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -122,12 +123,15 @@ const IndividualOwnerForm: React.FC = () => {
                         <Label>Date of birth</Label>
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Button variant="outline" className="w-full h-[3.375rem] justify-start text-left font-normal">
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {formData.dob ? formData.dob.toLocaleDateString() : "Select date"}
+                                <Button
+                                    variant="outline"
+                                    className="w-full h-[3.375rem] border border-solid border-neutral650 flex justify-between items-center font-normal focus:outline-none focus:ring-0"
+                                >
+                                    <span>{formData.dob ? formData.dob.toLocaleDateString() : "Select date"}</span>
+                                    <MdOutlineDateRange className="h-5 w-5 text-neutral950"/>
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="start">
+                            <PopoverContent className="w-auto p-0 shadow-none " align="start">
                                 <Calendar
                                     mode="single"
                                     selected={formData.dob}
@@ -135,21 +139,30 @@ const IndividualOwnerForm: React.FC = () => {
                                     initialFocus
                                 />
                             </PopoverContent>
-                        </Popover>
-                    </div>
+                        </Popover></div>
                     <div className="space-y-2">
                         <Label>Relationship</Label>
-                        <Select onValueChange={handleRelationshipSelect} value={formData.relationship}>
-                            <SelectTrigger className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650">
-                                <SelectValue placeholder="Select relationship" />
+                        <Select
+                            onValueChange={handleRelationshipSelect}
+                            value={formData.relationship}
+                            onOpenChange={(open) => setIsOpen(open)}
+                        >
+                            <SelectTrigger
+                                className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 flex justify-between items-center"
+                            >
+                                <SelectValue placeholder="Select relationship"/>
+                                {isOpen ? (
+                                    <MdKeyboardArrowUp className="h-5 w-5 text-neutral950"/>
+                                ) : (
+                                    <MdKeyboardArrowDown className="h-5 w-5 text-neutral950"/>
+                                )}
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="spouse">Spouse</SelectItem>
-                                <SelectItem value="child">Child</SelectItem>
-                                <SelectItem value="parent">Parent</SelectItem>
-                                <SelectItem value="sibling">Sibling</SelectItem>
-                                <SelectItem value="business_partner">Business Partner</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
+                                <SelectItem value="father">Father</SelectItem>
+                                <SelectItem value="mother">Mother</SelectItem>
+                                <SelectItem value="brother">Brother</SelectItem>
+                                <SelectItem value="sister">Sister</SelectItem>
+                                <SelectItem value="friend">Friend</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
