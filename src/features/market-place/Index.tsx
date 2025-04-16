@@ -191,6 +191,7 @@ const MarketPlaceView = () => {
                         const statusValue = vehicle.fundRaisingStatus || vehicle.deployingStatus || "";
                         const statuses = ` ${statusValue}`;
                         // fundRaising = `${statusKey}`;
+                        const typeTextColor = vehicle.investmentVehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
 
                         const truncatedTitle =
                             vehicle.name.length > 20
@@ -207,6 +208,7 @@ const MarketPlaceView = () => {
                             statuses,
                             borderClass,
                             percentage: vehicle.rate || 0,
+                            typeTextColor,
                             HandleCardDetails: () =>
                                 HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router),
                         };
