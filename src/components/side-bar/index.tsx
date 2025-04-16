@@ -1,16 +1,12 @@
 "use client"
 import React from 'react';
-import {redirect, useRouter} from "next/navigation";
+import { useRouter} from "next/navigation";
 import {persistor, RootState, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
-import {LuLogOut} from "react-icons/lu";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
-import {Icon} from "@iconify/react";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
-import {MdOutlineReceiptLong,MdOutlinePersonOutline, MdOutlinePeopleAlt,MdOutlineHome} from "react-icons/md";
 import {useLogoutMutation} from "@/service/users/api";
 import {clearData} from "@/utils/storage";
-import {GearIcon} from "@radix-ui/react-icons";
 import {useSelector} from "react-redux";
 import {
     getFinancierSideBarItems,
@@ -19,7 +15,9 @@ import {
     getPortfolioManagerSideBarItems,
     getSettingItem
 } from "@/utils/sideBarItems";
-
+import Image from "next/image"
+import NavbarRouter from "../../reuseable/ui/navbarRouter";
+import NavbarContainer from "@/reuseable/ui/Navbar";
 
 
 
@@ -30,10 +28,8 @@ const SideBar = () => {
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
     const [logout] = useLogoutMutation()
-    const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
-
     const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role')  : "user role";
-
+    const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
 
 
 
@@ -72,115 +68,12 @@ const SideBar = () => {
     }
 
 
-    const currentTextLiterals = `text-[#626F8C] md:text-[#626F8C]`;
-    const textLiterals = `text-navbarIconColor md:text-navbarIconColor`;
-
-
     const settingItem = getSettingItem( currentNavBottom, handleClick, userRole)
     const logoutItem = getLogoutItem(currentNavBottom,handleLogout)
 
-    ]
-
-    const LOANEE : navbarRouterItemsProps[] = [
-        {
-            icon: <MdOutlineHome
-                className={` h-[1.2rem] w-[1.2rem] ${isLoaneeIdentityVerified ? `${current === 'Overview' ? currentTextLiterals : textLiterals} ` : 'text-navbarIconColor md:text-navbarIconColor'} `}
-            />,
-            id: 'overview',
-            isActive: isLoaneeIdentityVerified,
-            name: "Overview",
-            route: '/overview'
-        },
-        {
-            icon: <MdOutlineReceiptLong
-                className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}
-            />,
-            id: 'wallet',
-            name: "Wallet",
-            isActive: false,
-            route: '/wallet'
-        },
-        {
-            icon: <Icon
-                icon='iconoir:hand-cash'
-                color={current === 'Loan' ? '#142854' : '#667085'}
-                height={"1.2rem"}
-                width={"1.3rem"}
-            />,
-            id: 'repayment',
-            isActive: false,
-            name: "Repayment",
-            route: '/repayment'
-        },
-
-
-    ]
-
-    const INSTITUTION_ADMIN: navbarRouterItemsProps[] = [
-        {icon: <MdOutlineHome color={'#d7d7d7'} className={`h-[1.2rem] w-[1.2rem]`}/>,id: 'Overview', name: 'Overview', isActive: false},
-        {id: 'program', name: 'Program', route: '/program', isActive: true, icon: <Icon icon="mynaui:book" color={current === 'Program' ? '#142854' : '#667085'} height={"1.2rem"} width={"1.3rem"}>         </Icon>},
-        {id: 'cohort', name: 'Cohort', route: '/cohort', isActive: true, icon: <MdOutlinePeopleAlt className={` h-[1.2rem] w-[1.2rem] ${current === 'Cohort' ? currentTextLiterals : textLiterals} `}/>},
-        {id: 'loan', name: 'Loan', isActive: false, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.3rem"} color={'#d7d7d7'} className={`h-[1.2rem] w-[1.2rem]`}></Icon>},
-        {id: 'loanee', name: 'Loanee', isActive: false, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={`h-[1.2rem] w-[1.2rem]`}/>},
-    ]
-
-
-    // const navbarContainerItems: navbarItemsProps[] = [
-    //     {
-    //         id: 'settings',
-    //         name: 'Settings',
-    //         icon: <GearIcon
-    //             color={currentNavBottom === 'Settings' ? '#142854' : '#939CB0'}
-    //             className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
-    //         handleClick: handleClick
-    //     },
-    //     {
-    //         id: 'help&support',
-    //         name: "Help & Support",
-    //         icon: <MdHelpOutline
-    //             color={currentNavBottom === "Help & Support" ? '#142854' : '#939CB0'}
-    //             className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
-    //         handleClick: () => {handleRoute("Help & Support")}
-    //     },
-
-    //     {id: 'logout',
-    //     name: 'Logout',
-    //     icon: <LuLogOut color={currentNavBottom === "Logout" ? '#142854' : '#939CB0'}
-    //     className={` h-[1.2rem] w-[1.2rem] `}/>, handleClick: handleLogout
-    // },
-
-//  ]
-
-const settingsAndHelpItems: navbarItemsProps[] = [];
-
-    if (role === "PORTFOLIO_MANAGER") {
-        settingsAndHelpItems.push({
-            id: 'settings',
-            name: 'Settings',
-            icon: <GearIcon color={currentNavBottom === 'Settings' ? '#142854' : '#939CB0'}
-                className={`text-navbarIconColor h-[1.2rem] w-[1.2rem] `}/>,
-            handleClick: handleClick
-        });
-
-
-    }
-
-    const logoutItem: navbarItemsProps = {
-        id: 'logout',
-        name: 'Logout',
-        icon: <LuLogOut color={currentNavBottom === 'Logout' ? '#142854' : '#939CB0'}
-        className={` h-[1.2rem] w-[1.2rem] `}/>, handleClick: handleLogout
-    };
-
-    const navbarContainerItems: navbarItemsProps[] = [...settingsAndHelpItems, logoutItem];
     const navbarContainerItems: navbarItemsProps[] = [...settingItem, logoutItem];
 
-    const sideBarContent = [
-        {name: "PORTFOLIO_MANAGER", value: getPortfolioManagerSideBarItems(current)},
-        {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
-        {name: 'LOANEE', value: getLoaneeSideBarItems(current) },
-        {name: 'FINANCIER', value: getFinancierSideBarItems(current)},
-    ]
+
 
 
     const getUserSideBarByRole = (userrole?: string): navbarRouterItemsProps[] | undefined => {
@@ -192,6 +85,15 @@ const settingsAndHelpItems: navbarItemsProps[] = [];
             }
         }
     }
+
+
+    const sideBarContent = [
+        {name: "PORTFOLIO_MANAGER", value: getPortfolioManagerSideBarItems(current)},
+        {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
+        {name: 'LOANEE', value: getLoaneeSideBarItems(current, isLoaneeIdentityVerified) },
+        {name: 'FINANCIER', value: getFinancierSideBarItems(current)},
+    ]
+
 
 
 

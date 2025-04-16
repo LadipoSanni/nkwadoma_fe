@@ -159,7 +159,6 @@ const Index = () => {
                 <div
                     id={'disbursedLoanDetailsPageContainer'}
                     data-testid={'disbursedLoanDetailsPageContainer'}
-                    className={` md:flex md:justify-between  md-8 w-full  px-3 pt-4 md:pt-4 `}
                     className={` md:flex md:justify-between grid gap-4  md-8 w-full h-full  px-3 pt-4 md:pt-4 `}
                 >
                     <div>
@@ -225,7 +224,6 @@ const Index = () => {
                                                 className={` ${inter.className} text-black300 md:text-black300 md:text-[14px] text-[14px`}>{item.label}</div>
 
                                             <div
-                                                className={'text-black500  break-all md:max-w-[50%]  text-[14px] leading-[150%] font-normal'}> {item.value ? item?.value : 'Not provided'}</div>
                                                 id={`loanDisbursalDetailsValue`}
                                                 data-testid={`loanDisbursalDetailsValue`}
                                                 className={`text-black500 ${inter.className} md:max-w-[40%] md:text-[14px] md:text-black500 md:break-all break-all text-black500 text-[14px]`}> {item.value ? item?.value : 'Not provided'} </div>
