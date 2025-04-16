@@ -142,6 +142,7 @@ const Details = () => {
                           </div>
                          
                            <Button 
+                            id='view-document'
                            type='button' 
                            variant={"default"} 
                            className='bg-[#D9EAFF] text-black text-[12px] font-medium hover:bg-[#D9EAFF] underline rounded-2xl h-7 w-[6.7vh]'
