@@ -14,7 +14,7 @@ interface FormData {
     lastName: string;
     dob: Date | undefined;
     relationship: string;
-    ownership: number;
+    ownership: number | string;
     proofType: string;
     proofFile: File | null;
 }
@@ -25,7 +25,7 @@ const IndividualOwnerForm: React.FC = () => {
         lastName: '',
         dob: undefined,
         relationship: '',
-        ownership: 0,
+        ownership: '',
         proofType: 'national_id',
         proofFile: null,
     });
@@ -42,12 +42,14 @@ const IndividualOwnerForm: React.FC = () => {
 
     const handleNumberInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        const numValue = value === '' ? 0 : Math.max(0, parseInt(value, 10));
-        if (!isNaN(numValue)) {
-            setFormData((prev) => ({ ...prev, [name]: numValue }));
-        }
-    };
 
+        const sanitizedValue = value.replace(/^0+(?=\d)/, '');
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: sanitizedValue, // Keep it as a string
+        }));
+    };
     const handleDateSelect = (date: Date | undefined) => {
         setFormData((prev) => ({ ...prev, dob: date }));
     };
@@ -159,7 +161,6 @@ const IndividualOwnerForm: React.FC = () => {
                         id="ownership"
                         name="ownership"
                         type="number"
-                        min="0"
                         max="100"
                         placeholder="0"
                         value={formData.ownership}
