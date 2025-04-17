@@ -2,14 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import { RootState } from '@/redux/store';
-import { setLoanReferralStatus, setCurrentStep } from '@/service/users/loanRerralSlice';
+import {RootState, store} from '@/redux/store';
+import { setLoanReferralStatus, setCurrentStep, setLoaneeIdentityVerifiedStatus } from '@/service/users/loanRerralSlice';
 import { useViewLoanReferralDetailsQuery, useRespondToLoanReferralMutation } from "@/service/users/Loanee_query";
 import { Button } from '@/components/ui/button';
 import StepContent from '@/features/onboarding/stepContent/Index';
 import dynamic from 'next/dynamic';
 import { cabinetGrotesk, inter } from '@/app/fonts';
 import Connector from '@/components/common/Connector';
+import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
+import Isloading from "@/reuseable/display/Isloading";
 
 const DynamicIdentityVerificationModal = dynamic(() => import('@/reuseable/modals/IdentityVerificationModal'), {
     ssr: false
@@ -33,31 +35,38 @@ const LoaneeOnboarding = () => {
     const { currentStep } = useSelector((state: RootState) => state.loanReferral);
     const [showModal, setShowModal] = useState(false);
     const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery({});
-    const [respondToLoanReferral] = useRespondToLoanReferralMutation({});
+    const [respondToLoanReferral, {isLoading}] = useRespondToLoanReferralMutation({});
     const [loanReferralId, setLoanReferralId] = useState("");
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
 
+
     useEffect(() => {
         if ( data?.data?.identityVerified  === true  ){
+            dispatch(setLoaneeIdentityVerifiedStatus(true))
+            store.dispatch(setCurrentNavBottomItem('Overview'))
+            store.dispatch(setCurrentNavbarItem('Overview'))
             router.push('/overview')
-
         }
         if (data?.statusCode === "OK" && data?.data?.id) {
-            setLoanReferralId(data.data.id);
-            dispatch(setLoanReferralStatus(data.data.loanReferralStatus));
+            setLoanReferralId(data?.data?.id);
+            dispatch(setLoanReferralStatus(data?.data?.loanReferralStatus));
+            store.dispatch(setCurrentNavBottomItem(''))
+            store.dispatch(setCurrentNavbarItem(''))
         }
+
         if (data?.statusCode === "OK" && data?.data) {
             setBackendDetails(data.data);
-            if (data.data.loanReferralStatus === "AUTHORIZED" && currentStep === steps.length - 1) {
-                router.push("/overview");
-            }
+            // if (data?.data?.loanReferralStatus === "AUTHORIZED" && currentStep === steps.length - 1) {
+            //     console.log('current step: ', currentStep)
+            //     console.log('current step - 1: ',steps.length - 1)
+            //     console.log('found the bug')
+            //     router.push("/overview");
+            // }
         }
 
-    }, [data, loanReferralDetailsIsLoading, currentStep, dispatch, router]);
+    }, [data, loanReferralDetailsIsLoading, currentStep]);
 
-    if(data?.data?.identityVerified){
-        router.push("/overview")
-    }
+
 
 
     const handleNext = () => {
@@ -129,8 +138,14 @@ const LoaneeOnboarding = () => {
                             id="continueButton"
                             className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem] hover:bg-meedlBlue focus:bg-meedlBlue'}
                             onClick={handleNext}
+                            disabled={isLoading}
                         >
-                            {currentStep === 1 ? 'Start identity verification' : 'Continue'}
+                            { isLoading ? <Isloading/> :
+                                <>
+                                    {currentStep === 1 ? 'Start identity verification' : 'Continue'}
+                                </>
+                            }
+
                         </Button>
                     )}
                 </section>
