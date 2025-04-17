@@ -18,7 +18,7 @@ import { BellIcon } from '@radix-ui/react-icons';
 import { Badge } from '../ui/badge';
 import { useNumberOfNotificationQuery } from '@/service/notification/notification_query';
 import { setCurrentTotalNotification } from '@/redux/slice/notification/notification';
-import {DISPLAYUSERROLE, TopBarUserInitialColors} from "@/components/topBar/variables";
+import {DISPLAYUSERROLE} from "@/components/topBar/variables";
 
 
 
@@ -58,10 +58,6 @@ const TopBar = () => {
     
     const isNotificationPage = /^\/notifications(?:\/.*)?$/.test(pathname || "");
 
-    const random = Math.floor(Math.random() * TopBarUserInitialColors.length);
-    const initialColors = TopBarUserInitialColors[random];
-    console.log(random, TopBarUserInitialColors[random]);
-    console.log('initialColors', initialColors);
 
     
 
@@ -121,9 +117,9 @@ const TopBar = () => {
                     </div>
                     <div id={'fullNameDiv'} className="flex gap-2  justify-between items-center w-[fit-content]">
                         <div
-                            className={` flex place-content-center  object-fit md:bg-[${initialColors.backgroundColor}]  bg-[${initialColors.backgroundColor}]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
+                            className={` flex place-content-center  object-fit md:bg-[#FEF6E8]  bg-[#FEF6E8]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
                             <div
-                                className={` ${inter500.className} grid place-content-center  mt-auto mb-auto text-[${initialColors.textColor}] md:text-[${initialColors.textColor}]   w-[50%] h-[50%]   `} >
+                                className={` ${inter500.className} grid place-content-center  mt-auto mb-auto text-[#885A3C] md:text-[#885A3C]   w-[50%] h-[50%]   `} >
                                 {getFirstLetterOfWord(user_name)}
                             </div>
                         </div>

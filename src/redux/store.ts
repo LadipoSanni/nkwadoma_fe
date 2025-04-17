@@ -23,7 +23,7 @@ import {marketplaceApi} from "@/service/financier/marketplace";
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep'],
+    whitelist: ['adminLayout', 'selectedLoan', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep'],
 };
 
 const persistedReducer = persistReducer(persistConfig, appReducer);
