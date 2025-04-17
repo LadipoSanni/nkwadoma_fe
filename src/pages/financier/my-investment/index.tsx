@@ -52,13 +52,13 @@ const MyInvestment = () => {
     const observer = useRef<IntersectionObserver | null>(null);
     // const lastCardRef = useRef<HTMLDivElement | null>(null);
 
-    const { data, isLoading, isFetching } =
-        useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
-            pageSize: 48,
-            pageNumber: pageNumber,
-            investmentVehicleStatus: "PUBLISHED",
-        });
-    console.log('data', data);
+    // const { data, isLoading, isFetching } =
+    //     useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
+    //         pageSize: 48,
+    //         pageNumber: pageNumber,
+    //         investmentVehicleStatus: "PUBLISHED",
+    //     });
+    // console.log('data', data);
 
     const {data: datss} = useViewMyInvestmentQuery({})
 
@@ -72,41 +72,41 @@ const MyInvestment = () => {
         setAllVehicles([]);
     }, [searchTerm, selectedValue]);
 
-    useEffect(() => {
-        if (data?.data?.body) {
-            // console.log("API Response:", data.data.body);
-            setAllVehicles(prev => {
-                const newVehicles = pageNumber === 0 ? data.data.body : [...prev, ...data.data.body];
-                const uniqueVehicles = Array.from(
-                    new Map(newVehicles.map(vehicle => [vehicle.id, vehicle])).values()
-                );
-                return uniqueVehicles;
-            });
-            setHasMore(data.data.hasNextPage);
-        }
-    }, [data, pageNumber]);
-
-    const lastCardObserver = useCallback(
-        (node: HTMLDivElement | null) => {
-            if (isLoading || isFetching) return;
-
-            if (observer.current) observer.current.disconnect();
-
-            observer.current = new IntersectionObserver(
-                entries => {
-                    if (entries[0].isIntersecting && hasMore) {
-                        setPageNumber(prevPage => prevPage + 1);
-                    }
-                },
-                {
-                    rootMargin: "100px",
-                }
-            );
-
-            if (node) observer.current.observe(node);
-        },
-        [isLoading, isFetching, hasMore]
-    );
+    // useEffect(() => {
+    //     if (data?.data?.body) {
+    //         // console.log("API Response:", data.data.body);
+    //         setAllVehicles(prev => {
+    //             const newVehicles = pageNumber === 0 ? data.data.body : [...prev, ...data.data.body];
+    //             const uniqueVehicles = Array.from(
+    //                 new Map(newVehicles.map(vehicle => [vehicle.id, vehicle])).values()
+    //             );
+    //             return uniqueVehicles;
+    //         });
+    //         setHasMore(data.data.hasNextPage);
+    //     }
+    // }, [data, pageNumber]);
+    //
+    // const lastCardObserver = useCallback(
+    //     (node: HTMLDivElement | null) => {
+    //         if (isLoading || isFetching) return;
+    //
+    //         if (observer.current) observer.current.disconnect();
+    //
+    //         observer.current = new IntersectionObserver(
+    //             entries => {
+    //                 if (entries[0].isIntersecting && hasMore) {
+    //                     setPageNumber(prevPage => prevPage + 1);
+    //                 }
+    //             },
+    //             {
+    //                 rootMargin: "100px",
+    //             }
+    //         );
+    //
+    //         if (node) observer.current.observe(node);
+    //     },
+    //     [isLoading, isFetching, hasMore]
+    // );
 
     const dd= [
         {
@@ -158,6 +158,8 @@ const MyInvestment = () => {
         return matchesSearch && typeMatch;
     });
 
+    const vehicles = datss?.data?.investmentVehicles
+
     return (
         <main id="marketplaceView" className="py-9 px-5 h ">
             <div id="searchDiv" className="px-2 flex md:flex-row flex-col gap-3">
@@ -197,7 +199,7 @@ const MyInvestment = () => {
                     id="card-segmentId"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
-                    {dd.map((vehicle, index) => {
+                    {vehicles.map((vehicle, index) => {
                         const backgroundColor =
                              vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -236,7 +238,7 @@ const MyInvestment = () => {
 
                         if (filteredVehicles.length === index + 1) {
                             return (
-                                <div key={`wrapper-${vehicle.id}`} ref={lastCardObserver}>
+                                <div key={`wrapper-${vehicle.id}`} >
                                     <InvestmentCard statuses={""} typeTextColor={""} key={vehicle.id} {...cardProps} />
                                 </div>
                             );
@@ -244,11 +246,11 @@ const MyInvestment = () => {
 
                         return <InvestmentCard statuses={""} typeTextColor={""} key={vehicle.id} {...cardProps} />;
                     })}
-                    {isFetching && pageNumber > 0 && (
-                        <div className="col-span-full text-center py-4">
-                            Loading more...
-                        </div>
-                    )}
+                    {/*{isFetching && pageNumber > 0 && (*/}
+                    {/*    <div className="col-span-full text-center py-4">*/}
+                    {/*        Loading more...*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                 </div>
             {/*)}*/}
         </main>
