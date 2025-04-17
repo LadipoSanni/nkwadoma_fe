@@ -66,6 +66,14 @@ export const marketplaceApi = createApi({
             }),
             providesTags: ['marketplace'],
         }),
+
+        getInvestmentVehicleDetail: builder.query({
+            query:({id}) => ({
+                url: `/investment-vehicle-details/${id}`,
+                method: "GET",
+            }),
+            providesTags: ['marketplace'],
+        }),
     })
 })
-export const {useSearchInvestmentVehiclesQuery, useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery} = marketplaceApi
+export const {useSearchInvestmentVehiclesQuery, useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useGetInvestmentVehicleDetailQuery} = marketplaceApi
