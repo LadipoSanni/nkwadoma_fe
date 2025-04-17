@@ -491,6 +491,7 @@ function Setup({investmentVehicleType}: Props) {
                       setFieldValue("mandate", url)
                     }
                     initialDocUrl={values.mandate}
+                    cloudinaryFolderName='investment-vehicle-documents'
                   />
                    
                    </div>

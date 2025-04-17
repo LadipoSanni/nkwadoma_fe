@@ -55,6 +55,7 @@ export const financierApi = createApi({
             query: (param: { 
                  pageSize: number; 
                  pageNumber: number; 
+                 financierType?: string
              }) => ({
                 url: "/financier/all/view",
                 method: 'GET',

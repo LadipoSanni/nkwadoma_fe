@@ -47,7 +47,6 @@ describe("InvestmentCard Component", () => {
 
     it("displays the correct status class", () => {
         render(<InvestmentCard statuses={""} {...mockProps} />);
-        // const statusElement = screen.getByText("Open").parentElement;
     });
 
     it("renders correctly with a different status and percentage", () => {
@@ -58,6 +57,7 @@ describe("InvestmentCard Component", () => {
             statusClass: "bg-red-100 text-[#FF0000] border-[#FFCCCC]",
         };
         render(<InvestmentCard statuses={""} {...customProps} />);
+        // expect(screen.getByText("Closed")).toBeInTheDocument();
         expect(screen.getByText("10% interest")).toBeInTheDocument();
     });
 

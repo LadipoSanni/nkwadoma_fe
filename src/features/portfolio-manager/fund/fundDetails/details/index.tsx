@@ -97,6 +97,7 @@ const Details = () => {
              </span>
                                          </div>},
         {name: 'Interest rate', value: `${data?.data?.rate || 0}%`},
+        {name: 'Start date', value: `${data?.data?.startDate }`},
         {
             name: 'Total amount in vehicle',
             value: formatAmount(data?.data?.totalAmountInInvestmentVehicle?.toString() || '0')
@@ -126,7 +127,8 @@ const Details = () => {
                        <p>Mandate</p>
                        <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
                        
-                          <div className='flex gap-2 '>
+                          <div className='flex gap-2 items-center'>
+                            <div>
                             <Image
                               src={"/pdf.png"}
                                alt='image'
@@ -138,6 +140,7 @@ const Details = () => {
                                 height: 'auto'
                               }}
                             />
+                            </div>
                             <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{docFilename}</p>
                           </div>
                          
