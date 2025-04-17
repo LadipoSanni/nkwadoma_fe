@@ -8,10 +8,11 @@ import {useCreatePasswordMutation} from "@/service/auths/api";
 import {useRouter, useSearchParams} from 'next/navigation'
 import { useToast} from "@/hooks/use-toast";
 import {jwtDecode} from "jwt-decode";
-import {ADMIN_ROLES} from "@/types/roles";
-import { store} from "@/redux/store";
-import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
+import {ADMIN_ROLES} from "@/types/roles";
+import {persistor, store} from "@/redux/store";
+import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
+import {clearData} from "@/utils/storage";
 
 
 const CreatePassword = () => {
@@ -35,6 +36,7 @@ const CreatePassword = () => {
         "Must contain one lowercase character",
         "Must contain one digit"
     ];
+
 
     const validatePassword = (password: string) => {
         const criteria = [
@@ -94,47 +96,54 @@ const CreatePassword = () => {
     }
 
 
+    const routeUserToTheirDashboard = async (userRole?: string) => {
+        switch (userRole) {
+            case 'LOANEE' :
+                store.dispatch(setCurrentNavbarItem("overview"))
+                router.push("/onboarding")
+                break;
+            case 'ORGANIZATION_ADMIN':
+                store.dispatch(setCurrentNavbarItem("Program"))
+                router.push("/program")
+                break;
+            case 'PORTFOLIO_MANAGER':
+                store.dispatch(setCurrentNavbarItem("Loan"))
+                router.push("/loan/loan-request")
+                break;
+            case "FINANCIER":
+                store.dispatch(setCurrentNavbarItem("Overview"))
+                router.push('/Overview')
+                break;
+        }
+    }
 
     const handleCreatePassword = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
         setDisableButton(true)
         const token = getUserToken()
 
-        console.log('after gettin token: ', token)
         try {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
-            console.log('response: ', response )
-
-            const access_token = response?.data?.access_token
-
-            const refresh_token = response?.data?.refresh_token
+            const access_token = response?.data?.accessToken
+            const refreshToken = response?.data?.refreshToken
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+            const user_email = decode_access_token?.email
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             const userName = decode_access_token?.name
-            const user_email = decode_access_token?.email
             const user_roles = decode_access_token?.realm_access?.roles
             const user_role = user_roles.filter(getUserRoles).at(0)
-            console.log('response: ', response, 'access_token: ', access_token, 'user_roles: ', user_roles, 'user-role: ', user_role, 'decoded_access_token: ', decode_access_token)
+            clearData()
+            await persistor.purge();
             if (user_role) {
-                console.log('seen roles')
+                storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
                 setUserRoles(user_roles)
-                storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
-                if (user_role === 'LOANEE') {
-                    store.dispatch(setCurrentNavbarItem("overview"))
-                    router.push("/onboarding")
-                } else if(user_role === 'ORGANIZATION_ADMIN') {
-                    store.dispatch(setCurrentNavbarItem("Program"))
-                    router.push("/program")
-                } else if(user_role === 'PORTFOLIO_MANAGER'){
-                    store.dispatch(setCurrentNavbarItem("Loan"))
-                    router.push("/loan/loan-request")
-                }else if(user_role === 'FINANCIER'){
-                    store.dispatch(setCurrentNavbarItem("Overview"))
-                    router.push('/Overview')
-                }
+                await routeUserToTheirDashboard(user_role)
+
             }
+
+
         }catch (error){
             toast({
                 //eslint-disable-next-line @typescript-eslint/ban-ts-comment

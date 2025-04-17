@@ -237,12 +237,12 @@ const MyInvestment = () => {
                         if (filteredVehicles.length === index + 1) {
                             return (
                                 <div key={`wrapper-${vehicle.id}`} ref={lastCardObserver}>
-                                    <InvestmentCard statuses={""} key={vehicle.id} {...cardProps} />
+                                    <InvestmentCard statuses={""} typeTextColor={""} key={vehicle.id} {...cardProps} />
                                 </div>
                             );
                         }
 
-                        return <InvestmentCard statuses={""} key={vehicle.id} {...cardProps} />;
+                        return <InvestmentCard statuses={""} typeTextColor={""} key={vehicle.id} {...cardProps} />;
                     })}
                     {isFetching && pageNumber > 0 && (
                         <div className="col-span-full text-center py-4">

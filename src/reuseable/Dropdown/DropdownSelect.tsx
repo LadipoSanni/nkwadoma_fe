@@ -16,7 +16,7 @@ interface FormValues {
 
 interface DropdownSelectProps {
     selectValue: string;
-    listOfItems: { id: string; name: string }[];
+    listOfItems: { label: string; name: string }[];
     initialFormValue: FormValues;
     validationSchema: Yup.ObjectSchema<FormValues>;
     handleSelectChange: (value: string) => void;
@@ -25,6 +25,7 @@ interface DropdownSelectProps {
     isDropdownOpen: boolean;
     toggleDropdown: () => void;
     isLoading: boolean;
+    disabled?: boolean;
 }
 
 const DropdownSelect: React.FC<DropdownSelectProps> = ({
@@ -38,12 +39,20 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
                                                            isDropdownOpen,
                                                            toggleDropdown,
                                                            isLoading,
+                                                           disabled
                                                        }) => {
     return (
         <div className='z-10'>
             <DropdownMenu onOpenChange={toggleDropdown}>
-                <DropdownMenuTrigger asChild>
-                    <Button id='dropdownSelectButton' variant={'default'} className='w-full text-black bg-neutral100 h-11 border-1 hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none'>
+                <DropdownMenuTrigger asChild disabled={disabled}>
+                    <Button 
+                    id='dropdownSelectButton' 
+                    variant={'default'} 
+                    className={`w-full text-black bg-neutral100 h-11 border-1 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none ${
+                        disabled ? 'opacity-40 cursor-auto' : 'hover:bg-neutral100'
+                    }`}
+                    disabled={disabled} 
+                    >
                         {!selectValue ? "Type" : selectValue}
                         <span className='ml-4'>
               {isDropdownOpen ? (
@@ -85,7 +94,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
                                     <SelectContent className='border-none border-[#FAFBFC] text-[#404653] text-sm z-50'>
                                         <SelectGroup>
                                             {listOfItems.map((item, index) => (
-                                                <SelectItem key={item.id} id={`${item.id}-${index}`} value={item.name} className='hover:bg-blue-200'>
+                                                <SelectItem key={item.label} id={`${item.label}-${index}`} value={item.label} className='hover:bg-blue-200'>
                                                     {item.name}
                                                 </SelectItem>
                                             ))}
@@ -94,6 +103,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
                                 </Select>
                                 <div className='flex justify-between items-center pt-7'>
                                     <Button
+                                        type='button'
                                         id='resetButton'
                                         variant={`outline`}
                                         className='text-meedlBlue h-[38px] font-bold ring-meedlBlue border-meedlBlue border-solid w-[80px]'
