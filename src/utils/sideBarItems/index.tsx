@@ -88,13 +88,13 @@ export const getFinancierSideBarItems = (currentNavItem: string) => {
             id: 'marketplace',
             name: 'Marketplace',
             route: '/marketplace',
-            isActive: false,
-            icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={'#d7d7d7'}/>
+            isActive: true,
+            icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={currentNavItem === 'Marketplace' ? '#142854':'#939CB0'}/>
         },
         {
-            icon: <Icon icon='iconoir:hand-cash' color={'#d7d7d7'} height={"1.2rem"} width={"1.3rem"}/>,
+            icon: <Icon icon='iconoir:hand-cash' color={currentNavItem === 'My Investment' ? '#142854' : '#939CB0'} height={"1.2rem"} width={"1.3rem"}/>,
             id: 'myInvestment',
-            isActive: false,
+            isActive: true,
             name: "My Investment",
             route: '/my-investment'
         },
