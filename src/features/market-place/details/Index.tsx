@@ -7,10 +7,11 @@ import {cabinetGroteskMediumBold600, inter} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import styles from "../../market-place/Index.module.css";
 import {useSelector} from "react-redux";
-import {RootState} from "@/redux/store";
+import {RootState, store} from "@/redux/store";
 import {useGetInvestmentVehicleDetailQuery} from "@/service/financier/marketplace";
 import {formatAmount} from "@/utils/Format";
 import MarketDetailsSkeleton from "@/reuseable/Skeleton-loading-state/MarketDetails";
+import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
 
 const MarketPlaceDetails = () => {
     const router = useRouter();
@@ -37,20 +38,16 @@ const MarketPlaceDetails = () => {
     };
 
     const HandleInvest = () => {
+        store.dispatch(
+            setMarketInvestmentVehicleId({
+                marketInvestmentVehicleId: data?.data?.id,
+                minimumInvestmentAmount: formatAmount(data?.data?.minimumInvestmentAmount?.toString()),
+                vehicleType: data?.data?.investmentVehicleType
+            })
+        );
         router.push("/marketplace/transfer");
-    }
+    };
 
-    // const status = data?.data.deployingStatus;
-    //
-    // const borderClass =
-    //     status === "OPEN" ? "border-[#B4E5C8]" : status === "CLOSE" ? "border-[#F2BCBA]" : "border-gray-300";
-    //
-    // const statusClass =
-    //     status === "OPEN"
-    //         ? "bg-green-100 text-[#0D9B48] border-[#B4E5C8]"
-    //         : status === "CLOSE"
-    //             ? "bg-red-100 text-red-600 border-[#F2BCBA]"
-    //             : "bg-gray-100 text-gray-600 border-gray-300";
     const actualStatus = data?.data?.fundRaisingStatus === null
         ? data?.data?.deployingStatus
         : data?.data?.fundRaisingStatus;
@@ -112,9 +109,9 @@ const MarketPlaceDetails = () => {
             }
 
             window.open(docUrl, '_blank', 'noopener,noreferrer');
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             setDocError('Error opening document');
-            console.error('Document open error:', error);
         } finally {
             setIsVerifying(false);
         }
@@ -123,7 +120,7 @@ const MarketPlaceDetails = () => {
 
 
     const investmentBasicDetails = [
-        {label: 'Maturity date', value: '13 Aug, 2026'},
+        {label: 'Maturity date', value: `${data?.data?.tenure} ${data?.data?.tenure === 1 ? 'month' : 'months'}`},
         {label: 'Interest rate', value: `${data?.data?.rate || 0}%`},
         {label: 'Minimum amount', value: (<span className="text-sm font-medium text-[#212221]">{formatAmount(data?.data?.minimumInvestmentAmount?.toString() || '0')}</span>)},
         {label: 'Status', value: (
@@ -195,7 +192,7 @@ const MarketPlaceDetails = () => {
                         >
                             {data?.data.name}
                         </p>
-                        <div className={`${inter.className} flex md:flex-row gap-4`}>
+                        <div className={`${inter.className} flex md:flex-row md:pt-0 pt-2 gap-4`}>
                             <div
                                 className={`${bgColor} rounded-full h-12 w-12 flex items-center justify-center text-meedlBlue text-sm font-semibold uppercase`}
                             >
@@ -221,7 +218,7 @@ const MarketPlaceDetails = () => {
                                 <div className="text-[#6A6B6A] text-sm font-normal">
                                     {data?.data.fundManager}
                                 </div>
-                                <div className={`${inter.className} text-sm font-semibold text-[#212221]`}>
+                                <div className={`${inter.className} text-sm font-medium text-[#212221]`}>
                                     {data?.data.bankPartner}
                                 </div>
                             </div>
@@ -234,7 +231,7 @@ const MarketPlaceDetails = () => {
 
                                 <div className='flex gap-2 '>
                                     <Image
-                                        src={"/pdf.png"}
+                                        src={"/MyMandateLogo.png"}
                                         alt='image'
                                         width={16}
                                         height={16}
@@ -251,7 +248,7 @@ const MarketPlaceDetails = () => {
                                     id='view-document'
                                     type='button'
                                     variant={"default"}
-                                    className='bg-[#D9EAFF] text-black text-[12px] font-medium hover:bg-[#D9EAFF] rounded-2xl h-7 w-[6.7vh]'
+                                    className='border-[1px] border-solid border-meedlBlue rounded-2xl text-meedlBlue font-medium  h-7 w-[6.7vh]'
                                     onClick={handleViewDocument}
                                     disabled={!docUrl || isVerifying}
                                     aria-label={`View ${docFilename}`}
