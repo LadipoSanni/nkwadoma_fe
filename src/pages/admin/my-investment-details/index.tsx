@@ -1,11 +1,9 @@
 'use client'
 import React, { useState} from 'react';
 import BackButton from "@/components/back-button";
-import { cabinetGroteskMediumBold600, inter, inter500} from "@/app/fonts";
-import TabSwitch from "@/reuseable/details/TabSwitch";
+import { cabinetGroteskMediumBold600, inter, inter500, inter600} from "@/app/fonts";
 import styles from './index.module.css';
 import PerformanceDisplay from "@/pages/admin/my-investment-details/performanceDisplay";
-import InvestmentMandate from "@/pages/admin/my-investment-details/investment-mandate";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
 
@@ -14,7 +12,8 @@ const MyInvestmentDetails = () => {
     const [currentTab, setCurrentsTab] = useState(0);
     const [currentBartChart, setCurrentBartChart] = useState(0);
     const router = useRouter();
-
+    const [isVerifying, setIsVerifying] = useState(false);
+    const [docError, setDocError] = useState<string | null>(null);
 
     const initialChartData = [
             { month: "Jan", value: 186, },
@@ -26,6 +25,22 @@ const MyInvestmentDetails = () => {
     const handleBackButton = () => {
         router.push(`/my-investment`)
     }
+
+    const getFilenameFromUrl = (url: string) => {
+        try {
+            const urlObj = new URL(url);
+            return urlObj.pathname.split('/').pop();
+        } catch {
+            return url?.split('/').pop() || 'No file available';
+        }
+    };
+
+
+    const docUrl = '';
+    const docFilename = getFilenameFromUrl(docUrl);
+    const isCloudinaryUrl = docUrl?.includes('cloudinary.com');
+    const fileExtension = docFilename?.split('.').pop()?.toLowerCase();
+
     // const investmentStartDate = dayjs(data?.data?.createdDate?.toString()).format('MMM D, YYYY')
 
     const SecondChartData = [
@@ -65,10 +80,7 @@ const MyInvestmentDetails = () => {
         },
     ]
 
-    const tabContent = [
-        'Performance',
-        'Mandate',
-    ]
+
     const barChartTabContent = [
         '3 months',
         '6 months',
@@ -86,9 +98,53 @@ const MyInvestmentDetails = () => {
             setChartData(thirdChartData)
         }
     }
-    const handleTabChange = (index: number) => {
-        setCurrentsTab(index)
-    }
+
+    const verifyDocumentExists = async (url: string): Promise<boolean> => {
+        if (url.includes('cloudinary.com')) {
+            return url.toLowerCase().endsWith('.pdf') ||
+                url.toLowerCase().endsWith('.docx');
+        }
+
+        try {
+            const response = await fetch(url, { method: 'HEAD' });
+            const contentType = response.headers.get('content-type') || '';
+            return response.ok && (
+                contentType.includes('application/pdf') ||
+                contentType.includes('application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            );
+        } catch {
+            return false;
+        }
+    };
+
+    const handleViewDocument = async () => {
+        if (!docUrl) return;
+
+        setIsVerifying(true);
+        setDocError(null);
+
+        try {
+            if (fileExtension !== 'pdf' && fileExtension !== 'docx') {
+                setDocError('Invalid document format');
+                return;
+            }
+
+            if (!isCloudinaryUrl) {
+                const docExists = await verifyDocumentExists(docUrl);
+                if (!docExists) {
+                    setDocError('Document not found');
+                    return;
+                }
+            }
+
+            window.open(docUrl, '_blank', 'noopener,noreferrer');
+        } catch (error) {
+            setDocError('Error opening document');
+            console.error('Document open error:', error);
+        } finally {
+            setIsVerifying(false);
+        }
+    };
 
     const investmentVehicleType = 'COMMERCIAL';
     const imageSrc =
@@ -153,14 +209,15 @@ const MyInvestmentDetails = () => {
                     <p></p>
                 </div>
                 <div className={`md:w-[60%] w-full grid md:grid gap-2 md:gap-2  md:max-h-[99%]`}>
-                    <TabSwitch componentId={'myInvestmentDetailsTabSwitch'} currentTab={currentTab}
-                               tabContent={tabContent} handleChange={handleTabChange}/>
+                    {/*<TabSwitch componentId={'myInvestmentDetailsTabSwitch'} currentTab={currentTab}*/}
+                    {/*           tabContent={tabContent} handleChange={handleTabChange}/>*/}
+                    <p className={` ${inter600.className}  text-[18px] text-[#212221]  `}>Performance</p>
                         <div className={`w-full ${styles.container} md:w-full md:max-h-[70vh] md:overf  pt-4 grid gap-4  `}>
-                            {currentTab === 0 ?
+                            {/*{currentTab === 0 ?*/}
                             <PerformanceDisplay barChartTabContent={barChartTabContent} currentBartChart={currentBartChart} chartData={chartData} handleBarChartTabChange={handleBarChartTabChange} />
-                                :
-                                <InvestmentMandate/>
-                            }
+                            {/*    // :*/}
+                            {/*    // <InvestmentMandate/>*/}
+                            {/*// }*/}
                         </div>
 
                 </div>

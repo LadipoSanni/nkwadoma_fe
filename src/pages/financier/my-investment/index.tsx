@@ -41,7 +41,6 @@ export const HandleCardDetails = (
     );
     router.push("/my-investment/details");
 };
-
 const MyInvestment = () => {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
@@ -109,40 +108,7 @@ const MyInvestment = () => {
     //     [isLoading, isFetching, hasMore]
     // );
 
-    // const dd= [
-    //     {
-    //
-    //         id: 'strrring',
-    //         investmentVehicleType: "COMMERCIAL" ,
-    //         name: 'bod',
-    //         rate: 4,
-    //     },
-    //     {
-    //
-    //         id: 'srtring',
-    //         investmentVehicleType: "COMMERCIAL" ,
-    //         name: 'required',
-    //         rate: 4,
-    //     },{
-    //
-    //         id: 'advance',
-    //         investmentVehicleType: "COMMERCIAL" ,
-    //         name: 'string',
-    //         rate: 4,
-    //     },{
-    //
-    //         id: 'worm',
-    //         investmentVehicleType: "COMMERCIAL" ,
-    //         name: 'string',
-    //         rate: 4,
-    //     },{
-    //
-    //         id: 'related',
-    //         investmentVehicleType: "COMMERCIAL" ,
-    //         name: 'string',
-    //         rate: 4,
-    //     },
-    // ]
+
 
     const getStatusColor = (status: string) => {
         if(capitalizeFirstLetters(status)?.toString() === 'Closed') {
@@ -245,7 +211,7 @@ const MyInvestment = () => {
                             borderClass,
                             percentage: vehicle.rate || 0,
                             HandleCardDetails: () =>
-                                HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router),
+                                HandleCardDetails( vehicle),
                         };
 
                         if (filteredVehicles.length === index + 1) {
