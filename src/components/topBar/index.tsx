@@ -33,6 +33,7 @@ const TopBar = () => {
 
 
     const {data,refetch} = useNumberOfNotificationQuery({})
+    const [userRole] = useState(user_role ? user_role : '');
 
     useEffect(()=>{
         if (data?.data?.allNotificationsCount !== undefined) {
@@ -125,7 +126,7 @@ const TopBar = () => {
                         </div>
                         <button onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : 'cursor-text'} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
                             <p className={`text-black500 ${inter500.className} flex justify-start mt-auto mb-auto  text-sm `}>{capitalizeFirstLetters(user_name)}</p>
-                            {DISPLAYUSERROLE?.includes(user_role) ?
+                            {DISPLAYUSERROLE?.includes(userRole) ?
                                 <p className={`text-black400 ${inter.className}  flex justify-start text-sm`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
                             :
                                 null
