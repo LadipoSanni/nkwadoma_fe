@@ -54,7 +54,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
             setIsFileSupported(true);
 
             try {
-                const uploadedFileUrl = await uploadImageToCloudinary(selectedFile);
+                const uploadedFileUrl = await uploadImageToCloudinary(selectedFile,"cohort_image");
                 setUploadedImageUrl(uploadedFileUrl);
             } catch (uploadError) {
                 setError("Failed to upload image");
@@ -83,7 +83,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
             setIsFileSupported(true);
             handleDrop(event);
             try {
-                const uploadedFileUrl = await uploadImageToCloudinary(droppedFile);
+                const uploadedFileUrl = await uploadImageToCloudinary(droppedFile,"cohort_image");
                 setUploadedImageUrl(uploadedFileUrl);
             } catch (uploadError) {
                 setError("Failed to upload image");
