@@ -10,11 +10,12 @@ interface InvestmentCardProps {
     imageSrc: string | StaticImageData;
     investmentVehicleType: string;
     investmentVehicleName: string;
-    status: string;
+    statuses: string;
     percentage: number;
     HandleCardDetails: (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => void;
     statusClass: string;
     borderClass:string;
+    typeTextColor:string;
 }
 
 const InvestmentCard: React.FC<InvestmentCardProps> = ({
@@ -23,11 +24,12 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                                                            investmentVehicleType,
                                                            imageSrc,
                                                            investmentVehicleName,
-                                                           status,
+                                                           statuses,
                                                            percentage,
                                                            HandleCardDetails,
                                                            statusClass,
                                                            borderClass,
+                                                           typeTextColor,
                                                        }) => {
     const router = useRouter();
 
@@ -39,8 +41,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                 <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>
                     <div
                         id="investmentTypeId"
-                        className="bg-white text-black text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center"
-                    >
+                        className={`bg-white text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center ${typeTextColor}`}>
                         {investmentVehicleType
                             ? investmentVehicleType.charAt(0).toUpperCase() + investmentVehicleType.slice(1).toLowerCase()
                             : ""}
@@ -67,8 +68,8 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                     </span>
                     <div id={"statusDivId"} className={`bg-meedlWhite p-1 border rounded-lg ${borderClass}`}>
                         <span id={"statusId"}
-                            className={`text-sm font-medium px-1 py-1 rounded-lg ${statusClass}`}>
-                            {status}
+                            className={`text-sm font-medium px-1 py-1 rounded-lg lowercase ${statusClass}`}>
+                            {statuses}
                         </span>
                     </div>
                 </div>

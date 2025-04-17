@@ -111,7 +111,6 @@ const CreatePassword = () => {
                 router.push("/loan/loan-request")
                 break;
             case "FINANCIER":
-                console.log('case financier')
                 store.dispatch(setCurrentNavbarItem("Overview"))
                 router.push('/Overview')
                 break;

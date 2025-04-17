@@ -34,6 +34,11 @@ export interface Draft {
 
   }
 
+  interface investmentStatus {
+    state: string;
+    status: string
+  }
+
 
 interface vehicleState {
     currentVehicleId: string;
@@ -42,7 +47,8 @@ interface vehicleState {
     CreateInvestmentField: InvestmentVehicleField | null
     setInvestmentVehicleType: string
     setDraftId: string
-    setPublicVehicleUrl: string
+    setPublicVehicleUrl: string;
+    setInvestmentStatus: investmentStatus | null
 }
 
 const initialState: vehicleState = {
@@ -52,7 +58,8 @@ const initialState: vehicleState = {
     CreateInvestmentField: null,
     setInvestmentVehicleType: "",
     setDraftId: "",
-    setPublicVehicleUrl: ""
+    setPublicVehicleUrl: "",
+    setInvestmentStatus: null
 }
 
 export const vehicleSlice = createSlice({
@@ -91,9 +98,26 @@ export const vehicleSlice = createSlice({
         },
         clearPublicVehicleUrl:(state) => {
             state.setPublicVehicleUrl = ""
-        }
+        },
+        setInvestmentStatus: (state, action: PayloadAction<investmentStatus> ) => {
+            state.setInvestmentStatus = action.payload;
+        },
+        clearSaveInvestmentStatus: (state) => {
+            state.setInvestmentStatus= null;
+        },
     }
 })
 
-export const {setCurrentVehicleId, setSaveClickedDraft, clearSaveClickedDraft,setVehicleType,setCreateInvestmentField,clearSaveCreateInvestmentField,setInvestmentVehicleType,setDraftId,clearDraftId,setPublicVehicleUrl,clearPublicVehicleUrl} = vehicleSlice.actions;
+export const {setCurrentVehicleId, 
+                setSaveClickedDraft, 
+                clearSaveClickedDraft,
+                setVehicleType,
+                setCreateInvestmentField,
+                clearSaveCreateInvestmentField,
+                setInvestmentVehicleType,
+                setDraftId,clearDraftId,
+                setPublicVehicleUrl,
+                clearPublicVehicleUrl,
+                setInvestmentStatus,
+                clearSaveInvestmentStatus} = vehicleSlice.actions;
 export default vehicleSlice.reducer;

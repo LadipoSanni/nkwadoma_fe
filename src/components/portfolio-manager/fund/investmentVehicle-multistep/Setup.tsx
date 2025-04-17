@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { validateNumber, validatePositiveNumberWithIndexNumbers } from "@/utils/Format";
 import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
-import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
+// import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 import {useRouter } from 'next/navigation';
 import DatePickerInput from "@/reuseable/Input/DatePickerInput";
 import { format, parseISO } from "date-fns";
@@ -20,12 +20,16 @@ import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect
 import {useAppSelector} from "@/redux/store";
 import { setCreateInvestmentField,clearSaveCreateInvestmentField,setDraftId,clearDraftId} from '@/redux/slice/vehicle/vehicle';
 import { validationSchema,draftValidationSchema } from '@/utils/validation-schema';
+import PdfAndDocFileUpload from '@/reuseable/Input/Pdf&docx-fileupload';
 
 interface ApiError {
     status: number;
     data: {
-      message: string;
+      name: {
+        message: string;
+      };
     };
+   
   }
   
 interface Props {
@@ -100,9 +104,10 @@ function Setup({investmentVehicleType}: Props) {
             }
           } catch (err) {
             const error = err as ApiError;
-            setError(error?.data?.message);
+            setError(error?.data?.name?.message);
           }
         }
+       
 
        const handleSaveDraft = async (
            values: typeof initialFormValue,
@@ -183,10 +188,18 @@ function Setup({investmentVehicleType}: Props) {
               }
             } catch (err) {
               const error = err as ApiError;
-              setError(error?.data?.message);
+              setError(error?.data?.name?.message);
             }  
              
        }
+
+        const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+           event.preventDefault();
+         };
+       
+         const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+           event.preventDefault();
+         };
 
 
 
@@ -256,9 +269,9 @@ function Setup({investmentVehicleType}: Props) {
                 setFieldValue("startDate", format(date, "yyyy-MM-dd"))
                 }
                  className="p-6 mt-2 text-[14px] text-[#6A6B6A]"
-                 disabledDate={
-                      (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
-                    }
+                //  disabledDate={
+                //       (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
+                //     }
               />  
                {errors.startDate && touched.startDate && (
                 <ErrorMessage
@@ -463,13 +476,25 @@ function Setup({investmentVehicleType}: Props) {
                 </div>
                 <div className='relative md:bottom-9 bottom-2'>
                    <Label htmlFor="mandate">Vehicle mandate</Label>  
-                   <Field
+                   {/* <Field
                   name="mandate"
                   component={FormikCustomQuillField}
                   maximumDescription={2500}
                   // label={"Mandate"}
                   placeholder={"Enter mandate..."}
-                />
+                /> */}
+                   <div className='mt-4'>
+                   <PdfAndDocFileUpload
+                    handleDrop={handleDrop}
+                    handleDragOver={handleDragOver}
+                    setUploadedDocUrl={(url: string | null) => 
+                      setFieldValue("mandate", url)
+                    }
+                    initialDocUrl={values.mandate}
+                    cloudinaryFolderName='investment-vehicle-documents'
+                  />
+                   
+                   </div>
                 {errors.mandate && touched.mandate && (
                <div>
                
@@ -483,7 +508,7 @@ function Setup({investmentVehicleType}: Props) {
                 )} 
                 </div>
             </div>  
-            <div className= "md:flex lg:gap-24 gap-6 justify-between mt-6  md:mb-0 lg:px-8 relative lg:right-10">
+            <div className= "lg:flex lg:gap-24 gap-6 justify-between mt-6  md:mb-0 lg:px-8 relative lg:right-10">
                         <Button
                             id='saveInvestment'
                             variant={"outline"}
