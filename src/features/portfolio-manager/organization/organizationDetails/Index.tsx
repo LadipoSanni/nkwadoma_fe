@@ -262,7 +262,7 @@ const OrganizationDetails = () => {
             id="detailsContainer"
             className={"mt-10 grid gap-9 md:gap-0 md:flex  md:justify-between"}
           >
-            
+            <div className="w-full mb-4">
             <section id="bannerSection" className={"relative"}>
               {organizationDetails?.data.bannerImage ? (
                 <Image
@@ -318,7 +318,7 @@ const OrganizationDetails = () => {
                   <Link
                       href={organizationLink}
                     className={
-                      "text-meedlBlue text-[14px] font-medium leading-[150%]"
+                      "text-meedlBlue text-[14px] font-medium leading-[150%] truncate max-w-[17rem]  md:max-w-[16rem] lg:max-w-[25rem] xl:max-w-[30rem] lg:whitespace-normal "
                     }
                   >
                     {organizationDetails?.data.websiteAddress}
@@ -330,7 +330,7 @@ const OrganizationDetails = () => {
                   <Button
                      id='activateAndDeactiveButton'
                      variant={'outline'}
-                     className="w-full h-[45px] text-[#142854] font-semibold border-solid border-[#142854]"
+                     className="w-full xl:w-[24vw] lg:w-[31vw] md:w-[36vw] h-[45px] text-[#142854] font-semibold border-solid border-[#142854]"
                      onClick={organizationDetails?.data.status === "ACTIVE"? handleDeactivateClick : handleActivateClick }
                   >
                     {
@@ -344,9 +344,11 @@ const OrganizationDetails = () => {
                 </div>
               </div>
             </section>
+            
+            </div>
             <div
               id="detailsTabContainer"
-              className={`relative md:w-6/12 md:pt-0 pt-0`}
+              className={`relative w-full md:pt-0 pt-0`}
             >
               <DetailsTabContainer
                 isTable={false}
