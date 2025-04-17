@@ -175,7 +175,7 @@ function EndownmentFund() {
                     onChange={handleSearchChange}
                     handleDraftClick={handleEndowerFundDraftClick}
                     handleCreateInvestmentVehicleClick={handleCreateInvestmentVehicleClick}
-                    buttonName='Set up endownment fund'
+                    buttonName='Set up endowment fund'
                 />
       </div>
         <div>
