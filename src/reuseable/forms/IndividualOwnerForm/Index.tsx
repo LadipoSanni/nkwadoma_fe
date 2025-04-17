@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -38,6 +38,27 @@ const IndividualOwnerForm: React.FC = () => {
         { id: 'national_id', label: 'National ID card' },
         { id: 'voters_card', label: "Voter's card" },
     ];
+
+    // Updated validation logic
+    const isFormValid = useMemo(() => {
+        return sections.every(section => {
+            const ownershipValue = parseFloat(section.ownership);
+            console.log('Validation check for section:', section); // Debug log
+            const valid =
+                section.firstName.trim() !== '' &&
+                section.lastName.trim() !== '' &&
+                section.dob !== undefined &&
+                section.relationship !== '' &&
+                section.ownership.trim() !== '' &&
+                !isNaN(ownershipValue) &&
+                ownershipValue > 0 &&
+                ownershipValue <= 100 &&
+                section.proofType !== '' &&
+                section.proofFile !== null;
+            console.log('Section is valid:', valid); // Debug log
+            return valid;
+        });
+    }, [sections]);
 
     const handleBackClick = () => {
         route.back();
@@ -84,19 +105,24 @@ const IndividualOwnerForm: React.FC = () => {
         ));
     };
 
+    // Updated file handling
     const handleDrop = (id: number, e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        const file = e.dataTransfer.files?.[0] || null;
+        if (file) {
             setSections(prev => prev.map(section =>
-                section.id === id ? { ...section, proofFile: e.dataTransfer.files[0] } : section
+                section.id === id ? { ...section, proofFile: file } : section
             ));
         }
+        console.log('File dropped:', file); // Debug log
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form Data:', sections);
-        route.push('/kyc/declaration');
+        if (isFormValid) {
+            console.log('Form Data:', sections);
+            route.push('/kyc/declaration');
+        }
     };
 
     return (
@@ -104,6 +130,7 @@ const IndividualOwnerForm: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
                 {sections.map((section, index) => (
                     <section key={section.id} className={'grid gap-5 p-5 rounded-md border-[0.5px] border-lightBlue250 relative'}>
+                        {/* Form fields remain the same */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor={`firstName-${section.id}`}>First name</Label>
@@ -137,6 +164,7 @@ const IndividualOwnerForm: React.FC = () => {
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <Button
+                                            type="button"
                                             variant="outline"
                                             className="w-full h-[3.375rem] border border-solid border-neutral650 flex justify-between items-center font-normal focus:outline-none focus:ring-0"
                                         >
@@ -149,7 +177,9 @@ const IndividualOwnerForm: React.FC = () => {
                                             mode="single"
                                             selected={section.dob}
                                             onSelect={(date) => handleDateSelect(section.id, date)}
+                                            disabled={(date) => date > new Date()}
                                             initialFocus
+                                            defaultMonth={section.dob || new Date()}
                                         />
                                     </PopoverContent>
                                 </Popover>
@@ -223,8 +253,9 @@ const IndividualOwnerForm: React.FC = () => {
                             handleDragOver={(e) => e.preventDefault()}
                             setUploadedImageUrl={() => {}}
                         />
+
                         {index > 0 && (
-                            <div className={'flex justify-end '}>
+                            <div className={'flex justify-end'}>
                                 <button
                                     type="button"
                                     onClick={() => handleDeleteSection(section.id)}
@@ -260,7 +291,12 @@ const IndividualOwnerForm: React.FC = () => {
                         </Button>
                         <Button
                             type="submit"
-                            className="h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md order-1 md:order-2"
+                            disabled={!isFormValid}
+                            className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 ${
+                                !isFormValid
+                                    ? 'bg-blue550 hover:bg-blue550 cursor-not-allowed opacity-50'
+                                    : 'bg-meedlBlue hover:bg-meedlBlue'
+                            } text-white rounded-md order-1 md:order-2`}
                         >
                             Save & continue
                         </Button>
