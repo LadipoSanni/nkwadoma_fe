@@ -16,10 +16,12 @@ interface InvestmentCardProps {
     statusClass: string;
     borderClass:string;
     typeTextColor:string;
+    status?: boolean;
 }
 
 const InvestmentCard: React.FC<InvestmentCardProps> = ({
                                                            id,
+                                                           status,
                                                            backgroundColor,
                                                            investmentVehicleType,
                                                            imageSrc,
@@ -64,7 +66,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                 <div id={"minidetailsId"} className="flex bg-[#F6F6F6] items-center gap-2 rounded-lg px-2 py-1 w-fit">
                     <span id={"fundrasingId"}
                         className="font-normal text-black text-sm flex items-center justify-center">
-                        Fundraising
+                        {status}
                     </span>
                     <div id={"statusDivId"} className={`bg-meedlWhite p-1 border rounded-lg ${borderClass}`}>
                         <span id={"statusId"}

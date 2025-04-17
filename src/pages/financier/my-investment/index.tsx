@@ -1,19 +1,20 @@
 "use client";
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
 import { store } from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
-import {
-    useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
-} from "@/service/admin/fund_query";
+// import {
+//     useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
+// } from "@/service/admin/fund_query";
 // import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
 // import LoanEmptyState from "@/reuseable/emptyStates/Index";
 // import { MdOutlinePayments } from "react-icons/md";
 import {useViewMyInvestmentQuery} from '@/service/financier/api'
 import dynamic from "next/dynamic";
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 interface InvestmentVehicle {
     id: string;
@@ -45,11 +46,11 @@ const MyInvestment = () => {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
-    const [hasMore, setHasMore] = useState(true);
+    // const [hasMore, setHasMore] = useState(true);
     const [pageNumber, setPageNumber] = useState(0);
     const [allVehicles, setAllVehicles] = useState<InvestmentVehicle[]>([]);
 
-    const observer = useRef<IntersectionObserver | null>(null);
+    // const observer = useRef<IntersectionObserver | null>(null);
     // const lastCardRef = useRef<HTMLDivElement | null>(null);
 
     // const { data, isLoading, isFetching } =
@@ -60,7 +61,7 @@ const MyInvestment = () => {
     //     });
     // console.log('data', data);
 
-    const {data: datss} = useViewMyInvestmentQuery({})
+    const {data: datss, isLoading} = useViewMyInvestmentQuery({})
 
     console.log('datss', datss)
 
@@ -108,40 +109,54 @@ const MyInvestment = () => {
     //     [isLoading, isFetching, hasMore]
     // );
 
-    const dd= [
-        {
+    // const dd= [
+    //     {
+    //
+    //         id: 'strrring',
+    //         investmentVehicleType: "COMMERCIAL" ,
+    //         name: 'bod',
+    //         rate: 4,
+    //     },
+    //     {
+    //
+    //         id: 'srtring',
+    //         investmentVehicleType: "COMMERCIAL" ,
+    //         name: 'required',
+    //         rate: 4,
+    //     },{
+    //
+    //         id: 'advance',
+    //         investmentVehicleType: "COMMERCIAL" ,
+    //         name: 'string',
+    //         rate: 4,
+    //     },{
+    //
+    //         id: 'worm',
+    //         investmentVehicleType: "COMMERCIAL" ,
+    //         name: 'string',
+    //         rate: 4,
+    //     },{
+    //
+    //         id: 'related',
+    //         investmentVehicleType: "COMMERCIAL" ,
+    //         name: 'string',
+    //         rate: 4,
+    //     },
+    // ]
 
-            id: 'strrring',
-            investmentVehicleType: "COMMERCIAL" ,
-            name: 'bod',
-            rate: 4,
-        },
-        {
+    const getStatusColor = (status: string) => {
+        if(capitalizeFirstLetters(status)?.toString() === 'Closed') {
+            return 'bg-red-100 md:bg-red-100 md:text-red-600 text-red-600 border-[#F2BCBA] md:border-[#F2BCBA]'
+        }
+        return 'bg-green-100 md:bg-green-100 md:text-[#0D9B48] text-[#0D9B48] border-[#B4E5C8] md:border-[#B4E5C8]'
+    }
 
-            id: 'srtring',
-            investmentVehicleType: "COMMERCIAL" ,
-            name: 'required',
-            rate: 4,
-        },{
-
-            id: 'advance',
-            investmentVehicleType: "COMMERCIAL" ,
-            name: 'string',
-            rate: 4,
-        },{
-
-            id: 'worm',
-            investmentVehicleType: "COMMERCIAL" ,
-            name: 'string',
-            rate: 4,
-        },{
-
-            id: 'related',
-            investmentVehicleType: "COMMERCIAL" ,
-            name: 'string',
-            rate: 4,
-        },
-    ]
+    const getStatusBorderColor =  (status: string) => {
+        if(capitalizeFirstLetters(status)?.toString() === 'Closed') {
+            return 'border-[#F2BCBA] md:border-[#F2BCBA]'
+        }
+        return 'border-[#B4E5C8] md:border-[#B4E5C8]'
+    }
 
     const filteredVehicles = allVehicles.filter((vehicle) => {
         const matchesSearch = vehicle.name
@@ -158,7 +173,7 @@ const MyInvestment = () => {
         return matchesSearch && typeMatch;
     });
 
-    const vehicles = datss?.data?.investmentVehicles
+    const vehicles = datss?.data?.investmentSummaries
 
     return (
         <main id="marketplaceView" className="py-9 px-5 h ">
@@ -199,7 +214,7 @@ const MyInvestment = () => {
                     id="card-segmentId"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
-                    {vehicles.map((vehicle, index) => {
+                    {vehicles?.map((vehicle, index) => {
                         const backgroundColor =
                              vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -208,14 +223,10 @@ const MyInvestment = () => {
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "/BlueCircles.svg"
                                 : "/GreenCircles.svg";
-
-                        const status = "Open";
-                        const statusClass =
-                            status === "Open"
-                                ? "bg-green-100 text-[#0D9B48] border-[#B4E5C8]"
-                                : "bg-red-100 text-red-600 border-[#F2BCBA]";
-                        const borderClass =
-                            status === "Open" ? "border-[#B4E5C8]" : "border-[#F2BCBA]";
+                        const status = vehicle?.fundRaisingStatus;
+                        const statuses = "Closed";
+                        const statusClass = getStatusColor(statuses)
+                        const borderClass = getStatusBorderColor(statuses)
 
                         const truncatedTitle =
                             vehicle.name.length > 20
@@ -229,7 +240,8 @@ const MyInvestment = () => {
                             imageSrc,
                             investmentVehicleName: truncatedTitle,
                             statusClass,
-                            status,
+                            status: capitalizeFirstLetters(status?.replace("_", " ")),
+                            statuses: statuses,
                             borderClass,
                             percentage: vehicle.rate || 0,
                             HandleCardDetails: () =>
@@ -246,11 +258,11 @@ const MyInvestment = () => {
 
                         return <InvestmentCard statuses={""} typeTextColor={""} key={vehicle.id} {...cardProps} />;
                     })}
-                    {/*{isFetching && pageNumber > 0 && (*/}
-                    {/*    <div className="col-span-full text-center py-4">*/}
-                    {/*        Loading more...*/}
-                    {/*    </div>*/}
-                    {/*)}*/}
+                    {isLoading && pageNumber > 0 && (
+                        <div className="col-span-full text-center py-4">
+                            Loading more...
+                        </div>
+                    )}
                 </div>
             {/*)}*/}
         </main>

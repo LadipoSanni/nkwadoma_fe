@@ -16,7 +16,7 @@ export const financierOnboardingAndDashboardApi = createApi({
         }),
         viewMyInvestment: builder.query({
            query: () => ({
-               url: `/financier/view/investment-details`,
+               url: `financier/view/investment-detail/id`,
                method: 'GET'
            })
         }),
