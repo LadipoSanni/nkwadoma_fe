@@ -16,7 +16,7 @@ interface FormValues {
 
 interface DropdownSelectProps {
     selectValue: string;
-    listOfItems: { id: string; name: string }[];
+    listOfItems: { label: string; name: string }[];
     initialFormValue: FormValues;
     validationSchema: Yup.ObjectSchema<FormValues>;
     handleSelectChange: (value: string) => void;
@@ -94,7 +94,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
                                     <SelectContent className='border-none border-[#FAFBFC] text-[#404653] text-sm z-50'>
                                         <SelectGroup>
                                             {listOfItems.map((item, index) => (
-                                                <SelectItem key={item.id} id={`${item.id}-${index}`} value={item.name} className='hover:bg-blue-200'>
+                                                <SelectItem key={item.label} id={`${item.label}-${index}`} value={item.label} className='hover:bg-blue-200'>
                                                     {item.name}
                                                 </SelectItem>
                                             ))}
@@ -103,6 +103,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
                                 </Select>
                                 <div className='flex justify-between items-center pt-7'>
                                     <Button
+                                        type='button'
                                         id='resetButton'
                                         variant={`outline`}
                                         className='text-meedlBlue h-[38px] font-bold ring-meedlBlue border-meedlBlue border-solid w-[80px]'

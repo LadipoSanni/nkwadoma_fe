@@ -56,13 +56,16 @@ const ViewFinanciers = () => {
     const [hasNextPage,setNextPage] = useState(false)
     const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
+    const [tempSelectedFinancier, setTempSelectedFinancier] = useState(''); 
     const router = useRouter()
     const param = {
         pageNumber: pageNumber,
         pageSize: 10,
+        financierType: selectedFinancier
     }
 
-    const {data,isLoading} = useViewAllFinanciersQuery(param)
+
+    const {data,isLoading,refetch} = useViewAllFinanciersQuery(param)
     const {data:searchData} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10},{skip: !searchTerm})
 
     useEffect(()=>{
@@ -83,8 +86,8 @@ const ViewFinanciers = () => {
 
 
     const listOfFinanciers = [
-        { id: '1', name: 'Individual' },
-        { id: '2', name: 'Corporate' },
+        { label: 'INDIVIDUAL', name: 'Individual' },
+        { label: 'COOPERATE', name: 'Corporate' },
     ];
 
     const initialFormValue: FormValues = {
@@ -102,11 +105,13 @@ const ViewFinanciers = () => {
     };
 
     const handleSelectFinancier = (financier: string) => {
-        setSelectedFinancier(financier);
+        setTempSelectedFinancier(financier);
     };
 
     const handleSubmit = () => {
-        // console.log('Form submitted with values:', values);
+        setSelectedFinancier(tempSelectedFinancier)
+            refetch()
+       
     };
 
     const toggleDropdown = () => {
@@ -114,6 +119,7 @@ const ViewFinanciers = () => {
     };
 
     const handleReset = () => {
+        setTempSelectedFinancier('')
         setSelectedFinancier('');
         setIsDropdownOpen(false);
     };
@@ -137,7 +143,6 @@ const ViewFinanciers = () => {
         store.dispatch(setCurrentFinancierId(String(row?.id)))
         store.dispatch(setFinancierMode("platform"))
         router.push('/funds/financier-details')
-        console.log('Row clicked:', row?.id);
     };
 
 
@@ -148,7 +153,7 @@ const ViewFinanciers = () => {
                 <div className={'flex gap-3'}>
                     <SearchInput id={'financiersSearch'} style='' value={searchTerm} onChange={handleSearchChange} />
                     <DropdownSelect
-                        selectValue={selectedFinancier}
+                        selectValue={tempSelectedFinancier}
                         listOfItems={listOfFinanciers}
                         initialFormValue={initialFormValue}
                         validationSchema={validationSchema}
@@ -158,7 +163,7 @@ const ViewFinanciers = () => {
                         isDropdownOpen={isDropdownOpen}
                         toggleDropdown={toggleDropdown}
                         isLoading={isLoading}
-                        disabled={true}
+                        
                     />
                 </div>
                 <Button
