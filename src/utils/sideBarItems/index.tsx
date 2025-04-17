@@ -74,30 +74,12 @@ export const getLogoutItem = (currentNavBottomItem: string, handleClick: ()=> vo
 }
 
 
-export const getFinancierSideBarItems = (currentNavItem: string) => {
-    const item: navbarRouterItemsProps[] = [
-        {
-            icon: <MdOutlineHome
-                className={` h-[1.2rem] w-[1.2rem] ${currentNavItem === 'Overview' ? currentTextLiterals : textLiterals} `}/>,
-            id: 'overview',
-            isActive: true,
-            name: "Overview",
-            route: '/Overview'
-        },
-        {
-            id: 'marketplace',
-            name: 'Marketplace',
-            route: '/marketplace',
-            isActive: false,
-            icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={'#d7d7d7'}/>
-        },
-        {
-            icon: <Icon icon='iconoir:hand-cash' color={'#d7d7d7'} height={"1.2rem"} width={"1.3rem"}/>,
-            id: 'myInvestment',
-            isActive: false,
-            name: "My Investment",
-            route: '/my-investment'
-        },
+export const getFinancierSideBarItems = (currentNavItem: string)=> {
+    const item : navbarRouterItemsProps[] = [
+        {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem] ${currentNavItem === 'Overview' ? currentTextLiterals : textLiterals} `}/>, id: 'overview', isActive: true, name: "Overview", route: '/Overview'},
+        {id: 'marketplace', name: 'Marketplace', route: '/marketplace', isActive: true, icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={currentNavItem === 'Marketplace' ? '#142854' : '#626F8C'}></MdOutlineAccountBalance>},
+        {icon: <Icon icon='iconoir:hand-cash' color={` ${currentNavItem === 'My Investment'? '#142854' : '#626F8C'}`} height={"1.2rem"} width={"1.3rem"}/>, id: 'myInvestment', isActive: true, name: "My Investment", route: '/my-investment'},
     ]
     return item;
+
 }

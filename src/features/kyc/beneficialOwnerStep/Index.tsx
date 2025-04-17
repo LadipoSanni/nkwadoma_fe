@@ -7,13 +7,20 @@ import {Input} from "@/components/ui/input";
 import IndividualOwnerForm from '@/reuseable/forms/IndividualOwnerForm/Index';
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
-import CountrySelectPopover from '@/reuseable/select/countrySelectPopover/Index'
+import CountrySelectPopover from '@/reuseable/select/countrySelectPopover/Index';
+import {MdAdd, MdDeleteOutline} from "react-icons/md";
 
 const BeneficialOwnerStep = () => {
     const [selectedForm, setSelectedForm] = useState<"entity" | "individual">("entity");
     const [entityName, setEntityName] = useState("");
     const [rcNumber, setRcNumber] = useState("");
     const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
+    const [sections, setSections] = useState<{
+        id: number;
+        entityName: string;
+        rcNumber: string;
+        country: string | undefined
+    }[]>([]);
     const router = useRouter();
 
     const isFormValid = useMemo(() => {
@@ -27,6 +34,25 @@ const BeneficialOwnerStep = () => {
 
     const handleBackClick = () => {
         router.back();
+    };
+
+    const handleAddSection = () => {
+        setSections((prev) => [
+            ...prev,
+            {id: Date.now(), entityName: "", rcNumber: "", country: undefined},
+        ]);
+    };
+
+    const handleDeleteSection = (id: number) => {
+        setSections((prev) => prev.filter((section) => section.id !== id));
+    };
+
+    const handleInputChange = (id: number, field: string, value: string) => {
+        setSections((prev) =>
+            prev.map((section) =>
+                section.id === id ? {...section, [field]: value} : section
+            )
+        );
     };
 
     return (
@@ -59,9 +85,8 @@ const BeneficialOwnerStep = () => {
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent id="entityTabContent" value="entity">
-                        <main id="entityFormMain" className="grid gap-10">
+                        <main id="entityFormMain" className="grid gap-10 h-[calc(100vh-300px)] overflow-y-auto">
                             <section className={'grid p-5 gap-5 border rounded-md border-lightBlue250'}>
-
                                 <div id="entityNameContainer" className="grid gap-2">
                                     <Label htmlFor="entityName" id="entityNameLabel"
                                            className="block text-sm font-medium text-labelBlue">
@@ -99,25 +124,87 @@ const BeneficialOwnerStep = () => {
                                     />
                                 </div>
                             </section>
-                            <div id="entityFormButtons" className={'md:flex grid gap-4 justify-between'}>
-                                <Button
-                                    id="entityFormBackButton"
-                                    onClick={handleBackClick}
-                                    type={'button'}
-                                    className={'h-[2.813rem] w-full md:w-[4.625rem] px-4 py-2 bg-gray-500 hover:bg-gray-600 text-meedlBlue border border-meedlBlue rounded-md  order-2 md:order-1'}
-                                >
-                                    Back
-                                </Button>
-                                <Button
-                                    id="entityFormSaveContinueButton"
-                                    type={'submit'}
-                                    onClick={() => router.push('/kyc/declaration')}
-                                    disabled={!isFormValid}
-                                    className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 ${!isFormValid ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md  order-1 md:order-2`}
-                                >
-                                    Save & continue
-                                </Button>
-                            </div>
+                            {sections.map((section) => (
+                                <section key={section.id}
+                                         className="grid p-5 gap-5 border rounded-md border-lightBlue250 mt-4 relative">
+                                    <div id="entityNameContainer" className="grid gap-2">
+                                        <Label htmlFor={`entityName-${section.id}`}
+                                               className="block text-sm font-medium text-labelBlue">
+                                            Entity name
+                                        </Label>
+                                        <Input
+                                            id={`entityName-${section.id}`}
+                                            value={section.entityName}
+                                            onChange={(e) => handleInputChange(section.id, "entityName", e.target.value)}
+                                            placeholder="Enter name"
+                                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                        />
+                                    </div>
+                                    <div id="rcNumberContainer" className="grid gap-2">
+                                        <Label htmlFor={`rcNumber-${section.id}`}
+                                               className="block text-sm font-medium text-labelBlue">
+                                            RC number
+                                        </Label>
+                                        <Input
+                                            id={`rcNumber-${section.id}`}
+                                            value={section.rcNumber}
+                                            onChange={(e) => handleInputChange(section.id, "rcNumber", e.target.value)}
+                                            placeholder="Enter number"
+                                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                        />
+                                    </div>
+                                    <div id="countryOfIncorporationContainer" className="grid gap-2">
+                                        <Label htmlFor={`country-${section.id}`}
+                                               className="block text-sm font-medium text-labelBlue">
+                                            Country of incorporation
+                                        </Label>
+                                        <CountrySelectPopover
+                                            selectedCountry={section.country}
+                                            onCountryChange={(value) => handleInputChange(section.id, "country", value)}
+                                        />
+                                    </div>
+                                    <div className={'flex justify-end'}>
+                                        <button
+                                            onClick={() => handleDeleteSection(section.id)}
+                                            className="bg-greyBase200 py-1 px-2 hover:bg-greyBase200 flex rounded-md gap-1 h-[1.8125rem] w-[5.25rem]"
+                                        >
+                                            <MdDeleteOutline className="text-error450 h-5 w-5"/>
+                                            <span className={'text-error450 text-[14px] leading-[150%] font-medium'}>Delete</span>
+                                        </button>
+                                    </div>
+                                </section>
+                            ))}
+                            <main className={'sticky bottom-0 bg-white '}>
+
+                                <div className="flex items-center gap-1 mb-4">
+                                    <Button
+                                        onClick={handleAddSection}
+                                        className="flex items-center gap-2 bg-transparent text-meedlBlue shadow-none px-0 py-2 rounded-md"
+                                    >
+                                        <MdAdd className="text-meedlBlue h-5 w-5"/>
+                                        <span className={'font-semibold text-[14px] leading-[150%]'}>Add</span>
+                                    </Button>
+                                </div>
+                                <div id="entityFormButtons" className={'md:flex grid gap-4 justify-between'}>
+                                    <Button
+                                        id="entityFormBackButton"
+                                        onClick={handleBackClick}
+                                        type={'button'}
+                                        className={'h-[2.813rem] w-full md:w-[4.625rem] px-4 py-2 bg-gray-500 hover:bg-gray-600 text-meedlBlue border border-meedlBlue rounded-md  order-2 md:order-1'}
+                                    >
+                                        Back
+                                    </Button>
+                                    <Button
+                                        id="entityFormSaveContinueButton"
+                                        type={'submit'}
+                                        onClick={() => router.push('/kyc/declaration')}
+                                        disabled={!isFormValid}
+                                        className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 ${!isFormValid ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md  order-1 md:order-2`}
+                                    >
+                                        Save & continue
+                                    </Button>
+                                </div>
+                            </main>
                         </main>
                     </TabsContent>
                     <TabsContent id="individualTabContent" value="individual">
