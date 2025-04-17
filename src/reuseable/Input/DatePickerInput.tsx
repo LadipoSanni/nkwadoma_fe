@@ -30,7 +30,7 @@ function DatePickerInput({selectedDate, onDateChange,className, placeholder = "S
     <PopoverTrigger asChild>
       <Button 
       data-testid="calenderButton"
-      className={cn("w-full flex justify-between  border rounded text-left text-black p-5 shadow-none ",className)} 
+      className={cn("w-full flex justify-between  border rounded text-left text-black p-5 shadow-none ",className,disabled && "opacity-60 bg-gray-50 text-gray-500 cursor-not-allowed")} 
       onClick={() => setIsOpen(true)}
       disabled={disabled}  
       >
