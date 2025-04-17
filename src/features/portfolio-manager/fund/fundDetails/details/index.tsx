@@ -13,10 +13,10 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { inter } from '@/app/fonts';
 import {formatMonthInDate} from '@/utils/Format';
-import {setDraftId,setEditStatus,clearEditStatus} from '@/redux/slice/vehicle/vehicle';
+import {clearEditStatus} from '@/redux/slice/vehicle/vehicle';
 import {store} from "@/redux/store";
-import { useRouter } from 'next/navigation'
-import {markStepCompleted} from '@/redux/slice/multiselect/vehicle-multiselect';
+// import { useRouter } from 'next/navigation'
+// import {markStepCompleted} from '@/redux/slice/multiselect/vehicle-multiselect';
 import { resetVehicleState } from '@/redux/slice/multiselect/vehicle-multiselect';
 
 const Details = () => {
@@ -24,7 +24,7 @@ const Details = () => {
     const [investmentId] = useState(currentVehicleId);
     const [isVerifying, setIsVerifying] = useState(false);
     const [docError, setDocError] = useState<string | null>(null);
-    const router = useRouter()
+    // const router = useRouter()
 
     const {data, isLoading} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
 
