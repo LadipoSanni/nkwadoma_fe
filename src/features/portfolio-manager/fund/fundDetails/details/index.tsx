@@ -13,25 +13,35 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { inter } from '@/app/fonts';
 import {formatMonthInDate} from '@/utils/Format';
-import {clearEditStatus} from '@/redux/slice/vehicle/vehicle';
+import {setDraftId,setEditStatus,clearEditStatus,setInvestmentStatus,clearSaveInvestmentStatus} from '@/redux/slice/vehicle/vehicle';
 import {store} from "@/redux/store";
-// import { useRouter } from 'next/navigation'
-// import {markStepCompleted} from '@/redux/slice/multiselect/vehicle-multiselect';
+import { useRouter } from 'next/navigation'
+import {markStepCompleted} from '@/redux/slice/multiselect/vehicle-multiselect';
 import { resetVehicleState } from '@/redux/slice/multiselect/vehicle-multiselect';
 
 const Details = () => {
     const currentVehicleId = useAppSelector(state => (state.vehicle.currentVehicleId))
+    const statusType = useAppSelector(state => (state.vehicle.setEditStatus))
     const [investmentId] = useState(currentVehicleId);
     const [isVerifying, setIsVerifying] = useState(false);
     const [docError, setDocError] = useState<string | null>(null);
-    // const router = useRouter()
+    const router = useRouter()
 
-    const {data, isLoading} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
+    const {data, isLoading,refetch} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
+
+    const setStatus = {
+        state: data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus,
+        status: data?.data?.fundRaisingStatus === null ? "deployingStatus" : "fundRaising"
+    }
 
     useEffect(() => {
          store.dispatch(clearEditStatus())
          store.dispatch(resetVehicleState())
-    })
+         store.dispatch(clearSaveInvestmentStatus())
+         if(statusType === "changeStatus"){
+            refetch()
+         }
+    },[refetch])
 
     const getFilenameFromUrl = (url: string) => {
         try {
@@ -65,19 +75,20 @@ const Details = () => {
     const isCloudinaryUrl = docUrl?.includes('cloudinary.com');
     const fileExtension = docFilename?.split('.').pop()?.toLowerCase();
 
-    // const handleChangeVisibility = () => {
-    //     router.push("/vehicle/edit/visibility")
-    //      store.dispatch(setDraftId(data?.data?.id))
-    //      store.dispatch(markStepCompleted("setup"))
-    //      store.dispatch(markStepCompleted("setup"))
-    // }
+    const handleChangeVisibility = () => {
+         store.dispatch(setDraftId(data?.data?.id))
+         store.dispatch(markStepCompleted("setup"))
+         store.dispatch(setEditStatus("changeVisibility"))
+         router.push("/vehicle/edit/visibility")
+    }
 
-    // const handleChangeStatus = () => {
-    //     router.push("/vehicle/edit/status")
-    //     store.dispatch(setDraftId(data?.data?.id))
-    //     store.dispatch(setEditStatus("changeStatus"))
-    //     store.dispatch(markStepCompleted("setup"))
-    // }
+    const handleChangeStatus = () => {
+        store.dispatch(setInvestmentStatus(setStatus))
+        store.dispatch(setDraftId(data?.data?.id))
+        store.dispatch(setEditStatus("changeStatus"))
+        store.dispatch(markStepCompleted("setup"))
+        router.push("/vehicle/edit/status")
+    }
 
     
     const handleViewDocument = async () => {
@@ -169,14 +180,14 @@ const Details = () => {
                               }}
                             />
                             </div>
-                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{docFilename}</p>
+                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px]  lg:whitespace-normal '>{docFilename}</p>
                           </div>
                          
                            <Button 
                             id='view-document'
                            type='button' 
                            variant={"default"} 
-                           className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white font-semibold rounded-2xl h-7 w-[6.9vh]'
+                           className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[7.9vh]"}`}
                             onClick={handleViewDocument}
                             disabled={!docUrl || isVerifying}
                             aria-label={`View ${docFilename}`}
@@ -202,8 +213,8 @@ const Details = () => {
                             id='edit_visibility'
                            type='button' 
                            variant={"default"} 
-                           className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold cursor-auto'
-                            // onClick={handleChangeVisibility}
+                           className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold'
+                            onClick={handleChangeVisibility}
                             
                             >
                              Change
@@ -227,8 +238,8 @@ const Details = () => {
                              id='edit_status'
                            type='button' 
                            variant={"default"} 
-                           className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold cursor-auto'
-                            // onClick={handleChangeStatus}
+                           className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold '
+                            onClick={handleChangeStatus}
                             
                             >
                              Change

@@ -18,6 +18,7 @@ import {useRouter} from 'next/navigation'
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
 import { resetVehicleState } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { setInvestmentVehicleType } from '@/redux/slice/vehicle/vehicle';
+import { clearDraftId,clearPublicVehicleUrl,clearEditStatus,clearSaveInvestmentStatus} from '@/redux/slice/vehicle/vehicle';
 
 
 
@@ -85,6 +86,10 @@ function EndownmentFund() {
                   setPageNumber(investmentVehicleData?.data?.pageNumber)
              }
              store.dispatch(resetVehicleState())
+             store.dispatch(clearDraftId())
+             store.dispatch(clearPublicVehicleUrl())
+             store.dispatch(clearEditStatus())
+              store.dispatch(clearSaveInvestmentStatus())
          }, [searchTerm, searchData, investmentVehicleData])
 
      
