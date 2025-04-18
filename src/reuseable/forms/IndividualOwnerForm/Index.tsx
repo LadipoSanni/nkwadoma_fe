@@ -39,11 +39,9 @@ const IndividualOwnerForm: React.FC = () => {
         { id: 'voters_card', label: "Voter's card" },
     ];
 
-    // Updated validation logic
     const isFormValid = useMemo(() => {
         return sections.every(section => {
             const ownershipValue = parseFloat(section.ownership);
-            console.log('Validation check for section:', section); // Debug log
             const valid =
                 section.firstName.trim() !== '' &&
                 section.lastName.trim() !== '' &&
@@ -55,7 +53,6 @@ const IndividualOwnerForm: React.FC = () => {
                 ownershipValue <= 100 &&
                 section.proofType !== '' &&
                 section.proofFile !== null;
-            console.log('Section is valid:', valid); // Debug log
             return valid;
         });
     }, [sections]);
@@ -105,7 +102,6 @@ const IndividualOwnerForm: React.FC = () => {
         ));
     };
 
-    // Updated file handling
     const handleDrop = (id: number, e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         const file = e.dataTransfer.files?.[0] || null;
@@ -114,13 +110,11 @@ const IndividualOwnerForm: React.FC = () => {
                 section.id === id ? { ...section, proofFile: file } : section
             ));
         }
-        console.log('File dropped:', file); // Debug log
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (isFormValid) {
-            console.log('Form Data:', sections);
             route.push('/kyc/declaration');
         }
     };
