@@ -11,6 +11,3 @@ export const ADMIN_ROLES = [
     "FINANCIER",
 ]
 
-export const USER = [
-    "LOANEE"
-]

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, {useEffect} from 'react';
 import {MdOutlineErrorOutline} from "react-icons/md";
 import {inter500} from '@/app/fonts'
 import BalanceCard from "@/reuseable/cards/BalanceCard/Index";
@@ -32,11 +32,13 @@ const FinancierOverview = dynamic(
 const FinancierOverviewContent = () => {
     const router = useRouter();
     const {data} = useViewFinancierDashboardQuery({})
+
+    useEffect(()=> {
+        store.dispatch(setFinancierType(data?.data?.financierType))
+    }, [data])
     const handleClick = () => {
         router.push('/kyc/identification')
     }
-    // console.log('dj: ', data)
-    store.dispatch(setFinancierType(data?.data?.financierType))
     return (
         <main className={`px-5 h-[85vh] ${styles.container}  pb-8`}>
 

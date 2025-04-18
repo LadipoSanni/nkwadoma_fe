@@ -1,6 +1,7 @@
 .loanOfferDetails {
     background-color: #fff;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 .loanOfferDetails::-webkit-scrollbar-track{
     background-color: #fff;
