@@ -1,11 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
+import React, {  useState } from "react";
 import { store } from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
-import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
+import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/financier";
 // import {
 //     useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
 // } from "@/service/admin/fund_query";
@@ -15,39 +14,33 @@ import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlac
 import {useViewMyInvestmentQuery} from '@/service/financier/api'
 import dynamic from "next/dynamic";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-
-interface InvestmentVehicle {
-    id: string;
-    investmentVehicleType: "COMMERCIAL" | "ENDOWMENT";
-    name: string;
-    rate?: number;
-}
+import {
+    CurrentMyInvestmentVehicleDetails,
+} from "@/pages/financier/my-investment/types";
+import Card from "@/pages/financier/my-investment/card";
+import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
+import {MdOutlinePayments} from "react-icons/md";
+import LoanEmptyState from "@/reuseable/emptyStates/Index";
+// interface InvestmentVehicle {
+//     id: string;
+//     investmentVehicleType: "COMMERCIAL" | "ENDOWMENT";
+//     name: string;
+//     rate?: number;
+// }
 
 const MyInvestmentContent = dynamic(
     () => Promise.resolve(MyInvestment),
     {ssr: false}
 )
 
-export const HandleCardDetails = (
-    id: string,
-    type: string,
-    router: ReturnType<typeof useRouter>
-) => {
-    store.dispatch(
-        setMarketInvestmentVehicleId({
-            marketInvestmentVehicleId: id,
-            vehicleType: type,
-        })
-    );
-    router.push("/my-investment/details");
-};
+
 const MyInvestment = () => {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
     // const [hasMore, setHasMore] = useState(true);
-    const [pageNumber, setPageNumber] = useState(0);
-    const [allVehicles, setAllVehicles] = useState<InvestmentVehicle[]>([]);
+    // const [pageNumber, setPageNumber] = useState(0);
+    // const [allVehicles, setAllVehicles] = useState<InvestmentVehicle[]>([]);
 
     // const observer = useRef<IntersectionObserver | null>(null);
     // const lastCardRef = useRef<HTMLDivElement | null>(null);
@@ -67,46 +60,16 @@ const MyInvestment = () => {
     // const hh = datss?.data?.investmentSummaries?.name
     // const hh2 = datss?.data?.investmentSummaries?.name
 
-    useEffect(() => {
-        setPageNumber(0);
-        setAllVehicles([]);
-    }, [searchTerm, selectedValue]);
 
-    // useEffect(() => {
-    //     if (data?.data?.body) {
-    //         // console.log("API Response:", data.data.body);
-    //         setAllVehicles(prev => {
-    //             const newVehicles = pageNumber === 0 ? data.data.body : [...prev, ...data.data.body];
-    //             const uniqueVehicles = Array.from(
-    //                 new Map(newVehicles.map(vehicle => [vehicle.id, vehicle])).values()
-    //             );
-    //             return uniqueVehicles;
-    //         });
-    //         setHasMore(data.data.hasNextPage);
-    //     }
-    // }, [data, pageNumber]);
-    //
-    // const lastCardObserver = useCallback(
-    //     (node: HTMLDivElement | null) => {
-    //         if (isLoading || isFetching) return;
-    //
-    //         if (observer.current) observer.current.disconnect();
-    //
-    //         observer.current = new IntersectionObserver(
-    //             entries => {
-    //                 if (entries[0].isIntersecting && hasMore) {
-    //                     setPageNumber(prevPage => prevPage + 1);
-    //                 }
-    //             },
-    //             {
-    //                 rootMargin: "100px",
-    //             }
-    //         );
-    //
-    //         if (node) observer.current.observe(node);
-    //     },
-    //     [isLoading, isFetching, hasMore]
-    // );
+
+    const HandleCardDetails = (vehicleDetails: CurrentMyInvestmentVehicleDetails ) => {
+        console.log('semd:< ', vehicleDetails)
+        store.dispatch(
+            setCurrentMyInvestmentVehicleDetails(vehicleDetails)
+        );
+        router.push("/my-investment/details");
+    };
+
 
 
 
@@ -124,20 +87,8 @@ const MyInvestment = () => {
         return 'border-[#B4E5C8] md:border-[#B4E5C8]'
     }
 
-    const filteredVehicles = allVehicles.filter((vehicle) => {
-        const matchesSearch = vehicle.name
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase());
 
-        const typeMatch =
-            selectedValue === "" ||
-            (selectedValue === "Commercial Investment" &&
-                vehicle.investmentVehicleType === "COMMERCIAL") ||
-            (selectedValue === "Endowment Investment" &&
-                vehicle.investmentVehicleType === "ENDOWMENT");
 
-        return matchesSearch && typeMatch;
-    });
 
     const vehicles = datss?.data?.investmentSummaries
 
@@ -161,26 +112,27 @@ const MyInvestment = () => {
                 />
             </div>
 
-            {/*{isLoading && pageNumber === 0 ? (*/}
-            {/*    <div className="w-full">*/}
-            {/*        <MarketPlaceInvestmentGrid />*/}
-            {/*    </div>*/}
-            {/*) : filteredVehicles.length === 0 ? (*/}
-            {/*    <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">*/}
-            {/*        <LoanEmptyState*/}
-            {/*            id="Vehicles"*/}
-            {/*            icon={<MdOutlinePayments className="w-10 h-10" color="#142854" />}*/}
-            {/*            iconBg="#D9EAFF"*/}
-            {/*            title="Investment Vehicles will show here"*/}
-            {/*            description="There are no investment vehicles available yet"*/}
-            {/*        />*/}
-            {/*    </div>*/}
-            {/*) : (*/}
+            {isLoading  ? (
+                <div className="w-full">
+                    <MarketPlaceInvestmentGrid />
+                </div>
+            ) : vehicles.length === 0 ? (
+                <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
+                    <LoanEmptyState
+                        id="Vehicles"
+                        icon={<MdOutlinePayments className="w-10 h-10" color="#142854" />}
+                        iconBg="#D9EAFF"
+                        title="Investment Vehicles will show here"
+                        description="There are no investment vehicles available yet"
+                    />
+                </div>
+            ) : (
                 <div
                     id="card-segmentId"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
-                    {vehicles?.map((vehicle, index) => {
+
+                    {vehicles?.map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
                         const backgroundColor =
                              vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -189,48 +141,38 @@ const MyInvestment = () => {
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "/BlueCircles.svg"
                                 : "/GreenCircles.svg";
-                        const status = vehicle?.fundRaisingStatus;
-                        const statuses = "Closed";
-                        const statusClass = getStatusColor(statuses)
-                        const borderClass = getStatusBorderColor(statuses)
+                        const statusValue = vehicle.fundRaisingStatus ? vehicle.fundRaisingStatus : vehicle.deployingStatus ;
+                        const status = vehicle.fundRaisingStatus ?  'Fundraising' : 'Deploying';
+
+                        const statusClass = getStatusColor(statusValue)
+                        const borderClass = getStatusBorderColor(statusValue)
 
                         const truncatedTitle =
                             vehicle.name.length > 20
                                 ? vehicle.name.slice(0, 20) + "..."
                                 : vehicle.name;
 
-                        const cardProps = {
-                            id: vehicle.id,
-                            backgroundColor,
-                            investmentVehicleType: vehicle.investmentVehicleType,
-                            imageSrc,
-                            investmentVehicleName: truncatedTitle,
-                            statusClass,
-                            status: capitalizeFirstLetters(status?.replace("_", " ")),
-                            statuses: statuses,
-                            borderClass,
-                            percentage: vehicle.rate || 0,
-                            HandleCardDetails: () =>
-                                HandleCardDetails( vehicle),
-                        };
 
-                        if (filteredVehicles.length === index + 1) {
-                            return (
-                                <div key={`wrapper-${vehicle.id}`} >
-                                    <InvestmentCard statuses={""} typeTextColor={""} key={vehicle.id} {...cardProps} />
-                                </div>
-                            );
-                        }
 
-                        return <InvestmentCard statuses={""} typeTextColor={""} key={vehicle.id} {...cardProps} />;
+                        return <Card
+                            key={`wrapper-${index}`}
+                            HandleCardDetails={HandleCardDetails}
+                            vehicleDetails={vehicle}
+                            backgroundColor={backgroundColor}
+                            investmentVehicleType={vehicle.investmentVehicleType}
+                            imageSrc={imageSrc}
+                            investmentVehicleName={truncatedTitle}
+                            statusClass={statusClass}
+                            status={status}
+                            statusValue={statusValue}
+                            borderClass={borderClass}
+                            percentage={vehicle.interestRateOffered || 0}
+
+                        />;
                     })}
-                    {isLoading && pageNumber > 0 && (
-                        <div className="col-span-full text-center py-4">
-                            Loading more...
-                        </div>
-                    )}
+
                 </div>
-            {/*)}*/}
+            )}
         </main>
     );
 };

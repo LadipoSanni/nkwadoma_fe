@@ -18,12 +18,13 @@ interface PerformanceCardProps {
     percentage: string | number;
     showContainerBorder: boolean;
     isSmall?: boolean;
+    isFigure?: boolean;
 
 }
 
 
 
-const PerformanceCard = ({id, showMonthPick,maxWidth, isSmall,title, value, isValueInPercentage, showContainerBorder, showPerformancePercentage,percentage, didValueIncrease}: PerformanceCardProps) => {
+const PerformanceCard = ({id,isFigure, showMonthPick,maxWidth, isSmall,title, value, isValueInPercentage, showContainerBorder, showPerformancePercentage,percentage, didValueIncrease}: PerformanceCardProps) => {
     return (
         <div
             id={id} data-testid={id}
@@ -39,12 +40,20 @@ const PerformanceCard = ({id, showMonthPick,maxWidth, isSmall,title, value, isVa
                     }
                 </div>
                 <div className={` grid gap-2 md:flex justify-between min-w-fit md:min-w-fit w-full md:w-full  `}>
-                    {isValueInPercentage ?
-                        <p id={'amountPercentage'} className={` ${cabinetGroteskBold.className} md:text-[36px] text-[24px] x text-meedlBlue `}>{value}%</p>
-                        :
+                   <div>
+                       {isFigure ?
+                           <p id={'performancePercentageAmount'} data-testid={'performancePercentageAmount'} className={` ${cabinetGroteskBold.className} md:min-w-fit md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue `}>{formatAmount(value)}</p>
+                           :
+                           <div>
+                               {isValueInPercentage ?
+                                   <p id={'amountPercentage'} className={` ${cabinetGroteskBold.className} md:text-[36px] text-[24px] x text-meedlBlue `}>{value}%</p>
+                                   :
 
-                        <p id={'performancePercentageAmount'} data-testid={'performancePercentageAmount'} className={` ${cabinetGroteskBold.className} md:min-w-fit md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue `}>{formatAmount(value)}</p>
-                    }
+                                   <p id={'performancePercentageAmount'} data-testid={'performancePercentageAmount'} className={` ${cabinetGroteskBold.className} md:min-w-fit md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue `}>{formatAmount(value)}</p>
+                               }
+                           </div>
+                       }
+                   </div>
                     { showPerformancePercentage && <div
                         id={'performancePercentageDiv'}
                         data-testid={'performancePercentageDiv'}

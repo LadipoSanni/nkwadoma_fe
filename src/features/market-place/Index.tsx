@@ -216,8 +216,8 @@ const MarketPlaceView = () => {
                         const borderClass =
                             status === "OPEN" ? "border-[#B4E5C8]" : status === "CLOSE" ? "border-[#F2BCBA]" : "border-gray-300";
                         // const statusKey = vehicle.fundRaisingStatus ? "fundRaisingStatus" : "deployingStatus";
-                        const statusValue = vehicle.fundRaisingStatus || vehicle.deployingStatus || "";
-                        const statuses = ` ${statusValue}`;
+                        const statusValue = vehicle.fundRaisingStatus ? vehicle.fundRaisingStatus : vehicle.deployingStatus ;
+                        const statuses = vehicle.fundRaisingStatus ?  'Fundrasing' : 'Deploying';
                         // fundRaising = `${statusKey}`;
                         const typeTextColor = vehicle.investmentVehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
 
@@ -233,12 +233,12 @@ const MarketPlaceView = () => {
                             imageSrc,
                             investmentVehicleName: truncatedTitle,
                             statusClass,
-                            statuses,
+                            status: statusValue,
+                            statuses: statuses,
                             borderClass,
                             percentage: vehicle.rate || 0,
                             typeTextColor,
-                            HandleCardDetails: () =>
-                                HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router),
+                            HandleCardDetails: ()=> { HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router)},
                         };
 
                         if (allVehicles.length === index + 1) {
