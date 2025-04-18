@@ -16,6 +16,7 @@ import { useEditCohortMutation } from "@/service/admin/cohort_query";
 import { useQueryClient } from "@tanstack/react-query";
 import FileUploadTwo from "@/reuseable/Input/FileUploadTwo";
 import QuillFieldEditor from "@/reuseable/textArea/Quill-field";
+import DatePicker from "@/reuseable/date/DatePicker";
 
 interface cohortDetails {
   id: string;
@@ -216,8 +217,8 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
 
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="">
-                  <Label htmlFor="startDate">Start date</Label>
-                  <DatePickerInput
+                  {/* <Label htmlFor="startDate">Start date</Label> */}
+                  {/* <DatePickerInput
                     selectedDate={parseISO(values.startDate ?? "")}
                     onDateChange={(date) =>
                       setFieldValue("startDate", format(date, "yyyy-MM-dd"))
@@ -231,7 +232,22 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
                       (date.getTime() < new Date().setHours(0, 0, 0, 0) ||
                         date >= parseISO(values.expectedEndDate ?? ""))
                     }
-                  />
+                  /> */}
+                   <DatePicker
+                  date={values.startDate ? parseISO(values.startDate) : undefined}
+                  setDate={(date) => {
+                    if (date) {
+                      setFieldValue("startDate", format(date, "yyyy-MM-dd"));
+                    }
+                  }}
+                  styleLabel="relative top-[2px]"
+                  className="h-[3.1rem] mt-1"
+                  disabledDate={(date) => {
+                    if (!date) return false; 
+                    const endDate = values.expectedEndDate ? parseISO(values.expectedEndDate) : null;
+                    return endDate ? date.getTime() >= endDate.getTime() : false;
+                  }}
+                   />
                   {errors.startDate && touched.startDate && (
                     <ErrorMessage
                       name="startDate"

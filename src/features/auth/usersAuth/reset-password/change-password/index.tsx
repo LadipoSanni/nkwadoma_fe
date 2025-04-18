@@ -6,6 +6,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {useResetPasswordMutation} from "@/service/auths/api";
 import {useToast} from "@/hooks/use-toast"
 import {inter} from "@/app/fonts";
+// import {encryptText} from "@/utils/encrypt";
 
 const Step3 = () => {
 
@@ -14,7 +15,9 @@ const Step3 = () => {
     // const [disableButton, setDisableButton] = useState(true)
     const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
     const searchParams = useSearchParams()
-    const [resetPassword, { data}] = useResetPasswordMutation()
+    const [resetPassword] = useResetPasswordMutation()
+    // const encryptedPassword =  encryptText(newPassword)
+
 
     const criteriaMessages = [
         "Must be at least 8 characters",
@@ -43,10 +46,10 @@ const Step3 = () => {
 
         try{
 
-            await resetPassword({token: token, password: newPassword}).unwrap()
-            if(data?.message){
+            const response =  await resetPassword({token: token, password: newPassword}).unwrap()
+            if(response?.message){
                 toast({
-                    description: data?.message,
+                    description: response?.message,
                     status: "success",
                 })
                 router.push("/auth/login")

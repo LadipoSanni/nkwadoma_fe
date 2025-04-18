@@ -18,6 +18,7 @@ import { BellIcon } from '@radix-ui/react-icons';
 import { Badge } from '../ui/badge';
 import { useNumberOfNotificationQuery } from '@/service/notification/notification_query';
 import { setCurrentTotalNotification } from '@/redux/slice/notification/notification';
+import {DISPLAYUSERROLE} from "@/components/topBar/variables";
 
 
 
@@ -29,20 +30,10 @@ const TopBar = () => {
     const user_name = getUserDetailsFromStorage("user_name");
      const router = useRouter();
      const pathname = usePathname();
-    //  const [isMobile, setIsMobile] = useState(false);
-
-    //   useEffect(() => {
-    //          const mediaQuery = window.matchMedia('(max-width: 767px)');
-    //          setIsMobile(mediaQuery.matches);
-
-    //          const handleResize = () => setIsMobile(mediaQuery.matches);
-    //          mediaQuery.addEventListener('change', handleResize);
-
-    //          return () => mediaQuery.removeEventListener('change', handleResize);
-    //      }, []);
 
 
     const {data,refetch} = useNumberOfNotificationQuery({})
+    const [userRole] = useState(user_role ? user_role : '');
 
     useEffect(()=>{
         if (data?.data?.allNotificationsCount !== undefined) {
@@ -66,14 +57,9 @@ const TopBar = () => {
        store.dispatch(setCurrentNavbarItem('Notification'))  
     }
     
-    // const isNotificationPage = pathname === "/notifications" ;
     const isNotificationPage = /^\/notifications(?:\/.*)?$/.test(pathname || "");
 
-    // const mobileNotificationHeaderClick =() => {
-    //     if(isMobile && currentTab === "Notification"){
-    //         router.push("/notifications/notification")
-    //     }
-    // }
+
     
 
 
@@ -92,7 +78,6 @@ const TopBar = () => {
                     <div className={` relative flex place-items-center `}>
                         <div
                         className={` ${inter500.className} text-base md:text-base text-black500 md:text500 `}
-                        // onClick={mobileNotificationHeaderClick}
                         >{currentTab}</div>
                     </div>
                 </div>
@@ -130,23 +115,22 @@ const TopBar = () => {
                                 }
                             </Button>
                           </div>
-                          {/* <Badge
-                         badgeContent={'33'}
-                        color="success" sx={{marginTop: 'auto', marginBottom: 'auto', height: '70%', width: '70%'}} >
-                        <FiBell className={` w-[100%] h-[100%] object-cover `}/>
-                          </Badge> */}
                     </div>
                     <div id={'fullNameDiv'} className="flex gap-2  justify-between items-center w-[fit-content]">
                         <div
-                            className={` flex place-content-center  object-fit  bg-[#E0FDEB]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
+                            className={` flex place-content-center  object-fit md:bg-[#FEF6E8]  bg-[#FEF6E8]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
                             <div
-                                className={` ${inter500.className} grid place-content-center  mt-auto mb-auto text-[#29804B]   w-[50%] h-[50%]   `} >
+                                className={` ${inter500.className} grid place-content-center  mt-auto mb-auto text-[#885A3C] md:text-[#885A3C]   w-[50%] h-[50%]   `} >
                                 {getFirstLetterOfWord(user_name)}
                             </div>
                         </div>
                         <button onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : 'cursor-text'} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
-                            <p className={`text-black500 ${inter500.className} flex justify-start  text-sm `}>{capitalizeFirstLetters(user_name)}</p>
-                            <p className={`text-black400 ${inter.className} flex justify-start text-sm`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
+                            <p className={`text-black500 ${inter500.className} flex justify-start mt-auto mb-auto  text-sm `}>{capitalizeFirstLetters(user_name)}</p>
+                            {DISPLAYUSERROLE?.includes(userRole) ?
+                                <p className={`text-black400 ${inter.className}  flex justify-start text-sm`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
+                            :
+                                null
+                            }
                         </button>
                         <div id={'toggleArrowDiv'} className={``}>
                             {user_role === 'ORGANIZATION_ADMIN' && (
