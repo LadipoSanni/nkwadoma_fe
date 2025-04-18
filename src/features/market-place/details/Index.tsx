@@ -153,7 +153,7 @@ const MarketPlaceDetails = () => {
             : "/GreenCircles.svg";
     const typeTextColor = vehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
 
-    const getTruncatedFilename = (filename: string, maxBaseLength = 10) => {
+    const getTruncatedFilename = (filename: string, maxBaseLength: number) => {
         const lastDot = filename.lastIndexOf('.');
         const ext = lastDot !== -1 ? filename.slice(lastDot) : '';
         const base = lastDot !== -1 ? filename.slice(0, lastDot) : filename;
@@ -163,6 +163,11 @@ const MarketPlaceDetails = () => {
         }
         return filename;
     };
+
+    const smallScreenFilename = getTruncatedFilename(docFilename || 'No Document', 10)
+    const largeScreenFilename = getTruncatedFilename(docFilename || 'No Document', 35);
+
+
 
 
 
@@ -265,11 +270,11 @@ const MarketPlaceDetails = () => {
                                         className="text-[14px] items-center flex max-w-[150px] truncate sm:hidden"
                                         title={docFilename}
                                     >
-                                        {docFilename ? getTruncatedFilename(docFilename) : ''}
+                                        {smallScreenFilename}
                                     </p>
 
                                     <p className="text-[14px] items-center hidden sm:flex">
-                                        {docFilename}
+                                        {largeScreenFilename}
                                     </p>
                                 </div>
 
