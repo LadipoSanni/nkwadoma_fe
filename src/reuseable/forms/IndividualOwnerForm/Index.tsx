@@ -124,7 +124,6 @@ const IndividualOwnerForm: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
                 {sections.map((section, index) => (
                     <section key={section.id} className={'grid gap-5 p-5 rounded-md border-[0.5px] border-lightBlue250 relative'}>
-                        {/* Form fields remain the same */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor={`firstName-${section.id}`}>First name</Label>
