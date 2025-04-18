@@ -4,9 +4,9 @@ export const validationSchema = Yup.object().shape({
   name: Yup.string()
     .trim()
     .matches(
-      /^[a-zA-Z][a-zA-Z0-9\-' ]*[a-zA-Z0-9]$/,
-      // "Name can include letters, numbers, hyphens and apostrophes only, and must start with a letter."
-      "Name must start with a letter and end with a letter or number and can include  hyphens and underscore only "
+      /^[a-zA-Z][a-zA-Z0-9\-'/ ]*[a-zA-Z0-9]$/,
+      // "Name can include letters, numbers, hyphens,slash and apostrophes only, and must start with a letter."
+      "Name must start with a letter and end with a letter or number and can include  hyphens,slash and underscore only "
     )
     .test(
       "valid-name",

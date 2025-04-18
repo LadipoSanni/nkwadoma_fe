@@ -31,6 +31,7 @@ const tabData = [
 
 const Status = ({disabledTabs}: Props)=> {
     const vehicleType = useAppSelector(state => (state?.vehicle?.vehicleType))
+     const statusType = useAppSelector(state => (state?.vehicle?.setEditStatus))
     const tabContent = [
         {
             value: "operation",
@@ -53,7 +54,7 @@ const Status = ({disabledTabs}: Props)=> {
         },
     ]
   return (
-    <div className={`${inter.className} xl:px-36 grid grid-cols-1 gap-y-8 relative md:right-6 lg:right-0`}>
+    <div className={`${inter.className}  grid grid-cols-1 gap-y-8 ${statusType === "changeStatus"? "xl:px-80 lg:px-60 md:px-40 px-10 lg:ml-12" : "xl:px-36 relative md:right-6 lg:right-0 "}`}>
       <div className='grid grid-cols-1 gap-y-1'>
         <h1 className='text-[18px] font-normal'>Status</h1>
     <p className='text-[14px] font-normal'>Select the status of your {vehicleType} fund</p>
