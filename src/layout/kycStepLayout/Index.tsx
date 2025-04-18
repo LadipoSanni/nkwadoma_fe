@@ -18,7 +18,7 @@ function KycStepLayout({children}:props) {
     const completedSteps = kycSteps.slice(0, currentIndex).map(step => step.id);
 
     const handleBack=()=> {
-            router.push("/financier-overview")
+            router.push("/Overview")
     }
     return (
         <div className='md:px-10 px-4  py-4 grid grid-cols-1 gap-y-10'>

@@ -1,15 +1,13 @@
 "use client"
 import React from 'react';
 import { useRouter} from "next/navigation";
-import {persistor, store, useAppSelector} from "@/redux/store";
+import {persistor, RootState, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
-import Image from "next/image"
-import NavbarRouter from "../../reuseable/ui/navbarRouter";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
-import NavbarContainer from "@/reuseable/ui/Navbar";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {useLogoutMutation} from "@/service/users/api";
 import {clearData} from "@/utils/storage";
+import {useSelector} from "react-redux";
 import {
     getFinancierSideBarItems,
     getInstituteAdminSideBarItems,
@@ -17,7 +15,9 @@ import {
     getPortfolioManagerSideBarItems,
     getSettingItem
 } from "@/utils/sideBarItems";
-
+import Image from "next/image"
+import NavbarRouter from "../../reuseable/ui/navbarRouter";
+import NavbarContainer from "@/reuseable/ui/Navbar";
 
 
 
@@ -29,7 +29,7 @@ const SideBar = () => {
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
     const [logout] = useLogoutMutation()
     const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role')  : "user role";
-
+    const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
 
 
 
@@ -68,19 +68,12 @@ const SideBar = () => {
     }
 
 
-
-
     const settingItem = getSettingItem( currentNavBottom, handleClick, userRole)
     const logoutItem = getLogoutItem(currentNavBottom,handleLogout)
 
     const navbarContainerItems: navbarItemsProps[] = [...settingItem, logoutItem];
 
-    const sideBarContent = [
-        {name: "PORTFOLIO_MANAGER", value: getPortfolioManagerSideBarItems(current)},
-        {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
-        {name: 'LOANEE', value: getLoaneeSideBarItems(current) },
-        {name: 'FINANCIER', value: getFinancierSideBarItems(current)},
-    ]
+
 
 
     const getUserSideBarByRole = (userrole?: string): navbarRouterItemsProps[] | undefined => {
@@ -92,6 +85,15 @@ const SideBar = () => {
             }
         }
     }
+
+
+    const sideBarContent = [
+        {name: "PORTFOLIO_MANAGER", value: getPortfolioManagerSideBarItems(current)},
+        {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
+        {name: 'LOANEE', value: getLoaneeSideBarItems(current, isLoaneeIdentityVerified) },
+        {name: 'FINANCIER', value: getFinancierSideBarItems(current)},
+    ]
+
 
 
 

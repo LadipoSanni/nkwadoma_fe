@@ -3,6 +3,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import SuccessDialog from '@/reuseable/modals/SuccessDialog/Index';
 import { useRouter } from 'next/navigation';
+import {store} from "@/redux/store";
+import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
+import {setLoaneeIdentityVerifiedStatus} from "@/service/users/loanRerralSlice";
 
 const ConfirmLoanReferralAcceptance = () => {
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -41,6 +44,9 @@ const ConfirmLoanReferralAcceptance = () => {
                 onClose={() => setIsDialogOpen(false)}
                 onContinue={() => {
                     setIsDialogOpen(false);
+                    store.dispatch(setCurrentNavBottomItem('Overview'))
+                    store.dispatch(setCurrentNavbarItem('Overview'))
+                    store.dispatch(setLoaneeIdentityVerifiedStatus(true))
                     router.push('/overview');
                 }}
                 title={'Acceptance process successful'}

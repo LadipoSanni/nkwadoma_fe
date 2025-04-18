@@ -12,9 +12,7 @@ interface LoanApplicationDetailsProps {
 
 const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeLoanDetail }) => {
     const [isOpen, setIsOpen] = useState(false);
-    // const [isCameraOn, setIsCameraOn] = useState(false);
-    // const [stream, setStream] = useState<MediaStream|null>(null);
-    // const videoRef = useRef<HTMLVideoElement>(null);
+
 
     if (!loaneeLoanDetail) {
         return <div>Loading...</div>;
@@ -24,37 +22,10 @@ const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeL
 
     const formattedCohortStartDate = isValid(new Date(cohortStartDate)) ? format(new Date(cohortStartDate), 'dd MMM, yyyy') : 'Date not available';
 
-    // const startCamera = async () => {
-    //     console.log(stream)
-    //     const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-    //         setStream(mediaStream);
-    //     if (videoRef.current) {
-    //         videoRef.current.srcObject = mediaStream;
-    //         setIsCameraOn(true);
-    //     }
-    // };
-    //
-    // const stopCamera = () => {
-    //     console.log("Stop camera called")
-    //     console.log("The stream is : ", stream)
-    //     if (stream) {
-    //         stream.getTracks().forEach((track) => {
-    //             console.log("The track is : ", track)
-    //             track.stop()
-    //         });
-    //         setStream(null)
-    //         if (videoRef.current) {
-    //             videoRef.current.srcObject = null;        }
-    //         setIsCameraOn(false);
-    //     }
-    //     console.log("Process has ended")
-    // };
+
 
     return (
         <div id="loanApplicationDetailsContent" className={'rounded-md grid gap-9 p-5 bg-grey105'}>
-            {/*<button onClick={startCamera}>Start Camera</button>*/}
-            {/*<button onClick={stopCamera}>Stop Camera</button>*/}
-            {/*{isCameraOn && <video ref={videoRef} autoPlay playsInline className="w-full h-auto mt-4" />}*/}
 
             <DetailItem label="Tuition amount" value={<NumericFormat value={tuitionAmount} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
             <DetailItem label="Cohort start date" value={formattedCohortStartDate}/>
