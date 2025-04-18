@@ -1,5 +1,5 @@
 "use client";
-import React, { useState} from 'react';
+import React, { useState,useEffect} from 'react';
 import InfoCard from '@/reuseable/details/InfoCard';
 import {MdOutlinePayments} from 'react-icons/md';
 import InfoPanel from '@/reuseable/details/InfoPanel';
@@ -8,17 +8,40 @@ import {useGetInvestmentVehicleDetailQuery} from '@/service/admin/fund_query';
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import {useAppSelector} from "@/redux/store";
-import { MdEdit } from "react-icons/md";
+// import { MdEdit } from "react-icons/md";
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { inter } from '@/app/fonts';
+import {formatMonthInDate} from '@/utils/Format';
+import {setDraftId,setEditStatus,clearEditStatus,setInvestmentStatus,clearSaveInvestmentStatus} from '@/redux/slice/vehicle/vehicle';
+import {store} from "@/redux/store";
+import { useRouter } from 'next/navigation'
+import {markStepCompleted} from '@/redux/slice/multiselect/vehicle-multiselect';
+import { resetVehicleState } from '@/redux/slice/multiselect/vehicle-multiselect';
 
 const Details = () => {
     const currentVehicleId = useAppSelector(state => (state.vehicle.currentVehicleId))
+    const statusType = useAppSelector(state => (state.vehicle.setEditStatus))
     const [investmentId] = useState(currentVehicleId);
     const [isVerifying, setIsVerifying] = useState(false);
     const [docError, setDocError] = useState<string | null>(null);
+    const router = useRouter()
 
-    const {data, isLoading} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
+    const {data, isLoading,refetch} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
+
+    const setStatus = {
+        state: data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus,
+        status: data?.data?.fundRaisingStatus === null ? "deployingStatus" : "fundRaising"
+    }
+
+    useEffect(() => {
+         store.dispatch(clearEditStatus())
+         store.dispatch(resetVehicleState())
+         store.dispatch(clearSaveInvestmentStatus())
+         if(statusType === "changeStatus"){
+            refetch()
+         }
+    },[refetch])
 
     const getFilenameFromUrl = (url: string) => {
         try {
@@ -51,6 +74,21 @@ const Details = () => {
     const docFilename = getFilenameFromUrl(docUrl);
     const isCloudinaryUrl = docUrl?.includes('cloudinary.com');
     const fileExtension = docFilename?.split('.').pop()?.toLowerCase();
+
+    const handleChangeVisibility = () => {
+         store.dispatch(setDraftId(data?.data?.id))
+         store.dispatch(markStepCompleted("setup"))
+         store.dispatch(setEditStatus("changeVisibility"))
+         router.push("/vehicle/edit/visibility")
+    }
+
+    const handleChangeStatus = () => {
+        store.dispatch(setInvestmentStatus(setStatus))
+        store.dispatch(setDraftId(data?.data?.id))
+        store.dispatch(setEditStatus("changeStatus"))
+        store.dispatch(markStepCompleted("setup"))
+        router.push("/vehicle/edit/status")
+    }
 
     
     const handleViewDocument = async () => {
@@ -85,19 +123,20 @@ const Details = () => {
     const detailInfo = [
         {name: 'Vehicle type', value: capitalizeFirstLetters(data?.data?.investmentVehicleType )|| 'N/A'},
         {name: 'Vehicle size', value: formatAmount(data?.data?.size?.toString() || '0')},
-        {
-            name: 'Vehicle status',
-            value: <p
-                >{data?.data?.fundRaisingStatus === null ? "Deploying" : "fundRaising" } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus) }</span></span> </p>
-        },
-        {name: 'Vehicle visibility', value: <div className='flex items-center gap-1'>
-            {capitalizeFirstLetters(data?.data?.investmentVehicleVisibility )}
-             <span>
-                <MdEdit color='#939CB0'/>
-             </span>
-                                         </div>},
+        // {
+        //     name: 'Vehicle status',
+        //     value: <p
+        //         >{data?.data?.fundRaisingStatus === null ? "Deploying" : "fundRaising" } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus) }</span></span> </p>
+        // },
+        // {name: 'Vehicle visibility', value: <div className='flex items-center gap-1'>
+        //     {capitalizeFirstLetters(data?.data?.investmentVehicleVisibility )}
+        //      <span>
+        //         <MdEdit color='#939CB0'/>
+        //      </span>
+        //                                  </div>},
+        {name: 'Vehicle start date', value: formatMonthInDate(data?.data?.startDate) },
         {name: 'Interest rate', value: `${data?.data?.rate || 0}%`},
-        {name: 'Start date', value: `${data?.data?.startDate }`},
+        {name: 'Tenor', value: `${data?.data?.tenure } month`},
         {
             name: 'Total amount in vehicle',
             value: formatAmount(data?.data?.totalAmountInInvestmentVehicle?.toString() || '0')
@@ -113,7 +152,7 @@ const Details = () => {
         <>
             {isLoading ? (<SkeletonForDetailPage/>) : (
                 <div
-                    className='flex flex-col md:flex-row md:justify-between'
+                    className={`flex flex-col md:flex-row md:justify-between ${inter.className}`}
                 > 
                   <div className='w-full'>
                     <div >
@@ -123,8 +162,8 @@ const Details = () => {
                             description={""}
                         />
                     </div>
-                     <div className='border-[1px] border-solid px-3 py-2 md:max-w-72 lg:max-w-[29vw] border-[#D7D7D7] rounded-md grid grid-cols-1 gap-y-3 mb-5'>
-                       <p>Mandate</p>
+                     <div className='py-2 md:max-w-72 lg:max-w-[29vw] rounded-md grid grid-cols-1 gap-y-3'>
+                       <p className='text-[14px] font-semibold'>Prospect</p>
                        <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
                        
                           <div className='flex gap-2 items-center'>
@@ -141,26 +180,76 @@ const Details = () => {
                               }}
                             />
                             </div>
-                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{docFilename}</p>
+                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px]  lg:whitespace-normal '>{docFilename}</p>
                           </div>
                          
                            <Button 
                             id='view-document'
                            type='button' 
                            variant={"default"} 
-                           className='bg-[#D9EAFF] text-black text-[12px] font-medium hover:bg-[#D9EAFF] underline rounded-2xl h-7 w-[6.7vh]'
+                           className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[7.9vh]"}`}
                             onClick={handleViewDocument}
                             disabled={!docUrl || isVerifying}
                             aria-label={`View ${docFilename}`}
                             >
                              {isVerifying ? 'Verifying...' : (docUrl ? 'View' : 'No Document')}
                            </Button>
+                      
+
                        </div>
                      </div>
                      {docError && (
                             <p className='text-red-500 text-xs mt-1 mb-3'>{docError}</p>
                             )}
+                    <div className='py-2 md:max-w-72 lg:max-w-[29vw] rounded-md grid grid-cols-1 gap-y-3'>
+                       <p className='text-[14px] font-semibold'>Visibility</p>
+                       <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
+                       
+                          <div className='flex gap-2 items-center'>
+                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p>
+                          </div>
+                         
+                           <Button 
+                            id='edit_visibility'
+                           type='button' 
+                           variant={"default"} 
+                           className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold'
+                            onClick={handleChangeVisibility}
+                            
+                            >
+                             Change
+                           </Button>
+                      
+
+                       </div>
+                     </div>
+                     <div className='py-2 md:max-w-72 lg:max-w-[29vw] rounded-md grid grid-cols-1 gap-y-3'>
+                       <p className='text-[14px] font-semibold'>Status</p>
+                       <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
+                       
+                          <div className='flex gap-2 items-center'>
+                            {/* <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p> */}
+                            <p
+                            className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '
+                >{data?.data?.fundRaisingStatus === null ? "Deploying" : "fundRaising" } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus) }</span></span> </p>
+                          </div>
+                         
+                           <Button 
+                             id='edit_status'
+                           type='button' 
+                           variant={"default"} 
+                           className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold '
+                            onClick={handleChangeStatus}
+                            
+                            >
+                             Change
+                           </Button>
+                      
+
+                       </div>
+                     </div>
                     </div>
+                    
                     <div className='w-full'>
                         <InfoPanel infoList={detailInfo}/>
                     </div>

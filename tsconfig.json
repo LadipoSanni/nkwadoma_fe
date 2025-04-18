@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/app/(Authenticated)/(Admin)/vehicle/edit/visibility", "src/app/(Authenticated)/(Admin)/vehicle/edit/status"  ],
   "exclude": [
     "node_modules"
   ]
