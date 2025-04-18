@@ -34,10 +34,10 @@ export const getPortfolioManagerSideBarItems =  (currentItem: string) => {
 
 
 
-export const getLoaneeSideBarItems = (currentItem: string) => {
+export const getLoaneeSideBarItems = (currentItem: string, isLoaneeIdentityVerified: boolean) => {
 
     const items : navbarRouterItemsProps[] = [
-        {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem] ${currentItem === 'Overview' ? currentTextLiterals : textLiterals} `}/>, id: 'overview', isActive: true, name: "Overview", route: '/Overview'},
+        {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem]  ${isLoaneeIdentityVerified ? `${currentItem === 'Overview' ? currentTextLiterals : textLiterals} ` : 'text-navbarIconColor md:text-navbarIconColor'} `}/>, id: 'overview', isActive: isLoaneeIdentityVerified, name: "Overview", route: '/Overview'},
         {icon: <MdOutlineAccountBalanceWallet className={` h-[1.2rem] w-[1.2rem] text-[#d7d7d7] md:text-[#d7d7d7`}/>, id: 'wallet', name: "Wallet", isActive: false, route: '/wallet'},
         {icon: <Icon icon='iconoir:hand-cash' color={'#d7d7d7'} height={"1.2rem"} width={"1.3rem"}/>, id: 'repayment', isActive: false, name: "Repayment", route: '/repayment'},
     ]
@@ -89,10 +89,10 @@ export const getFinancierSideBarItems = (currentNavItem: string) => {
             name: 'Marketplace',
             route: '/marketplace',
             isActive: true,
-            icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={currentNavItem === 'Marketplace' ? '#142854':'#939CB0'}/>
+            icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={ currentNavItem === 'Marketplace' ? '#142854':'#626F8C'}/>
         },
         {
-            icon: <Icon icon='iconoir:hand-cash' color={currentNavItem === 'My Investment' ? '#142854' : '#939CB0'} height={"1.2rem"} width={"1.3rem"}/>,
+            icon: <Icon icon='iconoir:hand-cash' color={ currentNavItem === 'My Investment' ? '#142854':'#626F8C'} height={"1.2rem"} width={"1.3rem"}/>,
             id: 'myInvestment',
             isActive: true,
             name: "My Investment",

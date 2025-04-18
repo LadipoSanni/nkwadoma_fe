@@ -87,7 +87,6 @@ const AcceptLoanOffer: React.FC = () => {
             // amountReceived,
         } = data.data;
 
-        // console.log('data:: ', data)
         switch (currentTab) {
             case 0:
                 return [
