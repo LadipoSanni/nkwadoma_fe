@@ -41,7 +41,7 @@ const MarketPlaceDetails = () => {
         store.dispatch(
             setMarketInvestmentVehicleId({
                 marketInvestmentVehicleId: data?.data?.id,
-                minimumInvestmentAmount: formatAmount(data?.data?.minimumInvestmentAmount?.toString()),
+                minimumInvestmentAmount: data?.data?.minimumInvestmentAmount?.toString(),
                 vehicleType: data?.data?.investmentVehicleType
             })
         );
@@ -142,6 +142,19 @@ const MarketPlaceDetails = () => {
             : "/GreenCircles.svg";
     const typeTextColor = vehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
 
+    const getTruncatedFilename = (filename: string, maxBaseLength = 10) => {
+        const lastDot = filename.lastIndexOf('.');
+        const ext = lastDot !== -1 ? filename.slice(lastDot) : '';
+        const base = lastDot !== -1 ? filename.slice(0, lastDot) : filename;
+
+        if (base.length > maxBaseLength) {
+            return `${base.slice(0, maxBaseLength)}...${ext}`;
+        }
+        return filename;
+    };
+
+
+
     return (
         <>{isLoading || isFetching ? (<MarketDetailsSkeleton/>):
             <main id="mainDiv" className="md:px-10 py-6 px-3 w-full md:gap-10 gap-8">
@@ -227,40 +240,49 @@ const MarketPlaceDetails = () => {
 
                         <div className='py-2 w-full grid grid-cols-1 gap-y-3 '>
                             <p className={`${inter.className} text-sm font-semibold text-[#212221]`}>Prospectus</p>
-                            <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
-
-                                <div className='flex gap-2 '>
+                            <div className="bg-[#F9F9F9] flex justify-between px-3 py-4 rounded-lg items-center flex-wrap">
+                                <div className="flex gap-2 items-center max-w-[70%]">
                                     <Image
                                         src={"/MyMandateLogo.png"}
-                                        alt='image'
-                                        width={16}
-                                        height={16}
+                                        alt="image"
+                                        width={25}
+                                        height={25}
                                         priority
-                                        style={{
-                                            width: 'auto',
-                                            height: 'auto'
-                                        }}
+                                        style={{ width: "auto", height: "auto" }}
                                     />
-                                    <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{docFilename}</p>
+                                    <p
+                                        className="text-[14px] items-center flex max-w-[150px] truncate sm:hidden"
+                                        title={docFilename}
+                                    >
+                                        {docFilename ? getTruncatedFilename(docFilename) : ''}
+                                    </p>
+
+                                    <p className="text-[14px] items-center hidden sm:flex">
+                                        {docFilename}
+                                    </p>
                                 </div>
 
-                                <Button
-                                    id='view-document'
-                                    type='button'
-                                    variant={"default"}
-                                    className='border-[1px] border-solid border-meedlBlue rounded-2xl text-meedlBlue font-medium  h-7 w-[6.7vh]'
-                                    onClick={handleViewDocument}
-                                    disabled={!docUrl || isVerifying}
-                                    aria-label={`View ${docFilename}`}
-                                >
-                                    {isVerifying ? 'Verifying...' : (docUrl ? 'View' : 'No Document')}
-                                </Button>
+                                <div className={`flex justify-center items-center`}>
+                                    <Button
+                                        id="view-document"
+                                        type="button"
+                                        variant={"default"}
+                                        onClick={handleViewDocument}
+                                        className="text-meedlBlue border-[1px] border-meedlBlue font-medium rounded-2xl text-sm md:px-4 px-3 py-2"
+                                        disabled={!docUrl || isVerifying}
+                                        aria-label={`View ${docFilename}`}
+                                    >
+                                        {isVerifying ? "Verifying..." : docUrl ? "View" : "No Document"}
+                                    </Button>
+                                </div>
                             </div>
+
                         </div>
                         {docError && (
                             <p className='text-red-500 text-xs mt-1 mb-3'>{docError}</p>
                         )}
-                        <p className={`${inter.className} text-sm font-semibold mb-3 text-[#212221]`}>Investment details</p>
+                        <p className={`${inter.className} text-sm font-semibold mb-3 text-[#212221]`}>Investment
+                            details</p>
                         <div
                             className="bg-[#F9F9F9] h-fit md:grid px-5 w-full">
                             {investmentBasicDetails?.map((item, index) => (
