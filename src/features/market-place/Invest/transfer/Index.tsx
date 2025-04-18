@@ -48,13 +48,21 @@ function Transfer() {
     // const HandleNext = () => {
     //     router.push('/marketplace/confirmTransfer');
     // }
+    const invest = Number(minimumInvestmentAmount)
 
     const validationSchema = Yup.object().shape({
         amount: Yup.number()
             .required("Amount is required")
             .typeError("Amount must be a number")
-            // .max(maxAmount, `Amount cannot exceed ${maxAmount}`), // Re-added max validation
-            // .max(maxAmount, `Amount cannot exceed ${minimumInvestmentAmount}`),
+            .min(
+                invest,
+                `Amount cannot be less than ${formatAmount(invest)}`
+            )
+            .test(
+                'is-greater-than-min',
+                `Amount cannot be less than ${formatAmount(invest)}`,
+                (value) => value === undefined || value >= invest
+            ),
     });
 
     const networkPopUp = ToastPopUp({
@@ -146,7 +154,7 @@ function Transfer() {
                                                 <div className={``}>
                                                     <MdInfoOutline className={`text-[#66440A]`}/>
                                                 </div>
-                                                <div className={`text-[#66440A] text-sm font-normal`}>Minimum amount to invest is {minimumInvestmentAmount}</div>
+                                                <div className={`text-[#66440A] text-sm font-normal`}>Minimum amount to invest is {formatAmount(minimumInvestmentAmount)}</div>
                                             </div>
 
                                             <div className={`bg-[#F9F9F9] w-full rounded-sm p-5 flex md:flex-row gap-4`}>
