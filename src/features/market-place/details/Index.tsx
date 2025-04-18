@@ -12,6 +12,7 @@ import {useGetInvestmentVehicleDetailQuery} from "@/service/financier/marketplac
 import {formatAmount} from "@/utils/Format";
 import MarketDetailsSkeleton from "@/reuseable/Skeleton-loading-state/MarketDetails";
 import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
+import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 
 const MarketPlaceDetails = () => {
     const router = useRouter();
@@ -37,16 +38,26 @@ const MarketPlaceDetails = () => {
         }
     };
 
+    const networkPopUp = ToastPopUp({
+        description: "No internet connection",
+        status: "error",
+    });
+
     const HandleInvest = () => {
-        store.dispatch(
-            setMarketInvestmentVehicleId({
-                marketInvestmentVehicleId: data?.data?.id,
-                minimumInvestmentAmount: data?.data?.minimumInvestmentAmount?.toString(),
-                vehicleType: data?.data?.investmentVehicleType
-            })
-        );
-        router.push("/marketplace/transfer");
+        if (!navigator.onLine) {
+            networkPopUp.showToast();
+        } else {
+            store.dispatch(
+                setMarketInvestmentVehicleId({
+                    marketInvestmentVehicleId: data?.data?.id,
+                    minimumInvestmentAmount: data?.data?.minimumInvestmentAmount?.toString(),
+                    vehicleType: data?.data?.investmentVehicleType
+                })
+            );
+            router.push("/marketplace/transfer");
+        }
     };
+
 
     const actualStatus = data?.data?.fundRaisingStatus === null
         ? data?.data?.deployingStatus
