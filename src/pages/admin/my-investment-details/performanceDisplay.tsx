@@ -8,11 +8,11 @@ interface PerformanceProps {
     currentBartChart: number,
     handleBarChartTabChange: (index: number) => void,
     chartData: {month: string, value: number}[],
-    amountInvested: string,
-    newAssetValue: string,
-    portfolioPercentage: string,
-    TalentFunded: string,
-    incomeEarned: string,
+    amountInvested?: string,
+    newAssetValue?: string,
+    portfolioPercentage?: string,
+    TalentFunded?: string,
+    incomeEarned?: string,
 
 }
 

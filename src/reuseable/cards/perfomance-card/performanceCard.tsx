@@ -11,7 +11,7 @@ interface PerformanceCardProps {
     id: string;
     maxWidth: string;
     title: string;
-    value: string | number; // performance amount
+    value?: string | number; // performance amount
     isValueInPercentage?: boolean; // value can eight be in percentage  or amount
     showPerformancePercentage?: boolean;
     didValueIncrease: boolean; // did performance amount increase or decrease
