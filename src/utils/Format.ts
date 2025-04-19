@@ -26,25 +26,20 @@ export const formatAmount = (price: TableRowData[keyof TableRowData]) => {
   return "₦0.00";
 };
 
-// export const formateDigits = (digit: string) => {
-//   if (typeof price === "string" || typeof price === "number") {
-//     const priceStr = typeof price === "number" ? price.toString() : price;
-//
-//     const numericPrice = parseFloat(priceStr.replace(/[^0-9.-]+/g, ""));
-//
-//     if (!isNaN(numericPrice)) {
-//       const formattedAmount = new Intl.NumberFormat("en-US", {
-//         style: "currency",
-//         currency: "NGN",
-//         minimumFractionDigits: 2,
-//       }).format(numericPrice);
-//
-//       return  formattedAmount.replace("NGN", "").trim();
-//     }
-//   }
+export const formateDigits = (digit:  number) => {
 
-//   return "0.00";
-// }
+    if (!isNaN(digit)) {
+      const formattedAmount = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "NGN",
+        minimumFractionDigits: 2,
+      }).format(digit);
+      return  formattedAmount.replace("NGN", "").trim();
+    }
+
+
+  return "0.00";
+}
 
 export const formatDate = (
   date: ReactNode,

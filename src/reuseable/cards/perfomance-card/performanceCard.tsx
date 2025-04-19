@@ -3,7 +3,7 @@ import React from 'react';
 import {cabinetGroteskBold, inter, inter500} from "@/app/fonts";
 import { MdArrowUpward, MdOutlineArrowDownward } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import {formatAmount} from "@/utils/Format";
+import {formatAmount, formateDigits} from "@/utils/Format";
 
 
 interface PerformanceCardProps {
@@ -42,7 +42,7 @@ const PerformanceCard = ({id,isFigure, showMonthPick,maxWidth, isSmall,title, va
                 <div className={` grid gap-2 md:flex justify-between min-w-fit md:min-w-fit w-full md:w-full  `}>
                    <div>
                        {isFigure ?
-                           <p id={'performancePercentageAmount'} data-testid={'performancePercentageAmount'} className={` ${cabinetGroteskBold.className} md:min-w-fit md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue `}>{formatAmount(value)}</p>
+                           <p id={'performancePercentageAmount'} data-testid={'performancePercentageAmount'} className={` ${cabinetGroteskBold.className} md:min-w-fit md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue `}>{formateDigits(Number(value))}</p>
                            :
                            <div>
                                {isValueInPercentage ?

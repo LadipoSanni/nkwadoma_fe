@@ -308,7 +308,7 @@ const MyInvestmentDetails = () => {
                     <p className={` ${inter600.className}  text-[18px] text-[#212221]  `}>Performance</p>
                         <div className={`w-full ${styles.container} md:w-full md:max-h-[70vh] md:overf  pt-4 grid gap-4  `}>
                             {/*{currentTab === 0 ?*/}
-                            <PerformanceDisplay amountInvested={currentInvestmentDetails.amountInvested} incomeEarned={currentInvestmentDetails.incomeEarned} newAssetValue={currentInvestmentDetails.netAssetValue} portfolioPercentage={currentInvestmentDetails.percentageOfPortfolio} TalentFunded={''} barChartTabContent={barChartTabContent} currentBartChart={currentBartChart} chartData={chartData} handleBarChartTabChange={handleBarChartTabChange} />
+                            <PerformanceDisplay amountInvested={currentInvestmentDetails.amountInvested} incomeEarned={currentInvestmentDetails?.incomeEarned} newAssetValue={currentInvestmentDetails?.netAssetValue} portfolioPercentage={currentInvestmentDetails?.percentageOfPortfolio} TalentFunded={''} barChartTabContent={barChartTabContent} currentBartChart={currentBartChart} chartData={chartData} handleBarChartTabChange={handleBarChartTabChange} />
                             {/*    // :*/}
                             {/*    // <InvestmentMandate/>*/}
                             {/*// }*/}
