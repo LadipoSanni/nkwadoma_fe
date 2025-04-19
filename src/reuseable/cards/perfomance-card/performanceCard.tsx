@@ -49,7 +49,7 @@ const PerformanceCard = ({id,isFigure, showMonthPick,maxWidth, isSmall,title, va
                                    <p id={'amountPercentage'} className={` ${cabinetGroteskBold.className} md:text-[36px] text-[24px] x text-meedlBlue `}>{value}%</p>
                                    :
 
-                                   <p id={'performancePercentageAmount'} data-testid={'performancePercentageAmount'} className={` ${cabinetGroteskBold.className} md:min-w-fit md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue `}>{formatAmount(value)}</p>
+                                   <p id={'performancePercentageAmount'} data-testid={'performancePercentageAmount'} className={` ${cabinetGroteskBold.className} md:min-w-fit md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue `}>{formatAmount(value,true)}</p>
                                }
                            </div>
                        }

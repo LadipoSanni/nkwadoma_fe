@@ -44,7 +44,7 @@ const MyInvestmentDetails = () => {
     };
 
 
-    const docUrl = currentInvestmentDetails.mandate;
+    const docUrl = currentInvestmentDetails?.mandate;
     const docFilename = getFilenameFromUrl(docUrl);
     const isCloudinaryUrl = docUrl?.includes('cloudinary.com');
     const fileExtension = docFilename?.split('.').pop()?.toLowerCase();
@@ -176,9 +176,7 @@ const MyInvestmentDetails = () => {
             <BackButton id={'backToViewMyInvestments'} text={'Back to investment'} textColor={'#142854'} handleClick={handleBackButton} iconBeforeLetters={true} />
             <div className={`w-full h-full md:w-full  grid md:flex md:justify-between md:h-[100%] `}>
                 <div className={`w-full md:w-[33%] ${styles.container} ml md:max-h-[70vh] grid gap-4 md:grid md:gap-4 h-fit md:h-fit `}>
-                    {/*<div className={` w-full md:w-full h-[15rem] md:h-[12rem] rounded-md md:rounded-md bg-[#D9EAFF] md:bg-[#D9EAFF] `}>*/}
 
-                    {/*</div>*/}
                     <div id="investment-type-segment" data-testid={`investment-type-segment`} style={{backgroundColor}}
                          className="rounded-md">
                         <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>
@@ -244,7 +242,7 @@ const MyInvestmentDetails = () => {
 
 
                         <div className='py-2 w-full grid grid-cols-1 gap-y-3 '>
-                            <p className={`${inter.className} text-sm font-semibold text-[#212221]`}>Prospectus</p>
+                            <p className={`${inter600.className} text-[14px]  text-[#212221]`}>Prospectus</p>
                             <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
 
                                 <div className='flex gap-2 '>
@@ -253,11 +251,9 @@ const MyInvestmentDetails = () => {
                                         alt='image'
                                         width={16}
                                         height={16}
+                                        className={` w-fit mt-auto mb-auto h-fit `}
                                         priority
-                                        style={{
-                                            width: 'auto',
-                                            height: 'auto'
-                                        }}
+
                                     />
                                     <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{docFilename}</p>
                                 </div>
@@ -266,7 +262,7 @@ const MyInvestmentDetails = () => {
                                     id='view-document'
                                     type='button'
                                     variant={"default"}
-                                    className='bg-[#D9EAFF] text-black text-[12px] font-medium hover:bg-[#D9EAFF] rounded-2xl h-7 w-[6.7vh]'
+                                    className='bg-[#D9EAFF] text-black text-[12px] font-medium hover:bg-[#D9EAFF] rounded-2xl h-7 w-fit'
                                     onClick={handleViewDocument}
                                     disabled={!docUrl || isVerifying}
                                     aria-label={`View ${docFilename}`}
@@ -281,7 +277,7 @@ const MyInvestmentDetails = () => {
 
 
                         <div className={` grid gap-4`}>
-                            <p>Investment details</p>
+                            <p className={` ${inter600.className} text-[14px] text-[#212221] `}>Investment details</p>
                             <div className={` bg-grey105 md:bg-grey105 grid h-fit md:h-fit  gap-8 py-3 md:py-3 px-3  `}>
                                 {investmentBasicDetails.map((item, index) => (
                                     <div key={"key" + index}
@@ -303,15 +299,9 @@ const MyInvestmentDetails = () => {
 
 
                 <div className={`md:w-[60%] w-full grid md:grid gap-2 md:gap-2  md:max-h-[99%]`}>
-                    {/*<TabSwitch componentId={'myInvestmentDetailsTabSwitch'} currentTab={currentTab}*/}
-                    {/*           tabContent={tabContent} handleChange={handleTabChange}/>*/}
                     <p className={` ${inter600.className}  text-[18px] text-[#212221]  `}>Performance</p>
                         <div className={`w-full ${styles.container} md:w-full md:max-h-[70vh] md:overf  pt-4 grid gap-4  `}>
-                            {/*{currentTab === 0 ?*/}
-                            <PerformanceDisplay amountInvested={currentInvestmentDetails.amountInvested} incomeEarned={currentInvestmentDetails?.incomeEarned} newAssetValue={currentInvestmentDetails?.netAssetValue} portfolioPercentage={currentInvestmentDetails?.percentageOfPortfolio} TalentFunded={''} barChartTabContent={barChartTabContent} currentBartChart={currentBartChart} chartData={chartData} handleBarChartTabChange={handleBarChartTabChange} />
-                            {/*    // :*/}
-                            {/*    // <InvestmentMandate/>*/}
-                            {/*// }*/}
+                            <PerformanceDisplay amountInvested={currentInvestmentDetails?.amountInvested} incomeEarned={currentInvestmentDetails?.incomeEarned} newAssetValue={currentInvestmentDetails?.netAssetValue} portfolioPercentage={currentInvestmentDetails?.percentageOfPortfolio} TalentFunded={''} barChartTabContent={barChartTabContent} currentBartChart={currentBartChart} chartData={chartData} handleBarChartTabChange={handleBarChartTabChange} />
                         </div>
 
                 </div>
