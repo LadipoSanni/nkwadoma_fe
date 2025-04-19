@@ -55,7 +55,6 @@ const MyInvestment = () => {
 
     const {data: datss, isLoading} = useViewMyInvestmentQuery({})
 
-    console.log('datss', datss)
 
     // const hh = datss?.data?.investmentSummaries?.name
     // const hh2 = datss?.data?.investmentSummaries?.name
@@ -63,7 +62,6 @@ const MyInvestment = () => {
 
 
     const HandleCardDetails = (vehicleDetails: CurrentMyInvestmentVehicleDetails ) => {
-        console.log('semd:< ', vehicleDetails)
         store.dispatch(
             setCurrentMyInvestmentVehicleDetails(vehicleDetails)
         );

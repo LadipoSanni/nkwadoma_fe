@@ -17,11 +17,11 @@ const MyInvestmentDetails = () => {
     const [currentBartChart, setCurrentBartChart] = useState(0);
     const router = useRouter();
     const [isVerifying, setIsVerifying] = useState(false);
+
     const [docError, setDocError] = useState<string | null>(null);
     const currentInvestmentDetails = useAppSelector(state => state.financier.currentMyInvestmentVehicleDetails)
+    const [docUrl] = useState(currentInvestmentDetails?.mandate || '')
 
-
-    console.log('currentInvestmentDetails:', currentInvestmentDetails);
     const initialChartData = [
             { month: "Jan", value: 186, },
             { month: "Feb", value: 305,  },
@@ -44,7 +44,6 @@ const MyInvestmentDetails = () => {
     };
 
 
-    const docUrl = currentInvestmentDetails?.mandate;
     const docFilename = getFilenameFromUrl(docUrl);
     const isCloudinaryUrl = docUrl?.includes('cloudinary.com');
     const fileExtension = docFilename?.split('.').pop()?.toLowerCase();
