@@ -10,9 +10,14 @@ import { useAppSelector } from '@/redux/store';
 import {Button} from "@/components/ui/button";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import dayjs from "dayjs";
+import dynamic from "next/dynamic";
 
 
-const MyInvestmentDetails = () => {
+const MyInvestmentDetails = dynamic(
+    () => Promise.resolve(MyInvestmentDetailsContent),
+    {ssr: false}
+)
+const MyInvestmentDetailsContent = () => {
     // const [currentTab, setCurrentsTab] = useState(0);
     const [currentBartChart, setCurrentBartChart] = useState(0);
     const router = useRouter();

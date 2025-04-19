@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {CurrentMyInvestmentVehicleDetails} from "@/pages/financier/my-investment/types";
+import {CurrentMyInvestmentVehicleDetails} from "@/types/Component.type";
 
 
 interface vehicleState {

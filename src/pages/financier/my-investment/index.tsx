@@ -16,7 +16,7 @@ import dynamic from "next/dynamic";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {
     CurrentMyInvestmentVehicleDetails,
-} from "@/pages/financier/my-investment/types";
+} from "@/types/Component.type";
 import Card from "@/pages/financier/my-investment/card";
 import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
 import {MdOutlinePayments} from "react-icons/md";

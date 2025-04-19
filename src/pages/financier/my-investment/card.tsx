@@ -1,7 +1,7 @@
 import React from "react"
 import {cabinetGrotesk, inter} from "@/app/fonts";
 import Image, {StaticImageData} from 'next/image';
-import {CurrentMyInvestmentVehicleDetails} from "@/pages/financier/my-investment/types";
+import {CurrentMyInvestmentVehicleDetails} from "@/types/Component.type";
 
 
 interface InvestmentCardProps {
