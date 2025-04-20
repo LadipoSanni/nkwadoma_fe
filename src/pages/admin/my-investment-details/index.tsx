@@ -1,6 +1,6 @@
 'use client'
 import React, { useState} from 'react';
-import BackButton from "@/components/back-button";
+import BackButton from "@/components/back-button/index";
 import { cabinetGroteskMediumBold600, inter, inter500, inter600} from "@/app/fonts";
 import styles from './index.module.css';
 import PerformanceDisplay from "@/pages/admin/my-investment-details/performanceDisplay";
