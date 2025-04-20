@@ -7,9 +7,10 @@ import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
 import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
-import { MdSearch } from "react-icons/md";
+import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useSearchInvestmentVehiclesQuery} from "@/service/financier/marketplace";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import LoanEmptyState from "@/reuseable/emptyStates/Index";
 
 interface InvestmentVehicle {
     id: string;
@@ -183,15 +184,15 @@ const MarketPlaceView = () => {
                     <MarketPlaceInvestmentGrid />
                 </div>
             )
-                // : searchTerm === "" ? (
-                // <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
-                //     <SearchEmptyState icon={MdSearch} name='Investment'/>
-                // </div>)
                 : allVehicles.length === 0 ? (
-                <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
-                    <SearchEmptyState icon={MdSearch} name='Investment'/>
-                </div>
-            ) : (
+                    <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
+                        {searchTerm ? (
+                            <SearchEmptyState icon={MdSearch} name="Investment" />
+                        ) : (
+                            <LoanEmptyState title={"Investment vehicles will show here"} description={"There are no Investment vehicles available yet"} icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>} iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
+                        )}
+                    </div>
+                ) : (
                 <div
                     id="card-segmentId"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
