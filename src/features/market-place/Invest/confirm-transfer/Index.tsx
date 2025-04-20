@@ -28,7 +28,7 @@ function ConfirmTransfer() {
 
     return (
         <div id={`confirmTransferDiv`} test-dataid={`confirmTransferDiv`} className={`${inter.className} `}>
-            <div id={`infoDesk`} className='xl:px-36 grid grid-cols-1 gap-5 lg:w-5/6 md:4/5 w-full'>
+            <div id={`infoDesk`} className='xl:px-36 grid grid-cols-1 gap-5 md:w-3/4 w-full'>
                 <div id={`titleAndMessage`} className='grid grid-cols-1 gap-y-1'>
                     <h1 id={"confirm"} className='text-[18px] font-normal'>Confirm transfer</h1>
                     <p id={`messageId`} className='text-[14px] font-normal'>Add the investment amount and the investment terms and

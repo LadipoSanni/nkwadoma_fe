@@ -40,7 +40,11 @@ const TopBar = () => {
             store.dispatch(setCurrentTotalNotification(data.data.allNotificationsCount));
         }        
         refetch()
-    },[data,refetch])
+        if (user_role === "FINANCIER" && pathname?.startsWith("/kyc")) {
+            store.dispatch(setCurrentNavbarItem("KYC verification"));
+        }
+
+    },[data,refetch,pathname, user_role])
      
    
     const toggleArrow = () => {

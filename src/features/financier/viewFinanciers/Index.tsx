@@ -56,7 +56,7 @@ const ViewFinanciers = () => {
     const [hasNextPage,setNextPage] = useState(false)
     const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
-    const [tempSelectedFinancier, setTempSelectedFinancier] = useState(''); 
+    const [tempSelectedFinancier, setTempSelectedFinancier] = useState('');
     const router = useRouter()
     const param = {
         pageNumber: pageNumber,
@@ -111,7 +111,7 @@ const ViewFinanciers = () => {
     const handleSubmit = () => {
         setSelectedFinancier(tempSelectedFinancier)
             refetch()
-       
+
     };
 
     const toggleDropdown = () => {
@@ -163,7 +163,7 @@ const ViewFinanciers = () => {
                         isDropdownOpen={isDropdownOpen}
                         toggleDropdown={toggleDropdown}
                         isLoading={isLoading}
-                        
+
                     />
                 </div>
                 <Button

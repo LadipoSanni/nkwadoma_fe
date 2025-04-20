@@ -2,8 +2,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
 export interface MarketData {
-    marketInvestmentVehicleId: string;
-    vehicleType: string;
+    marketInvestmentVehicleId?: string;
+    vehicleType?: string;
+    minimumInvestmentAmount?: number | string ;
     // status: string;
 }
 
