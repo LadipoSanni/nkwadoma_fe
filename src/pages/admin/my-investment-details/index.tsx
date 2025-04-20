@@ -7,7 +7,7 @@ import PerformanceDisplay from "@/pages/admin/my-investment-details/performanceD
 import {useRouter} from "next/navigation";
 import Image from "next/image";
 import { useAppSelector } from '@/redux/store';
-import {Button} from "@/components/ui/button";
+import {Button} from "../../../components/ui/button";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import dayjs from "dayjs";
 import dynamic from "next/dynamic";
