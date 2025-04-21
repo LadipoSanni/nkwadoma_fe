@@ -26,9 +26,15 @@ export const financierOnboardingAndDashboardApi = createApi({
                method: 'GET'
            })
         }),
+        searchMyInvestment: builder.query({
+           query : (data:{name: string, investmentType: string, pageSize: string, pageNumber: string}) => ({
+               url: `investmentVehicle/search/financier/${data.name}?investmentVehicleType=${data.investmentType}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
+               method: 'GET'
+           })
+        }),
 
 
     })
 })
 
-export const {useViewFinancierDashboardQuery,useFilterMyInvestmentQuery, useViewMyInvestmentQuery } = financierOnboardingAndDashboardApi
+export const {useViewFinancierDashboardQuery,useSearchMyInvestmentQuery,useFilterMyInvestmentQuery, useViewMyInvestmentQuery } = financierOnboardingAndDashboardApi

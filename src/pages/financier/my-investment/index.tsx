@@ -11,7 +11,7 @@ import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/fi
 // import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
 // import LoanEmptyState from "@/reuseable/emptyStates/Index";
 // import { MdOutlinePayments } from "react-icons/md";
-import {useFilterMyInvestmentQuery, useViewMyInvestmentQuery} from '@/service/financier/api'
+import {useFilterMyInvestmentQuery, useSearchMyInvestmentQuery, useViewMyInvestmentQuery} from '@/service/financier/api'
 import dynamic from "next/dynamic";
 import {
     CurrentMyInvestmentVehicleDetails,
@@ -37,13 +37,16 @@ const MyInvestment = () => {
     const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(allMyInvestment?.data?.investmentSummaries)
     // console.log('data', allMyInvestment);
 
-    const data = {
+    const filterProps = {
         investmentVehicleType: selectedValue.toUpperCase(),
         pageSize: '10',
         pageNumber: '0'
     }
-    const {data: filteredData, isLoading: isFilteredDataLoading} = useFilterMyInvestmentQuery(data)
+    const {data: filteredData, isLoading: isFilteredDataLoading} = useFilterMyInvestmentQuery(filterProps)
     // console.log('filteredData: ', filteredData)
+    const type = selectedValue.toUpperCase()
+
+    const {data: searchProps} = useSearchMyInvestmentQuery({name: searchTerm,investmentType: type, pageSize: 10, pageNumber: 0} )
 
 
     useEffect(()=> {
