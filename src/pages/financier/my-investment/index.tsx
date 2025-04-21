@@ -18,8 +18,9 @@ import {
 } from "@/types/Component.type";
 import Card from "@/pages/financier/my-investment/card";
 import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
-import {MdOutlinePayments} from "react-icons/md";
+import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
+import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 
 const MyInvestmentContent = dynamic(
     () => Promise.resolve(MyInvestment),
@@ -35,7 +36,6 @@ const MyInvestment = () => {
     const [isFiltered, setIsFiltered] = useState<boolean>(false)
 
     const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(allMyInvestment?.data?.investmentSummaries)
-    // console.log('data', allMyInvestment);
 
     const filterProps = {
         investmentVehicleType: selectedValue.toUpperCase(),
@@ -43,23 +43,33 @@ const MyInvestment = () => {
         pageNumber: '0'
     }
     const {data: filteredData, isLoading: isFilteredDataLoading} = useFilterMyInvestmentQuery(filterProps)
-    // console.log('filteredData: ', filteredData)
-    const type = selectedValue.toUpperCase()
+    const searchProps = {
+        name: searchTerm,
+        investmentType: selectedValue.toUpperCase(),
+        pageSize: '10',
+        pageNumber: '0'
+    }
 
-    const {data: searchProps} = useSearchMyInvestmentQuery({name: searchTerm,investmentType: type, pageSize: 10, pageNumber: 0} )
-
+    const {data: searchData, isLoading: isSearchItemLoading} = useSearchMyInvestmentQuery(searchProps)
 
     useEffect(()=> {
         setMyInvestmentVehicles(allMyInvestment?.data?.investmentSummaries)
         if(isFiltered){
             setMyInvestmentVehicles([])
             setMyInvestmentVehicles(filteredData?.data?.body)
+        }else{
+            setMyInvestmentVehicles(allMyInvestment?.data?.investmentSummaries)
         }
-    }, [selectedValue, filteredData, allMyInvestment, isFiltered])
+        if(searchTerm !== ''){
+            setMyInvestmentVehicles([])
+            setMyInvestmentVehicles(searchData?.data?.body)
+        }else {
+            setMyInvestmentVehicles(allMyInvestment?.data?.investmentSummaries)
+        }
+    }, [selectedValue, filteredData, allMyInvestment, isFiltered, searchData, searchTerm])
 
 
-    // const hh = allMyInvestment?.data?.investmentSummaries?.name
-    // const hh2 = allMyInvestment?.data?.investmentSummaries?.name
+
 
 
 
@@ -117,11 +127,11 @@ const MyInvestment = () => {
                 />
             </div>
 
-            {isLoading && isFilteredDataLoading  ? (
+            {isLoading && isFilteredDataLoading && isSearchItemLoading  ? (
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
-            ) : vehicles?.length === 0 ? (
+            ) : vehicles?.length === 0 && filteredData?.data?.body   ? (
                 <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
                     <LoanEmptyState
                         id="Vehicles"
@@ -131,7 +141,13 @@ const MyInvestment = () => {
                         description="There are no investment vehicles available yet"
                     />
                 </div>
-            ) : (
+            ) : searchData?.data?.body?.length === 0  ? (
+                <div>
+                    <SearchEmptyState icon={MdSearch} name="Investment" />
+                </div>
+                )
+                :
+                (
                 <div
                     id="card-segmentId"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
