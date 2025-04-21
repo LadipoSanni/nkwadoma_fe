@@ -13,7 +13,6 @@ import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/fi
 // import { MdOutlinePayments } from "react-icons/md";
 import {useFilterMyInvestmentQuery, useViewMyInvestmentQuery} from '@/service/financier/api'
 import dynamic from "next/dynamic";
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {
     CurrentMyInvestmentVehicleDetails,
 } from "@/types/Component.type";
@@ -33,22 +32,27 @@ const MyInvestment = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
     const {data: allMyInvestment, isLoading} = useViewMyInvestmentQuery({})
+    const [isFiltered, setIsFiltered] = useState<boolean>(false)
 
     const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(allMyInvestment?.data?.investmentSummaries)
-    console.log('data', allMyInvestment);
+    // console.log('data', allMyInvestment);
 
     const data = {
         investmentVehicleType: selectedValue.toUpperCase(),
         pageSize: '10',
         pageNumber: '0'
     }
-    const {data: filteredData} = useFilterMyInvestmentQuery(data)
-    console.log('datahghg: ', filteredData)
+    const {data: filteredData, isLoading: isFilteredDataLoading} = useFilterMyInvestmentQuery(data)
+    // console.log('filteredData: ', filteredData)
 
 
     useEffect(()=> {
-        setMyInvestmentVehicles(allMyInvestment?.data?.investmentSummaries)z
-    }, [selectedValue, filteredData, allMyInvestment])
+        setMyInvestmentVehicles(allMyInvestment?.data?.investmentSummaries)
+        if(isFiltered){
+            setMyInvestmentVehicles([])
+            setMyInvestmentVehicles(filteredData?.data?.body)
+        }
+    }, [selectedValue, filteredData, allMyInvestment, isFiltered])
 
 
     // const hh = allMyInvestment?.data?.investmentSummaries?.name
@@ -67,14 +71,14 @@ const MyInvestment = () => {
 
 
     const getStatusColor = (status: string) => {
-        if(capitalizeFirstLetters(status)?.toString() === 'Closed') {
+        if(status === 'CLOSE') {
             return 'bg-red-100 md:bg-red-100 md:text-red-600 text-red-600 border-[#F2BCBA] md:border-[#F2BCBA]'
         }
         return 'bg-green-100 md:bg-green-100 md:text-[#0D9B48] text-[#0D9B48] border-[#B4E5C8] md:border-[#B4E5C8]'
     }
 
     const getStatusBorderColor =  (status: string) => {
-        if(capitalizeFirstLetters(status)?.toString() === 'Closed') {
+        if(status === 'CLOSE') {
             return 'border-[#F2BCBA] md:border-[#F2BCBA]'
         }
         return 'border-[#B4E5C8] md:border-[#B4E5C8]'
@@ -82,8 +86,7 @@ const MyInvestment = () => {
 
     const filterInvestments = (type: string) => {
         setSelectedValue(type)
-        console.log('filterrrrr:: ',filteredData?.data?.body )
-        setMyInvestmentVehicles(filteredData?.data?.body)
+        setIsFiltered(true)
     }
 
 
@@ -111,11 +114,11 @@ const MyInvestment = () => {
                 />
             </div>
 
-            {isLoading  ? (
+            {isLoading && isFilteredDataLoading  ? (
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
-            ) : vehicles.length === 0 ? (
+            ) : vehicles?.length === 0 ? (
                 <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
                     <LoanEmptyState
                         id="Vehicles"
@@ -141,7 +144,7 @@ const MyInvestment = () => {
                                 ? "/BlueCircles.svg"
                                 : "/GreenCircles.svg";
                         const statusValue = vehicle.fundRaisingStatus ? vehicle.fundRaisingStatus : vehicle.deployingStatus ;
-                        const status = vehicle.fundRaisingStatus ?  'Fundraising' : 'Deploying';
+                        const status = vehicle.fundRaisingStatus !== null ?  'Fundraising' : 'Deploying';
 
                         const statusClass = getStatusColor(statusValue)
                         const borderClass = getStatusBorderColor(statusValue)
