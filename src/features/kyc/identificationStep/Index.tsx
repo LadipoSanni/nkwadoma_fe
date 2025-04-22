@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation'
 import { store } from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/kyc-multiselect';
 import Isloading from '@/reuseable/display/Isloading';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { updateIdentification } from '@/redux/slice/kyc/kycFormSlice';
 
 interface FormInputs {
     nin: string;
@@ -18,20 +20,23 @@ interface FormInputs {
 const IdentificationStep = () => {
     const route = useRouter()
     const [isLoading, setIsLoading] = React.useState(false);
+    const dispatch = useAppDispatch();
+    const savedData = useAppSelector(state => state.kycForm.identification);
     const { register, handleSubmit, formState: { errors, isValid } } = useForm<FormInputs>({
-        mode: 'onChange'
+        mode: 'onChange',
+        defaultValues: savedData
     });
 
     const onSubmit = async (data: FormInputs) => {
         try {
             setIsLoading(true);
-            console.log('Form data:', data);
+            dispatch(updateIdentification(data));
             await store.dispatch(markStepCompleted("identification"));
             route.push('/kyc/sof');
         } finally {
-            setIsLoading(true);
+            setIsLoading(false);
         }
-    }
+    };
 
     return (
         <main id="identificationStepMain" className={`${inter.className} xl:px-36  grid-cols-1 gap-y-6  grid gap-10`}>
