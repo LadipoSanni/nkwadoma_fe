@@ -1,14 +1,15 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { inter, cabinetGroteskMediumBold } from '@/app/fonts'
-import { useAppSelector } from "@/redux/store";
+import { inter, cabinetGroteskMediumBold } from '@/app/fonts';
+import { useAppSelector, useAppDispatch } from '@/redux/store';
 import { useRouter } from 'next/navigation';
-import Multiselect from '@/reuseable/mult-select/multi-select';
 import { Formik, Form } from 'formik';
 import { Button } from "@/components/ui/button";
 import { store } from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/kyc-multiselect';
+import { updateSourceOfFunds } from '@/redux/slice/kyc/kycFormSlice';
 import Isloading from '@/reuseable/display/Isloading';
+import CustomMultiselect from "@/reuseable/mult-select/customMultiselect/Index";
 
 interface FormValues {
     sourceOfFund: string[];
@@ -16,8 +17,11 @@ interface FormValues {
 
 const SourceOfFundsStep = () => {
     const router = useRouter();
+    const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = useState(false);
-    const completedStep = useAppSelector(state => (state?.kycMultistep.completedSteps));
+
+    const completedStep = useAppSelector(state => state.kycMultistep.completedSteps);
+    const savedSourceOfFunds = useAppSelector(state => state.kycForm.sourceOfFunds);
 
     useEffect(() => {
         if (!completedStep.includes("identification")) {
@@ -26,13 +30,13 @@ const SourceOfFundsStep = () => {
     }, [completedStep, router]);
 
     const sourceOptions = [
-        {value: 'Personal or joint savings', label: 'Personal or joint savings'},
-        {value: 'Employment income', label: 'Employment income'},
-        {value: 'Sales of assets', label: 'Sales of assets'},
-        {value: 'Donation', label: 'Donation'},
-        {value: 'Inheritance or gift', label: 'Inheritance or gift'},
-        {value: 'Compensation of legal settlements', label: 'Compensation of legal settlements'},
-        {value: 'Profit from legitimate activities', label: 'Profit from legitimate activities'},
+        { value: 'Personal or joint savings', label: 'Personal or joint savings' },
+        { value: 'Employment income', label: 'Employment income' },
+        { value: 'Sales of assets', label: 'Sales of assets' },
+        { value: 'Donation', label: 'Donation' },
+        { value: 'Inheritance or gift', label: 'Inheritance or gift' },
+        { value: 'Compensation of legal settlements', label: 'Compensation of legal settlements' },
+        { value: 'Profit from legitimate activities', label: 'Profit from legitimate activities' },
     ];
 
     const handleBackClick = () => {
@@ -46,31 +50,33 @@ const SourceOfFundsStep = () => {
 
         try {
             setIsLoading(true);
-            console.log('Form values:', values);
+            dispatch(updateSourceOfFunds(values.sourceOfFund)); // Save to Redux
             await store.dispatch(markStepCompleted("sourceOfFunds"));
             router.push('/kyc/beneficial-owner');
         } finally {
-            setIsLoading(true);
+            setIsLoading(false);
         }
     };
 
     return (
         <Formik
-            initialValues={{ sourceOfFund: [] }}
+            initialValues={{ sourceOfFund: savedSourceOfFunds || [] }} // Load saved values
             onSubmit={handleSubmit}
         >
             {({ values, setFieldValue }) => (
                 <Form>
-                    <main className={`${inter.className} xl:px-36  grid-cols-1 gap-y-6  grid gap-10 `}>
+                    <main className={`${inter.className} xl:px-36 grid-cols-1 gap-y-6 grid gap-10`}>
                         <div className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
                             <h1 className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>Source of funds</h1>
                         </div>
 
                         <div className={'md:w-[27.5rem] w-full grid gap-10'}>
-                            <Multiselect
+                            <CustomMultiselect
                                 multiselectList={sourceOptions}
                                 onValueChange={(values) => setFieldValue("sourceOfFund", values)}
-                                placeholder='Select sources'
+                                placeholder="Select sources"
+                                className=""
+                                selectedValues={savedSourceOfFunds}
                             />
 
                             <div className={'md:flex md:justify-between grid gap-5'}>
