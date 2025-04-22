@@ -32,6 +32,8 @@ const tabData = [
 const Status = ({disabledTabs}: Props)=> {
     const vehicleType = useAppSelector(state => (state?.vehicle?.vehicleType))
      const statusType = useAppSelector(state => (state?.vehicle?.setEditStatus))
+     const defaultValue = useAppSelector(state => (state?.vehicle?.statusDefaultValue))
+     console.log(defaultValue)
     const tabContent = [
         {
             value: "operation",
@@ -60,7 +62,7 @@ const Status = ({disabledTabs}: Props)=> {
     <p className='text-[14px] font-normal'>Select the status of your {vehicleType} fund</p>
        </div>
        <div>
-        <Tabs defaultValue='operation'>
+        <Tabs defaultValue={defaultValue? defaultValue : "operation"}>
             <div className='relative right-2'>
             <TabsList id='clickswitch' className={`z-50  bg-white`}>
               {tabData.map((tab, index) => (
