@@ -50,6 +50,7 @@ interface vehicleState {
     setPublicVehicleUrl: string;
     setInvestmentStatus: investmentStatus | null;
     setEditStatus: string
+    statusDefaultValue: string
 }
 
 const initialState: vehicleState = {
@@ -62,6 +63,7 @@ const initialState: vehicleState = {
     setPublicVehicleUrl: "",
     setInvestmentStatus: null,
     setEditStatus: "",
+    statusDefaultValue: 'operation',
 }
 
 export const vehicleSlice = createSlice({
@@ -113,6 +115,18 @@ export const vehicleSlice = createSlice({
         clearEditStatus:(state) => {
             state.setEditStatus = ""
         },
+        setStatusDefaultValue: (state, action: PayloadAction<string>) => {
+            state.statusDefaultValue = action.payload;
+          },
+          resetStatusDefaultValue: (state) => {
+            state.statusDefaultValue = "operation"
+          },
+        resetAll: (state) => {
+             state.setEditStatus = ""
+             state.setInvestmentStatus= null;
+             state.setPublicVehicleUrl = ""
+             state.setDraftId = "";
+        }
     }
 })
 
@@ -129,6 +143,7 @@ export const {setCurrentVehicleId,
                 setInvestmentStatus,
                 clearSaveInvestmentStatus,
                 setEditStatus,
-                clearEditStatus
+                clearEditStatus,
+                resetAll
             } = vehicleSlice.actions;
 export default vehicleSlice.reducer;
