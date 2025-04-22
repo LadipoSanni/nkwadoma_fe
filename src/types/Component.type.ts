@@ -31,7 +31,8 @@ export interface CurrentMyInvestmentVehicleDetails {
     mandate: string,
     interestRateOffered: string,
     fundRaisingStatus: string,
-    deployingStatus: string
+    deployingStatus: string,
+    id: string,
 }
 
 
