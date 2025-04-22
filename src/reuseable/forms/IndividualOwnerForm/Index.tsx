@@ -1,4 +1,4 @@
-import React, {useMemo, useState, useEffect} from "react";
+import React, { useState, useEffect} from "react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
@@ -34,7 +34,7 @@ const IndividualOwnerForm: React.FC = () => {
         (state) => state.kycForm.beneficialOwner.individualData
     );
 
-    const convertSection = (section: any): FormSection => ({
+    const convertSection = (section: Omit<FormSection, 'dob'> & { dob: string | undefined }): FormSection => ({
         ...section,
         dob: section.dob ? new Date(section.dob) : undefined,
     });
@@ -63,30 +63,29 @@ const IndividualOwnerForm: React.FC = () => {
         {id: "voters_card", label: "Voter's card"},
     ];
 
-    // Update sections when savedData changes with conversion
     useEffect(() => {
         if (savedData && savedData.sections.length) {
             setSections(savedData.sections.map(convertSection));
         }
     }, [savedData]);
 
-    const isFormValid = useMemo(() => {
-        return sections.every((section) => {
-            const ownershipValue = parseFloat(section.ownership);
-            return (
-                section.firstName.trim() !== "" &&
-                section.lastName.trim() !== "" &&
-                section.dob !== undefined &&
-                section.relationship.trim() !== "" &&
-                section.ownership.trim() !== "" &&
-                !isNaN(ownershipValue) &&
-                ownershipValue > 0 &&
-                ownershipValue <= 100 &&
-                section.proofType.trim() !== "" &&
-                section.proofFile !== null
-            );
-        });
-    }, [sections]);
+    // const isFormValid = useMemo(() => {
+    //     return sections.every((section) => {
+    //         const ownershipValue = parseFloat(section.ownership);
+    //         return (
+    //             section.firstName.trim() !== "" &&
+    //             section.lastName.trim() !== "" &&
+    //             section.dob !== undefined &&
+    //             section.relationship.trim() !== "" &&
+    //             section.ownership.trim() !== "" &&
+    //             !isNaN(ownershipValue) &&
+    //             ownershipValue > 0 &&
+    //             ownershipValue <= 100 &&
+    //             section.proofType.trim() !== "" &&
+    //             section.proofFile !== null
+    //         );
+    //     });
+    // }, [sections]);
 
     const handleBackClick = () => {
         route.back();
