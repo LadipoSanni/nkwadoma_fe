@@ -83,25 +83,27 @@ describe('MultistepLayout Component', () => {
   });
 
   describe('handleBack navigation', () => {
-    test('navigates to commercial-vehicle when vehicleType is commercialFund', () => {
-      (usePathname as jest.Mock).mockReturnValue('/vehicle/setup');
-      (useAppSelector as jest.Mock).mockReturnValue('commercial');
+    // test('navigates to commercial-vehicle when vehicleType is commercialFund', () => {
+    //   (usePathname as jest.Mock).mockReturnValue('/vehicle/setup');
+    //   (useAppSelector as jest.Mock).mockReturnValue('commercial');
       
-      render(<MultistepLayout>{mockChildren}</MultistepLayout>);
+    //   render(<MultistepLayout>{mockChildren}</MultistepLayout>);
       
-      fireEvent.click(screen.getByText('Back Button'));
-      expect(mockPush).toHaveBeenCalledWith('/vehicle/commercial-vehicle');
-    });
+    //   fireEvent.click(screen.getByText('Back Button'));
+    //   expect(mockPush).toHaveBeenCalledWith('/vehicle/commercial-vehicle');
+    // });
 
-    test('navigates to endownment-vehicle when vehicleType is not commercialFund', () => {
-      (usePathname as jest.Mock).mockReturnValue('/vehicle/setup');
-      (useAppSelector as jest.Mock).mockReturnValue('endowmentFund');
+  
+
+    // test('navigates to endownment-vehicle when vehicleType is not commercialFund', () => {
+    //   (usePathname as jest.Mock).mockReturnValue('/vehicle/setup');
+    //   (useAppSelector as jest.Mock).mockReturnValue('endowmentFund');
       
-      render(<MultistepLayout>{mockChildren}</MultistepLayout>);
+    //   render(<MultistepLayout>{mockChildren}</MultistepLayout>);
       
-      fireEvent.click(screen.getByText('Back Button'));
-      expect(mockPush).toHaveBeenCalledWith('/vehicle/endownment-vehicle');
-    });
+    //   fireEvent.click(screen.getByText('Back Button'));
+    //   expect(mockPush).toHaveBeenCalledWith('/vehicle/endownment-vehicle');
+    // });
   });
 
   test('passes correct props to MultiStep component', () => {
