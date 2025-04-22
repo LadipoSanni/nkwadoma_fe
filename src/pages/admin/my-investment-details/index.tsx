@@ -6,11 +6,12 @@ import styles from './index.module.css';
 import PerformanceDisplay from "@/pages/admin/my-investment-details/performanceDisplay";
 import {useRouter} from "next/navigation";
 import Image from "next/image";
-import { useAppSelector } from '@/redux/store';
+import {store, useAppSelector} from '@/redux/store';
 import {Button} from "../../../components/ui/button";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import dayjs from "dayjs";
 import dynamic from "next/dynamic";
+import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
 
 
 const MyInvestmentDetails = dynamic(
@@ -90,9 +91,9 @@ const MyInvestmentDetailsContent = () => {
                 <div className={`flex gap-2 md:gap-2 md:flex`}>
                     {status}
                     <div
-                        className={` w-fit md:w-fit md:h-fit h-fit md:py-0 py-0 md:px-1 px-1 md:rounded-md rounded-md border md:border border-green650 md:border-green650`}>
+                        className={` w-fit md:w-fit md:h-fit h-fit md:py-0 py-0 md:px-1 px-1 md:rounded-md rounded-md border md:border ${ statusValue === 'CLOSE' ? `border-[#F2BCBA] md:border-[#F2BCBA]` :  `border-green650 md:border-green650` }`}>
                         <span
-                            className={` ${inter500.className} md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[11px] text-[14px] text-green750 md:text-green750 `}>{statusValue}</span>
+                            className={` ${inter500.className} md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[11px] text-[14px] ${ statusValue === 'CLOSE' ? `g-red-100 md:bg-red-100 md:text-red-600 text-red-600 border-[#F2BCBA] md:border-[#F2BCBA]` : `text-green750 md:text-green750` }`}>{statusValue}</span>
                     </div>
                 </div>
         },
@@ -164,7 +165,10 @@ const MyInvestmentDetailsContent = () => {
         }
     };
 
+    // console.log('currentInvestmentDetails: ', currentInvestmentDetails)
+
     const investmentVehicleType = currentInvestmentDetails?.investmentVehicleType;
+    // console.log('type:x/: ', investmentVehicleType)
     const imageSrc =
         investmentVehicleType === "COMMERCIAL"
             ? "/BlueCircles.svg"
@@ -174,6 +178,17 @@ const MyInvestmentDetailsContent = () => {
             ? "#D9EAFF"
             : "#E6F2EA";
 
+
+    const investInVehicle = ()=> {
+        store.dispatch(
+            setMarketInvestmentVehicleId({
+                marketInvestmentVehicleId:currentInvestmentDetails?.id ,
+                minimumInvestmentAmount: '',
+                vehicleType: investmentVehicleType
+            })
+        );
+        router.push("/marketplace/transfer");
+    }
 
     return (
         <div className={`md:h-[100%] pt-3 px-3 grid md:grid gap-5 md:gap-6 md:pt-4 md:px-8 w-full h-full md:w-full `}>
@@ -296,6 +311,16 @@ const MyInvestmentDetailsContent = () => {
                                 ))}
                             </div>
                         </div>
+                    </div>
+
+                    <div className={`pt-3`}>
+                        <Button type="button" id={`invest-button`} size="lg" variant="secondary"
+                                onClick={investInVehicle}
+                                disabled={statusValue  === 'CLOSE'}
+                                className={`${inter.className} ${statusValue  === 'CLOSE'? " bg-[#D0D5DD]  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
+                        >
+                            Invest
+                        </Button>
                     </div>
 
                 </div>
