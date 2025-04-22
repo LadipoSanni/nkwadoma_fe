@@ -28,7 +28,7 @@ interface FormSection {
     proofFile: File | null;
 }
 
-const IndividualOwnerForm: React.FC = () => {
+const IndividualOwnershipForm: React.FC = () => {
     const dispatch = useAppDispatch();
     const savedData = useAppSelector(
         (state) => state.kycForm.beneficialOwner.individualData
@@ -333,4 +333,4 @@ const IndividualOwnerForm: React.FC = () => {
     );
 };
 
-export default IndividualOwnerForm;
+export default IndividualOwnershipForm;

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 interface FormSection {
     id: number;
@@ -21,9 +21,17 @@ interface EntitySection {
 
 interface KYCFormState {
     identification: {
-        nin: string;
-        bvn: string;
-    };
+        type: 'INDIVIDUAL' | 'CORPORATE';
+        individual?: {
+            nin: string;
+            bvn: string;
+        };
+        corporate?: {
+            tin: string;
+            rcNumber: string;
+            countryOfIncorporation: string;
+        };
+    }
     sourceOfFunds: string[];
     beneficialOwner: {
         selectedForm: 'entity' | 'individual';
@@ -48,8 +56,16 @@ interface KYCFormState {
 
 const initialState: KYCFormState = {
     identification: {
-        nin: '',
-        bvn: '',
+        type: 'INDIVIDUAL',
+        individual: {
+            nin: '',
+            bvn: ''
+        },
+        corporate: {
+            tin: '',
+            rcNumber: '',
+            countryOfIncorporation: ''
+        },
     },
     sourceOfFunds: [],
     beneficialOwner: {
@@ -74,17 +90,38 @@ const kycFormSlice = createSlice({
     name: 'kycForm',
     initialState,
     reducers: {
-        updateIdentification: (state, action: PayloadAction<{ nin: string; bvn: string }>) => {
-            state.identification = action.payload;
+        updateIdentification: (state, action: PayloadAction<{
+            type: 'INDIVIDUAL' | 'CORPORATE';
+            data: {
+                nin?: string;
+                bvn?: string;
+                tin?: string;
+                rcNumber?: string;
+                countryOfIncorporation?: string;
+            };
+        }>) => {
+            state.identification.type = action.payload.type;
+            if (action.payload.type === 'INDIVIDUAL') {
+                state.identification.individual = {
+                    nin: action.payload.data.nin || '',
+                    bvn: action.payload.data.bvn || ''
+                };
+            } else {
+                state.identification.corporate = {
+                    tin: action.payload.data.tin || '',
+                    rcNumber: action.payload.data.rcNumber || '',
+                    countryOfIncorporation: action.payload.data.countryOfIncorporation || ''
+                };
+            }
         },
         updateSourceOfFunds: (state, action: PayloadAction<string[]>) => {
             state.sourceOfFunds = action.payload;
         },
         updateBeneficialOwner: (state, action: PayloadAction<Partial<KYCFormState['beneficialOwner']>>) => {
-            state.beneficialOwner = { ...state.beneficialOwner, ...action.payload };
+            state.beneficialOwner = {...state.beneficialOwner, ...action.payload};
         },
         updateDeclaration: (state, action: PayloadAction<Partial<KYCFormState['declaration']>>) => {
-            state.declaration = { ...state.declaration, ...action.payload };
+            state.declaration = {...state.declaration, ...action.payload};
         },
     },
 });

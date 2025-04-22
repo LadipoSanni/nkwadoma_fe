@@ -4,15 +4,15 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 interface vehicleState {
     currentFinancierId: string;
     financierMode: string;
-    financierType: string;
+    type: 'INDIVIDUAL' | 'CORPORATE' | null;
    
 }
 
 const initialState: vehicleState = {
     currentFinancierId: '',
     financierMode: '',
-    financierType: '',
-   
+    type: null
+
 }
 
 export const financierSlice = createSlice({
@@ -25,9 +25,9 @@ export const financierSlice = createSlice({
         setFinancierMode: (state, action: PayloadAction<string>) => {
             state.financierMode = action.payload;
         },
-        setFinancierType: (state, action: PayloadAction<string>) => {
-            state.financierType = action.payload;
-        },
+        setFinancierType: (state, action: PayloadAction<'INDIVIDUAL' | 'CORPORATE'>) => {
+            state.type = action.payload;
+        }
        
     }
 })

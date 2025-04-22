@@ -4,7 +4,7 @@ import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
 import {inter, cabinetGroteskMediumBold} from '@/app/fonts';
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import IndividualOwnerForm from '@/reuseable/forms/IndividualOwnerForm/Index';
+import IndividualOwnershipForm from '@/reuseable/forms/individualOwnershipForm/Index';
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import CountrySelectPopover from '@/reuseable/select/countrySelectPopover/Index';
@@ -230,7 +230,7 @@ const BeneficialOwnerStep = () => {
                         </main>
                     </TabsContent>
                     <TabsContent id="individualTabContent" value="individual">
-                        <IndividualOwnerForm/>
+                        <IndividualOwnershipForm/>
                     </TabsContent>
                 </Tabs>
             </section>
