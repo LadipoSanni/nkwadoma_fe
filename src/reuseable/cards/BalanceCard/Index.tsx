@@ -21,7 +21,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ cardData }) => {
             <div className="flex md:grid md:grid-cols-3 gap-6">
                 {cardData.map((card, index) => (
                     <main key={index}
-                          className="flex-none w-[280px] md:w-full snap-start grid gap-5 px-3 pt-3 pb-5 rounded-md border border-neutral-200">
+                          className="flex-none w-[280px] md:w-full he grid gap-5 px-3 pt-3 pb-5 rounded-md border border-neutral-200">
                         <div id={`balanceCardBlock${index}`}
                              className="bg-grey105 p-5 grid gap-5">
                             <p id={`cardTitle${index}`}

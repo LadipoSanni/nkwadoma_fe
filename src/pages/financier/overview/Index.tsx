@@ -8,7 +8,7 @@ import InvestmentMarketplace from '@/features/financier/summary/investmentMarket
 import {useRouter} from 'next/navigation';
 import styles from "./index.module.css"
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
-import {setFinancierType} from "@/redux/financier/financier";
+import {setFinancierType} from "@/redux/slice/financier/financier";
 import {store} from "@/redux/store";
 import dynamic from "next/dynamic";
 

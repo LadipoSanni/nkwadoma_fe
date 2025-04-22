@@ -169,7 +169,6 @@ const Login: React.FC = () => {
                             user_roles,
                             user_role,
                         } = destructureLoginEndpointCallResponse(response)
-
                         clearData()
                         await persistor.purge();
                         toast({
