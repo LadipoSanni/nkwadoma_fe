@@ -1,39 +1,39 @@
 import React from "react"
 import {cabinetGrotesk, inter} from "@/app/fonts";
 import Image, {StaticImageData} from 'next/image';
-import {useRouter} from "next/navigation";
+import {CurrentMyInvestmentVehicleDetails} from "@/types/Component.type";
 
 
 interface InvestmentCardProps {
-    id: string;
     backgroundColor: string;
     imageSrc: string | StaticImageData;
     investmentVehicleType: string;
     investmentVehicleName: string;
-    statuses: string;
-    status: string;
-    percentage: number;
-    HandleCardDetails: (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => void;
+    statusValue: string;
+    percentage: number | string;
+    vehicleDetails: CurrentMyInvestmentVehicleDetails;
+    HandleCardDetails: (vehicleDetails: CurrentMyInvestmentVehicleDetails ) => void;
     statusClass: string;
     borderClass:string;
-    typeTextColor:string;
+    // typeTextColor:string;
+    status?: boolean | string;
 }
 
-const InvestmentCard: React.FC<InvestmentCardProps> = ({
-                                                           id,
+const Card = ({
+                                                           status,
                                                            backgroundColor,
                                                            investmentVehicleType,
                                                            imageSrc,
                                                            investmentVehicleName,
-                                                           statuses,
-                                                           status,
+                                                           statusValue,
                                                            percentage,
                                                            HandleCardDetails,
                                                            statusClass,
                                                            borderClass,
-                                                           typeTextColor,
-                                                       }) => {
-    const router = useRouter();
+                                                           // typeTextColor,
+                                                           vehicleDetails,
+                                                       }: InvestmentCardProps) => {
+    console.log('vehicleDetails:', vehicleDetails);
 
     return (
         <div id={`investment-card`} data-testid="investment-card"
@@ -43,7 +43,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                 <div id={`type`} data-testid={`type`} className={`py-5 px-4 flex flex-col`}>
                     <div
                         id="investmentTypeId"
-                        className={`bg-white text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center ${typeTextColor}`}>
+                        className={`bg-white text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center `}>
                         {investmentVehicleType
                             ? investmentVehicleType.charAt(0).toUpperCase() + investmentVehicleType.slice(1).toLowerCase()
                             : ""}
@@ -66,12 +66,12 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                 <div id={"minidetailsId"} className="flex bg-[#F6F6F6] items-center gap-2 rounded-lg px-2 py-1 w-fit">
                     <span id={"fundrasingId"}
                           className="font-normal text-black text-sm flex items-center justify-center">
-                        {statuses}
+                        {status}
                     </span>
                     <div id={"statusDivId"} className={`bg-meedlWhite p-1 border rounded-lg ${borderClass}`}>
                         <span id={"statusId"}
                               className={`text-sm font-medium px-1 py-1 rounded-lg lowercase ${statusClass}`}>
-                            {status}
+                            {statusValue}
                         </span>
                     </div>
                 </div>
@@ -82,14 +82,14 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                     {percentage}% interest
                 </div>
 
-                <div id={"HandleCardDetailsId"} className={`${inter.className} py-3 font-normal text-sm text-meedlBlue underline cursor-pointer`}
-                     onClick={() => HandleCardDetails(id, investmentVehicleType, router)}
+                <button id={"HandleCardDetailsId"} className={`${inter.className} py-3 font-normal text-sm text-meedlBlue underline cursor-pointer`}
+                        onClick={() => HandleCardDetails( vehicleDetails)}
                 >
                     View details
-                </div>
+                </button>
             </div>
         </div>
     );
 }
 
-export default InvestmentCard;
+export default Card;
