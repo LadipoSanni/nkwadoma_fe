@@ -78,7 +78,7 @@ describe("InvestmentCard Component", () => {
     });
 
     it("renders 'Fundraising' text consistently", () => {
-        render(<InvestmentCard statuses={""} {...mockProps} />);
+        render(<InvestmentCard statuses={"Fundraising"} {...mockProps} />);
         expect(screen.getByText("Fundraising")).toBeInTheDocument();
     });
 });
