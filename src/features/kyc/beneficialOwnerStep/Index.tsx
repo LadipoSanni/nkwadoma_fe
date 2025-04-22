@@ -9,18 +9,20 @@ import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import CountrySelectPopover from '@/reuseable/select/countrySelectPopover/Index';
 import {MdAdd, MdDeleteOutline} from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { updateBeneficialOwner } from "@/redux/slice/kyc/kycFormSlice";
 
 const BeneficialOwnerStep = () => {
+    const dispatch = useDispatch();
+    const { entityData } = useSelector((state: RootState) => state.kycForm.beneficialOwner);
+
     const [selectedForm, setSelectedForm] = useState<"entity" | "individual">("entity");
-    const [entityName, setEntityName] = useState("");
-    const [rcNumber, setRcNumber] = useState("");
-    const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
-    const [sections, setSections] = useState<{
-        id: number;
-        entityName: string;
-        rcNumber: string;
-        country: string | undefined
-    }[]>([]);
+    const [entityName, setEntityName] = useState(entityData.entityName || "");
+    const [rcNumber, setRcNumber] = useState(entityData.rcNumber || "");
+    const [selectedCountry, setSelectedCountry] = useState<string | undefined>(entityData.country);
+    const [sections, setSections] = useState(entityData.sections || []);
+
     const router = useRouter();
 
     const isFormValid = useMemo(() => {
@@ -53,6 +55,20 @@ const BeneficialOwnerStep = () => {
                 section.id === id ? {...section, [field]: value} : section
             )
         );
+    };
+
+    const handleSaveAndContinue = () => {
+        dispatch(
+            updateBeneficialOwner({
+                entityData: {
+                    entityName,
+                    rcNumber,
+                    country: selectedCountry,
+                    sections,
+                },
+            })
+        );
+        router.push('/kyc/declaration');
     };
 
     return (
@@ -100,6 +116,18 @@ const BeneficialOwnerStep = () => {
                                         className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                     />
                                 </div>
+                                <div id="countryOfIncorporationContainer" className="grid gap-2">
+                                    <Label htmlFor="countryOfIncorporation" id="countryOfIncorporationLabel"
+                                           className="block text-sm font-medium text-labelBlue">
+                                        Country of incorporation
+                                    </Label>
+                                    <CountrySelectPopover
+                                        selectedCountry={selectedCountry}
+                                        onCountryChange={(value) => setSelectedCountry(value)}
+                                        restrictedCountries={["US", "NG"]}
+                                        disableSearch={true}
+                                    />
+                                </div>
                                 <div id="rcNumberContainer" className="grid gap-2">
                                     <Label htmlFor="rcNumber" id="rcNumberLabel"
                                            className="block text-sm font-medium text-labelBlue">
@@ -113,16 +141,7 @@ const BeneficialOwnerStep = () => {
                                         className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                     />
                                 </div>
-                                <div id="countryOfIncorporationContainer" className="grid gap-2">
-                                    <Label htmlFor="countryOfIncorporation" id="countryOfIncorporationLabel"
-                                           className="block text-sm font-medium text-labelBlue">
-                                        Country of incorporation
-                                    </Label>
-                                    <CountrySelectPopover
-                                        selectedCountry={selectedCountry}
-                                        onCountryChange={(value) => setSelectedCountry(value)}
-                                    />
-                                </div>
+
                             </section>
                             {sections.map((section) => (
                                 <section key={section.id}
@@ -140,6 +159,18 @@ const BeneficialOwnerStep = () => {
                                             className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                         />
                                     </div>
+                                    <div id="countryOfIncorporationContainer" className="grid gap-2">
+                                        <Label htmlFor={`country-${section.id}`}
+                                               className="block text-sm font-medium text-labelBlue">
+                                            Country of incorporation
+                                        </Label>
+                                        <CountrySelectPopover
+                                            selectedCountry={section.country}
+                                            onCountryChange={(value) => handleInputChange(section.id, "country", value)}
+                                            restrictedCountries={["US", "NG"]}
+                                            disableSearch={true}
+                                        />
+                                    </div>
                                     <div id="rcNumberContainer" className="grid gap-2">
                                         <Label htmlFor={`rcNumber-${section.id}`}
                                                className="block text-sm font-medium text-labelBlue">
@@ -153,23 +184,14 @@ const BeneficialOwnerStep = () => {
                                             className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                         />
                                     </div>
-                                    <div id="countryOfIncorporationContainer" className="grid gap-2">
-                                        <Label htmlFor={`country-${section.id}`}
-                                               className="block text-sm font-medium text-labelBlue">
-                                            Country of incorporation
-                                        </Label>
-                                        <CountrySelectPopover
-                                            selectedCountry={section.country}
-                                            onCountryChange={(value) => handleInputChange(section.id, "country", value)}
-                                        />
-                                    </div>
                                     <div className={'flex justify-end'}>
                                         <button
                                             onClick={() => handleDeleteSection(section.id)}
                                             className="bg-greyBase200 py-1 px-2 hover:bg-greyBase200 flex rounded-md gap-1 h-[1.8125rem] w-[5.25rem]"
                                         >
                                             <MdDeleteOutline className="text-error450 h-5 w-5"/>
-                                            <span className={'text-error450 text-[14px] leading-[150%] font-medium'}>Delete</span>
+                                            <span
+                                                className={'text-error450 text-[14px] leading-[150%] font-medium'}>Delete</span>
                                         </button>
                                     </div>
                                 </section>
@@ -196,8 +218,8 @@ const BeneficialOwnerStep = () => {
                                     </Button>
                                     <Button
                                         id="entityFormSaveContinueButton"
-                                        type={'submit'}
-                                        onClick={() => router.push('/kyc/declaration')}
+                                        type={'button'}
+                                        onClick={handleSaveAndContinue} // Save data and navigate
                                         disabled={!isFormValid}
                                         className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 ${!isFormValid ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md  order-1 md:order-2`}
                                     >
