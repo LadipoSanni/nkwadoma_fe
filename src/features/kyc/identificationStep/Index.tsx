@@ -65,18 +65,15 @@ const IdentificationStep = () => {
         handleFormSubmitSuccess('COOPERATE', data);
     };
 
-    // Determine which form to render based on financierType
     const renderForm = () => {
         switch (financierType) {
             case 'INDIVIDUAL':
                 return (
                     <IndividualIdentificationForm
                         register={individualRegister}
-                        // Pass the correct handleSubmit
                         handleSubmit={handleIndividualSubmit}
                         errors={individualErrors}
                         isValid={isIndividualValid}
-                        // Pass the specific onSubmit handler
                         onSubmit={onIndividualSubmit}
                         isLoading={isLoading}
                     />
@@ -85,24 +82,21 @@ const IdentificationStep = () => {
                 return (
                     <CorporateIdentificationForm
                         register={corporateRegister}
-                        // Pass the correct handleSubmit
                         handleSubmit={handleCorporateSubmit}
                         errors={corporateErrors}
                         isValid={isCorporateValid}
-                        // Pass the specific onSubmit handler
                         onSubmit={onCorporateSubmit}
                         isLoading={isLoading}
                     />
                 );
             default:
-                // Default to individual form or show an error/placeholder
                 return (
                     <IndividualIdentificationForm
                         register={individualRegister}
                         handleSubmit={handleIndividualSubmit}
                         errors={individualErrors}
                         isValid={isIndividualValid}
-                        onSubmit={onIndividualSubmit} // Use individual submit here too
+                        onSubmit={onIndividualSubmit}
                         isLoading={isLoading}
                     />
                 );

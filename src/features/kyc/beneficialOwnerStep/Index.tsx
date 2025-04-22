@@ -219,7 +219,7 @@ const BeneficialOwnerStep = () => {
                                     <Button
                                         id="entityFormSaveContinueButton"
                                         type={'button'}
-                                        onClick={handleSaveAndContinue} // Save data and navigate
+                                        onClick={handleSaveAndContinue}
                                         disabled={!isFormValid}
                                         className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 ${!isFormValid ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md  order-1 md:order-2`}
                                     >

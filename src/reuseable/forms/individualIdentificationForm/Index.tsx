@@ -5,19 +5,17 @@ import { Button } from "@/components/ui/button";
 import Isloading from '@/reuseable/display/Isloading';
 import { UseFormRegister, FieldErrors, UseFormHandleSubmit } from 'react-hook-form';
 
-// Define the expected input types for this form
 interface IndividualFormInputs {
     nin: string;
     bvn: string;
 }
 
-// Define the props interface
 interface IndividualIdentificationFormProps {
     register: UseFormRegister<IndividualFormInputs>;
     handleSubmit: UseFormHandleSubmit<IndividualFormInputs>;
     errors: FieldErrors<IndividualFormInputs>;
     isValid: boolean;
-    onSubmit: (data: IndividualFormInputs) => void; // Adjusted type based on parent onSubmit
+    onSubmit: (data: IndividualFormInputs) => void;
     isLoading: boolean;
 }
 
@@ -30,14 +28,12 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                                                                                        isLoading
                                                                                    }) => {
     return (
-        // Use the passed handleSubmit and onSubmit
         <form onSubmit={handleSubmit(onSubmit)} className={'grid gap-5 md:w-[27.5rem] w-full'}>
             <div className={'grid gap-2'}>
                 <Label htmlFor="nin">National identification number</Label>
                 <Input
                     type="number"
                     placeholder="Enter NIN"
-                    // Use the passed register prop
                     {...register("nin", {
                         required: "NIN is required",
                         pattern: {
@@ -47,7 +43,6 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                     })}
                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem]'}
                 />
-                {/* Use the passed errors prop */}
                 {errors.nin && <p className="text-red-500 text-sm">{errors.nin.message}</p>}
             </div>
 
@@ -56,7 +51,6 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                 <Input
                     type="number"
                     placeholder="Enter BVN"
-                    // Use the passed register prop
                     {...register("bvn", {
                         required: "BVN is required",
                         pattern: {
@@ -66,18 +60,15 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                     })}
                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem]'}
                 />
-                {/* Use the passed errors prop */}
                 {errors.bvn && <p className="text-red-500 text-sm">{errors.bvn.message}</p>}
             </div>
 
             <div className={'flex justify-end mt-5'}>
                 <Button
                     type="submit"
-                    // Use the passed isValid and isLoading props
                     disabled={!isValid || isLoading}
-                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full ${!isValid ? 'bg-blue550' : 'bg-meedlBlue'}`}
+                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full ${!isValid ? 'bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'}`}
                 >
-                    {/* Use the passed isLoading prop */}
                     {isLoading ? <Isloading color="white" height={24} width={24}/> : 'Save & continue'}
                 </Button>
             </div>
