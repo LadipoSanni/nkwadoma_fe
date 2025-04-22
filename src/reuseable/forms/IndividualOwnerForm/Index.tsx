@@ -1,7 +1,7 @@
-import React, { useState, useEffect} from "react";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
     Select,
     SelectTrigger,
@@ -9,13 +9,13 @@ import {
     SelectContent,
     SelectItem,
 } from "@/components/ui/select";
-import {Calendar} from "@/components/ui/calendar";
-import {Popover, PopoverTrigger, PopoverContent} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import FileUpload from "@/reuseable/Input/FileUpload";
-import {MdOutlineDateRange, MdKeyboardArrowUp, MdKeyboardArrowDown, MdAdd, MdDeleteOutline} from "react-icons/md";
-import {useRouter} from "next/navigation";
-import {useAppDispatch, useAppSelector} from "@/redux/store";
-import {updateBeneficialOwner} from "@/redux/slice/kyc/kycFormSlice";
+import { MdOutlineDateRange, MdKeyboardArrowUp, MdKeyboardArrowDown, MdAdd, MdDeleteOutline } from "react-icons/md";
+import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { updateBeneficialOwner } from "@/redux/slice/kyc/kycFormSlice";
 
 interface FormSection {
     id: number;
@@ -59,8 +59,8 @@ const IndividualOwnerForm: React.FC = () => {
     const route = useRouter();
 
     const proofOptions = [
-        {id: "national_id", label: "National ID card"},
-        {id: "voters_card", label: "Voter's card"},
+        { id: "national_id", label: "National ID card" },
+        { id: "voters_card", label: "Voter's card" },
     ];
 
     useEffect(() => {
@@ -68,24 +68,6 @@ const IndividualOwnerForm: React.FC = () => {
             setSections(savedData.sections.map(convertSection));
         }
     }, [savedData]);
-
-    // const isFormValid = useMemo(() => {
-    //     return sections.every((section) => {
-    //         const ownershipValue = parseFloat(section.ownership);
-    //         return (
-    //             section.firstName.trim() !== "" &&
-    //             section.lastName.trim() !== "" &&
-    //             section.dob !== undefined &&
-    //             section.relationship.trim() !== "" &&
-    //             section.ownership.trim() !== "" &&
-    //             !isNaN(ownershipValue) &&
-    //             ownershipValue > 0 &&
-    //             ownershipValue <= 100 &&
-    //             section.proofType.trim() !== "" &&
-    //             section.proofFile !== null
-    //         );
-    //     });
-    // }, [sections]);
 
     const handleBackClick = () => {
         route.back();
@@ -114,7 +96,7 @@ const IndividualOwnerForm: React.FC = () => {
     const handleInputChange = (id: number, name: string, value: string) => {
         setSections((prev) =>
             prev.map((section) =>
-                section.id === id ? {...section, [name]: value} : section
+                section.id === id ? { ...section, [name]: value } : section
             )
         );
     };
@@ -122,7 +104,7 @@ const IndividualOwnerForm: React.FC = () => {
     const handleDateSelect = (id: number, date: Date | undefined) => {
         setSections((prev) =>
             prev.map((section) =>
-                section.id === id ? {...section, dob: date} : section
+                section.id === id ? { ...section, dob: date } : section
             )
         );
     };
@@ -130,7 +112,7 @@ const IndividualOwnerForm: React.FC = () => {
     const handleRelationshipSelect = (id: number, value: string) => {
         setSections((prev) =>
             prev.map((section) =>
-                section.id === id ? {...section, relationship: value} : section
+                section.id === id ? { ...section, relationship: value } : section
             )
         );
     };
@@ -138,7 +120,7 @@ const IndividualOwnerForm: React.FC = () => {
     const handleProofTypeChange = (id: number, value: string) => {
         setSections((prev) =>
             prev.map((section) =>
-                section.id === id ? {...section, proofType: value} : section
+                section.id === id ? { ...section, proofType: value } : section
             )
         );
     };
@@ -149,7 +131,7 @@ const IndividualOwnerForm: React.FC = () => {
         if (file) {
             setSections((prev) =>
                 prev.map((section) =>
-                    section.id === id ? {...section, proofFile: file} : section
+                    section.id === id ? { ...section, proofFile: file } : section
                 )
             );
         }
@@ -157,11 +139,6 @@ const IndividualOwnerForm: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // if (isFormValid) {
-        //     const sectionsToStore = sections.map((section) => ({
-        //         ...section,
-        //         dob: section.dob ? section.dob.toISOString() : undefined,
-        //     }));
             const sectionsToStore = sections.map((section) => ({
                 ...section,
                 dob: section.dob ? section.dob.toISOString() : undefined,
@@ -221,10 +198,10 @@ const IndividualOwnerForm: React.FC = () => {
                                             variant="outline"
                                             className="w-full h-[3.375rem] border border-solid border-neutral650 flex justify-between items-center font-normal focus:outline-none focus:ring-0"
                                         >
-                      <span>
-                        {section.dob ? section.dob.toLocaleDateString() : "Select date"}
-                      </span>
-                                            <MdOutlineDateRange className="h-5 w-5 text-neutral950"/>
+                                            <span>
+                                                {section.dob ? section.dob.toLocaleDateString() : "Select date"}
+                                            </span>
+                                            <MdOutlineDateRange className="h-5 w-5 text-neutral950" />
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-auto p-0 shadow-none" align="start">
@@ -244,15 +221,16 @@ const IndividualOwnerForm: React.FC = () => {
                                 <Select
                                     onValueChange={(value) => handleRelationshipSelect(section.id, value)}
                                     value={section.relationship}
-                                    onOpenChange={(open) => setIsOpen({...isOpen, [section.id]: open})}
+                                    onOpenChange={(open) => setIsOpen({ ...isOpen, [section.id]: open })}
                                 >
                                     <SelectTrigger
-                                        className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 flex justify-between items-center">
-                                        <SelectValue placeholder="Select relationship"/>
+                                        className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 flex justify-between items-center"
+                                    >
+                                        <SelectValue placeholder="Select relationship" />
                                         {isOpen[section.id] ? (
-                                            <MdKeyboardArrowUp className="h-5 w-5 text-neutral950"/>
+                                            <MdKeyboardArrowUp className="h-5 w-5 text-neutral950" />
                                         ) : (
-                                            <MdKeyboardArrowDown className="h-5 w-5 text-neutral950"/>
+                                            <MdKeyboardArrowDown className="h-5 w-5 text-neutral950" />
                                         )}
                                     </SelectTrigger>
                                     <SelectContent>
@@ -306,8 +284,7 @@ const IndividualOwnerForm: React.FC = () => {
                         <FileUpload
                             handleDrop={(e) => handleDrop(section.id, e)}
                             handleDragOver={(e) => e.preventDefault()}
-                            setUploadedImageUrl={() => {
-                            }}
+                            setUploadedImageUrl={() => {}}
                         />
                         {sections.length > 1 && (
                             <div className="flex justify-end">
@@ -316,7 +293,7 @@ const IndividualOwnerForm: React.FC = () => {
                                     onClick={() => handleDeleteSection(section.id)}
                                     className="bg-greyBase200 py-1 px-2 hover:bg-greyBase200 flex rounded-md gap-1 h-[1.8125rem] w-[5.25rem]"
                                 >
-                                    <MdDeleteOutline className="text-error450 h-5 w-5"/>
+                                    <MdDeleteOutline className="text-error450 h-5 w-5" />
                                     <span className="text-error450 text-[14px] leading-[150%] font-medium">Delete</span>
                                 </button>
                             </div>
@@ -330,7 +307,7 @@ const IndividualOwnerForm: React.FC = () => {
                             type="button"
                             className="flex items-center gap-2 bg-transparent text-meedlBlue shadow-none px-0 py-2 rounded-md"
                         >
-                            <MdAdd className="text-meedlBlue h-5 w-5"/>
+                            <MdAdd className="text-meedlBlue h-5 w-5" />
                             <span className="font-semibold text-[14px] leading-[150%]">Add</span>
                         </Button>
                     </div>
@@ -342,15 +319,6 @@ const IndividualOwnerForm: React.FC = () => {
                         >
                             Back
                         </Button>
-                        {/*<Button*/}
-                        {/*    type="submit"*/}
-                        {/*    disabled={!isFormValid}*/}
-                        {/*    className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 ${*/}
-                        {/*        !isFormValid ? "bg-blue550 hover:bg-blue550 cursor-not-allowed opacity-50" : "bg-meedlBlue hover:bg-meedlBlue"*/}
-                        {/*    } text-white rounded-md`}*/}
-                        {/*>*/}
-                        {/*    Save &amp; continue*/}
-                        {/*</Button>*/}
                         <Button
                             type="submit"
                             className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue

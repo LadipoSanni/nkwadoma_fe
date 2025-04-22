@@ -8,7 +8,7 @@ interface FormSection {
     relationship: string;
     ownership: string;
     proofType: string;
-    proofFile: null;
+    proofFile: File | null;
 }
 
 interface EntitySection {
