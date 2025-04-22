@@ -16,7 +16,7 @@ import {useAppSelector} from "@/redux/store";
 import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
 import Table from '@/reuseable/table/Table';
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
-import { setCurrentFinancierId,setFinancierMode } from '@/redux/financier/financier';
+import { setCurrentFinancierId,setFinancierMode } from '@/redux/slice/financier/financier';
 import {store} from "@/redux/store";
 
 interface TableRowData {

@@ -10,8 +10,9 @@ import {store} from "@/redux/store";
 import {useAppSelector} from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useCreateInvestmentVehicleStatusMutation } from "@/service/admin/fund_query";
-// import { useToast } from "@/hooks/use-toast";
-import { setPublicVehicleUrl,setInvestmentStatus } from "@/redux/slice/vehicle/vehicle";
+import { useToast } from "@/hooks/use-toast";
+import { setPublicVehicleUrl,setInvestmentStatus,clearSaveInvestmentStatus } from "@/redux/slice/vehicle/vehicle";
+
 
 interface ApiError {
   status: number;
@@ -44,14 +45,15 @@ function StatusReusable({
   onStatusChange,
   initialStatus = "", 
 }: Props) {
-  // const isLoading = false;
+  
   const router = useRouter();
   const completedStep = useAppSelector(state => (state?.vehicleMultistep?.completedSteps))
   const draftId = useAppSelector(state => (state?.vehicle?.setDraftId))
+  const statusType = useAppSelector(state => (state?.vehicle?.setEditStatus))
   const [isError, setError] = useState("");
   const formikRef = React.useRef<FormikProps<typeof initialFormValue>>(null);
   const [setVehicleStatus,{isLoading}] = useCreateInvestmentVehicleStatusMutation();
-  // const { toast } = useToast();
+  const { toast } = useToast();
   const savedstatus = useAppSelector(state => (state?.vehicle?.setInvestmentStatus))
 
   const initialFormValue = {
@@ -113,12 +115,17 @@ function StatusReusable({
         const urlLink = create?.data?.investmentVehicleLink
         store.dispatch(setPublicVehicleUrl(urlLink))
         saveToRedux(values)
-        // toast({
-        //   description: create.message,
-        //   status: "success",
-        // });
         store.dispatch(markStepCompleted("setup"))
-        router.push("/vehicle/visibility");
+        if(statusType === "changeStatus"){
+          router.push("/vehicle/details")
+          store.dispatch(clearSaveInvestmentStatus())
+          toast({
+            description: "Status updated successfully",
+            status: "success",
+          });
+        }else{
+          router.push("/vehicle/visibility");
+        }
       }
       
     } catch (err) {
@@ -197,8 +204,8 @@ function StatusReusable({
                   )}
                 </div>
               </div>
-              <div className="md:flex justify-between w-full mt-3">
-                <Button
+              <div className={`md:flex  w-full mt-3 ${statusType !== "changeStatus"? "justify-between" : "justify-end"}`}>
+               { statusType !== "changeStatus" && <Button
                   id="saveInvestment"
                   variant={"outline"}
                   type="button"
@@ -206,7 +213,7 @@ function StatusReusable({
                   onClick={handleBack}
                 >
                   Back
-                </Button>
+                </Button> }
                 <button
                   id="submitInvestment"
                   className={`w-full md:w-40 h-[46px] rounded-md ${
@@ -217,7 +224,7 @@ function StatusReusable({
                   type="submit"
                   disabled={!isValid}
                 >
-                  {isLoading ? <Isloading /> : "Save & Continue"}
+                  {isLoading ? <Isloading /> : statusType !== "changeStatus"?  "Save & Continue" : "Confirm"}
                 </button>
               </div>
               <p

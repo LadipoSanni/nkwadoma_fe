@@ -64,9 +64,10 @@ export const financierApi = createApi({
             providesTags: ['financier']
         }),
         viewFinancierDetail: builder.query({
-            query: (financierId) => ({
-                url: `/financier/view/${financierId}`,
+            query: (param:{financierId: string}) => ({
+                url: `/financier/view`,
                 method: 'GET', 
+                params: param
             }),
             providesTags: ['financier']
         })

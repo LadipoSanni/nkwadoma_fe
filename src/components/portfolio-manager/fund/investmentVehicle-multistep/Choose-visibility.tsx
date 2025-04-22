@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import Isloading from "@/reuseable/display/Isloading";
 import {store} from "@/redux/store";
 import {useAppSelector} from "@/redux/store";
-// import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
+import {clearVisibilityType } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useRouter } from "next/navigation";
 import CustomSelectId from '@/reuseable/Input/custom-select-id';
 // import Multiselect from '@/reuseable/mult-select/multi-select';
@@ -37,11 +37,7 @@ interface Financier {
   investmentVehicleDesignation: string[];
 }
 
-const initialFormValue = {
-  status: "",
-  financiers: [{ id: "",  investmentVehicleDesignation: [] }] as Financier[],
-  investmentVehicleId: ''
-};
+
 
 interface Financials {
   id: string,
@@ -54,11 +50,23 @@ interface Financials {
 }
 
 function ChooseVisibility() {
+  
+  const visibilityStatus = useAppSelector(state => (state?.vehicleMultistep?.visibilityType))
+
+  const initialFormValue = {
+    status: visibilityStatus || "",
+    financiers: [{ id: "",  investmentVehicleDesignation: [] }] as Financier[],
+    investmentVehicleId: ''
+  };
+
+
+
     const [copied, setCopied] = useState(false);
     const [selectedFinancierIds, setSelectedFinancierIds] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [pageNumber,setPageNumber] = useState(0)
     const investmentVehicleId = useAppSelector(state => (state?.vehicle?.setDraftId))
+    const statusType = useAppSelector(state => (state?.vehicle?.setEditStatus))
     const urlLink = useAppSelector(state => (state?.vehicle?.setPublicVehicleUrl))
     const [viewAllfinanciers,setAllfinanciers] = useState<Financials[]>([])
     const [hasNextPage, setNextPage] = useState(true);
@@ -161,17 +169,22 @@ function ChooseVisibility() {
          try {
           const visibility = await chooseVisibility(formData).unwrap();
              if(visibility){
+              
               toast({
-                description: visibility.message,
+                description: statusType === "changeVisibility"? "Vehicle visibility updated successfully" : visibility.message,
                 status: "success",
               });
               store.dispatch(clearDraftId())
               store.dispatch(clearPublicVehicleUrl())
               store.dispatch(clearSaveCreateInvestmentField())
               store.dispatch(clearSaveInvestmentStatus())
-              if(vehicleType === "commercial"){
+              store.dispatch(clearVisibilityType())
+                if(statusType === "changeVisibility"){
+                  router.push("/vehicle/details")
+                }
+             else if(vehicleType === "commercial"){
                 router.push("/vehicle/commercial-vehicle")
-            }else {
+            }else if(vehicleType === "endowment"){
                 router.push("/vehicle/endownment-vehicle")
             }
              }
@@ -275,7 +288,7 @@ function ChooseVisibility() {
         ...newFinanciers[index],
         investmentVehicleDesignation
       };
-      setFieldValue('financiers', newFinanciers, true); // Enable validation
+      setFieldValue('financiers', newFinanciers, true); 
     };
       const handleBack =() => {
         router.push("/vehicle/status")
@@ -283,7 +296,7 @@ function ChooseVisibility() {
 
   return (
     <div className={`${inter.className} `}>
-        <div className='xl:px-[6rem] lg:px-8 grid grid-cols-1 gap-y-6 '>
+        <div className={` grid grid-cols-1 gap-y-6 ${statusType !== "changeVisibility"? "xl:px-[6rem] lg:px-8" : "xl:px-72 lg:px-52 px-11 md:px-40"}`}>
         <div className='grid grid-cols-1 gap-y-1'>
         <h1 className='text-[18px] font-normal'>Visibility</h1>
         <p className='text-[14px] font-normal'>Select the visibility of your {vehicleType} fund</p>
@@ -662,8 +675,8 @@ function ChooseVisibility() {
             <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This {vehicleType} fund will be visible to the creator</p>
           </div>
              </div>
-             <div className="md:flex justify-between w-full mt-4">
-               <Button
+             <div className={`md:flex  w-full mt-4 ${statusType !== "changeVisibility"? "justify-between" : "justify-end"}`}>
+              {  statusType !== "changeVisibility" &&  <Button
                variant={"outline"}
                type="button"
                id='backToStatus'
@@ -672,7 +685,7 @@ function ChooseVisibility() {
                >
                 Back
                </Button>
-                
+        }
                 <button
                   id="submitInvestment"
                   className={`w-full md:w-24 h-[46px] rounded-md ${
@@ -683,7 +696,7 @@ function ChooseVisibility() {
                   type="submit"
                   disabled={!isValid}
                 >
-                  {isLoading ? <Isloading /> : "Publish"}
+                  {isLoading ? <Isloading /> : statusType !== "changeVisibility"? "Publish" : "Confirm"}
                 </button>
               </div>
             </Form>

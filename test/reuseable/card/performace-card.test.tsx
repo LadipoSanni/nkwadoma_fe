@@ -23,7 +23,7 @@ describe('test performance card', ()=> {
     })
 
     test('performance card display value passed into component', ()=> {
-        const value = '₦20,000.00';
+        const value = '₦20,000';
         render(
             <PerformanceCard id={'testing'} showContainerBorder={false} percentage={20} showPerformancePercentage={false} maxWidth={'100%'} title={'title'} value={20000} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
 
@@ -31,7 +31,7 @@ describe('test performance card', ()=> {
 
         const displayedValue = screen.getByText(value);
         // console.log('displayedValue', displayedValue);
-        expect(displayedValue).toHaveTextContent('₦20,000.00');
+        expect(displayedValue).toHaveTextContent('₦20,000');
     })
 
     test('performance card display percentage when showPerformancePercentage parameter is true', ()=> {

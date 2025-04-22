@@ -4,6 +4,7 @@ import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {inter, cabinetGrotesk} from "@/app/fonts";
 import {useRouter} from "next/navigation";
+import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 
 interface ConfirmTransferProps {
     headerTitle: string,
@@ -11,12 +12,18 @@ interface ConfirmTransferProps {
 }
 
 
+
 const ConfirmTransferDialogue: React.FC<ConfirmTransferProps> = ({headerTitle, amount}) => {
     const router = useRouter();
-    const handleMarketPlace = async () => {
-        router.push('/marketplace')
-    }
+    const toastPopUp = ToastPopUp({
+        description: `Successfully transferred ${amount}`,
+        status: "success",
+    });
 
+    const handleMarketPlace = async () => {
+        router.push("/marketplace");
+        toastPopUp.showToast();
+    };
     return (
         <div id={`Success modal`} data-testid="Successful transfer modal">
 
@@ -24,6 +31,7 @@ const ConfirmTransferDialogue: React.FC<ConfirmTransferProps> = ({headerTitle, a
                    className={`md:w-[5rem] w-[4rem] md:h-[5rem] h-[4rem]`}
                    width={200}
                    height={200}
+                   loading= "lazy"
             />
             <div id={`titleAndMessageDiv`} className={`pt-3`}>
                 <h1 id={"titleId"}
