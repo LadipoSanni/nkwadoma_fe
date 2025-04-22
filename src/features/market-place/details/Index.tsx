@@ -75,6 +75,8 @@ const MarketPlaceDetails = () => {
             ? "text-red-600 bg-[#FCEEEE]"
             : "text-gray-600 bg-gray-100";
 
+    const statusKey = data?.data?.fundRaisingStatus ? "Fundraising" : "Deploying";
+
 
     const verifyDocumentExists = async (url: string): Promise<boolean> => {
         if (url.includes('cloudinary.com')) {
@@ -136,7 +138,7 @@ const MarketPlaceDetails = () => {
         {label: 'Minimum amount', value: (<span className="text-sm font-medium text-[#212221]">{formatAmount(data?.data?.minimumInvestmentAmount?.toString() || '0')}</span>)},
         {label: 'Status', value: (
                 <div id="minidetailsId" className="flex bg-[#F6F6F6] items-center gap-2 rounded-lg px-2 py-1 w-fit">
-                    <span id="fundrasingId" className="font-normal text-black text-sm flex items-center justify-center">Fundraising</span>
+                    <span id="fundrasingId" className="font-normal text-black text-sm flex items-center justify-center">{statusKey}</span>
                     <div id="statusDivId" className={`bg-meedlWhite p-1 border rounded-lg ${borderClass}`}>
                         <span id="statusId" className={`text-sm font-medium px-1 py-1 rounded-lg lowercase ${statusClass}`}>
                             {actualStatus ?.toLowerCase() || ""}</span>
