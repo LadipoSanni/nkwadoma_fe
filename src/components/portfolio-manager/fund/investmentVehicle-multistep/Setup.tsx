@@ -18,7 +18,7 @@ import { format, parseISO } from "date-fns";
 import {store} from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 import {useAppSelector} from "@/redux/store";
-import { setCreateInvestmentField,clearSaveCreateInvestmentField,setDraftId,clearDraftId} from '@/redux/slice/vehicle/vehicle';
+import { setCreateInvestmentField,clearSaveCreateInvestmentField,setDraftId,clearDraftId, setInvestmentVehicleType} from '@/redux/slice/vehicle/vehicle';
 import { validationSchema,draftValidationSchema } from '@/utils/validation-schema';
 import PdfAndDocFileUpload from '@/reuseable/Input/Pdf&docx-fileupload';
 
@@ -97,9 +97,11 @@ function Setup({investmentVehicleType}: Props) {
               store.dispatch(clearSaveCreateInvestmentField())
                store.dispatch(clearDraftId())
                if(vehicleType === "commercial"){
-                 router.push("/vehicle/commercial-vehicle")
+                store.dispatch(setInvestmentVehicleType("COMMERCIAL"))
+                 router.push("/vehicle/draft")
                }else {
-                router.push("/vehicle/endownment-vehicle")
+                store.dispatch(setInvestmentVehicleType("ENDOWMENT")) 
+                router.push("/vehicle/draft")
                }
             }
           } catch (err) {

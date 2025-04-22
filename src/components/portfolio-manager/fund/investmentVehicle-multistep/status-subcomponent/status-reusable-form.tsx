@@ -10,7 +10,7 @@ import {store} from "@/redux/store";
 import {useAppSelector} from "@/redux/store";
 import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useCreateInvestmentVehicleStatusMutation } from "@/service/admin/fund_query";
-// import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { setPublicVehicleUrl,setInvestmentStatus,clearSaveInvestmentStatus } from "@/redux/slice/vehicle/vehicle";
 
 
@@ -45,7 +45,7 @@ function StatusReusable({
   onStatusChange,
   initialStatus = "", 
 }: Props) {
-  // const isLoading = false;
+  
   const router = useRouter();
   const completedStep = useAppSelector(state => (state?.vehicleMultistep?.completedSteps))
   const draftId = useAppSelector(state => (state?.vehicle?.setDraftId))
@@ -53,7 +53,7 @@ function StatusReusable({
   const [isError, setError] = useState("");
   const formikRef = React.useRef<FormikProps<typeof initialFormValue>>(null);
   const [setVehicleStatus,{isLoading}] = useCreateInvestmentVehicleStatusMutation();
-  // const { toast } = useToast();
+  const { toast } = useToast();
   const savedstatus = useAppSelector(state => (state?.vehicle?.setInvestmentStatus))
 
   const initialFormValue = {
@@ -119,6 +119,10 @@ function StatusReusable({
         if(statusType === "changeStatus"){
           router.push("/vehicle/details")
           store.dispatch(clearSaveInvestmentStatus())
+          toast({
+            description: "Status updated successfully",
+            status: "success",
+          });
         }else{
           router.push("/vehicle/visibility");
         }

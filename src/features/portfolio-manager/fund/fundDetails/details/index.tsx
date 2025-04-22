@@ -13,11 +13,11 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { inter } from '@/app/fonts';
 import {formatMonthInDate} from '@/utils/Format';
-import {setDraftId,setEditStatus,clearEditStatus,setInvestmentStatus,clearSaveInvestmentStatus} from '@/redux/slice/vehicle/vehicle';
+import {setDraftId,setEditStatus,clearEditStatus,setInvestmentStatus,clearSaveInvestmentStatus,setPublicVehicleUrl,clearPublicVehicleUrl} from '@/redux/slice/vehicle/vehicle';
 import {store} from "@/redux/store";
 import { useRouter } from 'next/navigation'
 import {markStepCompleted} from '@/redux/slice/multiselect/vehicle-multiselect';
-import { resetVehicleState } from '@/redux/slice/multiselect/vehicle-multiselect';
+import { resetVehicleState,setVisibilityType } from '@/redux/slice/multiselect/vehicle-multiselect';
 
 const Details = () => {
     const currentVehicleId = useAppSelector(state => (state.vehicle.currentVehicleId))
@@ -35,13 +35,15 @@ const Details = () => {
     }
 
     useEffect(() => {
-         store.dispatch(clearEditStatus())
+         if(statusType === "changeStatus" || statusType === "changeVisibility"){
+            refetch()
+         }else {
+        store.dispatch(clearEditStatus())
          store.dispatch(resetVehicleState())
          store.dispatch(clearSaveInvestmentStatus())
-         if(statusType === "changeStatus"){
-            refetch()
+          store.dispatch(clearPublicVehicleUrl())
          }
-    },[refetch])
+    },[refetch,statusType])
 
     const getFilenameFromUrl = (url: string) => {
         try {
@@ -79,6 +81,8 @@ const Details = () => {
          store.dispatch(setDraftId(data?.data?.id))
          store.dispatch(markStepCompleted("setup"))
          store.dispatch(setEditStatus("changeVisibility"))
+         store.dispatch(setPublicVehicleUrl(data?.data?.investmentVehicleLink))
+         store.dispatch(setVisibilityType(data?.data?.investmentVehicleVisibility))
          router.push("/vehicle/edit/visibility")
     }
 
