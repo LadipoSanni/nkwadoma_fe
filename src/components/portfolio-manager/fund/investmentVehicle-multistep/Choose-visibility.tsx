@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import Isloading from "@/reuseable/display/Isloading";
 import {store} from "@/redux/store";
 import {useAppSelector} from "@/redux/store";
-// import { markStepCompleted } from '@/redux/slice/multiselect/vehicle-multiselect';
+import {clearVisibilityType } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useRouter } from "next/navigation";
 import CustomSelectId from '@/reuseable/Input/custom-select-id';
 // import Multiselect from '@/reuseable/mult-select/multi-select';
@@ -37,11 +37,7 @@ interface Financier {
   investmentVehicleDesignation: string[];
 }
 
-const initialFormValue = {
-  status: "",
-  financiers: [{ id: "",  investmentVehicleDesignation: [] }] as Financier[],
-  investmentVehicleId: ''
-};
+
 
 interface Financials {
   id: string,
@@ -54,6 +50,17 @@ interface Financials {
 }
 
 function ChooseVisibility() {
+  
+  const visibilityStatus = useAppSelector(state => (state?.vehicleMultistep?.visibilityType))
+
+  const initialFormValue = {
+    status: visibilityStatus || "",
+    financiers: [{ id: "",  investmentVehicleDesignation: [] }] as Financier[],
+    investmentVehicleId: ''
+  };
+
+
+
     const [copied, setCopied] = useState(false);
     const [selectedFinancierIds, setSelectedFinancierIds] = useState<string[]>([]);
     const [isOpen, setIsOpen] = useState(false);
@@ -164,15 +171,16 @@ function ChooseVisibility() {
              if(visibility){
               
               toast({
-                description: visibility.message,
+                description: statusType === "changeVisibility"? "Vehicle visibility updated successfully" : visibility.message,
                 status: "success",
               });
               store.dispatch(clearDraftId())
               store.dispatch(clearPublicVehicleUrl())
               store.dispatch(clearSaveCreateInvestmentField())
               store.dispatch(clearSaveInvestmentStatus())
+              store.dispatch(clearVisibilityType())
                 if(statusType === "changeVisibility"){
-                  router.push("/vehicle/detail")
+                  router.push("/vehicle/details")
                 }
              else if(vehicleType === "commercial"){
                 router.push("/vehicle/commercial-vehicle")

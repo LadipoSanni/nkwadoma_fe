@@ -18,8 +18,12 @@ function MultistepLayout({children}:props) {
   const currentIndex = steps.findIndex(step => step.id === currentStep);
   const vehicleType = useAppSelector(state => (state.vehicle?.vehicleType))
   const completedSteps = steps.slice(0, currentIndex).map(step => step.id);
+  const isDraft = useAppSelector(state => (state.vehicleMultistep?.isDraft))
 
   const handleBack=()=> {
+     if(isDraft){
+      router.push("/vehicle/draft")
+     } else
     if(vehicleType === "commercial"){
         router.push("/vehicle/commercial-vehicle")
     }else {
