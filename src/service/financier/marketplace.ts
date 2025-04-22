@@ -74,6 +74,16 @@ export const marketplaceApi = createApi({
             }),
             providesTags: ['marketplace'],
         }),
+
+        confirmInvest: builder.mutation({
+            query: (formData) => ({
+                url: '/financier/vehicle/invest',
+                method: 'POST',
+                body: formData,
+            }),
+            invalidatesTags: ['marketplace'],
+
+        })
     })
 })
-export const {useSearchInvestmentVehiclesQuery, useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useGetInvestmentVehicleDetailQuery} = marketplaceApi
+export const {useSearchInvestmentVehiclesQuery, useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useGetInvestmentVehicleDetailQuery, useConfirmInvestMutation } = marketplaceApi

@@ -21,7 +21,7 @@ interface EntitySection {
 
 interface KYCFormState {
     identification: {
-        type: 'INDIVIDUAL' | 'CORPORATE';
+        type: 'INDIVIDUAL' | 'COOPERATE';
         individual?: {
             nin: string;
             bvn: string;
@@ -91,7 +91,7 @@ const kycFormSlice = createSlice({
     initialState,
     reducers: {
         updateIdentification: (state, action: PayloadAction<{
-            type: 'INDIVIDUAL' | 'CORPORATE';
+            type: 'INDIVIDUAL' | 'COOPERATE';
             data: {
                 nin?: string;
                 bvn?: string;

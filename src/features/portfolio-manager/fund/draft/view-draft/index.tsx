@@ -13,6 +13,7 @@ import {MdOutlinePayments} from 'react-icons/md';
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
 import { setCreateInvestmentField,setDraftId,clearDraftId} from '@/redux/slice/vehicle/vehicle';
 import {store} from "@/redux/store";
+import { setIsDraft,resetDraft } from '@/redux/slice/multiselect/vehicle-multiselect';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -81,6 +82,7 @@ function ViewDraft() {
        setTotalPage(data.data?.totalPages)
        setPageNumber(data?.data?.pageNumber)
     }
+    store.dispatch(resetDraft())
    },[searchTerm, searchData,data])
 
 const handleRowClick = (row: TableRowData) => {
@@ -102,6 +104,7 @@ const handleRowClick = (row: TableRowData) => {
         sponsors: '',
        }
     store.dispatch(setCreateInvestmentField(investmentVehicleData))
+    store.dispatch(setIsDraft(true))
     router.push('/vehicle/setup')
     }
 

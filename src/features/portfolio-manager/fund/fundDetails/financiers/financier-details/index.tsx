@@ -18,9 +18,9 @@ const FinancierDetails = () => {
     const financierMode = useAppSelector(state => (state.financier.financierMode))
     const router = useRouter();
 
-    const  {data, isLoading} = useViewFinancierDetailQuery(currentFinancierId,{skip : !currentFinancierId})
+    const  {data, isLoading} = useViewFinancierDetailQuery({financierId:currentFinancierId},{skip : !currentFinancierId})
 
-    console.log(data?.data?.userIdentity)
+      
 
     const navigateToViewAllFinancier = () => {
         if(financierMode === "platform"){

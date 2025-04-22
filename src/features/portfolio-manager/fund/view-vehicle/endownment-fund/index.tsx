@@ -16,9 +16,9 @@ import {formatAmount} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
-import { resetVehicleState } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { setInvestmentVehicleType } from '@/redux/slice/vehicle/vehicle';
-
+import { resetAll} from '@/redux/slice/vehicle/vehicle';
+import { clearAll } from '@/redux/slice/multiselect/vehicle-multiselect';
 
 
 
@@ -84,7 +84,8 @@ function EndownmentFund() {
                   setTotalPage(investmentVehicleData?.data?.totalPages)
                   setPageNumber(investmentVehicleData?.data?.pageNumber)
              }
-             store.dispatch(resetVehicleState())
+             store.dispatch(resetAll())
+             store.dispatch(clearAll())
          }, [searchTerm, searchData, investmentVehicleData])
 
      
@@ -175,7 +176,7 @@ function EndownmentFund() {
                     onChange={handleSearchChange}
                     handleDraftClick={handleEndowerFundDraftClick}
                     handleCreateInvestmentVehicleClick={handleCreateInvestmentVehicleClick}
-                    buttonName='Set up endownment fund'
+                    buttonName='Set up endowment fund'
                 />
       </div>
         <div>

@@ -8,8 +8,8 @@ import InvestmentMarketplace from '@/features/financier/summary/investmentMarket
 import {useRouter} from 'next/navigation';
 import styles from "./index.module.css"
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
-import {setFinancierType} from "@/redux/financier/financier";
-import {store, useAppDispatch} from "@/redux/store";
+import {setFinancierType} from "@/redux/slice/financier/financier";
+import { useAppDispatch} from "@/redux/store";
 import dynamic from "next/dynamic";
 
 const financialCardData = [
@@ -36,7 +36,7 @@ const FinancierOverviewContent = () => {
 
     useEffect(() => {
         if (data?.data?.financierType) {
-            const type = data.data.financierType as 'INDIVIDUAL' | 'CORPORATE';
+            const type = data.data.financierType as 'INDIVIDUAL' | 'COOPERATE';
             dispatch(setFinancierType(type));
         }
     }, [data, dispatch]);

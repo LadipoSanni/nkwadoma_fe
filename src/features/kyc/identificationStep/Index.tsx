@@ -25,7 +25,7 @@ const IdentificationStep = () => {
     const route = useRouter();
     const [isLoading, setIsLoading] = React.useState(false);
     const dispatch = useAppDispatch();
-    const financierType = useAppSelector(state => state.financier.type);
+    const financierType = useAppSelector(state => state.financier.financierType);
     const savedData = useAppSelector(state => state.kycForm.identification);
 
     const {
