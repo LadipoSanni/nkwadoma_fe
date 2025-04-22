@@ -46,10 +46,6 @@ const MyInvestment = () => {
 
     const {data: searchData, isLoading: isSearchItemLoading, isFetching: isFetchingSearchTerms} = useSearchMyInvestmentQuery(searchProps)
 
-    console.log('searchTerm:: ', searchTerm)
-    console.log('searched:: ', searchData?.data?.body)
-    console.log('filted data:: ', filteredData?.data?.body)
-    console.log('searchec data length: ', searchData?.data?.body?.length)
     useEffect(()=> {
         setMyInvestmentVehicles(filteredData?.data?.body)
         if (searchTerm?.length !== 0){
@@ -61,7 +57,6 @@ const MyInvestment = () => {
             setMyInvestmentVehicles(filteredData?.data?.body)
         }
         if (isFiltered && searchData?.data?.body?.length === 0 && filteredData?.data?.body !== 0){
-            console.log('it happended:: ')
             setMyInvestmentVehicles([])
             setMyInvestmentVehicles(filteredData?.data?.body)
         }
@@ -131,19 +126,13 @@ const MyInvestment = () => {
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
-            ) : myInvestmentVehicles?.length === 0 || filteredData?.data?.body?.length  === 0 || searchData?.data?.body?.length === 0  ? (
+            ) : myInvestmentVehicles?.length === 0 && filteredData?.data?.body?.length  === 0 && searchData?.data?.body?.length === 0  ? (
                 <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
-                    {searchTerm?.length  !== 0 ? (
-                        <SearchEmptyState icon={MdSearch} name="Investment" />
-                    ) : myInvestmentVehicles?.length === 0 && filteredData?.data?.body?.length  === 0 && searchData?.data?.body?.length === 0 ? (
-                        <LoanEmptyState title={"Investment vehicles will show here"} description={"There are no Investment vehicles available yet"} icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>} iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
-                    ): (
-                        <div>
-                        </div>
-                    )}
+                    <LoanEmptyState title={"Investment vehicles will show here"} description={"There are no Investment vehicles available yet"} icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>} iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
                 </div>
-            )
-                :
+            ) : myInvestmentVehicles?.length === 0 || filteredData?.data?.body?.length  === 0 || searchData?.data?.body?.length === 0 && searchTerm?.length  !== 0 ?   (
+                        <SearchEmptyState icon={MdSearch} name="Investment" />
+                ):
                 (
                 <div
                     id="card-segmentId"
