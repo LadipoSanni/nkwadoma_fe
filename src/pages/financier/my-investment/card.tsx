@@ -33,7 +33,6 @@ const Card = ({
                                                            // typeTextColor,
                                                            vehicleDetails,
                                                        }: InvestmentCardProps) => {
-    console.log('vehicleDetails:', vehicleDetails);
 
     return (
         <div id={`investment-card`} data-testid="investment-card"

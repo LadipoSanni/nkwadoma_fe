@@ -1,5 +1,5 @@
 "use client";
-import React, {  useState } from "react";
+import React, {  useState, useEffect } from "react";
 import { store } from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
@@ -11,22 +11,16 @@ import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/fi
 // import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
 // import LoanEmptyState from "@/reuseable/emptyStates/Index";
 // import { MdOutlinePayments } from "react-icons/md";
-import {useViewMyInvestmentQuery} from '@/service/financier/api'
+import {useFilterMyInvestmentQuery, useSearchMyInvestmentQuery, useViewMyInvestmentQuery} from '@/service/financier/api'
 import dynamic from "next/dynamic";
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {
     CurrentMyInvestmentVehicleDetails,
 } from "@/types/Component.type";
 import Card from "@/pages/financier/my-investment/card";
 import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
-import {MdOutlinePayments} from "react-icons/md";
+import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
-// interface InvestmentVehicle {
-//     id: string;
-//     investmentVehicleType: "COMMERCIAL" | "ENDOWMENT";
-//     name: string;
-//     rate?: number;
-// }
+import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 
 const MyInvestmentContent = dynamic(
     () => Promise.resolve(MyInvestment),
@@ -38,26 +32,44 @@ const MyInvestment = () => {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
-    // const [hasMore, setHasMore] = useState(true);
-    // const [pageNumber, setPageNumber] = useState(0);
-    // const [allVehicles, setAllVehicles] = useState<InvestmentVehicle[]>([]);
+    const {data: allMyInvestment, isLoading} = useViewMyInvestmentQuery({})
+    const [isFiltered, setIsFiltered] = useState<boolean>(false)
 
-    // const observer = useRef<IntersectionObserver | null>(null);
-    // const lastCardRef = useRef<HTMLDivElement | null>(null);
+    const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(allMyInvestment?.data?.investmentSummaries)
 
-    // const { data, isLoading, isFetching } =
-    //     useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
-    //         pageSize: 48,
-    //         pageNumber: pageNumber,
-    //         investmentVehicleStatus: "PUBLISHED",
-    //     });
-    // console.log('data', data);
+    const filterProps = {
+        investmentVehicleType: selectedValue.toUpperCase(),
+        pageSize: '10',
+        pageNumber: '0'
+    }
+    const {data: filteredData, isLoading: isFilteredDataLoading} = useFilterMyInvestmentQuery(filterProps)
+    const searchProps = {
+        name: searchTerm,
+        investmentType: selectedValue.toUpperCase(),
+        pageSize: '10',
+        pageNumber: '0'
+    }
 
-    const {data: datss, isLoading} = useViewMyInvestmentQuery({})
+    const {data: searchData, isLoading: isSearchItemLoading} = useSearchMyInvestmentQuery(searchProps)
+
+    useEffect(()=> {
+        setMyInvestmentVehicles(allMyInvestment?.data?.investmentSummaries)
+        if(isFiltered){
+            setMyInvestmentVehicles([])
+            setMyInvestmentVehicles(filteredData?.data?.body)
+        }else{
+            setMyInvestmentVehicles(allMyInvestment?.data?.investmentSummaries)
+        }
+        if(searchTerm !== ''){
+            setMyInvestmentVehicles([])
+            setMyInvestmentVehicles(searchData?.data?.body)
+        }else {
+            setMyInvestmentVehicles(allMyInvestment?.data?.investmentSummaries)
+        }
+    }, [selectedValue, filteredData, allMyInvestment, isFiltered, searchData, searchTerm])
 
 
-    // const hh = datss?.data?.investmentSummaries?.name
-    // const hh2 = datss?.data?.investmentSummaries?.name
+
 
 
 
@@ -72,23 +84,28 @@ const MyInvestment = () => {
 
 
     const getStatusColor = (status: string) => {
-        if(capitalizeFirstLetters(status)?.toString() === 'Closed') {
+        if(status === 'CLOSE') {
             return 'bg-red-100 md:bg-red-100 md:text-red-600 text-red-600 border-[#F2BCBA] md:border-[#F2BCBA]'
         }
         return 'bg-green-100 md:bg-green-100 md:text-[#0D9B48] text-[#0D9B48] border-[#B4E5C8] md:border-[#B4E5C8]'
     }
 
     const getStatusBorderColor =  (status: string) => {
-        if(capitalizeFirstLetters(status)?.toString() === 'Closed') {
+        if(status === 'CLOSE') {
             return 'border-[#F2BCBA] md:border-[#F2BCBA]'
         }
         return 'border-[#B4E5C8] md:border-[#B4E5C8]'
     }
 
+    const filterInvestments = (type: string) => {
+        setSelectedValue(type)
+        setIsFiltered(true)
+    }
 
 
 
-    const vehicles = datss?.data?.investmentSummaries
+
+    const vehicles = allMyInvestment?.data?.investmentSummaries
 
     return (
         <main id="marketplaceView" className="py-9 px-5 h ">
@@ -102,19 +119,19 @@ const MyInvestment = () => {
                 <CustomSelect
                     id="marketplaceSelect"
                     value={selectedValue}
-                    onChange={(value) => setSelectedValue(value)}
-                    selectContent={["Commercial Investment", "Endowment Investment"]}
+                    onChange={(value) => filterInvestments(value)}
+                    selectContent={["Commercial", "Endowment"]}
                     placeHolder="Type"
                     triggerId="marketplaceTrigger"
                     className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                 />
             </div>
 
-            {isLoading  ? (
+            {isLoading && isFilteredDataLoading && isSearchItemLoading  ? (
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
-            ) : vehicles.length === 0 ? (
+            ) : vehicles?.length === 0 && filteredData?.data?.body   ? (
                 <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
                     <LoanEmptyState
                         id="Vehicles"
@@ -124,13 +141,19 @@ const MyInvestment = () => {
                         description="There are no investment vehicles available yet"
                     />
                 </div>
-            ) : (
+            ) : searchData?.data?.body?.length === 0  ? (
+                <div>
+                    <SearchEmptyState icon={MdSearch} name="Investment" />
+                </div>
+                )
+                :
+                (
                 <div
                     id="card-segmentId"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
 
-                    {vehicles?.map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
+                    {myInvestmentVehicles?.map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
                         const backgroundColor =
                              vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -140,7 +163,7 @@ const MyInvestment = () => {
                                 ? "/BlueCircles.svg"
                                 : "/GreenCircles.svg";
                         const statusValue = vehicle.fundRaisingStatus ? vehicle.fundRaisingStatus : vehicle.deployingStatus ;
-                        const status = vehicle.fundRaisingStatus ?  'Fundraising' : 'Deploying';
+                        const status = vehicle.fundRaisingStatus !== null ?  'Fundraising' : 'Deploying';
 
                         const statusClass = getStatusColor(statusValue)
                         const borderClass = getStatusBorderColor(statusValue)
