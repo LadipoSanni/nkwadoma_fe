@@ -22,6 +22,7 @@ const SourceOfFundsStep = () => {
 
     const completedStep = useAppSelector(state => state.kycMultistep.completedSteps);
     const savedSourceOfFunds = useAppSelector(state => state.kycForm.sourceOfFunds);
+    const identificationType = useAppSelector(state => state.kycForm.identification.type);
 
     useEffect(() => {
         if (!completedStep.includes("identification")) {
@@ -29,7 +30,7 @@ const SourceOfFundsStep = () => {
         }
     }, [completedStep, router]);
 
-    const sourceOptions = [
+    const individualSourceOptions = [
         { value: 'Personal or joint savings', label: 'Personal or joint savings' },
         { value: 'Employment income', label: 'Employment income' },
         { value: 'Sales of assets', label: 'Sales of assets' },
@@ -38,6 +39,18 @@ const SourceOfFundsStep = () => {
         { value: 'Compensation of legal settlements', label: 'Compensation of legal settlements' },
         { value: 'Profit from legitimate activities', label: 'Profit from legitimate activities' },
     ];
+
+    const corporateSourceOptions = [
+        { value: 'Business revenue', label: 'Business revenue' },
+        { value: 'Investment income', label: 'Investment income' },
+        { value: 'Sales of corporate assets', label: 'Sales of corporate assets' },
+        { value: 'Others', label: 'Others' },
+    ];
+
+    // Determine which source options to use based on identification type
+    const sourceOptions = identificationType === 'COOPERATE' 
+        ? corporateSourceOptions 
+        : individualSourceOptions;
 
     const handleBackClick = () => {
         router.back();
