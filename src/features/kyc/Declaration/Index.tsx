@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -33,20 +33,25 @@ const Declaration: React.FC = () => {
         country: '',
     });
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
+    const [selectedCountry, setSelectedCountry] = useState<string | undefined>(formData.country);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (selectedCountry) {
+            setFormData(prev => ({
+                ...prev,
+                country: selectedCountry
+            }));
+        }
+    }, [selectedCountry]);
 
     const handlePEPChange = (value: boolean) => {
         setFormData(prev => ({
             ...prev,
-            isPoliticallyExposedPerson: value,
-            ...(value === false && {
-                politicalPosition: undefined,
-                relationship: undefined,
-                country: undefined
-            })
+            isPoliticallyExposedPerson: value
         }));
+        
         setErrorMessage(null);
     };
 
@@ -58,7 +63,6 @@ const Declaration: React.FC = () => {
     const handleFinish = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validation
         if (!formData.agreedToTerms) {
             setErrorMessage("You must agree to the terms to proceed.");
             return;
@@ -67,18 +71,33 @@ const Declaration: React.FC = () => {
             setErrorMessage("Please answer the Politically Exposed Person question.");
             return;
         }
+        
         if (formData.isPoliticallyExposedPerson && (!formData.politicalPosition || !formData.country)) {
             setErrorMessage("Please fill in all required PEP fields.");
             return;
         }
 
-        dispatch(updateDeclaration(formData));
+        const dataToSubmit = {
+            ...formData,
+            ...(formData.isPoliticallyExposedPerson === false && {
+                politicalPosition: undefined,
+                relationship: undefined,
+                country: undefined
+            })
+        };
+
+        dispatch(updateDeclaration(dataToSubmit));
         setShowSuccessDialog(true);
     };
 
     const handleSuccessDialogContinue = () => {
         setShowSuccessDialog(false);
         router.push('/Overview');
+    };
+
+    const handleCountryChange = (value: string) => {
+        setSelectedCountry(value);
+        setFormData(prev => ({ ...prev, country: value }));
     };
 
     const pepOptions = [
@@ -89,7 +108,10 @@ const Declaration: React.FC = () => {
     const isFormValid =
         formData.agreedToTerms &&
         formData.isPoliticallyExposedPerson !== null &&
-        (!formData.isPoliticallyExposedPerson || (formData.politicalPosition && formData.country));
+        (!formData.isPoliticallyExposedPerson || (
+            formData.politicalPosition && 
+            formData.country
+        ));
 
     return (
         <div id="declarationContainer" className={`${inter.className} xl:px-36 grid-cols-1 gap-y-6 grid gap-10`}>
@@ -174,7 +196,7 @@ const Declaration: React.FC = () => {
                                 </Label>
                                 <CountrySelectPopover
                                     selectedCountry={selectedCountry}
-                                    onCountryChange={(value) => setSelectedCountry(value)}
+                                    onCountryChange={handleCountryChange}
                                 />
                             </div>
                         </div>
@@ -233,7 +255,7 @@ const Declaration: React.FC = () => {
                 onClose={() => setShowSuccessDialog(false)}
                 onContinue={handleSuccessDialogContinue}
                 title="Verification successful"
-                message="Congratulations! You’ve successfully completed the KYC verification process"
+                message="Congratulations! You've successfully completed the KYC verification process"
                 buttonText="Go to overview"
             />
         </div>
