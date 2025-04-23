@@ -68,7 +68,7 @@ const BeneficialOwnerStep = () => {
                 },
             })
         );
-        router.push('/kyc/declaration');
+        router.push('/kyc/political-exposure');
     };
 
     return (

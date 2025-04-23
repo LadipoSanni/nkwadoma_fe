@@ -149,7 +149,7 @@ const IndividualOwnerForm: React.FC = () => {
                     individualData: { sections: sectionsToStore },
                 })
             );
-            route.push("/kyc/declaration");
+            route.push("/kyc/political-exposure");
     };
 
     return (
