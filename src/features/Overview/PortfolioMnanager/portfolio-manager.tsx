@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styles from "../index.module.css"
 import PortfolioManagerOverviewCard from "@/reuseable/cards/PortfolioManagerOverviewCard";
-import MeedlBarChart from "@/reuseable/bar-chart";
+// import MeedlBarChart from "@/reuseable/bar-chart";
 import Barcharts from "@/features/Overview/PortfolioMnanager/Barcharts";
 
 const PortfolioManager = () => {
-    const initialChartData = [
-        { month: "Jan", value: 186, },
-        { month: "Feb", value: 305,  },
-        { month: "March", value: 237, },
-    ]
-    const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialChartData);
+    // const initialChartData = [
+    //     { month: "Jan", value: 186, },
+    //     { month: "Feb", value: 305,  },
+    //     { month: "March", value: 237, },
+    // ]
+    // const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialChartData);
 
     const cardData1 = [
         {title: "Total investment vehicles", amount: '0',},
@@ -29,26 +29,26 @@ const PortfolioManager = () => {
         {title: "Endowment", amount: '2',},
     ]
 
-    const SecondChartData = [
-        { month: "Jan", value: 186, },
-        { month: "Feb", value: 505,  },
-        { month: "March", value: 237, },
-        { month: "April", value: 73, },
-        { month: "May", value: 209,  },
-        { month: "June", value: 214,  },
-    ]
-
-    const thirdChartData = [
-        { month: "Jan", value: 186, },
-        { month: "Feb", value: 305,  },
-        { month: "March", value: 237, },
-        { month: "April", value: 73, },
-        { month: "May", value: 209,  },
-        { month: "June", value: 214,  },
-        { month: "july", value: 73, },
-        { month: "August", value: 209,  },
-        { month: "September", value: 214,  },
-    ]
+    // const SecondChartData = [
+    //     { month: "Jan", value: 186, },
+    //     { month: "Feb", value: 505,  },
+    //     { month: "March", value: 237, },
+    //     { month: "April", value: 73, },
+    //     { month: "May", value: 209,  },
+    //     { month: "June", value: 214,  },
+    // ]
+    //
+    // const thirdChartData = [
+    //     { month: "Jan", value: 186, },
+    //     { month: "Feb", value: 305,  },
+    //     { month: "March", value: 237, },
+    //     { month: "April", value: 73, },
+    //     { month: "May", value: 209,  },
+    //     { month: "June", value: 214,  },
+    //     { month: "july", value: 73, },
+    //     { month: "August", value: 209,  },
+    //     { month: "September", value: 214,  },
+    // ]
 
     const clickCard1 = () => {
 

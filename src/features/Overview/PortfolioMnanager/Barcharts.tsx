@@ -7,7 +7,7 @@ const Barcharts = () => {
         {month: "Jan", value: 1},
         {month: "Jan", value: 1},
     ]
-    const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialDates);
+    // const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialDates);
     const [currentPortfolioGrowth, setCurrentPortfolioGrowth] = useState(0);
     const [portfolioGrowth, setPortfolioGrowth] = useState<{month: string, value: number}[]>(initialDates);
 
