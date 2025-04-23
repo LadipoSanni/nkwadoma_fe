@@ -37,6 +37,7 @@ const IndividualOwnershipForm: React.FC = () => {
     const convertSection = (section: Omit<FormSection, 'dob'> & { dob: string | undefined }): FormSection => ({
         ...section,
         dob: section.dob ? new Date(section.dob) : undefined,
+        proofFile: null,
     });
 
     const defaultSection: FormSection = {
@@ -51,7 +52,7 @@ const IndividualOwnershipForm: React.FC = () => {
     };
 
     const [sections, setSections] = useState<FormSection[]>(
-        savedData && savedData.sections.length
+        savedData && savedData.sections && savedData.sections.length
             ? savedData.sections.map(convertSection)
             : [defaultSection]
     );
@@ -64,10 +65,19 @@ const IndividualOwnershipForm: React.FC = () => {
     ];
 
     useEffect(() => {
-        if (savedData && savedData.sections.length) {
-            setSections(savedData.sections.map(convertSection));
-        }
-    }, [savedData]);
+        const sectionsToStore = sections.map((section) => ({
+            ...section,
+            dob: section.dob ? section.dob.toISOString() : undefined,
+            proofFile: section.proofFile ? section.proofFile : null,
+        }));
+
+        dispatch(
+            updateBeneficialOwner({
+                selectedForm: "individual",
+                individualData: { sections: sectionsToStore },
+            })
+        );
+    }, [sections, dispatch]);
 
     const handleBackClick = () => {
         route.back();
@@ -139,17 +149,17 @@ const IndividualOwnershipForm: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-            const sectionsToStore = sections.map((section) => ({
-                ...section,
-                dob: section.dob ? section.dob.toISOString() : undefined,
-            }));
-            dispatch(
-                updateBeneficialOwner({
-                    selectedForm: "individual",
-                    individualData: { sections: sectionsToStore },
-                })
-            );
-            route.push("/kyc/declaration");
+        const sectionsToStore = sections.map((section) => ({
+            ...section,
+            dob: section.dob ? section.dob.toISOString() : undefined,
+        }));
+        dispatch(
+            updateBeneficialOwner({
+                selectedForm: "individual",
+                individualData: { sections: sectionsToStore },
+            })
+        );
+        route.push("/kyc/declaration");
     };
 
     return (
