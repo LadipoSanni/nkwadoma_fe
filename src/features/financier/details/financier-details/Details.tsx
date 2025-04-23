@@ -76,7 +76,7 @@ const FinancierDetails = () => {
                             >
                             </div>
                             <div className={`px `}>
-                                <div className={`bg-grey105 ${styles.container} min-h-[25vh] md:h-[48vh]  overflow-x-hidden md:overflow-y-auto`}>
+                                <div className={`bg-grey105 ${styles.container} min-h-[45vh] md:h-[48vh]  overflow-x-hidden md:overflow-y-auto`}>
                                     {basicDetails.map((item, index) => (
                                         <li key={"key" + index} className={'p-4  grid gap-4 rounded-md'}>
                                             <div
