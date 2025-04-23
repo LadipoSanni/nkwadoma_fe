@@ -7,7 +7,7 @@ const Barcharts = () => {
         {month: "Jan", value: 1},
         {month: "Jan", value: 1},
     ]
-    // const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialDates);
+    const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialDates);
     const [currentPortfolioGrowth, setCurrentPortfolioGrowth] = useState(0);
     const [portfolioGrowth, setPortfolioGrowth] = useState<{month: string, value: number}[]>(initialDates);
 
@@ -53,7 +53,7 @@ const Barcharts = () => {
 
     return (
         <div className={` w-full md:w-full flex md:flex flex-col-2 md: gap-6 `}>
-            <BarChartWithDate id={'AUM portfolio growth rate'}
+            <BarChartWithDate id={'AUMPortfolioGrowthRate'}
                               displayDates={barChartTabContent}
                               currentMonthDate={currentPortfolioGrowth}
                               cardTile={'AUM portfolio growth rate'}
@@ -61,10 +61,10 @@ const Barcharts = () => {
                               changeCurrentMonth={handleBarChartTabChange}
                               performanceValue={0}
             />
-            <BarChartWithDate id={'AUM portfolio growth rate'}
+            <BarChartWithDate id={'LoanBookPortfolioGrowthRate'}
                               displayDates={barChartTabContent}
                               currentMonthDate={currentPortfolioGrowth}
-                              cardTile={'AUM portfolio growth rate'}
+                              cardTile={'Loan book portfolio growth rate'}
                               chartData={portfolioGrowth}
                               changeCurrentMonth={handleBarChartTabChange}
                               performanceValue={0}
