@@ -1,6 +1,6 @@
 import React from 'react';
-import FinancierDetails from "@/features/portfolio-manager/fund/fundDetails/financiers/financier-details";
 import CustomAuthorization from "@/features/auth/authorization";
+import FinancierDetails from "@/features/financier/details/financier-details/Details";
 
 const Page = () => {
     return (
