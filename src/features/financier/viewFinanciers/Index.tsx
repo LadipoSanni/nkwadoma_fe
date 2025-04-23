@@ -13,7 +13,10 @@ import InviteFinanciers from '@/components/portfolio-manager/fund/financier/fina
 import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { formatAmount } from '@/utils/Format';
-import { useViewAllFinanciersQuery,useSearchFinancierQuery } from '@/service/admin/financier';
+import {
+    useSearchFinancierQuery,
+    useGetAllActiveAndInvitedFinanciersQuery
+} from '@/service/admin/financier';
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import { setCurrentFinancierId,setFinancierMode } from '@/redux/slice/financier/financier';
 import {store} from "@/redux/store";
@@ -62,11 +65,12 @@ const ViewFinanciers = () => {
     const param = {
         pageNumber: pageNumber,
         pageSize: 10,
-        financierType: selectedFinancier
+        financierType: selectedFinancier.toUpperCase(),
+        activationStatus: selectedActivationStatusTab.toUpperCase(),
     }
 
 
-    const {data,isLoading,refetch} = useViewAllFinanciersQuery(param)
+    const {data, isLoading, refetch} = useGetAllActiveAndInvitedFinanciersQuery(param)
     const {data:searchData} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10},{skip: !searchTerm})
 
     useEffect(()=>{
