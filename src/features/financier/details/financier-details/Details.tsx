@@ -10,7 +10,7 @@ import { getInitial } from '@/utils/GlobalMethods';
 import { formatAmount } from '@/utils/Format';
 
 const FinancierDetails = () => {
-    const currentFinancierId = useAppSelector(state => (state.financier.currentFinancierId))
+    const currentFinancierId = useAppSelector(state => (state.financier.activeAndInvitedFinancierId))
 
     const  {data, isLoading} = useViewFinancierDetailQuery({financierId:currentFinancierId},{skip : !currentFinancierId})
 
