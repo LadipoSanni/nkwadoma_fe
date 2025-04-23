@@ -1,11 +1,11 @@
 import React from 'react';
-import FinancierDetails from "@/features/portfolio-manager/fund/fundDetails/financiers/financier-details";
 import CustomAuthorization from "@/features/auth/authorization";
+import InvestmentVehicle from "@/features/financier/details/investment-vehicle/InvestmentVehicle";
 
 const Page = () => {
     return (
         <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
-            <FinancierDetails/>
+            <InvestmentVehicle/>
         </CustomAuthorization>
 
     );
