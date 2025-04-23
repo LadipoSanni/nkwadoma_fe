@@ -47,8 +47,7 @@ const SourceOfFundsStep = () => {
         { value: 'Others', label: 'Others' },
     ];
 
-    // Determine which source options to use based on identification type
-    const sourceOptions = identificationType === 'COOPERATE' 
+    const sourceOptions = identificationType === 'COOPERATE'
         ? corporateSourceOptions 
         : individualSourceOptions;
 

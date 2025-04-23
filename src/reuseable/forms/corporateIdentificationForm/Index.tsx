@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import React, {useState, useEffect} from 'react';
+import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
 import Isloading from '@/reuseable/display/Isloading';
-import { UseFormRegister, FieldErrors, UseFormHandleSubmit } from 'react-hook-form';
+import {UseFormRegister, FieldErrors, UseFormHandleSubmit, UseFormSetValue} from 'react-hook-form';
 import CountrySelectPopover from "@/reuseable/select/countrySelectPopover/Index";
 
 interface CorporateFormInputs {
@@ -19,6 +19,8 @@ interface CorporateIdentificationFormProps {
     isValid: boolean;
     onSubmit: (data: CorporateFormInputs) => void;
     isLoading: boolean;
+    setValue: UseFormSetValue<CorporateFormInputs>;
+    defaultValues?: CorporateFormInputs;
 }
 
 const CorporateIdentificationForm: React.FC<CorporateIdentificationFormProps> = ({
@@ -27,9 +29,24 @@ const CorporateIdentificationForm: React.FC<CorporateIdentificationFormProps> = 
                                                                                      errors,
                                                                                      isValid,
                                                                                      onSubmit,
-                                                                                     isLoading
+                                                                                     isLoading,
+                                                                                     setValue,
+                                                                                     defaultValues
                                                                                  }) => {
-    const [selectedCountry, setSelectedCountry] = useState<string>("");
+    const [selectedCountry, setSelectedCountry] = useState<string>(defaultValues?.countryOfIncorporation || "");
+    register("countryOfIncorporation", {required: "Country of incorporation is required"});
+
+    useEffect(() => {
+        if (selectedCountry) {
+            setValue("countryOfIncorporation", selectedCountry, {shouldValidate: true});
+        }
+    }, [selectedCountry, setValue]);
+
+    const handleCountryChange = (value: string) => {
+        setSelectedCountry(value);
+        setValue("countryOfIncorporation", value, {shouldValidate: true});
+    };
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={'grid gap-5 md:w-[27.5rem] w-full'}>
             <div className={'grid gap-2'}>
@@ -52,12 +69,14 @@ const CorporateIdentificationForm: React.FC<CorporateIdentificationFormProps> = 
                 </Label>
                 <CountrySelectPopover
                     selectedCountry={selectedCountry}
-                    onCountryChange={(value) => setSelectedCountry(value)}
+                    onCountryChange={handleCountryChange}
                     restrictedCountries={["US", "NG"]}
                     disableSearch={true}
                 />
+                {errors.countryOfIncorporation && (
+                    <p className="text-red-500 text-sm">{errors.countryOfIncorporation.message}</p>
+                )}
             </div>
-
 
             <div className={'grid gap-2'}>
                 <Label htmlFor="rcNumber">RC Number</Label>

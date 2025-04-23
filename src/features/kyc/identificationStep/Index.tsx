@@ -40,7 +40,8 @@ const IdentificationStep = () => {
     const {
         register: corporateRegister,
         handleSubmit: handleCorporateSubmit,
-        formState: { errors: corporateErrors, isValid: isCorporateValid }
+        formState: { errors: corporateErrors, isValid: isCorporateValid },
+        setValue: corporateSetValue
     } = useForm<CorporateFormInputs>({
         mode: 'onChange',
         defaultValues: savedData.corporate || { tin: '', rcNumber: '', countryOfIncorporation: '' }
@@ -87,6 +88,8 @@ const IdentificationStep = () => {
                         isValid={isCorporateValid}
                         onSubmit={onCorporateSubmit}
                         isLoading={isLoading}
+                        setValue={corporateSetValue}
+                        defaultValues={savedData.corporate}
                     />
                 );
             default:
