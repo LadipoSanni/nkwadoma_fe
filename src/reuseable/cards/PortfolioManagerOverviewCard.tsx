@@ -2,26 +2,18 @@ import React from 'react';
 import {cabinetGroteskBold, inter} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 
-const PortfolioManagerOverviewCard = () => {
-    const cardData = [
-        {
-            title: "Fundamental",
-            amount: '0',
-        },
-        {
-            title: "Fundamental",
-            amount: '2',
-        },
-        {
-            title: "Fundamental",
-            amount: '2',
-        },
 
-    ]
+interface Props {
+    id: string;
+    cardData?: {title: string, amount: string}[];
+    clickView: () => void;
+}
+
+const PortfolioManagerOverviewCard = ({id, cardData, clickView}: Props) => {
 
 
     return (
-        <div id={'balanceCard'}
+        <div id={id}
              className={`${inter.className} flex overflow-x-auto md:grid md:overflow-visible 
                         snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden 
                         [-ms-overflow-style:none] w-[30rem] md:w-2/5  [scrollbar-width:none]`}>
@@ -43,9 +35,8 @@ const PortfolioManagerOverviewCard = () => {
 
                 <div id={`balanceLinkBlock`}
                      className="flex bg-white  justify-end">
-                    <Button className="bg-[#D9EAFF] shadow-none cu hover:bg-[#D9EAFF] w-fit h-fit px-4">
-                        <h2 id={`cardLinkText`}
-                            className="text-[#142854] text-[14px] gap-2 flex font-normal leading-[150%] underline">view</h2>
+                    <Button  onClick={clickView} className={`bg-[#D9EAFF] ${inter.className} md:w-fit md:h-fit  underline md:text-[#142854] text-[#142854] text-[14px] shadow-none  hover:bg-[#D9EAFF] w-fit h-fit `}>
+                        view
                     </Button>
                 </div>
             </div>
