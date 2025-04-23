@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import styles from "./index.module.css"
+import styles from "../index.module.css"
 import PortfolioManagerOverviewCard from "@/reuseable/cards/PortfolioManagerOverviewCard";
 import MeedlBarChart from "@/reuseable/bar-chart";
+import Barcharts from "@/features/Overview/PortfolioMnanager/Barcharts";
 
 const PortfolioManager = () => {
     const initialChartData = [
@@ -73,9 +74,10 @@ const PortfolioManager = () => {
                </div>
 
                <div className={`  w-full md:w-full pb-5  `}>
-                   <div className={` grid md:flex md:w-[50%] md:h-auto md:border md:border-[#D7D7D7] rounded-md  md:py-4 md:px-4 `}>
-                       <MeedlBarChart dataKey={'value'} maxWidth={'100%'} maxHeight={'30rem'} chartData={chartData} componentId={'details'}/>
-                   </div>
+                   {/*<div className={` grid md:flex md:w-[50%] md:h-auto md:border md:border-[#D7D7D7] rounded-md  md:py-4 md:px-4 `}>*/}
+                   {/*    <MeedlBarChart dataKey={'value'} maxWidth={'100%'} maxHeight={'30rem'} chartData={chartData} componentId={'details'}/>*/}
+                   {/*</div>*/}
+                   <Barcharts/>
                </div>
            </div>
        </div>
