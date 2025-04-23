@@ -12,7 +12,6 @@ interface Props {
 
 const PortfolioManagerOverviewCard = ({id, cardData, clickView}: Props) => {
 
-    // <MdOutlineHelpOutline />
 
 
     return (
@@ -41,7 +40,7 @@ const PortfolioManagerOverviewCard = ({id, cardData, clickView}: Props) => {
 
                 <div id={`balanceLinkBlock`}
                      className="flex bg-white  justify-end">
-                    <Button  onClick={clickView} className={`bg-[#D9EAFF] ${inter.className} md:w-fit md:h-fit  underline md:text-[#142854] text-[#142854] text-[14px] shadow-none  hover:bg-[#D9EAFF] w-fit h-fit `}>
+                    <Button  onClick={clickView} className={`bg-[#D9EAFF] ${inter.className} md:w-fit md:h-fit px-1 py-1 md:py-1 md:px-2  underline md:text-[#142854] text-[#142854] text-[14px] shadow-none  hover:bg-[#D9EAFF] w-fit h-fit `}>
                         view
                     </Button>
                 </div>

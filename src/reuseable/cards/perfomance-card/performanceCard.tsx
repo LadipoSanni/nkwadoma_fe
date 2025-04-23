@@ -1,9 +1,9 @@
 'use client'
 import React from 'react';
-import {cabinetGroteskBold, inter, inter500} from "@/app/fonts";
+import {cabinetGroteskBold, inter} from "@/app/fonts";
 import { MdArrowUpward, MdOutlineArrowDownward } from "react-icons/md";
-import { MdKeyboardArrowDown } from "react-icons/md";
 import {formatAmount, formateDigits} from "@/utils/Format";
+import CustomSelect from "@/reuseable/Input/Custom-select";
 
 
 interface PerformanceCardProps {
@@ -19,12 +19,14 @@ interface PerformanceCardProps {
     showContainerBorder: boolean;
     isSmall?: boolean;
     isFigure?: boolean;
+    currentDate?: string;
+    onChangeDate?: (value: string) => void;
 
 }
 
 
 
-const PerformanceCard = ({id,isFigure, showMonthPick,maxWidth, isSmall,title, value, isValueInPercentage, showContainerBorder, showPerformancePercentage,percentage, didValueIncrease}: PerformanceCardProps) => {
+const PerformanceCard = ({id,isFigure,onChangeDate,currentDate, showMonthPick,maxWidth, isSmall,title, value, isValueInPercentage, showContainerBorder, showPerformancePercentage,percentage, didValueIncrease}: PerformanceCardProps) => {
     return (
         <div
             id={id} data-testid={id}
@@ -32,11 +34,16 @@ const PerformanceCard = ({id,isFigure, showMonthPick,maxWidth, isSmall,title, va
             <div className={` ${isSmall? `md:w-full w-full  ` : `md:min-w-fit  min-w-fit w-[${maxWidth}] md:w-[${maxWidth}] `} h-full bg-grey105 md:bg-grey105 px-4 py-4 grid gap-2 content-between`}>
                 <div className={` md:flex md:justify-between md:full flex justify-between `}>
                     <p id={'performanceTitleId'+title} data-testid={title} aria-labelledby={title} className={`md:text-[16px] text-[14px] ${inter.className} text-black300`}>{title}</p>
-                    {showMonthPick &&
-                        <div className={` ${inter500.className} md:text-[12px] px-2 py-1 gap-2 md:gap-0.5 rounded-md md:rounded-md  md:py-1 md:px-2 flex md:flex md:bg-white bg-white md:w-fit md:h-fit md:border md:border-[#e7eaee]  w-fit h-fit border border-[#e7eaee]  `}>
-                            <p id={'selectedYearOnPerformanceCard'} className={`mt-auto mb-auto `}>2025</p>
-                            <MdKeyboardArrowDown id={'MdKeyboardArrowDown'} className={`w-5 h-5 mt-auto mb-auto `}/>
-                        </div>
+                    {showMonthPick  && onChangeDate &&
+                        <CustomSelect
+                            id={"performanceDate:"+id}
+                            value={currentDate}
+                            onChange={(value) => onChangeDate(value)}
+                            selectContent={["Commercial", "Endowment"]}
+                            placeHolder={'2025'}
+                            triggerId="performanceDate"
+                            className="h-fit md:w-fit w-fit mt-0 bg-white border border-[#D0D5DD]"
+                        />
                     }
                 </div>
                 <div className={` grid gap-2 md:flex justify-between min-w-fit md:min-w-fit w-full md:w-full  `}>

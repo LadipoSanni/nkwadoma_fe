@@ -4,12 +4,16 @@ import BarChartWithDate from "@/reuseable/cards/BarChartWithDate";
 const Barcharts = () => {
     const initialDates = [
         {month: "Jan", value: 1},
-        {month: "Jan", value: 1},
-        {month: "Jan", value: 1},
+        {month: "Feb", value: 1},
+        {month: "March", value: 1},
     ]
     const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialDates);
-    const [currentPortfolioGrowth, setCurrentPortfolioGrowth] = useState(0);
-    const [portfolioGrowth, setPortfolioGrowth] = useState<{month: string, value: number}[]>(initialDates);
+    const [currentLoanBookPortfolioGrowth, setCurrentLoanBookPortfolioGrowth] = useState(0);
+    const [currentAumPortfolioGrowth, setCurrentAumPortfolioGrowth] = useState(0);
+    const [aumPortfolioGrowth, setaumPortfolioGrowth] = useState<{month: string, value: number}[]>(initialDates);
+    const [loanBookPortfolioGrowth, setloanBookPortfolioGrowth] = useState<{month: string, value: number}[]>(initialDates);
+
+
 
     const SecondChartData = [
         { month: "Jan", value: 186, },
@@ -38,36 +42,57 @@ const Barcharts = () => {
     ]
 
     const handleBarChartTabChange = (index: number) => {
-        setCurrentPortfolioGrowth(index)
+        setCurrentAumPortfolioGrowth(index)
         if (index === 0) {
-            setPortfolioGrowth(initialDates)
+            setaumPortfolioGrowth(initialDates)
         }
         if (index === 1) {
-            setPortfolioGrowth(SecondChartData)
+            setaumPortfolioGrowth(SecondChartData)
         }
         if (index === 2) {
-            setPortfolioGrowth(thirdChartData)
+            setaumPortfolioGrowth(thirdChartData)
+        }
+    }
+    const handleBarLoanBookChartTabChange = (index: number) => {
+        setCurrentLoanBookPortfolioGrowth(index)
+        if (index === 0) {
+            setloanBookPortfolioGrowth(initialDates)
+        }
+        if (index === 1) {
+            setloanBookPortfolioGrowth(SecondChartData)
+        }
+        if (index === 2) {
+            setloanBookPortfolioGrowth(thirdChartData)
         }
     }
 
+    const changeAumYear = (year: string) => {
+
+    }
+
+    const changeLoanYear = (year: string) => {
+
+    }
 
     return (
-        <div className={` w-full md:w-full flex md:flex flex-col-2 md: gap-6 `}>
+        <div className={` w-full md:w-full grid md:flex flex-col-2 md: gap-6 `}>
             <BarChartWithDate id={'AUMPortfolioGrowthRate'}
                               displayDates={barChartTabContent}
-                              currentMonthDate={currentPortfolioGrowth}
+                              currentMonthDate={currentAumPortfolioGrowth}
                               cardTile={'AUM portfolio growth rate'}
-                              chartData={portfolioGrowth}
+                              chartData={aumPortfolioGrowth}
                               changeCurrentMonth={handleBarChartTabChange}
                               performanceValue={0}
+                              onChange={changeAumYear}
             />
             <BarChartWithDate id={'LoanBookPortfolioGrowthRate'}
                               displayDates={barChartTabContent}
-                              currentMonthDate={currentPortfolioGrowth}
+                              currentMonthDate={currentLoanBookPortfolioGrowth}
                               cardTile={'Loan book portfolio growth rate'}
-                              chartData={portfolioGrowth}
-                              changeCurrentMonth={handleBarChartTabChange}
+                              chartData={loanBookPortfolioGrowth}
+                              changeCurrentMonth={handleBarLoanBookChartTabChange}
                               performanceValue={0}
+                              onChange={changeLoanYear}
             />
         </div>
     );

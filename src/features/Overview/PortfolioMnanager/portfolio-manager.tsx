@@ -3,6 +3,7 @@ import styles from "../index.module.css"
 import PortfolioManagerOverviewCard from "@/reuseable/cards/PortfolioManagerOverviewCard";
 // import MeedlBarChart from "@/reuseable/bar-chart";
 import Barcharts from "@/features/Overview/PortfolioMnanager/Barcharts";
+import PerformanceCard from "@/reuseable/cards/perfomance-card/performanceCard";
 
 const PortfolioManager = () => {
     // const initialChartData = [
@@ -25,8 +26,8 @@ const PortfolioManager = () => {
     ]
     const cardData3 = [
         {title: "Total number of loans", amount: '0',},
-        {title: "Commercial funds", amount: '2',},
-        {title: "Endowment", amount: '2',},
+        // {title: "Commercial funds", amount: '2',},
+        // {title: "Endowment", amount: '2',},
     ]
 
     // const SecondChartData = [
@@ -72,12 +73,16 @@ const PortfolioManager = () => {
                    <PortfolioManagerOverviewCard id={'vehicleCard2'} cardData={cardData2} clickView={clickCard2}/>
                    <PortfolioManagerOverviewCard id={'vehicleCard3'} cardData={cardData3} clickView={clickCard3}/>
                </div>
-
-               <div className={`  w-full md:w-full pb-5  `}>
-                   {/*<div className={` grid md:flex md:w-[50%] md:h-auto md:border md:border-[#D7D7D7] rounded-md  md:py-4 md:px-4 `}>*/}
-                   {/*    <MeedlBarChart dataKey={'value'} maxWidth={'100%'} maxHeight={'30rem'} chartData={chartData} componentId={'details'}/>*/}
-                   {/*</div>*/}
+               <div className={`  w-full md:w-full pb-4  `}>
                    <Barcharts/>
+               </div>
+               <div className={` w-full grid md:flex pb-4 gap-6 `}>
+                   <PerformanceCard id={'ownership'}  isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={true} maxWidth={'50%'} title={'Net AUM return'} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
+                   <PerformanceCard id={'ownership'} isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={true} maxWidth={'50%'} title={'Talent funded '} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
+               </div>
+               <div className={` w-full grid  md:flex pb-4 gap-6 `}>
+                   <PerformanceCard id={'ownership'}  isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total custodian/trustee fee'} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
+                   <PerformanceCard id={'ownership'} isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total fund manager fee'} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                </div>
            </div>
        </div>
