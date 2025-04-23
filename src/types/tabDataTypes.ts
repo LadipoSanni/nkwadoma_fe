@@ -46,5 +46,5 @@ export const marketplaceInvestment = [
 
 export const financierTabData = [
 {name: 'Details', value: '/financier/details'},
-{name: 'InvestmentVehicles', value: '/financier/investmentVehicles'}
+{name: 'Investment vehicle', value: '/financier/investmentVehicles'}
 ]
