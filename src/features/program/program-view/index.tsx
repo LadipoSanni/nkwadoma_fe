@@ -366,94 +366,113 @@ const ProgramView = () => {
                     </TableModal>
                 </div>
             </section>
-            <div id="programContent" className={'grid gap-4 relative bottom-3 overflow-hidden'}>
-                <DisplayOptions setView={setView} activeView={view} options={options}/>
-                {view === 'grid' ? (
-                    <div
-                        id={'programGrid'}
-                        className={'grid gap-6 pr-2 overflow-y-auto overflow-x-hidden'}
-                        style={{
-                            height: '62vh',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
-                        }}
-                    >
-                        {isLoading ? (<SkeletonForGrid/>) :
-                            (searchTerm && programView.length === 0? <div><SearchEmptyState icon={MdSearch} name='Program'/></div> : 
-                         ( 
-                         programView.length === 0 ?
-                                <TableEmptyState
-                                    icon={Book}
-                                    name='program'
-                                /> :
-                            programView.slice().reverse().map((program, index) => {
-                                const tagButtonData = [
-                                    {
-                                        tagIcon: MdPersonOutline,
-                                        tagCount: Number(program.numberOfLoanees ?? 0),
-                                        tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
-                                        tagText: Number(program.numberOfLoanees ?? 0) <= 1 ? 'loanee' : 'loanees',
-                                    },
-                                    {
-                                        tagIcon: MdOutlineDateRange,
-                                        tagCount: Number(program.duration ?? 0),
-                                        tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
-                                        tagText: Number(program.duration ?? 0) <= 1 ? 'month' : 'months',
-                                    },
-                                    {
-                                        tagIcon: MdOutlinePeopleAlt,
-                                        tagCount: Number(program.numberOfCohort ?? 0),
-                                        tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
-                                        tagText: Number(program.numberOfCohort ?? 0) <= 1 ? 'cohort' : 'cohorts',
-                                    },
-                                ];
-                                    return (
-                                        <AllProgramsCard
-                                            key={index}
-                                            description={program.programDescription ?? ''}
-                                            title={program.name ?? ''}
-                                            id={program.id ?? ""} dropdownOption={dropDownOption}
-                                            tagButtonData={tagButtonData}
-                                            onEdit={handleEditProgram}
-                                            onDelete={handleDeleteProgram}
-                                            handleCardDropDownClick={(optionId: string) => handleCardDropDownClick(optionId, program.id ?? '')}
-                                            handleProgramDetails={() => handleProgramDetailsOnclick(program.id ?? '')}
-                                        />
-                                    )
-                                }
-                            )) 
-
-                            )}
-
-                    </div>
+            {
+                isLoading ? (
+                    <SkeletonForGrid />
                 ) : (
                     <div
-                        id="programListView"
-                        className={'grid -6'}
-                        style={{
-                            height: '62vh',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
-                        }}
+                        id="programContent"
+                        className={'grid gap-4 relative bottom-3 overflow-hidden'}
                     >
-                     {searchTerm && programView.length === 0? <div><SearchEmptyState icon={MdSearch} name='Program'/></div> : <Table
-                            tableData={programView.slice().reverse()}
-                            tableHeader={ProgramHeader}
-                            staticHeader={"Programs"}
-                            staticColunm={'name'}
-                            tableHeight={52}
-                            handleRowClick={handleRowClick}
-                            sx='cursor-pointer'
-                            showKirkBabel={true}
-                            kirkBabDropdownOption={dropDownOption}
-                            icon={Book}
-                            sideBarTabName='program'
-                            handleDropDownClick={handleDropdownClick}
-                            optionalRowsPerPage={10}
-                            isLoading={isLoading}
-                        />
-                }
+                        <DisplayOptions setView={setView} activeView={view} options={options} />
+                        {view === 'grid' ? (
+                            <div
+                                id={'programGrid'}
+                             className="grid grid-cols-1 pr-2 md:grid-cols-3 w-full h-[66vh] sm:grid-cols-1 lg:grid-cols-3 gap-y-6 gap-x-4 overflow-y-auto overflow-x-hidden"
+                            // className={'grid gap-6 pr-2 overflow-y-auto overflow-x-hidden'}
+                                style={{
+                                    // height: '62vh',
+                                    // gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                                }}
+                            >
+                                {searchTerm && programView.length === 0 ? (
+                                    <div>
+                                        <SearchEmptyState icon={MdSearch} name="Program" />
+                                    </div>
+                                ) : programView.length === 0 ? (
+                                    <TableEmptyState icon={Book} name="program" />
+                                ) : (
+                                    programView
+                                        .slice()
+                                        .reverse()
+                                        .map((program, index) => {
+                                            const tagButtonData = [
+                                                {
+                                                    tagIcon: MdPersonOutline,
+                                                    tagCount: Number(program.numberOfLoanees ?? 0),
+                                                    tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
+                                                    tagText: Number(program.numberOfLoanees ?? 0) <= 1 ? 'loanee' : 'loanees',
+                                                },
+                                                {
+                                                    tagIcon: MdOutlineDateRange,
+                                                    tagCount: Number(program.duration ?? 0),
+                                                    tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
+                                                    tagText: Number(program.duration ?? 0) <= 1 ? 'month' : 'months',
+                                                },
+                                                {
+                                                    tagIcon: MdOutlinePeopleAlt,
+                                                    tagCount: Number(program.numberOfCohort ?? 0),
+                                                    tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
+                                                    tagText: Number(program.numberOfCohort ?? 0) <= 1 ? 'cohort' : 'cohorts',
+                                                },
+                                            ];
+                                            return (
+                                                <AllProgramsCard
+                                                    key={index}
+                                                    description={program.programDescription ?? ''}
+                                                    title={program.name ?? ''}
+                                                    id={program.id ?? ''}
+                                                    dropdownOption={dropDownOption}
+                                                    tagButtonData={tagButtonData}
+                                                    onEdit={handleEditProgram}
+                                                    onDelete={handleDeleteProgram}
+                                                    handleCardDropDownClick={(optionId: string) =>
+                                                        handleCardDropDownClick(optionId, program.id ?? '')
+                                                    }
+                                                    handleProgramDetails={() =>
+                                                        handleProgramDetailsOnclick(program.id ?? '')
+                                                    }
+                                                />
+                                            );
+                                        })
+                                )}
+                            </div>
+                        ) : (
+                            <div
+                                id="programListView"
+                                className={'grid -6'}
+                                style={{
+                                    height: '62vh',
+                                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                                }}
+                            >
+                                {searchTerm && programView.length === 0 ? (
+                                    <div>
+                                        <SearchEmptyState icon={MdSearch} name="Program" />
+                                    </div>
+                                ) : (
+                                    <Table
+                                        tableData={programView.slice().reverse()}
+                                        tableHeader={ProgramHeader}
+                                        staticHeader={'Programs'}
+                                        staticColunm={'name'}
+                                        tableHeight={52}
+                                        handleRowClick={handleRowClick}
+                                        sx="cursor-pointer"
+                                        showKirkBabel={true}
+                                        kirkBabDropdownOption={dropDownOption}
+                                        icon={Book}
+                                        sideBarTabName="program"
+                                        handleDropDownClick={handleDropdownClick}
+                                        optionalRowsPerPage={10}
+                                        isLoading={false} // Set to false since isLoading is handled outside
+                                    />
+                                )}
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
+                )
+            }
             <div>
                 {loading ? "" : (
                     <TableModal
