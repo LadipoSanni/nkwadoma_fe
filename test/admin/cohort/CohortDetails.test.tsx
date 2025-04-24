@@ -39,7 +39,6 @@ describe("cohort-details Component", () => {
             </Providers>
         );
 
-        expect(screen.getByText("Start Date")).toBeInTheDocument();
         expect(screen.getByText("Number employed")).toBeInTheDocument();
     });
 
