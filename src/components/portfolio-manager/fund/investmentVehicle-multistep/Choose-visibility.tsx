@@ -84,24 +84,6 @@ function ChooseVisibility() {
 
     const validationSchema = Yup.object().shape({
       status: Yup.string().required("Visibility is required"),
-      // financiers: Yup.array().test(
-      //   'private-validation',
-      //   'At least one financier with investment vehicle designation is required for private funds',
-      //   function(value) {
-      //     if (this.parent.status === 'PRIVATE') {
-      //       return (
-      //         Array.isArray(value) &&
-      //         value.length > 0 &&
-      //         value.every(f => 
-      //           f?.id && 
-      //           Array.isArray(f?.investmentVehicleDesignation) && 
-      //           f.investmentVehicleDesignation.length > 0
-      //         )
-      //       );
-      //     }
-      //     return true;
-      //   }
-      // )
       financiers: Yup.array().test(
         'private-validation',
         'Each financier must have at least one designation',
@@ -208,15 +190,7 @@ function ChooseVisibility() {
         });
       };
 
-      // const addFinancierRow = (
-      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-      //   values: typeof initialFormValue 
-      // ) => {
-      //   setFieldValue('financiers', [
-      //     ...values.financiers,
-      //     { financierId: '', investmentVehicleDesignation: [] }, 
-      //   ], true);
-      // };
+
 
       const addFinancierRow = (
         setFieldValue: (

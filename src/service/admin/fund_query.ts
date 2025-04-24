@@ -167,11 +167,19 @@ export const fundApi = createApi({
                 method: "POST",
                 body: data
             })
-        })
+        }),
+        financierInvestmentVehicle: builder.query({
+            query: ()=> ({
+                url: ``,
+                method: 'GET'
+            })
+        }),
+
     }),
 })
 
 export const {
+    useFinancierInvestmentVehicleQuery,
     useGetAllInvestmentmentVehicleQuery,
     useGetInvestmentVehicleDetailQuery,
     useCreateInvestmentVehicleMutation,
