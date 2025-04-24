@@ -126,6 +126,7 @@ const Details = () => {
 
     const detailInfo = [
         {name: 'Vehicle type', value: capitalizeFirstLetters(data?.data?.investmentVehicleType )|| 'N/A'},
+        {name: 'Fund Manager', value: capitalizeFirstLetters(data?.data?.fundManager )|| 'N/A'},
         {name: 'Vehicle size', value: formatAmount(data?.data?.size?.toString() || '0')},
         // {
         //     name: 'Vehicle status',
@@ -140,7 +141,7 @@ const Details = () => {
         //                                  </div>},
         {name: 'Vehicle start date', value: formatMonthInDate(data?.data?.startDate) },
         {name: 'Interest rate', value: `${data?.data?.rate || 0}%`},
-        {name: 'Tenor', value: `${data?.data?.tenure } month`},
+        {name: 'Tenor', value: `${data?.data?.tenure} ${data?.data?.tenure === 1 ? 'month' : 'months'}`},
         {
             name: 'Total amount in vehicle',
             value: formatAmount(data?.data?.totalAmountInInvestmentVehicle?.toString() || '0')
