@@ -150,7 +150,7 @@ const ProgramView = () => {
             </span>
         },
         {
-            title: 'No. of Cohorts',
+            title: 'No. of cohorts',
             sortable: true,
             id: 'numberOfCohort',
             selector: (row: TableRowData) => row.numberOfCohort ?? "0"
@@ -162,19 +162,19 @@ const ProgramView = () => {
             selector: (row: TableRowData) => row.numberOfLoanees ?? "0"
         },
         {
-            title: 'Amount Disbursed',
+            title: 'Amount disbursed',
             sortable: true,
             id: 'totalAmountDisbursed',
             selector: (row: TableRowData) => formatAmount(row.totalAmountDisbursed)
         },
         {
-            title: 'Amount Repaired',
+            title: 'Amount repaired',
             sortable: true,
             id: 'totalAmountRepaid',
             selector: (row: TableRowData) => formatAmount(row.totalAmountRepaid)
         },
         {
-            title: 'Amount Outstanding',
+            title: 'Amount outstanding',
             sortable: true,
             id: 'totalAmountOutstanding',
             selector: (row: TableRowData) => formatAmount(row.totalAmountOutstanding)
@@ -419,7 +419,7 @@ const ProgramView = () => {
                                             return (
                                                 <AllProgramsCard
                                                     key={index}
-                                                    description={program.programDescription ?? ''}
+                                                    description={program.programDescription || 'No description'}
                                                     title={program.name ?? ''}
                                                     id={program.id ?? ''}
                                                     dropdownOption={dropDownOption}
