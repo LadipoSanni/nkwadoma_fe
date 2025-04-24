@@ -141,7 +141,7 @@ const Details = () => {
         //                                  </div>},
         {name: 'Vehicle start date', value: formatMonthInDate(data?.data?.startDate) },
         {name: 'Interest rate', value: `${data?.data?.rate || 0}%`},
-        {name: 'Tenor', value: `${data?.data?.tenure} ${data?.data?.tenure === 1 ? 'month' : 'months'}`},
+        {name: 'Tenor', value: `${data?.data?.tenure} ${data?.data?.tenure <= 1 ? 'month' : 'months'}`},
         {
             name: 'Total amount in vehicle',
             value: formatAmount(data?.data?.totalAmountInInvestmentVehicle?.toString() || '0')
