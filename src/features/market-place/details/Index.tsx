@@ -135,7 +135,7 @@ const MarketPlaceDetails = () => {
     const investmentBasicDetails = [
         {label: 'Maturity date', value: `${data?.data?.tenure} ${data?.data?.tenure === 1 ? 'month' : 'months'}`},
         {label: 'Interest rate', value: `${data?.data?.rate || 0}%`},
-        {label: 'Minimum amount', value: (<span className="text-sm font-medium text-[#212221]">{formatAmount(data?.data?.minimumInvestmentAmount?.toString() || '0')}</span>)},
+        {label: 'Minimum amount', value: (<span className='text-meedlBlack text-[14px] font-semibold'>{formatAmount(data?.data?.minimumInvestmentAmount?.toString() || '0')}</span>)},
         {label: 'Status', value: (
                 <div id="minidetailsId" className="flex bg-[#F6F6F6] items-center gap-2 rounded-lg px-2 py-1 w-fit">
                     <span id="fundrasingId" className="font-normal text-black text-sm flex items-center justify-center">{statusKey}</span>
@@ -219,7 +219,7 @@ const MarketPlaceDetails = () => {
                         </div>
 
                         <p
-                            className={`id="keyValuePairId" ${cabinetGroteskMediumBold600.className} md:text-[32px] text-[24px] pt-5 md:text-[#212221]`}
+                            className={`id="keyValuePairId" ${cabinetGroteskMediumBold600.className} md:text-[32px] text-[24px] pt-5 font-medium text-[#212221]`}
                         >
                             {data?.data.name}
                         </p>
@@ -256,8 +256,8 @@ const MarketPlaceDetails = () => {
                         </div>
 
 
-                        <div className='py-2 w-full grid grid-cols-1 gap-y-3 '>
-                            <p className={`${inter.className} text-sm font-semibold text-[#212221]`}>Prospectus</p>
+                        <div className='py-5 w-full grid grid-cols-1 gap-y-4 '>
+                            <p className={'text-meedlBlack text-[14px] font-semibold'}>Prospectus</p>
                             <div className="bg-[#F9F9F9] flex justify-between px-3 py-4 rounded-lg items-center flex-wrap">
                                 <div className="flex gap-2 items-center max-w-[70%]">
                                     <Image
@@ -286,7 +286,7 @@ const MarketPlaceDetails = () => {
                                         type="button"
                                         variant={"default"}
                                         onClick={handleViewDocument}
-                                        className="text-meedlBlue border-[1px] border-meedlBlue font-medium rounded-2xl text-sm md:px-4 px-3 py-2"
+                                        className="text-meedlBlue border-[1px] border-meedlBlue rounded-[20px] font-semibold text-[12px] md:px-4 px-3 py-2"
                                         disabled={!docUrl || isVerifying}
                                         aria-label={`View ${docFilename}`}
                                     >
@@ -299,7 +299,7 @@ const MarketPlaceDetails = () => {
                         {docError && (
                             <p className='text-red-500 text-xs mt-1 mb-3'>{docError}</p>
                         )}
-                        <p className={`${inter.className} text-sm font-semibold mb-3 text-[#212221]`}>Investment
+                        <p className='text-meedlBlack py-2 text-[14px] font-semibold mb-3'>Investment
                             details</p>
                         <div
                             className="bg-[#F9F9F9] h-fit md:grid px-5 w-full">
