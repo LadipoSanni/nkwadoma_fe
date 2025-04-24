@@ -90,7 +90,7 @@ function ChooseVisibility() {
     const props = {
         investmentVehicleId: investmentVehicleId,
         pageNumber: pageNumber,
-        pageSize: 1,
+        pageSize: 10,
     }
 
      const {data: financiersInInvestmentVehicle} = useFinancierInvestmentVehicleQuery(props)
