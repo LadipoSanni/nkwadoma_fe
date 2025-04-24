@@ -18,7 +18,10 @@ import {
     useGetAllActiveAndInvitedFinanciersQuery
 } from '@/service/admin/financier';
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
-import { setCurrentFinancierId,setFinancierMode } from '@/redux/slice/financier/financier';
+import {
+    setActiveAndInvitedFinancierId,
+    setFinancierMode
+} from '@/redux/slice/financier/financier';
 import {store} from "@/redux/store";
 import { useRouter } from 'next/navigation'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
@@ -145,9 +148,9 @@ const ViewFinanciers = () => {
     ];
 
     const handleRowClick = (row: TableRowData) => {
-        store.dispatch(setCurrentFinancierId(String(row?.id)))
+        store.dispatch(setActiveAndInvitedFinancierId(String(row?.id)))
         store.dispatch(setFinancierMode("platform"))
-        router.push('/funds/financier-details')
+        router.push('/financier/details')
     };
 
 

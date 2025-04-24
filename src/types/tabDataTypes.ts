@@ -35,7 +35,7 @@ export const kycSteps = [
     { id: 'identification', title: 'Identification' },
     { id:"sof", title: 'Source of funds' },
     { id: 'beneficial-owner', title: 'Beneficial Owner' },
-    { id: 'declaration', title: 'Declaration' },
+    { id: 'political-exposure', title: 'Political exposure' },
 
 ];
 
@@ -43,3 +43,8 @@ export const marketplaceInvestment = [
     { id: 'transfer', title: 'Transfer funds' },
     { id: 'confirmTransfer', title: 'Confirm transfer' },
   ];
+
+export const financierTabData = [
+{name: 'Details', value: '/financier/details'},
+{name: 'Investment vehicle', value: '/financier/investmentVehicles'}
+]
