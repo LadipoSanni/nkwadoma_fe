@@ -266,20 +266,31 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
           // isFileSupported && (
             <>
               {error &&<p className={` text-xs text-red-500  `}>{error} please chose another files</p>}
-              <div className="h-11 w-11 bg-meedlWhite flex justify-center items-center rounded-md">
-                <FiUploadCloud className="w-6 h-[22px]" />
-              </div>
               {fileUploadLoading?
-                  <p className={`text-xs`}>loading...</p>
+                  <div className="flex flex-col items-start">
+                    <p className="text-black500 font-normal text-sm truncate md:whitespace-normal">
+                      {fileName}
+                    </p>
+                        <p className="text-black300 font-normal text-[12px] leading-[150%]">
+                          Uploading...
+                        </p>
+
+                  </div>
                   :
-               <div className="grid gap-1 place-items-center">
-                <p className="font-normal text-black300 text-[14px] leading-[150%]">
-                  <span className="underline text-meedlBlue">Click to upload</span> or drag and drop
-                </p>
-                <p className="text-black300 leading-[150%] text-[14px] font-normal">
-                  PDF or DOCX (max. 10MB)
-                </p>
-              </div>}
+               <>
+                 <div className="h-11 w-11 bg-meedlWhite flex justify-center items-center rounded-md">
+                   <FiUploadCloud className="w-6 h-[22px]" />
+                 </div>
+                 <div className="grid gap-1 place-items-center">
+                   <p className="font-normal text-black300 text-[14px] leading-[150%]">
+                     <span className="underline text-meedlBlue">Click to upload</span> or drag and drop
+                   </p>
+                   <p className="text-black300 leading-[150%] text-[14px] font-normal">
+                     PDF or DOCX (max. 10MB)
+                   </p>
+                 </div>
+               </>
+              }
             </>
           // )
         )}
