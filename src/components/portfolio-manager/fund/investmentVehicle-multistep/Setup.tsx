@@ -477,14 +477,7 @@ function Setup({investmentVehicleType}: Props) {
                 </div>
                 </div>
                 <div className='relative md:bottom-9 bottom-2'>
-                   <Label htmlFor="mandate">Vehicle mandate</Label>  
-                   {/* <Field
-                  name="mandate"
-                  component={FormikCustomQuillField}
-                  maximumDescription={2500}
-                  // label={"Mandate"}
-                  placeholder={"Enter mandate..."}
-                /> */}
+                   <Label htmlFor="mandate">Vehicle mandate</Label>
                    <div className='mt-4'>
                    <PdfAndDocFileUpload
                     handleDrop={handleDrop}

@@ -6,7 +6,7 @@ if (!upload_preset || !cloud_name) {
   throw new Error("Missing Cloudinary environment variables");
 }
 
-export const uploadDocumentToCloudinary = async (file: File, folder?: string): Promise<string> => {
+export const uploadDocumentToCloudinary = async (file: File,setLoader: (error:boolean) => void,  folder?: string): Promise<string> => {
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
   const allowedTypes = [
@@ -30,17 +30,15 @@ export const uploadDocumentToCloudinary = async (file: File, folder?: string): P
     formData.append('folder', folder);
   }
 
-
+  setLoader(true)
   const res = await fetch(api_url, {
     method: 'POST',
     body: formData
-  });
+  })
+      .catch((err) => console.error(err))
+      .finally(() => setLoader(false));
 
-  if (!res.ok) {
-    const error = await res.text();
-    throw new Error(`Document upload failed: ${error}`);
-  }
 
-  const result = await res.json();
-  return result.secure_url;
+  const result = res?.url ?? '';
+  return result;
 };
