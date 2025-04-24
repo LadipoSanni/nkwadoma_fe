@@ -156,10 +156,10 @@ const IndividualOwnershipForm: React.FC = () => {
         dispatch(
             updateBeneficialOwner({
                 selectedForm: "individual",
-                individualData: { sections: sectionsToStore },
+                individualData: {sections: sectionsToStore},
             })
         );
-        route.push("/kyc/declaration");
+        route.push("/kyc/political-exposure");
     };
 
     return (
