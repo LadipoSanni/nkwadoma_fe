@@ -27,7 +27,6 @@ const MyInvestment = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
     const [isFiltered, setIsFiltered] = useState<boolean>(false)
-    // const [showSearchEmptyState, setShowSearchEmptyState] = useState<boolean>(false)
 
     const filterProps = {
         investmentVehicleType: selectedValue.toUpperCase(),
@@ -100,8 +99,6 @@ const MyInvestment = () => {
 
 
 
-
-
     return (
         <main id="marketplaceView" className="py-9 px-5 h ">
             <div id="searchDiv" className="px-2 flex md:flex-row flex-col gap-3">
@@ -126,11 +123,11 @@ const MyInvestment = () => {
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
-            ) : myInvestmentVehicles?.length === 0 && filteredData?.data?.body?.length  === 0 && searchData?.data?.body?.length === 0  ? (
+            ) : myInvestmentVehicles?.length === 0  && searchData?.data?.body?.length === 0  ? (
                 <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
                     <LoanEmptyState title={"Investment vehicles will show here"} description={"There are no Investment vehicles available yet"} icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>} iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
                 </div>
-            ) : myInvestmentVehicles?.length === 0 || filteredData?.data?.body?.length  === 0 || searchData?.data?.body?.length === 0 && searchTerm?.length  !== 0 ?   (
+            ) :  searchData?.data?.body?.length === 0 && searchTerm?.length  !== 0 ?   (
                         <SearchEmptyState icon={MdSearch} name="Investment" />
                 ):
                 (
