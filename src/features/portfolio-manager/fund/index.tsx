@@ -135,7 +135,7 @@ const InvestmentVehicle = () => {
             selector: (row: TableRowData) => row.name
         },
         {
-            title: 'Start Date',
+            title: 'Start date',
             sortable: true,
             id: 'startDate',
             selector: (row: TableRowData) => formatMonthInDate(row?.startDate)
