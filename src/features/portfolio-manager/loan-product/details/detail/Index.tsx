@@ -35,7 +35,7 @@ const loanProductId = useAppSelector(state => (state.selectedLoan.clickedLoanPro
         { label: "Minimum repayment amount", value: formatAmount(loanProduct?.data.minRepaymentAmount)},
         { label: "Interest rate", value: `${loanProduct?.data.interestRate}%` },
         { label: "Obligor limit", value: formatAmount(loanProduct?.data.obligorLoanLimit)},
-        { label: "Moratorium", value: loanProduct?.data.moratorium + " months" },
+        { label: "Moratorium", value: `${loanProduct?.data.moratorium} ${loanProduct?.data?.moratorium === 1? "month": "months"}`},
         { label: "Amount disbursed", value: formatAmount(loanProduct?.data.totalAmountDisbursed)},
         { label: "Amount repaid ", value: formatAmount(loanProduct?.data.totalAmountRepaid)},
         { label: "Amount earned", value: formatAmount(loanProduct?.data.totalAmountEarned)},
