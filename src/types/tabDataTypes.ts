@@ -43,3 +43,8 @@ export const marketplaceInvestment = [
     { id: 'transfer', title: 'Transfer funds' },
     { id: 'confirmTransfer', title: 'Confirm transfer' },
   ];
+
+export const financierTabData = [
+{name: 'Details', value: '/financier/details'},
+{name: 'Investment vehicle', value: '/financier/investmentVehicles'}
+]
