@@ -386,25 +386,26 @@ const ProgramView = () => {
                                     name='program'
                                 /> :
                             programView.slice().reverse().map((program, index) => {
-
-                                    const tagButtonData = [{
+                                const tagButtonData = [
+                                    {
                                         tagIcon: MdPersonOutline,
                                         tagCount: Number(program.numberOfLoanees ?? 0),
                                         tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
-                                        tagText: 'loanees'
+                                        tagText: Number(program.numberOfLoanees ?? 0) <= 1 ? 'loanee' : 'loanees',
                                     },
-                                        {
-                                            tagIcon: MdOutlineDateRange,
-                                            tagCount: Number(program.duration ?? 0),
-                                            tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
-                                            tagText: 'months'
-                                        },
-                                        {
-                                            tagIcon: MdOutlinePeopleAlt,
-                                            tagCount: Number(program.numberOfCohort ?? 0),
-                                            tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
-                                            tagText: 'cohorts'
-                                        }];
+                                    {
+                                        tagIcon: MdOutlineDateRange,
+                                        tagCount: Number(program.duration ?? 0),
+                                        tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
+                                        tagText: Number(program.duration ?? 0) <= 1 ? 'month' : 'months',
+                                    },
+                                    {
+                                        tagIcon: MdOutlinePeopleAlt,
+                                        tagCount: Number(program.numberOfCohort ?? 0),
+                                        tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
+                                        tagText: Number(program.numberOfCohort ?? 0) <= 1 ? 'cohort' : 'cohorts',
+                                    },
+                                ];
                                     return (
                                         <AllProgramsCard
                                             key={index}
