@@ -96,7 +96,6 @@ const MyInvestment = () => {
     }
 
 
-    console.log()
 
 
     return (
