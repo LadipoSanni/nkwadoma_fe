@@ -369,6 +369,12 @@ const ProgramView = () => {
             {
                 isLoading ? (
                     <SkeletonForGrid />
+                ) : searchTerm && programView.length === 0 ? (
+                    <div>
+                        <SearchEmptyState icon={MdSearch} name="Program" />
+                    </div>
+                ): programView.length === 0 ? (
+                    <TableEmptyState icon={Book} name="program" />
                 ) : (
                     <div
                         id="programContent"
@@ -385,13 +391,7 @@ const ProgramView = () => {
                                     // gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                                 }}
                             >
-                                {searchTerm && programView.length === 0 ? (
-                                    <div>
-                                        <SearchEmptyState icon={MdSearch} name="Program" />
-                                    </div>
-                                ) : programView.length === 0 ? (
-                                    <TableEmptyState icon={Book} name="program" />
-                                ) : (
+                                {
                                     programView
                                         .slice()
                                         .reverse()
@@ -435,7 +435,7 @@ const ProgramView = () => {
                                                 />
                                             );
                                         })
-                                )}
+                                }
                             </div>
                         ) : (
                             <div
