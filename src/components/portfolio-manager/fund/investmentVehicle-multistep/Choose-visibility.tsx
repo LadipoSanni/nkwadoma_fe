@@ -171,7 +171,7 @@ function ChooseVisibility() {
              if(visibility){
               
               toast({
-                description: statusType === "changeVisibility"? "Vehicle visibility updated successfully" : visibility.message,
+                description: statusType === "changeVisibility"? "Vehicle visibility updated " : visibility.message,
                 status: "success",
               });
               store.dispatch(clearDraftId())
