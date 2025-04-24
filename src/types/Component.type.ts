@@ -9,14 +9,14 @@ export  interface navbarRouterItemsProps {
     isActive?: boolean
 }
 
-export interface financierInInvestmentVehicle {
+export interface FinancierInInvestmentVehicle {
 
     id: string,
     financierType: string,
     activationStatus: string,
     totalAmountInvested: string,
     nextOfKin: string,
-    investmentVehicleRole: string,
+    investmentVehicleRole: string[],
     organizationName: string,
     userIdentity: {
     id: string,

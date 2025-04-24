@@ -74,7 +74,6 @@ function ChooseVisibility() {
     const statusType = useAppSelector(state => (state?.vehicle?.setEditStatus))
     const urlLink = useAppSelector(state => (state?.vehicle?.setPublicVehicleUrl))
     const [viewAllfinanciers,setAllfinanciers] = useState<Financials[]>([])
-    const [finan, setFinan] = useState<{name: string, roles: string[]}[]>([])
     const [hasNextPage, setNextPage] = useState(true);
     const [isFinancier,setFinancier] = useState(false)
     const [isError, setError] = useState("");
@@ -94,12 +93,9 @@ function ChooseVisibility() {
         pageSize: 1,
     }
 
-     const {data: wee} = useFinancierInvestmentVehicleQuery(props)
+     const {data: financiersInInvestmentVehicle} = useFinancierInvestmentVehicleQuery(props)
 
-    console.log('financiers:: ',wee?.data?.body)
 
-    console.log('investment vehicle financiers:: ', wee)
-    console.log('data:: ', data)
     const validationSchema = Yup.object().shape({
       status: Yup.string().required("Visibility is required"),
       financiers: Yup.array().test(
@@ -419,11 +415,10 @@ function ChooseVisibility() {
                           <Label className='text-[#212221]'>Role</Label>
                         </div>
                       <div className={`lg:-space-y-4 space-y-2 md:max-h-[35vh]  ${style.container}`}>
-
                           <div className={`w-full h-fit py-4  grid`}>
-                              {wee?.data?.body?.length !== 0 && (
-                                  <div>
-                                     <DisplayFinancierInvehicle list={wee?.data?.body}/>
+                              {financiersInInvestmentVehicle?.data?.body?.length !== 0 && (
+                                  <div id={'FinancierInsideInvestmentVehicle'} className={` lg:block md:max-w-[94%]   `}>
+                                      <DisplayFinancierInvehicle list={financiersInInvestmentVehicle?.data?.body}/>
                                   </div>
                               )}
                           </div>
