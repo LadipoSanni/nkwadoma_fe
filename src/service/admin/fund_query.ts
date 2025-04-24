@@ -169,8 +169,8 @@ export const fundApi = createApi({
             })
         }),
         financierInvestmentVehicle: builder.query({
-            query: ()=> ({
-                url: ``,
+            query: (data:{pageNumber: number, pageSize:number, investmentVehicleId: string})=> ({
+                url: `/financier/investment-vehicle/all/view?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}&investmentVehicleId=${data.investmentVehicleId}`,
                 method: 'GET'
             })
         }),

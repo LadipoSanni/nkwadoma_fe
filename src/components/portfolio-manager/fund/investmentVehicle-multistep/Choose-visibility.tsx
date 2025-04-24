@@ -20,10 +20,15 @@ import Modal from '@/reuseable/modals/TableModal';
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import { useViewAllFinanciersQuery } from '@/service/admin/financier';
-import { useChooseInvestmentVehicleVisibilityMutation } from '@/service/admin/fund_query';
+import {
+    useChooseInvestmentVehicleVisibilityMutation,
+    useFinancierInvestmentVehicleQuery
+} from '@/service/admin/fund_query';
 import { useToast } from "@/hooks/use-toast";
 import { clearDraftId,clearPublicVehicleUrl} from '@/redux/slice/vehicle/vehicle';
 import { clearSaveCreateInvestmentField,clearSaveInvestmentStatus } from '@/redux/slice/vehicle/vehicle'
+import DisplayFinancierInvehicle
+    from "@/components/portfolio-manager/fund/investmentVehicle-multistep/DisplayFinancierInvehicle";
 
 interface ApiError {
   status: number;
@@ -69,6 +74,7 @@ function ChooseVisibility() {
     const statusType = useAppSelector(state => (state?.vehicle?.setEditStatus))
     const urlLink = useAppSelector(state => (state?.vehicle?.setPublicVehicleUrl))
     const [viewAllfinanciers,setAllfinanciers] = useState<Financials[]>([])
+    const [finan, setFinan] = useState<{name: string, roles: string[]}[]>([])
     const [hasNextPage, setNextPage] = useState(true);
     const [isFinancier,setFinancier] = useState(false)
     const [isError, setError] = useState("");
@@ -82,6 +88,18 @@ function ChooseVisibility() {
      const {data,isLoading: isloading, isFetching} = useViewAllFinanciersQuery(param,{skip: !isFinancier})
      const [chooseVisibility, {isLoading}] = useChooseInvestmentVehicleVisibilityMutation()
 
+    const props = {
+        investmentVehicleId: investmentVehicleId,
+        pageNumber: pageNumber,
+        pageSize: 1,
+    }
+
+     const {data: wee} = useFinancierInvestmentVehicleQuery(props)
+
+    console.log('financiers:: ',wee?.data?.body)
+
+    console.log('investment vehicle financiers:: ', wee)
+    console.log('data:: ', data)
     const validationSchema = Yup.object().shape({
       status: Yup.string().required("Visibility is required"),
       financiers: Yup.array().test(
@@ -136,6 +154,7 @@ function ChooseVisibility() {
     ]
     
        useEffect(()=> {
+
          if(!completedStep.includes("setup")){
           router.push('/vehicle/setup');
          }
@@ -396,11 +415,19 @@ function ChooseVisibility() {
                     <div className=' md:px-3 px-6 relative top-4 md:left-6 left-2 '>
 
                         <div className="lg:grid grid-cols-2 gap-4 hidden ">
-                          
-                      <Label className='text-[#212221]'>Financier</Label>
-                      <Label className='text-[#212221]'>Role</Label>
-                    </div>
+                          <Label className='text-[#212221]'>Financier</Label>
+                          <Label className='text-[#212221]'>Role</Label>
+                        </div>
                       <div className={`lg:-space-y-4 space-y-2 md:max-h-[35vh]  ${style.container}`}>
+
+                          <div className={`w-full h-fit py-4  grid`}>
+                              {wee?.data?.body?.length !== 0 && (
+                                  <div>
+                                     <DisplayFinancierInvehicle list={wee?.data?.body}/>
+                                  </div>
+                              )}
+                          </div>
+
                         {
                            values.financiers.map((financier, index) => (
                             <div key={index} className=''>

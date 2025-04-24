@@ -9,6 +9,42 @@ export  interface navbarRouterItemsProps {
     isActive?: boolean
 }
 
+export interface financierInInvestmentVehicle {
+
+    id: string,
+    financierType: string,
+    activationStatus: string,
+    totalAmountInvested: string,
+    nextOfKin: string,
+    investmentVehicleRole: string,
+    organizationName: string,
+    userIdentity: {
+    id: string,
+        email: string,
+        firstName:string,
+        lastName: string,
+        phoneNumber: string,
+        emailVerified: boolean,
+        image: string,
+        gender: string,
+        dateOfBirth: string,
+        stateOfOrigin: string,
+        maritalStatus: string,
+        stateOfResidence: string,
+        nationality: string,
+        residentialAddress: string,
+        role: string,
+        createdBy: string,
+        alternateEmail: string,
+        alternatePhoneNumber: string,
+        alternateContactAddress: string,
+        identityVerified: boolean
+},
+    invitedBy: string,
+    investmentVehicles: string
+
+}
+
 export interface CurrentMyInvestmentVehicleDetails {
     name: string,
     investmentVehicleType: string,
