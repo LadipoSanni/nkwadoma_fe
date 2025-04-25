@@ -18,12 +18,12 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
 
     return (
         <div id={id}
-             className={`${inter.className} flex overflow-x-auto md:grid  w-[30rem] md:w-2/5 `}>
+             className={`${inter.className} flex overflow-x-auto md:grid w-full md:w-full  `}>
             <div className="grid px-3 pt-3 pb-5  rounded-md border border-neutral-200 md:grid md:gri gap-6">
-              <div className={`bg-grey105  grid gap-2 px-4 py-4`}>
+              <div className={`bg-grey105  grid gap- px-4 py-4`}>
                   {cardData?.map((card, index) => (
                       <main key={index}
-                            className="flex-none w md:w-full he grid gap-5 ">
+                            className="flex-non bg-purple-100 e w md:w-full he grid gap-5 ">
                           <div id={`balanceCardBlock${index}`}
                                className=" grid gap-5 ">
                               <p id={`cardTitle${index}`}
@@ -33,21 +33,21 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
                                       <MdOutlineHelpOutline className={` mt-auto mb-auto`} />
                                   }
                               </p>
-                              <h1 id={`cardAmount${index}`} className={`${cabinetGroteskBold.className} text-meedlBlue text-[32px] font-bold leading-[120%]`}>{card.amount}
+                              <h1 id={`cardAmount${index}`} className={`${cabinetGroteskBold.className} text-meedlBlue ]`}>{card.amount}
                               </h1>
                           </div>
                       </main>
                   ))}
                   {isLoanData &&
-                      <div className={`bg-grey105 w-full grid gap-4 px-4 py-4`}>
+                      <main className={`bg-red-100 w-full grid gap-4 px-4 py-4`}>
                           {loanData?.map((loan, index) => (
                               <div key={index} id={`cardTitle`}
                                  className={`text-black300 w-full border h-fit py-3  ${Number(loan.amount) === 0 ? '' : ''}  border-[#ECECEC] rounded-md flex justify-between gap-2  text-[14px] font-normal leading-[150%]`}>
                                   <p className={` ${inter500.className} text-[${loan.textColor}] `}>{loan.title}</p>
-                                  <p>{loan.amount}</p>
+                                  <p className={` ${inter500.className}  `}>{loan.amount}%</p>
                               </div>
                           ))}
-                      </div>
+                      </main>
                   }
               </div>
 
