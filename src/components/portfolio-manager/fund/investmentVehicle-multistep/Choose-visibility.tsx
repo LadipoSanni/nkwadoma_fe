@@ -169,7 +169,6 @@ function ChooseVisibility() {
          try {
           const visibility = await chooseVisibility(formData).unwrap();
              if(visibility){
-                 console.log('visibility:: ', visibility)
               toast({
                 description: statusType === "changeVisibility"? "Vehicle visibility updated " : visibility.message,
                 status: "success",
