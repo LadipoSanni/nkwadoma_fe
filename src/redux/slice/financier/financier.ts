@@ -5,17 +5,17 @@ import {CurrentMyInvestmentVehicleDetails} from "@/types/Component.type";
 interface vehicleState {
     currentFinancierId: string;
     financierMode: string;
-    financierType: string;
+    financierType:  'INDIVIDUAL' | 'COOPERATE' | null;
     currentMyInvestmentVehicleDetails: CurrentMyInvestmentVehicleDetails | null;
     activeAndInvitedFinancierId: string;
     financierInvestmentVehicleId: string
-   
+
 }
 
 const initialState: vehicleState = {
     currentFinancierId: '',
     financierMode: '',
-    financierType: '',
+    financierType: null,
     currentMyInvestmentVehicleDetails: null,
     activeAndInvitedFinancierId: ``,
     financierInvestmentVehicleId: ``,
@@ -33,7 +33,7 @@ export const financierSlice = createSlice({
         setFinancierMode: (state, action: PayloadAction<string>) => {
             state.financierMode = action.payload;
         },
-        setFinancierType: (state, action: PayloadAction<string>) => {
+        setFinancierType: (state, action: PayloadAction<'INDIVIDUAL' | 'COOPERATE'>) => {
             state.financierType = action.payload;
         },
         setCurrentMyInvestmentVehicleDetails : (state, action: PayloadAction<CurrentMyInvestmentVehicleDetails>) => {

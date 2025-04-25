@@ -32,7 +32,7 @@ function KycStepLayout({children}:props) {
                     textColor=''
                 />
             </div>
-            <div className="md:flex  md:gap-10">
+            <div className="md:flex  md:gap-5">
                 <div><MultiStep steps={kycSteps} currentStep={currentStep} completedSteps={completedSteps}/></div>
 
                 <div className="w-full mt-4 md:mt-0 ">

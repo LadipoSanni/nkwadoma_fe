@@ -4,7 +4,7 @@ import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
 import {inter, cabinetGroteskMediumBold} from '@/app/fonts';
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import IndividualOwnerForm from '@/reuseable/forms/IndividualOwnerForm/Index';
+import IndividualOwnershipForm from '@/reuseable/forms/individualOwnershipForm/Index';
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import CountrySelectPopover from '@/reuseable/select/countrySelectPopover/Index';
@@ -72,12 +72,12 @@ const BeneficialOwnerStep = () => {
     };
 
     return (
-        <main id="beneficialOwnerStepMain" className={`${inter.className} xl:px-36 grid-cols-1 gap-y-6 grid gap-10`}>
-            <div id="beneficialOwnerHeader" className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
+        <main id="beneficialOwnerStepMain" className={`${inter.className} w-full xl:px-48 grid-cols-1 gap-y-6 grid`}>
+            <div id="beneficialOwnerHeader" className={`${cabinetGroteskMediumBold.className} max-w-[30rem] md:mx-auto w-full`}>
                 <h1 id="beneficialOwnerTitle"
                     className="text-meedlBlack text-[24px] leading-[120%] font-medium">Beneficial owner</h1>
             </div>
-            <section id="beneficialOwnerSection" className={'md:w-[30rem] w-full'}>
+            <section id="beneficialOwnerSection" className={'md:max-w-[30rem] w-full md:mx-auto '}>
                 <Tabs
                     id="beneficialOwnerTabs"
                     value={selectedForm}
@@ -101,7 +101,7 @@ const BeneficialOwnerStep = () => {
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent id="entityTabContent" value="entity">
-                        <main id="entityFormMain" className="grid gap-10 h-[calc(100vh-300px)] overflow-y-auto">
+                        <main id="entityFormMain" className="grid gap-6 h-[calc(100vh-300px)] overflow-y-auto pr-3">
                             <section className={'grid p-5 gap-5 border rounded-md border-lightBlue250'}>
                                 <div id="entityNameContainer" className="grid gap-2">
                                     <Label htmlFor="entityName" id="entityNameLabel"
@@ -196,7 +196,7 @@ const BeneficialOwnerStep = () => {
                                     </div>
                                 </section>
                             ))}
-                            <main className={'sticky bottom-0 bg-white '}>
+                            <main className={'sticky bottom-0  bg-white py-4 pr-4'}>
 
                                 <div className="flex items-center gap-1 mb-4">
                                     <Button
@@ -219,7 +219,7 @@ const BeneficialOwnerStep = () => {
                                     <Button
                                         id="entityFormSaveContinueButton"
                                         type={'button'}
-                                        onClick={handleSaveAndContinue} // Save data and navigate
+                                        onClick={handleSaveAndContinue}
                                         disabled={!isFormValid}
                                         className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 ${!isFormValid ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md  order-1 md:order-2`}
                                     >
@@ -230,7 +230,7 @@ const BeneficialOwnerStep = () => {
                         </main>
                     </TabsContent>
                     <TabsContent id="individualTabContent" value="individual">
-                        <IndividualOwnerForm/>
+                        <IndividualOwnershipForm/>
                     </TabsContent>
                 </Tabs>
             </section>
