@@ -19,7 +19,7 @@ import { MultiSelect } from '@/reuseable/mult-select';
 import Modal from '@/reuseable/modals/TableModal';
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
 import {Cross2Icon} from "@radix-ui/react-icons";
-import { useViewAllFinanciersQuery } from '@/service/admin/financier';
+import {useViewAllFinanciersQuery, useViewFinanciersByInvestmentmentVehicleQuery} from '@/service/admin/financier';
 import {
     useChooseInvestmentVehicleVisibilityMutation,
     useFinancierInvestmentVehicleQuery
@@ -85,17 +85,19 @@ function ChooseVisibility() {
       pageSize: 10,
       }
 
-     const {data,isLoading: isloading, isFetching} = useViewAllFinanciersQuery(param,{skip: !isFinancier})
-     const [chooseVisibility, {isLoading}] = useChooseInvestmentVehicleVisibilityMutation()
-
     const props = {
         investmentVehicleId: investmentVehicleId,
         pageNumber: pageNumber,
         pageSize: 10,
     }
+     const {data,isLoading: isloading, isFetching} = useViewAllFinanciersQuery(param,{skip: !isFinancier})
+     const [chooseVisibility, {isLoading}] = useChooseInvestmentVehicleVisibilityMutation()
 
-     const {data: financiersInInvestmentVehicle} = useFinancierInvestmentVehicleQuery(props)
 
+
+     const {data: financiersInInvestmentVehicle} = useFinancierInvestmentVehicleQuery(props, {skip: !investmentVehicleId})
+
+    // console.log('financiersInInvestmentVehicle:: ', financiersInInvestmentVehicle)
 
     const validationSchema = Yup.object().shape({
       status: Yup.string().required("Visibility is required"),
