@@ -15,8 +15,8 @@ export const settingsTab = [
 ]
 
 export const vehicleTab = [
-    {name: "Commercial vehicle", value: "/vehicle/commercial-vehicle"},
-    {name: "Endowment vehicle", value: "/vehicle/endownment-vehicle"}
+    {name: "Commercial ", value: "/vehicle/commercial-vehicle"},
+    {name: "Endowment ", value: "/vehicle/endownment-vehicle"}
 ]
 
 export const programDetailTab = [
