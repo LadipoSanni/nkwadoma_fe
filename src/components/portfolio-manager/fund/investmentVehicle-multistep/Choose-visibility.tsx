@@ -19,7 +19,7 @@ import { MultiSelect } from '@/reuseable/mult-select';
 import Modal from '@/reuseable/modals/TableModal';
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {useViewAllFinanciersQuery, useViewFinanciersByInvestmentmentVehicleQuery} from '@/service/admin/financier';
+import {useViewAllFinanciersQuery} from '@/service/admin/financier';
 import {
     useChooseInvestmentVehicleVisibilityMutation,
     useFinancierInvestmentVehicleQuery
