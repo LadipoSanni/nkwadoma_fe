@@ -150,7 +150,10 @@ export const fundApi = createApi({
             query: (data: {
                 investmentVehicleId: string,
                 fundRaising?: string,
-                deployingStatus?: string
+                deployingStatus?: string,
+                couponDistributionStatus?: string,
+                recollectionStatus?: string,
+                maturity?: string
             }) => ({
                 url: "/investment-vehicle/status",
                 method: "POST",
@@ -179,6 +182,7 @@ export const fundApi = createApi({
 
     }),
 })
+
 
 export const {
     useFinancierInvestmentVehicleQuery,
