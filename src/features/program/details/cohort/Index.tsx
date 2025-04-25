@@ -80,7 +80,7 @@ const ProgramCohortDetails= ()=> {
     const ProgramHeader = [
         {title: "Cohort", sortable: true, id: "name"},
         {
-            title: "No of loanees", sortable: true, id: "noOfTrainees",
+            title: "No. of loanees", sortable: true, id: "noOfTrainees",
             selector: (row: ViewAllProgramProps) => row.numberOfLoanees
         },
 
@@ -91,19 +91,19 @@ const ProgramCohortDetails= ()=> {
             selector: (row: ViewAllProgramProps) => formatAmount(row.tuitionAmount)
         },
         {
-            title: "Amount Requested",
+            title: "Amount requested",
             sortable: true,
             id: "amountRequested",
             selector: (row: ViewAllProgramProps) => formatAmount(row.loanDetails?.totalAmountRequested)
         },
         {
-            title: "Amount Received",
+            title: "Amount received",
             sortable: true,
             id: "amountReceived",
             selector: (row: ViewAllProgramProps) => formatAmount(row.loanDetails?.totalAmountRecieved)
         },
         {
-            title: "Amount Outstanding",
+            title: "Amount outstanding",
             sortable: true,
             id: "totalAmountOutstanding",
             selector: (row: ViewAllProgramProps) => formatAmount(row.loanDetails?.totalAmountOutstanding)

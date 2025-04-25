@@ -192,7 +192,7 @@ function CreateProgram({setIsOpen}:Props) {
                       value={values.deliveryType} 
                       onChange={(value) => setFieldValue("deliveryType", value)} 
                       name="deliveryType"
-                      placeHolder='Select a program Delivery Type'
+                      placeHolder='Select a program delivery type'
                     />
                      {
                     errors.deliveryType && touched.deliveryType &&  (
@@ -247,7 +247,7 @@ function CreateProgram({setIsOpen}:Props) {
                       scrollbarWidth: 'none',
                        msOverflowStyle: 'none'
                       }}> 
-                    <Label htmlFor="programDuration" style={{ display: 'inline-block',WebkitOverflowScrolling: 'touch' }}>Program duration (Months)</Label> 
+                    <Label htmlFor="programDuration" style={{ display: 'inline-block',WebkitOverflowScrolling: 'touch' }}>Program duration (months)</Label>
                     </div>
                     <CustomSelect
                       selectContent={programDurations}

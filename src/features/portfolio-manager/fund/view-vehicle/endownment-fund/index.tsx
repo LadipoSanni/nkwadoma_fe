@@ -129,14 +129,14 @@ function EndownmentFund() {
                 selector: (row: TableRowData) => row.name
             },
             {
-                title: 'Start Date',
+                title: 'Start date',
                 sortable: true,
                 id: 'startDate',
                 selector: (row: TableRowData) => formatMonthInDate(row?.startDate)
             },
             {title: 'Tenure(months)', sortable: true, id: 'tenure', selector: (row: TableRowData) => row.tenure},
             {
-                title: <div className='md:pr-5 md:pl-8 relative md:right-6 '>vehicle size</div>,
+                title: <div className='md:pr-5 md:pl-8 relative md:right-6 '>Vehicle size</div>,
                 sortable: true,
                 id: 'size',
                 selector: (row: TableRowData) => <div className=''>{formatAmount(row.size)}</div>

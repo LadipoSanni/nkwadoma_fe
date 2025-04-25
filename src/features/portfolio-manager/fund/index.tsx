@@ -135,7 +135,7 @@ const InvestmentVehicle = () => {
             selector: (row: TableRowData) => row.name
         },
         {
-            title: 'Start Date',
+            title: 'Start date',
             sortable: true,
             id: 'startDate',
             selector: (row: TableRowData) => formatMonthInDate(row?.startDate)
@@ -192,14 +192,14 @@ const InvestmentVehicle = () => {
                     onChange={handleSearchChange}
                     handleDraftClick={handleCommercialFundDraftClick}
                     handleCreateInvestmentVehicleClick={handleCreateInvestmentVehicleClick}
-                    buttonName='Set up commercial fund'
+                    buttonName='Set up commercial vehicle'
                 />
             </div>,
             value: "commercialFund",
             table: <div>
                 {
                     searchTerm && commercial.length === 0 ?
-                        <div><SearchEmptyState icon={MdSearch} name='Commercial fund'/></div> :
+                        <div><SearchEmptyState icon={MdSearch} name='Commercial vehicle'/></div> :
                         <Tables
                             tableData={commercial.slice().reverse()}
                             handleRowClick={handleRowClick}
@@ -211,7 +211,7 @@ const InvestmentVehicle = () => {
                             staticHeader={'Vehicle'}
                             staticColunm={'name'}
                             icon={MdOutlinePayments}
-                            sideBarTabName='fund'
+                            sideBarTabName='vehicle'
                             optionalFilterName='commercial'
                             condition={true}
                         />
@@ -226,14 +226,14 @@ const InvestmentVehicle = () => {
                     onChange={handleSearchChange}
                     handleDraftClick={handleEndowmentFundDraftClick}
                     handleCreateInvestmentVehicleClick={handleCreateInvestmentDonorClick}
-                    buttonName='Set up endownment fund'
+                    buttonName='Set up endownment vehicle'
                 />
             </div>,
             value: "endowmentFund",
             table: <div>
                 {
                     searchTerm && endowment.length === 0 ?
-                        <div><SearchEmptyState icon={MdSearch} name='Endowment fund'/></div> :
+                        <div><SearchEmptyState icon={MdSearch} name='Endowment vehicle'/></div> :
                         <Tables
                             tableData={endowment.slice().reverse()}
                             handleRowClick={handleRowClick}
@@ -244,7 +244,7 @@ const InvestmentVehicle = () => {
                             staticColunm={'name'}
                             tableCellStyle={'h-12'}
                             icon={MdOutlinePayments}
-                            sideBarTabName='fund'
+                            sideBarTabName='vehicle'
                             optionalFilterName='endowment'
                             condition={true}
                             sx='cursor-pointer'
@@ -284,7 +284,7 @@ const InvestmentVehicle = () => {
                         isOpen={isModalOpen}
                         closeModal={() => setIsModalOpen(false)}
                         className='pb-1'
-                        headerTitle={modalType === 'commercial' ? "Commercial fund" : "Endowment fund"}
+                        headerTitle={modalType === 'commercial' ? "Commercial vehicle" : "Endowment vehicle"}
                         closeOnOverlayClick={true}
                         icon={Cross2Icon}
                         width={"36%"}

@@ -103,8 +103,9 @@ const CohortDetails = () => {
     const id = "1";
 
     const dataList = [
-        {label: "Start Date", value: formatMonthInDate(details.startDate)},
-        {label: "End Date", value: formatMonthInDate(details.expectedEndDate)},
+        {label: "Tuition amount", value: formatAmount(details.tuitionAmount)},
+        {label: "Start date", value: formatMonthInDate(details.startDate)},
+        {label: "End date", value: formatMonthInDate(details.expectedEndDate)},
         {
             label: "Cohort status",
             value: <div
@@ -112,12 +113,11 @@ const CohortDetails = () => {
                 {capitalizeFirstLetters(details.cohortStatus)}
             </div>
         },
-        {label: "Number of Dropout", value: details.numberOfDropOut},
+        {label: "Number of dropouts", value: details.numberOfDropOut},
         {label: "Dropout rate", value: "0"},
         {label: "Number employed", value: details.numberOfEmployed},
         {label: "Employment rate", value: "0"},
         {label: "Average starting salary", value: "0"},
-        {label: "Tuition amount", value: formatAmount(details.tuitionAmount)},
     ];
 
     const loanDetail = [
@@ -129,7 +129,7 @@ const CohortDetails = () => {
 
     const tagButtonData = [
         {tagIcon: FiBook, tagCount: details?.programName, tagButtonStyle: "bg-lightBlue100 text-meedlBlue", tagText: ""},
-        {tagIcon: MdPersonOutline, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-warning50 text-meedlBlue", tagText: "Loanees"},
+        {tagIcon: MdPersonOutline, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-warning50 text-meedlBlue", tagText: details?.numberOfLoanees <= 1 ? "loanee" : "loanees"},
     ];
 
 
