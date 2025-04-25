@@ -73,6 +73,7 @@ export const mapKycDataToApiRequest = (state: RootState) => {
     ...(identification.type === 'INDIVIDUAL' && {
       nin: identification.individual?.nin || "",
       bvn: identification.individual?.bvn || "",
+      taxInformationNumber: "1234567890",
     }),
     ...(identification.type === 'COOPERATE' && {
       taxId: identification.corporate?.tin || "",

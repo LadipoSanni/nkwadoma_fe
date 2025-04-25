@@ -17,6 +17,12 @@ import { useCompleteKycMutation } from "@/service/financier/api";
 import { mapKycDataToApiRequest } from "@/utils/kycDataMapper";
 import { useToast } from "@/hooks/use-toast";
 
+interface ApiError {
+    data?: {
+        message?: string;
+    };
+}
+
 interface PoliticalExposureData {
     isPoliticallyExposedPerson: boolean | null;
     agreedToTerms: boolean;
@@ -30,7 +36,7 @@ const PoliticalExposure: React.FC = () => {
     const dispatch = useAppDispatch();
     const state = useAppSelector(state => state);
     const [completeKyc, { isLoading: isSubmitting }] = useCompleteKycMutation();
-    const { toast } = useToast();
+    const { } = useToast();
     const [formData, setFormData] = useState<PoliticalExposureData>({
         isPoliticallyExposedPerson: true,
         agreedToTerms: false,
@@ -103,9 +109,22 @@ const PoliticalExposure: React.FC = () => {
             } else {
                 setErrorMessage(response?.message || "Failed to complete KYC. Please try again.");
             }
-        } catch (error: any) {
-            console.error("KYC completion error:", error);
-            setErrorMessage(error?.data?.message || "An error occurred. Please try again.");
+        } catch (error: unknown) {
+            console.error("KYC completion error:", JSON.stringify(error, null, 2));
+            const apiError = error as ApiError;
+            if (apiError?.data?.message) {
+                setErrorMessage(apiError.data.message);
+            } else if (typeof error === 'object' && error !== null) {
+                // Try to extract any useful information from the error object
+                const errorObj = error as Record<string, any>;
+                const errorMessage = 
+                    errorObj.message || 
+                    (errorObj.data && errorObj.data.message) || 
+                    JSON.stringify(error);
+                setErrorMessage(errorMessage);
+            } else {
+                setErrorMessage("An error occurred. Please try again.");
+            }
         }
     };
 
