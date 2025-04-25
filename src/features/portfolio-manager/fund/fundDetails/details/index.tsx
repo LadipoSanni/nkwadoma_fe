@@ -13,7 +13,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { inter } from '@/app/fonts';
 import {formatMonthInDate} from '@/utils/Format';
-import {setDraftId,setEditStatus,clearEditStatus,setInvestmentStatus,clearSaveInvestmentStatus,setPublicVehicleUrl,clearPublicVehicleUrl} from '@/redux/slice/vehicle/vehicle';
+import {setDraftId,setEditStatus,clearEditStatus,clearSaveInvestmentStatus,setPublicVehicleUrl,clearPublicVehicleUrl,setStatusDefaultValue,resetStatusDefaultValue} from '@/redux/slice/vehicle/vehicle';
 import {store} from "@/redux/store";
 import { useRouter } from 'next/navigation'
 import {markStepCompleted} from '@/redux/slice/multiselect/vehicle-multiselect';
@@ -29,10 +29,10 @@ const Details = () => {
 
     const {data, isLoading,refetch} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
 
-    const setStatus = {
-        state: data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus,
-        status: data?.data?.fundRaisingStatus === null ? "deployingStatus" : "fundRaising"
-    }
+    // const setStatus = {
+    //     state: data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus,
+    //     status: data?.data?.fundRaisingStatus === null ? "deployingStatus" : "fundRaising"
+    // }
 
     useEffect(() => {
          if(statusType === "changeStatus" || statusType === "changeVisibility"){
@@ -42,6 +42,7 @@ const Details = () => {
          store.dispatch(resetVehicleState())
          store.dispatch(clearSaveInvestmentStatus())
           store.dispatch(clearPublicVehicleUrl())
+          store.dispatch(resetStatusDefaultValue())
          }
     },[refetch,statusType])
 
@@ -87,10 +88,17 @@ const Details = () => {
     }
 
     const handleChangeStatus = () => {
-        store.dispatch(setInvestmentStatus(setStatus))
+        // store.dispatch(setInvestmentStatus(setStatus))
         store.dispatch(setDraftId(data?.data?.id))
         store.dispatch(setEditStatus("changeStatus"))
         store.dispatch(markStepCompleted("setup"))
+        if(data?.data?.fundRaisingStatus || data?.data?.deployingStatus){
+            store.dispatch(setStatusDefaultValue("operation"))
+        }else if (data?.data?.couponDistributionStatus){
+            store.dispatch(setStatusDefaultValue("coupon")) 
+        }else {
+            store.dispatch(setStatusDefaultValue("closure"))
+        }
         router.push("/vehicle/edit/status")
     }
 
@@ -153,6 +161,23 @@ const Details = () => {
         {name: 'Net asset value', value: formatAmount(data?.data?.netAssetValue?.toString() || '0')},
     ];
 
+    const getVehicleStatus = () => {
+        const statuses = [
+          { type: "fundRaising", value: data?.data?.fundRaisingStatus },
+          { type: "deploying", value: data?.data?.deployingStatus },
+          { type: "couponDistribution", value: data?.data?.couponDistributionStatus },
+          { type: "recollection", value: data?.data?.recollectionStatus },
+          { type: "maturity", value: data?.data?.maturity }
+        ];
+      
+        
+        const activeStatus = statuses.find(status => status.value !== null);
+        
+        return activeStatus || { type: "unknown", value: null };
+      };
+      
+      const { type: statusTypes, value: statusValue } = getVehicleStatus();
+
     return (
         <>
             {isLoading ? (<SkeletonForDetailPage/>) : (
@@ -168,13 +193,13 @@ const Details = () => {
                         />
                     </div>
                      <div className='py-2 md:max-w-72 lg:max-w-[29vw] rounded-md grid grid-cols-1 gap-y-3'>
-                       <p className={`text-meedlBlack text-[14px] font-semibold`}>Prospectus</p>
+                       <p className='text-[14px] font-semibold'>Prospectus</p>
                        <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
                        
                           <div className='flex gap-2 items-center'>
                             <div>
                             <Image
-                              src={"/pdf.png"}
+                              src={"/MyMandateLogo.png"}
                                alt='image'
                                width={16}
                                height={16}
@@ -192,7 +217,7 @@ const Details = () => {
                             id='view-document'
                            type='button' 
                            variant={"default"} 
-                           className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[7.9vh]"}`}
+                           className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[8.9vh]"}`}
                             onClick={handleViewDocument}
                             disabled={!docUrl || isVerifying}
                             aria-label={`View ${docFilename}`}
@@ -235,8 +260,8 @@ const Details = () => {
                           <div className='flex gap-2 items-center'>
                             {/* <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p> */}
                             <p
-                            className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '
-                >{data?.data?.fundRaisingStatus === null ? "Deploying" : "fundRaising" } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus) }</span></span> </p>
+                            className='text-[14px]   lg:max-w-[180px] xl:max-w-[250px] lg:whitespace-normal '
+                >{statusTypes } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(statusValue) }</span></span> </p>
                           </div>
                          
                            <Button 
