@@ -96,11 +96,11 @@ const ProgramDetails = () => {
     ];
 
     const loanDetail = [
-        {detail: "Repayment rate", value: "0%"},
-        {detail: "Debt percentage", value: "0%"},
         {detail: "Total loan amount disbursed", value: formatAmount(progamDetail.totalAmountDisbursed)},
         {detail: "Total loan amount repaid", value: formatAmount(progamDetail.totalAmountRepaid)},
         {detail: "Total loan amount outstanding", value: formatAmount(progamDetail.totalAmountOutstanding)},
+        {detail: "Debt percentage", value: "0%"},
+        {detail: "Repayment rate", value: "0%"},
 
     ]
 
@@ -108,13 +108,13 @@ const ProgramDetails = () => {
     const tagButtonData = [
         {
             tagIcon: MdOutlineDateRange,
-            tagCount: progamDetail.duration,
+            tagCount: progamDetail.duration ?? 0,
             tagButtonStyle: "bg-lightBlue100",
-            tagText: "Months",
+            tagText: progamDetail.duration <= 1 ? 'month' : 'months',
             textColor: "text-meedlBlue",
         },
-        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: "Cohorts", textColor: "text-success700"},
-        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: "Loanees", textColor: "text-warning900" },
+        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: progamDetail.numberOfCohort <= 1 ? 'month' : 'months', textColor: "text-success700"},
+        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: progamDetail.numberOfLoanees <= 1 ? 'month' : 'months', textColor: "text-warning900" },
     ];
 
     const programOptions = [
@@ -206,7 +206,7 @@ const ProgramDetails = () => {
 
                         <div id={`container`} className={`w-full md:w-1/2 md:pt-0 pt-5 overflow-x-hidden`}>
                             <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail} dataList={dataList}
-                                                 tabTitle1={"program-details"} tabTitle2={"Loan program-details"}/>
+                                                 tabTitle1={"program details"} tabTitle2={"Loan details"}/>
                         </div>
                     </section>
             {
