@@ -172,12 +172,12 @@ function CommercialFund() {
                     onChange={handleSearchChange}
                     handleDraftClick={handleCommercialFundDraftClick}
                     handleCreateInvestmentVehicleClick={handleCreateInvestmentVehicleClick}
-                     buttonName='Set up commercial fund'
+                     buttonName='Set up commercial vehicle'
                 />
       </div>
       <div>
             { searchTerm && viewAllInvestmentVehicle.length === 0? <div>
-                <SearchEmptyState icon={MdSearch} name='Endowment fund'/>
+                <SearchEmptyState icon={MdSearch} name='Endowment vehicle'/>
             </div> : <div  className='mt-6'>
                 <Table
                 tableData={tableData} 

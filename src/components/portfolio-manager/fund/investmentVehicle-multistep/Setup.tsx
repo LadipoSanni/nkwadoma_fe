@@ -209,8 +209,8 @@ function Setup({investmentVehicleType}: Props) {
     <div className={`${inter.className} `}>
         <div className='xl:px-36 grid grid-cols-1 gap-y-6 '>
        <div className='grid grid-cols-1 gap-y-1'>
-        <h1 className='text-[18px] font-normal'>Set up {vehicleType} fund</h1>
-        <p className='text-[14px] font-normal'>Provide details of your {vehicleType} fund</p>
+        <h1 className='text-[18px] font-normal'>Set up {vehicleType} vehicle</h1>
+        {/*<p className='text-[14px] font-normal'>Provide details of your {vehicleType} vehicle</p>*/}
        </div>
        <div>
        <Formik
