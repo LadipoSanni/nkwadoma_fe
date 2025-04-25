@@ -99,6 +99,9 @@ function StatusReusable({
       investmentVehicleId: string;
       fundRaising?: string;
       deployingStatus?: string;
+      couponDistributionStatus?: string;
+      recollectionStatus?: string;
+      maturity?:string;
     } = {
       investmentVehicleId: draftId
     };
@@ -107,6 +110,12 @@ function StatusReusable({
       formData.fundRaising = values.state;
     } else if (values.status === "deployingStatus") {
       formData.deployingStatus = values.state;
+    } else if (values.status === "recollectionStatus") {
+       formData.recollectionStatus = values.state;
+    } else if (values.status === "maturity"){
+        formData.maturity = values.status
+    }else {
+      formData.couponDistributionStatus = values.status
     }
   
     try {

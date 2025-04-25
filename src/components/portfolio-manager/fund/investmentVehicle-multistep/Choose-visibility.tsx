@@ -19,11 +19,17 @@ import { MultiSelect } from '@/reuseable/mult-select';
 import Modal from '@/reuseable/modals/TableModal';
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
 import {Cross2Icon} from "@radix-ui/react-icons";
-import { useViewAllFinanciersQuery } from '@/service/admin/financier';
-import { useChooseInvestmentVehicleVisibilityMutation } from '@/service/admin/fund_query';
+import {useViewAllFinanciersQuery} from '@/service/admin/financier';
+import {
+    useChooseInvestmentVehicleVisibilityMutation,
+    useFinancierInvestmentVehicleQuery
+} from '@/service/admin/fund_query';
 import { useToast } from "@/hooks/use-toast";
 import { clearDraftId,clearPublicVehicleUrl} from '@/redux/slice/vehicle/vehicle';
 import { clearSaveCreateInvestmentField,clearSaveInvestmentStatus } from '@/redux/slice/vehicle/vehicle'
+import DisplayFinancierInvehicle
+    from "@/components/portfolio-manager/fund/investmentVehicle-multistep/DisplayFinancierInvehicle";
+import {FinancierInInvestmentVehicle} from "@/types/Component.type";
 
 interface ApiError {
   status: number;
@@ -79,29 +85,22 @@ function ChooseVisibility() {
       pageSize: 10,
       }
 
+    const props = {
+        investmentVehicleId: investmentVehicleId,
+        pageNumber: pageNumber,
+        pageSize: 10,
+    }
      const {data,isLoading: isloading, isFetching} = useViewAllFinanciersQuery(param,{skip: !isFinancier})
      const [chooseVisibility, {isLoading}] = useChooseInvestmentVehicleVisibilityMutation()
 
+
+
+     const {data: financiersInInvestmentVehicle} = useFinancierInvestmentVehicleQuery(props, {skip: !investmentVehicleId})
+
+    // console.log('financiersInInvestmentVehicle:: ', financiersInInvestmentVehicle)
+
     const validationSchema = Yup.object().shape({
       status: Yup.string().required("Visibility is required"),
-      // financiers: Yup.array().test(
-      //   'private-validation',
-      //   'At least one financier with investment vehicle designation is required for private funds',
-      //   function(value) {
-      //     if (this.parent.status === 'PRIVATE') {
-      //       return (
-      //         Array.isArray(value) &&
-      //         value.length > 0 &&
-      //         value.every(f => 
-      //           f?.id && 
-      //           Array.isArray(f?.investmentVehicleDesignation) && 
-      //           f.investmentVehicleDesignation.length > 0
-      //         )
-      //       );
-      //     }
-      //     return true;
-      //   }
-      // )
       financiers: Yup.array().test(
         'private-validation',
         'Each financier must have at least one designation',
@@ -154,6 +153,7 @@ function ChooseVisibility() {
     ]
     
        useEffect(()=> {
+
          if(!completedStep.includes("setup")){
           router.push('/vehicle/setup');
          }
@@ -169,7 +169,6 @@ function ChooseVisibility() {
          try {
           const visibility = await chooseVisibility(formData).unwrap();
              if(visibility){
-              
               toast({
                 description: statusType === "changeVisibility"? "Vehicle visibility updated " : visibility.message,
                 status: "success",
@@ -208,15 +207,7 @@ function ChooseVisibility() {
         });
       };
 
-      // const addFinancierRow = (
-      //   setFieldValue: (field: string, value: unknown, shouldValidate?: boolean) => void,
-      //   values: typeof initialFormValue 
-      // ) => {
-      //   setFieldValue('financiers', [
-      //     ...values.financiers,
-      //     { financierId: '', investmentVehicleDesignation: [] }, 
-      //   ], true);
-      // };
+
 
       const addFinancierRow = (
         setFieldValue: (
@@ -293,6 +284,11 @@ function ChooseVisibility() {
       const handleBack =() => {
         router.push("/vehicle/status")
       }
+
+      const isFianancierAlreadyInInvestmetVehicle = (financierId: string) => {
+         return financiersInInvestmentVehicle?.data?.body?.some((financier: FinancierInInvestmentVehicle) => financier?.id === financierId)  || selectedFinancierIds.includes(financierId)  ;
+      }
+
 
   return (
     <div className={`${inter.className} `}>
@@ -422,11 +418,18 @@ function ChooseVisibility() {
                     <div className=' md:px-3 px-6 relative top-4 md:left-6 left-2 '>
 
                         <div className="lg:grid grid-cols-2 gap-4 hidden ">
-                          
-                      <Label className='text-[#212221]'>Financier</Label>
-                      <Label className='text-[#212221]'>Role</Label>
-                    </div>
+                          <Label className='text-[#212221]'>Financier</Label>
+                          <Label className='text-[#212221]'>Role</Label>
+                        </div>
                       <div className={`lg:-space-y-4 space-y-2 md:max-h-[35vh]  ${style.container}`}>
+                          <div className={`w-full h-fit py-4  grid`}>
+                              {financiersInInvestmentVehicle?.data?.body?.length !== 0 && (
+                                  <div id={'FinancierInsideInvestmentVehicle'} className={` lg:block md:max-w-[94%]   `}>
+                                      <DisplayFinancierInvehicle list={financiersInInvestmentVehicle?.data?.body}/>
+                                  </div>
+                              )}
+                          </div>
+
                         {
                            values.financiers.map((financier, index) => (
                             <div key={index} className=''>
@@ -439,9 +442,10 @@ function ChooseVisibility() {
                                 placeholder="Select financier"
                                 triggerId={`financier-select-${index}`}
                                 className="w-full"
-                                isItemDisabled={(item) => selectedFinancierIds.includes(item.id) && item.id !== financier.id}
+                                isItemDisabled={(item) => isFianancierAlreadyInInvestmetVehicle(item.id)}
                                 additionalContent={({ closeDropdown }) => (
                                   <div className="relative py-2 top-1 px-2 flex items-center text-[#142854]">
+                                      {isFianancierAlreadyInInvestmetVehicle(financier.id)}
                                     <div className="z-50">
                                       <MdAdd color="#142854" className="h-[16px] w-[16px]" />
                                     </div>
@@ -534,10 +538,12 @@ function ChooseVisibility() {
                                 placeholder="Select financier"
                                 triggerId={`financier-select-${index}`}
                                 className="w-full"
-                                isItemDisabled={(item) => selectedFinancierIds.includes(item.id) && item.id !== financier.id}
+                                isItemDisabled={(item) => isFianancierAlreadyInInvestmetVehicle(item.id)}
                                 additionalContent={({ closeDropdown }) => (
                                   <div className="relative py-2 top-1 px-2 flex items-center text-[#142854]">
-                                    <div className="z-50">
+                                      {isFianancierAlreadyInInvestmetVehicle(financier.id)}
+
+                                      <div className="z-50">
                                       <MdAdd color="#142854" className="h-[16px] w-[16px]" />
                                     </div>
                                     <div className="relative right-3">

@@ -31,14 +31,18 @@ export const uploadDocumentToCloudinary = async (file: File,setLoader: (error:bo
   }
 
   setLoader(true)
+
   const res = await fetch(api_url, {
     method: 'POST',
     body: formData
-  })
-      .catch((err) => console.error(err))
-      .finally(() => setLoader(false));
+  });
 
+  if (!res.ok) {
+    const error = await res.text();
+    throw new Error(`Document upload failed: ${error}`);
+  }
 
-  const result = res?.url ?? '';
-  return result;
+  const result = await res.json();
+  return result.secure_url;
+
 };

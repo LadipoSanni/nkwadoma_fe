@@ -176,12 +176,12 @@ function EndownmentFund() {
                     onChange={handleSearchChange}
                     handleDraftClick={handleEndowerFundDraftClick}
                     handleCreateInvestmentVehicleClick={handleCreateInvestmentVehicleClick}
-                    buttonName='Set up endowment fund'
+                    buttonName='Set up endowment vehicle'
                 />
       </div>
         <div>
             { searchTerm && viewAllInvestmentVehicle.length === 0? <div>
-                <SearchEmptyState icon={MdSearch} name='Endowment fund'/>
+                <SearchEmptyState icon={MdSearch} name='Endowment vehicle'/>
             </div> : <div  className='mt-6'>
                 <Table
                 tableData={tableData} 
