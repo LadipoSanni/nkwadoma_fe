@@ -1,17 +1,17 @@
 "use client"
 
-import React, { useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoMdMenu } from "react-icons/io";
 import { setShowMobileSideBar } from "@/redux/slice/layout/adminLayout";
-import {inter500, inter} from "@/app/fonts";
+import { inter500, inter } from "@/app/fonts";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { capitalizeFirstLetters, getFirstLetterOfWord } from "@/utils/GlobalMethods";
 import { store, useAppSelector } from "@/redux/store";
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import AdminProfile from "@/features/profile/adminProfile/Index";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
-import { useRouter,usePathname} from "next/navigation";
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import { useRouter, usePathname } from "next/navigation";
 import { MdNotifications } from 'react-icons/md';
 import { Button } from '../ui/button';
 import { BellIcon } from '@radix-ui/react-icons';
@@ -19,8 +19,8 @@ import { Badge } from '../ui/badge';
 import { useNumberOfNotificationQuery } from '@/service/notification/notification_query';
 import { setCurrentTotalNotification } from '@/redux/slice/notification/notification';
 import {DISPLAYUSERROLE} from "@/components/topBar/variables";
-
-
+import { useViewFinancierDashboardQuery } from '@/service/financier/api';
+import { getItemFromLocalStorage, setItemToLocalStorage } from '@/utils/storage';
 
 const TopBar = () => {
     const [arrowToggled, setArrowToggled] = useState(false);
@@ -31,14 +31,28 @@ const TopBar = () => {
      const router = useRouter();
      const pathname = usePathname();
 
-
-    const {data,refetch} = useNumberOfNotificationQuery({})
+    const storedOrgName = getItemFromLocalStorage('organization_name');
+    const { data: financierData, isSuccess } = useViewFinancierDashboardQuery({});
+    const [displayName, setDisplayName] = useState(storedOrgName || user_name || '');
     const [userRole] = useState(user_role ? user_role : '');
+
+    const { data, refetch } = useNumberOfNotificationQuery({});
+
+    useEffect(() => {
+        if (isSuccess && financierData?.data) {
+            if (financierData.data.financierType === "COOPERATE" && financierData.data.organizationName) {
+                setItemToLocalStorage('organization_name', financierData.data.organizationName);
+                setDisplayName(financierData.data.organizationName);
+            } else {
+                setDisplayName(user_name || '');
+            }
+        }
+    }, [financierData, isSuccess, user_name]);
 
     useEffect(()=>{
         if (data?.data?.allNotificationsCount !== undefined) {
             store.dispatch(setCurrentTotalNotification(data.data.allNotificationsCount));
-        }        
+        }
         refetch()
         if (user_role === "FINANCIER" && pathname?.startsWith("/kyc")) {
             store.dispatch(setCurrentNavbarItem("KYC verification"));
@@ -125,11 +139,11 @@ const TopBar = () => {
                             className={` flex place-content-center  object-fit md:bg-[#FEF6E8]  bg-[#FEF6E8]  mt-auto mb-auto rounded-full w-[30px] h-[30px]  md:w-[40px] md:h-[40px] `}>
                             <div
                                 className={` ${inter500.className} grid place-content-center  mt-auto mb-auto text-[#885A3C] md:text-[#885A3C]   w-[50%] h-[50%]   `} >
-                                {getFirstLetterOfWord(user_name)}
+                                {getFirstLetterOfWord(displayName)}
                             </div>
                         </div>
                         <button onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : 'cursor-text'} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
-                            <p className={`text-black500 ${inter500.className} flex justify-start mt-auto mb-auto  text-sm `}>{capitalizeFirstLetters(user_name)}</p>
+                            <p className={`text-black500 ${inter500.className} flex justify-start mt-auto mb-auto  text-sm `}>{capitalizeFirstLetters(displayName)}</p>
                             {DISPLAYUSERROLE?.includes(userRole) ?
                                 <p className={`text-black400 ${inter.className}  flex justify-start text-sm`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
                             :

@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { kycSteps } from '@/types/tabDataTypes'
 import BackButton from '@/components/back-button';
 import MultiStep from '@/reuseable/multiStep-component';
+import {inter} from "@/app/fonts";
 
 
 interface props {
@@ -21,7 +22,7 @@ function KycStepLayout({children}:props) {
             router.push("/Overview")
     }
     return (
-        <div className='md:px-10 px-4  py-4 grid grid-cols-1 gap-y-10'>
+        <div className={`${inter.className} md:px-10 px-4  py-4 grid grid-cols-1 gap-y-10`}>
             <div>
                 <BackButton
                     id="createFundBackButton"
@@ -31,7 +32,7 @@ function KycStepLayout({children}:props) {
                     textColor=''
                 />
             </div>
-            <div className="md:flex  md:gap-10">
+            <div className="md:flex  md:gap-5">
                 <div><MultiStep steps={kycSteps} currentStep={currentStep} completedSteps={completedSteps}/></div>
 
                 <div className="w-full mt-4 md:mt-0 ">

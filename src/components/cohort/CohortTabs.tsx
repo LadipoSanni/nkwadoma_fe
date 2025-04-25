@@ -181,14 +181,23 @@ useEffect(() => {
   const ProgramHeader = [
     { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => row.name },
     { title: <div className='relative right-2 left-2'>End date</div>, sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatMonthInDate(row?.expectedEndDate)},
-    // { title: 'No. of Trainees', sortable: true, id: 'noOfTrainees', selector: (row: TableRowData) => row.noOfTrainees },
-    { title: 'No. of Loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => row.numberOfLoanees || 0 },
+    { title: 'No. of loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => row.numberOfLoanees || 0 },
     { title: 'Tuition', sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => formatAmount(row.tuitionAmount)},
     { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRecieved)}</div> },
     { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountRequested)}</div> },
-    { title: 'Amount Outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountOutstanding)}</div> },
+    { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountOutstanding)}</div> },
 
   ]
+
+    const IncomingProgramHeader = [
+        {title: 'Cohort', sortable: true, id: 'name', selector: (row: TableRowData) => row.name,},
+        { title: <div className='relative right-2 left-2'>Start date</div>, sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatMonthInDate(row?.startDate)},
+        { title: 'No. of loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => row.numberOfLoanees || 0 },
+        { title: 'Tuition', sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => formatAmount(row.tuitionAmount)},
+        { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRecieved)}</div> },
+        { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountRequested)}</div> },
+        { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountOutstanding)}</div> },
+    ];
 
   const incomingCohorts = listOfCohorts.filter(cohort => cohort.cohortStatus === 'INCOMING'); 
   const currentCohorts = listOfCohorts.filter(cohort => cohort.cohortStatus === 'CURRENT'); 
@@ -203,7 +212,7 @@ useEffect(() => {
            <Tables
               tableData={incomingCohorts.slice().reverse()}
               handleRowClick={handleRowClick}
-              tableHeader={ProgramHeader}
+              tableHeader={IncomingProgramHeader}
               tableHeight={52}
               sx='cursor-pointer'
               staticColunm='name'

@@ -126,6 +126,7 @@ export const vehicleSlice = createSlice({
              state.setInvestmentStatus= null;
              state.setPublicVehicleUrl = ""
              state.setDraftId = "";
+             state.statusDefaultValue = "operation"
         }
     }
 })
@@ -144,6 +145,8 @@ export const {setCurrentVehicleId,
                 clearSaveInvestmentStatus,
                 setEditStatus,
                 clearEditStatus,
-                resetAll
+                resetAll,
+                setStatusDefaultValue,
+                resetStatusDefaultValue
             } = vehicleSlice.actions;
 export default vehicleSlice.reducer;

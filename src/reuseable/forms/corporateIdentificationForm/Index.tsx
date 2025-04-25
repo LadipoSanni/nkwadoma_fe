@@ -48,16 +48,25 @@ const CorporateIdentificationForm: React.FC<CorporateIdentificationFormProps> = 
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className={'grid gap-5 md:w-[27.5rem] w-full'}>
+        <form onSubmit={handleSubmit(onSubmit)} className={'w-full md:max-w-[27.5rem] md:mx-auto grid gap-5'}>
             <div className={'grid gap-2'}>
                 <Label htmlFor="tin">Tax Identification Number</Label>
                 <Input
                     type="text"
                     placeholder="Enter TIN"
                     {...register("tin", {
-                        required: "TIN is required"
+                        required: "TIN is required",
+                        pattern: {
+                            value: /^\d{10}$/,
+                            message: "TIN must be exactly 10 digits"
+                        },
+                        validate: {
+                            validDigits: (value) => /^\d+$/.test(value) || "TIN must contain only numbers",
+                            exactLength: (value) => value.length === 10 || "TIN must be 10 digits"
+                        }
                     })}
-                    className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem]'}
+                    maxLength={10}
+                    className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
                 />
                 {errors.tin && <p className="text-red-500 text-sm">{errors.tin.message}</p>}
             </div>
@@ -84,9 +93,18 @@ const CorporateIdentificationForm: React.FC<CorporateIdentificationFormProps> = 
                     type="text"
                     placeholder="Enter RC Number"
                     {...register("rcNumber", {
-                        required: "RC Number is required"
+                        required: "RC Number is required",
+                        pattern: {
+                            value: /^\d{8}$/,
+                            message: "RC Number must be exactly 8 digits"
+                        },
+                        validate: {
+                            validDigits: (value) => /^\d+$/.test(value) || "RC Number must contain only numbers",
+                            exactLength: (value) => value.length === 8 || "RC Number must be 8 digits"
+                        }
                     })}
-                    className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem]'}
+                    maxLength={8}
+                    className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
                 />
                 {errors.rcNumber && <p className="text-red-500 text-sm">{errors.rcNumber.message}</p>}
             </div>

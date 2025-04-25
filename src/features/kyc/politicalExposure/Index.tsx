@@ -14,7 +14,7 @@ import SuccessDialog from "@/reuseable/modals/SuccessDialog/Index";
 import { useAppDispatch } from "@/redux/store";
 import { updateDeclaration } from "@/redux/slice/kyc/kycFormSlice";
 
-interface DeclarationData {
+interface PoliticalExposureData {
     isPoliticallyExposedPerson: boolean | null;
     agreedToTerms: boolean;
     politicalPosition?: string;
@@ -22,10 +22,10 @@ interface DeclarationData {
     country?: string;
 }
 
-const Declaration: React.FC = () => {
+const PoliticalExposure: React.FC = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const [formData, setFormData] = useState<DeclarationData>({
+    const [formData, setFormData] = useState<PoliticalExposureData>({
         isPoliticallyExposedPerson: true,
         agreedToTerms: false,
         politicalPosition: '',
@@ -114,11 +114,11 @@ const Declaration: React.FC = () => {
         ));
 
     return (
-        <div id="declarationContainer" className={`${inter.className} xl:px-36 grid-cols-1 gap-y-6 grid gap-10`}>
-            <div id="declarationHeaderContainer" className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
-                <h1 id="declarationTitle" className="text-meedlBlack text-[24px] leading-[120%] font-medium">Declaration</h1>
+        <div id="declarationContainer" className={`${inter.className} w-full xl:px-48 grid-cols-1 gap-y-6 grid gap-10`}>
+            <div id="declarationHeaderContainer" className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem] md:mx-auto w-full`}>
+                <h1 id="declarationTitle" className="text-meedlBlack text-[24px] leading-[120%] font-medium">Political exposure</h1>
             </div>
-            <form id="declarationForm" onSubmit={handleFinish} className="space-y-8 md:w-[27.5rem] w-full">
+            <form id="declarationForm" onSubmit={handleFinish} className="w-full md:max-w-[27.5rem] md:mx-auto grid gap-5">
                 <div id="pepQuestionContainer" className="space-y-4">
                     <Label id="pepQuestionLabel" className="block text-[14px] leading-[150%] font-medium text-black500">
                         Are you or any of your close associates / relatives a Politically Exposed Person?
@@ -224,7 +224,7 @@ const Declaration: React.FC = () => {
                     <p className="text-red-500 text-sm">{errorMessage}</p>
                 )}
 
-                <div id="buttonContainer" className="flex flex-col md:flex-row justify-between items-center pt-6 gap-4">
+                <div id="buttonContainer" className="flex flex-col md:flex-row justify-between items-center pt-5 gap-4">
                     <Button
                         id="backButton"
                         onClick={() => router.back()}
@@ -262,4 +262,4 @@ const Declaration: React.FC = () => {
     );
 };
 
-export default Declaration;
+export default PoliticalExposure;
