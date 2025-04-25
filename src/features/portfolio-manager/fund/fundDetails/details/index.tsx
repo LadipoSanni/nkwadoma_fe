@@ -46,12 +46,6 @@ const Details = () => {
          }
     },[refetch,statusType])
 
-    // useEffect(() => {
-    //     if(data?.data?.fundRaisingStatus || data?.data?.deployingStatus){
-    //       store.dispatch(setStatusDefaultValue("operation"))
-    //     }
-    // })
-
     const getFilenameFromUrl = (url: string) => {
         try {
             const urlObj = new URL(url);
