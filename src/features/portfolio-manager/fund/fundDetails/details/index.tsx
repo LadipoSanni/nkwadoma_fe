@@ -13,7 +13,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { inter } from '@/app/fonts';
 import {formatMonthInDate} from '@/utils/Format';
-import {setDraftId,setEditStatus,clearEditStatus,clearSaveInvestmentStatus,setPublicVehicleUrl,clearPublicVehicleUrl,setStatusDefaultValue} from '@/redux/slice/vehicle/vehicle';
+import {setDraftId,setEditStatus,clearEditStatus,clearSaveInvestmentStatus,setPublicVehicleUrl,clearPublicVehicleUrl,setStatusDefaultValue,resetStatusDefaultValue} from '@/redux/slice/vehicle/vehicle';
 import {store} from "@/redux/store";
 import { useRouter } from 'next/navigation'
 import {markStepCompleted} from '@/redux/slice/multiselect/vehicle-multiselect';
@@ -42,6 +42,7 @@ const Details = () => {
          store.dispatch(resetVehicleState())
          store.dispatch(clearSaveInvestmentStatus())
           store.dispatch(clearPublicVehicleUrl())
+          store.dispatch(resetStatusDefaultValue())
          }
     },[refetch,statusType])
 

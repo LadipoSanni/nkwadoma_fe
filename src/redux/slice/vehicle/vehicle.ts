@@ -126,6 +126,7 @@ export const vehicleSlice = createSlice({
              state.setInvestmentStatus= null;
              state.setPublicVehicleUrl = ""
              state.setDraftId = "";
+             state.statusDefaultValue = "operation"
         }
     }
 })
