@@ -29,6 +29,7 @@ import { clearDraftId,clearPublicVehicleUrl} from '@/redux/slice/vehicle/vehicle
 import { clearSaveCreateInvestmentField,clearSaveInvestmentStatus } from '@/redux/slice/vehicle/vehicle'
 import DisplayFinancierInvehicle
     from "@/components/portfolio-manager/fund/investmentVehicle-multistep/DisplayFinancierInvehicle";
+import {FinancierInInvestmentVehicle} from "@/types/Component.type";
 
 interface ApiError {
   status: number;
@@ -283,6 +284,11 @@ function ChooseVisibility() {
         router.push("/vehicle/status")
       }
 
+      const isFianancierAlreadyInInvestmetVehicle = (financierId: string) => {
+         return financiersInInvestmentVehicle?.data?.body?.some((financier: FinancierInInvestmentVehicle) => financier?.id === financierId)  || selectedFinancierIds.includes(financierId)  ;
+      }
+
+
   return (
     <div className={`${inter.className} `}>
         <div className={` grid grid-cols-1 gap-y-6 ${statusType !== "changeVisibility"? "xl:px-[6rem] lg:px-8" : "xl:px-72 lg:px-52 px-11 md:px-40"}`}>
@@ -435,9 +441,10 @@ function ChooseVisibility() {
                                 placeholder="Select financier"
                                 triggerId={`financier-select-${index}`}
                                 className="w-full"
-                                isItemDisabled={(item) => selectedFinancierIds.includes(item.id) && item.id !== financier.id}
+                                isItemDisabled={(item) => isFianancierAlreadyInInvestmetVehicle(item.id)}
                                 additionalContent={({ closeDropdown }) => (
                                   <div className="relative py-2 top-1 px-2 flex items-center text-[#142854]">
+                                      {isFianancierAlreadyInInvestmetVehicle(financier.id)}
                                     <div className="z-50">
                                       <MdAdd color="#142854" className="h-[16px] w-[16px]" />
                                     </div>
@@ -530,10 +537,12 @@ function ChooseVisibility() {
                                 placeholder="Select financier"
                                 triggerId={`financier-select-${index}`}
                                 className="w-full"
-                                isItemDisabled={(item) => selectedFinancierIds.includes(item.id) && item.id !== financier.id}
+                                isItemDisabled={(item) => isFianancierAlreadyInInvestmetVehicle(item.id)}
                                 additionalContent={({ closeDropdown }) => (
                                   <div className="relative py-2 top-1 px-2 flex items-center text-[#142854]">
-                                    <div className="z-50">
+                                      {isFianancierAlreadyInInvestmetVehicle(financier.id)}
+
+                                      <div className="z-50">
                                       <MdAdd color="#142854" className="h-[16px] w-[16px]" />
                                     </div>
                                     <div className="relative right-3">

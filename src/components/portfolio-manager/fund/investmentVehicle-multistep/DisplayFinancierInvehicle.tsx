@@ -11,7 +11,7 @@ const DisplayFinancierInvehicle = ({list}:Props ) => {
 
 
     return (
-        <div className={` w-full md:w-full `}>
+        <div className={` w-full  grid gap-3 md:w-full `}>
             {list?.map((fina, index) => (
                 <div key={index}
                      className={` w-full  md:w-full md:grid md:grid-cols-2  grid gap-2 md:gap-4`}

@@ -167,7 +167,7 @@ const Details = () => {
                         />
                     </div>
                      <div className='py-2 md:max-w-72 lg:max-w-[29vw] rounded-md grid grid-cols-1 gap-y-3'>
-                       <p className='text-[14px] font-semibold'>Prospect</p>
+                       <p className='text-[14px] font-semibold'>Prospectus</p>
                        <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
                        
                           <div className='flex gap-2 items-center'>
