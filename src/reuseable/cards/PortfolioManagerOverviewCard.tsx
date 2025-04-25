@@ -1,5 +1,5 @@
 import React from 'react';
-import {cabinetGroteskBold, inter} from "@/app/fonts";
+import {cabinetGroteskBold, inter, inter500} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import { MdOutlineHelpOutline } from "react-icons/md";
 
@@ -8,9 +8,11 @@ interface Props {
     id: string;
     cardData?: {title: string, amount: string, showIcon?: boolean}[];
     clickView: () => void;
+    isLoanData?: boolean;
+    loanData?: {title: string, amount: string, textColor: string,bgColor: string,}[];
 }
 
-const PortfolioManagerOverviewCard = ({id, cardData, clickView}: Props) => {
+const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickView}: Props) => {
 
 
 
@@ -36,6 +38,17 @@ const PortfolioManagerOverviewCard = ({id, cardData, clickView}: Props) => {
                           </div>
                       </main>
                   ))}
+                  {isLoanData &&
+                      <div className={`bg-grey105 w-full grid gap-4 px-4 py-4`}>
+                          {loanData?.map((loan, index) => (
+                              <div key={index} id={`cardTitle`}
+                                 className={`text-black300 w-full border h-fit py-3  ${Number(loan.amount) === 0 ? '' : ''}  border-[#ECECEC] rounded-md flex justify-between gap-2  text-[14px] font-normal leading-[150%]`}>
+                                  <p className={` ${inter500.className} text-[${loan.textColor}] `}>{loan.title}</p>
+                                  <p>{loan.amount}</p>
+                              </div>
+                          ))}
+                      </div>
+                  }
               </div>
 
                 <div id={`balanceLinkBlock`}

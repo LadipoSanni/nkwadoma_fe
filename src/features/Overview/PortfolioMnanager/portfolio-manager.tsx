@@ -51,6 +51,12 @@ const PortfolioManager = () => {
     //     { month: "September", value: 214,  },
     // ]
 
+    const loanData = [
+        {title: "Loan referrals", amount: '0',textColor: '#66440A',bgColor: 'bg-green-500',},
+        {title: "Loan offers", amount: '0',textColor: '#142854',bgColor: 'bg-green-500',},
+        {title: "Disbursed loan", amount: '0',textColor: '#034319',bgColor: 'bg-green-500',},
+    ]
+
     const clickCard1 = () => {
 
     }
@@ -71,7 +77,7 @@ const PortfolioManager = () => {
                <div className={` w-[100%] md:w-[100%] bg--300 md:h-auto m ${styles.tab} md:gap-5 md:w- flex md:flex `}>
                    <PortfolioManagerOverviewCard id={'vehicleCard'} cardData={cardData1} clickView={clickCard1}/>
                    <PortfolioManagerOverviewCard id={'vehicleCard2'} cardData={cardData2} clickView={clickCard2}/>
-                   <PortfolioManagerOverviewCard id={'vehicleCard3'} cardData={cardData3} clickView={clickCard3}/>
+                   <PortfolioManagerOverviewCard loanData={loanData}  isLoanData={true} id={'vehicleCard3'} cardData={cardData3} clickView={clickCard3}/>
                </div>
                <div className={`  w-full md:w-full pb-4  `}>
                    <Barcharts/>
