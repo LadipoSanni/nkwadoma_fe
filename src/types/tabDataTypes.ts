@@ -41,7 +41,7 @@ export const kycSteps = [
 
 export const marketplaceInvestment = [
     { id: 'transfer', title: 'Transfer funds' },
-    { id: 'confirmTransfer', title: 'Confirm transfer' },
+    // { id: 'confirmTransfer', title: 'Confirm transfer' },
   ];
 
 export const financierTabData = [
