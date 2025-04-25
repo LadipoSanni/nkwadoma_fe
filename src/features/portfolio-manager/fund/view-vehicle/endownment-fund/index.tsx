@@ -41,7 +41,7 @@ interface investmentVehicleProps     {
     totalAmountInInvestmentVehicle: number,
     amountRaised?: string,
     amountDisbursed?: string,
-    amountAvailable?: string,
+    totalAvailableAmount?: number,
     totalIncomeGenerated?: string,
     netAssetValue?: string
 }
@@ -163,7 +163,7 @@ function EndownmentFund() {
                 title: 'Amount available',
                 sortable: true,
                 id: 'amountAvailable',
-                selector: (row: TableRowData) => <div className='ml-8'>{formatAmount(row.amountAvailable)}</div>
+                selector: (row: TableRowData) => <div className='ml-8'>{formatAmount(row.totalAvailableAmount)}</div>
             },
         ]
 

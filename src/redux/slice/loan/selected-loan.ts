@@ -10,6 +10,7 @@ interface SelectedLoanState {
     } | null;
     disbursedLoanAccountId: string;
     clickedLoanProductId: string;
+    fundProductAvailableAmount: number;
 }
 
 const initialState: SelectedLoanState = {
@@ -18,6 +19,7 @@ const initialState: SelectedLoanState = {
     clickedDisbursedLoanIdNumber: "",
     disbursedLoanAccountId:"",
     clickedLoanProductId:"",
+    fundProductAvailableAmount: 0,
 };
 
 export const selectedLoanSlice = createSlice({
@@ -38,10 +40,13 @@ export const selectedLoanSlice = createSlice({
         },
         setClickedLoanProductId: (state, action: PayloadAction<string>) => {
             state.clickedLoanProductId = action.payload;
-        }
+        },
+        setFundProductAvailableAmount: (state, action: PayloadAction<number>) => {
+            state.fundProductAvailableAmount = action.payload;
+        },
     },
 });
 
-export const { setCurrentTab, setClickedOrganization, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId } = selectedLoanSlice.actions;
+export const { setCurrentTab, setClickedOrganization, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId, setFundProductAvailableAmount } = selectedLoanSlice.actions;
 
 export default selectedLoanSlice.reducer;

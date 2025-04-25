@@ -23,6 +23,7 @@ interface InvestmentVehicle {
     status: string;
     startDate: string;
     totalAmountInInvestmentVehicle:number;
+    totalAvailableAmount: number;
 }
 interface InvestmentVehicleResponse {
     data: InvestmentVehicle[];
