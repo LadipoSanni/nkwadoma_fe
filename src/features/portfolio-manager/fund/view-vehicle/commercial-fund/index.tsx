@@ -38,7 +38,7 @@ interface investmentVehicleProps     {
     totalAmountInInvestmentVehicle: number,
     amountRaised?: string,
     amountDisbursed?: string,
-    totalAvailableAmount?: string,
+    totalAvailableAmount?: number,
     totalIncomeGenerated?: string,
     netAssetValue?: string
 }
