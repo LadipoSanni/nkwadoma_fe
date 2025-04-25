@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -33,20 +33,25 @@ const PoliticalExposure: React.FC = () => {
         country: '',
     });
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
+    const [selectedCountry, setSelectedCountry] = useState<string | undefined>(formData.country);
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (selectedCountry) {
+            setFormData(prev => ({
+                ...prev,
+                country: selectedCountry
+            }));
+        }
+    }, [selectedCountry]);
 
     const handlePEPChange = (value: boolean) => {
         setFormData(prev => ({
             ...prev,
-            isPoliticallyExposedPerson: value,
-            ...(value === false && {
-                politicalPosition: undefined,
-                relationship: undefined,
-                country: undefined
-            })
+            isPoliticallyExposedPerson: value
         }));
+        
         setErrorMessage(null);
     };
 
@@ -58,7 +63,6 @@ const PoliticalExposure: React.FC = () => {
     const handleFinish = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validation
         if (!formData.agreedToTerms) {
             setErrorMessage("You must agree to the terms to proceed.");
             return;
@@ -67,18 +71,33 @@ const PoliticalExposure: React.FC = () => {
             setErrorMessage("Please answer the Politically Exposed Person question.");
             return;
         }
+        
         if (formData.isPoliticallyExposedPerson && (!formData.politicalPosition || !formData.country)) {
             setErrorMessage("Please fill in all required PEP fields.");
             return;
         }
 
-        dispatch(updateDeclaration(formData));
+        const dataToSubmit = {
+            ...formData,
+            ...(formData.isPoliticallyExposedPerson === false && {
+                politicalPosition: undefined,
+                relationship: undefined,
+                country: undefined
+            })
+        };
+
+        dispatch(updateDeclaration(dataToSubmit));
         setShowSuccessDialog(true);
     };
 
     const handleSuccessDialogContinue = () => {
         setShowSuccessDialog(false);
         router.push('/Overview');
+    };
+
+    const handleCountryChange = (value: string) => {
+        setSelectedCountry(value);
+        setFormData(prev => ({ ...prev, country: value }));
     };
 
     const pepOptions = [
@@ -89,14 +108,17 @@ const PoliticalExposure: React.FC = () => {
     const isFormValid =
         formData.agreedToTerms &&
         formData.isPoliticallyExposedPerson !== null &&
-        (!formData.isPoliticallyExposedPerson || (formData.politicalPosition && formData.country));
+        (!formData.isPoliticallyExposedPerson || (
+            formData.politicalPosition && 
+            formData.country
+        ));
 
     return (
-        <div id="declarationContainer" className={`${inter.className} xl:px-36 grid-cols-1 gap-y-6 grid gap-10`}>
-            <div id="declarationHeaderContainer" className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
+        <div id="declarationContainer" className={`${inter.className} w-full xl:px-48 grid-cols-1 gap-y-6 grid gap-10`}>
+            <div id="declarationHeaderContainer" className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem] md:mx-auto w-full`}>
                 <h1 id="declarationTitle" className="text-meedlBlack text-[24px] leading-[120%] font-medium">Political exposure</h1>
             </div>
-            <form id="declarationForm" onSubmit={handleFinish} className="space-y-8 md:w-[27.5rem] w-full">
+            <form id="declarationForm" onSubmit={handleFinish} className="w-full md:max-w-[27.5rem] md:mx-auto grid gap-5">
                 <div id="pepQuestionContainer" className="space-y-4">
                     <Label id="pepQuestionLabel" className="block text-[14px] leading-[150%] font-medium text-black500">
                         Are you or any of your close associates / relatives a Politically Exposed Person?
@@ -174,7 +196,7 @@ const PoliticalExposure: React.FC = () => {
                                 </Label>
                                 <CountrySelectPopover
                                     selectedCountry={selectedCountry}
-                                    onCountryChange={(value) => setSelectedCountry(value)}
+                                    onCountryChange={handleCountryChange}
                                 />
                             </div>
                         </div>
@@ -202,7 +224,7 @@ const PoliticalExposure: React.FC = () => {
                     <p className="text-red-500 text-sm">{errorMessage}</p>
                 )}
 
-                <div id="buttonContainer" className="flex flex-col md:flex-row justify-between items-center pt-6 gap-4">
+                <div id="buttonContainer" className="flex flex-col md:flex-row justify-between items-center pt-5 gap-4">
                     <Button
                         id="backButton"
                         onClick={() => router.back()}
@@ -233,7 +255,7 @@ const PoliticalExposure: React.FC = () => {
                 onClose={() => setShowSuccessDialog(false)}
                 onContinue={handleSuccessDialogContinue}
                 title="Verification successful"
-                message="Congratulations! You’ve successfully completed the KYC verification process"
+                message="Congratulations! You've successfully completed the KYC verification process"
                 buttonText="Go to overview"
             />
         </div>

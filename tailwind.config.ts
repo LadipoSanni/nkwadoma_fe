@@ -117,6 +117,7 @@ const config: Config = {
 				neutral900: '#606060',
 				neutral950: '#667085',
 				navBorder: '#E0E3E8',
+				black100: '#BABABA',
 				black300: '#6A6B6A',
 				black400: '#4D4E4D',
 				black500: '#212221',
