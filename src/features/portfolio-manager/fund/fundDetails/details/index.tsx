@@ -147,7 +147,7 @@ const Details = () => {
         },
         {name: 'Amount raised', value: formatAmount(data?.data?.amountRaised?.toString() || '0')},
         {name: 'Amount disbursed', value: formatAmount(data?.data?.amountDisbursed?.toString() || '0')},
-        {name: 'Amount available', value: formatAmount(data?.data?.amountAvailable?.toString() || '0')},
+        {name: 'Amount available', value: formatAmount(data?.data?.totalAvailableAmount?.toString() || '0')},
         {name: 'Total income generated', value: formatAmount(data?.data?.totalIncomeGenerated?.toString() || '0')},
         {name: 'Net asset value', value: formatAmount(data?.data?.netAssetValue?.toString() || '0')},
     ];
