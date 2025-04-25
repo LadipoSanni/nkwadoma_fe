@@ -144,6 +144,8 @@ export const {setCurrentVehicleId,
                 clearSaveInvestmentStatus,
                 setEditStatus,
                 clearEditStatus,
-                resetAll
+                resetAll,
+                setStatusDefaultValue,
+                resetStatusDefaultValue
             } = vehicleSlice.actions;
 export default vehicleSlice.reducer;
