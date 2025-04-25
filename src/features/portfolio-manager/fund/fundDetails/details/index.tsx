@@ -76,6 +76,7 @@ const Details = () => {
     const docFilename = getFilenameFromUrl(docUrl);
     const isCloudinaryUrl = docUrl?.includes('cloudinary.com');
     const fileExtension = docFilename?.split('.').pop()?.toLowerCase();
+    console.log('dada: ', data?.data)
 
     const handleChangeVisibility = () => {
          store.dispatch(setDraftId(data?.data?.id))

@@ -39,6 +39,7 @@ export const uploadDocumentToCloudinary = async (file: File,setLoader: (error:bo
       .finally(() => setLoader(false));
 
 
+  console.log('res:: ', res)
   const result = res?.url ?? '';
   return result;
 };
