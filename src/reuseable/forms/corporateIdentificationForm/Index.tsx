@@ -91,19 +91,18 @@ const CorporateIdentificationForm: React.FC<CorporateIdentificationFormProps> = 
                 <Label htmlFor="rcNumber">RC Number</Label>
                 <Input
                     type="text"
-                    placeholder="Enter RC Number"
+                    placeholder="Enter RC Number (e.g., RC12345678)"
                     {...register("rcNumber", {
                         required: "RC Number is required",
                         pattern: {
-                            value: /^\d{8}$/,
-                            message: "RC Number must be exactly 8 digits"
+                            value: /^RC\d{8}$/i,
+                            message: "RC Number must be in format RC12345678"
                         },
                         validate: {
-                            validDigits: (value) => /^\d+$/.test(value) || "RC Number must contain only numbers",
-                            exactLength: (value) => value.length === 8 || "RC Number must be 8 digits"
+                            validFormat: (value) => /^RC\d{8}$/i.test(value) || "RC Number must start with RC followed by 8 digits"
                         }
                     })}
-                    maxLength={8}
+                    maxLength={10}
                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
                 />
                 {errors.rcNumber && <p className="text-red-500 text-sm">{errors.rcNumber.message}</p>}

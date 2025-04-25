@@ -11,8 +11,11 @@ import { useRouter } from 'next/navigation';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import CountrySelectPopover from "@/reuseable/select/countrySelectPopover/Index";
 import SuccessDialog from "@/reuseable/modals/SuccessDialog/Index";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { updateDeclaration } from "@/redux/slice/kyc/kycFormSlice";
+import { useCompleteKycMutation } from "@/service/financier/api";
+import { mapKycDataToApiRequest } from "@/utils/kycDataMapper";
+import { useToast } from "@/hooks/use-toast";
 
 interface PoliticalExposureData {
     isPoliticallyExposedPerson: boolean | null;
@@ -25,6 +28,9 @@ interface PoliticalExposureData {
 const PoliticalExposure: React.FC = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
+    const state = useAppSelector(state => state);
+    const [completeKyc, { isLoading: isSubmitting }] = useCompleteKycMutation();
+    const { toast } = useToast();
     const [formData, setFormData] = useState<PoliticalExposureData>({
         isPoliticallyExposedPerson: true,
         agreedToTerms: false,
@@ -51,7 +57,7 @@ const PoliticalExposure: React.FC = () => {
             ...prev,
             isPoliticallyExposedPerson: value
         }));
-        
+
         setErrorMessage(null);
     };
 
@@ -60,7 +66,7 @@ const PoliticalExposure: React.FC = () => {
         setErrorMessage(null);
     };
 
-    const handleFinish = (e: React.FormEvent) => {
+    const handleFinish = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!formData.agreedToTerms) {
@@ -71,7 +77,7 @@ const PoliticalExposure: React.FC = () => {
             setErrorMessage("Please answer the Politically Exposed Person question.");
             return;
         }
-        
+
         if (formData.isPoliticallyExposedPerson && (!formData.politicalPosition || !formData.country)) {
             setErrorMessage("Please fill in all required PEP fields.");
             return;
@@ -87,7 +93,20 @@ const PoliticalExposure: React.FC = () => {
         };
 
         dispatch(updateDeclaration(dataToSubmit));
-        setShowSuccessDialog(true);
+
+        try {
+            const kycData = mapKycDataToApiRequest(state);
+            const response = await completeKyc(kycData).unwrap();
+
+            if (response && response.success) {
+                setShowSuccessDialog(true);
+            } else {
+                setErrorMessage(response?.message || "Failed to complete KYC. Please try again.");
+            }
+        } catch (error: any) {
+            console.error("KYC completion error:", error);
+            setErrorMessage(error?.data?.message || "An error occurred. Please try again.");
+        }
     };
 
     const handleSuccessDialogContinue = () => {
@@ -239,13 +258,22 @@ const PoliticalExposure: React.FC = () => {
                         type="submit"
                         className={cn(
                             "w-full md:w-[81px] h-[2.8125rem] text-meedlWhite order-1 md:order-2",
-                            isFormValid
+                            isFormValid && !isSubmitting
                                 ? "bg-meedlBlue hover:bg-meedlBlue"
                                 : "bg-blue550 hover:bg-blue550 cursor-not-allowed"
                         )}
-                        disabled={!isFormValid}
+                        disabled={!isFormValid || isSubmitting}
                     >
-                        Finish
+                        {isSubmitting ? (
+                            <div className="flex items-center justify-center">
+                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </div>
+                        ) : (
+                            "Finish"
+                        )}
                     </Button>
                 </div>
             </form>

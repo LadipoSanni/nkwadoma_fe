@@ -137,7 +137,7 @@ const BeneficialOwnerStep = () => {
                                         id="rcNumber"
                                         value={rcNumber}
                                         onChange={(e) => setRcNumber(e.target.value)}
-                                        placeholder="Enter number"
+                                        placeholder="Enter RC Number (e.g., RC12345678)"
                                         className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                     />
                                 </div>
@@ -180,7 +180,7 @@ const BeneficialOwnerStep = () => {
                                             id={`rcNumber-${section.id}`}
                                             value={section.rcNumber}
                                             onChange={(e) => handleInputChange(section.id, "rcNumber", e.target.value)}
-                                            placeholder="Enter number"
+                                            placeholder="Enter RC Number (e.g., RC12345678)"
                                             className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                         />
                                     </div>

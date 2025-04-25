@@ -1,29 +1,41 @@
 import { RootState } from "@/redux/store";
 
+const mapCountryCodeToEnum = (countryCode?: string): string | undefined => {
+  if (!countryCode) return undefined;
+
+  const countryMap: Record<string, string> = {
+    "US": "UNITED_STATES",
+    "GB": "UNITED_KINGDOM",
+    "NG": "NIGERIA",
+  };
+
+  return countryMap[countryCode] || countryCode;
+};
+
 export const mapKycDataToApiRequest = (state: RootState) => {
   const { identification, sourceOfFunds, beneficialOwner, declaration } = state.kycForm;
-  
+
   const beneficialOwners = [];
-  
+
   if (beneficialOwner.selectedForm === 'entity') {
     if (beneficialOwner.entityData.entityName) {
       beneficialOwners.push({
         id: String(Date.now()),
-        beneficialOwnerType: "ENTITY",
+        beneficialOwnerType: "COOPERATE",
         entityName: beneficialOwner.entityData.entityName,
         beneficialRcNumber: beneficialOwner.entityData.rcNumber,
-        countryOfIncorporation: beneficialOwner.entityData.country,
+        countryOfIncorporation: mapCountryCodeToEnum(beneficialOwner.entityData.country),
       });
     }
-    
+
     beneficialOwner.entityData.sections.forEach(section => {
       if (section.entityName) {
         beneficialOwners.push({
           id: String(section.id),
-          beneficialOwnerType: "ENTITY",
+          beneficialOwnerType: "COOPERATE",
           entityName: section.entityName,
           beneficialRcNumber: section.rcNumber,
-          countryOfIncorporation: section.country,
+          countryOfIncorporation: mapCountryCodeToEnum(section.country),
         });
       }
     });
@@ -38,13 +50,26 @@ export const mapKycDataToApiRequest = (state: RootState) => {
           beneficialOwnerRelationship: section.relationship.toUpperCase(),
           beneficialOwnerDateOfBirth: section.dob,
           percentageOwnershipOrShare: parseFloat(section.ownership) || 0,
-          [section.proofType]: section.proofFile?.name || "uploaded-file"
+          ...(section.proofType === 'votersCard' && { votersCard: section.proofFile?.name || "uploaded-file" }),
+          ...(section.proofType === 'nationalIdCard' && { nationalIdCard: section.proofFile?.name || "uploaded-file" }),
+          ...(section.proofType === 'driverLicense' && { driverLicense: section.proofFile?.name || "uploaded-file" }),
         });
       }
     });
   }
-  
+
+  const formattedSourceOfFunds = sourceOfFunds.map(source => {
+    if (source.startsWith("Source (specify others):")) {
+      return source.replace("Source (specify others):", "").trim();
+    }
+    return source;
+  });
+
   return {
+    bankName: "Default Bank Account",
+    bankNumber: "0101234504",
+    phoneNumber: "1020202020",
+
     ...(identification.type === 'INDIVIDUAL' && {
       nin: identification.individual?.nin || "",
       bvn: identification.individual?.bvn || "",
@@ -52,38 +77,24 @@ export const mapKycDataToApiRequest = (state: RootState) => {
     ...(identification.type === 'COOPERATE' && {
       taxId: identification.corporate?.tin || "",
       rcNumber: identification.corporate?.rcNumber || "",
-      countryOfIncorporation: identification.corporate?.countryOfIncorporation || "",
+      taxInformationNumber: identification.corporate?.tin || "",
     }),
-    
-    personalOrJointSavings: sourceOfFunds.includes('Personal or joint savings') ? "Yes" : "",
-    employmentIncome: sourceOfFunds.includes('Employment income') ? "Yes" : "",
-    salesOfAssets: sourceOfFunds.includes('Sales of assets') ? "Yes" : "",
-    donation: sourceOfFunds.includes('Donation') ? "Yes" : "",
-    inheritanceOrGift: sourceOfFunds.includes('Inheritance or gift') ? "Yes" : "",
-    compensationOfLegalSettlements: sourceOfFunds.includes('Compensation of legal settlements') ? "Yes" : "",
-    profitFromLegitimateActivities: sourceOfFunds.includes('Profit from legitimate activities') ? 1 : 0,
-    
-    businessRevenue: sourceOfFunds.includes('Business revenue') ? "Yes" : "",
-    investmentIncome: sourceOfFunds.includes('Investment income') ? "Yes" : "",
-    salesOfCorporateAssets: sourceOfFunds.includes('Sales of corporate assets') ? "Yes" : "",
-    othersSourceOfFunds: sourceOfFunds.includes('Others') ? "Yes" : "",
-    
+
+    sourceOfFunds: formattedSourceOfFunds,
+
     declarationAndAgreement: declaration.agreedToTerms,
     politicallyExposed: declaration.isPoliticallyExposedPerson === true,
-    
-    ...(declaration.isPoliticallyExposedPerson && {
-      politicalPosition: declaration.politicalPosition || "",
-      relationship: declaration.relationship || "",
-      country: declaration.country || ""
-    }),
-    
+
     beneficialOwners: beneficialOwners.length > 0 ? beneficialOwners : [{
       id: "default",
       beneficialOwnerType: "INDIVIDUAL",
       beneficialOwnerFirstName: "",
       beneficialOwnerLastName: "",
       beneficialOwnerRelationship: "FATHER",
+      beneficialOwnerDateOfBirth: new Date().toISOString(),
       percentageOwnershipOrShare: 0
-    }]
+    }],
+
+    address: "",
   };
 };

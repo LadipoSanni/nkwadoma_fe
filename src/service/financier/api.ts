@@ -43,4 +43,4 @@ export const financierOnboardingAndDashboardApi = createApi({
     })
 })
 
-export const {useViewFinancierDashboardQuery,useSearchMyInvestmentQuery,useFilterMyInvestmentQuery, useViewMyInvestmentQuery ,useCompleteKycMutation} = financierOnboardingAndDashboardApi
+export const {useViewFinancierDashboardQuery,useSearchMyInvestmentQuery,useFilterMyInvestmentQuery, useViewMyInvestmentQuery, useCompleteKycMutation} = financierOnboardingAndDashboardApi
