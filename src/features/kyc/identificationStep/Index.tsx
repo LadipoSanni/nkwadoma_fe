@@ -107,8 +107,8 @@ const IdentificationStep = () => {
     };
 
     return (
-        <main className={`${inter.className} xl:px-36 grid-cols-1 gap-y-6 grid gap-10`}>
-            <div className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
+        <main className={`${inter.className} w-full xl:px-48 grid-cols-1 gap-y-6 grid gap-10`}>
+            <div className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem] md:mx-auto w-full`}>
                 <h1 className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>
                     {financierType === 'INDIVIDUAL' ? 'Identification' : 'Identification'}
                 </h1>

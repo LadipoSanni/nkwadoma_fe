@@ -28,7 +28,7 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                                                                                        isLoading
                                                                                    }) => {
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className={'grid gap-5 md:w-[27.5rem] w-full'}>
+        <form onSubmit={handleSubmit(onSubmit)} className={'w-full md:max-w-[27.5rem] md:mx-auto grid gap-5'}>
             <div className={'grid gap-2'}>
                 <Label htmlFor="nin">National identification number</Label>
                 <Input
@@ -41,7 +41,7 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                             message: "NIN must be 11 digits"
                         }
                     })}
-                    className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem]'}
+                    className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
                 />
                 {errors.nin && <p className="text-red-500 text-sm">{errors.nin.message}</p>}
             </div>
@@ -58,7 +58,7 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                             message: "BVN must be 11 digits"
                         }
                     })}
-                    className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem]'}
+                    className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
                 />
                 {errors.bvn && <p className="text-red-500 text-sm">{errors.bvn.message}</p>}
             </div>

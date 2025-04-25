@@ -10,19 +10,29 @@ import { markStepCompleted } from '@/redux/slice/multiselect/kyc-multiselect';
 import { updateSourceOfFunds } from '@/redux/slice/kyc/kycFormSlice';
 import Isloading from '@/reuseable/display/Isloading';
 import CustomMultiselect from "@/reuseable/mult-select/customMultiselect/Index";
+import { Input } from "@/components/ui/input";
+import {MdAdd, MdDeleteOutline} from "react-icons/md";
 
 interface FormValues {
     sourceOfFund: string[];
+    otherSources: string[];
 }
 
 const SourceOfFundsStep = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = useState(false);
+    const [currentOtherSource, setCurrentOtherSource] = useState("");
 
     const completedStep = useAppSelector(state => state.kycMultistep.completedSteps);
     const savedSourceOfFunds = useAppSelector(state => state.kycForm.sourceOfFunds);
     const identificationType = useAppSelector(state => state.kycForm.identification.type);
+
+    // Extract any "Source (specify others):" items from savedSourceOfFunds
+    const regularSources = savedSourceOfFunds?.filter(v => !v.startsWith("Source (specify others):")) || [];
+    const initialOtherSources = savedSourceOfFunds
+        ?.filter(v => v.startsWith("Source (specify others):"))
+        .map(v => v.replace("Source (specify others):", "").trim()) || [];
 
     useEffect(() => {
         if (!completedStep.includes("identification")) {
@@ -38,6 +48,7 @@ const SourceOfFundsStep = () => {
         { value: 'Inheritance or gift', label: 'Inheritance or gift' },
         { value: 'Compensation of legal settlements', label: 'Compensation of legal settlements' },
         { value: 'Profit from legitimate activities', label: 'Profit from legitimate activities' },
+        { value: 'Others', label: 'Others' },
     ];
 
     const corporateSourceOptions = [
@@ -48,21 +59,54 @@ const SourceOfFundsStep = () => {
     ];
 
     const sourceOptions = identificationType === 'COOPERATE'
-        ? corporateSourceOptions 
+        ? corporateSourceOptions
         : individualSourceOptions;
 
     const handleBackClick = () => {
         router.back();
     };
 
+    const addOtherSource = (values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
+        if (currentOtherSource.trim()) {
+            const updatedOtherSources = [...values.otherSources, currentOtherSource.trim()];
+            setFieldValue("otherSources", updatedOtherSources);
+            setCurrentOtherSource("");
+        }
+    };
+
+    const updateOtherSource = (index: number, value: string, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
+        const updatedOtherSources = [...values.otherSources];
+        updatedOtherSources[index] = value;
+        setFieldValue("otherSources", updatedOtherSources);
+    };
+
+    const removeOtherSource = (index: number, values: FormValues, setFieldValue: (field: string, value: string[]) => void) => {
+        const updatedOtherSources = values.otherSources.filter((_, i) => i !== index);
+        setFieldValue("otherSources", updatedOtherSources);
+    };
+
+    const clearOtherSource = () => {
+        setCurrentOtherSource("");
+    };
+
     const handleSubmit = async (values: FormValues) => {
-        if (values.sourceOfFund.length === 0) {
+        const { sourceOfFund, otherSources } = values;
+
+        if (sourceOfFund.length === 0 && otherSources.length === 0) {
             return;
         }
 
         try {
             setIsLoading(true);
-            dispatch(updateSourceOfFunds(values.sourceOfFund)); // Save to Redux
+            const formattedOtherSources = otherSources.map(source => `Source (specify others): ${source}`);
+            
+            if (currentOtherSource.trim()) {
+                formattedOtherSources.push(`Source (specify others): ${currentOtherSource.trim()}`);
+            }
+            
+            const allSources = [...sourceOfFund, ...formattedOtherSources];
+
+            dispatch(updateSourceOfFunds(allSources)); // Save to Redux
             await store.dispatch(markStepCompleted("sourceOfFunds"));
             router.push('/kyc/beneficial-owner');
         } finally {
@@ -72,26 +116,99 @@ const SourceOfFundsStep = () => {
 
     return (
         <Formik
-            initialValues={{ sourceOfFund: savedSourceOfFunds || [] }} // Load saved values
+            initialValues={{
+                sourceOfFund: regularSources,
+                otherSources: initialOtherSources
+            }}
             onSubmit={handleSubmit}
         >
             {({ values, setFieldValue }) => (
                 <Form>
-                    <main className={`${inter.className} xl:px-36 grid-cols-1 gap-y-6 grid gap-10`}>
-                        <div className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
+                    <main className={`${inter.className} w-full xl:px-48 grid-cols-1 gap-y-6 grid`}>
+                        <div className={`${cabinetGroteskMediumBold.className} max-w-[27.5rem] md:mx-auto w-full`}>
                             <h1 className={`text-meedlBlack text-[24px] leading-[120%] font-medium`}>Source of funds</h1>
                         </div>
 
-                        <div className={'md:w-[27.5rem] w-full grid gap-10'}>
+                        <div className={'w-full md:max-w-[27.5rem] md:mx-auto grid gap-5'}>
                             <CustomMultiselect
                                 multiselectList={sourceOptions}
-                                onValueChange={(values) => setFieldValue("sourceOfFund", values)}
-                                placeholder="Select sources"
+                                onValueChange={(newValues) => {
+                                    if (values.sourceOfFund.includes('Others') && !newValues.includes('Others')) {
+                                        setFieldValue("otherSources", []);
+                                        setCurrentOtherSource("");
+                                    }
+                                    setFieldValue("sourceOfFund", newValues);
+                                }}
+                                placeholder="Select source"
                                 className=""
-                                selectedValues={savedSourceOfFunds}
+                                selectedValues={values.sourceOfFund}
                             />
 
-                            <div className={'md:flex md:justify-between grid gap-5'}>
+                            {values.sourceOfFund.includes('Others') && (
+                                <div className="max-h-[300px] overflow-y-auto p">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-sm font-medium">Source (specify others)</h3>
+                                    </div>
+                                    
+                                    {values.otherSources.map((source, index) => (
+                                        <div key={index} className="flex gap-3 items-center justify-between mb-3">
+                                            <Input
+                                                type="text"
+                                                value={source}
+                                                onChange={(e) => updateOtherSource(index, e.target.value, values, setFieldValue)}
+                                                className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] w-[25.5rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => removeOtherSource(index, values, setFieldValue)}
+                                                className="text-[#939CB0]"
+                                            >
+                                                <MdDeleteOutline className="h-5 w-5" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                    
+                                    <div className="flex w-full gap-3 items-center justify-between">
+                                        <Input
+                                            id="otherSource"
+                                            type="text"
+                                            placeholder="Enter source"
+                                            value={currentOtherSource}
+                                            onChange={(e) => setCurrentOtherSource(e.target.value)}
+                                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] w-[25.5rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' && currentOtherSource.trim()) {
+                                                    e.preventDefault();
+                                                    addOtherSource(values, setFieldValue);
+                                                }
+                                            }}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={clearOtherSource}
+                                            className="text-[#939CB0]"
+                                        >
+                                            <MdDeleteOutline className="h-5 w-5" />
+                                        </button>
+                                    </div>
+                                    
+                                    <div className="flex items-center gap-1 mt-4">
+                                        <div className="flex items-center gap-1">
+                                            <Button
+                                                onClick={() => addOtherSource(values, setFieldValue)}
+                                                type="button"
+                                                className="flex items-center gap-2 bg-transparent text-meedlBlue shadow-none px-0 py-2 rounded-md"
+                                                disabled={!currentOtherSource.trim()}
+                                            >
+                                                <MdAdd className="text-meedlBlue h-5 w-5" />
+                                                <span className="font-semibold text-[14px] leading-[150%]">Add</span>
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className={'md:flex  md:justify-between mt-5 grid gap-5'}>
                                 <Button
                                     onClick={handleBackClick}
                                     type={'button'}
@@ -101,8 +218,8 @@ const SourceOfFundsStep = () => {
                                 </Button>
                                 <Button
                                     type={'submit'}
-                                    disabled={values.sourceOfFund.length === 0 || isLoading}
-                                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${values.sourceOfFund.length === 0 ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
+                                    disabled={(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim()) || isLoading}
+                                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full px-4 py-2 ${(values.sourceOfFund.length === 0 && values.otherSources.length === 0 && !currentOtherSource.trim()) ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md flex items-center justify-center gap-2 order-1 md:order-2`}
                                 >
                                     {isLoading ? (
                                         <Isloading color="white" height={24} width={24} />

@@ -163,12 +163,12 @@ const IndividualOwnershipForm: React.FC = () => {
     };
 
     return (
-        <div className="w-full h-[calc(100vh-300px)] overflow-y-auto">
+        <div className="w-full h-[calc(100vh-300px)] overflow-y-auto pr-3">
             <form onSubmit={handleSubmit} className="space-y-6">
                 {sections.map((section) => (
                     <section
                         key={section.id}
-                        className="grid gap-5 p-5 rounded-md border-[0.5px] border-lightBlue250 relative"
+                        className="grid gap-5 py-5 pl-5 pr-5   rounded-md border-[0.5px] border-lightBlue250 relative"
                     >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
@@ -310,7 +310,7 @@ const IndividualOwnershipForm: React.FC = () => {
                         )}
                     </section>
                 ))}
-                <div className="sticky bottom-0 bg-white p-4">
+                <div className="sticky bottom-0 bg-white py-4 pr-4">
                     <div className="flex items-center gap-1 mb-4">
                         <Button
                             onClick={handleAddSection}
