@@ -18,16 +18,16 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
 
     return (
         <div id={id}
-             className={`${inter.className} flex overflow-x-auto md:grid w-full md:w-full  `}>
-            <div className="grid px-3 pt-3 pb-5  rounded-md border border-neutral-200 md:grid md:gri gap-6">
-              <div className={`bg-grey105  grid gap- px-4 py-4`}>
+             className={`${inter.className}  w-[20rem] d md:w-1/3  `}>
+            <div className="grid px-3 pt-3 pb-5   rounded-md border border-neutral-200 md:grid md:gri gap-6">
+              <div className={`bg-grey105 w-  grid gap- px-4 py-4`}>
                   {cardData?.map((card, index) => (
                       <main key={index}
-                            className="flex-non bg-purple-100 e w md:w-full he grid gap-5 ">
+                            className="flex-non  w-fit he grid gap-5 ">
                           <div id={`balanceCardBlock${index}`}
-                               className=" grid gap-5 ">
+                               className=" w-fit grid gap-5 ">
                               <p id={`cardTitle${index}`}
-                                 className="text-black300 flex gap-2  text-[14px] font-normal leading-[150%]">
+                                 className="text-black300 flex gap-2 w-fit bg-red-100 text-[14px] break-keep ">
                                   {card.title}
                                   {card?.showIcon &&
                                       <MdOutlineHelpOutline className={` mt-auto mb-auto`} />
@@ -39,7 +39,7 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
                       </main>
                   ))}
                   {isLoanData &&
-                      <main className={`bg-red-100 w-full grid gap-4 px-4 py-4`}>
+                      <main className={`b w-full grid gap-4 px-4 py-4`}>
                           {loanData?.map((loan, index) => (
                               <div key={index} id={`cardTitle`}
                                  className={`text-black300 w-full border h-fit py-3  ${Number(loan.amount) === 0 ? '' : ''}  border-[#ECECEC] rounded-md flex justify-between gap-2  text-[14px] font-normal leading-[150%]`}>
