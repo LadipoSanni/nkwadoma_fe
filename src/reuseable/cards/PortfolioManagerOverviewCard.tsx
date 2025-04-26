@@ -18,7 +18,7 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
 
     return (
         <div id={id}
-             className={`${inter.className}  w-[20rem] d md:w-1/3  `}>
+             className={`${inter.className}  w-fit d md:w-1/3  `}>
             <div className="grid px-3 pt-3 pb-5   rounded-md border border-neutral-200 md:grid md:gri gap-6">
               <div className={`bg-grey105 w-  grid gap- px-4 py-4`}>
                   {cardData?.map((card, index) => (
@@ -27,7 +27,7 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
                           <div id={`balanceCardBlock${index}`}
                                className=" w-fit grid gap-5 ">
                               <p id={`cardTitle${index}`}
-                                 className="text-black300 flex gap-2 w-fit bg-red-100 text-[14px] break-keep ">
+                                 className="text-black300 text-nowrap whitespace-nowrap  flex gap-2 w-fit bg-red-100 text-[14px] break-keep ">
                                   {card.title}
                                   {card?.showIcon &&
                                       <MdOutlineHelpOutline className={` mt-auto mb-auto`} />
