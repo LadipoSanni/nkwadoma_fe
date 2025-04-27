@@ -193,7 +193,7 @@ const MarketPlaceView = () => {
                 />
             </div>
 
-            {isLoading && pageNumber === 0  || isSearchLoading || isSearchFetching || filteringIsLoading || filteringIsFetching ? (
+            {isLoading && pageNumber === 0  || isSearchLoading || isSearchFetching || filteringIsLoading || filteringIsFetching || isFetching && pageNumber > 0 ? (
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
@@ -266,11 +266,11 @@ const MarketPlaceView = () => {
 
                         return <InvestmentCard key={vehicle.id} {...cardProps} />;
                     })}
-                    {isFetching && pageNumber > 0 && (
-                        <div className="col-span-full text-center py-4">
-                            Loading more...
-                        </div>
-                    )}
+                    {/*{isFetching && pageNumber > 0 && (*/}
+                    {/*    <div className="col-span-full text-center py-4">*/}
+                    {/*        Loading more...*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                 </div>
             )}
         </main>
