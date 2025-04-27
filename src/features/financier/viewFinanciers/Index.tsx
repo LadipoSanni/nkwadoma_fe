@@ -69,7 +69,7 @@ const ViewFinanciers = () => {
 
 
     const {data, isLoading, refetch} = useGetAllActiveAndInvitedFinanciersQuery(param)
-    const {data:searchData} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10},{skip: !searchTerm})
+    const {data:searchData, isLoading: searchIsLoading} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10},{skip: !searchTerm})
 
     useEffect(()=>{
         if(searchTerm && searchData && searchData?.data){
@@ -213,7 +213,7 @@ const ViewFinanciers = () => {
                             }}
                         >
                             {searchTerm && financiers.length === 0 ? (
-                                <div>
+                                <div className={`flex justify-center items-center text-center md:h-[32vh] h-[40%] w-full mt-32`}>
                                     <SearchEmptyState icon={MdSearch} name="Financier" />
                                 </div>
                             ) : (
@@ -232,7 +232,7 @@ const ViewFinanciers = () => {
                                     pageNumber={pageNumber}
                                     setPageNumber={setPageNumber}
                                     totalPages={totalPage}
-                                    isLoading={isLoading}
+                                    isLoading={isLoading || searchIsLoading}
                                 />
                             )}
                         </div>
@@ -254,7 +254,7 @@ const ViewFinanciers = () => {
                             pageNumber={pageNumber}
                             setPageNumber={setPageNumber}
                             totalPages={totalPage}
-                            isLoading={isLoading}
+                            isLoading={isLoading || searchIsLoading}
                         />
 
                     </TabsContent>
