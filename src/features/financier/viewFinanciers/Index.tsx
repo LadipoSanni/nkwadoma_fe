@@ -228,6 +228,12 @@ const ViewFinanciers = () => {
                     </TabsContent>
 
                     <TabsContent value={"invited"} className={`pt-3`}>
+                        <div>
+                        {searchTerm && financiers.length === 0 ? (
+                                <div>
+                                    <SearchEmptyState icon={MdSearch} name="Financier" />
+                                </div>
+                            ) : (
                         <Table
                             tableData={financiers}
                             tableHeader={financierHeader}
@@ -245,7 +251,8 @@ const ViewFinanciers = () => {
                             totalPages={totalPage}
                             isLoading={isLoading}
                         />
-
+                        )}
+                  </div>
                     </TabsContent>
 
                 </Tabs>
