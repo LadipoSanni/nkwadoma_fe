@@ -30,7 +30,7 @@ import kycMultistepReducer from './slice/multiselect/kyc-multiselect'
 
 import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
 import {marketplaceApi} from "@/service/financier/marketplace";
-
+import {portfolioOverviewApi} from '@/service/admin/overview'
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
     selectedLoan: selectedLoanReducer,
@@ -61,6 +61,7 @@ const appReducer = combineReducers({
     [financierApi.reducerPath]: financierApi.reducer,
     [financierOnboardingAndDashboardApi.reducerPath]: financierOnboardingAndDashboardApi.reducer,
     [marketplaceApi.reducerPath]: marketplaceApi.reducer,
+    [portfolioOverviewApi.reducerPath]: portfolioOverviewApi.reducer,
 });
 
 export default appReducer;

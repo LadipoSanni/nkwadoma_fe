@@ -1,34 +1,31 @@
 import React from 'react';
 import styles from "../index.module.css"
 import PortfolioManagerOverviewCard from "@/reuseable/cards/PortfolioManagerOverviewCard";
-// import MeedlBarChart from "@/reuseable/bar-chart";
 import Barcharts from "@/features/Overview/PortfolioMnanager/Barcharts";
 import PerformanceCard from "@/reuseable/cards/perfomance-card/performanceCard";
 import {useRouter} from "next/navigation";
 import {store} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
+import {useViewMeedlPortfolioQuery} from "@/service/admin/overview";
 
 const PortfolioManager = () => {
-    // const initialChartData = [
-    //     { month: "Jan", value: 186, },
-    //     { month: "Feb", value: 305,  },
-    //     { month: "March", value: 237, },
-    // ]
-    // const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialChartData);
+
     const router = useRouter();
+    const {data} = useViewMeedlPortfolioQuery({})
+    // console.log('data: ', data)
     const cardData1 = [
-        {title: "Total investment vehicles", amount: '0',},
-        {title: "Commercial funds", amount: '2',showIcon: true},
-        {title: "Endowment", amount: '2',showIcon: true},
+        {title: "Total investment vehicles", amount: data?.data?.totalNumberOfInvestmentVehicle?.toString(),},
+        {title: "Commercial funds", amount: data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString(),showIcon: true},
+        {title: "Endowment", amount: data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle?.toString(),showIcon: true},
     ]
 
     const cardData2 = [
-        {title: "Total number of financier", amount: '0',},
-        {title: "Individual", amount: '2',showIcon: true},
-        {title: "Corporate", amount: '2',showIcon: true},
+        {title: "Total number of financier", amount: data?.data?.totalNumberOfFinancier?.toString(),},
+        {title: "Individual", amount: data?.data?.totalNumberOfIndividualFinancier?.toString(),showIcon: true},
+        {title: "Corporate", amount: data?.data?.totalNumberOfInstitutionalFinancier?.toString(),showIcon: true},
     ]
     const cardData3 = [
-        {title: "Total number of loans", amount: '0',},
+        {title: "Total number of loans", amount: data?.data?.totalNumberOfFinancier?.toString(),},
         // {title: "Commercial funds", amount: '2',},
         // {title: "Endowment", amount: '2',},
     ]

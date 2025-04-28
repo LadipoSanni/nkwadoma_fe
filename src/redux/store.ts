@@ -19,7 +19,7 @@ import { notificationApi } from '@/service/notification/notification_query';
 import { financierApi } from '@/service/admin/financier';
 import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
 import {marketplaceApi} from "@/service/financier/marketplace";
-
+import {portfolioOverviewApi} from '@/service/admin/overview'
 const persistConfig = {
     key: 'root',
     storage,
@@ -50,6 +50,7 @@ export const store = configureStore({
             financierApi.middleware,
             financierOnboardingAndDashboardApi.middleware,
             marketplaceApi.middleware,
+            portfolioOverviewApi.middleware,
         ]),
 });
 

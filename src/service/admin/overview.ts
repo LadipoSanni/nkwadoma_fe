@@ -1,7 +1,7 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
 import {customFetchBaseQuery} from "@/service/customFetchBaseQuery";
 
-export const PortfolioOverviewApi = createApi({
+export const portfolioOverviewApi = createApi({
     reducerPath: 'portfolioOverviewApi',
     baseQuery: customFetchBaseQuery,
     tagTypes: [''],
@@ -15,4 +15,4 @@ export const PortfolioOverviewApi = createApi({
     })
 
 })
-export const {useViewMeedlPortfolioQuery} = PortfolioOverviewApi;
+export const {useViewMeedlPortfolioQuery} = portfolioOverviewApi;
