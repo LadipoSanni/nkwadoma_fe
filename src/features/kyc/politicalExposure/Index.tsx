@@ -110,7 +110,6 @@ const PoliticalExposure: React.FC = () => {
                 setErrorMessage(response?.message || "Failed to complete KYC. Please try again.");
             }
         } catch (error: unknown) {
-            console.error("KYC completion error:", error);
             const apiError = error as ApiError;
             setErrorMessage(apiError?.data?.message || "An error occurred. Please try again.");
         }
