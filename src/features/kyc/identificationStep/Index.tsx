@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { inter, cabinetGroteskMediumBold } from '@/app/fonts';
 import { useRouter } from 'next/navigation';
@@ -23,7 +23,7 @@ interface CorporateFormInputs {
 
 const IdentificationStep = () => {
     const route = useRouter();
-    const [isLoading, setIsLoading] = React.useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const dispatch = useAppDispatch();
     const financierType = useAppSelector(state => state.financier.financierType);
     const savedData = useAppSelector(state => state.kycForm.identification);
@@ -48,14 +48,10 @@ const IdentificationStep = () => {
     });
 
     const handleFormSubmitSuccess = async (type: 'INDIVIDUAL' | 'COOPERATE', data: IndividualFormInputs | CorporateFormInputs) => {
-        try {
-            setIsLoading(true);
-            dispatch(updateIdentification({ type, data }));
-            await store.dispatch(markStepCompleted("identification"));
-            route.push('/kyc/sof');
-        } finally {
-            setIsLoading(false);
-        }
+        setErrorMessage(null);
+        dispatch(updateIdentification({ type, data }));
+        await store.dispatch(markStepCompleted("identification"));
+        route.push('/kyc/sof');
     };
 
     const onIndividualSubmit = (data: IndividualFormInputs) => {
@@ -76,7 +72,7 @@ const IdentificationStep = () => {
                         errors={individualErrors}
                         isValid={isIndividualValid}
                         onSubmit={onIndividualSubmit}
-                        isLoading={isLoading}
+                        isLoading={false}
                     />
                 );
             case 'COOPERATE':
@@ -87,7 +83,7 @@ const IdentificationStep = () => {
                         errors={corporateErrors}
                         isValid={isCorporateValid}
                         onSubmit={onCorporateSubmit}
-                        isLoading={isLoading}
+                        isLoading={false}
                         setValue={corporateSetValue}
                         defaultValues={savedData.corporate}
                     />
@@ -100,7 +96,7 @@ const IdentificationStep = () => {
                         errors={individualErrors}
                         isValid={isIndividualValid}
                         onSubmit={onIndividualSubmit}
-                        isLoading={isLoading}
+                        isLoading={false}
                     />
                 );
         }
@@ -113,6 +109,11 @@ const IdentificationStep = () => {
                     {financierType === 'INDIVIDUAL' ? 'Identification' : 'Identification'}
                 </h1>
             </div>
+            {errorMessage && (
+                <div className="w-full md:max-w-[27.5rem] md:mx-auto">
+                    <p className="text-red-500 text-sm">{errorMessage}</p>
+                </div>
+            )}
             {renderForm()}
         </main>
     );
