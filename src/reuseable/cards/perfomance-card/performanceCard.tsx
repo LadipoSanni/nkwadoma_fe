@@ -22,7 +22,7 @@ interface PerformanceCardProps {
     currentDate?: string;
     onChangeDate?: (value: string) => void;
     currentYear?:   string;
-    years: string[];
+    years?: string[];
 
 }
 
