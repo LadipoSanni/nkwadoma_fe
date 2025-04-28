@@ -1,4 +1,3 @@
-// src/redux/reducer.ts
 import { combineReducers } from 'redux';
 import adminLayoutReducer from '@/redux/slice/layout/adminLayout';
 import selectedLoanReducer from '@/redux/slice/loan/selected-loan';
