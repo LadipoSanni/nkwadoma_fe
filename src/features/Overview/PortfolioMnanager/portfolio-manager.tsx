@@ -4,6 +4,9 @@ import PortfolioManagerOverviewCard from "@/reuseable/cards/PortfolioManagerOver
 // import MeedlBarChart from "@/reuseable/bar-chart";
 import Barcharts from "@/features/Overview/PortfolioMnanager/Barcharts";
 import PerformanceCard from "@/reuseable/cards/perfomance-card/performanceCard";
+import {useRouter} from "next/navigation";
+import {store} from "@/redux/store";
+import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 
 const PortfolioManager = () => {
     // const initialChartData = [
@@ -12,7 +15,7 @@ const PortfolioManager = () => {
     //     { month: "March", value: 237, },
     // ]
     // const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialChartData);
-
+    const router = useRouter();
     const cardData1 = [
         {title: "Total investment vehicles", amount: '0',},
         {title: "Commercial funds", amount: '2',showIcon: true},
@@ -57,39 +60,46 @@ const PortfolioManager = () => {
         {title: "Disbursed loan", amount: '0',textColor: '#034319',bgColor: 'bg-green-500',},
     ]
 
-    const clickCard1 = () => {
+    const routeToInvestmentVehicle = () => {
+        store.dispatch(setCurrentNavBottomItem('Investment vehicle'))
+        store.dispatch(setCurrentNavbarItem('Investment vehicle'))
+        router.push('/vehicle/commercial-vehicle')
+    }
+
+
+    const routeToFinancier = () => {
+        store.dispatch(setCurrentNavBottomItem('Financier'))
+        store.dispatch(setCurrentNavbarItem('Financier'))
+        router.push('/financier')
 
     }
 
 
-    const clickCard2 = () => {
-
-    }
-
-
-    const clickCard3 = () => {
-
+    const routeToLoans = () => {
+        store.dispatch(setCurrentNavBottomItem('Loan'))
+        store.dispatch(setCurrentNavbarItem('Loan'))
+        router.push('/loan/loan-request')
     }
 
     return (
        <div className={` pt-8 pb-`}>
-           <div className={`px-5 h-[82vh] w-[100%] md:w-[100%] md:grid md:gap-8  ${styles.container}   `}>
-               <div className={` w-[100%] md:w-[100%] bg--300 md:h-auto m ${styles.tab} md:gap-5 md:w- flex md:grid md:grid-cols-3  `}>
-                   <PortfolioManagerOverviewCard id={'vehicleCard'} cardData={cardData1} clickView={clickCard1}/>
-                   <PortfolioManagerOverviewCard id={'vehicleCard2'} cardData={cardData2} clickView={clickCard2}/>
-                   <PortfolioManagerOverviewCard loanData={loanData}  isLoanData={true} id={'vehicleCard3'} cardData={cardData3} clickView={clickCard3}/>
+           <div className={`px-5 h-[82vh] w-[100%] gap-8  md:w-[100%] md:grid md:gap-8  ${styles.container}   `}>
+               <div className={` w-[100%] md:w-[100%] gap-8 md:mb-0 sm:mb-8 mb-8  md:h-auto m ${styles.tab} md:gap-5 md:w- flex  `}>
+                   <PortfolioManagerOverviewCard id={'vehicleCard'} cardData={cardData1} clickView={routeToInvestmentVehicle}/>
+                   <PortfolioManagerOverviewCard id={'vehicleCard2'} cardData={cardData2} clickView={routeToFinancier}/>
+                   <PortfolioManagerOverviewCard loanData={loanData}  isLoanData={true} id={'vehicleCard3'} cardData={cardData3} clickView={routeToLoans}/>
                </div>
-               {/*<div className={`  w-full md:w-full pb-4  `}>*/}
-               {/*    <Barcharts/>*/}
-               {/*</div>*/}
-               {/*<div className={` w-full grid md:flex pb-4 gap-6 `}>*/}
-               {/*    <PerformanceCard id={'ownership'}  isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={true} maxWidth={'50%'} title={'Net AUM return'} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>*/}
-               {/*    <PerformanceCard id={'ownership'} isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={true} maxWidth={'50%'} title={'Talent funded '} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>*/}
-               {/*</div>*/}
-               {/*<div className={` w-full grid  md:flex pb-4 gap-6 `}>*/}
-               {/*    <PerformanceCard id={'ownership'}  isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total custodian/trustee fee'} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>*/}
-               {/*    <PerformanceCard id={'ownership'} isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total fund manager fee'} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>*/}
-               {/*</div>*/}
+               <div className={`  w-full md:w-full pb-4  `}>
+                   <Barcharts/>
+               </div>
+               <div className={` w-full grid md:flex pb-4 gap-6 `}>
+                   <PerformanceCard id={'ownership'}  isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={true} maxWidth={'50%'} title={'Net AUM return'} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
+                   <PerformanceCard id={'ownership'} isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={true} maxWidth={'50%'} title={'Talent funded '} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
+               </div>
+               <div className={` w-full grid  md:flex pb-4 gap-6 `}>
+                   <PerformanceCard id={'ownership'}  isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total custodian/trustee fee'} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
+                   <PerformanceCard id={'ownership'} isSmall={true} showContainerBorder={true} percentage={'26.8'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total fund manager fee'} value={3000000000} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
+               </div>
            </div>
        </div>
     );
