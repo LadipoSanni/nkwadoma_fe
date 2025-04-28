@@ -5,13 +5,7 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useRouter } from "next/navigation";
 import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/financier";
-// import {
-//     useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
-// } from "@/service/admin/fund_query";
-// import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
-// import LoanEmptyState from "@/reuseable/emptyStates/Index";
-// import { MdOutlinePayments } from "react-icons/md";
-import {useFilterMyInvestmentQuery, useSearchMyInvestmentQuery, useViewMyInvestmentQuery} from '@/service/financier/api'
+import {useFilterMyInvestmentQuery, useSearchMyInvestmentQuery} from '@/service/financier/api'
 import dynamic from "next/dynamic";
 import {
     CurrentMyInvestmentVehicleDetails,
@@ -32,17 +26,16 @@ const MyInvestment = () => {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
-    const {data: allMyInvestment, isLoading} = useViewMyInvestmentQuery({})
     const [isFiltered, setIsFiltered] = useState<boolean>(false)
-
-    const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(allMyInvestment?.data?.investmentSummaries)
 
     const filterProps = {
         investmentVehicleType: selectedValue.toUpperCase(),
         pageSize: '10',
         pageNumber: '0'
     }
-    const {data: filteredData, isLoading: isFilteredDataLoading} = useFilterMyInvestmentQuery(filterProps)
+    const {data: filteredData, isLoading: isFilteredDataLoading, isFetching: isFetchingFilteredItems} = useFilterMyInvestmentQuery(filterProps)
+    const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(filteredData?.data?.body)
+
     const searchProps = {
         name: searchTerm,
         investmentType: selectedValue.toUpperCase(),
@@ -50,23 +43,23 @@ const MyInvestment = () => {
         pageNumber: '0'
     }
 
-    const {data: searchData, isLoading: isSearchItemLoading} = useSearchMyInvestmentQuery(searchProps)
+    const {data: searchData, isLoading: isSearchItemLoading, isFetching: isFetchingSearchTerms} = useSearchMyInvestmentQuery(searchProps)
 
     useEffect(()=> {
-        setMyInvestmentVehicles(allMyInvestment?.data?.investmentSummaries)
-        if(isFiltered){
-            setMyInvestmentVehicles([])
-            setMyInvestmentVehicles(filteredData?.data?.body)
-        }else{
-            setMyInvestmentVehicles(allMyInvestment?.data?.investmentSummaries)
-        }
-        if(searchTerm !== ''){
+        setMyInvestmentVehicles(filteredData?.data?.body)
+        if (searchTerm?.length !== 0){
             setMyInvestmentVehicles([])
             setMyInvestmentVehicles(searchData?.data?.body)
-        }else {
-            setMyInvestmentVehicles(allMyInvestment?.data?.investmentSummaries)
         }
-    }, [selectedValue, filteredData, allMyInvestment, isFiltered, searchData, searchTerm])
+        if (searchTerm === '' && searchData?.data?.body){
+            setMyInvestmentVehicles([])
+            setMyInvestmentVehicles(filteredData?.data?.body)
+        }
+        if (isFiltered && searchData?.data?.body?.length === 0 && filteredData?.data?.body !== 0){
+            setMyInvestmentVehicles([])
+            setMyInvestmentVehicles(filteredData?.data?.body)
+        }
+    }, [isFiltered, filteredData, searchData, searchTerm])
 
 
 
@@ -105,8 +98,6 @@ const MyInvestment = () => {
 
 
 
-    const vehicles = allMyInvestment?.data?.investmentSummaries
-
     return (
         <main id="marketplaceView" className="py-9 px-5 h ">
             <div id="searchDiv" className="px-2 flex md:flex-row flex-col gap-3">
@@ -127,26 +118,17 @@ const MyInvestment = () => {
                 />
             </div>
 
-            {isLoading && isFilteredDataLoading && isSearchItemLoading  ? (
+            { isFilteredDataLoading || isSearchItemLoading || isFetchingSearchTerms || isFetchingFilteredItems ? (
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
-            ) : vehicles?.length === 0 && filteredData?.data?.body   ? (
+            ) : myInvestmentVehicles?.length === 0  && searchData?.data?.body?.length === 0 && filteredData?.data?.body?.length === 0   ? (
                 <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
-                    <LoanEmptyState
-                        id="Vehicles"
-                        icon={<MdOutlinePayments className="w-10 h-10" color="#142854" />}
-                        iconBg="#D9EAFF"
-                        title="Investment Vehicles will show here"
-                        description="There are no investment vehicles available yet"
-                    />
+                    <LoanEmptyState title={"Investment vehicles will show here"} description={"There are no Investment vehicles available yet"} icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>} iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
                 </div>
-            ) : searchData?.data?.body?.length === 0  ? (
-                <div>
-                    <SearchEmptyState icon={MdSearch} name="Investment" />
-                </div>
-                )
-                :
+            ) :  searchData?.data?.body?.length === 0 && searchTerm?.length  !== 0 ?   (
+                        <SearchEmptyState icon={MdSearch} name="Investment" />
+                ):
                 (
                 <div
                     id="card-segmentId"

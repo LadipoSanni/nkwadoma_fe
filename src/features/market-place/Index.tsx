@@ -218,7 +218,7 @@ const MarketPlaceView = () => {
                             status === "OPEN" ? "border-[#B4E5C8]" : status === "CLOSE" ? "border-[#F2BCBA]" : "border-gray-300";
                         // const statusKey = vehicle.fundRaisingStatus ? "fundRaisingStatus" : "deployingStatus";
                         const statusValue = vehicle.fundRaisingStatus ? vehicle.fundRaisingStatus : vehicle.deployingStatus ;
-                        const statuses = vehicle.fundRaisingStatus ?  'Fundrasing' : 'Deploying';
+                        const statuses = vehicle.fundRaisingStatus ?  'Fundraising' : 'Deploying';
                         // fundRaising = `${statusKey}`;
                         const typeTextColor = vehicle.investmentVehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
 

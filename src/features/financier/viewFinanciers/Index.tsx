@@ -7,18 +7,24 @@ import { inter } from "@/app/fonts";
 import DropdownSelect from "@/reuseable/Dropdown/DropdownSelect";
 import Table from '@/reuseable/table/Table';
 import * as Yup from 'yup';
-import { MdSearch } from 'react-icons/md';
+import {MdOutlineBusinessCenter, MdSearch} from 'react-icons/md';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
-import { Book } from 'lucide-react';
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
 import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { formatAmount } from '@/utils/Format';
-import { useViewAllFinanciersQuery,useSearchFinancierQuery } from '@/service/admin/financier';
+import {
+    useSearchFinancierQuery,
+    useGetAllActiveAndInvitedFinanciersQuery
+} from '@/service/admin/financier';
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
-import { setCurrentFinancierId,setFinancierMode } from '@/redux/slice/financier/financier';
+import {
+    setActiveAndInvitedFinancierId,
+    setFinancierMode
+} from '@/redux/slice/financier/financier';
 import {store} from "@/redux/store";
 import { useRouter } from 'next/navigation'
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 
 
 interface FormValues {
@@ -56,16 +62,18 @@ const ViewFinanciers = () => {
     const [hasNextPage,setNextPage] = useState(false)
     const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
-    const [tempSelectedFinancier, setTempSelectedFinancier] = useState('');
+    const [tempSelectedFinancier, setTypeSelectedFinancier] = useState('');
+    const [selectedActivationStatusTab, setSelectedActivationStatusTab] = useState('active');
     const router = useRouter()
     const param = {
         pageNumber: pageNumber,
         pageSize: 10,
-        financierType: selectedFinancier
+        financierType: selectedFinancier.toUpperCase(),
+        activationStatus: selectedActivationStatusTab.toUpperCase(),
     }
 
 
-    const {data,isLoading,refetch} = useViewAllFinanciersQuery(param)
+    const {data, isLoading, refetch} = useGetAllActiveAndInvitedFinanciersQuery(param)
     const {data:searchData} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10},{skip: !searchTerm})
 
     useEffect(()=>{
@@ -105,7 +113,7 @@ const ViewFinanciers = () => {
     };
 
     const handleSelectFinancier = (financier: string) => {
-        setTempSelectedFinancier(financier);
+        setTypeSelectedFinancier(financier);
     };
 
     const handleSubmit = () => {
@@ -119,7 +127,7 @@ const ViewFinanciers = () => {
     };
 
     const handleReset = () => {
-        setTempSelectedFinancier('')
+        setTypeSelectedFinancier('')
         setSelectedFinancier('');
         setIsDropdownOpen(false);
     };
@@ -132,17 +140,17 @@ const ViewFinanciers = () => {
             {capitalizeFirstLetters(row.financierType)}
         </span>
             ) },
-        { title: 'No. of Investments', id: 'investments', selector: (row:viewAllfinancier) => row.investments || 0 },
-        { title: 'Amount Invested', id: 'amountInvested', selector: (row:viewAllfinancier) => formatAmount(row.amountInvested) },
-        { title: 'Amount Earned', id: 'amountEarned', selector: (row:viewAllfinancier) => formatAmount(row.amountEarned) },
+        { title: 'No. of investments', id: 'investments', selector: (row:viewAllfinancier) => row.investments || 0 },
+        { title: 'Amount invested', id: 'amountInvested', selector: (row:viewAllfinancier) => formatAmount(row.amountInvested) },
+        { title: 'Amount earned', id: 'amountEarned', selector: (row:viewAllfinancier) => formatAmount(row.amountEarned) },
         { title: 'Payout', id: 'payout', selector: (row:viewAllfinancier) => formatAmount(row.payout) },
-        { title: 'Portfolio Value', id: 'portfolioValue', selector: (row:viewAllfinancier) => formatAmount(row.portfolioValue) }
+        { title: 'Portfolio value', id: 'portfolioValue', selector: (row:viewAllfinancier) => formatAmount(row.portfolioValue) }
     ];
 
     const handleRowClick = (row: TableRowData) => {
-        store.dispatch(setCurrentFinancierId(String(row?.id)))
+        store.dispatch(setActiveAndInvitedFinancierId(String(row?.id)))
         store.dispatch(setFinancierMode("platform"))
-        router.push('/funds/financier-details')
+        router.push('/financier/details')
     };
 
 
@@ -177,37 +185,71 @@ const ViewFinanciers = () => {
                 </Button>
             </section>
 
-            <div
-                id="financierListView"
-                className={"grid mt-8 gap-6"}
-                style={{
-                    height: "62vh",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-                }}
-            >
-                {searchTerm && financiers.length === 0 ? (
-                    <div>
-                        <SearchEmptyState icon={MdSearch} name="Financier" />
-                    </div>
-                ) : (
-                    <Table
-                        tableData={financiers}
-                        tableHeader={financierHeader}
-                        handleRowClick={handleRowClick}
-                        tableHeight={58}
-                        icon={Book}
-                        sideBarTabName='financier'
-                        condition={true}
-                        staticHeader={"Financier"}
-                        staticColunm={"name"}
-                        sx='cursor-pointer'
-                        hasNextPage={hasNextPage}
-                        pageNumber={pageNumber}
-                        setPageNumber={setPageNumber}
-                        totalPages={totalPage}
-                        isLoading={isLoading}
-                    />
-                )}
+            <div className={`pt-5`}>
+                <Tabs value={selectedActivationStatusTab} onValueChange={setSelectedActivationStatusTab} >
+                    <TabsList>
+                        <TabsTrigger value="active">Active</TabsTrigger>
+                        <TabsTrigger value="invited">Invited</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="active">
+                        <div
+                            id="financierListView"
+                            className={"grid mt-5 gap-6"}
+                            style={{
+                                height: "62vh",
+                                gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                            }}
+                        >
+                            {searchTerm && financiers.length === 0 ? (
+                                <div>
+                                    <SearchEmptyState icon={MdSearch} name="Financier" />
+                                </div>
+                            ) : (
+                                <Table
+                                    tableData={financiers}
+                                    tableHeader={financierHeader}
+                                    handleRowClick={handleRowClick}
+                                    tableHeight={58}
+                                    icon={MdOutlineBusinessCenter }
+                                    sideBarTabName='financier'
+                                    condition={true}
+                                    staticHeader={"Financier"}
+                                    staticColunm={"name"}
+                                    sx='cursor-pointer'
+                                    hasNextPage={hasNextPage}
+                                    pageNumber={pageNumber}
+                                    setPageNumber={setPageNumber}
+                                    totalPages={totalPage}
+                                    isLoading={isLoading}
+                                />
+                            )}
+                        </div>
+                    </TabsContent>
+
+                    <TabsContent value={"invited"} className={`pt-3`}>
+                        <Table
+                            tableData={financiers}
+                            tableHeader={financierHeader}
+                            handleRowClick={handleRowClick}
+                            tableHeight={58}
+                            icon={MdOutlineBusinessCenter }
+                            sideBarTabName='financier'
+                            condition={true}
+                            staticHeader={"Financier"}
+                            staticColunm={"name"}
+                            sx='cursor-pointer'
+                            hasNextPage={hasNextPage}
+                            pageNumber={pageNumber}
+                            setPageNumber={setPageNumber}
+                            totalPages={totalPage}
+                            isLoading={isLoading}
+                        />
+
+                    </TabsContent>
+
+                </Tabs>
+
             </div>
 
             {isModalOpen && (

@@ -73,7 +73,7 @@ function Index() {
             selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div>
         },
         {
-            title: 'Amount Requested',
+            title: 'Amount requested',
             sortable: true,
             id: 'amountRequested',
             selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>

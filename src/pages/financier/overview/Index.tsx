@@ -9,7 +9,7 @@ import {useRouter} from 'next/navigation';
 import styles from "./index.module.css"
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
 import {setFinancierType} from "@/redux/slice/financier/financier";
-import {store} from "@/redux/store";
+import { useAppDispatch} from "@/redux/store";
 import dynamic from "next/dynamic";
 
 const financialCardData = [
@@ -32,10 +32,15 @@ const FinancierOverview = dynamic(
 const FinancierOverviewContent = () => {
     const router = useRouter();
     const {data} = useViewFinancierDashboardQuery({})
+    const dispatch = useAppDispatch();
 
-    useEffect(()=> {
-        store.dispatch(setFinancierType(data?.data?.financierType))
-    }, [data])
+    useEffect(() => {
+        if (data?.data?.financierType) {
+            const type = data.data.financierType as 'INDIVIDUAL' | 'COOPERATE';
+            dispatch(setFinancierType(type));
+        }
+    }, [data, dispatch]);
+
     const handleClick = () => {
         router.push('/kyc/identification')
     }

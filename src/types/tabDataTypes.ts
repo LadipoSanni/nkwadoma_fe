@@ -15,8 +15,8 @@ export const settingsTab = [
 ]
 
 export const vehicleTab = [
-    {name: "Commercial fund", value: "/vehicle/commercial-vehicle"},
-    {name: "Endowment fund", value: "/vehicle/endownment-vehicle"}
+    {name: "Commercial ", value: "/vehicle/commercial-vehicle"},
+    {name: "Endowment ", value: "/vehicle/endownment-vehicle"}
 ]
 
 export const programDetailTab = [
@@ -35,11 +35,16 @@ export const kycSteps = [
     { id: 'identification', title: 'Identification' },
     { id:"sof", title: 'Source of funds' },
     { id: 'beneficial-owner', title: 'Beneficial Owner' },
-    { id: 'declaration', title: 'Declaration' },
+    { id: 'political-exposure', title: 'Political exposure' },
 
 ];
 
 export const marketplaceInvestment = [
     { id: 'transfer', title: 'Transfer funds' },
-    { id: 'confirmTransfer', title: 'Confirm transfer' },
+    // { id: 'confirmTransfer', title: 'Confirm transfer' },
   ];
+
+export const financierTabData = [
+{name: 'Details', value: '/financier/details'},
+{name: 'Investment vehicle', value: '/financier/investmentVehicles'}
+]
