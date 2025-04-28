@@ -171,19 +171,6 @@ const ViewFinanciers = () => {
                         triggerId="financierSelectId"
                         className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                     />
-                    {/*<DropdownSelect*/}
-                    {/*    selectValue={tempSelectedFinancier}*/}
-                    {/*    listOfItems={listOfFinanciers}*/}
-                    {/*    initialFormValue={initialFormValue}*/}
-                    {/*    validationSchema={validationSchema}*/}
-                    {/*    handleSelectChange={handleSelectFinancier}*/}
-                    {/*    handleSubmit={handleSubmit}*/}
-                    {/*    handleReset={handleReset}*/}
-                    {/*    isDropdownOpen={isDropdownOpen}*/}
-                    {/*    toggleDropdown={toggleDropdown}*/}
-                    {/*    isLoading={isLoading}*/}
-
-                    {/*/>*/}
                 </div>
                 <Button
                     variant={"secondary"}
