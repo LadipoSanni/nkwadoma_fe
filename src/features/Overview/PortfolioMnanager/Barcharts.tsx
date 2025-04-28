@@ -7,7 +7,7 @@ const Barcharts = () => {
         {month: "Feb", value: 1},
         {month: "March", value: 1},
     ]
-    const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialDates);
+    // const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialDates);
     const [currentLoanBookPortfolioGrowth, setCurrentLoanBookPortfolioGrowth] = useState(0);
     const [currentAumPortfolioGrowth, setCurrentAumPortfolioGrowth] = useState(0);
     const [aumPortfolioGrowth, setaumPortfolioGrowth] = useState<{month: string, value: number}[]>(initialDates);
@@ -67,16 +67,28 @@ const Barcharts = () => {
     }
 
     const changeAumYear = (year: string) => {
-
+        console.log(year)
     }
 
     const changeLoanYear = (year: string) => {
-
+        console.log(year)
     }
+    const LoanLifeSpan = [
+        '2023',
+        '2024',
+        '2025'
+    ]
+    const AumLifeSpan = [
+        '2023',
+        '2024',
+        '2025'
+    ]
 
     return (
         <div className={` w-full md:w-full grid md:flex flex-col-2 md: gap-6 `}>
             <BarChartWithDate id={'AUMPortfolioGrowthRate'}
+                              years={AumLifeSpan}
+                              currentYear={'2024'}
                               displayDates={barChartTabContent}
                               currentMonthDate={currentAumPortfolioGrowth}
                               cardTile={'AUM portfolio growth rate'}
@@ -86,6 +98,8 @@ const Barcharts = () => {
                               onChange={changeAumYear}
             />
             <BarChartWithDate id={'LoanBookPortfolioGrowthRate'}
+                              years={LoanLifeSpan}
+                              currentYear={'2023'}
                               displayDates={barChartTabContent}
                               currentMonthDate={currentLoanBookPortfolioGrowth}
                               cardTile={'Loan book portfolio growth rate'}

@@ -21,12 +21,14 @@ interface PerformanceCardProps {
     isFigure?: boolean;
     currentDate?: string;
     onChangeDate?: (value: string) => void;
+    currentYear?:   string;
+    years: string[];
 
 }
 
 
 
-const PerformanceCard = ({id,isFigure,onChangeDate,currentDate, showMonthPick,maxWidth, isSmall,title, value, isValueInPercentage, showContainerBorder, showPerformancePercentage,percentage, didValueIncrease}: PerformanceCardProps) => {
+const PerformanceCard = ({id,currentYear,years,isFigure,onChangeDate,currentDate, showMonthPick,maxWidth, isSmall,title, value, isValueInPercentage, showContainerBorder, showPerformancePercentage,percentage, didValueIncrease}: PerformanceCardProps) => {
     return (
         <div
             id={id} data-testid={id}
@@ -39,8 +41,8 @@ const PerformanceCard = ({id,isFigure,onChangeDate,currentDate, showMonthPick,ma
                             id={"performanceDate:"+id}
                             value={currentDate}
                             onChange={(value) => onChangeDate(value)}
-                            selectContent={["Commercial", "Endowment"]}
-                            placeHolder={'2025'}
+                            selectContent={years}
+                            placeHolder={currentYear}
                             triggerId="performanceDate"
                             className="h-fit md:w-fit w-fit mt-0 bg-white border border-[#D0D5DD]"
                         />
