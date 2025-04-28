@@ -45,6 +45,9 @@ export const financierApi = createApi({
                name: string; 
                pageNumber: number; 
                 pageSize: number; 
+                activationStatus?: string;
+                investmentVehicleId?: string
+
             })=> ({
                 url: "/financier/search",
                 method: 'GET',

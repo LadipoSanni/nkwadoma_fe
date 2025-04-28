@@ -32,9 +32,15 @@ export const financierOnboardingAndDashboardApi = createApi({
                method: 'GET'
            })
         }),
-
+        completeKyc: builder.mutation({
+          query: (data) => ({
+            url: `financier/complete-kyc`,
+            method: 'POST',
+            body: data
+          })
+        }),
 
     })
 })
 
-export const {useViewFinancierDashboardQuery,useSearchMyInvestmentQuery,useFilterMyInvestmentQuery, useViewMyInvestmentQuery } = financierOnboardingAndDashboardApi
+export const {useViewFinancierDashboardQuery,useSearchMyInvestmentQuery,useFilterMyInvestmentQuery, useViewMyInvestmentQuery, useCompleteKycMutation} = financierOnboardingAndDashboardApi
