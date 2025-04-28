@@ -236,7 +236,7 @@ const Details = () => {
                        <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
                        
                           <div className='flex gap-2 items-center'>
-                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p>
+                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{data?.data?.investmentVehicleVisibility === "DEFAULT"? "Only-me"  : capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p>
                           </div>
                          
                            <Button 
