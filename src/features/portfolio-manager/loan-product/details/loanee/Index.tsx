@@ -73,7 +73,7 @@ export function Loanees() {
                             tableHeader={LoanProductLoaneeHeader}
                             staticHeader={'Loanee'}
                             staticColunm={'name'}
-                            tableHeight={45}
+                            tableHeight={58}
                             icon={MdOutlinePerson}
                             sideBarTabName={"Loanee"}
                             handleRowClick={() => {
