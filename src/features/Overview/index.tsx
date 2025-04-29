@@ -3,7 +3,7 @@ import React from 'react';
 import Financier from "@/features/Overview/financier";
 import OrgAdmin from "@/features/Overview/org-admin";
 import Loanee from "@/features/Overview/loanee";
-import PortfolioManager from "@/features/Overview/portfolio-manager";
+import PortfolioManager from "@/features/Overview/PortfolioMnanager/portfolio-manager";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
 
 

@@ -112,8 +112,8 @@ const Login: React.FC = () => {
                 router.push("/program")
                 break;
             case 'PORTFOLIO_MANAGER':
-                store.dispatch(setCurrentNavbarItem("Loan"))
-                router.push("/loan/loan-request")
+                store.dispatch(setCurrentNavbarItem("Overview"))
+                router.push("/Overview")
                 break;
             case "FINANCIER":
                 store.dispatch(setCurrentNavbarItem("Overview"))
