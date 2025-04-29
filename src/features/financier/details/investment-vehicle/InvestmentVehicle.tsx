@@ -6,7 +6,7 @@ import { formatAmount } from '@/utils/Format';
 import { Book } from "lucide-react";
 import { useRouter } from 'next/navigation'
 import {useAppSelector} from "@/redux/store";
-import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
+import {useSearchFinancierVehicleQuery} from '@/service/admin/financier';
 import Table from '@/reuseable/table/Table';
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import {setFinancierInvestmentVehicleId, setFinancierMode} from '@/redux/slice/financier/financier';
@@ -36,18 +36,19 @@ type viewAllfinancier = financials & TableRowData
 function InvestmentVehicle() {
     const [searchTerm, setSearchTerm] = useState('');
     const router = useRouter()
-    const currentVehicleId = useAppSelector(state => (state.vehicle.currentVehicleId))
+    const financierId = useAppSelector(state => (state.financier.activeAndInvitedFinancierId))
     const [hasNextPage,setNextPage] = useState(false)
     const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
     const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
     const param = {
+        investmentVehicleName: searchTerm,
         pageNumber: pageNumber,
         pageSize: 10,
-        investmentVehicleId: currentVehicleId
+        financierId: financierId
     }
 
-    const {data,isLoading} = useViewFinanciersByInvestmentmentVehicleQuery(param,{skip: !currentVehicleId})
+    const {data,isLoading} = useSearchFinancierVehicleQuery(param,{skip: !financierId})
 
     useEffect(()=>{
         if(data && data.data){
@@ -104,7 +105,7 @@ function InvestmentVehicle() {
                     tableData={financiers}
                     tableHeader={financierHeader}
                     handleRowClick={handleRowClick}
-                    tableHeight={48}
+                    tableHeight={58}
                     icon={Book}
                     sideBarTabName='financier'
                     condition={true}
