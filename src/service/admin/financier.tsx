@@ -81,10 +81,22 @@ export const financierApi = createApi({
                 params: param
             }),
             providesTags: ['financier']
-        })
+        }),
+        viewFinancierVehicles: builder.query({
+            query: (param:{
+                financierId: string,
+                pageNumber: number,
+                pageSize: number,
+            })=> ({
+                url: "/financier/all-investment?",
+                method: 'GET',
+                params: param
+            }),
+            providesTags: ['financier']
+        }),
     })
 })
 
 export const {useInviteFinancierMutation,useViewFinanciersByInvestmentmentVehicleQuery,
-    useSearchFinancierQuery,useViewAllFinanciersQuery,
+    useSearchFinancierQuery,useViewAllFinanciersQuery, useViewFinancierVehiclesQuery,
     useViewFinancierDetailQuery, useGetAllActiveAndInvitedFinanciersQuery} = financierApi
