@@ -183,7 +183,7 @@ const ViewFinanciers = () => {
                 </Button>
             </section>
 
-            <div className={`pt-5`}>
+            <div className={`pt-2`}>
                 <Tabs value={selectedActivationStatusTab} onValueChange={setSelectedActivationStatusTab} >
                     <TabsList>
                         <TabsTrigger value="active">Active</TabsTrigger>
