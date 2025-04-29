@@ -33,7 +33,6 @@ const Status = ({disabledTabs}: Props)=> {
     const vehicleType = useAppSelector(state => (state?.vehicle?.vehicleType))
      const statusType = useAppSelector(state => (state?.vehicle?.setEditStatus))
      const defaultValue = useAppSelector(state => (state?.vehicle?.statusDefaultValue))
-     console.log(defaultValue)
     const tabContent = [
         {
             value: "operation",

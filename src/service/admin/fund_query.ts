@@ -23,6 +23,7 @@ interface InvestmentVehicle {
     status: string;
     startDate: string;
     totalAmountInInvestmentVehicle:number;
+    totalAvailableAmount: number;
 }
 interface InvestmentVehicleResponse {
     data: InvestmentVehicle[];
@@ -46,7 +47,7 @@ interface InvestmentVehicleFundRaisingResponse {
 export const fundApi = createApi({
     reducerPath: 'fundApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['vehicle'],
+    tagTypes: ['vehicle', 'financier'],
     endpoints: (builder) => ({
       getAllInvestmentmentVehicle: builder.query({
         query: (param: {
@@ -150,7 +151,10 @@ export const fundApi = createApi({
             query: (data: {
                 investmentVehicleId: string,
                 fundRaising?: string,
-                deployingStatus?: string
+                deployingStatus?: string,
+                couponDistributionStatus?: string,
+                recollectionStatus?: string,
+                maturity?: string
             }) => ({
                 url: "/investment-vehicle/status",
                 method: "POST",
@@ -165,13 +169,24 @@ export const fundApi = createApi({
             }) => ({
                 url: "/investment-vehicle/visibility",
                 method: "POST",
-                body: data
-            })
-        })
+                body: data,
+            }),
+            invalidatesTags: ['financier']
+        }),
+        financierInvestmentVehicle: builder.query({
+            query: (data:{pageNumber: number, pageSize:number, investmentVehicleId: string})=> ({
+                url: `/financier/investment-vehicle/all/view?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}&investmentVehicleId=${data.investmentVehicleId}`,
+                method: 'GET'
+            }),
+            providesTags: ['financier']
+        }),
+
     }),
 })
 
+
 export const {
+    useFinancierInvestmentVehicleQuery,
     useGetAllInvestmentmentVehicleQuery,
     useGetInvestmentVehicleDetailQuery,
     useCreateInvestmentVehicleMutation,

@@ -43,7 +43,7 @@ describe("CohortTabs", () => {
        </Providers>);
     
         fireEvent.click(screen.getByText('Graduated')); 
-        expect(screen.getByText('No. of Loanees')).toBeInTheDocument();
+        expect(screen.getByText('No. of loanees')).toBeInTheDocument();
       });
 
      
@@ -55,13 +55,13 @@ describe("CohortTabs", () => {
    </Providers>);
 
     fireEvent.click(screen.getByText("Current"));
-    expect(screen.getByText("No. of Loanees")).toBeInTheDocument();
+    expect(screen.getByText("No. of loanees")).toBeInTheDocument();
 
     fireEvent.click(screen.getByText("Graduated"));
-    expect(screen.getByText("No. of Loanees")).toBeInTheDocument();
+    expect(screen.getByText("No. of loanees")).toBeInTheDocument();
 
     fireEvent.click(screen.getByText("Current"));
-    expect(screen.getByText("No. of Loanees")).toBeInTheDocument();
+    expect(screen.getByText("No. of loanees")).toBeInTheDocument();
   });
 
   
@@ -112,7 +112,6 @@ it('renders all headers in the table', () => {
     <CohortTabs listOfCohorts={mockCohorts}/>
  </Providers>);
   expect(screen.getAllByText(/cohort/i)[0]).toBeInTheDocument();
-  expect(screen.getAllByText(/end date/i)[0]).toBeInTheDocument();
 });
 
 

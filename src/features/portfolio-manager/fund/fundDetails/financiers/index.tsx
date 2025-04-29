@@ -13,10 +13,12 @@ import { useRouter } from 'next/navigation'
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
 // import { financiers } from '@/utils/cohort/trainee-details-mock-data/Index';
 import {useAppSelector} from "@/redux/store";
-import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
+import { useSearchFinancierQuery,useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
 import Table from '@/reuseable/table/Table';
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import { setCurrentFinancierId,setFinancierMode } from '@/redux/slice/financier/financier';
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
+import  {MdSearch} from 'react-icons/md';
 import {store} from "@/redux/store";
 
 interface TableRowData {
@@ -57,15 +59,23 @@ function Financiers() {
       }
 
     const {data,isLoading} = useViewFinanciersByInvestmentmentVehicleQuery(param,{skip: !currentVehicleId})
+    const {data:searchData} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10,investmentVehicleId: currentVehicleId},{skip: !searchTerm})
 
     useEffect(()=>{
-      if(data && data.data){
+      if(searchTerm && searchData && searchData?.data){
+        const result = searchData?.data?.body
+        setFinanciers(result)
+        setNextPage(searchData?.data?.hasNextPage)
+        setTotalPage(searchData?.data?.totalPages)
+        setPageNumber(searchData?.data?.pageNumber)
+    }
+    else if(!searchTerm && data && data.data){
        setFinanciers(data?.data?.body)
        setNextPage(data?.data?.hasNextPage)
        setTotalPage(data?.data?.totalPages)
        setPageNumber(data?.data?.pageNumber)
       }
-   },[data])
+   },[searchTerm, searchData,data])
 
     const handleOpenModal = () => {
       setIsOpen(true)
@@ -78,7 +88,6 @@ function Financiers() {
      const handleRowClick = (row:TableRowData) => {
             store.dispatch(setCurrentFinancierId(String(row?.id)))
              store.dispatch(setFinancierMode("investment"))
-             console.log('Row clicked:', row?.id);
              router.push('/funds/financier-details')
            
             
@@ -120,6 +129,11 @@ function Financiers() {
          </Button>
         </div>
         <div className='mt-6 '>
+        {searchTerm && financiers.length === 0 ? (
+              <div>
+                  <SearchEmptyState icon={MdSearch} name="Financier" />
+              </div>
+          ) : (
           <Table
              tableData={financiers}
              tableHeader={financierHeader}
@@ -137,6 +151,7 @@ function Financiers() {
             totalPages={totalPage}
             isLoading={isLoading}
           />
+          )}
         </div>
         <div>
           <Modal

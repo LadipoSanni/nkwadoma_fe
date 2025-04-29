@@ -564,31 +564,6 @@ function CreateInvestmentVehicle({
               </div>
               <div className="relative bottom-3">
                 <Label htmlFor="mandate">Vehicle mandate</Label>
-
-                {/* <Field
-                 as="textarea"
-                id="mandate"
-                name="mandate"
-                className="w-full p-3 border rounded focus:outline-none mt-2 resize-none "
-                placeholder="Enter cohort description"
-                rows={4}
-                maxLength={maxChars}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { 
-                  const value = e.target.value; 
-                  if (value.length <= maxChars) { 
-                    setFieldValue("mandate", value);
-                    setError('')
-                   } }} 
-                onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => { 
-                  const paste = e.clipboardData.getData('text'); 
-                  if (paste.length + values.mandate.length > maxChars) { 
-                    e.preventDefault(); 
-                    setError('Mandate must be 2500 characters or less'); } 
-                    else {
-                      setError('')
-                    }
-                  }}
-                /> */}
                 <Field
                   name="mandate"
                   component={FormikCustomQuillField}
@@ -609,26 +584,6 @@ function CreateInvestmentVehicle({
                 )}
               </div>
               </div>
-                {/* <div className={`lg:flex lg:justify-between items-center  `}> */}
-                    {/* <div className={`space-x-1 hidden  lg:flex items-center cursor-pointer`} 
-                    onClick={()=> handleSaveDraft(values,setFieldError)}
-                    // onChange={handleChange}
-                    >
-                       { vehicleTypeStatus === "DRAFT" && isLoading? (<div><Isloading color="black" height={28}/></div>) : ( 
-                        <input
-                            type="checkbox"
-                            id={`draftClickId`}
-                            className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md`}
-                            disabled={!values.name}
-                        /> )
-                       
-                       }
-                        <p
-                            className={`${inter.className} text-sm text-[#212221] font-medium `}
-                        >
-                            Save to draft
-                        </p>
-                    </div> */}
                     <div className= "md:flex gap-4 justify-end mt-2 mb-4 md:mb-0">
                         <Button
                             variant={"outline"}
@@ -654,25 +609,8 @@ function CreateInvestmentVehicle({
                         >
                             {vehicleTypeStatus === "PUBLISH" && isLoading ? <Isloading /> : "Publish"}
                         </Button>
-                        {/* <div className={`space-x-1 lg:hidden mt-5  flex items-center justify-center cursor-pointer`}
-                        onClick={()=> handleSaveDraft(values,setFieldError)}
-                        >
-                        { vehicleTypeStatus === "DRAFT" && isLoading? (<div><Isloading color="black" height={28}/></div>) : ( <input
-                            type="checkbox"
-                            id={`draftClickId`}
-                            disabled={!values.name}
-                            className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md`}
-                        /> )
-                       
-                       }
-                        <p
-                            className={`${inter.className} text-sm text-[#212221] font-medium`}
-                        >
-                            Save to draft
-                        </p>
-                    </div> */}
+
                     </div>
-                {/* </div> */}
 
             </div>
             <p

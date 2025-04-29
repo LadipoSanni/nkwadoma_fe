@@ -6,18 +6,27 @@ import ReactCountryFlag from "react-country-flag";
 import { countries } from "countries-list";
 
 interface CountrySelectPopoverProps {
-    selectedCountry: string | undefined; // Ensure this matches the type used in the parent
-    onCountryChange: (value: string) => void; // Define the type for the callback
+    selectedCountry: string | undefined;
+    onCountryChange: (value: string) => void;
+    restrictedCountries?: string[];
+    disableSearch?: boolean;
 }
 
-const CountrySelectPopover: React.FC<CountrySelectPopoverProps> = ({ selectedCountry, onCountryChange }) => {
+const CountrySelectPopover: React.FC<CountrySelectPopoverProps> = ({
+    selectedCountry,
+    onCountryChange,
+    restrictedCountries,
+    disableSearch = false,
+}) => {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const countryOptions = Object.entries(countries).map(([code, { name }]) => ({
-        value: code,
-        label: name,
-    }));
+    const countryOptions = Object.entries(countries)
+        .filter(([code]) => !restrictedCountries || restrictedCountries.includes(code))
+        .map(([code, { name }]) => ({
+            value: code,
+            label: name,
+        }));
 
     return (
         <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
@@ -50,22 +59,24 @@ const CountrySelectPopover: React.FC<CountrySelectPopoverProps> = ({ selectedCou
                 </button>
             </PopoverTrigger>
             <PopoverContent className="p-0 max-h-[13.3125rem] md:w-[27.5rem] w-full overflow-y-auto">
-                <div className="sticky top-0 bg-white z-10 px-2 py-1">
-                    <div className="flex gap-2 p-2 items-center border-[0.5px] border-blue550 rounded h-[2.3125rem]">
-                        <MdOutlineSearch className="text-primary200 h-[18px] w-[18px]" />
-                        <Input
-                            type="text"
-                            placeholder="Search country"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full p-0 text-black300 focus-visible:ring-0 focus:outline-none border-none"
-                        />
+                {!disableSearch && (
+                    <div className="sticky top-0 bg-white z-10 px-2 py-1">
+                        <div className="flex gap-2 p-2 items-center border-[0.5px] border-blue550 rounded h-[2.3125rem]">
+                            <MdOutlineSearch className="text-primary200 h-[18px] w-[18px]" />
+                            <Input
+                                type="text"
+                                placeholder="Search country"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full p-0 text-black300 focus-visible:ring-0 focus:outline-none border-none"
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
                 <div id="countryOptionsContainer" className="px-2 py-1">
                     {countryOptions
                         .filter((option) =>
-                            option.label.toLowerCase().includes(searchQuery.toLowerCase())
+                            disableSearch || option.label.toLowerCase().includes(searchQuery.toLowerCase())
                         )
                         .map((option) => (
                             <div

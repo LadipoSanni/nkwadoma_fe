@@ -33,12 +33,14 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>('');
   const [fileName, setFileName] = useState(
     initialDocUrl ? truncateFileName(extractFileName(initialDocUrl), 13) : ''
   );
-  const [isFileSupported, setIsFileSupported] = useState<boolean>(true);
+  // const [isFileSupported, setIsFileSupported] = useState<boolean>(true);
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(initialDocUrl || null);
+  const [fileUploadLoading, setFileUploadLoading] = useState<boolean>(false);
+
 
   function extractFileName(url: string): string {
     try {
@@ -48,6 +50,11 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
       return url.split('/').pop() || 'Uploaded document';
     }
   }
+
+  const setLoader = (loadingState: boolean)=> {
+    setFileUploadLoading(loadingState);
+  }
+
 
   useEffect(() => {
     if (initialDocUrl && !file) {
@@ -67,7 +74,7 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, [file, initialDocUrl]);
 
-  const validateFile = (file: File): boolean => {
+  const isFileValid = (file: File): boolean => {
     const supportedTypes = [
       'application/pdf',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
@@ -75,13 +82,13 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
 
     if (!supportedTypes.includes(file.type)) {
       setError('Only PDF and DOCX files are supported');
-      setIsFileSupported(false);
+      // setIsFileSupported(false);
       return false;
     }
 
     if (file.size > MAX_FILE_SIZE) {
       setError('File size exceeds 10MB limit');
-      setIsFileSupported(false);
+      // setIsFileSupported(false);
       return false;
     }
 
@@ -95,24 +102,26 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
     setLoading(true);
     setError(null);
 
-    if (!validateFile(selectedFile)) {
-      setLoading(false);
-      return;
-    }
+    if (isFileValid(selectedFile)) {
+      setFile(selectedFile);
+      setFileName(truncateFileName(selectedFile.name, 13));
+      // setIsFileSupported(true);
 
-    setFile(selectedFile);
-    setFileName(truncateFileName(selectedFile.name, 13));
-    setIsFileSupported(true);
-
-    try {
-      const uploadedFileUrl = await uploadDocumentToCloudinary(selectedFile, cloudinaryFolderName);
-      setUploadedFileUrl(uploadedFileUrl);
-      setUploadedDocUrl(uploadedFileUrl);
-    } catch (uploadError) {
-      setError(uploadError instanceof Error ? uploadError.message : 'Failed to upload document');
-      console.error(uploadError);
-    } finally {
+      try {
+        const uploadedFileUrl = await uploadDocumentToCloudinary(selectedFile, setLoader, cloudinaryFolderName);
+        setUploadedFileUrl(uploadedFileUrl);
+        setUploadedDocUrl(uploadedFileUrl);
+      } catch (uploadError) {
+        setError(uploadError instanceof Error ? uploadError.message : 'Failed to upload document');
+        console.error(uploadError);
+      } finally {
+        setLoading(false);
+      }
+    }else {
+      setFile(null);
+      // setIsFileSupported(false);
       setLoading(false);
+
     }
   };
 
@@ -125,25 +134,26 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
     setLoading(true);
     setError(null);
 
-    if (!validateFile(droppedFile)) {
-      setLoading(false);
-      return;
-    }
+    if (!isFileValid(droppedFile)) {
+      setFile(droppedFile);
+      setFileName(truncateFileName(droppedFile.name, 13));
+      // setIsFileSupported(true);
+      handleDrop?.(event);
 
-    setFile(droppedFile);
-    setFileName(truncateFileName(droppedFile.name, 13));
-    setIsFileSupported(true);
-    handleDrop?.(event);
-
-    try {
-      const uploadedFileUrl = await uploadDocumentToCloudinary(droppedFile, cloudinaryFolderName || 'investment-vehicle-documents');
-      setUploadedFileUrl(uploadedFileUrl);
-      setUploadedDocUrl(uploadedFileUrl);
-    } catch (uploadError) {
-      setError(uploadError instanceof Error ? uploadError.message : 'Failed to upload document');
-      console.error(uploadError);
-    } finally {
+      try {
+        const uploadedFileUrl = await uploadDocumentToCloudinary(droppedFile, setLoader, cloudinaryFolderName || 'investment-vehicle-documents');
+        setUploadedFileUrl(uploadedFileUrl);
+        setUploadedDocUrl(uploadedFileUrl);
+      } catch (uploadError) {
+        setError(uploadError instanceof Error ? uploadError.message : 'Failed to upload document');
+        console.error(uploadError);
+      } finally {
+        setLoading(false);
+      }
+    }else {
       setLoading(false);
+
+
     }
   };
 
@@ -159,7 +169,7 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
       setUploadedFileUrl(null);
       setUploadedDocUrl(null);
       setFileName('');
-      setIsFileSupported(true);
+      // setIsFileSupported(true);
       setError(null);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -180,7 +190,7 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
         className={`${
           uploadedFileUrl
             ? 'p-3 bg-meedlWhite h-[4.25rem] border-[0.5px] border-solid border-neutral650 rounded-sm flex items-center justify-between'
-            : 'grid gap-4 place-items-center border-dashed border border-neutral650 py-5 rounded-md bg-neutral100 cursor-pointer h-[147px]'
+            : 'grid gap-4 place-items-center border-dashed border border-neutral650 px-2 py-5 rounded-md bg-neutral100 cursor-pointer h-fit'
         }`}
         onDrop={uploadedFileUrl ? undefined : onDrop}
         onDragOver={uploadedFileUrl ? undefined : handleDragOver}
@@ -253,21 +263,36 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
             </div>
           </>
         ) : (
-          isFileSupported && (
+          // isFileSupported && (
             <>
-              <div className="h-11 w-11 bg-meedlWhite flex justify-center items-center rounded-md">
-                <FiUploadCloud className="w-6 h-[22px]" />
-              </div>
-              <div className="grid gap-1 place-items-center">
-                <p className="font-normal text-black300 text-[14px] leading-[150%]">
-                  <span className="underline text-meedlBlue">Click to upload</span> or drag and drop
-                </p>
-                <p className="text-black300 leading-[150%] text-[14px] font-normal">
-                  PDF or DOCX (max. 10MB)
-                </p>
-              </div>
+              {error &&<p className={` text-xs text-red-500  `}>{error} please chose another files</p>}
+              {fileUploadLoading?
+                  <div className="flex flex-col items-start">
+                    <p className="text-black500 font-normal text-sm truncate md:whitespace-normal">
+                      {fileName}
+                    </p>
+                        <p className="text-black300 font-normal text-[12px] leading-[150%]">
+                          Uploading...
+                        </p>
+
+                  </div>
+                  :
+               <>
+                 <div className="h-11 w-11 bg-meedlWhite flex justify-center items-center rounded-md">
+                   <FiUploadCloud className="w-6 h-[22px]" />
+                 </div>
+                 <div className="grid gap-1 place-items-center">
+                   <p className="font-normal text-black300 text-[14px] leading-[150%]">
+                     <span className="underline text-meedlBlue">Click to upload</span> or drag and drop
+                   </p>
+                   <p className="text-black300 leading-[150%] text-[14px] font-normal">
+                     PDF or DOCX (max. 10MB)
+                   </p>
+                 </div>
+               </>
+              }
             </>
-          )
+          // )
         )}
       </div>
     </div>

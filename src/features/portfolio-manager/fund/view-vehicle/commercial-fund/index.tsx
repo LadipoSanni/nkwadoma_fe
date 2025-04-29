@@ -38,7 +38,7 @@ interface investmentVehicleProps     {
     totalAmountInInvestmentVehicle: number,
     amountRaised?: string,
     amountDisbursed?: string,
-    amountAvailable?: string,
+    totalAvailableAmount?: number,
     totalIncomeGenerated?: string,
     netAssetValue?: string
 }
@@ -125,14 +125,14 @@ function CommercialFund() {
                     selector: (row: TableRowData) => row.name
                 },
                 {
-                    title: 'Start Date',
+                    title: 'Start date',
                     sortable: true,
                     id: 'startDate',
                     selector: (row: TableRowData) => formatMonthInDate(row?.startDate)
                 },
                 {title: 'Tenure(months)', sortable: true, id: 'tenure', selector: (row: TableRowData) => row.tenure},
                 {
-                    title: <div className='md:pr-5 md:pl-8 relative md:right-6 '>vehicle size</div>,
+                    title: <div className='md:pr-5 md:pl-8 relative md:right-6 '>Vehicle size</div>,
                     sortable: true,
                     id: 'size',
                     selector: (row: TableRowData) => <div className=''>{formatAmount(row.size)}</div>
@@ -159,7 +159,7 @@ function CommercialFund() {
                     title: 'Amount available',
                     sortable: true,
                     id: 'amountAvailable',
-                    selector: (row: TableRowData) => <div className='ml-8'>{formatAmount(row.amountAvailable)}</div>
+                    selector: (row: TableRowData) => <div className='ml-8'>{formatAmount(row.totalAvailableAmount)}</div>
                 },
             ]
 
@@ -172,12 +172,12 @@ function CommercialFund() {
                     onChange={handleSearchChange}
                     handleDraftClick={handleCommercialFundDraftClick}
                     handleCreateInvestmentVehicleClick={handleCreateInvestmentVehicleClick}
-                     buttonName='Set up commercial fund'
+                     buttonName='Set up commercial vehicle'
                 />
       </div>
       <div>
             { searchTerm && viewAllInvestmentVehicle.length === 0? <div>
-                <SearchEmptyState icon={MdSearch} name='Endowment fund'/>
+                <SearchEmptyState icon={MdSearch} name='Endowment vehicle'/>
             </div> : <div  className='mt-6'>
                 <Table
                 tableData={tableData} 

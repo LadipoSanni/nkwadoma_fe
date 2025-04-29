@@ -16,6 +16,9 @@ import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import 'react-quill-new/dist/quill.snow.css'
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
 import styles from "@/components/selected-loan/SelectedLoan.module.css"
+import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
+import {store, useAppSelector} from "@/redux/store";
+import {formatAmount} from "@/utils/Format";
 
 
 interface CreateLoanProductProps {
@@ -31,6 +34,7 @@ interface ApiError {
 
 
 const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
+    const fundProductAvailableAmount = useAppSelector(state => (state.selectedLoan.fundProductAvailableAmount))
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [investmentVehicleObj, setInvestmentVehicleObj] = useState<{ [key: string]: string }>({});
     const [error, setError] = useState('');
@@ -48,7 +52,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     useEffect(() => {
         if (investmentVehicleData?.data?.body) {
             const obj: { [key: string]: string } = {};
-            investmentVehicleData.data.body.forEach((vehicle: { id: string; name: string }) => {
+            investmentVehicleData.data.body.forEach((vehicle: { id: string; name: string; totalAvailableAmount: number }) => {
                 obj[vehicle.name] = vehicle.id;
             });
             setInvestmentVehicleObj(obj);
@@ -98,6 +102,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         investmentVehicleId: Yup.string()
             .trim()
             .required("Fund product is required"),
+        // Loan product size cannot be greater than investment vehicle available amount.
         costOfFunds: Yup.string()
             .trim()
             // .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Cost of fund must be greater than 0 ")
@@ -116,7 +121,15 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Product size must be greater than 0")
             .required("Loan product is required")
             .test("max-number", "Product size must be less than or equal to a quadrillion",
-                value => !value || Number(value) <= 1e15),
+                value => !value || Number(value) <= 1e15)
+            .test(
+                `is-greater-than-fund`,
+                `Amount can't be greater than fund product ${formatAmount(fundProductAvailableAmount)}`,
+                function(value) {
+                    if (!value || !fundProductAvailableAmount) return true;
+                    return Number(value) <= Number(fundProductAvailableAmount);
+                }
+            ),
         obligorLimit: Yup.string()
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Limit must be greater than 0")
@@ -303,7 +316,16 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         id="FundProduct"
                                         selectContent={investmentVehicleNames}
                                         value={values.investmentVehicleId}
-                                        onChange={(value) => setFieldValue("investmentVehicleId", value)}
+                                        onChange={(value) => {
+                                            setFieldValue("investmentVehicleId", value);
+                                            // Find the selected vehicle in the data
+                                            const selectedVehicle = investmentVehicleData?.data?.body?.find(
+                                                (vehicle: { name: string }) => vehicle.name === value
+                                            );
+                                            if (selectedVehicle) {
+                                                store.dispatch(setFundProductAvailableAmount(selectedVehicle.totalAvailableAmount))
+                                            }
+                                        }}
                                         name="FundProduct"
                                         placeHolder='Select fund'
                                     />

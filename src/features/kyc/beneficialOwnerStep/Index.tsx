@@ -4,23 +4,25 @@ import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
 import {inter, cabinetGroteskMediumBold} from '@/app/fonts';
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import IndividualOwnerForm from '@/reuseable/forms/IndividualOwnerForm/Index';
+import IndividualOwnershipForm from '@/reuseable/forms/individualOwnershipForm/Index';
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import CountrySelectPopover from '@/reuseable/select/countrySelectPopover/Index';
 import {MdAdd, MdDeleteOutline} from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { updateBeneficialOwner } from "@/redux/slice/kyc/kycFormSlice";
 
 const BeneficialOwnerStep = () => {
+    const dispatch = useDispatch();
+    const { entityData } = useSelector((state: RootState) => state.kycForm.beneficialOwner);
+
     const [selectedForm, setSelectedForm] = useState<"entity" | "individual">("entity");
-    const [entityName, setEntityName] = useState("");
-    const [rcNumber, setRcNumber] = useState("");
-    const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
-    const [sections, setSections] = useState<{
-        id: number;
-        entityName: string;
-        rcNumber: string;
-        country: string | undefined
-    }[]>([]);
+    const [entityName, setEntityName] = useState(entityData.entityName || "");
+    const [rcNumber, setRcNumber] = useState(entityData.rcNumber || "");
+    const [selectedCountry, setSelectedCountry] = useState<string | undefined>(entityData.country);
+    const [sections, setSections] = useState(entityData.sections || []);
+
     const router = useRouter();
 
     const isFormValid = useMemo(() => {
@@ -55,13 +57,27 @@ const BeneficialOwnerStep = () => {
         );
     };
 
+    const handleSaveAndContinue = () => {
+        dispatch(
+            updateBeneficialOwner({
+                entityData: {
+                    entityName,
+                    rcNumber,
+                    country: selectedCountry,
+                    sections,
+                },
+            })
+        );
+        router.push('/kyc/political-exposure');
+    };
+
     return (
-        <main id="beneficialOwnerStepMain" className={`${inter.className} xl:px-36 grid-cols-1 gap-y-6 grid gap-10`}>
-            <div id="beneficialOwnerHeader" className={`${cabinetGroteskMediumBold.className} grid gap-1`}>
+        <main id="beneficialOwnerStepMain" className={`${inter.className} w-full xl:px-48 grid-cols-1 gap-y-6 grid`}>
+            <div id="beneficialOwnerHeader" className={`${cabinetGroteskMediumBold.className} max-w-[30rem] md:mx-auto w-full`}>
                 <h1 id="beneficialOwnerTitle"
                     className="text-meedlBlack text-[24px] leading-[120%] font-medium">Beneficial owner</h1>
             </div>
-            <section id="beneficialOwnerSection" className={'md:w-[30rem] w-full'}>
+            <section id="beneficialOwnerSection" className={'md:max-w-[30rem] w-full md:mx-auto '}>
                 <Tabs
                     id="beneficialOwnerTabs"
                     value={selectedForm}
@@ -85,7 +101,7 @@ const BeneficialOwnerStep = () => {
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent id="entityTabContent" value="entity">
-                        <main id="entityFormMain" className="grid gap-10 h-[calc(100vh-300px)] overflow-y-auto">
+                        <main id="entityFormMain" className="grid gap-6 h-[calc(100vh-300px)] overflow-y-auto pr-3">
                             <section className={'grid p-5 gap-5 border rounded-md border-lightBlue250'}>
                                 <div id="entityNameContainer" className="grid gap-2">
                                     <Label htmlFor="entityName" id="entityNameLabel"
@@ -100,19 +116,6 @@ const BeneficialOwnerStep = () => {
                                         className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                     />
                                 </div>
-                                <div id="rcNumberContainer" className="grid gap-2">
-                                    <Label htmlFor="rcNumber" id="rcNumberLabel"
-                                           className="block text-sm font-medium text-labelBlue">
-                                        RC number
-                                    </Label>
-                                    <Input
-                                        id="rcNumber"
-                                        value={rcNumber}
-                                        onChange={(e) => setRcNumber(e.target.value)}
-                                        placeholder="Enter number"
-                                        className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                                    />
-                                </div>
                                 <div id="countryOfIncorporationContainer" className="grid gap-2">
                                     <Label htmlFor="countryOfIncorporation" id="countryOfIncorporationLabel"
                                            className="block text-sm font-medium text-labelBlue">
@@ -121,8 +124,27 @@ const BeneficialOwnerStep = () => {
                                     <CountrySelectPopover
                                         selectedCountry={selectedCountry}
                                         onCountryChange={(value) => setSelectedCountry(value)}
+                                        restrictedCountries={["US", "NG"]}
+                                        disableSearch={true}
                                     />
                                 </div>
+                                <div id="rcNumberContainer" className="grid gap-2">
+                                    <Label htmlFor="rcNumber" id="rcNumberLabel"
+                                           className="block text-sm font-medium text-labelBlue">
+                                        RC number
+                                    </Label>
+                                    <Input
+                                        id="rcNumber"
+                                        value={rcNumber}
+                                        onChange={(e) => {
+                                            const value = e.target.value.replace(/^rc/i, 'RC');
+                                            setRcNumber(value);
+                                        }}
+                                        placeholder="Enter RC number"
+                                        className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                    />
+                                </div>
+
                             </section>
                             {sections.map((section) => (
                                 <section key={section.id}
@@ -140,19 +162,6 @@ const BeneficialOwnerStep = () => {
                                             className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                         />
                                     </div>
-                                    <div id="rcNumberContainer" className="grid gap-2">
-                                        <Label htmlFor={`rcNumber-${section.id}`}
-                                               className="block text-sm font-medium text-labelBlue">
-                                            RC number
-                                        </Label>
-                                        <Input
-                                            id={`rcNumber-${section.id}`}
-                                            value={section.rcNumber}
-                                            onChange={(e) => handleInputChange(section.id, "rcNumber", e.target.value)}
-                                            placeholder="Enter number"
-                                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                                        />
-                                    </div>
                                     <div id="countryOfIncorporationContainer" className="grid gap-2">
                                         <Label htmlFor={`country-${section.id}`}
                                                className="block text-sm font-medium text-labelBlue">
@@ -161,6 +170,24 @@ const BeneficialOwnerStep = () => {
                                         <CountrySelectPopover
                                             selectedCountry={section.country}
                                             onCountryChange={(value) => handleInputChange(section.id, "country", value)}
+                                            restrictedCountries={["US", "NG"]}
+                                            disableSearch={true}
+                                        />
+                                    </div>
+                                    <div id="rcNumberContainer" className="grid gap-2">
+                                        <Label htmlFor={`rcNumber-${section.id}`}
+                                               className="block text-sm font-medium text-labelBlue">
+                                            RC number
+                                        </Label>
+                                        <Input
+                                            id={`rcNumber-${section.id}`}
+                                            value={section.rcNumber}
+                                            onChange={(e) => {
+                                                const value = e.target.value.replace(/^rc/i, 'RC');
+                                                handleInputChange(section.id, "rcNumber", value);
+                                            }}
+                                            placeholder="Enter RC number"
+                                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                         />
                                     </div>
                                     <div className={'flex justify-end'}>
@@ -169,12 +196,13 @@ const BeneficialOwnerStep = () => {
                                             className="bg-greyBase200 py-1 px-2 hover:bg-greyBase200 flex rounded-md gap-1 h-[1.8125rem] w-[5.25rem]"
                                         >
                                             <MdDeleteOutline className="text-error450 h-5 w-5"/>
-                                            <span className={'text-error450 text-[14px] leading-[150%] font-medium'}>Delete</span>
+                                            <span
+                                                className={'text-error450 text-[14px] leading-[150%] font-medium'}>Delete</span>
                                         </button>
                                     </div>
                                 </section>
                             ))}
-                            <main className={'sticky bottom-0 bg-white '}>
+                            <main className={'sticky bottom-0  bg-white py-4 pr-4'}>
 
                                 <div className="flex items-center gap-1 mb-4">
                                     <Button
@@ -196,8 +224,8 @@ const BeneficialOwnerStep = () => {
                                     </Button>
                                     <Button
                                         id="entityFormSaveContinueButton"
-                                        type={'submit'}
-                                        onClick={() => router.push('/kyc/declaration')}
+                                        type={'button'}
+                                        onClick={handleSaveAndContinue}
                                         disabled={!isFormValid}
                                         className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 ${!isFormValid ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'} text-white rounded-md  order-1 md:order-2`}
                                     >
@@ -208,7 +236,7 @@ const BeneficialOwnerStep = () => {
                         </main>
                     </TabsContent>
                     <TabsContent id="individualTabContent" value="individual">
-                        <IndividualOwnerForm/>
+                        <IndividualOwnershipForm/>
                     </TabsContent>
                 </Tabs>
             </section>

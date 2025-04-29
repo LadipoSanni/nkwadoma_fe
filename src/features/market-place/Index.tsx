@@ -159,6 +159,13 @@ const MarketPlaceView = () => {
         [isLoading, isFetching, hasMore]
     );
 
+    const handleReset = () => {
+        setSelectedType("");
+        setPageNumber(0);
+        setAllVehicles([]);
+        setHasMore(true);
+    };
+
     return (
         <main id="marketplaceView" className="py-9 px-5">
             <div id="searchDiv" className="px-2 flex md:flex-row flex-col gap-3">
@@ -171,15 +178,22 @@ const MarketPlaceView = () => {
                 <CustomSelect
                     id="marketplaceSelect"
                     value={selectedValue}
-                    onChange={(value) => setSelectedType(value)}
-                    selectContent={["Commercial", "Endowment"]}
+                    // onChange={(value) => setSelectedType(value)}
+                    selectContent={["Commercial", "Endowment", "Reset"]}
+                    onChange={(value) => {
+                        if (value === "Reset") {
+                            handleReset();
+                        } else {
+                            setSelectedType(value);
+                        }
+                    }}
                     placeHolder="Type"
                     triggerId="marketplaceTrigger"
                     className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                 />
             </div>
 
-            {isLoading && pageNumber === 0  || isSearchLoading || isSearchFetching || filteringIsLoading || filteringIsFetching ? (
+            {isLoading && pageNumber === 0  || isSearchLoading || isSearchFetching || filteringIsLoading || filteringIsFetching || isFetching && pageNumber > 0 ? (
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
@@ -218,7 +232,7 @@ const MarketPlaceView = () => {
                             status === "OPEN" ? "border-[#B4E5C8]" : status === "CLOSE" ? "border-[#F2BCBA]" : "border-gray-300";
                         // const statusKey = vehicle.fundRaisingStatus ? "fundRaisingStatus" : "deployingStatus";
                         const statusValue = vehicle.fundRaisingStatus ? vehicle.fundRaisingStatus : vehicle.deployingStatus ;
-                        const statuses = vehicle.fundRaisingStatus ?  'Fundrasing' : 'Deploying';
+                        const statuses = vehicle.fundRaisingStatus ?  'Fundraising' : 'Deploying';
                         // fundRaising = `${statusKey}`;
                         const typeTextColor = vehicle.investmentVehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
 
@@ -252,11 +266,11 @@ const MarketPlaceView = () => {
 
                         return <InvestmentCard key={vehicle.id} {...cardProps} />;
                     })}
-                    {isFetching && pageNumber > 0 && (
-                        <div className="col-span-full text-center py-4">
-                            Loading more...
-                        </div>
-                    )}
+                    {/*{isFetching && pageNumber > 0 && (*/}
+                    {/*    <div className="col-span-full text-center py-4">*/}
+                    {/*        Loading more...*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                 </div>
             )}
         </main>

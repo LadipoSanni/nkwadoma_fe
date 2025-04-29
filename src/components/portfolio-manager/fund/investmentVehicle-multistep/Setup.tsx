@@ -209,8 +209,8 @@ function Setup({investmentVehicleType}: Props) {
     <div className={`${inter.className} `}>
         <div className='xl:px-36 grid grid-cols-1 gap-y-6 '>
        <div className='grid grid-cols-1 gap-y-1'>
-        <h1 className='text-[18px] font-normal'>Set up {vehicleType} fund</h1>
-        <p className='text-[14px] font-normal'>Provide details of your {vehicleType} fund</p>
+        <h1 className='text-[18px] font-normal'>Set up {vehicleType} vehicle</h1>
+        {/*<p className='text-[14px] font-normal'>Provide details of your {vehicleType} vehicle</p>*/}
        </div>
        <div>
        <Formik
@@ -477,14 +477,7 @@ function Setup({investmentVehicleType}: Props) {
                 </div>
                 </div>
                 <div className='relative md:bottom-9 bottom-2'>
-                   <Label htmlFor="mandate">Vehicle mandate</Label>  
-                   {/* <Field
-                  name="mandate"
-                  component={FormikCustomQuillField}
-                  maximumDescription={2500}
-                  // label={"Mandate"}
-                  placeholder={"Enter mandate..."}
-                /> */}
+                   <Label htmlFor="mandate">Vehicle mandate</Label>
                    <div className='mt-4'>
                    <PdfAndDocFileUpload
                     handleDrop={handleDrop}
