@@ -14,11 +14,12 @@ import {
 } from "@/service/admin/fund_query";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import 'react-quill-new/dist/quill.snow.css'
-import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
-import styles from "@/components/selected-loan/SelectedLoan.module.css"
 import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
 import {store, useAppSelector} from "@/redux/store";
 import {formatAmount} from "@/utils/Format";
+import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
+import styles from "@/features/market-place/Index.module.css";
+
 
 
 interface CreateLoanProductProps {
@@ -271,6 +272,15 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     }
 
 
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+    };
+
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+    };
+
+
     return (
         <main>
             <Formik
@@ -284,11 +294,11 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                         <Form className={`${inter.className}`}>
                             <div className='grid grid-cols-1'
                                  style={{
-                                     scrollbarWidth: 'none',
+                                     scrollbarWidth: 'thin',
                                      msOverflowStyle: 'none',
                                  }}
                             >
-                                <div className={`${styles.scrollBarNone} space-y-3  lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto`}>
+                                <div className={`${styles.container} space-y-3  lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto`}>
                                 <div>
                                     <Label htmlFor="productName">Product name</Label>
                                     <Field
@@ -654,12 +664,23 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                 <div className={`pt-4`}>
                                     <Label htmlFor="loanProductMandate">Loan product mandate</Label>
-                                    <Field
-                                        name="loanProductMandate"
-                                        component={FormikCustomQuillField}
-                                        maximumDescription={2500}
-                                        placeholder={"Enter product mandate..."}
-                                    />
+                                    {/*<Field*/}
+                                    {/*    name="loanProductMandate"*/}
+                                    {/*    component={FormikCustomQuillField}*/}
+                                    {/*    maximumDescription={2500}*/}
+                                    {/*    placeholder={"Enter product mandate..."}*/}
+                                    {/*/>*/}
+                                   <div className={`pt-3`}>
+                                       <PdfAndDocFileUpload
+                                           handleDrop={handleDrop}
+                                           handleDragOver={handleDragOver}
+                                           setUploadedDocUrl={(url: string | null) =>
+                                               setFieldValue("loanProductMandate", url)
+                                           }
+                                           initialDocUrl={values.loanProductMandate}
+                                           cloudinaryFolderName='loan-product-mandate'
+                                       />
+                                   </div>
                                     {errors.loanProductMandate && touched.loanProductMandate && (
                                         <ErrorMessage
                                             name="loanProductMandate"
@@ -673,12 +694,23 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product
                                         terms and
                                         conditions</Label>
-                                    <Field
-                                        name="loanProductTermsAndCondition"
-                                        component={FormikCustomQuillField}
-                                        maximumDescription={2500}
-                                        placeholder={"Enter terms and condition"}
-                                    />
+                                    {/*<Field*/}
+                                    {/*    name="loanProductTermsAndCondition"*/}
+                                    {/*    component={FormikCustomQuillField}*/}
+                                    {/*    maximumDescription={2500}*/}
+                                    {/*    placeholder={"Enter terms and condition"}*/}
+                                    {/*/>*/}
+                                    <div className={`pt-3`}>
+                                        <PdfAndDocFileUpload
+                                            handleDrop={handleDrop}
+                                            handleDragOver={handleDragOver}
+                                            setUploadedDocUrl={(url: string | null) =>
+                                                setFieldValue("loanProductTermsAndCondition", url)
+                                            }
+                                            initialDocUrl={values.loanProductTermsAndCondition}
+                                            cloudinaryFolderName='loan-product-terms-and-conditions'
+                                        />
+                                    </div>
                                     {errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
                                         <ErrorMessage
                                             name="loanProductTermsAndCondition"
