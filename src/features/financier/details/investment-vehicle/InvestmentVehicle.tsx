@@ -76,17 +76,17 @@ function InvestmentVehicle() {
     }
 
     const financierHeader = [
-        { title: 'Financier', sortable: true, id: 'name', selector: (row:viewAllfinancier ) => row?.investmentVehicleName},
+        { title: 'Name', sortable: true, id: 'name', selector: (row:viewAllfinancier ) => row?.investmentVehicleName},
         // { title: 'Type', sortable: true, id: 'type', selector: (row:viewAllfinancier) => <div className='w-full flex justify-center items-center '><div className={`${row.financierType === "INDIVIDUAL"? "text-[#68442E] bg-warning50 ": "text-[#142854] bg-[#EEF5FF]"} px-2 rounded-xl relative md:right-[12px]  `}>{capitalizeFirstLetters(row.financierType)}</div></div> },
         { title: <div className='relative md:left-4'>Type</div>, id: 'type', selector: (row:viewAllfinancier) => (
                 <span className={`${row.investmentVehicleType ===  "ENDOWMENT" ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
     {capitalizeFirstLetters(row.investmentVehicleType)}
 </span>
             ) },
-        { title: 'No. of investments', sortable: true, id: 'number_of_investments', selector: (row:viewAllfinancier) => row.dateInvested|| 0 },
+        { title: 'Date invested', sortable: true, id: 'number_of_investments', selector: (row:viewAllfinancier) => row.dateInvested|| 0 },
         { title: 'Amount invested', sortable: true, id: 'amount_invested', selector: (row:viewAllfinancier) => formatAmount(row.amountInvested)},
-        { title: 'Amount earned', sortable: true, id: 'amount_earned', selector: (row:viewAllfinancier) =>formatAmount(row.incomeEarned)},
-        { title: 'Payout', sortable: true, id: 'payout', selector: (row:viewAllfinancier) => formatAmount(row.netAssertValue)},
+        { title: 'Income earned', sortable: true, id: 'amount_earned', selector: (row:viewAllfinancier) =>formatAmount(row.incomeEarned)},
+        { title: 'Net asset value', sortable: true, id: 'payout', selector: (row:viewAllfinancier) => formatAmount(row.netAssertValue)},
         { title: 'Portfolio value', sortable: true, id: 'portfolio_value', selector: (row:viewAllfinancier) => formatAmount(row.portfolioValue)},
 
     ]
