@@ -1,4 +1,3 @@
-// src/redux/reducer.ts
 import { combineReducers } from 'redux';
 import adminLayoutReducer from '@/redux/slice/layout/adminLayout';
 import selectedLoanReducer from '@/redux/slice/loan/selected-loan';
@@ -30,6 +29,7 @@ import kycMultistepReducer from './slice/multiselect/kyc-multiselect'
 
 import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
 import {marketplaceApi} from "@/service/financier/marketplace";
+import {portfolioOverviewApi} from '@/service/admin/overview'
 import kycFormReducer from "@/redux/slice/kyc/kycFormSlice";
 
 const appReducer = combineReducers({
@@ -63,6 +63,7 @@ const appReducer = combineReducers({
     [financierApi.reducerPath]: financierApi.reducer,
     [financierOnboardingAndDashboardApi.reducerPath]: financierOnboardingAndDashboardApi.reducer,
     [marketplaceApi.reducerPath]: marketplaceApi.reducer,
+    [portfolioOverviewApi.reducerPath]: portfolioOverviewApi.reducer,
 });
 
 export default appReducer;
