@@ -97,9 +97,9 @@ export const financierApi = createApi({
         searchFinancierVehicle: builder.query({
             query: (param: {
                 investmentVehicleName: string;
+                financierId?: string
                 pageSize: number;
                 pageNumber: number;
-                financierId?: string
 
             })=> ({
                 url: "/financier/search-all-investment?",
