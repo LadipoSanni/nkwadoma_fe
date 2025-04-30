@@ -164,7 +164,7 @@ const LoanProductPage = () => {
                         tableData={allLoanee.slice().reverse()}
                         handleRowClick={handleRowClick}
                         tableHeader={loanProductHeader}
-                        tableHeight={52}
+                        tableHeight={58}
                         sx='cursor-pointer'
                         staticColunm="name"
                         staticHeader="Loan Product"

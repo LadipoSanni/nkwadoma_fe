@@ -3,14 +3,16 @@ import React,{useState,useEffect} from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
 import {inter} from '@/app/fonts'
 import { formatAmount } from '@/utils/Format';
-import { Book } from "lucide-react";
 import { useRouter } from 'next/navigation'
 import {useAppSelector} from "@/redux/store";
 import {useViewFinancierVehiclesQuery} from '@/service/admin/financier';
+import {useSearchFinancierVehicleQuery} from '@/service/admin/financier';
 import Table from '@/reuseable/table/Table';
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import {setFinancierInvestmentVehicleId, setFinancierMode} from '@/redux/slice/financier/financier';
 import {store} from "@/redux/store";
+import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import {MdOutlinePayments, MdSearch} from "react-icons/md";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -47,16 +49,32 @@ function InvestmentVehicle() {
         financierId: activeAndInvitedFinancierId
     }
 
+    const searchParam ={
+        investmentVehicleName: searchTerm,
+        financierId: activeAndInvitedFinancierId,
+        pageSize: 10,
+        pageNumber: pageNumber,
+    }
+
     const {data,isLoading} = useViewFinancierVehiclesQuery(param,{skip: !activeAndInvitedFinancierId})
 
+    const {data:searchData} = useSearchFinancierVehicleQuery(searchParam, {skip: !searchTerm})
+
     useEffect(()=>{
-        if(data && data.data){
+        if(searchTerm && searchData && searchData?.data){
+            const result = searchData?.data?.body
+            setFinanciers(result)
+            setNextPage(searchData?.data?.hasNextPage)
+            setTotalPage(searchData?.data?.totalPages)
+            setPageNumber(searchData?.data?.pageNumber)
+        }
+        else if(data && data.data){
             setFinanciers(data?.data?.body)
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
         }
-    },[data])
+    },[data, searchTerm, searchData])
 
     // const handleOpenModal = () => {
     //     setIsOpen(true)
@@ -99,23 +117,29 @@ function InvestmentVehicle() {
                 />
             </div>
             <div className='mt-6 '>
-                <Table
-                    tableData={financiers}
-                    tableHeader={financierHeader}
-                    handleRowClick={handleRowClick}
-                    tableHeight={48}
-                    icon={Book}
-                    sideBarTabName='financier'
-                    condition={true}
-                    staticHeader={"Financier"}
-                    staticColunm={"name"}
-                    sx='cursor-pointer'
-                    hasNextPage={hasNextPage}
-                    pageNumber={pageNumber}
-                    setPageNumber={setPageNumber}
-                    totalPages={totalPage}
-                    isLoading={isLoading}
-                />
+                {searchTerm && searchData?.data?.body.length === 0 ? (
+                    <div className={`flex justify-center items-center text-center md:h-[38vh] h-[40%] w-full mt-38`}>
+                    <SearchEmptyState icon={MdSearch} name="Investment vehicle" />
+                    </div>
+                ):(
+                    <Table
+                        tableData={financiers}
+                        tableHeader={financierHeader}
+                        handleRowClick={handleRowClick}
+                        tableHeight={58}
+                        icon={MdOutlinePayments}
+                        sideBarTabName='financier'
+                        condition={true}
+                        staticHeader={"Financier"}
+                        staticColunm={"name"}
+                        sx='cursor-pointer'
+                        hasNextPage={hasNextPage}
+                        pageNumber={pageNumber}
+                        setPageNumber={setPageNumber}
+                        totalPages={totalPage}
+                        isLoading={isLoading}
+                    />
+                )}
             </div>
         </div>
     )
