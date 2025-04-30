@@ -62,7 +62,8 @@ const MyInvestment = () => {
     }, [isFiltered, filteredData, searchData, searchTerm])
 
 
-
+    console.log('searched data: ', searchData, 'filtered data: ', filteredData)
+    console.log('myInvestmentVehicles: ', myInvestmentVehicles)
 
 
 
@@ -91,6 +92,13 @@ const MyInvestment = () => {
     }
 
     const filterInvestments = (type: string) => {
+        console.log('type:: ', type)
+        if (type === 'Reset'){
+            setSelectedValue('')
+            setIsFiltered(true)
+            // setMyInvestmentVehicles([])
+            // setMyInvestmentVehicles(filteredData?.data?.body)
+        }
         setSelectedValue(type)
         setIsFiltered(true)
     }
@@ -111,7 +119,7 @@ const MyInvestment = () => {
                     id="marketplaceSelect"
                     value={selectedValue}
                     onChange={(value) => filterInvestments(value)}
-                    selectContent={["Commercial", "Endowment"]}
+                    selectContent={["Commercial", "Endowment", 'Reset']}
                     placeHolder="Type"
                     triggerId="marketplaceTrigger"
                     className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
