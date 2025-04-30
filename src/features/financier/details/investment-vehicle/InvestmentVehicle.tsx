@@ -129,7 +129,7 @@ function InvestmentVehicle() {
                         handleRowClick={handleRowClick}
                         tableHeight={58}
                         icon={MdOutlinePayments}
-                        sideBarTabName='investment vehicle'
+                        sideBarTabName='investment'
                         condition={true}
                         staticHeader={"Investment vehicle"}
                         staticColunm={"name"}
