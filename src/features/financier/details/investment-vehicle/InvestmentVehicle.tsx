@@ -3,7 +3,6 @@ import React,{useState,useEffect} from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
 import {inter} from '@/app/fonts'
 import { formatAmount } from '@/utils/Format';
-import { Book } from "lucide-react";
 import { useRouter } from 'next/navigation'
 import {useAppSelector} from "@/redux/store";
 import {useViewFinancierVehiclesQuery} from '@/service/admin/financier';
@@ -13,7 +12,7 @@ import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import {setFinancierInvestmentVehicleId, setFinancierMode} from '@/redux/slice/financier/financier';
 import {store} from "@/redux/store";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
-import {MdSearch} from "react-icons/md";
+import {MdOutlinePayments, MdSearch} from "react-icons/md";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -128,7 +127,7 @@ function InvestmentVehicle() {
                         tableHeader={financierHeader}
                         handleRowClick={handleRowClick}
                         tableHeight={58}
-                        icon={Book}
+                        icon={MdOutlinePayments}
                         sideBarTabName='financier'
                         condition={true}
                         staticHeader={"Financier"}
