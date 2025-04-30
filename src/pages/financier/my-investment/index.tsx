@@ -91,8 +91,13 @@ const MyInvestment = () => {
     }
 
     const filterInvestments = (type: string) => {
-        setSelectedValue(type)
-        setIsFiltered(true)
+        if (type === 'Reset'){
+            setSelectedValue('')
+            setIsFiltered(true)
+        }else {
+            setSelectedValue(type)
+            setIsFiltered(true)
+        }
     }
 
 
@@ -111,7 +116,7 @@ const MyInvestment = () => {
                     id="marketplaceSelect"
                     value={selectedValue}
                     onChange={(value) => filterInvestments(value)}
-                    selectContent={["Commercial", "Endowment"]}
+                    selectContent={["Commercial", "Endowment", 'Reset']}
                     placeHolder="Type"
                     triggerId="marketplaceTrigger"
                     className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"

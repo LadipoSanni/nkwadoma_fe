@@ -156,13 +156,15 @@ const LoanProductPage = () => {
                         <SkeletonForTable />
                     </div>
                 ) : searchTerm && searchResult && searchResult?.data.length === 0 ? (
-                    <SearchEmptyState name={"loan product"} icon={MdSearch} />
+                        <div className={`flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40`}>
+                            <SearchEmptyState name={"loan product"} icon={MdSearch} />
+                        </div>
                 ) : allLoanee.length > 0 ? (
                     <Tables
                         tableData={allLoanee.slice().reverse()}
                         handleRowClick={handleRowClick}
                         tableHeader={loanProductHeader}
-                        tableHeight={52}
+                        tableHeight={58}
                         sx='cursor-pointer'
                         staticColunm="name"
                         staticHeader="Loan Product"

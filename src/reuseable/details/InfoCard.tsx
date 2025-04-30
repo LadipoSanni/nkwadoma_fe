@@ -16,8 +16,8 @@ function          InfoCard({icon: Icon,fundTitle,description}: Props) {
     >
        <div className=' mt-2' >
          {Icon && 
-          <div id='emptyStateIconId' data-testid="icon-container" className='bg-lightBlue500 w-[80px] h-[80px] flex justify-center items-center rounded-full mb-6 font-extrabold'>
-         <Icon style={{fontSize:"1.8rem",color:"#142854"}}/>
+          <div id='emptyStateIconId' data-testid="icon-container" className='bg-lightBlue500 h-[7.5rem] w-[7.5rem] flex justify-center items-center rounded-full mb-6 font-extrabold'>
+         <Icon className={`h-[50px] w-[50px] text-meedlBlue`}/>
          </div>
          }
          </div>

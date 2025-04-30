@@ -156,7 +156,7 @@ const Details = () => {
         },
         {name: 'Amount raised', value: formatAmount(data?.data?.amountRaised?.toString() || '0')},
         {name: 'Amount disbursed', value: formatAmount(data?.data?.amountDisbursed?.toString() || '0')},
-        {name: 'Amount available', value: formatAmount(data?.data?.amountAvailable?.toString() || '0')},
+        {name: 'Amount available', value: formatAmount(data?.data?.totalAvailableAmount?.toString() || '0')},
         {name: 'Total income generated', value: formatAmount(data?.data?.totalIncomeGenerated?.toString() || '0')},
         {name: 'Net asset value', value: formatAmount(data?.data?.netAssetValue?.toString() || '0')},
     ];
@@ -236,7 +236,7 @@ const Details = () => {
                        <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
                        
                           <div className='flex gap-2 items-center'>
-                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p>
+                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{data?.data?.investmentVehicleVisibility === "DEFAULT"? "Only-me"  : capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p>
                           </div>
                          
                            <Button 

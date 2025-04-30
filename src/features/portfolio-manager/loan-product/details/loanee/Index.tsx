@@ -67,13 +67,13 @@ export function Loanees() {
             <div id={`loanProductTab2`} className={'grid gap-4'}>
                 <SearchInput id={'loanProductLoaneeSearch'} value={searchTerm} onChange={handleSearchChange}/>
                 <div>
-                    {searchTerm && loanees.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='Loanee'/></div> :
+                    {searchTerm && loanees.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :
                         <Tables
                             tableData={loanees}
                             tableHeader={LoanProductLoaneeHeader}
                             staticHeader={'Loanee'}
                             staticColunm={'name'}
-                            tableHeight={45}
+                            tableHeight={58}
                             icon={MdOutlinePerson}
                             sideBarTabName={"Loanee"}
                             handleRowClick={() => {

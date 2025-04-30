@@ -45,6 +45,9 @@ export const financierApi = createApi({
                name: string; 
                pageNumber: number; 
                 pageSize: number; 
+                activationStatus?: string;
+                investmentVehicleId?: string
+
             })=> ({
                 url: "/financier/search",
                 method: 'GET',
@@ -78,10 +81,35 @@ export const financierApi = createApi({
                 params: param
             }),
             providesTags: ['financier']
-        })
+        }),
+        viewFinancierVehicles: builder.query({
+            query: (param:{
+                financierId: string,
+                pageNumber: number,
+                pageSize: number,
+            })=> ({
+                url: "/financier/all-investment?",
+                method: 'GET',
+                params: param
+            }),
+            providesTags: ['financier']
+        }),
+        searchFinancierVehicle: builder.query({
+            query: (param: {
+                investmentVehicleName: string;
+                financierId?: string
+                pageSize: number;
+                pageNumber: number;
+
+            })=> ({
+                url: "/financier/search-all-investment?",
+                method: 'GET',
+                params: param
+            })
+        }),
     })
 })
 
 export const {useInviteFinancierMutation,useViewFinanciersByInvestmentmentVehicleQuery,
-    useSearchFinancierQuery,useViewAllFinanciersQuery,
-    useViewFinancierDetailQuery, useGetAllActiveAndInvitedFinanciersQuery} = financierApi
+    useSearchFinancierQuery,useViewAllFinanciersQuery, useViewFinancierVehiclesQuery,
+    useViewFinancierDetailQuery, useGetAllActiveAndInvitedFinanciersQuery, useSearchFinancierVehicleQuery} = financierApi
