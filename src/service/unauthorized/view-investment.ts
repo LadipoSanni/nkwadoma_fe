@@ -7,7 +7,7 @@ export const publicInvestmentApi = createApi({
     baseQuery: customFetchBaseQuery,
     endpoints: (builder) => ({
         viewPublicInvestmentDetails: builder.query({
-            query: (investmentName: string)=> ({
+            query: (investmentName: string| undefined)=> ({
                 url: `/investment-vehicle/detail/link/${investmentName}`,
                 method: 'GET',
             })

@@ -4,10 +4,36 @@ import styles from "@/features/market-place/Index.module.css";
 import Image from "next/image";
 import {cabinetGroteskMediumBold600, inter} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
+import {useSearchParams} from "next/navigation";
+import {useViewPublicInvestmentDetailsQuery} from "@/service/unauthorized/view-investment";
 const ViewPublicInvestmentVehicle = () => {
 
 
-    const investmentBasicDetails = [
+        const searchParams = useSearchParams()
+
+
+        const getInvestmentVehicleName = () => {
+            if (searchParams){
+                const pathVariable = searchParams.get("name")
+                if (pathVariable){
+                    return pathVariable
+                }
+            }
+        }
+        const vehicleName = getInvestmentVehicleName()
+        console.log('vehicleName', vehicleName)
+        // if (vehicleName){
+        //     const {data, isLoading} = useViewPublicInvestmentDetailsQuery(vehicleName)
+        // }
+
+       const {data, isLoading} = useViewPublicInvestmentDetailsQuery(vehicleName)
+
+
+        console.log('data: ', data)
+
+
+
+        const investmentBasicDetails = [
         {label: 'Maturity date',
             // value: `${data?.data?.tenure} ${data?.data?.tenure === 1 ? 'month' : 'months'}`}
             value: ''},
