@@ -62,8 +62,7 @@ const MyInvestment = () => {
     }, [isFiltered, filteredData, searchData, searchTerm])
 
 
-    console.log('searched data: ', searchData, 'filtered data: ', filteredData)
-    console.log('myInvestmentVehicles: ', myInvestmentVehicles)
+
 
 
 
@@ -92,15 +91,13 @@ const MyInvestment = () => {
     }
 
     const filterInvestments = (type: string) => {
-        console.log('type:: ', type)
         if (type === 'Reset'){
             setSelectedValue('')
             setIsFiltered(true)
-            // setMyInvestmentVehicles([])
-            // setMyInvestmentVehicles(filteredData?.data?.body)
+        }else {
+            setSelectedValue(type)
+            setIsFiltered(true)
         }
-        setSelectedValue(type)
-        setIsFiltered(true)
     }
 
 
