@@ -38,7 +38,7 @@ const ViewPublicInvestmentVehicle = () => {
         const statusValue = status === 'Deploying' ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus;
 
     // console.log('statusValue', statusValue)
-        const vehicleType = data?.data?.investmentVehicleType;
+    const vehicleType = data?.data?.investmentVehicleType;
     const getFilenameFromUrl = (url: string) => {
         try {
             const urlObj = new URL(url);
