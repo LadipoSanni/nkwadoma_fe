@@ -97,7 +97,7 @@ function ChooseVisibility() {
 
 
      const {data: financiersInInvestmentVehicle} = useFinancierInvestmentVehicleQuery(props, {skip: !investmentVehicleId})
-    const link = baseUrl+ '/view-investment-vehicle?name='+ urlLink;
+    const link = baseUrl+ 'view-investment-vehicle?name='+ urlLink;
 
 
     const validationSchema = Yup.object().shape({
