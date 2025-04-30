@@ -1,22 +1,25 @@
 'use client'
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter} from "next/navigation";
 import {useAppSelector} from "@/redux/store";
-import { useViewFinancierDetailQuery } from '@/service/admin/financier';
+import {useFinancierVehicleDetailsQuery} from '@/service/admin/financier';
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
-import { getInitial } from '@/utils/GlobalMethods';
 import { formatAmount } from '@/utils/Format';
-import {cabinetGroteskMediumBold, inter} from "@/app/fonts";
+import {inter} from "@/app/fonts";
 import styles from "@/features/portfolio-manager/fund/fundDetails/financiers/financier-details/index.module.css";
+import { MdOutlinePayments} from "react-icons/md";
+import InfoCard from "@/reuseable/details/InfoCard";
 
 const FinancierInvestmentVehiclesDetails = () => {
-    const currentFinancierId = useAppSelector(state => (state.financier.activeAndInvitedFinancierId))
+    const financierId = useAppSelector(state => (state.financier.activeAndInvitedFinancierId))
     const financierMode = useAppSelector(state => (state.financier.financierMode))
+    const investmentVehicleFinancierId = useAppSelector(state=> (state.financier.financierInvestmentVehicleId))
     const router = useRouter();
+    const [statusValue, setStatusValue] = useState("");
 
-    const  {data, isLoading} = useViewFinancierDetailQuery({financierId:currentFinancierId},{skip : !currentFinancierId})
+    const  {data, isLoading} = useFinancierVehicleDetailsQuery({financierId:financierId, investmentVehicleFinancierId:investmentVehicleFinancierId})
 
 
 
@@ -27,21 +30,39 @@ const FinancierInvestmentVehiclesDetails = () => {
             router.push("/financier/investmentVehicles");
         }
     }
-    const initial = getInitial(data?.data?.firstName ,data?.data?.lastName);
-    const companyInitial = getInitial(data?.data?.organizationName )
+
+    const status = () => {
+        if (data?.data?.couponDistributionStatus !== null) {
+            return { value: data?.data?.couponDistributionStatus, type: "coupon" };
+        } else if (data?.data?.fundRaisingStatus || data?.data?.deployingStatus) {
+            return { value: data?.data?.fundRaisingStatus || data?.data?.deployingStatus, type: "operation" };
+        } else {
+            return {
+                value: data?.data?.vehicleClosureStatus?.recollectionStatus ?? data?.data?.vehicleClosureStatus?.maturity,
+                type: "closure",
+            };
+        }
+    };
+
+    // useEffect to update the state based on the status function
+    useEffect(() => {
+        if (data) {
+            const result = status();
+            setStatusValue(result.value);
+        }
+    }, [data,status]);
 
 
     const basicDetails = [
-        {label: 'Vehicle type', value: <div className={` w-fit h-fit rounded-full px-2 bg-[#EEF5FF] text-[#142854] `}>{capitalizeFirstLetters(data?.data?.financierType)}</div>},
-        {label: 'Investment start date', value:  data?.data?.phoneNumber ?? "Not provided"},
-        {label: 'Date invested', value:  data?.data?.phoneNumber ?? "Not provided"},
-        {label: 'Total amount invested', value:  formatAmount(data?.data?.totalNumberOfInvestment)},
-        {label: 'Maturity date', value: data?.data?.address ?? "Not provided"},
-        {label: 'Income earned', value: formatAmount(data?.data?.totalIncomeEarned)},
-        {label: 'Designation', value: data?.data?.address ?? "Not provided"},
-        {label: 'Vehicle operation status', value:  ``?? `Not provided`},
-        {label: 'Vehicle closure status', value: ``??   "Not provided" },
-        {label: 'Vehicle visibility status', value: 'Not provided'},
+        {label: 'Vehicle type', value: <div className={` w-fit h-fit rounded-full px-2 bg-[#EEF5FF] text-[#142854] `}>{capitalizeFirstLetters(data?.data?.investmentVehicleType)}</div>},
+        {label: 'Investment start date', value:  data?.data?.startDate ?? "Not provided"},
+        {label: 'Date invested', value:  data?.data?.dateInvested ?? "Not provided"},
+        {label: 'Total amount invested', value:  formatAmount(data?.data?.amountInvested)},
+        {label: 'Maturity date', value: data?.data?.maturityDate ?? "Not provided"},
+        {label: 'Income earned', value: formatAmount(data?.data?.incomeEarned) ?? "0"},
+        {label: 'Designation', value: data?.data?.designations ?? "Not provided"},
+        {label: `Vehicle ${status().type} status`, value:  capitalizeFirstLetters(statusValue) ?? `Not provided`},
+        {label: 'Vehicle visibility status', value: capitalizeFirstLetters(data?.data?.investmentVehicleVisibility) ?? 'Not provided'},
     ]
 
 
@@ -62,18 +83,19 @@ const FinancierInvestmentVehiclesDetails = () => {
                     >
                         <div>
 
-                            <div
-                                className={` ${cabinetGroteskMediumBold.className} md:text-[28px] w-32 h-32 md:w-20 md:h-20 text-[#885A3C]  flex bg-[#FEF6F0] rounded-full justify-center items-center`}>
-                                {data?.data?.organizationName === null? initial : companyInitial}
-                            </div>
+                            {/*<div*/}
+                            {/*    className={` ${cabinetGroteskMediumBold.className} md:text-[28px] w-32 h-32 md:w-20 md:h-20 text-[#885A3C]  flex bg-[#FEF6F0] rounded-full justify-center items-center`}>*/}
+                            {/*    {data?.data?.organizationName === null? initial : companyInitial}*/}
+                            {/*</div>*/}
+                            {/*MdOutlinePayments*/}
                             <div
                                 className={`grid gap-2 mt-4`}
                             >
-                                <div id={'financierName'}
-                                     data-testid={'financierName'}
-                                     className={`${cabinetGroteskMediumBold.className} text-black text-xl md:text-[28px]  `}>
-                                    {data?.data?.organizationName === null? data?.data?.firstName  + " " +  data?.data?.lastName : data?.data?.organizationName}
-                                </div>
+                                <InfoCard
+                                    icon={MdOutlinePayments}
+                                    fundTitle={data?.data?.name}
+                                    description={"Net asset value - " + data?.data.netAssetValue}
+                                />
                                 <span id={'financierEmail'}
                                       data-testid={'financierEmail'}
                                       className={`${inter.className} text-sm text-black400`}>
