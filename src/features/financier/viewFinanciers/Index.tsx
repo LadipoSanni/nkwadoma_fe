@@ -84,6 +84,7 @@ const ViewFinanciers = () => {
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
+           
         }
     },[searchTerm, searchData,data])
 

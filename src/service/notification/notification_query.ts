@@ -35,7 +35,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
                   await queryFulfilled;
                   dispatch(notificationApi.util.invalidateTags(['notification']));
                 } catch (error) {
-                  console.error('Error fetching notification details:', error);
+                  console.debug('Error fetching notification details:', error);
                 }
               },    
         }),

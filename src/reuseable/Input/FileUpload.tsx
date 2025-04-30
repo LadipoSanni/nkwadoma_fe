@@ -8,14 +8,23 @@ interface FileUploadProps {
     handleDrop: (event: React.DragEvent<HTMLDivElement>) => void;
     handleDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
     setUploadedImageUrl: (url: string | null) => void;
-    labelName?: string
+    labelName?: string;
+    supportedFileTypes?: string[];
+    fileTypesText?: string;
 }
 
 const truncateFileName = (name: string, length: number) => {
     return name.length > length ? name.substring(0, length) + "..." : name;
 };
 
-const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setUploadedImageUrl,labelName}) => {
+const FileUpload: React.FC<FileUploadProps> = ({ 
+    handleDrop, 
+    handleDragOver, 
+    setUploadedImageUrl, 
+    labelName, 
+    supportedFileTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/webp"],
+    fileTypesText = "SVG, PNG OR JPG  (max. 800x400px)"
+}) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -39,10 +48,9 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
 
     const onFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0];
-        const supportedTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg"];
 
         if (selectedFile) {
-            if (!supportedTypes.includes(selectedFile.type)) {
+            if (!supportedFileTypes.includes(selectedFile.type)) {
                 setError("File not supported");
                 setIsFileSupported(false);
                 setFile(selectedFile);
@@ -68,10 +76,9 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
     const onDrop = async (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         const droppedFile = event.dataTransfer.files?.[0];
-        const supportedTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg","image/webp"];
 
         if (droppedFile) {
-            if (!supportedTypes.includes(droppedFile.type)) {
+            if (!supportedFileTypes.includes(droppedFile.type)) {
                 setError("File not supported");
                 setIsFileSupported(false);
                 setFile(droppedFile);
@@ -118,7 +125,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
                 <input
                     id="fileInput"
                     type="file"
-                    accept=".svg,.png,.jpg,.jpeg"
+                    accept={supportedFileTypes.includes("application/pdf") ? ".pdf,.svg,.png,.jpg,.jpeg" : ".svg,.png,.jpg,.jpeg"}
                     style={{ display: 'none' }}
                     ref={fileInputRef}
                     onChange={onFileChange}
@@ -179,7 +186,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver,setU
                             </div>
                             <div id="uploadTextContainer" className={'grid gap-1 place-items-center'}>
                                 <p className={'font-normal text-black300 text-[14px] leading-[150%]'}><span className={'underline text-meedlBlue'}>Click to upload</span> or drag and drop</p>
-                                <p className={'text-black300 leading-[150%] text-[14px] font-normal'}>SVG, PNG OR JPG  (max. 800x400px) </p>
+                                <p className={'text-black300 leading-[150%] text-[14px] font-normal'}>{fileTypesText}</p>
                             </div>
                         </>
                     )

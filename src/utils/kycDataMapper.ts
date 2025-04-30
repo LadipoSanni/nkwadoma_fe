@@ -12,7 +12,7 @@ const mapCountryCodeToEnum = (countryCode?: string): string | undefined => {
   return countryMap[countryCode] || countryCode;
 };
 
-export const mapKycDataToApiRequest = (state: RootState) => {
+export const mapKycDataToApiRequest = (state: RootState, declarationOverride?: { agreedToTerms: boolean }) => {
   const { identification, sourceOfFunds, beneficialOwner, declaration } = state.kycForm;
 
   const beneficialOwners = [];
@@ -50,9 +50,9 @@ export const mapKycDataToApiRequest = (state: RootState) => {
           beneficialOwnerRelationship: section.relationship.toUpperCase(),
           beneficialOwnerDateOfBirth: section.dob,
           percentageOwnershipOrShare: parseFloat(section.ownership) || 0,
-          ...(section.proofType === 'votersCard' && { votersCard: section.proofFile?.name || "uploaded-file" }),
-          ...(section.proofType === 'nationalIdCard' && { nationalIdCard: section.proofFile?.name || "uploaded-file" }),
-          ...(section.proofType === 'driverLicense' && { driverLicense: section.proofFile?.name || "uploaded-file" }),
+          ...(section.proofType === 'voters_card' && { votersCard: section.proofFileUrl || section.proofFile?.name || "uploaded-file" }),
+          ...(section.proofType === 'national_id' && { nationalIdCard: section.proofFileUrl || section.proofFile?.name || "uploaded-file" }),
+          ...(section.proofType === 'driverLicense' && { driverLicense: section.proofFileUrl || section.proofFile?.name || "uploaded-file" }),
         });
       }
     });
@@ -73,7 +73,8 @@ export const mapKycDataToApiRequest = (state: RootState) => {
     ...(identification.type === 'INDIVIDUAL' && {
       nin: identification.individual?.nin || "",
       bvn: identification.individual?.bvn || "",
-      taxInformationNumber: "1234567890",
+      taxInformationNumber: identification.individual?.tin || "",
+      taxId: identification.individual?.tin || "",
     }),
     ...(identification.type === 'COOPERATE' && {
       taxId: identification.corporate?.tin || "",
@@ -83,7 +84,7 @@ export const mapKycDataToApiRequest = (state: RootState) => {
 
     sourceOfFunds: formattedSourceOfFunds,
 
-    declarationAndAgreement: declaration.agreedToTerms,
+    declarationAndAgreement: declarationOverride?.agreedToTerms !== undefined ? declarationOverride.agreedToTerms : declaration.agreedToTerms,
     politicallyExposed: declaration.isPoliticallyExposedPerson === true,
 
     beneficialOwners: beneficialOwners.length > 0 ? beneficialOwners : [{
