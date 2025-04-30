@@ -83,12 +83,13 @@ function NotificationLayout({children}: Props) {
           setNotificationData(result)
           setHasNextPage(searchData?.data?.hasNextPage)
           setPageNumber(searchData?.data?.pageNumber)
+          setActiveNotificationId("")
         } 
         else  if(!searchTerm && data && data?.data){
              setNotificationData(data?.data?.body)
              setHasNextPage(data?.data?.hasNextPage)
              setPageNumber(data?.data?.pageNumber)
-             
+             setActiveNotificationId("")
           }
           //  const paginated = getPaginatedData(pageNumber, pageSize, notificationMockData);
           //   setPaginatedData(paginated.notifications)
