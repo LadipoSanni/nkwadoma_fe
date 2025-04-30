@@ -129,9 +129,9 @@ function InvestmentVehicle() {
                         handleRowClick={handleRowClick}
                         tableHeight={58}
                         icon={MdOutlinePayments}
-                        sideBarTabName='investment vehicles'
+                        sideBarTabName='investment vehicle'
                         condition={true}
-                        staticHeader={"Investment vehicles"}
+                        staticHeader={"Investment vehicle"}
                         staticColunm={"name"}
                         sx='cursor-pointer'
                         hasNextPage={hasNextPage}
