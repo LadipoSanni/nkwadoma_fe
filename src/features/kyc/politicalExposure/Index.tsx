@@ -68,7 +68,7 @@ const PoliticalExposure: React.FC = () => {
     };
 
     const handleAgreementChange = (checked: boolean | 'indeterminate') => {
-        setFormData(prev => ({ ...prev, agreedToTerms: checked === true }));
+        setFormData(prev => ({ ...prev, agreedToTerms: !!checked && checked !== 'indeterminate' }));
         setErrorMessage(null);
     };
 
@@ -101,10 +101,10 @@ const PoliticalExposure: React.FC = () => {
         dispatch(updateDeclaration(dataToSubmit));
 
         try {
-            const kycData = mapKycDataToApiRequest(state);
+            const kycData = mapKycDataToApiRequest(state, { agreedToTerms: formData.agreedToTerms });
             const response = await completeKyc(kycData).unwrap();
 
-            if (response && response.success) {
+            if (response && (response.statusCode === "200 OK" || response.message === "Response is successful.")) {
                 setShowSuccessDialog(true);
             } else {
                 setErrorMessage(response?.message || "Failed to complete KYC. Please try again.");
@@ -238,7 +238,7 @@ const PoliticalExposure: React.FC = () => {
                     <div id="termsLabelContainer" className="grid gap-1.5 leading-snug">
                         <Label htmlFor="terms" id="termsLabel" className="text-[14px] leading-[150%] font-normal text-gray-700 cursor-pointer">
                             I have read, understood and agree to this{' '}
-                            <a id="termsLink" href="/declaration-agreement" target="_blank" rel="noopener noreferrer" className="font-semibold text-meedlBlue underline">
+                            <a id="termsLink" href="/" target="_blank" rel="noopener noreferrer" className="font-semibold text-meedlBlue underline">
                                 Declaration and Agreement
                             </a>
                         </Label>

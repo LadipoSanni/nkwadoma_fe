@@ -13,6 +13,7 @@ import IndividualIdentificationForm from "@/reuseable/forms/individualIdentifica
 interface IndividualFormInputs {
     nin: string;
     bvn: string;
+    taxId: string;
 }
 
 interface CorporateFormInputs {
@@ -34,7 +35,13 @@ const IdentificationStep = () => {
         formState: { errors: individualErrors, isValid: isIndividualValid }
     } = useForm<IndividualFormInputs>({
         mode: 'onChange',
-        defaultValues: savedData.individual || { nin: '', bvn: '' }
+        defaultValues: savedData.individual ? 
+            { 
+                nin: savedData.individual.nin, 
+                bvn: savedData.individual.bvn, 
+                taxId: savedData.individual.tin || '' 
+            } : 
+            { nin: '', bvn: '', taxId: '' }
     });
 
     const {
@@ -55,7 +62,11 @@ const IdentificationStep = () => {
     };
 
     const onIndividualSubmit = (data: IndividualFormInputs) => {
-        handleFormSubmitSuccess('INDIVIDUAL', data);
+        const mappedData = {
+            ...data,
+            tin: data.taxId
+        };
+        handleFormSubmitSuccess('INDIVIDUAL', mappedData);
     };
 
     const onCorporateSubmit = (data: CorporateFormInputs) => {

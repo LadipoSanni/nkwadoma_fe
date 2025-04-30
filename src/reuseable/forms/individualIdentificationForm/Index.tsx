@@ -8,6 +8,7 @@ import { UseFormRegister, FieldErrors, UseFormHandleSubmit } from 'react-hook-fo
 interface IndividualFormInputs {
     nin: string;
     bvn: string;
+    taxId: string;
 }
 
 interface IndividualIdentificationFormProps {
@@ -61,6 +62,28 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
                 />
                 {errors.bvn && <p className="text-red-500 text-sm">{errors.bvn.message}</p>}
+            </div>
+
+            <div className={'grid gap-2'}>
+                <Label htmlFor="taxId">Tax identification number</Label>
+                <Input
+                    type="text"
+                    placeholder="Enter TIN"
+                    {...register("taxId", {
+                        required: "Tax ID is required",
+                        pattern: {
+                            value: /^\d{10}$/,
+                            message: "Tax ID must be exactly 10 digits"
+                        },
+                        validate: {
+                            validDigits: (value) => /^\d+$/.test(value) || "Tax ID must contain only numbers",
+                            exactLength: (value) => value.length === 10 || "Tax ID must be 10 digits"
+                        }
+                    })}
+                    maxLength={10}
+                    className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
+                />
+                {errors.taxId && <p className="text-red-500 text-sm">{errors.taxId.message}</p>}
             </div>
 
             <div className={'flex justify-end mt-5'}>

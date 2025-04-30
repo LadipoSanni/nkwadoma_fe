@@ -5,14 +5,15 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery";
 export const financierOnboardingAndDashboardApi = createApi({
     reducerPath:'financierOnboardingAndDashboardApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: [],
+    tagTypes: ['FinancierDashboard'],
     endpoints : (builder) =>  ({
 
         viewFinancierDashboard: builder.query({
             query:() => ({
                 url : `/financier/view`,
                 method: 'GET',
-            })
+            }),
+            providesTags: ['FinancierDashboard']
         }),
         viewMyInvestment: builder.query({
            query: () => ({
@@ -37,7 +38,8 @@ export const financierOnboardingAndDashboardApi = createApi({
             url: `financier/complete-kyc`,
             method: 'POST',
             body: data
-          })
+          }),
+          invalidatesTags: ['FinancierDashboard']
         }),
 
     })
