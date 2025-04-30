@@ -53,6 +53,7 @@ function NotificationLayout({children}: Props) {
       //  const [totalItem, setTotalItem] = useState(0)
        const [isDeleteOpen, setIsDeleteOpen] = useState(false);
        const [isMobile, setIsMobile] = useState(false);
+       const [activeNotificationId, setActiveNotificationId] = useState<string | null>(null);
        const router = useRouter();
        const {toast} = useToast()
        const param = {
@@ -178,6 +179,7 @@ function NotificationLayout({children}: Props) {
             }
 
             const handleClick = (id: string) => {
+              setActiveNotificationId(id);
                 if (isMobile) {
                     handleMobileClick(id);
                 } else {
@@ -265,12 +267,20 @@ function NotificationLayout({children}: Props) {
           >
           {
             notificationDatas.map((notification, index)=> (
-              <div key={index} className={`flex items-center w-full border-t md:border-none ${selectedRows.has(notification.id)? "bg-[#F9F9F9] " : ""} `}>
+              <div key={index} className={`flex items-center w-full border-t md:border-none  ${
+    activeNotificationId === notification.id ? "bg-[#F9F9F9] data-[state=active]:bg-[#F9F9F9]" : ""
+} ${
+    selectedRows.has(notification.id) ? "bg-[#F9F9F9] data-[state=active]:bg-[#F9F9F9]"  : ""
+}  `}>
               <div key={index} className='flex items-center w-full px-4 md:px-0'>
         
                 <div className='flex-1 md:border-t  '>
                   <TabsTrigger 
-                  value={notification.title} className={`w-full py-3  data-[state=active]:bg-[#F9F9F9] flex justify-between px-0 rounded-none  ${selectedRows.has(notification.id)? "bg-[#F9F9F9]" : ""}`}
+                  value={notification.title} className={`w-full py-3   flex justify-between px-0 rounded-none   ${
+    activeNotificationId === notification.id ? "bg-[#F9F9F9] data-[state=active]:bg-[#F9F9F9]" : ""
+} ${
+    selectedRows.has(notification.id) ? "bg-[#F9F9F9] data-[state=active]:bg-[#F9F9F9]"  : ""
+}`}
                 onClick={() =>handleClick(notification.id)}
                   >
                   <div className='flex md:px-3 cursor-pointer' >
