@@ -9,6 +9,7 @@ interface FormSection {
     ownership: string;
     proofType: string;
     proofFile: File | null;
+    proofFileUrl?: string;
 }
 
 interface EntitySection {
@@ -25,6 +26,7 @@ interface KYCFormState {
         individual?: {
             nin: string;
             bvn: string;
+            tin?: string;
         };
         corporate?: {
             tin: string;
@@ -59,7 +61,8 @@ const initialState: KYCFormState = {
         type: 'INDIVIDUAL',
         individual: {
             nin: '',
-            bvn: ''
+            bvn: '',
+            tin: ''
         },
         corporate: {
             tin: '',
@@ -104,7 +107,8 @@ const kycFormSlice = createSlice({
             if (action.payload.type === 'INDIVIDUAL') {
                 state.identification.individual = {
                     nin: action.payload.data.nin || '',
-                    bvn: action.payload.data.bvn || ''
+                    bvn: action.payload.data.bvn || '',
+                    tin: action.payload.data.tin || ''
                 };
             } else {
                 state.identification.corporate = {

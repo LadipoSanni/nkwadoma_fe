@@ -26,6 +26,7 @@ interface FormSection {
     ownership: string;
     proofType: string;
     proofFile: File | null;
+    proofFileUrl?: string;
 }
 
 const IndividualOwnershipForm: React.FC = () => {
@@ -38,6 +39,7 @@ const IndividualOwnershipForm: React.FC = () => {
         ...section,
         dob: section.dob ? new Date(section.dob) : undefined,
         proofFile: null,
+        proofFileUrl: section.proofFileUrl,
     });
 
     const defaultSection: FormSection = {
@@ -49,6 +51,7 @@ const IndividualOwnershipForm: React.FC = () => {
         ownership: "",
         proofType: "national_id",
         proofFile: null,
+        proofFileUrl: undefined,
     };
 
     const [sections, setSections] = useState<FormSection[]>(
@@ -69,6 +72,7 @@ const IndividualOwnershipForm: React.FC = () => {
             ...section,
             dob: section.dob ? section.dob.toISOString() : undefined,
             proofFile: section.proofFile ? section.proofFile : null,
+            proofFileUrl: section.proofFileUrl,
         }));
 
         dispatch(
@@ -95,6 +99,7 @@ const IndividualOwnershipForm: React.FC = () => {
                 ownership: "",
                 proofType: "national_id",
                 proofFile: null,
+                proofFileUrl: undefined,
             },
         ]);
     };
@@ -147,11 +152,23 @@ const IndividualOwnershipForm: React.FC = () => {
         }
     };
 
+    const handleSetUploadedImageUrl = (id: number, url: string | null) => {
+        if (url) {
+            setSections((prev) =>
+                prev.map((section) =>
+                    section.id === id ? { ...section, proofFileUrl: url } : section
+                )
+            );
+        }
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const sectionsToStore = sections.map((section) => ({
             ...section,
             dob: section.dob ? section.dob.toISOString() : undefined,
+            proofFile: section.proofFile, // Explicitly include proofFile
+            proofFileUrl: section.proofFileUrl, // Explicitly include proofFileUrl
         }));
         dispatch(
             updateBeneficialOwner({
@@ -294,7 +311,7 @@ const IndividualOwnershipForm: React.FC = () => {
                         <FileUpload
                             handleDrop={(e) => handleDrop(section.id, e)}
                             handleDragOver={(e) => e.preventDefault()}
-                            setUploadedImageUrl={() => {}}
+                            setUploadedImageUrl={(url) => handleSetUploadedImageUrl(section.id, url)}
                         />
                         {sections.length > 1 && (
                             <div className="flex justify-end">
