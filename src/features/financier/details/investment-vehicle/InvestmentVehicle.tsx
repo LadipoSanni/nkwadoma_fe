@@ -85,9 +85,10 @@ function InvestmentVehicle() {
     };
 
     const handleRowClick = (row:TableRowData) => {
-        store.dispatch(setFinancierInvestmentVehicleId(String(row?.id)))
+        store.dispatch(setFinancierInvestmentVehicleId(String(row?.investmentId)))
+        console.log(row.investmentId, "setFinancierInvestmentVehicleId")
         store.dispatch(setFinancierMode("investment"))
-        router.push('/financier/financier-investment-details')
+        router.push('/financier/financier-investments-details')
 
 
     }
