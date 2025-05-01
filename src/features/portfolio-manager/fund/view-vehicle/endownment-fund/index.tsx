@@ -10,7 +10,7 @@ import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import {MdSearch} from 'react-icons/md'
 import Table from '@/reuseable/table/Table';
 import {store} from "@/redux/store";
-import {setCurrentVehicleId,setVehicleType} from "@/redux/slice/vehicle/vehicle";
+import {setCurrentVehicleId, setCurrentVehicleName, setVehicleType} from "@/redux/slice/vehicle/vehicle";
 import {formatMonthInDate} from '@/utils/Format';
 import {formatAmount} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
@@ -113,7 +113,8 @@ function EndownmentFund() {
 
 
     const handleRowClick = (row: TableRowData) => {
-            store.dispatch(setCurrentVehicleId(String(row.id)));
+        store.dispatch(setCurrentVehicleName(String(row.name)))
+        store.dispatch(setCurrentVehicleId(String(row.id)));
             store.dispatch(setVehicleType("endowment"))
             router.push('/vehicle/details')
         }
