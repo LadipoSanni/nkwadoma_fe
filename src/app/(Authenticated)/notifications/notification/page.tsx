@@ -5,7 +5,7 @@ import CustomAuthorization from '@/features/auth/authorization';
 function page() {
   return (
     <>
-    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN','LOANEE']}>
+    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN','LOANEE','FINANCIER']}>
       <NotificationsEmptystate/>
       </CustomAuthorization>
     </>

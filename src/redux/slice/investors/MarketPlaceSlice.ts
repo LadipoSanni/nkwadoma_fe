@@ -23,7 +23,10 @@ export const MarketPlaceSlice = createSlice({
         setMarketInvestmentVehicleId: (state, action: PayloadAction<MarketData>) => {
             state.savedMarketplaceData = action.payload;
         },
+        clearAll: (state) => {
+            state.savedMarketplaceData = null
+        }
     }
 })
-export const {setMarketInvestmentVehicleId} = MarketPlaceSlice.actions;
+export const {setMarketInvestmentVehicleId,clearAll} = MarketPlaceSlice.actions;
 export default MarketPlaceSlice.reducer;
