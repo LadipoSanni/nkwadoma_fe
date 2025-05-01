@@ -74,7 +74,6 @@ function ChooseVisibility() {
     const investmentVehicleId = useAppSelector(state => (state?.vehicle?.setDraftId))
     const statusType = useAppSelector(state => (state?.vehicle?.setEditStatus))
     const urlLink = useAppSelector(state => (state?.vehicle?.setPublicVehicleUrl))
-    const vehicleName = useAppSelector(state=> (state.vehicle.currentVehicleName))
     const [viewAllfinanciers,setAllfinanciers] = useState<Financials[]>([])
     const [hasNextPage, setNextPage] = useState(true);
     const [isFinancier,setFinancier] = useState(false)
@@ -101,9 +100,7 @@ function ChooseVisibility() {
     const link = baseUrl+ '/view-investment-vehicle?name='+ urlLink;
     console.log('base url: ', baseUrl)
     console.log('link: ', link)
-    console.log('vehcile nam: ', vehicleName)
     console.log('url link: ', urlLink)
-    console.log('===: ', baseUrl, '/view-investment-vehicle?name=', vehicleName)
 
     const validationSchema = Yup.object().shape({
       status: Yup.string().required("Visibility is required"),
