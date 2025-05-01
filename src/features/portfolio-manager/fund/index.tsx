@@ -20,7 +20,7 @@ import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import {MdSearch} from 'react-icons/md'
 import Draft from "@/features/portfolio-manager/fund/draft/Index";
 import {store} from "@/redux/store";
-import {setCurrentVehicleId, setCurrentVehicleName} from "@/redux/slice/vehicle/vehicle";
+import {setCurrentVehicleId} from "@/redux/slice/vehicle/vehicle";
 
 
 interface TableRowData {
@@ -175,7 +175,6 @@ const InvestmentVehicle = () => {
 
 
     const handleRowClick = (row: TableRowData) => {
-        store.dispatch(setCurrentVehicleName(String(row.name)))
         store.dispatch(setCurrentVehicleId(String(row.id)));
         router.push('/vehicle/details')
     }
