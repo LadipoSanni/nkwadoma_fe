@@ -98,9 +98,7 @@ function ChooseVisibility() {
 
      const {data: financiersInInvestmentVehicle} = useFinancierInvestmentVehicleQuery(props, {skip: !investmentVehicleId})
     const link = baseUrl+ '/view-investment-vehicle?name='+ urlLink;
-    console.log('base url: ', baseUrl)
-    console.log('link: ', link)
-    console.log('url link: ', urlLink)
+
 
     const validationSchema = Yup.object().shape({
       status: Yup.string().required("Visibility is required"),
