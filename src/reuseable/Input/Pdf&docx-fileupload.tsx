@@ -129,17 +129,13 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
     event.preventDefault();
     const droppedFile = event.dataTransfer.files?.[0];
     if (!droppedFile) return;
-
-
     setLoading(true);
     setError(null);
-
     if (!isFileValid(droppedFile)) {
       setFile(droppedFile);
       setFileName(truncateFileName(droppedFile.name, 13));
       // setIsFileSupported(true);
       handleDrop?.(event);
-
       try {
         const uploadedFileUrl = await uploadDocumentToCloudinary(droppedFile, setLoader, cloudinaryFolderName || 'investment-vehicle-documents');
         setUploadedFileUrl(uploadedFileUrl);
@@ -226,7 +222,7 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
                 </p>
                 {loading ? (
                   <p className="text-black300 font-normal text-[12px] leading-[150%]">
-                    Uploading...
+                    loading...
                   </p>
                 ) : error ? (
                   <p className="text-red-500 font-normal text-[12px] leading-[150%]">
@@ -264,21 +260,45 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
           </>
         ) : (
           // isFileSupported && (
-            <>
-              {error &&<p className={` text-xs text-red-500  `}>{error} please chose another files</p>}
+            <div className={` w-full `}>
+              {error &&<p className={` text-xs mr-auto ml-auto mb-2 w-fit text-red-500  `}>{error} please chose another files</p>}
               {fileUploadLoading?
-                  <div className="flex flex-col items-start">
-                    <p className="text-black500 font-normal text-sm truncate md:whitespace-normal">
+                  <div className="flex justify-between  w-full">
+                  <div className="flex gap-2   w-fit items-start">
+                    <div id={'loadingState'} className="w-5 h-5 border-2 border-l-[2px] mr-auto ml-auto  mt-auto mb-auto border-l-meedlBlue border-lightBlue550 rounded-full animate-spin" />
+                    <span id={'fileName'} className="text-black500 grid font-normal text-sm truncate md:whitespace-normal">
                       {fileName}
-                    </p>
-                        <p className="text-black300 font-normal text-[12px] leading-[150%]">
-                          Uploading...
-                        </p>
-
+                      <p id={'uploadingText'}>uploading ...</p>
+                    </span>
+                  </div>
+                    <div className="flex gap-2">
+                      <button
+                          type="button"
+                          className={`h-[1.875rem] w-[1.875rem] bg-grey350 rounded-[50%] flex justify-center items-center ${
+                              fileUploadLoading ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
+                          onClick={onDelete}
+                          disabled={fileUploadLoading}
+                          id={'changeFileButton'}
+                      >
+                        <MdOutlineDelete id={'editIcon'} className="h-5 w-5 text-primary200" />
+                      </button>
+                      <button
+                          type="button"
+                          className={`h-[1.875rem] w-[1.875rem] bg-grey350 rounded-[50%] flex justify-center items-center ${
+                              fileUploadLoading ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
+                          onClick={onClick}
+                          disabled={fileUploadLoading}
+                          id={'changeFileButton'}
+                      >
+                        <MdOutlineEdit className="h-5 w-5 text-primary200" />
+                      </button>
+                    </div>
                   </div>
                   :
                <>
-                 <div className="h-11 w-11 bg-meedlWhite flex justify-center items-center rounded-md">
+                 <div className="h-11 w-11 bg-meedlWhite  mr-auto ml-auto flex justify-center items-center rounded-md">
                    <FiUploadCloud className="w-6 h-[22px]" />
                  </div>
                  <div className="grid gap-1 place-items-center">
@@ -291,7 +311,7 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
                  </div>
                </>
               }
-            </>
+            </div>
           // )
         )}
       </div>

@@ -136,6 +136,9 @@ const Login: React.FC = () => {
         const user_email = decode_access_token?.email
         const user_roles = decode_access_token?.realm_access?.roles
         const user_role = user_roles.filter(getUserRoles).at(0)
+        // console.log('access_token: ', access_token, 'decode_access_token:', decode_access_token)
+        // const decoded_re = jwtDecode<CustomJwtPayload>(refresh_token)
+        // console.log('decode: ', decode_access_token,'decoded_re: ', decoded_re)
         return {
             access_token,
             refresh_token,

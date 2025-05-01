@@ -43,6 +43,7 @@ export const uploadDocumentToCloudinary = async (file: File,setLoader: (error:bo
   }
 
   const result = await res.json();
+  setLoader(false)
   return result.secure_url;
 
 };
