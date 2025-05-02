@@ -1,16 +1,23 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from "@/features/market-place/Index.module.css";
 import Image from "next/image";
 import {cabinetGroteskMediumBold600, inter} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
-import {useSearchParams} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import {useViewPublicInvestmentDetailsQuery} from "@/service/unauthorized/view-investment";
 import {formatAmount} from "@/utils/Format";
+import MarketDetailsSkeleton from '@/reuseable/Skeleton-loading-state/MarketDetails';
+import LoanEmptyState from "@/reuseable/emptyStates/Index";
+import {MdOutlinePayments} from "react-icons/md";
+
+
 const ViewPublicInvestmentVehicle = () => {
 
     const [isVerifying, setIsVerifying] = useState(false);
     const [docError, setDocError] = useState<string | null>(null);
+    const [details, setDetails] = useState([])
+    const router = useRouter()
 
         const searchParams = useSearchParams()
 
@@ -24,20 +31,17 @@ const ViewPublicInvestmentVehicle = () => {
             }
         }
         const vehicleName = getInvestmentVehicleName()
-        // console.log('vehicleName', vehicleName)
-        // if (vehicleName){
-        //     const {data, isLoading} = useViewPublicInvestmentDetailsQuery(vehicleName)
-        // }
+       const {data, isLoading, isFetching} = useViewPublicInvestmentDetailsQuery(vehicleName)
 
-       const {data} = useViewPublicInvestmentDetailsQuery(vehicleName)
+    useEffect(()=> {
+        setDetails(data?.data)
 
+    }, [data])
 
-        // console.log('data: ', data)
 
     const status = data?.data?.fundRaisingStatus ? 'Fund raising': 'Deploying';
         const statusValue = status === 'Deploying' ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus;
 
-    // console.log('statusValue', statusValue)
     const vehicleType = data?.data?.investmentVehicleType;
     const getFilenameFromUrl = (url: string) => {
         try {
@@ -117,6 +121,14 @@ const ViewPublicInvestmentVehicle = () => {
 
 
 
+    const id = data?.data?.id;
+
+    const redirectToLogin =()=> {
+        router.push(`/auth/login?vehicleId=${id}?vehicleType=${vehicleType}`)
+    }
+
+
+
     const investmentBasicDetails = [
         {label: 'Maturity date',
             value: `${data?.data?.tenure} ${data?.data?.tenure === 1 ? 'month' : 'months'}`},
@@ -140,15 +152,22 @@ const ViewPublicInvestmentVehicle = () => {
 
     return (
         <>
-            {/*{isLoading || isFetching ? (<MarketDetailsSkeleton/>):*/}
-            <main id="mainDiv" className="md:px-10 py-6 px-3 w-full md:gap-10 gap-8">
+            {isLoading || isFetching ? (<MarketDetailsSkeleton/>):
+                !details ? (
+                        <div className=" grid content-center  h-full  py-6 px-3 w-full">
+                         <div className={`  mr-auto ml-auto w-fit h-fit`}>
+                             <LoanEmptyState title={"Investment vehicle not found"} description={"Investment vehicle will show here"} icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>} iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
+                         </div>
+                        </div>
+                    ):
+           ( <main id="mainDiv" className="md:px-10 py-6 px-3 w-full md:gap-10 gap-8">
                 <div
                     id="detailsPurposeAndObjectiveDiv"
                     className={`flex items-center justify-center md:pt-4 pt-4`}
                 >
                     <div
                         id="purpposeDiv"
-                        className={`${styles.container} w-full grid md:w-2/5 md:h-[70vh] md:max-h-none `}
+                        className={`${styles.container} w-full grid sm:w-4/5 md:w-2/5 md:h-[70vh] md:max-h-none `}
                     >
                             <div id="backgroundId" className={`w-full ${ vehicleType === 'COMMERCIAL'? 'bg-[#D9EAFF] md:bg-[#D9EAFF]' : 'bg-[#E6F2EA].,' }md:w-full rounded-md md:rounded-md `}>
                             <div id="type" data-testid="type" className="py-5 px-4 flex flex-col">
@@ -278,7 +297,7 @@ const ViewPublicInvestmentVehicle = () => {
 
                         <div className={`pt-3`}>
                             <Button type="button" id={`invest-button`} size="lg" variant="secondary"
-                                // onClick={HandleInvest}
+                                onClick={redirectToLogin}
                                 //     className={` w-full `}
                                 disabled={statusValue  === 'CLOSE'}
                                 className={`${inter.className} ${statusValue  === 'CLOSE'? " bg-[#D0D5DD]  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
@@ -289,8 +308,8 @@ const ViewPublicInvestmentVehicle = () => {
                     </div>
 
                 </div>
-            </main>
-            {/*}*/}
+            </main>)
+            }
         </>
     );
 };
