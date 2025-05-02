@@ -22,7 +22,7 @@ const Index : React.FC<AuthProps> = ({children}) => {
     const response2 = isTokenExpired(refreshToken ? refreshToken : '')
     useEffect(() => {
         checkUserToken(response, response2)
-    }, [response, response2]);
+    }, [response, response2,token,refreshToken]);
 
     const checkUserToken = (isTokenExpired: boolean, isRefreshTokenExpired: boolean) => {
         if (isTokenExpired && isRefreshTokenExpired) {
