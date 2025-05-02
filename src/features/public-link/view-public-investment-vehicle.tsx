@@ -7,6 +7,7 @@ import {Button} from "@/components/ui/button";
 import {useSearchParams} from "next/navigation";
 import {useViewPublicInvestmentDetailsQuery} from "@/service/unauthorized/view-investment";
 import {formatAmount} from "@/utils/Format";
+import MarketDetailsSkeleton from '@/reuseable/Skeleton-loading-state/MarketDetails';
 const ViewPublicInvestmentVehicle = () => {
 
     const [isVerifying, setIsVerifying] = useState(false);
@@ -24,15 +25,15 @@ const ViewPublicInvestmentVehicle = () => {
             }
         }
         const vehicleName = getInvestmentVehicleName()
-        // console.log('vehicleName', vehicleName)
+        console.log('vehicleName', vehicleName)
         // if (vehicleName){
         //     const {data, isLoading} = useViewPublicInvestmentDetailsQuery(vehicleName)
         // }
 
-       const {data} = useViewPublicInvestmentDetailsQuery(vehicleName)
+       const {data, isLoading, isFetching} = useViewPublicInvestmentDetailsQuery(vehicleName)
 
 
-        // console.log('data: ', data)
+        console.log('data: ', data)
 
     const status = data?.data?.fundRaisingStatus ? 'Fund raising': 'Deploying';
         const statusValue = status === 'Deploying' ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus;
@@ -140,7 +141,8 @@ const ViewPublicInvestmentVehicle = () => {
 
     return (
         <>
-            {/*{isLoading || isFetching ? (<MarketDetailsSkeleton/>):*/}
+            {isLoading || isFetching ? (<MarketDetailsSkeleton/>):
+                // data?.da
             <main id="mainDiv" className="md:px-10 py-6 px-3 w-full md:gap-10 gap-8">
                 <div
                     id="detailsPurposeAndObjectiveDiv"
@@ -290,7 +292,7 @@ const ViewPublicInvestmentVehicle = () => {
 
                 </div>
             </main>
-            {/*}*/}
+            }
         </>
     );
 };
