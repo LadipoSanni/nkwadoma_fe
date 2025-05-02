@@ -41,11 +41,11 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
                   {isLoanData &&
                       <main className={`w-full grid gap-4 `}>
                           {loanData?.map((loan, index) => (
-                              <div key={index} id={`cardTitle`}
+                              <progress key={index} id={`cardTitle`}
                                  className={`text-black300 w-full border h-fit py-3  ${Number(loan.amount) === 0 ? '' : ''} bg-white px-2   border-[#ECECEC] rounded-md flex justify-between gap-2  text-[14px] text-nowrap whitespace-nowrap mt-auto mb-auto `}>
-                                  <p className={` ${inter500.className} text-[${loan.textColor}] `}>{loan.title}</p>
-                                  <p className={` ${inter500.className}  `}>{loan.amount}%</p>
-                              </div>
+                                  <label className={` ${inter500.className} text-[${loan.textColor}] `}>{loan.title}</label>
+                                  <label className={` ${inter500.className}  `}>{loan.amount}%</label>
+                              </progress>
                           ))}
                       </main>
                   }

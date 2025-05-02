@@ -11,8 +11,8 @@ import {useViewMeedlPortfolioQuery} from "@/service/admin/overview";
 const PortfolioManager = () => {
 
     const router = useRouter();
-    const {data} = useViewMeedlPortfolioQuery({})
-    // console.log('data: ', data)
+    const {data, isLoading, isFetching } = useViewMeedlPortfolioQuery({})
+    console.log('data: ', data)
     const cardData1 = [
         {title: "Total investment vehicles", amount: data?.data?.totalNumberOfInvestmentVehicle?.toString(),},
         {title: "Commercial funds", amount: data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString(),showIcon: true},
@@ -25,7 +25,7 @@ const PortfolioManager = () => {
         {title: "Corporate", amount: data?.data?.totalNumberOfInstitutionalFinancier?.toString(),showIcon: true},
     ]
     const cardData3 = [
-        {title: "Total number of loans", amount: data?.data?.totalNumberOfFinancier?.toString(),},
+        {title: "Total number of loans", amount: data?.data?.totalNumberOfLoans?.toString(),},
         // {title: "Commercial funds", amount: '2',},
         // {title: "Endowment", amount: '2',},
     ]
@@ -52,9 +52,9 @@ const PortfolioManager = () => {
     // ]
 
     const loanData = [
-        {title: "Loan referrals", amount: '0',textColor: '#66440A',bgColor: 'bg-green-500',},
-        {title: "Loan offers", amount: '0',textColor: '#142854',bgColor: 'bg-green-500',},
-        {title: "Disbursed loan", amount: '0',textColor: '#034319',bgColor: 'bg-green-500',},
+        {title: "Loan referrals", amount: data?.data?.loanReferralPercentage?.toString(),textColor: '#66440A',bgColor: 'bg-green-500',},
+        {title: "Loan offers", amount:data?.data?.loanOfferPercentage?.toString(),textColor: '#142854',bgColor: 'bg-green-500',},
+        {title: "Disbursed loan", amount: data?.data?.loanDisbursalPercentage?.toString(),textColor: '#034319',bgColor: 'bg-green-500',},
     ]
 
     const routeToInvestmentVehicle = () => {
