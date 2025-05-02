@@ -13,6 +13,8 @@ import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
+import { setMarketInvestmentVehicleId } from '@/redux/slice/investors/MarketPlaceSlice';
+
 
 
 const CreatePassword = () => {
@@ -25,7 +27,6 @@ const CreatePassword = () => {
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
 
     const disable = !criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton;
-
 
 
 
@@ -62,15 +63,43 @@ const CreatePassword = () => {
 
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
+    // const getUserToken = () => {
+    //     if (searchParams){
+    //         const pathVariable = searchParams.get("token")
+    //         if (pathVariable){
+    //             return pathVariable
+    //         }
+    //     }
+    // }
+   
     const getUserToken = () => {
-        if (searchParams){
-            const pathVariable = searchParams.get("token")
-            if (pathVariable){
-                return pathVariable
-            }
+        if (searchParams) {
+          const rawToken = searchParams.get("token");
+      
+          if (rawToken?.includes("?investmentVehicleId=")) {
+            const [token, vehicleId] = rawToken.split("?investmentVehicleId=");
+            return {
+              token: token,
+              investmentVehicleId: vehicleId || null, 
+            };
+          }
+      
+          return {
+            token: rawToken,
+            investmentVehicleId: null, 
+          };
         }
-    }
-
+      
+        return {
+          token: null,
+          investmentVehicleId: null,
+        };
+      };
+    //   const { token,investmentVehicleId } = getUserToken();
+    //  console.log("T: ", getUserToken())
+    //  console.log("token:",token)
+    //  console.log("ID:",investmentVehicleId)
+     
     const getUserRoles = (returnsRole: string) => {
         if (returnsRole) {
             // ADMIN_ROLES.filter(returnsRole)
@@ -111,8 +140,15 @@ const CreatePassword = () => {
                 router.push("/Overview")
                 break;
             case "FINANCIER":
-                store.dispatch(setCurrentNavbarItem("Overview"))
-                router.push('/Overview')
+                const { investmentVehicleId } = getUserToken(); 
+                if (investmentVehicleId) {
+                     store.dispatch(setMarketInvestmentVehicleId({marketInvestmentVehicleId: investmentVehicleId }))
+                    store.dispatch(setCurrentNavbarItem("Marketplace"));
+                    router.push(`/marketplace/details`);
+                  } else {
+                    store.dispatch(setCurrentNavbarItem("Overview"))
+                    router.push('/Overview')
+                  }
                 break;
         }
     }
@@ -120,29 +156,34 @@ const CreatePassword = () => {
     const handleCreatePassword = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
         setDisableButton(true)
-        const token = getUserToken()
+        const { token } = getUserToken();
 
         try {
             const response = await createPassword({token: token
                 , password: password}).unwrap()
-            const access_token = response?.data?.accessToken
-            const refreshToken = response?.data?.refreshToken
-            const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-            const user_email = decode_access_token?.email
-            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            const userName = decode_access_token?.name
-            const user_roles = decode_access_token?.realm_access?.roles
-            const user_role = user_roles.filter(getUserRoles).at(0)
-            clearData()
-            await persistor.purge();
-            if (user_role) {
-                storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
-                setUserRoles(user_roles)
-                await routeUserToTheirDashboard(user_role)
-
-            }
-
+             if(response?.data)  {
+                const access_token = response?.data?.accessToken
+                const refreshToken = response?.data?.refreshToken
+                const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+                const user_email = decode_access_token?.email
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                const userName = decode_access_token?.name
+                const user_roles = decode_access_token?.realm_access?.roles
+                const user_role = user_roles.filter(getUserRoles).at(0)
+                clearData()
+                await persistor.purge();
+                toast({
+                    description: "Password created successfully",
+                    status: "success",
+                });
+                if (user_role) {
+                    storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
+                    setUserRoles(user_roles)
+                    await routeUserToTheirDashboard(user_role)
+    
+                }
+             } 
 
         }catch (error){
             toast({
