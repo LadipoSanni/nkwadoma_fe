@@ -58,25 +58,61 @@ const MarketPlaceDetails = () => {
         }
     };
 
+    const statusKeyAndValue = ()  => {
+        if (data?.data?.fundRaisingStatus !== null){
+              return {
+                key: "Fundraising",
+                value: data?.data?.fundRaisingStatus
+              }
+        }else if (data?.data?.deployingStatus !== null) {
+              return {
+                   key: "Deploying",
+                   value: data?.data?.deployingStatus
+              }
+        } else if (data?.data?.couponDistributionStatus !== null) {
+                return {
+                    key: "CouponDistribution",
+                    value: data?.data?.couponDistributionStatus
+                }
+        } else if (data?.data?.recollectionStatus !== null) {
+            return {
+                key: "Recollection",
+                value: data?.data?.recollectionStatus
+            } 
+        }
+           else if (data?.data?.maturity !== null) {
+            return {
+                key: "Maturity",
+                value: data?.data?.maturity
+            } 
+           }
+         else {
+            return {
+                key: "",
+                value: null
+            } 
+        }
 
-    const actualStatus = data?.data?.fundRaisingStatus === null
-        ? data?.data?.deployingStatus
-        : data?.data?.fundRaisingStatus;
+         }
 
-    const borderClass = actualStatus === "OPEN"
+
+    // const actualStatus = data?.data?.fundRaisingStatus === null
+    //     ? data?.data?.deployingStatus
+    //     : data?.data?.fundRaisingStatus;
+
+    const borderClass = statusKeyAndValue().value === "OPEN"
         ? "border-[#B4E5C8]"
-        : actualStatus === "CLOSE"
+        : statusKeyAndValue().value === "CLOSE"
             ? "border-[#F2BCBA]"
-            : "border-gray-300";
+            : "border-[#B4E5C8]";
 
-    const statusClass = actualStatus === "OPEN"
+    const statusClass = statusKeyAndValue().value === "OPEN"
         ? "text-[#0D9B48] bg-[#E7F7ED]"
-        : actualStatus === "CLOSE"
+        : statusKeyAndValue().value === "CLOSE"
             ? "text-red-600 bg-[#FCEEEE]"
-            : "text-gray-600 bg-gray-100";
+            : "text-[#0D9B48] bg-[#E7F7ED]";
 
-    const statusKey = data?.data?.fundRaisingStatus ? "Fundraising" : "Deploying";
-
+    // const statusKey = data?.data?.fundRaisingStatus ? "Fundraising" : "Deploying"; 
 
     const verifyDocumentExists = async (url: string): Promise<boolean> => {
         if (url.includes('cloudinary.com')) {
@@ -138,10 +174,10 @@ const MarketPlaceDetails = () => {
         {label: 'Minimum amount', value: (<span className='text-meedlBlack text-[14px] font-semibold'>{formatAmount(data?.data?.minimumInvestmentAmount?.toString() || '0')}</span>)},
         {label: 'Status', value: (
                 <div id="minidetailsId" className="flex bg-[#F6F6F6] items-center gap-2 rounded-lg px-2 py-1 w-fit">
-                    <span id="fundrasingId" className="font-normal text-black text-sm flex items-center justify-center">{statusKey}</span>
-                    <div id="statusDivId" className={`bg-meedlWhite p-1 border rounded-lg ${borderClass}`}>
-                        <span id="statusId" className={`text-sm font-medium px-1 py-1 rounded-lg lowercase ${statusClass}`}>
-                            {actualStatus ?.toLowerCase() || ""}</span>
+                    <span id="fundrasingId" className="font-normal text-black text-sm flex items-center justify-center">{statusKeyAndValue().key}</span>
+                    <div id="statusDivId" className={`bg-meedlWhite p-1 border rounded-lg ${borderClass} ${statusKeyAndValue().value === "maturity"? "hidden" : ""}`}>
+                        <span id="statusId" className={`text-sm font-medium px-1 py-1 rounded-lg lowercase ${statusClass} `}>
+                            {statusKeyAndValue().value ?.toLowerCase() || ""}</span>
                     </div>
                 </div>
             ),
@@ -202,7 +238,7 @@ const MarketPlaceDetails = () => {
                                 >
                                     {vehicleType
                                         ? vehicleType.charAt(0).toUpperCase() + vehicleType.slice(1).toLowerCase()
-                                        : ""}
+                                        : data?.data?.investmentVehicleType}
                                 </div>
                             </div>
                             <div id="imageId" className="object-right-bottom justify-end flex">
@@ -322,8 +358,9 @@ const MarketPlaceDetails = () => {
                         <div className={`pt-3`}>
                             <Button type="button" id={`invest-button`} size="lg" variant="secondary"
                                     onClick={HandleInvest}
-                                    disabled={actualStatus  === 'CLOSE'}
-                                    className={`${inter.className} ${actualStatus  === 'CLOSE'? " bg-[#D0D5DD]  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
+                                    // disabled={ statusKeyAndValue().value  === 'CLOSE'}
+                                    // className={`${inter.className} ${statusKeyAndValue().value   === 'CLOSE'? " bg-[#D0D5DD]  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
+                                    className={`${inter.className} bg-meedlBlue text-meedlWhite w-full`}
                             >
                                 Invest
                             </Button>
