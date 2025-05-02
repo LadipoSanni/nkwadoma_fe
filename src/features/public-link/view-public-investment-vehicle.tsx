@@ -124,7 +124,7 @@ const ViewPublicInvestmentVehicle = () => {
     const id = data?.data?.id;
 
     const redirectToLogin =()=> {
-        router.push(`/auth/login?vehicleId=${id}`)
+        router.push(`/auth/login?vehicleId=${id}?vehicleType=${vehicleType}`)
     }
 
 
