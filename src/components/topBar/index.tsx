@@ -32,14 +32,16 @@ const TopBar = () => {
      const pathname = usePathname();
 
     const storedOrgName = getItemFromLocalStorage('organization_name');
-    const { data: financierData, isSuccess } = useViewFinancierDashboardQuery({});
+    const { data: financierData, isSuccess } = useViewFinancierDashboardQuery({}, {
+        skip: user_role !== "FINANCIER"
+    });
     const [displayName, setDisplayName] = useState(storedOrgName || user_name || '');
     const [userRole] = useState(user_role ? user_role : '');
 
     const { data, refetch } = useNumberOfNotificationQuery({});
 
     useEffect(() => {
-        if (isSuccess && financierData?.data) {
+        if (user_role === "FINANCIER" && isSuccess && financierData?.data) {
             if (financierData.data.financierType === "COOPERATE" && financierData.data.organizationName) {
                 setItemToLocalStorage('organization_name', financierData.data.organizationName);
                 setDisplayName(financierData.data.organizationName);
@@ -47,7 +49,7 @@ const TopBar = () => {
                 setDisplayName(user_name || '');
             }
         }
-    }, [financierData, isSuccess, user_name]);
+    }, [financierData, isSuccess, user_name, user_role]);
 
     useEffect(()=>{
         if (data?.data?.allNotificationsCount !== undefined) {
@@ -59,8 +61,8 @@ const TopBar = () => {
         }
 
     },[data,refetch,pathname, user_role])
-     
-   
+
+
     const toggleArrow = () => {
         setArrowToggled(!arrowToggled);
         setIsPopoverOpen(!isPopoverOpen);
@@ -74,11 +76,11 @@ const TopBar = () => {
         router.push("/notifications/notification")
        store.dispatch(setCurrentNavbarItem('Notification'))  
     }
-    
+
     const isNotificationPage = /^\/notifications(?:\/.*)?$/.test(pathname || "");
 
 
-    
+
 
 
     return (
