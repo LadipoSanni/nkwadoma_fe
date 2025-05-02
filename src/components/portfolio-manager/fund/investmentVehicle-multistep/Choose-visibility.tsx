@@ -93,11 +93,12 @@ function ChooseVisibility() {
      const {data,isLoading: isloading, isFetching} = useViewAllFinanciersQuery(param,{skip: !isFinancier})
      const [chooseVisibility, {isLoading}] = useChooseInvestmentVehicleVisibilityMutation()
 
+    const baseUrl = process.env.APP_URL;
 
 
      const {data: financiersInInvestmentVehicle} = useFinancierInvestmentVehicleQuery(props, {skip: !investmentVehicleId})
+    const link = baseUrl+ '/view-investment-vehicle?name='+ urlLink;
 
-    // console.log('financiersInInvestmentVehicle:: ', financiersInInvestmentVehicle)
 
     const validationSchema = Yup.object().shape({
       status: Yup.string().required("Visibility is required"),
@@ -200,7 +201,7 @@ function ChooseVisibility() {
     }
 
     const handleCopyLink = () => {
-        const url = urlLink;
+        const url = link;
         navigator.clipboard.writeText(url).then(() => {
           setCopied(true);
           setTimeout(() => setCopied(false), 2000); 
@@ -361,7 +362,7 @@ function ChooseVisibility() {
                         <p 
                         className="lg:max-w-[14rem]  truncate text-ellipsis whitespace-nowrap"
                         >
-                         {urlLink}
+                         {link}
                         </p>
                         </div>
                         <div className='flex justify-center mt-3 lg:mt-0'>

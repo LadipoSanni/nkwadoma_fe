@@ -69,7 +69,7 @@ const ViewFinanciers = () => {
 
 
     const {data, isLoading, refetch} = useGetAllActiveAndInvitedFinanciersQuery(param)
-    const {data:searchData, isLoading: searchIsLoading} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10, activationStatus: selectedActivationStatusTab.toUpperCase()},{skip: !searchTerm})
+    const {data:searchData, isLoading: searchIsLoading} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: selectedActivationStatusTab.toUpperCase()},{skip: !searchTerm})
 
     useEffect(()=>{
         if(searchTerm && searchData && searchData?.data){
@@ -84,6 +84,7 @@ const ViewFinanciers = () => {
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
+           
         }
     },[searchTerm, searchData,data])
 

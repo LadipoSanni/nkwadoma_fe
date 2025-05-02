@@ -11,6 +11,7 @@ import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useSearchInvestmentVehiclesQuery} from "@/service/financier/marketplace";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
+import { clearAll } from "@/redux/slice/investors/MarketPlaceSlice";
 
 interface InvestmentVehicle {
     id: string;
@@ -19,6 +20,9 @@ interface InvestmentVehicle {
     rate?: number;
     fundRaisingStatus: string | null;
     deployingStatus: string;
+    couponDistributionStatus: string;
+    maturity: string;
+    recollectionStatus: string
 }
 
 export const HandleCardDetails = (
@@ -82,6 +86,7 @@ const MarketPlaceView = () => {
         setPageNumber(0);
         setAllVehicles([]);
         setHasMore(true);
+        store.dispatch(clearAll())
     }, [searchTerm, selectedValue]);
 
     useEffect(() => {
@@ -220,19 +225,57 @@ const MarketPlaceView = () => {
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "/BlueCircles.svg"
                                 : "/GreenCircles.svg";
+                        
+                                const statusKeyAndValue = ()  => {
+                                    if (vehicle.fundRaisingStatus !== null){
+                                          return {
+                                            key: "Fundraising",
+                                            value: vehicle.fundRaisingStatus
+                                          }
+                                    }else if (vehicle.deployingStatus !== null) {
+                                          return {
+                                               key: "Deploying",
+                                               value: vehicle.deployingStatus
+                                          }
+                                    } else if (vehicle?.couponDistributionStatus !== null) {
+                                            return {
+                                                key: "CouponDistribution",
+                                                value: vehicle?.couponDistributionStatus
+                                            }
+                                    } else if (vehicle?.recollectionStatus !== null) {
+                                        return {
+                                            key: "Recollection",
+                                            value: vehicle?.recollectionStatus
+                                        } 
+                                    }
+                                       else if (vehicle?.maturity !== null) {
+                                        return {
+                                            key: "Maturity",
+                                            value: vehicle?.maturity
+                                        } 
+                                       }
+                                     else {
+                                        return {
+                                            key: "",
+                                            value: null
+                                        } 
+                                    }
+                            
+                                     }        
 
-                        const status = vehicle.fundRaisingStatus || vehicle.deployingStatus || "";
+                        // const status = vehicle.fundRaisingStatus || vehicle.deployingStatus || "";
                         const statusClass =
-                            status === "OPEN"
+                        statusKeyAndValue().value === "OPEN"
                                 ? "bg-green-100 text-[#0D9B48] border-[#B4E5C8]"
-                                : status === "CLOSE"
+                                : statusKeyAndValue().value === "CLOSE"
                                     ? "bg-red-100 text-red-600 border-[#F2BCBA]"
-                                    : "bg-gray-100 text-gray-600 border-gray-300";
+                                    // : "bg-gray-100 text-gray-600 border-gray-300";
+                                    : "bg-green-100 text-[#0D9B48] border-[#B4E5C8]";
                         const borderClass =
-                            status === "OPEN" ? "border-[#B4E5C8]" : status === "CLOSE" ? "border-[#F2BCBA]" : "border-gray-300";
+                        statusKeyAndValue().value === "OPEN" ? "border-[#B4E5C8]" : statusKeyAndValue().value === "CLOSE" ? "border-[#F2BCBA]" :  "border-[#B4E5C8]";
                         // const statusKey = vehicle.fundRaisingStatus ? "fundRaisingStatus" : "deployingStatus";
-                        const statusValue = vehicle.fundRaisingStatus ? vehicle.fundRaisingStatus : vehicle.deployingStatus ;
-                        const statuses = vehicle.fundRaisingStatus ?  'Fundraising' : 'Deploying';
+                        // const statusValue = vehicle.fundRaisingStatus ? vehicle.fundRaisingStatus : vehicle.deployingStatus ;
+                        // const statuses = vehicle.fundRaisingStatus ?  'Fundraising' : 'Deploying';
                         // fundRaising = `${statusKey}`;
                         const typeTextColor = vehicle.investmentVehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
 
@@ -248,12 +291,13 @@ const MarketPlaceView = () => {
                             imageSrc,
                             investmentVehicleName: truncatedTitle,
                             statusClass,
-                            status: statusValue,
-                            statuses: statuses,
+                            status:  statusKeyAndValue().value,
+                            statuses: statusKeyAndValue().key,
                             borderClass,
                             percentage: vehicle.rate || 0,
                             typeTextColor,
                             HandleCardDetails: ()=> { HandleCardDetails(vehicle.id, vehicle.investmentVehicleType, router)},
+                            statusValue : "maturity"
                         };
 
                         if (allVehicles.length === index + 1) {

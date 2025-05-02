@@ -6,6 +6,7 @@ const nextConfig = {
         APP_DEV_IV_ENCRYPTION_SECRET_KEY: process.env.APP_DEV_IV_ENCRYPTION_SECRET_KEY,
         NEXT_PUBLIC_UPLOAD_PRESET: process.env.NEXT_PUBLIC_UPLOAD_PRESET,
         NEXT_PUBLIC_CLOUD_NAME: process.env.NEXT_PUBLIC_CLOUD_NAME,
+        APP_URL:process.env.APP_URL,
     },
     images: {domains: ['res.cloudinary.com', 'via.placeholder.com', "images.unsplash.com", "png.pngtree.com"],},
 };

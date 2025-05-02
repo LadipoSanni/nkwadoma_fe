@@ -15,6 +15,7 @@ import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
+import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
 // import {encryptText} from "@/utils/encrypt";
 
 
@@ -45,16 +46,21 @@ const Login: React.FC = () => {
     const [showEmailMessage, setShowEmailMessage] = useState(false)
     // const encryptedPassword =  encryptText(password)
 
-    const getUserLoanOfferId = () => {
+    const getVariableFromRoute = (name: string) => {
         if (searchParams){
-            const pathVariable = searchParams.get("loanOfferId")
+            const pathVariable = searchParams.get(name)
             if (pathVariable){
                 return pathVariable
             }
         }
     }
 
-    const loanOfferId =  getUserLoanOfferId()
+    const loanOfferId =  getVariableFromRoute('loanOfferId')
+
+    const vehicleId = getVariableFromRoute('vehicleId')
+    const vehicleType = getVariableFromRoute('vehicleType')
+
+
 
 
 
@@ -100,6 +106,21 @@ const Login: React.FC = () => {
         }
     }
 
+    const  routeFinancier = async (vehicleId?: string, vehicleType?: string) => {
+        if (vehicleId){
+            store.dispatch(
+                setMarketInvestmentVehicleId({
+                    marketInvestmentVehicleId: vehicleId,
+                    vehicleType: vehicleType,
+                })
+            )
+            store.dispatch(setCurrentNavbarItem("Marketplace"))
+            router.push("/marketplace/details")
+        }else{
+            store.dispatch(setCurrentNavbarItem("Overview"))
+            router.push('/Overview')
+        }
+    }
 
 
     const routeUserToTheirDashboard = async (userRole?: string) => {
@@ -116,8 +137,7 @@ const Login: React.FC = () => {
                 router.push("/Overview")
                 break;
             case "FINANCIER":
-                store.dispatch(setCurrentNavbarItem("Overview"))
-                router.push('/Overview')
+                await routeFinancier(vehicleId, vehicleType)
                 break;
         }
     }
@@ -136,6 +156,9 @@ const Login: React.FC = () => {
         const user_email = decode_access_token?.email
         const user_roles = decode_access_token?.realm_access?.roles
         const user_role = user_roles.filter(getUserRoles).at(0)
+        // console.log('access_token: ', access_token, 'decode_access_token:', decode_access_token)
+        // const decoded_re = jwtDecode<CustomJwtPayload>(refresh_token)
+        // console.log('decode: ', decode_access_token,'decoded_re: ', decoded_re)
         return {
             access_token,
             refresh_token,

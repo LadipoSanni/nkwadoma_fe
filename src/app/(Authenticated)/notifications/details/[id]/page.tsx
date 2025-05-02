@@ -14,7 +14,7 @@ function Page({params}:Props) {
     const { id } = React.use(params);
     // const notification =notificationMockData.find((n)=> n.id === id)
   return (
-    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN','LOANEE']}>
+    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN','LOANEE','FINANCIER']}>
     <ResponsiveRedirect webPath={`/notifications/notification/${id}`} mobilePath={`/notifications/details/${id}`}>
       <NotificationDetailPage notificationId={id}/>
     </ResponsiveRedirect>

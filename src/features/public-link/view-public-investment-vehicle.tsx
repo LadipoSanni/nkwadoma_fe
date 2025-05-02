@@ -1,34 +1,48 @@
-'use client';
-import React, {useState} from 'react';
-import BackButton from "@/components/back-button";
-import {useRouter} from "next/navigation";
+'use client'
+import React, {useEffect, useState} from 'react';
+import styles from "@/features/market-place/Index.module.css";
 import Image from "next/image";
 import {cabinetGroteskMediumBold600, inter} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
-import styles from "../../market-place/Index.module.css";
-import {useSelector} from "react-redux";
-import {RootState, store} from "@/redux/store";
-import {useGetInvestmentVehicleDetailQuery} from "@/service/financier/marketplace";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useViewPublicInvestmentDetailsQuery} from "@/service/unauthorized/view-investment";
 import {formatAmount} from "@/utils/Format";
-import MarketDetailsSkeleton from "@/reuseable/Skeleton-loading-state/MarketDetails";
-import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
-import ToastPopUp from "@/reuseable/notification/ToastPopUp";
+import MarketDetailsSkeleton from '@/reuseable/Skeleton-loading-state/MarketDetails';
+import LoanEmptyState from "@/reuseable/emptyStates/Index";
+import {MdOutlinePayments} from "react-icons/md";
 
-const MarketPlaceDetails = () => {
-    const router = useRouter();
+
+const ViewPublicInvestmentVehicle = () => {
+
     const [isVerifying, setIsVerifying] = useState(false);
     const [docError, setDocError] = useState<string | null>(null);
+    const [details, setDetails] = useState([])
+    const router = useRouter()
 
-    const handleBack = () => {
-        router.push("/marketplace");
-    };
+        const searchParams = useSearchParams()
 
-    const {
-        marketInvestmentVehicleId,
-        vehicleType,
-    } = useSelector((state: RootState) => state.marketPlace.savedMarketplaceData) || {};
 
-    const {data, isLoading, isFetching} = useGetInvestmentVehicleDetailQuery({id: marketInvestmentVehicleId});
+        const getInvestmentVehicleName = () => {
+            if (searchParams){
+                const pathVariable = searchParams.get("name")
+                if (pathVariable){
+                    return pathVariable
+                }
+            }
+        }
+        const vehicleName = getInvestmentVehicleName()
+       const {data, isLoading, isFetching} = useViewPublicInvestmentDetailsQuery(vehicleName)
+
+    useEffect(()=> {
+        setDetails(data?.data)
+
+    }, [data])
+
+
+    const status = data?.data?.fundRaisingStatus ? 'Fund raising': 'Deploying';
+        const statusValue = status === 'Deploying' ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus;
+
+    const vehicleType = data?.data?.investmentVehicleType;
     const getFilenameFromUrl = (url: string) => {
         try {
             const urlObj = new URL(url);
@@ -37,82 +51,6 @@ const MarketPlaceDetails = () => {
             return url?.split('/').pop() || 'No file available';
         }
     };
-
-    const networkPopUp = ToastPopUp({
-        description: "No internet connection",
-        status: "error",
-    });
-
-    const HandleInvest = () => {
-        if (!navigator.onLine) {
-            networkPopUp.showToast();
-        } else {
-            store.dispatch(
-                setMarketInvestmentVehicleId({
-                    marketInvestmentVehicleId: data?.data?.id,
-                    minimumInvestmentAmount: data?.data?.minimumInvestmentAmount?.toString(),
-                    vehicleType: data?.data?.investmentVehicleType
-                })
-            );
-            router.push("/marketplace/transfer");
-        }
-    };
-
-    const statusKeyAndValue = ()  => {
-        if (data?.data?.fundRaisingStatus !== null){
-              return {
-                key: "Fundraising",
-                value: data?.data?.fundRaisingStatus
-              }
-        }else if (data?.data?.deployingStatus !== null) {
-              return {
-                   key: "Deploying",
-                   value: data?.data?.deployingStatus
-              }
-        } else if (data?.data?.couponDistributionStatus !== null) {
-                return {
-                    key: "CouponDistribution",
-                    value: data?.data?.couponDistributionStatus
-                }
-        } else if (data?.data?.recollectionStatus !== null) {
-            return {
-                key: "Recollection",
-                value: data?.data?.recollectionStatus
-            } 
-        }
-           else if (data?.data?.maturity !== null) {
-            return {
-                key: "Maturity",
-                value: data?.data?.maturity
-            } 
-           }
-         else {
-            return {
-                key: "",
-                value: null
-            } 
-        }
-
-         }
-
-
-    // const actualStatus = data?.data?.fundRaisingStatus === null
-    //     ? data?.data?.deployingStatus
-    //     : data?.data?.fundRaisingStatus;
-
-    const borderClass = statusKeyAndValue().value === "OPEN"
-        ? "border-[#B4E5C8]"
-        : statusKeyAndValue().value === "CLOSE"
-            ? "border-[#F2BCBA]"
-            : "border-[#B4E5C8]";
-
-    const statusClass = statusKeyAndValue().value === "OPEN"
-        ? "text-[#0D9B48] bg-[#E7F7ED]"
-        : statusKeyAndValue().value === "CLOSE"
-            ? "text-red-600 bg-[#FCEEEE]"
-            : "text-[#0D9B48] bg-[#E7F7ED]";
-
-    // const statusKey = data?.data?.fundRaisingStatus ? "Fundraising" : "Deploying"; 
 
     const verifyDocumentExists = async (url: string): Promise<boolean> => {
         if (url.includes('cloudinary.com')) {
@@ -131,11 +69,6 @@ const MarketPlaceDetails = () => {
             return false;
         }
     };
-
-    const docUrl = data?.data?.mandate;
-    const docFilename = getFilenameFromUrl(docUrl);
-    const isCloudinaryUrl = docUrl?.includes('cloudinary.com');
-    const fileExtension = docFilename?.split('.').pop()?.toLowerCase();
 
     const handleViewDocument = async () => {
         if (!docUrl) return;
@@ -167,29 +100,10 @@ const MarketPlaceDetails = () => {
     };
 
 
-
-    const investmentBasicDetails = [
-        {label: 'Maturity date', value: `${data?.data?.tenure} ${data?.data?.tenure === 1 ? 'month' : 'months'}`},
-        {label: 'Interest rate', value: `${data?.data?.rate || 0}%`},
-        {label: 'Minimum amount', value: (<span className='text-meedlBlack text-[14px] font-semibold'>{formatAmount(data?.data?.minimumInvestmentAmount?.toString() || '0')}</span>)},
-        {label: 'Status', value: (
-                <div id="minidetailsId" className="flex bg-[#F6F6F6] items-center gap-2 rounded-lg px-2 py-1 w-fit">
-                    <span id="fundrasingId" className="font-normal text-black text-sm flex items-center justify-center">{statusKeyAndValue().key}</span>
-                    <div id="statusDivId" className={`bg-meedlWhite p-1 border rounded-lg ${borderClass} ${statusKeyAndValue().value === "maturity"? "hidden" : ""}`}>
-                        <span id="statusId" className={`text-sm font-medium px-1 py-1 rounded-lg lowercase ${statusClass} `}>
-                            {statusKeyAndValue().value ?.toLowerCase() || ""}</span>
-                    </div>
-                </div>
-            ),
-        },
-    ];
-
-    const bgColor = vehicleType === "COMMERCIAL" ? "bg-[#D9EAFF]" : "bg-[#E6F2EA]";
-    const imageSrc =
-        vehicleType === "COMMERCIAL"
-            ? "/BlueCircles.svg"
-            : "/GreenCircles.svg";
-    const typeTextColor = vehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
+    const docUrl = data?.data?.mandate;
+    const docFilename = getFilenameFromUrl(docUrl);
+    const isCloudinaryUrl = docUrl?.includes('cloudinary.com');
+    const fileExtension = docFilename?.split('.').pop()?.toLowerCase();
 
     const getTruncatedFilename = (filename: string, maxBaseLength: number) => {
         const lastDot = filename.lastIndexOf('.');
@@ -207,43 +121,68 @@ const MarketPlaceDetails = () => {
 
 
 
+    const id = data?.data?.id;
 
+    const redirectToLogin =()=> {
+        router.push(`/auth/login?vehicleId=${id}?vehicleType=${vehicleType}`)
+    }
+
+
+
+    const investmentBasicDetails = [
+        {label: 'Maturity date',
+            value: `${data?.data?.tenure} ${data?.data?.tenure === 1 ? 'month' : 'months'}`},
+            // value: ''},
+        {label: 'Interest rate', value: `${data?.data?.rate || 0}%`},
+            //     ''},
+        {label: 'Minimum amount', value: (<span className='text-meedlBlack text-[14px] font-semibold'>{formatAmount(data?.data?.minimumInvestmentAmount?.toString() || '0')}</span>)}
+        ,
+        {label: 'Status', value:
+                (
+                <div id="minidetailsId" className="flex bg-[#F6F6F6]  items-center gap-2 rounded-lg px-2 py-1 w-fit">
+                    <span id="fundrasingId" className="font-normal text-black text-sm flex items-center justify-center">{status}</span>
+                    <div id="statusDivId" className={`bg-meedlWhite ${statusValue === 'OPEN' ? 'border-[#B4E5C8]' : 'border-[#F2BCBA]'} p-1 border rounded-lg }`}>
+                        <p id="statusId" className={`text-sm ${statusValue === 'OPEN' ? 'text-[#0D9B48] bg-[#E7F7ED]' : 'text-red-600 bg-[#FCEEEE]'} font-medium px-1 py-1 rounded-lg lowercase `}>
+                            {statusValue ?.toLowerCase() || ""}</p>
+                    </div>
+                </div>
+            ),
+        },
+    ];
 
     return (
-        <>{isLoading || isFetching ? (<MarketDetailsSkeleton/>):
-            <main id="mainDiv" className="md:px-10 py-6 px-3 w-full md:gap-10 gap-8">
-                <div id="backButtonId">
-                    <BackButton
-                        id="createFundBackButton"
-                        handleClick={handleBack}
-                        iconBeforeLetters={true}
-                        text="Back to investment"
-                        textColor=""
-                    />
-                </div>
-
+        <>
+            {isLoading || isFetching ? (<MarketDetailsSkeleton/>):
+                !details ? (
+                        <div className=" grid content-center  h-full  py-6 px-3 w-full">
+                         <div className={`  mr-auto ml-auto w-fit h-fit`}>
+                             <LoanEmptyState title={"Investment vehicle not found"} description={"Investment vehicle will show here"} icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>} iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
+                         </div>
+                        </div>
+                    ):
+           ( <main id="mainDiv" className="md:px-10 py-6 px-3 w-full md:gap-10 gap-8">
                 <div
                     id="detailsPurposeAndObjectiveDiv"
                     className={`flex items-center justify-center md:pt-4 pt-4`}
                 >
                     <div
                         id="purpposeDiv"
-                        className={`${styles.container} w-full grid md:w-2/5 md:h-[70vh] md:max-h-none `}
+                        className={`${styles.container} w-full grid sm:w-4/5 md:w-2/5 md:h-[70vh] md:max-h-none `}
                     >
-                        <div id="backgroundId" className={`w-full md:w-full rounded-md md:rounded-md ${bgColor}`}>
+                            <div id="backgroundId" className={`w-full ${ vehicleType === 'COMMERCIAL'? 'bg-[#D9EAFF] md:bg-[#D9EAFF]' : 'bg-[#E6F2EA].,' }md:w-full rounded-md md:rounded-md `}>
                             <div id="type" data-testid="type" className="py-5 px-4 flex flex-col">
                                 <div
                                     id="investmentTypeId"
-                                    className={`bg-white ${typeTextColor} text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center`}
+                                    className={`bg-white  text-sm font-medium rounded-[32px] px-3 py-1 w-[104px] h-[29px] flex items-center justify-center`}
                                 >
                                     {vehicleType
                                         ? vehicleType.charAt(0).toUpperCase() + vehicleType.slice(1).toLowerCase()
-                                        : data?.data?.investmentVehicleType}
+                                        : ""}
                                 </div>
                             </div>
                             <div id="imageId" className="object-right-bottom justify-end flex">
                                 <Image
-                                    src={imageSrc}
+                                    src={vehicleType === 'COMMERCIAL' ?'/BlueCircles.svg' : '/GreenCircles.svg'}
                                     alt="circle"
                                     width={104}
                                     height={29}
@@ -255,24 +194,25 @@ const MarketPlaceDetails = () => {
                         </div>
 
                         <p
+                            id={'fundManagerName'}
                             className={`id="keyValuePairId" ${cabinetGroteskMediumBold600.className} md:text-[32px] text-[24px] pt-5 font-medium text-[#212221]`}
                         >
                             {data?.data.name}
                         </p>
                         <div className={`${inter.className} flex md:flex-row md:pt-0 pt-2 gap-4`}>
                             <div
-                                className={`${bgColor} rounded-full h-12 w-12 flex items-center justify-center text-meedlBlue text-sm font-semibold uppercase`}
+                                className={`} rounded-full h-12 w-12 flex items-center justify-center text-meedlBlue text-sm font-semibold uppercase`}
                             >
                                 {data?.data.bankPartnerImage ? (
-                                    <Image
-                                        src={data?.data.bankPartnerImage}
-                                        alt="logo"
-                                        width={104}
-                                        height={29}
-                                        className="h-4 w-4 object-cover"
-                                        data-testid="circle-image"
-                                        loading="lazy"
-                                    />
+                                <Image
+                                    src={`/GreenCircles.svg`}
+                                    alt="logo"
+                                    width={104}
+                                    height={29}
+                                    className="h-4 w-4 object-cover"
+                                    data-testid="circle-image"
+                                    loading="lazy"
+                                />
                                 ) : (
                                     data?.data.bankPartner
                                         ?.split(" ")
@@ -357,10 +297,10 @@ const MarketPlaceDetails = () => {
 
                         <div className={`pt-3`}>
                             <Button type="button" id={`invest-button`} size="lg" variant="secondary"
-                                    onClick={HandleInvest}
-                                    // disabled={ statusKeyAndValue().value  === 'CLOSE'}
-                                    // className={`${inter.className} ${statusKeyAndValue().value   === 'CLOSE'? " bg-[#D0D5DD]  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
-                                    className={`${inter.className} bg-meedlBlue text-meedlWhite w-full`}
+                                onClick={redirectToLogin}
+                                //     className={` w-full `}
+                                disabled={statusValue  === 'CLOSE'}
+                                className={`${inter.className} ${statusValue  === 'CLOSE'? " bg-[#D0D5DD]  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
                             >
                                 Invest
                             </Button>
@@ -368,10 +308,10 @@ const MarketPlaceDetails = () => {
                     </div>
 
                 </div>
-            </main>
-        }
+            </main>)
+            }
         </>
     );
 };
 
-export default MarketPlaceDetails;
+export default ViewPublicInvestmentVehicle;

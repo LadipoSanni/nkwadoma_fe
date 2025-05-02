@@ -24,7 +24,7 @@ const FinancierDetails = () => {
         {label: 'Address', value: data?.data?.address ?? "Not provided"},
         {label: 'Organization admin name', value: data?.data?.firstName  + " " +  data?.data?.lastName },
         {label: 'Organization admin email address', value: data?.data?.email ?? "Not provided"},
-        {label: 'Organization admin phone number', value:  ``?? "Not provided"},
+        // {label: 'Organization admin phone number', value:  ``?? "Not provided"},
         {label: 'No. of investments', value: data?.data?.totalNumberOfInvestment ?? `Not provided`},
         {label: 'Total amount invested', value:  formatAmount(data?.data?.totalNumberOfInvestment) ?? `Not provided`},
         {label: 'Total income earned', value: formatAmount(data?.data?.totalIncomeEarned) ?? `Not provided`},

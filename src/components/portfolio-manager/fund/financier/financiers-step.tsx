@@ -136,7 +136,7 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
   };
 
 const handleSubmit = async  (values: typeof initialFormValue) => {
-   console.log(values)
+  //  console.log(values)
   const data = {
        userIdentity: {
           firstName: values.firstName,
