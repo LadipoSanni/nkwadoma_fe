@@ -11,12 +11,13 @@ interface InvestmentCardProps {
     investmentVehicleType: string;
     investmentVehicleName: string;
     statuses: string;
-    status: string;
+    status: string | null;
     percentage: number;
     HandleCardDetails: (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => void;
     statusClass: string;
     borderClass:string;
     typeTextColor:string;
+    statusValue?: string
 }
 
 const InvestmentCard: React.FC<InvestmentCardProps> = ({
@@ -32,6 +33,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                                                            statusClass,
                                                            borderClass,
                                                            typeTextColor,
+                                                           statusValue
                                                        }) => {
     const router = useRouter();
 
@@ -63,12 +65,12 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
             </div>
 
             <div id={"detailsSectionId"} className={`pt-5`}>
-                <div id={"minidetailsId"} className="flex bg-[#F6F6F6] items-center gap-2 rounded-lg px-2 py-1 w-fit">
+                <div id={"minidetailsId"} className={`flex bg-[#F6F6F6] items-center gap-2 rounded-lg px-2 py-1 w-fit ${status === statusValue? "py-[11px]" : ""}`}>
                     <span id={"fundrasingId"}
                           className="font-normal text-black text-sm flex items-center justify-center">
                         {statuses}
                     </span>
-                    <div id={"statusDivId"} className={`bg-meedlWhite p-1 border rounded-lg ${borderClass}`}>
+                    <div id={"statusDivId"} className={`bg-meedlWhite p-1 border rounded-lg ${borderClass} ${status === statusValue? "hidden" : ""}`}>
                         <span id={"statusId"}
                               className={`text-sm font-medium px-1 py-1 rounded-lg lowercase ${statusClass}`}>
                             {status}
