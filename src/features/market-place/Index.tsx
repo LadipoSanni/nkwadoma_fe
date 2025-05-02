@@ -11,6 +11,7 @@ import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useSearchInvestmentVehiclesQuery} from "@/service/financier/marketplace";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
+import { clearAll } from "@/redux/slice/investors/MarketPlaceSlice";
 
 interface InvestmentVehicle {
     id: string;
@@ -82,6 +83,7 @@ const MarketPlaceView = () => {
         setPageNumber(0);
         setAllVehicles([]);
         setHasMore(true);
+        store.dispatch(clearAll())
     }, [searchTerm, selectedValue]);
 
     useEffect(() => {

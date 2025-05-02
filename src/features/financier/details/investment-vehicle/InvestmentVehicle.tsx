@@ -85,9 +85,10 @@ function InvestmentVehicle() {
     };
 
     const handleRowClick = (row:TableRowData) => {
-        store.dispatch(setFinancierInvestmentVehicleId(String(row?.id)))
+        store.dispatch(setFinancierInvestmentVehicleId(String(row?.investmentId)))
+        console.log(row.investmentId, "setFinancierInvestmentVehicleId")
         store.dispatch(setFinancierMode("investment"))
-        router.push('/financier/financier-investment-details')
+        router.push('/financier/financier-investments-details')
 
 
     }
@@ -128,9 +129,9 @@ function InvestmentVehicle() {
                         handleRowClick={handleRowClick}
                         tableHeight={58}
                         icon={MdOutlinePayments}
-                        sideBarTabName='financier'
+                        sideBarTabName='investment'
                         condition={true}
-                        staticHeader={"Financier"}
+                        staticHeader={"Investment vehicle"}
                         staticColunm={"name"}
                         sx='cursor-pointer'
                         hasNextPage={hasNextPage}
