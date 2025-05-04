@@ -1,5 +1,5 @@
 import React from 'react';
-import {cabinetGroteskBold, inter} from "@/app/fonts";
+import {cabinetGroteskBold, inter, inter500} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import { MdOutlineHelpOutline } from "react-icons/md";
 
@@ -39,26 +39,29 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
                       </main>
                   ))}
                   {isLoanData &&
-                      <main className={`w-full grid gap-4 `}>
+                      <main className={`w-full  grid gap-4 `}>
                           {loanData?.map((loan, index) => (
-                              <div key={index} className={`text-black300 w-full border h-fit  ${Number(loan.amount) === 0 ? '' : ''} bg-white px-2   border-[#ECECEC] rounded-md flex justify-between gap-2  text-[14px] text-nowrap whitespace-nowrap mt-auto mb-auto`}>
+                              <div key={index}
+                                   id={'id'+loan.title}
+                                   className={` bg-white w-full border rounded-md relative  border-[#ECECEC]  h-fit `}
+                              >
+
                                   <div
-                                      style={{width:Math.round(Number(loan.amount)).toString()}}
-                                      className={`h-full py-3 bg-red-600 `}
+                                      style={{width:loan.amount}}
+                                      className={` h-[40px] ${loan.bgColor} rounded-md `}
+                                      id={loan.title + 'Bar'}
                                   >
-kjjk
+
+                                  </div>
+
+                                  <div
+                                      className={`text-black300 w-full absolute top-0 left-0    px-3  h-[40px]    flex justify-between gap-2  `}
+                                  >
+                                      <label id={'label'+ loan.title} className={` ${inter500.className} mt-auto mb-auto  ${loan.textColor} `}>{loan.title}</label>
+                                      <label id={ loan.title +'Percentage'} className={` ${inter500.className} mt-auto mb-auto text-[#212221] `}>{loan.amount}</label>
+
                                   </div>
                               </div>
-
-                      //         <div className={` w- py-3  flex justify-between ${loan.bgColor} `} style={{width: Math.round(Number(loan.amount)).toString()}}>
-                      //     <label className={` ${inter500.className} text-[${loan.textColor}] `}>{loan.title}</label>
-                      //     <label className={` ${inter500.className}  `}>{Math.round(Number(loan.amount))}%</label>
-                      // </div>
-                              // <progress key={index} id={`cardTitle`}
-                              //    className={`text-black300 w-full border h-fit py-3  ${Number(loan.amount) === 0 ? '' : ''} bg-white px-2   border-[#ECECEC] rounded-md flex justify-between gap-2  text-[14px] text-nowrap whitespace-nowrap mt-auto mb-auto `}>
-                              //     <label className={` ${inter500.className} text-[${loan.textColor}] `}>{loan.title}</label>
-                              //     <label className={` ${inter500.className}  `}>{loan.amount}%</label>
-                              // </progress>
                           ))}
                       </main>
                   }

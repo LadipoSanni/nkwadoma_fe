@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from "../index.module.css"
-import PortfolioManagerOverviewCard from "@/reuseable/cards/PortfolioManagerOverviewCard";
+import PortfolioManagerOverviewCard from "@/reuseable/cards/portfoliomanagerOverview/PortfolioManagerOverviewCard";
 import Barcharts from "@/features/Overview/PortfolioMnanager/Barcharts";
 import PerformanceCard from "@/reuseable/cards/perfomance-card/performanceCard";
 import {useRouter} from "next/navigation";
@@ -52,9 +52,10 @@ const PortfolioManager = () => {
     // ]
 
     const loanData = [
-        {title: "Loan referrals", amount: data?.data?.loanReferralPercentage?.toString(),textColor: '#66440A',bgColor: 'bg-green-500',},
-        {title: "Loan offers", amount:data?.data?.loanOfferPercentage?.toString(),textColor: '#142854',bgColor: 'bg-green-500',},
-        {title: "Disbursed loan", amount: data?.data?.loanDisbursalPercentage?.toString(),textColor: '#034319',bgColor: 'bg-green-500',},
+        {title: "Loan referrals", amount: Math.round(Number(data?.data?.loanReferralPercentage?.toString())) + "%",textColor: 'text-[#66440A]',bgColor: 'bg-[#FEF6E8]',},
+        {title: "Loan offers", amount: Math.round(Number(data?.data?.loanOfferPercentage?.toString())) + "%",textColor: 'text-[#142854]',bgColor: 'bg-[#D9EAFF]',},
+        {title: "Disbursed loan", amount: Math.round(Number(data?.data?.loanDisbursalPercentage?.toString())) + '%',textColor: 'text-[#0e4c23]',bgColor: 'bg-[#E6F2EA]',},
+
     ]
 
     const routeToInvestmentVehicle = () => {
