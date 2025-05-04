@@ -11,7 +11,7 @@ import {useViewMeedlPortfolioQuery} from "@/service/admin/overview";
 const PortfolioManager = () => {
 
     const router = useRouter();
-    const {data, isLoading, isFetching } = useViewMeedlPortfolioQuery({})
+    const {data } = useViewMeedlPortfolioQuery({})
     console.log('data: ', data)
     const cardData1 = [
         {title: "Total investment vehicles", amount: data?.data?.totalNumberOfInvestmentVehicle?.toString(),},
