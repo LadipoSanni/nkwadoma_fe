@@ -5,7 +5,7 @@ import {useRouter} from "next/navigation";
 import {useAppSelector} from "@/redux/store";
 import {useFinancierVehicleDetailsQuery} from '@/service/admin/financier';
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
-import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
+import {capitalizeFirstLetters, capitalizeWordsFromArray} from "@/utils/GlobalMethods";
 import { formatAmount } from '@/utils/Format';
 import {inter} from "@/app/fonts";
 import styles from "@/features/portfolio-manager/fund/fundDetails/financiers/financier-details/index.module.css";
@@ -60,7 +60,7 @@ const FinancierInvestmentVehiclesDetails = () => {
         {label: 'Total amount invested', value:  formatAmount(data?.data?.amountInvested)},
         {label: 'Maturity date', value: data?.data?.maturityDate ?? "Not provided"},
         {label: 'Income earned', value: formatAmount(data?.data?.incomeEarned) ?? "0"},
-        {label: 'Designation', value: data?.data?.designations ?? "Not provided"},
+        {label: 'Designation', value: capitalizeWordsFromArray(data?.data?.designations) || 'Not provided'},
         {label: `Vehicle ${status().type} status`, value:  capitalizeFirstLetters(statusValue) ?? `Not provided`},
         {label: 'Vehicle visibility status', value: capitalizeFirstLetters(data?.data?.investmentVehicleVisibility) ?? 'Not provided'},
     ]
