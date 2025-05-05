@@ -55,10 +55,10 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
                                   </div>
 
                                   <div
-                                      className={`text-black300 w-full absolute top-0 left-0    px-3  h-[40px]    flex justify-between gap-2  `}
+                                      className={`text-black300 w-full absolute top-0 left-0  gap-2   px-3  h-[40px]    flex justify-between   `}
                                   >
-                                      <label id={'label'+ loan.title} className={` ${inter500.className} mt-auto mb-auto  ${loan.textColor} `}>{loan.title}</label>
-                                      <label id={ loan.title +'Percentage'} className={` ${inter500.className} mt-auto mb-auto text-[#212221] `}>{loan.amount}</label>
+                                      <label id={'label'+ loan.title} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  ${loan.textColor} `}>{loan.title}</label>
+                                      <label id={ loan.title +'Percentage'} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  text-[#212221] `}>{loan.amount}</label>
 
                                   </div>
                               </div>

@@ -12,7 +12,7 @@ const PortfolioManager = () => {
 
     const router = useRouter();
     const {data } = useViewMeedlPortfolioQuery({})
-    console.log('data: ', data)
+    // console.log('data: ', data)
     const cardData1 = [
         {title: "Total investment vehicles", amount: data?.data?.totalNumberOfInvestmentVehicle?.toString(),},
         {title: "Commercial funds", amount: data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString(),showIcon: true},
