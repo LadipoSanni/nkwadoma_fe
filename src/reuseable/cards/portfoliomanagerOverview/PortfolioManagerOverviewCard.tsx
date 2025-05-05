@@ -39,12 +39,28 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
                       </main>
                   ))}
                   {isLoanData &&
-                      <main className={`w-full grid gap-4 `}>
+                      <main className={`w-full  grid gap-4 `}>
                           {loanData?.map((loan, index) => (
-                              <div key={index} id={`cardTitle`}
-                                 className={`text-black300 w-full border h-fit py-3  ${Number(loan.amount) === 0 ? '' : ''} bg-white px-2   border-[#ECECEC] rounded-md flex justify-between gap-2  text-[14px] text-nowrap whitespace-nowrap mt-auto mb-auto `}>
-                                  <p className={` ${inter500.className} text-[${loan.textColor}] `}>{loan.title}</p>
-                                  <p className={` ${inter500.className}  `}>{loan.amount}%</p>
+                              <div key={index}
+                                   id={'id'+loan.title}
+                                   className={` bg-white w-full border rounded-md relative  border-[#ECECEC]  h-fit `}
+                              >
+
+                                  <div
+                                      style={{width:loan.amount}}
+                                      className={` h-[40px] ${loan.bgColor} rounded-md `}
+                                      id={loan.title + 'Bar'}
+                                  >
+
+                                  </div>
+
+                                  <div
+                                      className={`text-black300 w-full absolute top-0 left-0  gap-2   px-3  h-[40px]    flex justify-between   `}
+                                  >
+                                      <label id={'label'+ loan.title} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  ${loan.textColor} `}>{loan.title}</label>
+                                      <label id={ loan.title +'Percentage'} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  text-[#212221] `}>{loan.amount}</label>
+
+                                  </div>
                               </div>
                           ))}
                       </main>
