@@ -170,7 +170,7 @@ const ViewFinanciers = () => {
                         selectContent={["Individual", "Cooperate", "Reset"]}
                         placeHolder="Select type"
                         triggerId="financierSelectId"
-                        className="h-11 md:w-sm w-fit  mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                        className="h-11 md:w-32 w-full  mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                     />
                 </div>
                 <Button
