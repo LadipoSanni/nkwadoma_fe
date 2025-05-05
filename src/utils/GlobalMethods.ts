@@ -13,6 +13,23 @@ export  function capitalizeFirstLetters(word: string | null| undefined) {
 
 }
 
+export function capitalizeWordsFromArray(arr: unknown): string {
+    if (!Array.isArray(arr)) return '';
+
+    return arr
+        .filter(item => typeof item === 'string')
+        .map(item =>
+            item
+                .toLowerCase()
+                .split(' ')
+                .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(' ')
+        )
+        .join(', ');
+}
+
+
+
 export const isUserAdmin = (role: string) => {
     return ADMIN_ROLES.includes(role)
 }
