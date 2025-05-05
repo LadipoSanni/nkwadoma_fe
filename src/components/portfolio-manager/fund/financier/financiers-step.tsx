@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import InviteFinancier from './Invite-financier';
 import { useInviteFinancierMutation } from '@/service/admin/financier';
 import {useToast} from "@/hooks/use-toast";
+import { store } from '@/redux/store';
+import { setFinancierStatusTab } from '@/redux/slice/financier/financier';
 
 interface ApiError {
   status: number;
@@ -21,10 +23,10 @@ interface Props{
   amountCommitedAndDesignationCondition?: boolean
   isDesignationRequired?: boolean
   context?: string
-
+  state?: string
 }
 
-function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCondition,isDesignationRequired,context}: Props) {
+function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCondition,isDesignationRequired,context,state}: Props) {
   const [step, setStep] = useState(1);
   const [inviteFinancier, {isLoading}] = useInviteFinancierMutation()
   const [error, setError] = useState("");
@@ -164,6 +166,9 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
         });
         if (setIsOpen) {
             setIsOpen(false);
+        }
+        if(state === "platform"){
+          store.dispatch(setFinancierStatusTab("invited"))
         }
     }
 

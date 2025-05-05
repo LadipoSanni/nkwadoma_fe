@@ -24,7 +24,8 @@ import {store} from "@/redux/store";
 import { useRouter } from 'next/navigation'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import CustomSelect from "@/reuseable/Input/Custom-select";
-
+import { useAppSelector } from '@/redux/store';
+import { setFinancierStatusTab } from '@/redux/slice/financier/financier';
 
 
 
@@ -49,6 +50,7 @@ type viewAllfinancier = financials & TableRowData
 
 
 const ViewFinanciers = () => {
+    const tabType = useAppSelector(state => state?.financier?.financierStatusTab)
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFinancier, setSelectedFinancier] = useState('');
     // const [setIsDropdownOpen] = useState(false);
@@ -58,18 +60,19 @@ const ViewFinanciers = () => {
     const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
     // const [setTypeSelectedFinancier] = useState('');
-    const [selectedActivationStatusTab, setSelectedActivationStatusTab] = useState('active');
+    // const [selectedActivationStatusTab, setSelectedActivationStatusTab] = useState(tabType );
     const router = useRouter()
+
     const param = {
         pageNumber: pageNumber,
         pageSize: 10,
         financierType: selectedFinancier.toUpperCase(),
-        activationStatus: selectedActivationStatusTab.toUpperCase(),
+        activationStatus: tabType.toUpperCase(),
     }
 
 
     const {data, isLoading, refetch} = useGetAllActiveAndInvitedFinanciersQuery(param)
-    const {data:searchData, isLoading: searchIsLoading} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: selectedActivationStatusTab.toUpperCase()},{skip: !searchTerm})
+    const {data:searchData, isLoading: searchIsLoading} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !searchTerm})
 
     useEffect(()=>{
         if(searchTerm && searchData && searchData?.data){
@@ -184,8 +187,11 @@ const ViewFinanciers = () => {
                 </Button>
             </div>
 
-            <div className={`pt-2 w-full pr-2  `}>
-                <Tabs value={selectedActivationStatusTab} onValueChange={setSelectedActivationStatusTab} >
+            <div className={`pt-2`}>
+                <Tabs value={tabType} onValueChange={(value) => {
+    // setSelectedActivationStatusTab(value);
+    store.dispatch(setFinancierStatusTab(value));
+  }} >
                     <TabsList>
                         <TabsTrigger value="active">Active</TabsTrigger>
                         <TabsTrigger value="invited">Invited</TabsTrigger>
@@ -261,7 +267,7 @@ const ViewFinanciers = () => {
                         icon={Cross2Icon}
                         width='36%'
                     >
-                        <InviteFinanciers  setIsOpen={setIsModalOpen} />
+                        <InviteFinanciers  setIsOpen={setIsModalOpen} state='platform'/>
                     </Modal>
                 </div>
             )}

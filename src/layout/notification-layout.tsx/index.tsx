@@ -64,7 +64,7 @@ function NotificationLayout({children}: Props) {
 
        const [deleteNotification,{isLoading:isloading}] = useDeleteNotificationMutation()
       
-       const {data,isLoading} = useViewAllNotificationQuery({pageSize: pageSize,pageNumber: pageNumber})
+       const {data,isLoading} = useViewAllNotificationQuery({pageSize: pageSize,pageNumber: pageNumber},{ refetchOnMountOrArgChange: true })
        const {data: searchData} = useSearchNotificationQuery({param},{skip: !searchTerm})
 
        useEffect(() => {

@@ -8,7 +8,8 @@ interface vehicleState {
     financierType:  'INDIVIDUAL' | 'COOPERATE' | null;
     currentMyInvestmentVehicleDetails: CurrentMyInvestmentVehicleDetails | null;
     activeAndInvitedFinancierId: string;
-    financierInvestmentVehicleId: string
+    financierInvestmentVehicleId: string;
+    financierStatusTab: string;
 
 }
 
@@ -19,6 +20,7 @@ const initialState: vehicleState = {
     currentMyInvestmentVehicleDetails: null,
     activeAndInvitedFinancierId: ``,
     financierInvestmentVehicleId: ``,
+    financierStatusTab: "active"
 
    
 }
@@ -44,9 +46,12 @@ export const financierSlice = createSlice({
         },
        setFinancierInvestmentVehicleId: (state, action: PayloadAction<string>) => {
             state.financierInvestmentVehicleId = action.payload;
+       },
+       setFinancierStatusTab: (state, action: PayloadAction<string>) => {
+        state.financierStatusTab =  action.payload
        }
     }
 })
 
-export const {setCurrentFinancierId, setCurrentMyInvestmentVehicleDetails ,setFinancierMode, setFinancierType, setActiveAndInvitedFinancierId, setFinancierInvestmentVehicleId} = financierSlice.actions;
+export const {setCurrentFinancierId, setCurrentMyInvestmentVehicleDetails ,setFinancierMode, setFinancierType, setActiveAndInvitedFinancierId, setFinancierInvestmentVehicleId,setFinancierStatusTab} = financierSlice.actions;
 export default financierSlice.reducer;
