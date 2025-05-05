@@ -170,7 +170,7 @@ const MarketPlaceDetails = () => {
 
 
     const investmentBasicDetails = [
-        {label: 'Maturity date', value: `${data?.data?.tenure} ${data?.data?.tenure === 1 ? 'month' : 'months'}`},
+        {label: 'Maturity date', value: `${data?.data?.tenure} ${data?.data?.tenure <= 1 ? 'month' : 'months'}`},
         {label: 'Interest rate', value: `${data?.data?.rate || 0}%`},
         {label: 'Minimum amount', value: (<span className='text-meedlBlack text-[14px] font-semibold'>{formatAmount(data?.data?.minimumInvestmentAmount?.toString() || '0')}</span>)},
         {label: 'Status', value: (
