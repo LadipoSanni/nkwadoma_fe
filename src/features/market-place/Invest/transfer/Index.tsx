@@ -172,7 +172,7 @@ function Transfer() {
                                                 <div>
                                                     <p className={`${inter.className} text-sm font-normal text-meedlBlack `}>I
                                                         have read, understood and I agree to the <span
-                                                            className="underline text-meedlBlue font-semibold cursor-pointer"> Terms and <br/> conditions</span>
+                                                            className="underline text-meedlBlue font-semibold"> Terms and conditions</span>
                                                     </p>
                                                 </div>
                                             </div>
