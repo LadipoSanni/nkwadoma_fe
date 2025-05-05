@@ -153,10 +153,10 @@ const ViewFinanciers = () => {
 
 
     return (
-        <main className={'mt-7 mx-5'}>
-            <section className={'md:flex justify-between grid gap-4'}>
-                <div className={'flex gap-3'}>
-                    <SearchInput id={'financiersSearch'} style='' value={searchTerm} onChange={handleSearchChange} />
+        <main className={'mt-7 w-[100%] md:px-4 '}>
+            <div className={'md:flex w-full justify-between grid gap-4'}>
+                <div className={'flex gap-2 w-full '}>
+                    <SearchInput id={'financiersSearch'} style='w-70' value={searchTerm} onChange={handleSearchChange} />
                     <CustomSelect
                         id="financierId"
                         value={selectedFinancier}
@@ -170,21 +170,21 @@ const ViewFinanciers = () => {
                         selectContent={["Individual", "Cooperate", "Reset"]}
                         placeHolder="Select type"
                         triggerId="financierSelectId"
-                        className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                        className="h-11 md:w-sm w-fit  mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                     />
                 </div>
                 <Button
                     variant={"secondary"}
                     size={"lg"}
-                    className={`${inter.className} bg-meedlBlue text-meedlWhite h-[2.8125rem] w-full md:w-[7.8125rem] flex justify-center items-center`}
+                    className={`${inter.className} bg-meedlBlue text-meedlWhite h-[2.8125rem] w-full md:w-fit flex justify-center items-center`}
                     id='createProgramModal'
                     onClick={() => setIsModalOpen(true)}
                 >
                     Invite financier
                 </Button>
-            </section>
+            </div>
 
-            <div className={`pt-2`}>
+            <div className={`pt-2 w-full pr-2  `}>
                 <Tabs value={selectedActivationStatusTab} onValueChange={setSelectedActivationStatusTab} >
                     <TabsList>
                         <TabsTrigger value="active">Active</TabsTrigger>
