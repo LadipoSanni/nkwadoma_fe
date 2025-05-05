@@ -11,18 +11,69 @@ import { useViewFinancierDashboardQuery } from '@/service/financier/api';
 import {setFinancierType} from "@/redux/slice/financier/financier";
 import { useAppDispatch} from "@/redux/store";
 import dynamic from "next/dynamic";
+import { NumericFormat } from 'react-number-format';
 
-const financialCardData = [
-    {
-        title: "Number of investments", amount: "0", linkText: "View"
-    },
-    {
-        title: "Amount invested", amount: "₦0", linkText: "View"
-    },
-    {
-        title: "Portfolio value", amount: "0", linkText: "View"
-    }
-];
+interface FinancierDashboardData {
+    data?: {
+        totalNumberOfInvestment?: number;
+        totalAmountInvested?: number;
+        portfolioValue?: number;
+    };
+}
+
+const getFinancialCardData = (data: FinancierDashboardData) => {
+    const defaultData = [
+        {
+            title: "Number of investments",
+            amount: <NumericFormat value={0} displayType="text" thousandSeparator={true} />,
+            linkText: "View"
+        },
+        {
+            title: "Amount invested",
+            amount: <NumericFormat value={0} displayType="text" thousandSeparator={true} prefix="₦" />,
+            linkText: "View"
+        },
+        {
+            title: "Portfolio value",
+            amount: <NumericFormat value={0} displayType="text" thousandSeparator={true} prefix="₦" />,
+            linkText: "View"
+        }
+    ];
+
+    if (!data?.data) return defaultData;
+
+    return [
+        {
+            title: "Number of investments",
+            amount: <NumericFormat
+                value={data.data.totalNumberOfInvestment || 0}
+                displayType="text"
+                thousandSeparator={true}
+            />,
+            linkText: "View"
+        },
+        {
+            title: "Amount invested",
+            amount: <NumericFormat
+                value={data.data.totalAmountInvested || 0}
+                displayType="text"
+                thousandSeparator={true}
+                prefix="₦"
+            />,
+            linkText: "View"
+        },
+        {
+            title: "Portfolio value",
+            amount: <NumericFormat
+                value={data.data.portfolioValue || 0}
+                displayType="text"
+                thousandSeparator={true}
+                prefix="₦"
+            />,
+            linkText: "View"
+        }
+    ];
+};
 
 const FinancierOverview = dynamic(
     () => Promise.resolve(FinancierOverviewContent),
@@ -77,7 +128,7 @@ const FinancierOverviewContent = () => {
     }
 
     return (
-        <main className={`px-5 h-[85vh] ${styles.container}  pb-8`}>
+        <main className={`px-5 pr-5 h-[85vh] ${styles.container}  pb-8`}>
 
             {showKycButton ? (
                 <button
@@ -90,7 +141,7 @@ const FinancierOverviewContent = () => {
                 <div></div>
             )}
             <section className={'mt-8'}>
-                <BalanceCard cardData={financialCardData} />
+                <BalanceCard cardData={getFinancialCardData(data)} />
             </section>
             <div className={'mt-8'}>
                 <MyInvestments />

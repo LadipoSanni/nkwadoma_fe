@@ -4,7 +4,7 @@ import {Button} from "@/components/ui/button";
 
 interface CardData {
     title: string;
-    amount: string;
+    amount: string | React.ReactNode;
     linkText: string;
 }
 
@@ -26,8 +26,10 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ cardData }) => {
                              className="bg-grey105 p-5 grid gap-5">
                             <p id={`cardTitle${index}`}
                                className="text-black300 text-[14px] font-normal leading-[150%]">{card.title}</p>
-                            <h1 id={`cardAmount${index}`}
-                                className={`${cabinetGrotesk.className} text-meedlBlue text-[32px] font-bold leading-[120%]`}>{card.amount}</h1>
+                            <div className="overflow-x-auto whitespace-nowrap scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                                <h1 id={`cardAmount${index}`}
+                                    className={`${cabinetGrotesk.className} text-meedlBlue text-[32px] font-bold leading-[120%]`}>{card.amount}</h1>
+                            </div>
                         </div>
                         <div id={`balanceLinkBlock${index}`}
                              className="grid place-items-end items-center h-[4.54vh]">
