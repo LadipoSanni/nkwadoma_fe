@@ -73,7 +73,7 @@ const FinancierInvestmentVehiclesDetails = () => {
                      data-testid={'financierDetailsPage'}
                      className={` w-full md:w-full h-full md:h-fit  grid gap-2 md:grid md:gap-8 px-4 py-2  md:px-8 md:py-4`}
                 >
-                    <BackButton handleClick={navigateToViewAllFinancier} iconBeforeLetters={true} text={"Back to financiers"}
+                    <BackButton handleClick={navigateToViewAllFinancier} iconBeforeLetters={true} text={"Back"}
                                 id={"backButtonToViewAllFinancier"} textColor={'#142854'}/>
 
                     <div
