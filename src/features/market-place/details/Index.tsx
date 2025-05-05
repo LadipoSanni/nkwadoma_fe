@@ -229,7 +229,7 @@ const MarketPlaceDetails = () => {
                 >
                     <div
                         id="purpposeDiv"
-                        className={`${styles.container} w-full grid md:w-2/5 md:h-[70vh] md:max-h-none `}
+                        className={`${styles.container} w-full grid md:w-3/5 xl:w-2/5 lg:w-3/5 md:h-[70vh] md:max-h-none `}
                     >
                         <div id="backgroundId" className={`w-full md:w-full rounded-md md:rounded-md ${bgColor}`}>
                             <div id="type" data-testid="type" className="py-5 px-4 flex flex-col">
