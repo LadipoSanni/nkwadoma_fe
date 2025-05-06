@@ -62,8 +62,7 @@ const MyInvestment = () => {
     }, [isFiltered, filteredData, searchData, searchTerm])
 
 
-
-
+    console.log('myInvestmentVehicles: ', myInvestmentVehicles?.length,'searchData: ', searchData?.data?.body?.length, 'filteredData: ', filteredData?.data?.body?.length)
 
 
     const HandleCardDetails = (vehicleDetails: CurrentMyInvestmentVehicleDetails ) => {
@@ -127,10 +126,19 @@ const MyInvestment = () => {
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
-            ) : myInvestmentVehicles?.length === 0  && searchData?.data?.body?.length === 0 && filteredData?.data?.body?.length === 0   ? (
+            ) : myInvestmentVehicles?.length === 0    ? (
                 <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
-                    <LoanEmptyState title={"Investment vehicles will show here"} description={"There are no Investment vehicles available yet"} icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>} iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
-                </div>
+                    { selectedValue === '' ?
+                        <LoanEmptyState title={"Investment vehicles will show here"}
+                                     description={"There are no Investment vehicles available yet"}
+                                     icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>}
+                                     iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
+                        :
+                        <LoanEmptyState title={"Investment vehicles will show here"}
+                                        description={`There are no ${selectedValue} Investment vehicles available yet`}
+                                        icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>}
+                                        iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
+                    }                </div>
             ) :  searchData?.data?.body?.length === 0 && searchTerm?.length  !== 0 ?   (
                         <SearchEmptyState icon={MdSearch} name="Investment" />
                 ):
