@@ -82,7 +82,7 @@ const ViewFinanciers = () => {
             setTotalPage(searchData?.data?.totalPages)
             setPageNumber(searchData?.data?.pageNumber)
         }
-        else if(data && data.data){
+        else if(data && data?.data){
             setFinanciers(data?.data?.body)
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
@@ -171,9 +171,9 @@ const ViewFinanciers = () => {
                             }
                         }}
                         selectContent={["Individual", "Cooperate", "Reset"]}
-                        placeHolder="Select type"
+                        placeHolder="Type"
                         triggerId="financierSelectId"
-                        className="h-11 md:w-sm w-fit  mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                        className="h-11 md:w-28 w-full  mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                     />
                 </div>
                 <Button
