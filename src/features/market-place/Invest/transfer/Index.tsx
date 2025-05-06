@@ -93,7 +93,7 @@ function Transfer() {
 
     return (
         <div className={`${inter.className} `}>
-            <div className='xl:px-36 grid grid-cols-1 gap-5 md:w-3/4 w-full'>
+            <div className='xl:px-36 grid grid-cols-1 gap-5 xl:w-3/4 lg:w-3/4 md:w-3/4 sm:w-3/4 w-full'>
                 <div className='grid grid-cols-1 gap-y-1'>
                     <h1 className='text-[18px] font-normal'>Transfer funds</h1>
                     <p className='text-[14px] font-normal text-[#4D4E4D]'>Add the investment amount and the investment terms <br/> and
