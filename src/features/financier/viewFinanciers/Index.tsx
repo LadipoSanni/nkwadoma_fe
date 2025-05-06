@@ -82,7 +82,7 @@ const ViewFinanciers = () => {
             setTotalPage(searchData?.data?.totalPages)
             setPageNumber(searchData?.data?.pageNumber)
         }
-        else if(data && data.data){
+        else if(data && data?.data){
             setFinanciers(data?.data?.body)
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
