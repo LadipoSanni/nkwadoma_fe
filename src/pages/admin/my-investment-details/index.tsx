@@ -12,6 +12,7 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
+import {formatAmount} from "@/utils/Format";
 
 
 const MyInvestmentDetails = dynamic(
@@ -76,17 +77,40 @@ const MyInvestmentDetailsContent = () => {
         { month: "August", value: 209,  },
         { month: "September", value: 214,  },
     ]
-    const startDate = dayjs(currentInvestmentDetails?.startDate?.toString())?.format('MMM D, YYYY')
-    const dateInvested = dayjs(currentInvestmentDetails?.dateInvested?.toString())?.format('MMM D, YYYY')
-    const maturityDate = dayjs(currentInvestmentDetails?.maturityDate?.toString())?.format('MMM D, YYYY')
-    const statusValue = currentInvestmentDetails?.fundRaisingStatus ? currentInvestmentDetails?.fundRaisingStatus : currentInvestmentDetails?.deployingStatus ;
-    const status = currentInvestmentDetails?.fundRaisingStatus ?  'Fundraising' : 'Deploying';
+    const minimumInvestmentAmount = currentInvestmentDetails?.minimumInvestmentAmount
+    const rate = currentInvestmentDetails?.rate
+    const maturityDate = currentInvestmentDetails?.tenure
+    // const statusValue = currentInvestmentDetails?.fundRaisingStatus ? currentInvestmentDetails?.fundRaisingStatus : currentInvestmentDetails?.deployingStatus ;
+    // const status = currentInvestmentDetails?.fundRaisingStatus ?  'Fundraising' : 'Deploying';
 
+    const recollectionStatus = currentInvestmentDetails?.recollectionStatus
+    const couponDistributionStatus = currentInvestmentDetails?.couponDistributionStatus
+    const deployingStatus =  currentInvestmentDetails?.deployingStatus
+    const fundRaisingStatus =  currentInvestmentDetails?.fundRaisingStatus
+    const maturity =  currentInvestmentDetails?.maturity
+    const status = recollectionStatus !== null
+        ? 'Recollection'
+        : couponDistributionStatus !== null
+            ? 'Coupon Distribution'
+            : deployingStatus !== null
+                ? 'Deploying'
+                : fundRaisingStatus !== null
+                    ? 'Fund Raising'
+                    : 'Maturity';
+    const statusValue = recollectionStatus !== null
+        ? recollectionStatus
+        : couponDistributionStatus !== null
+            ? couponDistributionStatus
+            : deployingStatus !== null
+                ? deployingStatus
+                : fundRaisingStatus !== null
+                    ? fundRaisingStatus
+                    : maturity;
 
     const investmentBasicDetails = [
-        {label: 'Investment start date', value: startDate},
-        {label: 'Date invested', value: dateInvested},
-        {label: 'Maturity date', value: maturityDate},
+        {label: 'Maturity date', value: maturityDate + ' months'},
+        {label: 'Interest rate', value: rate +'%'},
+        {label: 'Investment start date', value: <p className={` text-meedlBlack text-[14px]  `}>{formatAmount(minimumInvestmentAmount?.toString(), true )|| '0'}</p>},
         {label: 'Status', value:
                 <div className={`flex gap-2 md:gap-2 md:flex`}>
                     {status}
@@ -165,10 +189,8 @@ const MyInvestmentDetailsContent = () => {
         }
     };
 
-    // console.log('currentInvestmentDetails: ', currentInvestmentDetails)
 
     const investmentVehicleType = currentInvestmentDetails?.investmentVehicleType;
-    // console.log('type:x/: ', investmentVehicleType)
     const imageSrc =
         investmentVehicleType === "COMMERCIAL"
             ? "/BlueCircles.svg"
@@ -330,7 +352,7 @@ const MyInvestmentDetailsContent = () => {
                 <div className={`md:w-[60%] w-full grid md:grid gap-2 md:gap-2  md:max-h-[99%]`}>
                     <p className={` ${inter600.className}  text-[18px] text-[#212221]  `}>Performance</p>
                         <div className={`w-full ${styles.container} md:w-full md:max-h-[70vh] md:overf  pt-4 grid gap-4  `}>
-                            <PerformanceDisplay amountInvested={currentInvestmentDetails?.amountInvested} incomeEarned={currentInvestmentDetails?.incomeEarned} newAssetValue={currentInvestmentDetails?.netAssetValue} portfolioPercentage={currentInvestmentDetails?.percentageOfPortfolio} TalentFunded={''} barChartTabContent={barChartTabContent} currentBartChart={currentBartChart} chartData={chartData} handleBarChartTabChange={handleBarChartTabChange} />
+                            <PerformanceDisplay amountInvested={currentInvestmentDetails?.amountFinancierInvested} incomeEarned={currentInvestmentDetails?.totalIncomeGenerated} newAssetValue={currentInvestmentDetails?.netAssetValue} portfolioPercentage={currentInvestmentDetails?.percentageOfPortfolio} TalentFunded={''} barChartTabContent={barChartTabContent} currentBartChart={currentBartChart} chartData={chartData} handleBarChartTabChange={handleBarChartTabChange} />
                         </div>
 
                 </div>
