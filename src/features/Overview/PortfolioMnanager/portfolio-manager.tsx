@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from "../index.module.css"
-import PortfolioManagerOverviewCard from "@/reuseable/cards/PortfolioManagerOverviewCard";
+import PortfolioManagerOverviewCard from "@/reuseable/cards/portfoliomanagerOverview/PortfolioManagerOverviewCard";
 import Barcharts from "@/features/Overview/PortfolioMnanager/Barcharts";
 import PerformanceCard from "@/reuseable/cards/perfomance-card/performanceCard";
 import {useRouter} from "next/navigation";
@@ -11,7 +11,7 @@ import {useViewMeedlPortfolioQuery} from "@/service/admin/overview";
 const PortfolioManager = () => {
 
     const router = useRouter();
-    const {data} = useViewMeedlPortfolioQuery({})
+    const {data } = useViewMeedlPortfolioQuery({})
     // console.log('data: ', data)
     const cardData1 = [
         {title: "Total investment vehicles", amount: data?.data?.totalNumberOfInvestmentVehicle?.toString(),},
@@ -25,7 +25,7 @@ const PortfolioManager = () => {
         {title: "Corporate", amount: data?.data?.totalNumberOfInstitutionalFinancier?.toString(),showIcon: true},
     ]
     const cardData3 = [
-        {title: "Total number of loans", amount: data?.data?.totalNumberOfFinancier?.toString(),},
+        {title: "Total number of loans", amount: data?.data?.totalNumberOfLoans?.toString(),},
         // {title: "Commercial funds", amount: '2',},
         // {title: "Endowment", amount: '2',},
     ]
@@ -52,9 +52,10 @@ const PortfolioManager = () => {
     // ]
 
     const loanData = [
-        {title: "Loan referrals", amount: '0',textColor: '#66440A',bgColor: 'bg-green-500',},
-        {title: "Loan offers", amount: '0',textColor: '#142854',bgColor: 'bg-green-500',},
-        {title: "Disbursed loan", amount: '0',textColor: '#034319',bgColor: 'bg-green-500',},
+        {title: "Loan referrals", amount: Math.round(Number(data?.data?.loanReferralPercentage?.toString())) + "%",textColor: 'text-[#66440A]',bgColor: 'bg-[#FEF6E8]',},
+        {title: "Loan offers", amount: Math.round(Number(data?.data?.loanOfferPercentage?.toString())) + "%",textColor: 'text-[#142854]',bgColor: 'bg-[#D9EAFF]',},
+        {title: "Disbursed loan", amount: Math.round(Number(data?.data?.loanDisbursalPercentage?.toString())) + '%',textColor: 'text-[#0e4c23]',bgColor: 'bg-[#E6F2EA]',},
+
     ]
 
     const routeToInvestmentVehicle = () => {

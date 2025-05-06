@@ -13,6 +13,37 @@ export  function capitalizeFirstLetters(word: string | null| undefined) {
 
 }
 
+export function capitalizeWordsFromArray(arr: unknown): string {
+    if (!Array.isArray(arr)) return '';
+
+    const result = arr
+        .filter(item => typeof item === 'string')
+        .map(item =>
+            item
+                .toLowerCase()
+                .split(' ')
+                .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(' ')
+        )
+        .join(', ');
+
+    return result
+        ? result.charAt(0).toUpperCase() + result.slice(1)
+        : '';
+}
+
+export function insertSpaceCapitalized(str: unknown): string {
+    if (typeof str !== 'string') return '';
+
+    const spaced = str
+        .replace(/([A-Z])/g, ' $1')
+        .trim()
+        .toLowerCase();
+
+    return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+}
+
+
 export const isUserAdmin = (role: string) => {
     return ADMIN_ROLES.includes(role)
 }

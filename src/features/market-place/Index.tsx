@@ -184,9 +184,9 @@ const MarketPlaceView = () => {
                     id="marketplaceSelect"
                     value={selectedValue}
                     // onChange={(value) => setSelectedType(value)}
-                    selectContent={["Commercial", "Endowment", "Reset"]}
+                    selectContent={["Commercial", "Endowment", "All"]}
                     onChange={(value) => {
-                        if (value === "Reset") {
+                        if (value === "All") {
                             handleReset();
                         } else {
                             setSelectedType(value);
@@ -194,7 +194,7 @@ const MarketPlaceView = () => {
                     }}
                     placeHolder="Type"
                     triggerId="marketplaceTrigger"
-                    className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                    className="h-11 md:w-32 w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                 />
             </div>
 

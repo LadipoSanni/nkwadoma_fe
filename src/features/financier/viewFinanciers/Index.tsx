@@ -24,7 +24,8 @@ import {store} from "@/redux/store";
 import { useRouter } from 'next/navigation'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import CustomSelect from "@/reuseable/Input/Custom-select";
-
+import { useAppSelector } from '@/redux/store';
+import { setFinancierStatusTab } from '@/redux/slice/financier/financier';
 
 
 
@@ -49,6 +50,7 @@ type viewAllfinancier = financials & TableRowData
 
 
 const ViewFinanciers = () => {
+    const tabType = useAppSelector(state => state?.financier?.financierStatusTab)
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFinancier, setSelectedFinancier] = useState('');
     // const [setIsDropdownOpen] = useState(false);
@@ -58,18 +60,19 @@ const ViewFinanciers = () => {
     const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
     // const [setTypeSelectedFinancier] = useState('');
-    const [selectedActivationStatusTab, setSelectedActivationStatusTab] = useState('active');
+    // const [selectedActivationStatusTab, setSelectedActivationStatusTab] = useState(tabType );
     const router = useRouter()
+
     const param = {
         pageNumber: pageNumber,
         pageSize: 10,
         financierType: selectedFinancier.toUpperCase(),
-        activationStatus: selectedActivationStatusTab.toUpperCase(),
+        activationStatus: tabType.toUpperCase(),
     }
 
 
     const {data, isLoading, refetch} = useGetAllActiveAndInvitedFinanciersQuery(param)
-    const {data:searchData, isLoading: searchIsLoading} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: selectedActivationStatusTab.toUpperCase()},{skip: !searchTerm})
+    const {data:searchData, isLoading: searchIsLoading} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !searchTerm})
 
     useEffect(()=>{
         if(searchTerm && searchData && searchData?.data){
@@ -79,7 +82,7 @@ const ViewFinanciers = () => {
             setTotalPage(searchData?.data?.totalPages)
             setPageNumber(searchData?.data?.pageNumber)
         }
-        else if(data && data.data){
+        else if(data && data?.data){
             setFinanciers(data?.data?.body)
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
@@ -153,10 +156,10 @@ const ViewFinanciers = () => {
 
 
     return (
-        <main className={'mt-7 mx-5'}>
-            <section className={'md:flex justify-between grid gap-4'}>
-                <div className={'flex gap-3'}>
-                    <SearchInput id={'financiersSearch'} style='' value={searchTerm} onChange={handleSearchChange} />
+        <main className={'mt-7 w-[100%] md:px-4 '}>
+            <div className={'md:flex w-full justify-between grid gap-4'}>
+                <div className={'flex gap-2 w-full '}>
+                    <SearchInput id={'financiersSearch'} style='w-70' value={searchTerm} onChange={handleSearchChange} />
                     <CustomSelect
                         id="financierId"
                         value={selectedFinancier}
@@ -168,24 +171,27 @@ const ViewFinanciers = () => {
                             }
                         }}
                         selectContent={["Individual", "Cooperate", "Reset"]}
-                        placeHolder="Select type"
+                        placeHolder="Type"
                         triggerId="financierSelectId"
-                        className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                        className="h-11 md:w-28 w-full  mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                     />
                 </div>
                 <Button
                     variant={"secondary"}
                     size={"lg"}
-                    className={`${inter.className} bg-meedlBlue text-meedlWhite h-[2.8125rem] w-full md:w-[7.8125rem] flex justify-center items-center`}
+                    className={`${inter.className} bg-meedlBlue text-meedlWhite h-[2.8125rem] w-full md:w-fit flex justify-center items-center`}
                     id='createProgramModal'
                     onClick={() => setIsModalOpen(true)}
                 >
                     Invite financier
                 </Button>
-            </section>
+            </div>
 
             <div className={`pt-2`}>
-                <Tabs value={selectedActivationStatusTab} onValueChange={setSelectedActivationStatusTab} >
+                <Tabs value={tabType} onValueChange={(value) => {
+    // setSelectedActivationStatusTab(value);
+    store.dispatch(setFinancierStatusTab(value));
+  }} >
                     <TabsList>
                         <TabsTrigger value="active">Active</TabsTrigger>
                         <TabsTrigger value="invited">Invited</TabsTrigger>
@@ -261,7 +267,7 @@ const ViewFinanciers = () => {
                         icon={Cross2Icon}
                         width='36%'
                     >
-                        <InviteFinanciers  setIsOpen={setIsModalOpen} />
+                        <InviteFinanciers  setIsOpen={setIsModalOpen} state='platform'/>
                     </Modal>
                 </div>
             )}
