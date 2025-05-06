@@ -9,7 +9,6 @@ import Image from "next/image";
 import {store, useAppSelector} from '@/redux/store';
 import {Button} from "../../../components/ui/button";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
 import {formatAmount} from "@/utils/Format";
@@ -83,6 +82,8 @@ const MyInvestmentDetailsContent = () => {
     // const statusValue = currentInvestmentDetails?.fundRaisingStatus ? currentInvestmentDetails?.fundRaisingStatus : currentInvestmentDetails?.deployingStatus ;
     // const status = currentInvestmentDetails?.fundRaisingStatus ?  'Fundraising' : 'Deploying';
 
+    console.log('currentInvestmentDetails: ', currentInvestmentDetails)
+
     const recollectionStatus = currentInvestmentDetails?.recollectionStatus
     const couponDistributionStatus = currentInvestmentDetails?.couponDistributionStatus
     const deployingStatus =  currentInvestmentDetails?.deployingStatus
@@ -110,7 +111,7 @@ const MyInvestmentDetailsContent = () => {
     const investmentBasicDetails = [
         {label: 'Maturity date', value: maturityDate + ' months'},
         {label: 'Interest rate', value: rate +'%'},
-        {label: 'Investment start date', value: <p className={` text-meedlBlack text-[14px]  `}>{formatAmount(minimumInvestmentAmount?.toString(), true )|| '0'}</p>},
+        {label: 'Minimum amount', value: <p className={` text-meedlBlack text-[14px]  `}>{formatAmount(minimumInvestmentAmount?.toString(), true )|| '0'}</p>},
         {label: 'Status', value:
                 <div className={`flex gap-2 md:gap-2 md:flex`}>
                     {status}
@@ -352,7 +353,7 @@ const MyInvestmentDetailsContent = () => {
                 <div className={`md:w-[60%] w-full grid md:grid gap-2 md:gap-2  md:max-h-[99%]`}>
                     <p className={` ${inter600.className}  text-[18px] text-[#212221]  `}>Performance</p>
                         <div className={`w-full ${styles.container} md:w-full md:max-h-[70vh] md:overf  pt-4 grid gap-4  `}>
-                            <PerformanceDisplay amountInvested={currentInvestmentDetails?.amountFinancierInvested} incomeEarned={currentInvestmentDetails?.totalIncomeGenerated} newAssetValue={currentInvestmentDetails?.netAssetValue} portfolioPercentage={currentInvestmentDetails?.percentageOfPortfolio} TalentFunded={''} barChartTabContent={barChartTabContent} currentBartChart={currentBartChart} chartData={chartData} handleBarChartTabChange={handleBarChartTabChange} />
+                            <PerformanceDisplay amountInvested={''} incomeEarned={currentInvestmentDetails?.totalIncomeGenerated} newAssetValue={currentInvestmentDetails?.netAssetValue} portfolioPercentage={''} TalentFunded={''} barChartTabContent={barChartTabContent} currentBartChart={currentBartChart} chartData={chartData} handleBarChartTabChange={handleBarChartTabChange} />
                         </div>
 
                 </div>
