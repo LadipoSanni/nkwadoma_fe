@@ -31,7 +31,6 @@ function Index() {
     }
 
     const {data: allDisbursedLoan, isLoading: disbursedLoanIsLoading} = useViewAllLoanDisbursalQuery(request)
-    console.log(allDisbursedLoan)
 
     const {data, isLoading: isLoading} = useViewAllLoanDisbursalByOrgIdQuery(
         {
