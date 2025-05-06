@@ -8,7 +8,7 @@ import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/fi
 import {useFilterMyInvestmentQuery, useSearchMyInvestmentQuery} from '@/service/financier/api'
 import dynamic from "next/dynamic";
 import {
-    CurrentMyInvestmentVehicleDetails,
+     InvestedVehicleDetails,
 } from "@/types/Component.type";
 import Card from "@/pages/financier/my-investment/card";
 import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
@@ -29,17 +29,15 @@ const MyInvestment = () => {
     const [isFiltered, setIsFiltered] = useState<boolean>(false)
 
     const filterProps = {
-        investmentVehicleType: selectedValue.toUpperCase(),
+        investmentVehicleType: selectedValue?.toUpperCase(),
         pageSize: '10',
         pageNumber: '0'
     }
     const {data: filteredData, isLoading: isFilteredDataLoading, isFetching: isFetchingFilteredItems} = useFilterMyInvestmentQuery(filterProps)
     const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(filteredData?.data?.body)
-    const [status, setStatus]= useState('')
-    const [statusValue , setStatusValue] = useState('')
     const searchProps = {
         name: searchTerm,
-        investmentType: selectedValue.toUpperCase(),
+        investmentType: selectedValue?.toUpperCase(),
         pageSize: '10',
         pageNumber: '0'
     }
@@ -63,17 +61,16 @@ const MyInvestment = () => {
     }, [isFiltered, filteredData, searchData, searchTerm])
 
 
-    console.log('myInvestmentVehicles: ', myInvestmentVehicles,'searchData: ', searchData?.data?.body, 'filteredData: ', filteredData?.data?.body)
 
 
-    const HandleCardDetails = (vehicleDetails: CurrentMyInvestmentVehicleDetails ) => {
+    const HandleCardDetails = (vehicleDetails: InvestedVehicleDetails ) => {
         store.dispatch(
             setCurrentMyInvestmentVehicleDetails(vehicleDetails)
         );
         router.push("/my-investment/details");
     };
 
-    // const setVehicleStatusAnd
+
 
 
 
@@ -151,7 +148,7 @@ const MyInvestment = () => {
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
 
-                    {myInvestmentVehicles?.map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
+                    {myInvestmentVehicles?.map((vehicle: InvestedVehicleDetails, index: number) => {
                         const backgroundColor =
                              vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -160,9 +157,29 @@ const MyInvestment = () => {
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "/BlueCircles.svg"
                                 : "/GreenCircles.svg";
-                        const statusValue = vehicle.fundRaisingStatus ? vehicle.fundRaisingStatus : vehicle.deployingStatus ;
-                        const status = vehicle.fundRaisingStatus !== null ?  'Fundraising' : 'Deploying';
-
+                         const recollectionStatus = vehicle?.recollectionStatus
+                        const couponDistributionStatus = vehicle?.couponDistributionStatus
+                        const deployingStatus =  vehicle?.deployingStatus
+                        const fundRaisingStatus =  vehicle?.fundRaisingStatus
+                        const maturity =  vehicle?.maturity
+                        const status = recollectionStatus !== null
+                            ? 'Recollection'
+                            : couponDistributionStatus !== null
+                                ? 'Coupon Distribution'
+                                : deployingStatus !== null
+                                    ? 'Deploying'
+                                    : fundRaisingStatus !== null
+                                        ? 'Fund Raising'
+                                        : 'Maturity';
+                        const statusValue = recollectionStatus !== null
+                            ? recollectionStatus
+                            : couponDistributionStatus !== null
+                                ? couponDistributionStatus
+                                : deployingStatus !== null
+                                    ? deployingStatus
+                                    : fundRaisingStatus !== null
+                                        ? fundRaisingStatus
+                                        : maturity;
                         const statusClass = getStatusColor(statusValue)
                         const borderClass = getStatusBorderColor(statusValue)
 
@@ -185,7 +202,7 @@ const MyInvestment = () => {
                             status={status}
                             statusValue={statusValue}
                             borderClass={borderClass}
-                            percentage={vehicle.interestRateOffered || 0}
+                            percentage={vehicle.rate || 0}
 
                         />;
                     })}
