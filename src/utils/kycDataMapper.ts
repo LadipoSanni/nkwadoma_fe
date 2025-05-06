@@ -85,7 +85,15 @@ export const mapKycDataToApiRequest = (state: RootState, declarationOverride?: {
     sourceOfFunds: formattedSourceOfFunds,
 
     declarationAndAgreement: declarationOverride?.agreedToTerms !== undefined ? declarationOverride.agreedToTerms : declaration.agreedToTerms,
-    politicallyExposed: declaration.isPoliticallyExposedPerson === true,
+    politicallyExposed: declaration.isPoliticallyExposedPerson ? [
+          {
+            positionHeld: declaration.politicalPosition || "",
+            country: declaration.country || "",
+            relationship: declaration.relationship || "",
+            additionalInformation: "",
+          },
+        ]
+        : [],
 
     beneficialOwners: beneficialOwners.length > 0 ? beneficialOwners : [{
       id: "default",
