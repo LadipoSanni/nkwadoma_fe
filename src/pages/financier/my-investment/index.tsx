@@ -35,7 +35,8 @@ const MyInvestment = () => {
     }
     const {data: filteredData, isLoading: isFilteredDataLoading, isFetching: isFetchingFilteredItems} = useFilterMyInvestmentQuery(filterProps)
     const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(filteredData?.data?.body)
-
+    const [status, setStatus]= useState('')
+    const [statusValue , setStatusValue] = useState('')
     const searchProps = {
         name: searchTerm,
         investmentType: selectedValue.toUpperCase(),
@@ -62,7 +63,7 @@ const MyInvestment = () => {
     }, [isFiltered, filteredData, searchData, searchTerm])
 
 
-    console.log('myInvestmentVehicles: ', myInvestmentVehicles?.length,'searchData: ', searchData?.data?.body?.length, 'filteredData: ', filteredData?.data?.body?.length)
+    console.log('myInvestmentVehicles: ', myInvestmentVehicles,'searchData: ', searchData?.data?.body, 'filteredData: ', filteredData?.data?.body)
 
 
     const HandleCardDetails = (vehicleDetails: CurrentMyInvestmentVehicleDetails ) => {
@@ -71,6 +72,8 @@ const MyInvestment = () => {
         );
         router.push("/my-investment/details");
     };
+
+    // const setVehicleStatusAnd
 
 
 
