@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
-import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {store} from "@/redux/store";
 import {setClickedLoanProductId} from "@/redux/slice/loan/selected-loan";
 

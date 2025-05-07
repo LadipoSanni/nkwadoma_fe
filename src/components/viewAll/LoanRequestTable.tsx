@@ -1,6 +1,5 @@
 "use client"
 import React from "react";
-import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/index";
