@@ -167,19 +167,17 @@ const LoanProductPage = () => {
                         tableHeight={58}
                         sx='cursor-pointer'
                         staticColunm="name"
-                        staticHeader="Loan Product"
+                        staticHeader="loan product"
                         showKirkBabel={false}
                         kirkBabDropdownOption={dropDownOption}
                         tableCellStyle={"h-12"}
                         optionalRowsPerPage={10}
                         icon={MdOutlineInventory2}
-                        sideBarTabName={"Loan product"}
+                        sideBarTabName={"loan product"}
                         isLoading={isLoading}
                         condition={true}
                     />
-                ) : (
-                    <TableEmptyState name={"loan product"} icon={MdOutlineInventory2} condition={true} />
-                )}
+                ) : ""}
             </div>
             <div className={`md:max-w-sm`} id={`CreateLoanProduct`}>
                 <TableModal

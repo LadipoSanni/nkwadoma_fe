@@ -125,11 +125,11 @@ const ProgramCohortDetails= ()=> {
                         {searchTerm && cohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Cohort'/></div> : <Tables
                             tableData={cohorts}
                             tableHeader={ProgramHeader}
-                            staticHeader={'Cohort'}
+                            staticHeader={'cohort'}
                             staticColunm={'name'}
                             tableHeight={45}
                             icon={MdOutlinePerson}
-                            sideBarTabName={"Cohort"}
+                            sideBarTabName={"cohort"}
                             handleRowClick={() => {
                             }}
                             optionalRowsPerPage={10}

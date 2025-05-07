@@ -12,6 +12,8 @@ import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useSearchInvest
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import { clearAll } from "@/redux/slice/investors/MarketPlaceSlice";
+import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
+import {Book} from "lucide-react";
 
 interface InvestmentVehicle {
     id: string;
@@ -208,7 +210,12 @@ const MarketPlaceView = () => {
                         {searchTerm ? (
                             <SearchEmptyState icon={MdSearch} name="Investment" />
                         ) : (
-                            <LoanEmptyState title={"Investment vehicles will show here"} description={"There are no Investment vehicles available yet"} icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>} iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
+                            <TableEmptyState
+                                name={"investment vehicle"}
+                                icon={<MdOutlinePayments width={"3rem"} height={"3rem"}/>}
+                                condition={true}
+                            />
+                            // <TableEmptyState name={"investment vehicles "} icon={<MdOutlinePayments height={"2.5rem"} width={"2.5rem"}/>}/>
                         )}
                     </div>
                 ) : (

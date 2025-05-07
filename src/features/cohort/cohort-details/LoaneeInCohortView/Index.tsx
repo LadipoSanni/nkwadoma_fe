@@ -220,7 +220,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         <SelectableTable
                             tableData={allLoanee}
                             tableHeader={loanProduct}
-                            staticHeader="Loanee"
+                            staticHeader="loanee"
                             staticColunm="firstName"
                             tableHeight={45}
                             icon={MdOutlinePerson}

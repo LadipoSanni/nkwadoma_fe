@@ -1,6 +1,5 @@
 "use client"
 import React from "react";
-import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/index";
@@ -14,6 +13,7 @@ import {
 } from "@/service/admin/loan/Loan-disbursal-api";
 import {setClickedDisbursedLoanIdNumber} from "@/redux/slice/loan/selected-loan";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
+import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 
 
 interface TableRowData {
@@ -94,15 +94,13 @@ function Index() {
                 </div>
             ) : data?.data?.body?.length === 0 || allDisbursedLoan?.data?.body?.length === 0 ?
                 (
-                    <LoanEmptyState
-                        id={'LoanRequestEmptyState'}
-                        icon={<Icon icon="material-symbols:money-bag-outline"
-                                    height={"2rem"}
-                                    width={"2rem"}
-                                    color={'#142854'}
-                        ></Icon>} iconBg={'#D9EAFF'} title={'Loan disbursed will show here'}
-                        description={clickedOrganizationId?.id ? 'There are no loan disbursal in this organization yet' :
-                            `There are no loan disbursal available yet`}/>
+                    <TableEmptyState name={"loan disbursal"}   icon={
+                        <Icon
+                            icon="material-symbols:money-bag-outline"
+                            height="2.5rem"
+                            width="2.5rem"
+                        />
+                    } condition={true} descriptionId={clickedOrganizationId?.id ? 'There are no loan disbursal in this organization yet' : `There are no loan disbursal available yet`}/>
                 ) :
                 (
                     <div className={`md:w-full  w-full h-full md:h-full `}>
