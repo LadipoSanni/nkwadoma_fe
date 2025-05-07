@@ -96,7 +96,7 @@ const MyInvestments = () => {
                             status={status}
                             statusValue={statusValue}
                             borderClass={borderClass}
-                            percentage={vehicle.interestRateOffered || 0}
+                            percentage={vehicle.rate || 0}
                         />;
                     })}
                 </div>
