@@ -210,7 +210,7 @@ const MarketPlaceView = () => {
                         ) : (
                             <TableEmptyState
                                 name={"investment vehicle"}
-                                icon={<MdOutlinePayments width={"3rem"} height={"3rem"}/>}
+                                icon={<MdOutlinePayments style={{ fontSize: '2.5rem', height: '2.5rem', width: '2.5rem' }}/>}
                                 condition={true}
                             />
                             // <TableEmptyState name={"investment vehicles "} icon={<MdOutlinePayments height={"2.5rem"} width={"2.5rem"}/>}/>

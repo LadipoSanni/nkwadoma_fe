@@ -1,3 +1,4 @@
+"use client"
 import React, { ElementType } from 'react'
 import {cabinetGroteskRegular} from "@/app/fonts";
 
