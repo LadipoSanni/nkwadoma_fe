@@ -10,10 +10,8 @@ import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skelet
 import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useSearchInvestmentVehiclesQuery} from "@/service/financier/marketplace";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
-import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import { clearAll } from "@/redux/slice/investors/MarketPlaceSlice";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
-import {Book} from "lucide-react";
 
 interface InvestmentVehicle {
     id: string;
