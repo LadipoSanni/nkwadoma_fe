@@ -116,7 +116,7 @@ const MyInvestmentDetailsContent = () => {
                     <div
                         className={` w-fit md:w-fit md:h-fit h-fit md:py-0 py-0 md:px-1 px-1 md:rounded-md rounded-md border md:border ${ statusValue === 'CLOSE' ? `border-[#F2BCBA] md:border-[#F2BCBA]` :  `border-green650 md:border-green650` }`}>
                         <span
-                            className={` ${inter500.className} md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[11px] text-[14px] ${ statusValue === 'CLOSE' ? `g-red-100 md:bg-red-100 md:text-red-600 text-red-600 border-[#F2BCBA] md:border-[#F2BCBA]` : `text-green750 md:text-green750` }`}>{statusValue}</span>
+                            className={` ${inter500.className} md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[11px] text-[14px] ${ statusValue === 'CLOSE' ? `g-red-100 md:bg-red-100 md:text-red-600 text-red-600 border-[#F2BCBA] md:border-[#F2BCBA]` : `text-green750 md:text-green750` }`}>{capitalizeFirstLetters(statusValue)}</span>
                     </div>
                 </div>
         },
