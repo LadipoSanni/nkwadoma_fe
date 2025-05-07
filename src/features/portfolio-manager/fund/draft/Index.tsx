@@ -9,9 +9,7 @@ import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
 import { MdOutlineArticle } from "react-icons/md";
-import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {Icon} from "@iconify/react";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 
 interface SaveToDraftProps {
