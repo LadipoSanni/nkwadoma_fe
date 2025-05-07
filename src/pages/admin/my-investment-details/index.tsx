@@ -29,9 +29,9 @@ const MyInvestmentDetailsContent = () => {
     const [docUrl] = useState(currentInvestmentDetails?.mandate || '')
 
     const initialChartData = [
-            { month: "Jan", value: 186, },
-            { month: "Feb", value: 305,  },
-            { month: "March", value: 237, },
+            { month: "Jan", value: 0, },
+            { month: "Feb", value: 0,  },
+            { month: "March", value: 0, },
     ]
     const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialChartData);
 
@@ -57,30 +57,28 @@ const MyInvestmentDetailsContent = () => {
     // const investmentStartDate = dayjs(data?.data?.createdDate?.toString()).format('MMM D, YYYY')
 
     const SecondChartData = [
-        { month: "Jan", value: 186, },
-        { month: "Feb", value: 505,  },
-        { month: "March", value: 237, },
-        { month: "April", value: 73, },
-        { month: "May", value: 209,  },
-        { month: "June", value: 214,  },
+        { month: "Jan", value: 0, },
+        { month: "Feb", value: 0,  },
+        { month: "March", value: 0, },
+        { month: "April", value: 0, },
+        { month: "May", value: 0,  },
+        { month: "June", value: 0,  },
     ]
 
     const thirdChartData = [
-        { month: "Jan", value: 186, },
-        { month: "Feb", value: 305,  },
-        { month: "March", value: 237, },
-        { month: "April", value: 73, },
-        { month: "May", value: 209,  },
-        { month: "June", value: 214,  },
-        { month: "july", value: 73, },
-        { month: "August", value: 209,  },
-        { month: "September", value: 214,  },
+        { month: "Jan", value: 0, },
+        { month: "Feb", value: 0,  },
+        { month: "March", value: 0, },
+        { month: "April", value: 0, },
+        { month: "May", value: 0,  },
+        { month: "June", value: 0,  },
+        { month: "july", value: 0, },
+        { month: "August", value: 0,  },
+        { month: "September", value: 0,  },
     ]
     const minimumInvestmentAmount = currentInvestmentDetails?.minimumInvestmentAmount
     const rate = currentInvestmentDetails?.rate
     const maturityDate = currentInvestmentDetails?.tenure
-    // const statusValue = currentInvestmentDetails?.fundRaisingStatus ? currentInvestmentDetails?.fundRaisingStatus : currentInvestmentDetails?.deployingStatus ;
-    // const status = currentInvestmentDetails?.fundRaisingStatus ?  'Fundraising' : 'Deploying';
 
     console.log('currentInvestmentDetails: ', currentInvestmentDetails)
 
@@ -349,11 +347,19 @@ const MyInvestmentDetailsContent = () => {
                 </div>
 
 
-
                 <div className={`md:w-[60%] w-full grid md:grid gap-2 md:gap-2  md:max-h-[99%]`}>
                     <p className={` ${inter600.className}  text-[18px] text-[#212221]  `}>Performance</p>
                         <div className={`w-full ${styles.container} md:w-full md:max-h-[70vh] md:overf  pt-4 grid gap-4  `}>
-                            <PerformanceDisplay amountInvested={''} incomeEarned={currentInvestmentDetails?.totalIncomeGenerated} newAssetValue={currentInvestmentDetails?.netAssetValue} portfolioPercentage={''} TalentFunded={''} barChartTabContent={barChartTabContent} currentBartChart={currentBartChart} chartData={chartData} handleBarChartTabChange={handleBarChartTabChange} />
+                            <PerformanceDisplay
+                                amountInvested={currentInvestmentDetails?.amountFinancierInvested}
+                                incomeEarned={currentInvestmentDetails?.totalIncomeGenerated}
+                                newAssetValue={currentInvestmentDetails?.netAssetValue}
+                                portfolioPercentage={currentInvestmentDetails?.portfolioValue}
+                                TalentFunded={currentInvestmentDetails?.talentFunded}
+                                barChartTabContent={barChartTabContent}
+                                currentBartChart={currentBartChart}
+                                chartData={chartData}
+                                handleBarChartTabChange={handleBarChartTabChange} />
                         </div>
 
                 </div>

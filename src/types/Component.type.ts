@@ -125,7 +125,9 @@ export interface InvestedVehicleDetails {
     maturity: string,
     amountFinancierInvested: string,
     investmentVehicleDesignation: string,
-    dateInvested: string
+    dateInvested: string,
+    talentFunded?: string,
+    portfolioValue?:string,
 
 }
 

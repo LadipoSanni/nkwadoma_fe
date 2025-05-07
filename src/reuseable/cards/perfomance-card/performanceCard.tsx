@@ -18,7 +18,7 @@ interface PerformanceCardProps {
     percentage: string | number;
     showContainerBorder: boolean;
     isSmall?: boolean;
-    isFigure?: boolean;
+    isFigure?: boolean; // means performance is in amount e.g   $20,000
     currentDate?: string;
     onChangeDate?: (value: string) => void;
     currentYear?:   string;
@@ -55,7 +55,7 @@ const PerformanceCard = ({id,currentYear,years,isFigure,onChangeDate,currentDate
                            :
                            <div>
                                {isValueInPercentage ?
-                                   <p id={'amountPercentage'} className={` ${cabinetGroteskBold.className} md:text-[36px] text-[24px] x text-meedlBlue `}>{value}%</p>
+                                   <p id={'amountPercentage'} className={` ${cabinetGroteskBold.className} md:text-[36px] text-[24px] x text-meedlBlue `}>{value ? value : 0}%</p>
                                    :
 
                                    <p id={'performancePercentageAmount'} data-testid={'performancePercentageAmount'} className={` ${cabinetGroteskBold.className} md:min-w-fit md:bg-grey105 bg-grey105 max-w-fit md:max-w-fit  md:text-[36px] text-[24px] text-meedlBlue `}>{formatAmount(value,true)}</p>
