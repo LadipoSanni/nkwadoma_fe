@@ -19,7 +19,6 @@ const MyInvestmentDetails = dynamic(
     {ssr: false}
 )
 const MyInvestmentDetailsContent = () => {
-    // const [currentTab, setCurrentsTab] = useState(0);
     const [currentBartChart, setCurrentBartChart] = useState(0);
     const router = useRouter();
     const [isVerifying, setIsVerifying] = useState(false);
@@ -54,7 +53,6 @@ const MyInvestmentDetailsContent = () => {
     const isCloudinaryUrl = docUrl?.includes('cloudinary.com');
     const fileExtension = docFilename?.split('.').pop()?.toLowerCase();
 
-    // const investmentStartDate = dayjs(data?.data?.createdDate?.toString()).format('MMM D, YYYY')
 
     const SecondChartData = [
         { month: "Jan", value: 0, },
@@ -80,7 +78,6 @@ const MyInvestmentDetailsContent = () => {
     const rate = currentInvestmentDetails?.rate
     const maturityDate = currentInvestmentDetails?.tenure
 
-    console.log('currentInvestmentDetails: ', currentInvestmentDetails)
 
     const recollectionStatus = currentInvestmentDetails?.recollectionStatus
     const couponDistributionStatus = currentInvestmentDetails?.couponDistributionStatus
@@ -251,7 +248,6 @@ const MyInvestmentDetailsContent = () => {
                             <div
                                 className={` rounded-full h-12 w-12 flex items-center justify-center text-meedlBlue text-sm font-semibold uppercase`}
                             >
-                                {/*{currentInvestmentDetails ? (*/}
                                     <Image
                                         src={`/`}
                                         alt="logo"
@@ -261,19 +257,13 @@ const MyInvestmentDetailsContent = () => {
                                         data-testid="circle-image"
                                         loading="lazy"
                                     />
-                                {/*// ) : (*/}
-                                {/*//     currentInvestmentDetails.investmentVehicleType*/}
-                                {/*//         ?.split(" ")*/}
-                                {/*//         .map((word: string) => word[0])*/}
-                                {/*//         .join("")*/}
-                                {/*// )}*/}
                             </div>
 
                             <div className="flex flex-col gap-1">
-                                <div className="text-[#6A6B6A] text-sm font-normal">
+                                <div id={'fundManagerText'} className="text-[#6A6B6A] text-sm font-normal">
                                     Fund manager
                                 </div>
-                                <div className={`${inter.className} text-sm font-semibold text-[#212221]`}>
+                                <div id={'fundManagerName'} className={`${inter.className} text-sm font-semibold text-[#212221]`}>
                                     {currentInvestmentDetails?.fundManager}
                                 </div>
                             </div>
@@ -295,7 +285,7 @@ const MyInvestmentDetailsContent = () => {
                                         priority
 
                                     />
-                                    <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{docFilename}</p>
+                                    <p id={'docName'} className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{docFilename}</p>
                                 </div>
 
                                 <Button
