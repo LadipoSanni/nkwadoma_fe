@@ -5,7 +5,7 @@ import {useRouter} from 'next/navigation';
 import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
 import Card from "@/pages/financier/my-investment/card";
-import { CurrentMyInvestmentVehicleDetails } from "@/types/Component.type";
+import { InvestedVehicleDetails} from "@/types/Component.type";
 import { store } from "@/redux/store";
 import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/financier";
 
@@ -18,7 +18,7 @@ const MyInvestments = () => {
         router.push('/my-investment')
     }
 
-    const HandleCardDetails = (vehicleDetails: CurrentMyInvestmentVehicleDetails) => {
+    const HandleCardDetails = (vehicleDetails: InvestedVehicleDetails) => {
         store.dispatch(
             setCurrentMyInvestmentVehicleDetails(vehicleDetails)
         );
@@ -64,7 +64,7 @@ const MyInvestments = () => {
             </div>
             {investmentVehicles.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-                    {investmentVehicles.slice(0, 4).map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
+                    {investmentVehicles.slice(0, 4).map((vehicle: InvestedVehicleDetails, index: number) => {
                         const backgroundColor =
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -87,7 +87,7 @@ const MyInvestments = () => {
                         return <Card
                             key={`wrapper-${index}`}
                             HandleCardDetails={HandleCardDetails}
-                            vehicleDetails={vehicle as CurrentMyInvestmentVehicleDetails}
+                            vehicleDetails={vehicle}
                             backgroundColor={backgroundColor}
                             investmentVehicleType={vehicle.investmentVehicleType}
                             imageSrc={imageSrc}
