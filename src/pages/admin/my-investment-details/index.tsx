@@ -9,9 +9,9 @@ import Image from "next/image";
 import {store, useAppSelector} from '@/redux/store';
 import {Button} from "../../../components/ui/button";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
+import {formatAmount} from "@/utils/Format";
 
 
 const MyInvestmentDetails = dynamic(
@@ -19,7 +19,6 @@ const MyInvestmentDetails = dynamic(
     {ssr: false}
 )
 const MyInvestmentDetailsContent = () => {
-    // const [currentTab, setCurrentsTab] = useState(0);
     const [currentBartChart, setCurrentBartChart] = useState(0);
     const router = useRouter();
     const [isVerifying, setIsVerifying] = useState(false);
@@ -29,9 +28,9 @@ const MyInvestmentDetailsContent = () => {
     const [docUrl] = useState(currentInvestmentDetails?.mandate || '')
 
     const initialChartData = [
-            { month: "Jan", value: 186, },
-            { month: "Feb", value: 305,  },
-            { month: "March", value: 237, },
+            { month: "Jan", value: 0, },
+            { month: "Feb", value: 0,  },
+            { month: "March", value: 0, },
     ]
     const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialChartData);
 
@@ -54,46 +53,71 @@ const MyInvestmentDetailsContent = () => {
     const isCloudinaryUrl = docUrl?.includes('cloudinary.com');
     const fileExtension = docFilename?.split('.').pop()?.toLowerCase();
 
-    // const investmentStartDate = dayjs(data?.data?.createdDate?.toString()).format('MMM D, YYYY')
 
     const SecondChartData = [
-        { month: "Jan", value: 186, },
-        { month: "Feb", value: 505,  },
-        { month: "March", value: 237, },
-        { month: "April", value: 73, },
-        { month: "May", value: 209,  },
-        { month: "June", value: 214,  },
+        { month: "Jan", value: 0, },
+        { month: "Feb", value: 0,  },
+        { month: "March", value: 0, },
+        { month: "April", value: 0, },
+        { month: "May", value: 0,  },
+        { month: "June", value: 0,  },
     ]
 
     const thirdChartData = [
-        { month: "Jan", value: 186, },
-        { month: "Feb", value: 305,  },
-        { month: "March", value: 237, },
-        { month: "April", value: 73, },
-        { month: "May", value: 209,  },
-        { month: "June", value: 214,  },
-        { month: "july", value: 73, },
-        { month: "August", value: 209,  },
-        { month: "September", value: 214,  },
+        { month: "Jan", value: 0, },
+        { month: "Feb", value: 0,  },
+        { month: "March", value: 0, },
+        { month: "April", value: 0, },
+        { month: "May", value: 0,  },
+        { month: "June", value: 0,  },
+        { month: "july", value: 0, },
+        { month: "August", value: 0,  },
+        { month: "September", value: 0,  },
     ]
-    const startDate = dayjs(currentInvestmentDetails?.startDate?.toString())?.format('MMM D, YYYY')
-    const dateInvested = dayjs(currentInvestmentDetails?.dateInvested?.toString())?.format('MMM D, YYYY')
-    const maturityDate = dayjs(currentInvestmentDetails?.maturityDate?.toString())?.format('MMM D, YYYY')
-    const statusValue = currentInvestmentDetails?.fundRaisingStatus ? currentInvestmentDetails?.fundRaisingStatus : currentInvestmentDetails?.deployingStatus ;
-    const status = currentInvestmentDetails?.fundRaisingStatus ?  'Fundraising' : 'Deploying';
 
+    const investmentLifeSpanInYears = [
+        '2024'
+    ]
+    const minimumInvestmentAmount = currentInvestmentDetails?.minimumInvestmentAmount
+    const rate = currentInvestmentDetails?.rate
+    const maturityDate = currentInvestmentDetails?.tenure
+
+
+    const recollectionStatus = currentInvestmentDetails?.recollectionStatus
+    const couponDistributionStatus = currentInvestmentDetails?.couponDistributionStatus
+    const deployingStatus =  currentInvestmentDetails?.deployingStatus
+    const fundRaisingStatus =  currentInvestmentDetails?.fundRaisingStatus
+    const maturity =  currentInvestmentDetails?.maturity
+    const status = recollectionStatus !== null
+        ? 'Recollection'
+        : couponDistributionStatus !== null
+            ? 'Coupon Distribution'
+            : deployingStatus !== null
+                ? 'Deploying'
+                : fundRaisingStatus !== null
+                    ? 'Fund Raising'
+                    : 'Maturity';
+    const statusValue = recollectionStatus !== null
+        ? recollectionStatus
+        : couponDistributionStatus !== null
+            ? couponDistributionStatus
+            : deployingStatus !== null
+                ? deployingStatus
+                : fundRaisingStatus !== null
+                    ? fundRaisingStatus
+                    : maturity;
 
     const investmentBasicDetails = [
-        {label: 'Investment start date', value: startDate},
-        {label: 'Date invested', value: dateInvested},
-        {label: 'Maturity date', value: maturityDate},
+        {label: 'Maturity date', value: maturityDate + ' months'},
+        {label: 'Interest rate', value: rate +'%'},
+        {label: 'Minimum amount', value: <p className={` ${inter600.className} text-meedlBlack text-[14px]  `}>{formatAmount(minimumInvestmentAmount?.toString(), true )|| '0'}</p>},
         {label: 'Status', value:
                 <div className={`flex gap-2 md:gap-2 md:flex`}>
                     {status}
                     <div
                         className={` w-fit md:w-fit md:h-fit h-fit md:py-0 py-0 md:px-1 px-1 md:rounded-md rounded-md border md:border ${ statusValue === 'CLOSE' ? `border-[#F2BCBA] md:border-[#F2BCBA]` :  `border-green650 md:border-green650` }`}>
                         <span
-                            className={` ${inter500.className} md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[11px] text-[14px] ${ statusValue === 'CLOSE' ? `g-red-100 md:bg-red-100 md:text-red-600 text-red-600 border-[#F2BCBA] md:border-[#F2BCBA]` : `text-green750 md:text-green750` }`}>{statusValue}</span>
+                            className={` ${inter500.className} md:bg-green150 bg-green150 md:px-0.5 px-0.5 md:rounded-md rounded-md md:py-0.5 py-0.5 md:text-[11px] text-[14px] ${ statusValue === 'CLOSE' ? `g-red-100 md:bg-red-100 md:text-red-600 text-red-600 border-[#F2BCBA] md:border-[#F2BCBA]` : `text-green750 md:text-green750` }`}>{capitalizeFirstLetters(statusValue)}</span>
                     </div>
                 </div>
         },
@@ -165,10 +189,8 @@ const MyInvestmentDetailsContent = () => {
         }
     };
 
-    // console.log('currentInvestmentDetails: ', currentInvestmentDetails)
 
     const investmentVehicleType = currentInvestmentDetails?.investmentVehicleType;
-    // console.log('type:x/: ', investmentVehicleType)
     const imageSrc =
         investmentVehicleType === "COMMERCIAL"
             ? "/BlueCircles.svg"
@@ -179,6 +201,9 @@ const MyInvestmentDetailsContent = () => {
             : "#E6F2EA";
 
 
+    const changeLoanYear = (year: string) => {
+        console.log(year)
+    }
     const investInVehicle = ()=> {
         store.dispatch(
             setMarketInvestmentVehicleId({
@@ -230,7 +255,6 @@ const MyInvestmentDetailsContent = () => {
                             <div
                                 className={` rounded-full h-12 w-12 flex items-center justify-center text-meedlBlue text-sm font-semibold uppercase`}
                             >
-                                {/*{currentInvestmentDetails ? (*/}
                                     <Image
                                         src={`/`}
                                         alt="logo"
@@ -240,19 +264,13 @@ const MyInvestmentDetailsContent = () => {
                                         data-testid="circle-image"
                                         loading="lazy"
                                     />
-                                {/*// ) : (*/}
-                                {/*//     currentInvestmentDetails.investmentVehicleType*/}
-                                {/*//         ?.split(" ")*/}
-                                {/*//         .map((word: string) => word[0])*/}
-                                {/*//         .join("")*/}
-                                {/*// )}*/}
                             </div>
 
                             <div className="flex flex-col gap-1">
-                                <div className="text-[#6A6B6A] text-sm font-normal">
+                                <div id={'fundManagerText'} className="text-[#6A6B6A] text-sm font-normal">
                                     Fund manager
                                 </div>
-                                <div className={`${inter.className} text-sm font-semibold text-[#212221]`}>
+                                <div id={'fundManagerName'} className={`${inter.className} text-sm font-semibold text-[#212221]`}>
                                     {currentInvestmentDetails?.fundManager}
                                 </div>
                             </div>
@@ -274,14 +292,14 @@ const MyInvestmentDetailsContent = () => {
                                         priority
 
                                     />
-                                    <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{docFilename}</p>
+                                    <p id={'docName'} className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{docFilename}</p>
                                 </div>
 
                                 <Button
                                     id='view-document'
                                     type='button'
                                     variant={"default"}
-                                    className='bg-[#D9EAFF] text-black text-[12px] font-medium hover:bg-[#D9EAFF] rounded-2xl h-7 w-fit'
+                                    className='bg-white text-black text-[12px] font-medium hover:bg-white border border-meedlBlue  rounded-2xl h-7 w-fit'
                                     onClick={handleViewDocument}
                                     disabled={!docUrl || isVerifying}
                                     aria-label={`View ${docFilename}`}
@@ -326,11 +344,22 @@ const MyInvestmentDetailsContent = () => {
                 </div>
 
 
-
                 <div className={`md:w-[60%] w-full grid md:grid gap-2 md:gap-2  md:max-h-[99%]`}>
                     <p className={` ${inter600.className}  text-[18px] text-[#212221]  `}>Performance</p>
                         <div className={`w-full ${styles.container} md:w-full md:max-h-[70vh] md:overf  pt-4 grid gap-4  `}>
-                            <PerformanceDisplay amountInvested={currentInvestmentDetails?.amountInvested} incomeEarned={currentInvestmentDetails?.incomeEarned} newAssetValue={currentInvestmentDetails?.netAssetValue} portfolioPercentage={currentInvestmentDetails?.percentageOfPortfolio} TalentFunded={''} barChartTabContent={barChartTabContent} currentBartChart={currentBartChart} chartData={chartData} handleBarChartTabChange={handleBarChartTabChange} />
+                            <PerformanceDisplay
+                                onChangeDate={changeLoanYear}
+                                currentInvestmentYearOnBarChart={''}
+                                investmentLifeSpanInYears={investmentLifeSpanInYears}
+                                amountInvested={currentInvestmentDetails?.amountFinancierInvested}
+                                incomeEarned={currentInvestmentDetails?.totalIncomeGenerated}
+                                newAssetValue={currentInvestmentDetails?.netAssetValue}
+                                portfolioPercentage={currentInvestmentDetails?.portfolioValue}
+                                TalentFunded={currentInvestmentDetails?.talentFunded}
+                                barChartTabContent={barChartTabContent}
+                                currentBartChart={currentBartChart}
+                                chartData={chartData}
+                                handleBarChartTabChange={handleBarChartTabChange} />
                         </div>
 
                 </div>

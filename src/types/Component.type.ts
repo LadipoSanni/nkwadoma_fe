@@ -125,6 +125,45 @@ export interface cohortLoaneeResponse {
     userIdentity: []
 }
 
+export interface InvestedVehicleDetails {
+    id: string,
+    name: string,
+    investmentVehicleType: string,
+    mandate: string,
+    sponsors: [],
+    tenure: string,
+    size: string,
+    rate: string,
+    totalAvailableAmount: string,
+    amountRaised: string,
+    amountDisbursed: string,
+    amountAvailable: string,
+    totalIncomeGenerated: string,
+    netAssetValue: string,
+    startDate: string,
+    createdDate: string,
+    investmentVehicleLink: string,
+    investmentVehicleStatus: string,
+    minimumInvestmentAmount: string,
+    fundManager: string,
+    trustee: string,
+    custodian: string,
+    bankPartner: string,
+    lastUpdatedDate: string,
+    investmentVehicleVisibility: string,
+    fundRaisingStatus: string,
+    deployingStatus: string,
+    couponDistributionStatus: string,
+    recollectionStatus: string,
+    maturity: string,
+    amountFinancierInvested: string,
+    investmentVehicleDesignation: string,
+    dateInvested: string,
+    talentFunded?: string,
+    portfolioValue?:string,
+
+}
+
 export type cohortBreakDown = {
     currency: string,
     itemAmount: string,
