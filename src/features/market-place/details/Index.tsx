@@ -13,6 +13,7 @@ import {formatAmount} from "@/utils/Format";
 import MarketDetailsSkeleton from "@/reuseable/Skeleton-loading-state/MarketDetails";
 import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
+import {insertSpaceCapitalized} from '@/utils/GlobalMethods';
 
 const MarketPlaceDetails = () => {
     const router = useRouter();
@@ -169,12 +170,12 @@ const MarketPlaceDetails = () => {
 
 
     const investmentBasicDetails = [
-        {label: 'Maturity date', value: `${data?.data?.tenure} ${data?.data?.tenure === 1 ? 'month' : 'months'}`},
+        {label: 'Maturity date', value: `${data?.data?.tenure} ${data?.data?.tenure <= 1 ? 'month' : 'months'}`},
         {label: 'Interest rate', value: `${data?.data?.rate || 0}%`},
         {label: 'Minimum amount', value: (<span className='text-meedlBlack text-[14px] font-semibold'>{formatAmount(data?.data?.minimumInvestmentAmount?.toString() || '0')}</span>)},
         {label: 'Status', value: (
                 <div id="minidetailsId" className="flex bg-[#F6F6F6] items-center gap-2 rounded-lg px-2 py-1 w-fit">
-                    <span id="fundrasingId" className="font-normal text-black text-sm flex items-center justify-center">{statusKeyAndValue().key}</span>
+                    <span id="fundrasingId" className="font-normal text-black text-sm flex items-center justify-center">{insertSpaceCapitalized(statusKeyAndValue().key) || 'Status'}</span>
                     <div id="statusDivId" className={`bg-meedlWhite p-1 border rounded-lg ${borderClass} ${statusKeyAndValue().value === "maturity"? "hidden" : ""}`}>
                         <span id="statusId" className={`text-sm font-medium px-1 py-1 rounded-lg lowercase ${statusClass} `}>
                             {statusKeyAndValue().value ?.toLowerCase() || ""}</span>
@@ -203,7 +204,7 @@ const MarketPlaceDetails = () => {
     };
 
     const smallScreenFilename = getTruncatedFilename(docFilename || 'No Document', 10)
-    const largeScreenFilename = getTruncatedFilename(docFilename || 'No Document', 35);
+    const largeScreenFilename = getTruncatedFilename(docFilename || 'No Document', 25);
 
 
 
@@ -228,7 +229,7 @@ const MarketPlaceDetails = () => {
                 >
                     <div
                         id="purpposeDiv"
-                        className={`${styles.container} w-full grid md:w-2/5 md:h-[70vh] md:max-h-none `}
+                        className={`${styles.container} w-full grid md:w-3/5 xl:w-2/5 lg:w-3/5 md:h-[70vh] md:max-h-none `}
                     >
                         <div id="backgroundId" className={`w-full md:w-full rounded-md md:rounded-md ${bgColor}`}>
                             <div id="type" data-testid="type" className="py-5 px-4 flex flex-col">
@@ -345,7 +346,7 @@ const MarketPlaceDetails = () => {
                                      className="flex md:flex-row md:py-6 py-4 flex-col w-full justify-between font-normal text-meedlBlack text-[14px]">
                                     <div id={`itemsId`}
                                          className={` ${inter.className} text-[#6A6B6A] text-[14px] font-normal`}>
-                                        <span id={`item`}>{item.label}</span>
+                                        <span id={`item`}>{insertSpaceCapitalized(item.label)}</span>
                                     </div>
                                     <div id={`valueId`}
                                          className={`${inter.className}  text-[#212221] text-[14px] font-normal`}>

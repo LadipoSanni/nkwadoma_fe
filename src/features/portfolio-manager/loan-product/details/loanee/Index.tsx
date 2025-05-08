@@ -71,11 +71,11 @@ export function Loanees() {
                         <Tables
                             tableData={loanees}
                             tableHeader={LoanProductLoaneeHeader}
-                            staticHeader={'Loanee'}
+                            staticHeader={'loanee'}
                             staticColunm={'name'}
                             tableHeight={58}
                             icon={MdOutlinePerson}
-                            sideBarTabName={"Loanee"}
+                            sideBarTabName={"loanee"}
                             handleRowClick={() => {
                             }}
                             optionalRowsPerPage={10}

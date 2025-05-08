@@ -10,8 +10,8 @@ import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skelet
 import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useSearchInvestmentVehiclesQuery} from "@/service/financier/marketplace";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
-import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import { clearAll } from "@/redux/slice/investors/MarketPlaceSlice";
+import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 
 interface InvestmentVehicle {
     id: string;
@@ -184,9 +184,9 @@ const MarketPlaceView = () => {
                     id="marketplaceSelect"
                     value={selectedValue}
                     // onChange={(value) => setSelectedType(value)}
-                    selectContent={["Commercial", "Endowment", "Reset"]}
+                    selectContent={["Commercial", "Endowment", "All"]}
                     onChange={(value) => {
-                        if (value === "Reset") {
+                        if (value === "All") {
                             handleReset();
                         } else {
                             setSelectedType(value);
@@ -194,7 +194,7 @@ const MarketPlaceView = () => {
                     }}
                     placeHolder="Type"
                     triggerId="marketplaceTrigger"
-                    className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                    className="h-11 md:w-32 w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                 />
             </div>
 
@@ -208,7 +208,12 @@ const MarketPlaceView = () => {
                         {searchTerm ? (
                             <SearchEmptyState icon={MdSearch} name="Investment" />
                         ) : (
-                            <LoanEmptyState title={"Investment vehicles will show here"} description={"There are no Investment vehicles available yet"} icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>} iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
+                            <TableEmptyState
+                                name={"investment vehicle"}
+                                icon={<MdOutlinePayments style={{ fontSize: '2.5rem', height: '2.5rem', width: '2.5rem' }}/>}
+                                condition={true}
+                            />
+                            // <TableEmptyState name={"investment vehicles "} icon={<MdOutlinePayments height={"2.5rem"} width={"2.5rem"}/>}/>
                         )}
                     </div>
                 ) : (

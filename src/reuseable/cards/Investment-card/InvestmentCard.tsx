@@ -2,6 +2,7 @@ import React from "react"
 import {cabinetGrotesk, inter} from "@/app/fonts";
 import Image, {StaticImageData} from 'next/image';
 import {useRouter} from "next/navigation";
+import { insertSpaceCapitalized } from "@/utils/GlobalMethods";
 
 
 interface InvestmentCardProps {
@@ -12,7 +13,7 @@ interface InvestmentCardProps {
     investmentVehicleName: string;
     statuses: string;
     status: string | null;
-    percentage: number;
+    percentage: number | string;
     HandleCardDetails: (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => void;
     statusClass: string;
     borderClass:string;
@@ -68,7 +69,7 @@ const InvestmentCard: React.FC<InvestmentCardProps> = ({
                 <div id={"minidetailsId"} className={`flex bg-[#F6F6F6] items-center gap-2 rounded-lg px-2 py-1 w-fit ${status === statusValue? "py-[11px]" : ""}`}>
                     <span id={"fundrasingId"}
                           className="font-normal text-black text-sm flex items-center justify-center">
-                        {statuses}
+                        {insertSpaceCapitalized(statuses)}
                     </span>
                     <div id={"statusDivId"} className={`bg-meedlWhite p-1 border rounded-lg ${borderClass} ${status === statusValue? "hidden" : ""}`}>
                         <span id={"statusId"}
