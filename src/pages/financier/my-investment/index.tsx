@@ -62,7 +62,7 @@ const MyInvestment = () => {
     }, [isFiltered, filteredData, searchData, searchTerm])
 
 
-    console.log('myInvestmentVehicles: ', myInvestmentVehicles?.length,'searchData: ', searchData?.data?.body?.length, 'filteredData: ', filteredData?.data?.body?.length)
+    // console.log('myInvestmentVehicles: ', myInvestmentVehicles?.length,'searchData: ', searchData?.data?.body?.length, 'filteredData: ', filteredData?.data?.body?.length)
 
 
     const HandleCardDetails = (vehicleDetails: CurrentMyInvestmentVehicleDetails ) => {
@@ -126,7 +126,7 @@ const MyInvestment = () => {
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
-            ) : myInvestmentVehicles?.length === 0    ? (
+            ) : myInvestmentVehicles?.length === 0  || !myInvestmentVehicles   ? (
                 <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
                     { selectedValue === '' ?
                         <LoanEmptyState title={"Investment vehicles will show here"}
