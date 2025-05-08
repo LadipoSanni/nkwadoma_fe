@@ -13,7 +13,7 @@ interface InvestmentCardProps {
     investmentVehicleName: string;
     statuses: string;
     status: string | null;
-    percentage: number;
+    percentage: number | string;
     HandleCardDetails: (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => void;
     statusClass: string;
     borderClass:string;
