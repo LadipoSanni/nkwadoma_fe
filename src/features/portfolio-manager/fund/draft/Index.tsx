@@ -9,8 +9,8 @@ import {clearSaveClickedDraft, setSaveClickedDraft} from "@/redux/slice/vehicle/
 import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 import UpdateDraft from "@/features/portfolio-manager/fund/draft/UpdateDraft";
 import { MdOutlineArticle } from "react-icons/md";
-import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import InfiniteScroll from "react-infinite-scroll-component";
+import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 
 interface SaveToDraftProps {
     setIsOpen?: (b: boolean) => void;
@@ -175,13 +175,7 @@ const Draft = ({investmentVehicleType, type, setIsOpen}: SaveToDraftProps) => {
                             <SkeletonForLoanOrg />
                         ) : drafts.length === 0 ? (
                             <div className="flex justify-center items-center pt-20">
-                                <LoanEmptyState
-                                    id="LoanRequestEmptyState"
-                                    icon={<MdOutlineArticle className="w-10 h-10" color="#142854" />}
-                                    iconBg="#D9EAFF"
-                                    title="Drafts will show here"
-                                    description="There are no drafts available yet"
-                                />
+                                <TableEmptyState name={"draft"}   icon={MdOutlineArticle} condition={true}/>
                             </div>
                         ) : (
                             drafts.map((draft: Draft, index) => (
