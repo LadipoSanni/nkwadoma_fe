@@ -29,6 +29,7 @@ interface PerformanceCardProps {
 
 
 const PerformanceCard = ({id,currentYear,years,isFigure,onChangeDate,currentDate, showMonthPick,maxWidth, isSmall,title, value, isValueInPercentage, showContainerBorder, showPerformancePercentage,percentage, didValueIncrease}: PerformanceCardProps) => {
+
     return (
         <div
             id={id} data-testid={id}

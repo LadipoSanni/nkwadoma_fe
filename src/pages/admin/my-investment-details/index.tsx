@@ -74,6 +74,10 @@ const MyInvestmentDetailsContent = () => {
         { month: "August", value: 0,  },
         { month: "September", value: 0,  },
     ]
+
+    const investmentLifeSpanInYears = [
+        '2024'
+    ]
     const minimumInvestmentAmount = currentInvestmentDetails?.minimumInvestmentAmount
     const rate = currentInvestmentDetails?.rate
     const maturityDate = currentInvestmentDetails?.tenure
@@ -106,7 +110,7 @@ const MyInvestmentDetailsContent = () => {
     const investmentBasicDetails = [
         {label: 'Maturity date', value: maturityDate + ' months'},
         {label: 'Interest rate', value: rate +'%'},
-        {label: 'Minimum amount', value: <p className={` text-meedlBlack text-[14px]  `}>{formatAmount(minimumInvestmentAmount?.toString(), true )|| '0'}</p>},
+        {label: 'Minimum amount', value: <p className={` ${inter600.className} text-meedlBlack text-[14px]  `}>{formatAmount(minimumInvestmentAmount?.toString(), true )|| '0'}</p>},
         {label: 'Status', value:
                 <div className={`flex gap-2 md:gap-2 md:flex`}>
                     {status}
@@ -197,6 +201,9 @@ const MyInvestmentDetailsContent = () => {
             : "#E6F2EA";
 
 
+    const changeLoanYear = (year: string) => {
+        console.log(year)
+    }
     const investInVehicle = ()=> {
         store.dispatch(
             setMarketInvestmentVehicleId({
@@ -292,7 +299,7 @@ const MyInvestmentDetailsContent = () => {
                                     id='view-document'
                                     type='button'
                                     variant={"default"}
-                                    className='bg-[#D9EAFF] text-black text-[12px] font-medium hover:bg-[#D9EAFF] rounded-2xl h-7 w-fit'
+                                    className='bg-white text-black text-[12px] font-medium hover:bg-white border border-meedlBlue  rounded-2xl h-7 w-fit'
                                     onClick={handleViewDocument}
                                     disabled={!docUrl || isVerifying}
                                     aria-label={`View ${docFilename}`}
@@ -341,6 +348,9 @@ const MyInvestmentDetailsContent = () => {
                     <p className={` ${inter600.className}  text-[18px] text-[#212221]  `}>Performance</p>
                         <div className={`w-full ${styles.container} md:w-full md:max-h-[70vh] md:overf  pt-4 grid gap-4  `}>
                             <PerformanceDisplay
+                                onChangeDate={changeLoanYear}
+                                currentInvestmentYearOnBarChart={''}
+                                investmentLifeSpanInYears={investmentLifeSpanInYears}
                                 amountInvested={currentInvestmentDetails?.amountFinancierInvested}
                                 incomeEarned={currentInvestmentDetails?.totalIncomeGenerated}
                                 newAssetValue={currentInvestmentDetails?.netAssetValue}

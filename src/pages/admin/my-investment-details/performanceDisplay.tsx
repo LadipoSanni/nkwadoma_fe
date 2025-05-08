@@ -13,10 +13,13 @@ interface PerformanceProps {
     portfolioPercentage?: string,
     TalentFunded?: string,
     incomeEarned?: string,
+    investmentLifeSpanInYears: string[];
+    currentInvestmentYearOnBarChart: string;
+    onChangeDate?: (month: string) => void;
 
 }
 
-const PerformanceDisplay = ({barChartTabContent,TalentFunded,incomeEarned, amountInvested,portfolioPercentage, newAssetValue,currentBartChart,handleBarChartTabChange, chartData}:PerformanceProps) => {
+const PerformanceDisplay = ({barChartTabContent,onChangeDate,currentInvestmentYearOnBarChart,investmentLifeSpanInYears,TalentFunded,incomeEarned, amountInvested,portfolioPercentage, newAssetValue,currentBartChart,handleBarChartTabChange, chartData}:PerformanceProps) => {
     return (
         <div id={`performanceMainContainer`} data-testid={'performanceMainContainer'} className={` grid md:grid gap-4 md:gap-4 `}>
             <PerformanceCard id={'amountRequest'} showContainerBorder={true} percentage={''} showPerformancePercentage={false} maxWidth={'100%'} title={'Amount invested'} value={amountInvested} isValueInPercentage={false} showMonthPick={false} didValueIncrease={false}/>
@@ -27,7 +30,7 @@ const PerformanceDisplay = ({barChartTabContent,TalentFunded,incomeEarned, amoun
             </div>
             <div className={`w-full md:w-full  rounded-md md:rounded-md py-4 px-4 md:px-3 md:py-3 md:bg-white bg-white   border border-[#D7D7D7] md:border   `}>
                 <div className={`bg-grey105 grid gap-4 md:grid md:gap-3  md:bg-grey105 `}>
-                    <PerformanceCard id={'incomeEarned'} isSmall={false} showContainerBorder={false} percentage={'26.8'} showPerformancePercentage={false} maxWidth={'100%'} title={'Income earned'} value={incomeEarned} isValueInPercentage={true} showMonthPick={true} didValueIncrease={true}/>
+                    <PerformanceCard id={'incomeEarned'} onChangeDate={onChangeDate} currentYear={currentInvestmentYearOnBarChart} years={investmentLifeSpanInYears} isSmall={false} showContainerBorder={false} percentage={'26.8'} showPerformancePercentage={false} maxWidth={'100%'} title={'Income earned'} value={incomeEarned} isValueInPercentage={true} showMonthPick={true} didValueIncrease={true}/>
                     <div className={` w-full md:w-full grid md:grid gap-3 md:gap-3 `}>
                         <div className={` md:px-4 px-4  `}>
                             <TabSwitch componentId={'myInvestmentBarChartTabSwitch'} currentTab={currentBartChart}
