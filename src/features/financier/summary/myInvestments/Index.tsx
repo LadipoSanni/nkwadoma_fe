@@ -4,8 +4,8 @@ import {Icon} from "@iconify/react";
 import {useRouter} from 'next/navigation';
 import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
-import Card from "@/pages/financier/my-investment/card";
-import { CurrentMyInvestmentVehicleDetails } from "@/types/Component.type";
+import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
+import { MyInvestmentVehicleDetails } from "@/types/Component.type";
 import { store } from "@/redux/store";
 import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/financier";
 
@@ -18,11 +18,14 @@ const MyInvestments = () => {
         router.push('/my-investment')
     }
 
-    const HandleCardDetails = (vehicleDetails: CurrentMyInvestmentVehicleDetails) => {
-        store.dispatch(
-            setCurrentMyInvestmentVehicleDetails(vehicleDetails)
-        );
-        router.push("/my-investment/details");
+    const HandleCardDetails = (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => {
+        const vehicle = investmentVehicles.find((investmentVehicle: MyInvestmentVehicleDetails) => investmentVehicle.id === id);
+        if (vehicle) {
+            store.dispatch(
+                setCurrentMyInvestmentVehicleDetails(vehicle)
+            );
+            router.push("/my-investment/details");
+        }
     };
 
     const getStatusColor = (status: string) => {
@@ -64,7 +67,7 @@ const MyInvestments = () => {
             </div>
             {investmentVehicles.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-                    {investmentVehicles.slice(0, 4).map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
+                    {investmentVehicles.slice(0, 4).map((vehicle: MyInvestmentVehicleDetails, index: number) => {
                         const backgroundColor =
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -73,31 +76,74 @@ const MyInvestments = () => {
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "/BlueCircles.svg"
                                 : "/GreenCircles.svg";
-                        const statusValue = vehicle.fundRaisingStatus ? vehicle.fundRaisingStatus : vehicle.deployingStatus;
-                        const status = vehicle.fundRaisingStatus !== null ? 'Fundraising' : 'Deploying';
+                        const statusKeyAndValue = () => {
+                            if (vehicle.vehicleOperation?.fundRaisingStatus !== null && vehicle.vehicleOperation?.fundRaisingStatus !== undefined) {
+                                return {
+                                    key: "Fundraising",
+                                    value: vehicle.vehicleOperation.fundRaisingStatus
+                                }
+                            } else if (vehicle.vehicleOperation?.deployingStatus !== null && vehicle.vehicleOperation?.deployingStatus !== undefined) {
+                                return {
+                                    key: "Deploying",
+                                    value: vehicle.vehicleOperation?.deployingStatus
+                                }
+                            } else if (vehicle.vehicleOperation?.couponDistributionStatus !== null && vehicle.vehicleOperation?.couponDistributionStatus !== undefined) {
+                                return {
+                                    key: "CouponDistribution",
+                                    value: vehicle.vehicleOperation.couponDistributionStatus
+                                }
+                            } else if (typeof vehicle.vehicleClosureStatus === 'object' && vehicle.vehicleClosureStatus?.recollectionStatus !== null && vehicle.vehicleClosureStatus?.recollectionStatus !== undefined) {
+                                return {
+                                    key: "Recollection",
+                                    value: vehicle.vehicleClosureStatus.recollectionStatus
+                                }
+                            } else if (typeof vehicle.vehicleClosureStatus === 'object' && vehicle.vehicleClosureStatus?.maturity !== null && vehicle.vehicleClosureStatus?.maturity !== undefined) {
+                                return {
+                                    key: "Maturity",
+                                    value: vehicle.vehicleClosureStatus.maturity
+                                }
+                            } else {
+                                return {
+                                    key: "",
+                                    value: null
+                                }
+                            }
+                        }
 
-                        const statusClass = getStatusColor(statusValue)
-                        const borderClass = getStatusBorderColor(statusValue)
+                        const statusValue = statusKeyAndValue().value;
+                        const status = statusKeyAndValue().key;
+
+                        const statusClass = getStatusColor(statusValue ?? "")
+                        const borderClass = getStatusBorderColor(statusValue ?? "")
 
                         const truncatedTitle =
                             vehicle.name.length > 20
                                 ? vehicle.name.slice(0, 20) + "..."
                                 : vehicle.name;
 
-                        return <Card
-                            key={`wrapper-${index}`}
-                            HandleCardDetails={HandleCardDetails}
-                            vehicleDetails={vehicle as CurrentMyInvestmentVehicleDetails}
-                            backgroundColor={backgroundColor}
-                            investmentVehicleType={vehicle.investmentVehicleType}
-                            imageSrc={imageSrc}
-                            investmentVehicleName={truncatedTitle}
-                            statusClass={statusClass}
-                            status={status}
-                            statusValue={statusValue}
-                            borderClass={borderClass}
-                            percentage={vehicle.interestRateOffered || 0}
-                        />;
+                        const typeTextColor = vehicle.investmentVehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
+
+                        const cardProps = {
+                            id: vehicle.id,
+                            backgroundColor,
+                            investmentVehicleType: vehicle.investmentVehicleType,
+                            imageSrc,
+                            investmentVehicleName: truncatedTitle,
+                            statusClass,
+                            status: statusValue,
+                            statuses: status,
+                            borderClass,
+                            percentage: vehicle.interestRateOffered || 0,
+                            typeTextColor,
+                            HandleCardDetails,
+                            statusValue: "maturity"
+                        };
+
+                        return (
+                            <div key={`wrapper-${vehicle.id}-${index}`}>
+                                <InvestmentCard key={vehicle.id} {...cardProps} />
+                            </div>
+                        );
                     })}
                 </div>
             ) : (
