@@ -10,9 +10,11 @@ interface Props {
     clickView: () => void;
     isLoanData?: boolean;
     loanData?: {title: string, amount: string, textColor: string,bgColor: string,}[];
+    isLoading: boolean;
+    isFetching: boolean;
 }
 
-const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickView}: Props) => {
+const PortfolioManagerOverviewCard = ({id,isLoading,isFetching,isLoanData,loanData, cardData, clickView}: Props) => {
 
 
 
@@ -20,14 +22,14 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
         <div id={id}
              className={`${inter.className} flex  md:grid w-full md:w-full  `}>
             <div className="grid px-3 pt-3 pb-3  rounded-md border border-neutral-200 md:grid  gap-6">
-              <div className={`bg-grey105  h-full grid gap- px-4 py-4`}>
+              <div className={`  ${isFetching  && isLoading ? 'animate-pulse h-[20vh] bg-[#f9f9f9] ': 'bg-grey105'} h-full grid gap- px-4 py-4`}>
                   {cardData?.map((card, index) => (
                       <main key={index}
-                            className="flex-non h-full pb-2  w md:w-full he grid gap ">
+                            className={`flex-non h-full ${isFetching  && isLoading ? 'hidden ': ''} pb-2  w md:w-full he grid gap `}>
                           <div id={`balanceCardBlock${index}`}
                                className=" grid gap-2 ">
                               <p id={`cardTitle${index}`}
-                                 className="text-black300 flex gap-2 text-nowrap whitespace-nowrap mt-auto mb-auto  ">
+                                 className={`text-black300  flex gap-2 text-nowrap whitespace-nowrap mt-auto mb-auto  `}>
                                   {card.title}
                                   {card?.showIcon &&
                                       <MdOutlineHelpOutline className={` mt-auto mb-auto`} />
@@ -43,7 +45,7 @@ const PortfolioManagerOverviewCard = ({id,isLoanData,loanData, cardData, clickVi
                           {loanData?.map((loan, index) => (
                               <div key={index}
                                    id={'id'+loan.title}
-                                   className={` bg-white w-full border rounded-md relative  border-[#ECECEC]  h-fit `}
+                                   className={` bg-white w-full border ${isFetching  && isLoading ? 'hidden ': ''} rounded-md relative  border-[#ECECEC]  h-fit `}
                               >
 
                                   <div
