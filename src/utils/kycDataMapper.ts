@@ -1,16 +1,7 @@
 import { RootState } from "@/redux/store";
+import { mapCountryToEnum } from "./countryMapper";
 
-const mapCountryCodeToEnum = (countryCode?: string): string | undefined => {
-  if (!countryCode) return undefined;
-
-  const countryMap: Record<string, string> = {
-    "US": "UNITED_STATES",
-    "GB": "UNITED_KINGDOM",
-    "NG": "NIGERIA",
-  };
-
-  return countryMap[countryCode] || countryCode;
-};
+export const mapCountryCodeToEnum = mapCountryToEnum;
 
 export const mapKycDataToApiRequest = (state: RootState, declarationOverride?: { agreedToTerms: boolean }) => {
   const { identification, sourceOfFunds, beneficialOwner, declaration } = state.kycForm;

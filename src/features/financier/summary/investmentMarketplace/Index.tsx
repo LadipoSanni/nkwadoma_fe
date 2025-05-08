@@ -36,24 +36,47 @@ const HandleCardDetails = (
 
 const InvestmentMarketplace = () => {
     const router = useRouter();
-    const {data, isLoading} = useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery({
+    const { data, isLoading } = useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery({
         pageSize: 4,
         pageNumber: 0,
         investmentVehicleStatus: 'PUBLISHED',
     });
 
-    const vehicles = (data?.data?.body || []).map((vehicle: investmentVehicleType) => ({
-        id: vehicle.id,
-        investmentVehicleType: vehicle.investmentVehicleType,
-        name: vehicle.name,
-        rate: vehicle.rate,
-        fundRaisingStatus: vehicle.fundRaisingStatus ?? null,
-        deployingStatus: vehicle.deployingStatus ?? '',
-        couponDistributionStatus: vehicle.couponDistributionStatus ?? '',
-        maturity: vehicle.maturity ?? '',
-        recollectionStatus: vehicle.recollectionStatus ?? '',
+    const vehicles = data?.data?.body || [];
 
-    }));
+    const handleRoute = () => {
+        router.push('/marketplace');
+    };
+
+    const getStatusColor = (status: string) => {
+        if (status === 'CLOSE') {
+            return 'bg-red-100 md:bg-red-100 md:text-red-600 text-red-600 border-[#F2BCBA] md:border-[#F2BCBA]';
+        }
+        return 'bg-green-100 md:bg-green-100 md:text-[#0D9B48] text-[#0D9B48] border-[#B4E5C8] md:border-[#B4E5C8]';
+    };
+
+    const getStatusBorderColor = (status: string) => {
+        if (status === 'CLOSE') {
+            return 'border-[#F2BCBA] md:border-[#F2BCBA]';
+        }
+        return 'border-[#B4E5C8] md:border-[#B4E5C8]';
+    };
+
+    const statusKeyAndValue = (vehicle: investmentVehicleType) => {
+        if (vehicle.fundRaisingStatus) {
+            return { key: 'Fundraising', value: vehicle.fundRaisingStatus };
+        } else if (vehicle.deployingStatus) {
+            return { key: 'Deploying', value: vehicle.deployingStatus };
+        } else if (vehicle.couponDistributionStatus) {
+            return { key: 'CouponDistribution', value: vehicle.couponDistributionStatus };
+        } else if (vehicle.recollectionStatus) {
+            return { key: 'Recollection', value: vehicle.recollectionStatus };
+        } else if (vehicle.maturity) {
+            return { key: 'Maturity', value: vehicle.maturity };
+        } else {
+            return { key: '', value: null };
+        }
+    };
 
     return (
         <section
@@ -71,7 +94,7 @@ const InvestmentMarketplace = () => {
                     Investment Marketplace
                 </h5>
                 <p
-                    onClick={() => router.push('/marketplace')}
+                    onClick={handleRoute}
                     className={`${vehicles.length > 0 ? '' : 'hidden'} cursor-pointer text-meedlBlue underline text-[14px] font-normal leading-[150%]`}
                     id={'investmentMarketplaceViewAll'}
                 >
@@ -95,7 +118,6 @@ const InvestmentMarketplace = () => {
                             will show here</h1> <p className={'text-lightBlue850 text-[14px] leading-[150%]'}>There are
                             no investments
                             available yet</p></div>}
-                        // condition={true}
                     />
                 </div>
             ) : (
@@ -105,33 +127,9 @@ const InvestmentMarketplace = () => {
                             vehicle.investmentVehicleType === 'COMMERCIAL' ? '#D9EAFF' : '#E6F2EA';
                         const imageSrc =
                             vehicle.investmentVehicleType === 'COMMERCIAL' ? '/BlueCircles.svg' : '/GreenCircles.svg';
-                        const statusKeyAndValue = () => {
-                            if (vehicle.fundRaisingStatus !== null) {
-                                return {key: 'Fundraising', value: vehicle.fundRaisingStatus};
-                            } else if (vehicle.deployingStatus !== null) {
-                                return {key: 'Deploying', value: vehicle.deployingStatus};
-                            } else if (vehicle.couponDistributionStatus !== null) {
-                                return {key: 'CouponDistribution', value: vehicle.couponDistributionStatus};
-                            } else if (vehicle.recollectionStatus !== null) {
-                                return {key: 'Recollection', value: vehicle.recollectionStatus};
-                            } else if (vehicle.maturity !== null) {
-                                return {key: 'Maturity', value: vehicle.maturity};
-                            } else {
-                                return {key: '', value: null};
-                            }
-                        };
-                        const statusClass =
-                            statusKeyAndValue().value === 'OPEN'
-                                ? 'bg-green-100 text-[#0D9B48] border-[#B4E5C8]'
-                                : statusKeyAndValue().value === 'CLOSE'
-                                    ? 'bg-red-100 text-red-600 border-[#F2BCBA]'
-                                    : 'bg-green-100 text-[#0D9B48] border-[#B4E5C8]';
-                        const borderClass =
-                            statusKeyAndValue().value === 'OPEN'
-                                ? 'border-[#B4E5C8]'
-                                : statusKeyAndValue().value === 'CLOSE'
-                                    ? 'border-[#F2BCBA]'
-                                    : 'border-[#B4E5C8]';
+                        const { key: status, value: statusValue } = statusKeyAndValue(vehicle);
+                        const statusClass = getStatusColor(statusValue ?? '');
+                        const borderClass = getStatusBorderColor(statusValue ?? '');
                         const typeTextColor =
                             vehicle.investmentVehicleType === 'COMMERCIAL' ? 'text-[#142854]' : 'text-[#045620]';
                         const truncatedTitle =
@@ -143,8 +141,8 @@ const InvestmentMarketplace = () => {
                             imageSrc,
                             investmentVehicleName: truncatedTitle,
                             statusClass,
-                            status: statusKeyAndValue().value,
-                            statuses: statusKeyAndValue().key,
+                            status: statusValue,
+                            statuses: status,
                             borderClass,
                             percentage: vehicle.rate || 0,
                             typeTextColor,
