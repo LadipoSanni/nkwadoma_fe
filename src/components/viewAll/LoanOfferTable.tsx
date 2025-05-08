@@ -1,7 +1,5 @@
 "use client"
 import React from "react";
-import LoanEmptyState from "@/reuseable/emptyStates/Index";
-import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/index";
 import {useRouter} from "next/navigation";
@@ -11,6 +9,8 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import {useAppSelector} from "@/redux/store";
 import { useViewAllLoanOfferQuery , useViewLoanInAnOrganizationQuery} from "@/service/admin/loan/loan-offer-api";
+import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
+import {Icon} from "@iconify/react";
 
 
 
@@ -70,13 +70,13 @@ const Index = () => {
                 </div>
             ) :sortedViewAllLoanOfferInAnOrg.length === 0 || data?.data?.body?.length === 0 ?
                 (
-                    <LoanEmptyState
-                        id={'LoanRequestEmptyState'}
-                        icon={<Icon icon="material-symbols:money-bag-outline"
-                                    height={"2rem"}
-                                    width={"2rem"}
-                                    color={'#142854'}
-                        ></Icon >} iconBg={'#D9EAFF'} title={'Loan offers will show here'} description={clickedOrganization?.id ? 'There are no loan offer in this organization yet': `There are no loan offer available yet` } />
+                    <TableEmptyState name={"loan offer"}   icon={
+                        <Icon
+                            icon="material-symbols:money-bag-outline"
+                            height="2.5rem"
+                            width="2.5rem"
+                        />
+                    } condition={true} descriptionId={clickedOrganization?.id ? 'There are no loan offers in this organization yet': `There are no loan offers available yet` }/>
                 ) :
                 (
                     <div className={`md:w-full  w-full h-full md:h-full `}>

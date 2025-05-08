@@ -65,6 +65,17 @@ export const mapKycDataToApiRequest = (state: RootState, declarationOverride?: {
     return source;
   });
 
+  const politicallyExposedPeople = declaration.isPoliticallyExposedPerson
+      ? [
+        {
+          positionHeld: declaration.politicalPosition || "",
+          country: declaration.country || "",
+          relationship: declaration.relationship || "",
+          additionalInformation: "",
+        },
+      ]
+      : [];
+
   return {
     bankName: "Default Bank Account",
     bankNumber: "0101234504",
@@ -86,6 +97,7 @@ export const mapKycDataToApiRequest = (state: RootState, declarationOverride?: {
 
     declarationAndAgreement: declarationOverride?.agreedToTerms !== undefined ? declarationOverride.agreedToTerms : declaration.agreedToTerms,
     politicallyExposed: declaration.isPoliticallyExposedPerson === true,
+    politicallyExposedPeople,
 
     beneficialOwners: beneficialOwners.length > 0 ? beneficialOwners : [{
       id: "default",

@@ -142,7 +142,7 @@ function Financiers() {
             icon={Book}
             sideBarTabName='financier'
             condition={true}
-            staticHeader={"Financier"}
+            staticHeader={"financier"}
             staticColunm={"name"}
             sx='cursor-pointer'
             hasNextPage={hasNextPage}
