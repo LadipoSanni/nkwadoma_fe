@@ -75,20 +75,17 @@ const Barcharts = () => {
     }
     const LoanLifeSpan = [
         '2023',
-        '2024',
-        '2025'
+
     ]
     const AumLifeSpan = [
         '2023',
-        '2024',
-        '2025'
     ]
 
     return (
         <div className={` w-full md:w-full grid md:flex flex-col-2 md: gap-6 `}>
             <BarChartWithDate id={'AUMPortfolioGrowthRate'}
                               years={AumLifeSpan}
-                              currentYear={'2024'}
+                              currentYear={'2023'}
                               displayDates={barChartTabContent}
                               currentMonthDate={currentAumPortfolioGrowth}
                               cardTile={'AUM portfolio growth rate'}

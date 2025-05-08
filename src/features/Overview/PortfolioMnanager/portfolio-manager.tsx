@@ -12,22 +12,20 @@ const PortfolioManager = () => {
 
     const router = useRouter();
     const {data, isFetching, isLoading } = useViewMeedlPortfolioQuery({})
-    // console.log('data: ', data)
+    console.log('data: ', data)
     const cardData1 = [
-        {title: "Total investment vehicles", amount: data?.data?.totalNumberOfInvestmentVehicle?.toString(),},
-        {title: "Commercial funds", amount: data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString(),showIcon: true},
-        {title: "Endowment", amount: data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle?.toString(),showIcon: true},
+        {title: "Total investment vehicles", amount: `${data?.data?.totalNumberOfInvestmentVehicle ? data?.data?.totalNumberOfInvestmentVehicle?.toString() : '0'}`,},
+        {title: "Commercial funds", amount: `${data?.data?.totalNumberOfCommercialFundsInvestmentVehicle ? data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
+        {title: "Endowment", amount: `${data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle ? data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
     ]
 
     const cardData2 = [
-        {title: "Total number of financier", amount: data?.data?.totalNumberOfFinancier?.toString(),},
-        {title: "Individual", amount: data?.data?.totalNumberOfIndividualFinancier?.toString(),showIcon: true},
-        {title: "Corporate", amount: data?.data?.totalNumberOfInstitutionalFinancier?.toString(),showIcon: true},
+        {title: "Total number of financier", amount: `${data?.data?.totalNumberOfFinancier ?data?.data?.totalNumberOfFinancier?.toString() : '0'}`,},
+        {title: "Individual", amount: `${data?.data?.totalNumberOfIndividualFinancier ? data?.data?.totalNumberOfIndividualFinancier?.toString() : '0'}`,showIcon: true},
+        {title: "Corporate", amount: `${data?.data?.totalNumberOfLoans ? data?.data?.totalNumberOfInstitutionalFinancier?.toString() : '0'}`,showIcon: true},
     ]
     const cardData3 = [
-        {title: "Total number of loans", amount: data?.data?.totalNumberOfLoans?.toString(),},
-        // {title: "Commercial funds", amount: '2',},
-        // {title: "Endowment", amount: '2',},
+        {title: "Total number of loans", amount: `${data?.data?.totalNumberOfLoans ? data?.data?.totalNumberOfLoans?.toString() : '0'}`,},
     ]
 
     // const SecondChartData = [
@@ -52,9 +50,9 @@ const PortfolioManager = () => {
     // ]
 
     const loanData = [
-        {title: "Loan referrals", amount: Math.round(Number(data?.data?.loanReferralPercentage?.toString())) + "%",textColor: 'text-[#66440A]',bgColor: 'bg-[#FEF6E8]',},
-        {title: "Loan offers", amount: Math.round(Number(data?.data?.loanOfferPercentage?.toString())) + "%",textColor: 'text-[#142854]',bgColor: 'bg-[#D9EAFF]',},
-        {title: "Disbursed loan", amount: Math.round(Number(data?.data?.loanDisbursalPercentage?.toString())) + '%',textColor: 'text-[#0e4c23]',bgColor: 'bg-[#E6F2EA]',},
+        {title: "Loan referrals", amount: `${ data?.data?.loanReferralPercentage ? Math.round(Number(data?.data?.loanReferralPercentage?.toString())) + "%" : '0%'}`,textColor: 'text-[#66440A]',bgColor: 'bg-[#FEF6E8]',},
+        {title: "Loan offers", amount:  `${ data?.data?.loanOfferPercentage ? Math.round(Number(data?.data?.loanOfferPercentage?.toString())) + "%" : '0%'}`,textColor: 'text-[#142854]',bgColor: 'bg-[#D9EAFF]',},
+        {title: "Disbursed loan", amount: `${ data?.data?.loanDisbursalPercentage ? Math.round(Number(data?.data?.loanDisbursalPercentage?.toString())) + "%" : '0%'}`,textColor: 'text-[#0e4c23]',bgColor: 'bg-[#E6F2EA]',},
 
     ]
 
@@ -92,10 +90,10 @@ const PortfolioManager = () => {
                </div>
                <div className={` w-full grid md:flex pb-4 gap-6 `}>
                    <PerformanceCard id={'ownership'}  isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={true} maxWidth={'50%'} title={'Net AUM return'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
-                   <PerformanceCard id={'ownership'} isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={true} maxWidth={'50%'} title={'Talent funded '} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
+                   <PerformanceCard id={'netLoanPortfolioReturn'} isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={true} maxWidth={'50%'} title={'Net loan portfolio return'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                </div>
                <div className={` w-full grid  md:flex pb-4 gap-6 `}>
-                   <PerformanceCard id={'ownership'}  isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total custodian/trustee fee'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
+                   <PerformanceCard id={'totalCustodianTrusteeFee'}  isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total custodian/trustee fee'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                    <PerformanceCard id={'ownership'} isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total fund manager fee'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                </div>
            </div>

@@ -22,7 +22,7 @@ const PortfolioManagerOverviewCard = ({id,isLoading,isFetching,isLoanData,loanDa
         <div id={id}
              className={`${inter.className} flex  md:grid w-full md:w-full  `}>
             <div className="grid px-3 pt-3 pb-3  rounded-md border border-neutral-200 md:grid  gap-6">
-              <div className={`  ${isFetching  && isLoading ? 'animate-pulse h-[20vh] bg-[#f9f9f9] ': 'bg-grey105'} h-full grid gap- px-4 py-4`}>
+              <div className={`  ${isFetching  && isLoading ? 'animate-pulse h-[40vh] bg-[#f9f9f9] ': 'bg-grey105'} h-full grid gap- px-4 py-4`}>
                   {cardData?.map((card, index) => (
                       <main key={index}
                             className={`flex-non h-full ${isFetching  && isLoading ? 'hidden ': ''} pb-2  w md:w-full he grid gap `}>
@@ -50,7 +50,7 @@ const PortfolioManagerOverviewCard = ({id,isLoading,isFetching,isLoanData,loanDa
 
                                   <div
                                       style={{width:loan.amount}}
-                                      className={` h-[40px] ${loan.bgColor} rounded-md `}
+                                      className={` h-[40px] ${loan.amount === '0%'? `bg-white` : `${loan.bgColor}` }  rounded-md `}
                                       id={loan.title + 'Bar'}
                                   >
 
