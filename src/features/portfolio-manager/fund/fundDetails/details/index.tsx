@@ -8,7 +8,6 @@ import {useGetInvestmentVehicleDetailQuery} from '@/service/admin/fund_query';
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import {useAppSelector} from "@/redux/store";
-// import { MdEdit } from "react-icons/md";
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { inter } from '@/app/fonts';
@@ -16,6 +15,7 @@ import {formatMonthInDate} from '@/utils/Format';
 import {setDraftId,setEditStatus,clearEditStatus,clearSaveInvestmentStatus,setPublicVehicleUrl,clearPublicVehicleUrl,setStatusDefaultValue,resetStatusDefaultValue} from '@/redux/slice/vehicle/vehicle';
 import {store} from "@/redux/store";
 import { useRouter } from 'next/navigation'
+import styles from '@/pages/admin/my-investment-details/index.module.css'
 import {markStepCompleted} from '@/redux/slice/multiselect/vehicle-multiselect';
 import { resetVehicleState,setVisibilityType } from '@/redux/slice/multiselect/vehicle-multiselect';
 
@@ -29,10 +29,7 @@ const Details = () => {
 
     const {data, isLoading,refetch} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
 
-    // const setStatus = {
-    //     state: data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus,
-    //     status: data?.data?.fundRaisingStatus === null ? "deployingStatus" : "fundRaising"
-    // }
+    console.log('data: ', data)
 
     useEffect(() => {
          if(statusType === "changeStatus" || statusType === "changeVisibility"){
@@ -136,17 +133,6 @@ const Details = () => {
         {name: 'Vehicle type', value: capitalizeFirstLetters(data?.data?.investmentVehicleType )|| 'N/A'},
         {name: 'Fund manager', value: capitalizeFirstLetters(data?.data?.fundManager )|| 'N/A'},
         {name: 'Vehicle size', value: formatAmount(data?.data?.size?.toString() || '0')},
-        // {
-        //     name: 'Vehicle status',
-        //     value: <p
-        //         >{data?.data?.fundRaisingStatus === null ? "Deploying" : "fundRaising" } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(data?.data?.fundRaisingStatus === null ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus) }</span></span> </p>
-        // },
-        // {name: 'Vehicle visibility', value: <div className='flex items-center gap-1'>
-        //     {capitalizeFirstLetters(data?.data?.investmentVehicleVisibility )}
-        //      <span>
-        //         <MdEdit color='#939CB0'/>
-        //      </span>
-        //                                  </div>},
         {name: 'Vehicle start date', value: formatMonthInDate(data?.data?.startDate) },
         {name: 'Interest rate', value: `${data?.data?.rate || 0}%`},
         {name: 'Tenor', value: `${data?.data?.tenure} ${data?.data?.tenure <= 1 ? 'month' : 'months'}`},
@@ -184,100 +170,121 @@ const Details = () => {
                 <div
                     className={`flex flex-col md:flex-row md:justify-between ${inter.className}`}
                 > 
-                  <div className='w-full'>
-                    <div >
-                        <InfoCard
-                            icon={MdOutlinePayments}
-                            fundTitle={data?.data?.name}
-                            description={""}
-                        />
-                    </div>
-                     <div className='py-2 md:max-w-72 lg:max-w-[29vw] rounded-md grid grid-cols-1 gap-y-3'>
-                       <p className='text-[14px] font-semibold'>Prospectus</p>
-                       <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
-                       
-                          <div className='flex gap-2 items-center'>
-                            <div>
-                            <Image
-                              src={"/MyMandateLogo.png"}
-                               alt='image'
-                               width={16}
-                               height={16}
-                               priority 
-                               style={{
-                                width: 'auto',
-                                height: 'auto'
-                              }}
-                            />
-                            </div>
-                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px]  lg:whitespace-normal '>{docFilename}</p>
+                  <div className={`w-full   `}>
+                      <div className={` ${styles.container}  md:max-h-[70vh] max-w-[80%] `}>
+                          <div >
+                              <InfoCard
+                                  icon={MdOutlinePayments}
+                                  fundTitle={data?.data?.name}
+                                  description={""}
+                              />
                           </div>
-                         
-                           <Button 
-                            id='view-document'
-                           type='button' 
-                           variant={"default"} 
-                           className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[8.9vh]"}`}
-                            onClick={handleViewDocument}
-                            disabled={!docUrl || isVerifying}
-                            aria-label={`View ${docFilename}`}
-                            >
-                             {isVerifying ? 'Verifying...' : (docUrl ? 'View' : 'No Document')}
-                           </Button>
-                      
+                          <div className={`py-2 md:max-w-72   lg:max-w-[29vw] rounded-md grid grid-cols-1 gap-y-3`}>
+                              <div className={`${inter.className} flex md:flex-row gap-4`}>
+                                  <div
+                                      className={` rounded-full h-12 w-12 flex items-center justify-center  bg-[#d9eaff] text-meedlBlue text-sm font-semibold uppercase`}
+                                  >
+                                      {data?.data.bankPartner
+                                          ?.split(" ")
+                                          .map((word: string) => word[0])
+                                          .join("")}
+                                  </div>
 
-                       </div>
-                     </div>
-                     {docError && (
-                            <p className='text-red-500 text-xs mt-1 mb-3'>{docError}</p>
-                            )}
-                    <div className='py-2 md:max-w-72 lg:max-w-[29vw] rounded-md grid grid-cols-1 gap-y-3'>
-                       <p className='text-meedlBlack text-[14px] font-semibold'>Visibility</p>
-                       <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
-                       
-                          <div className='flex gap-2 items-center'>
-                            <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{data?.data?.investmentVehicleVisibility === "DEFAULT"? "Only-me"  : capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p>
+                                  <div className="flex flex-col gap-1">
+                                      <div id={'fundManagerText'} className="text-[#6A6B6A] text-sm font-normal">
+                                          Fund manager
+                                      </div>
+                                      <div id={'fundManagerName'} className={`${inter.className} text-sm font-semibold text-[#212221]`}>
+                                          {data?.data?.fundManager}
+                                      </div>
+                                  </div>
+                              </div>
+                              <p className='text-[14px] font-semibold'>Prospectus</p>
+                              <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
+
+                                  <div className='flex gap-2 items-center'>
+                                      <div>
+                                          <Image
+                                              src={"/MyMandateLogo.png"}
+                                              alt='image'
+                                              width={16}
+                                              height={16}
+                                              priority
+                                              style={{
+                                                  width: 'auto',
+                                                  height: 'auto'
+                                              }}
+                                          />
+                                      </div>
+                                      <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px]  lg:whitespace-normal '>{docFilename}</p>
+                                  </div>
+
+                                  <Button
+                                      id='view-document'
+                                      type='button'
+                                      variant={"default"}
+                                      className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[8.9vh]"}`}
+                                      onClick={handleViewDocument}
+                                      disabled={!docUrl || isVerifying}
+                                      aria-label={`View ${docFilename}`}
+                                  >
+                                      {isVerifying ? 'Verifying...' : (docUrl ? 'View' : 'No Document')}
+                                  </Button>
+
+
+                              </div>
                           </div>
-                         
-                           <Button 
-                            id='edit_visibility'
-                           type='button' 
-                           variant={"default"} 
-                           className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold'
-                            onClick={handleChangeVisibility}
-                            
-                            >
-                             Change
-                           </Button>
-                      
+                          {docError && (
+                              <p className='text-red-500 text-xs mt-1 mb-3'>{docError}</p>
+                          )}
+                          <div className='py-2 md:max-w-72 lg:max-w-[29vw] rounded-md grid grid-cols-1 gap-y-3'>
+                              <p className='text-meedlBlack text-[14px] font-semibold'>Visibility</p>
+                              <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
 
-                       </div>
-                     </div>
-                     <div className='py-2 md:max-w-72 lg:max-w-[29vw] rounded-md grid grid-cols-1 gap-y-3'>
-                       <p className='text-meedlBlack text-[14px] font-semibold'>Status</p>
-                       <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
-                       
-                          <div className='flex gap-2 items-center'>
-                            {/* <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p> */}
-                            <p
-                            className='text-[14px]   lg:max-w-[180px] xl:max-w-[250px] lg:whitespace-normal '
-                >{statusTypes } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(statusValue) }</span></span> </p>
+                                  <div className='flex gap-2 items-center'>
+                                      <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{data?.data?.investmentVehicleVisibility === "DEFAULT"? "Only-me"  : capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p>
+                                  </div>
+
+                                  <Button
+                                      id='edit_visibility'
+                                      type='button'
+                                      variant={"default"}
+                                      className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold'
+                                      onClick={handleChangeVisibility}
+
+                                  >
+                                      Change
+                                  </Button>
+
+
+                              </div>
                           </div>
-                         
-                           <Button 
-                             id='edit_status'
-                           type='button' 
-                           variant={"default"} 
-                           className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold '
-                            onClick={handleChangeStatus}
-                            
-                            >
-                             Change
-                           </Button>
-                      
+                          <div className='py-2 md:max-w-72 lg:max-w-[29vw] rounded-md grid grid-cols-1 gap-y-3'>
+                              <p className='text-meedlBlack text-[14px] font-semibold'>Status</p>
+                              <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
 
-                       </div>
-                     </div>
+                                  <div className='flex gap-2 items-center'>
+                                      {/* <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p> */}
+                                      <p
+                                          className='text-[14px]   lg:max-w-[180px] xl:max-w-[250px] lg:whitespace-normal '
+                                      >{statusTypes } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(statusValue) }</span></span> </p>
+                                  </div>
+
+                                  <Button
+                                      id='edit_status'
+                                      type='button'
+                                      variant={"default"}
+                                      className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold '
+                                      onClick={handleChangeStatus}
+
+                                  >
+                                      Change
+                                  </Button>
+
+
+                              </div>
+                          </div>
+                      </div>
                     </div>
                     
                     <div className='w-full'>

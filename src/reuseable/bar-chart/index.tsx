@@ -15,24 +15,12 @@ interface Props {
 const MeedlBarChart = ({componentId, dataKey,chartData, maxHeight, maxWidth}: Props) => {
 
 
-    // const chartData = [
-    //     { month: "Jan", desktop: 186, },
-    //     { month: "Feb", desktop: 305,  },
-    //     { month: "March", desktop: 237, },
-    //     { month: "April", desktop: 73, },
-    //     { month: "May", desktop: 209,  },
-    //     { month: "June", desktop: 214,  },
-    // ]
 
     const chartConfig = {
         desktop: {
             label: "Desktop",
             color: "#142854",
         },
-        // mobile: {
-        //     label: "Mobile",
-        //     color: "#60a5fa",
-        // },
     } satisfies ChartConfig
     return (
             <div id={componentId}
@@ -52,7 +40,6 @@ const MeedlBarChart = ({componentId, dataKey,chartData, maxHeight, maxWidth}: Pr
                         />
                         <ChartTooltip content={<ChartTooltipContent />} />
                         <Bar  dataKey={dataKey} fill="var(--color-desktop)" radius={0} />
-                        {/*<Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />*/}
                     </BarChart>
                 </ChartContainer>
             </div>
