@@ -172,7 +172,7 @@ function DataTable<T extends TableRowData>({
           <div>
             {searchEmptyState ?
                 <TableEmptyState
-                    icon={MagnifyingGlassIcon}
+                    icon={<MagnifyingGlassIcon/>}
                     name={sideBarTabName}
                     className={emptyStateStyle}
                     optionalFilterName={optionalFilterName}

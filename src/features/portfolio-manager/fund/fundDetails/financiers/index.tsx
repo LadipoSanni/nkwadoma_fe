@@ -141,7 +141,7 @@ function Financiers() {
              tableHeader={financierHeader}
              handleRowClick={handleRowClick}
              tableHeight={52}
-            icon={Book}
+            icon={<Book/>}
             sideBarTabName='financier'
             condition={true}
             staticHeader={"financier"}
