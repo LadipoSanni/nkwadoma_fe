@@ -32,7 +32,7 @@ export const notificationSlice = createSlice({
             state.setNotificationId = action.payload;
         },
         resetNotification: (state) => {
-            state.setNotification = "",
+            state.setNotification = "";
             state.setNotificationId = ""
         },
     }
