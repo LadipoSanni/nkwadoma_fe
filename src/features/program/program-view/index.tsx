@@ -421,11 +421,16 @@ const ProgramView = () => {
             {isLoading && pageNumber === 0  || isSearchFetching|| isFetching && pageNumber > 0 ? (
                 <SkeletonForGrid />
             ) : searchTerm && programView.length === 0 ? (
-                <div className={`flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40`}>
+                <div className={`grid justify-center items-center text-center min-h-[60vh] w-full`}>
                     <SearchEmptyState icon={MdSearch} name="Program" />
                 </div>
             ) : programView.length === 0 ? (
-                <TableEmptyState icon={Book} name="program" />
+                <TableEmptyState
+                    name={"program"}
+                    icon={<Book width={"2.5rem"} height={"2.5rem"}/>}
+                    condition={true}
+                />
+                // <TableEmptyState icon={Book} name="program" condition={true}/>
             ) : (
                 <div
                     id="programContent"
@@ -496,7 +501,7 @@ const ProgramView = () => {
                                 <Table
                                     tableData={programView.slice().reverse()}
                                     tableHeader={ProgramHeader}
-                                    staticHeader={"Programs"}
+                                    staticHeader={"program"}
                                     staticColunm={"name"}
                                     tableHeight={52}
                                     handleRowClick={handleRowClick}

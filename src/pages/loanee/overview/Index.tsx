@@ -20,14 +20,13 @@ const LoaneeOverview = () => {
             <BalanceCard cardData={loaneeCardData} />
             <TableEmptyState
                 name={'Repayment'}
-                icon={() => (
+                icon={
                     <Icon
-                        icon='iconoir:hand-cash'
-                        color={'#142854'}
-                        height={"40px"}
-                        width={"40px"}
+                    icon="iconoir:hand-cash"
+                    height="2.5rem"
+                    width="2.5rem"
                     />
-                )}
+                }
                 condition={true}
             />
         </main>
