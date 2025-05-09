@@ -45,31 +45,31 @@ export interface FinancierInInvestmentVehicle {
 
 }
 
-export interface CurrentMyInvestmentVehicleDetails {
-    name: string,
-    investmentVehicleType: string,
-    fundManager : string,
-    dateInvested: string,
-    amountInvested: string,
-    netAssetValue: string,
-    netAssetValueInPercent: string,
-    talentFunded: string,
-    percentageOfPortfolio: string,
-    startDate: string,
-    maturityDate: string,
-    incomeEarned: string,
-    incomeInterval: string,
-    designations: string,
-    operationStatus: string,
-    couponDistributionStatus: string,
-    vehicleClosureStatus: string,
-    investmentVehicleVisibility: string,
-    mandate: string,
-    interestRateOffered: string,
-    fundRaisingStatus: string,
-    deployingStatus: string,
-    id: string,
-}
+// export interface CurrentMyInvestmentVehicleDetails {
+//     name: string,
+//     investmentVehicleType: string,
+//     fundManager : string,
+//     dateInvested: string,
+//     amountInvested: string,
+//     netAssetValue: string,
+//     netAssetValueInPercent: string,
+//     talentFunded: string,
+//     percentageOfPortfolio: string,
+//     startDate: string,
+//     maturityDate: string,
+//     incomeEarned: string,
+//     incomeInterval: string,
+//     designations: string,
+//     operationStatus: string,
+//     couponDistributionStatus: string,
+//     vehicleClosureStatus: string,
+//     investmentVehicleVisibility: string,
+//     mandate: string,
+//     interestRateOffered: string,
+//     fundRaisingStatus: string,
+//     deployingStatus: string,
+//     id: string,
+// }
 
 export interface MyInvestmentVehicleDetails {
     name: string;
@@ -125,7 +125,7 @@ export interface cohortLoaneeResponse {
     userIdentity: []
 }
 
-export interface InvestedVehicleDetails {
+export interface CurrentMyInvestmentVehicleDetails {
     id: string,
     name: string,
     investmentVehicleType: string,

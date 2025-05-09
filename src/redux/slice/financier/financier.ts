@@ -1,12 +1,12 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import { InvestedVehicleDetails} from "@/types/Component.type";
+import { CurrentMyInvestmentVehicleDetails} from "@/types/Component.type";
 
 
 interface vehicleState {
     currentFinancierId: string;
     financierMode: string;
     financierType:  'INDIVIDUAL' | 'COOPERATE' | null;
-    currentMyInvestmentVehicleDetails: InvestedVehicleDetails | null;
+    currentMyInvestmentVehicleDetails: CurrentMyInvestmentVehicleDetails | null;
     activeAndInvitedFinancierId: string;
     financierInvestmentVehicleId: string;
     financierStatusTab: string;
@@ -38,7 +38,7 @@ export const financierSlice = createSlice({
         setFinancierType: (state, action: PayloadAction<'INDIVIDUAL' | 'COOPERATE'>) => {
             state.financierType = action.payload;
         },
-        setCurrentMyInvestmentVehicleDetails : (state, action: PayloadAction<InvestedVehicleDetails>) => {
+        setCurrentMyInvestmentVehicleDetails : (state, action: PayloadAction<CurrentMyInvestmentVehicleDetails>) => {
             state.currentMyInvestmentVehicleDetails = action.payload;
         },
         setActiveAndInvitedFinancierId: (state, action: PayloadAction<string>) => {

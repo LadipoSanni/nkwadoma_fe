@@ -8,7 +8,7 @@ import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/fi
 import {useFilterMyInvestmentQuery, useSearchMyInvestmentQuery} from '@/service/financier/api'
 import dynamic from "next/dynamic";
 import {
-     InvestedVehicleDetails,
+     CurrentMyInvestmentVehicleDetails,
 } from "@/types/Component.type";
 import Card from "@/pages/financier/my-investment/card";
 import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
@@ -61,15 +61,16 @@ const MyInvestment = () => {
     }, [isFiltered, filteredData, searchData, searchTerm])
 
 
-    // console.log('myInvestmentVehicles: ', myInvestmentVehicles?.length,'searchData: ', searchData?.data?.body?.length, 'filteredData: ', filteredData?.data?.body?.length)
 
 
-    const HandleCardDetails = (vehicleDetails: InvestedVehicleDetails ) => {
+    const HandleCardDetails = (vehicleDetails: CurrentMyInvestmentVehicleDetails ) => {
         store.dispatch(
             setCurrentMyInvestmentVehicleDetails(vehicleDetails)
         );
         router.push("/my-investment/details");
     };
+
+
 
 
 
@@ -147,7 +148,7 @@ const MyInvestment = () => {
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
 
-                    {myInvestmentVehicles?.map((vehicle: InvestedVehicleDetails, index: number) => {
+                    {myInvestmentVehicles?.map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
                         const backgroundColor =
                              vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
