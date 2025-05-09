@@ -3,15 +3,12 @@ import React,{useState,useEffect} from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
 import {inter} from '@/app/fonts'
 import { Button } from '@/components/ui/button';
-// import LoanProductTable from "@/reuseable/table/LoanProductTable";
-// import { investmentVehicleData } from '@/utils/cohort/trainee-details-mock-data/Index';
 import { formatAmount } from '@/utils/Format';
 import { Book } from "lucide-react";
 import Modal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import { useRouter } from 'next/navigation'
 import InviteFinanciers from '@/components/portfolio-manager/fund/financier/financiers-step';
-// import { financiers } from '@/utils/cohort/trainee-details-mock-data/Index';
 import {useAppSelector} from "@/redux/store";
 import { useSearchFinancierQuery,useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
 import Table from '@/reuseable/table/Table';
@@ -95,7 +92,6 @@ function Financiers() {
 
     const financierHeader = [
       { title: 'Financier', sortable: true, id: 'name', selector: (row:viewAllfinancier ) => row?.financierType === "INDIVIDUAL"? row.userIdentity?.firstName + " " + row.userIdentity?.lastName : row?.organizationName},
-      // { title: 'Type', sortable: true, id: 'type', selector: (row:viewAllfinancier) => <div className='w-full flex justify-center items-center '><div className={`${row.financierType === "INDIVIDUAL"? "text-[#68442E] bg-warning50 ": "text-[#142854] bg-[#EEF5FF]"} px-2 rounded-xl relative md:right-[12px]  `}>{capitalizeFirstLetters(row.financierType)}</div></div> },
       { title: <div className='relative md:left-4'>Type</div>, id: 'type', selector: (row:viewAllfinancier) => (
         <span className={`${row.financierType ===  "INDIVIDUAL" ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
     {capitalizeFirstLetters(row.financierType)}
@@ -139,7 +135,7 @@ function Financiers() {
              tableHeader={financierHeader}
              handleRowClick={handleRowClick}
              tableHeight={48}
-            icon={Book}
+            icon={<Book style={{height: '1.25rem', width: '1.25rem', color: '#66440A'}}/>}
             sideBarTabName='financier'
             condition={true}
             staticHeader={"financier"}
