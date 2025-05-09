@@ -8,7 +8,8 @@ import BackButton from '@/components/back-button';
 import { useRouter } from 'next/navigation';
 import { useViewNotificationDetailsQuery } from '@/service/notification/notification_query';
 import {store} from "@/redux/store";
-import { setCurrentFinancierId,setFinancierNotification,reset } from '@/redux/slice/financier/financier';
+import { setCurrentFinancierId} from '@/redux/slice/financier/financier';
+import { setNotification,resetNotification,setNotificationId } from '@/redux/slice/notification/notification';
 
 // interface NotificationDetailsPageProps{
 //     notification?: NotificationProps
@@ -26,7 +27,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   }
 
     useEffect(()=> {
-        store.dispatch(reset())
+        store.dispatch(resetNotification())
     })
 
 
@@ -35,7 +36,8 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   const handleRoute = () => {
      if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
         store.dispatch(setCurrentFinancierId(notification?.data?.contentId))
-        store.dispatch(setFinancierNotification("notification"))
+        store.dispatch(setNotificationId(notification?.data?.id))
+        store.dispatch(setNotification("notification"))
         router.push("/funds/financier-details")
      }
   }

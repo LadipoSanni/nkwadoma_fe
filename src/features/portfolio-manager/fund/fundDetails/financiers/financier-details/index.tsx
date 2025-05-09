@@ -16,6 +16,8 @@ import { formatAmount } from '@/utils/Format';
 const FinancierDetails = () => {
     const currentFinancierId = useAppSelector(state => (state.financier.currentFinancierId))
     const financierMode = useAppSelector(state => (state.financier.financierMode))
+    const notification = useAppSelector(state => (state?.notification?.setNotification))
+    const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
     const router = useRouter();
 
     const  {data, isLoading} = useViewFinancierDetailQuery({financierId:currentFinancierId},{skip : !currentFinancierId})
@@ -25,7 +27,10 @@ const FinancierDetails = () => {
     const navigateToViewAllFinancier = () => {
         if(financierMode === "platform"){
             router.push("/financier");
-        }else {
+        } else if (notification === "notification"){
+            router.push(`/notifications/notification/${notificationId}`);
+        }
+        else {
           router.push("/vehicle/financiers");
         }
     }
@@ -126,7 +131,7 @@ const FinancierDetails = () => {
              data-testid={'financierDetailsPage'}
              className={` w-full md:w-full h-full md:h-fit  grid gap-2 md:grid md:gap-8 px-4 py-2  md:px-8 md:py-4`}
         >
-            <BackButton handleClick={navigateToViewAllFinancier} iconBeforeLetters={true} text={"Back to financiers"}
+            <BackButton handleClick={navigateToViewAllFinancier} iconBeforeLetters={true} text={notification === "notification"? "Back to notification" : "Back to financier"}
                         id={"backButtonToViewAllFinancier"} textColor={'#142854'}/>
 
             <div
