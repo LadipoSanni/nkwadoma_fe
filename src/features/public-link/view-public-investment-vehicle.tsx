@@ -39,8 +39,7 @@ const ViewPublicInvestmentVehicle = () => {
     }, [data])
 
 
-    const status = data?.data?.fundRaisingStatus ? 'Fund raising': 'Deploying';
-        const statusValue = status === 'Deploying' ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus;
+
 
     const vehicleType = data?.data?.investmentVehicleType;
     const getFilenameFromUrl = (url: string) => {
@@ -120,6 +119,29 @@ const ViewPublicInvestmentVehicle = () => {
     const largeScreenFilename = getTruncatedFilename(docFilename || 'No Document', 35);
 
 
+    const recollectionStatus = data?.data?.recollectionStatus
+    const couponDistributionStatus = data?.data?.couponDistributionStatus
+    const deployingStatus =  data?.data?.deployingStatus
+    const fundRaisingStatus =  data?.data?.fundRaisingStatus
+    const maturity =  data?.data?.maturity
+    const status = recollectionStatus !== null
+        ? 'Recollection'
+        : couponDistributionStatus !== null
+            ? 'Coupon Distribution'
+            : deployingStatus !== null
+                ? 'Deploying'
+                : fundRaisingStatus !== null
+                    ? 'Fund Raising'
+                    : 'Maturity';
+    const statusValue = recollectionStatus !== null
+        ? recollectionStatus
+        : couponDistributionStatus !== null
+            ? couponDistributionStatus
+            : deployingStatus !== null
+                ? deployingStatus
+                : fundRaisingStatus !== null
+                    ? fundRaisingStatus
+                    : maturity;
 
     const id = data?.data?.id;
 
@@ -298,7 +320,6 @@ const ViewPublicInvestmentVehicle = () => {
                         <div className={`pt-3`}>
                             <Button type="button" id={`invest-button`} size="lg" variant="secondary"
                                 onClick={redirectToLogin}
-                                //     className={` w-full `}
                                 disabled={statusValue  === 'CLOSE'}
                                 className={`${inter.className} ${statusValue  === 'CLOSE'? " bg-[#D0D5DD]  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
                             >
