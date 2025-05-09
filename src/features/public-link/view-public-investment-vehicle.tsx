@@ -163,8 +163,8 @@ const ViewPublicInvestmentVehicle = () => {
                 (
                 <div id="minidetailsId" className="flex bg-[#F6F6F6]  items-center gap-2 rounded-lg px-2 py-1 w-fit">
                     <span id="fundrasingId" className="font-normal text-black text-sm flex items-center justify-center">{status}</span>
-                    <div id="statusDivId" className={`bg-meedlWhite ${statusValue === 'OPEN' ? 'border-[#B4E5C8]' : 'border-[#F2BCBA]'} p-1 border rounded-lg }`}>
-                        <p id="statusId" className={`text-sm ${statusValue === 'OPEN' ? 'text-[#0D9B48] bg-[#E7F7ED]' : 'text-red-600 bg-[#FCEEEE]'} font-medium px-1 py-1 rounded-lg lowercase `}>
+                    <div id="statusDivId" className={`bg-meedlWhite ${statusValue === 'CLOSE' ?  'border-[#F2BCBA]' : 'border-[#B4E5C8]' } p-1 border rounded-lg }`}>
+                        <p id="statusId" className={`text-sm ${statusValue === 'CLOSE' ? 'text-red-600 bg-[#FCEEEE]' : 'text-[#0D9B48] bg-[#E7F7ED]' } font-medium px-1 py-1 rounded-lg lowercase `}>
                             {statusValue ?.toLowerCase() || ""}</p>
                     </div>
                 </div>
@@ -320,8 +320,8 @@ const ViewPublicInvestmentVehicle = () => {
                         <div className={`pt-3`}>
                             <Button type="button" id={`invest-button`} size="lg" variant="secondary"
                                 onClick={redirectToLogin}
-                                disabled={statusValue  === 'CLOSE'}
-                                className={`${inter.className} ${statusValue  === 'CLOSE'? " bg-[#D0D5DD]  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
+                                // disabled={statusValue  === 'CLOSE'}
+                                className={`${inter.className} bg-meedlBlue text-meedlWhite  w-full `}
                             >
                                 Invest
                             </Button>

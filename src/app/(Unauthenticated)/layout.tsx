@@ -37,10 +37,10 @@ const Layout = ({children}: props) => {
                         >
                             <button
                                 id={`iteMarket`}
-                                className={` flex gap-2 text-meedlBlue `}
+                                className={` flex gap-2 t cursor-not-allowed  `}
                             >
-                                <MdAccountBalance id={'itemIcon'} className={` mt-auto mb-auto text-[]`} />
-                                <p id={'itemName'} className={` ${inter.className} text-[14px] `}>Marketplace</p>
+                                <MdAccountBalance id={'itemIcon'} className={` mt-auto mb-auto text-[#939CB0]`} />
+                                <p id={'itemName'} className={` ${inter.className} text-[14px] text-[#626F8C] `}>Marketplace</p>
 
                             </button>
 
