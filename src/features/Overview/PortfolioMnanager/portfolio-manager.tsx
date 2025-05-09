@@ -12,7 +12,6 @@ const PortfolioManager = () => {
 
     const router = useRouter();
     const {data, isFetching, isLoading } = useViewMeedlPortfolioQuery({})
-    console.log('data: ', data)
     const cardData1 = [
         {title: "Total investment vehicles", amount: `${data?.data?.totalNumberOfInvestmentVehicle ? data?.data?.totalNumberOfInvestmentVehicle?.toString() : '0'}`,},
         {title: "Commercial funds", amount: `${data?.data?.totalNumberOfCommercialFundsInvestmentVehicle ? data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
@@ -88,7 +87,7 @@ const PortfolioManager = () => {
                <div className={`  w-full md:w-full pb-4  `}>
                    <Barcharts/>
                </div>
-               <div className={` w-full grid md:flex pb-4 gap-6 `}>
+               <div className={` w-full grid sm:grid   xl:flex lg:flex md:flex  pb-4 gap-6 `}>
                    <PerformanceCard id={'ownership'}  isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={true} maxWidth={'50%'} title={'Net AUM return'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                    <PerformanceCard id={'netLoanPortfolioReturn'} isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={true} maxWidth={'50%'} title={'Net loan portfolio return'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                </div>

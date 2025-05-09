@@ -4,7 +4,7 @@ import {Providers} from "@/app/provider";
 import styles from "@/layout/meedl-layout/index.module.css";
 import Image from "next/image";
 import { MdAccountBalance } from "react-icons/md";
-import {inter} from "@/app/fonts";
+import {inter, inter600} from "@/app/fonts";
 import {useRouter} from "next/navigation";
 
 type props = {
@@ -37,10 +37,10 @@ const Layout = ({children}: props) => {
                         >
                             <button
                                 id={`iteMarket`}
-                                className={` flex gap-2 text-meedlBlue `}
+                                className={` flex gap-2 t cursor-not-allowed  `}
                             >
-                                <MdAccountBalance id={'itemIcon'} className={` mt-auto mb-auto text-[]`} />
-                                <p id={'itemName'} className={` ${inter.className} text-[14px] `}>Marketplace</p>
+                                <MdAccountBalance id={'itemIcon'} className={` mt-auto mb-auto text-[#939CB0]`} />
+                                <p id={'itemName'} className={` ${inter.className} text-[14px] text-[#626F8C] `}>Marketplace</p>
 
                             </button>
 
@@ -66,7 +66,7 @@ const Layout = ({children}: props) => {
                         <button
                             id={`topBatLoginComponent`}
                             onClick={() => {router.push('/auth/login')}}
-                            className={` w-fit h-fit py-2 rounded-md text-[14px] ${inter.className} px-4 border mt-auto mb-auto border-meedlBlue `}
+                            className={` w-fit h-fit py-2 rounded-md text-[14px] ${inter600.className} px-4 border mt-auto mb-auto border-meedlBlue `}
                         >
                             Login
                         </button>
