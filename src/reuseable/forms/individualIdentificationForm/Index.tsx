@@ -90,7 +90,7 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                 <Button
                     type="submit"
                     disabled={!isValid || isLoading}
-                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full ${!isValid ? 'bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'}`}
+                    className={`h-[2.8125rem] md:w-[9.3125rem] w-full ${!isValid ? 'bg-blue550 hover:bg-blue550' : 'bg-meedlBlue hover:bg-meedlBlue'}`}
                 >
                     {isLoading ? <Isloading color="white" height={24} width={24}/> : 'Save & continue'}
                 </Button>

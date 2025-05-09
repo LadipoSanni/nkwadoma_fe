@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import {persistor, RootState, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
@@ -30,9 +30,6 @@ const SideBar = () => {
     const [logout] = useLogoutMutation()
     const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role')  : "user role";
     const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
-
-
-
 
 
     const closeSideBar = () => {

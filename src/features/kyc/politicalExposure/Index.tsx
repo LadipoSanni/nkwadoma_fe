@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,7 +14,7 @@ import SuccessDialog from "@/reuseable/modals/SuccessDialog/Index";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { updateDeclaration } from "@/redux/slice/kyc/kycFormSlice";
 import { useCompleteKycMutation } from "@/service/financier/api";
-import { mapKycDataToApiRequest } from "@/utils/kycDataMapper";
+import { mapKycDataToApiRequest, mapCountryCodeToEnum } from "@/utils/kycDataMapper";
 import { useToast } from "@/hooks/use-toast";
 
 interface ApiError {
@@ -30,6 +30,14 @@ interface PoliticalExposureData {
     relationship?: string;
     country?: string;
 }
+
+const relationshipMap: Record<string, string> = {
+    father: "FATHER",
+    mother: "MOTHER",
+    brother: "BROTHER",
+    sister: "SISTER",
+    friend: "FRIEND",
+};
 
 const PoliticalExposure: React.FC = () => {
     const router = useRouter();
@@ -51,9 +59,10 @@ const PoliticalExposure: React.FC = () => {
 
     useEffect(() => {
         if (selectedCountry) {
+            const mappedCountry = mapCountryCodeToEnum(selectedCountry); // Map the country code to the full enum value
             setFormData(prev => ({
                 ...prev,
-                country: selectedCountry
+                country: mappedCountry
             }));
         }
     }, [selectedCountry]);
@@ -91,11 +100,12 @@ const PoliticalExposure: React.FC = () => {
 
         const dataToSubmit = {
             ...formData,
+            relationship: formData.relationship ? relationshipMap[formData.relationship] : undefined, // Map relationship to enum
             ...(formData.isPoliticallyExposedPerson === false && {
                 politicalPosition: undefined,
                 relationship: undefined,
-                country: undefined
-            })
+                country: undefined,
+            }),
         };
 
         dispatch(updateDeclaration(dataToSubmit));
@@ -122,7 +132,8 @@ const PoliticalExposure: React.FC = () => {
 
     const handleCountryChange = (value: string) => {
         setSelectedCountry(value);
-        setFormData(prev => ({ ...prev, country: value }));
+        const mappedCountry = mapCountryCodeToEnum(value); // Map the country code to the full enum value
+        setFormData(prev => ({ ...prev, country: mappedCountry }));
     };
 
     const pepOptions = [
@@ -297,3 +308,4 @@ const PoliticalExposure: React.FC = () => {
 };
 
 export default PoliticalExposure;
+

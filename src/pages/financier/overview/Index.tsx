@@ -82,7 +82,7 @@ const FinancierOverview = dynamic(
 
 const FinancierOverviewContent = () => {
     const router = useRouter();
-    const {data, isLoading, refetch} = useViewFinancierDashboardQuery({})
+    const { data, isLoading, refetch, isUninitialized } = useViewFinancierDashboardQuery({});
     const dispatch = useAppDispatch();
     const [showKycButton, setShowKycButton] = useState(false);
 
@@ -94,10 +94,12 @@ const FinancierOverviewContent = () => {
             if (referrer && referrer.includes('/kyc/political-exposure')) {
                 setIsFromKycCompletion(true);
                 setShowKycButton(false);
-                refetch();
+                if (!isUninitialized) {
+                    refetch();
+                }
             }
         }
-    }, [refetch]);
+    }, [refetch, isUninitialized]);
 
     useEffect(() => {
         if (data?.data?.financierType) {
@@ -110,7 +112,7 @@ const FinancierOverviewContent = () => {
                 const isAccredited = data?.data?.accreditationStatus === "VERIFIED";
                 setShowKycButton(!isAccredited);
 
-                if (!isAccredited) {
+                if (!isAccredited && !isUninitialized) {
                     const refetchTimer = setTimeout(() => {
                         refetch();
                     }, 2000);
@@ -121,7 +123,7 @@ const FinancierOverviewContent = () => {
 
             return () => clearTimeout(timer);
         }
-    }, [data, dispatch, isLoading, isFromKycCompletion, refetch]);
+    }, [data, dispatch, isLoading, isFromKycCompletion, refetch, isUninitialized]);
 
     const handleClick = () => {
         router.push('/kyc/identification')
@@ -154,3 +156,4 @@ const FinancierOverviewContent = () => {
 };
 
 export default FinancierOverview;
+
