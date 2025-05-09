@@ -32,6 +32,8 @@ const HandleCardDetails = (
         })
     );
     router.push('/marketplace/details');
+    store.dispatch(setCurrentNavbarItem('Marketplace'));
+
 };
 
 
