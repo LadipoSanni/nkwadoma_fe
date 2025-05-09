@@ -29,7 +29,6 @@ const Details = () => {
 
     const {data, isLoading,refetch} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
 
-    console.log('data: ', data)
 
     useEffect(() => {
          if(statusType === "changeStatus" || statusType === "changeVisibility"){
