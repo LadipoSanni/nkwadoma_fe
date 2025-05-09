@@ -253,17 +253,12 @@ const MyInvestmentDetailsContent = () => {
 
                         <div className={`${inter.className} flex md:flex-row gap-4`}>
                             <div
-                                className={` rounded-full h-12 w-12 flex items-center justify-center text-meedlBlue text-sm font-semibold uppercase`}
+                                className={` rounded-full h-12 w-12 flex items-center justify-center  bg-[#d9eaff] text-meedlBlue text-sm font-semibold uppercase`}
                             >
-                                    <Image
-                                        src={`/`}
-                                        alt="logo"
-                                        width={104}
-                                        height={29}
-                                        className="h-4 w-4 object-cover"
-                                        data-testid="circle-image"
-                                        loading="lazy"
-                                    />
+                                {currentInvestmentDetails?.bankPartner
+                                    ?.split(" ")
+                                    .map((word: string) => word[0])
+                                    .join("")}
                             </div>
 
                             <div className="flex flex-col gap-1">
@@ -284,7 +279,7 @@ const MyInvestmentDetailsContent = () => {
 
                                 <div className='flex gap-2 '>
                                     <Image
-                                        src={"/pdf.png"}
+                                        src={"/MyMandateLogo.png"}
                                         alt='image'
                                         width={16}
                                         height={16}
