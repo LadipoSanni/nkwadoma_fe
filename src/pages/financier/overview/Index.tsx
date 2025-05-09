@@ -7,17 +7,25 @@ import MyInvestments from "@/features/financier/summary/myInvestments/Index"
 import InvestmentMarketplace from '@/features/financier/summary/investmentMarketplace/Index'
 import {useRouter} from 'next/navigation';
 import styles from "./index.module.css"
-import { useViewFinancierDashboardQuery } from '@/service/financier/api';
+import {useViewFinancierDashboardQuery} from '@/service/financier/api';
 import {setFinancierType} from "@/redux/slice/financier/financier";
-import { useAppDispatch} from "@/redux/store";
+import {useAppDispatch} from "@/redux/store";
 import dynamic from "next/dynamic";
-import { NumericFormat } from 'react-number-format';
+import {NumericFormat} from 'react-number-format';
+
+interface InvestmentVehicle {
+    id: string;
+    name: string;
+    amount: number;
+    status: string;
+}
 
 interface FinancierDashboardData {
     data?: {
         totalNumberOfInvestment?: number;
         totalAmountInvested?: number;
         portfolioValue?: number;
+        investmentVehicles?: InvestmentVehicle[];
     };
 }
 
@@ -25,17 +33,17 @@ const getFinancialCardData = (data: FinancierDashboardData) => {
     const defaultData = [
         {
             title: "Number of investments",
-            amount: <NumericFormat value={0} displayType="text" thousandSeparator={true} />,
+            amount: <NumericFormat value={0} displayType="text" thousandSeparator={true}/>,
             linkText: "View"
         },
         {
             title: "Amount invested",
-            amount: <NumericFormat value={0} displayType="text" thousandSeparator={true} prefix="₦" />,
+            amount: <NumericFormat value={0} displayType="text" thousandSeparator={true} prefix="₦"/>,
             linkText: "View"
         },
         {
             title: "Portfolio value",
-            amount: <NumericFormat value={0} displayType="text" thousandSeparator={true} prefix="₦" />,
+            amount: <NumericFormat value={0} displayType="text" thousandSeparator={true} prefix="₦"/>,
             linkText: "View"
         }
     ];
@@ -82,7 +90,7 @@ const FinancierOverview = dynamic(
 
 const FinancierOverviewContent = () => {
     const router = useRouter();
-    const { data, isLoading, refetch, isUninitialized } = useViewFinancierDashboardQuery({});
+    const {data, isLoading, refetch, isUninitialized} = useViewFinancierDashboardQuery({});
     const dispatch = useAppDispatch();
     const [showKycButton, setShowKycButton] = useState(false);
 
@@ -112,9 +120,11 @@ const FinancierOverviewContent = () => {
                 const isAccredited = data?.data?.accreditationStatus === "VERIFIED";
                 setShowKycButton(!isAccredited);
 
-                if (!isAccredited && !isUninitialized) {
+                if (!isAccredited) {
                     const refetchTimer = setTimeout(() => {
-                        refetch();
+                        if (!isUninitialized) {
+                            refetch();
+                        }
                     }, 2000);
 
                     return () => clearTimeout(refetchTimer);
@@ -134,26 +144,29 @@ const FinancierOverviewContent = () => {
 
             {showKycButton ? (
                 <button
-                    onClick={()=> {handleClick()}}
+                    onClick={() => {
+                        handleClick()
+                    }}
                     className={`${inter500.className} h-16 w-full mt-[38px] md:p-5 py-4 px-3 flex gap-2 bg-warning150 border-[0.5px] border-warning650 rounded-[6px]`}>
                     <MdOutlineErrorOutline className={'h-[22px] w-[22px] text-warning650'}/>
-                    <p className={'cursor-pointer text-warning650 leading-[150%] text-[14px] md:text-[16px]'}>Click here to complete your KYC</p>
+                    <p className={'cursor-pointer text-warning650 leading-[150%] text-[14px] md:text-[16px]'}>Click here
+                        to complete your KYC</p>
                 </button>
             ) : (
                 <div></div>
             )}
             <section className={'mt-8'}>
-                <BalanceCard cardData={getFinancialCardData(data)} />
+                <BalanceCard cardData={getFinancialCardData(data)}
+                             hasInvestmentData={!!data?.data && (data?.data?.investmentVehicles?.length > 0)}/>
             </section>
             <div className={'mt-8'}>
-                <MyInvestments />
+                <MyInvestments/>
             </div>
             <div className={'mt-8'}>
-                <InvestmentMarketplace />
+                <InvestmentMarketplace/>
             </div>
         </main>
     );
 };
 
 export default FinancierOverview;
-

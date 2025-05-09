@@ -27,6 +27,8 @@ const MyInvestments = () => {
                 setCurrentMyInvestmentVehicleDetails(vehicle)
             );
             router.push("/my-investment/details");
+            store.dispatch(setCurrentNavbarItem('My Investment'));
+
         }
     };
 

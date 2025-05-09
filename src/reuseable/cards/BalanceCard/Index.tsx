@@ -1,6 +1,9 @@
 import React from "react";
 import {cabinetGrotesk, inter} from '@/app/fonts';
 import {Button} from "@/components/ui/button";
+import {useRouter} from 'next/navigation';
+import { store } from "@/redux/store";
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
 interface CardData {
     title: string;
@@ -10,9 +13,28 @@ interface CardData {
 
 interface BalanceCardProps {
     cardData: CardData[];
+    hasInvestmentData?: boolean;
 }
 
-const BalanceCard: React.FC<BalanceCardProps> = ({ cardData }) => {
+const BalanceCard: React.FC<BalanceCardProps> = ({ 
+    cardData,
+    hasInvestmentData = false 
+}) => {
+    const router = useRouter();
+
+    const handleClick = () => {
+        store.dispatch(setCurrentNavbarItem('My Investment'));
+        router.push('/my-investment');
+    };
+
+    const buttonStyles = hasInvestmentData
+        ? "bg-[#D9EAFF] shadow-none hover:bg-[#D9EAFF] w-auto px-4"
+        : "bg-grey50 shadow-none cursor-not-allowed hover:bg-grey50 w-auto px-4";
+
+    const textStyles = hasInvestmentData
+        ? "text-meedlBlue text-[14px] gap-2 flex font-normal leading-[150%] underline"
+        : "text-black300 text-[14px] gap-2 flex font-normal leading-[150%] underline";
+
     return (
         <div id={'balanceCard'}
              className={`${inter.className} flex overflow-x-auto md:grid md:overflow-visible 
@@ -33,9 +55,13 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ cardData }) => {
                         </div>
                         <div id={`balanceLinkBlock${index}`}
                              className="grid place-items-end items-center h-[4.54vh]">
-                            <Button className="bg-grey50 shadow-none cursor-not-allowed hover:bg-grey50 w-auto px-4">
+                            <Button 
+                                className={buttonStyles}
+                                onClick={hasInvestmentData ? handleClick : undefined}
+                                disabled={!hasInvestmentData}
+                            >
                                 <h2 id={`cardLinkText${index}`}
-                                    className="text-black300 text-[14px] gap-2 flex font-normal leading-[150%] underline">{card.linkText}</h2>
+                                    className={textStyles}>{card.linkText}</h2>
                             </Button>
                         </div>
                     </main>
