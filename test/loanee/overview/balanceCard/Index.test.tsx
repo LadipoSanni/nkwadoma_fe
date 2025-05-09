@@ -3,6 +3,12 @@ import {cleanup, render, screen} from '@testing-library/react';
 import BalanceCard from '@/reuseable/cards/BalanceCard/Index';
 import { Providers } from '@/app/provider';
 
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(() => ({
+        push: jest.fn(),
+    })),
+}));
+
 const loaneeCardData = [
     { title: "Wallet balance", amount: "₦0.00", linkText: "Go to wallet" },
     { title: "Loan balance", amount: "₦0.00", linkText: "Go to repayment" }
