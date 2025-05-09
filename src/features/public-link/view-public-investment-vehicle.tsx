@@ -151,7 +151,7 @@ const ViewPublicInvestmentVehicle = () => {
     ];
 
     return (
-        <>
+        <div>
             {isLoading || isFetching ? (<MarketDetailsSkeleton/>):
                 !details ? (
                         <div className=" grid content-center  h-full  py-6 px-3 w-full">
@@ -167,7 +167,7 @@ const ViewPublicInvestmentVehicle = () => {
                 >
                     <div
                         id="purpposeDiv"
-                        className={`${styles.container} w-full grid sm:w-4/5 md:w-2/5 md:h-[70vh] md:max-h-none `}
+                        className={`${styles.container} h-full w-full grid sm:w-4/5 md:w-3/5 xl:w-2/5 lg:w-3/5  md:h-[70vh] md:max-h-none `}
                     >
                             <div id="backgroundId" className={`w-full ${ vehicleType === 'COMMERCIAL'? 'bg-[#D9EAFF] md:bg-[#D9EAFF]' : 'bg-[#E6F2EA].,' }md:w-full rounded-md md:rounded-md `}>
                             <div id="type" data-testid="type" className="py-5 px-4 flex flex-col">
@@ -201,7 +201,7 @@ const ViewPublicInvestmentVehicle = () => {
                         </p>
                         <div className={`${inter.className} flex md:flex-row md:pt-0 pt-2 gap-4`}>
                             <div
-                                className={`} rounded-full h-12 w-12 flex items-center justify-center text-meedlBlue text-sm font-semibold uppercase`}
+                                className={`} rounded-full h-12 w-12 flex items-center bg-[#D9EAFF] justify-center text-meedlBlue text-sm font-semibold uppercase`}
                             >
                                 {data?.data.bankPartnerImage ? (
                                 <Image
@@ -310,7 +310,7 @@ const ViewPublicInvestmentVehicle = () => {
                 </div>
             </main>)
             }
-        </>
+        </div>
     );
 };
 
