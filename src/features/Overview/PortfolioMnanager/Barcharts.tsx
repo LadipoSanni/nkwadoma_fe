@@ -3,9 +3,9 @@ import BarChartWithDate from "@/reuseable/cards/BarChartWithDate";
 
 const Barcharts = () => {
     const initialDates = [
-        {month: "Jan", value: 1},
-        {month: "Feb", value: 1},
-        {month: "March", value: 1},
+        {month: "Jan", value: 0},
+        {month: "Feb", value: 0},
+        {month: "March", value: 0},
     ]
     // const [chartData, setChartData] = useState<{month: string, value: number}[]>(initialDates);
     const [currentLoanBookPortfolioGrowth, setCurrentLoanBookPortfolioGrowth] = useState(0);
@@ -16,24 +16,24 @@ const Barcharts = () => {
 
 
     const SecondChartData = [
-        { month: "Jan", value: 186, },
-        { month: "Feb", value: 505,  },
-        { month: "March", value: 237, },
-        { month: "April", value: 73, },
-        { month: "May", value: 209,  },
-        { month: "June", value: 214,  },
+        { month: "Jan", value: 0, },
+        { month: "Feb", value: 0,  },
+        { month: "March", value: 0, },
+        { month: "April", value: 0, },
+        { month: "May", value: 0,  },
+        { month: "June", value: 0,  },
     ]
 
     const thirdChartData = [
-        { month: "Jan", value: 186, },
-        { month: "Feb", value: 305,  },
-        { month: "March", value: 237, },
-        { month: "April", value: 73, },
-        { month: "May", value: 209,  },
-        { month: "June", value: 214,  },
-        { month: "july", value: 73, },
-        { month: "August", value: 209,  },
-        { month: "September", value: 214,  },
+        { month: "Jan", value: 0, },
+        { month: "Feb", value: 0,  },
+        { month: "March", value: 0, },
+        { month: "April", value: 0, },
+        { month: "May", value: 0,  },
+        { month: "June", value: 0,  },
+        { month: "july", value: 0, },
+        { month: "August", value: 0,  },
+        { month: "September", value: 0,  },
     ]
     const barChartTabContent = [
         '3 months',
@@ -75,20 +75,17 @@ const Barcharts = () => {
     }
     const LoanLifeSpan = [
         '2023',
-        '2024',
-        '2025'
+
     ]
     const AumLifeSpan = [
         '2023',
-        '2024',
-        '2025'
     ]
 
     return (
         <div className={` w-full md:w-full grid md:flex flex-col-2 md: gap-6 `}>
             <BarChartWithDate id={'AUMPortfolioGrowthRate'}
                               years={AumLifeSpan}
-                              currentYear={'2024'}
+                              currentYear={'2023'}
                               displayDates={barChartTabContent}
                               currentMonthDate={currentAumPortfolioGrowth}
                               cardTile={'AUM portfolio growth rate'}

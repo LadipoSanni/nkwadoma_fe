@@ -1,7 +1,7 @@
 import React from "react"
 import {cabinetGrotesk, inter} from "@/app/fonts";
 import Image, {StaticImageData} from 'next/image';
-import { InvestedVehicleDetails} from "@/types/Component.type";
+import { CurrentMyInvestmentVehicleDetails} from "@/types/Component.type";
 
 
 interface InvestmentCardProps {
@@ -11,8 +11,8 @@ interface InvestmentCardProps {
     investmentVehicleName: string;
     statusValue: string;
     percentage: number | string;
-    vehicleDetails: InvestedVehicleDetails;
-    HandleCardDetails: (vehicleDetails: InvestedVehicleDetails ) => void;
+    vehicleDetails: CurrentMyInvestmentVehicleDetails;
+    HandleCardDetails: (vehicleDetails: CurrentMyInvestmentVehicleDetails ) => void;
     statusClass: string;
     borderClass:string;
     // typeTextColor:string;
