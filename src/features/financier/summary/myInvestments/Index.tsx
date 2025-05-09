@@ -8,6 +8,7 @@ import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
 import { MyInvestmentVehicleDetails } from "@/types/Component.type";
 import { store } from "@/redux/store";
 import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/financier";
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
 const MyInvestments = () => {
     const router = useRouter();
@@ -16,6 +17,7 @@ const MyInvestments = () => {
 
     const handleRoute = () => {
         router.push('/my-investment')
+        store.dispatch(setCurrentNavbarItem('My Investment'));
     }
 
     const HandleCardDetails = (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => {

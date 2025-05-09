@@ -5,6 +5,7 @@ import InvestmentCard from '@/reuseable/cards/Investment-card/InvestmentCard';
 import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery} from '@/service/financier/marketplace';
 import {store} from '@/redux/store';
 import {setMarketInvestmentVehicleId} from '@/redux/slice/investors/MarketPlaceSlice';
+import {setCurrentNavbarItem} from '@/redux/slice/layout/adminLayout';
 import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
 import {MdOutlineAccountBalance} from 'react-icons/md';
 
@@ -46,6 +47,7 @@ const InvestmentMarketplace = () => {
 
     const handleRoute = () => {
         router.push('/marketplace');
+        store.dispatch(setCurrentNavbarItem('Marketplace'));
     };
 
     const getStatusColor = (status: string) => {

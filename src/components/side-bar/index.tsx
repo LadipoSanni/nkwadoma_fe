@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter, usePathname } from "next/navigation";
 import {persistor, RootState, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
@@ -24,7 +24,6 @@ import NavbarContainer from "@/reuseable/ui/Navbar";
 
 const SideBar = () => {
     const router = useRouter();
-    const pathname = usePathname();
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
@@ -32,13 +31,6 @@ const SideBar = () => {
     const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role')  : "user role";
     const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
 
-    useEffect(() => {
-        if (pathname === '/marketplace') {
-            store.dispatch(setCurrentNavbarItem('Marketplace'));
-        } else if (pathname === '/my-investment') {
-            store.dispatch(setCurrentNavbarItem('My Investment'));
-        }
-    }, [pathname]);
 
     const closeSideBar = () => {
         store.dispatch(setShowMobileSideBar(false))
