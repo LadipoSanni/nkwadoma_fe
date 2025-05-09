@@ -33,7 +33,7 @@ export const notificationSlice = createSlice({
         },
         resetNotification: (state) => {
             state.setNotification = "",
-            state.setNotificationId
+            state.setNotificationId = ""
         },
     }
 })
