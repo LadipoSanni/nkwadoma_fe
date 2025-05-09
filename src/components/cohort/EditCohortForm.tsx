@@ -192,7 +192,14 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
       >
         {({ values, errors, isValid, touched, setFieldValue }) => (
           <Form className={`${inter.className}`}>
-            <div className="grid grid-cols-1 gap-y-4">
+            <div className="grid grid-cols-1 gap-y-4  md:max-h-[55vh] max-h-[55vh] overflow-y-auto"
+             style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              scrollbarGutter: "stable both-edge"
+
+          }}
+            >
               <div className="">
                 <Label htmlFor="cohortName">Cohort name</Label>
                 <Field
@@ -322,7 +329,8 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
                   initialImageUrl={values.imageUrl}
                 />
               </div>
-              <div className="md:flex gap-4 justify-end mt-2 mb-4 md:mb-0">
+            </div>
+            <div className="md:flex gap-4 justify-end mt-2 mb-4 md:mb-0 ">
                 <Button
                   variant={"outline"}
                   type="reset"
@@ -364,7 +372,6 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
                   )}
                 </Button>
               </div>
-            </div>
             {
               <div
                 id="editCohortErrorFromBackend"

@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React,{useEffect} from 'react'
 import {inter} from "@/app/fonts"
 import { Button } from '@/components/ui/button'
 import { getInitials } from '@/utils/GlobalMethods';
@@ -7,7 +7,9 @@ import SkeletonforNotificationDetails from '@/reuseable/Skeleton-loading-state/S
 import BackButton from '@/components/back-button';
 import { useRouter } from 'next/navigation';
 import { useViewNotificationDetailsQuery } from '@/service/notification/notification_query';
-
+import {store} from "@/redux/store";
+import { setCurrentFinancierId} from '@/redux/slice/financier/financier';
+import { setNotification,resetNotification,setNotificationId } from '@/redux/slice/notification/notification';
 
 // interface NotificationDetailsPageProps{
 //     notification?: NotificationProps
@@ -24,7 +26,27 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     router.back()
   }
 
+    useEffect(()=> {
+        store.dispatch(resetNotification())
+    })
+
+
   const {data:notification,isLoading} = useViewNotificationDetailsQuery(notificationId,{skip: !notificationId})
+
+  const handleRoute = () => {
+     if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
+        store.dispatch(setCurrentFinancierId(notification?.data?.contentId))
+        store.dispatch(setNotificationId(notification?.data?.id))
+        store.dispatch(setNotification("notification"))
+        router.push("/funds/financier-details")
+     }
+  }
+
+   const buttonName = () => {
+    if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
+      return "financier"
+   }
+   }
 
 
   return (
@@ -72,16 +94,17 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                          </p>
                         </div>
                         <div className='mt-4 mb-4'>
-                         {notification?.data?.callToAction === true? (<p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>): ""}
+                         {notification?.data?.notificationFlag !== null? (<p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>): ""}
                          <p>If you have any question or further assistance, our customer service team is here to help you</p>
                         </div>
                          <div>
-                          {notification?.data?.callToAction === true?
+                          {notification?.data?.notificationFlag !== null?
                           <Button 
-                           // className='bg-[#142854] hover:bg-[#142854] h-[45px] text-[14px]'
-                            className='bg-[#F9F9F9] hover:bg-[#F9F9F9] text-grey100 h-[45px] text-[14px] cursor-none shadow-none'
+                           onClick={handleRoute}
+                           className='bg-[#142854] hover:bg-[#142854] h-[45px] text-[14px]'
+                            // className='bg-[#F9F9F9] hover:bg-[#F9F9F9] text-grey100 h-[45px] text-[14px] cursor-none shadow-none'
                            >
-                             View <span className='lowercase ml-1'> {notification?.data?.title}</span>
+                             View <span className='lowercase ml-1'> {buttonName()}</span>
                              
                            </Button>
                            : ""}

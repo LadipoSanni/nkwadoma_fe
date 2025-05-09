@@ -90,6 +90,7 @@ const CohortView = () => {
   const [organisationCohort,setOrganisationCohort] = useState<allCohortsProps[]>([])
   const [originalCohortData, setOriginalCohortData] = useState<allCohortsProps[]>([]);
   const [listOfPrograms, setListOfPrograms] = useState<viewAllProgramProps[]>([])
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [programId, setProgramId] = useState('');
   const [pendingProgramId, setPendingProgramId] = useState('');
@@ -101,7 +102,7 @@ const CohortView = () => {
 
    const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
    const { data: searchData } = useSearchCohortByOrganisationQuery(searchTerm, { skip:!searchTerm })
-   const { data: programDatas, isLoading } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
+   const { data: programDatas, isLoading } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { skip: !isCreateModalOpen, refetchOnMountOrArgChange: true, })
   const { data: cohortsByProgram, refetch } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
  
@@ -147,7 +148,7 @@ const CohortView = () => {
 
    const toggleDropdown = useCallback(() => {
     setIsDropdown((prev) => !prev);
-    
+    setIsCreateModalOpen((prev) => !prev)
   }, []);
 
 
@@ -347,7 +348,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
             </div>
              <div className='md:mt-0 mt-4'>
 
-                 <CreateCohort  triggerButtonStyle={`w-full`}/>
+                 <CreateCohort  triggerButtonStyle={`w-full`} onOpenChange={(open) => setIsCreateModalOpen(open)}/>
              </div>
           </div>
         </div>

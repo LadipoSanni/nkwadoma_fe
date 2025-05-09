@@ -38,6 +38,7 @@ import CustomQuillField from "../textArea/Custom-quill-field";
 
 interface createCohortProps {
   triggerButtonStyle: string;
+  onOpenChange?: (open: boolean) => void;
 }
 
 interface viewAllProgramProps {
@@ -52,7 +53,7 @@ interface ApiError {
   };
 }
 
-const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
+const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle,onOpenChange }) => {
   const [startDate, setDate] = useState<Date>();
   const [programId, setProgramId] = useState("");
   const [name, setName] = useState("");
@@ -223,7 +224,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
   };
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={(open) => setIsModalOpen(open)}>
+    <Dialog open={isModalOpen} onOpenChange={(open) => {setIsModalOpen(open); onOpenChange?.(open)}}>
       <DialogTrigger asChild>
         <Button
           id="createCohortButton"
@@ -235,11 +236,11 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
       </DialogTrigger>
       <DialogContent
         id="createCohortDialogContent"
-        className="max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-8 py-5 pl-5 pr-2"
+        className="max-w-[320px] md:max-w-[533px] [&>button]:hidden gap-8 py-5 pl-5 pr-2"
       >
         <DialogHeader id="createCohortDialogHeader">
           <DialogTitle
-            className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}
+            className={`${cabinetGrotesk.className} flex justify-start text-[28px] font-medium text-labelBlue leading-[120%]`}
           >
             Create cohort
           </DialogTitle>
@@ -262,8 +263,15 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
 
         <form
           id="cohortForm"
-          className={`grid gap-5 ${inter.className} pr-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`}
-          style={{ scrollbarGutter: "stable both-edge" }}
+          // className={`grid gap-5 ${inter.className} pr-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`}
+          // style={{ scrollbarGutter: "stable both-edge" }}
+          className='grid gap-5 grid-cols-1 gap-y-4 md:max-h-[57vh] max-h-[55vh] overflow-y-auto  pr-2'
+                    style={{
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none',
+                        scrollbarGutter: "stable both-edge"
+    
+                    }}
           onSubmit={handleSubmit}
         >
           {!isFormSubmitted ? (
