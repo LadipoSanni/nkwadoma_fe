@@ -180,7 +180,7 @@ const IndividualOwnershipForm: React.FC = () => {
     };
 
     return (
-        <div className="w-full h-[calc(100vh-300px)] overflow-y-auto pr-3">
+        <div className="w-full ">
             <form onSubmit={handleSubmit} className="space-y-6">
                 {sections.map((section) => (
                     <section
