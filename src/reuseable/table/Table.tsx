@@ -63,7 +63,7 @@ interface Props<T extends TableRowData> {
   kirkBabDropdownOption?: DropdownOption[];
   sideBarTabName?: string;
   emptyStateStyle?: string;
-  icon?: ElementType;
+  icon?: ElementType | React.ReactNode ;
   optionalFilterName?: string;
 //   optionalRowsPerPage?: number;
   tableCellStyle?: string;
