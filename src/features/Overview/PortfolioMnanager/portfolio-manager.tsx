@@ -12,7 +12,6 @@ const PortfolioManager = () => {
 
     const router = useRouter();
     const {data, isFetching, isLoading } = useViewMeedlPortfolioQuery({})
-    console.log('data: ', data)
     const cardData1 = [
         {title: "Total investment vehicles", amount: `${data?.data?.totalNumberOfInvestmentVehicle ? data?.data?.totalNumberOfInvestmentVehicle?.toString() : '0'}`,},
         {title: "Commercial funds", amount: `${data?.data?.totalNumberOfCommercialFundsInvestmentVehicle ? data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
