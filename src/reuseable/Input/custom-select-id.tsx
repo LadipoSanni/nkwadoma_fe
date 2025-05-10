@@ -40,7 +40,7 @@ type Props = {
   name?: string;
   placeholder?: string;
   triggerId?: string;
-  isItemDisabled: (item: SelectItemType) => boolean;
+  isItemDisabled?: (item: SelectItemType) => boolean;
   additionalContent?: ReactNode | ((props: { closeDropdown: () => void }) => ReactNode);
   selectItemCss?: string
   infinityScroll?: InfiniteScrollProps
@@ -155,7 +155,7 @@ function CustomSelectId({
         >
            <SelectGroup className='min-w-full w-max'>
         {selectContent.map((item) => {
-            const disabled =  isItemDisabled(item) ;
+            const disabled =  isItemDisabled ?  isItemDisabled(item) :false ;
             const selected = value === item.id;
 
           return (
@@ -185,7 +185,7 @@ function CustomSelectId({
        : (
         <SelectGroup className='min-w-full w-max'>
         {selectContent.map((item) => {
-            const disabled =  isItemDisabled(item) ;
+            const disabled =  isItemDisabled ? isItemDisabled(item) : false ;
             const selected = value === item.id;
             return (
               <SelectItem

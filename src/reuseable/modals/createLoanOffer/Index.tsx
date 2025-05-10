@@ -16,6 +16,7 @@ import {store} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation";
 import {unformatAmount} from "@/utils/Format";
+import CustomSelectId from "@/reuseable/Input/custom-select-id";
 
 interface CreateLoanOfferProps {
     onSubmit?: (data: { amountApproved: string, loanProduct: string }) => void;
@@ -25,7 +26,7 @@ interface CreateLoanOfferProps {
 }
 
 const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, setIsOpen, loanRequestId }) => {
-    const [selectedLoanProduct, setSelectedLoanProduct] = useState<string | null>(null);
+    const [selectedLoanProduct, setSelectedLoanProduct] = useState();
     const [isSelectOpen, setIsSelectOpen] = useState(false);
     const router = useRouter()
 
@@ -45,6 +46,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const empty : {id: string, name: string}[] = []
     loanProducts?.forEach((element: LoanProductType) => empty?.push({id: element.id, name: element.name}))
 
+    console.log('loan products:: ', loanProducts)
 
     const {toast} = useToast()
 
@@ -87,6 +89,10 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     };
 
     if (!isOpen) return null;
+
+    const handleOnSelectLoanProductModal = (value: any)=> {
+        console.log('value:: ', value)
+    }
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -142,15 +148,28 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                             />
                         </div>
                     </div>
-                    <ProgramSelect
-                        selectedProgram={selectedLoanProduct}
-                        setSelectedProgram={setSelectedLoanProduct}
-                        isSelectOpen={isSelectOpen}
-                        setIsSelectOpen={setIsSelectOpen}
-                        selectOptions={empty}
-                        setId={setSelectedLoanProductId}
-                        label={'Loan product'}
+                    {/*<ProgramSelect*/}
+                    {/*    selectedProgram={selectedLoanProduct}*/}
+                    {/*    setSelectedProgram={setSelectedLoanProduct}*/}
+                    {/*    isSelectOpen={isSelectOpen}*/}
+                    {/*    setIsSelectOpen={setIsSelectOpen}*/}
+                    {/*    selectOptions={empty}*/}
+                    {/*    setId={setSelectedLoanProductId}*/}
+                    {/*    label={'Loan product'}*/}
+                    {/*    placeholder={'Select loan product'}*/}
+                    {/*/>*/}
+                    <CustomSelectId
                         placeholder={'Select loan product'}
+                        selectContent={loanProducts}
+                        value={selectedLoanProductId}
+                        onChange={(value) => handleOnSelectLoanProductModal(value)}
+                        // isLoading={isloading}
+                        triggerId={`financier-select-${selectedLoanProductId}`}
+                        // infinityScroll={{
+                        //     hasMore: hasNextPage,
+                        //     loadMore: loadMore,
+                        //     loader: isFetching
+                        // }}
                     />
                     {!isFormValid && (
                         <div className="text-red-500 text-sm">{errorMessage}</div>
