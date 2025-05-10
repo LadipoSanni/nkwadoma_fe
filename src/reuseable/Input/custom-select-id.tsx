@@ -47,6 +47,7 @@ type Props = {
   isLoading?: boolean
   isFinancier?:(value: boolean) => void;
   button?: ReactNode | ((props: { closeDropdown: () => void }) => ReactNode);
+  displayName?: boolean;
 };
 
 function CustomSelectId({
@@ -64,7 +65,8 @@ function CustomSelectId({
   infinityScroll,
   isLoading,
   isFinancier,
-  button
+  button,
+   displayName,
 }: Props) {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -74,7 +76,7 @@ function CustomSelectId({
 
   const getDisplayValue = (id: string) => {
     const item = selectContent.find(item => String(item.id) === id);
-    return item?.organizationName || `${item?.userIdentity?.firstName} ${item?.userIdentity?.lastName}`;
+    return displayName ? item?.name : item?.organizationName || `${item?.userIdentity?.firstName} ${item?.userIdentity?.lastName}`;
   };
 
   return (
@@ -99,10 +101,7 @@ function CustomSelectId({
           placeholder={placeholder}
           id={id ? `select-${id}` : undefined}
         >
-          
-          {/* {value
-            ? selectContent.find((item) => String(item.id) === value)?.organizationName
-            : placeholder} */}
+
             {value ? getDisplayValue(value) : placeholder}
         </SelectValue>
         {isOpen ? (
@@ -170,7 +169,7 @@ function CustomSelectId({
                 disabled={disabled}
               >
                 <div className="flex items-center justify-end w-full whitespace-nowrap">
-                  <span className='w-full'>{item.organizationName? item.organizationName : item.userIdentity?.firstName + " " + item.userIdentity?.lastName }</span>
+                  <span className='w-full'>{displayName ? item?.name :item.organizationName? item.organizationName : item.userIdentity?.firstName + " " + item.userIdentity?.lastName }</span>
                   <div className='flex items-center justify-center absolute right-2 '>
                   {(disabled || selected) && (
                     <MdCheck className="h-4 w-4 text-[#BABABA] ml-2 " />
@@ -198,7 +197,7 @@ function CustomSelectId({
                 disabled={disabled}
               >
                 <div className="flex items-center justify-end w-full whitespace-nowrap">
-                  <span className='w-full'>{item.organizationName? item.organizationName : item.userIdentity?.firstName + " " + item.userIdentity?.lastName }</span>
+                  <span className='w-full'>{displayName ? item?.name :item.organizationName? item.organizationName : item.userIdentity?.firstName + " " + item.userIdentity?.lastName }</span>
                   <div className='flex items-center justify-center absolute right-2 '>
                   {(disabled || selected) && (
                     <MdCheck className="h-4 w-4 text-[#BABABA] ml-2 " />

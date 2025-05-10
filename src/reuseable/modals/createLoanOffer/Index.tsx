@@ -29,6 +29,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const [selectedLoanProduct, setSelectedLoanProduct] = useState();
     const [isSelectOpen, setIsSelectOpen] = useState(false);
     const router = useRouter()
+    const [hasNextPage, setNextPage] = useState(true);
 
     const [selectedLoanProductId, setSelectedLoanProductId] = useState("");
     const [isFormValid, setIsFormValid] = useState(false);
@@ -36,16 +37,23 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const [respondToLoanRequest, {isError, isLoading, error}] = useRespondToLoanRequestMutation(); // Use the new mutation
     const [amount , setAmount] = useState('');
     const isValid = amount.length > 0 && selectedLoanProduct !== null;
+    const [pageNumber,setPageNumber] = useState(0)
+    const [loanProducts, setLoanProducts] = useState()
+    // const [empty, setEmpty] = useState()
 
     const parameter = {
         pageSize: 10,
-        pageNumber: 0
+        pageNumber: pageNumber
     }
-    const {data  } = useViewAllLoanProductQuery(parameter)
-    const loanProducts =  data?.data?.body
+    const {data, isFetching  } = useViewAllLoanProductQuery(parameter)
+    // const loanProducts =  data?.data?.body
     const empty : {id: string, name: string}[] = []
-    loanProducts?.forEach((element: LoanProductType) => empty?.push({id: element.id, name: element.name}))
+    // loanProducts?.forEach((element: LoanProductType) => empty?.push({id: element.id, name: element.name}))
 
+    useEffect(()=> {
+        setLoanProducts(data?.data?.body)
+        // setEmpty()
+    }, [data])
     console.log('loan products:: ', loanProducts)
 
     const {toast} = useToast()
@@ -93,6 +101,12 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const handleOnSelectLoanProductModal = (value: any)=> {
         console.log('value:: ', value)
     }
+    const loadMore = () => {
+        if (!isFetching && hasNextPage) {
+            setPageNumber((prevPage) => prevPage + 1);
+        }
+    };
+
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -164,12 +178,13 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                         value={selectedLoanProductId}
                         onChange={(value) => handleOnSelectLoanProductModal(value)}
                         // isLoading={isloading}
+                        displayName={true}
                         triggerId={`financier-select-${selectedLoanProductId}`}
-                        // infinityScroll={{
-                        //     hasMore: hasNextPage,
-                        //     loadMore: loadMore,
-                        //     loader: isFetching
-                        // }}
+                        infinityScroll={{
+                            hasMore: hasNextPage,
+                            loadMore: loadMore,
+                            loader: isFetching
+                        }}
                     />
                     {!isFormValid && (
                         <div className="text-red-500 text-sm">{errorMessage}</div>
