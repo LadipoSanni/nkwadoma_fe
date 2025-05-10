@@ -1,4 +1,4 @@
-import React from'react'
+import React, { ReactNode } from'react'
 
 export  interface navbarRouterItemsProps {
     id: string,
@@ -196,3 +196,9 @@ export type cohortBreakDown = {
     loanBreakdownId: string
 
 }
+
+ export type InfiniteScrollProps = {
+  hasMore: boolean;
+  loadMore: () => void;
+  loader?: ReactNode;
+};

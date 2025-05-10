@@ -148,7 +148,7 @@ const CohortView = () => {
 
    const toggleDropdown = useCallback(() => {
     setIsDropdown((prev) => !prev);
-    setIsCreateModalOpen((prev) => !prev)
+    setIsCreateModalOpen(true)
   }, []);
 
 
@@ -348,7 +348,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
             </div>
              <div className='md:mt-0 mt-4'>
 
-                 <CreateCohort  triggerButtonStyle={`w-full`} onOpenChange={(open) => setIsCreateModalOpen(open)}/>
+                 <CreateCohort  triggerButtonStyle={`w-full`} />
              </div>
           </div>
         </div>

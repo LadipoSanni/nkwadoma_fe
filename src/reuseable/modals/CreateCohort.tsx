@@ -53,6 +53,8 @@ interface ApiError {
   };
 }
 
+
+
 const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle,onOpenChange }) => {
   const [startDate, setDate] = useState<Date>();
   const [programId, setProgramId] = useState("");
@@ -71,27 +73,46 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle,onOpenCh
   const [programView, setProgramView] = useState<viewAllProgramProps[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUrl, setUploadedUrl] = useState<string | null>(null);
-  const [page] = useState(0);
-  const size = 200;
+  const [pageNumber, setPageNumber] = useState(0);
+  const size = 10;
   const [error, setError] = useState("");
   const [descriptionError, setDescriptionError] = useState<string | null>(null);
   const [isItemListValid, setIsItemListValid] = useState(true);
   const [totalAmount, setTotalAmount] = useState(0);
   const [initialItemAmount, setInitialItemAmount] = useState("");
+  const [isProgram, setIsprogram] = useState(false)
+  const [hasNextPage, setNextPage] = useState(true);
   // const dispatch = useDispatch();
 
-  const { data } = useGetAllProgramsQuery(
-    { pageSize: size, pageNumber: page },
-    { refetchOnMountOrArgChange: true }
+  const { data,isLoading: programIsLoading,isFetching } = useGetAllProgramsQuery(
+    { pageSize: size, pageNumber: pageNumber },
+    { skip: !isProgram,refetchOnMountOrArgChange: true }
   );
   const [createCohort, { isLoading }] = useCreateCohortMutation();
 
   useEffect(() => {
     if (data && data?.data) {
       const programs = data?.data?.body;
-      setProgramView(programs);
+      // setProgramView(programs);
+       setProgramView((prev) => {
+        if(pageNumber === 0){
+          return data?.data?.body
+        }
+        const newPrograms = data?.data?.body.filter(
+          (newProgram: viewAllProgramProps) => !prev.some((prev) => prev.id  === newProgram.id)
+        );
+         return [...prev, ...newPrograms]
+       });
+       setNextPage(data?.data?.hasNextPage)
     }
-  }, [data]);
+  }, [data,pageNumber]);
+
+  const loadMore = () => {
+    if (!isFetching && hasNextPage) {
+        setPageNumber((prevPage) => prevPage + 1);
+    }
+};
+  
 
   const { toast } = useToast();
 
@@ -224,7 +245,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle,onOpenCh
   };
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={(open) => {setIsModalOpen(open); onOpenChange?.(open)}}>
+    <Dialog open={isModalOpen} onOpenChange={(open) => {setIsModalOpen(open);onOpenChange?.(open)}}>
       <DialogTrigger asChild>
         <Button
           id="createCohortButton"
@@ -289,7 +310,14 @@ const CreateCohort: React.FC<createCohortProps> = ({ triggerButtonStyle,onOpenCh
                     selectOptions={programView}
                     setId={setProgramId} 
                     label={"Program"} 
-                    placeholder={"Select program"}   
+                    placeholder={"Select program"}  
+                    isLoading={programIsLoading}
+                    onOpenChange={(open) => setIsprogram(open)}
+                    infinityScroll={{
+                      hasMore: hasNextPage,
+                      loadMore: loadMore,
+                      loader: isFetching
+                    }}
                        />
                 <DatePicker date={startDate} setDate={setDate} />
               </div>
