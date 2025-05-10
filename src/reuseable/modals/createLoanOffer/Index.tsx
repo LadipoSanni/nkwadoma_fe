@@ -25,7 +25,7 @@ interface CreateLoanOfferProps {
 }
 
 const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, setIsOpen, loanRequestId }) => {
-    const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
+    const [selectedLoanProduct, setSelectedLoanProduct] = useState<string | null>(null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
     const router = useRouter()
 
@@ -34,7 +34,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const [errorMessage, setErrorMessage] = useState("");
     const [respondToLoanRequest, {isError, isLoading, error}] = useRespondToLoanRequestMutation(); // Use the new mutation
     const [amount , setAmount] = useState('');
-    const isValid = amount.length > 0 && selectedProgram !== null;
+    const isValid = amount.length > 0 && selectedLoanProduct !== null;
 
     const parameter = {
         pageSize: 10,
@@ -50,7 +50,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (!selectedProgram) {
+        if (!selectedLoanProduct) {
             setIsFormValid(false);
             setErrorMessage("Please select a program.");
             return;
@@ -143,8 +143,8 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                         </div>
                     </div>
                     <ProgramSelect
-                        selectedProgram={selectedProgram}
-                        setSelectedProgram={setSelectedProgram}
+                        selectedProgram={selectedLoanProduct}
+                        setSelectedProgram={setSelectedLoanProduct}
                         isSelectOpen={isSelectOpen}
                         setIsSelectOpen={setIsSelectOpen}
                         selectOptions={empty}
