@@ -164,6 +164,31 @@ export interface CurrentMyInvestmentVehicleDetails {
 
 }
 
+export type LoanProduct = {
+    id: string,
+    name: string,
+    moratorium: string,
+    tenor: string,
+    interestRate: number,
+    termsAndCondition: string,
+    obligorLoanLimit: number,
+    loanProductSize: number,
+    totalAmountAvailable: number,
+    createdAt: string,
+    totalAmountEarned: number,
+    totalAmountDisbursed: number,
+    totalAmountRepaid: number,
+    mandate: string,
+    costOfFund: string,
+    sponsor: string,
+    minRepaymentAmount: number,
+    bankPartner: string,
+    disbursementTerms: string,
+    investmentVehicleId: string,
+    investmentVehicleName: string,
+    totalNumberOfLoanee: number
+}
+
 export type cohortBreakDown = {
     currency: string,
     itemAmount: string,

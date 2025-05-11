@@ -23,20 +23,20 @@ type InfiniteScrollProps = {
 
 type SelectItemType = {
   id: string ;
-  organizationName: string;
-  userIdentity: {
+  organizationName?: string;
+  userIdentity?: {
     firstName: string,
     lastName: string,
-
   }
+  name?: string;
 };
 
 type Props = {
   id?: string;
-  value?: string; 
+  value?: string;
   onChange: (value: string) => void; 
   className?: string;
-  selectContent: SelectItemType[]; 
+  selectContent: SelectItemType[] ;
   name?: string;
   placeholder?: string;
   triggerId?: string;
