@@ -24,6 +24,16 @@ interface CreateLoanOfferProps {
     loanRequestId: string;
 }
 
+
+interface selectedIdType {
+    id: string,
+    organizationName: string,
+    userIdentity: {
+        firstName: string,
+        lastName: string,
+    }
+}
+
 const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, setIsOpen, loanRequestId }) => {
     const router = useRouter()
     const [hasNextPage, setNextPage] = useState(true);
@@ -34,7 +44,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const [amount , setAmount] = useState('');
     const isValid = amount.length > 0 && selectedLoanProductId !== null;
     const [pageNumber,setPageNumber] = useState(0)
-    const [loanProducts, setLoanProducts] = useState<LoanProduct[]>()
+    const [loanProducts, setLoanProducts] = useState<selectedIdType[]>()
 
     const parameter = {
         pageSize: 10,
@@ -50,7 +60,9 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
             const newLoanProducts = data?.data?.body.filter(
                 (newLoanProducts: LoanProduct) => !prev?.some((prevloanProducts) => prevloanProducts.id === newLoanProducts.id)
             );
-            return [...prev, ...newLoanProducts]
+            if (prev) {
+                return [...prev, ...newLoanProducts]
+            }
         });
         setNextPage(data?.data?.hasNextPage)
     }, [data, pageNumber])
@@ -166,6 +178,8 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                     </div>
                     <CustomSelectId
                         placeholder={'Select loan product'}
+                        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-expect-error
                         selectContent={loanProducts}
                         value={selectedLoanProductId}
                         onChange={(value) => handleOnSelectLoanProductModal(value)}

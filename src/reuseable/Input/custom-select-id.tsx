@@ -36,7 +36,7 @@ type Props = {
   value?: string;
   onChange: (value: string) => void; 
   className?: string;
-  selectContent: SelectItemType[] ;
+  selectContent: SelectItemType[]  ;
   name?: string;
   placeholder?: string;
   triggerId?: string;
