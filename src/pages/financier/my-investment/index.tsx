@@ -15,7 +15,6 @@ import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skelet
 import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
-import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const MyInvestmentContent = dynamic(
@@ -34,38 +33,70 @@ const MyInvestment = () => {
 
     const filterProps = {
         investmentVehicleType: selectedValue?.toUpperCase(),
-        pageSize: '10',
-        pageNumber: '0'
+        pageSize: 10,
+        pageNumber: pageNumber
     }
-    const {data: filteredData, isLoading: isFilteredDataLoading, isFetching: isFetchingFilteredItems} = useFilterMyInvestmentQuery(filterProps)
-    const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(filteredData?.data?.body)
+
     const searchProps = {
         name: searchTerm,
         investmentType: selectedValue?.toUpperCase(),
-        pageSize: '10',
-        pageNumber: '0'
+        pageSize: 10,
+        pageNumber: pageNumber
     }
-
-    const {data: searchData, isLoading: isSearchItemLoading, isFetching: isFetchingSearchTerms} = useSearchMyInvestmentQuery(searchProps)
+    const {data: filteredData, isLoading: isFilteredDataLoading, isFetching: isFetchingFilteredItems} = useFilterMyInvestmentQuery(filterProps)
+    const {data: searchData, isLoading: isSearchItemLoading, isFetching: isFetchingSearchTerms} = useSearchMyInvestmentQuery(searchProps, {skip: !searchTerm})
+    const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(filteredData?.data?.body)
 
     useEffect(()=> {
         setMyInvestmentVehicles(filteredData?.data?.body)
-        if (searchTerm?.length !== 0){
-            setMyInvestmentVehicles([])
-            setMyInvestmentVehicles(searchData?.data?.body)
-        }
+        // if (searchTerm?.length !== 0){
+        //     setMyInvestmentVehicles([])
+        //     setMyInvestmentVehicles([])
+        // }
         if (searchTerm === '' && searchData?.data?.body){
             setMyInvestmentVehicles([])
-            setMyInvestmentVehicles(filteredData?.data?.body)
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            setMyInvestmentVehicles((prev)=> {
+                console.log('adding more cause why not ??')
+                if(pageNumber === 0) {
+                    console.log('on page one')
+                    return searchData?.data?.body
+                }
+                const newInvestmentVehicle = searchData?.data?.body.filter(
+                    (newFinancier: CurrentMyInvestmentVehicleDetails) => !prev.some((prevVehicle: CurrentMyInvestmentVehicleDetails) => prevVehicle.id === newFinancier.id)
+                );
+                console.log('prev:: ', prev)
+                console.log('newInvestmentVehicle:: ', newInvestmentVehicle)
+                console.log('expected total: ', [...prev, ...newInvestmentVehicle])
+                return [...prev, ...newInvestmentVehicle]
+            })
+            setNextPage(searchData?.data?.hasNextPage)
         }
         if (isFiltered && searchData?.data?.body?.length === 0 && filteredData?.data?.body !== 0){
             setMyInvestmentVehicles([])
-            setMyInvestmentVehicles(filteredData?.data?.body)
+            setMyInvestmentVehicles(
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                (prev)=> {
+                    if(pageNumber === 0) {
+                        return filteredData?.data?.body
+                    }
+                    const newInvestmentVehicle = filteredData?.data?.body.filter(
+                        (newFinancier: CurrentMyInvestmentVehicleDetails) => !prev.some((prevVehicle: CurrentMyInvestmentVehicleDetails) => prevVehicle.id === newFinancier.id)
+                    );
+                    return [...prev, ...newInvestmentVehicle]
+                }
+
+                // filteredData?.data?.body
+            )
+            setNextPage(filteredData?.data?.hasNextPage)
         }
-    }, [isFiltered, filteredData, searchData, searchTerm])
+    }, [isFiltered, filteredData, searchData, searchTerm,hasNextPage,pageNumber])
 
 
     const loadMore = () => {
+        console.log('load more ....')
         if (!isFetchingFilteredItems && hasNextPage) {
             setPageNumber((prevPage) => prevPage + 1);
         }
@@ -163,7 +194,7 @@ const MyInvestment = () => {
                     hasMore={hasNextPage}
                     loader={isFetchingFilteredItems ? <MarketPlaceInvestmentGrid /> : null}
                     //  scrollableTarget="select-content"
-                    // height="26.5vh"
+                    height="70vh"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
 
