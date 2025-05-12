@@ -339,22 +339,10 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                              </InfiniteScroll>
                           </div>)
                         }
-                        {/* <SelectGroup
-                          className=''
-                        >
-                          {listOfPrograms.map((value,index) => (
-                           <SelectItem key={value.id} id={`${value}-${index}`} value={value.name} className='hover:bg-blue-200'>
-                             {value.name}
-                           </SelectItem>
-                          ))}
-                        </SelectGroup> */}
-
                       </SelectContent>
 
                       </Select>
-                      {/* <div>
-                        {errors.selectProgram && touched.selectProgram && ( <div className='text-red-500'>{errors.selectProgram}</div>)}
-                      </div> */}
+                     
                       <div className='flex justify-between items-center pt-7'>
 
                         <Button
@@ -409,8 +397,6 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                     Create cohort
                 </Button>
 
-
-                 {/* <CreateCohort  triggerButtonStyle={`w-full`} /> */}
              </div>
           </div>
         </div>
