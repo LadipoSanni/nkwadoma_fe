@@ -14,14 +14,22 @@ import MarketDetailsSkeleton from "@/reuseable/Skeleton-loading-state/MarketDeta
 import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
 import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 import {insertSpaceCapitalized} from '@/utils/GlobalMethods';
+import { useAppSelector } from '@/redux/store';
 
 const MarketPlaceDetails = () => {
     const router = useRouter();
     const [isVerifying, setIsVerifying] = useState(false);
     const [docError, setDocError] = useState<string | null>(null);
+    const notification = useAppSelector(state => (state?.notification?.setNotification))
+    const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
 
     const handleBack = () => {
-        router.push("/marketplace");
+        if (notification === "notification"){
+            router.push(`/notifications/notification/${notificationId}`);
+        } else {
+            router.push("/marketplace");
+        }
+        
     };
 
     const {
@@ -218,7 +226,7 @@ const MarketPlaceDetails = () => {
                         id="createFundBackButton"
                         handleClick={handleBack}
                         iconBeforeLetters={true}
-                        text="Back to investment"
+                        text={notification === "notification"? "Back to notification" : "Back to investment"}
                         textColor=""
                     />
                 </div>

@@ -12,6 +12,7 @@ import {useGetMarketplaceInvestmentVehiclesByTypeAndStatusQuery, useSearchInvest
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import { clearAll } from "@/redux/slice/investors/MarketPlaceSlice";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
+import { resetNotification } from '@/redux/slice/notification/notification';
 
 interface InvestmentVehicle {
     id: string;
@@ -141,6 +142,10 @@ const MarketPlaceView = () => {
             setHasMore(data.data.hasNextPage);
         }
     }, [data, searchData, pageNumber, searchTerm, viewBy]);
+
+    useEffect(()=> {
+                  store.dispatch(resetNotification())
+              })
 
     const lastCardObserver = useCallback(
         (node: HTMLDivElement | null) => {
