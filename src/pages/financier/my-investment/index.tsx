@@ -15,6 +15,8 @@ import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skelet
 import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const MyInvestmentContent = dynamic(
     () => Promise.resolve(MyInvestment),
@@ -27,6 +29,8 @@ const MyInvestment = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
     const [isFiltered, setIsFiltered] = useState<boolean>(false)
+    const [hasNextPage, setNextPage] = useState(true);
+    const [pageNumber,setPageNumber] = useState(0)
 
     const filterProps = {
         investmentVehicleType: selectedValue?.toUpperCase(),
@@ -61,6 +65,11 @@ const MyInvestment = () => {
     }, [isFiltered, filteredData, searchData, searchTerm])
 
 
+    const loadMore = () => {
+        if (!isFetchingFilteredItems && hasNextPage) {
+            setPageNumber((prevPage) => prevPage + 1);
+        }
+    };
 
 
     const HandleCardDetails = (vehicleDetails: CurrentMyInvestmentVehicleDetails ) => {
@@ -99,11 +108,16 @@ const MyInvestment = () => {
         }
     }
 
-
+    // dataLength={myInvestmentVehicles.length}
+    // next={loadMore}
+    // hasMore={hasNextPage}
+    // loader={isFetchingFilteredItems ? <MarketPlaceInvestmentGrid /> : null}
 
 
     return (
-        <main id="marketplaceView" className="py-9 px-5 h ">
+        <main
+            id="marketplaceView"
+            className="py-9 px-5 h ">
             <div id="searchDiv" className="px-2 flex md:flex-row flex-col gap-3">
                 <SearchInput
                     id="ProgramSearchInput"
@@ -143,8 +157,13 @@ const MyInvestment = () => {
                         <SearchEmptyState icon={MdSearch} name="Investment" />
                 ):
                 (
-                <div
-                    id="card-segmentId"
+                <InfiniteScroll
+                    dataLength={myInvestmentVehicles.length}
+                    next={loadMore}
+                    hasMore={hasNextPage}
+                    loader={isFetchingFilteredItems ? <MarketPlaceInvestmentGrid /> : null}
+                    //  scrollableTarget="select-content"
+                    // height="26.5vh"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
 
@@ -207,7 +226,7 @@ const MyInvestment = () => {
                         />;
                     })}
 
-                </div>
+                </InfiniteScroll>
             )}
         </main>
     );
