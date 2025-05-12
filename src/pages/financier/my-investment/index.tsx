@@ -54,6 +54,7 @@ const MyInvestment = () => {
         //     setMyInvestmentVehicles([])
         // }
         if (searchTerm === '' && searchData?.data?.body){
+            console.log('inside useEffect')
             setMyInvestmentVehicles([])
             //eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
