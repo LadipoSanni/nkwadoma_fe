@@ -20,6 +20,7 @@ const MyInvestments = () => {
         store.dispatch(setCurrentNavbarItem('My Investment'));
     }
 
+
     const HandleCardDetails = (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => {
         const vehicle = investmentVehicles.find((investmentVehicle: CurrentMyInvestmentVehicleDetails) => investmentVehicle.id === id);
         if (vehicle) {
@@ -69,9 +70,9 @@ const MyInvestments = () => {
                     View all
                 </button>
             </div>
-            {investmentVehicles.length > 0 ? (
+            {investmentVehicles?.length > 0 ? (
                 <div id={'viewMyInvestmentVehicleOnOverview'} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-                    {investmentVehicles.slice(0, 4).map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
+                    {investmentVehicles?.slice(0, 4)?.map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
                         const backgroundColor =
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -94,17 +95,17 @@ const MyInvestments = () => {
                             } else if (vehicle?.couponDistributionStatus !== null && vehicle?.couponDistributionStatus !== undefined) {
                                 return {
                                     key: "CouponDistribution",
-                                    value: vehicle.couponDistributionStatus
+                                    value: vehicle?.couponDistributionStatus
                                 }
                             } else if ( vehicle?.recollectionStatus !== null && vehicle?.recollectionStatus !== undefined) {
                                 return {
                                     key: "Recollection",
-                                    value: vehicle.recollectionStatus
+                                    value: vehicle?.recollectionStatus
                                 }
                             } else if ( vehicle?.maturity !== null && vehicle?.maturity !== undefined) {
                                 return {
                                     key: "Maturity",
-                                    value: vehicle.maturity
+                                    value: vehicle?.maturity
                                 }
                             } else {
                                 return {
@@ -125,7 +126,7 @@ const MyInvestments = () => {
                                 ? vehicle.name.slice(0, 20) + "..."
                                 : vehicle.name;
 
-                        const typeTextColor = vehicle.investmentVehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
+                        const typeTextColor = vehicle?.investmentVehicleType === "COMMERCIAL" ? "text-[#142854]" : "text-[#045620]";
 
                         const cardProps = {
                             id: vehicle.id,
