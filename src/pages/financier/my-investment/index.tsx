@@ -100,6 +100,23 @@ const MyInvestment = () => {
         console.log('load more ....')
         if (!isFetchingFilteredItems && hasNextPage) {
             setPageNumber((prevPage) => prevPage + 1);
+
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            setMyInvestmentVehicles((prev)=> {
+                console.log('adding more cause why not ??')
+                if(pageNumber === 0) {
+                    console.log('on page one')
+                    return searchData?.data?.body
+                }
+                const newInvestmentVehicle = searchData?.data?.body.filter(
+                    (newFinancier: CurrentMyInvestmentVehicleDetails) => !prev.some((prevVehicle: CurrentMyInvestmentVehicleDetails) => prevVehicle.id === newFinancier.id)
+                );
+                console.log('prev:: ', prev)
+                console.log('newInvestmentVehicle:: ', newInvestmentVehicle)
+                console.log('expected total: ', [...prev, ...newInvestmentVehicle])
+                return [...prev, ...newInvestmentVehicle]
+            })
         }
     };
 
