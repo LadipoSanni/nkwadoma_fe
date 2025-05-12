@@ -22,10 +22,12 @@ import { useSearchCohortByOrganisationQuery } from '@/service/admin/cohort_query
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
 import {useToast} from "@/hooks/use-toast"
-
-
-
-
+import InfiniteScroll from "react-infinite-scroll-component";
+import SkeletonForLoanOrg from '@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations'
+import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate'
+import { Book } from 'lucide-react';
+import Modal from "@/reuseable/modals/TableModal";
+import {Cross2Icon} from "@radix-ui/react-icons";
 
 
 
@@ -95,17 +97,22 @@ const CohortView = () => {
   const [programId, setProgramId] = useState('');
   const [pendingProgramId, setPendingProgramId] = useState('');
   const [deleteProgram, setDeleteProgram] = useState("")
-   const [isLoadings] = useState(false);
-   const [page] = useState(0);
-   const size = 300;
+   const [hasNextPage, setNextPage] = useState(true);
+   const [pageNumber,setPageNumber] = useState(0);
+   const [isOpen, setIsOpen] = React.useState(false);
+   const [page] = useState(0)
+   const size = 10;
    const {toast} = useToast()
 
-   const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
+   const { data: cohortData,isLoading } = useGetAllCohortsByOrganisationQuery({ pageSize: 300, pageNumber:page }, { refetchOnMountOrArgChange: true, })  
    const { data: searchData } = useSearchCohortByOrganisationQuery(searchTerm, { skip:!searchTerm })
-   const { data: programDatas, isLoading } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { skip: !isCreateModalOpen, refetchOnMountOrArgChange: true, })
-  const { data: cohortsByProgram, refetch } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
+   const { data: programDatas, isLoading: programIsloading,isFetching  } = useGetAllProgramsQuery({ pageSize: size, pageNumber: pageNumber }, { skip: !isCreateModalOpen, refetchOnMountOrArgChange: true, })
+  const { data: cohortsByProgram, refetch, isLoading: cohortIsLoading } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: 300, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
  
+  const handleModalOpen = () => {
+    setIsOpen(!isOpen)
+}
 
   //  useEffect(const {toast} = useToast()() => { 
   //   if (cohortData && cohortData?.data) { 
@@ -128,9 +135,17 @@ const CohortView = () => {
 
    useEffect(() => {
     if( programDatas &&  programDatas?.data ) {
-        const programs =  programDatas?.data?.body
-        setListOfPrograms(programs)
-       
+        // const programs =  programDatas?.data?.body
+        setListOfPrograms((prev) => {
+          if(pageNumber === 0){
+            return  programDatas?.data?.body
+          }
+          const newPrograms = programDatas?.data?.body.filter(
+            (newProgram: viewAllProgramProps) => !prev.some((prev) => prev.id === newProgram.id)
+          );
+          return [...prev, ...newPrograms]
+        })
+        setNextPage(programDatas?.data?.hasNextPage)
     }
    
 },[programDatas])
@@ -141,7 +156,11 @@ const CohortView = () => {
       setOrganisationCohort(result);
      } }, [cohortsByProgram]);
 
-
+     const loadMore = () => {
+      if (!isFetching && hasNextPage) {
+          setPageNumber((prevPage) => prevPage + 1);
+      }
+  };
   // console.log("The organisationCohort: ",listOfPrograms)
   // console.log("The organisationCohort: ", organisationCohort);
 
@@ -286,8 +305,30 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                       <SelectContent
                       className='border-none border-[#FAFBFC] text-[#404653]  text-sm z-50'
                       >
-                        <SelectGroup
-                          className=''
+                        {
+                          programIsloading? (<div><SkeletonForLoanOrg/></div>) : listOfPrograms.length === 0? (<div>
+                           <div className='relative bottom-6'>
+                            <GeneralEmptyState
+                            icon={Book}
+                            iconSize='1.6rem'
+                            iconContainerClass='w-[30px] h-[30px]'
+                            message={<div className='relative bottom-2'>
+                              <p>No program available</p>
+                            </div>}
+                            />
+                          </div>
+                          </div>) : (
+                            <div >
+                             <InfiniteScroll
+                               dataLength={listOfPrograms.length}
+                               next={loadMore}
+                               hasMore={hasNextPage}
+                               loader = {isFetching ?  <SkeletonForLoanOrg /> : null}
+                               height="30.5vh"
+                               className="w-full"
+                             >
+                             <SelectGroup
+                          className='w-full'
                         >
                           {listOfPrograms.map((value,index) => (
                            <SelectItem key={value.id} id={`${value}-${index}`} value={value.name} className='hover:bg-blue-200'>
@@ -295,6 +336,18 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                            </SelectItem>
                           ))}
                         </SelectGroup>
+                             </InfiniteScroll>
+                          </div>)
+                        }
+                        {/* <SelectGroup
+                          className=''
+                        >
+                          {listOfPrograms.map((value,index) => (
+                           <SelectItem key={value.id} id={`${value}-${index}`} value={value.name} className='hover:bg-blue-200'>
+                             {value.name}
+                           </SelectItem>
+                          ))}
+                        </SelectGroup> */}
 
                       </SelectContent>
 
@@ -328,7 +381,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                         type='submit'
                         disabled={!isValid}
                         >
-                           {isLoadings ? (
+                           {cohortIsLoading ? (
                                                 <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">
                                                     <Icon id={'Icon'} icon={loadingLoop} width={24} height={24}/>
                                                 </div>
@@ -347,8 +400,17 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
              </div>
             </div>
              <div className='md:mt-0 mt-4'>
+               <Button variant={"secondary"}
+                  size={"lg"}
+                  className={`${inter.className} bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center w-full`}
+                  id='createProgramModal'
+                   onClick={handleModalOpen}
+                  >
+                    Create cohort
+                </Button>
 
-                 <CreateCohort  triggerButtonStyle={`w-full`} />
+
+                 {/* <CreateCohort  triggerButtonStyle={`w-full`} /> */}
              </div>
           </div>
         </div>
@@ -357,6 +419,19 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
         <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
          <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation} errorDeleted={deleteProgram} searchTerm={searchTerm}/>
          
+        </div>
+        <div>
+          <Modal
+            isOpen={isOpen}
+            closeOnOverlayClick={true}
+            closeModal={() => setIsOpen(false)}
+             width='36%'
+            headerTitle='Create cohort'
+             className='pb-1'
+              icon={Cross2Icon}
+          >
+            <CreateCohort setIsOpen={setIsOpen}/>
+          </Modal>
         </div>
     </div>
   )
