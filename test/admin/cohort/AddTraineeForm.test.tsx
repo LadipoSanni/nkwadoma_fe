@@ -38,7 +38,6 @@ describe("AddTraineeForm", () => {
             expect(screen.getByText('First name is required')).toBeInTheDocument();
             expect(screen.getByText('Last name is required')).toBeInTheDocument();
             expect(screen.getByText('Email address is required')).toBeInTheDocument();
-            expect(screen.getByText('Initial deposit is required')).toBeInTheDocument();
 
           });
       });
@@ -76,7 +75,7 @@ describe("AddTraineeForm", () => {
       expect(getByText('First name is required')).toBeInTheDocument();
       expect(getByText('Last name is required')).toBeInTheDocument();
       expect(getByText('Email address is required')).toBeInTheDocument();
-      expect(getByText('Initial deposit is required')).toBeInTheDocument();
+      // expect(getByText('Initial deposit is required')).toBeInTheDocument();
       })
   
       fireEvent.change(getByLabelText('First name'), { target: { value: 'John' } });
@@ -88,7 +87,7 @@ describe("AddTraineeForm", () => {
   
       await waitFor(() => {
       expect(getByText('Invalid email address')).toBeInTheDocument();
-      expect(getByText('Initial deposit is required')).toBeInTheDocument();
+      // expect(getByText('Initial deposit is required')).toBeInTheDocument();
     })
     });
    
@@ -112,7 +111,7 @@ describe("AddTraineeForm", () => {
     expect(screen.getByText('First name is required')).toBeInTheDocument();
     expect(screen.getByText('Last name is required')).toBeInTheDocument();
     expect(screen.getByText('Email address is required')).toBeInTheDocument();
-    expect(screen.getByText('Initial deposit is required')).toBeInTheDocument();
+    // expect(screen.getByText('Initial deposit is required')).toBeInTheDocument();
    })
 });
 

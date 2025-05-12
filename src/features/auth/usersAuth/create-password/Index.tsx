@@ -13,6 +13,7 @@ import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
+import {encryptText} from "@/utils/encrypt";
 
 
 const CreatePassword = () => {
@@ -23,6 +24,8 @@ const CreatePassword = () => {
     const searchParams = useSearchParams()
     const [disableButton, setDisableButton] = useState(false)
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
+    const encryptedPassword =  encryptText(password)
+
 
     const disable = !criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton;
 
@@ -100,7 +103,7 @@ const CreatePassword = () => {
 
         try {
             const response = await createPassword({token: token
-                , password: password}).unwrap()
+                , password: encryptedPassword}).unwrap()
             const access_token = response?.data?.accessToken
             const refreshToken = response?.data?.refreshToken
             const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
