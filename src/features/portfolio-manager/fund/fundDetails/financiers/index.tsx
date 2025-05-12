@@ -166,7 +166,7 @@ function Financiers() {
           >
            <InviteFinanciers 
            investmentId={investmentId} 
-           setIsOpen={() =>setIsOpen} 
+           setIsOpen={setIsOpen} 
            amountCommitedAndDesignationCondition={true}
            isDesignationRequired={true}
            />
