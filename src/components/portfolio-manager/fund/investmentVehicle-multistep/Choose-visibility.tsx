@@ -6,14 +6,11 @@ import { Formik, Form, FormikErrors } from "formik";
 import * as Yup from "yup";
 import { Label } from '@/components/ui/label';
 import Isloading from "@/reuseable/display/Isloading";
-import {store} from "@/redux/store";
-import {useAppSelector} from "@/redux/store";
+import {store,useAppSelector} from "@/redux/store";
 import {clearVisibilityType } from '@/redux/slice/multiselect/vehicle-multiselect';
 import { useRouter } from "next/navigation";
 import CustomSelectId from '@/reuseable/Input/custom-select-id';
-// import Multiselect from '@/reuseable/mult-select/multi-select';
-import { MdDeleteOutline } from 'react-icons/md';
-import { MdAdd } from 'react-icons/md';
+import { MdDeleteOutline, MdAdd } from 'react-icons/md';
 import style from "./multistep.module.css"
 import { MultiSelect } from '@/reuseable/mult-select';
 import Modal from '@/reuseable/modals/TableModal';
@@ -25,8 +22,7 @@ import {
     useFinancierInvestmentVehicleQuery
 } from '@/service/admin/fund_query';
 import { useToast } from "@/hooks/use-toast";
-import { clearDraftId,clearPublicVehicleUrl} from '@/redux/slice/vehicle/vehicle';
-import { clearSaveCreateInvestmentField,clearSaveInvestmentStatus } from '@/redux/slice/vehicle/vehicle'
+import { clearDraftId,clearPublicVehicleUrl, clearSaveCreateInvestmentField,clearSaveInvestmentStatus} from '@/redux/slice/vehicle/vehicle';
 import DisplayFinancierInvehicle
     from "@/components/portfolio-manager/fund/investmentVehicle-multistep/DisplayFinancierInvehicle";
 import {FinancierInInvestmentVehicle} from "@/types/Component.type";
