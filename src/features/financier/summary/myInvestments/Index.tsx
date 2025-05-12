@@ -5,7 +5,7 @@ import {useRouter} from 'next/navigation';
 import GeneralEmptyState from "@/reuseable/emptyStates/General-emptystate";
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
 import InvestmentCard from "@/reuseable/cards/Investment-card/InvestmentCard";
-import { MyInvestmentVehicleDetails } from "@/types/Component.type";
+import {CurrentMyInvestmentVehicleDetails} from "@/types/Component.type";
 import { store } from "@/redux/store";
 import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/financier";
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
@@ -13,7 +13,7 @@ import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 const MyInvestments = () => {
     const router = useRouter();
     const { data } = useViewFinancierDashboardQuery({});
-    const investmentVehicles = data?.data?.investmentVehicles || [];
+    const investmentVehicles = data?.data?.investmentVehicleResponses || [];
 
     const handleRoute = () => {
         router.push('/my-investment')
@@ -21,7 +21,7 @@ const MyInvestments = () => {
     }
 
     const HandleCardDetails = (id: string, investmentVehicleType: string, router: ReturnType<typeof useRouter>) => {
-        const vehicle = investmentVehicles.find((investmentVehicle: MyInvestmentVehicleDetails) => investmentVehicle.id === id);
+        const vehicle = investmentVehicles.find((investmentVehicle: CurrentMyInvestmentVehicleDetails) => investmentVehicle.id === id);
         if (vehicle) {
             store.dispatch(
                 setCurrentMyInvestmentVehicleDetails(vehicle)
@@ -61,17 +61,17 @@ const MyInvestments = () => {
                 >
                     My investments
                 </h5>
-                <p
+                <button
                     onClick={handleRoute}
                     className={`${investmentVehicles.length > 0 ? '' : 'hidden'} cursor-pointer text-meedlBlue underline text-[14px] font-normal leading-[150%]`}
                     id="myInvestmentsViewAll"
                 >
                     View all
-                </p>
+                </button>
             </div>
             {investmentVehicles.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-                    {investmentVehicles.slice(0, 4).map((vehicle: MyInvestmentVehicleDetails, index: number) => {
+                <div id={'viewMyInvestmentVehicleOnOverview'} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+                    {investmentVehicles.slice(0, 4).map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
                         const backgroundColor =
                             vehicle.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
@@ -81,30 +81,30 @@ const MyInvestments = () => {
                                 ? "/BlueCircles.svg"
                                 : "/GreenCircles.svg";
                         const statusKeyAndValue = () => {
-                            if (vehicle.vehicleOperation?.fundRaisingStatus !== null && vehicle.vehicleOperation?.fundRaisingStatus !== undefined) {
+                            if (vehicle?.fundRaisingStatus !== null && vehicle?.fundRaisingStatus !== undefined) {
                                 return {
                                     key: "Fundraising",
-                                    value: vehicle.vehicleOperation.fundRaisingStatus
+                                    value: vehicle.fundRaisingStatus
                                 }
-                            } else if (vehicle.vehicleOperation?.deployingStatus !== null && vehicle.vehicleOperation?.deployingStatus !== undefined) {
+                            } else if (vehicle?.deployingStatus !== null && vehicle?.deployingStatus !== undefined) {
                                 return {
                                     key: "Deploying",
-                                    value: vehicle.vehicleOperation?.deployingStatus
+                                    value: vehicle?.deployingStatus
                                 }
-                            } else if (vehicle.vehicleOperation?.couponDistributionStatus !== null && vehicle.vehicleOperation?.couponDistributionStatus !== undefined) {
+                            } else if (vehicle?.couponDistributionStatus !== null && vehicle?.couponDistributionStatus !== undefined) {
                                 return {
                                     key: "CouponDistribution",
-                                    value: vehicle.vehicleOperation.couponDistributionStatus
+                                    value: vehicle.couponDistributionStatus
                                 }
-                            } else if (typeof vehicle.vehicleClosureStatus === 'object' && vehicle.vehicleClosureStatus?.recollectionStatus !== null && vehicle.vehicleClosureStatus?.recollectionStatus !== undefined) {
+                            } else if ( vehicle?.recollectionStatus !== null && vehicle?.recollectionStatus !== undefined) {
                                 return {
                                     key: "Recollection",
-                                    value: vehicle.vehicleClosureStatus.recollectionStatus
+                                    value: vehicle.recollectionStatus
                                 }
-                            } else if (typeof vehicle.vehicleClosureStatus === 'object' && vehicle.vehicleClosureStatus?.maturity !== null && vehicle.vehicleClosureStatus?.maturity !== undefined) {
+                            } else if ( vehicle?.maturity !== null && vehicle?.maturity !== undefined) {
                                 return {
                                     key: "Maturity",
-                                    value: vehicle.vehicleClosureStatus.maturity
+                                    value: vehicle.maturity
                                 }
                             } else {
                                 return {
@@ -137,7 +137,7 @@ const MyInvestments = () => {
                             status: statusValue,
                             statuses: status,
                             borderClass,
-                            percentage: vehicle.interestRateOffered || 0,
+                            percentage: vehicle.rate || 0,
                             typeTextColor,
                             HandleCardDetails,
                             statusValue: "maturity"
