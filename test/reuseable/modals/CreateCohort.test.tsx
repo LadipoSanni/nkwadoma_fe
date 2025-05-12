@@ -14,7 +14,7 @@ describe('CreateCohort Component', () => {
     it('should render the Create Cohort button', () => {
         render(
             <Providers>
-                <CreateCohort triggerButtonStyle="test-style" />
+                <CreateCohort />
             </Providers>
 
     );
@@ -23,7 +23,7 @@ describe('CreateCohort Component', () => {
 
     it("opens the dialog and displays the Cohort Name input field", async () => {
         render( <Providers>
-            <CreateCohort triggerButtonStyle="test-style" />
+            <CreateCohort />
         </Providers>
         );
         const openDialogButton = screen.getByRole("button", { name: /Create cohort/i });
