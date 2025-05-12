@@ -72,7 +72,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
   // >([]);
   const [loanBreakdowns, setLoanBreakdowns] = useState<{ itemName: string; itemAmount: string; currency: string }[]>([ { itemName: "Tuition", itemAmount: "", currency: "NGN" }  ]);
   const [programView, setProgramView] = useState<viewAllProgramProps[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageUrl, setUploadedUrl] = useState<string | null>(null);
   const [pageNumber, setPageNumber] = useState(0);
   const size = 10;
