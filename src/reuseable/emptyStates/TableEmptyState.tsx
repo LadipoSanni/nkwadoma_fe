@@ -56,7 +56,7 @@ function TableEmptyState({name, icon: Icon, className, optionalFilterName, condi
                                     <span> To create a  <span className="lowercase">{name}</span>, click on the{' '}<span
                                         className="font-semibold lowercase"> create {name} </span> </span>) : ( '')}</p>)
                               : ( <p className="text-foundationBlue800 text-[14px]">{
-                                  notification ? <span>{message}</span> : ''
+                                  notification ? <span className='pr-3 md:pr-0'>{message}</span> : ''
                               }
                               </p>)}
                     </div>

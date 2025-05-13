@@ -150,8 +150,10 @@ useEffect(() => {
 
 
   const handleDropdownClick = async (id:string,row: rowData) => {
-    if(id === "1") {router.push('/cohort/cohort-details')
+    if(id === "1") {
       setItemSessionStorage("programsId", String(row.programId))
+      setItemSessionStorage("cohortId",String(row.id))
+      router.push('/cohort/cohort-details')
   }
     else if(id === "2") {
       setCohortId(String(row.id))

@@ -17,6 +17,7 @@ import { setCurrentFinancierId,setFinancierMode } from '@/redux/slice/financier/
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import  {MdSearch} from 'react-icons/md';
 import {store} from "@/redux/store";
+import { resetNotification } from '@/redux/slice/notification/notification';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -54,6 +55,11 @@ function Financiers() {
       pageSize: 10,
       investmentVehicleId: currentVehicleId
       }
+
+      useEffect(()=> {
+              store.dispatch(resetNotification())
+          })
+      
 
     const {data,isLoading} = useViewFinanciersByInvestmentmentVehicleQuery(param,{skip: !currentVehicleId})
     const {data:searchData} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10,investmentVehicleId: currentVehicleId},{skip: !searchTerm})
@@ -134,8 +140,8 @@ function Financiers() {
              tableData={financiers}
              tableHeader={financierHeader}
              handleRowClick={handleRowClick}
-             tableHeight={48}
-            icon={<Book style={{height: '1.25rem', width: '1.25rem', color: '#66440A'}}/>}
+             tableHeight={52}
+            icon={<Book/>}
             sideBarTabName='financier'
             condition={true}
             staticHeader={"financier"}

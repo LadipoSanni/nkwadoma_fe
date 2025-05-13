@@ -29,7 +29,6 @@ const Details = () => {
 
     const {data, isLoading,refetch} = useGetInvestmentVehicleDetailQuery({id: investmentId}, {skip: !investmentId});
 
-    console.log('data: ', data)
 
     useEffect(() => {
          if(statusType === "changeStatus" || statusType === "changeVisibility"){
@@ -171,7 +170,7 @@ const Details = () => {
                     className={`flex flex-col md:flex-row md:justify-between ${inter.className}`}
                 > 
                   <div className={`w-full   `}>
-                      <div className={` ${styles.container}  md:max-h-[70vh] max-w-[80%] `}>
+                      <div className={` ${styles.container}  md:max-h-[70vh] w-full  md:max-w-[80%] `}>
                           <div >
                               <InfoCard
                                   icon={MdOutlinePayments}

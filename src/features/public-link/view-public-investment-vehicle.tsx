@@ -39,8 +39,7 @@ const ViewPublicInvestmentVehicle = () => {
     }, [data])
 
 
-    const status = data?.data?.fundRaisingStatus ? 'Fund raising': 'Deploying';
-        const statusValue = status === 'Deploying' ? data?.data?.deployingStatus : data?.data?.fundRaisingStatus;
+
 
     const vehicleType = data?.data?.investmentVehicleType;
     const getFilenameFromUrl = (url: string) => {
@@ -120,6 +119,29 @@ const ViewPublicInvestmentVehicle = () => {
     const largeScreenFilename = getTruncatedFilename(docFilename || 'No Document', 35);
 
 
+    const recollectionStatus = data?.data?.recollectionStatus
+    const couponDistributionStatus = data?.data?.couponDistributionStatus
+    const deployingStatus =  data?.data?.deployingStatus
+    const fundRaisingStatus =  data?.data?.fundRaisingStatus
+    const maturity =  data?.data?.maturity
+    const status = recollectionStatus !== null
+        ? 'Recollection'
+        : couponDistributionStatus !== null
+            ? 'Coupon Distribution'
+            : deployingStatus !== null
+                ? 'Deploying'
+                : fundRaisingStatus !== null
+                    ? 'Fund Raising'
+                    : 'Maturity';
+    const statusValue = recollectionStatus !== null
+        ? recollectionStatus
+        : couponDistributionStatus !== null
+            ? couponDistributionStatus
+            : deployingStatus !== null
+                ? deployingStatus
+                : fundRaisingStatus !== null
+                    ? fundRaisingStatus
+                    : maturity;
 
     const id = data?.data?.id;
 
@@ -141,8 +163,8 @@ const ViewPublicInvestmentVehicle = () => {
                 (
                 <div id="minidetailsId" className="flex bg-[#F6F6F6]  items-center gap-2 rounded-lg px-2 py-1 w-fit">
                     <span id="fundrasingId" className="font-normal text-black text-sm flex items-center justify-center">{status}</span>
-                    <div id="statusDivId" className={`bg-meedlWhite ${statusValue === 'OPEN' ? 'border-[#B4E5C8]' : 'border-[#F2BCBA]'} p-1 border rounded-lg }`}>
-                        <p id="statusId" className={`text-sm ${statusValue === 'OPEN' ? 'text-[#0D9B48] bg-[#E7F7ED]' : 'text-red-600 bg-[#FCEEEE]'} font-medium px-1 py-1 rounded-lg lowercase `}>
+                    <div id="statusDivId" className={`bg-meedlWhite ${statusValue === 'CLOSE' ?  'border-[#F2BCBA]' : 'border-[#B4E5C8]' } p-1 border rounded-lg }`}>
+                        <p id="statusId" className={`text-sm ${statusValue === 'CLOSE' ? 'text-red-600 bg-[#FCEEEE]' : 'text-[#0D9B48] bg-[#E7F7ED]' } font-medium px-1 py-1 rounded-lg lowercase `}>
                             {statusValue ?.toLowerCase() || ""}</p>
                     </div>
                 </div>
@@ -151,7 +173,7 @@ const ViewPublicInvestmentVehicle = () => {
     ];
 
     return (
-        <>
+        <div>
             {isLoading || isFetching ? (<MarketDetailsSkeleton/>):
                 !details ? (
                         <div className=" grid content-center  h-full  py-6 px-3 w-full">
@@ -167,7 +189,7 @@ const ViewPublicInvestmentVehicle = () => {
                 >
                     <div
                         id="purpposeDiv"
-                        className={`${styles.container} w-full grid sm:w-4/5 md:w-2/5 md:h-[70vh] md:max-h-none `}
+                        className={`${styles.container} h-full w-full grid sm:w-4/5 md:w-3/5 xl:w-2/5 lg:w-3/5  md:h-[70vh] md:max-h-none `}
                     >
                             <div id="backgroundId" className={`w-full ${ vehicleType === 'COMMERCIAL'? 'bg-[#D9EAFF] md:bg-[#D9EAFF]' : 'bg-[#E6F2EA].,' }md:w-full rounded-md md:rounded-md `}>
                             <div id="type" data-testid="type" className="py-5 px-4 flex flex-col">
@@ -201,7 +223,7 @@ const ViewPublicInvestmentVehicle = () => {
                         </p>
                         <div className={`${inter.className} flex md:flex-row md:pt-0 pt-2 gap-4`}>
                             <div
-                                className={`} rounded-full h-12 w-12 flex items-center justify-center text-meedlBlue text-sm font-semibold uppercase`}
+                                className={`} rounded-full h-12 w-12 flex items-center bg-[#D9EAFF] justify-center text-meedlBlue text-sm font-semibold uppercase`}
                             >
                                 {data?.data.bankPartnerImage ? (
                                 <Image
@@ -298,9 +320,8 @@ const ViewPublicInvestmentVehicle = () => {
                         <div className={`pt-3`}>
                             <Button type="button" id={`invest-button`} size="lg" variant="secondary"
                                 onClick={redirectToLogin}
-                                //     className={` w-full `}
-                                disabled={statusValue  === 'CLOSE'}
-                                className={`${inter.className} ${statusValue  === 'CLOSE'? " bg-[#D0D5DD]  cursor-not-allowed" : "bg-meedlBlue text-meedlWhite"}  w-full `}
+                                // disabled={statusValue  === 'CLOSE'}
+                                className={`${inter.className} bg-meedlBlue text-meedlWhite  w-full `}
                             >
                                 Invest
                             </Button>
@@ -310,7 +331,7 @@ const ViewPublicInvestmentVehicle = () => {
                 </div>
             </main>)
             }
-        </>
+        </div>
     );
 };
 

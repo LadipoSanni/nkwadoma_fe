@@ -93,25 +93,23 @@ const ProgramView = () => {
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
     const [deleteProgram, setDeleteProgram] = useState("");
-    const size = 10;
+
+    // Conditional pageSize based on view
+    const pageSize = view === 'grid' ? 10 : 100;
 
     const { data, isLoading, isFetching } = useGetAllProgramsQuery(
-        {
-            pageSize: size,
-            pageNumber: pageNumber,
+        { pageSize,
+            pageNumber: view === 'grid' ? pageNumber : 0
         },
         { refetchOnMountOrArgChange: true }
     );
     const [deleteItem] = useDeleteProgramMutation();
-    const { data: searchResults, isFetching: isSearchFetching } = useSearchProgramQuery(
-        { searchTerm, pageSize: size, pageNumber },
-        { skip: !searchTerm }
-    );
+    const { data: searchResults, isFetching: isSearchFetching, error: searchError } = useSearchProgramQuery(searchTerm, { skip: !searchTerm});
     const { data: program, isLoading: loading, refetch } = useGetProgramByIdQuery(
         { id: programId },
         {
             skip: !programId,
-            refetchOnMountOrArgChange: true,
+            refetchOnMountOrArgChange: true
         }
     );
 
@@ -121,13 +119,13 @@ const ProgramView = () => {
         setPageNumber(0);
         setProgramView([]);
         setHasNextPage(true);
-    }, [searchTerm]);
+    }, [searchTerm, view]);
 
     useEffect(() => {
-        if (searchTerm && searchResults?.data?.body) {
-            const programs = searchResults.data.body as viewAllProgramProps[];
+        if (searchTerm && searchResults?.data) {
+            const programs = searchResults.data as viewAllProgramProps[];
             setProgramView((prev) => {
-                const newPrograms = pageNumber === 0 ? programs : [...prev, ...programs];
+                const newPrograms = pageNumber === 0 || view === 'list' ? programs : [...prev, ...programs];
                 const uniquePrograms = newPrograms.reduce<viewAllProgramProps[]>((acc, program) => {
                     if (!acc.some((p) => p.id === program.id)) {
                         acc.push(program);
@@ -136,11 +134,11 @@ const ProgramView = () => {
                 }, []);
                 return uniquePrograms;
             });
-            setHasNextPage(searchResults.data.hasNextPage);
+            setHasNextPage(view === 'grid' ? searchResults.data.hasNextPage : false);
         } else if (!searchTerm && data?.data?.body) {
             const programs = data.data.body as viewAllProgramProps[];
             setProgramView((prev) => {
-                const newPrograms = pageNumber === 0 ? programs : [...prev, ...programs];
+                const newPrograms = pageNumber === 0 || view === 'list' ? programs : [...prev, ...programs];
                 const uniquePrograms = newPrograms.reduce<viewAllProgramProps[]>((acc, program) => {
                     if (!acc.some((p) => p.id === program.id)) {
                         acc.push(program);
@@ -149,19 +147,25 @@ const ProgramView = () => {
                 }, []);
                 return uniquePrograms;
             });
-            setHasNextPage(data.data.hasNextPage);
+            setHasNextPage(view === 'grid' ? data.data.hasNextPage : false);
         }
-    }, [searchTerm, searchResults, data, pageNumber]);
+        if (searchError) {
+            toast({
+                description: "Failed to fetch search results",
+                status: "error",
+            });
+        }
+    }, [searchTerm, searchResults, data, pageNumber, view, searchError, toast]);
 
     const lastCardObserver = useCallback(
         (node: HTMLDivElement | null) => {
-            if (isLoading || isFetching || isSearchFetching) return;
+            if (isLoading || isFetching || isSearchFetching || !hasNextPage || view !== 'grid') return;
 
             if (observer.current) observer.current.disconnect();
 
             observer.current = new IntersectionObserver(
                 (entries) => {
-                    if (entries[0].isIntersecting && hasNextPage) {
+                    if (entries[0].isIntersecting) {
                         setPageNumber((prevPage) => prevPage + 1);
                     }
                 },
@@ -172,8 +176,14 @@ const ProgramView = () => {
 
             if (node) observer.current.observe(node);
         },
-        [isLoading, isFetching, isSearchFetching, hasNextPage]
+        [isLoading, isFetching, isSearchFetching, hasNextPage, pageNumber, view]
     );
+
+    useEffect(() => {
+        return () => {
+            if (observer.current) observer.current.disconnect();
+        };
+    }, []);
 
     const handleRowClick = (row: TableRowData) => {
         store.dispatch(setCurrentProgramId(String(row?.id)))
@@ -225,7 +235,7 @@ const ProgramView = () => {
             selector: (row: TableRowData) => formatAmount(row.totalAmountDisbursed)
         },
         {
-            title: 'Amount repaired',
+            title: 'Amount repaid',
             sortable: true,
             id: 'totalAmountRepaid',
             selector: (row: TableRowData) => formatAmount(row.totalAmountRepaid)
@@ -418,9 +428,9 @@ const ProgramView = () => {
                     </TableModal>
                 </div>
             </section>
-            {isLoading && pageNumber === 0  || isSearchFetching|| isFetching && pageNumber > 0 ? (
+            {isLoading && pageNumber === 0 || isSearchFetching ? (
                 <SkeletonForGrid />
-            ) : searchTerm && programView.length === 0 ? (
+            ) : searchTerm && programView.length === 0 && !isSearchFetching ? (
                 <div className={`grid justify-center items-center text-center min-h-[60vh] w-full`}>
                     <SearchEmptyState icon={MdSearch} name="Program" />
                 </div>
@@ -441,7 +451,7 @@ const ProgramView = () => {
                             id={"programGrid"}
                             className="grid grid-cols-1 pr-2 md:grid-cols-3 w-full h-[66vh] sm:grid-cols-1 lg:grid-cols-3 gap-y-6 gap-x-4 overflow-y-auto overflow-x-hidden"
                         >
-                            {programView.slice().reverse().map((program, index) => {
+                            {programView.map((program, index) => {
                                 const tagButtonData = [
                                     {
                                         tagIcon: MdPersonOutline,
@@ -485,21 +495,19 @@ const ProgramView = () => {
                                 );
                             })}
                             {
-                            //     isFetching && pageNumber > 0 && (
-                            //     <SkeletonForGrid/>
-                            //     // <div className="col-span-full text-center py-4">Loading more...</div>
-                            // )
+                                isFetching && pageNumber > 0 && (
+                                // <SkeletonForGrid/>
+                                <div className="col-span-full text-center py-4">Loading more...</div>
+                            )
                             }
                         </div>
                     ) : (
                         <div id="programListView" className={"grid -6"} style={{ height: "62vh" }}>
-                            {searchTerm && programView.length === 0 ? (
-                                <div>
-                                    <SearchEmptyState icon={MdSearch} name="Program" />
-                                </div>
+                            {searchTerm && programView.length === 0 && !isSearchFetching ? (
+                                <SearchEmptyState icon={MdSearch} name="Program" />
                             ) : (
                                 <Table
-                                    tableData={programView.slice().reverse()}
+                                    tableData={programView}
                                     tableHeader={ProgramHeader}
                                     staticHeader={"program"}
                                     staticColunm={"name"}

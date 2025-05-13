@@ -148,7 +148,13 @@ function CreateProgram({setIsOpen}:Props) {
             ({errors, isValid, touched,setFieldValue,values}) => (
               <Form className={`${inter.className}`}>
                 <div
-                className='grid grid-cols-1 gap-y-4'
+                // className='grid grid-cols-1 gap-y-4'
+                className='grid grid-cols-1 gap-y-4 md:max-h-[56.5vh] overflow-y-auto'
+                style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
+
+                }}
                 >
                   <div>
                   <Label htmlFor="programName">Program name</Label>
