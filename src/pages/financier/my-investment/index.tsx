@@ -1,5 +1,5 @@
 "use client";
-import React, {  useState, useEffect } from "react";
+import React, {useState, useEffect, useCallback, useRef} from "react";
 import { store } from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
@@ -15,7 +15,7 @@ import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skelet
 import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
-import InfiniteScroll from "react-infinite-scroll-component";
+
 
 const MyInvestmentContent = dynamic(
     () => Promise.resolve(MyInvestment),
@@ -28,8 +28,8 @@ const MyInvestment = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
     const [isFiltered, setIsFiltered] = useState<boolean>(false)
-    const [hasNextPage, setNextPage] = useState(true);
     const [pageNumber,setPageNumber] = useState(0)
+    const [hasMore, setHasMore] = useState(true);
 
     const filterProps = {
         investmentVehicleType: selectedValue?.toUpperCase(),
@@ -45,80 +45,39 @@ const MyInvestment = () => {
     }
     const {data: filteredData, isLoading: isFilteredDataLoading, isFetching: isFetchingFilteredItems} = useFilterMyInvestmentQuery(filterProps)
     const {data: searchData, isLoading: isSearchItemLoading, isFetching: isFetchingSearchTerms} = useSearchMyInvestmentQuery(searchProps, {skip: !searchTerm})
-    const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(filteredData?.data?.body)
+    const [myInvestmentVehicles, setMyInvestmentVehicles] = useState<CurrentMyInvestmentVehicleDetails[]>([])
 
-    useEffect(()=> {
-        setMyInvestmentVehicles(filteredData?.data?.body)
-        // if (searchTerm?.length !== 0){
-        //     setMyInvestmentVehicles([])
-        //     setMyInvestmentVehicles([])
-        // }
-        if (searchTerm === '' && searchData?.data?.body){
-            console.log('inside useEffect')
-            setMyInvestmentVehicles([])
-            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setMyInvestmentVehicles((prev)=> {
-                console.log('adding more cause why not ??')
-                if(pageNumber === 0) {
-                    console.log('on page one')
-                    return searchData?.data?.body
-                }
-                const newInvestmentVehicle = searchData?.data?.body.filter(
-                    (newFinancier: CurrentMyInvestmentVehicleDetails) => !prev.some((prevVehicle: CurrentMyInvestmentVehicleDetails) => prevVehicle.id === newFinancier.id)
-                );
-                console.log('prev:: ', prev)
-                console.log('newInvestmentVehicle:: ', newInvestmentVehicle)
-                console.log('expected total: ', [...prev, ...newInvestmentVehicle])
-                return [...prev, ...newInvestmentVehicle]
+    const isLoading = isFilteredDataLoading || isSearchItemLoading ;
+    const isFetching = isFetchingFilteredItems || isFetchingSearchTerms;
+    const observer = useRef<IntersectionObserver | null>(null);
+
+    useEffect(() => {
+        if(searchTerm && searchData?.data?.body){
+            setMyInvestmentVehicles((prev) => {
+                return  pageNumber === 0 ? searchData?.data.body : [...prev, searchData?.data?.body];
             })
-            setNextPage(searchData?.data?.hasNextPage)
-        }
-        if (isFiltered && searchData?.data?.body?.length === 0 && filteredData?.data?.body !== 0){
-            setMyInvestmentVehicles([])
-            setMyInvestmentVehicles(
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                (prev)=> {
-                    if(pageNumber === 0) {
-                        return filteredData?.data?.body
+            setHasMore(searchData?.data?.hasNextPage);
+        }else if(isFiltered && filteredData?.data?.body ){
+            console.log('its filtered ', filteredData?.data?.body)
+                setMyInvestmentVehicles(
+                    (prev) => {
+                        return  pageNumber === 0 ? filteredData?.body?.data : [...prev, filteredData?.body?.data]
+
                     }
-                    const newInvestmentVehicle = filteredData?.data?.body.filter(
-                        (newFinancier: CurrentMyInvestmentVehicleDetails) => !prev.some((prevVehicle: CurrentMyInvestmentVehicleDetails) => prevVehicle.id === newFinancier.id)
-                    );
-                    return [...prev, ...newInvestmentVehicle]
-                }
+                )
+            setHasMore(searchData?.data?.hasNextPage);
 
-                // filteredData?.data?.body
-            )
-            setNextPage(filteredData?.data?.hasNextPage)
         }
-    }, [isFiltered, filteredData, searchData, searchTerm,hasNextPage,pageNumber])
-
-
-    const loadMore = () => {
-        console.log('load more ....')
-        if (!isFetchingFilteredItems && hasNextPage) {
-            setPageNumber((prevPage) => prevPage + 1);
-
-            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            setMyInvestmentVehicles((prev)=> {
-                console.log('adding more cause why not ??')
-                if(pageNumber === 0) {
-                    console.log('on page one')
-                    return searchData?.data?.body
-                }
-                const newInvestmentVehicle = searchData?.data?.body.filter(
-                    (newFinancier: CurrentMyInvestmentVehicleDetails) => !prev.some((prevVehicle: CurrentMyInvestmentVehicleDetails) => prevVehicle.id === newFinancier.id)
-                );
-                console.log('prev:: ', prev)
-                console.log('newInvestmentVehicle:: ', newInvestmentVehicle)
-                console.log('expected total: ', [...prev, ...newInvestmentVehicle])
-                return [...prev, ...newInvestmentVehicle]
-            })
+        else {
+           setMyInvestmentVehicles((prev)=> {
+              return  pageNumber === 0 ? filteredData?.data?.body : [...prev, filteredData?.data?.body];
+           })
+           setHasMore(filteredData?.data?.hasNextPage);
         }
-    };
+
+    }, [searchTerm, filteredData, searchData, pageNumber,selectedValue]);
+
+
 
 
     const HandleCardDetails = (vehicleDetails: CurrentMyInvestmentVehicleDetails ) => {
@@ -130,7 +89,27 @@ const MyInvestment = () => {
 
 
 
+    const lastCardObserver = useCallback(
+        (node: HTMLDivElement | null) => {
+            if (isLoading || isFetching) return;
 
+            if (observer.current) observer.current.disconnect();
+
+            observer.current = new IntersectionObserver(
+                entries => {
+                    if (entries[0].isIntersecting && hasMore) {
+                        setPageNumber(prevPage => prevPage + 1);
+                    }
+                },
+                {
+                    rootMargin: "100px",
+                }
+            );
+
+            if (node) observer.current.observe(node);
+        },
+        [isLoading, isFetching, hasMore]
+    );
 
 
     const getStatusColor = (status: string) => {
@@ -149,18 +128,16 @@ const MyInvestment = () => {
 
     const filterInvestments = (type: string) => {
         if (type === 'All'){
+            console.log('alll')
             setSelectedValue('')
             setIsFiltered(true)
         }else {
+            console.log(`filtering by ${type}`)
             setSelectedValue(type)
             setIsFiltered(true)
         }
     }
 
-    // dataLength={myInvestmentVehicles.length}
-    // next={loadMore}
-    // hasMore={hasNextPage}
-    // loader={isFetchingFilteredItems ? <MarketPlaceInvestmentGrid /> : null}
 
 
     return (
@@ -206,13 +183,7 @@ const MyInvestment = () => {
                         <SearchEmptyState icon={MdSearch} name="Investment" />
                 ):
                 (
-                <InfiniteScroll
-                    dataLength={myInvestmentVehicles.length}
-                    next={loadMore}
-                    hasMore={hasNextPage}
-                    loader={isFetchingFilteredItems ? <MarketPlaceInvestmentGrid /> : null}
-                    //  scrollableTarget="select-content"
-                    height="70vh"
+                <div
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
 
@@ -257,7 +228,26 @@ const MyInvestment = () => {
                                 : vehicle.name;
 
 
-
+                        if (myInvestmentVehicles?.length === index + 1) {
+                            return (
+                                <div  key={`wrapper-${vehicle.id}`} ref={lastCardObserver} >
+                                <Card
+                                key={`wrapper-${index}`}
+                                HandleCardDetails={HandleCardDetails}
+                                vehicleDetails={vehicle}
+                                backgroundColor={backgroundColor}
+                                investmentVehicleType={vehicle.investmentVehicleType}
+                                imageSrc={imageSrc}
+                                investmentVehicleName={truncatedTitle}
+                                statusClass={statusClass}
+                                status={status}
+                                statusValue={statusValue}
+                                borderClass={borderClass}
+                                percentage={vehicle.rate || 0}
+                            />
+                                </div>
+                            )
+                        }
                         return <Card
                             key={`wrapper-${index}`}
                             HandleCardDetails={HandleCardDetails}
@@ -273,9 +263,11 @@ const MyInvestment = () => {
                             percentage={vehicle.rate || 0}
 
                         />;
+
+
                     })}
 
-                </InfiniteScroll>
+                </div>
             )}
         </main>
     );
