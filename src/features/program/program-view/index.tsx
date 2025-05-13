@@ -451,7 +451,7 @@ const ProgramView = () => {
                             id={"programGrid"}
                             className="grid grid-cols-1 pr-2 md:grid-cols-3 w-full h-[66vh] sm:grid-cols-1 lg:grid-cols-3 gap-y-6 gap-x-4 overflow-y-auto overflow-x-hidden"
                         >
-                            {programView.slice().reverse().map((program, index) => {
+                            {programView.map((program, index) => {
                                 const tagButtonData = [
                                     {
                                         tagIcon: MdPersonOutline,
@@ -507,7 +507,7 @@ const ProgramView = () => {
                                 <SearchEmptyState icon={MdSearch} name="Program" />
                             ) : (
                                 <Table
-                                    tableData={programView.slice().reverse()}
+                                    tableData={programView}
                                     tableHeader={ProgramHeader}
                                     staticHeader={"program"}
                                     staticColunm={"name"}
