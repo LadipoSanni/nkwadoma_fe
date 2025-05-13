@@ -153,7 +153,7 @@ export const organizationApi = createApi({
                 pageSize: number,
                 status: string
             }) => ({
-                url: "",
+                url: "/organization/all/status",
                 method: 'GET',
                 params: param
             })

@@ -48,3 +48,4 @@ export const financierTabData = [
 {name: 'Details', value: '/financier/details'},
 {name: 'Investment vehicle', value: '/financier/investmentVehicles'}
 ]
+

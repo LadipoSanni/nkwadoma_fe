@@ -10,6 +10,8 @@ import Isloading from '@/reuseable/display/Isloading';
 import {useInviteOrganizationMutation} from '@/service/admin/organization';
 import {useToast} from "@/hooks/use-toast";
 import {useQueryClient} from '@tanstack/react-query';
+import { store } from '@/redux/store';
+import { setOrganizationTabStatus } from '@/redux/slice/organization/organization';
 
 interface ApiError {
     status: number;
@@ -135,14 +137,14 @@ function InviteOrganizationForm({setIsOpen}: props) {
         try {
             const result = await inviteOrganization(formData).unwrap();
             if (result) {
-                queryClient.invalidateQueries({queryKey: ['invite']});
+                // queryClient.invalidateQueries({queryKey: ['invite']});
+                store.dispatch(setOrganizationTabStatus("invited"))
                 toast({
                     description: result.message,
                     status: "success",
                 });
-                if (setIsOpen) {
-                    setIsOpen(false);
-                }
+                handleCloseModal()
+                console.log("Current tab:", store.getState().organization.organizationStatusTab);
             }
 
         } catch (err) {
