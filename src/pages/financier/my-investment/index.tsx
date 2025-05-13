@@ -1,5 +1,5 @@
 "use client";
-import React, {  useState, useEffect } from "react";
+import React, {useState, useEffect, useCallback, useRef} from "react";
 import { store } from "@/redux/store";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
@@ -15,6 +15,8 @@ import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skelet
 import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import {clearAll} from "@/redux/slice/investors/MarketPlaceSlice";
+
 
 const MyInvestmentContent = dynamic(
     () => Promise.resolve(MyInvestment),
@@ -27,38 +29,60 @@ const MyInvestment = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
     const [isFiltered, setIsFiltered] = useState<boolean>(false)
+    const [pageNumber,setPageNumber] = useState(0)
+    const [hasMore, setHasMore] = useState(true);
 
     const filterProps = {
         investmentVehicleType: selectedValue?.toUpperCase(),
-        pageSize: '10',
-        pageNumber: '0'
+        pageSize: 48,
+        pageNumber: pageNumber
     }
-    const {data: filteredData, isLoading: isFilteredDataLoading, isFetching: isFetchingFilteredItems} = useFilterMyInvestmentQuery(filterProps)
-    const [myInvestmentVehicles, setMyInvestmentVehicles] = useState(filteredData?.data?.body)
+
     const searchProps = {
         name: searchTerm,
         investmentType: selectedValue?.toUpperCase(),
-        pageSize: '10',
-        pageNumber: '0'
+        pageSize: 48,
+        pageNumber: pageNumber
     }
+    const {data: filteredData, isLoading: isFilteredDataLoading, isFetching: isFetchingFilteredItems} = useFilterMyInvestmentQuery(filterProps, {skip: searchTerm?.length > 0})
+    const {data: searchData, isLoading: isSearchItemLoading, isFetching: isFetchingSearchTerms} = useSearchMyInvestmentQuery(searchProps, {skip: !searchTerm})
+    const [myInvestmentVehicles, setMyInvestmentVehicles] = useState<CurrentMyInvestmentVehicleDetails[]>([])
 
-    const {data: searchData, isLoading: isSearchItemLoading, isFetching: isFetchingSearchTerms} = useSearchMyInvestmentQuery(searchProps)
+    const isLoading = isFilteredDataLoading || isSearchItemLoading ;
+    const isFetching = isFetchingFilteredItems || isFetchingSearchTerms;
+    const observer = useRef<IntersectionObserver | null>(null);
 
-    useEffect(()=> {
-        setMyInvestmentVehicles(filteredData?.data?.body)
-        if (searchTerm?.length !== 0){
-            setMyInvestmentVehicles([])
-            setMyInvestmentVehicles(searchData?.data?.body)
+    useEffect(() => {
+        setPageNumber(0);
+        setMyInvestmentVehicles([]);
+        setHasMore(true);
+        store.dispatch(clearAll())
+    }, [searchTerm, selectedValue]);
+
+    useEffect(() => {
+        if(searchTerm && searchData?.data?.body){
+            setMyInvestmentVehicles((prev) => {
+                return  pageNumber === 0 ? searchData?.data.body : [...prev, searchData?.data?.body];
+            })
+            setHasMore(searchData?.data?.hasNextPage);
+        }else if(isFiltered && filteredData?.data?.body ){
+            setMyInvestmentVehicles(
+                (prev) => {
+                    const vehicle =  pageNumber === 0 ? filteredData?.data?.body : [...prev, filteredData?.data?.body]
+                return vehicle;
+                }
+            )
+            setHasMore(filteredData?.data?.hasNextPage);
+
         }
-        if (searchTerm === '' && searchData?.data?.body){
-            setMyInvestmentVehicles([])
-            setMyInvestmentVehicles(filteredData?.data?.body)
+        else {
+           setMyInvestmentVehicles((prev)=> {
+              return  pageNumber === 0 ? filteredData?.data?.body : [...prev, filteredData?.data?.body];
+           })
+           setHasMore(filteredData?.data?.hasNextPage);
         }
-        if (isFiltered && searchData?.data?.body?.length === 0 && filteredData?.data?.body !== 0){
-            setMyInvestmentVehicles([])
-            setMyInvestmentVehicles(filteredData?.data?.body)
-        }
-    }, [isFiltered, filteredData, searchData, searchTerm])
+
+    }, [searchTerm, filteredData, searchData, pageNumber,selectedValue]);
 
 
 
@@ -72,7 +96,27 @@ const MyInvestment = () => {
 
 
 
+    const lastCardObserver = useCallback(
+        (node: HTMLDivElement | null) => {
+            if (isLoading || isFetching) return;
 
+            if (observer.current) observer.current.disconnect();
+
+            observer.current = new IntersectionObserver(
+                entries => {
+                    if (entries[0].isIntersecting && hasMore) {
+                        setPageNumber(prevPage => prevPage + 1);
+                    }
+                },
+                {
+                    rootMargin: "100px",
+                }
+            );
+
+            if (node) observer.current.observe(node);
+        },
+        [isLoading, isFetching, hasMore]
+    );
 
 
     const getStatusColor = (status: string) => {
@@ -101,9 +145,10 @@ const MyInvestment = () => {
 
 
 
-
     return (
-        <main id="marketplaceView" className="py-9 px-5 h ">
+        <main
+            id="marketplaceView"
+            className="py-9 px-5 h ">
             <div id="searchDiv" className="px-2 flex md:flex-row flex-col gap-3">
                 <SearchInput
                     id="ProgramSearchInput"
@@ -126,7 +171,11 @@ const MyInvestment = () => {
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
-            ) : myInvestmentVehicles?.length === 0  || !myInvestmentVehicles   ? (
+            ) :
+                  searchData?.data?.body?.length === 0 && searchTerm ?   (
+                <SearchEmptyState icon={MdSearch} name="Investment" />
+    ):
+                myInvestmentVehicles?.length === 0  || !myInvestmentVehicles   ? (
                 <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
                     { selectedValue === '' ?
                         <LoanEmptyState title={"Investment vehicles will show here"}
@@ -139,12 +188,9 @@ const MyInvestment = () => {
                                         icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>}
                                         iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
                     }                </div>
-            ) :  searchData?.data?.body?.length === 0 && searchTerm?.length  !== 0 ?   (
-                        <SearchEmptyState icon={MdSearch} name="Investment" />
-                ):
+            ) :
                 (
                 <div
-                    id="card-segmentId"
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
                 >
 
@@ -184,12 +230,31 @@ const MyInvestment = () => {
                         const borderClass = getStatusBorderColor(statusValue)
 
                         const truncatedTitle =
-                            vehicle.name.length > 20
-                                ? vehicle.name.slice(0, 20) + "..."
-                                : vehicle.name;
+                            vehicle?.name?.length > 20
+                                ? vehicle?.name?.slice(0, 20) + "..."
+                                : vehicle?.name;
 
 
-
+                        if (myInvestmentVehicles?.length === index + 1) {
+                            return (
+                                <div  key={`wrapper-${vehicle.id}`} ref={lastCardObserver} >
+                                <Card
+                                key={`wrapper-${index}`}
+                                HandleCardDetails={HandleCardDetails}
+                                vehicleDetails={vehicle}
+                                backgroundColor={backgroundColor}
+                                investmentVehicleType={vehicle.investmentVehicleType}
+                                imageSrc={imageSrc}
+                                investmentVehicleName={truncatedTitle}
+                                statusClass={statusClass}
+                                status={status}
+                                statusValue={statusValue}
+                                borderClass={borderClass}
+                                percentage={vehicle.rate || 0}
+                            />
+                                </div>
+                            )
+                        }
                         return <Card
                             key={`wrapper-${index}`}
                             HandleCardDetails={HandleCardDetails}
@@ -205,6 +270,8 @@ const MyInvestment = () => {
                             percentage={vehicle.rate || 0}
 
                         />;
+
+
                     })}
 
                 </div>

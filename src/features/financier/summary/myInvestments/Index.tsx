@@ -9,10 +9,11 @@ import {CurrentMyInvestmentVehicleDetails} from "@/types/Component.type";
 import { store } from "@/redux/store";
 import { setCurrentMyInvestmentVehicleDetails } from "@/redux/slice/financier/financier";
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skeleton-for-MarketPlace";
 
 const MyInvestments = () => {
     const router = useRouter();
-    const { data } = useViewFinancierDashboardQuery({});
+    const { data, isFetching,isLoading } = useViewFinancierDashboardQuery({});
     const investmentVehicles = data?.data?.investmentVehicleResponses || [];
 
     const handleRoute = () => {
@@ -70,7 +71,12 @@ const MyInvestments = () => {
                     View all
                 </button>
             </div>
-            {investmentVehicles?.length > 0 ? (
+            {isLoading || isFetching ? (
+                <div className={` w-full `}>
+                    <MarketPlaceInvestmentGrid/>
+                </div>
+            ):
+                investmentVehicles?.length > 0 ? (
                 <div id={'viewMyInvestmentVehicleOnOverview'} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
                     {investmentVehicles?.slice(0, 4)?.map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
                         const backgroundColor =
