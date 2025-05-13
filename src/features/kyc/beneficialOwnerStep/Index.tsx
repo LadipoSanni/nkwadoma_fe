@@ -57,14 +57,40 @@ const BeneficialOwnerStep = () => {
     const [sectionTypes, setSectionTypes] = useState<{[key: number]: "entity" | "individual"}>({});
     const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({}); // For select dropdowns
 
-    // Update sections when selectedForm changes
     useEffect(() => {
         if (selectedForm === "entity") {
             setSections(entityData.sections || []);
         } else {
-            setSections((individualData.sections || []) as Section[]);
+            const individualSections = individualData.sections || [];
+            if (individualSections.length === 0) {
+                // Get entity data to pre-populate individual form
+                const entitySections = entityData.sections || [];
+                const entityInfo = entitySections.length > 0 ? entitySections[0] : null;
+
+                const newSectionId = Date.now();
+                setSections([{
+                    id: newSectionId,
+                    entityName: entityInfo?.entityName || entityData.entityName || "",
+                    rcNumber: entityInfo?.rcNumber || entityData.rcNumber || "",
+                    country: entityInfo?.country || entityData.country,
+                    firstName: "John", // Default first name
+                    lastName: "Doe", // Default last name
+                    dob: new Date(1990, 0, 1).toISOString(), // Default date of birth (January 1, 1990)
+                    relationship: "friend", // Default relationship
+                    ownership: "100", // Default ownership percentage
+                    proofType: "national_id",
+                    proofFile: null,
+                    proofFileUrl: undefined
+                }]);
+                setSectionTypes(prev => ({
+                    ...prev,
+                    [newSectionId]: "individual"
+                }));
+            } else {
+                setSections(individualSections as Section[]);
+            }
         }
-    }, [selectedForm, entityData.sections, individualData.sections]);
+    }, [selectedForm, entityData.sections, individualData.sections, entityData.entityName, entityData.rcNumber, entityData.country]);
 
     const proofOptions = [
         { id: "national_id", label: "National ID card" },
@@ -196,6 +222,15 @@ const BeneficialOwnerStep = () => {
                     }
                 })
             );
+        } else {
+            dispatch(
+                updateBeneficialOwner({
+                    selectedForm: "individual",
+                    individualData: {
+                        sections: processedIndividualSections
+                    }
+                })
+            );
         }
 
         router.push('/kyc/political-exposure');
@@ -214,7 +249,6 @@ const BeneficialOwnerStep = () => {
                     onValueChange={(value) => {
                         const newValue = value as "entity" | "individual";
                         setSelectedForm(newValue);
-                        // Update the selectedForm in Redux
                         dispatch(updateBeneficialOwner({ selectedForm: newValue }));
                     }}
                     className={'grid gap-7'}
@@ -284,148 +318,13 @@ const BeneficialOwnerStep = () => {
                         </main>
                     </TabsContent>
                     <TabsContent id="individualTabContent" value="individual">
-                        <main id="entityFormMain" className="grid gap-6">
-                            <section className={'grid p-5 gap-5 border rounded-md border-lightBlue250'}>
-                                <div className="grid gap-5">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="firstName">First name</Label>
-                                            <Input
-                                                id="firstName"
-                                                name="firstName"
-                                                placeholder="Enter first name"
-                                                value={sections[0]?.firstName || ""}
-                                                onChange={(e) =>
-                                                    handleInputChange(sections[0]?.id || 0, "firstName", e.target.value)
-                                                }
-                                                className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="lastName">Last name</Label>
-                                            <Input
-                                                id="lastName"
-                                                name="lastName"
-                                                placeholder="Enter last name"
-                                                value={sections[0]?.lastName || ""}
-                                                onChange={(e) =>
-                                                    handleInputChange(sections[0]?.id || 0, "lastName", e.target.value)
-                                                }
-                                                className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="space-y-2">
-                                            <Label>Date of birth</Label>
-                                            <Popover>
-                                                <PopoverTrigger asChild>
-                                                    <Button
-                                                        type="button"
-                                                        variant="outline"
-                                                        className="w-full h-[3.375rem] border border-solid border-neutral650 flex justify-between items-center font-normal focus:outline-none focus:ring-0"
-                                                    >
-                                                <span>
-                                                    {sections[0]?.dob ? new Date(sections[0].dob).toLocaleDateString() : "Select date"}
-                                                </span>
-                                                        <MdOutlineDateRange className="h-5 w-5 text-neutral950"/>
-                                                    </Button>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-auto p-0 shadow-none" align="start">
-                                                    <Calendar
-                                                        mode="single"
-                                                        selected={sections[0]?.dob ? new Date(sections[0].dob) : undefined}
-                                                        onSelect={(date) => handleDateSelect(sections[0]?.id || 0, date)}
-                                                        disabled={(date) => date > new Date()}
-                                                        initialFocus
-                                                        defaultMonth={sections[0]?.dob ? new Date(sections[0].dob) : new Date()}
-                                                    />
-                                                </PopoverContent>
-                                            </Popover>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label>Relationship</Label>
-                                            <Select
-                                                onValueChange={(value) => handleRelationshipSelect(sections[0]?.id || 0, value)}
-                                                value={sections[0]?.relationship || ""}
-                                                onOpenChange={(open) => setIsOpen({
-                                                    ...isOpen,
-                                                    [sections[0]?.id || 0]: open
-                                                })}
-                                            >
-                                                <SelectTrigger
-                                                    className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650 flex justify-between items-center"
-                                                >
-                                                    <SelectValue placeholder="Select relationship"/>
-                                                    {isOpen[sections[0]?.id || 0] ? (
-                                                        <MdKeyboardArrowUp className="h-5 w-5 text-neutral950"/>
-                                                    ) : (
-                                                        <MdKeyboardArrowDown className="h-5 w-5 text-neutral950"/>
-                                                    )}
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="father">Father</SelectItem>
-                                                    <SelectItem value="mother">Mother</SelectItem>
-                                                    <SelectItem value="brother">Brother</SelectItem>
-                                                    <SelectItem value="sister">Sister</SelectItem>
-                                                    <SelectItem value="friend">Friend</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="ownership">Ownership / Share (%)</Label>
-                                        <Input
-                                            id="ownership"
-                                            name="ownership"
-                                            type="number"
-                                            max="100"
-                                            placeholder="0"
-                                            value={sections[0]?.ownership || ""}
-                                            onChange={(e) => handleInputChange(sections[0]?.id || 0, "ownership", e.target.value)}
-                                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md w-full md:w-[47%] h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                                        />
-                                    </div>
-                                    <div className="space-y-4">
-                                        <Label>Proof of beneficial ownership</Label>
-                                        <div className="flex gap-3">
-                                            {proofOptions.map((option) => (
-                                                <label
-                                                    key={option.id}
-                                                    className={`rounded-[20px] px-3 py-2 text-[14px] leading-[150%] font-medium bg-blue50 hover:bg-blue50 cursor-pointer ${
-                                                        sections[0]?.proofType === option.id
-                                                            ? "border border-meedlBlue bg-blue50 text-meedlBlue"
-                                                            : "text-black300"
-                                                    }`}
-                                                >
-                                                    <input
-                                                        type="radio"
-                                                        name="proofType"
-                                                        value={option.id}
-                                                        checked={sections[0]?.proofType === option.id}
-                                                        onChange={(e) => handleProofTypeChange(sections[0]?.id || 0, e.target.value)}
-                                                        className="hidden"
-                                                    />
-                                                    <span className="text-sm">{option.label}</span>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <FileUpload
-                                        handleDrop={(e) => handleDrop(sections[0]?.id || 0, e)}
-                                        handleDragOver={(e) => e.preventDefault()}
-                                        setUploadedImageUrl={(url) => handleSetUploadedImageUrl(sections[0]?.id || 0, url)}
-                                    />
-                                </div>
 
-                            </section>
-                        </main>
-                    </TabsContent>
-                    {sections.map((section) => (
+                        <main id="entityFormMain" className="grid gap-6">
+                            {sections.map((section) => (
                         <section key={section.id} className={'relative grid mt-6'}>
                             <Tabs
                                 id={`beneficialOwnerTabs-${section.id}`}
-                                value={sectionTypes[section.id] || "entity"}
+                                value={sectionTypes[section.id] || "individual"}
                                 onValueChange={(value) => handleSectionTypeChange(section.id, value as "entity" | "individual")}
                                 className={'grid gap-7'}
                             >
@@ -646,7 +545,9 @@ const BeneficialOwnerStep = () => {
                             </Tabs>
 
                         </section>
-                    ))}
+                            ))}
+                        </main>
+                    </TabsContent>
                     <main className={'sticky bottom-0  bg-white py-4 pr-4'}>
 
                         <div className="flex items-center gap-1 mb-4">
@@ -658,7 +559,7 @@ const BeneficialOwnerStep = () => {
                                 <span className={'font-semibold text-[14px] leading-[150%]'}>Add</span>
                             </Button>
                         </div>
-                        <div id="entityFormButtons" className={'md:flex grid gap-4 justify-between'}>
+                        <div id="entityFormButtons" className={'md:flex grid gap-4 md:justify-between'}>
                             <Button
                                 id="entityFormBackButton"
                                 onClick={handleBackClick}
