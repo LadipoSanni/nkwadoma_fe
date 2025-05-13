@@ -137,14 +137,14 @@ function InviteOrganizationForm({setIsOpen}: props) {
         try {
             const result = await inviteOrganization(formData).unwrap();
             if (result) {
-                // queryClient.invalidateQueries({queryKey: ['invite']});
+                queryClient.invalidateQueries({queryKey: ['invite']});
                 store.dispatch(setOrganizationTabStatus("invited"))
                 toast({
                     description: result.message,
                     status: "success",
                 });
                 handleCloseModal()
-                console.log("Current tab:", store.getState().organization.organizationStatusTab);
+                
             }
 
         } catch (err) {
