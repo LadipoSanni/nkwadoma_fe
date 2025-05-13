@@ -61,7 +61,7 @@ export const mapKycDataToApiRequest = (state: RootState, declarationOverride?: {
         {
           positionHeld: declaration.politicalPosition || "",
           country: declaration.country || "",
-          relationship: declaration.relationship || "",
+          relationship: declaration.relationship || "SELF",
           additionalInformation: "",
         },
       ]
