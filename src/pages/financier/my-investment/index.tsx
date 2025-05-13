@@ -15,6 +15,7 @@ import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skelet
 import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import {clearAll} from "@/redux/slice/investors/MarketPlaceSlice";
 
 
 const MyInvestmentContent = dynamic(
@@ -33,17 +34,17 @@ const MyInvestment = () => {
 
     const filterProps = {
         investmentVehicleType: selectedValue?.toUpperCase(),
-        pageSize: 10,
+        pageSize: 48,
         pageNumber: pageNumber
     }
 
     const searchProps = {
         name: searchTerm,
         investmentType: selectedValue?.toUpperCase(),
-        pageSize: 10,
+        pageSize: 48,
         pageNumber: pageNumber
     }
-    const {data: filteredData, isLoading: isFilteredDataLoading, isFetching: isFetchingFilteredItems} = useFilterMyInvestmentQuery(filterProps)
+    const {data: filteredData, isLoading: isFilteredDataLoading, isFetching: isFetchingFilteredItems} = useFilterMyInvestmentQuery(filterProps, {skip: searchTerm?.length > 0})
     const {data: searchData, isLoading: isSearchItemLoading, isFetching: isFetchingSearchTerms} = useSearchMyInvestmentQuery(searchProps, {skip: !searchTerm})
     const [myInvestmentVehicles, setMyInvestmentVehicles] = useState<CurrentMyInvestmentVehicleDetails[]>([])
 
@@ -52,20 +53,26 @@ const MyInvestment = () => {
     const observer = useRef<IntersectionObserver | null>(null);
 
     useEffect(() => {
+        setPageNumber(0);
+        setMyInvestmentVehicles([]);
+        setHasMore(true);
+        store.dispatch(clearAll())
+    }, [searchTerm, selectedValue]);
+
+    useEffect(() => {
         if(searchTerm && searchData?.data?.body){
             setMyInvestmentVehicles((prev) => {
                 return  pageNumber === 0 ? searchData?.data.body : [...prev, searchData?.data?.body];
             })
             setHasMore(searchData?.data?.hasNextPage);
         }else if(isFiltered && filteredData?.data?.body ){
-            console.log('its filtered ', filteredData?.data?.body)
-                setMyInvestmentVehicles(
-                    (prev) => {
-                        return  pageNumber === 0 ? filteredData?.body?.data : [...prev, filteredData?.body?.data]
-
-                    }
-                )
-            setHasMore(searchData?.data?.hasNextPage);
+            setMyInvestmentVehicles(
+                (prev) => {
+                    const vehicle =  pageNumber === 0 ? filteredData?.data?.body : [...prev, filteredData?.data?.body]
+                return vehicle;
+                }
+            )
+            setHasMore(filteredData?.data?.hasNextPage);
 
         }
         else {
@@ -128,11 +135,9 @@ const MyInvestment = () => {
 
     const filterInvestments = (type: string) => {
         if (type === 'All'){
-            console.log('alll')
             setSelectedValue('')
             setIsFiltered(true)
         }else {
-            console.log(`filtering by ${type}`)
             setSelectedValue(type)
             setIsFiltered(true)
         }
@@ -166,7 +171,11 @@ const MyInvestment = () => {
                 <div className="w-full">
                     <MarketPlaceInvestmentGrid />
                 </div>
-            ) : myInvestmentVehicles?.length === 0  || !myInvestmentVehicles   ? (
+            ) :
+                  searchData?.data?.body?.length === 0 && searchTerm ?   (
+                <SearchEmptyState icon={MdSearch} name="Investment" />
+    ):
+                myInvestmentVehicles?.length === 0  || !myInvestmentVehicles   ? (
                 <div className="flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40">
                     { selectedValue === '' ?
                         <LoanEmptyState title={"Investment vehicles will show here"}
@@ -179,9 +188,7 @@ const MyInvestment = () => {
                                         icon={<MdOutlinePayments height={`5rem`} width={"5rem"} color={"#142854"}/>}
                                         iconBg={`#D9EAFF`} id={"vehicleEmptyState"}/>
                     }                </div>
-            ) :  searchData?.data?.body?.length === 0 && searchTerm?.length  !== 0 ?   (
-                        <SearchEmptyState icon={MdSearch} name="Investment" />
-                ):
+            ) :
                 (
                 <div
                     className="grid grid-cols-1 px-3 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 h-[70vh] overflow-x-hidden overflow-y-auto gap-y-10 gap-x-5"
@@ -223,9 +230,9 @@ const MyInvestment = () => {
                         const borderClass = getStatusBorderColor(statusValue)
 
                         const truncatedTitle =
-                            vehicle.name.length > 20
-                                ? vehicle.name.slice(0, 20) + "..."
-                                : vehicle.name;
+                            vehicle?.name?.length > 20
+                                ? vehicle?.name?.slice(0, 20) + "..."
+                                : vehicle?.name;
 
 
                         if (myInvestmentVehicles?.length === index + 1) {
