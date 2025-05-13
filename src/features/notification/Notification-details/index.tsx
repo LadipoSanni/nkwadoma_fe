@@ -10,6 +10,7 @@ import { useViewNotificationDetailsQuery } from '@/service/notification/notifica
 import {store} from "@/redux/store";
 import { setCurrentFinancierId} from '@/redux/slice/financier/financier';
 import { setNotification,resetNotification,setNotificationId } from '@/redux/slice/notification/notification';
+import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
 
 // interface NotificationDetailsPageProps{
 //     notification?: NotificationProps
@@ -34,24 +35,31 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   const {data:notification,isLoading} = useViewNotificationDetailsQuery(notificationId,{skip: !notificationId})
 
   const handleRoute = () => {
+      store.dispatch(setNotification("notification"))
+      store.dispatch(setNotificationId(notification?.data?.id))
      if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
         store.dispatch(setCurrentFinancierId(notification?.data?.contentId))
-        store.dispatch(setNotificationId(notification?.data?.id))
-        store.dispatch(setNotification("notification"))
         router.push("/funds/financier-details")
+     }else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE") {
+         store.dispatch(setMarketInvestmentVehicleId({marketInvestmentVehicleId:notification?.data?.contentId }))
+         router.push("/marketplace/details");
      }
   }
 
    const buttonName = () => {
     if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
       return "financier"
+   } else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE"){
+      return "investment vehicle"
    }
+  
    }
 
 
   return (
     <div className={`w-full pr-9 md:pr-16 py-4 px-4 md:px-0 ${inter.className}`}>
-      { isLoading? <div><SkeletonforNotificationDetails/></div> :
+
+      {!notificationId ? <div className='flex justify-center items-center'>Not found</div> : isLoading? <div><SkeletonforNotificationDetails/></div> :
       <div>
       <div className='md:hidden mt-3 mb-7'>
         <BackButton 

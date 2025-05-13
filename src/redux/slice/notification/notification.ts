@@ -15,7 +15,7 @@ const initialState: totalNumberOfNotification = {
 }
 
 export const notificationSlice = createSlice({
-    name: "totalNotification",
+    name: "notification",
     initialState,
     reducers: {
         setCurrentTotalNotification: (state, action: PayloadAction<number>) => {
