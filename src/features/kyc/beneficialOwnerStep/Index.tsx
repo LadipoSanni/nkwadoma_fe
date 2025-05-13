@@ -52,9 +52,9 @@ const BeneficialOwnerStep = () => {
     } = useSelector((state: RootState) => state.kycForm.beneficialOwner);
 
     const [selectedForm, setSelectedForm] = useState<"entity" | "individual">(storedSelectedForm || "entity");
-    const [entityName, setEntityName] = useState(entityData.entityName || "");
-    const [rcNumber, setRcNumber] = useState(entityData.rcNumber || "");
-    const [selectedCountry, setSelectedCountry] = useState<string | undefined>(entityData.country);
+    const [entityName] = useState(entityData.entityName || "");
+    const [rcNumber] = useState(entityData.rcNumber || "");
+    const [selectedCountry] = useState<string | undefined>(entityData.country);
     const [sections, setSections] = useState<Section[]>(
         (selectedForm === "entity" ? (entityData.sections || []) : (individualData.sections || [])) as Section[]
     );
@@ -65,7 +65,6 @@ const BeneficialOwnerStep = () => {
         if (selectedForm === "entity") {
             const entitySections = entityData.sections || [];
             if (entitySections.length === 0) {
-                // Create a default entity section if none exists
                 const newSectionId = Date.now();
                 setSections([{
                     id: newSectionId,
@@ -86,7 +85,6 @@ const BeneficialOwnerStep = () => {
         } else {
             const individualSections = individualData.sections || [];
             if (individualSections.length === 0) {
-                // Get entity data to pre-populate individual form
                 const entitySections = entityData.sections || [];
                 const entityInfo = entitySections.length > 0 ? entitySections[0] : null;
 
