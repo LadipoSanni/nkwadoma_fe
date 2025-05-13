@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -6,16 +6,16 @@ import { cabinetGrotesk, inter } from "@/app/fonts";
 import { MdClose } from "react-icons/md";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import { NumericFormat } from "react-number-format";
-import ProgramSelect from "@/reuseable/select/ProgramSelect";
 import { useRespondToLoanRequestMutation } from "@/service/admin/loan/loan-request-api"; // Import the new mutation
 import {useViewAllLoanProductQuery} from '@/service/admin/loan_product'
-import {LoanProductType} from "@/types/loan/loan-request.type";
 import { Loader2 } from "lucide-react"
 import { useToast} from "@/hooks/use-toast";
 import {store} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation";
 import {unformatAmount} from "@/utils/Format";
+import CustomSelectId from "@/reuseable/Input/custom-select-id";
+import {LoanProduct} from "@/types/Component.type";
 
 interface CreateLoanOfferProps {
     onSubmit?: (data: { amountApproved: string, loanProduct: string }) => void;
@@ -24,33 +24,56 @@ interface CreateLoanOfferProps {
     loanRequestId: string;
 }
 
-const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, setIsOpen, loanRequestId }) => {
-    const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
-    const [isSelectOpen, setIsSelectOpen] = useState(false);
-    const router = useRouter()
 
+interface selectedIdType {
+    id: string,
+    organizationName: string,
+    userIdentity: {
+        firstName: string,
+        lastName: string,
+    }
+}
+
+const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, setIsOpen, loanRequestId }) => {
+    const router = useRouter()
+    const [hasNextPage, setNextPage] = useState(true);
     const [selectedLoanProductId, setSelectedLoanProductId] = useState("");
     const [isFormValid, setIsFormValid] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const [respondToLoanRequest, {isError, isLoading, error}] = useRespondToLoanRequestMutation(); // Use the new mutation
+    const [respondToLoanRequest, {isError, isLoading: isLoanOfferCreating, error}] = useRespondToLoanRequestMutation(); // Use the new mutation
     const [amount , setAmount] = useState('');
-    const isValid = amount.length > 0 && selectedProgram !== null;
+    const isValid = amount.length > 0 && selectedLoanProductId !== null;
+    const [pageNumber,setPageNumber] = useState(0)
+    const [loanProducts, setLoanProducts] = useState<selectedIdType[]>()
 
     const parameter = {
         pageSize: 10,
-        pageNumber: 0
+        pageNumber: pageNumber
     }
-    const {data  } = useViewAllLoanProductQuery(parameter)
-    const loanProducts =  data?.data?.body
-    const empty : {id: string, name: string}[] = []
-    loanProducts?.forEach((element: LoanProductType) => empty?.push({id: element.id, name: element.name}))
+    const {data, isFetching,isLoading  } = useViewAllLoanProductQuery(parameter)
+
+    useEffect(()=> {
+        setLoanProducts((prev) => {
+            if(pageNumber === 0) {
+                return data?.data?.body
+            }
+            const newLoanProducts = data?.data?.body.filter(
+                (newLoanProducts: LoanProduct) => !prev?.some((prevloanProducts) => prevloanProducts.id === newLoanProducts.id)
+            );
+            if (prev) {
+                return [...prev, ...newLoanProducts]
+            }
+        });
+        setNextPage(data?.data?.hasNextPage)
+    }, [data, pageNumber])
 
 
     const {toast} = useToast()
 
+
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (!selectedProgram) {
+        if (!selectedLoanProductId) {
             setIsFormValid(false);
             setErrorMessage("Please select a program.");
             return;
@@ -87,6 +110,16 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     };
 
     if (!isOpen) return null;
+
+    const handleOnSelectLoanProductModal = (value: string)=> {
+        setSelectedLoanProductId(value)
+    }
+    const loadMore = () => {
+        if (!isFetching && hasNextPage) {
+            setPageNumber((prevPage) => prevPage + 1);
+        }
+    };
+
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -139,18 +172,28 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                                     const {value} = e.target
                                     setAmount(value)
                                 }}
+
                             />
                         </div>
                     </div>
-                    <ProgramSelect
-                        selectedProgram={selectedProgram}
-                        setSelectedProgram={setSelectedProgram}
-                        isSelectOpen={isSelectOpen}
-                        setIsSelectOpen={setIsSelectOpen}
-                        selectOptions={empty}
-                        setId={setSelectedLoanProductId}
-                        label={'Loan product'}
+                    <CustomSelectId
                         placeholder={'Select loan product'}
+                        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-expect-error
+                        selectContent={loanProducts}
+                        value={selectedLoanProductId}
+                        onChange={(value) => handleOnSelectLoanProductModal(value)}
+                        isLoading={isLoading}
+                        displayName={true}
+                        triggerId={`financier-select-${selectedLoanProductId}`}
+                        selectItemCss='text-[#6A6B6A]'
+                        className="w-full"
+                        emptyStateText={'No loan products available'}
+                        infinityScroll={{
+                            hasMore: hasNextPage,
+                            loadMore: loadMore,
+                            loader: isFetching
+                        }}
                     />
                     {!isFormValid && (
                         <div className="text-red-500 text-sm">{errorMessage}</div>
@@ -177,7 +220,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                             disabled={!isValid}
 
                         >
-                            {isLoading && <Loader2 className="animate-spin" />}
+                            {isLoanOfferCreating && <Loader2 className="animate-spin" />}
                             Create
                         </Button>
                     </div>

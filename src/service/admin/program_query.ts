@@ -33,13 +33,8 @@ export const programApi = createApi({
             invalidatesTags:  ({ id }) => [{ type: 'program', id }],
         }),
         searchProgram: builder.query({
-            query: (name) => ({
-        url: '/program/search', 
-        method: 'GET',
-        params: { name }, 
-      }),
-    //    transformResponse: (response) => response.data, 
-    }),
+            query: (name) => `program/search?name=${name}`,
+        }),
         createProgram: builder.mutation({
             query: (formData:
                  {
@@ -82,4 +77,4 @@ export const programApi = createApi({
 })
 
 
-export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery, useCreateProgramMutation, useUpdateProgramMutation, useSearchCohortsInAParticularProgramQuery} = programApi;
+export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery , useCreateProgramMutation, useUpdateProgramMutation, useSearchCohortsInAParticularProgramQuery} = programApi;
