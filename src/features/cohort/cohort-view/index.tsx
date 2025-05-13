@@ -18,7 +18,6 @@ import {
     useGetAllCohortsByOrganisationQuery
 } from '@/service/admin/cohort_query'
 import { useSearchCohortByOrganisationQuery } from '@/service/admin/cohort_query'
-// import { debounce } from 'lodash';
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
 import {useToast} from "@/hooks/use-toast"
@@ -38,24 +37,6 @@ export const initialFormValue = {
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
  }
-
-export const programData = {
-  "value 1" : "Design Thinking",
-  "value 2" : "Software Engineering",
-  "value 3" : "Data Science",
-  "value 4" : "Cybersecurity",
-  "value 5" : "UX/UI Design",
-  "value 6" : "Product design",
-  "value 7" : "Digital Marketing",
-  "value 8" : "Business Administration",
-  "value 9" : "Finance",
-  "value 10" : "Human Resources",
-  "value 11" : "Project Management",
-  "value 12" : "Product Marketing",
-   "value 13" : "Product Management",
-}
-
-
 
 interface allCohortsProps extends TableRowData {
    name:string,
@@ -104,8 +85,8 @@ const CohortView = () => {
    const size = 10;
    const {toast} = useToast()
 
-   const { data: cohortData,isLoading } = useGetAllCohortsByOrganisationQuery({ pageSize: 300, pageNumber:page }, { refetchOnMountOrArgChange: true, })  
-   const { data: searchData } = useSearchCohortByOrganisationQuery(searchTerm, { skip:!searchTerm })
+   const { data: cohortData,isLoading } = useGetAllCohortsByOrganisationQuery({ pageSize: 300, pageNumber:page }, { refetchOnMountOrArgChange: true, })
+    const { data: searchData } = useSearchCohortByOrganisationQuery({cohortName: searchTerm, programId: programId, pageSize: size, pageNumber: pageNumber,}, { skip: !searchTerm });
    const { data: programDatas, isLoading: programIsloading,isFetching  } = useGetAllProgramsQuery({ pageSize: size, pageNumber: pageNumber }, { skip: !isCreateModalOpen, refetchOnMountOrArgChange: true, })
   const { data: cohortsByProgram, refetch, isLoading: cohortIsLoading } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: 300, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
@@ -114,16 +95,9 @@ const CohortView = () => {
     setIsOpen(!isOpen)
 }
 
-  //  useEffect(const {toast} = useToast()() => { 
-  //   if (cohortData && cohortData?.data) { 
-  //     const result = cohortData?.data?.body; 
-  //     setOrganisationCohort(result); 
-  //     setOriginalCohortData(result);  
-  //   } }, [cohortData]);
-
    useEffect(() => {
     if(searchTerm && searchData && searchData?.data) {
-      const result = searchData?.data
+      const result = searchData?.data?.body
       setOrganisationCohort(result)
     }
     else if(!searchTerm && cohortData && cohortData?.data) {
@@ -133,24 +107,28 @@ const CohortView = () => {
     }
    },[searchTerm,searchData,cohortData])
 
-   useEffect(() => {
-    if( programDatas &&  programDatas?.data ) {
-        // const programs =  programDatas?.data?.body
-        setListOfPrograms((prev) => {
-          if(pageNumber === 0){
-            return  programDatas?.data?.body
-          }
-          const newPrograms = programDatas?.data?.body.filter(
-            (newProgram: viewAllProgramProps) => !prev.some((prev) => prev.id === newProgram.id)
-          );
-          return [...prev, ...newPrograms]
-        })
-        setNextPage(programDatas?.data?.hasNextPage)
-    }
-   
-},[programDatas])
+    useEffect(() => {
+        if (programDatas && programDatas?.data) {
+            const sortedPrograms = [...programDatas.data.body].sort((a, b) =>
+                a.name.localeCompare(b.name)
+            );
 
-   useEffect(() => { 
+            setListOfPrograms((prev) => {
+                if (pageNumber === 0) {
+                    return sortedPrograms;
+                }
+                const newPrograms = sortedPrograms.filter(
+                    (newProgram: viewAllProgramProps) => !prev.some((prev) => prev.id === newProgram.id)
+                );
+                return [...prev, ...newPrograms].sort((a, b) => a.name.localeCompare(b.name));
+            });
+
+            setNextPage(programDatas?.data?.hasNextPage);
+        }
+    }, [programDatas]);
+
+
+    useEffect(() => {
     if (cohortsByProgram && cohortsByProgram?.data) { 
       const result = cohortsByProgram?.data?.body; 
       setOrganisationCohort(result);
@@ -161,8 +139,6 @@ const CohortView = () => {
           setPageNumber((prevPage) => prevPage + 1);
       }
   };
-  // console.log("The organisationCohort: ",listOfPrograms)
-  // console.log("The organisationCohort: ", organisationCohort);
 
 
    const toggleDropdown = useCallback(() => {
@@ -185,7 +161,6 @@ const CohortView = () => {
        }
   }
 
-  // console.log("The hhhid: ",programId)
 
  const validationSchema = Yup.object().shape({
    selectProgram: Yup.string().required('Program is required'),
@@ -243,7 +218,6 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
   return (
     <div className=''>
         <div id='cohortName' className='md:px-6 px-4'>
-          {/* <h1 className={`mt-5 font-semibold text-2xl mb-4 normal-case z-50 ${cabinetGrotesk.className}`}>Cohort</h1> */}
           <div id='buttonFilterCreate' className={`md:flex justify-between items-center z-50 relative top-6 bottom-2 ${inter.className}`}>
             <div id='buttonFilter' className='flex gap-4'>
             <div className='relative'>
@@ -256,7 +230,6 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
               className='w-full lg:w-96 h-11 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
               value={searchTerm}
               onChange={handleSearchChange}
-              //  onKeyUp={handleKeyUp}
               />
             </div>
              <div className='z-10'>
@@ -347,7 +320,6 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
 
                         <Button
                         id='resetButton'
-                        // type="reset"
                         variant={`outline`}
                         className='text-meedlBlue h-[38px] font-bold ring-meedlBlue border-meedlBlue border-solid w-[80px]'
                         onClick={()=> {
