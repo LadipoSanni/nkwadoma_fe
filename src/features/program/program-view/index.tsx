@@ -507,7 +507,7 @@ const ProgramView = () => {
                                 <SearchEmptyState icon={MdSearch} name="Program" />
                             ) : (
                                 <Table
-                                    tableData={programView}
+                                    tableData={programView.slice().reverse()}
                                     tableHeader={ProgramHeader}
                                     staticHeader={"program"}
                                     staticColunm={"name"}
