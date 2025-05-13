@@ -39,9 +39,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [investmentVehicleObj, setInvestmentVehicleObj] = useState<{ [key: string]: string }>({});
     const [error, setError] = useState('');
-    // const [mandateError, setMandateError] = useState('');
-    // const [loanProductTermsAndConditionError, setLoanProductTermsAndConditionError] = useState('');
-    // const [step, setStep] = useState(1);
     const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
     const { data: investmentVehicleData } =
         useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
@@ -63,11 +60,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
     const initialFormValue = {
         productName: "",
-        // productSponsor: "",
         investmentVehicleId: "",
         costOfFunds: "",
         tenor: "",
-        // tenorDuration: "",
         loanProductSize: "",
         minimumRepaymentAmount: "",
         moratorium: "",
@@ -75,11 +70,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         obligorLimit: "",
         loanProductMandate: "",
         loanProductTermsAndCondition: "",
-        // bankPartner: "",
-        // loanInsuranceProvider: "",
-        // loanDisbursementTerms: "",
-        // investmentVehicleId: "",
-        // loanProductStatus: "ACTIVE"
     }
 
 
@@ -97,21 +87,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             )
 
             .max(200, "Terms exceeds 100 characters"),
-        // productSponsor: Yup.string()
-        //     .trim()
-        //     .required("Product sponsor is required"),
         investmentVehicleId: Yup.string()
             .trim()
             .required("Fund product is required"),
-        // Loan product size cannot be greater than investment vehicle available amount.
         costOfFunds: Yup.string()
             .trim()
-            // .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Cost of fund must be greater than 0 ")
             .transform((original) => original?.replace(/,/g, ""))
             .required("Cost of fund is required"),
-        // tenorDuration: Yup.string()
-        //     .trim()
-        //     .required("Duration can not be empty"),
         tenor: Yup.string()
             .trim()
             .matches(/^(?!0$)([1-9]\d*|0\.\d*[1-9]\d*)$/, "Tenor must be greater than 0")
@@ -183,25 +165,11 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                 const sanitizedValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
                 return sanitizedValue !== "";
             }),
-        // .test("no-html-tags", "Loan product terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value)),
-        // loanDisbursementTerms: Yup.string()
-        //     .trim()
-        //     .max(2500, "Terms exceeds 2500 characters")
-        //     .test("no-html-tags", "Loan disbursement terms contains HTML tags", value => !value || !/<\/?[a-z][\s\S]*>/i.test(value))
     });
 
     const investmentVehicleNames = investmentVehicleData?.data?.body
         ?.map((vehicle: { name: string }) => vehicle.name)
         ?.sort((a, b) => a.localeCompare(b)) || [];
-
-    // const bankPartner = ["Patner 1", "Partner 2",];
-    // const maxChars = 2500;
-    //
-    // const validateLength = (value: string) => {
-    //     const maxChars = 2500;
-    //     const regex = new RegExp(`^.{0,${maxChars}}$`);
-    //     return regex.test(value);
-    // };
 
     const toastPopUp = ToastPopUp({
         description: "Loan product Created successfully.",
@@ -228,7 +196,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             investmentVehicleId: investmentVehicleObj[values.investmentVehicleId],
             costOfFund: Number(values.costOfFunds),
             tenor: Number(values.tenor),
-            // tenorDuration: values.tenorDuration,
             loanProductSize: Number(values.loanProductSize),
             minRepaymentAmount: Number(values.minimumRepaymentAmount),
             moratorium: Number(values.moratorium),
@@ -236,11 +203,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             obligorLoanLimit: Number(values.obligorLimit),
             mandate: values.loanProductMandate,
             termsAndCondition: values.loanProductTermsAndCondition,
-            // bankPartner: values.bankPartner,
-            // loanInsuranceProvider: values.loanInsuranceProvider,
-            // disbursementTerms: values.loanDisbursementTerms,
-            // investmentVehicleId: fundProductId,
-            // loanProductStatus: values.loanProductStatus,
         };
 
 
@@ -258,13 +220,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         }
     };
 
-    // const handleBack = () => {
-    //     setStep(1);
-    // }
-    //
-    // const handleContinueButton = () => {
-    //     setStep(2);
-    // };
     const handleModalClose = () => {
         if (setIsOpen) {
             setIsOpen(false);
@@ -350,26 +305,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                 </div>
 
                                 <div className={`grid md:grid-cols-2 grid-col gap-y-0 gap-x-5`}>
-                                    {/*<div>*/}
-                                    {/*    <Label htmlFor="productSponsor">Loan product sponsor</Label>*/}
-                                    {/*    <LoanProductCustomSelect triggerId='productSponsorId'*/}
-                                    {/*                             id="productSponsor"*/}
-                                    {/*                             selectContent={productSponsors}*/}
-                                    {/*                             value={values.productSponsor}*/}
-                                    {/*                             onChange={(value) => setFieldValue("productSponsor", value)}*/}
-                                    {/*                             name="productSponsor"*/}
-                                    {/*                             placeHolder='Select a sponsor'/>*/}
-                                    {/*    {*/}
-                                    {/*        errors.productSponsor && touched.productSponsor && (*/}
-                                    {/*            <ErrorMessage*/}
-                                    {/*                name="productSponsor"*/}
-                                    {/*                id='productSponsorError'*/}
-                                    {/*                component="div"*/}
-                                    {/*                className="text-red-500 text-sm"*/}
-                                    {/*            />)*/}
-                                    {/*    }*/}
-                                    {/*</div>*/}
-
                                     <div className={`flex flex-col w-full`}>
                                         <div>
                                             <Label htmlFor="costOfFunds">Cost of funds (%)</Label>
@@ -664,12 +599,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                 <div className={`pt-4`}>
                                     <Label htmlFor="loanProductMandate">Loan product mandate</Label>
-                                    {/*<Field*/}
-                                    {/*    name="loanProductMandate"*/}
-                                    {/*    component={FormikCustomQuillField}*/}
-                                    {/*    maximumDescription={2500}*/}
-                                    {/*    placeholder={"Enter product mandate..."}*/}
-                                    {/*/>*/}
                                    <div className={`pt-3`}>
                                        <PdfAndDocFileUpload
                                            handleDrop={handleDrop}
@@ -694,12 +623,6 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                     <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product
                                         terms and
                                         conditions</Label>
-                                    {/*<Field*/}
-                                    {/*    name="loanProductTermsAndCondition"*/}
-                                    {/*    component={FormikCustomQuillField}*/}
-                                    {/*    maximumDescription={2500}*/}
-                                    {/*    placeholder={"Enter terms and condition"}*/}
-                                    {/*/>*/}
                                     <div className={`pt-3`}>
                                         <PdfAndDocFileUpload
                                             handleDrop={handleDrop}
@@ -741,120 +664,13 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                             "Create"
                                         )}
                                     </Button>
-                                    {/*<Button*/}
-                                    {/*    className={`h-12 w-32 ${!isValid? 'bg-neutral650 text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'*/}
-                                    {/*    }`}*/}
-                                    {/*    variant="secondary"*/}
-                                    {/*    onClick={handleContinueButton}*/}
-                                    {/*    disabled={!isValid}*/}
-                                    {/*>*/}
-                                    {/*    Continue*/}
-                                    {/*</Button>*/}
                                 </div>
                                 {error && (
                                     <div className="text-red-500 text-sm mt-2 text-center">
                                         {error}
                                     </div>
                                 )}
-
-                                {/*{*/}
-                                {/*    <div*/}
-                                {/*        className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>*/}
-                                {/*}*/}
                             </div>
-                            {/*)}*/}
-
-                            {/*{step === 2 && (*/}
-                            {/*    <div id={"step2Div"}>*/}
-                            {/*        <div>*/}
-                            {/*            <Label htmlFor="bankPartner">Bank partner(optional)</Label>*/}
-                            {/*            <div>*/}
-                            {/*                <CustomSelect triggerId='bankPartner'*/}
-                            {/*                              id="bankPartner"*/}
-                            {/*                              selectContent={bankPartner}*/}
-                            {/*                              value={values.bankPartner}*/}
-                            {/*                              onChange={(value) => setFieldValue("bankPartner", value)}*/}
-                            {/*                              name="bankPartner"*/}
-                            {/*                              placeHolder='Select partner'*/}
-                            {/*                />*/}
-                            {/*                {*/}
-                            {/*                    errors.bankPartner && touched.bankPartner && (*/}
-                            {/*                        <ErrorMessage*/}
-                            {/*                            name="bankPartner"*/}
-                            {/*                            id='bankPartner'*/}
-                            {/*                            component="div"*/}
-                            {/*                            className="text-red-500 text-sm"*/}
-                            {/*                        />)*/}
-                            {/*                }*/}
-                            {/*            </div>*/}
-                            {/*        </div>*/}
-
-                            {/*        <div>*/}
-                            {/*            <Label htmlFor="loanDisbursementTerms">Select loan insurance provider (optional)</Label>*/}
-                            {/*            <div>*/}
-
-                            {/*            </div>*/}
-                            {/*        </div>*/}
-
-
-                            {/*        <div className={`pt-4`}>*/}
-                            {/*            <Label htmlFor="loanDisbursementTerms">Loan disbursement terms(optional)</Label>*/}
-                            {/*            <Field*/}
-                            {/*                as="textarea"*/}
-                            {/*                id="loanDisbursementTermsId"*/}
-                            {/*                name="loanDisbursementTerms"*/}
-                            {/*                className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"*/}
-                            {/*                placeholder="Enter disbursement terms"*/}
-                            {/*                rows={4}*/}
-                            {/*                maxLength={maxChars}*/}
-                            {/*                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {*/}
-                            {/*                    const value = e.target.value; if (value.length <= maxChars) {*/}
-                            {/*                        setFieldValue("loanDisbursementTerms", value); } }}*/}
-                            {/*                onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {*/}
-                            {/*                    const paste = e.clipboardData.getData('text');*/}
-                            {/*                    if (paste.length + values.loanDisbursementTerms.length > maxChars) {*/}
-                            {/*                        e.preventDefault();*/}
-                            {/*                        setError('Loan terms must be 2500 characters or less');*/}
-                            {/*                    } }}*/}
-                            {/*            />*/}
-                            {/*            { errors.loanDisbursementTerms && touched.loanDisbursementTerms && (*/}
-                            {/*                <ErrorMessage*/}
-                            {/*                    name="loanDisbursementTerms"*/}
-                            {/*                    component="div"*/}
-                            {/*                    id='loanDisbursementTerms'*/}
-                            {/*                    className="text-red-500 text-sm"*/}
-                            {/*                /> ) }*/}
-                            {/*            { error && (*/}
-                            {/*                <div className="text-red-500 text-sm"> {error} </div>*/}
-                            {/*            )}*/}
-                            {/*        </div>*/}
-
-                            {/*        <div className={`flex justify-end py-5 gap-3`}>*/}
-                            {/*            <Button*/}
-                            {/*                className={`text-meedlBlue border border-meedlBlue h-12 w-32`}*/}
-                            {/*                variant={"outline"}*/}
-                            {/*                onClick={handleBack}*/}
-                            {/*            >*/}
-                            {/*                Back*/}
-                            {/*            </Button>*/}
-                            {/*            <Button*/}
-                            {/*                className={`bg-meedlBlue text-meedlWhite h-12 w-32`}*/}
-                            {/*                variant={"secondary"}*/}
-                            {/*                type={"submit"}*/}
-                            {/*            >*/}
-                            {/*                Create*/}
-                            {/*                /!*{isLoading ? ( <Isloading/> ) : (*!/*/}
-                            {/*                /!*    "Create"*!/*/}
-                            {/*                /!*)}*!/*/}
-
-                            {/*            </Button>*/}
-                            {/*        </div>*/}
-                            {/*        {*/}
-                            {/*            <div*/}
-                            {/*                className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>*/}
-                            {/*        }*/}
-                            {/*    </div>*/}
-                            {/*)}*/}
                         </Form>
                     )
                 }
