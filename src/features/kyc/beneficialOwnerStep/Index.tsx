@@ -179,12 +179,14 @@ const BeneficialOwnerStep = () => {
 
     const handleDrop = (id: number, e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
-        const file = e.dataTransfer.files?.[0];
-        setSections((prev) =>
-            prev.map((section) =>
-                section.id === id ? { ...section, proofFile: file || null } : section
-            )
-        );
+        const file = e.dataTransfer.files?.[0] || null;
+        if (file) {
+            setSections((prev) =>
+                prev.map((section) =>
+                    section.id === id ? { ...section, proofFile: file } : section
+                )
+            );
+        }
     };
 
     const handleSetUploadedImageUrl = (id: number, url: string | null) => {
@@ -198,15 +200,13 @@ const BeneficialOwnerStep = () => {
     };
 
     const handleSaveAndContinue = () => {
-            const processedIndividualSections = sections.map(section => ({
+            const sectionsWithTypes = sections.map(section => ({
                 ...section,
                 type: sectionTypes[section.id] || "entity",
                 firstName: section.firstName || "",
                 lastName: section.lastName || "",
                 relationship: section.relationship || "",
                 proofType: section.proofType || "",
-                ownership: section.ownership || "",
-                proofFile: section.proofFile || null,
                 dob: section.dob instanceof Date ? section.dob.toISOString() : section.dob
             }));
 
@@ -218,7 +218,16 @@ const BeneficialOwnerStep = () => {
                         entityName,
                         rcNumber,
                         country: selectedCountry,
-                        sections: processedIndividualSections
+                        sections: sectionsWithTypes
+                    }
+                })
+            );
+        } else {
+            dispatch(
+                updateBeneficialOwner({
+                    selectedForm: "individual",
+                    individualData: {
+                        sections: sectionsWithTypes
                     }
                 })
             );
