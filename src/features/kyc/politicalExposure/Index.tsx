@@ -59,7 +59,7 @@ const PoliticalExposure: React.FC = () => {
 
     useEffect(() => {
         if (selectedCountry) {
-            const mappedCountry = mapCountryCodeToEnum(selectedCountry); // Map the country code to the full enum value
+            const mappedCountry = mapCountryCodeToEnum(selectedCountry);
             setFormData(prev => ({
                 ...prev,
                 country: mappedCountry
@@ -100,12 +100,12 @@ const PoliticalExposure: React.FC = () => {
 
         const dataToSubmit = {
             ...formData,
-            relationship: formData.relationship ? relationshipMap[formData.relationship] : undefined, // Map relationship to enum
-            ...(formData.isPoliticallyExposedPerson === false && {
+            relationship: formData.relationship ? relationshipMap[formData.relationship] : undefined,
+            ...((!formData.isPoliticallyExposedPerson && {
                 politicalPosition: undefined,
                 relationship: undefined,
                 country: undefined,
-            }),
+            })),
         };
 
         dispatch(updateDeclaration(dataToSubmit));

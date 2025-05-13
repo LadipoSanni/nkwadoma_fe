@@ -157,7 +157,7 @@ const FinancierOverviewContent = () => {
             )}
             <section className={'mt-8'}>
                 <BalanceCard cardData={getFinancialCardData(data)}
-                             hasInvestmentData={!!data?.data && (data?.data?.investmentVehicles?.length > 0)}/>
+                             hasInvestmentData={!!data?.data && (data?.data?.investmentVehicleResponses?.length > 0)}/>
             </section>
             <div className={'mt-8'}>
                 <MyInvestments/>
