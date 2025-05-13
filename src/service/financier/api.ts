@@ -5,7 +5,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery";
 export const financierOnboardingAndDashboardApi = createApi({
     reducerPath:'financierOnboardingAndDashboardApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['FinancierDashboard'],
+    tagTypes: ['FinancierDashboard', 'marketplace'],
     endpoints : (builder) =>  ({
 
         viewFinancierDashboard: builder.query({
@@ -22,16 +22,18 @@ export const financierOnboardingAndDashboardApi = createApi({
            })
         }),
         filterMyInvestment: builder.query({
-           query : (data: {investmentVehicleType: string, pageSize:string, pageNumber: string}) => ({
+           query : (data: {investmentVehicleType: string, pageSize:number, pageNumber: number}) => ({
                url: `investmentVehicle/all/financier?investmentVehicleType=${data.investmentVehicleType}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
                method: 'GET'
-           })
+           }),
+            providesTags: ['marketplace']
         }),
         searchMyInvestment: builder.query({
-           query : (data:{name: string, investmentType: string, pageSize: string, pageNumber: string}) => ({
+           query : (data:{name: string, investmentType: string, pageSize: number, pageNumber: number}) => ({
                url: `investmentVehicle/search/financier/${data.name}?investmentVehicleType=${data.investmentType}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
                method: 'GET'
-           })
+           }),
+            providesTags:['marketplace']
         }),
         completeKyc: builder.mutation({
           query: (data) => ({
