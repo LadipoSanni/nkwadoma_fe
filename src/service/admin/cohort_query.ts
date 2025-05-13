@@ -84,13 +84,13 @@ export const cohortApi = createApi({
         }),
 
         searchCohortByOrganisation: builder.query({
-            query: (cohortName) => ({
-                url: '/searchCohort',
+            query: ({ cohortName, programId, pageSize, pageNumber }) => ({
+                url: `/searchCohort?cohortName=${cohortName}&programId=${programId}&pageSize=${pageSize}&pageNumber=${pageNumber}`,
                 method: 'GET',
-                params: {cohortName},
             }),
 
         }),
+
 
         editCohort: builder.mutation({
             query: ({data}) => ({
