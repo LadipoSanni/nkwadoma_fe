@@ -36,9 +36,9 @@ const ChangeInstitutionModal = () => {
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
     const [current, setCurrent] = useState<number | string>('')
     const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
-    const [pageNumber,setPageNumber] = useState(0)
-    const [nextPage,setNextPage] = useState(false)
-    const [totalPage,setTotalPage] = useState(0)
+    const [pageNumber] = useState(0)
+    // const [nextPage,setNextPage] = useState(false)
+    // const [totalPage,setTotalPage] = useState(0)
     const [disabled, setDisabled] = React.useState(true)
     const [searchTerm, setSearchTerm] = useState('');
     const pageSize = 10
