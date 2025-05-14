@@ -141,19 +141,19 @@ function EndownmentFund() {
                 title: 'Amount collected',
                 sortable: true,
                 id: 'amountRaised',
-                selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRaised)}</div>
+                selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountRaised)}</div>
             },
             {
                 title: 'Amount disbursed',
                 sortable: true,
                 id: ' amountDisbursed',
-                selector: (row: TableRowData) => <div className='ml-6'>{formatAmount(row.amountDisbursed)}</div>
+                selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountDisbursed)}</div>
             },
             {
                 title: 'Amount available',
                 sortable: true,
                 id: 'amountAvailable',
-                selector: (row: TableRowData) => <div className='ml-8'>{formatAmount(row.totalAvailableAmount)}</div>
+                selector: (row: TableRowData) => <div className=''>{formatAmount(row.totalAvailableAmount)}</div>
             },
         ]
 

@@ -71,15 +71,30 @@ function Organization() {
         status: tabType.toUpperCase(),
     };
 
+    const searchElement = {
+        name:searchTerm,
+        status: tabType.toUpperCase(),
+        pageNumber: currentTabState.pageNumber,
+        pageSize,
+    }
+
     const { data, isLoading } = useViewAllOrganizationByStatusQuery(dataElement, {
         refetchOnMountOrArgChange: tabType === "active" || tabType === "deactivated"
     });
 
-    const { data: searchResults } = useSearchOrganisationByNameQuery(searchTerm, { skip: !searchTerm });
+    const { data: searchResults, isLoading: isloading } = useSearchOrganisationByNameQuery(searchElement, { skip: !searchTerm });
 
     useEffect(() => {
         if (searchTerm && searchResults && searchResults.data) {
-            setOrganizationList(searchResults.data);
+            setOrganizationList(searchResults.data?.body);
+            setTabStates(prev => ({
+                ...prev,
+                [tabType]: {
+                    pageNumber: searchResults.data.pageNumber,
+                    totalPages: searchResults.data.totalPages,
+                    hasNextPage:searchResults.data.hasNextPage
+                }
+            }));
         } else if (!searchTerm && data && data?.data) {
             setOrganizationList(data?.data?.body);
             setTabStates(prev => ({
@@ -150,7 +165,7 @@ function Organization() {
                 pageNumber={currentTabState.pageNumber}
                 setPageNumber={handlePageChange}
                 totalPages={currentTabState.totalPages}
-                isLoading={isLoading}
+                isLoading={isLoading || isloading}
             />
         );
     };
