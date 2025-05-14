@@ -7,7 +7,8 @@ import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
 import { useDeactivateOrganizationMutation } from '@/service/admin/organization';
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from 'next/navigation'
-
+import { store } from '@/redux/store';
+import { setOrganizationTabStatus } from '@/redux/slice/organization/organization';
 
 interface ApiError {
     status: number;
@@ -58,6 +59,7 @@ function DeactivateOrganization({setIsOpen,id}:props) {
                 description: deactivate.message,
                 status: "success",
               })
+              store.dispatch(setOrganizationTabStatus("deactivated"))
               router.push("/organizations")
             }
           } catch (err) {
