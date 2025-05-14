@@ -77,17 +77,10 @@ const BeneficialOwnerStep = () => {
     };
 
     const validateEntityName = (name: string) => {
-        // Check if name contains at least one number
-        if (!/\d/.test(name)) {
-            return "Entity name must contain at least one number";
-        }
-
-        // Check if name starts with a special character (except &)
         if (/^[^a-zA-Z0-9&]/.test(name)) {
             return "Entity name cannot start with a special character";
         }
 
-        // Check if name contains special characters other than &
         if (/[^a-zA-Z0-9&\s]/.test(name)) {
             return "Entity name can only contain '&' as a special character";
         }
@@ -96,7 +89,6 @@ const BeneficialOwnerStep = () => {
     };
 
     const validatePersonName = (name: string) => {
-        // Check if name contains numbers
         if (/\d/.test(name)) {
             return "Name cannot contain numbers";
         }
@@ -105,7 +97,6 @@ const BeneficialOwnerStep = () => {
     };
 
     const validateTotalOwnership = (sections: Section[]) => {
-        // Calculate total ownership percentage
         const entitySections = sections.filter(section => sectionTypes[section.id] === "entity");
         const individualSections = sections.filter(section => sectionTypes[section.id] === "individual");
 

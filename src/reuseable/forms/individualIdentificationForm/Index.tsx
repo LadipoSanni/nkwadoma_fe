@@ -20,6 +20,7 @@ interface IndividualIdentificationFormProps {
     onSubmit: (data: IndividualFormInputs) => void;
     isLoading: boolean;
     setValue: UseFormSetValue<IndividualFormInputs>;
+    defaultValues?: IndividualFormInputs;
 }
 
 const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> = ({
