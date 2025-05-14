@@ -17,6 +17,7 @@ interface EntitySection {
     entityName: string;
     rcNumber: string;
     country: string | undefined;
+    ownership?: string;
 }
 
 

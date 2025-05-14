@@ -37,7 +37,8 @@ interface Section extends EntitySection {
     lastName?: string;
     dob?: Date | string;
     relationship?: string;
-    ownership?: string;
+    entityOwnership?: string;
+    individualOwnership?: string;
     proofType?: string;
     proofFile?: File | null;
     proofFileUrl?: string;
@@ -82,6 +83,7 @@ const BeneficialOwnerStep = () => {
                     entityName: entityData.entityName || "",
                     rcNumber: rcNumber,
                     country: entityData.country,
+                    entityOwnership: "",
                     proofType: "national_id",
                     proofFile: null,
                     proofFileUrl: undefined,
@@ -119,7 +121,7 @@ const BeneficialOwnerStep = () => {
                     lastName: "",
                     dob: new Date().toISOString(),
                     relationship: "",
-                    ownership: "", 
+                    individualOwnership: "", 
                     proofType: "national_id",
                     proofFile: null,
                     proofFileUrl: undefined,
@@ -173,7 +175,8 @@ const BeneficialOwnerStep = () => {
                 lastName: "",
                 dob: undefined,
                 relationship: "",
-                ownership: "",
+                entityOwnership: "",
+                individualOwnership: "",
                 proofType: "national_id",
                 proofFile: null,
                 proofFileUrl: undefined,
@@ -276,14 +279,19 @@ const BeneficialOwnerStep = () => {
                 hasErrors = true;
             }
 
+            const sectionType = sectionTypes[section.id] || "entity";
+            const ownership = sectionType === "entity" ? section.entityOwnership : section.individualOwnership;
+
             return {
                 ...section,
-                type: sectionTypes[section.id] || "entity",
+                type: sectionType,
                 firstName: section.firstName || "",
                 lastName: section.lastName || "",
                 relationship: section.relationship || "",
                 proofType: section.proofType || "",
-                ownership: section.ownership || "",
+                entityOwnership: section.entityOwnership || "",
+                individualOwnership: section.individualOwnership || "",
+                ownership: ownership || "", // Add ownership field for Redux store
                 proofFile: section.proofFile || null,
                 dob: section.dob instanceof Date ? section.dob.toISOString() : section.dob,
                 errors: {
@@ -400,24 +408,43 @@ const BeneficialOwnerStep = () => {
                                                             disableSearch={true}
                                                         />
                                                     </div>
-                                                    <div id="rcNumberContainer" className="grid gap-2">
-                                                        <Label htmlFor={`rcNumber-${section.id}`}
-                                                            className="block text-sm font-medium text-labelBlue">
-                                                            RC number
-                                                        </Label>
-                                                        <Input
-                                                            id={`rcNumber-${section.id}`}
-                                                            value={section.rcNumber}
-                                                            onChange={(e) => {
-                                                                const value = e.target.value.replace(/^rc/i, 'RC');
-                                                                handleInputChange(section.id, "rcNumber", value);
-                                                            }}
-                                                            placeholder="Enter RC number"
-                                                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                                                        />
-                                                        {section.errors?.rcNumber && (
-                                                            <p className="text-red-500 text-sm">{section.errors.rcNumber}</p>
-                                                        )}
+                                                    <div className="flex flex-col gap-2">
+                                                        <div id="rcNumberContainer" className="flex gap-5">
+                                                            <div className="grid gap-2">
+                                                                <Label htmlFor={`rcNumber-${section.id}`}
+                                                                    className="block text-sm font-medium text-labelBlue">
+                                                                    RC number
+                                                                </Label>
+                                                                <Input
+                                                                    id={`rcNumber-${section.id}`}
+                                                                    value={section.rcNumber}
+                                                                    onChange={(e) => {
+                                                                        const value = e.target.value.replace(/^rc/i, 'RC');
+                                                                        handleInputChange(section.id, "rcNumber", value);
+                                                                    }}
+                                                                    placeholder="Enter RC number"
+                                                                    className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                                                />
+                                                                {section.errors?.rcNumber && (
+                                                                    <p className="text-red-500 text-sm">{section.errors.rcNumber}</p>
+                                                                )}
+                                                            </div>
+                                                            <div className="grid gap-2">
+                                                                <Label htmlFor={`ownership-${section.id}`}>
+                                                                    Ownership / Share (%)
+                                                                </Label>
+                                                                <Input
+                                                                    id={`ownership-${section.id}`}
+                                                                    name="ownership"
+                                                                    type="number"
+                                                                    max="100"
+                                                                    placeholder="0"
+                                                                    value={section.entityOwnership || ""}
+                                                                    onChange={(e) => handleInputChange(section.id, "entityOwnership", e.target.value)}
+                                                                    className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                                                />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </TabsContent>
@@ -523,8 +550,8 @@ const BeneficialOwnerStep = () => {
                                                             type="number"
                                                             max="100"
                                                             placeholder="0"
-                                                            value={section.ownership || ""}
-                                                            onChange={(e) => handleInputChange(section.id, "ownership", e.target.value)}
+                                                            value={section.individualOwnership || ""}
+                                                            onChange={(e) => handleInputChange(section.id, "individualOwnership", e.target.value)}
                                                             className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md w-full md:w-[47%] h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                                         />
                                                     </div>
