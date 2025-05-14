@@ -59,7 +59,6 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
   const [initialItemAmount, setInitialItemAmount] = useState("");
   const [isProgram, setIsprogram] = useState(false)
   const [hasNextPage, setNextPage] = useState(true);
-  // const dispatch = useDispatch();
 
   const { data,isLoading: programIsLoading,isFetching } = useGetAllProgramsQuery(
     { pageSize: size, pageNumber: pageNumber },
@@ -69,20 +68,24 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
 
   useEffect(() => {
     if (data && data?.data) {
-      // const programs = data?.data?.body;
-      // setProgramView(programs);
-       setProgramView((prev) => {
-        if(pageNumber === 0){
-          return data?.data?.body
+      setProgramView((prev) => {
+        if (pageNumber === 0) {
+          return [...data.data.body].sort((a, b) =>
+              a.name.localeCompare(b.name)
+          );
         }
-        const newPrograms = data?.data?.body.filter(
-          (newProgram: viewAllProgramProps) => !prev.some((prev) => prev.id  === newProgram.id)
+        const newPrograms = data.data.body.filter(
+            (newProgram: viewAllProgramProps) =>
+                !prev.some((prev) => prev.id === newProgram.id)
         );
-         return [...prev, ...newPrograms]
-       });
-       setNextPage(data?.data?.hasNextPage)
+        return [...prev, ...newPrograms].sort((a, b) =>
+            a.name.localeCompare(b.name)
+        );
+      });
+      setNextPage(data?.data?.hasNextPage);
     }
-  }, [data,pageNumber]);
+  }, [data, pageNumber]);
+
 
   const loadMore = () => {
     if (!isFetching && hasNextPage) {
@@ -188,23 +191,6 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
     }else { setError("Description must be 2500 characters or less"); }
   };
 
-  // const handleReset = () => {
-  //   setIsFormSubmitted(false);
-  //   setDate(undefined);
-  //   setName("");
-  //   setDescription("");
-  //   setSelectedProgram("");
-  //   setDescriptionError(null);
-  //   setIsSelectOpen(false);
-  //   setIsButtonDisabled(true);
-  //   setCreateButtonDisabled(true);
-  //   // setLoanBreakdowns([]);
-  //    setLoanBreakdowns([{ itemName: "Tuition", itemAmount: "", currency: "NGN" }]);
-  //   setProgramId("");
-  //   setError("");
-  //   setUploadedUrl(null);
-  // };
-
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
@@ -214,10 +200,6 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
   };
 
   const handleSelectClick = () => {
-    // setLoanBreakdowns([
-    //   ...loanBreakdowns,
-    //   { itemName: "", itemAmount: "", currency: "NGN" },
-    // ]);
     setLoanBreakdowns([ loanBreakdowns[0],
        ...loanBreakdowns.slice(1), 
        { itemName: "", itemAmount: "", currency: "NGN" }  ]);
@@ -233,8 +215,6 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
 
         <form
           id="cohortForm"
-          // className={`grid gap-5 ${inter.className} pr-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`}
-          // style={{ scrollbarGutter: "stable both-edge" }}
           className='grid gap-5 grid-cols-1 gap-y-4 md:max-h-[57vh] max-h-[55vh] overflow-y-auto  pr-2'
                     style={{
                         scrollbarWidth: 'none',
@@ -365,7 +345,6 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
         >
           {error}
         </div>
-      {/* </DialogContent> */}
     </div>
   );
 };

@@ -146,8 +146,19 @@ export const organizationApi = createApi({
                method: 'GET',
                params: param
             })
+        }),
+        viewAllOrganizationByStatus: builder.query({
+            query: (param:{
+                pageNumber: number,
+                pageSize: number,
+                status: string
+            }) => ({
+                url: "/organization/all/status",
+                method: 'GET',
+                params: param
+            })
         })
     })
 })
 
-export const { useViewOrganizationsQuery, useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery,useDeactivateOrganizationMutation,useActivateOrganizationMutation,useViewOrganizationAdminQuery,useSearchOrganizationAsPortfolioManagerQuery} = organizationApi
+export const { useViewOrganizationsQuery, useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery,useDeactivateOrganizationMutation,useActivateOrganizationMutation,useViewOrganizationAdminQuery,useSearchOrganizationAsPortfolioManagerQuery,useViewAllOrganizationByStatusQuery} = organizationApi
