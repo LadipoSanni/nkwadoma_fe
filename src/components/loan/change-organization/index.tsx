@@ -16,6 +16,7 @@ import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {ChangeOrganization} from "@/types/loan/loan-request.type";
 
 
+
 interface OrganizationType {
     id: string;
     name: string;
@@ -35,13 +36,22 @@ const ChangeInstitutionModal = () => {
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
     const [current, setCurrent] = useState<number | string>('')
     const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
-
+    const [pageNumber] = useState(0)
+    // const [nextPage,setNextPage] = useState(false)
+    // const [totalPage,setTotalPage] = useState(0)
     const [disabled, setDisabled] = React.useState(true)
     const [searchTerm, setSearchTerm] = useState('');
-    const {data, isLoading} = useViewOrganizationsQuery(9);
+    const pageSize = 10
+    const searchElement = {
+        name:searchTerm,
+        pageNumber: pageNumber,
+        pageSize,
+    }
+
+    const {data, isLoading} = useViewOrganizationsQuery({});
     const {
         data: searchResults,
-    } = useSearchOrganisationByNameQuery(searchTerm, {skip: !searchTerm});
+    } = useSearchOrganisationByNameQuery(searchElement, {skip: !searchTerm});
     const organisationList: ChangeOrganization[] = searchTerm.length > 0 ? searchResults?.data.body || [] : data?.data
 
     const handleClick = (id: string | number, name?: string, logoImage?: string) => {
@@ -121,7 +131,7 @@ const ChangeInstitutionModal = () => {
                                         searchResults?.data.length === 0 || !searchResults ?
                                             <SearchEmptyState name={"organization"}
                                                               icon={MdSearch}/> :
-                                            searchResults?.data.map((searchResult: OrganizationType, index: number) => {
+                                            searchResults?.data?.body?.map((searchResult: OrganizationType, index: number) => {
 
                                                 const initial = getInitials(searchResult.name)
                                                 return (

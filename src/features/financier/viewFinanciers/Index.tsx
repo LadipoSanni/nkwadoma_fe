@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState,useEffect } from 'react';
 import SearchInput from '@/reuseable/Input/SearchInput';
 import { Button } from "@/components/ui/button";
@@ -47,24 +46,32 @@ interface financials {
 
 type viewAllfinancier = financials & TableRowData
 
+interface TabState {
+    pageNumber: number;
+    totalPages: number;
+    hasNextPage: boolean;
+}
 
 
 const ViewFinanciers = () => {
     const tabType = useAppSelector(state => state?.financier?.financierStatusTab)
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFinancier, setSelectedFinancier] = useState('');
-    // const [setIsDropdownOpen] = useState(false);
     const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [hasNextPage,setNextPage] = useState(false)
-    const [totalPage,setTotalPage] = useState(0)
-    const [pageNumber,setPageNumber] = useState(0)
-    // const [setTypeSelectedFinancier] = useState('');
-    // const [selectedActivationStatusTab, setSelectedActivationStatusTab] = useState(tabType );
     const router = useRouter()
 
+    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
+            active: { pageNumber: 0, totalPages: 0, hasNextPage: false },
+            invited: { pageNumber: 0, totalPages: 0, hasNextPage: false },
+            
+        });
+
+    const currentTabState = tabStates[tabType];
+
+
     const param = {
-        pageNumber: pageNumber,
+        pageNumber: currentTabState.pageNumber,
         pageSize: 10,
         financierType: selectedFinancier.toUpperCase(),
         activationStatus: tabType.toUpperCase(),
@@ -72,65 +79,54 @@ const ViewFinanciers = () => {
 
 
     const {data, isLoading, refetch} = useGetAllActiveAndInvitedFinanciersQuery(param)
-    const {data:searchData, isLoading: searchIsLoading} = useSearchFinancierQuery({name:searchTerm, pageNumber: pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !searchTerm})
+    const {data:searchData, isLoading: searchIsLoading} = useSearchFinancierQuery({name:searchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !searchTerm})
 
     useEffect(()=>{
         if(searchTerm && searchData && searchData?.data){
             const result = searchData?.data?.body
             setFinanciers(result)
-            setNextPage(searchData?.data?.hasNextPage)
-            setTotalPage(searchData?.data?.totalPages)
-            setPageNumber(searchData?.data?.pageNumber)
+            setTabStates(prev => ({
+                ...prev,
+                [tabType]: {
+                    pageNumber: searchData?.data.pageNumber,
+                    totalPages: searchData?.data.totalPages,
+                    hasNextPage: searchData?.data.hasNextPage
+                }
+            }));
         }
         else if(data && data?.data){
             setFinanciers(data?.data?.body)
-            setNextPage(data?.data?.hasNextPage)
-            setTotalPage(data?.data?.totalPages)
-            setPageNumber(data?.data?.pageNumber)
+            setTabStates(prev => ({
+                ...prev,
+                [tabType]: {
+                    pageNumber: data.data.pageNumber,
+                    totalPages: data.data.totalPages,
+                    hasNextPage: data.data.hasNextPage
+                }
+            }));
            
         }
-    },[searchTerm, searchData,data])
-
-
-    // const listOfFinanciers = [
-    //     { label: 'INDIVIDUAL', name: 'Individual' },
-    //     { label: 'COOPERATE', name: 'Corporate' },
-    // ];
-    //
-    // const initialFormValue: FormValues = {
-    //     selectValue: '',
-    //     financier: 'Individual',
-    // };
-    //
-    // const validationSchema = Yup.object().shape({
-    //     selectValue: Yup.string().required('Select value is required'),
-    //     financier: Yup.string().required('Financier is required'),
-    // });
+    },[searchTerm, searchData,data,tabType])
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
 
-    // const handleSelectFinancier = (financier: string) => {
-    //     setTypeSelectedFinancier(financier);
-    // };
-
-    // const handleSubmit = () => {
-    //     setSelectedFinancier(tempSelectedFinancier)
-    //         refetch()
-    //
-    // };
-    //
-    // const toggleDropdown = () => {
-    //     setIsDropdownOpen(!isDropdownOpen);
-    // };
-
     const handleReset = () => {
-        // setTypeSelectedFinancier('')
         setSelectedFinancier('');
-        // setIsDropdownOpen(false);
         refetch();
     };
+
+    const handlePageChange: React.Dispatch<React.SetStateAction<number>> = (value) => {
+            const newPage = typeof value === 'function' ? value(currentTabState.pageNumber) : value;
+            setTabStates(prev => ({
+                ...prev,
+                [tabType]: {
+                    ...prev[tabType],
+                    pageNumber: newPage
+                }
+            }));
+        };
 
 
     const financierHeader = [
@@ -189,7 +185,6 @@ const ViewFinanciers = () => {
 
             <div className={`pt-2`}>
                 <Tabs value={tabType} onValueChange={(value) => {
-    // setSelectedActivationStatusTab(value);
     store.dispatch(setFinancierStatusTab(value));
   }} >
                     <TabsList>
@@ -222,10 +217,10 @@ const ViewFinanciers = () => {
                                     staticHeader={"Financier"}
                                     staticColunm={"name"}
                                     sx='cursor-pointer'
-                                    hasNextPage={hasNextPage}
-                                    pageNumber={pageNumber}
-                                    setPageNumber={setPageNumber}
-                                    totalPages={totalPage}
+                                    hasNextPage={currentTabState.hasNextPage}
+                                    pageNumber={currentTabState.pageNumber}
+                                    setPageNumber={handlePageChange}
+                                    totalPages={currentTabState.totalPages}
                                     isLoading={isLoading || searchIsLoading}
                                 />
                             )}
@@ -244,10 +239,10 @@ const ViewFinanciers = () => {
                             staticHeader={"Financier"}
                             staticColunm={"name"}
                             sx='cursor-pointer'
-                            hasNextPage={hasNextPage}
-                            pageNumber={pageNumber}
-                            setPageNumber={setPageNumber}
-                            totalPages={totalPage}
+                            hasNextPage={currentTabState.hasNextPage}
+                            pageNumber={currentTabState.pageNumber}
+                            setPageNumber={handlePageChange}
+                            totalPages={currentTabState.totalPages}
                             isLoading={isLoading || searchIsLoading}
                         />
 

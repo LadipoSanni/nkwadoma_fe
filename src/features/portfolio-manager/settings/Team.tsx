@@ -1,7 +1,7 @@
 'use client' 
 import React,{useState,useEffect} from 'react'
 import ButtonAndSearch from '@/reuseable/action-bars/Button-and-search'
-import Table from "@/reuseable/table/LoanProductTable";
+import Table from "@/reuseable/table/Table";
 // import { teamData } from '@/utils/cohort/trainee-details-mock-data/Index';
 import { Book } from "lucide-react";
 import TableModal from '@/reuseable/modals/TableModal';
@@ -29,15 +29,17 @@ interface adminProps extends TableRowData  {
 function Team() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+     const [hasNextPage,setNextPage] = useState(false)
+      const [totalPage,setTotalPage] = useState(0)
+    const [pageNumber,setPageNumber] = useState(0)
   const [adminList, setAdminList] = useState<adminProps[]>([])
 
     const dataElement = {
-      pageNumber: 0,
-      pageSize: 300
+      pageNumber:pageNumber,
+      pageSize: 10
   }
     const {data: adminData,isLoading} = useViewOrganizationAdminQuery(dataElement)
-    console.log(adminData);
-
+   
     const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
 
     useEffect(()=> {
@@ -48,6 +50,9 @@ function Team() {
      else if(!searchTerm && adminData && adminData?.data  ){
          const adminEmployees = adminData?.data?.body
           setAdminList(adminEmployees)
+          setNextPage(adminData?.data?.hasNextPage)
+          setTotalPage(adminData?.data?.totalPages)
+          setPageNumber(adminData?.data?.pageNumber)
       }
     },[adminData,searchTerm,searchResults])
 
@@ -124,14 +129,17 @@ function Team() {
           tableData={adminList.slice().reverse()}
           tableHeader={adminsHeader}
           handleRowClick={()=>{}}
-          optionalRowsPerPage={10}
           tableHeight={48}
-          icon={Book}
+          icon={<Book/>}
           condition={true}
           sideBarTabName='colleague'
           staticHeader={"Full name"}
           staticColunm={"fullName"}
           isLoading={isLoading}
+          hasNextPage={hasNextPage}
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+          totalPages={totalPage}
          />
 }
         </div>

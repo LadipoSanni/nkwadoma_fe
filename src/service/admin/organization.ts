@@ -44,10 +44,16 @@ export const organizationApi = createApi({
         }),
 
         searchOrganisationByName: builder.query({
-            query: (name) => ({
+            query: (param: {
+                 name: string,
+                 status?: string,
+                pageSize: number,
+                pageNumber: number,
+                
+       }) => ({
                 url: '/organization/search',
                 method: 'GET',
-                params: {name},
+                params: param,
             }),
         }),
         inviteAdmin: builder.mutation({

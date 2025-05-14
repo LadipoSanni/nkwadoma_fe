@@ -6,16 +6,8 @@ import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
  import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
  import { validateNumber} from "@/utils/Format";
  import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
-//  import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 import Multiselect from '@/reuseable/mult-select/multi-select';
 
-
-// interface ApiError {
-//     status: number;
-//     data: {
-//       message: string;
-//     };
-//   }
 
 interface Props {
     financierType?: string;
@@ -185,6 +177,7 @@ function InviteFinancier({financierType,isloading,isValid,handleBack,errors,touc
         onValueChange={(values) => setFieldValue("investmentVehicleDesignation", values)}
         placeholder='Select designation'
         restrictedItems={["LEAD","SPONSOR"]}
+        isShowButton={true}
       />
     
    {
