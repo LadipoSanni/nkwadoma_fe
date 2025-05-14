@@ -15,7 +15,6 @@ import MarketPlaceInvestmentGrid from "@/reuseable/Skeleton-loading-state/Skelet
 import {MdOutlinePayments, MdSearch} from "react-icons/md";
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
-import {clearAll} from "@/redux/slice/investors/MarketPlaceSlice";
 
 
 const MyInvestmentContent = dynamic(
@@ -34,14 +33,14 @@ const MyInvestment = () => {
 
     const filterProps = {
         investmentVehicleType: selectedValue?.toUpperCase(),
-        pageSize: 48,
+        pageSize: 20,
         pageNumber: pageNumber
     }
 
     const searchProps = {
         name: searchTerm,
         investmentType: selectedValue?.toUpperCase(),
-        pageSize: 48,
+        pageSize: 20,
         pageNumber: pageNumber
     }
     const {data: filteredData, isLoading: isFilteredDataLoading, isFetching: isFetchingFilteredItems} = useFilterMyInvestmentQuery(filterProps, {skip: searchTerm?.length > 0})
@@ -52,37 +51,30 @@ const MyInvestment = () => {
     const isFetching = isFetchingFilteredItems || isFetchingSearchTerms;
     const observer = useRef<IntersectionObserver | null>(null);
 
-    useEffect(() => {
-        setPageNumber(0);
-        setMyInvestmentVehicles([]);
-        setHasMore(true);
-        store.dispatch(clearAll())
-    }, [searchTerm, selectedValue]);
+
 
     useEffect(() => {
         if(searchTerm && searchData?.data?.body){
             setMyInvestmentVehicles((prev) => {
-                return  pageNumber === 0 ? searchData?.data.body : [...prev, searchData?.data?.body];
+                return  pageNumber === 0 ? searchData?.data.body : [...prev, ...searchData?.data?.body];
             })
             setHasMore(searchData?.data?.hasNextPage);
         }else if(isFiltered && filteredData?.data?.body ){
             setMyInvestmentVehicles(
                 (prev) => {
-                    const vehicle =  pageNumber === 0 ? filteredData?.data?.body : [...prev, filteredData?.data?.body]
-                return vehicle;
+                   return  pageNumber === 0 ? filteredData?.data?.body : [...prev, ...filteredData?.data?.body]
                 }
             )
             setHasMore(filteredData?.data?.hasNextPage);
-
         }
         else {
            setMyInvestmentVehicles((prev)=> {
-              return  pageNumber === 0 ? filteredData?.data?.body : [...prev, filteredData?.data?.body];
+              return pageNumber === 0 ? filteredData?.data?.body : [...prev, ...filteredData?.data?.body];
            })
            setHasMore(filteredData?.data?.hasNextPage);
         }
 
-    }, [searchTerm, filteredData, searchData, pageNumber,selectedValue]);
+    }, [searchTerm, filteredData, searchData, pageNumber, selectedValue, isFiltered]);
 
 
 
@@ -105,6 +97,7 @@ const MyInvestment = () => {
             observer.current = new IntersectionObserver(
                 entries => {
                     if (entries[0].isIntersecting && hasMore) {
+                        console.log('ii')
                         setPageNumber(prevPage => prevPage + 1);
                     }
                 },
@@ -143,6 +136,7 @@ const MyInvestment = () => {
         }
     }
 
+    console.log('myInvestmentVehicles', myInvestmentVehicles)
 
 
     return (
@@ -196,11 +190,11 @@ const MyInvestment = () => {
 
                     {myInvestmentVehicles?.map((vehicle: CurrentMyInvestmentVehicleDetails, index: number) => {
                         const backgroundColor =
-                             vehicle.investmentVehicleType === "COMMERCIAL"
+                             vehicle?.investmentVehicleType === "COMMERCIAL"
                                 ? "#D9EAFF"
                                 : "#E6F2EA";
                         const imageSrc =
-                            vehicle.investmentVehicleType === "COMMERCIAL"
+                            vehicle?.investmentVehicleType === "COMMERCIAL"
                                 ? "/BlueCircles.svg"
                                 : "/GreenCircles.svg";
                          const recollectionStatus = vehicle?.recollectionStatus
@@ -235,41 +229,41 @@ const MyInvestment = () => {
                                 : vehicle?.name;
 
 
-                        if (myInvestmentVehicles?.length === index + 1) {
+                        // if (myInvestmentVehicles?.length === index + 1) {
                             return (
-                                <div  key={`wrapper-${vehicle.id}`} ref={lastCardObserver} >
+                                <div  key={`wrapper-${vehicle?.id }`} ref={lastCardObserver} >
                                 <Card
                                 key={`wrapper-${index}`}
                                 HandleCardDetails={HandleCardDetails}
                                 vehicleDetails={vehicle}
                                 backgroundColor={backgroundColor}
-                                investmentVehicleType={vehicle.investmentVehicleType}
+                                investmentVehicleType={vehicle?.investmentVehicleType}
                                 imageSrc={imageSrc}
                                 investmentVehicleName={truncatedTitle}
                                 statusClass={statusClass}
                                 status={status}
                                 statusValue={statusValue}
                                 borderClass={borderClass}
-                                percentage={vehicle.rate || 0}
+                                percentage={vehicle?.rate || 0}
                             />
                                 </div>
                             )
-                        }
-                        return <Card
-                            key={`wrapper-${index}`}
-                            HandleCardDetails={HandleCardDetails}
-                            vehicleDetails={vehicle}
-                            backgroundColor={backgroundColor}
-                            investmentVehicleType={vehicle.investmentVehicleType}
-                            imageSrc={imageSrc}
-                            investmentVehicleName={truncatedTitle}
-                            statusClass={statusClass}
-                            status={status}
-                            statusValue={statusValue}
-                            borderClass={borderClass}
-                            percentage={vehicle.rate || 0}
-
-                        />;
+                        // }
+                        // return <Card
+                        //     key={`wrapper-${index}`}
+                        //     HandleCardDetails={HandleCardDetails}
+                        //     vehicleDetails={vehicle}
+                        //     backgroundColor={backgroundColor}
+                        //     investmentVehicleType={vehicle.investmentVehicleType}
+                        //     imageSrc={imageSrc}
+                        //     investmentVehicleName={truncatedTitle}
+                        //     statusClass={statusClass}
+                        //     status={status}
+                        //     statusValue={statusValue}
+                        //     borderClass={borderClass}
+                        //     percentage={vehicle.rate || 0}
+                        //
+                        // />;
 
 
                     })}

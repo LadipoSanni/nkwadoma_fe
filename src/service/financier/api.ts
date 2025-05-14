@@ -13,7 +13,7 @@ export const financierOnboardingAndDashboardApi = createApi({
                 url : `/financier/view`,
                 method: 'GET',
             }),
-            providesTags: ['FinancierDashboard']
+            providesTags: ['FinancierDashboard','marketplace']
         }),
         viewMyInvestment: builder.query({
            query: () => ({
