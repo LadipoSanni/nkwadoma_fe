@@ -41,7 +41,12 @@ interface Section extends EntitySection {
     proofType?: string;
     proofFile?: File | null;
     proofFileUrl?: string;
+    errors: {
+        rcNumber?: string;
+    };
 }
+
+type FormSection = Partial<Section>;
 
 const BeneficialOwnerStep = () => {
     const dispatch = useDispatch();
@@ -61,38 +66,54 @@ const BeneficialOwnerStep = () => {
     const [sectionTypes, setSectionTypes] = useState<{ [key: number]: "entity" | "individual" }>({});
     const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({});
 
+    const validateRcNumber = (rcNumber: string) => {
+        const rcNumberRegex = /^RC\d{7}$/i;
+        return rcNumberRegex.test(rcNumber) ? undefined : "RC Number must start with RC followed by 7 digits";
+    };
+
     useEffect(() => {
         if (selectedForm === "entity") {
             const entitySections = entityData.sections || [];
             if (entitySections.length === 0) {
                 const newSectionId = Date.now();
+                const rcNumber = entityData.rcNumber || "";
                 setSections([{
                     id: newSectionId,
                     entityName: entityData.entityName || "",
-                    rcNumber: entityData.rcNumber || "",
+                    rcNumber: rcNumber,
                     country: entityData.country,
                     proofType: "national_id",
                     proofFile: null,
-                    proofFileUrl: undefined
+                    proofFileUrl: undefined,
+                    errors: {
+                        rcNumber: rcNumber ? validateRcNumber(rcNumber) : undefined
+                    }
                 }]);
                 setSectionTypes(prev => ({
                     ...prev,
                     [newSectionId]: "entity"
                 }));
             } else {
-                setSections(entitySections);
+                const validatedSections = entitySections.map((section: EntitySection) => ({
+                    ...section,
+                    errors: {
+                        rcNumber: section.rcNumber ? validateRcNumber(section.rcNumber) : undefined
+                    }
+                }));
+                setSections(validatedSections);
             }
         } else {
             const individualSections = individualData.sections || [];
             if (individualSections.length === 0) {
                 const entitySections = entityData.sections || [];
                 const entityInfo = entitySections.length > 0 ? entitySections[0] : null;
+                const rcNumber = entityInfo?.rcNumber || entityData.rcNumber || "";
 
                 const newSectionId = Date.now();
                 setSections([{
                     id: newSectionId,
                     entityName: entityInfo?.entityName || entityData.entityName || "",
-                    rcNumber: entityInfo?.rcNumber || entityData.rcNumber || "",
+                    rcNumber: rcNumber,
                     country: entityInfo?.country || entityData.country,
                     firstName: "",
                     lastName: "",
@@ -101,14 +122,28 @@ const BeneficialOwnerStep = () => {
                     ownership: "", 
                     proofType: "national_id",
                     proofFile: null,
-                    proofFileUrl: undefined
+                    proofFileUrl: undefined,
+                    errors: {
+                        rcNumber: rcNumber ? validateRcNumber(rcNumber) : undefined
+                    }
                 }]);
                 setSectionTypes(prev => ({
                     ...prev,
                     [newSectionId]: "individual"
                 }));
             } else {
-                setSections(individualSections as Section[]);
+                const validatedSections = individualSections.map((section: FormSection): Section => ({
+                    ...section,
+                    id: section.id || Date.now(),
+                    entityName: section.entityName || "",
+                    rcNumber: section.rcNumber || "",
+                    country: section.country,
+                    errors: {
+                        ...section.errors,
+                        rcNumber: section.rcNumber ? validateRcNumber(section.rcNumber) : undefined
+                    }
+                }));
+                setSections(validatedSections);
             }
         }
     }, [selectedForm, entityData.sections, individualData.sections, entityData.entityName, entityData.rcNumber, entityData.country]);
@@ -141,7 +176,10 @@ const BeneficialOwnerStep = () => {
                 ownership: "",
                 proofType: "national_id",
                 proofFile: null,
-                proofFileUrl: undefined
+                proofFileUrl: undefined,
+                errors: {
+                    rcNumber: undefined
+                }
             },
         ]);
         setSectionTypes((prev) => ({
@@ -168,9 +206,21 @@ const BeneficialOwnerStep = () => {
 
     const handleInputChange = (id: number, field: string, value: string) => {
         setSections((prev) =>
-            prev.map((section) =>
-                section.id === id ? {...section, [field]: value} : section
-            )
+            prev.map((section) => {
+                if (section.id === id) {
+                    const updatedSection = { ...section, [field]: value };
+
+                    if (field === "rcNumber") {
+                        updatedSection.errors = {
+                            ...updatedSection.errors,
+                            rcNumber: validateRcNumber(value)
+                        };
+                    }
+
+                    return updatedSection;
+                }
+                return section;
+            })
         );
     };
 
@@ -219,17 +269,35 @@ const BeneficialOwnerStep = () => {
     };
 
     const handleSaveAndContinue = () => {
-        const processedIndividualSections = sections.map(section => ({
-            ...section,
-            type: sectionTypes[section.id] || "entity",
-            firstName: section.firstName || "",
-            lastName: section.lastName || "",
-            relationship: section.relationship || "",
-            proofType: section.proofType || "",
-            ownership: section.ownership || "",
-            proofFile: section.proofFile || null,
-            dob: section.dob instanceof Date ? section.dob.toISOString() : section.dob
-        }));
+        let hasErrors = false;
+        const validatedSections = sections.map(section => {
+            const rcNumberError = validateRcNumber(section.rcNumber);
+            if (rcNumberError) {
+                hasErrors = true;
+            }
+
+            return {
+                ...section,
+                type: sectionTypes[section.id] || "entity",
+                firstName: section.firstName || "",
+                lastName: section.lastName || "",
+                relationship: section.relationship || "",
+                proofType: section.proofType || "",
+                ownership: section.ownership || "",
+                proofFile: section.proofFile || null,
+                dob: section.dob instanceof Date ? section.dob.toISOString() : section.dob,
+                errors: {
+                    ...section.errors,
+                    rcNumber: rcNumberError
+                }
+            };
+        });
+
+        setSections(validatedSections);
+
+        if (hasErrors) {
+            return;
+        }
 
         if (selectedForm === "entity") {
             dispatch(
@@ -239,7 +307,7 @@ const BeneficialOwnerStep = () => {
                         entityName,
                         rcNumber,
                         country: selectedCountry,
-                        sections: processedIndividualSections
+                        sections: validatedSections
                     }
                 })
             );
@@ -248,7 +316,7 @@ const BeneficialOwnerStep = () => {
                 updateBeneficialOwner({
                     selectedForm: "individual",
                     individualData: {
-                        sections: processedIndividualSections
+                        sections: validatedSections
                     }
                 })
             );
@@ -347,6 +415,9 @@ const BeneficialOwnerStep = () => {
                                                             placeholder="Enter RC number"
                                                             className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                                         />
+                                                        {section.errors?.rcNumber && (
+                                                            <p className="text-red-500 text-sm">{section.errors.rcNumber}</p>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </TabsContent>
