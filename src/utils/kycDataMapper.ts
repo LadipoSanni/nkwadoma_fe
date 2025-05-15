@@ -16,6 +16,7 @@ export const mapKycDataToApiRequest = (state: RootState, declarationOverride?: {
         entityName: beneficialOwner.entityData.entityName,
         beneficialRcNumber: beneficialOwner.entityData.rcNumber,
         countryOfIncorporation: mapCountryCodeToEnum(beneficialOwner.entityData.country),
+        percentageOwnershipOrShare: 0,
       });
     }
 
@@ -27,6 +28,7 @@ export const mapKycDataToApiRequest = (state: RootState, declarationOverride?: {
           entityName: section.entityName,
           beneficialRcNumber: section.rcNumber,
           countryOfIncorporation: mapCountryCodeToEnum(section.country),
+          percentageOwnershipOrShare: parseFloat(section.ownership || "0") || 0,
         });
       }
     });

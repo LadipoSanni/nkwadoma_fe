@@ -32,7 +32,8 @@ const IdentificationStep = () => {
     const {
         register: individualRegister,
         handleSubmit: handleIndividualSubmit,
-        formState: { errors: individualErrors, isValid: isIndividualValid }
+        formState: { errors: individualErrors, isValid: isIndividualValid },
+        setValue: individualSetValue
     } = useForm<IndividualFormInputs>({
         mode: 'onChange',
         defaultValues: savedData.individual ? 
@@ -84,6 +85,7 @@ const IdentificationStep = () => {
                         isValid={isIndividualValid}
                         onSubmit={onIndividualSubmit}
                         isLoading={false}
+                        setValue={individualSetValue}
                     />
                 );
             case 'COOPERATE':
@@ -108,6 +110,7 @@ const IdentificationStep = () => {
                         isValid={isIndividualValid}
                         onSubmit={onIndividualSubmit}
                         isLoading={false}
+                        setValue={individualSetValue}
                     />
                 );
         }

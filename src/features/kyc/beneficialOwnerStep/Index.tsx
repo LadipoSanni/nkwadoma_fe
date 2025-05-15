@@ -37,12 +37,17 @@ interface Section extends EntitySection {
     lastName?: string;
     dob?: Date | string;
     relationship?: string;
-    ownership?: string;
+    entityOwnership?: string;
+    individualOwnership?: string;
     proofType?: string;
     proofFile?: File | null;
     proofFileUrl?: string;
     errors: {
         rcNumber?: string;
+        entityName?: string;
+        firstName?: string;
+        lastName?: string;
+        ownership?: string;
     };
 }
 
@@ -71,6 +76,53 @@ const BeneficialOwnerStep = () => {
         return rcNumberRegex.test(rcNumber) ? undefined : "RC Number must start with RC followed by 7 digits";
     };
 
+    const validateEntityName = (name: string) => {
+        if (/^[^a-zA-Z0-9&]/.test(name)) {
+            return "Entity name cannot start with a special character";
+        }
+
+        if (/[^a-zA-Z0-9&\s]/.test(name)) {
+            return "Entity name can only contain '&' as a special character";
+        }
+
+        return undefined;
+    };
+
+    const validatePersonName = (name: string) => {
+        if (/\d/.test(name)) {
+            return "Name cannot contain numbers";
+        }
+
+        return undefined;
+    };
+
+    const validateTotalOwnership = (sections: Section[]) => {
+        const entitySections = sections.filter(section => sectionTypes[section.id] === "entity");
+        const individualSections = sections.filter(section => sectionTypes[section.id] === "individual");
+
+        if (entitySections.length > 0) {
+            const totalEntityOwnership = entitySections.reduce((sum, section) => {
+                return sum + (section.entityOwnership ? parseFloat(section.entityOwnership) : 0);
+            }, 0);
+
+            if (totalEntityOwnership !== 100) {
+                return "Total entity ownership must be exactly 100%";
+            }
+        }
+
+        if (individualSections.length > 0) {
+            const totalIndividualOwnership = individualSections.reduce((sum, section) => {
+                return sum + (section.individualOwnership ? parseFloat(section.individualOwnership) : 0);
+            }, 0);
+
+            if (totalIndividualOwnership !== 100) {
+                return "Total individual ownership must be exactly 100%";
+            }
+        }
+
+        return undefined;
+    };
+
     useEffect(() => {
         if (selectedForm === "entity") {
             const entitySections = entityData.sections || [];
@@ -82,6 +134,7 @@ const BeneficialOwnerStep = () => {
                     entityName: entityData.entityName || "",
                     rcNumber: rcNumber,
                     country: entityData.country,
+                    entityOwnership: "",
                     proofType: "national_id",
                     proofFile: null,
                     proofFileUrl: undefined,
@@ -119,7 +172,7 @@ const BeneficialOwnerStep = () => {
                     lastName: "",
                     dob: new Date().toISOString(),
                     relationship: "",
-                    ownership: "", 
+                    individualOwnership: "", 
                     proofType: "national_id",
                     proofFile: null,
                     proofFileUrl: undefined,
@@ -173,7 +226,8 @@ const BeneficialOwnerStep = () => {
                 lastName: "",
                 dob: undefined,
                 relationship: "",
-                ownership: "",
+                entityOwnership: "",
+                individualOwnership: "",
                 proofType: "national_id",
                 proofFile: null,
                 proofFileUrl: undefined,
@@ -205,23 +259,69 @@ const BeneficialOwnerStep = () => {
     };
 
     const handleInputChange = (id: number, field: string, value: string) => {
-        setSections((prev) =>
-            prev.map((section) => {
+        setSections((prev) => {
+            const updatedSections = prev.map((section) => {
                 if (section.id === id) {
                     const updatedSection = { ...section, [field]: value };
 
+                    // Validate specific fields
                     if (field === "rcNumber") {
                         updatedSection.errors = {
                             ...updatedSection.errors,
                             rcNumber: validateRcNumber(value)
+                        };
+                    } else if (field === "entityName") {
+                        updatedSection.errors = {
+                            ...updatedSection.errors,
+                            entityName: validateEntityName(value)
+                        };
+                    } else if (field === "firstName") {
+                        updatedSection.errors = {
+                            ...updatedSection.errors,
+                            firstName: validatePersonName(value)
+                        };
+                    } else if (field === "lastName") {
+                        updatedSection.errors = {
+                            ...updatedSection.errors,
+                            lastName: validatePersonName(value)
+                        };
+                    } else if (field === "entityOwnership" || field === "individualOwnership") {
+                        // Validate that ownership is a number between 0 and 100
+                        const numValue = parseFloat(value);
+                        let ownershipError;
+
+                        if (isNaN(numValue)) {
+                            ownershipError = "Ownership must be a number";
+                        } else if (numValue < 0 || numValue > 100) {
+                            ownershipError = "Ownership must be between 0 and 100";
+                        }
+
+                        updatedSection.errors = {
+                            ...updatedSection.errors,
+                            ownership: ownershipError
                         };
                     }
 
                     return updatedSection;
                 }
                 return section;
-            })
-        );
+            });
+
+            // Validate total ownership across all sections
+            const ownershipError = validateTotalOwnership(updatedSections);
+            if (ownershipError) {
+                // Update all sections with the ownership error
+                return updatedSections.map(section => ({
+                    ...section,
+                    errors: {
+                        ...section.errors,
+                        ownership: ownershipError
+                    }
+                }));
+            }
+
+            return updatedSections;
+        });
     };
 
     const handleDateSelect = (id: number, date: Date | undefined) => {
@@ -271,27 +371,60 @@ const BeneficialOwnerStep = () => {
     const handleSaveAndContinue = () => {
         let hasErrors = false;
         const validatedSections = sections.map(section => {
+            const sectionType = sectionTypes[section.id] || "entity";
+            const ownership = sectionType === "entity" ? section.entityOwnership : section.individualOwnership;
+
             const rcNumberError = validateRcNumber(section.rcNumber);
-            if (rcNumberError) {
+            const entityNameError = validateEntityName(section.entityName);
+
+            let firstNameError, lastNameError;
+            if (sectionType === "individual") {
+                firstNameError = validatePersonName(section.firstName || "");
+                lastNameError = validatePersonName(section.lastName || "");
+            }
+
+            const numOwnership = ownership ? parseFloat(ownership) : 0;
+            let ownershipError;
+
+            if (isNaN(numOwnership)) {
+                ownershipError = "Ownership must be a number";
+            } else if (numOwnership < 0 || numOwnership > 100) {
+                ownershipError = "Ownership must be between 0 and 100";
+            }
+
+            if (rcNumberError || entityNameError || firstNameError || lastNameError || ownershipError) {
                 hasErrors = true;
             }
 
             return {
                 ...section,
-                type: sectionTypes[section.id] || "entity",
+                type: sectionType,
                 firstName: section.firstName || "",
                 lastName: section.lastName || "",
                 relationship: section.relationship || "",
                 proofType: section.proofType || "",
-                ownership: section.ownership || "",
+                entityOwnership: section.entityOwnership || "",
+                individualOwnership: section.individualOwnership || "",
+                ownership: ownership || "", 
                 proofFile: section.proofFile || null,
                 dob: section.dob instanceof Date ? section.dob.toISOString() : section.dob,
                 errors: {
-                    ...section.errors,
-                    rcNumber: rcNumberError
+                    rcNumber: rcNumberError,
+                    entityName: entityNameError,
+                    firstName: firstNameError,
+                    lastName: lastNameError,
+                    ownership: ownershipError
                 }
             };
         });
+
+        const ownershipError = validateTotalOwnership(validatedSections);
+        if (ownershipError) {
+            hasErrors = true;
+            validatedSections.forEach(section => {
+                section.errors.ownership = ownershipError;
+            });
+        }
 
         setSections(validatedSections);
 
@@ -387,6 +520,9 @@ const BeneficialOwnerStep = () => {
                                                             placeholder="Enter name"
                                                             className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                                         />
+                                                        {section.errors?.entityName && (
+                                                            <p className="text-red-500 text-sm">{section.errors.entityName}</p>
+                                                        )}
                                                     </div>
                                                     <div id="countryOfIncorporationContainer" className="grid gap-2">
                                                         <Label htmlFor={`country-${section.id}`}
@@ -400,24 +536,46 @@ const BeneficialOwnerStep = () => {
                                                             disableSearch={true}
                                                         />
                                                     </div>
-                                                    <div id="rcNumberContainer" className="grid gap-2">
-                                                        <Label htmlFor={`rcNumber-${section.id}`}
-                                                            className="block text-sm font-medium text-labelBlue">
-                                                            RC number
-                                                        </Label>
-                                                        <Input
-                                                            id={`rcNumber-${section.id}`}
-                                                            value={section.rcNumber}
-                                                            onChange={(e) => {
-                                                                const value = e.target.value.replace(/^rc/i, 'RC');
-                                                                handleInputChange(section.id, "rcNumber", value);
-                                                            }}
-                                                            placeholder="Enter RC number"
-                                                            className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                                                        />
-                                                        {section.errors?.rcNumber && (
-                                                            <p className="text-red-500 text-sm">{section.errors.rcNumber}</p>
-                                                        )}
+                                                    <div className="flex flex-col gap-2">
+                                                        <div id="rcNumberContainer" className="flex gap-5">
+                                                            <div className="grid gap-2">
+                                                                <Label htmlFor={`rcNumber-${section.id}`}
+                                                                    className="block text-sm font-medium text-labelBlue">
+                                                                    RC number
+                                                                </Label>
+                                                                <Input
+                                                                    id={`rcNumber-${section.id}`}
+                                                                    value={section.rcNumber}
+                                                                    onChange={(e) => {
+                                                                        const value = e.target.value.replace(/^rc/i, 'RC');
+                                                                        handleInputChange(section.id, "rcNumber", value);
+                                                                    }}
+                                                                    placeholder="Enter RC number"
+                                                                    className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                                                />
+                                                                {section.errors?.rcNumber && (
+                                                                    <p className="text-red-500 text-sm">{section.errors.rcNumber}</p>
+                                                                )}
+                                                            </div>
+                                                            <div className="grid gap-2">
+                                                                <Label htmlFor={`ownership-${section.id}`}>
+                                                                    Ownership / Share (%)
+                                                                </Label>
+                                                                <Input
+                                                                    id={`ownership-${section.id}`}
+                                                                    name="ownership"
+                                                                    type="number"
+                                                                    max="100"
+                                                                    placeholder="0"
+                                                                    value={section.entityOwnership || ""}
+                                                                    onChange={(e) => handleInputChange(section.id, "entityOwnership", e.target.value)}
+                                                                    className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                                                                />
+                                                                {section.errors?.ownership && (
+                                                                    <p className="text-red-500 text-sm">{section.errors.ownership}</p>
+                                                                )}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </TabsContent>
@@ -437,6 +595,9 @@ const BeneficialOwnerStep = () => {
                                                                 }
                                                                 className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                                             />
+                                                            {section.errors?.firstName && (
+                                                                <p className="text-red-500 text-sm">{section.errors.firstName}</p>
+                                                            )}
                                                         </div>
                                                         <div className="space-y-2">
                                                             <Label htmlFor={`lastName-${section.id}`}>Last name</Label>
@@ -450,6 +611,9 @@ const BeneficialOwnerStep = () => {
                                                                 }
                                                                 className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                                             />
+                                                            {section.errors?.lastName && (
+                                                                <p className="text-red-500 text-sm">{section.errors.lastName}</p>
+                                                            )}
                                                         </div>
                                                     </div>
                                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -523,10 +687,13 @@ const BeneficialOwnerStep = () => {
                                                             type="number"
                                                             max="100"
                                                             placeholder="0"
-                                                            value={section.ownership || ""}
-                                                            onChange={(e) => handleInputChange(section.id, "ownership", e.target.value)}
+                                                            value={section.individualOwnership || ""}
+                                                            onChange={(e) => handleInputChange(section.id, "individualOwnership", e.target.value)}
                                                             className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md w-full md:w-[47%] h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                                                         />
+                                                        {section.errors?.ownership && (
+                                                            <p className="text-red-500 text-sm">{section.errors.ownership}</p>
+                                                        )}
                                                     </div>
                                                     <div className="space-y-4">
                                                         <Label>Proof of beneficial ownership</Label>

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Isloading from '@/reuseable/display/Isloading';
-import { UseFormRegister, FieldErrors, UseFormHandleSubmit } from 'react-hook-form';
+import { UseFormRegister, FieldErrors, UseFormHandleSubmit, UseFormSetValue } from 'react-hook-form';
+import { PatternFormat } from 'react-number-format';
 
 interface IndividualFormInputs {
     nin: string;
@@ -18,6 +19,8 @@ interface IndividualIdentificationFormProps {
     isValid: boolean;
     onSubmit: (data: IndividualFormInputs) => void;
     isLoading: boolean;
+    setValue: UseFormSetValue<IndividualFormInputs>;
+    defaultValues?: IndividualFormInputs;
 }
 
 const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> = ({
@@ -26,8 +29,31 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                                                                                        errors,
                                                                                        isValid,
                                                                                        onSubmit,
-                                                                                       isLoading
+                                                                                       isLoading,
+                                                                                       setValue
                                                                                    }) => {
+    const [ninValue, setNinValue] = useState<string>("");
+    const [bvnValue, setBvnValue] = useState<string>("");
+    const [taxIdValue, setTaxIdValue] = useState<string>("");
+
+    useEffect(() => {
+        if (ninValue) {
+            setValue("nin", ninValue, { shouldValidate: true });
+        }
+    }, [ninValue, setValue]);
+
+    useEffect(() => {
+        if (bvnValue) {
+            setValue("bvn", bvnValue, { shouldValidate: true });
+        }
+    }, [bvnValue, setValue]);
+
+    useEffect(() => {
+        if (taxIdValue) {
+            setValue("taxId", taxIdValue, { shouldValidate: true });
+        }
+    }, [taxIdValue, setValue]);
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={'w-full md:max-w-[27.5rem] md:mx-auto grid gap-5'}>
             <div className={'grid gap-2'}>
@@ -40,6 +66,9 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                         pattern: {
                             value: /^\d{11}$/,
                             message: "NIN must be 11 digits"
+                        },
+                        onChange: (e) => {
+                            setNinValue(e.target.value);
                         }
                     })}
                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
@@ -57,6 +86,9 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
                         pattern: {
                             value: /^\d{11}$/,
                             message: "BVN must be 11 digits"
+                        },
+                        onChange: (e) => {
+                            setBvnValue(e.target.value);
                         }
                     })}
                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
@@ -66,21 +98,29 @@ const IndividualIdentificationForm: React.FC<IndividualIdentificationFormProps> 
 
             <div className={'grid gap-2'}>
                 <Label htmlFor="taxId">Tax identification number</Label>
-                <Input
-                    type="text"
+                <PatternFormat
+                    format="N-########"
+                    customInput={Input}
                     placeholder="Enter TIN"
                     {...register("taxId", {
                         required: "Tax ID is required",
                         pattern: {
-                            value: /^\d{10}$/,
-                            message: "Tax ID must be exactly 10 digits"
+                            value: /^N-\d{8}$/,
+                            message: "Tax ID must be in format N-12345678"
                         },
                         validate: {
-                            validDigits: (value) => /^\d+$/.test(value) || "Tax ID must contain only numbers",
-                            exactLength: (value) => value.length === 10 || "Tax ID must be 10 digits"
+                            validFormat: (value) => {
+                                return /^N-\d{8}$/.test(value) || "Tax ID must be in format N-12345678";
+                            }
+                        },
+                        onChange: (e) => {
+                            setTaxIdValue(e.target.value);
                         }
                     })}
-                    maxLength={10}
+                    onValueChange={(values) => {
+                        const { formattedValue } = values;
+                        setTaxIdValue(formattedValue);
+                    }}
                     className={'p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] placeholder:text-black100'}
                 />
                 {errors.taxId && <p className="text-red-500 text-sm">{errors.taxId.message}</p>}
