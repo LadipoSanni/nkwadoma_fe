@@ -2,10 +2,6 @@
 import React,{useState,useEffect} from 'react'
 import InvestmentActionBar from '@/components/portfolio-manager/fund/Investment-action-bar'
 import {inter} from '@/app/fonts'
-// import Draft from "@/features/portfolio-manager/fund/draft/Index";
-// import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
-// import TableModal from '@/reuseable/modals/TableModal';
-// import {Cross2Icon} from "@radix-ui/react-icons";
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import {MdSearch} from 'react-icons/md'
 import Table from '@/reuseable/table/Table';
@@ -46,8 +42,6 @@ interface investmentVehicleProps     {
 
 function CommercialFund() {
     const [searchTerm, setSearchTerm] = useState('');
-    // const [modalType, setModalType] = useState('');
-    // const [isModalOpen, setIsModalOpen] = useState(false);
        const [pageNumber,setPageNumber] = useState(0)
         const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
         const [hasNextPage,setNextPage] = useState(false)
@@ -147,19 +141,19 @@ function CommercialFund() {
                     title: 'Amount collected',
                     sortable: true,
                     id: 'amountRaised',
-                    selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRaised)}</div>
+                    selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountRaised)}</div>
                 },
                 {
                     title: 'Amount disbursed',
                     sortable: true,
                     id: ' amountDisbursed',
-                    selector: (row: TableRowData) => <div className='ml-6'>{formatAmount(row.amountDisbursed)}</div>
+                    selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountDisbursed)}</div>
                 },
                 {
                     title: 'Amount available',
                     sortable: true,
                     id: 'amountAvailable',
-                    selector: (row: TableRowData) => <div className='ml-8'>{formatAmount(row.totalAvailableAmount)}</div>
+                    selector: (row: TableRowData) => <div className=''>{formatAmount(row.totalAvailableAmount)}</div>
                 },
             ]
 
@@ -183,7 +177,7 @@ function CommercialFund() {
                 tableData={tableData} 
                 tableHeader={fundHeader}
                 handleRowClick={handleRowClick}
-                tableHeight={52}
+                tableHeight={54}
                 sx='cursor-pointer'
                 tableCellStyle={'h-12'}
                 optionalFilterName='endownment'
@@ -201,18 +195,6 @@ function CommercialFund() {
                 </div>}
         </div>
        <div>
-        {/* <TableModal
-          isOpen={isModalOpen}
-                    closeModal={()=> setIsModalOpen(false)}
-                    className='pb-1'
-                    headerTitle={modalType === "createInvestmentVehicle"? "Create Investment Vehicle" : "Draft" }
-                    closeOnOverlayClick={true}
-                    icon={Cross2Icon}
-                    width={"38%"}
-        > */}
-            {/* {modalType === "createInvestmentVehicle"? (<CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='sponsor' investmentVehicleType='COMMERCIAL' />): (  <Draft setIsOpen={() => setIsModalOpen(false)} type='sponsor' investmentVehicleType='COMMERCIAL'/>)} */}
-           
-        {/* </TableModal> */}
        </div>
        
     </div>

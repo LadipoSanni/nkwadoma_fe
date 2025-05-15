@@ -252,7 +252,7 @@ function NotificationLayout({children}: Props) {
             </button>
           </div>
         </div>
-         <div className='md:max-h-[56vh] max-h-[58vh]  overflow-y-auto'
+         <div className='md:max-h-[58vh] max-h-[58vh]  overflow-y-auto'
          style={{
           overflowX: "hidden",  
           overflowY: "auto",    

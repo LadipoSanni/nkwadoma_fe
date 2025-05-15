@@ -2,10 +2,6 @@
 import React,{useState,useEffect} from 'react'
 import InvestmentActionBar from '@/components/portfolio-manager/fund/Investment-action-bar'
 import {inter} from '@/app/fonts'
-// import Draft from "@/features/portfolio-manager/fund/draft/Index";
-// import CreateInvestmentVehicle from '@/components/portfolio-manager/fund/Create-investment-vehicle';
-// import TableModal from '@/reuseable/modals/TableModal';
-// import {Cross2Icon} from "@radix-ui/react-icons";
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import {MdSearch} from 'react-icons/md'
 import Table from '@/reuseable/table/Table';
@@ -48,8 +44,6 @@ interface investmentVehicleProps     {
 
 function EndownmentFund() {
     const [searchTerm, setSearchTerm] = useState('');
-    // const [modalType, setModalType] = useState('');
-    // const [isModalOpen, setIsModalOpen] = useState(false);
     const [pageNumber,setPageNumber] = useState(0)
     const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
     const [hasNextPage,setNextPage] = useState(false)
@@ -95,8 +89,6 @@ function EndownmentFund() {
     };
 
     const handleEndowerFundDraftClick = () => {
-        // setModalType("draft")
-        // setIsModalOpen(true);
         router.push("/vehicle/draft")
         store.dispatch(setVehicleType("endowment")) 
         store.dispatch(setInvestmentVehicleType("ENDOWMENT")) 
@@ -104,8 +96,6 @@ function EndownmentFund() {
     }
 
     const handleCreateInvestmentVehicleClick = () => {
-        // setModalType("createEndownmentVehicle")
-        // setIsModalOpen(true);
         router.push("/vehicle/setup")
         store.dispatch(setVehicleType("endowment")) 
         store.dispatch(setInvestmentVehicleType("ENDOWMENT"))    
@@ -151,19 +141,19 @@ function EndownmentFund() {
                 title: 'Amount collected',
                 sortable: true,
                 id: 'amountRaised',
-                selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRaised)}</div>
+                selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountRaised)}</div>
             },
             {
                 title: 'Amount disbursed',
                 sortable: true,
                 id: ' amountDisbursed',
-                selector: (row: TableRowData) => <div className='ml-6'>{formatAmount(row.amountDisbursed)}</div>
+                selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountDisbursed)}</div>
             },
             {
                 title: 'Amount available',
                 sortable: true,
                 id: 'amountAvailable',
-                selector: (row: TableRowData) => <div className='ml-8'>{formatAmount(row.totalAvailableAmount)}</div>
+                selector: (row: TableRowData) => <div className=''>{formatAmount(row.totalAvailableAmount)}</div>
             },
         ]
 
@@ -187,7 +177,7 @@ function EndownmentFund() {
                 tableData={tableData} 
                 tableHeader={fundHeader}
                 handleRowClick={handleRowClick}
-                tableHeight={52}
+                tableHeight={54}
                 sx='cursor-pointer'
                 tableCellStyle={'h-12'}
                 optionalFilterName='endownment'
@@ -205,18 +195,6 @@ function EndownmentFund() {
                 </div>}
         </div>
        <div>
-        {/* <TableModal
-          isOpen={isModalOpen}
-                    closeModal={()=> setIsModalOpen(false)}
-                    className='pb-1'
-                    headerTitle={modalType === "createEndownmentVehicle"? "Endownment fund" : "Draft" }
-                    closeOnOverlayClick={true}
-                    icon={Cross2Icon}
-                    width={"38%"}
-        >
-            {modalType === "createEndownmentVehicle"? (<CreateInvestmentVehicle setIsOpen={() => setIsModalOpen(false)} type='donor' investmentVehicleType='ENDOWMENT' />): (  <Draft setIsOpen={() => setIsModalOpen(false)} type='donor' investmentVehicleType='ENDOWMENT'/>)}
-
-        </TableModal> */}
        </div>
     </div>
   )
