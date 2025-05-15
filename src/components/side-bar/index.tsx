@@ -18,7 +18,7 @@ import {
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
 import NavbarContainer from "@/reuseable/ui/Navbar";
-
+import { resetTab } from '@/redux/slice/loan/selected-loan';
 
 
 
@@ -56,6 +56,7 @@ const SideBar = () => {
 
     const handleLogout =  async () => {
         store.dispatch(setCurrentNavBottomItem("Logout"))
+        store.dispatch(resetTab())
         await logout({})
         router.push("/auth/login")
         clearData()

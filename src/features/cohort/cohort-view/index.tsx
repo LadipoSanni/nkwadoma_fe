@@ -125,7 +125,7 @@ const CohortView = () => {
 
             setNextPage(programDatas?.data?.hasNextPage);
         }
-    }, [programDatas]);
+    }, [programDatas,pageNumber]);
 
 
     useEffect(() => {

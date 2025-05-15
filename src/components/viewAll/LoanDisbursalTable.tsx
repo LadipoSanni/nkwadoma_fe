@@ -23,7 +23,7 @@ interface TableRowData {
 function Index() {
     const router = useRouter();
 
-    const clickedOrganizationId = useAppSelector(state => state.selectedLoan.clickedOrganization)
+    const clickedOrganizationId = useAppSelector(state => state.selectedLoan?.clickedOrganization)
 
     const request = {
         pageSize: 100,
@@ -86,7 +86,7 @@ function Index() {
 
     return (
         <div data-testid={'LoanDisbursalMainDivContainer'} id={`LoanDisbursalMainDivContainer`}
-             className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
+            //  className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {isLoading || disbursedLoanIsLoading ? (
                 <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
@@ -103,13 +103,13 @@ function Index() {
                     } condition={true} descriptionId={clickedOrganizationId?.id ? 'There are no loan disbursal in this organization yet' : `There are no loan disbursal available yet`}/>
                 ) :
                 (
-                    <div className={`md:w-full  w-full h-full md:h-full `}>
+                    <div className={``}>
                         <Tables
                             tableData={clickedOrganizationId?.id ? data?.data?.body.slice().reverse() : allDisbursedLoan?.data?.body.slice().reverse()}
                             isLoading={isLoading || disbursedLoanIsLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanDisbursalHeader}
-                            tableHeight={52}
+                            tableHeight={54}
                             sx='cursor-pointer'
                             staticColunm='firstName'
                             staticHeader='Loanee'

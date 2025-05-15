@@ -135,9 +135,14 @@ export const organizationApi = createApi({
             providesTags: ['admin']
         }),
         viewOrganizations : builder.query({
-           query: ()=> ({
+           query: (param: {
+           loanType: string,
+            pageSize: number,
+            pageNumber: number,
+           })=> ({
                url: `/organizations`,
-               method: 'GET'
+               method: 'GET',
+               params: param
            })
         }),
         searchOrganizationAsPortfolioManager : builder.query({
