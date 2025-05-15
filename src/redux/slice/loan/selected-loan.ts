@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SelectedLoanState {
     currentTab: string;
+    currentTabStatus: string
     clickedDisbursedLoanIdNumber: string | object | React.ReactNode;
     clickedOrganization: {
         id: string | number;
@@ -20,6 +21,7 @@ const initialState: SelectedLoanState = {
     disbursedLoanAccountId:"",
     clickedLoanProductId:"",
     fundProductAvailableAmount: 0,
+    currentTabStatus: "LOAN_REQUEST"
 };
 
 export const selectedLoanSlice = createSlice({
@@ -44,9 +46,18 @@ export const selectedLoanSlice = createSlice({
         setFundProductAvailableAmount: (state, action: PayloadAction<number>) => {
             state.fundProductAvailableAmount = action.payload;
         },
+        setCurrentTabStatus: (state, action: PayloadAction<string>) => {
+            state.currentTabStatus = action.payload;
+        },
+        resetTab: (state) => {
+            state.currentTab = "Loan requests"
+            state.currentTabStatus = "LOAN_REQUEST"
+            state.clickedOrganization = null
+        }
+       
     },
 });
 
-export const { setCurrentTab, setClickedOrganization, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId, setFundProductAvailableAmount } = selectedLoanSlice.actions;
+export const { setCurrentTab, setClickedOrganization, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId, setFundProductAvailableAmount,setCurrentTabStatus,resetTab } = selectedLoanSlice.actions;
 
 export default selectedLoanSlice.reducer;

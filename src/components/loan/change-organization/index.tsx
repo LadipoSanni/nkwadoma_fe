@@ -14,7 +14,7 @@ import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {ChangeOrganization} from "@/types/loan/loan-request.type";
-
+// import InfiniteScroll from "react-infinite-scroll-component";
 
 
 interface OrganizationType {
@@ -33,7 +33,8 @@ interface SaveClickedId {
 
 const ChangeInstitutionModal = () => {
 
-    const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
+    const currentTab = useAppSelector(state => state?.selectedLoan?.currentTab)
+    const currentTabStatus = useAppSelector(state => state?.selectedLoan?.currentTabStatus)
     const [current, setCurrent] = useState<number | string>('')
     const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
     const [pageNumber] = useState(0)
@@ -42,18 +43,28 @@ const ChangeInstitutionModal = () => {
     const [disabled, setDisabled] = React.useState(true)
     const [searchTerm, setSearchTerm] = useState('');
     const pageSize = 10
+
     const searchElement = {
         name:searchTerm,
         pageNumber: pageNumber,
         pageSize,
     }
 
-    const {data, isLoading} = useViewOrganizationsQuery({});
+   
+
+    const element = {
+        loanType:currentTabStatus,
+        pageNumber: pageNumber,
+        pageSize,
+    }
+
+    const {data, isLoading} = useViewOrganizationsQuery(element);
     const {
         data: searchResults,
     } = useSearchOrganisationByNameQuery(searchElement, {skip: !searchTerm});
-    const organisationList: ChangeOrganization[] = searchTerm.length > 0 ? searchResults?.data.body || [] : data?.data
+    const organisationList: ChangeOrganization[] = searchTerm.length > 0 ? searchResults?.data.body || [] : data?.data?.body
 
+   
     const handleClick = (id: string | number, name?: string, logoImage?: string) => {
         if (id === current) {
             setCurrent('');
@@ -68,13 +79,13 @@ const ChangeInstitutionModal = () => {
     const getLoanCounts = (index: number) => {
         switch (currentTab) {
             case 'Loan requests':
-                return roundUpAmount(data?.data?.at(index)?.loanRequestCount.toString());
+                return roundUpAmount(data?.data?.body?.at(index)?.loanRequestCount.toString());
             case 'Loan offers':
-                return roundUpAmount(data?.data?.at(index)?.loanOfferCount.toString());
+                return roundUpAmount(data?.data?.body?.at(index)?.loanOfferCount.toString());
             case 'Disbursed loan':
-                return roundUpAmount(data?.data?.at(index)?.loanDisbursalCount.toString());
+                return roundUpAmount(data?.data?.body?.at(index)?.loanDisbursalCount.toString());
             case 'Loan referrals':
-                return roundUpAmount(data?.data?.at(index)?.loanReferralCount.toString())
+                return roundUpAmount(data?.data?.body?.at(index)?.loanReferralCount.toString())
         }
     }
 

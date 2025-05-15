@@ -53,7 +53,7 @@ const Index = () => {
 
     return (
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
-             className={`grid md:px-3 md:overflow-hidden   place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
+            //  className={`grid md:px-3 md:overflow-hidden   place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {isLoading || isLoadingOrganizationLoanRequest ? (
                     <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
@@ -77,13 +77,13 @@ const Index = () => {
                         //     ></Icon >} iconBg={'#D9EAFF'} title={'Loan request will show here'} description={clickedOrganization?.id ? 'There are no loan requests in this organization yet': `There are no loan requests available yet` } />
                     ) :
                (
-                    <div className={`md:w-full  w-full h-full md:h-full `}>
+                    <div className={` pr-2 md:pr-0`}>
                         <Tables
                             tableData={clickedOrganization?.id  ? viewAllLoanRequestsInAnOrganizationData?.data?.body : data?.data?.body}
                             isLoading={isLoading || isLoadingOrganizationLoanRequest}
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
-                            tableHeight={52}
+                            tableHeight={54}
                             sx='cursor-pointer'
                             staticColunm='firstName'
                             staticHeader='Loanee'

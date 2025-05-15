@@ -9,7 +9,7 @@ interface props  {
 const SelectedLoan = ({children}: props) => {
     return (
         <div>
-            <div id={'selectedLoanLayout'} className={` ${styles.layout}  grid md:grid  absolute gap-1 h-[100%] w-[100%] md:h-[100%] md:w-[100%] `}>
+            <div id={'selectedLoanLayout'} className={` ${styles.layout}  grid md:grid  absolute gap-1 h-[100%] w-[100%] md:h-[100%] md:w-[100%] pr-2 md:pr-0`}>
                     <SelectedLoanHeader/>
                     <div id={'childrenOnLoan'}
                          data-testid={'childrenOnLoan'}
