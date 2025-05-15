@@ -280,7 +280,7 @@ const ChangeInstitutionModal = () => {
                         className="  py-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
                         <Dialog.Close asChild>
                             <Button
-                                id={'cancel'} data-testid={'cancel'} onClick={handleContinue}
+                                id={'cancel'} data-testid={'cancel'}
                                 className={` border border-meedlBlue rounded-md text-sm h-fit md:w-fit md:px-10 md:py-4 py-4   text-meedlBlue`}
                             >
                                 Cancel
