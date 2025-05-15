@@ -481,42 +481,27 @@ export const CohortTrainees = [
     AmountRequested:"300,000.00",
     AmountReceived: "3000,000.00"
   }, {
-    Trainee: "Margret Ezeoke",
+    Trainee: "Paul Amiesimaka",
     InitialDeposit: "300,000.00",
     AmountRequested:"300,000.00",
     AmountReceived: "3000,000.00"
   }, {
-    Trainee: "Margret Ezeoke",
+    Trainee: "Elizabeth Oyedepo",
     InitialDeposit: "300,000.00",
     AmountRequested:"300,000.00",
     AmountReceived: "3000,000.00"
   }, {
-    Trainee: "Margret Ezeoke",
+    Trainee: "James Oyelowo",
     InitialDeposit: "300,000.00",
     AmountRequested:"300,000.00",
     AmountReceived: "3000,000.00"
   }, {
-    Trainee: "Margret Ezeoke",
+    Trainee: "Ruth Anozie",
     InitialDeposit: "300,000.00",
     AmountRequested:"300,000.00",
     AmountReceived: "3000,000.00"
   }, {
-    Trainee: "Margret Ezeoke",
-    InitialDeposit: "300,000.00",
-    AmountRequested:"300,000.00",
-    AmountReceived: "3000,000.00"
-  }, {
-    Trainee: "Margret Ezeoke",
-    InitialDeposit: "300,000.00",
-    AmountRequested:"300,000.00",
-    AmountReceived: "3000,000.00"
-  }, {
-    Trainee: "Margret Ezeoke",
-    InitialDeposit: "300,000.00",
-    AmountRequested:"300,000.00",
-    AmountReceived: "3000,000.00"
-  }, {
-    Trainee: "Margret Ezeoke",
+    Trainee: "Timothy Nwankwo",
     InitialDeposit: "300,000.00",
     AmountRequested:"300,000.00",
     AmountReceived: "3000,000.00"
@@ -536,6 +521,7 @@ export const CohortTrainees = [
     AmountRequested:"300,000.00",
     AmountReceived: "3000,000.00"
   },
+
 ]
 export const loanRequestDatas = [
   {

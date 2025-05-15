@@ -157,7 +157,7 @@ function Organization() {
                 tableCellStyle={'h-12'}
                 staticHeader='Name'
                 staticColunm='name'
-                sideBarTabName='organization'
+                sideBarTabName='loanee'
                 optionalFilterName={tabValue}
                 condition={true}
                 icon={MdOutlineAccountBalance}
