@@ -1,10 +1,8 @@
 import React from 'react';
-
+import Loanees from "@/pages/admin/organization/Cohort/Loanees"
 const Page = () => {
     return (
-        <div>
-            
-        </div>
+        <Loanees/>
     );
 };
 
