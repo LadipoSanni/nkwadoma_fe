@@ -15,7 +15,7 @@ import {
   useGetOrganizationDetailsQuery,
 } from "@/service/admin/organization";
 import { useRouter } from "next/navigation";
-import { getItemSessionStorage } from "@/utils/storage";
+// import { getItemSessionStorage } from "@/utils/storage";
 import { formatAmount } from "@/utils/Format";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 // import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization"
@@ -27,7 +27,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import Link from "next/link";
 import { useSearchOrganizationAsPortfolioManagerQuery } from "@/service/admin/organization";
-
+import { useAppSelector } from "@/redux/store";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -43,26 +43,27 @@ const OrganizationDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState('');
   const [page] = useState(0);
-  const [orgId, setOrgList] = useState("");
+  // const [orgId, setOrgList] = useState("");
   const [searchTerm, setSearchTerm] = useState('');
   const [adminList, setAdminList] = useState<adminProps[]>([])
+  const organizationId = useAppSelector(store => store.organization?.setOrganizationId)
    const { data: adminData } = useViewAllAdminsInOrganizationQuery(
     {
-      organizationId: orgId,
+      organizationId: organizationId,
       pageNumber: page,
       pageSize: 300,
     },
-    { skip: !orgId }
+    { skip: !organizationId }
   );
   const { data: organizationDetails, isLoading } = useGetOrganizationDetailsQuery(
     {
-      id: orgId,
+      id: organizationId,
     },
-    { skip: !orgId }
+    { skip: !organizationId }
   );
 
   const param = {
-    organizationId: orgId,
+    organizationId: organizationId,
     name:searchTerm,
     pageNumber: page,
     pageSize: 300,
@@ -74,12 +75,12 @@ const OrganizationDetails = () => {
   const organizationLink = organizationDetails?.data.websiteAddress ? organizationDetails?.data.websiteAddress :
       ''
 
-  useEffect(() => {
-    const id = getItemSessionStorage("organisationId");
-    if (id) {
-      setOrgList(id);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const id = getItemSessionStorage("organisationId");
+  //   if (id) {
+  //     setOrgList(id);
+  //   }
+  // }, []);
 
     useEffect(() => {
       if (searchTerm && searchResult && searchResult.data) {
@@ -249,6 +250,15 @@ const OrganizationDetails = () => {
           </TabsTrigger>
           <TabsTrigger
             id="adminsTab"
+            value="cohorts"
+            className={
+              "py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom"
+            }
+          >
+            cohort
+          </TabsTrigger>
+          <TabsTrigger
+            id="adminsTab"
             value="admins"
             className={
               "py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom"
@@ -360,7 +370,9 @@ const OrganizationDetails = () => {
             </div>
           </div>
         </TabsContent>
-
+       <TabsContent id="adminsContent" value="cohorts" className={"mt-4"}>
+        hhhh
+       </TabsContent>
         <TabsContent id="adminsContent" value="admins" className={"mt-4"}>
           <section
             id="adminActions"
@@ -415,7 +427,7 @@ const OrganizationDetails = () => {
            headerTitle={modalType === "activate"? "Activate Reason" : "Deactivate Reason" }
           >
             {
-              modalType === "activate" ? (<ActivateOrganization setIsOpen={setIsModalOpen} id={orgId}/>) : (<DeactivateOrganization setIsOpen={setIsModalOpen} id={orgId}/>)
+              modalType === "activate" ? (<ActivateOrganization setIsOpen={setIsModalOpen} id={organizationId}/>) : (<DeactivateOrganization setIsOpen={setIsModalOpen} id={organizationId}/>)
             }
           </TableModal>
         </div>
