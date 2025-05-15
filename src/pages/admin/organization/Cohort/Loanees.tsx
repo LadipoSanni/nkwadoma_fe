@@ -7,19 +7,51 @@ import { MdOutlinePeople} from "react-icons/md";
 import {formatAmount} from "@/utils/Format";
 import Tables from "@/reuseable/table/index";
 import {CohortTrainees} from "@/utils/LoanRequestMockData/cohortProduct";
+import {useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
+}
+interface userIdentity {
+    firstName: string;
+    lastName: string;
+}
+
+interface loaneeLoanDetail {
+    initialDeposit: number;
+    amountRequested: number;
+    amountReceived: number;
+}
+
+interface viewAllLoanees {
+    userIdentity: userIdentity;
+    loaneeLoanDetails: loaneeLoanDetail;
+    loaneeStatus: string;
 }
 
 const Loanees = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
+
     const handleBackButtonClick = () => {
 
     }
+    const size = 300;
+    const [page] = useState(0);
 
+    const {data} = useViewAllLoaneeQuery({
+        cohortId: 'a14a73bd-0ddb-4b58-8822-9ff1f7dff0e3',
+        pageSize: size,
+        pageNumber: page
+    },{refetchOnMountOrArgChange: true})
+    console.log('data: ', data)
 
+    const tableHeaderintegrated = [
+        {title: "Trainee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row.userIdentity?.firstName + " " + row.userIdentity?.lastName},
+        {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail )?.initialDeposit)},
+        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)},
+        {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountReceived)},
+    ];
 
     const tableHeader = [
         { title: 'Trainee', sortable: true, id: 'trainee', selector: (row: TableRowData) => row.Trainee},
