@@ -8,9 +8,9 @@ import {formatAmount} from "@/utils/Format";
 import {useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
 import Table from "@/reuseable/table/LoanProductTable"
 
-// interface TableRowData {
-//     [key: string]: string | number | null | React.ReactNode;
-// }
+interface TableRowData {
+    [key: string]: string | number | null | React.ReactNode;
+}
 interface userIdentity {
     firstName: string;
     lastName: string;
@@ -22,11 +22,13 @@ interface loaneeLoanDetail {
     amountReceived: number;
 }
 
-interface viewAllLoanees {
+interface viewAllLoanee {
     userIdentity: userIdentity;
     loaneeLoanDetails: loaneeLoanDetail;
     loaneeStatus: string;
 }
+type viewAllLoanees = viewAllLoanee & TableRowData;
+
 
 const Loanees = () => {
     const [searchTerm, setSearchTerm] = useState("");
