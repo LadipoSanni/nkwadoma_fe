@@ -10,7 +10,6 @@ import InviteOrganizationForm from '@/components/portfolio-manager/organization/
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useViewAllOrganizationByStatusQuery, useSearchOrganisationByNameQuery } from "@/service/admin/organization";
 import { formatAmount } from '@/utils/Format';
-// import { setItemSessionStorage } from '@/utils/storage';
 import { useRouter } from 'next/navigation';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import { MdSearch } from 'react-icons/md';
@@ -114,7 +113,6 @@ function Organization() {
     };
 
     const handleRowClick = (row: TableRowData) => {
-        // setItemSessionStorage("organisationId", String(row.id));
         store.dispatch(setOrganizationId(String(row.id)))
         router.push('/organizations/details');
     };

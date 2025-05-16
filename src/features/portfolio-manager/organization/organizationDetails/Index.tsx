@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import { DetailsTabContainer } from "@/reuseable/details/DetailsTabContainer";
 import SearchInput from "@/reuseable/Input/SearchInput";
-import LoanProductTable from "@/reuseable/table/LoanProductTable";
+import Table from "@/reuseable/table/Table";
 import { Book } from "lucide-react";
 // import InviteAdminDialog from "@/reuseable/modals/InviteAdminDialog/Index";
 import {
@@ -27,7 +27,9 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import Link from "next/link";
 import { useSearchOrganizationAsPortfolioManagerQuery } from "@/service/admin/organization";
-import { useAppSelector } from "@/redux/store";
+import { store, useAppSelector } from "@/redux/store";
+import { setOrganizationDetail } from "@/redux/slice/organization/organization";
+import CohortView from "@/features/cohort/cohort-view";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -42,18 +44,20 @@ interface adminProps extends TableRowData {
 const OrganizationDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState('');
-  const [page] = useState(0);
-  // const [orgId, setOrgList] = useState("");
+  const [page,setPageNumber] = useState(0);
+  const [totalPage,setTotalPage] = useState(0);
+  const [nextPage,hasNextPage] = useState(false)
   const [searchTerm, setSearchTerm] = useState('');
   const [adminList, setAdminList] = useState<adminProps[]>([])
   const organizationId = useAppSelector(store => store.organization?.setOrganizationId)
-   const { data: adminData } = useViewAllAdminsInOrganizationQuery(
+  const organizationDetailTab = useAppSelector(store => store.organization?.organizationDetailTab)
+   const { data: adminData,isLoading: isloadingAdmin } = useViewAllAdminsInOrganizationQuery(
     {
       organizationId: organizationId,
       pageNumber: page,
       pageSize: 300,
     },
-    { skip: !organizationId }
+    { skip: organizationDetailTab !== "admins"}
   );
   const { data: organizationDetails, isLoading } = useGetOrganizationDetailsQuery(
     {
@@ -69,26 +73,24 @@ const OrganizationDetails = () => {
     pageSize: 300,
   }
 
-  // const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
-  const {data: searchResult} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !searchTerm})
+  const {data: searchResult,isLoading: isloadingSearch} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !searchTerm})
 
-  const organizationLink = organizationDetails?.data.websiteAddress ? organizationDetails?.data.websiteAddress :
-      ''
+  const organizationLink = organizationDetails?.data.websiteAddress ? organizationDetails?.data.websiteAddress : ''
 
-  // useEffect(() => {
-  //   const id = getItemSessionStorage("organisationId");
-  //   if (id) {
-  //     setOrgList(id);
-  //   }
-  // }, []);
 
     useEffect(() => {
       if (searchTerm && searchResult && searchResult.data) {
         const admins = searchResult?.data?.body
         setAdminList(admins);
+        setPageNumber(searchResult?.data?.pageNumber)
+        setTotalPage(searchResult?.data?.totalPages)
+        hasNextPage(searchResult?.data?.hasNextPage)
       } else if (!searchTerm && adminData && adminData?.data) {
         const admins = adminData?.data?.body;
         setAdminList(admins);
+        setPageNumber( adminData?.data?.pageNumber)
+        setTotalPage(adminData?.data?.totalPages)
+        hasNextPage(adminData?.data?.hasNextPage)
       }
     },[searchTerm, searchResult,adminData]);
 
@@ -232,7 +234,11 @@ const OrganizationDetails = () => {
           Back to organization
         </p>
       </div>
-      <Tabs id="organizationTabs" defaultValue="details">
+      <Tabs id="organizationTabs"  value={organizationDetailTab}
+        onValueChange={(value) => {
+          store.dispatch(setOrganizationDetail(value))
+        }}
+      >
         <TabsList
           id="tabsList"
           className={
@@ -371,7 +377,7 @@ const OrganizationDetails = () => {
           </div>
         </TabsContent>
        <TabsContent id="adminsContent" value="cohorts" className={"mt-4"}>
-        hhhh
+       <CohortView/>
        </TabsContent>
         <TabsContent id="adminsContent" value="admins" className={"mt-4"}>
           <section
@@ -395,19 +401,23 @@ const OrganizationDetails = () => {
               gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             }}
           >
-            <LoanProductTable
+            <Table
               tableData={adminList}
               tableHeader={adminsHeader}
               staticHeader={"Full name"}
               staticColunm={"fullName"}
               tableHeight={42}
               handleRowClick={() => {}}
-              // sx='cursor-pointer'
-              icon={Book}
+              icon={<Book/>}
               sideBarTabName="Admin"
-              optionalRowsPerPage={10}
+              // optionalRowsPerPage={10}
               tableCellStyle="h-12"
               searchEmptyState={true}
+              hasNextPage={nextPage}
+              pageNumber={page}
+              setPageNumber={setPageNumber}
+              totalPages={totalPage}
+              isLoading={isloadingAdmin || isloadingSearch}
             />
           </div>
 

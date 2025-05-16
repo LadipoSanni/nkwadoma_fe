@@ -29,8 +29,11 @@ export const organizationSlice = createSlice({
         setOrganizationDetail: ( state, action: PayloadAction<string >) => {
             state.organizationDetailTab = action.payload;
         },
+        resetOrganizationDetailsStatus: (state) => {
+            state.organizationDetailTab= "details"
+        },
     }
 })
 
-export const {setOrganizationTabStatus,resetOrganizationId,setOrganizationId,setOrganizationDetail} = organizationSlice.actions;
+export const {setOrganizationTabStatus,resetOrganizationId,setOrganizationId,setOrganizationDetail,resetOrganizationDetailsStatus} = organizationSlice.actions;
 export default organizationSlice.reducer;

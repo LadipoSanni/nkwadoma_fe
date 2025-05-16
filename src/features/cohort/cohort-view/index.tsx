@@ -27,6 +27,10 @@ import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate'
 import { Book } from 'lucide-react';
 import Modal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
+import { getUserDetailsFromStorage } from "@/components/topBar/action";
+import AddCohortInAnOrganization from '@/components/portfolio-manager/organization/AddCohort-in-organization'
+import { useAppSelector } from '@/redux/store'
+// import { resetcohortId, } from '@/redux/slice/create/cohortSlice'
 
 
 
@@ -67,6 +71,14 @@ interface ApiError {
 }
 
 
+interface TabState {
+  pageNumber: number;
+  totalPages: number;
+  hasNextPage: boolean;
+}
+
+
+
 const CohortView = () => {
   const [isDropdown,setIsDropdown] = useState(false)
   const [selectProgram, setSelectProgram] = useState('')
@@ -84,9 +96,23 @@ const CohortView = () => {
    const [page] = useState(0)
    const size = 10;
    const {toast} = useToast()
+   const user_role = getUserDetailsFromStorage('user_role');
+   const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
+   const organizationId = useAppSelector(state => state?.organization?.setOrganizationId)
 
-   const { data: cohortData,isLoading } = useGetAllCohortsByOrganisationQuery({ pageSize: 300, pageNumber:page }, { refetchOnMountOrArgChange: true, })
-    const { data: searchData } = useSearchCohortByOrganisationQuery({cohortName: searchTerm, programId: programId, pageSize: size, pageNumber: pageNumber,}, { skip: !searchTerm });
+   console.log(organizationId)
+   const [tabStates, setTabStates] = useState<Record<string, TabState>>({
+    incoming: { pageNumber: 0, totalPages: 0, hasNextPage: false },
+    current: { pageNumber: 0, totalPages: 0, hasNextPage: false },
+    graduated: { pageNumber: 0, totalPages: 0, hasNextPage: false }
+});
+
+const currentTabState = tabStates[cohortTab];
+   
+   const { data: cohortData,isLoading } = useGetAllCohortsByOrganisationQuery({  ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+    ? { organizationId } 
+    : {}),cohortStatus: cohortTab.toUpperCase(),pageSize: 10, pageNumber:currentTabState.pageNumber }, { refetchOnMountOrArgChange: true, })
+    const { data: searchData, isLoading: searchIsloading } = useSearchCohortByOrganisationQuery({cohortName: searchTerm, programId: programId, pageSize: size, pageNumber: currentTabState.pageNumber,}, { skip: !searchTerm });
    const { data: programDatas, isLoading: programIsloading,isFetching  } = useGetAllProgramsQuery({ pageSize: size, pageNumber: pageNumber }, { skip: !isCreateModalOpen, refetchOnMountOrArgChange: true, })
   const { data: cohortsByProgram, refetch, isLoading: cohortIsLoading } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: 300, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
@@ -95,17 +121,46 @@ const CohortView = () => {
     setIsOpen(!isOpen)
 }
 
+
    useEffect(() => {
     if(searchTerm && searchData && searchData?.data) {
       const result = searchData?.data?.body
       setOrganisationCohort(result)
+      setTabStates(prev => ({
+        ...prev,
+        [cohortTab]: {
+            pageNumber: searchData?.data.pageNumber,
+            totalPages: searchData?.data.totalPages,
+            hasNextPage:searchData?.data.hasNextPage
+        }
+    }));
     }
     else if(!searchTerm && cohortData && cohortData?.data) {
         const result = cohortData?.data?.body
       setOrganisationCohort(result)
       setOriginalCohortData(result);  
+      setTabStates(prev => ({
+        ...prev,
+        [cohortTab]: {
+            pageNumber: cohortData?.data.pageNumber,
+            totalPages: cohortData?.data.totalPages,
+            hasNextPage:cohortData?.data.hasNextPage
+        }
+    }));
     }
-   },[searchTerm,searchData,cohortData])
+    
+   },[searchTerm,searchData,cohortData,cohortTab])
+
+    const handlePageChange: React.Dispatch<React.SetStateAction<number>> = (value) => {
+           const newPage = typeof value === 'function' ? value(currentTabState.pageNumber) : value;
+           setTabStates(prev => ({
+               ...prev,
+               [cohortTab]: {
+                   ...prev[cohortTab],
+                   pageNumber: newPage
+               }
+           }));
+       };
 
     useEffect(() => {
         if (programDatas && programDatas?.data) {
@@ -217,8 +272,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
 
   return (
     <div className=''>
-        <div id='cohortName' className='md:px-6 px-4'>
-          <div id='buttonFilterCreate' className={`md:flex justify-between items-center z-50 relative top-6 bottom-2 ${inter.className}`}>
+        <div id='cohortName' className={` ${user_role === "PORTFOLIO_MANAGER"? "" : "md:px-6 px-4"}`}>
+          <div id='buttonFilterCreate' className={`md:flex justify-between items-center z-50 relative  ${inter.className} ${user_role === "PORTFOLIO_MANAGER"? "top-2" : "top-6  bottom-2"}`}>
             <div id='buttonFilter' className='flex gap-4'>
             <div className='relative'>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -366,7 +421,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                   id='createProgramModal'
                    onClick={handleModalOpen}
                   >
-                    Create cohort
+                   {user_role === "PORTFOLIO_MANAGER"? "Add cohort" : "Create cohort"}
                 </Button>
 
              </div>
@@ -374,8 +429,19 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
         </div>
         <div>
         </div>
-        <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
-         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation} errorDeleted={deleteProgram} searchTerm={searchTerm}/>
+        <div className={` ${user_role === "PORTFOLIO_MANAGER"? "mt-8" : " mr-auto ml-auto relative w-[96%] mt-12 "}`}>
+         <CohortTabs 
+         isLoading={isLoading || searchIsloading} 
+         listOfCohorts={organisationCohort} 
+         handleDelete={handleDeleteCohortByOrganisation} 
+         errorDeleted={deleteProgram} searchTerm={searchTerm} 
+         userRole={user_role} 
+         currentTab={cohortTab}
+         handlePageChange={handlePageChange}
+         hasNextPage={currentTabState.hasNextPage}
+         pageNumber={currentTabState.pageNumber}
+         totalPages={currentTabState.totalPages}
+         />
          
         </div>
         <div>
@@ -384,11 +450,11 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
             closeOnOverlayClick={true}
             closeModal={() => setIsOpen(false)}
              width='36%'
-            headerTitle='Create cohort'
+            headerTitle={user_role === "PORTFOLIO_MANAGER"? "Add cohort" : 'Create cohort'}
              className='pb-1'
               icon={Cross2Icon}
           >
-            <CreateCohort setIsOpen={setIsOpen}/>
+            {user_role === "PORTFOLIO_MANAGER"? <AddCohortInAnOrganization  setIsOpen={setIsOpen}/> : <CreateCohort setIsOpen={setIsOpen}/> }
           </Modal>
         </div>
     </div>
