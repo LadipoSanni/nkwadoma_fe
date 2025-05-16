@@ -147,10 +147,10 @@ useEffect(() => {
      }
 
   const handleRowClick = (row: TableRowData) => {
-      console.log('row: ', row)
     store.dispatch(setcohortId(String(row.id)))
      if(userRole === "PORTFOLIO_MANAGER"){
-         store.dispatch(setSelectedCohortInOrganization(row))
+         const cohort = {name: String(row?.name),id: String(row?.id)}
+         store.dispatch(setSelectedCohortInOrganization(cohort))
       router.push('/organizations/loanee')
      }else {
       router.push('/cohort/cohort-details')

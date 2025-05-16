@@ -100,7 +100,6 @@ const CohortView = () => {
    const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
    const organizationId = useAppSelector(state => state?.organization?.setOrganizationId)
 
-   console.log(organizationId)
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
     incoming: { pageNumber: 0, totalPages: 0, hasNextPage: false },
     current: { pageNumber: 0, totalPages: 0, hasNextPage: false },

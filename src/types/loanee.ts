@@ -9,3 +9,14 @@ export interface LoaneeCurentInformation {
     alternatePhoneNumber: string,
     alternateContactAddress: string,
 }
+
+export interface CohortInfo {
+    id: string,
+    name: string,
+    numberOfLoanees: number,
+    startDate: string,
+    tuitionAmount: number,
+    amountRequested: number,
+    amountReceived: number,
+    amountOutstanding: number
+}
