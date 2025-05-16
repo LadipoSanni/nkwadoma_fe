@@ -6,7 +6,7 @@ interface CohortState {
   imageUrl: string | null;
   cohortStatusTab:  string ;
    setCohortId: string,
-  selectedCohortInOrganization: {name: string, id: string} ;
+  selectedCohortInOrganization: {name: string, id: string} | undefined ;
   
 }
 
@@ -15,7 +15,7 @@ const initialState: CohortState = {
   imageUrl: null,
   cohortStatusTab: "incoming",
   setCohortId: "",
-  selectedCohortInOrganization:[],
+  selectedCohortInOrganization:undefined,
 };
 
 const cohortSlice = createSlice({
