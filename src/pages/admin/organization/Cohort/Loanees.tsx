@@ -3,10 +3,12 @@ import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
 import {cabinetGroteskBold, cabinetGroteskMediumBold} from "@/app/fonts";
 import SearchInput from "@/reuseable/Input/SearchInput";
-import { MdOutlinePerson} from "react-icons/md";
+import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {formatAmount} from "@/utils/Format";
-import {useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
+import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
 import Table from "@/reuseable/table/LoanProductTable"
+import dynamic from "next/dynamic";
+import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -29,8 +31,12 @@ interface viewAllLoanee {
 }
 type viewAllLoanees = viewAllLoanee & TableRowData;
 
+const Loanees = dynamic(
+    () => Promise.resolve(LoaneesInACohort),
+    {ssr: false}
+)
 
-const Loanees = () => {
+const LoaneesInACohort = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
 
@@ -39,12 +45,18 @@ const Loanees = () => {
     }
     const size = 300;
     const [page] = useState(0);
-
+    const cohortId = 'a14a73bd-0ddb-4b58-8822-9ff1f7dff0e3';
     const {data, isLoading} = useViewAllLoaneeQuery({
         cohortId: 'a14a73bd-0ddb-4b58-8822-9ff1f7dff0e3',
         pageSize: size,
         pageNumber: page
     },{refetchOnMountOrArgChange: true})
+
+    const {data: searchResults, isLoading: isLoadingSearch} = useSearchForLoaneeInACohortQuery({
+            loaneeName: searchTerm,
+            cohortId: cohortId
+        },
+        {skip: !searchTerm || !cohortId})
 
     const tableHeaderintegrated = [
         {title: "Trainee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
@@ -53,15 +65,10 @@ const Loanees = () => {
         {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetails?.amountReceived))},
     ];
 
-    // const tableHeader = [
-    //     { title: 'Trainee', sortable: true, id: 'trainee', selector: (row: TableRowData) => row.Trainee},
-    //     {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: TableRowData) => row.InitialDeposit},
-    //     {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: TableRowData) => formatAmount((row.AmountRequested))},
-    //     {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: TableRowData) => formatAmount((row.AmountReceived))},
-    // ];
+
 
     return (
-        <div
+        <main
             id={'loaneesInACohort'}
             className={'w-full h-full md:px-6 md:py-4 px-4 py-4 '}
         >
@@ -90,9 +97,10 @@ const Loanees = () => {
                 id={'loaneeTable'}
                 className={`mt-6`}
             >
+                {searchTerm && searchResults?.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :
 
-                <Table
-                    tableData={data?.data?.body}
+                    <Table
+                    tableData={searchTerm ?searchResults?.data?.body : data?.data?.body}
                     tableHeader={tableHeaderintegrated}
                     handleRowClick={()=> {}}
                     staticHeader=""
@@ -101,12 +109,13 @@ const Loanees = () => {
                     sideBarTabName="trainee"
                     optionalRowsPerPage={10}
                     tableCellStyle="h-12"
-                    isLoading={isLoading}
+                    isLoading={isLoading || isLoadingSearch}
                     condition={true}
                     tableHeight={45}
                 />
+                }
             </div>
-        </div>
+        </main>
     );
 };
 
