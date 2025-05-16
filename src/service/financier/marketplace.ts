@@ -36,7 +36,7 @@ interface InvestmentVehicleFundRaisingResponse {
 export const marketplaceApi = createApi({
     reducerPath: 'marketplaceApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['marketplace'],
+    tagTypes: ['marketplace', 'investInVehicle'],
     endpoints: (builder) => ({
         searchInvestmentVehicles: builder.query<InvestmentVehicleFundRaisingResponse, {
             searchTerm: string;
@@ -81,7 +81,7 @@ export const marketplaceApi = createApi({
                 method: 'POST',
                 body: formData,
             }),
-            invalidatesTags: ['marketplace'],
+            invalidatesTags: ['marketplace', 'investInVehicle'],
 
         })
     })
