@@ -15,13 +15,13 @@ import {
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
-import {getItemSessionStorage} from "@/utils/storage";
+// import {getItemSessionStorage} from "@/utils/storage";
 import {useToast} from "@/hooks/use-toast";
 import {cohortLoaneeResponse} from "@/types/Component.type";
 import Table from "@/reuseable/table/LoanProductTable"
 import Isloading from "@/reuseable/display/Isloading";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
-
+import { useAppSelector } from '@/redux/store';
 
 interface userIdentity {
     firstName: string;
@@ -61,22 +61,23 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
 
 
-    const cohortId = getItemSessionStorage("cohortId")
+    // const cohortId = getItemSessionStorage("cohortId")
+    const cohortId =  useAppSelector(store=> store?.cohort?.setCohortId)
     const size = 300;
     const [page] = useState(0);
-    const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
+    // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
 
     const {data} = useViewAllLoaneeQuery({
-        cohortId: cohortsId,
+        cohortId: cohortId,
         pageSize: size,
         pageNumber: page
     },{refetchOnMountOrArgChange: true})
 
     const {data: searchResults, isLoading: isLoading} = useSearchForLoaneeInACohortQuery({
             loaneeName: loaneeName,
-            cohortId: cohortsId
+            cohortId: cohortId
         },
-        {skip: !loaneeName || !cohortsId})
+        {skip: !loaneeName || !cohortId})
 
 
     const [refer, {isLoading: isLoadingRefer}] = useReferLoaneeToACohortMutation()
@@ -267,7 +268,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                     headerTitle={`Add loanee`}
                     width="30%"
                 >
-                    <AddTraineeForm  tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)}/>
+                    <AddTraineeForm  tuitionFee={cohortFee} setIsOpen={() => setAddLoanee(false)} cohortId={cohortId}/>
                 </TableModal>
 
             </div>

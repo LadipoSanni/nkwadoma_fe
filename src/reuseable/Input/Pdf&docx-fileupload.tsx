@@ -82,13 +82,11 @@ const PdfAndDocFileUpload: React.FC<FileUploadProps> = ({
 
     if (!supportedTypes.includes(file.type)) {
       setError('Only PDF and DOCX files are supported');
-      // setIsFileSupported(false);
       return false;
     }
 
     if (file.size > MAX_FILE_SIZE) {
       setError('File size exceeds 10MB limit');
-      // setIsFileSupported(false);
       return false;
     }
 

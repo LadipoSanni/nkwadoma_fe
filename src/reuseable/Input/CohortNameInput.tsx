@@ -9,17 +9,8 @@ interface CohortNameInputProps {
 
 const CohortNameInput: React.FC<CohortNameInputProps> = ({ cohortName, setCohortName }) => {
     const [error, setError] = useState<string | null>(null); 
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
-    //     const value = e.target.value; 
-    //     const regex = /^(?=.*[a-zA-Z])[a-zA-Z0-9-_\s]*$/; 
-    //      if (value === "" || regex.test(value)) { 
-    //         setCohortName(value);
-    //           setError(null); 
-   
-    //         else { 
-    //             setError('Cohort name should contain at least one letter and can include numbers, hyphens, and underscores.'); 
-    //         }
-    // };
+    const [isTouched, setIsTouched] = useState(false);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const regex = /^(?=.*[a-zA-Z])[a-zA-Z0-9-_\s]*$/;
@@ -32,6 +23,13 @@ const CohortNameInput: React.FC<CohortNameInputProps> = ({ cohortName, setCohort
             setError(null);
         } else {
             setError('Cohort name should contain at least one letter and can include numbers, hyphens, and underscores.');
+        }
+    };
+       
+    const handleBlur = () => {
+        setIsTouched(true);
+        if (!cohortName.trim()) {
+            setError('Name is required');
         }
     };
     
@@ -49,8 +47,12 @@ const CohortNameInput: React.FC<CohortNameInputProps> = ({ cohortName, setCohort
             value={cohortName}
             // onChange={(e) => setCohortName(e.target.value)}
             onChange={handleChange}
+            onBlur={handleBlur} 
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
+        {isTouched && !cohortName.trim() && !error && (
+                <p className="text-red-500 text-sm">Name is required</p>
+            )}
     </div>
     )
 }

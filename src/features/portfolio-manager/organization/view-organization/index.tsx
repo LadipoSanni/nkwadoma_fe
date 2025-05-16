@@ -10,11 +10,10 @@ import InviteOrganizationForm from '@/components/portfolio-manager/organization/
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useViewAllOrganizationByStatusQuery, useSearchOrganisationByNameQuery } from "@/service/admin/organization";
 import { formatAmount } from '@/utils/Format';
-import { setItemSessionStorage } from '@/utils/storage';
 import { useRouter } from 'next/navigation';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import { MdSearch } from 'react-icons/md';
-import { setOrganizationTabStatus } from '@/redux/slice/organization/organization';
+import { setOrganizationTabStatus,setOrganizationId,resetOrganizationId} from '@/redux/slice/organization/organization';
 import { useAppSelector } from '@/redux/store';
 import { store } from "@/redux/store";
 
@@ -106,6 +105,7 @@ function Organization() {
                 }
             }));
         }
+        store.dispatch(resetOrganizationId())
     }, [searchTerm, searchResults, data, tabType]);
 
     const handleInviteOrganizationClick = () => {
@@ -113,8 +113,8 @@ function Organization() {
     };
 
     const handleRowClick = (row: TableRowData) => {
+        store.dispatch(setOrganizationId(String(row.id)))
         router.push('/organizations/details');
-        setItemSessionStorage("organisationId", String(row.id));
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Tabs,TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import Tables from '@/reuseable/table/LoanProductTable'
-// import { cohortsData } from '@/utils/LoanRequestMockData/cohortProduct'
+// import Tables from '@/reuseable/table/LoanProductTable'
+import Table  from '@/reuseable/table/Table'
 import { MdOutlinePeople } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
 import { formatAmount } from '@/utils/Format'
@@ -17,7 +17,8 @@ import { setItemSessionStorage } from '@/utils/storage';
 import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
-
+import { store } from '@/redux/store'
+import { setcohortStatusTab,setcohortId } from '@/redux/slice/create/cohortSlice'
 
 
 
@@ -46,10 +47,16 @@ interface cohortList {
   isLoading?: boolean
   errorDeleted?: string
   searchTerm?: string
+  userRole?: string;
+  currentTab?: string;
+  hasNextPage: boolean;
+  totalPages: number;
+  pageNumber: number
+  handlePageChange:  (value: React.SetStateAction<number>, tabType?: string) => void;
 }
 
 
-const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,searchTerm}:cohortList) => {
+const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,searchTerm,userRole,currentTab,hasNextPage,totalPages,handlePageChange,pageNumber}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
   // const [programId, setProgramId] = React.useState("")
@@ -73,7 +80,7 @@ const {data: cohortDetails, isLoading: loading, refetch} = useGetCohortDetailsQu
   cohortId: cohortId
 }, {skip: !cohortId,refetchOnMountOrArgChange: true});
 
-// const {data:cohortInfo} = useViewCohortDetailsQuery({})
+
 
 useEffect(() => {
   if (cohortDetails && cohortDetails?.data) {
@@ -107,7 +114,7 @@ useEffect(() => {
     },
     {
       name:"Graduated",
-      value: "graduate"
+      value: "graduated"
     },
 
   ]
@@ -140,9 +147,12 @@ useEffect(() => {
      }
 
   const handleRowClick = (row: TableRowData) => {
-    router.push('/cohort/cohort-details')
-    // console.log('The row: ',row.id)
-     setItemSessionStorage("cohortId",String(row.id))
+    store.dispatch(setcohortId(String(row.id)))
+     if(userRole === "PORTFOLIO_MANAGER"){
+      router.push('')
+     }else {
+      router.push('/cohort/cohort-details')
+     }
      setItemSessionStorage("programsId", String(row.programId))
 
   }
@@ -152,8 +162,12 @@ useEffect(() => {
   const handleDropdownClick = async (id:string,row: rowData) => {
     if(id === "1") {
       setItemSessionStorage("programsId", String(row.programId))
-      setItemSessionStorage("cohortId",String(row.id))
-      router.push('/cohort/cohort-details')
+      store.dispatch(setcohortId(String(row.id)))
+      if(userRole === "PORTFOLIO_MANAGER"){
+        router.push('')
+       }else {
+        router.push('/cohort/cohort-details')
+       }
   }
     else if(id === "2") {
       setCohortId(String(row.id))
@@ -182,7 +196,7 @@ useEffect(() => {
   
   const ProgramHeader = [
     { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => row.name },
-    { title: <div className='relative right-2 left-2'>End date</div>, sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatMonthInDate(row?.expectedEndDate)},
+    { title: <div className='relative right-2 left-2'>start date</div>, sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatMonthInDate(row?.startDate)},
     { title: 'No. of loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => row.numberOfLoanees || 0 },
     { title: 'Tuition', sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => formatAmount(row.tuitionAmount)},
     { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRecieved)}</div> },
@@ -191,105 +205,137 @@ useEffect(() => {
 
   ]
 
-    const IncomingProgramHeader = [
-        {title: 'Cohort', sortable: true, id: 'name', selector: (row: TableRowData) => row.name,},
-        { title: <div className='relative right-2 left-2'>Start date</div>, sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatMonthInDate(row?.startDate)},
-        { title: 'No. of loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => row.numberOfLoanees || 0 },
-        { title: 'Tuition', sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => formatAmount(row.tuitionAmount)},
-        { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRecieved)}</div> },
-        { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className='ml-6'>{formatAmount(row.amountRequested)}</div> },
-        { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className='ml-8'>{formatAmount(row.amountOutstanding)}</div> },
-    ];
 
-  const incomingCohorts = listOfCohorts.filter(cohort => cohort.cohortStatus === 'INCOMING'); 
-  const currentCohorts = listOfCohorts.filter(cohort => cohort.cohortStatus === 'CURRENT'); 
-  const graduatedCohorts = listOfCohorts.filter(cohort => cohort.cohortStatus === 'GRADUATED');
+  const renderTable = (tabValue: string) => {
+        const isEmpty = searchTerm && listOfCohorts.length === 0
+        const emptyStateName = `${tabValue.charAt(0).toUpperCase() + tabValue.slice(1)} cohort`;
 
-  const dataTabs = [
-    {
-      value: 'incoming',
-      table: <div >
-           {  
-           searchTerm && incomingCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Incoming cohort'/></div> :
-           <Tables
-              tableData={incomingCohorts.slice().reverse()}
-              handleRowClick={handleRowClick}
-              tableHeader={IncomingProgramHeader}
-              tableHeight={52}
-              sx='cursor-pointer'
-              staticColunm='name'
-              staticHeader='cohort'
-              showKirkBabel={true}
-              kirkBabDropdownOption={dropDownOption}
-              icon={MdOutlinePeople}
-              sideBarTabName='cohort'
-              optionalFilterName='incoming'
-              handleDropDownClick={handleDropdownClick}
-              optionalRowsPerPage={10}
-              isLoading={isLoading}
-             />
-           }
-             </div>
-    },
-     {
-      value: 'current',
-      table: <div>
-          {  
-           searchTerm && currentCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Current cohort'/></div> :
-             <Tables
-              tableData={currentCohorts.slice().reverse()}
-              handleRowClick={handleRowClick}
-              tableHeader={ProgramHeader}
-              tableHeight={52}
-              sx='cursor-pointer'
-              staticColunm='name'
-              staticHeader='cohort'
-              showKirkBabel={true}
-              kirkBabDropdownOption={dropDownOption}
-              icon={MdOutlinePeople}
-              sideBarTabName='cohort'
-              optionalFilterName='current'
-              handleDropDownClick={handleDropdownClick}
-              optionalRowsPerPage={10}
-              condition={true}
-              isLoading={isLoading}
-             />
-          }
-             </div>
-    },
-    {
-      value: 'graduate',
-      table: <div>
-         {  
-           searchTerm && graduatedCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Graduated cohort'/></div> :
-             <Tables
-              tableData={graduatedCohorts.slice().reverse()}
-              handleRowClick={handleRowClick}
-              tableHeader={ProgramHeader}
-              tableHeight={52}
-              sx='cursor-pointer'
-              staticColunm='name'
-              staticHeader='cohort'
-              showKirkBabel={true}
-              kirkBabDropdownOption={dropDownOption}
-              icon={MdOutlinePeople}
-              sideBarTabName='cohort'
-              optionalFilterName='graduated'
-              handleDropDownClick={handleDropdownClick}
-               optionalRowsPerPage={10}
-               condition={true}
-               isLoading={isLoading}
-             />
-         }
-             </div>
-    },
+        return isEmpty ? (
+          <SearchEmptyState icon={MdSearch} name={emptyStateName} />
+      ) : (
+        <Table
+        tableData={listOfCohorts}
+        handleRowClick={handleRowClick}
+        tableHeader={ProgramHeader}
+        tableHeight={userRole === "PORTFOLIO_MANAGER"? 40 : 52}
+        sx='cursor-pointer'
+        staticColunm='name'
+        staticHeader='cohort'
+        showKirkBabel={userRole === "PORTFOLIO_MANAGER"? false : true}
+        kirkBabDropdownOption={dropDownOption}
+        icon={MdOutlinePeople}
+        sideBarTabName='cohort'
+        optionalFilterName={tabValue}
+        handleDropDownClick={handleDropdownClick}
+        isLoading={isLoading}
+        condition={userRole === "PORTFOLIO_MANAGER"? false : true}
+        hasNextPage={hasNextPage}
+        pageNumber={pageNumber}
+        setPageNumber={handlePageChange}
+        totalPages={totalPages}
+        />
+      )
+  }
 
-  ]
+   const tabContent = tabData.map(tab => ({
+      value: tab.value,
+      content: (
+            <div>
+               {renderTable(tab.value)}
+            </div>
+      )
+   }))
+
+  // const dataTabs = [
+  //   {
+  //     value: 'incoming',
+  //     table: <div className='relative'>
+  //          {  
+  //          searchTerm && listOfCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Incoming cohort'/></div> :
+  //          <Tables
+  //             tableData={listOfCohorts}
+  //             handleRowClick={handleRowClick}
+  //             tableHeader={IncomingProgramHeader}
+  //             tableHeight={userRole === "PORTFOLIO_MANAGER"? 40 : 52}
+  //             sx='cursor-pointer'
+  //             staticColunm='name'
+  //             staticHeader='cohort'
+  //             showKirkBabel={userRole === "PORTFOLIO_MANAGER"? false : true}
+  //             kirkBabDropdownOption={dropDownOption}
+  //             icon={MdOutlinePeople}
+  //             sideBarTabName='cohort'
+  //             optionalFilterName='incoming'
+  //             handleDropDownClick={handleDropdownClick}
+  //             optionalRowsPerPage={10}
+  //             isLoading={isLoading}
+  //              condition={userRole === "PORTFOLIO_MANAGER"? false : true}
+  //            />
+  //          }
+  //            </div>
+  //   },
+  //    {
+  //     value: 'current',
+  //     table: <div>
+  //         {  
+  //          searchTerm && listOfCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Current cohort'/></div> :
+  //            <Tables
+  //             tableData={listOfCohorts.slice().reverse()}
+  //             handleRowClick={handleRowClick}
+  //             tableHeader={ProgramHeader}
+  //             tableHeight={userRole === "PORTFOLIO_MANAGER"? 40 : 52}
+  //             sx='cursor-pointer'
+  //             staticColunm='name'
+  //             staticHeader='cohort'
+  //             showKirkBabel={userRole === "PORTFOLIO_MANAGER"? false : true}
+  //             kirkBabDropdownOption={dropDownOption}
+  //             icon={MdOutlinePeople}
+  //             sideBarTabName='cohort'
+  //             optionalFilterName='current'
+  //             handleDropDownClick={handleDropdownClick}
+  //             optionalRowsPerPage={10}
+  //             condition={true}
+  //             isLoading={isLoading}
+  //            />
+  //         }
+  //            </div>
+  //   },
+  //   {
+  //     value: 'graduated',
+  //     table: <div>
+  //        {  
+  //          searchTerm && listOfCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Graduated cohort'/></div> :
+  //            <Tables
+  //             tableData={listOfCohorts.slice().reverse()}
+  //             handleRowClick={handleRowClick}
+  //             tableHeader={ProgramHeader}
+  //             tableHeight={userRole === "PORTFOLIO_MANAGER"? 40 : 52}
+  //             sx='cursor-pointer'
+  //             staticColunm='name'
+  //             staticHeader='cohort'
+  //             showKirkBabel={true}
+  //             kirkBabDropdownOption={dropDownOption}
+  //             icon={MdOutlinePeople}
+  //             sideBarTabName='cohort'
+  //             optionalFilterName='graduated'
+  //             handleDropDownClick={handleDropdownClick}
+  //              optionalRowsPerPage={10}
+  //              condition={userRole === "PORTFOLIO_MANAGER"? false : true}
+  //              isLoading={isLoading}
+  //            />
+  //        }
+  //            </div>
+  //   },
+
+  // ]
 
 
   return (
     <div >
-      <Tabs defaultValue='incoming'>
+      <Tabs value={currentTab}
+       onValueChange={(value) => {
+                          store.dispatch(setcohortStatusTab(value));
+                      }}
+      >
         <TabsList className= {`z-50 ${inter.className}`}>
           {tabData.map((tab,index) => (
             <TabsTrigger id={`${tab.name}-${index}`} data-testid={`tabName${tab.value}`}  value={tab.value} key={index}>
@@ -298,9 +344,9 @@ useEffect(() => {
           ))}
         </TabsList>
         {
-          dataTabs.map((tab, index) => (
+          tabContent.map((tab, index) => (
             <TabsContent key={index} value={tab.value}  className='mt-5'>
-                {tab.table}
+                {tab.content}
             </TabsContent>
           ))
         }

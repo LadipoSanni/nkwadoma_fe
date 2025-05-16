@@ -5,7 +5,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery";
 export const financierOnboardingAndDashboardApi = createApi({
     reducerPath:'financierOnboardingAndDashboardApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['FinancierDashboard', 'marketplace'],
+    tagTypes: ['FinancierDashboard', 'marketplace','investInVehicle'],
     endpoints : (builder) =>  ({
 
         viewFinancierDashboard: builder.query({
@@ -13,7 +13,7 @@ export const financierOnboardingAndDashboardApi = createApi({
                 url : `/financier/view`,
                 method: 'GET',
             }),
-            providesTags: ['FinancierDashboard','marketplace']
+            providesTags: ['FinancierDashboard','marketplace', 'investInVehicle']
         }),
         viewMyInvestment: builder.query({
            query: () => ({
