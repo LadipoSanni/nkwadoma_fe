@@ -6,6 +6,7 @@ interface CohortState {
   imageUrl: string | null;
   cohortStatusTab:  string ;
    setCohortId: string,
+  selectedCohortInOrganization: [];
   
 }
 
@@ -14,6 +15,7 @@ const initialState: CohortState = {
   imageUrl: null,
   cohortStatusTab: "incoming",
   setCohortId: "",
+  selectedCohortInOrganization:[],
 };
 
 const cohortSlice = createSlice({
@@ -36,9 +38,12 @@ const cohortSlice = createSlice({
   setcohortId: ( state, action: PayloadAction<string >) => {
       state.setCohortId = action.payload;
   },
+    setSelectedCohortInOrganization: (state, action: PayloadAction<[]>) => {
+      state.selectedCohortInOrganization = action.payload;
+    }
     
   },
 });
 
-export const { setSelectedProgram, setUploadedUrl,setcohortStatusTab,resetcohortId,setcohortId} = cohortSlice.actions;
+export const { setSelectedProgram, setSelectedCohortInOrganization, setUploadedUrl,setcohortStatusTab,resetcohortId,setcohortId} = cohortSlice.actions;
 export default cohortSlice.reducer;

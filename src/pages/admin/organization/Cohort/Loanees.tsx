@@ -9,6 +9,8 @@ import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery} from "@/service
 import Table from "@/reuseable/table/LoanProductTable"
 import dynamic from "next/dynamic";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import {store} from "@/redux/store";
+import {setOrganizationDetail} from "@/redux/slice/organization/organization";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -41,6 +43,7 @@ const LoaneesInACohort = () => {
 
 
     const handleBackButtonClick = () => {
+        store.dispatch(setOrganizationDetail('cohorts'))
 
     }
     const size = 300;
@@ -97,10 +100,10 @@ const LoaneesInACohort = () => {
                 id={'loaneeTable'}
                 className={`mt-6`}
             >
-                {searchTerm && searchResults?.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :
+                {searchTerm && searchResults?.data?.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :
 
                     <Table
-                    tableData={searchTerm ?searchResults?.data?.body : data?.data?.body}
+                    tableData={searchTerm ? searchResults?.data : data?.data?.body}
                     tableHeader={tableHeaderintegrated}
                     handleRowClick={()=> {}}
                     staticHeader=""
