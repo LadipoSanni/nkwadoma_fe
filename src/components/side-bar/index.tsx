@@ -19,6 +19,9 @@ import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
 import NavbarContainer from "@/reuseable/ui/Navbar";
 import { resetTab } from '@/redux/slice/loan/selected-loan';
+import { resetOrganizationDetailsStatus,resetOrganizationId } from '@/redux/slice/organization/organization';
+import { resetcohortId } from '@/redux/slice/create/cohortSlice';
+
 
 
 
@@ -55,10 +58,13 @@ const SideBar = () => {
     }
 
     const handleLogout =  async () => {
-        store.dispatch(setCurrentNavBottomItem("Logout"))
-        store.dispatch(resetTab())
         await logout({})
         router.push("/auth/login")
+        store.dispatch(setCurrentNavBottomItem("Logout"))
+        store.dispatch(resetTab())
+        store.dispatch(resetOrganizationDetailsStatus())
+        store.dispatch(resetcohortId())
+        store.dispatch(resetOrganizationId())
         clearData()
         await persistor.purge();
         store.dispatch(setCurrentNavBottomItem(""))

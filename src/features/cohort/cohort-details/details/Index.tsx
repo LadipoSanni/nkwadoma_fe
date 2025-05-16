@@ -18,6 +18,7 @@ import { formatMonthInDate } from "@/utils/Format";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import BackButton from "@/components/back-button";
+import { useAppSelector } from "@/redux/store";
 
 
 interface breakDown {
@@ -30,13 +31,14 @@ const CohortDetails = () => {
     const [isEditOpen, setEditOpen] = React.useState(false);
 
     const [breakdown, setBreakdown] = useState<breakDown[]>([]);
+    const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
 
-    const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
+    // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
     const {data: cohortDetails, isLoading} = useViewCohortDetailsQuery({
-        cohortId: cohortsId
+        cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
 
-    const {data: cohortBreakDown} = useGetCohortDetailsBreakdownQuery({cohortId: cohortsId}, {skip: !cohortsId})
+    const {data: cohortBreakDown} = useGetCohortDetailsBreakdownQuery({cohortId: cohortId}, {skip: !cohortId})
 
     useEffect(() => {
         if (cohortBreakDown && cohortBreakDown?.data) {

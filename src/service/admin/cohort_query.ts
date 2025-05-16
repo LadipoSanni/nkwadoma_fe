@@ -73,6 +73,8 @@ export const cohortApi = createApi({
 
         getAllCohortsByOrganisation: builder.query({
             query: (param: {
+                organizationId?: string;
+                cohortStatus: string
                 pageSize?: number;
                 pageNumber?: number;
             }) => ({

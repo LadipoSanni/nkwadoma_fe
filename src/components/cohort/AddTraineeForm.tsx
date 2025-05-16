@@ -9,7 +9,7 @@ import { inter } from '@/app/fonts';
 import CurrencySelectInput from '@/reuseable/Input/CurrencySelectInput';
 import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import { useAddLoaneeToCohortMutation, useGetCohortLoanBreakDownQuery } from "@/service/admin/cohort_query";
-import { getItemSessionStorage } from "@/utils/storage";
+// import { getItemSessionStorage } from "@/utils/storage";
 import TotalInput from "@/reuseable/display/TotalInput";
 import { NumericFormat } from 'react-number-format';
 // import { useToast } from '@/hooks/use-toast';
@@ -19,6 +19,7 @@ import {MdOutlineDelete} from "react-icons/md";
 interface Props {
     tuitionFee?: string;
     setIsOpen?: (e: boolean | undefined) => void;
+    cohortId?: string
 }
 
 type cohortBreakDown = {
@@ -29,11 +30,11 @@ type cohortBreakDown = {
     isloading?:(value: boolean) => boolean;
 }
 
-function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
-    const COHORTID = getItemSessionStorage("cohortId");
+function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
+    // const COHORTID = getItemSessionStorage("cohortId");
     const [step, setStep] = useState(1);
     const [selectCurrency, setSelectCurrency] = useState('NGN');
-    const { data } = useGetCohortLoanBreakDownQuery(COHORTID);
+    const { data } = useGetCohortLoanBreakDownQuery(cohortId);
     const [cohortBreakDown, setCohortBreakDown] = useState<cohortBreakDown[]>([]);
     const [totalItemAmount, setTotalItemAmount] = useState(0);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -110,7 +111,7 @@ function AddTraineeForm({setIsOpen, tuitionFee }: Props) {
 
     const handleFinalSubmit = async (values: typeof initialFormValue) => {
         const input = {
-            cohortId: COHORTID,
+            cohortId: cohortId,
             userIdentity: {
                 email: values.emailAddress,
                 firstName: values.firstName,

@@ -3,10 +3,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface OrganizationSliceState {
     organizationStatusTab:  string ;
+    setOrganizationId: string,
+    organizationDetailTab: string
 }
 
 const initialState:OrganizationSliceState= {
     organizationStatusTab: "active",
+    setOrganizationId: "",
+    organizationDetailTab: "details",
 }
 
 export const organizationSlice = createSlice({
@@ -16,11 +20,20 @@ export const organizationSlice = createSlice({
         setOrganizationTabStatus: ( state, action: PayloadAction<string >) => {
             state. organizationStatusTab = action.payload;
         },
-        resetOrganization: (state) => {
-            state.organizationStatusTab = "active"
-        }
+        resetOrganizationId: (state) => {
+            state.setOrganizationId= ""
+        },
+        setOrganizationId: ( state, action: PayloadAction<string >) => {
+            state.setOrganizationId = action.payload;
+        },
+        setOrganizationDetail: ( state, action: PayloadAction<string >) => {
+            state.organizationDetailTab = action.payload;
+        },
+        resetOrganizationDetailsStatus: (state) => {
+            state.organizationDetailTab= "details"
+        },
     }
 })
 
-export const {setOrganizationTabStatus,resetOrganization} = organizationSlice.actions;
+export const {setOrganizationTabStatus,resetOrganizationId,setOrganizationId,setOrganizationDetail,resetOrganizationDetailsStatus} = organizationSlice.actions;
 export default organizationSlice.reducer;
