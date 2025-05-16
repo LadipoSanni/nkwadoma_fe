@@ -18,7 +18,7 @@ import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 import { store } from '@/redux/store'
-import { setcohortStatusTab,setcohortId } from '@/redux/slice/create/cohortSlice'
+import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization} from '@/redux/slice/create/cohortSlice'
 
 
 
@@ -149,7 +149,9 @@ useEffect(() => {
   const handleRowClick = (row: TableRowData) => {
     store.dispatch(setcohortId(String(row.id)))
      if(userRole === "PORTFOLIO_MANAGER"){
-      router.push('')
+         const cohort = {name: String(row?.name),id: String(row?.id)}
+         store.dispatch(setSelectedCohortInOrganization(cohort))
+      router.push('/organizations/loanee')
      }else {
       router.push('/cohort/cohort-details')
      }
@@ -246,87 +248,6 @@ useEffect(() => {
       )
    }))
 
-  // const dataTabs = [
-  //   {
-  //     value: 'incoming',
-  //     table: <div className='relative'>
-  //          {  
-  //          searchTerm && listOfCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Incoming cohort'/></div> :
-  //          <Tables
-  //             tableData={listOfCohorts}
-  //             handleRowClick={handleRowClick}
-  //             tableHeader={IncomingProgramHeader}
-  //             tableHeight={userRole === "PORTFOLIO_MANAGER"? 40 : 52}
-  //             sx='cursor-pointer'
-  //             staticColunm='name'
-  //             staticHeader='cohort'
-  //             showKirkBabel={userRole === "PORTFOLIO_MANAGER"? false : true}
-  //             kirkBabDropdownOption={dropDownOption}
-  //             icon={MdOutlinePeople}
-  //             sideBarTabName='cohort'
-  //             optionalFilterName='incoming'
-  //             handleDropDownClick={handleDropdownClick}
-  //             optionalRowsPerPage={10}
-  //             isLoading={isLoading}
-  //              condition={userRole === "PORTFOLIO_MANAGER"? false : true}
-  //            />
-  //          }
-  //            </div>
-  //   },
-  //    {
-  //     value: 'current',
-  //     table: <div>
-  //         {  
-  //          searchTerm && listOfCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Current cohort'/></div> :
-  //            <Tables
-  //             tableData={listOfCohorts.slice().reverse()}
-  //             handleRowClick={handleRowClick}
-  //             tableHeader={ProgramHeader}
-  //             tableHeight={userRole === "PORTFOLIO_MANAGER"? 40 : 52}
-  //             sx='cursor-pointer'
-  //             staticColunm='name'
-  //             staticHeader='cohort'
-  //             showKirkBabel={userRole === "PORTFOLIO_MANAGER"? false : true}
-  //             kirkBabDropdownOption={dropDownOption}
-  //             icon={MdOutlinePeople}
-  //             sideBarTabName='cohort'
-  //             optionalFilterName='current'
-  //             handleDropDownClick={handleDropdownClick}
-  //             optionalRowsPerPage={10}
-  //             condition={true}
-  //             isLoading={isLoading}
-  //            />
-  //         }
-  //            </div>
-  //   },
-  //   {
-  //     value: 'graduated',
-  //     table: <div>
-  //        {  
-  //          searchTerm && listOfCohorts.length === 0? <div><SearchEmptyState icon={MdSearch} name='Graduated cohort'/></div> :
-  //            <Tables
-  //             tableData={listOfCohorts.slice().reverse()}
-  //             handleRowClick={handleRowClick}
-  //             tableHeader={ProgramHeader}
-  //             tableHeight={userRole === "PORTFOLIO_MANAGER"? 40 : 52}
-  //             sx='cursor-pointer'
-  //             staticColunm='name'
-  //             staticHeader='cohort'
-  //             showKirkBabel={true}
-  //             kirkBabDropdownOption={dropDownOption}
-  //             icon={MdOutlinePeople}
-  //             sideBarTabName='cohort'
-  //             optionalFilterName='graduated'
-  //             handleDropDownClick={handleDropdownClick}
-  //              optionalRowsPerPage={10}
-  //              condition={userRole === "PORTFOLIO_MANAGER"? false : true}
-  //              isLoading={isLoading}
-  //            />
-  //        }
-  //            </div>
-  //   },
-
-  // ]
 
 
   return (
