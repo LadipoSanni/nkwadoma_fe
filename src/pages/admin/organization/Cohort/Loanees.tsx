@@ -3,15 +3,14 @@ import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
 import {cabinetGroteskBold, cabinetGroteskMediumBold} from "@/app/fonts";
 import SearchInput from "@/reuseable/Input/SearchInput";
-import { MdOutlinePeople} from "react-icons/md";
+import { MdOutlinePerson} from "react-icons/md";
 import {formatAmount} from "@/utils/Format";
-import Tables from "@/reuseable/table/index";
-import {CohortTrainees} from "@/utils/LoanRequestMockData/cohortProduct";
 import {useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
+import Table from "@/reuseable/table/LoanProductTable"
 
-interface TableRowData {
-    [key: string]: string | number | null | React.ReactNode;
-}
+// interface TableRowData {
+//     [key: string]: string | number | null | React.ReactNode;
+// }
 interface userIdentity {
     firstName: string;
     lastName: string;
@@ -39,26 +38,25 @@ const Loanees = () => {
     const size = 300;
     const [page] = useState(0);
 
-    const {data} = useViewAllLoaneeQuery({
+    const {data, isLoading} = useViewAllLoaneeQuery({
         cohortId: 'a14a73bd-0ddb-4b58-8822-9ff1f7dff0e3',
         pageSize: size,
         pageNumber: page
     },{refetchOnMountOrArgChange: true})
-    console.log('data: ', data)
 
     const tableHeaderintegrated = [
-        {title: "Trainee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row.userIdentity?.firstName + " " + row.userIdentity?.lastName},
-        {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail )?.initialDeposit)},
-        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountRequested)},
-        {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row.loaneeLoanDetail as loaneeLoanDetail)?.amountReceived)},
+        {title: "Trainee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
+        {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetails?.initialDeposit))},
+        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetails?.amountRequested))},
+        {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetails?.amountReceived))},
     ];
 
-    const tableHeader = [
-        { title: 'Trainee', sortable: true, id: 'trainee', selector: (row: TableRowData) => row.Trainee},
-        {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: TableRowData) => row.InitialDeposit},
-        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: TableRowData) => formatAmount((row.AmountRequested))},
-        {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: TableRowData) => formatAmount((row.AmountReceived))},
-    ];
+    // const tableHeader = [
+    //     { title: 'Trainee', sortable: true, id: 'trainee', selector: (row: TableRowData) => row.Trainee},
+    //     {title: "Initial deposit", sortable: true, id: "InitialDeposit", selector: (row: TableRowData) => row.InitialDeposit},
+    //     {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: TableRowData) => formatAmount((row.AmountRequested))},
+    //     {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: TableRowData) => formatAmount((row.AmountReceived))},
+    // ];
 
     return (
         <div
@@ -91,19 +89,19 @@ const Loanees = () => {
                 className={`mt-6`}
             >
 
-                <Tables
-                    tableData={CohortTrainees}
-                    isLoading={false}
+                <Table
+                    tableData={data?.data?.body}
+                    tableHeader={tableHeaderintegrated}
                     handleRowClick={()=> {}}
-                    tableHeader={tableHeader}
-                    tableHeight={49}
-                    sx='cursor-pointer'
-                    staticColunm='Trainee'
-                    staticHeader='Trainee'
-                    showKirkBabel={false}
-                    icon={MdOutlinePeople}
-                    sideBarTabName='Cohort'
-                    optionalFilterName='graduate'
+                    staticHeader=""
+                    staticColunm="firstName"
+                    icon={MdOutlinePerson}
+                    sideBarTabName="trainee"
+                    optionalRowsPerPage={10}
+                    tableCellStyle="h-12"
+                    isLoading={isLoading}
+                    condition={true}
+                    tableHeight={45}
                 />
             </div>
         </div>
