@@ -99,7 +99,7 @@ const CohortView = () => {
    const user_role = getUserDetailsFromStorage('user_role');
    const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
    const organizationId = useAppSelector(state => state?.organization?.setOrganizationId)
-
+  const organisationTabStatus = useAppSelector(store => store?.organization?.organizationStatusTab)
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
     incoming: { pageNumber: 0, totalPages: 0, hasNextPage: false },
     current: { pageNumber: 0, totalPages: 0, hasNextPage: false },
@@ -112,8 +112,10 @@ const currentTabState = tabStates[cohortTab];
     ? { organizationId } 
     : {}),cohortStatus: cohortTab.toUpperCase(),pageSize: 10, pageNumber:currentTabState.pageNumber }, { refetchOnMountOrArgChange: true, })
     const { data: searchData, isLoading: searchIsloading } = useSearchCohortByOrganisationQuery({cohortName: searchTerm, programId: programId, pageSize: size, pageNumber: currentTabState.pageNumber,}, { skip: !searchTerm });
-   const { data: programDatas, isLoading: programIsloading,isFetching  } = useGetAllProgramsQuery({ pageSize: size, pageNumber: pageNumber }, { skip: !isCreateModalOpen, refetchOnMountOrArgChange: true, })
-  const { data: cohortsByProgram, refetch, isLoading: cohortIsLoading } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: 300, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
+   const { data: programDatas, isLoading: programIsloading,isFetching  } = useGetAllProgramsQuery({ ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+    ? { organizationId } 
+    : {}),pageSize: size, pageNumber: pageNumber }, { skip: !isCreateModalOpen, refetchOnMountOrArgChange: true, })
+  const { data: cohortsByProgram, refetch, isLoading: cohortIsLoading } = useGetAllCohortByAParticularProgramQuery({ programId,cohortStatus: cohortTab.toUpperCase(), pageSize: 300, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
  
   const handleModalOpen = () => {
@@ -416,9 +418,10 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
              <div className='md:mt-0 mt-4'>
                <Button variant={"secondary"}
                   size={"lg"}
-                  className={`${inter.className} bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center w-full`}
+                  className={`${inter.className}   h-12 flex justify-center items-center w-full ${user_role === "PORTFOLIO_MANAGER" && organisationTabStatus !== "active"? "bg-gray text-grey150" : "bg-meedlBlue text-meedlWhite"}`}
                   id='createProgramModal'
                    onClick={handleModalOpen}
+                   disabled={user_role === "PORTFOLIO_MANAGER" && organisationTabStatus !== "active" ? true : false}
                   >
                    {user_role === "PORTFOLIO_MANAGER"? "Add cohort" : "Create cohort"}
                 </Button>
@@ -453,7 +456,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
              className='pb-1'
               icon={Cross2Icon}
           >
-            {user_role === "PORTFOLIO_MANAGER"? <AddCohortInAnOrganization  setIsOpen={setIsOpen}/> : <CreateCohort setIsOpen={setIsOpen}/> }
+            {user_role === "PORTFOLIO_MANAGER"? <AddCohortInAnOrganization  setIsOpen={setIsOpen} organizationId={organizationId}/> : <CreateCohort setIsOpen={setIsOpen}/> }
           </Modal>
         </div>
     </div>

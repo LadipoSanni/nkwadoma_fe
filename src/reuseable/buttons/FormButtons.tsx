@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
+import IsLoading from "@/reuseable/display/Isloading";
 
 interface FormButtonsProps {
     isButtonDisabled: boolean;
@@ -8,9 +9,10 @@ interface FormButtonsProps {
     setClearField?:() => void;
     isSubmitType?: boolean;
     buttonName?: string
+    isloading?: boolean
 }
 
-const FormButtons: React.FC<FormButtonsProps> = ({ isButtonDisabled, setIsFormSubmitted,setClearField,isSubmitType,buttonName }) => {
+const FormButtons: React.FC<FormButtonsProps> = ({ isButtonDisabled, setIsFormSubmitted,setClearField,isSubmitType,buttonName,isloading }) => {
        const setFormSubmitted = () => {
          if(setIsFormSubmitted){
             setIsFormSubmitted(true)
@@ -36,7 +38,7 @@ const FormButtons: React.FC<FormButtonsProps> = ({ isButtonDisabled, setIsFormSu
         id="submitButton"
         type='submit'
         >
-         {buttonName }
+         {isloading? <IsLoading/> : buttonName }
         </Button>
         }
     </div>

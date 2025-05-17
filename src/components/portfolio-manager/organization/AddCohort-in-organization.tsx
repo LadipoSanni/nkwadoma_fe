@@ -5,7 +5,6 @@ import FormButtons from "@/reuseable/buttons/FormButtons";
 import { CohortNameInput } from "@/reuseable/Input";
 import { useCreateCohortMutation } from "@/service/admin/cohort_query";
 import { useGetAllProgramsQuery } from "@/service/admin/program_query";
-// import Isloading from "@/reuseable/display/Isloading";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import CustomQuillField from "@/reuseable/textArea/Custom-quill-field";
@@ -14,10 +13,11 @@ import TuitionInput from "@/reuseable/feeBreakdown/Tuition";
 import { Label } from "@/components/ui/label";
 import SpreadsheetFileUpload from "@/reuseable/Input/RawFile-spreadshitUpload";
 import {  useViewAllLoanProductQuery } from "@/service/admin/loan_product";
+import { useUploadLoaneeFileMutation } from "@/service/admin/loan_book";
 
 interface createCohortProps {
   setIsOpen?: (e: boolean) => void;
- 
+  organizationId?: string
 }
 
 interface viewAllProps {
@@ -34,7 +34,7 @@ interface ApiError {
 
 
 
-const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen}) => {
+const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,organizationId}) => {
   const [startDate, setDate] = useState<Date>();
   const [programId, setProgramId] = useState("");
   const [loanProductId, setLoanProductId] = useState("");
@@ -46,7 +46,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen}) =>
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [isLoanProductSelectOpen, setIsLoanProductSelectOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [loanBreakdowns, setLoanBreakdowns] = useState<{ itemName: string; itemAmount: string; currency: string }[]>([ { itemName: "Tuition", itemAmount: "", currency: "NGN" }  ]);
+  // const [loanBreakdowns, setLoanBreakdowns] = useState<{ itemName: string; itemAmount: string; currency: string }[]>([ { itemName: "Tuition", itemAmount: "", currency: "NGN" }  ]);
  
   const [fileUpload, setUploadedFile] = useState<File | null>(null);
   const size = 10;
@@ -69,13 +69,13 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen}) =>
 
 
   const { data,isLoading: programIsLoading,isFetching } = useGetAllProgramsQuery(
-    { pageSize: size, pageNumber: programPageNumber },
-    { skip: !isProgram,refetchOnMountOrArgChange: true }
+    { organizationId: organizationId, pageSize: size, pageNumber: programPageNumber },
+    { skip: !isProgram }
   );
-  const { data:loanProduct, isLoading: loanProductIsloading,isFetching:loanProductIsfetching} = useViewAllLoanProductQuery({ pageSize: size, pageNumber:loanProductPageNumber },{ skip: !isLoanProduct,refetchOnMountOrArgChange: true });
-  const [createCohort
-    // { isLoading }
-  ] = useCreateCohortMutation();
+  const { data:loanProduct, isLoading: loanProductIsloading,isFetching:loanProductIsfetching} = useViewAllLoanProductQuery({ pageSize: size, pageNumber:loanProductPageNumber },{ skip: !isLoanProduct});
+
+  const [createCohort, { isLoading } ] = useCreateCohortMutation();
+  const [uploadLoaneeFile, {isLoading: uploadLoaneeIsloading}] = useUploadLoaneeFileMutation();
 
   useEffect(() => {
     if (data?.data) {
@@ -109,8 +109,6 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen}) =>
   }, [loanProduct, loanProductPageNumber]);
 
 
-  console.log(loanProductId)
-
   
   const loadMorePrograms = () => {
     if (!isFetching && hasNextProgramPage) {
@@ -135,9 +133,6 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen}) =>
     }
   }, [name, selectedProgram, startDate, descriptionError, selectedLoanProduct, tuitionAmount, fileUpload]);
 
-  
-
-
 
   const resetForm = () => {
     setDate(undefined);
@@ -147,7 +142,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen}) =>
     setSelectedLoanProduct("");
     setDescriptionError(null);
     setIsSelectOpen(false);
-    setLoanBreakdowns([{ itemName: "Tuition", itemAmount: "", currency: "NGN" }]);
+    // setLoanBreakdowns([{ itemName: "Tuition", itemAmount: "", currency: "NGN" }]);
     setProgramId("");
     setError("");
     setUploadedFile(null)
@@ -169,30 +164,52 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen}) =>
       return;
     }
     if (!isButtonDisabled && !descriptionError) {
-      const tuitionItem = loanBreakdowns.find(item => item.itemName === "Tuition");
-      const tuitionAmount = tuitionItem? tuitionItem.itemAmount : "" ;
-      const filteredLoanBreakdowns = loanBreakdowns.filter(item => item.itemName !== "Tuition");
-
-      const formData = {
+      const loanBreakDownObj = {
+        itemName: "food",
+        itemAmount: "500000",
+        currency: "NGN"
+      }
+      
+      const formDatas = {
         name: name,
         programId: programId,
         startDate: startDate ? format(startDate, "yyyy-MM-dd") : "",
         cohortDescription: cohortDescription,
         imageUrl: "",
-        loanBreakdowns: filteredLoanBreakdowns,
+        loanBreakdowns: [loanBreakDownObj],
         tuitionAmount: tuitionAmount
       };
+
+      if (!fileUpload) {
+        toast({
+          description: "no file",
+          status: "error",
+        });
+        return;
+      }
       try {
-        const result = await createCohort(formData).unwrap();
-        if(result){
-        //   setIsFormSubmitted(true);
-          // setIsModalOpen(false);
-          resetForm();
-          handleCloseModal()
-          toast({
-            description: result.message,
-            status: "success",
-          });
+      
+        const result = await createCohort(formDatas).unwrap();
+        const formData = new FormData();
+           formData.append("file", fileUpload, fileUpload.name); 
+           
+        if(result && fileUpload){
+          const uploadData = {
+            cohortId:result.data?.id,
+            loanProductId: loanProductId,
+            formData
+          }
+  
+            const uploadFile = await uploadLoaneeFile(uploadData).unwrap()
+            if(uploadFile) {
+              resetForm();
+              handleCloseModal()
+              toast({
+                description: result.message,
+                status: "success",
+              });
+            }
+    
         }
        
       } catch (err) {
@@ -229,7 +246,6 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen}) =>
           onSubmit={handleSubmit}
         >
          
-          
               <CohortNameInput cohortName={name} setCohortName={setName} />
               <div
                 id="programDateContainer"
@@ -327,19 +343,13 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen}) =>
                   />
 
               {descriptionError && ( <div className="text-red-500 text-sm">{descriptionError}</div> )}
-             
-               
-              {/* <FileUpload
-                handleDrop={handleDrop}
-                handleDragOver={handleDragOver}
-                 setUploadedImageUrl={setUploadedUrl}
-                labelName="Cohort image (optional)"
-              /> */}
+        
               <FormButtons
                 isButtonDisabled={isButtonDisabled}
                 setClearField={resetForm}
                 buttonName="Add"
                 isSubmitType={true}
+                isloading={isLoading || uploadLoaneeIsloading}
               />
            
            
@@ -358,3 +368,21 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen}) =>
 export default AddCohortInAnOrganization;
 
 
+
+// function downloadCSVs() {
+//   const csvContent = 
+//       "data:text/csv;charset=utf-8," +
+//       "FirstName,LastName,Email,PhoneNumber,DON,InitialDeposit,AmountRequested,AmountReceived\n" +
+//       "Johns,Doess,johndoee@email.com,1234267890,2025-05-18,90000,10000,19000\n" +
+//       "Janesa,Smithss,janesmieth@email.com,0987054321,2025-05-13,4000,17000,15000";
+
+//   const encodedUri = encodeURI(csvContent);
+//   const link = document.createElement("a");
+//   link.setAttribute("href", encodedUri);
+//   link.setAttribute("download", "data.csv");
+//   document.body.appendChild(link);
+//   link.click();
+// }
+
+
+// downloadCSVs()

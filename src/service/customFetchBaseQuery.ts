@@ -14,13 +14,15 @@ export const customFetchBaseQuery = fetchBaseQuery({
     fetchFn: typeof window === 'undefined'
         ? (fetch as unknown as typeof globalThis.fetch) // Use node-fetch for SSR but cast to global fetch type
         : undefined, 
-    prepareHeaders: (headers) => {
+    prepareHeaders: (headers,{ endpoint }) => {
         const { storedAccessToken } = getUserDetails();
         const {storedRefreshToken} = getUserDetails();
         const token = isTokenExpired(storedAccessToken) ? storedRefreshToken : storedAccessToken
         if (storedAccessToken || storedRefreshToken) {
             headers.set('authorization', `Bearer ${token}`);
-            headers.set('Content-type', 'application/json');
+            if (endpoint !== 'uploadLoaneeFile') {
+                headers.set('Content-Type', 'application/json');
+              }
         }
 
         return headers;
