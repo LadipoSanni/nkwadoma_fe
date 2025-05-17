@@ -154,7 +154,8 @@ export const cohortApi = createApi({
         }),
         getAllCohortByAParticularProgram: builder.query({
             query: (param: {
-                programId?:string,
+                programId?:string;
+                cohortStatus?: string;
                 pageSize?: number;
                 pageNumber?: number;
             }) => ({

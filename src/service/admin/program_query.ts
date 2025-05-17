@@ -8,6 +8,7 @@ export const programApi = createApi({
     endpoints: (builder) => ({
         getAllPrograms: builder.query({
             query: (param: {
+                organizationId?: string;
                 pageSize?: number;
                 pageNumber?: number;
             }) => ({

@@ -33,6 +33,7 @@ import {portfolioOverviewApi} from '@/service/admin/overview'
 import kycFormReducer from "@/redux/slice/kyc/kycFormSlice";
 import {publicInvestmentApi} from "@/service/unauthorized/view-investment";
 import OrganizationReducer from "./slice/organization/organization"
+import { loanBookApi } from '@/service/admin/loan_book';
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -68,6 +69,7 @@ const appReducer = combineReducers({
     [marketplaceApi.reducerPath]: marketplaceApi.reducer,
     [portfolioOverviewApi.reducerPath]: portfolioOverviewApi.reducer,
     [publicInvestmentApi.reducerPath]: publicInvestmentApi.reducer,
+    [loanBookApi.reducerPath]: loanBookApi.reducer
 });
 
 export default appReducer;
