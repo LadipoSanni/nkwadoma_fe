@@ -261,7 +261,7 @@ const OrganizationDetails = () => {
               "py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom"
             }
           >
-            cohort
+            Cohort
           </TabsTrigger>
           <TabsTrigger
             id="adminsTab"
