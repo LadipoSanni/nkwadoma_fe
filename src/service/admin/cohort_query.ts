@@ -86,9 +86,17 @@ export const cohortApi = createApi({
         }),
 
         searchCohortByOrganisation: builder.query({
-            query: ({ cohortName, programId, pageSize, pageNumber }) => ({
-                url: `/searchCohort?cohortName=${cohortName}&programId=${programId}&pageSize=${pageSize}&pageNumber=${pageNumber}`,
+            query: (param: { 
+                cohortName: string;
+                organizationId?: string;
+                programId?: string;
+                cohortStatus?: string;
+                pageSize?: number;
+                pageNumber?: number;
+                 }) => ({
+                url: `/searchCohort`,
                 method: 'GET',
+                params: param
             }),
 
         }),

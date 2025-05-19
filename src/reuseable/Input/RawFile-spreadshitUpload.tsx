@@ -13,7 +13,7 @@ interface FileUploadProps {
   className?: string;
 }
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const MAX_FILE_SIZE = 3 * 1024 * 1024;
 
 const truncateFileName = (name: string, length: number) => {
   return name.length > length ? name.substring(0, length) + '...' : name;
@@ -67,7 +67,7 @@ const SpreadsheetFileUpload: React.FC<FileUploadProps> = ({
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      setError('File size exceeds 10MB limit');
+      setError('File size exceeds 3MB limit');
       return false;
     }
 
@@ -225,7 +225,7 @@ const SpreadsheetFileUpload: React.FC<FileUploadProps> = ({
                 <span className="underline text-meedlBlue">Click to upload</span> or drag and drop
               </p>
               <p className="text-black300 leading-[150%] text-[14px] font-normal">
-                CSV, XLS or XLSX (max. 10MB)
+                CSV, XLS or XLSX (max. 3MB)
               </p>
             </div>
           </>

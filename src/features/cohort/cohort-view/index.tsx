@@ -111,7 +111,11 @@ const currentTabState = tabStates[cohortTab];
    const { data: cohortData,isLoading } = useGetAllCohortsByOrganisationQuery({  ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
     ? { organizationId } 
     : {}),cohortStatus: cohortTab.toUpperCase(),pageSize: 10, pageNumber:currentTabState.pageNumber }, { refetchOnMountOrArgChange: true, })
-    const { data: searchData, isLoading: searchIsloading } = useSearchCohortByOrganisationQuery({cohortName: searchTerm, programId: programId, pageSize: size, pageNumber: currentTabState.pageNumber,}, { skip: !searchTerm });
+    
+    const { data: searchData, isLoading: searchIsloading } = useSearchCohortByOrganisationQuery({cohortName: searchTerm,...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+      ? { organizationId } 
+      : {}),programId: programId,cohortStatus: cohortTab.toUpperCase(), pageSize: size, pageNumber: currentTabState.pageNumber,}, { skip: !searchTerm });
+
    const { data: programDatas, isLoading: programIsloading,isFetching  } = useGetAllProgramsQuery({ ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
     ? { organizationId } 
     : {}),pageSize: size, pageNumber: pageNumber }, { skip: !isCreateModalOpen, refetchOnMountOrArgChange: true, })

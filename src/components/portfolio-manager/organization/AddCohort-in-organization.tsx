@@ -164,11 +164,11 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
       return;
     }
     if (!isButtonDisabled && !descriptionError) {
-      const loanBreakDownObj = {
-        itemName: "food",
-        itemAmount: "500000",
-        currency: "NGN"
-      }
+      // const loanBreakDownObj = {
+      //   itemName: "book",
+      //   itemAmount: "600000",
+      //   currency: "NGN"
+      // }
       
       const formDatas = {
         name: name,
@@ -176,7 +176,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
         startDate: startDate ? format(startDate, "yyyy-MM-dd") : "",
         cohortDescription: cohortDescription,
         imageUrl: "",
-        loanBreakdowns: [loanBreakDownObj],
+        loanBreakdowns: [],
         tuitionAmount: tuitionAmount
       };
 
@@ -373,8 +373,8 @@ export default AddCohortInAnOrganization;
 //   const csvContent = 
 //       "data:text/csv;charset=utf-8," +
 //       "FirstName,LastName,Email,PhoneNumber,DON,InitialDeposit,AmountRequested,AmountReceived\n" +
-//       "Johns,Doess,johndoee@email.com,1234267890,2025-05-18,90000,10000,19000\n" +
-//       "Janesa,Smithss,janesmieth@email.com,0987054321,2025-05-13,4000,17000,15000";
+//       "Jossa,Doessmen,jomenen@email.com,1266007877,2025-05-18,90000,10000,19000\n" +
+//       "Jasana,Smithssmenn,jaerth@email.com,09990549844,2025-05-13,4000,17000,15000";
 
 //   const encodedUri = encodeURI(csvContent);
 //   const link = document.createElement("a");
