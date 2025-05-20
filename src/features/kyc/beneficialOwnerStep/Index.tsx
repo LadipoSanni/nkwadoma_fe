@@ -100,6 +100,13 @@ const BeneficialOwnerStep = () => {
         const entitySections = sections.filter(section => sectionTypes[section.id] === "entity");
         const individualSections = sections.filter(section => sectionTypes[section.id] === "individual");
 
+        console.log('section:', sections)
+        const allOwnership = sections.filter(section => section.entityOwnership || section.individualOwnership )
+        // const totalEntity =  section.filter
+        console.log('allOwnership:', allOwnership)
+        console.log('entitySections:', entitySections)
+        console.log('individualSections:', individualSections)
+
         if (entitySections.length > 0) {
             const totalEntityOwnership = entitySections.reduce((sum, section) => {
                 return sum + (section.entityOwnership ? parseFloat(section.entityOwnership) : 0);
@@ -292,9 +299,10 @@ const BeneficialOwnerStep = () => {
 
                         if (isNaN(numValue)) {
                             ownershipError = "Ownership must be a number";
-                        } else if (numValue < 0 || numValue > 100) {
-                            ownershipError = "Ownership must be between 0 and 100";
                         }
+                        // else if (numValue < 0 || numValue > 100) {
+                        //     ownershipError = "Ownership must be between 0 and 100";
+                        // }
 
                         updatedSection.errors = {
                             ...updatedSection.errors,
@@ -537,7 +545,7 @@ const BeneficialOwnerStep = () => {
                                                         />
                                                     </div>
                                                     <div className="flex flex-col gap-2">
-                                                        <div id="rcNumberContainer" className="flex gap-5">
+                                                        <div id="rcNumberContainer" className="md:flex grid gap-4 md:gap-5">
                                                             <div className="grid gap-2">
                                                                 <Label htmlFor={`rcNumber-${section.id}`}
                                                                     className="block text-sm font-medium text-labelBlue">
@@ -559,9 +567,9 @@ const BeneficialOwnerStep = () => {
                                                             </div>
                                                             <div className="grid gap-2">
                                                                 <Label htmlFor={`ownership-${section.id}`}>
-                                                                    Ownership / Share (%)
+                                                                    Ownership/Share(%)
                                                                 </Label>
-                                                                <Input
+                                                                <input
                                                                     id={`ownership-${section.id}`}
                                                                     name="ownership"
                                                                     type="number"
