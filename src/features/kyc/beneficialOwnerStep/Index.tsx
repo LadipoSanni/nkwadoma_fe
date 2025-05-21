@@ -70,12 +70,16 @@ const BeneficialOwnerStep = () => {
     );
     const [sectionTypes, setSectionTypes] = useState<{ [key: number]: "entity" | "individual" }>({});
     const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({});
-    // const [disabledContinueButton, setDisabledContinueButton] = useState(true);
+    const [disabledContinueButton, setDisabledContinueButton] = useState(true);
     // const [error, setError] = useState("");
 
     const validateRcNumber = (rcNumber: string) => {
-        const rcNumberRegex = /^RC\d{7}$/i;
-        return rcNumberRegex.test(rcNumber) ? undefined : "RC Number must start with RC followed by 7 digits";
+        // const rcNumberRegex = /^\d{7}$/i;
+        if(/^[a-zA-Z]+$/.test(rcNumber)){
+            return "RC Number can not  contain  letters";
+        }
+        return undefined
+        // return rcNumberRegex.test(rcNumber) ? undefined : "RC Number must start with 7 digits";
     };
 
     const validateEntityName = (name: string) => {
@@ -86,7 +90,7 @@ const BeneficialOwnerStep = () => {
         if (/[^a-zA-Z0-9&\s]/.test(name)) {
             return "Entity name can only contain '&' as a special character";
         }
-        if(/[^d+$]/.test(name)){
+        if(/^\d+$/.test(name)){
             return "Entity name can not  contain only digits";
         }
 
@@ -102,50 +106,19 @@ const BeneficialOwnerStep = () => {
     };
 
     const validateTotalOwnership = (sections: Section[]) => {
-        // const entitySections = sections.filter(section => sectionTypes[section.id] === "entity");
-        // const individualSections = sections.filter(section => sectionTypes[section.id] === "individual");
-        // const allOwnership = sections.filter(section => section.entityOwnership || section.individualOwnership )
         const array: number[] = [] ;
         sections?.filter(section=> array?.push(Number(section?.entityOwnership)) )
-        console.log('array: ', array)
-        // console.log(' totalEntity: ', totalEntity)
-        // console.log('allOwnership:', allOwnership)
-        // console.log('entitySections:', entitySections)
-        // console.log('individualSections:', individualSections)
         const initial = 0
         const totalEntityOwnershipss = array.reduce((sum, currentValue) => sum + currentValue, initial)
         if (totalEntityOwnershipss > 100) {
             return 'Total entity ownership must be exactly 100%'
         }
-        console.log('totalEntityOwnershipss: ', totalEntityOwnershipss)
-
-        // if (entitySections.length > 0) {
-        //     const totalEntityOwnership = entitySections.reduce((sum, section) => {
-        //         return sum + (section.entityOwnership ? parseFloat(section.entityOwnership) : 0);
-        //     }, 0);
-        //
-        //     if (totalEntityOwnership !== 100) {
-        //         return "Total entity ownership must be exactly 100%";
-        //     }
-        // }
-        //
-        // if (individualSections.length > 0) {
-        //     const totalIndividualOwnership = individualSections.reduce((sum, section) => {
-        //         return sum + (section.individualOwnership ? parseFloat(section.individualOwnership) : 0);
-        //     }, 0);
-        //
-        //     if (totalIndividualOwnership !== 100) {
-        //         return "Total individual ownership must be exactly 100%";
-        //     }
-        // }
-
         return undefined;
     };
 
     const calculateTotalOwnership = (sections: Section[]) => {
         const array: number[] = [] ;
         sections?.filter(section=> array?.push(Number(section?.entityOwnership)) )
-        console.log('array: ', array)
         const initial = 0
         const totalEntityOwnerships = array.reduce((sum, currentValue) => sum + currentValue, initial)
         return totalEntityOwnerships;
@@ -290,34 +263,55 @@ const BeneficialOwnerStep = () => {
         setSections((prev) => {
             const updatedSections = prev.map((section) => {
                 if (section.id === id) {
-                    const updatedSection = { ...section, [field]: value };
+                    let updatedSection = { ...section, [field]: '' };
 
                     // Validate specific fields
                     if (field === "rcNumber") {
-                        console.log('rc number')
-                        updatedSection.errors = {
-                            ...updatedSection.errors,
-                            rcNumber: validateRcNumber(value)
-                        };
-                    } else if (field === "entityName") {
+                        if(validateRcNumber(value) === undefined){
+                            updatedSection = { ...section, [field]: value };
+                            updatedSection.errors = {
+                                ...updatedSection.errors,
+                                rcNumber: ''
+                            };
+                        }else{
+                            updatedSection.errors = {
+                                ...updatedSection.errors,
+                                rcNumber: validateRcNumber(value)
+                            };
+                        }
+                    }
+                    if (field === "entityName") {
                         console.log('entity name')
-                        updatedSection.errors = {
-                            ...updatedSection.errors,
-                            entityName: validateEntityName(value)
-                        };
-                    } else if (field === "firstName") {
+                       if(validateEntityName(value) === undefined) {
+                           updatedSection = { ...section, [field]: value };
+                           updatedSection.errors = {
+                               ...updatedSection.errors,
+                               entityName: ''
+                           };
+                       }else{
+                           updatedSection.errors = {
+                               ...updatedSection.errors,
+                               entityName: validateEntityName(value)
+                           };
+                       }
+                    }
+                    if (field === "firstName") {
                         console.log('first name')
                         updatedSection.errors = {
                             ...updatedSection.errors,
                             firstName: validatePersonName(value)
                         };
-                    } else if (field === "lastName") {
-                        console.log('last name')
+                    }
+                    if (field === "lastName") {
                         updatedSection.errors = {
                             ...updatedSection.errors,
                             lastName: validatePersonName(value)
                         };
-                    } else if (field === "entityOwnership" || field === "individualOwnership") {
+                    }
+                    if(field === 'country'){
+                        updatedSection = { ...section, [field]: value };
+                    }
+                    if (field === "entityOwnership" || field === "individualOwnership") {
                         console.log('ownership')
                         // Validate that ownership is a number between 0 and 100
                         const numValue = parseFloat(value);
@@ -332,12 +326,12 @@ const BeneficialOwnerStep = () => {
                         else if(numValue + totalOwnerShipEntered > 100 ) {
                             ownershipError = "Total ownership must be  100%";
                         }
-
                         updatedSection.errors = {
                             ...updatedSection.errors,
                             ownership: ownershipError
                         };
                     }
+
 
                     return updatedSection;
                 }
@@ -806,8 +800,8 @@ const BeneficialOwnerStep = () => {
                                 id="entityFormSaveContinueButton"
                                 type={'button'}
                                 onClick={handleSaveAndContinue}
-                                // disabled={disabledContinueButton}
-                                className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md  order-1 md:order-2`}
+                                disabled={disabledContinueButton}
+                                className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 ${disabledContinueButton ? `bg-[#e8eaee] hover:bg-[#e8eaee]`:` bg-meedlBlue hover:bg-meedlBlue text-white`} rounded-md  order-1 md:order-2`}
                             >
                                 Save & continue
                             </Button>
