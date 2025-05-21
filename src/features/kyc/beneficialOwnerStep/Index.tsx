@@ -70,6 +70,8 @@ const BeneficialOwnerStep = () => {
     );
     const [sectionTypes, setSectionTypes] = useState<{ [key: number]: "entity" | "individual" }>({});
     const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({});
+    const [r, setDisabledContinueButton] = useState(true);
+    const [error, setError] = useState("");
 
     const validateRcNumber = (rcNumber: string) => {
         const rcNumberRegex = /^RC\d{7}$/i;
@@ -99,13 +101,14 @@ const BeneficialOwnerStep = () => {
     const validateTotalOwnership = (sections: Section[]) => {
         const entitySections = sections.filter(section => sectionTypes[section.id] === "entity");
         const individualSections = sections.filter(section => sectionTypes[section.id] === "individual");
-
-        console.log('section:', sections)
-        const allOwnership = sections.filter(section => section.entityOwnership || section.individualOwnership )
-        // const totalEntity =  section.filter
-        console.log('allOwnership:', allOwnership)
-        console.log('entitySections:', entitySections)
-        console.log('individualSections:', individualSections)
+        // const allOwnership = sections.filter(section => section.entityOwnership || section.individualOwnership )
+        const array: string[] = [] ;
+        sections?.filter(section=> array?.push(section?.entityOwnership) )
+        console.log('array: ', array)
+        // console.log(' totalEntity: ', totalEntity)
+        // console.log('allOwnership:', allOwnership)
+        // console.log('entitySections:', entitySections)
+        // console.log('individualSections:', individualSections)
 
         if (entitySections.length > 0) {
             const totalEntityOwnership = entitySections.reduce((sum, section) => {
