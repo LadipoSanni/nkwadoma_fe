@@ -7,7 +7,7 @@ import { useCreateCohortMutation } from "@/service/admin/cohort_query";
 import { useGetAllProgramsQuery } from "@/service/admin/program_query";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
-import CustomQuillField from "@/reuseable/textArea/Custom-quill-field";
+// import CustomQuillField from "@/reuseable/textArea/Custom-quill-field";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import TuitionInput from "@/reuseable/feeBreakdown/Tuition";
 import { Label } from "@/components/ui/label";
@@ -40,7 +40,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
   const [loanProductId, setLoanProductId] = useState("");
   const [selectCurrency, setSelectCurrency] = useState("NGN");
   const [name, setName] = useState("");
-  const [cohortDescription, setDescription] = useState("");
+  // const [cohortDescription, setDescription] = useState("");
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
   const [selectedLoanProduct, setSelectedLoanProduct] = useState<string | null>(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
@@ -51,7 +51,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
   const [fileUpload, setUploadedFile] = useState<File | null>(null);
   const size = 10;
   const [error, setError] = useState("");
-  const [descriptionError, setDescriptionError] = useState<string | null>(null);
+  // const [descriptionError, setDescriptionError] = useState<string | null>(null);
   const [isLoanProduct, setIsLoanProduct] = useState(false)
   const [isProgram, setIsprogram] = useState(false)
   const [tuitionAmount,setTuition] = useState("")
@@ -126,23 +126,21 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
   const { toast } = useToast();
 
   useEffect(() => {
-    if (name && selectedProgram && startDate && !descriptionError && selectedLoanProduct && tuitionAmount && fileUpload ) {
+    if (name && selectedProgram && startDate &&  selectedLoanProduct && tuitionAmount && fileUpload ) {
       setIsButtonDisabled(false);
     } else {
       setIsButtonDisabled(true);
     }
-  }, [name, selectedProgram, startDate, descriptionError, selectedLoanProduct, tuitionAmount, fileUpload]);
+  }, [name, selectedProgram, startDate,selectedLoanProduct, tuitionAmount, fileUpload]);
 
 
   const resetForm = () => {
     setDate(undefined);
     setName("");
-    setDescription("");
+    // setDescription("");
     setSelectedProgram("");
     setSelectedLoanProduct("");
-    setDescriptionError(null);
     setIsSelectOpen(false);
-    // setLoanBreakdowns([{ itemName: "Tuition", itemAmount: "", currency: "NGN" }]);
     setProgramId("");
     setError("");
     setUploadedFile(null)
@@ -163,7 +161,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
       });
       return;
     }
-    if (!isButtonDisabled && !descriptionError) {
+    if (!isButtonDisabled ) {
       // const loanBreakDownObj = {
       //   itemName: "book",
       //   itemAmount: "600000",
@@ -174,7 +172,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
         name: name,
         programId: programId,
         startDate: startDate ? format(startDate, "yyyy-MM-dd") : "",
-        cohortDescription: cohortDescription,
+        cohortDescription: "",
         imageUrl: "",
         loanBreakdowns: [],
         tuitionAmount: tuitionAmount
@@ -322,7 +320,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                  labelName="Loanees Data"
                 />
               </div>
-                  <CustomQuillField
+                  {/* <CustomQuillField
                     description={cohortDescription}
                     setDescription={setDescription}
                     maximumDescription={2500}
@@ -340,9 +338,9 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                     placeholder={"Enter description...."}   
                     setError={(error) => setDescriptionError(error)}
                     name="Cohort description"
-                  />
+                  /> */}
 
-              {descriptionError && ( <div className="text-red-500 text-sm">{descriptionError}</div> )}
+              {/* {descriptionError && ( <div className="text-red-500 text-sm">{descriptionError}</div> )} */}
         
               <FormButtons
                 isButtonDisabled={isButtonDisabled}

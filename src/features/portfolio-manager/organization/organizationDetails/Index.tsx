@@ -25,11 +25,12 @@ import DeactivateOrganization from "@/components/portfolio-manager/organization/
 import TableModal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
-import Link from "next/link";
+// import Link from "next/link";
 import { useSearchOrganizationAsPortfolioManagerQuery } from "@/service/admin/organization";
 import { store, useAppSelector } from "@/redux/store";
 import { setOrganizationDetail } from "@/redux/slice/organization/organization";
 import CohortView from "@/features/cohort/cohort-view";
+import { ensureHttpsUrl } from "@/utils/GlobalMethods";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -40,6 +41,7 @@ interface adminProps extends TableRowData {
   email: string,
   status: string
 }
+
 
 const OrganizationDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,8 +77,7 @@ const OrganizationDetails = () => {
 
   const {data: searchResult,isLoading: isloadingSearch} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !searchTerm})
 
-  const organizationLink = organizationDetails?.data.websiteAddress ? organizationDetails?.data.websiteAddress : ''
-
+  const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);
 
     useEffect(() => {
       if (searchTerm && searchResult && searchResult.data) {
@@ -331,14 +332,16 @@ const OrganizationDetails = () => {
                   className={"flex items-center gap-2"}
                 >
                   <IoGlobeOutline className={"h-5 w-5 text-meedlBlue"} />
-                  <Link
+                  <a
                       href={organizationLink}
+                       target="_blank"
+                     rel="noopener noreferrer"
                     className={
                       "text-meedlBlue text-[14px] font-medium leading-[150%] truncate max-w-[17rem]  md:max-w-[16rem] lg:max-w-[25rem] xl:max-w-[30rem] lg:whitespace-normal "
                     }
                   >
                     {organizationDetails?.data.websiteAddress}
-                  </Link>
+                  </a>
                 </div>
                 <div className="mt-5">
                   {  organizationDetails?.data.status == "INVITED"?
