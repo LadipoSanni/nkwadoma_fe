@@ -198,7 +198,7 @@ useEffect(() => {
   
   const ProgramHeader = [
     { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => row.name },
-    { title: <div className='relative right-2 left-2'>start date</div>, sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatMonthInDate(row?.startDate)},
+    { title: <div className='relative right-2 left-2'>Start date</div>, sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatMonthInDate(row?.startDate)},
     { title: 'No. of loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => row.numberOfLoanees || 0 },
     { title: 'Tuition', sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => formatAmount(row.tuitionAmount)},
     { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className='ml-4'>{formatAmount(row.amountRecieved)}</div> },

@@ -102,7 +102,13 @@ function InviteOrganizationForm({setIsOpen}: props) {
                 function () {
                     const {email, adminEmail} = this.parent;
                     return email !== adminEmail;
-                })
+                }),
+        websiteAddress: Yup.string()
+        .matches(
+            /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/,
+            'Enter a valid website URL'
+        )
+        .nullable(),
     })
 
     const handleSubmit = async (values: typeof initialFormValue) => {
@@ -171,9 +177,11 @@ function InviteOrganizationForm({setIsOpen}: props) {
                 onSubmit={handleSubmit}
                 validateOnMount={true}
                 validationSchema={validationSchema}
+                validateOnChange={true}
+                validateOnBlur={true}  
             >
                 {
-                    ({errors, isValid, touched, setFieldValue, values}) => (
+                    ({errors, isValid, touched, setFieldValue, values,setFieldTouched}) => (
                         <Form className={`${inter.className}`}>
                             <div >
                                 <div
@@ -254,7 +262,17 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         name="websiteAddress"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
                                         placeholder="Enter website"
+                                        onFocus={() => setFieldTouched("websiteAddress", true, false)}
                                     />
+                                      {
+                                        errors.websiteAddress && touched.websiteAddress && (
+                                            <ErrorMessage
+                                                name="websiteAddress"
+                                                component="div"
+                                                className="text-red-500 text-sm"
+                                            />
+                                        )
+                                    }
                                 </div>
                                 <div className='grid md:grid-cols-2 gap-4 w-full'>
                                     <div>
