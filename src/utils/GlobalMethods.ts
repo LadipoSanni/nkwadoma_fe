@@ -156,3 +156,8 @@ export  const isValidUrl = (url: string  | StaticImageData) => {
     }
 };
 
+export const ensureHttpsUrl = (url: string | null | undefined): string | undefined => {
+    if (!url) return undefined;
+    const cleaned = url.trim().replace(/^(https?:\/\/)?/i, '');
+    return cleaned ? `https://${cleaned}` : undefined;
+  };

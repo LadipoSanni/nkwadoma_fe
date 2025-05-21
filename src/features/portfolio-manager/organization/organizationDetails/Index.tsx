@@ -30,6 +30,7 @@ import { useSearchOrganizationAsPortfolioManagerQuery } from "@/service/admin/or
 import { store, useAppSelector } from "@/redux/store";
 import { setOrganizationDetail } from "@/redux/slice/organization/organization";
 import CohortView from "@/features/cohort/cohort-view";
+import { ensureHttpsUrl } from "@/utils/GlobalMethods";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -40,6 +41,7 @@ interface adminProps extends TableRowData {
   email: string,
   status: string
 }
+
 
 const OrganizationDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,8 +77,7 @@ const OrganizationDetails = () => {
 
   const {data: searchResult,isLoading: isloadingSearch} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !searchTerm})
 
-  const organizationLink = organizationDetails?.data.websiteAddress ? organizationDetails?.data.websiteAddress : ''
-
+  const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);
 
     useEffect(() => {
       if (searchTerm && searchResult && searchResult.data) {
