@@ -70,7 +70,7 @@ const BeneficialOwnerStep = () => {
     );
     const [sectionTypes, setSectionTypes] = useState<{ [key: number]: "entity" | "individual" }>({});
     const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({});
-    const [r, setDisabledContinueButton] = useState(true);
+    const [disabledContinueButton, setDisabledContinueButton] = useState(true);
     const [error, setError] = useState("");
 
     const validateRcNumber = (rcNumber: string) => {
@@ -780,7 +780,7 @@ const BeneficialOwnerStep = () => {
                                 id="entityFormSaveContinueButton"
                                 type={'button'}
                                 onClick={handleSaveAndContinue}
-                                // disabled={!isFormValid}
+                                disabled={disabledContinueButton}
                                 className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md  order-1 md:order-2`}
                             >
                                 Save & continue
