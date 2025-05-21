@@ -70,8 +70,8 @@ const BeneficialOwnerStep = () => {
     );
     const [sectionTypes, setSectionTypes] = useState<{ [key: number]: "entity" | "individual" }>({});
     const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({});
-    const [disabledContinueButton, setDisabledContinueButton] = useState(true);
-    const [error, setError] = useState("");
+    // const [disabledContinueButton, setDisabledContinueButton] = useState(true);
+    // const [error, setError] = useState("");
 
     const validateRcNumber = (rcNumber: string) => {
         const rcNumberRegex = /^RC\d{7}$/i;
@@ -86,6 +86,9 @@ const BeneficialOwnerStep = () => {
         if (/[^a-zA-Z0-9&\s]/.test(name)) {
             return "Entity name can only contain '&' as a special character";
         }
+        if(/[^d+$]/.test(name)){
+            return "Entity name can not  contain only digits";
+        }
 
         return undefined;
     };
@@ -99,40 +102,54 @@ const BeneficialOwnerStep = () => {
     };
 
     const validateTotalOwnership = (sections: Section[]) => {
-        const entitySections = sections.filter(section => sectionTypes[section.id] === "entity");
-        const individualSections = sections.filter(section => sectionTypes[section.id] === "individual");
+        // const entitySections = sections.filter(section => sectionTypes[section.id] === "entity");
+        // const individualSections = sections.filter(section => sectionTypes[section.id] === "individual");
         // const allOwnership = sections.filter(section => section.entityOwnership || section.individualOwnership )
-        const array: string[] = [] ;
-        sections?.filter(section=> array?.push(section?.entityOwnership) )
+        const array: number[] = [] ;
+        sections?.filter(section=> array?.push(Number(section?.entityOwnership)) )
         console.log('array: ', array)
         // console.log(' totalEntity: ', totalEntity)
         // console.log('allOwnership:', allOwnership)
         // console.log('entitySections:', entitySections)
         // console.log('individualSections:', individualSections)
-
-        if (entitySections.length > 0) {
-            const totalEntityOwnership = entitySections.reduce((sum, section) => {
-                return sum + (section.entityOwnership ? parseFloat(section.entityOwnership) : 0);
-            }, 0);
-
-            if (totalEntityOwnership !== 100) {
-                return "Total entity ownership must be exactly 100%";
-            }
+        const initial = 0
+        const totalEntityOwnershipss = array.reduce((sum, currentValue) => sum + currentValue, initial)
+        if (totalEntityOwnershipss > 100) {
+            return 'Total entity ownership must be exactly 100%'
         }
+        console.log('totalEntityOwnershipss: ', totalEntityOwnershipss)
 
-        if (individualSections.length > 0) {
-            const totalIndividualOwnership = individualSections.reduce((sum, section) => {
-                return sum + (section.individualOwnership ? parseFloat(section.individualOwnership) : 0);
-            }, 0);
-
-            if (totalIndividualOwnership !== 100) {
-                return "Total individual ownership must be exactly 100%";
-            }
-        }
+        // if (entitySections.length > 0) {
+        //     const totalEntityOwnership = entitySections.reduce((sum, section) => {
+        //         return sum + (section.entityOwnership ? parseFloat(section.entityOwnership) : 0);
+        //     }, 0);
+        //
+        //     if (totalEntityOwnership !== 100) {
+        //         return "Total entity ownership must be exactly 100%";
+        //     }
+        // }
+        //
+        // if (individualSections.length > 0) {
+        //     const totalIndividualOwnership = individualSections.reduce((sum, section) => {
+        //         return sum + (section.individualOwnership ? parseFloat(section.individualOwnership) : 0);
+        //     }, 0);
+        //
+        //     if (totalIndividualOwnership !== 100) {
+        //         return "Total individual ownership must be exactly 100%";
+        //     }
+        // }
 
         return undefined;
     };
 
+    const calculateTotalOwnership = (sections: Section[]) => {
+        const array: number[] = [] ;
+        sections?.filter(section=> array?.push(Number(section?.entityOwnership)) )
+        console.log('array: ', array)
+        const initial = 0
+        const totalEntityOwnerships = array.reduce((sum, currentValue) => sum + currentValue, initial)
+        return totalEntityOwnerships;
+    }
     useEffect(() => {
         if (selectedForm === "entity") {
             const entitySections = entityData.sections || [];
@@ -269,6 +286,7 @@ const BeneficialOwnerStep = () => {
     };
 
     const handleInputChange = (id: number, field: string, value: string) => {
+        console.log('id: ', id, 'field: ', field, 'value: ', value)
         setSections((prev) => {
             const updatedSections = prev.map((section) => {
                 if (section.id === id) {
@@ -276,36 +294,44 @@ const BeneficialOwnerStep = () => {
 
                     // Validate specific fields
                     if (field === "rcNumber") {
+                        console.log('rc number')
                         updatedSection.errors = {
                             ...updatedSection.errors,
                             rcNumber: validateRcNumber(value)
                         };
                     } else if (field === "entityName") {
+                        console.log('entity name')
                         updatedSection.errors = {
                             ...updatedSection.errors,
                             entityName: validateEntityName(value)
                         };
                     } else if (field === "firstName") {
+                        console.log('first name')
                         updatedSection.errors = {
                             ...updatedSection.errors,
                             firstName: validatePersonName(value)
                         };
                     } else if (field === "lastName") {
+                        console.log('last name')
                         updatedSection.errors = {
                             ...updatedSection.errors,
                             lastName: validatePersonName(value)
                         };
                     } else if (field === "entityOwnership" || field === "individualOwnership") {
+                        console.log('ownership')
                         // Validate that ownership is a number between 0 and 100
                         const numValue = parseFloat(value);
-                        let ownershipError;
 
+                        let ownershipError;
+                        const totalOwnerShipEntered = calculateTotalOwnership(prev)
                         if (isNaN(numValue)) {
                             ownershipError = "Ownership must be a number";
+                        } else if (numValue < 0 || numValue > 100) {
+                            ownershipError = "Ownership must be between 0 and 100";
                         }
-                        // else if (numValue < 0 || numValue > 100) {
-                        //     ownershipError = "Ownership must be between 0 and 100";
-                        // }
+                        else if(numValue + totalOwnerShipEntered > 100 ) {
+                            ownershipError = "Total ownership must be  100%";
+                        }
 
                         updatedSection.errors = {
                             ...updatedSection.errors,
@@ -394,14 +420,14 @@ const BeneficialOwnerStep = () => {
                 lastNameError = validatePersonName(section.lastName || "");
             }
 
-            const numOwnership = ownership ? parseFloat(ownership) : 0;
-            let ownershipError;
+            // const numOwnership = ownership ? parseFloat(ownership) : 0;
+            // let ownershipError;
 
-            if (isNaN(numOwnership)) {
-                ownershipError = "Ownership must be a number";
-            } else if (numOwnership < 0 || numOwnership > 100) {
-                ownershipError = "Ownership must be between 0 and 100";
-            }
+            // if (isNaN(numOwnership)) {
+            //     ownershipError = "Ownership must be a number";
+            // } else if (numOwnership < 0 || numOwnership > 100) {
+            //     ownershipError = "Ownership must be between 0 and 100";
+            // }
 
             if (rcNumberError || entityNameError || firstNameError || lastNameError || ownershipError) {
                 hasErrors = true;
@@ -780,7 +806,7 @@ const BeneficialOwnerStep = () => {
                                 id="entityFormSaveContinueButton"
                                 type={'button'}
                                 onClick={handleSaveAndContinue}
-                                disabled={disabledContinueButton}
+                                // disabled={disabledContinueButton}
                                 className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md  order-1 md:order-2`}
                             >
                                 Save & continue
