@@ -14,6 +14,7 @@ import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 import { setMarketInvestmentVehicleId } from '@/redux/slice/investors/MarketPlaceSlice';
+import {encryptText} from "@/utils/encrypt";
 
 
 
@@ -25,6 +26,7 @@ const CreatePassword = () => {
     const searchParams = useSearchParams()
     const [disableButton, setDisableButton] = useState(false)
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
+    const encryptedPassword =  encryptText(password)
 
     const disable = !criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton;
 
@@ -63,14 +65,7 @@ const CreatePassword = () => {
 
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
-    // const getUserToken = () => {
-    //     if (searchParams){
-    //         const pathVariable = searchParams.get("token")
-    //         if (pathVariable){
-    //             return pathVariable
-    //         }
-    //     }
-    // }
+
    
     const getUserToken = () => {
         if (searchParams) {
@@ -95,10 +90,7 @@ const CreatePassword = () => {
           investmentVehicleId: null,
         };
       };
-    //   const { token,investmentVehicleId } = getUserToken();
-    //  console.log("T: ", getUserToken())
-    //  console.log("token:",token)
-    //  console.log("ID:",investmentVehicleId)
+
      
     const getUserRoles = (returnsRole: string) => {
         if (returnsRole) {
@@ -160,7 +152,7 @@ const CreatePassword = () => {
 
         try {
             const response = await createPassword({token: token
-                , password: password}).unwrap()
+                , password: encryptedPassword}).unwrap()
              if(response?.data)  {
                 const access_token = response?.data?.accessToken
                 const refreshToken = response?.data?.refreshToken
