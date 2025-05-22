@@ -70,12 +70,12 @@ const BeneficialOwnerStep = () => {
     );
     const [sectionTypes, setSectionTypes] = useState<{ [key: number]: "entity" | "individual" }>({});
     const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({});
-    const [disabledContinueButton] = useState(true);
+    const [disabledContinueButton, setDisabledContinueButton] = useState(true);
     // const [error, setError] = useState("");
 
     const validateRcNumber = (rcNumber: string) => {
         // const rcNumberRegex = /^\d{7}$/i;
-        if(/^[a-zA-Z]+$/.test(rcNumber)){
+        if(/^\d{7}$/.test(rcNumber)){
             return "RC Number can not  contain  letters";
         }
         return undefined
@@ -83,6 +83,7 @@ const BeneficialOwnerStep = () => {
     };
 
     const validateEntityName = (name: string) => {
+        // /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/
         if (/^[^a-zA-Z0-9&]/.test(name)) {
             return "Entity name cannot start with a special character";
         }
@@ -93,8 +94,11 @@ const BeneficialOwnerStep = () => {
         if(/^\d+$/.test(name)){
             return "Entity name can not  contain only digits";
         }
+        if(/^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/.test(name)){
+            return undefined
+        }
 
-        return undefined;
+        // return undefined;
     };
 
     const validatePersonName = (name: string) => {
