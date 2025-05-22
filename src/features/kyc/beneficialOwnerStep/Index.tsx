@@ -70,7 +70,7 @@ const BeneficialOwnerStep = () => {
     );
     const [sectionTypes, setSectionTypes] = useState<{ [key: number]: "entity" | "individual" }>({});
     const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({});
-    const [disabledContinueButton, setDisabledContinueButton] = useState(true);
+    const [disabledContinueButton] = useState(true);
     // const [error, setError] = useState("");
 
     const validateRcNumber = (rcNumber: string) => {
