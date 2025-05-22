@@ -21,7 +21,7 @@ interface userIdentity {
     lastName: string;
 }
 
-interface loaneeLoanDetail {
+interface loaneeLoanDetails {
     initialDeposit: number;
     amountRequested: number;
     amountReceived: number;
@@ -29,7 +29,7 @@ interface loaneeLoanDetail {
 
 interface viewAllLoanee {
     userIdentity: userIdentity;
-    loaneeLoanDetails: loaneeLoanDetail;
+    loaneeLoanDetail: loaneeLoanDetails;
     loaneeStatus: string;
 }
 type viewAllLoanees = viewAllLoanee & TableRowData;
@@ -66,7 +66,6 @@ const LoaneesInACohort = () => {
         },
         {skip: !searchTerm || !cohortId})
 
-    console.log('data: ', data)
 
     const tableHeaderintegrated = [
         {title: "Trainee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
