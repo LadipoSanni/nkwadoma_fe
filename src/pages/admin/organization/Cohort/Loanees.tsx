@@ -66,11 +66,13 @@ const LoaneesInACohort = () => {
         },
         {skip: !searchTerm || !cohortId})
 
+    console.log('data: ', data)
+
     const tableHeaderintegrated = [
         {title: "Trainee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
-        {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetails?.initialDeposit))},
-        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetails?.amountRequested))},
-        {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetails?.amountReceived))},
+        {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
+        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountRequested))},
+        {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountReceived))},
     ];
 
 
