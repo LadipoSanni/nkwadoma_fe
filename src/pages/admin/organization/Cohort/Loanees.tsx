@@ -76,6 +76,7 @@ const LoaneesInACohort = () => {
 
     const initial: string = `${cohortName?.at(0)}${cohortName?.at(1)}`
 
+
     return (
         <main
             id={'loaneesInACohort'}
@@ -106,10 +107,10 @@ const LoaneesInACohort = () => {
                 id={'loaneeTable'}
                 className={`mt-6`}
             >
-                {searchTerm && searchResults?.data?.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :
+                {searchTerm && searchResults?.data?.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :
 
                     <Table
-                    tableData={searchTerm ? searchResults?.data : data?.data?.body}
+                    tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
                     tableHeader={tableHeaderintegrated}
                     handleRowClick={()=> {}}
                     staticHeader=""
