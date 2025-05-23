@@ -71,7 +71,7 @@ const BeneficialOwnerStep = () => {
     const [sectionTypes, setSectionTypes] = useState<{ [key: number]: "entity" | "individual" }>({});
     const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({});
     const [disabledContinueButton] = useState(true);
-    // const [error, setError] = useState("");
+    const [error, setError] = useState("");
 
     const validateRcNumber = (rcNumber: string) => {
         // const rcNumberRegex = /^\d{7}$/i;
@@ -81,6 +81,10 @@ const BeneficialOwnerStep = () => {
         return undefined
         // return rcNumberRegex.test(rcNumber) ? undefined : "RC Number must start with 7 digits";
     };
+
+    useEffect(() => {
+
+    }, []);
 
     const validateEntityName = (name: string) => {
         // /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/
@@ -327,8 +331,12 @@ const BeneficialOwnerStep = () => {
                         } else if (numValue < 0 || numValue > 100) {
                             ownershipError = "Ownership must be between 0 and 100";
                         }
+                        if(totalOwnerShipEntered <= 100){
+                            updatedSection = { ...section, [field]: value };
+                        }
                         else if(numValue + totalOwnerShipEntered > 100 ) {
-                            ownershipError = "Total ownership must be  100%";
+                            // ownershipError = "Total ownership must be  100%";
+                            setError("Total ownership must be  100%")
                         }
                         updatedSection.errors = {
                             ...updatedSection.errors,
