@@ -80,7 +80,6 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
     const [refer, {isLoading: isLoadingRefer}] = useReferLoaneeToACohortMutation()
 
-    console.log('data: ', data)
 
     useEffect(() => {
         let result: viewAllLoanees[] = [];
