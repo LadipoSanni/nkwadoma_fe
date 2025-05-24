@@ -3,7 +3,26 @@ import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import CountrySelectPopover from "@/reuseable/select/countrySelectPopover";
 
-const Enity = () => {
+interface EntityData {
+    name: string,
+    country: string,
+    rcNumber: string,
+    ownership: string,
+}
+
+const Entity = () => {
+    const initialEntityDate = {
+        name: '',
+        country: '',
+        rcNumber: '',
+        ownership: '',
+    }
+
+    const [entityData, setEntityData] = React.useState<EntityData>(initialEntityDate)
+    const [dataError, setDataError] = React.useState<{name: string, errorMessage: string}[]>()
+
+
+    const section = {}
     return (
         <div>
             <div className="grid gap-5">
@@ -13,13 +32,13 @@ const Enity = () => {
                         Entity name
                     </Label>
                     <Input
-                        id={`entityName-${section.id}`}
-                        value={section.entityName}
+                        id={`entityName-${entityData.name}`}
+                        value={entityData.name}
                         onChange={(e) => handleInputChange(section.id, "entityName", e.target.value)}
                         placeholder="Enter name"
                         className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                     />
-                    {section.errors?.entityName && (
+                    {entityData.errors?.entityName && (
                         <p className="text-red-500 text-sm">{section.errors.entityName}</p>
                     )}
                 </div>
@@ -81,4 +100,4 @@ const Enity = () => {
     );
 };
 
-export default Enity;
+export default Entity;
