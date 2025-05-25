@@ -1,13 +1,17 @@
 import React from 'react';
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import CountrySelectPopover from "@/reuseable/select/countrySelectPopover";
+import CountrySelectPopover from "@/reuseable/select/countrySelectPopover/Index";
+import {validateEntityOwnership, validateName, validateRcNumber} from "@/utils/GlobalMethods";
 
 interface EntityData {
     name: string,
     country: string,
     rcNumber: string,
     ownership: string,
+    errorMessage: string,
+    entityError: string,
+
 }
 
 const Entity = () => {
@@ -16,85 +20,145 @@ const Entity = () => {
         country: '',
         rcNumber: '',
         ownership: '',
+        entityError: '',
+        errorMessage: ''
+
     }
 
     const [entityData, setEntityData] = React.useState<EntityData>(initialEntityDate)
-    const [dataError, setDataError] = React.useState<{name: string, errorMessage: string}[]>()
 
 
-    const section = {}
-    return (
+
+    const handleInputChange = ( field: string, value: string) => {
+        setEntityData((prevState) => (
+            { ...prevState, [field]: value }
+        ))
+    }
+
+        return (
         <div>
             <div className="grid gap-5">
                 <div id="entityNameContainer" className="grid gap-2">
-                    <Label htmlFor={`entityName-${section.id}`}
+                    <label htmlFor={`entityName-`}
                            className="block text-sm font-medium text-labelBlue">
                         Entity name
-                    </Label>
+                    </label>
                     <Input
                         id={`entityName-${entityData.name}`}
                         value={entityData.name}
-                        onChange={(e) => handleInputChange(section.id, "entityName", e.target.value)}
+                        onChange={(e) => {
+                            const isInputValid = validateName(e.target.value)
+                            if (typeof  isInputValid === "string") {
+                                setEntityData((prevState) => (
+                                    { ...prevState, ['entityError']: 'name' }
+                                ))
+                                setEntityData((prevState) => (
+                                    { ...prevState, ['errorMessage']: isInputValid }
+                                ))
+
+                            }else {
+                                setEntityData((prevState) => (
+                                    { ...prevState, ['errorMessage']: '' }
+                                ))
+                                handleInputChange('name', e.target.value)
+                            }
+                        }}
                         placeholder="Enter name"
                         className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                     />
-                    {entityData.errors?.entityName && (
-                        <p className="text-red-500 text-sm">{section.errors.entityName}</p>
+                    {entityData.entityError === 'name' && (
+                        <p className="text-red-500 text-sm">{entityData.errorMessage }</p>
                     )}
                 </div>
                 <div id="countryOfIncorporationContainer" className="grid gap-2">
-                    <Label htmlFor={`country-${section.id}`}
+                    <label htmlFor={`country-`}
                            className="block text-sm font-medium text-labelBlue">
                         Country of incorporation
-                    </Label>
+                    </label>
                     <CountrySelectPopover
-                        selectedCountry={section.country}
-                        onCountryChange={(value) => handleInputChange(section.id, "country", value)}
+                        selectedCountry={entityData.country}
+                        onCountryChange={(value) => handleInputChange( "country", value)}
                         restrictedCountries={["US", "NG"]}
                         disableSearch={true}
                     />
                 </div>
-                <div className="flex flex-col gap-2">
-                    <div id="rcNumberContainer" className="md:flex grid gap-4 md:gap-5">
+                <div className="grid gap-2">
+                    <label htmlFor={`rcNumber-`}
+                           className="block text-sm font-medium text-labelBlue">
+                        RC number
+                    </label>
+                    <input
+                        id={`rcNumber-`}
+                        value={entityData.rcNumber}
+                        onChange={(e) => {
+                            const value = e.target.value.replace(/^rc/i, 'RC');
+                            const isInputValid = validateRcNumber(e.target.value)
+                            if (typeof  isInputValid === "string") {
+                                setEntityData((prevState) => (
+                                    { ...prevState, ['entityError']: 'rcNumber' }
+                                ))
+                                setEntityData((prevState) => (
+                                    { ...prevState, ['errorMessage']: isInputValid }
+                                ))
+
+                            }else if(/^\d{7}$/.test(entityData.rcNumber)){
+                                setEntityData((prevState) => (
+                                    { ...prevState, ['errorMessage']: '' }
+                                ))
+                            }
+                            else{
+                                setEntityData((prevState) => (
+                                    { ...prevState, ['errorMessage']: '' }
+                                ))
+                                handleInputChange('rcNumber', value)
+                            }
+                        }}
+                        placeholder="Enter RC number"
+                        className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
+                    />
+                    {entityData.entityError === 'rcNumber' && (
+                        <p className="text-red-500 text-sm">{entityData.errorMessage }</p>
+                    )}
+                </div>
                         <div className="grid gap-2">
-                            <Label htmlFor={`rcNumber-${section.id}`}
-                                   className="block text-sm font-medium text-labelBlue">
-                                RC number
-                            </Label>
-                            <Input
-                                id={`rcNumber-${section.id}`}
-                                value={section.rcNumber}
-                                onChange={(e) => {
-                                    const value = e.target.value.replace(/^rc/i, 'RC');
-                                    handleInputChange(section.id, "rcNumber", value);
-                                }}
-                                placeholder="Enter RC number"
-                                className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
-                            />
-                            {section.errors?.rcNumber && (
-                                <p className="text-red-500 text-sm">{section.errors.rcNumber}</p>
-                            )}
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor={`ownership-${section.id}`}>
-                                Ownership/Share(%)
-                            </Label>
+                            <label htmlFor={`ownership-}`}>
+                                Ownership / Share (%)
+                            </label>
                             <input
-                                id={`ownership-${section.id}`}
+                                id={`ownership-`}
                                 name="ownership"
                                 type="number"
                                 max="100"
                                 placeholder="0"
-                                value={section.entityOwnership || ""}
-                                onChange={(e) => handleInputChange(section.id, "entityOwnership", e.target.value)}
+                                value={entityData.ownership || ""}
+                                onFocus={(e) => e.target.addEventListener("wheel", function (e) { e.preventDefault() }, { passive: false })}
+                                onChange={(e) => {
+                                    const value = e.target.value.replace(/^rc/i, 'RC');
+                                    const isInputValid = validateEntityOwnership(e.target.value)
+                                    if (typeof  isInputValid === "string") {
+                                        setEntityData((prevState) => (
+                                            { ...prevState, ['entityError']: 'ownership' }
+                                        ))
+                                        setEntityData((prevState) => (
+                                            { ...prevState, ['errorMessage']: isInputValid }
+                                        ))
+
+                                        // || Number(entityData.ownership) + Number(value) > 100 || Number(entityData.ownership) + Number(value) === 0
+                                    }
+                                    else{
+                                        setEntityData((prevState) => (
+                                            { ...prevState, ['errorMessage']: '' }
+                                        ))
+                                        handleInputChange('ownership', value)
+                                    }
+                                }}
                                 className="p-4 focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-md h-[3.375rem] font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid border-neutral650"
                             />
-                            {section.errors?.ownership && (
-                                <p className="text-red-500 text-sm">{section.errors.ownership}</p>
+                            {entityData.entityError === 'ownership' && (
+                                <p className="text-red-500 text-sm">{entityData.errorMessage }</p>
                             )}
                         </div>
-                    </div>
-                </div>
+
             </div>
         </div>
     );
