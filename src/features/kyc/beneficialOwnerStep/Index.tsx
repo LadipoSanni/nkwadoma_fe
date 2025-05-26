@@ -33,6 +33,30 @@ interface EntitySection extends BaseSection {
     rcNumber: string;
     country: string | undefined;
 }
+interface EntityType {
+    name: string,
+    country: string,
+    rcNumber: string,
+    ownership: string,
+    errorMessage: string,
+    id: number,
+    entityError: string,
+}
+interface IndividualType {
+    firstName: string,
+    lastName: string,
+    dateOfBirth: Date | undefined,
+    relationShip: string,
+    ownership: string,
+    errorMessage: string,
+    entityError: string,
+    proofType?: string;
+    proofFile?: File | null;
+    proofFileUrl?: string;
+    id: number;
+}
+
+
 
 interface Section extends EntitySection {
     firstName?: string;
@@ -71,10 +95,37 @@ const BeneficialOwnerStep = () => {
         (selectedForm === "entity" ? (entityData.sections || []) : (individualData.sections || [])) as Section[]
     );
     const [sectionTypes, setSectionTypes] = useState<{ [key: number]: "entity" | "individual" }>({});
-    const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({});
+    // const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({});
     const [disabledContinueButton] = useState(true);
-    const [error, setError] = useState("");
+    // const [error, setError] = useState("");
 
+    const initialEntityDate = {
+        name: '',
+        country: '',
+        rcNumber: '',
+        ownership: '',
+        entityError: '',
+        errorMessage: '',
+        id : Date.now(),
+
+    }
+
+
+    const initialIndividualData = {
+        firstName: '',
+        lastName: '',
+        dateOfBirth: new Date(),
+        relationShip: '',
+        ownership: '',
+        errorMessage: '',
+        entityError: '',
+        proofType: '',
+        proofFile:  null,
+        proofFileUrl: '',
+        id :Date.now(),
+    }
+
+    const [owners, setOnwer] = useState<EntityType[]| IndividualType[]>([initialEntityDate])
     const validateRcNumber = (rcNumber: string) => {
         // const rcNumberRegex = /^\d{7}$/i;
         if(/^\d{7}$/.test(rcNumber)){
@@ -126,95 +177,7 @@ const BeneficialOwnerStep = () => {
         return undefined;
     };
 
-    const calculateTotalOwnership = (sections: Section[]) => {
-        const array: number[] = [] ;
-        sections?.filter(section=> array?.push(Number(section?.entityOwnership)) )
-        const initial = 0
-        const totalEntityOwnerships = array.reduce((sum, currentValue) => sum + currentValue, initial)
-        return totalEntityOwnerships;
-    }
-    useEffect(() => {
-        if (selectedForm === "entity") {
-            const entitySections = entityData.sections || [];
-            if (entitySections.length === 0) {
-                const newSectionId = Date.now();
-                const rcNumber = entityData.rcNumber || "";
-                setSections([{
-                    id: newSectionId,
-                    entityName: entityData.entityName || "",
-                    rcNumber: rcNumber,
-                    country: entityData.country,
-                    entityOwnership: "",
-                    proofType: "national_id",
-                    proofFile: null,
-                    proofFileUrl: undefined,
-                    errors: {
-                        rcNumber: rcNumber ? validateRcNumber(rcNumber) : undefined
-                    }
-                }]);
-                setSectionTypes(prev => ({
-                    ...prev,
-                    [newSectionId]: "entity"
-                }));
-            } else {
-                const validatedSections = entitySections.map((section: EntitySection) => ({
-                    ...section,
-                    errors: {
-                        rcNumber: section.rcNumber ? validateRcNumber(section.rcNumber) : undefined
-                    }
-                }));
-                setSections(validatedSections);
-            }
-        } else {
-            const individualSections = individualData.sections || [];
-            if (individualSections.length === 0) {
-                const entitySections = entityData.sections || [];
-                const entityInfo = entitySections.length > 0 ? entitySections[0] : null;
-                const rcNumber = entityInfo?.rcNumber || entityData.rcNumber || "";
 
-                const newSectionId = Date.now();
-                setSections([{
-                    id: newSectionId,
-                    entityName: entityInfo?.entityName || entityData.entityName || "",
-                    rcNumber: rcNumber,
-                    country: entityInfo?.country || entityData.country,
-                    firstName: "",
-                    lastName: "",
-                    dob: new Date().toISOString(),
-                    relationship: "",
-                    individualOwnership: "", 
-                    proofType: "national_id",
-                    proofFile: null,
-                    proofFileUrl: undefined,
-                    errors: {
-                        rcNumber: rcNumber ? validateRcNumber(rcNumber) : undefined
-                    }
-                }]);
-                setSectionTypes(prev => ({
-                    ...prev,
-                    [newSectionId]: "individual"
-                }));
-            } else {
-                const validatedSections = individualSections.map((section: FormSection): Section => ({
-                    ...section,
-                    id: section.id || Date.now(),
-                    entityName: section.entityName || "",
-                    rcNumber: section.rcNumber || "",
-                    country: section.country,
-                    errors: {
-                        ...section.errors,
-                        rcNumber: section.rcNumber ? validateRcNumber(section.rcNumber) : undefined
-                    }
-                }));
-                setSections(validatedSections);
-            }
-        }
-    }, [selectedForm, entityData.sections, individualData.sections, entityData.entityName, entityData.rcNumber, entityData.country]);
-
-    const proofOptions = [
-        {id: "national_id", label: "National ID card"},
-        {id: "voters_card", label: "Voter's card"},
-    ];
 
     const router = useRouter();
 
@@ -268,146 +231,8 @@ const BeneficialOwnerStep = () => {
         }));
     };
 
-    const handleInputChange = (id: number, field: string, value: string) => {
-        setSections((prev) => {
-            const updatedSections = prev.map((section) => {
-                if (section.id === id) {
-                    let updatedSection = { ...section, [field]: '' };
-
-                    // Validate specific fields
-                    if (field === "rcNumber") {
-                        if(validateRcNumber(value) === undefined){
-                            updatedSection = { ...section, [field]: value };
-                            updatedSection.errors = {
-                                ...updatedSection.errors,
-                                rcNumber: ''
-                            };
-                        }else{
-                            updatedSection.errors = {
-                                ...updatedSection.errors,
-                                rcNumber: validateRcNumber(value)
-                            };
-                        }
-                    }
-                    if (field === "entityName") {
-                       if(validateEntityName(value) === undefined) {
-                           updatedSection = { ...section, [field]: value };
-                           updatedSection.errors = {
-                               ...updatedSection.errors,
-                               entityName: ''
-                           };
-                       }else{
-                           updatedSection.errors = {
-                               ...updatedSection.errors,
-                               entityName: validateEntityName(value)
-                           };
-                       }
-                    }
-                    if (field === "firstName") {
-                        updatedSection.errors = {
-                            ...updatedSection.errors,
-                            firstName: validatePersonName(value)
-                        };
-                    }
-                    if (field === "lastName") {
-                        updatedSection.errors = {
-                            ...updatedSection.errors,
-                            lastName: validatePersonName(value)
-                        };
-                    }
-                    if(field === 'country'){
-                        updatedSection = { ...section, [field]: value };
-                    }
-                    if (field === "entityOwnership" || field === "individualOwnership") {
-                        // Validate that ownership is a number between 0 and 100
-                        const numValue = parseFloat(value);
-
-                        let ownershipError;
-                        const totalOwnerShipEntered = calculateTotalOwnership(prev)
-                        if (isNaN(numValue)) {
-                            ownershipError = "Ownership must be a number";
-                        } else if (numValue < 0 || numValue > 100) {
-                            ownershipError = "Ownership must be between 0 and 100";
-                        }
-                        if(totalOwnerShipEntered <= 100){
-                            updatedSection = { ...section, [field]: value };
-                        }
-                        else if(numValue + totalOwnerShipEntered > 100 ) {
-                            // ownershipError = "Total ownership must be  100%";
-                            setError("Total ownership must be  100%")
-                        }
-                        updatedSection.errors = {
-                            ...updatedSection.errors,
-                            ownership: ownershipError
-                        };
-                    }
 
 
-                    return updatedSection;
-                }
-                return section;
-            });
-
-            // Validate total ownership across all sections
-            const ownershipError = validateTotalOwnership(updatedSections);
-            if (ownershipError) {
-                // Update all sections with the ownership error
-                return updatedSections.map(section => ({
-                    ...section,
-                    errors: {
-                        ...section.errors,
-                        ownership: ownershipError
-                    }
-                }));
-            }
-
-            return updatedSections;
-        });
-    };
-
-    const handleDateSelect = (id: number, date: Date | undefined) => {
-        setSections((prev) =>
-            prev.map((section) =>
-                section.id === id ? {...section, dob: date ? date.toISOString() : undefined} : section
-            )
-        );
-    };
-
-    const handleRelationshipSelect = (id: number, value: string) => {
-        setSections((prev) =>
-            prev.map((section) =>
-                section.id === id ? {...section, relationship: value} : section
-            )
-        );
-    };
-
-    const handleProofTypeChange = (id: number, value: string) => {
-        setSections((prev) =>
-            prev.map((section) =>
-                section.id === id ? {...section, proofType: value} : section
-            )
-        );
-    };
-
-    const handleDrop = (id: number, e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault();
-        const file = e.dataTransfer.files?.[0];
-        setSections((prev) =>
-            prev.map((section) =>
-                section.id === id ? {...section, proofFile: file || null} : section
-            )
-        );
-    };
-
-    const handleSetUploadedImageUrl = (id: number, url: string | null) => {
-        if (url) {
-            setSections((prev) =>
-                prev.map((section) =>
-                    section.id === id ? {...section, proofFileUrl: url} : section
-                )
-            );
-        }
-    };
 
     const handleSaveAndContinue = () => {
         let hasErrors = false;
@@ -520,7 +345,7 @@ const BeneficialOwnerStep = () => {
                 >
                     <TabsContent id="entityTabContent" value="entity">
                         <main id="entityFormMain" className="grid gap-6">
-                            {sections.map((section) => (
+                            {owners.map((section) => (
                                 <section key={section.id} className={'relative grid mt-6'}>
                                     <Tabs
                                         id={`beneficialOwnerTabs-${section.id}`}

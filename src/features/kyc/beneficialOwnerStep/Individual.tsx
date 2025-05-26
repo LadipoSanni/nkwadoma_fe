@@ -12,38 +12,74 @@ import {validateEntityOwnership, validateName} from "@/utils/GlobalMethods";
 interface IndividualData {
     firstName: string,
     lastName: string,
-    dateOfBirth: string,
+    dateOfBirth: Date | undefined,
     relationShip: string,
     ownership: string,
     errorMessage: string,
     entityError: string,
+    proofType?: string;
+    proofFile?: File | null;
+    proofFileUrl?: string;
 
 }
 const Individual = () => {
+    const [date, setDate] = React.useState<Date | undefined>(new Date())
+
     const initialIndividualData = {
         firstName: '',
         lastName: '',
-        dateOfBirth: '',
+        dateOfBirth: date,
         relationShip: '',
         ownership: '',
         errorMessage: '',
         entityError: '',
-
+        proofType: '',
+        proofFile:  null,
+        proofFileUrl: '',
     }
 
     const [individualData, setIndividualData] = React.useState<IndividualData>(initialIndividualData)
+    console.log('individual: ', individualData)
 
     const handleInputChange = ( field: string, value: string) => {
         setIndividualData((prevState) => (
             { ...prevState, [field]: value }
         ))
     }
-    const handleDateSelect = (field: string, date: Date | undefined) => {
-        console.log('date: ', date)
-        setIndividualData((prev) =>(
-                { ...prev, [field]: date ? date.toISOString() : undefined}
 
-        ));
+    const proofOptions = [
+        {id: "national_id", label: "National ID card"},
+        {id: "voters_card", label: "Voter's card"},
+    ];
+
+    const handleProofTypeChange = ( value: string) => {
+        setIndividualData((prev) =>
+            (
+                 {...prev, proofType: value}
+            )
+        );
+    };
+    const handleDrop = ( e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files?.[0];
+        setIndividualData((prev) =>
+            (
+                 {...prev, proofFile: file || null}
+            )
+        );
+    };
+
+    const handleSetUploadedImageUrl = (url: string | null) => {
+        if (url) {
+            setIndividualData((prev) =>
+                    (
+                        {...prev, proofFileUrl: url}
+                    )
+                // prev.map((section) =>
+                //     section.id === id ? {...section, proofFileUrl: url} : section
+                // )
+            );
+        }
     };
 
     return (
@@ -107,7 +143,7 @@ const Individual = () => {
                                 variant="outline"
                                 className="w-full h-[3.375rem] border border-solid border-neutral650 flex justify-between items-center font-normal focus:outline-none focus:ring-0"
                             >
-                                  {individualData.dateOfBirth ? new Date(initialIndividualData.dateOfBirth).toLocaleDateString() : "Select date"}
+                                  {individualData.dateOfBirth ?  initialIndividualData?.dateOfBirth?.toLocaleDateString() : "Select date"}
                                 <MdOutlineDateRange className="h-5 w-5 text-neutral950"/>
                             </Button>
                         </PopoverTrigger>
@@ -116,7 +152,7 @@ const Individual = () => {
                             <Calendar
                                 mode="single"
                                 selected={individualData.dateOfBirth ? new Date(individualData.dateOfBirth) : undefined}
-                                onSelect={(date) => handleDateSelect('dateOfBirth', date)}
+                                onSelect={setDate}
                                 disabled={(date) => date > new Date()}
                                 initialFocus
                                 defaultMonth={individualData.dateOfBirth ? new Date(individualData.dateOfBirth) : new Date()}
@@ -192,36 +228,36 @@ const Individual = () => {
                     <p className="text-red-500 text-sm">{individualData.errorMessage}</p>
                 )}
             </div>
-            {/*<div className="space-y-4">*/}
-            {/*    <Label>Proof of beneficial ownership</Label>*/}
-            {/*    <div className="flex gap-3">*/}
-            {/*        {proofOptions.map((option) => (*/}
-            {/*            <label*/}
-            {/*                key={option.id}*/}
-            {/*                className={`rounded-[20px] px-3 py-2 text-[14px] leading-[150%] font-medium bg-blue50 hover:bg-blue50 cursor-pointer ${*/}
-            {/*                    section.proofType === option.id*/}
-            {/*                        ? "border border-meedlBlue bg-blue50 text-meedlBlue"*/}
-            {/*                        : "text-black300"*/}
-            {/*                }`}*/}
-            {/*            >*/}
-            {/*                <input*/}
-            {/*                    type="radio"*/}
-            {/*                    name={`proofType-${section.id}`}*/}
-            {/*                    value={option.id}*/}
-            {/*                    checked={section.proofType === option.id}*/}
-            {/*                    onChange={(e) => handleProofTypeChange(section.id, e.target.value)}*/}
-            {/*                    className="hidden"*/}
-            {/*                />*/}
-            {/*                <span className="text-sm">{option.label}</span>*/}
-            {/*            </label>*/}
-            {/*        ))}*/}
-            {/*    </div>*/}
-            {/*</div>*/}
-            {/*<FileUpload*/}
-            {/*    handleDrop={(e) => handleDrop(section.id, e)}*/}
-            {/*    handleDragOver={(e) => e.preventDefault()}*/}
-            {/*    setUploadedImageUrl={(url) => handleSetUploadedImageUrl(section.id, url)}*/}
-            {/*/>*/}
+            <div className="space-y-4">
+                <Label>Proof of beneficial ownership</Label>
+                <div className="flex gap-3">
+                    {proofOptions.map((option) => (
+                        <label
+                            key={option.id}
+                            className={`rounded-[20px] px-3 py-2 text-[14px] leading-[150%] font-medium bg-blue50 hover:bg-blue50 cursor-pointer ${
+                                individualData.proofType === option.id
+                                    ? "border border-meedlBlue bg-blue50 text-meedlBlue"
+                                    : "text-black300"
+                            }`}
+                        >
+                            <input
+                                type="radio"
+                                // name={`proofType-${section.id}`}
+                                value={option.id}
+                                checked={individualData.proofType === option.id}
+                                onChange={(e) => handleProofTypeChange( e.target.value)}
+                                className="hidden"
+                            />
+                            <span className="text-sm">{option.label}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
+            <FileUpload
+                handleDrop={(e) => handleDrop( e)}
+                handleDragOver={(e) => e.preventDefault()}
+                setUploadedImageUrl={(url) => handleSetUploadedImageUrl( url)}
+            />
         </div>
 
     );
