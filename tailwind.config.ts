@@ -186,36 +186,11 @@ const config: Config = {
 			},
 			screens: {
 				'sm': '576px',
-				// => @media (min-width: 576px) { ... }
-
 				'md': '960px',
-				// => @media (min-width: 960px) { ... }
-
 				'lg': '1440px',
-				// => @media (min-width: 1440px) { ...
-				// 'sm': '640px',
-				// // => @media (min-width: 640px) { ... }
-				// // 1070px
-				// 'md': '106px',
-				// // => @media (min-width: 768px) { ... }
-				//
-				// 'lg': '1024px',
-				// => @media (min-width: 1024px) { ... }
-
 				'xl': '1280px',
-				// => @media (min-width: 1280px) { ... }
-
-				'2xl': '1536px',
-				// => @media (min-width: 1536px) { ... }
-				// => @media (min-width: 640px) { ... }
-
-				// 'laptop': '1024px',
-				// // => @media (min-width: 1024px) { ... }
-				//
-				// 'desktop': '1280px',
-				// // => @media (min-width: 1280px) { ... }
+			    '2xl': '1536px',
 			},
-			// },
 			boxShadow: {
 				custom: '0px 0px 0px 1px rgba(18, 55, 105, 0.08)',
 				boxShadowLight: '0px 2px 8px 0px rgba(99, 99, 99, 0.12)'
