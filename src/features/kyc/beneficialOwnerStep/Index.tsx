@@ -56,7 +56,19 @@ interface IndividualType {
     id: number;
 }
 
-
+type Owner = Partial<Array<EntityType>> | {
+    firstName: string,
+    lastName: string,
+    dateOfBirth: Date | undefined,
+    relationShip: string,
+    ownership: string,
+    errorMessage: string,
+    entityError: string,
+    proofType?: string;
+    proofFile?: File | null;
+    proofFileUrl?: string;
+    id: number;
+}
 
 interface Section extends EntitySection {
     firstName?: string;
@@ -125,7 +137,8 @@ const BeneficialOwnerStep = () => {
         id :Date.now(),
     }
 
-    const [owners, setOnwer] = useState<EntityType[]| IndividualType[]>([initialEntityDate])
+    const [owners, setOnwer] = useState<Owner[]>()
+
     const validateRcNumber = (rcNumber: string) => {
         // const rcNumberRegex = /^\d{7}$/i;
         if(/^\d{7}$/.test(rcNumber)){
@@ -188,27 +201,41 @@ const BeneficialOwnerStep = () => {
 
     const handleAddSection = () => {
         const newSectionId = Date.now();
-        setSections((prev) => [
+        // setSections((prev) => [
+        //     ...prev,
+        //     {
+        //         id: newSectionId,
+        //         entityName: "",
+        //         rcNumber: "",
+        //         country: undefined,
+        //         firstName: "",
+        //         lastName: "",
+        //         dob: undefined,
+        //         relationship: "",
+        //         entityOwnership: "",
+        //         individualOwnership: "",
+        //         proofType: "national_id",
+        //         proofFile: null,
+        //         proofFileUrl: undefined,
+        //         errors: {
+        //             rcNumber: undefined
+        //         }
+        //     },
+        // ]);
+        setOnwer((prev) => ([
             ...prev,
-            {
-                id: newSectionId,
-                entityName: "",
-                rcNumber: "",
-                country: undefined,
-                firstName: "",
-                lastName: "",
-                dob: undefined,
-                relationship: "",
-                entityOwnership: "",
-                individualOwnership: "",
-                proofType: "national_id",
-                proofFile: null,
-                proofFileUrl: undefined,
-                errors: {
-                    rcNumber: undefined
+
+                {
+                    name: '',
+                    country: '',
+                    rcNumber: '',
+                    ownership: '',
+                    entityError: '',
+                    errorMessage: '',
+                    id: Date.now(),
                 }
-            },
-        ]);
+        ]
+        ))
         setSectionTypes((prev) => ({
             ...prev,
             [newSectionId]: selectedForm
