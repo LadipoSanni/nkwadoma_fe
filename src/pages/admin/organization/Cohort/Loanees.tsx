@@ -21,7 +21,7 @@ interface userIdentity {
     lastName: string;
 }
 
-interface loaneeLoanDetail {
+interface loaneeLoanDetails {
     initialDeposit: number;
     amountRequested: number;
     amountReceived: number;
@@ -29,7 +29,7 @@ interface loaneeLoanDetail {
 
 interface viewAllLoanee {
     userIdentity: userIdentity;
-    loaneeLoanDetails: loaneeLoanDetail;
+    loaneeLoanDetail: loaneeLoanDetails;
     loaneeStatus: string;
 }
 type viewAllLoanees = viewAllLoanee & TableRowData;
@@ -66,15 +66,17 @@ const LoaneesInACohort = () => {
         },
         {skip: !searchTerm || !cohortId})
 
+
     const tableHeaderintegrated = [
         {title: "Trainee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
-        {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetails?.initialDeposit))},
-        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetails?.amountRequested))},
-        {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetails?.amountReceived))},
+        {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
+        {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountRequested))},
+        {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountReceived))},
     ];
 
 
     const initial: string = `${cohortName?.at(0)}${cohortName?.at(1)}`
+
 
     return (
         <main
@@ -106,10 +108,10 @@ const LoaneesInACohort = () => {
                 id={'loaneeTable'}
                 className={`mt-6`}
             >
-                {searchTerm && searchResults?.data?.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :
+                {searchTerm && searchResults?.data?.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :
 
                     <Table
-                    tableData={searchTerm ? searchResults?.data : data?.data?.body}
+                    tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
                     tableHeader={tableHeaderintegrated}
                     handleRowClick={()=> {}}
                     staticHeader=""

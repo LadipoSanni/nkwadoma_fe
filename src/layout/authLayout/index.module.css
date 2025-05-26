@@ -22,21 +22,23 @@
     }
 }
 
-@media only screen and (min-width: 768px){
+@media only screen and (min-width: 960px){
     .authBgMainContainer{
         grid-template-columns: 35% 65%;
+    }
+    .authBgMainContainer{
 
     }
 }
 
 
 @media  screen and(min-width: 765px) and (max-width: 1020px){
-    .whiteBackground{
-        visibility: hidden;
-    }
+    /*.whiteBackground{*/
+    /*    visibility: hidden;*/
+    /*}*/
 }
 
-@media only screen  and (min-width: 768px){
+@media only screen  and (min-width: 960px){
     .authLayoutChildrenDiv{
         width: 100%;
         /*clip-path: polygon(25.2% 0%, 85% 0%, 100.1% 0%, 100.1% 100.3%, 85% 100%, 15% 100%, 0% 100.3%, 29% 54%);*/

@@ -184,6 +184,13 @@ const config: Config = {
 					'5': 'hsl(var(--chart-5))'
 				}
 			},
+			screens: {
+				'sm': '576px',
+				'md': '960px',
+				'lg': '1440px',
+				'xl': '1280px',
+			    '2xl': '1536px',
+			},
 			boxShadow: {
 				custom: '0px 0px 0px 1px rgba(18, 55, 105, 0.08)',
 				boxShadowLight: '0px 2px 8px 0px rgba(99, 99, 99, 0.12)'

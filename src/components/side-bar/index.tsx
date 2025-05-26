@@ -107,7 +107,7 @@ const SideBar = () => {
             {showMobileSideBar &&
                 <div
                     id={'adminMobileSideBar'}
-                    className={` z-40 w-[100vw] overflow-hidden h-[100vh]  border-r-2 border-r-grey-200  flex md:hidden`}
+                    className={` sm:z-40 sm:w-[100vw] sm:overflow-hidden sm:h-[100vh]   sm:border-r-2 border-r-grey-200 z-40 w-[100vw] overflow-hidden h-[100vh] tablet:flex  border-r-2 border-r-grey-200  flex md:hidden`}
                 >
 
                     <div

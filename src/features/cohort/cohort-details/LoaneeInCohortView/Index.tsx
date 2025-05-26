@@ -61,11 +61,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
 
 
-    // const cohortId = getItemSessionStorage("cohortId")
     const cohortId =  useAppSelector(store=> store?.cohort?.setCohortId)
     const size = 300;
     const [page] = useState(0);
-    // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
 
     const {data} = useViewAllLoaneeQuery({
         cohortId: cohortId,
@@ -81,6 +79,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
 
     const [refer, {isLoading: isLoadingRefer}] = useReferLoaneeToACohortMutation()
+
 
     useEffect(() => {
         let result: viewAllLoanees[] = [];

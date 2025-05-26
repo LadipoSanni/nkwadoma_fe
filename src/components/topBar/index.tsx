@@ -90,7 +90,7 @@ const TopBar = () => {
         >
             <div className={'flex  w-full  mr-auto ml-auto  place-content-between'}>
                 <div className={`flex gap-2 h-[1rem] mt-auto mb-auto place-content-center `}>
-                    <div id={'buttonsDiv'} className={`relative  flex place-items-center md:hidden`}>
+                    <div id={'buttonsDiv'} className={`relative  flex place-items-center tablet:flex md:hidden`}>
                         <IoMdMenu color='#667085' style={{ height: '1rem', width: '1rem' }}
                             onClick={openMobileSideBar}
                             id={'LayOutHamburger'} />

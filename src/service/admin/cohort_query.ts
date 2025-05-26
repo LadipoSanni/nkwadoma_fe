@@ -55,7 +55,7 @@ export const cohortApi = createApi({
                 pageNumber?: number;
                 pageSize?: number;
             }) => ({
-                url: '/cohort/all/loanee',
+                url: '/loanee/cohorts/loanees',
                 method: "GET",
                 params: data,
             }),
@@ -139,7 +139,7 @@ export const cohortApi = createApi({
                 loaneeName: string,
                 cohortId?: string,
             }) => ({
-                url: '/cohort/searchForLoanee',
+                url: '/loanee/cohorts/search/loanees',
                 method: 'GET',
                 params: param,
             })
@@ -154,7 +154,7 @@ export const cohortApi = createApi({
         }),
         addLoaneeToCohort: builder.mutation({
             query: (data) => ({
-                url: `/addLoaneeToCohort`,
+                url: `/loanee/cohort`,
                 method: 'POST',
                 body: data
             }),
