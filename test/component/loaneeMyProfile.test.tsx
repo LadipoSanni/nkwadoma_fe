@@ -1,18 +1,18 @@
 import '@testing-library/react'
 import {render, screen} from '@testing-library/react'
-import Header from '@/components/loanee-my-profile/header'
+import LoaneeProfileHeader from '@/components/loanee-my-profile/loaneeProfileHeader'
 import {Providers} from "@/app/provider";
-import SelectLoanTab from "@/components/selected-loan/SelectLoanTab";
 
 
 describe('test header', ()=> {
     test('that component is rendered when called', ()=> {
         render(
         <Providers>
-            <Header/>
+            <LoaneeProfileHeader/>
         </Providers>
         )
-        const  headerComponent = screen.getAllByTestId('loaneeProfileHeader')
+        const  headerComponent = screen.getByTestId('loaneeProfileHeader')
         expect(headerComponent).toBeInTheDocument()
     })
+
 })
