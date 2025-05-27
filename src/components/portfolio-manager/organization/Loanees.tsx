@@ -4,11 +4,14 @@ import dynamic from "next/dynamic";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import { Button } from '@/components/ui/button';
 import CheckBoxTable from '@/reuseable/table/Checkbox-table';
-import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery} from "@/service/admin/cohort_query";
+import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery,useUpdateLoaneeStatusMutation} from "@/service/admin/cohort_query";
 import {useAppSelector} from "@/redux/store";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {formatAmount} from '@/utils/Format';
+import {useToast} from "@/hooks/use-toast"
+import { useRouter } from 'next/navigation';
+import Isloading from '@/reuseable/display/Isloading';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -37,11 +40,19 @@ const Loanees = dynamic(
 )
  interface Props {
     buttonName?: string;
-    // status?: string
+    status?: string
     tabType?: string
+    condition?: string
  }
 
-function LoaneesInACohort({buttonName,tabType}: Props) {
+ interface ApiError {
+  status: number;
+  data: {
+    message: string;
+  };
+}
+
+function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
     const [searchTerm, setSearchTerm] = useState("");
     const cohortDetails = useAppSelector((state) => state.cohort.selectedCohortInOrganization)
     const cohortId = cohortDetails?.id;
@@ -51,11 +62,15 @@ function LoaneesInACohort({buttonName,tabType}: Props) {
     const size = 10
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
     const [enableButton, setEnableButton] = useState(false)
+    const [updateLoaneeStatus, {isLoading:statusIsloading}] = useUpdateLoaneeStatusMutation()
+    const {toast} = useToast()
+    const router = useRouter();
 
       const {data, isLoading} = useViewAllLoaneeQuery({
             cohortId: cohortId,
             pageSize: size,
-            pageNumber: page
+            pageNumber: page,
+            status: status
         })
 
       const {data: searchResults, isLoading: isLoadingSearch} = useSearchForLoaneeInACohortQuery({
@@ -70,7 +85,7 @@ function LoaneesInACohort({buttonName,tabType}: Props) {
           setTotalPage(data?.data?.totalPages)
           setPageNumber(data?.data?.pageNumber)
         }
-      },[searchTerm,data])       
+      },[searchTerm,data])      
 
       const tableHeaderintegrated = [
               {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
@@ -86,8 +101,40 @@ function LoaneesInACohort({buttonName,tabType}: Props) {
         const getTableData = () => {
           if (!data?.data?.body) return [];
           if (searchTerm) return searchResults?.data || [];
-          if (tabType === "Archived") return [];
           return data?.data?.body;
+      }
+
+      const handleClick= async () => {
+          setSelectedRows(new Set()); 
+          const formData = {
+            loaneeIds: Array.from(selectedRows),
+            loaneeStatus:condition || ""
+          }
+        try {
+         const updateStatus =  await updateLoaneeStatus(formData).unwrap()
+          if(updateStatus) {
+            toast({
+              description: `Loanees has been ${status === "ARCHIVE"? "unarchived" : "archived"}`,
+              status: "success",
+            })
+            setSelectedRows(new Set());
+            setEnableButton(false)
+            if(status === "ARCHIVE"){
+              router.push("/organizations/loanees/all")
+            }else {
+              router.push("/organizations/loanees/archived")
+            }
+
+          }
+          
+        } catch (err) {
+          const error = err as ApiError;
+          toast({
+            description: error?.data?.message,
+            status: "error",
+          })
+          
+        }
       }
 
   return (
@@ -109,9 +156,10 @@ function LoaneesInACohort({buttonName,tabType}: Props) {
          aria-disabled={!enableButton}
          variant={`secondary`}
         className={`h-[45px] w-full font-semibold ${tabType === "All"? "md:w-[90px]" : "md:w-[110px]"} ${enableButton ? "" : "bg-[#B6BCCA]"}`}
-        disabled={selectedRows.size === 0 }
+        disabled={selectedRows.size === 0 || statusIsloading}
+        onClick={handleClick}
          >
-            {buttonName}
+           { statusIsloading? <Isloading/> : buttonName}
         </Button>
         </div>
       </div>

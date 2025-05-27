@@ -7,6 +7,7 @@ function All() {
       <Loanees
         buttonName='Archive'
         tabType='All'
+        condition= 'ARCHIVE'
       />
     </div>
   )
