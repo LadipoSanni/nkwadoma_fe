@@ -151,7 +151,7 @@ useEffect(() => {
      if(userRole === "PORTFOLIO_MANAGER"){
          const cohort = {name: String(row?.name),id: String(row?.id)}
          store.dispatch(setSelectedCohortInOrganization(cohort))
-      router.push('/organizations/loanee')
+      router.push('/organizations/loanees/all')
      }else {
       router.push('/cohort/cohort-details')
      }
