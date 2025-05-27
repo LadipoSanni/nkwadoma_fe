@@ -95,14 +95,17 @@ function LoaneesInACohort({buttonName,tabType}: Props) {
       <div className='md:flex justify-between items-center'>
         <div >
         <SearchInput
+                    testId='search-input'
                     id="SearchLoanee"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style="md:w-20 w-full"
          />  
         </div>
-        <div className='mt-3 md:mt-0'>
+        <div className='mt-3 md:mt-0'  >
         <Button
+        id='action'
+       data-testid='actionButton'
          aria-disabled={!enableButton}
          variant={`secondary`}
         className={`h-[45px] w-full font-semibold ${tabType === "All"? "md:w-[90px]" : "md:w-[110px]"} ${enableButton ? "" : "bg-[#B6BCCA]"}`}

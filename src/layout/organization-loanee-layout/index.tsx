@@ -39,10 +39,11 @@ function OrganizationLoaneeLayout({children}:props) {
                       <div
                           id={'cohortInitials'}
                           className={`w-fit py-3 px-4 h-fit rounded-full bg-[#FEF6F0] text-[#68442E] text-[28px] ${cabinetGroteskBold.className}  h-fit flex justify-center items-center`}
+                          data-testid="cohortInitials"
                       >
                           {initial?.toUpperCase()}
                       </div>
-                      <span id={'cohortName'} className={`text-[#212221] ${cabinetGroteskMediumBold.className} text-[28px] mt-auto mb-auto `}>{cohortName}</span>
+                      <span id={'cohortName'}  data-testid="cohortName" className={`text-[#212221] ${cabinetGroteskMediumBold.className} text-[28px] mt-auto mb-auto `}>{cohortName}</span>
       </div> 
      </div>
         <div>
