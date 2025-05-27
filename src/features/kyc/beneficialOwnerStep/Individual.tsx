@@ -3,26 +3,36 @@ import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {Button} from "@/components/ui/button";
-import {MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineDateRange} from "react-icons/md";
 import {Calendar} from "@/components/ui/calendar";
+// MdKeyboardArrowDown, MdKeyboardArrowUp,
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import FileUpload from "../../../reuseable/Input/FileUpload";
 import {validateEntityOwnership, validateName} from "@/utils/GlobalMethods";
+import {MdOutlineDateRange} from "react-icons/md";
+import {format} from "date-fns";
 
 interface IndividualData {
-    firstName: string,
-    lastName: string,
-    dateOfBirth: Date | undefined,
-    relationShip: string,
-    ownership: string,
-    errorMessage: string,
-    entityError: string,
+    firstName?: string,
+    lastName?: string,
+    dateOfBirth?: Date | undefined,
+    relationShip?: string,
+    ownership?: string,
+    errorMessage?: string,
+    entityError?: string,
     proofType?: string;
     proofFile?: File | null;
     proofFileUrl?: string;
+    id?: number;
+    name?: string;
+    country?: string,
+    rcNumber?: string,
 
 }
-const Individual = () => {
+interface IndividualProps  {
+    id?: number;
+    updateOwner :( field: string, value: string | File| boolean, id?: number) => void
+}
+const Individual = ({id, updateOwner}: IndividualProps) => {
     const [date, setDate] = React.useState<Date | undefined>(new Date())
 
     const initialIndividualData = {
@@ -30,21 +40,33 @@ const Individual = () => {
         lastName: '',
         dateOfBirth: date,
         relationShip: '',
-        ownership: '',
         errorMessage: '',
         entityError: '',
         proofType: '',
         proofFile:  null,
         proofFileUrl: '',
+        id :Date.now(),
+        ownership: '',
     }
 
+    const isFormField = () => {
+        return initialIndividualData.relationShip.length > 0 && initialIndividualData.proofFileUrl.length > 0 && initialIndividualData.firstName.length > 0 && initialIndividualData.lastName.length > 0 && initialIndividualData.ownership.length > 0;
+    }
     const [individualData, setIndividualData] = React.useState<IndividualData>(initialIndividualData)
-    console.log('individual: ', individualData)
 
     const handleInputChange = ( field: string, value: string) => {
         setIndividualData((prevState) => (
             { ...prevState, [field]: value }
         ))
+        if(field === 'dateOfBirth'){
+            updateOwner( field, format(value, "yyyy-MM-dd"), id)
+        }else{
+            updateOwner( field, value, id)
+        }
+        // console.log('inii:', response)
+        const response = isFormField()
+        updateOwner('isFormField', response, id)
+
     }
 
     const proofOptions = [

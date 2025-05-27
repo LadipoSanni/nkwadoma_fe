@@ -1,5 +1,4 @@
 import React from 'react';
-import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import CountrySelectPopover from "@/reuseable/select/countrySelectPopover/Index";
 import {validateEntityOwnership, validateName, validateRcNumber} from "@/utils/GlobalMethods";
@@ -13,8 +12,11 @@ interface EntityData {
     entityError: string,
 
 }
-
-const Entity = () => {
+interface IndividualProps  {
+    id?: number;
+    updateOwner :( field: string, value: string | File| boolean,id?: number) => void
+}
+const Entity = ({id, updateOwner}: IndividualProps) => {
     const initialEntityDate = {
         name: '',
         country: '',
@@ -26,13 +28,22 @@ const Entity = () => {
     }
 
     const [entityData, setEntityData] = React.useState<EntityData>(initialEntityDate)
+    console.log('entityData', entityData)
 
+    const isFormField = () => {
+        return entityData.rcNumber.length > 0 && entityData.name.length > 0 && entityData.country.length > 0 && entityData.ownership.length > 0;
+    }
 
+    console.log('isFormField()', isFormField())
 
     const handleInputChange = ( field: string, value: string) => {
+        console.log('field:', field,'value: ', value)
         setEntityData((prevState) => (
             { ...prevState, [field]: value }
         ))
+        updateOwner(field, value,id)
+        const response = isFormField()
+        updateOwner('isFormField', response, id)
     }
 
         return (
@@ -143,9 +154,7 @@ const Entity = () => {
                                             { ...prevState, ['errorMessage']: isInputValid }
                                         ))
 
-                                        // || Number(entityData.ownership) + Number(value) > 100 || Number(entityData.ownership) + Number(value) === 0
-                                    }
-                                    else{
+                                    } else{
                                         setEntityData((prevState) => (
                                             { ...prevState, ['errorMessage']: '' }
                                         ))
@@ -158,7 +167,6 @@ const Entity = () => {
                                 <p className="text-red-500 text-sm">{entityData.errorMessage }</p>
                             )}
                         </div>
-
             </div>
         </div>
     );

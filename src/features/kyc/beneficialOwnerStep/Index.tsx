@@ -2,64 +2,18 @@
 import React, {useState, useEffect} from "react";
 import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
 import {inter, cabinetGroteskMediumBold} from '@/app/fonts';
-import {Label} from "@/components/ui/label";
-import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
-import CountrySelectPopover from '@/reuseable/select/countrySelectPopover/Index';
-import {MdAdd, MdDeleteOutline, MdOutlineDateRange, MdKeyboardArrowUp, MdKeyboardArrowDown} from "react-icons/md";
+import {MdAdd, MdDeleteOutline} from "react-icons/md";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/redux/store";
-import {updateBeneficialOwner} from "@/redux/slice/kyc/kycFormSlice";
-import FileUpload from "@/reuseable/Input/FileUpload";
-import {
-    Select,
-    SelectTrigger,
-    SelectValue,
-    SelectContent,
-    SelectItem,
-} from "@/components/ui/select";
-import {Calendar} from "@/components/ui/calendar";
-import {Popover, PopoverTrigger, PopoverContent} from "@/components/ui/popover";
 import Entity from "@/features/kyc/beneficialOwnerStep/Entity";
 import Individual from "@/features/kyc/beneficialOwnerStep/Individual";
-
-interface BaseSection {
-    id: number;
-}
-
-interface EntitySection extends BaseSection {
-    entityName: string;
-    rcNumber: string;
-    country: string | undefined;
-}
-interface EntityType {
-    name: string,
-    country: string,
-    rcNumber: string,
-    ownership: string,
-    errorMessage: string,
-    id: number,
-    entityError: string,
-}
-interface IndividualType {
-    firstName: string,
-    lastName: string,
-    dateOfBirth: Date | undefined,
-    relationShip: string,
-    ownership: string,
-    errorMessage: string,
-    entityError: string,
-    proofType?: string;
-    proofFile?: File | null;
-    proofFileUrl?: string;
-    id: number;
-}
+import {format} from "date-fns";
 
 interface Owner {
     firstName?: string,
     lastName?: string,
-    dateOfBirth?: Date | undefined,
+    dateOfBirth?: string,
     relationShip?: string,
     ownership?: string,
     errorMessage?: string,
@@ -71,134 +25,74 @@ interface Owner {
     name?: string;
     country?: string,
     rcNumber?: string,
+    isFormField: boolean
 }
 
-interface Section extends EntitySection {
-    firstName?: string;
-    lastName?: string;
-    dob?: Date | string;
-    relationship?: string;
-    entityOwnership?: string;
-    individualOwnership?: string;
-    proofType?: string;
-    proofFile?: File | null;
-    proofFileUrl?: string;
-    errors: {
-        rcNumber?: string;
-        entityName?: string;
-        firstName?: string;
-        lastName?: string;
-        ownership?: string;
-    };
-}
-
-type FormSection = Partial<Section>;
 
 const BeneficialOwnerStep = () => {
     const dispatch = useDispatch();
-    const {
-        entityData,
-        individualData,
-        selectedForm: storedSelectedForm
-    } = useSelector((state: RootState) => state.kycForm.beneficialOwner);
-
-    const [selectedForm, setSelectedForm] = useState<"entity" | "individual">(storedSelectedForm || "entity");
-    const [entityName] = useState(entityData.entityName || "");
-    const [rcNumber] = useState(entityData.rcNumber || "");
-    const [selectedCountry] = useState<string | undefined>(entityData.country);
-    const [sections, setSections] = useState<Section[]>(
-        (selectedForm === "entity" ? (entityData.sections || []) : (individualData.sections || [])) as Section[]
-    );
-    const [sectionTypes, setSectionTypes] = useState<{ [key: number]: "entity" | "individual" }>({});
-    // const [isOpen, setIsOpen] = useState<{ [key: number]: boolean }>({});
-    const [disabledContinueButton] = useState(true);
+    const [disabledContinueButton, setDisableContinueButton] = useState(true);
     // const [error, setError] = useState("");
-
-    const initialEntityDate = {
-        name: '',
-        country: '',
-        rcNumber: '',
-        ownership: '',
-        entityError: '',
-        errorMessage: '',
-        id : Date.now(),
-
-    }
-
-
+    // startDate ? format(startDate, "yyyy-MM-dd") : ""
     const initialData = {
         firstName: '',
         lastName: '',
-        dateOfBirth: new Date(),
+        dateOfBirth: format(new Date(), "yyyy-MM-dd"),
         relationShip: '',
         errorMessage: '',
         entityError: '',
         proofType: '',
-        proofFile:  null,
+        proofFile: null,
         proofFileUrl: '',
-        id :Date.now(),
+        id: Date.now(),
         name: '',
         country: '',
         rcNumber: '',
         ownership: '',
+        isFormField: false
     }
+    const router = useRouter();
 
-    const [owners, setOnwer] = useState<Owner[]>([initialData])
+    const [owners, setOwner] = useState<Owner[]>([initialData])
+    console.log('owner: ', owners)
 
-    const validateRcNumber = (rcNumber: string) => {
-        // const rcNumberRegex = /^\d{7}$/i;
-        if(/^\d{7}$/.test(rcNumber)){
-            return "RC Number can not  contain  letters";
-        }
-        return undefined
-        // return rcNumberRegex.test(rcNumber) ? undefined : "RC Number must start with 7 digits";
-    };
 
     useEffect(() => {
+        // const dd: boolean[] = []
+        owners?.forEach((owner) => {
+            // dd.push(owner?.isFormField)
+            if (owner?.isFormField === true){
+                console.log('dont disable')
+                setDisableContinueButton(false)
+            }else{
+                console.log('disabel')
+                setDisableContinueButton(true)
+            }
+        })
+        // console.log('dd: ', dd)
+        console.log('disan', disabledContinueButton)
+        // if(dd.map((value) => !value)){
+        //     setDisableContinueButton(true)
+        // }else {
+        //     setDisableContinueButton(false)
+        // }
+        // if(dd.){
+        //
+        // }
 
-    }, []);
-
-    const validateEntityName = (name: string) => {
-        // /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/
-        if (/^[^a-zA-Z0-9&]/.test(name)) {
-            return "Entity name cannot start with a special character";
-        }
-
-        if (/[^a-zA-Z0-9&\s]/.test(name)) {
-            return "Entity name can only contain '&' as a special character";
-        }
-        if(/^\d+$/.test(name)){
-            return "Entity name can not  contain only digits";
-        }
-        if(/^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/.test(name)){
-            return undefined
-        }
-
-        // return undefined;
-    };
-
-    const validatePersonName = (name: string) => {
-        if (/\d/.test(name)) {
-            return "Name cannot contain numbers";
-        }
-
-        return undefined;
-    };
-
-    const validateTotalOwnership = (sections: Section[]) => {
-        const array: number[] = [] ;
-        sections?.filter(section=> array?.push(Number(section?.entityOwnership)) )
-        const initial = 0
-        const totalEntityOwnershipss = array.reduce((sum, currentValue) => sum + currentValue, initial)
-        if (totalEntityOwnershipss > 100) {
-            return 'Total entity ownership must be exactly 100%'
-        }
-        return undefined;
-    };
+    }, [owners, disabledContinueButton]);
 
 
-
-    const router = useRouter();
+    // const validateTotalOwnership = (sections: Section[]) => {
+    //     const array: number[] = [] ;
+    //     sections?.filter(section=> array?.push(Number(section?.entityOwnership)) )
+    //     const initial = 0
+    //     const totalEntityOwnershipss = array.reduce((sum, currentValue) => sum + currentValue, initial)
+    //     if (totalEntityOwnershipss > 100) {
+    //         return 'Total entity ownership must be exactly 100%'
+    //     }
+    //     return undefined;
+    // };
 
 
     const handleBackClick = () => {
@@ -206,156 +100,61 @@ const BeneficialOwnerStep = () => {
     };
 
     const handleAddSection = () => {
-        const newSectionId = Date.now();
-        // setSections((prev) => [
-        //     ...prev,
-        //     {
-        //         id: newSectionId,
-        //         entityName: "",
-        //         rcNumber: "",
-        //         country: undefined,
-        //         firstName: "",
-        //         lastName: "",
-        //         dob: undefined,
-        //         relationship: "",
-        //         entityOwnership: "",
-        //         individualOwnership: "",
-        //         proofType: "national_id",
-        //         proofFile: null,
-        //         proofFileUrl: undefined,
-        //         errors: {
-        //             rcNumber: undefined
-        //         }
-        //     },
-        // ]);
-        setOnwer((prev) => ([
-            ...prev,
+        setOwner((prev) => ([
+                ...prev,
 
                 {
+                    firstName: '',
+                    lastName: '',
+                    dateOfBirth: format(new Date(), "yyyy-MM-dd"),
+                    relationShip: '',
+                    errorMessage: '',
+                    entityError: '',
+                    proofType: '',
+                    proofFile: null,
+                    proofFileUrl: '',
+                    id: Date.now(),
                     name: '',
                     country: '',
                     rcNumber: '',
                     ownership: '',
-                    entityError: '',
-                    errorMessage: '',
-                    id: Date.now(),
+                    isFormField: false
                 }
-        ]
+            ]
         ))
-        setSectionTypes((prev) => ({
-            ...prev,
-            [newSectionId]: selectedForm
-        }));
+    }
+
+    // const getBeneficialOwnerType = (beneficalOwner: Owner) => {
+    //     if (beneficalOwner.)
+    // }
+
+    const updateOwner = (field: string, value: string  | File| boolean, id?: number) => {
+        // setOwner(
+        //     owners?.map(owner =>
+        //         owner.id === id ? {...owner, [field]: value} : owner
+        //     )
+        // )
+        setOwner(prevOwners =>
+            prevOwners?.map(owner =>
+                owner.id === id
+                    ? { ...owner, [field]: value }
+                    : owner
+            )
+        );
+
+        console.log('after updating owner: ', owners)
+
     };
 
-    const handleDeleteSection = (id: number) => {
-        setSections((prev) => prev.filter((section) => section.id !== id));
-        setSectionTypes((prev) => {
-            const newTypes = {...prev};
-            delete newTypes[id];
-            return newTypes;
-        });
+    const handleDeleteSection = (id?: number) => {
+        setOwner((prev) => prev.filter((section) => section.id !== id));
     };
-
-    const handleSectionTypeChange = (id: number, type: "entity" | "individual") => {
-        setSectionTypes((prev) => ({
-            ...prev,
-            [id]: type
-        }));
-    };
-
-
 
 
     const handleSaveAndContinue = () => {
-        let hasErrors = false;
-        const validatedSections = sections.map(section => {
-            const sectionType = sectionTypes[section.id] || "entity";
-            const ownership = sectionType === "entity" ? section.entityOwnership : section.individualOwnership;
-
-            const rcNumberError = validateRcNumber(section.rcNumber);
-            const entityNameError = validateEntityName(section.entityName);
-
-            let firstNameError, lastNameError;
-            if (sectionType === "individual") {
-                firstNameError = validatePersonName(section.firstName || "");
-                lastNameError = validatePersonName(section.lastName || "");
-            }
-
-            // const numOwnership = ownership ? parseFloat(ownership) : 0;
-            // let ownershipError;
-
-            // if (isNaN(numOwnership)) {
-            //     ownershipError = "Ownership must be a number";
-            // } else if (numOwnership < 0 || numOwnership > 100) {
-            //     ownershipError = "Ownership must be between 0 and 100";
-            // }
-
-            if (rcNumberError || entityNameError || firstNameError || lastNameError || ownershipError) {
-                hasErrors = true;
-            }
-
-            return {
-                ...section,
-                type: sectionType,
-                firstName: section.firstName || "",
-                lastName: section.lastName || "",
-                relationship: section.relationship || "",
-                proofType: section.proofType || "",
-                entityOwnership: section.entityOwnership || "",
-                individualOwnership: section.individualOwnership || "",
-                ownership: ownership || "", 
-                proofFile: section.proofFile || null,
-                dob: section.dob instanceof Date ? section.dob.toISOString() : section.dob,
-                errors: {
-                    rcNumber: rcNumberError,
-                    entityName: entityNameError,
-                    firstName: firstNameError,
-                    lastName: lastNameError,
-                    ownership: ownershipError
-                }
-            };
-        });
-
-        const ownershipError = validateTotalOwnership(validatedSections);
-        if (ownershipError) {
-            hasErrors = true;
-            validatedSections.forEach(section => {
-                section.errors.ownership = ownershipError;
-            });
-        }
-
-        setSections(validatedSections);
-
-        if (hasErrors) {
-            return;
-        }
-
-        if (selectedForm === "entity") {
-            dispatch(
-                updateBeneficialOwner({
-                    selectedForm: "entity",
-                    entityData: {
-                        entityName,
-                        rcNumber,
-                        country: selectedCountry,
-                        sections: validatedSections
-                    }
-                })
-            );
-        } else {
-            dispatch(
-                updateBeneficialOwner({
-                    selectedForm: "individual",
-                    individualData: {
-                        sections: validatedSections
-                    }
-                })
-            );
-        }
-
         router.push('/kyc/political-exposure');
     };
+
 
     return (
         <main id="beneficialOwnerStepMain" className={`${inter.className} w-full xl:px-48 grid-cols-1 gap-y-5 grid`}>
@@ -364,108 +163,96 @@ const BeneficialOwnerStep = () => {
                 <h1 id="beneficialOwnerTitle"
                     className="text-meedlBlack text-[24px] leading-[120%] font-medium">Beneficial owner</h1>
             </div>
-            <section id="beneficialOwnerSection"
+            <div id="beneficialOwnerSection"
                      className={'md:max-w-[30rem] w-full md:mx-auto h-[calc(100vh-250px)] pt-1 overflow-y-auto pr-3'}>
-                {/*<Tabs*/}
-                {/*    id="beneficialOwnerTabs"*/}
-                {/*    value={selectedForm}*/}
-                {/*    onValueChange={(value) => {*/}
-                {/*        const newValue = value as "entity" | "individual";*/}
-                {/*        setSelectedForm(newValue);*/}
-                {/*        dispatch(updateBeneficialOwner({selectedForm: newValue}));*/}
-                {/*    }}*/}
-                {/*    className={'grid gap-7'}*/}
-                {/*>*/}
-                {/*    <TabsContent id="entityTabContent" value="entity">*/}
-                        <main id="entityFormMain" className="grid gap-6">
-                            {owners?.map((section) => (
-                                <section key={section.id} className={'relative grid mt-6'}>
-                                    <Tabs
-                                        id={`beneficialOwnerTabs-${section.id}`}
-                                        defaultValue={'entity'}
-                                        // value={sectionTypes[section.id] || "entity"}
-                                        // onValueChange={(value) => handleSectionTypeChange(section.id, value as "entity" | "individual")}
-                                        className={'grid gap-7'}
+                <main id="entityFormMain" className="grid gap-6">
+                    {owners?.map((section) => (
+                        <div key={section.id} className={'relative grid mt-6'}>
+                            <Tabs
+                                id={`beneficialOwnerTabs-${section.id}`}
+                                defaultValue={'entity'}
+                                className={'grid gap-7'}
+                            >
+                                <TabsList id={`beneficialOwnerTabsList-${section.id}`}
+                                          className="flex gap-3 bg-transparent p-0 justify-start">
+                                    <TabsTrigger
+                                        onClick={()=> {updateOwner('type', 'individual', section.id)}}
+                                        id={`entityTabTrigger-${section.id}`}
+                                        value="entity"
+                                        className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:bg-blue50 data-[state=active]:text-meedlBlue data-[state=inactive]:text-grey250"
                                     >
-                                        <TabsList id={`beneficialOwnerTabsList-${section.id}`}
-                                                className="flex gap-3 bg-transparent p-0 justify-start">
-                                            <TabsTrigger
-                                                id={`entityTabTrigger-${section.id}`}
-                                                value="entity"
-                                                className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:bg-blue50 data-[state=active]:text-meedlBlue data-[state=inactive]:text-grey250"
+                                        Entity
+                                    </TabsTrigger>
+                                    <TabsTrigger
+                                        onClick={()=> {updateOwner('type', 'individual', section.id)}}
+                                        id={`individualTabTrigger-${section.id}`}
+                                        value="individual"
+                                        className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:bg-blue50 data-[state=active]:text-meedlBlue data-[state=inactive]:text-grey250"
+                                    >
+                                        Individual
+                                    </TabsTrigger>
+                                </TabsList>
+                                <section
+                                    className="grid p-5 gap-5 border rounded-md border-lightBlue250 relative">
+                                    <TabsContent id={`entityTabContent-${section.id}`} value="entity">
+                                        <Entity id={section.id} updateOwner={updateOwner}/>
+                                    </TabsContent>
+                                    <TabsContent id={`individualTabContent-${section.id}`} value="individual">
+                                        <Individual id={section.id} updateOwner={updateOwner}/>
+                                    </TabsContent>
+                                    {owners.length > 1 && (
+                                        <div className={'flex justify-end'}>
+                                            <button
+                                                onClick={() => handleDeleteSection(section.id)}
+                                                className="bg-greyBase200 py-1 px-2 hover:bg-greyBase200 flex rounded-md gap-1 h-[1.8125rem] w-[5.25rem]"
                                             >
-                                                Entity
-                                            </TabsTrigger>
-                                            <TabsTrigger
-                                                id={`individualTabTrigger-${section.id}`}
-                                                value="individual"
-                                                className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:bg-blue50 data-[state=active]:text-meedlBlue data-[state=inactive]:text-grey250"
-                                            >
-                                                Individual
-                                            </TabsTrigger>
-                                        </TabsList>
-                                        <section
-                                            className="grid p-5 gap-5 border rounded-md border-lightBlue250 relative">
-                                            <TabsContent id={`entityTabContent-${section.id}`} value="entity">
-                                                <Entity/>
-                                            </TabsContent>
-                                            <TabsContent id={`individualTabContent-${section.id}`} value="individual">
-                                                <Individual/>
-                                            </TabsContent>
-                                            {sections.length > 1 && (
-                                                <div className={'flex justify-end'}>
-                                                    <button
-                                                        onClick={() => handleDeleteSection(section.id)}
-                                                        className="bg-greyBase200 py-1 px-2 hover:bg-greyBase200 flex rounded-md gap-1 h-[1.8125rem] w-[5.25rem]"
-                                                    >
-                                                        <MdDeleteOutline className="text-error450 h-5 w-5"/>
-                                                        <span
-                                                            className={'text-error450 text-[14px] leading-[150%] font-medium'}>Delete</span>
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </section>
-                                    </Tabs>
+                                                <MdDeleteOutline className="text-error450 h-5 w-5"/>
+                                                <span
+                                                    className={'text-error450 text-[14px] leading-[150%] font-medium'}>Delete</span>
+                                            </button>
+                                        </div>
+                                    )}
                                 </section>
-                            ))}
-                        </main>
-                    {/*</TabsContent>*/}
-                    <main className={'sticky bottom-0  bg-white py-4 pr-4'}>
+                            </Tabs>
+                        </div>
+                    ))}
+                </main>
+                <main className={'sticky bottom-0  bg-white py-4 pr-4'}>
 
-                        <div className="flex items-center gap-1 mb-4">
-                            <Button
-                                onClick={handleAddSection}
-                                className="flex items-center gap-2 bg-transparent text-meedlBlue shadow-none px-0 py-2 rounded-md"
-                            >
-                                <MdAdd className="text-meedlBlue h-5 w-5"/>
-                                <span className={'font-semibold text-[14px] leading-[150%]'}>Add</span>
-                            </Button>
-                        </div>
-                        <div id="entityFormButtons" className={'md:flex grid gap-4 md:justify-between'}>
-                            <Button
-                                id="entityFormBackButton"
-                                onClick={handleBackClick}
-                                type={'button'}
-                                className={'h-[2.813rem] w-full md:w-[4.625rem] px-4 py-2 bg-gray-500 hover:bg-gray-600 text-meedlBlue border border-meedlBlue rounded-md  order-2 md:order-1'}
-                            >
-                                Back
-                            </Button>
-                            <Button
-                                id="entityFormSaveContinueButton"
-                                type={'button'}
-                                onClick={handleSaveAndContinue}
-                                disabled={disabledContinueButton}
-                                className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 ${disabledContinueButton ? `bg-[#e8eaee] hover:bg-[#e8eaee]`:` bg-meedlBlue hover:bg-meedlBlue text-white`} rounded-md  order-1 md:order-2`}
-                            >
-                                Save & continue
-                            </Button>
-                        </div>
-                    </main>
+                    <div className="flex items-center gap-1 mb-4">
+                        <Button
+                            onClick={handleAddSection}
+                            className="flex items-center gap-2 bg-transparent text-meedlBlue shadow-none px-0 py-2 rounded-md"
+                        >
+                            <MdAdd className="text-meedlBlue h-5 w-5"/>
+                            <span className={'font-semibold text-[14px] leading-[150%]'}>Add</span>
+                        </Button>
+                    </div>
+                    <div id="entityFormButtons" className={'md:flex grid gap-4 md:justify-between'}>
+                        <Button
+                            id="entityFormBackButton"
+                            onClick={handleBackClick}
+                            type={'button'}
+                            className={'h-[2.813rem] w-full md:w-[4.625rem] px-4 py-2 bg-gray-500 hover:bg-gray-600 text-meedlBlue border border-meedlBlue rounded-md  order-2 md:order-1'}
+                        >
+                            Back
+                        </Button>
+                        <Button
+                            id="entityFormSaveContinueButton"
+                            type={'button'}
+                            onClick={handleSaveAndContinue}
+                            disabled={disabledContinueButton}
+                            className={`h-[2.8125rem] w-full md:w-[9.3125rem] px-4 py-2 ${disabledContinueButton ? `bg-[#e8eaee] md:bg-[#e8eaee] md:hover:bg-[#e8eaee] hover:bg-[#e8eaee]` : ` bg-meedlBlue hover:bg-meedlBlue text-white`} rounded-md  order-1 md:order-2`}
+                        >
+                            Save & continue
+                        </Button>
+                    </div>
+                </main>
 
                 {/*</Tabs>*/}
-            </section>
+            </div>
         </main>
-    );
-};
+    )};
+
 
 export default BeneficialOwnerStep;
