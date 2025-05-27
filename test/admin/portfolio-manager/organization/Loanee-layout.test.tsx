@@ -1,12 +1,13 @@
 import { render, screen, fireEvent,cleanup} from "@testing-library/react";
 import { Providers } from "@/app/provider";
-import { useRouter } from 'next/navigation';
+import { useRouter,usePathname } from 'next/navigation';
 import OrganizationLoaneeLayout from "@/layout/organization-loanee-layout";
 import { store } from "@/redux/store";
 import { setOrganizationDetail } from "@/redux/slice/organization/organization";
 
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
+    usePathname: jest.fn(), 
   }));
 
   const mockChildren = <div>Test Children</div>;
@@ -14,6 +15,7 @@ jest.mock('next/navigation', () => ({
 
 describe("InviteOrganizationForm", () => {
     const mockPush = jest.fn();
+    const mockPathname = '/organizations/loanees/all'; 
     beforeEach(() => {
         cleanup();
 
@@ -21,6 +23,9 @@ describe("InviteOrganizationForm", () => {
         (useRouter as jest.Mock).mockReturnValue({
             push: mockPush,
           });
+         
+          (usePathname as jest.Mock).mockReturnValue(mockPathname);
+
           jest.spyOn(console,'log').mockReturnValue()
           jest.spyOn(console,'warn').mockReturnValue()
           jest.spyOn(console,'error').mockReturnValue()
