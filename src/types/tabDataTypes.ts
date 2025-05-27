@@ -49,3 +49,9 @@ export const financierTabData = [
 {name: 'Investment vehicle', value: '/financier/investmentVehicles'}
 ]
 
+export const loaneeTabData = [
+    {name: "All", value:"/organizations/loanees/all"},
+    {name: "Repayment", value: "/organizations/loanees/repayment"},
+    {name: "Archived",value: "/organizations/loanees/archived"}
+]
+
