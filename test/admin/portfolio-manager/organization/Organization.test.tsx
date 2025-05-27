@@ -1,4 +1,4 @@
-import { render, screen, fireEvent,cleanup} from "@testing-library/react";
+import { render, screen, cleanup} from "@testing-library/react";
 import { Providers } from "@/app/provider";
 import Organization from "@/features/portfolio-manager/organization/view-organization";
 import { useRouter } from 'next/navigation';
