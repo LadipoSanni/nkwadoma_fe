@@ -56,18 +56,21 @@ interface IndividualType {
     id: number;
 }
 
-type Owner = Partial<Array<EntityType>> | {
-    firstName: string,
-    lastName: string,
-    dateOfBirth: Date | undefined,
-    relationShip: string,
-    ownership: string,
-    errorMessage: string,
-    entityError: string,
+interface Owner {
+    firstName?: string,
+    lastName?: string,
+    dateOfBirth?: Date | undefined,
+    relationShip?: string,
+    ownership?: string,
+    errorMessage?: string,
+    entityError?: string,
     proofType?: string;
     proofFile?: File | null;
     proofFileUrl?: string;
-    id: number;
+    id?: number;
+    name?: string;
+    country?: string,
+    rcNumber?: string,
 }
 
 interface Section extends EntitySection {
@@ -123,21 +126,24 @@ const BeneficialOwnerStep = () => {
     }
 
 
-    const initialIndividualData = {
+    const initialData = {
         firstName: '',
         lastName: '',
         dateOfBirth: new Date(),
         relationShip: '',
-        ownership: '',
         errorMessage: '',
         entityError: '',
         proofType: '',
         proofFile:  null,
         proofFileUrl: '',
         id :Date.now(),
+        name: '',
+        country: '',
+        rcNumber: '',
+        ownership: '',
     }
 
-    const [owners, setOnwer] = useState<Owner[]>()
+    const [owners, setOnwer] = useState<Owner[]>([initialData])
 
     const validateRcNumber = (rcNumber: string) => {
         // const rcNumberRegex = /^\d{7}$/i;
@@ -360,24 +366,25 @@ const BeneficialOwnerStep = () => {
             </div>
             <section id="beneficialOwnerSection"
                      className={'md:max-w-[30rem] w-full md:mx-auto h-[calc(100vh-250px)] pt-1 overflow-y-auto pr-3'}>
-                <Tabs
-                    id="beneficialOwnerTabs"
-                    value={selectedForm}
-                    onValueChange={(value) => {
-                        const newValue = value as "entity" | "individual";
-                        setSelectedForm(newValue);
-                        dispatch(updateBeneficialOwner({selectedForm: newValue}));
-                    }}
-                    className={'grid gap-7'}
-                >
-                    <TabsContent id="entityTabContent" value="entity">
+                {/*<Tabs*/}
+                {/*    id="beneficialOwnerTabs"*/}
+                {/*    value={selectedForm}*/}
+                {/*    onValueChange={(value) => {*/}
+                {/*        const newValue = value as "entity" | "individual";*/}
+                {/*        setSelectedForm(newValue);*/}
+                {/*        dispatch(updateBeneficialOwner({selectedForm: newValue}));*/}
+                {/*    }}*/}
+                {/*    className={'grid gap-7'}*/}
+                {/*>*/}
+                {/*    <TabsContent id="entityTabContent" value="entity">*/}
                         <main id="entityFormMain" className="grid gap-6">
-                            {owners.map((section) => (
+                            {owners?.map((section) => (
                                 <section key={section.id} className={'relative grid mt-6'}>
                                     <Tabs
                                         id={`beneficialOwnerTabs-${section.id}`}
-                                        value={sectionTypes[section.id] || "entity"}
-                                        onValueChange={(value) => handleSectionTypeChange(section.id, value as "entity" | "individual")}
+                                        defaultValue={'entity'}
+                                        // value={sectionTypes[section.id] || "entity"}
+                                        // onValueChange={(value) => handleSectionTypeChange(section.id, value as "entity" | "individual")}
                                         className={'grid gap-7'}
                                     >
                                         <TabsList id={`beneficialOwnerTabsList-${section.id}`}
@@ -422,7 +429,7 @@ const BeneficialOwnerStep = () => {
                                 </section>
                             ))}
                         </main>
-                    </TabsContent>
+                    {/*</TabsContent>*/}
                     <main className={'sticky bottom-0  bg-white py-4 pr-4'}>
 
                         <div className="flex items-center gap-1 mb-4">
@@ -455,7 +462,7 @@ const BeneficialOwnerStep = () => {
                         </div>
                     </main>
 
-                </Tabs>
+                {/*</Tabs>*/}
             </section>
         </main>
     );
