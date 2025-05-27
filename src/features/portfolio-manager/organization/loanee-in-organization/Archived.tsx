@@ -7,6 +7,8 @@ function Archived() {
        <Loanees
        buttonName='Unarchived'
        tabType='Archived'
+       status='ARCHIVE'
+       condition= 'UNARCHIVE'
      />
     </div>
   )

@@ -10,7 +10,7 @@ interface LoanBreakdown {
 export const cohortApi = createApi({
     reducerPath: 'cohortApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['cohort'],
+    tagTypes: ['cohort','loanee'],
     endpoints: (builder) => ({
         createCohort: builder.mutation({
             query: (formData: {
@@ -47,19 +47,20 @@ export const cohortApi = createApi({
                 method: "POST",
                 body: formData
             }),
-            invalidatesTags: ({id}) => [{type: 'cohort', id}],
+            invalidatesTags: ({id}) => [{type: 'loanee', id}],
         }),
         viewAllLoanee: builder.query({
             query: (data: {
                 cohortId?: string,
                 pageNumber?: number;
                 pageSize?: number;
+                status?: string
             }) => ({
                 url: '/loanee/cohorts/loanees',
                 method: "GET",
                 params: data,
             }),
-            providesTags: ['cohort'],
+            providesTags: ['cohort','loanee'],
         }),
 
         viewCohortDetails: builder.query({
@@ -82,7 +83,7 @@ export const cohortApi = createApi({
                 method: "GET",
                 params: param,
             }),
-            providesTags: ['cohort'],
+            providesTags: ['cohort','loanee'],
         }),
 
         searchCohortByOrganisation: builder.query({
@@ -150,7 +151,7 @@ export const cohortApi = createApi({
                 method: 'POST',
                 body: data
             }),
-            invalidatesTags: ['cohort'],
+            invalidatesTags: ['loanee'],
         }),
         addLoaneeToCohort: builder.mutation({
             query: (data) => ({
@@ -174,6 +175,16 @@ export const cohortApi = createApi({
             }),
             providesTags: ['cohort'],
         }),
+          updateLoaneeStatus: builder.mutation({
+            query: (data: {
+                loaneeIds: string[]; 
+                loaneeStatus: string}) => ({
+                url: '/loanee/status', 
+                method: 'POST',              
+                body:data,  
+              }), 
+              invalidatesTags: ['loanee'],
+          }),
     })
 })
 
@@ -192,5 +203,6 @@ export const {
     useSearchForLoaneeInACohortQuery,
     useGetCohortDetailsBreakdownQuery,
     useGetAllCohortByAParticularProgramQuery,
+    useUpdateLoaneeStatusMutation
 } = cohortApi;
 
