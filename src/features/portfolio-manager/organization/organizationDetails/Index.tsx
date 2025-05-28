@@ -53,6 +53,8 @@ const OrganizationDetails = () => {
   const [adminList, setAdminList] = useState<adminProps[]>([])
   const organizationId = useAppSelector(store => store.organization?.setOrganizationId)
   const organizationDetailTab = useAppSelector(store => store.organization?.organizationDetailTab)
+  const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
+  const notification = useAppSelector(state => (state?.notification?.setNotification))
    const { data: adminData,isLoading: isloadingAdmin } = useViewAllAdminsInOrganizationQuery(
     {
       organizationId: organizationId,
@@ -107,7 +109,12 @@ const OrganizationDetails = () => {
   
 
   const handleBackClick = () => {
+    if (notification === "notification"){
+      router.push(`/notifications/notification/${notificationId}`);
+  } else {
     router.push("/organizations");
+  }
+   
   };
 
   const handleActivateClick = () => {
@@ -232,7 +239,7 @@ const OrganizationDetails = () => {
       >
         <MdOutlineArrowBack className={"h-5 w-5 text-meedlBlue"} />
         <p className={"text-meedlBlue font-medium text-[14px] leading-[150%]"}>
-          Back to organization
+         {notification === "notification"? "Back to notification" : "Back to organization"}
         </p>
       </div>
       <Tabs id="organizationTabs"  value={organizationDetailTab}
