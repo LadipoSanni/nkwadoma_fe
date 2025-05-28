@@ -7,10 +7,10 @@ const Index = () => {
     return (
         <main
             id={'loaneeProfile'}
-            className={`w-full h-full`}
+            className={`w-full  h-full`}
         >
           <LoaneeProfileHeader/>
-           <div className={`flex w-full h-full`}>
+           <div className={`flex w-full max-h-[77vh]  `}>
                <LoaneeLoanDetails/>
                <LoaneeBasicDetails/>
            </div>

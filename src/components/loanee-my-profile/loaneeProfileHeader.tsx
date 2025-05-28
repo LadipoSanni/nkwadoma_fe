@@ -6,7 +6,7 @@ const LoaneeProfileHeader = () => {
     return (
         <div id={'loaneeProfileHeader'}
              data-testid={'loaneeProfileHeader'}
-             className={`w-full h-[20%] border-b border-b-grey-200 px-4 py-4 md:flex grid gap-4  md:justify-between `}
+             className={`w-full h-[13vh] border-b border-b-grey-200 px-4  mt-auto mb-auto  md:flex grid gap-4  md:justify-between `}
         >
             <div
                 id={'cohortAndProgramInfo'}
@@ -16,7 +16,7 @@ const LoaneeProfileHeader = () => {
                 <div
                     id={'cohortImage'}
                     data-testid={'cohortImage'}
-                    className={`h-[4rem] w-[4rem] rounded-full bg-[#F6F6F6] `}
+                    className={`h-[4rem] w-[4rem] mt-auto mb-auto rounded-full bg-[#F6F6F6] `}
                 >
 
                 </div>

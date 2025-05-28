@@ -5,3 +5,9 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
+.details{
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

@@ -33,12 +33,12 @@ const LoaneeBasicDetails = () => {
         <div
             id={'loaneeBasicDetails'}
             data-testid={'loaneeBasicDetails'}
-            className={`md:h-[74vh] md:w-[60%] sm:w-full w-full  `}
+            className={`md:max-h-fit md:w-[45%]  sm:w-full w-full  `}
         >
             <Tabs defaultValue={'bioDetails'} className={`pt-6 px-4 `}>
                 <TabsList className="grid w-fit px-0 pb-2  grid-cols-2">
-                    <TabsTrigger className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="bioDetails">Bio details</TabsTrigger>
-                    <TabsTrigger className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="documents">Document</TabsTrigger>
+                    <TabsTrigger id={'bioDetails'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="bioDetails">Bio details</TabsTrigger>
+                    <TabsTrigger id={'document'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="documents">Document</TabsTrigger>
                 </TabsList>
                 <div
                     className={` md:max-h-[65vh] ${styles.container}`}
@@ -50,8 +50,10 @@ const LoaneeBasicDetails = () => {
                                     <div
                                         className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                         <div
+                                            id={'name:'+item.label}
                                             className={`  ${inter.className} break-all md:max-w-[40%] text-black300 text-[14px] `}>{item.label}</div>
                                         <div
+                                            id={'name:'+item.value}
                                             className={` ${inter.className} break-all md:max-w-[50%]   text-black500 text-[14px] `}> {item.value ? item.value : 'Not provided'}</div>
                                     </div>
                                 </li>
