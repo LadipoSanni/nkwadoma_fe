@@ -1,6 +1,6 @@
 import React from 'react';
 import {cabinetGroteskBold, inter} from '@/app/fonts'
-import {formatAmount, formateDigits} from "@/utils/Format";
+import {formatAmount} from "@/utils/Format";
 interface Props {
     id: string;
     name: string;
