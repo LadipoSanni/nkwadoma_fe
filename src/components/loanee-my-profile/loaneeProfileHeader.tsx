@@ -1,11 +1,12 @@
 import {cabinetGroteskBold, inter700, inter} from '@/app/fonts';
 import React from 'react';
+import {MdKeyboardArrowDown} from "react-icons/md";
 
 const LoaneeProfileHeader = () => {
     return (
         <div id={'loaneeProfileHeader'}
              data-testid={'loaneeProfileHeader'}
-             className={`w-full h-[20%] border-b border-b-[#D7D7D7] px-4 py-4 flex justify-between `}
+             className={`w-full h-[20%] border-b border-b-grey-200 px-4 py-4 flex justify-between `}
         >
             <div
                 id={'cohortAndProgramInfo'}
@@ -27,8 +28,11 @@ const LoaneeProfileHeader = () => {
             <button
                 id={'defferButton'}
                 data-testid={'defferButton'}
-                className={` ${inter700.className} mt-auto mb-auto  bg-meedlBlue w-fit h-fit py-2 px-4 rounded-md text-[12px] text-white`}
-            >Defer cohort</button>
+                className={` ${inter700.className} mt-auto mb-auto flex  bg-meedlBlue w-fit h-fit py-2 px-4 rounded-md text-[12px] text-white`}
+            >Defer cohort
+                <MdKeyboardArrowDown
+                    className="h-5 w-5 mt-auto mb-auto text-white"/>
+            </button>
         </div>
     );
 };

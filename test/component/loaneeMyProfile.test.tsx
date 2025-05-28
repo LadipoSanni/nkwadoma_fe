@@ -1,14 +1,14 @@
 import '@testing-library/react'
 import {render, screen} from '@testing-library/react'
-import LoaneeProfileHeader from '@/components/loanee-my-profile/loaneeProfileHeader'
 import {Providers} from "@/app/provider";
+import Index from "@/pages/loanee/MyProfile";
 
 
 describe('test header', ()=> {
     test('that component is rendered when called', ()=> {
         render(
         <Providers>
-            <LoaneeProfileHeader/>
+            <Index/>
         </Providers>
         )
         const  headerComponent = screen.getByTestId('loaneeProfileHeader')
