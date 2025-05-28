@@ -65,7 +65,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const size = 300;
     const [page] = useState(0);
 
-    const {data} = useViewAllLoaneeQuery({
+    const {data,isLoading: loaneeIsloading} = useViewAllLoaneeQuery({
         cohortId: cohortId,
         pageSize: size,
         pageNumber: page
@@ -73,7 +73,9 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
     const {data: searchResults, isLoading: isLoading} = useSearchForLoaneeInACohortQuery({
             loaneeName: loaneeName,
-            cohortId: cohortId
+            cohortId: cohortId,
+            pageSize: size,
+            pageNumber: page
         },
         {skip: !loaneeName || !cohortId})
 
@@ -84,7 +86,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     useEffect(() => {
         let result: viewAllLoanees[] = [];
         if (loaneeName && searchResults && searchResults?.data) {
-            result = searchResults.data; }
+            result = searchResults.data?.body; }
         else if (!loaneeName && data && data?.data) {
             result = data.data.body;
         }
@@ -229,7 +231,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             optionalRowsPerPage={10}
                             tableCellStyle="h-12"
                             enableRowSelection={true}
-                            isLoading={isLoading}
+                            isLoading={isLoading || loaneeIsloading}
                             condition={true}
                             enableButton={() =>setEnableButton(true) }
                             disabledButton={()=> setEnableButton(false) }
@@ -249,7 +251,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                             sideBarTabName="loanee"
                             optionalRowsPerPage={10}
                             tableCellStyle="h-12"
-                            isLoading={isLoading}
+                            isLoading={isLoading || loaneeIsloading}
                             condition={true}
                             tableHeight={45}
                         />
