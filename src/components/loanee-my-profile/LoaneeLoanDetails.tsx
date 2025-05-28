@@ -4,7 +4,6 @@ import {inter500, inter} from '@/app/fonts'
 import PerformanceCard from "@/reuseable/cards/perfomance-card/performanceCard";
 import Details from './Details';
 import styles from './index.module.css'
-// import {formateDigits} from "@/utils/Format";
 
 const LoaneeLoanDetails = () => {
     return (
