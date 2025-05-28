@@ -6,7 +6,7 @@ const LoaneeProfileHeader = () => {
     return (
         <div id={'loaneeProfileHeader'}
              data-testid={'loaneeProfileHeader'}
-             className={`w-full h-[20%] border-b border-b-grey-200 px-4 py-4 flex justify-between `}
+             className={`w-full h-[20%] border-b border-b-grey-200 px-4 py-4 md:flex grid gap-4  md:justify-between `}
         >
             <div
                 id={'cohortAndProgramInfo'}
@@ -28,7 +28,7 @@ const LoaneeProfileHeader = () => {
             <button
                 id={'defferButton'}
                 data-testid={'defferButton'}
-                className={` ${inter700.className} mt-auto mb-auto flex  bg-meedlBlue w-fit h-fit py-2 px-4 rounded-md text-[12px] text-white`}
+                className={` ${inter700.className} flex justify-center mt-auto mb-auto  py-3 text-[14px] gap-2 bg-meedlBlue w-full  md:w-fit h-fit md:py-2 px-4 rounded-md md:text-[12px] text-white`}
             >Defer cohort
                 <MdKeyboardArrowDown
                     className="h-5 w-5 mt-auto mb-auto text-white"/>
