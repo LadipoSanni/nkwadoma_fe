@@ -33,8 +33,8 @@ const LoaneeLoanDetails = () => {
                     </TabsContent>
                     <TabsContent value={'loanProduct'} className={` pr-6 pt-3 grid gap-4`} >
                         <div className={` md:flex md:gap-2 gap-4 grid w-full  `}>
-                            <Details id={'amountRepaid'}    maxWidth={'100%'} name={'Amount repaid'} value={11111} valueType={'currency'} />
-                            <Details id={'amountApproved'}    maxWidth={'100%'} name={'Amount approved'} value={4033494} valueType={'currency'}  />
+                            <Details id={'amountRepaid'}    maxWidth={'100%'} name={'Amount repaid'}     value={111178988987898881} valueType={'currency'} />
+                            <Details id={'amountApproved'}    maxWidth={'100%'} name={'Amount approved'} value={403348788888946677} valueType={'currency'}  />
                         </div>
                         <div className={` md:flex md:gap-2 grid gap-4   w-full  `}>
                             <Details id={'interest'}    maxWidth={'100%'} name={'Interest'} value={20} valueType={'percentage'} />
