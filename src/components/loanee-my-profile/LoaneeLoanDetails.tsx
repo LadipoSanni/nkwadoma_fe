@@ -9,11 +9,11 @@ const LoaneeLoanDetails = () => {
     return (
         <div id={'loaneeLoanDetails'}
              data-testid={'loaneeLoanDetails'}
-             className={`md:h-[74vh] md:w-[60%] sm:w-full w-full md:border-r md:border-r-grey-200] `}>
+             className={`md:max-h-fit md:w-[55%] sm:w-full w-full md:border-r md:border-r-grey-200] `}>
             <Tabs defaultValue={'loanInformation'} className={`pt-6 pl-3 `}>
                 <TabsList className="grid w-fit px-0 pb-2  grid-cols-2">
-                    <TabsTrigger className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanInformation">Loan information</TabsTrigger>
-                    <TabsTrigger className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanProduct">Loan product</TabsTrigger>
+                    <TabsTrigger id={'loanInfo'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanInformation">Loan information</TabsTrigger>
+                    <TabsTrigger id={'loanProducte'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanProduct">Loan product</TabsTrigger>
                 </TabsList>
                 <div className={` max-h-[65vh] ${styles.container}`}>
                     <TabsContent className={` pr-6 pt-3 grid gap-4`} value="loanInformation">
@@ -33,8 +33,8 @@ const LoaneeLoanDetails = () => {
                     </TabsContent>
                     <TabsContent value={'loanProduct'} className={` pr-6 pt-3 grid gap-4`} >
                         <div className={` md:flex md:gap-2 gap-4 grid w-full  `}>
-                            <Details id={'amountRepaid'}    maxWidth={'100%'} name={'Amount repaid'} value={11111} valueType={'currency'} />
-                            <Details id={'amountApproved'}    maxWidth={'100%'} name={'Amount approved'} value={4033494} valueType={'currency'}  />
+                            <Details id={'amountRepaid'}    maxWidth={'100%'} name={'Amount repaid'}     value={111178988987898881} valueType={'currency'} />
+                            <Details id={'amountApproved'}    maxWidth={'100%'} name={'Amount approved'} value={403348788888946677} valueType={'currency'}  />
                         </div>
                         <div className={` md:flex md:gap-2 grid gap-4   w-full  `}>
                             <Details id={'interest'}    maxWidth={'100%'} name={'Interest'} value={20} valueType={'percentage'} />
