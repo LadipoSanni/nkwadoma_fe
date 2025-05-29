@@ -172,7 +172,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         </div>
       </div>
       <div className='mt-4'>
-       { searchTerm && searchResults?.data?.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanees'/></div> :
+       { searchTerm && searchResults?.data?.body?.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanees'/></div> :
         
         <CheckBoxTable
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
