@@ -10,7 +10,7 @@ export const loanBookApi = createApi({
        
         
         return {
-          url: `/loan/book/upload/${cohortId}/${loanProductId}/file`,
+          url: `/loan/book/upload/${cohortId}/${loanProductId}/file/loanee/data`,
           method: "POST",
           body: formData
         };
