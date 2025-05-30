@@ -18,6 +18,7 @@ const Details = () => {
 
     const [isVerifying, setIsVerifying] = useState(false);
     const [docError, setDocError] = useState<string | null>(null);
+    const [document, setDocument] = useState("")
 
     const {data: loanProduct, isLoading: loading} = useGetLoanProductDetailsByIdQuery({loanProductId: loanProductId})
 
@@ -31,7 +32,7 @@ const Details = () => {
         {name: "Minimum repayment amount", value: formatAmount(loanProduct?.data.minRepaymentAmount)},
         {name: "Interest rate", value: `${loanProduct?.data.interestRate || 0}%`},
         {name: "Obligor limit", value: formatAmount(loanProduct?.data.obligorLoanLimit)},
-        {name: "Moratorium", value: `${loanProduct?.data.moratorium} ${loanProduct?.data?.moratorium <= 1 ? "month" : "months" || 0}`},
+        {name: "Moratorium", value: `${loanProduct?.data.moratorium} ${loanProduct?.data?.moratorium <= 1 ? "month" : "months" }`},
         {name: "Amount disbursed", value: formatAmount(loanProduct?.data.totalAmountDisbursed) || 0},
         {name: "Amount repaid ", value: formatAmount(loanProduct?.data.totalAmountRepaid) || 0},
         {name: "Amount earned", value: formatAmount(loanProduct?.data.totalAmountEarned) || 0},
@@ -75,10 +76,11 @@ const Details = () => {
 
         setIsVerifying(true);
         setDocError(null);
-
+        setDocError("")
         try {
             if (fileExtension !== 'pdf' && fileExtension !== 'docx') {
                 setDocError('Invalid document format');
+                setDocument("Mandate")
                 return;
             }
 
@@ -86,11 +88,49 @@ const Details = () => {
                 const docExists = await verifyDocumentExists(docUrl);
                 if (!docExists) {
                     setDocError('Document not found');
+                    setDocument("Mandate")
                     return;
                 }
             }
 
             window.open(docUrl, '_blank', 'noopener,noreferrer');
+        } catch (error) {
+            setDocError('Error opening document');
+            console.error('Document open error:', error);
+        } finally {
+            setIsVerifying(false);
+        }
+    };
+
+    const terms_condition = loanProduct?.data?.termsAndCondition;
+    const terms_conditionFile = getFilenameFromUrl(terms_condition);
+    const isCloudinaryUrlFile = terms_condition?.includes('cloudinary.com');
+    const extension = terms_conditionFile?.split('.').pop()?.toLowerCase();
+    
+
+    const handleView = async () => {
+        if (!terms_condition) return;
+
+        setIsVerifying(true);
+        setDocError(null);
+        setDocument("")
+        try {
+            if (extension !== 'pdf' && extension !== 'docx') {
+                setDocError('Invalid document format');
+                setDocument("TermsAndCondition")
+                return;
+            }
+
+            if (isCloudinaryUrlFile) {
+                const docExists = await verifyDocumentExists(terms_condition);
+                if (!docExists) {
+                    setDocError('Document not found');
+                    setDocument("TermsAndCondition")
+                    return;
+                }
+            }
+
+            window.open(terms_condition, '_blank', 'noopener,noreferrer');
         } catch (error) {
             setDocError('Error opening document');
             console.error('Document open error:', error);
@@ -112,7 +152,11 @@ const Details = () => {
     };
 
     const smallScreenFilename = getTruncatedFilename(docFilename || 'No Document', 10)
-    const largeScreenFilename = getTruncatedFilename(docFilename || 'No Document', 35);
+    const largeScreenFilename = getTruncatedFilename(docFilename || 'No Document', 25);
+
+    const fileOnSmallScreen = getTruncatedFilename(terms_conditionFile || 'No Document', 10)
+    const fileOnLargeScreen = getTruncatedFilename(terms_conditionFile || 'No Document', 25)
+   
 
     return (
         <>{
@@ -140,13 +184,13 @@ const Details = () => {
                                               style={{ width: "auto", height: "auto" }}
                                           />
                                           <p
-                                              className="text-[14px] items-center flex max-w-[150px] truncate sm:hidden"
+                                              className="text-[14px] items-center flex max-w-[150px] truncate lg:hidden"
                                               title={docFilename}
                                           >
                                               {smallScreenFilename}
                                           </p>
 
-                                          <p className="text-[14px] items-center hidden sm:flex">
+                                          <p className="text-[14px] items-center hidden lg:flex">
                                               {largeScreenFilename}
                                           </p>
                                       </div>
@@ -165,7 +209,7 @@ const Details = () => {
                                           </Button>
                                       </div>
                                   </div>
-                                  {docError && (
+                                  {docError && document === "Mandate" && (
                                       <p className='text-red-500 text-xs mt-1 mb-3'>{docError}</p>
                                   )}
                               </div>
@@ -186,11 +230,11 @@ const Details = () => {
                                               className="text-[14px] items-center flex max-w-[150px] truncate sm:hidden"
                                               title={docFilename}
                                           >
-                                              {smallScreenFilename}
+                                              {fileOnSmallScreen}
                                           </p>
 
                                           <p className="text-[14px] items-center hidden sm:flex">
-                                              {largeScreenFilename}
+                                              {fileOnLargeScreen}
                                           </p>
                                       </div>
 
@@ -199,7 +243,7 @@ const Details = () => {
                                               id="view-document"
                                               type="button"
                                               variant={"default"}
-                                              onClick={handleViewDocument}
+                                              onClick={handleView}
                                               className="text-meedlBlue border-[1px] border-meedlBlue rounded-[20px] font-semibold text-[12px] md:px-4 px-3 py-2"
                                               disabled={!docUrl || isVerifying}
                                               aria-label={`View ${docFilename}`}
@@ -208,7 +252,7 @@ const Details = () => {
                                           </Button>
                                       </div>
                                   </div>
-                                  {docError && (
+                                  {docError && document === "TermsAndCondition" && (
                                       <p className='text-red-500 text-xs mt-1 mb-3'>{docError}</p>
                                   )}
                               </div>

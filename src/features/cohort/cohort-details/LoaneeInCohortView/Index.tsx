@@ -4,7 +4,6 @@ import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {Input} from "@/components/ui/input";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import {Button} from "@/components/ui/button";
-import SelectableTable from "@/reuseable/table/SelectableTable";
 import {formatAmount} from "@/utils/Format";
 import {useState} from "react";
 import {
@@ -15,13 +14,12 @@ import {
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import AddTraineeForm from "@/components/cohort/AddTraineeForm";
-// import {getItemSessionStorage} from "@/utils/storage";
 import {useToast} from "@/hooks/use-toast";
 import {cohortLoaneeResponse} from "@/types/Component.type";
-import Table from "@/reuseable/table/LoanProductTable"
 import Isloading from "@/reuseable/display/Isloading";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import { useAppSelector } from '@/redux/store';
+import CheckBoxTable from '@/reuseable/table/Checkbox-table';
 
 interface userIdentity {
     firstName: string;
@@ -50,59 +48,61 @@ interface props {
     cohortFee?: string,
 }
 
+interface ApiError {
+    status: number;
+    data: {
+      message: string;
+    };
+  }
+
 export const LoaneeInCohortView = ({cohortFee}: props) => {
-    const [allLoanee, setAllLoanee] = useState<viewAllLoanees[]>([]);
     const [addLoanee, setAddLoanee] = React.useState(false);
-    const [isRowSelected, setIsRowSelected] = React.useState(false);
     const [loaneeName, setLoaneeName] = React.useState("");
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
     const [isReferred, setIsReferred] = React.useState("Not referred");
     const [enableButton, setEnableButton] = useState(false)
 
-
-
     const cohortId =  useAppSelector(store=> store?.cohort?.setCohortId)
-    const size = 300;
-    const [page] = useState(0);
+    const size = 10;
+    const [page,setPageNumber] = useState(0);
+    const [totalPage,setTotalPage] = useState(0)
+    const [hasNextPage,setNextPage] = useState(false)
+    const status = isReferred === "Not referred"? "ADDED" : "REFERRED"
 
-    const {data} = useViewAllLoaneeQuery({
+    const {data,isLoading: loaneeIsloading} = useViewAllLoaneeQuery({
         cohortId: cohortId,
+        status: status,
         pageSize: size,
         pageNumber: page
-    },{refetchOnMountOrArgChange: true})
+    })
 
     const {data: searchResults, isLoading: isLoading} = useSearchForLoaneeInACohortQuery({
             loaneeName: loaneeName,
-            cohortId: cohortId
+            cohortId: cohortId,
+            status: status,
+            pageSize: size,
+            pageNumber: page
         },
         {skip: !loaneeName || !cohortId})
 
 
     const [refer, {isLoading: isLoadingRefer}] = useReferLoaneeToACohortMutation()
 
-
-    useEffect(() => {
-        let result: viewAllLoanees[] = [];
-        if (loaneeName && searchResults && searchResults?.data) {
-            result = searchResults.data; }
-        else if (!loaneeName && data && data?.data) {
-            result = data.data.body;
-        }
-        if (isReferred === "Not referred") {
-            result = result.filter(filter => filter.loaneeStatus === "ADDED");
-        }
-        else if
-            (isReferred === "Referred") {
-                result = result.filter(filter => filter.loaneeStatus === "REFERRED");
-            }
-
-        setAllLoanee(result);
-    }, [data, loaneeName, searchResults, isReferred]);
-
-
     const handleSelectedRow = (rows: Set<string>) => {
         setSelectedRows(rows)
     }
+
+    useEffect(()=> {
+        if (loaneeName && searchResults && searchResults?.data) {
+            setNextPage(searchResults?.data?.hasNextPage)
+            setTotalPage(searchResults?.data?.totalPages)
+            setPageNumber(searchResults?.data?.pageNumber)
+        }else if(!loaneeName && data &&  data?.data) {
+            setNextPage(data?.data?.hasNextPage)
+            setTotalPage(data?.data?.totalPages)
+            setPageNumber(data?.data?.pageNumber)
+        }
+    },[loaneeName,searchResults,data])
 
     const loanProduct = [
         {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row.userIdentity?.firstName + " " + row.userIdentity?.lastName},
@@ -112,6 +112,12 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     ]
 
     const items = ["Not referred","Referred"]
+
+    const getTableData = () => {
+        if (!data?.data?.body) return [];
+        if (loaneeName) return searchResults?.data?.body || [];
+        return data?.data?.body;
+    }
 
     const handleSelected = (value: string) => {
         setIsReferred(value);
@@ -133,11 +139,11 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 description: response?.message,
                 status: "success",
             })
+            setSelectedRows(new Set());
             setEnableButton(false)
-        } catch (error) {
+        } catch (err) {
+            const error = err as ApiError;
             toast({
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
                 description: error?.data?.message,
                 status: "error",
             })
@@ -145,9 +151,6 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
     }
 
-    const handleRowClick = () => {
-        setIsRowSelected(isRowSelected);
-    };
 
     return (
         <main>
@@ -214,48 +217,32 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                    { isReferred === "Not referred"?
-                       <div>
-                    {loaneeName && allLoanee.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :     
-                        <SelectableTable
-                            tableData={allLoanee}
-                            tableHeader={loanProduct}
-                            staticHeader="loanee"
-                            staticColunm="firstName"
-                            tableHeight={45}
-                            icon={MdOutlinePerson}
-                            sideBarTabName="loanee"
-                            handleRowClick={ handleRowClick}
-                            optionalRowsPerPage={10}
-                            tableCellStyle="h-12"
-                            enableRowSelection={true}
-                            isLoading={isLoading}
-                            condition={true}
-                            enableButton={() =>setEnableButton(true) }
-                            disabledButton={()=> setEnableButton(false) }
-                            handleSelectedRow={handleSelectedRow}
-                        />
-    }
-                       </div>  : 
-                       <div>
-                         {loaneeName && allLoanee.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> : 
-                       <Table
-                            tableData={allLoanee}
-                            tableHeader={loanProduct}
-                            handleRowClick={()=> {}}
-                            staticHeader=""
-                            staticColunm="firstName"
-                            icon={MdOutlinePerson}
-                            sideBarTabName="loanee"
-                            optionalRowsPerPage={10}
-                            tableCellStyle="h-12"
-                            isLoading={isLoading}
-                            condition={true}
-                            tableHeight={45}
-                        />
-}
-                        </div>
-                }
+                  {loaneeName && searchResults?.data?.body?.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :  
+                  <div>
+                    <CheckBoxTable
+                        tableData={getTableData()}
+                        tableHeader={loanProduct}
+                        handleRowClick={()=> {}}
+                        staticHeader="Loanee"
+                        staticColunm="firstName"
+                        icon={MdOutlinePerson}
+                        sideBarTabName="loanee"
+                        tableCellStyle="h-12"
+                        isLoading={isLoading || loaneeIsloading}
+                        condition={true}
+                        tableHeight={45}
+                        hasNextPage={hasNextPage}
+                        pageNumber={page}
+                        setPageNumber={setPageNumber}
+                        totalPages={totalPage}
+                        enableButton={() =>setEnableButton(true) }
+                        disabledButton={()=> setEnableButton(false) }
+                        handleSelectedRow={handleSelectedRow}
+                        enableRowSelection={isReferred === "Not referred"? true : false}
+                    />
+                  </div>
+
+                  }
                 </div>
             </div>
             <div className={`md:max-w-sm`} id={`AddTraineeDiv`}>

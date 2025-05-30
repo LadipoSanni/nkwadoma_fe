@@ -75,17 +75,25 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
 
       const {data: searchResults, isLoading: isLoadingSearch} = useSearchForLoaneeInACohortQuery({
                  loaneeName: searchTerm,
-                 cohortId: cohortId
+                 cohortId: cohortId,
+                 status: status,
+                 pageSize: size,
+                 pageNumber: page,
              },
              {skip: !searchTerm || !cohortId})
             
       useEffect(() => {
-        if(!searchTerm && data && data?.data) {
+         if(searchTerm && searchResults && searchResults?.data){
+          setNextPage(searchResults?.data?.hasNextPage)
+          setTotalPage(searchResults?.data?.totalPages)
+          setPageNumber(searchResults?.data?.pageNumber)
+         }
+        else if(!searchTerm && data && data?.data) {
           setNextPage(data?.data?.hasNextPage)
           setTotalPage(data?.data?.totalPages)
           setPageNumber(data?.data?.pageNumber)
         }
-      },[searchTerm,data])      
+      },[searchTerm,data,searchResults])      
 
       const tableHeaderintegrated = [
               {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
@@ -100,7 +108,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
 
         const getTableData = () => {
           if (!data?.data?.body) return [];
-          if (searchTerm) return searchResults?.data || [];
+          if (searchTerm) return searchResults?.data?.body || [];
           return data?.data?.body;
       }
 
@@ -164,7 +172,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         </div>
       </div>
       <div className='mt-4'>
-       { searchTerm && searchResults?.data?.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanees'/></div> :
+       { searchTerm && searchResults?.data?.body?.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanees'/></div> :
         
         <CheckBoxTable
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
