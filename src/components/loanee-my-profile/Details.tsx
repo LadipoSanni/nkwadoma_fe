@@ -18,7 +18,7 @@ const Details = ({id, name, value, maxWidth, valueType}: Props) => {
            <div className={` bg-[#f9f9f9] px-4 py-4 grid gap-4 w-full `}>
                <span id={'detailName:'+ name} className={` ${inter.className} text-[#6A6B6A] text-[14px] `}>{name}</span>
                <span id={'detailsValue:' + value} className={` ${cabinetGroteskBold.className} text-[32px] ${styles.details} max-w-[100%]  text-meedlBlue  `}>
-                   {valueType === 'percentage' ? (`${value}%`) : valueType === 'digit' ? (`${value}`) : valueType === 'tenor' ? (`${value} months`) : (`${formatAmount(Number(value))}`)  }
+                   {valueType === 'percentage' ? (`${value}%`) : valueType === 'digit' ? (`${value}`) : valueType === 'tenor' ? (`${Number(value) > 1 ? `${value} months` : `${value} month` } `) : (`${formatAmount(Number(value))}`)  }
                </span>
            </div>
         </div>

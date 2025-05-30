@@ -8,13 +8,8 @@ import { useGetLoaneeDetailsQuery } from '@/service/users/Loanee_query';
 const Index = () => {
     const {data} = useGetLoaneeDetailsQuery({})
 
-    console.log('data: ', data)
 
-    const headerData = [
-        data?.data?.cohortName,
-        data?.data?.programName,
-        data?.data?.institutionName
-    ]
+
     return (
         <main
             id={'loaneeProfile'}
@@ -22,8 +17,8 @@ const Index = () => {
         >
           <LoaneeProfileHeader cohort={data?.data?.cohortName} program={data?.data?.programName}/>
            <div className={`flex w-full  max-h-[77vh]  `}>
-               <LoaneeLoanDetails/>
-               <LoaneeBasicDetails/>
+               <LoaneeLoanDetails data={data?.data}/>
+               <LoaneeBasicDetails data={data?.data}/>
            </div>
         </main>
     );
