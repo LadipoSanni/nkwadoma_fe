@@ -4,8 +4,14 @@ import LoaneeProfileHeader from "@/components/loanee-my-profile/loaneeProfileHea
 import LoaneeLoanDetails from '@/components/loanee-my-profile/LoaneeLoanDetails'
 import LoaneeBasicDetails from "@/components/loanee-my-profile/LoaneeBasicDetails";
 import { useGetLoaneeDetailsQuery } from '@/service/users/Loanee_query';
+import dynamic from "next/dynamic";
 
-const Index = () => {
+const Index = dynamic(
+    () => Promise.resolve(LoaneeDetails),
+    {ssr: false}
+)
+
+const LoaneeDetails = () => {
     const {data} = useGetLoaneeDetailsQuery({})
 
 
