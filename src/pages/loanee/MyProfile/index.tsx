@@ -10,7 +10,7 @@ const Index = () => {
             className={`w-full  h-full`}
         >
           <LoaneeProfileHeader/>
-           <div className={`flex w-full max-h-[77vh]  `}>
+           <div className={`flex w-full  max-h-[77vh]  `}>
                <LoaneeLoanDetails/>
                <LoaneeBasicDetails/>
            </div>

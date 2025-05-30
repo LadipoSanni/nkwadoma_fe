@@ -1,12 +1,13 @@
 import {cabinetGroteskBold, inter700, inter} from '@/app/fonts';
 import React from 'react';
 import {MdKeyboardArrowDown} from "react-icons/md";
+import { Circle } from "lucide-react"
 
 const LoaneeProfileHeader = () => {
     return (
         <div id={'loaneeProfileHeader'}
              data-testid={'loaneeProfileHeader'}
-             className={`w-full h-[13vh] border-b border-b-grey-200 px-4  mt-auto mb-auto  md:flex grid gap-4  md:justify-between `}
+             className={`w-full h-fit md:h-[13vh] py-4 border-b border-b-grey-200 px-4  mt-auto mb-auto  md:flex grid gap-4  md:justify-between `}
         >
             <div
                 id={'cohortAndProgramInfo'}
@@ -22,7 +23,11 @@ const LoaneeProfileHeader = () => {
                 </div>
                 <div className={` mt-auto mb-auto `}>
                     <span id={'cohortName'} data-testid={'cohortName'} className={` ${cabinetGroteskBold.className} text-[20px] text-[#212221] `}>Semicolon Africa</span>
-                    <div className={` text-[#4D4E4D] text-[14px]  ${inter.className}`}>Software engineering . Alphas</div>
+                    <div className={`  flex  gap-2 `}>
+                        <p className={`${inter.className} text-[#4D4E4D] text-[14px] `}>Software engineering</p>
+                        <Circle color={'#ECECEC'} className="h-1 w-1 text-[#ECECEC] mt-auto mb-auto  fill-primary" />
+                        <p className={`${inter.className} text-[#4D4E4D] text-[14px] `}>Alphas</p>
+                    </div>
                 </div>
             </div>
             <button

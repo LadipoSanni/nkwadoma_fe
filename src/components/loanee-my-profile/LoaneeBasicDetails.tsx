@@ -33,15 +33,15 @@ const LoaneeBasicDetails = () => {
         <div
             id={'loaneeBasicDetails'}
             data-testid={'loaneeBasicDetails'}
-            className={`md:max-h-fit md:w-[45%]  sm:w-full w-full  `}
+            className={`md:max-h-fit hidden  md:w-[45%] pb-6 pt-6 md:flex lg:flex sm:hidden    sm:w-full w-full  `}
         >
-            <Tabs defaultValue={'bioDetails'} className={`pt-6 px-4 `}>
+            <Tabs defaultValue={'bioDetails'} className={` px-4 w-full  `}>
                 <TabsList className="grid w-fit px-0 pb-2  grid-cols-2">
                     <TabsTrigger id={'bioDetails'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="bioDetails">Bio details</TabsTrigger>
                     <TabsTrigger id={'document'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="documents">Document</TabsTrigger>
                 </TabsList>
                 <div
-                    className={` md:max-h-[65vh] ${styles.container}`}
+                    className={` md:max-h-[65vh] w-full  ${styles.container}`}
                 >
                     <TabsContent value={'bioDetails'} className={` md:w-full pt-3 w-full   `}>
                         <div className={` bg-grey105  w-full rounded-md  `}>
