@@ -20,3 +20,67 @@ export interface CohortInfo {
     amountReceived: number,
     amountOutstanding: number
 }
+
+interface LoaneeDetails {
+
+    "id": "c2217301-c0e0-4047-8da9-70d382c9051e",
+    "cohortId": "cd8c4b2a-96b9-494f-af7a-76740e10a669",
+    "createdBy": null,
+    "creditScore": 0,
+    "createdAt": "2025-05-30T09:15:12.170908",
+    "updatedAt": null,
+    "userIdentity": {
+    "id": "9903995f-cf80-4ad8-85e1-755d23924389",
+        "email": "picigej111@nomrista.com",
+        "firstName": "Adrian",
+        "lastName": "Scott",
+        "phoneNumber": null,
+        "emailVerified": false,
+        "enabled": false,
+        "createdAt": "2025-05-30T09:15:12.170907943",
+        "image": null,
+        "gender": null,
+        "dateOfBirth": null,
+        "stateOfOrigin": null,
+        "maritalStatus": null,
+        "stateOfResidence": null,
+        "nationality": null,
+        "residentialAddress": null,
+        "role": "LOANEE",
+        "createdBy": "6625661b-89dc-4b5c-a98d-0178bdc4f6a5",
+        "alternateEmail": null,
+        "alternatePhoneNumber": null,
+        "alternateContactAddress": null,
+        "accessToken": null,
+        "refreshToken": null,
+        "organizationDomain": null,
+        "deactivationReason": null,
+        "reactivationReason": null,
+        "nextOfKinResponse": null,
+        "identityVerified": false
+},
+    "loaneeLoanDetail": {
+    "tuitionAmount": null,
+        "initialDeposit": 200000,
+        "amountRequested": 4803999,
+        "amountReceived": null,
+        "amountRepaid": null,
+        "amountOutstanding": null,
+        "loanBreakdown": null
+},
+    "loaneeStatus": "REFERRED",
+    "highestLevelOfEducation": null,
+    "nameOfPreviousInstitution": null,
+    "programOfStudy": null,
+    "institutionName": null,
+    "programName": "Modelling Language",
+    "cohortName": "Cohort 1",
+    "cohortStartDate": "2025-05-07",
+    "fitnessToWorkRating": string,
+    "loanAmount": string,
+    "interestRate": string,
+    "paymentMoratoriumPeriod": string,
+    "termsAndConditions": string,
+    "tenor": number
+
+}

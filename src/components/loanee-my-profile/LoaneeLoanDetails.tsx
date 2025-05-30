@@ -36,7 +36,7 @@ const LoaneeLoanDetails = () => {
              data-testid={'loaneeLoanDetails'}
              className={`md:max-h-fit md:w-[55%] sm:w-[100%] w-[100%] pt-6 pb-6 md:border-r md:border-r-grey-200] `}>
             <Tabs defaultValue={'loanInformation'} className={` pl-3 `}>
-                <TabsList className="grid w-fit px-0 pb-2 lg:grid-cols-2 grid-cols-4   md:grid-cols-2 ">
+                <TabsList className={`grid  ${styles.details} max-w-[100%] w-[100%] sm:w-full lg:w-fit md:w-fit px-0 pb-2 lg:grid-cols-2 grid-cols-4   md:grid-cols-2 `}>
                     <TabsTrigger id={'loanInfo'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanInformation">Loan information</TabsTrigger>
                     <TabsTrigger id={'loanProducte'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanProduct">Loan product</TabsTrigger>
                     <TabsTrigger id={'bioDetails'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] md:hidden lg:hidden  flex data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="bioInfo">Bio details</TabsTrigger>
