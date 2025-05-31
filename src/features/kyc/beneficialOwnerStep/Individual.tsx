@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {Button} from "@/components/ui/button";
 import {Calendar} from "@/components/ui/calendar";
-// MdKeyboardArrowDown, MdKeyboardArrowUp,
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import FileUpload from "../../../reuseable/Input/FileUpload";
 import {validateEntityOwnership, validateName} from "@/utils/GlobalMethods";
@@ -34,7 +33,6 @@ interface IndividualProps  {
 }
 const Individual = ({id, updateOwner}: IndividualProps) => {
     const [date, setDate] = React.useState<Date | undefined>(new Date())
-
     const initialIndividualData = {
         firstName: '',
         lastName: '',
@@ -42,28 +40,44 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
         relationShip: '',
         errorMessage: '',
         entityError: '',
-        proofType: '',
+        proofType: 'national_id',
         proofFile:  null,
         proofFileUrl: '',
         id :Date.now(),
         ownership: '',
     }
 
-    const isFormField = () => {
-        return initialIndividualData.relationShip.length > 0 && initialIndividualData.proofFileUrl.length > 0 && initialIndividualData.firstName.length > 0 && initialIndividualData.lastName.length > 0 && initialIndividualData.ownership.length > 0;
-    }
     const [individualData, setIndividualData] = React.useState<IndividualData>(initialIndividualData)
 
-    const handleInputChange = ( field: string, value: string) => {
+
+    useEffect(()=> {
+        if (date){
+            handleInputChange('dateOfBirth', format(date , "yyyy-MM-dd"))
+        }
+    },[date])
+
+    const isFormField = () => {
+        const isValidIndividualData = [
+            initialIndividualData?.relationShip,
+            initialIndividualData?.proofFileUrl,
+            initialIndividualData?.firstName,
+            initialIndividualData?.lastName,
+            initialIndividualData?.ownership,
+            // individualData
+        ].every(field => field?.length > 0);
+        console.log('isFormField()', isValidIndividualData)
+        return isValidIndividualData;
+    }
+
+    const handleInputChange = ( field: string, value: string | File) => {
         setIndividualData((prevState) => (
             { ...prevState, [field]: value }
         ))
-        if(field === 'dateOfBirth'){
+        if(field === 'dateOfBirth' && typeof value === 'string'){
             updateOwner( field, format(value, "yyyy-MM-dd"), id)
         }else{
             updateOwner( field, value, id)
         }
-        // console.log('inii:', response)
         const response = isFormField()
         updateOwner('isFormField', response, id)
 
@@ -80,6 +94,8 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
                  {...prev, proofType: value}
             )
         );
+        handleInputChange('proofType', value)
+
     };
     const handleDrop = ( e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -89,7 +105,10 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
                  {...prev, proofFile: file || null}
             )
         );
+        handleInputChange('proofFileUrl', file)
+
     };
+
 
     const handleSetUploadedImageUrl = (url: string | null) => {
         if (url) {
@@ -97,10 +116,8 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
                     (
                         {...prev, proofFileUrl: url}
                     )
-                // prev.map((section) =>
-                //     section.id === id ? {...section, proofFileUrl: url} : section
-                // )
             );
+            handleInputChange('proofFileUrl', url)
         }
     };
 
@@ -141,7 +158,7 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
                 <div className="space-y-2">
                     <Label htmlFor={`lastName-`}>Last name</Label>
                     <Input
-                        // id={`lastName-${section.id}`}
+                        id={`lastName-${individualData.id}`}
                         name="lastName"
                         placeholder="Enter last name"
                         value={individualData.lastName || ""}
@@ -214,14 +231,15 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
                     </Select>
                 </div>
             </div>
-            <div className="space-y-2">
+            <div className="grid gap-4">
                 <Label
                     // htmlFor={`ownership-${section.id}`}
                 >Ownership / Share
                     (%)</Label>
-                <Input
+                <input
                     // id={`ownership-${section.id}`}
                     name="ownership"
+                    onFocus={(e) => e.target.addEventListener("wheel", function (e) { e.preventDefault() }, { passive: false })}
                     type="number"
                     max="100"
                     placeholder="0"

@@ -32,8 +32,7 @@ interface Owner {
 const BeneficialOwnerStep = () => {
     const dispatch = useDispatch();
     const [disabledContinueButton, setDisableContinueButton] = useState(true);
-    // const [error, setError] = useState("");
-    // startDate ? format(startDate, "yyyy-MM-dd") : ""
+
     const initialData = {
         firstName: '',
         lastName: '',
@@ -41,7 +40,7 @@ const BeneficialOwnerStep = () => {
         relationShip: '',
         errorMessage: '',
         entityError: '',
-        proofType: '',
+        proofType: 'national_id',
         proofFile: null,
         proofFileUrl: '',
         id: Date.now(),
@@ -110,7 +109,7 @@ const BeneficialOwnerStep = () => {
                     relationShip: '',
                     errorMessage: '',
                     entityError: '',
-                    proofType: '',
+                    proofType: 'national_id',
                     proofFile: null,
                     proofFileUrl: '',
                     id: Date.now(),
@@ -124,16 +123,9 @@ const BeneficialOwnerStep = () => {
         ))
     }
 
-    // const getBeneficialOwnerType = (beneficalOwner: Owner) => {
-    //     if (beneficalOwner.)
-    // }
+
 
     const updateOwner = (field: string, value: string  | File| boolean, id?: number) => {
-        // setOwner(
-        //     owners?.map(owner =>
-        //         owner.id === id ? {...owner, [field]: value} : owner
-        //     )
-        // )
         setOwner(prevOwners =>
             prevOwners?.map(owner =>
                 owner.id === id
@@ -248,8 +240,6 @@ const BeneficialOwnerStep = () => {
                         </Button>
                     </div>
                 </main>
-
-                {/*</Tabs>*/}
             </div>
         </main>
     )};
