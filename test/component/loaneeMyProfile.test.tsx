@@ -5,14 +5,23 @@ import Index from "@/pages/loanee/MyProfile";
 
 
 describe('test header', ()=> {
-    test('that component is rendered when called', ()=> {
+    beforeEach(()=> {
         render(
-        <Providers>
-            <Index/>
-        </Providers>
+            <Providers>
+                <Index/>
+            </Providers>
         )
+    })
+    test('that component is rendered when called', ()=> {
         const  headerComponent = screen.getByTestId('loaneeProfileHeader')
         expect(headerComponent).toBeInTheDocument()
     })
+
+    // test('that component contains loanee basic details', () => {
+    //     const  loaneeGender = screen.getByTestId('name:Gender')
+    //     const loaneeEmails = screen.getByTestId('name:Date of birth')
+    //     expect(loaneeGender).toBeInTheDocument()
+    //     expect(loaneeEmails).toBeInTheDocument()
+    // })
 
 })

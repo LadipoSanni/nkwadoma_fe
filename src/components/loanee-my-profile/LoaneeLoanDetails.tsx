@@ -35,7 +35,6 @@ const LoaneeLoanDetails = ({data}:props ) => {
 
     ]
 
-    console.log('data: data', data)
 
     return (
         <div id={'loaneeLoanDetails'}
