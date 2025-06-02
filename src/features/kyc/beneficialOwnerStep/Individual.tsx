@@ -57,11 +57,13 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
     },[date])
 
     const isFormField = () => {
-        return individualData?.relationShip?.length > 0 &&
-            individualData?.proofFileUrl?.length > 0 &&
-            individualData?.firstName?.length > 0 &&
-            individualData?.lastName?.length > 0 &&
-            individualData?.ownership?.length > 0;
+      if (individualData){
+          return individualData?.relationShip?.length > 0 &&
+              individualData?.proofFileUrl?.length > 0 &&
+              individualData?.firstName?.length > 0 &&
+              individualData?.lastName?.length > 0 &&
+              individualData?.ownership?.length > 0;
+      }else return false;
     }
     useEffect(()=> {
         const response = isFormField()
