@@ -9,18 +9,29 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-interface props {
+import Modal from "@/reuseable/modals/Modal";
+interface Props {
     cohort: string,
     program: string,
 }
 
-const LoaneeProfileHeader = ({cohort , program}: props) => {
+const LoaneeProfileHeader = ({cohort , program}: Props) => {
 
     const [clickDrop, setClickDrop] = React.useState(false);
+    const [openModal, setOpenModal] = React.useState(false);
+    const [modalId, setModalId] = React.useState('');
+    const [modalTitle, setModalTitle] = React.useState('');
 
     const toggleArrow = () => {
         console.log('toggle')
         setClickDrop(!clickDrop);
+    }
+
+    const handleOpenModal = (id: string, title: string) => {
+        console.log('id: ',id,'title: ', title)
+        setModalId(id);
+        setModalTitle(title);
+        setOpenModal(true);
     }
 
     return (
@@ -58,10 +69,11 @@ const LoaneeProfileHeader = ({cohort , program}: props) => {
                       className={` ${inter700.className} flex justify-center mt-auto mb-auto  py-3 text-[14px] gap-2 bg-meedlBlue w-full  md:w-fit h-fit md:py-2 px-4 rounded-md md:text-[12px] text-white`}
 
               >
-                  <span
+                  <button
                       id={'deferCohort'}
                       data-testid={'deferCohort'}
-                      className={`${inter700.className}  text-white `}>Defer cohort</span>
+                      onClick={() => handleOpenModal('deferCohort', 'Defer cohort')}
+                      className={`${inter700.className} bg-pink-100   text-white `}>Defer cohort</button>
                   <DropdownMenuTrigger
                       onClick={toggleArrow}
                       asChild>
@@ -81,12 +93,15 @@ const LoaneeProfileHeader = ({cohort , program}: props) => {
                   <DropdownMenuContent>
                       <DropdownMenuItem
                           id={`dropOut`}
+                          onClick={() => handleOpenModal('dropOut', 'Drop out')}
                           className={`hover:bg-error50 text-error500 hover:text-error500 `}>
                           Drop out
                       </DropdownMenuItem>
                   </DropdownMenuContent>
               </div>
             </DropdownMenu>
+
+            <Modal modalId={modalId} title={modalTitle} isOpen={openModal} setIsOpen={setOpenModal} />
 
         </div>
     );
