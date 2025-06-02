@@ -1,7 +1,14 @@
 import {cabinetGroteskBold, inter700, inter} from '@/app/fonts';
 import React from 'react';
-import {MdKeyboardArrowDown} from "react-icons/md";
+import {MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { Circle } from "lucide-react"
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
+} from "@/components/ui/select";
 
 interface props {
     cohort: string,
@@ -10,6 +17,7 @@ interface props {
 
 const LoaneeProfileHeader = ({cohort , program}: props) => {
 
+    const [clickDrop, setClickDrop] = React.useState(false);
 
     return (
         <div id={'loaneeProfileHeader'}
@@ -37,14 +45,50 @@ const LoaneeProfileHeader = ({cohort , program}: props) => {
                     </div>
                 </div>
             </div>
-            <button
-                id={'defferButton'}
-                data-testid={'defferButton'}
-                className={` ${inter700.className} flex justify-center mt-auto mb-auto  py-3 text-[14px] gap-2 bg-meedlBlue w-full  md:w-fit h-fit md:py-2 px-4 rounded-md md:text-[12px] text-white`}
-            >Defer cohort
-                <MdKeyboardArrowDown
-                    className="h-5 w-5 mt-auto mb-auto text-white"/>
-            </button>
+            {/*<button*/}
+            {/*    id={'defferButton'}*/}
+            {/*    data-testid={'defferButton'}*/}
+            {/*    className={` ${inter700.className} flex justify-center mt-auto mb-auto  py-3 text-[14px] gap-2 bg-meedlBlue w-full  md:w-fit h-fit md:py-2 px-4 rounded-md md:text-[12px] text-white`}*/}
+            {/*>Defer cohort*/}
+            {/*    {clickDrop ?*/}
+            {/*        <MdKeyboardArrowUp*/}
+            {/*            onClick={() => setClickDrop(!clickDrop) }*/}
+            {/*            className="h-5 w-5 mt-auto mb-auto text-white"*/}
+            {/*        />*/}
+
+            {/*    :*/}
+            {/*        <MdKeyboardArrowDown*/}
+            {/*            id={'showDropOut'}*/}
+            {/*            onClick={() => setClickDrop(!clickDrop) }*/}
+            {/*            className="h-5 w-5 mt-auto mb-auto text-white"/>*/}
+            {/*    }*/}
+
+            {/*</button>*/}
+            <Select>
+                <SelectTrigger
+                        id={'defferButton'}
+                        data-testid={'defferButton'}
+                        className={` ${inter700.className} flex justify-center mt-auto mb-auto  py-3 text-[14px] gap-2 bg-meedlBlue w-full  md:w-fit h-fit md:py-2 px-4 rounded-md md:text-[12px] text-white`}
+
+                >
+                    <SelectValue placeholder="Defer cohort" />
+                        {clickDrop ?
+                            <MdKeyboardArrowUp
+                                onClick={() => setClickDrop(!clickDrop) }
+                                className="h-5 w-5 mt-auto mb-auto text-white"
+                            />
+
+                        :
+                            <MdKeyboardArrowDown
+                                id={'showDropOut'}
+                                onClick={() => setClickDrop(!clickDrop) }
+                                className="h-5 w-5 mt-auto mb-auto text-white"/>
+                        }
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="dropout">Drop out</SelectItem>
+                </SelectContent>
+            </Select>
         </div>
     );
 };
