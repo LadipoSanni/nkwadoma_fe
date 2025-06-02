@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Input} from "@/components/ui/input";
 import CountrySelectPopover from "@/reuseable/select/countrySelectPopover/Index";
 import {validateEntityOwnership, validateName, validateRcNumber} from "@/utils/GlobalMethods";
@@ -33,6 +33,10 @@ const Entity = ({id, updateOwner}: IndividualProps) => {
         return entityData?.rcNumber?.length > 0 && entityData?.name?.length > 0 && entityData?.country?.length > 0 && entityData?.ownership?.length > 0;
     }
 
+    useEffect(() => {
+        const response = isFormField()
+        updateOwner('isFormField', response, id)
+    }, [entityData]);
 
     const handleInputChange = ( field: string, value: string) => {
         setEntityData((prevState) => (
@@ -109,10 +113,15 @@ const Entity = ({id, updateOwner}: IndividualProps) => {
                                     { ...prevState, ['errorMessage']: isInputValid }
                                 ))
 
-                            }else if(/^\d{7}$/.test(entityData.rcNumber)){
+                            }else if(entityData?.rcNumber?.length > 8){
+                                // /^\d{8}$/.test(entityData.rcNumber
                                 setEntityData((prevState) => (
-                                    { ...prevState, ['errorMessage']: '' }
+                                    { ...prevState, ['entityError']: 'rcNumber' }
                                 ))
+                                setEntityData((prevState) => (
+                                    { ...prevState, ['errorMessage']: 'rc number must be 8 digits long' }
+                                ))
+                                handleInputChange('rcNumber', value)
                             }
                             else{
                                 setEntityData((prevState) => (

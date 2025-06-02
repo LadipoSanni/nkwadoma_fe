@@ -32,6 +32,7 @@ interface Owner {
 const BeneficialOwnerStep = () => {
     // const dispatch = useDispatch();
     const [disabledContinueButton, setDisableContinueButton] = useState(true);
+    const [error, setError] = useState<string| undefined >(undefined);
 
     const initialData = {
         firstName: '',
@@ -53,36 +54,53 @@ const BeneficialOwnerStep = () => {
     const router = useRouter();
 
     const [owners, setOwner] = useState<Owner[]>([initialData])
-    console.log('owner: ', owners)
 
+    const validateTotalOwnership = (sections: Owner[]) => {
+        const array: number[] = [] ;
+        console.log('section : ', sections)
+        sections?.filter(section=> array?.push(Number(section?.ownership)) )
+        const initial = 0
+        const totalEntityOwnershipss = array.reduce((sum, currentValue) => sum + currentValue, initial)
+        console.log('total: ', totalEntityOwnershipss)
+        if (totalEntityOwnershipss < 100 || totalEntityOwnershipss > 100) {
+            return 'Total beneficial ownership must be exactly 100%'
+        }
+        return undefined;
+    };
 
     useEffect(() => {
+        const response = validateTotalOwnership(owners)
         owners?.forEach((owner) => {
-            // dd.push(owner?.isFormField)
-            if (owner?.isFormField === true){
-                console.log('dont disable')
-                setDisableContinueButton(false)
-            }else{
-                console.log('disabel')
-                setDisableContinueButton(true)
-            }
+            // if (typeof response === 'string'){
+            //     setError(response)
+            //     setDisableContinueButton(true)
+            // }else{
+                if (owner?.isFormField === true) {
+                    if (typeof response === 'string'){
+                        setError(response)
+                        setDisableContinueButton(true)
+                    }else{
+                        setError('')
+                        setDisableContinueButton(false)
+                  }
+                }else{
+                    setError('')
+                    setDisableContinueButton(true)
+                }
+            // }
         })
-        console.log('disan', disabledContinueButton)
-
-
+        // const response = validateTotalOwnership(owners)
+        // if (response) {
+        //     setError(response)
+        //     setDisableContinueButton(true)
+        // }else{
+        //     setError('')
+        //     setDisableContinueButton(false)
+        // }
     }, [owners, disabledContinueButton]);
 
 
-    // const validateTotalOwnership = (sections: Section[]) => {
-    //     const array: number[] = [] ;
-    //     sections?.filter(section=> array?.push(Number(section?.entityOwnership)) )
-    //     const initial = 0
-    //     const totalEntityOwnershipss = array.reduce((sum, currentValue) => sum + currentValue, initial)
-    //     if (totalEntityOwnershipss > 100) {
-    //         return 'Total entity ownership must be exactly 100%'
-    //     }
-    //     return undefined;
-    // };
+
 
 
     const handleBackClick = () => {
@@ -124,9 +142,6 @@ const BeneficialOwnerStep = () => {
                     : owner
             )
         );
-
-        console.log('after updating owner: ', owners)
-
     };
 
     const handleDeleteSection = (id?: number) => {
@@ -202,10 +217,11 @@ const BeneficialOwnerStep = () => {
                 </main>
                 <main className={'sticky bottom-0  bg-white py-4 pr-4'}>
 
-                    <div className="flex items-center gap-1 mb-4">
+                    <div className="grid r gap-1 mb-4">
+                        <span className="text-red-500 text-sm">{error}</span>
                         <Button
                             onClick={handleAddSection}
-                            className="flex items-center gap-2 bg-transparent text-meedlBlue shadow-none px-0 py-2 rounded-md"
+                            className="flex items-center w-fit  bg-purple-100 gap-2 bg-transparent text-meedlBlue shadow-none px-0 py-2 rounded-md"
                         >
                             <MdAdd className="text-meedlBlue h-5 w-5"/>
                             <span className={'font-semibold text-[14px] leading-[150%]'}>Add</span>

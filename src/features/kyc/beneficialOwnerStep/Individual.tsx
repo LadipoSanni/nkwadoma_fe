@@ -57,24 +57,22 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
     },[date])
 
     const isFormField = () => {
-        const isValidIndividualData = [
-            initialIndividualData?.relationShip,
-            initialIndividualData?.proofFileUrl,
-            initialIndividualData?.firstName,
-            initialIndividualData?.lastName,
-            initialIndividualData?.ownership,
-            // individualData
-        ].every(field => field?.length > 0);
-        console.log('isFormField()rr', isValidIndividualData)
-        return isValidIndividualData;
+        return individualData?.relationShip?.length > 0 &&
+            individualData?.proofFileUrl?.length > 0 &&
+            individualData?.firstName?.length > 0 &&
+            individualData?.lastName?.length > 0 &&
+            individualData?.ownership?.length > 0;
     }
+    useEffect(()=> {
+        const response = isFormField()
+        updateOwner('isFormField', response, id)
+    },[individualData])
 
     const handleInputChange = ( field: string, value: string | File) => {
         setIndividualData((prevState) => (
             { ...prevState, [field]: value }
         ))
         const response = isFormField()
-        console.log('resposss:: ',response)
         updateOwner('isFormField', response, id)
         if(field === 'dateOfBirth' && typeof value === 'string'){
             updateOwner( field, format(value, "yyyy-MM-dd"), id)
