@@ -14,7 +14,7 @@ interface ModalProps {
 
 const Modal = ({modalId, title, isOpen, setIsOpen}: ModalProps) => {
     const [reason, setReason] = useState('');
-    const [error, setError] = useState<string | null>(null);
+    const [error] = useState<string | null>(null);
 
 
     return (
