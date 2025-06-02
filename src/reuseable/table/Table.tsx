@@ -260,8 +260,7 @@ function DataTable<T extends TableRowData>({
                         >
                           <div
                             id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
-                            // truncate
-                            className={`${Styles.tableBodyItem} ${tableStyle}   `}
+                            className={`${Styles.tableBodyItem} ${tableStyle}  truncate `}
                             // style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", maxWidth: "200px",  }}
                           >
                             {/* {column.selector ? column.selector(row) : row[column.id]} */}
