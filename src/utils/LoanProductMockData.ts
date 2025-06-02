@@ -23,24 +23,40 @@ export const loanProductData = [
     },
     ]
 
+export const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+
+]
+
 export const repaymentsData = [
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000,000,000,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'Victoria Olowookere', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'Esther james', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
-    {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000,000,000,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'Victoria Olowookere', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'Esther james', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Bank transfer', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
+    // {name: 'stephen Anigbogu', paymentDate: '2 May, 2023', AmountPaid: '₦3,000,000.00', paymentMode: 'Credit card', totalAmountRepaid: '₦36,000,000.00', amountOutstanding: '₦3,000,000.00'},
 
 ]
 

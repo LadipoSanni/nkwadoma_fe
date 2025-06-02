@@ -2,46 +2,37 @@
 import React, {useState} from 'react';
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
-import {MdOutlinePayments} from "react-icons/md";
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-import dayjs from "dayjs";
-import {formatAmount} from "@/utils/Format";
 import Table from '@/reuseable/table/Table';
 import {
 MdOutlineLibraryBooks,
 } from "react-icons/md";
-import {repaymentsData} from "@/utils/LoanProductMockData";
+import {repaymentsData, months} from "@/utils/LoanProductMockData";
+import { inter } from '@/app/fonts';
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 const Repayment = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
-    const [hasNextPage,setNextPage] = useState(false)
-    const [totalPage,setTotalPage] = useState(0)
+    const [hasNextPage] = useState(false)
+    const [totalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
 
-    const filterTable = (type: string) => {
-        // if (type === 'All'){
-        //     setSelectedValue('')
-        //     setIsFiltered(true)
-        // }else {
-        //     setSelectedValue(type)
-        //     setIsFiltered(true)
-        // }
+
+    const filterTable = (value: string) => {
+        setSelectedValue(value)
     }
     const tableHeader = [
-        // <div className='flex  gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div> <div>{dayjs(row.cohortStartDate?.toString()).format('MMM D, YYYY')}</div>
         { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => row?.name },
         { title: 'Payment date', sortable: true, id: 'paymentDate', selector: (row: TableRowData) =>row?.paymentDate },
         { title: 'Amount paid', sortable: true, id: 'amountPaid', selector: (row: TableRowData) => row?.AmountPaid },
-        { title: 'Payment mode', sortable: true, id: 'paymentMode', selector: (row: TableRowData) => row?.paymentMode },
+        { title: 'Payment mode', sortable: true, id: 'paymentMode', selector: (row: TableRowData) => <div>{row?.paymentMode === 'Bank transfer' ? <div className={` ${inter.className} bg-[#EEF5FF] text-[14px] text-[#142854] rounded-full w-fit h-fit py-1 px-2 `}>{row?.paymentMode}</div> : <div className={` ${inter.className} bg-[#FEF6E8] text-[14px] text-[#66440A] rounded-full w-fit h-fit py-1 px-2`}>{row?.paymentMode}</div>}</div> },
         { title: 'Total amount repaid', sortable: true, id: 'totalAmountRepaid', selector: (row: TableRowData) =>row?.totalAmountRepaid },
         { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row: TableRowData) => row?.amountOutstanding },
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        // router.push(`/loan-request-details?id=${ID}`);
+        console.log(ID)
     };
 
     return (
@@ -58,15 +49,15 @@ const Repayment = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style="md:w-20 w-full"
                 />
-                <CustomSelect
+                {repaymentsData && repaymentsData?.length > 0  ?<CustomSelect
                     id="filterMonth"
                     value={selectedValue}
                     onChange={(value) => filterTable(value)}
-                    selectContent={["Commercial", "Endowment", 'All']}
-                    placeHolder="Type"
+                    selectContent={months}
+                    placeHolder="Month"
                     triggerId="marketplaceTrigger"
                     className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
-                />
+                />: null}
             </div>
 
             <div>
@@ -77,9 +68,9 @@ const Repayment = () => {
                     tableHeight={54}
                     sx='cursor-pointer'
                     tableCellStyle={'h-12'}
-                    optionalFilterName='endownment'
+                    // optionalFilterName='endownment'
                     condition={true}
-                    sideBarTabName='fund'
+                    sideBarTabName='Repayment'
                     icon={MdOutlineLibraryBooks}
                     staticHeader={"Name"}
                     staticColunm={'name'}
