@@ -28,22 +28,19 @@ const Entity = ({id, updateOwner}: IndividualProps) => {
     }
 
     const [entityData, setEntityData] = React.useState<EntityData>(initialEntityDate)
-    console.log('entityData', entityData)
 
     const isFormField = () => {
-        return entityData.rcNumber.length > 0 && entityData.name.length > 0 && entityData.country.length > 0 && entityData.ownership.length > 0;
+        return entityData?.rcNumber?.length > 0 && entityData?.name?.length > 0 && entityData?.country?.length > 0 && entityData?.ownership?.length > 0;
     }
 
-    console.log('isFormField()', isFormField())
 
     const handleInputChange = ( field: string, value: string) => {
-        console.log('field:', field,'value: ', value)
         setEntityData((prevState) => (
             { ...prevState, [field]: value }
         ))
-        updateOwner(field, value,id)
         const response = isFormField()
         updateOwner('isFormField', response, id)
+        updateOwner(field, value,id)
     }
 
         return (

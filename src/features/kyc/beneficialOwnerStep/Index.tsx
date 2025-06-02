@@ -57,7 +57,6 @@ const BeneficialOwnerStep = () => {
 
 
     useEffect(() => {
-        // const dd: boolean[] = []
         owners?.forEach((owner) => {
             // dd.push(owner?.isFormField)
             if (owner?.isFormField === true){
@@ -68,16 +67,8 @@ const BeneficialOwnerStep = () => {
                 setDisableContinueButton(true)
             }
         })
-        // console.log('dd: ', dd)
         console.log('disan', disabledContinueButton)
-        // if(dd.map((value) => !value)){
-        //     setDisableContinueButton(true)
-        // }else {
-        //     setDisableContinueButton(false)
-        // }
-        // if(dd.){
-        //
-        // }
+
 
     }, [owners, disabledContinueButton]);
 

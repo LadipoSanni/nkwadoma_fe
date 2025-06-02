@@ -65,7 +65,7 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
             initialIndividualData?.ownership,
             // individualData
         ].every(field => field?.length > 0);
-        console.log('isFormField()', isValidIndividualData)
+        console.log('isFormField()rr', isValidIndividualData)
         return isValidIndividualData;
     }
 
@@ -73,13 +73,14 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
         setIndividualData((prevState) => (
             { ...prevState, [field]: value }
         ))
+        const response = isFormField()
+        console.log('resposss:: ',response)
+        updateOwner('isFormField', response, id)
         if(field === 'dateOfBirth' && typeof value === 'string'){
             updateOwner( field, format(value, "yyyy-MM-dd"), id)
         }else{
             updateOwner( field, value, id)
         }
-        const response = isFormField()
-        updateOwner('isFormField', response, id)
 
     }
 
