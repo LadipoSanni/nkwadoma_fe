@@ -11,20 +11,17 @@ import {MdOutlineDateRange} from "react-icons/md";
 import {format} from "date-fns";
 
 interface IndividualData {
-    firstName?: string,
-    lastName?: string,
-    dateOfBirth?: Date | undefined,
-    relationShip?: string,
-    ownership?: string,
-    errorMessage?: string,
-    entityError?: string,
-    proofType?: string;
-    proofFile?: File | null;
-    proofFileUrl?: string;
-    id?: number;
-    name?: string;
-    country?: string,
-    rcNumber?: string,
+    firstName: string,
+    lastName: string,
+    dateOfBirth: Date | undefined,
+    relationShip: string,
+    errorMessage: string,
+    entityError: string,
+    proofType: string,
+    proofFile:  File | null,
+    proofFileUrl: '',
+    id :string | Date,
+    ownership: string,
 
 }
 interface IndividualProps  {
@@ -57,13 +54,8 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
     },[date])
 
     const isFormField = () => {
-      if (individualData){
-          return individualData?.relationShip?.length > 0 &&
-              individualData?.proofFileUrl?.length > 0 &&
-              individualData?.firstName?.length > 0 &&
-              individualData?.lastName?.length > 0 &&
-              individualData?.ownership?.length > 0;
-      }else return false;
+          return individualData?.relationShip?.length > 0 && individualData?.proofFileUrl?.length > 0 && individualData?.firstName?.length > 0 && individualData?.lastName?.length > 0 && individualData?.ownership?.length > 0;
+
     }
     useEffect(()=> {
         const response = isFormField()
@@ -113,11 +105,9 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
 
     const handleSetUploadedImageUrl = (url: string | null) => {
         if (url) {
-            setIndividualData((prev) =>
-                    (
-                        {...prev, proofFileUrl: url}
-                    )
-            );
+            setIndividualData((prev) => (
+                {...prev, proofType: url}
+            ))
             handleInputChange('proofFileUrl', url)
         }
     };
