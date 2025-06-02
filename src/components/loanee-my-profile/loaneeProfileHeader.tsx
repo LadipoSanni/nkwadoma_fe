@@ -9,7 +9,22 @@ import {
     SelectContent,
     SelectItem,
 } from "@/components/ui/select";
-
+import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from "@/components/ui/menubar";
+// import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuPortal,
+    DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 interface props {
     cohort: string,
     program: string,
@@ -18,6 +33,11 @@ interface props {
 const LoaneeProfileHeader = ({cohort , program}: props) => {
 
     const [clickDrop, setClickDrop] = React.useState(false);
+
+    const toggleArrow = () => {
+        console.log('toggle')
+        setClickDrop(!clickDrop);
+    }
 
     return (
         <div id={'loaneeProfileHeader'}
@@ -45,50 +65,45 @@ const LoaneeProfileHeader = ({cohort , program}: props) => {
                     </div>
                 </div>
             </div>
-            {/*<button*/}
-            {/*    id={'defferButton'}*/}
-            {/*    data-testid={'defferButton'}*/}
-            {/*    className={` ${inter700.className} flex justify-center mt-auto mb-auto  py-3 text-[14px] gap-2 bg-meedlBlue w-full  md:w-fit h-fit md:py-2 px-4 rounded-md md:text-[12px] text-white`}*/}
-            {/*>Defer cohort*/}
-            {/*    {clickDrop ?*/}
-            {/*        <MdKeyboardArrowUp*/}
-            {/*            onClick={() => setClickDrop(!clickDrop) }*/}
-            {/*            className="h-5 w-5 mt-auto mb-auto text-white"*/}
-            {/*        />*/}
 
-            {/*    :*/}
-            {/*        <MdKeyboardArrowDown*/}
-            {/*            id={'showDropOut'}*/}
-            {/*            onClick={() => setClickDrop(!clickDrop) }*/}
-            {/*            className="h-5 w-5 mt-auto mb-auto text-white"/>*/}
-            {/*    }*/}
+            <DropdownMenu
+            >
+              <div
+                  id={'deferAndDropOut'}
+                  data-testid={'deferAndDropOut'}
+                      className={` ${inter700.className} flex justify-center mt-auto mb-auto  py-3 text-[14px] gap-2 bg-meedlBlue w-full  md:w-fit h-fit md:py-2 px-4 rounded-md md:text-[12px] text-white`}
 
-            {/*</button>*/}
-            <Select>
-                <SelectTrigger
-                        id={'defferButton'}
-                        data-testid={'defferButton'}
-                        className={` ${inter700.className} flex justify-center mt-auto mb-auto  py-3 text-[14px] gap-2 bg-meedlBlue w-full  md:w-fit h-fit md:py-2 px-4 rounded-md md:text-[12px] text-white`}
+              >
+                  <span
+                      id={'deferCohort'}
+                      data-testid={'deferCohort'}
+                      className={`${inter700.className}  text-white `}>Defer cohort</span>
+                  <DropdownMenuTrigger
+                      onClick={toggleArrow}
+                      asChild>
+                      {clickDrop ? (
+                          <MdKeyboardArrowUp
+                              id={'iconUp'}
+                              onClick={() => setClickDrop(!clickDrop) }
+                              className="h-5 w-5 mt-auto mb-auto text-white"
+                          />                            ) : (
+                          <MdKeyboardArrowDown
+                              id={'iconDowm'}
+                              onClick={() => setClickDrop(!clickDrop) }
+                              className="h-5 w-5 mt-auto mb-auto text-white"/>
 
-                >
-                    <SelectValue placeholder="Defer cohort" />
-                        {clickDrop ?
-                            <MdKeyboardArrowUp
-                                onClick={() => setClickDrop(!clickDrop) }
-                                className="h-5 w-5 mt-auto mb-auto text-white"
-                            />
+                      )}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                      <DropdownMenuItem
+                          id={`dropOut`}
+                          className={`hover:bg-error50 text-error500 hover:text-error500 `}>
+                          Drop out
+                      </DropdownMenuItem>
+                  </DropdownMenuContent>
+              </div>
+            </DropdownMenu>
 
-                        :
-                            <MdKeyboardArrowDown
-                                id={'showDropOut'}
-                                onClick={() => setClickDrop(!clickDrop) }
-                                className="h-5 w-5 mt-auto mb-auto text-white"/>
-                        }
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="dropout">Drop out</SelectItem>
-                </SelectContent>
-            </Select>
         </div>
     );
 };
