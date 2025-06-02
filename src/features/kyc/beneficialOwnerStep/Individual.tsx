@@ -19,8 +19,7 @@ interface IndividualData {
     entityError: string,
     proofType: string,
     proofFile:  File | null,
-    proofFileUrl: '',
-    id :string | Date,
+    proofFileUrl: string,
     ownership: string,
 
 }
@@ -40,7 +39,6 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
         proofType: 'national_id',
         proofFile:  null,
         proofFileUrl: '',
-        id :Date.now(),
         ownership: '',
     }
 
@@ -149,7 +147,7 @@ const Individual = ({id, updateOwner}: IndividualProps) => {
                 <div className="space-y-2">
                     <Label htmlFor={`lastName-`}>Last name</Label>
                     <Input
-                        id={`lastName-${individualData.id}`}
+                        id={`lastName-${individualData.lastName}`}
                         name="lastName"
                         placeholder="Enter last name"
                         value={individualData.lastName || ""}
