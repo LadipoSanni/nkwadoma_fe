@@ -2,27 +2,11 @@ import {cabinetGroteskBold, inter700, inter} from '@/app/fonts';
 import React from 'react';
 import {MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { Circle } from "lucide-react"
-import {
-    Select,
-    SelectTrigger,
-    SelectValue,
-    SelectContent,
-    SelectItem,
-} from "@/components/ui/select";
-import {Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger} from "@/components/ui/menubar";
-// import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuPortal,
-    DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 interface props {
