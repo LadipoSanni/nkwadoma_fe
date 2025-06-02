@@ -57,11 +57,9 @@ const BeneficialOwnerStep = () => {
 
     const validateTotalOwnership = (sections: Owner[]) => {
         const array: number[] = [] ;
-        console.log('section : ', sections)
         sections?.filter(section=> array?.push(Number(section?.ownership)) )
         const initial = 0
         const totalEntityOwnershipss = array.reduce((sum, currentValue) => sum + currentValue, initial)
-        console.log('total: ', totalEntityOwnershipss)
         if (totalEntityOwnershipss < 100 || totalEntityOwnershipss > 100) {
             return 'Total beneficial ownership must be exactly 100%'
         }
@@ -71,10 +69,6 @@ const BeneficialOwnerStep = () => {
     useEffect(() => {
         const response = validateTotalOwnership(owners)
         owners?.forEach((owner) => {
-            // if (typeof response === 'string'){
-            //     setError(response)
-            //     setDisableContinueButton(true)
-            // }else{
                 if (owner?.isFormField === true) {
                     if (typeof response === 'string'){
                         setError(response)
@@ -87,16 +81,8 @@ const BeneficialOwnerStep = () => {
                     setError('')
                     setDisableContinueButton(true)
                 }
-            // }
         })
-        // const response = validateTotalOwnership(owners)
-        // if (response) {
-        //     setError(response)
-        //     setDisableContinueButton(true)
-        // }else{
-        //     setError('')
-        //     setDisableContinueButton(false)
-        // }
+
     }, [owners, disabledContinueButton]);
 
 
