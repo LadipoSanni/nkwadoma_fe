@@ -5,7 +5,7 @@ import {inter, cabinetGroteskMediumBold} from '@/app/fonts';
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import {MdAdd, MdDeleteOutline} from "react-icons/md";
-import {useDispatch, useSelector} from "react-redux";
+// import {useDispatch} from "react-redux";
 import Entity from "@/features/kyc/beneficialOwnerStep/Entity";
 import Individual from "@/features/kyc/beneficialOwnerStep/Individual";
 import {format} from "date-fns";
@@ -30,7 +30,7 @@ interface Owner {
 
 
 const BeneficialOwnerStep = () => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const [disabledContinueButton, setDisableContinueButton] = useState(true);
 
     const initialData = {
