@@ -283,13 +283,17 @@ function CheckBoxTable<T extends TableRowData>({
                       className={`${sx}`}
                     >
                       {enableRowSelection && (
-                        <TableCell>
+                        <TableCell
+                         className={`${
+                          isLastPage ? "border-b border-solid" : ""
+                        }`}
+                        >
                           <input
                             type="checkbox"
                             id={`rowCheckBox`}
                             checked={selectedRows.has(String(row.id))}
                             onChange={() => handleRowSelect(String(row.id))}
-                            className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md`}
+                            className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md `}
                           />
                         </TableCell>
                       )}
