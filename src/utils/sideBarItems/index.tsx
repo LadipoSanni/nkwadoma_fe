@@ -15,7 +15,6 @@ import React from "react";
 import {GearIcon} from "@radix-ui/react-icons";
 import {LuLogOut} from "react-icons/lu";
 
-import { MdPersonOutline } from "react-icons/md";
 
 const currentTextLiterals = `text-meedlBlue md:text-meedlBlue`;
 const textLiterals = `text-[#626F8C] md:text-[#626F8C] `;
