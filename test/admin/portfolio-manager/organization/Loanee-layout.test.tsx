@@ -75,13 +75,13 @@ describe("InviteOrganizationForm", () => {
         expect(screen.getByText("Archived")).toBeInTheDocument();
       });
 
-      it("repayment tab as specified", () => {
+      it("All tab as specified", () => {
         render(
           <Providers>
             <OrganizationLoaneeLayout>{mockChildren}</OrganizationLoaneeLayout>
           </Providers>
         );
-        const repaymentTab = screen.queryByText("Repayment");
+        const repaymentTab = screen.queryByText("All");
         expect(repaymentTab).toBeInTheDocument();
       });
 
