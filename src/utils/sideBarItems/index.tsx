@@ -7,8 +7,10 @@ import {
     MdOutlineBusinessCenter,
     MdOutlinePersonOutline,
     MdOutlineHome,
-    MdOutlineAccountBalanceWallet, MdOutlinePeopleAlt
+    MdOutlineAccountBalanceWallet, MdOutlinePeopleAlt,
+    MdOutlineLibraryBooks,
 } from "react-icons/md";
+
 import React from "react";
 import {GearIcon} from "@radix-ui/react-icons";
 import {LuLogOut} from "react-icons/lu";
@@ -24,6 +26,7 @@ export const getPortfolioManagerSideBarItems =  (currentItem: string) => {
         { icon: <MdOutlineHome color={currentItem === 'Overview' ? '#142854' : '#939cb0'} className={` h-[1.2rem] w-[1.2em] `}/>, id: 'Overview', name: 'Overview', isActive: true,route: '/Overview'},
         {id: 'loan', name: 'Loan', route: '/loan/loan-request', isActive: true, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={currentItem === 'Loan' ? '#142854' : '#939cb0'}></Icon>},
         {id: 'loanProduct', name: 'Loan product', route: '/loan-product', isActive: true, icon: <MdOutlineInventory2 color={currentItem === 'Loan product' ? '#142854' : '#939CB0'}></MdOutlineInventory2>},
+        {id: 'repayment', name: 'Repayment', route:'/repayment', icon: <MdOutlineLibraryBooks color={currentItem === 'Repayment' ? '#142854' : '#939CB0'}  />, isActive: true,},
         {id: 'organizations', name: 'Organizations', route: '/organizations', isActive: true, icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={currentItem === 'Organizations' ? '#142854' : '#939CB0'}></MdOutlineAccountBalance>},
         {id: 'loanee', name: 'Loanee', isActive: false, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={` h-[1.2rem] w-[1.2rem]   `}/>},
         {id: 'vehicle', name: 'Investment vehicle', isActive: true, route: '/vehicle/commercial-vehicle', icon: <MdOutlinePayments color={currentItem === 'Investment vehicle' ? '#142854' : '#939CB0'} className={` h-[1.2rem] w-[1.2rem]  `}/>},
