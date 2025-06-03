@@ -62,6 +62,46 @@ export const isTokenExpired = (token?: string): boolean => {
     }
 }
 
+export const validateName = (name: string) : boolean | string  => {
+    // const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/;
+    if (/[\d ]/.test(name)) {
+      return  'name can not contain digit'
+
+    }
+    if (/[|#%^*@()?>,.{!$}[=+":<]/.test(name)|| /^--+$/.test(name)) {
+        return  'name can not contain special characters'
+    }
+    return /[a-zA-Z&]$/.test(name)
+
+}
+
+export const validateRcNumber = (name: string) : boolean | string  => {
+    // const regex = /^[a-zA-Z][a-zA-Z0-9\s-_]*[a-zA-Z0-9]$/;
+    if (/[a-zA-Z]/.test(name)) {
+        return  'rc  can not contain letters'
+
+    }
+    if (/[^a-zA-Z0-9]/.test(name) || /^-+$/.test(name)|| /[|#%^&*@()?>,.{!$}[=+":<]/.test(name) ) {
+        return  'name can not contain special characters'
+    }
+    return /^\d{8}$/.test(name)
+
+}
+export const validateEntityOwnership = (ownership: string) : boolean | string => {
+    if (/[a-zA-Z]/.test(ownership)) {
+        return  'ownership can not contain letters'
+
+    }
+    if (/[|#%^&*@()?>,.{!$}[=+":<]/.test(ownership) || /-+$/.test(ownership)) {
+        return  'ownership can not contain special characters'
+    }
+    if (Number(ownership) > 100){
+        // Number(ownership) < 1 ||
+        return  'ownership should between 1 and 100'
+    }
+    return /^\d$/.test(ownership)
+
+}
 export  function  getFirstLetterOfWord (word : undefined | string| null) {
     let ans = '';
 
