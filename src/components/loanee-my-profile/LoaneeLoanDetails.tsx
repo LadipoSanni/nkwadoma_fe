@@ -3,7 +3,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {inter500, inter} from '@/app/fonts'
 import Details from './Details';
 import styles from './index.module.css'
-import BasicDetails from "@/components/loanee-my-profile/BasicDetails";
+// import BasicDetails from "@/components/loanee-my-profile/BasicDetails";
 import Document from "@/components/loanee-my-profile/Document";
 import {LoaneeDetails} from '@/types/loanee'
 
