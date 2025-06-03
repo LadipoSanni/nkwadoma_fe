@@ -1,8 +1,9 @@
 import React from 'react';
-import Loanees from "@/pages/admin/organization/Cohort/Loanees"
+import Index from "@/pages/loanee/MyProfile";
+
 const Page = () => {
     return (
-        <Loanees/>
+        <Index/>
     );
 };
 

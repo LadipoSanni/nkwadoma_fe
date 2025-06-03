@@ -1,0 +1,22 @@
+.container{
+    /*display: flex;*/
+    /*grid-template-columns: max-content;*/
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.details{
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.containers{
+    
+}
+@media only screen and (max-width: 960px) {
+    .containers{
+        visibility: hidden;
+    }
+}

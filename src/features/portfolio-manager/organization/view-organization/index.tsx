@@ -16,6 +16,7 @@ import { MdSearch } from 'react-icons/md';
 import { setOrganizationTabStatus,setOrganizationId,resetOrganizationId} from '@/redux/slice/organization/organization';
 import { useAppSelector } from '@/redux/store';
 import { store } from "@/redux/store";
+import { resetNotification } from '@/redux/slice/notification/notification';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -106,6 +107,7 @@ function Organization() {
             }));
         }
         store.dispatch(resetOrganizationId())
+        store.dispatch(resetNotification())
     }, [searchTerm, searchResults, data, tabType]);
 
     const handleInviteOrganizationClick = () => {

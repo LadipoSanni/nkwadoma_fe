@@ -11,6 +11,7 @@ import {store} from "@/redux/store";
 import { setCurrentFinancierId} from '@/redux/slice/financier/financier';
 import { setNotification,resetNotification,setNotificationId } from '@/redux/slice/notification/notification';
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
+import { setOrganizationId,setOrganizationDetail} from '@/redux/slice/organization/organization';
 
 // interface NotificationDetailsPageProps{
 //     notification?: NotificationProps
@@ -43,7 +44,11 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
      }else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE") {
          store.dispatch(setMarketInvestmentVehicleId({marketInvestmentVehicleId:notification?.data?.contentId }))
          router.push("/marketplace/details");
-     }
+     }else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION") {
+      store.dispatch(setOrganizationId(notification?.data?.contentId))
+      store.dispatch(setOrganizationDetail("details"))
+      router.push("/organizations/details");
+  }
   }
 
    const buttonName = () => {
@@ -51,7 +56,9 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
       return "financier"
    } else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE"){
       return "investment vehicle"
-   }
+   } else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION"){
+    return "organization"
+ }
   
    }
 
