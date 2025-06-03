@@ -6,6 +6,14 @@
     scrollbar-width: none;
 }
 
+.tab{
+    display: flex;
+    grid-template-columns: max-content;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 .details{
     overflow-x: auto;
     -ms-overflow-style: none;

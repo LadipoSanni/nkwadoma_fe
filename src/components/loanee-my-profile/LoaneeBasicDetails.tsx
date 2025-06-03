@@ -3,28 +3,35 @@ import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
 import {inter, inter500} from "@/app/fonts";
 import styles from "@/components/loanee-my-profile/index.module.css";
 import Image from "next/image";
+import {LoaneeDetails} from "@/types/loanee";
+interface props{
+    data: LoaneeDetails
+}
 
-const LoaneeBasicDetails = () => {
+
+const LoaneeBasicDetails = ({data}: props) => {
+    const basicData = data?.userIdentity
 
     const basicDetails = [
-        {label: 'Gender', value: ''},
-        {label: 'Date of birth', value: ''},
-        {label: 'Marital status', value: ''},
-        {label: 'Nationality', value: ''},
-        {label: 'State of origin ', value: ''},
-        {label: 'State of residence', value: ''},
-        {label: 'Residential address', value: ''},
-        {label: 'Phone number', value: ''},
-        {label: 'Alternate residential address', value: ''},
-        {label: 'Alternate email address', value: ''},
-        {label: 'Alternate email address', value: ''},
-        {label: 'Next of kin full name', value: ''},
+        {label: 'Gender', value: `${basicData?.gender ? basicData?.gender : 'Not provided'}`},
+        {label: 'Date of birth', value: `${basicData?.dateOfBirth ? basicData?.dateOfBirth : 'Not provided'}`},
+        {label: 'Marital status', value: `${basicData?.maritalStatus ? basicData?.maritalStatus : 'Not provided'}`},
+        {label: 'Nationality', value: `${basicData?.nationality ? basicData?.nationality : 'Not provided'}`},
+        {label: 'State of origin ', value: `${basicData?.stateOfOrigin ? basicData?.stateOfOrigin : 'Not provided'}`},
+        {label: 'State of residence', value: `${basicData?.stateOfResidence ? basicData?.stateOfResidence : 'Not provided'}`},
+        {label: 'Residential address', value: `${basicData?.residentialAddress ? basicData?.residentialAddress : 'Not provided'}`},
+        {label: 'Phone number', value: `${basicData?.phoneNumber ? basicData?.phoneNumber : 'Not provided'}`},
+        {label: 'Alternate residential address', value: `${basicData?.residentialAddress ? basicData?.residentialAddress : 'Not provided'}`},
+        // {label: 'Alternate email address', value: ''},
+        {label: 'Alternate email address', value: `${basicData?.alternateEmail? basicData?.alternateEmail : 'Not provided'}`},
+        {label: 'Next of kin full name', value: `${basicData?.nextOfKinResponse}`},
         {label: 'Next of kin phone number', value: ''},
         {label: 'Next of kin residential address', value: ''},
         {label: 'Next of kin relationship ', value: ''},
         {label: 'Highest level of education ', value: ''},
-        {label: 'Institution name ', value: ''},
-        {label: 'Program of study ', value: ''},
+        {label: 'Institution name ', value: data?.institutionName},
+        {label: 'Program of study ', value: data?.programOfStudy},
+
 
     ]
 

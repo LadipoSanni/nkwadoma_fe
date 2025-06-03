@@ -3,7 +3,14 @@ import React from 'react';
 import {MdKeyboardArrowDown} from "react-icons/md";
 import { Circle } from "lucide-react"
 
-const LoaneeProfileHeader = () => {
+interface props {
+    cohort: string,
+    program: string,
+}
+
+const LoaneeProfileHeader = ({cohort , program}: props) => {
+
+
     return (
         <div id={'loaneeProfileHeader'}
              data-testid={'loaneeProfileHeader'}
@@ -24,9 +31,9 @@ const LoaneeProfileHeader = () => {
                 <div className={` mt-auto mb-auto `}>
                     <span id={'cohortName'} data-testid={'cohortName'} className={` ${cabinetGroteskBold.className} text-[20px] text-[#212221] `}>Semicolon Africa</span>
                     <div className={`  flex  gap-2 `}>
-                        <p className={`${inter.className} text-[#4D4E4D] text-[14px] `}>Software engineering</p>
+                        <p className={`${inter.className} text-[#4D4E4D] text-[14px] `}>{cohort}</p>
                         <Circle color={'#ECECEC'} className="h-1 w-1 text-[#ECECEC] mt-auto mb-auto  fill-primary" />
-                        <p className={`${inter.className} text-[#4D4E4D] text-[14px] `}>Alphas</p>
+                        <p className={`${inter.className} text-[#4D4E4D] text-[14px] `}>{program}</p>
                     </div>
                 </div>
             </div>

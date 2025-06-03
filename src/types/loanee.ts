@@ -20,3 +20,67 @@ export interface CohortInfo {
     amountReceived: number,
     amountOutstanding: number
 }
+
+export interface LoaneeDetails {
+
+    "id": string,
+    "cohortId": string,
+    "createdBy": string,
+    "creditScore": number,
+    "createdAt":string,
+    "updatedAt": string,
+    "userIdentity": {
+    "id": string,
+        "email":string,
+        "firstName": string,
+        "lastName": string,
+        "phoneNumber": string,
+        "emailVerified": boolean,
+        "enabled": boolean,
+        "createdAt": string,
+        "image": string,
+        "gender": string,
+        "dateOfBirth": string,
+        "stateOfOrigin": string,
+        "maritalStatus": string,
+        "stateOfResidence": string,
+        "nationality": string,
+        "residentialAddress": string,
+        "role": string,
+        "createdBy": string,
+        "alternateEmail": string,
+        "alternatePhoneNumber": string,
+        "alternateContactAddress": string,
+        "accessToken": string,
+        "refreshToken": string,
+        "organizationDomain": string,
+        "deactivationReason": string,
+        "reactivationReason": string,
+        "nextOfKinResponse": string,
+        "identityVerified": boolean
+},
+    "loaneeLoanDetail": {
+    "tuitionAmount": string,
+        "initialDeposit": number | string,
+        "amountRequested": string,
+        "amountReceived": string,
+        "amountRepaid": string,
+        "amountOutstanding": string,
+        "loanBreakdown": string
+},
+    "loaneeStatus": string,
+    "highestLevelOfEducation": string,
+    "nameOfPreviousInstitution": string,
+    "programOfStudy": string,
+    "institutionName": string,
+    "programName": string,
+    "cohortName": string,
+    "cohortStartDate": string,
+    "fitnessToWorkRating": string,
+    "loanAmount": string,
+    "interestRate": string,
+    "paymentMoratoriumPeriod": string,
+    "termsAndConditions": string,
+    "tenor": number
+
+}
