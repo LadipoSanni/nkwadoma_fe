@@ -14,7 +14,6 @@ const Index = dynamic(
 const LoaneeDetails = () => {
     const {data} = useGetLoaneeDetailsQuery({})
 
-    console.log('data: ', data)
 
     return (
         <main
