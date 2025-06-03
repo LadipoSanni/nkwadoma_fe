@@ -8,11 +8,12 @@ import {Button} from "@/components/ui/button";
 interface ModalProps {
     modalId: string;
     isOpen?: boolean;
-    setIsOpen?: (value: boolean) => void;
+    setIsOpen: (value: boolean) => void;
     title?: string;
+    buttonText?: string;
 }
 
-const Modal = ({modalId, title, isOpen, setIsOpen}: ModalProps) => {
+const Modal = ({modalId, title, isOpen, setIsOpen, buttonText}: ModalProps) => {
     const [reason, setReason] = useState('');
     const [error] = useState<string | null>(null);
 
@@ -51,7 +52,7 @@ const Modal = ({modalId, title, isOpen, setIsOpen}: ModalProps) => {
                        <Button
                            type="button"
                            className="w-[140px] h-[57px] flex items-center font-bold text-[14px] justify-center rounded-md text-meedlBlue border border-meedlBlue bg-meedlWhite"
-                           // onClick={() => setIsOpen(false)}
+                           onClick={() => setIsOpen(false)}
                            // disabled={isLoading}
                        >
                            Cancel
@@ -59,12 +60,13 @@ const Modal = ({modalId, title, isOpen, setIsOpen}: ModalProps) => {
                        <Button
                            type="button"
                            className={`w-[140px] h-[57px] flex items-center font-bold text-[14px] justify-center rounded-md text-meedlWhite ${
-                               reason.trim() ? 'bg-error500 hover:bg-error500' : 'bg-blue50 hover:bg-blue50'
+                               reason.trim() ? 'bg-meedlBlue hover:bg-meedlBlue' : 'bg-blue50 hover:bg-blue50'
                            }`}
                            // disabled={!reason.trim() || isLoading}
                            // onClick={handleDecline}
                        >
                            {/*{isLoading ? 'Declining...' : 'Decline'}*/}
+                           {buttonText}
                        </Button>
                    </div>
                </DialogContent>
