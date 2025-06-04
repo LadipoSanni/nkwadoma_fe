@@ -12,6 +12,9 @@ import {formatAmount} from '@/utils/Format';
 import {useToast} from "@/hooks/use-toast"
 import { useRouter } from 'next/navigation';
 import Isloading from '@/reuseable/display/Isloading';
+import Modal from "@/reuseable/modals/TableModal";
+import {Cross2Icon} from "@radix-ui/react-icons";
+import UploadCSV from './Upload-csv';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -65,6 +68,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
     const [updateLoaneeStatus, {isLoading:statusIsloading}] = useUpdateLoaneeStatusMutation()
     const {toast} = useToast()
     const router = useRouter();
+     const [isOpen, setIsOpen] = useState(false);
 
       const {data, isLoading} = useViewAllLoaneeQuery({
             cohortId: cohortId,
@@ -105,6 +109,10 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
       const handleSelectedRow = (rows: Set<string>) => {
             setSelectedRows(rows)
         }
+      
+       const handleModalOpen = () => {
+          setIsOpen(!isOpen)
+      }
 
         const getTableData = () => {
           if (!data?.data?.body) return [];
@@ -157,7 +165,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
                     style="md:w-20 w-full"
          />  
         </div>
-        <div className='mt-3 md:mt-0'  >
+        <div className='mt-3 md:mt-0 gap-4 flex'  >
         <Button
         id='action'
        data-testid='actionButton'
@@ -169,6 +177,15 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
          >
            { statusIsloading? <Isloading/> : buttonName}
         </Button>
+        {  tabType === "All" &&
+          <Button
+          variant={`secondary`}
+          className='h-[45px] w-full'
+          onClick={handleModalOpen}
+          >
+            Upload csv
+          </Button>
+        }
         </div>
       </div>
       <div className='mt-4'>
@@ -197,6 +214,18 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         handleSelectedRow={handleSelectedRow}
         />}
       </div>
+       <div>
+        <Modal
+         isOpen={isOpen}
+         closeOnOverlayClick={true}
+         closeModal={() => setIsOpen(false)}
+          width='36%'
+          icon={Cross2Icon}
+          headerTitle='Upload csv'
+        >
+        <UploadCSV setIsOpen={setIsOpen}/>
+        </Modal>
+       </div>
     </main>
   )
 }

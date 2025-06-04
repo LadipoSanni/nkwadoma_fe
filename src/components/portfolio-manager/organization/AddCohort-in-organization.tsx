@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import SpreadsheetFileUpload from "@/reuseable/Input/RawFile-spreadshitUpload";
 import {  useViewAllLoanProductQuery } from "@/service/admin/loan_product";
 import { useUploadLoaneeFileMutation } from "@/service/admin/loan_book";
+import DownloadTemplate from "./Download-template";
 
 interface createCohortProps {
   setIsOpen?: (e: boolean) => void;
@@ -215,7 +216,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
         setError(error?.data?.message);
         
       }
-    }else { setError("Description must be 2500 characters or less"); }
+    }else { setError(""); }
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -296,7 +297,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                     Tuition
                  </Label>
                 <div
-                className="flex gap-2 items-center md:relative bottom-[4px] "
+                className="flex gap-2 items-center relative md:bottom-[4px] w-full "
                 >
                     
                     <CurrencySelectInput
@@ -306,12 +307,19 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                     />
                    
                 
-                 <div className="relative bottom-2">
+                 <div className="relative bottom-2 w-full">
                  <TuitionInput  tuition={tuitionAmount} setTuition={setTuition}/>
                  </div>
                 </div>
                 </div>
               </div>
+                <div className="w-full relative lg:bottom-3">
+                  <DownloadTemplate 
+                  name="loanee"
+                  fileName="UserData_template"
+                  fileUrl="/templates/Userdata_template.csv"
+                  />
+                </div>
               <div className="md: mt-2 lg:mt-0 lg:relative bottom-3">
                 <SpreadsheetFileUpload
                  handleDrop={handleDrop}
@@ -320,27 +328,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                  labelName="Loanees Data"
                 />
               </div>
-                  {/* <CustomQuillField
-                    description={cohortDescription}
-                    setDescription={setDescription}
-                    maximumDescription={2500}
-                    onDescriptionChange={(desc) => {
-                      const pTagSpace = 7
-                      const maximumDescription = 2500
-                      if (desc.length <= maximumDescription +  pTagSpace) {
-                        setDescription(desc);
-                        setDescriptionError(null);
-                      } else {
-                        setDescriptionError("Cohort description must be 2500 characters or less");
-                      }
-                    }} 
-                    label={"Description"} 
-                    placeholder={"Enter description...."}   
-                    setError={(error) => setDescriptionError(error)}
-                    name="Cohort description"
-                  /> */}
-
-              {/* {descriptionError && ( <div className="text-red-500 text-sm">{descriptionError}</div> )} */}
+            
         
               <FormButtons
                 isButtonDisabled={isButtonDisabled}
