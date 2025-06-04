@@ -1,5 +1,5 @@
 import React from 'react';
-import {inter500, inter,} from '@/app/fonts'
+import {inter500} from '@/app/fonts'
 import Details from './Details';
 import styles from './index.module.css'
 // import BasicDetails from "@/components/loanee-my-profile/BasicDetails";
