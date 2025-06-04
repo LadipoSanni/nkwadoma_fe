@@ -34,6 +34,7 @@ import kycFormReducer from "@/redux/slice/kyc/kycFormSlice";
 import {publicInvestmentApi} from "@/service/unauthorized/view-investment";
 import OrganizationReducer from "./slice/organization/organization"
 import { loanBookApi } from '@/service/admin/loan_book';
+import CsvReducer from "@/redux/slice/csv/csv"
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -52,6 +53,7 @@ const appReducer = combineReducers({
     kycMultistep:kycMultistepReducer,
     kycForm: kycFormReducer,
     organization: OrganizationReducer,
+    csv: CsvReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,

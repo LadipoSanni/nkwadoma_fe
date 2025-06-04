@@ -176,7 +176,7 @@ const ProgramView = () => {
 
             if (node) observer.current.observe(node);
         },
-        [isLoading, isFetching, isSearchFetching, hasNextPage, pageNumber, view]
+        [isLoading, isFetching, isSearchFetching, hasNextPage, view]
     );
 
     useEffect(() => {

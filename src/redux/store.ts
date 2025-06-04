@@ -23,10 +23,11 @@ import {portfolioOverviewApi} from '@/service/admin/overview'
 import {publicInvestmentApi} from "@/service/unauthorized/view-investment";
 import { loanBookApi } from '@/service/admin/loan_book';
 
+
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep', 'loanReferral', 'kycForm','notification','organization','cohort'],
+    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep', 'loanReferral', 'kycForm','notification','organization','cohort','csv'],
 };
 
 const persistedReducer = persistReducer(persistConfig, appReducer);
