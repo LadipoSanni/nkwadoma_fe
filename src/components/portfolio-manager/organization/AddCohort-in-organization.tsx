@@ -313,7 +313,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                 </div>
                 </div>
               </div>
-                <div className="w-full">
+                <div className="w-full relative lg:bottom-3">
                   <DownloadTemplate 
                   name="loanee"
                   fileName="UserData_template"
