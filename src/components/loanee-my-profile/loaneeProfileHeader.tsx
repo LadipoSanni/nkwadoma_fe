@@ -13,9 +13,10 @@ import Modal from "@/reuseable/modals/Modal";
 interface Props {
     cohort: string,
     program: string,
+    institutionName: string,
 }
 
-const LoaneeProfileHeader = ({cohort , program}: Props) => {
+const LoaneeProfileHeader = ({cohort ,institutionName, program}: Props) => {
 
     const [openModal, setOpenModal] = React.useState(false);
     const [modalId, setModalId] = React.useState('');
@@ -24,7 +25,6 @@ const LoaneeProfileHeader = ({cohort , program}: Props) => {
 
 
     const handleOpenModal = (id: string, title: string, buttonText: string) => {
-        console.log('id: ',id,'title: ', title)
         setModalId(id);
         setModalTitle(title);
         setModalButtonText(buttonText);
@@ -50,11 +50,11 @@ const LoaneeProfileHeader = ({cohort , program}: Props) => {
 
                    </div>
                    <div className={` mt-auto mb-auto `}>
-                       <span id={'cohortName'} data-testid={'cohortName'} className={` ${cabinetGroteskBold.className} text-[20px] text-[#212221] `}>Semicolon Africa</span>
+                       <span id={'cohortName'} data-testid={'cohortName'} className={` ${cabinetGroteskBold.className} text-[20px] text-[#212221] `}>{institutionName}</span>
                        <div className={`  flex  gap-2 `}>
                            <p className={`${inter.className} text-[#4D4E4D] text-[14px] `}>{cohort}</p>
-                           {cohort || program && <Circle color={'#ECECEC'}
-                                    className="h-1 w-1 text-[#ECECEC] mt-auto mb-auto  fill-primary"/>}
+                           {cohort || program ? <Circle color={'#ECECEC'}
+                                                         className="h-1 w-1 text-[#ECECEC] mt-auto mb-auto  fill-primary"/>: null}
                            <p className={`${inter.className} text-[#4D4E4D] text-[14px] `}>{program}</p>
                        </div>
                    </div>

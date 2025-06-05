@@ -19,10 +19,10 @@ const LoaneeLoanDetails = ({data}:props ) => {
              className={`md:max-h-fit md:w-[55%] sm:w-[100%] w-[100%] px-4 pb-6 md:border-r md:border-r-grey-200] `}>
                 <div id={'loanInfo'} className={`w-fit text-[18px] py-4 h-fit   text-[#212221] ${inter500.className} `}>Loan information</div>
                 <div className={` md:max-h-[65vh] grid gap-4 w-full  ${styles.container}`}>
-                        <Details id={'loanAmount'}    maxWidth={'100%'} name={'Loan amount'} value={data?.loanAmount} valueType={'currency'} />
+                        <Details id={'loanAmount'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.loanAmount} valueType={'currency'} />
                         <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>
-                            <Details id={'amountOutstanding'}    maxWidth={'100%'} name={'Amount outstanding'} value={0} valueType={'currency'} />
-                            <Details id={'AmountRepaid'}    maxWidth={'100%'} name={'Amount repaid'} value={data?.loaneeLoanDetail?.amountRepaid} valueType={'currency'}  />
+                            <Details id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={0} valueType={'currency'} />
+                            <Details id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.loaneeLoanDetail?.amountRepaid} valueType={'currency'}  />
                         </div>
                         <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
                             <Details id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? data?.interestRate : 0} valueType={'percentage'} />

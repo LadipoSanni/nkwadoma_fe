@@ -20,7 +20,7 @@ const LoaneeDetails = () => {
             id={'loaneeProfile'}
             className={`w-full  h-full`}
         >
-          <LoaneeProfileHeader cohort={data?.data?.cohortName} program={data?.data?.programName}/>
+          <LoaneeProfileHeader institutionName={data?.data?.institutionName} cohort={data?.data?.cohortName} program={data?.data?.programName}/>
            <div className={`flex w-full  max-h-[77vh]  `}>
                <LoaneeLoanDetails data={data?.data}/>
                <LoaneeBasicDetails data={data?.data}/>
