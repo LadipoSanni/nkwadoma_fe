@@ -6,11 +6,18 @@ export const loanBookApi = createApi({
   baseQuery: customFetchBaseQuery,
   endpoints: (builder) => ({
     uploadLoaneeFile: builder.mutation({
-      query: ({ cohortId, loanProductId, formData }) => { 
-       
-        
+      query: ({ cohortId, loanProductId, formData }) => {    
         return {
           url: `/loan/book/upload/${cohortId}/${loanProductId}/file/loanee/data`,
+          method: "POST",
+          body: formData
+        };
+      },
+    }),
+    uploadRepaymentFile: builder.mutation({
+      query: ({ cohortId,formData }) => {    
+        return {
+          url: `/loan/book/upload/${cohortId}/file/loanee/repayment/record`,
           method: "POST",
           body: formData
         };
@@ -19,4 +26,4 @@ export const loanBookApi = createApi({
   }),
 });
 
-export const { useUploadLoaneeFileMutation } = loanBookApi;
+export const { useUploadLoaneeFileMutation, useUploadRepaymentFileMutation } = loanBookApi;

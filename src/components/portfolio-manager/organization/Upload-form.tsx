@@ -5,6 +5,9 @@ import SpreadsheetFileUpload from "@/reuseable/Input/RawFile-spreadshitUpload";
 import { inter } from "@/app/fonts";
 import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
 import DownloadTemplate from "./Download-template";
+import { store,useAppSelector } from '@/redux/store';
+import { setUserdataFile,setRepaymentFile,resetCsvStatus } from '@/redux/slice/csv/csv';
+import { useUploadLoaneeFileMutation } from "@/service/admin/loan_book";
 
 interface FormValues {
   loaneeFile: File | null;
@@ -17,9 +20,15 @@ interface Props {
 }
 
 function UploadForm({ setIsOpen, uploadType }: Props) {
+  const userData = useAppSelector(store => store?.csv?.userdataFile)
+  const repaymentData = useAppSelector(store => store?.csv?.repaymentFile)
+  const cohortDetails = useAppSelector((state) => state.cohort?.selectedCohortInOrganization)
+  const cohortId = cohortDetails?.id
+  const [uploadLoaneeFile, {isLoading: uploadLoaneeIsloading}] = useUploadLoaneeFileMutation();
+
   const initialFormValue: FormValues = {
-    loaneeFile: null,
-    repaymentFile: null,
+    loaneeFile:  userData || null,
+    repaymentFile: repaymentData ||  null,
   };
 
   const validationSchema = Yup.object().shape({
@@ -35,8 +44,9 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
     })
   });
 
-  const handleSubmit = (values: FormValues) => {
-    console.log('Submitted files:', values);
+  const handleSubmit =  async  (values: FormValues) => {
+     
+    store.dispatch(resetCsvStatus())
     if (uploadType === "loaneeData") {
       console.log('Loanee file:', values.loaneeFile);
     } else {
@@ -81,7 +91,8 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
                     <SpreadsheetFileUpload
                       handleDrop={handleDrop}
                       handleDragOver={handleDragOver}
-                      setUploadedFile={(file) => setFieldValue("loaneeFile", file)}
+                      setUploadedFile={(file) =>  {setFieldValue("loaneeFile", file); store.dispatch(setUserdataFile(file))}}
+                      initialFile={userData}
                     />
                     {errors.loaneeFile && touched.loaneeFile && (
                       <ErrorMessage
@@ -96,7 +107,8 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
                     <SpreadsheetFileUpload
                       handleDrop={handleDrop}
                       handleDragOver={handleDragOver}
-                      setUploadedFile={(file) => setFieldValue("repaymentFile", file)}
+                      setUploadedFile={(file) =>{ setFieldValue("repaymentFile", file); store.dispatch(setRepaymentFile(file));}}
+                      initialFile={repaymentData}
                     />
                     {errors.repaymentFile && touched.repaymentFile && (
                       <ErrorMessage

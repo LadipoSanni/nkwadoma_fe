@@ -7,7 +7,6 @@ import { useCreateCohortMutation } from "@/service/admin/cohort_query";
 import { useGetAllProgramsQuery } from "@/service/admin/program_query";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
-// import CustomQuillField from "@/reuseable/textArea/Custom-quill-field";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import TuitionInput from "@/reuseable/feeBreakdown/Tuition";
 import { Label } from "@/components/ui/label";
@@ -15,6 +14,7 @@ import SpreadsheetFileUpload from "@/reuseable/Input/RawFile-spreadshitUpload";
 import {  useViewAllLoanProductQuery } from "@/service/admin/loan_product";
 import { useUploadLoaneeFileMutation } from "@/service/admin/loan_book";
 import DownloadTemplate from "./Download-template";
+import { convertSpreadsheetToCsv } from "@/utils/convert-csv";
 
 interface createCohortProps {
   setIsOpen?: (e: boolean) => void;
@@ -41,18 +41,16 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
   const [loanProductId, setLoanProductId] = useState("");
   const [selectCurrency, setSelectCurrency] = useState("NGN");
   const [name, setName] = useState("");
-  // const [cohortDescription, setDescription] = useState("");
+ 
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
   const [selectedLoanProduct, setSelectedLoanProduct] = useState<string | null>(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [isLoanProductSelectOpen, setIsLoanProductSelectOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  // const [loanBreakdowns, setLoanBreakdowns] = useState<{ itemName: string; itemAmount: string; currency: string }[]>([ { itemName: "Tuition", itemAmount: "", currency: "NGN" }  ]);
  
   const [fileUpload, setUploadedFile] = useState<File | null>(null);
   const size = 10;
   const [error, setError] = useState("");
-  // const [descriptionError, setDescriptionError] = useState<string | null>(null);
   const [isLoanProduct, setIsLoanProduct] = useState(false)
   const [isProgram, setIsprogram] = useState(false)
   const [tuitionAmount,setTuition] = useState("")
@@ -127,18 +125,17 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
   const { toast } = useToast();
 
   useEffect(() => {
-    if (name && selectedProgram && startDate &&  selectedLoanProduct && tuitionAmount && fileUpload ) {
+    if (name && selectedProgram && startDate &&  selectedLoanProduct && tuitionAmount  ) {
       setIsButtonDisabled(false);
     } else {
       setIsButtonDisabled(true);
     }
-  }, [name, selectedProgram, startDate,selectedLoanProduct, tuitionAmount, fileUpload]);
+  }, [name, selectedProgram, startDate,selectedLoanProduct, tuitionAmount]);
 
 
   const resetForm = () => {
     setDate(undefined);
     setName("");
-    // setDescription("");
     setSelectedProgram("");
     setSelectedLoanProduct("");
     setIsSelectOpen(false);
@@ -153,6 +150,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
     }
 }
 
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!navigator.onLine) {
@@ -163,11 +161,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
       return;
     }
     if (!isButtonDisabled ) {
-      // const loanBreakDownObj = {
-      //   itemName: "book",
-      //   itemAmount: "600000",
-      //   currency: "NGN"
-      // }
+    
       
       const formDatas = {
         name: name,
@@ -179,26 +173,25 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
         tuitionAmount: tuitionAmount
       };
 
-      if (!fileUpload) {
-        toast({
-          description: "no file",
-          status: "error",
-        });
-        return;
-      }
       try {
       
         const result = await createCohort(formDatas).unwrap();
-        const formData = new FormData();
-           formData.append("file", fileUpload, fileUpload.name); 
-           
-        if(result && fileUpload){
-          const uploadData = {
-            cohortId:result.data?.id,
-            loanProductId: loanProductId,
-            formData
-          }
-  
+        if (result && !fileUpload) {
+          handleCloseModal()
+          toast({
+            description: result.message,
+            status: "success",
+          });
+        } else if (result && fileUpload) {
+          const csvData = await convertSpreadsheetToCsv(fileUpload);
+          const formData = new FormData();
+             formData.append("file", csvData, csvData.name); 
+             console.log("The file: ",csvData)
+            const uploadData = {
+              cohortId:result.data?.id,
+              loanProductId: loanProductId,
+              formData
+            }
             const uploadFile = await uploadLoaneeFile(uploadData).unwrap()
             if(uploadFile) {
               resetForm();

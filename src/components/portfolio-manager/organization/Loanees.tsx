@@ -16,6 +16,7 @@ import Modal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import UploadCSV from './Upload-csv';
 
+
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
@@ -170,8 +171,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         id='action'
        data-testid='actionButton'
          aria-disabled={!enableButton}
-         variant={`secondary`}
-        className={`h-[45px] w-full font-semibold ${tabType === "All"? "md:w-[90px]" : "md:w-[110px]"} ${enableButton ? "" : "bg-[#B6BCCA]"}`}
+         variant={tabType === "All"? "outline" :`secondary`}
+        className={`h-[45px] w-full font-semibold ${tabType === "All"? "md:w-[90px] " : "md:w-[110px]"} ${enableButton && tabType === "All" ? "border-[#142854] text-[#142854]" : !enableButton && tabType === "All"? "border-[#ECECEC] text-[#A8A8A8] shadow-none" : enableButton && tabType === "Archived" ? "bg-[#142854]" :  !enableButton && tabType === "Archived" && "bg-[#B6BCCA]" }`}
         disabled={selectedRows.size === 0 || statusIsloading}
         onClick={handleClick}
          >
