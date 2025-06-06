@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import SpreadsheetFileUpload from "@/reuseable/Input/RawFile-spreadshitUpload";
@@ -6,8 +6,10 @@ import { inter } from "@/app/fonts";
 import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
 import DownloadTemplate from "./Download-template";
 import { store,useAppSelector } from '@/redux/store';
-import { setUserdataFile,setRepaymentFile,resetCsvStatus } from '@/redux/slice/csv/csv';
-import { useUploadLoaneeFileMutation } from "@/service/admin/loan_book";
+import { setUserdataFile,setRepaymentFile,resetCsvStatus,resetRepaymentdata } from '@/redux/slice/csv/csv';
+import { useUploadLoaneeFileMutation,useUploadRepaymentFileMutation } from "@/service/admin/loan_book";
+import { convertSpreadsheetToCsv } from "@/utils/convert-csv";
+import { useToast } from "@/hooks/use-toast";
 
 interface FormValues {
   loaneeFile: File | null;
@@ -19,12 +21,21 @@ interface Props {
   setIsOpen?: (e: boolean) => void;
 }
 
+interface ApiError {
+    status: number;
+    data: {
+      message: string;
+    };
+  }
+
 function UploadForm({ setIsOpen, uploadType }: Props) {
   const userData = useAppSelector(store => store?.csv?.userdataFile)
   const repaymentData = useAppSelector(store => store?.csv?.repaymentFile)
   const cohortDetails = useAppSelector((state) => state.cohort?.selectedCohortInOrganization)
   const cohortId = cohortDetails?.id
   const [uploadLoaneeFile, {isLoading: uploadLoaneeIsloading}] = useUploadLoaneeFileMutation();
+  const [uploadLRepaymentFile, {isLoading: uploadRepaymentIsloading}] = useUploadRepaymentFileMutation();
+  const [error, setError] = useState("");
 
   const initialFormValue: FormValues = {
     loaneeFile:  userData || null,
@@ -46,12 +57,37 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
 
   const handleSubmit =  async  (values: FormValues) => {
      
-    store.dispatch(resetCsvStatus())
-    if (uploadType === "loaneeData") {
+   try {
+
+    if (uploadType === "loaneeData"  &&  values.loaneeFile) {
       console.log('Loanee file:', values.loaneeFile);
-    } else {
-      console.log('Repayment file:', values.repaymentFile);
+
+    } 
+    else if(uploadType === "repaymentData" &&  values.repaymentFile){
+        const csvData = await convertSpreadsheetToCsv(values.repaymentFile);
+        const formData = new FormData(); 
+        formData.append("file", csvData, csvData.name); 
+        const uploadData = {
+            cohortId:cohortId,
+            formData 
+        }
+        const uploadFile = await uploadLRepaymentFile(uploadData).unwrap()
+        if(uploadFile) {
+            handleCloseModal()
+            store.dispatch(resetRepaymentdata())
+            toast({
+              description: uploadFile.message,
+              status: "success",
+            });
+        }
+    }else {
+        setError("File was not uploaded")
     }
+     
+   } catch (err) {
+    const error = err as ApiError;
+    setError(error?.data?.message);
+   }
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -66,16 +102,11 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
     setIsOpen?.(false);
   };
 
+  const { toast } = useToast();
+
   return (
     <div>
-      <div>
-        <DownloadTemplate 
-          name={uploadType === "loaneeData" ? "loanee" : "repayment"}
-          fileName={uploadType === "loaneeData" ? "UserData_template" : "Repayment_template"}
-          fileUrl={uploadType === "loaneeData" ? "/templates/Userdata_template.csv" : "/templates/RepaymentData_template.csv"}
-        /> 
-      </div>
-      <div>
+     
         <Formik
           initialValues={initialFormValue}
           onSubmit={handleSubmit}
@@ -83,9 +114,31 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
           validateOnMount={true}
           context={{ uploadType }} 
         >
+
           {({ errors, touched, setFieldValue, values }) => (
             <Form className={inter.className}>
-              <div className='mt-5'>
+                <div 
+                  className='grid grid-cols-1 gap-y-4 md:max-h-[40.5vh] overflow-y-auto'
+                  style={{
+                      scrollbarWidth: 'none',
+                      msOverflowStyle: 'none',
+
+                  }}
+                >
+        <div className='mb-5'>
+        <DownloadTemplate 
+          name={uploadType === "loaneeData" ? "loanee" : "repayment"}
+          fileName={uploadType === "loaneeData" ? "UserData_template" : "Repayment_template"}
+          fileUrl={uploadType === "loaneeData" ? "/templates/Userdata_template.csv" : "/templates/RepaymentData_template.csv"}
+        /> 
+            </div>
+              <div 
+               style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+
+            }}
+              >
                 {uploadType === "loaneeData" ? (
                   <div>
                     <SpreadsheetFileUpload
@@ -120,20 +173,28 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
                   </div>
                 )}
               </div>
+              </div>
               <div className='relative top-3 mt-4'>
                 <SubmitAndCancelButton 
                   isValid={ uploadType === "loaneeData"
                                           ? !!values.loaneeFile
                                           : !!values.repaymentFile}
-                  isLoading={false}
+                  isLoading={uploadType === "loaneeData"? uploadLoaneeIsloading : uploadRepaymentIsloading}
                   handleCloseModal={handleCloseModal}
                   submitButtonName='Upload'
                 />
               </div>
+              <div id="createCohortError"
+          className={`text-error500 flex justify-center items-center ${
+            error ? "mb-3 mt-2" : ""
+          }`}
+        >
+          {error}
+        </div>
             </Form>
           )}
         </Formik>
-      </div>
+      
     </div>
   );
 }

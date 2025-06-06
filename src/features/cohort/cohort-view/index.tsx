@@ -192,6 +192,14 @@ const currentTabState = tabStates[cohortTab];
     if (cohortsByProgram && cohortsByProgram?.data) { 
       const result = cohortsByProgram?.data?.body; 
       setOrganisationCohort(result);
+      setTabStates(prev => ({
+        ...prev,
+        [cohortTab]: {
+            pageNumber: cohortsByProgram?.data.pageNumber,
+            totalPages: cohortsByProgram?.data.totalPages,
+            hasNextPage:cohortsByProgram?.data.hasNextPage
+        }
+    }));
      } }, [cohortsByProgram]);
 
      const loadMore = () => {
@@ -388,6 +396,14 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                           setProgramId("")
                           setPendingProgramId("") 
                           setOrganisationCohort(originalCohortData);
+                          setTabStates(prev => ({
+                            ...prev,
+                            [cohortTab]: {
+                              pageNumber: 0,  
+                              totalPages: cohortData?.data?.totalPages || 0,  // Restore original total pages
+                              hasNextPage: cohortData?.data?.hasNextPage || false
+                            }
+                          }));
                         }}
                         >
                           Reset
@@ -437,7 +453,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
         </div>
         <div className={` ${user_role === "PORTFOLIO_MANAGER"? "mt-8" : " mr-auto ml-auto relative w-[96%] mt-12 "}`}>
          <CohortTabs 
-         isLoading={isLoading || searchIsloading} 
+         isLoading={isLoading || searchIsloading || cohortIsLoading } 
          listOfCohorts={organisationCohort} 
          handleDelete={handleDeleteCohortByOrganisation} 
          errorDeleted={deleteProgram} searchTerm={searchTerm} 

@@ -186,7 +186,6 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
           const csvData = await convertSpreadsheetToCsv(fileUpload);
           const formData = new FormData();
              formData.append("file", csvData, csvData.name); 
-             console.log("The file: ",csvData)
             const uploadData = {
               cohortId:result.data?.id,
               loanProductId: loanProductId,

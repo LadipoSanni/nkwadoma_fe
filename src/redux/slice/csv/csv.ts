@@ -28,10 +28,13 @@ export const csvSlice = createSlice({
         resetCsvStatus:(state) => {
             state.uploadCsvTab =  "loaneeData";
             state.userdataFile = null
+        },
+        resetRepaymentdata: (state) => {
+            state.uploadCsvTab =  "loaneeData";
             state.repaymentFile = null
         }
     }
 })
 
-export const { setCurrentCsvStatus, resetCsvStatus,setRepaymentFile, setUserdataFile} = csvSlice.actions;
+export const { setCurrentCsvStatus, resetCsvStatus,setRepaymentFile, setUserdataFile, resetRepaymentdata} = csvSlice.actions;
 export default csvSlice.reducer;
