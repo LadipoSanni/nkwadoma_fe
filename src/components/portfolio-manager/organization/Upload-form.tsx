@@ -60,8 +60,22 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
    try {
 
     if (uploadType === "loaneeData"  &&  values.loaneeFile) {
-      console.log('Loanee file:', values.loaneeFile);
-
+        const csvData = await convertSpreadsheetToCsv(values.loaneeFile);
+        const formData = new FormData(); 
+        formData.append("file", csvData, csvData.name); 
+        const uploadData = {
+            cohortId:cohortId,
+            formData 
+        }
+        const uploadUserFile = await uploadLoaneeFile(uploadData).unwrap()
+        if(uploadUserFile) {
+            handleCloseModal()
+            store.dispatch(resetCsvStatus()) 
+            toast({
+                description: uploadUserFile.message,
+                status: "success",
+              });
+        }
     } 
     else if(uploadType === "repaymentData" &&  values.repaymentFile){
         const csvData = await convertSpreadsheetToCsv(values.repaymentFile);
@@ -80,8 +94,6 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
               status: "success",
             });
         }
-    }else {
-        setError("File was not uploaded")
     }
      
    } catch (err) {

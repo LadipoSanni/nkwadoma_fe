@@ -38,20 +38,20 @@ interface ApiError {
 const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,organizationId}) => {
   const [startDate, setDate] = useState<Date>();
   const [programId, setProgramId] = useState("");
-  const [loanProductId, setLoanProductId] = useState("");
+  // const [loanProductId, setLoanProductId] = useState("");
   const [selectCurrency, setSelectCurrency] = useState("NGN");
   const [name, setName] = useState("");
  
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
-  const [selectedLoanProduct, setSelectedLoanProduct] = useState<string | null>(null);
+  // const [selectedLoanProduct, setSelectedLoanProduct] = useState<string | null>(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const [isLoanProductSelectOpen, setIsLoanProductSelectOpen] = useState(false);
+  // const [isLoanProductSelectOpen, setIsLoanProductSelectOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
  
   const [fileUpload, setUploadedFile] = useState<File | null>(null);
   const size = 10;
   const [error, setError] = useState("");
-  const [isLoanProduct, setIsLoanProduct] = useState(false)
+  // const [isLoanProduct, setIsLoanProduct] = useState(false)
   const [isProgram, setIsprogram] = useState(false)
   const [tuitionAmount,setTuition] = useState("")
 
@@ -60,18 +60,15 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
    const [programPageNumber, setProgramPageNumber] = useState(0);
    const [hasNextProgramPage, setHasNextProgramPage] = useState(true);
  
-  
-   const [listOfLoanProduct, setLoanProducts] = useState<viewAllProps[]>([]);
-   const [loanProductPageNumber, setLoanProductPageNumber] = useState(0);
-   const [hasNextLoanProductPage, setHasNextLoanProductPage] = useState(true);
- 
-
+  //  const [listOfLoanProduct, setLoanProducts] = useState<viewAllProps[]>([]);
+  //  const [loanProductPageNumber, setLoanProductPageNumber] = useState(0);
+  //  const [hasNextLoanProductPage, setHasNextLoanProductPage] = useState(true);
 
   const { data,isLoading: programIsLoading,isFetching } = useGetAllProgramsQuery(
     { organizationId: organizationId, pageSize: size, pageNumber: programPageNumber },
     { skip: !isProgram }
   );
-  const { data:loanProduct, isLoading: loanProductIsloading,isFetching:loanProductIsfetching} = useViewAllLoanProductQuery({ pageSize: size, pageNumber:loanProductPageNumber },{ skip: !isLoanProduct});
+  // const { data:loanProduct, isLoading: loanProductIsloading,isFetching:loanProductIsfetching} = useViewAllLoanProductQuery({ pageSize: size, pageNumber:loanProductPageNumber },{ skip: !isLoanProduct});
 
   const [createCohort, { isLoading } ] = useCreateCohortMutation();
   const [uploadLoaneeFile, {isLoading: uploadLoaneeIsloading}] = useUploadLoaneeFileMutation();
@@ -92,20 +89,20 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
   }, [data, programPageNumber]);
 
   
-  useEffect(() => {
-    if (loanProduct?.data) {
-      setLoanProducts((prev) => {
-        if (loanProductPageNumber === 0) {
-          return [...loanProduct.data.body].sort((a, b) => a.name.localeCompare(b.name));
-        }
-        const newLoanProducts = loanProduct.data.body.filter(
-          (newLoanProduct: viewAllProps) => !prev.some((prevItem) => prevItem.id === newLoanProduct.id)
-        );
-        return [...prev, ...newLoanProducts].sort((a, b) => a.name.localeCompare(b.name));
-      });
-      setHasNextLoanProductPage(loanProduct.data.hasNextPage);
-    }
-  }, [loanProduct, loanProductPageNumber]);
+  // useEffect(() => {
+  //   if (loanProduct?.data) {
+  //     setLoanProducts((prev) => {
+  //       if (loanProductPageNumber === 0) {
+  //         return [...loanProduct.data.body].sort((a, b) => a.name.localeCompare(b.name));
+  //       }
+  //       const newLoanProducts = loanProduct.data.body.filter(
+  //         (newLoanProduct: viewAllProps) => !prev.some((prevItem) => prevItem.id === newLoanProduct.id)
+  //       );
+  //       return [...prev, ...newLoanProducts].sort((a, b) => a.name.localeCompare(b.name));
+  //     });
+  //     setHasNextLoanProductPage(loanProduct.data.hasNextPage);
+  //   }
+  // }, [loanProduct, loanProductPageNumber]);
 
 
   
@@ -116,28 +113,28 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
   };
 
 
-  const loadMoreLoanProducts = () => {
-    if (!loanProductIsfetching && hasNextLoanProductPage) {
-      setLoanProductPageNumber((prev) => prev + 1);
-    }
-  };
+  // const loadMoreLoanProducts = () => {
+  //   if (!loanProductIsfetching && hasNextLoanProductPage) {
+  //     setLoanProductPageNumber((prev) => prev + 1);
+  //   }
+  // };
 
   const { toast } = useToast();
 
   useEffect(() => {
-    if (name && selectedProgram && startDate &&  selectedLoanProduct && tuitionAmount  ) {
+    if (name && selectedProgram && startDate &&   tuitionAmount  ) {
       setIsButtonDisabled(false);
     } else {
       setIsButtonDisabled(true);
     }
-  }, [name, selectedProgram, startDate,selectedLoanProduct, tuitionAmount]);
+  }, [name, selectedProgram, startDate, tuitionAmount]);
 
 
   const resetForm = () => {
     setDate(undefined);
     setName("");
     setSelectedProgram("");
-    setSelectedLoanProduct("");
+    // setSelectedLoanProduct("");
     setIsSelectOpen(false);
     setProgramId("");
     setError("");
@@ -188,7 +185,6 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
              formData.append("file", csvData, csvData.name); 
             const uploadData = {
               cohortId:result.data?.id,
-              loanProductId: loanProductId,
               formData
             }
             const uploadFile = await uploadLoaneeFile(uploadData).unwrap()
@@ -263,9 +259,9 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
               </div>
               <div
               id="loanProductAndTuitionContainer"
-               className={"md:grid grid-cols-2 gap-x-5"}
+              //  className={"md:grid grid-cols-2 gap-x-5"}
               >
-                <div>
+                {/* <div>
                 <Select
                     selectedProgram={selectedLoanProduct}
                     setSelectedProgram={setSelectedLoanProduct}
@@ -283,7 +279,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                       loader: loanProductIsfetching
                     }}
                        />
-                </div>
+                </div> */}
                  <div>
                  <Label>
                     Tuition

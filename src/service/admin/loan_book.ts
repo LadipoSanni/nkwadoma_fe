@@ -4,15 +4,17 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 export const loanBookApi = createApi({
   reducerPath: "loanBookApi",
   baseQuery: customFetchBaseQuery,
+  tagTypes: ['cohort','loanee'],
   endpoints: (builder) => ({
     uploadLoaneeFile: builder.mutation({
-      query: ({ cohortId, loanProductId, formData }) => {    
+      query: ({ cohortId, formData }) => {    
         return {
-          url: `/loan/book/upload/${cohortId}/${loanProductId}/file/loanee/data`,
+          url: `/loan/book/upload/${cohortId}/file/loanee/data`,
           method: "POST",
           body: formData
         };
       },
+      invalidatesTags: ['cohort','loanee'],
     }),
     uploadRepaymentFile: builder.mutation({
       query: ({ cohortId,formData }) => {    
@@ -22,6 +24,7 @@ export const loanBookApi = createApi({
           body: formData
         };
       },
+      invalidatesTags: ['loanee'],
     }),
   }),
 });
