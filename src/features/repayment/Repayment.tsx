@@ -86,7 +86,7 @@ const Repayment = () => {
 
             <div>
                 <Table
-                    tableData={data?.data?.body}
+                    tableData={data?.data?.body ?  data?.data?.body  : null}
                     // tableData={repaymentsData}
                     tableHeader={tableHeader}
                     handleRowClick={handleRowClick}
