@@ -15,7 +15,6 @@ import React from "react";
 import {GearIcon} from "@radix-ui/react-icons";
 import {LuLogOut} from "react-icons/lu";
 
-import { MdPersonOutline } from "react-icons/md";
 
 const currentTextLiterals = `text-meedlBlue md:text-meedlBlue`;
 const textLiterals = `text-[#626F8C] md:text-[#626F8C] `;
@@ -45,8 +44,7 @@ export const getLoaneeSideBarItems = (currentItem: string, isLoaneeIdentityVerif
         {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem]  ${isLoaneeIdentityVerified ? `${currentItem === 'Overview' ? currentTextLiterals : textLiterals} ` : 'text-navbarIconColor md:text-navbarIconColor'} `}/>, id: 'overview', isActive: isLoaneeIdentityVerified, name: "Overview", route: '/Overview'},
         {icon: <MdOutlineAccountBalanceWallet className={` h-[1.2rem] w-[1.2rem] text-[#d7d7d7] md:text-[#d7d7d7`}/>, id: 'wallet', name: "Wallet", isActive: false, route: '/wallet'},
         // {icon: <Icon icon='iconoir:hand-cash' color={'#d7d7d7'} height={"1.2rem"} width={"1.3rem"}/>, id: 'repayment', isActive: true, name: "My profile", route: '/repayment'}, className={` h-[1.2rem] w-[1.2rem]  ${isLoaneeIdentityVerified ? `${currentItem === 'My profile' ? currentTextLiterals : textLiterals} ` : 'text-navbarIconColor md:text-navbarIconColor'} `}
-        {icon: <MdPersonOutline   className={` h-[1.2rem] w-[1.2rem]  ${currentItem === 'My profile' ? currentTextLiterals : textLiterals} `} />, id: 'myProfile', isActive: true, name: "My profile", route: '/myProfile'},
-
+        {icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={currentItem === 'My loan' ? '#142854' : '#939cb0'}></Icon>, id: 'myLoan', isActive: true, name: "My loan", route: '/myLoan'},
     ]
     return items;
 }
