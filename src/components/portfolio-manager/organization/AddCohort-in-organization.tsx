@@ -11,7 +11,7 @@ import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import TuitionInput from "@/reuseable/feeBreakdown/Tuition";
 import { Label } from "@/components/ui/label";
 import SpreadsheetFileUpload from "@/reuseable/Input/RawFile-spreadshitUpload";
-import {  useViewAllLoanProductQuery } from "@/service/admin/loan_product";
+// import {  useViewAllLoanProductQuery } from "@/service/admin/loan_product";
 import { useUploadLoaneeFileMutation } from "@/service/admin/loan_book";
 import DownloadTemplate from "./Download-template";
 import { convertSpreadsheetToCsv } from "@/utils/convert-csv";
