@@ -6,8 +6,11 @@ import Table from '@/reuseable/table/Table';
 import {
 MdOutlineLibraryBooks,
 } from "react-icons/md";
-import {repaymentsData, months} from "@/utils/LoanProductMockData";
+import {
+    repaymentsData,
+    months, years} from "@/utils/LoanProductMockData";
 import { inter } from '@/app/fonts';
+import { useViewAllRepaymentHistoryQuery } from '@/service/admin/overview';
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
@@ -17,7 +20,15 @@ const Repayment = () => {
     const [hasNextPage] = useState(false)
     const [totalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
+    const [pageSize] = useState(10)
 
+    const props =  {
+        pageSize: pageSize,
+            pageNumber: pageNumber,
+    }
+    const {data} = useViewAllRepaymentHistoryQuery(props)
+
+    // console.log('data:: ', data)
 
     const filterTable = (value: string) => {
         setSelectedValue(value)
@@ -49,20 +60,34 @@ const Repayment = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style="md:w-20 w-full"
                 />
-                {repaymentsData && repaymentsData?.length > 0  ?<CustomSelect
-                    id="filterMonth"
-                    value={selectedValue}
-                    onChange={(value) => filterTable(value)}
-                    selectContent={months}
-                    placeHolder="Month"
-                    triggerId="marketplaceTrigger"
-                    className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
-                />: null}
+                {repaymentsData && repaymentsData?.length > 0  ?
+                   <div className={` flex gap-4 `}>
+                       <CustomSelect
+                           id="filterMonth"
+                           value={selectedValue}
+                           onChange={(value) => filterTable(value)}
+                           selectContent={months}
+                           placeHolder="Month"
+                           triggerId="monthFilterTrigger"
+                           className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                       />
+                       <CustomSelect
+                           id="filterByYear"
+                           value={selectedValue}
+                           onChange={(value) => filterTable(value)}
+                           selectContent={years}
+                           placeHolder="year"
+                           triggerId="yearFilterTrigger"
+                           className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                       />
+                   </div>
+                    : null}
             </div>
 
             <div>
                 <Table
-                    tableData={repaymentsData}
+                    tableData={data?.data?.body}
+                    // tableData={repaymentsData}
                     tableHeader={tableHeader}
                     handleRowClick={handleRowClick}
                     tableHeight={54}
@@ -70,7 +95,7 @@ const Repayment = () => {
                     tableCellStyle={'h-12'}
                     // optionalFilterName='endownment'
                     condition={true}
-                    sideBarTabName='Repayment'
+                    sideBarTabName='repayment'
                     icon={MdOutlineLibraryBooks}
                     staticHeader={"Name"}
                     staticColunm={'name'}
