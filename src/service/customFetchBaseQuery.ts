@@ -12,7 +12,7 @@ export const customFetchBaseQuery = fetchBaseQuery({
     baseUrl,
     // mode: 'no-cors',
     fetchFn: typeof window === 'undefined'
-        ? (fetch as unknown as typeof globalThis.fetch) // Use node-fetch for SSR but cast to global fetch type
+        ? (fetch as unknown as typeof globalThis.fetch) 
         : undefined, 
     prepareHeaders: (headers,{ endpoint }) => {
         const { storedAccessToken } = getUserDetails();
@@ -20,7 +20,7 @@ export const customFetchBaseQuery = fetchBaseQuery({
         const token = isTokenExpired(storedAccessToken) ? storedRefreshToken : storedAccessToken
         if (storedAccessToken || storedRefreshToken) {
             headers.set('authorization', `Bearer ${token}`);
-            if (endpoint !== 'uploadLoaneeFile') {
+            if (endpoint !== 'uploadLoaneeFile'  && endpoint !== 'uploadRepaymentFile') {
                 headers.set('Content-Type', 'application/json');
               }
         }

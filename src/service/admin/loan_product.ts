@@ -61,7 +61,7 @@ export const loanProductApi = createApi({
             pageSize: number;
             pageNumber: number }>({
             query: ({ loanProductId, pageSize, pageNumber }) =>
-                `loanProduct/loanees/${loanProductId}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
+                `/loanee/loanProduct/loanees/${loanProductId}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
         }),
 
         searchLoaneesInALoanProduct: builder.query({
