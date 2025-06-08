@@ -14,7 +14,6 @@ import { useViewAllRepaymentHistoryQuery } from '@/service/admin/overview';
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
-import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
@@ -25,6 +24,7 @@ const Repayment = () => {
     const [totalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
     const [pageSize] = useState(10)
+    const [click, setClicked] = React.useState<object| ReactNode>('')
 
     const props =  {
         pageSize: pageSize,
@@ -32,9 +32,9 @@ const Repayment = () => {
     }
     const {data} = useViewAllRepaymentHistoryQuery(props)
 
-    console.log('data:: ', data)
 
     const filterTable = (value: string) => {
+        console.log('click', click) // to fixed unuse variable
         setSelectedValue(value)
     }
     const getModeOfPayment = (mode?: string |ReactNode) => {
@@ -63,7 +63,7 @@ const Repayment = () => {
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        console.log(ID)
+        setClicked(ID)
     };
 
     return (
@@ -81,7 +81,7 @@ const Repayment = () => {
                     style="md:w-20 w-full"
                 />
                 {repaymentsData && repaymentsData?.length > 0  ?
-                   <div className={` flex gap-4 `}>
+                   <div className={` grid grid-cols-2 md:flex lg:flex gap-4 h-fit md:w-fit lg:w-fit w-full  `}>
                        <CustomSelect
                            id="filterMonth"
                            value={selectedValue}
@@ -89,7 +89,7 @@ const Repayment = () => {
                            selectContent={months}
                            placeHolder="Month"
                            triggerId="monthFilterTrigger"
-                           className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                           className="h-11  w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                        />
                        <CustomSelect
                            id="filterByYear"
@@ -105,17 +105,6 @@ const Repayment = () => {
             </div>
 
             <div>
-                {data?.data?.body?.length === 0 ?
-                    <TableEmptyState
-                        icon={MdOutlineLibraryBooks}
-                        name={'repayment'}
-                        isSearch={false}
-                        // notification={true}
-                        // className={emptyStateStyle}
-                        // optionalFilterName={optionalFilterName}
-                        condition={true}
-                    />
-                    :
                     <Table
                     tableData={data?.data?.body}
                     // tableData={repaymentsData}
@@ -135,7 +124,7 @@ const Repayment = () => {
                     setPageNumber={setPageNumber}
                     totalPages={totalPage}
                     isLoading={false}
-                />}
+                />
             </div>
 
             
