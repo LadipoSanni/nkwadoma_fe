@@ -164,11 +164,12 @@ function DataTable<T extends TableRowData>({
 
   const isLastPage = pageNumber + 1 === totalPages;
 
+
   return (
     <div id="loanProductTableContainer" className={`w-[100%] `}>
       {isLoading ? (
         <SkeletonForTable />
-      ) : tableData?.length === 0 ? (
+      ) : tableData?.length === 0 && !tableData ? (
           <div>
             {searchEmptyState ?
                 <TableEmptyState
