@@ -107,7 +107,9 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
           ];
 
       const handleSelectedRow = (rows: Set<string>) => {
-            setSelectedRows(rows)
+          console.log('clicking a row')
+            // setSelectedRows(rows)
+             router.push('/organizations/view-loanee-profile')
         }
       
        const handleModalOpen = () => {
