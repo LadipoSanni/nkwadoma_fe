@@ -3,7 +3,7 @@ import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
 import {inter, inter500} from "@/app/fonts";
 import Details from "@/components/loanee-my-profile/Details";
 import styles from './index.module.css'
-import Repayment from "@/components/loanee-my-profile/repayment";
+import LoaneeRepayment from "@/components/loanee-my-profile/loaneeRepayment";
 
 const PmLoaneeLoanDetails = () => {
     return (
@@ -32,7 +32,7 @@ const PmLoaneeLoanDetails = () => {
                         </div>
                     </TabsContent>
                     <TabsContent value={'repayment'}>
-                        <Repayment/>
+                        <LoaneeRepayment/>
                     </TabsContent>
                 </div>
             </Tabs>
