@@ -12,11 +12,26 @@ import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-ta
 import {useAppSelector} from "@/redux/store";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 
-
+interface userIdentity {
+    firstName?: string;
+    lastName?: string;
+};
 
 interface TableRowData {
-    [key: string]: string | number | null | React.ReactNode;
+    [key: string]: string | number | null | React.ReactNode  ;
 }
+
+interface viewAllLoanee {
+    userIdentity: userIdentity
+    programName: string
+    cohortName: string
+    cohortStartDate: string
+    requestDate:string
+    initialDeposit:number
+    loanAmountRequested: number
+}
+
+type viewAllLoanees = viewAllLoanee & TableRowData;
 
 const Index = () => {
     const router = useRouter();
@@ -35,13 +50,13 @@ const Index = () => {
     const {data: viewAllLoanRequestsInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewLoanRequestsOfCurrentOrganizationQuery(requestBody, {skip:!clickedOrganization})
 
     const loanRequestHeader = [
-        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex  gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
-        { title: 'Program', sortable: true, id: 'program', selector: (row: TableRowData) =>row.programName },
-        { title: 'Cohort', sortable: true, id: 'cohort', selector: (row: TableRowData) => row.cohortName },
-        { title: 'Start date', sortable: true, id: 'startDate', selector: (row: TableRowData) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMM D, YYYY')}</div> },
-        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: TableRowData) =><div>{dayjs(row.requestDate?.toString()).format('MMM D, YYYY')}</div> },
-        { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row: TableRowData) => <div className=''>{formatAmount(row.initialDeposit)}</div>},
-        { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className=''>{formatAmount(row.loanAmountRequested)}</div>}
+        { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: viewAllLoanees) =><div className='flex  gap-2 '>{capitalizeFirstLetters(row.userIdentity?.firstName?.toString())} <div className={``}></div>{capitalizeFirstLetters(row.userIdentity?.lastName?.toString())}</div>  },
+        { title: 'Program', sortable: true, id: 'program', selector: (row:  viewAllLoanees) =>row.programName },
+        { title: 'Cohort', sortable: true, id: 'cohort', selector: (row:  viewAllLoanees) => row.cohortName },
+        { title: 'Start date', sortable: true, id: 'startDate', selector: (row:  viewAllLoanees) => <div>{dayjs(row.cohortStartDate?.toString()).format('MMM D, YYYY')}</div> },
+        { title: 'Request date', sortable: true, id: 'requestDate', selector: (row: viewAllLoanees) =><div>{dayjs(row.requestDate?.toString()).format('MMM D, YYYY')}</div> },
+        { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row:  viewAllLoanees) => <div className=''>{formatAmount(row.initialDeposit)}</div>},
+        { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row: viewAllLoanees) => <div className=''>{formatAmount(row.loanAmountRequested)}</div>}
     ];
 
 

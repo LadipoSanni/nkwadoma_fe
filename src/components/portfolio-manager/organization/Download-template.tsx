@@ -30,6 +30,8 @@ function DownloadTemplate({name,fileUrl,fileName}: Props) {
       className='border-none shadow-none text-[#142854] '
       variant={'outline'}
       onClick={handleDownload}
+      type="button" 
+      id='templateButton'
       >
         <MdOutlineFileDownload className='w-10 h-5'/>
         <span className='font-extrabold'>Download</span>

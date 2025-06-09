@@ -2,10 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface csvSliceState {
     uploadCsvTab:  string ;
+    userdataFile: File  | null;
+    repaymentFile: File  | null;
 }
 
 const initialState:csvSliceState = {
-   uploadCsvTab: "loaneeData"
+   uploadCsvTab: "loaneeData",
+   userdataFile: null,
+   repaymentFile: null
 }
 
 export const csvSlice = createSlice({
@@ -15,11 +19,22 @@ export const csvSlice = createSlice({
         setCurrentCsvStatus: ( state, action: PayloadAction<string >) => {
             state.uploadCsvTab = action.payload;
         },
+        setUserdataFile: (state, action: PayloadAction<File | null>) => {
+            state.userdataFile = action.payload;
+        },
+        setRepaymentFile: (state, action: PayloadAction<File | null>) => {
+            state.repaymentFile = action.payload;
+        },
         resetCsvStatus:(state) => {
-            state.uploadCsvTab =  "loaneeData"
+            state.uploadCsvTab =  "loaneeData";
+            state.userdataFile = null
+        },
+        resetRepaymentdata: (state) => {
+            state.uploadCsvTab =  "loaneeData";
+            state.repaymentFile = null
         }
     }
 })
 
-export const { setCurrentCsvStatus, resetCsvStatus} = csvSlice.actions;
+export const { setCurrentCsvStatus, resetCsvStatus,setRepaymentFile, setUserdataFile, resetRepaymentdata} = csvSlice.actions;
 export default csvSlice.reducer;
