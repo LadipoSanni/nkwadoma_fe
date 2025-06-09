@@ -12,7 +12,13 @@ export const portfolioOverviewApi = createApi({
                method: 'GET'
            })
         }),
+        viewAllRepaymentHistory: builder.query({
+            query: (data) => ({
+                url:   `/repayment/history/all?pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
+                method: 'GET'
+            })
+         })
     })
 
 })
-export const {useViewMeedlPortfolioQuery} = portfolioOverviewApi;
+export const {useViewMeedlPortfolioQuery, useViewAllRepaymentHistoryQuery} = portfolioOverviewApi;
