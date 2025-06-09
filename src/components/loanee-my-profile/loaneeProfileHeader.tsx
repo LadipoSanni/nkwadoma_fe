@@ -54,18 +54,18 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program}: Props)
                        // className={`h-[4rem] w-[4rem] mt-auto mb-auto rounded-full bg-[#F6F6F6] `}
                    >
                        {userRole === 'LOANEE'?
-                           <Badge className={`h-fit w-fit py-3 px-3  bg-[#F6F6F6] rounded-full `}>
+                           <Badge className={`h-fit w-fit py-4 px-4  bg-[#F6F6F6] rounded-full `}>
                                {getFirstLetterOfWord(institutionName)}
                            </Badge>
                            :
 
-                           <Badge  id={'loaneeUserName'} variant={"secondary"} className={`h-fit w-fit py-3 px-3 bg-[#E7F5EC] ${inter.className} text-[#063F1A] md:text-[#063F1A]  text-[24px] rounded-full `}>
+                           <Badge  id={'loaneeUserName'} variant={"secondary"} className={`h-fit w-fit py-4 px-4 bg-[#E7F5EC] ${cabinetGroteskBold.className} text-[#063F1A] md:text-[#063F1A]  text-[24px] rounded-full `}>
                                {getFirstLetterOfWord(userName)}
                            </Badge>
                        }
                    </div>
                    <div className={` mt-auto mb-auto `}>
-                       <div className={`  grid  gap-1 `}>
+                       <div className={`   grid  gap-0 `}>
                            {userRole === 'LOANEE' ?
                                <span id={'cohortName'} data-testid={'cohortName'} className={` ${cabinetGroteskBold.className} text-[20px] text-[#212221] `}>{institutionName}</span>
                                :

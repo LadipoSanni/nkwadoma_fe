@@ -2,7 +2,7 @@ import React from 'react';
 import { inter500, inter} from "@/app/fonts";
 import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
 
-// import stxyles from "@/components/loanee-my-profile/index.module.css";
+import styles from "@/components/loanee-my-profile/index.module.css";
 import Image from "next/image";
 import {LoaneeDetails} from "@/types/loanee";
 import {getItemSessionStorage} from "@/utils/storage";
