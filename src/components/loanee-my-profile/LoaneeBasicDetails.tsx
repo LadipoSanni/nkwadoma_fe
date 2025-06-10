@@ -6,7 +6,6 @@ import styles from "@/components/loanee-my-profile/index.module.css";
 import Image from "next/image";
 import {LoaneeDetails} from "@/types/loanee";
 import {getItemSessionStorage} from "@/utils/storage";
-import Document from "@/components/loanee-my-profile/Document";
 interface props{
     data?: LoaneeDetails,
     isLoading?: boolean,

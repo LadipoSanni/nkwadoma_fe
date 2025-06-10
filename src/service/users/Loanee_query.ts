@@ -52,7 +52,7 @@ export const loaneeApi = createApi({
         }),
         getLoaneeDetails: builder.query ({
             query: (loaneeId?: string) =>({
-                url: `/loanee/${loaneeId}`,
+                url: `/loanee/${loaneeId ? loaneeId : 'details'}`,
                 method: 'GET'
             }),
 

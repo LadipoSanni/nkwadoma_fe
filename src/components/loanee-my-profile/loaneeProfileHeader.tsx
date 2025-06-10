@@ -38,6 +38,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
         setModalButtonText(buttonText);
         setOpenModal(true);
     }
+    console.log('ubd: ', getFirstLetterOfWord(institutionName), 'userRole: ', userRole)
 
     return (
        <div>
@@ -66,7 +67,8 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                    >
                        {userRole === 'LOANEE' ?
                            <Badge className={`h-[70px] w-[70px] hover:bg-[#F6F6F6]    bg-[#F6F6F6] rounded-full `}>
-                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto `}>{getFirstLetterOfWord(institutionName)}</p>
+
+                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto ${cabinetGroteskBold.className} text-[#4D4E4D] md:text-[#4D4E4D] text-[24px] `}>{getFirstLetterOfWord(institutionName) ? getFirstLetterOfWord(institutionName) : institutionName?.at(0)?.toUpperCase()}</p>
                            </Badge>
                            :
 

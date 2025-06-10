@@ -16,6 +16,7 @@ import Modal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import UploadCSV from './Upload-csv';
 import {setLoaneeId} from "@/redux/slice/organization/organization";
+import {LoaneetDetails} from "@/types/loanee";
 
 
 interface TableRowData {
@@ -109,12 +110,13 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
           ];
 
       const handleSelectedRow = (rows: Set<string>) => {
-          console.log('clicking a row', rows)
-          const firstValue = rows.values().next().value;
-          console.log('first: ', firstValue);
-          // setSelectedRows(rows)
-          store.dispatch(setLoaneeId(firstValue))
-             router.push('/organizations/view-loanee-profile')
+          setSelectedRows(rows)
+
+        }
+
+        const handleRowClick = (row: LoaneetDetails) => {
+            store.dispatch(setLoaneeId(row?.id))
+               router.push('/organizations/view-loanee-profile')
         }
       
        const handleModalOpen = () => {
@@ -202,7 +204,9 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
         tableData={getTableData()}
         tableHeader={tableHeaderintegrated}
-        handleRowClick={()=> {}}
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        handleRowClick={handleRowClick}
         staticHeader="Loanee"
         staticColunm="firstName"
         icon={MdOutlinePerson}

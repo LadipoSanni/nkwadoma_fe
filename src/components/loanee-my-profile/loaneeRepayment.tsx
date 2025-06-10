@@ -5,7 +5,7 @@ import {formatAmount} from "@/utils/Format";
 import Table from '@/reuseable/table/Table';
 import {MdOutlineLibraryBooks} from "react-icons/md";
 import {inter} from "@/app/fonts";
-import {repaymentsData} from "@/utils/LoanProductMockData";
+// import {repaymentsData} from "@/utils/LoanProductMockData";
 import {useViewAllRepaymentHistoryQuery} from "@/service/admin/overview";
 
 
