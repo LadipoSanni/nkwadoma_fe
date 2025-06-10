@@ -7,16 +7,17 @@ interface props {
     textColor: string,
     iconBeforeLetters: boolean,
     text: string,
-    handleClick: ()=> void
+    handleClick: ()=> void,
+    sx?: string,
 
 }
 
-const BackButton = ({id,text, textColor, handleClick, iconBeforeLetters}: props) => {
+const BackButton = ({id,text,sx, textColor, handleClick, iconBeforeLetters}: props) => {
     return (
         <button
             id={id}
             data-testid={id}
-            className={`w-fit h-fit md:w-fit md:flex items-center text-${textColor} md:fit flex gap-1`}
+            className={`w-fit h-fit md:w-fit md:flex items-center ${sx} text-${textColor} md:fit flex gap-1`}
             onClick={handleClick}
         >
             {iconBeforeLetters &&

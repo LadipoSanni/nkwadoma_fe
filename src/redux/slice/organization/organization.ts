@@ -4,13 +4,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface OrganizationSliceState {
     organizationStatusTab:  string ;
     setOrganizationId: string,
-    organizationDetailTab: string
+    organizationDetailTab: string;
+    loaneeId: string;
 }
 
 const initialState:OrganizationSliceState= {
     organizationStatusTab: "active",
     setOrganizationId: "",
     organizationDetailTab: "details",
+    loaneeId: "",
 }
 
 export const organizationSlice = createSlice({
@@ -32,8 +34,11 @@ export const organizationSlice = createSlice({
         resetOrganizationDetailsStatus: (state) => {
             state.organizationDetailTab= "details"
         },
+        setLoaneeId: ( state, action: PayloadAction<string >) => {
+            state.loaneeId = action.payload;
+        }
     }
 })
 
-export const {setOrganizationTabStatus,resetOrganizationId,setOrganizationId,setOrganizationDetail,resetOrganizationDetailsStatus} = organizationSlice.actions;
+export const {setOrganizationTabStatus,setLoaneeId,resetOrganizationId,setOrganizationId,setOrganizationDetail,resetOrganizationDetailsStatus} = organizationSlice.actions;
 export default organizationSlice.reducer;

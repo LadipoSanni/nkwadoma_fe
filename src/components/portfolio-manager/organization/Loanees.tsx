@@ -5,7 +5,7 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import { Button } from '@/components/ui/button';
 import CheckBoxTable from '@/reuseable/table/Checkbox-table';
 import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery,useUpdateLoaneeStatusMutation} from "@/service/admin/cohort_query";
-import {useAppSelector} from "@/redux/store";
+import {store, useAppSelector} from "@/redux/store";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {formatAmount} from '@/utils/Format';
@@ -15,6 +15,8 @@ import Isloading from '@/reuseable/display/Isloading';
 import Modal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import UploadCSV from './Upload-csv';
+import {setLoaneeId} from "@/redux/slice/organization/organization";
+import {LoaneetDetails} from "@/types/loanee";
 
 
 interface TableRowData {
@@ -108,7 +110,13 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
           ];
 
       const handleSelectedRow = (rows: Set<string>) => {
-            setSelectedRows(rows)
+          setSelectedRows(rows)
+
+        }
+
+        const handleRowClick = (row: LoaneetDetails) => {
+            store.dispatch(setLoaneeId(row?.id))
+               router.push('/organizations/view-loanee-profile')
         }
       
        const handleModalOpen = () => {
@@ -196,7 +204,9 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
         tableData={getTableData()}
         tableHeader={tableHeaderintegrated}
-        handleRowClick={()=> {}}
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        handleRowClick={handleRowClick}
         staticHeader="Loanee"
         staticColunm="firstName"
         icon={MdOutlinePerson}
