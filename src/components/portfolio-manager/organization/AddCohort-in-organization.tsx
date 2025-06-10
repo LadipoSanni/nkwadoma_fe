@@ -304,8 +304,8 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                 <div className="w-full relative lg:bottom-3">
                   <DownloadTemplate 
                   name="loanee"
-                  fileName="UserData_template"
-                  fileUrl="/templates/Userdata_template.csv"
+                  fileName="LoaneeData_template"
+                  fileUrl="/templates/Loaneedata_template.csv"
                   />
                 </div>
               <div className="md: mt-2 lg:mt-0 lg:relative bottom-3">
