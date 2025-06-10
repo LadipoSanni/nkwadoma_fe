@@ -215,7 +215,7 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
 
         <form
           id="cohortForm"
-          className='grid gap-5 grid-cols-1 gap-y-4 md:max-h-[57vh] max-h-[55vh] overflow-y-auto  pr-2'
+          className='grid gap-5 grid-cols-1 gap-y-4 md:max-h-[57vh] max-h-[62vh] overflow-y-auto  pr-2'
                     style={{
                         scrollbarWidth: 'none',
                         msOverflowStyle: 'none',

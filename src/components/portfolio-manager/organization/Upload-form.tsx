@@ -140,8 +140,8 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
         <div className='mb-5'>
         <DownloadTemplate 
           name={uploadType === "loaneeData" ? "loanee" : "repayment"}
-          fileName={uploadType === "loaneeData" ? "UserData_template" : "Repayment_template"}
-          fileUrl={uploadType === "loaneeData" ? "/templates/Userdata_template.csv" : "/templates/RepaymentData_template.csv"}
+          fileName={uploadType === "loaneeData" ? "Loaneedata_template" : "Repayment_template"}
+          fileUrl={uploadType === "loaneeData" ? "/templates/Loaneedata_template.csv" : "/templates/Repayments_data_template.csv"}
         /> 
             </div>
               <div 
