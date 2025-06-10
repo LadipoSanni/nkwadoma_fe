@@ -12,7 +12,7 @@ const Index = dynamic(
 )
 
 const LoaneeDetails = () => {
-    const {data} = useGetLoaneeDetailsQuery({})
+    const {data} = useGetLoaneeDetailsQuery('')
 
 
     return (

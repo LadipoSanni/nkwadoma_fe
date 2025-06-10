@@ -51,8 +51,8 @@ export const loaneeApi = createApi({
             })
         }),
         getLoaneeDetails: builder.query ({
-            query: () =>({
-                url: `/loanee/null`,
+            query: (loaneeId?: string) =>({
+                url: `/loanee/${loaneeId}`,
                 method: 'GET'
             }),
 

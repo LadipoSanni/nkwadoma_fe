@@ -5,7 +5,7 @@ import SearchInput from "@/reuseable/Input/SearchInput";
 import { Button } from '@/components/ui/button';
 import CheckBoxTable from '@/reuseable/table/Checkbox-table';
 import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery,useUpdateLoaneeStatusMutation} from "@/service/admin/cohort_query";
-import {useAppSelector} from "@/redux/store";
+import {store, useAppSelector} from "@/redux/store";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {formatAmount} from '@/utils/Format';
@@ -15,6 +15,7 @@ import Isloading from '@/reuseable/display/Isloading';
 import Modal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import UploadCSV from './Upload-csv';
+import {setLoaneeId} from "@/redux/slice/organization/organization";
 
 
 interface TableRowData {
@@ -108,8 +109,11 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
           ];
 
       const handleSelectedRow = (rows: Set<string>) => {
-          console.log('clicking a row')
-            // setSelectedRows(rows)
+          console.log('clicking a row', rows)
+          const firstValue = rows.values().next().value;
+          console.log('first: ', firstValue);
+          // setSelectedRows(rows)
+          store.dispatch(setLoaneeId(firstValue))
              router.push('/organizations/view-loanee-profile')
         }
       

@@ -4,8 +4,19 @@ import {inter, inter500} from "@/app/fonts";
 import Details from "@/components/loanee-my-profile/Details";
 import styles from './index.module.css'
 import LoaneeRepayment from "@/components/loanee-my-profile/loaneeRepayment";
+import {LoaneeDetails} from "@/types/loanee";
 
-const PmLoaneeLoanDetails = () => {
+
+interface props{
+    data?: LoaneeDetails;
+    loaneeId:string;
+}
+
+const PmLoaneeLoanDetails = ({data, loaneeId}: props) => {
+
+
+
+
     return (
         <div className={`md:max-h-fit md:w-[55%] sm:w-[100%] w-[100%] px-4 pb-6 md:border-r md:border-r-grey-200 `}>
             <Tabs  defaultValue={'loanInfo'}>
@@ -17,13 +28,13 @@ const PmLoaneeLoanDetails = () => {
               </div>
                 <div className={`md:max-h-[55vh]  grid gap-4 w-full  ${styles.container} `}>
                     <TabsContent value={'loanInfo'} className={` grid gap-3 `}>
-                        <Details id={'loanAmount'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={'data?.loanAmount'} valueType={'currency'} />
+                        <Details id={'loanAmount'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.loanAmount} valueType={'currency'} />
                         <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>
-                            <Details id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={0} valueType={'currency'} />
-                            <Details id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={'data?.loaneeLoanDetail?.amountRepaid'} valueType={'currency'}  />
+                            <Details id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.loaneeLoanDetail?.amountOutstanding} valueType={'currency'} />
+                            <Details id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.loaneeLoanDetail?.amountRepaid} valueType={'currency'}  />
                         </div>
                         <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
-                            <Details id={'interest'}    maxWidth={'100%'} name={'Interest'} value={'data?.interestRate ? data?.interestRate : 0'} valueType={'percentage'} />
+                            <Details id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? data?.interestRate : 0} valueType={'percentage'} />
                             <Details id={'interestIncured'}    maxWidth={'100%'} name={'Interest incurred'} value={0} valueType={'percentage'}  />
                         </div>
                         <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
@@ -31,8 +42,8 @@ const PmLoaneeLoanDetails = () => {
                             <Details id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={0} valueType={'percentage'}  />
                         </div>
                     </TabsContent>
-                    <TabsContent className={' bg-red-200 h-full '} value={'repayment'}>
-                        <LoaneeRepayment/>
+                    <TabsContent className={'  py-0 h-full  '} value={'repayment'}>
+                        <LoaneeRepayment loaneeId={loaneeId}/>
                     </TabsContent>
                 </div>
             </Tabs>

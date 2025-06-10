@@ -13,15 +13,17 @@ import Modal from "@/reuseable/modals/Modal";
 import {getItemSessionStorage} from "@/utils/storage";
 import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import { Badge } from "@/components/ui/badge"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface Props {
     cohort: string,
     program: string,
     institutionName?: string,
     userName?: string,
+    isLoading: boolean,
 }
 
-const LoaneeProfileHeader = ({cohort ,userName,institutionName, program}: Props) => {
+const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoading}: Props) => {
 
     const [openModal, setOpenModal] = React.useState(false);
     const [modalId, setModalId] = React.useState('');
@@ -43,24 +45,34 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program}: Props)
                 data-testid={'loaneeProfileHeader'}
                 className={`w-full h-fit md:h-[13vh]  py-4 border-b border-b-grey-200 px-4  mt-auto mb-auto  flex justify-between `}
            >
+               {isLoading ?
+                   <div className="flex items-center space-x-4">
+                       <Skeleton className="h-20 w-20 bg-[#f4f4f5] rounded-full" />
+                       <div className="space-y-2">
+                           <Skeleton className="h-5 bg-[#f4f4f5] w-[250px]" />
+                           <Skeleton className="h-5  bg-[#f4f4f5] w-[200px]" />
+                       </div>
+                   </div>
+                   :
                <div
                    id={'cohortAndProgramInfo'}
                    data-testid={'cohortAndProgramInfo'}
                    className={` w-fit h-full  flex gap-2`}
                >
-                   <div
+                       <div
                        id={'cohortImage'}
                        data-testid={'cohortImage'}
                        // className={`h-[4rem] w-[4rem] mt-auto mb-auto rounded-full bg-[#F6F6F6] `}
                    >
-                       {userRole === 'LOANEE'?
-                           <Badge className={`h-fit w-fit py-4 px-4  bg-[#F6F6F6] rounded-full `}>
-                               {getFirstLetterOfWord(institutionName)}
+                       {userRole === 'LOANEE' ?
+                           <Badge className={`h-[70px] w-[70px] hover:bg-[#F6F6F6]    bg-[#F6F6F6] rounded-full `}>
+                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto `}>{getFirstLetterOfWord(institutionName)}</p>
                            </Badge>
                            :
 
-                           <Badge  id={'loaneeUserName'} variant={"secondary"} className={`h-fit w-fit py-4 px-4 bg-[#E7F5EC] ${cabinetGroteskBold.className} text-[#063F1A] md:text-[#063F1A]  text-[24px] rounded-full `}>
-                               {getFirstLetterOfWord(userName)}
+                           <Badge id={'loaneeUserName'} variant={"secondary"}
+                                  className={`h-[70px] w-[70px] bg-[#E7F5EC] hover:bg-[#E7F5EC] ${cabinetGroteskBold.className} text-[#063F1A] md:text-[#063F1A]  text-[24px] rounded-full `}>
+                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto `}>{getFirstLetterOfWord(userName)}</p>
                            </Badge>
                        }
                    </div>
@@ -81,6 +93,8 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program}: Props)
                        </div>
                    </div>
                </div>
+
+               }
 
                {userRole === 'LOANEE' &&
                <Menubar className={'w-fit mt-auto mb-auto h-fit'}>

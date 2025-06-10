@@ -6,18 +6,22 @@ import Table from '@/reuseable/table/Table';
 import {MdOutlineLibraryBooks} from "react-icons/md";
 import {inter} from "@/app/fonts";
 import {repaymentsData} from "@/utils/LoanProductMockData";
+import {useViewAllRepaymentHistoryQuery} from "@/service/admin/overview";
 
 
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
+interface Props {
+    loaneeId: string;
+}
 
-const LoaneeRepayment = () => {
+const LoaneeRepayment = ({loaneeId}:Props) => {
     const [hasNextPage] = useState(false)
     const [totalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
-    // const [pageSize] = useState(10)
+    const [pageSize] = useState(10)
 
     const getModeOfPayment = (mode?: string |ReactNode) => {
         switch (mode) {
@@ -33,7 +37,13 @@ const LoaneeRepayment = () => {
 
         }
     }
-
+    const props =  {
+        pageSize: pageSize,
+        pageNumber: pageNumber,
+        loaneeId: loaneeId
+    }
+    const {data, isFetching, isLoading} = useViewAllRepaymentHistoryQuery(props)
+    console.log('loanee repayment data ', data)
 
     const tableHeader = [
         { title: 'Payment date', sortable: true, id: 'paymentDate', selector: (row: TableRowData) =><div>{dayjs(row.paymentDateTime?.toString()).format('MMM D, YYYY')}</div>},
@@ -49,8 +59,8 @@ const LoaneeRepayment = () => {
 
     return (
             <Table
-                // tableData={data?.data?.body}
-                tableData={repaymentsData}
+                tableData={data?.data?.body}
+                // tableData={repaymentsData}
                 tableHeader={tableHeader}
                 handleRowClick={handleRowClick}
                 tableHeight={48}
@@ -66,7 +76,7 @@ const LoaneeRepayment = () => {
                 pageNumber={pageNumber}
                 setPageNumber={setPageNumber}
                 totalPages={totalPage}
-                isLoading={false}
+                isLoading={isLoading || isFetching}
             />
     )
 };

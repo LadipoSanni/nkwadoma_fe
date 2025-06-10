@@ -5,7 +5,7 @@ import styles from './index.module.css'
 interface Props {
     id: string;
     name: string;
-    value: string| number;
+    value?: string| number;
     maxWidth: string;
     valueType:'percentage'| 'digit'| 'currency' | 'tenor',
     showAsWholeNumber?: boolean
