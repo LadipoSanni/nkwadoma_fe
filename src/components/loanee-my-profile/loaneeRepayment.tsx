@@ -1,5 +1,5 @@
 import React, {ReactNode, useState} from 'react';
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+// import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import dayjs from "dayjs";
 import {formatAmount} from "@/utils/Format";
 import Table from '@/reuseable/table/Table';
@@ -17,7 +17,7 @@ const LoaneeRepayment = () => {
     const [hasNextPage] = useState(false)
     const [totalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
-    const [pageSize] = useState(10)
+    // const [pageSize] = useState(10)
 
     const getModeOfPayment = (mode?: string |ReactNode) => {
         switch (mode) {
@@ -44,6 +44,7 @@ const LoaneeRepayment = () => {
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
         // router.push(`/loan-request-details?id=${ID}`);
+        console.log(ID)
     };
 
     return (
@@ -52,7 +53,7 @@ const LoaneeRepayment = () => {
                 tableData={repaymentsData}
                 tableHeader={tableHeader}
                 handleRowClick={handleRowClick}
-                tableHeight={45}
+                tableHeight={48}
                 sx='cursor-pointer'
                 tableCellStyle={'h-12'}
                 // optionalFilterName='endownment'

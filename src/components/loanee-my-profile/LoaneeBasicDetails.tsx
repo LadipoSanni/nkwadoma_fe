@@ -6,6 +6,7 @@ import styles from "@/components/loanee-my-profile/index.module.css";
 import Image from "next/image";
 import {LoaneeDetails} from "@/types/loanee";
 import {getItemSessionStorage} from "@/utils/storage";
+import Document from "@/components/loanee-my-profile/Document";
 interface props{
     data?: LoaneeDetails
 }
@@ -74,13 +75,13 @@ const LoaneeBasicDetails = ({data}: props) => {
                 </div>
                 </div>
                 :
-                <Tabs defaultValue={'bioDetails'} className={` px-4 w-full  `}>
+                <Tabs defaultValue={'bioDetails'} className={` px-4 py-4  w-full  `}>
                     <TabsList className="grid w-fit px-0 pb-2  grid-cols-2">
                         <TabsTrigger id={'bioDetails'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="bioDetails">Bio details</TabsTrigger>
                         <TabsTrigger id={'document'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="documents">Document</TabsTrigger>
                     </TabsList>
                     <div
-                        className={` md:max-h-[65vh] w-full  ${styles.container}`}
+                        className={` md:max-h-[56vh] w-full  ${styles.container}`}
                     >
                         <TabsContent value={'bioDetails'} className={` md:w-full pt-3 w-full   `}>
                             <div className={` bg-grey105  w-full rounded-md  `}>
@@ -102,40 +103,8 @@ const LoaneeBasicDetails = ({data}: props) => {
 
                         </TabsContent>
                         <TabsContent value={'documents'} className={` grid md:flex pt-3 gap-5  md:flex-col-2  `}>
-                            <div className={` h-fit  w-full rounded-md px-3 pt-5 pb-3  bg-[#F6F6F6] `}>
-                                <div className={` h-[8rem] bg-white  w-full rounded-md `}>
-
-                                </div>
-
-                                <div className={`flex py-4 gap-2 `}>
-                                    <Image
-                                        src={'/MyMandateLogo.png'}
-                                        alt="circle"
-                                        width={20}
-                                        height={29}
-                                        data-testid="circle-image"
-                                        loading="lazy"
-                                    />
-                                    <span className={` ${inter.className} text-[#212221] text-[14px] `}>mymandate25.pdf</span>
-                                </div>
-                            </div>
-                            <div className={` h-fit  w-full rounded-md px-3 pt-5 pb-3   bg-[#F6F6F6] `}>
-                                <div className={` h-[8rem] bg-white  w-full rounded-md `}>
-
-                                </div>
-                                <div className={`flex py-4  gap-2 `}>
-                                    <Image
-                                        src={'/MyMandateLogo.png'}
-                                        alt="circle"
-                                        width={20}
-                                        height={29}
-                                        // className="object-right-bottom flex  "
-                                        data-testid="circle-image"
-                                        loading="lazy"
-                                    />
-                                    <span className={` ${inter.className} text-[#212221] text-[14px] `}>mymandate25.pdf</span>
-                                </div>
-                            </div>
+                            {/*<Document/>*/}
+                            <p>No Document available</p>
                         </TabsContent>
                     </div>
                 </Tabs>

@@ -31,7 +31,7 @@ const PmLoaneeLoanDetails = () => {
                             <Details id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={0} valueType={'percentage'}  />
                         </div>
                     </TabsContent>
-                    <TabsContent value={'repayment'}>
+                    <TabsContent className={' bg-red-200 h-full '} value={'repayment'}>
                         <LoaneeRepayment/>
                     </TabsContent>
                 </div>
