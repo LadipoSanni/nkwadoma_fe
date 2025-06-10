@@ -188,6 +188,14 @@ export const cohortApi = createApi({
               }), 
               invalidatesTags: ['loanee'],
           }),
+          inviteLoanee: builder.mutation({
+            query: (loaneeIds: string[]) => ({
+                url: '/loanee/invite', 
+                method: 'POST',              
+                body: loaneeIds,  
+              }), 
+              invalidatesTags: ['loanee'],
+          }),
     })
 })
 
@@ -206,6 +214,7 @@ export const {
     useSearchForLoaneeInACohortQuery,
     useGetCohortDetailsBreakdownQuery,
     useGetAllCohortByAParticularProgramQuery,
-    useUpdateLoaneeStatusMutation
+    useUpdateLoaneeStatusMutation,
+    useInviteLoaneeMutation
 } = cohortApi;
 

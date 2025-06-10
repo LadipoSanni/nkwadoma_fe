@@ -4,8 +4,8 @@ import dynamic from "next/dynamic";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import { Button } from '@/components/ui/button';
 import CheckBoxTable from '@/reuseable/table/Checkbox-table';
-import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery,useUpdateLoaneeStatusMutation} from "@/service/admin/cohort_query";
-import {store, useAppSelector} from "@/redux/store";
+import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery,useUpdateLoaneeStatusMutation,useInviteLoaneeMutation} from "@/service/admin/cohort_query";
+import {useAppSelector} from "@/redux/store";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {formatAmount} from '@/utils/Format';
@@ -69,6 +69,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
     const [enableButton, setEnableButton] = useState(false)
     const [updateLoaneeStatus, {isLoading:statusIsloading}] = useUpdateLoaneeStatusMutation()
+    const [inviteLoanee, {isLoading:inviteIsloading}] = useInviteLoaneeMutation()
     const {toast} = useToast()
     const router = useRouter();
      const [isOpen, setIsOpen] = useState(false);
@@ -119,6 +120,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
                router.push('/organizations/view-loanee-profile')
         }
       
+   
+      
        const handleModalOpen = () => {
           setIsOpen(!isOpen)
       }
@@ -162,6 +165,28 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         }
       }
 
+      const handleInvite = async () => {
+         const loaneeId = Array.from(selectedRows)
+         try {
+          const inviteLoanees = await inviteLoanee(loaneeId).unwrap()
+          if(inviteLoanees){
+            setSelectedRows(new Set());
+            setEnableButton(false)
+            toast({
+              description: inviteLoanees?.message,
+              status: "success",
+            })
+          }
+         } 
+         catch (err) {
+          const error = err as ApiError;
+          toast({
+            description: error?.data?.message,
+            status: "error",
+          })
+         }
+      }
+
   return (
     <main>
       <div className='md:flex justify-between items-center'>
@@ -175,7 +200,17 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
          />  
         </div>
         <div className='mt-3 md:mt-0 gap-4 flex'  >
-        <Button
+        { tabType === "All" ?
+         <Button
+           id="inviteLoanee"
+           aria-disabled={!enableButton}
+         variant={"outline"}
+         disabled={selectedRows.size === 0 || inviteIsloading }
+         className={`h-[45px] w-full font-semibold md:w-[90px]  ${enableButton  ? "border-[#142854] text-[#142854]" :"border-[#ECECEC] text-[#A8A8A8] shadow-none"  }`}
+         onClick={handleInvite}
+         >
+         { inviteIsloading?  <Isloading/> : " Invite"}
+        </Button> : <Button
         id='action'
        data-testid='actionButton'
          aria-disabled={!enableButton}
@@ -185,7 +220,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         onClick={handleClick}
          >
            { statusIsloading? <Isloading/> : buttonName}
-        </Button>
+        </Button>}
         {  tabType === "All" &&
           <Button
           variant={`secondary`}
