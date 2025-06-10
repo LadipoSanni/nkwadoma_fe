@@ -12,7 +12,7 @@ const Index = dynamic(
 )
 
 const LoaneeDetails = () => {
-    const {data} = useGetLoaneeDetailsQuery('')
+    const {data, isFetching, isLoading} = useGetLoaneeDetailsQuery('')
 
 
     return (
@@ -20,7 +20,7 @@ const LoaneeDetails = () => {
             id={'loaneeProfile'}
             className={`w-full  h-full`}
         >
-          <LoaneeProfileHeader institutionName={data?.data?.institutionName} cohort={data?.data?.cohortName} program={data?.data?.programName}/>
+          <LoaneeProfileHeader isLoading={isLoading || isFetching} institutionName={data?.data?.institutionName} cohort={data?.data?.cohortName} program={data?.data?.programName}/>
            <div className={`flex w-full  max-h-[77vh]  `}>
                <LoaneeLoanDetails data={data?.data}/>
                <LoaneeBasicDetails data={data?.data}/>

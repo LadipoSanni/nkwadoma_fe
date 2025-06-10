@@ -10,9 +10,10 @@ import {LoaneeDetails} from "@/types/loanee";
 interface props{
     data?: LoaneeDetails;
     loaneeId:string;
+    isLoading: boolean
 }
 
-const PmLoaneeLoanDetails = ({data, loaneeId}: props) => {
+const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
 
 
 
@@ -28,18 +29,18 @@ const PmLoaneeLoanDetails = ({data, loaneeId}: props) => {
               </div>
                 <div className={`md:max-h-[55vh]  grid gap-4 w-full  ${styles.container} `}>
                     <TabsContent value={'loanInfo'} className={` grid gap-3 `}>
-                        <Details id={'loanAmount'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.loanAmount} valueType={'currency'} />
+                        <Details id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.loanAmount} valueType={'currency'} />
                         <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>
-                            <Details id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.loaneeLoanDetail?.amountOutstanding} valueType={'currency'} />
-                            <Details id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.loaneeLoanDetail?.amountRepaid} valueType={'currency'}  />
+                            <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.loaneeLoanDetail?.amountOutstanding} valueType={'currency'} />
+                            <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.loaneeLoanDetail?.amountRepaid} valueType={'currency'}  />
                         </div>
                         <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
-                            <Details id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? data?.interestRate : 0} valueType={'percentage'} />
-                            <Details id={'interestIncured'}    maxWidth={'100%'} name={'Interest incurred'} value={0} valueType={'percentage'}  />
+                            <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? data?.interestRate : 0} valueType={'percentage'} />
+                            <Details isLoading={isLoading} id={'interestIncured'}    maxWidth={'100%'} name={'Interest incurred'} value={0} valueType={'percentage'}  />
                         </div>
                         <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
-                            <Details id={'deptPercentage'}    maxWidth={'100%'} name={'Dept percentage'} value={0} valueType={'percentage'} />
-                            <Details id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={0} valueType={'percentage'}  />
+                            <Details isLoading={isLoading} id={'deptPercentage'}    maxWidth={'100%'} name={'Dept percentage'} value={0} valueType={'percentage'} />
+                            <Details isLoading={isLoading} id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={0} valueType={'percentage'}  />
                         </div>
                     </TabsContent>
                     <TabsContent className={'  py-0 h-full  '} value={'repayment'}>

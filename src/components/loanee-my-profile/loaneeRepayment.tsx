@@ -43,7 +43,6 @@ const LoaneeRepayment = ({loaneeId}:Props) => {
         loaneeId: loaneeId
     }
     const {data, isFetching, isLoading} = useViewAllRepaymentHistoryQuery(props)
-    console.log('loanee repayment data ', data)
 
     const tableHeader = [
         { title: 'Payment date', sortable: true, id: 'paymentDate', selector: (row: TableRowData) =><div>{dayjs(row.paymentDateTime?.toString()).format('MMM D, YYYY')}</div>},

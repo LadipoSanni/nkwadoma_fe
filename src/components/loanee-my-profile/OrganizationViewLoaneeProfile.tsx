@@ -2,7 +2,6 @@
 import React from 'react';
 import BackButton from "@/components/back-button";
 import LoaneeProfileHeader from "@/components/loanee-my-profile/loaneeProfileHeader";
-import  LoaneeLoanDetails from "@/components/loanee-my-profile/LoaneeLoanDetails";
 import LoaneeBasicDetails from "@/components/loanee-my-profile/LoaneeBasicDetails";
 import PmLoaneeLoanDetails from "@/components/loanee-my-profile/PmLoaneeLoanDetails";
 import {useRouter} from "next/navigation";
@@ -11,11 +10,9 @@ import {useGetLoaneeDetailsQuery} from "@/service/users/Loanee_query";
 
 const OrganizationViewLoaneeProfile = () => {
     const id =  useAppSelector(state => state.organization.loaneeId)
-    console.log('loaneeid: ', id)
     const router = useRouter()
     const loaneeId = id
     const  {data, isLoading, isFetching} = useGetLoaneeDetailsQuery(loaneeId)
-    console.log('data: ', data)
     const  handleBack = () => {
         router.push('/organizations/loanees/all')
     }
@@ -28,8 +25,8 @@ const OrganizationViewLoaneeProfile = () => {
             <BackButton sx={'pl-5 pt-2 pb-4'} id={'backToViewLoanee'} handleClick={handleBack} iconBeforeLetters={true} textColor={'meedlBlue'} text={'Back'} />
             <LoaneeProfileHeader isLoading={isFetching || isLoading} userName={userName } program={data?.data?.programName} cohort={data?.data?.cohortName}/>
             <div className={`flex w-full  max-h-[65vh]  `}>
-                <PmLoaneeLoanDetails loaneeId={loaneeId} data={data?.data} />
-                <LoaneeBasicDetails />
+                <PmLoaneeLoanDetails isLoading={isFetching || isLoading} loaneeId={loaneeId} data={data?.data} />
+                <LoaneeBasicDetails isLoading={isFetching || isLoading} data={data?.data} />
             </div>
         </div>
     );
