@@ -49,7 +49,7 @@ interface DropdownOption {
 interface Props<T extends TableRowData> {
   tableData: T[];
   tableHeader: ColumnProps<T>[];
-  handleRowClick: (row: T|string) => void;
+  handleRowClick: (row: T) => void;
   handleDropDownClick?: (id: string, row: TableRowData) => void;
   tableHeight?: number;
   sx?: string;

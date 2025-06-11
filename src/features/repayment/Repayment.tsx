@@ -1,5 +1,5 @@
 'use client'
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import Table from '@/reuseable/table/Table';
@@ -20,8 +20,8 @@ interface TableRowData {
 const Repayment = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedValue, setSelectedValue] = useState<string>("");
-    const [hasNextPage] = useState(false)
-    const [totalPage] = useState(0)
+    const [hasNextPage,setNextPage] = useState(false)
+    const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
     const [pageSize] = useState(10)
     const [click, setClicked] = React.useState<object| ReactNode>('')
@@ -33,8 +33,17 @@ const Repayment = () => {
     const {data} = useViewAllRepaymentHistoryQuery(props)
 
 
+    useEffect(() => {
+        if(data && data?.data &&  data?.data?.body) {
+            setPageNumber(data?.data?.pageNumber)
+            setTotalPage(data?.data?.totalPages)
+            setNextPage(data?.data?.hasNextPage)
+        }
+    },[data])
+
+
     const filterTable = (value: string) => {
-        console.log('click', click) // to fixed unuse variable
+        console.log('click', click) 
         setSelectedValue(value)
     }
     const getModeOfPayment = (mode?: string |ReactNode) => {

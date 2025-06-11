@@ -10,6 +10,7 @@ import UploadForm from './Upload-form';
 
 interface Props{
 setIsOpen : (e: boolean) => void;
+loaneeRefetch?: (() => void) | null;
 }
 
 const tabData = [
@@ -18,7 +19,7 @@ const tabData = [
    
 ];
 
-function UploadCSV({setIsOpen}:Props) {
+function UploadCSV({setIsOpen,loaneeRefetch}:Props) {
     const tabType = useAppSelector(state => state?.csv?.uploadCsvTab)
 
     const tabContent = [
@@ -28,6 +29,7 @@ function UploadCSV({setIsOpen}:Props) {
              <UploadForm
               uploadType='loaneeData'
               setIsOpen={setIsOpen}
+              loaneeRefetch={loaneeRefetch}
              />
             </div>
         },
@@ -37,6 +39,7 @@ function UploadCSV({setIsOpen}:Props) {
               <UploadForm
               uploadType='repaymentData'
               setIsOpen={setIsOpen}
+              loaneeRefetch={loaneeRefetch}
              />
             </div>  
         }
