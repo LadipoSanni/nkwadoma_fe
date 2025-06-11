@@ -33,7 +33,6 @@ const Repayment = () => {
         month:  selectedIndex ,
         year:  selectedYear ,
     }
-    console.log('moth: ',selectedIndex, 'year:', selectedYear)
     const {data, isFetching , isLoading} = useViewAllRepaymentHistoryQuery(props)
     const searchProps = {
         pageSize: pageSize,
@@ -42,7 +41,7 @@ const Repayment = () => {
         year: selectedYear,
         searchTerm: searchTerm,
     }
-    const  {data:getRepaymentYearRange} = useGetRepaymentHistoryYearRangeQuery()
+    const  {data:getRepaymentYearRange} = useGetRepaymentHistoryYearRangeQuery({})
     const {data:searchData, isLoading:isLoadinFetchedData, isFetching:isFetchingSearchedData } = useSearchAllRepaymentHistoryQuery(searchProps,{skip: !searchTerm})
 
 
@@ -61,7 +60,7 @@ const Repayment = () => {
 
     const filterYear = (value: string) => {
         if (value === 'All'){
-            selectedYear('')
+            setSelectedYear('')
         }else{
             setSelectedYear(value)
         }
