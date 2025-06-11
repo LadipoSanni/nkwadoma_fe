@@ -12,6 +12,7 @@ const PortfolioManager = () => {
 
     const router = useRouter();
     const {data, isFetching, isLoading } = useViewMeedlPortfolioQuery({})
+    console.log('data: ', data)
     const cardData1 = [
         {title: "Total investment vehicles", amount: `${data?.data?.totalNumberOfInvestmentVehicle ? data?.data?.totalNumberOfInvestmentVehicle?.toString() : '0'}`,},
         {title: "Commercial funds", amount: `${data?.data?.totalNumberOfCommercialFundsInvestmentVehicle ? data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
@@ -49,9 +50,9 @@ const PortfolioManager = () => {
     // ]
 
     const loanData = [
-        {title: "Loan referrals", amount: `${ data?.data?.loanReferralPercentage ? Math.round(Number(data?.data?.loanReferralPercentage?.toString())) + "%" : '0%'}`,textColor: 'text-[#66440A]',bgColor: 'bg-[#FEF6E8]',},
-        {title: "Loan offers", amount:  `${ data?.data?.loanOfferPercentage ? Math.round(Number(data?.data?.loanOfferPercentage?.toString())) + "%" : '0%'}`,textColor: 'text-[#142854]',bgColor: 'bg-[#D9EAFF]',},
-        {title: "Disbursed loan", amount: `${ data?.data?.loanDisbursalPercentage ? Math.round(Number(data?.data?.loanDisbursalPercentage?.toString())) + "%" : '0%'}`,textColor: 'text-[#0e4c23]',bgColor: 'bg-[#E6F2EA]',},
+        {title: "Loan referrals", amount: `${ data?.data?.loanReferralPercentage ? Math.round(Number(data?.data?.loanReferralPercentage?.toString()))  : '0'}`,textColor: 'text-[#66440A]',bgColor: 'bg-[#FEF6E8]',},
+        {title: "Loan offers", amount:  `${ data?.data?.loanOfferPercentage ? Math.round(Number(data?.data?.loanOfferPercentage?.toString()))  : '0'}`,textColor: 'text-[#142854]',bgColor: 'bg-[#D9EAFF]',},
+        {title: "Disbursed loan", amount: `${ data?.data?.loanDisbursalPercentage ? Math.round(Number(data?.data?.loanDisbursalPercentage?.toString()))  : '0'}`,textColor: 'text-[#0e4c23]',bgColor: 'bg-[#E6F2EA]',},
 
     ]
 

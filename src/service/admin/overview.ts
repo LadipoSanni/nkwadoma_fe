@@ -14,11 +14,17 @@ export const portfolioOverviewApi = createApi({
         }),
         viewAllRepaymentHistory: builder.query({
             query: (data) => ({
-                url:   `/repayment/history/all?loaneeId=${data?.loaneeId}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
+                url:   `/repayment/history/all?pageSize=${data.pageSize}&pageNumber=${data.pageNumber}&month=${data.month}&year=${data.year}`,
                 method: 'GET'
             })
-         })
+         }),
+        searchAllRepaymentHistory: builder.query({
+            query: (data) => ({
+                url:   `/repayment/history/search?name=${data.searchTerm}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}&month=${data.month}&year=${data.year}`,
+                method: 'GET'
+            })
+        })
     })
 
 })
-export const {useViewMeedlPortfolioQuery, useViewAllRepaymentHistoryQuery} = portfolioOverviewApi;
+export const {useViewMeedlPortfolioQuery, useSearchAllRepaymentHistoryQuery,useViewAllRepaymentHistoryQuery} = portfolioOverviewApi;

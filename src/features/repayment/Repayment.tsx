@@ -1,5 +1,5 @@
 'use client'
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import SearchInput from "@/reuseable/Input/SearchInput";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import Table from '@/reuseable/table/Table';
@@ -10,38 +10,76 @@ import {
     repaymentsData,
     months, years} from "@/utils/LoanProductMockData";
 import { inter } from '@/app/fonts';
-import { useViewAllRepaymentHistoryQuery } from '@/service/admin/overview';
+import { useViewAllRepaymentHistoryQuery, useSearchAllRepaymentHistoryQuery } from '@/service/admin/overview';
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
+import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
+import {MagnifyingGlassIcon} from "@radix-ui/react-icons";
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 const Repayment = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedValue, setSelectedValue] = useState<string>("");
-    const [hasNextPage] = useState(false)
-    const [totalPage] = useState(0)
+    const [selectedYear, setSelectedYear] = useState<string>("");
+    const [selectedMonth, setSelectedMonth] = useState<string>("");
+    const [selectedIndex, setSelectedIndex] = useState<number| string>('');
+    const [hasNextPage,setNextPage] = useState(false)
+    const [totalPage, setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
-    const [pageSize] = useState(10)
+    const [pageSize, setPageSize] = useState(10)
     const [click, setClicked] = React.useState<object| ReactNode>('')
 
     const props =  {
         pageSize: pageSize,
-            pageNumber: pageNumber,
+        pageNumber: pageNumber,
+        month:  selectedIndex ,
+        year:  selectedYear ,
     }
-    const {data} = useViewAllRepaymentHistoryQuery(props)
+    console.log('moth: ',selectedIndex, 'year:', selectedYear)
+    const {data, isFetching , isLoading} = useViewAllRepaymentHistoryQuery(props)
+    const searchProps = {
+        pageSize: pageSize,
+        pageNumber: pageNumber,
+        month: selectedIndex,
+        year: selectedYear,
+        searchTerm: searchTerm,
+    }
+    const {data:searchData} = useSearchAllRepaymentHistoryQuery(searchProps,{skip: !searchTerm})
+
+    console.log('search: ',searchData)
+
+    console.log('data: ', data)
+    const filterMonth = (value: string) => {
+        for (let i = 0; i < months.length; i++) {
+            if (months[i] === value) {
+                setSelectedIndex(i + 1)
+            }
+        }
+        setSelectedMonth(value)
+    }
 
 
-    const filterTable = (value: string) => {
-        console.log('click', click) // to fixed unuse variable
-        setSelectedValue(value)
+    const filterYear = (value: string) => {
+        setSelectedYear(value)
     }
+    useEffect(() => {
+        if(searchTerm && searchData && searchData?.data){
+            setNextPage(searchData?.data?.hasNextPage)
+            setTotalPage(searchData?.data?.totalPages)
+            setPageNumber(searchData?.data?.pageNumber)
+        }
+        else if(!searchTerm && data?.data?.body) {
+            setNextPage(data?.data?.hasNextPage)
+            setTotalPage(data?.data?.totalPages)
+            setPageNumber(data?.data?.pageNumber)
+        }
+    },[searchTerm,data])
+
     const getModeOfPayment = (mode?: string |ReactNode) => {
         switch (mode) {
             case 'TRANSFER' :
                 return <span className={` ${inter.className} bg-[#EEF5FF] text-[14px] text-[#142854] rounded-full w-fit h-fit py-1 px-2 `} >Bank transfer</span>
-                // break;
             case 'CASH':
                 return <span className={` ${inter.className}  bg-[#FEF6E8] text-[14px] text-[#66440A]rounded-full w-fit h-fit py-1 px-2 `} >Cash</span>
             case 'USSD':
@@ -66,6 +104,24 @@ const Repayment = () => {
         setClicked(ID)
     };
 
+    const  getYea = (earlyYear: number,currentYear: number) => {
+        if (!earlyYear || !currentYear) {
+            const currentYear = new Date().getFullYear();
+            return [currentYear]
+        }else {
+            const aa : number[] = [earlyYear]
+            for (const element of aa) {
+                if (element < currentYear){
+                    aa.push(element + 1 )
+                }
+            }
+            return aa;
+        }
+    }
+
+    const getYears = getYea(data?.data?.firstYear, data?.data?.lastYear)
+
+
     return (
         <main
             id={'repaymentComponent'}
@@ -80,12 +136,13 @@ const Repayment = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style="md:w-20 w-full"
                 />
-                {repaymentsData && repaymentsData?.length > 0  ?
+                {/*// excess Cakza*/}
+                {/*{data?.data?.firstYear && data?.data?.lastYear   ?*/}
                    <div className={` grid grid-cols-2 md:flex lg:flex gap-4 h-fit md:w-fit lg:w-fit w-full  `}>
                        <CustomSelect
                            id="filterMonth"
-                           value={selectedValue}
-                           onChange={(value) => filterTable(value)}
+                           value={selectedMonth}
+                           onChange={(value) => filterMonth(value)}
                            selectContent={months}
                            placeHolder="Month"
                            triggerId="monthFilterTrigger"
@@ -93,20 +150,31 @@ const Repayment = () => {
                        />
                        <CustomSelect
                            id="filterByYear"
-                           value={selectedValue}
-                           onChange={(value) => filterTable(value)}
-                           selectContent={years}
-                           placeHolder="year"
+                           value={selectedYear}
+                           onChange={(value) => filterYear(value)}
+                           selectContent={getYears}
+                           placeHolder="Year"
                            triggerId="yearFilterTrigger"
                            className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                        />
                    </div>
-                    : null}
             </div>
-
+            {console.log('datavhgb:: ', data?.data?.body?.length === 0)}
             <div>
+                { selectedMonth.length > 0 || selectedYear.length > 0 && data?.data?.body?.length === 0 ?
+                    <TableEmptyState
+                        icon={<MagnifyingGlassIcon/>}
+                        name={'repayment'}
+                        className={''}
+                        // optionalFilterName={optionalFilterName}
+                        condition={true}
+                        isSearch={true}
+                    />
+
+                    :
+
                     <Table
-                    tableData={data?.data?.body}
+                    tableData={searchTerm?.length > 0 ? searchData?.data?.body : data?.data?.body}
                     // tableData={repaymentsData}
                     tableHeader={tableHeader}
                     handleRowClick={handleRowClick}
@@ -123,8 +191,9 @@ const Repayment = () => {
                     pageNumber={pageNumber}
                     setPageNumber={setPageNumber}
                     totalPages={totalPage}
-                    isLoading={false}
+                    isLoading={isLoading|| isFetching}
                 />
+            }
             </div>
 
             
