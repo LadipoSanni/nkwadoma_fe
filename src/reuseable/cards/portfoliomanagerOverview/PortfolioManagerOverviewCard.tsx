@@ -49,7 +49,7 @@ const PortfolioManagerOverviewCard = ({id,isLoading,isFetching,isLoanData,loanDa
                               >
                                   <div
                                       style={{width:Number(loan.amount) > 100 ? '100%' : loan.amount}}
-                                      className={` h-[40px] ${loan.amount === '0%'? `bg-white` : `${loan.bgColor}` }  rounded-md `}
+                                      className={` h-[40px] ${loan.amount === '0'? `bg-white` : `${loan.bgColor}` } ${Number(loan.amount) > 9 ? ' pr-2' : ''}   rounded-md `}
                                       id={loan.title + 'Bar'}
                                   >
 

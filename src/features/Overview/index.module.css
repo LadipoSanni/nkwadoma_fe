@@ -2,9 +2,9 @@
     width: 100%;
     /*display: flex;*/
     /*grid-template-columns: max-content;*/
-    /*overflow-x: auto;*/
-    /*-ms-overflow-style: none;*/
-    /*scrollbar-width: none;*/
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 .container{
     background-color: white;
