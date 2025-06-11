@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import { Button } from '@/components/ui/button';
 import CheckBoxTable from '@/reuseable/table/Checkbox-table';
-import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery,useUpdateLoaneeStatusMutation,useInviteLoaneeMutation} from "@/service/admin/cohort_query";
+import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery,useUpdateLoaneeStatusMutation} from "@/service/admin/cohort_query";
 import {useAppSelector} from "@/redux/store";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
@@ -69,7 +69,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
     const [enableButton, setEnableButton] = useState(false)
     const [updateLoaneeStatus, {isLoading:statusIsloading}] = useUpdateLoaneeStatusMutation()
-    const [inviteLoanee, {isLoading:inviteIsloading}] = useInviteLoaneeMutation()
+    // const [inviteLoanee, {isLoading:inviteIsloading}] = useInviteLoaneeMutation()
     const {toast} = useToast()
     const router = useRouter();
      const [isOpen, setIsOpen] = useState(false);
@@ -165,27 +165,27 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         }
       }
 
-      const handleInvite = async () => {
-         const loaneeId = Array.from(selectedRows)
-         try {
-          const inviteLoanees = await inviteLoanee(loaneeId).unwrap()
-          if(inviteLoanees){
-            setSelectedRows(new Set());
-            setEnableButton(false)
-            toast({
-              description: inviteLoanees?.message,
-              status: "success",
-            })
-          }
-         } 
-         catch (err) {
-          const error = err as ApiError;
-          toast({
-            description: error?.data?.message,
-            status: "error",
-          })
-         }
-      }
+      // const handleInvite = async () => {
+      //    const loaneeId = Array.from(selectedRows)
+      //    try {
+      //     const inviteLoanees = await inviteLoanee(loaneeId).unwrap()
+      //     if(inviteLoanees){
+      //       setSelectedRows(new Set());
+      //       setEnableButton(false)
+      //       toast({
+      //         description: inviteLoanees?.message,
+      //         status: "success",
+      //       })
+      //     }
+      //    } 
+      //    catch (err) {
+      //     const error = err as ApiError;
+      //     toast({
+      //       description: error?.data?.message,
+      //       status: "error",
+      //     })
+      //    }
+      // }
 
   return (
     <main>
