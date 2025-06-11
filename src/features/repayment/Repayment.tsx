@@ -6,11 +6,9 @@ import Table from '@/reuseable/table/Table';
 import {
 MdOutlineLibraryBooks,
 } from "react-icons/md";
-import {
-    repaymentsData,
-    months, years} from "@/utils/LoanProductMockData";
+import {months} from "@/utils/LoanProductMockData";
 import { inter } from '@/app/fonts';
-import { useViewAllRepaymentHistoryQuery, useSearchAllRepaymentHistoryQuery } from '@/service/admin/overview';
+import { useViewAllRepaymentHistoryQuery,useGetRepaymentHistoryYearRangeQuery, useSearchAllRepaymentHistoryQuery } from '@/service/admin/overview';
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
@@ -27,8 +25,7 @@ const Repayment = () => {
     const [hasNextPage,setNextPage] = useState(false)
     const [totalPage, setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
-    const [pageSize, setPageSize] = useState(10)
-    const [click, setClicked] = React.useState<object| ReactNode>('')
+    const [pageSize ] = useState(10)
 
     const props =  {
         pageSize: pageSize,
@@ -45,23 +42,29 @@ const Repayment = () => {
         year: selectedYear,
         searchTerm: searchTerm,
     }
-    const {data:searchData} = useSearchAllRepaymentHistoryQuery(searchProps,{skip: !searchTerm})
+    const  {data:getRepaymentYearRange} = useGetRepaymentHistoryYearRangeQuery()
+    const {data:searchData, isLoading:isLoadinFetchedData, isFetching:isFetchingSearchedData } = useSearchAllRepaymentHistoryQuery(searchProps,{skip: !searchTerm})
 
-    console.log('search: ',searchData)
 
-    console.log('data: ', data)
     const filterMonth = (value: string) => {
-        for (let i = 0; i < months.length; i++) {
-            if (months[i] === value) {
-                setSelectedIndex(i + 1)
+        if (value === 'All'){
+            setSelectedMonth('')
+        }else{
+            for (let i = 0; i < months.length; i++) {
+                if (months[i] === value) {
+                    setSelectedIndex(i + 1)
+                }
             }
-        }
-        setSelectedMonth(value)
+            setSelectedMonth(value)        }
     }
 
 
     const filterYear = (value: string) => {
-        setSelectedYear(value)
+        if (value === 'All'){
+            selectedYear('')
+        }else{
+            setSelectedYear(value)
+        }
     }
     useEffect(() => {
         if(searchTerm && searchData && searchData?.data){
@@ -101,7 +104,7 @@ const Repayment = () => {
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        setClicked(ID)
+        console.log(ID)
     };
 
     const  getYea = (earlyYear: number,currentYear: number) => {
@@ -119,7 +122,15 @@ const Repayment = () => {
         }
     }
 
-    const getYears = getYea(data?.data?.firstYear, data?.data?.lastYear)
+    const handleResetYear = () => {
+        setSelectedYear('')
+    }
+    const handleResetMonth = () => {
+        setSelectedMonth('')
+        setSelectedIndex(0)
+    }
+
+    const getYears = getYea(getRepaymentYearRange?.data?.firstYear, getRepaymentYearRange?.data?.lastYear)
 
 
     return (
@@ -145,13 +156,17 @@ const Repayment = () => {
                            onChange={(value) => filterMonth(value)}
                            selectContent={months}
                            placeHolder="Month"
+                           showRestButton={true}
+                           handleReset={handleResetMonth}
                            triggerId="monthFilterTrigger"
                            className="h-11  w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                        />
                        <CustomSelect
                            id="filterByYear"
+                           showRestButton={true}
                            value={selectedYear}
                            onChange={(value) => filterYear(value)}
+                           handleReset={handleResetYear}
                            selectContent={getYears}
                            placeHolder="Year"
                            triggerId="yearFilterTrigger"
@@ -159,17 +174,25 @@ const Repayment = () => {
                        />
                    </div>
             </div>
-            {console.log('datavhgb:: ', data?.data?.body?.length === 0)}
             <div>
-                { selectedMonth.length > 0 || selectedYear.length > 0 && data?.data?.body?.length === 0 ?
+                { selectedMonth?.length > 0  && data?.data?.body?.length === 0 ?
                     <TableEmptyState
                         icon={<MagnifyingGlassIcon/>}
-                        name={'repayment'}
+                        name={'filtered dates repayment'}
                         className={''}
                         // optionalFilterName={optionalFilterName}
                         condition={true}
                         isSearch={true}
                     />
+                     :  selectedYear?.length > 0 && data?.data?.body?.length === 0 ?
+                        <TableEmptyState
+                            icon={<MagnifyingGlassIcon/>}
+                            name={'filtered dates repayment'}
+                            className={''}
+                            // optionalFilterName={optionalFilterName}
+                            condition={true}
+                            isSearch={true}
+                        />
 
                     :
 
@@ -183,7 +206,8 @@ const Repayment = () => {
                     tableCellStyle={'h-12'}
                     // optionalFilterName='endownment'
                     condition={true}
-                    sideBarTabName='repayment'
+                    searchEmptyState={searchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
+                    sideBarTabName={'repayment'}
                     icon={MdOutlineLibraryBooks}
                     staticHeader={"Name"}
                     staticColunm={'name'}
@@ -191,7 +215,7 @@ const Repayment = () => {
                     pageNumber={pageNumber}
                     setPageNumber={setPageNumber}
                     totalPages={totalPage}
-                    isLoading={isLoading|| isFetching}
+                    isLoading={isLoading|| isFetching|| isLoadinFetchedData || isFetchingSearchedData}
                 />
             }
             </div>

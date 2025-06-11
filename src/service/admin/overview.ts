@@ -23,8 +23,14 @@ export const portfolioOverviewApi = createApi({
                 url:   `/repayment/history/search?name=${data.searchTerm}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}&month=${data.month}&year=${data.year}`,
                 method: 'GET'
             })
+        }),
+        getRepaymentHistoryYearRange: builder.query({
+            query: () => ({
+                url: `/repayment/history/years`,
+                method: 'GET'
+            })
         })
     })
 
 })
-export const {useViewMeedlPortfolioQuery, useSearchAllRepaymentHistoryQuery,useViewAllRepaymentHistoryQuery} = portfolioOverviewApi;
+export const {useViewMeedlPortfolioQuery, useGetRepaymentHistoryYearRangeQuery, useSearchAllRepaymentHistoryQuery,useViewAllRepaymentHistoryQuery} = portfolioOverviewApi;

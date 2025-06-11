@@ -38,7 +38,6 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
         setModalButtonText(buttonText);
         setOpenModal(true);
     }
-    console.log('ubd: ', getFirstLetterOfWord(institutionName), 'userRole: ', userRole)
 
     return (
        <div>

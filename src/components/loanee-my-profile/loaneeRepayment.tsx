@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 // import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import dayjs from "dayjs";
 import {formatAmount} from "@/utils/Format";
@@ -18,8 +18,8 @@ interface Props {
 }
 
 const LoaneeRepayment = ({loaneeId}:Props) => {
-    const [hasNextPage] = useState(false)
-    const [totalPage] = useState(0)
+    const [hasNextPage, setNextPage] = useState(false)
+    const [totalPage, setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
     const [pageSize] = useState(10)
 
@@ -40,9 +40,20 @@ const LoaneeRepayment = ({loaneeId}:Props) => {
     const props =  {
         pageSize: pageSize,
         pageNumber: pageNumber,
-        loaneeId: loaneeId
+        loaneeId: loaneeId,
+        month: '',
+        year: '',
     }
     const {data, isFetching, isLoading} = useViewAllRepaymentHistoryQuery(props)
+
+    useEffect(() => {
+        if(data && data?.data) {
+            setNextPage(data?.data?.hasNextPage)
+            setTotalPage(data?.data?.totalPages)
+            setPageNumber(data?.data?.pageNumber)
+        }
+
+    },[data])
 
     const tableHeader = [
         { title: 'Payment date', sortable: true, id: 'paymentDate', selector: (row: TableRowData) =><div>{dayjs(row.paymentDateTime?.toString()).format('MMM D, YYYY')}</div>},
@@ -69,8 +80,8 @@ const LoaneeRepayment = ({loaneeId}:Props) => {
                 condition={true}
                 sideBarTabName='repayment'
                 icon={MdOutlineLibraryBooks}
-                staticHeader={"Name"}
-                staticColunm={'name'}
+                staticHeader={"Payment date"}
+                staticColunm={'paymentDate'}
                 hasNextPage={hasNextPage}
                 pageNumber={pageNumber}
                 setPageNumber={setPageNumber}
