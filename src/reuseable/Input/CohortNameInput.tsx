@@ -37,7 +37,7 @@ const CohortNameInput: React.FC<CohortNameInputProps> = ({ cohortName, setCohort
     return (
     
     <div id="cohortNameContainer" className={'grid gap-2'}>
-        <Label htmlFor="cohortName" className="block text-sm font-medium text-labelBlue">Cohort Name</Label>
+        <Label htmlFor="cohortName" className="block text-sm font-medium text-labelBlue">Cohort name</Label>
         <Input
             type="text"
             id="cohortName"

@@ -431,11 +431,11 @@ const SpreadsheetFileUpload: React.FC<FileUploadProps> = ({
                     loading...
                   </p>
                 ) : error ? (
-                  <p className="text-red-500 font-normal text-[12px] leading-[150%]">
+                  <p className="text-[#D42620] font-normal text-[12px] leading-[150%]">
                     {error}
                   </p>
                 ) : (
-                  <p className="text-green-500 font-normal text-[12px] leading-[150%]">
+                  <p className="text-[#06792D] font-normal text-[12px] leading-[150%]">
                     File selected successfully
                   </p>
                 )}

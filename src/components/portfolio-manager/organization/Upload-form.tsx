@@ -30,8 +30,8 @@ interface ApiError {
   }
 
 function UploadForm({ setIsOpen, uploadType,loaneeRefetch }: Props) {
-  const userData = useAppSelector(store => store?.csv?.userdataFile)
-  const repaymentData = useAppSelector(store => store?.csv?.repaymentFile)
+//   const userData = useAppSelector(store => store?.csv?.userdataFile)
+//   const repaymentData = useAppSelector(store => store?.csv?.repaymentFile)
   const cohortDetails = useAppSelector((state) => state.cohort?.selectedCohortInOrganization)
   const cohortId = cohortDetails?.id
   const [uploadLoaneeFile, {isLoading: uploadLoaneeIsloading}] = useUploadLoaneeFileMutation();
@@ -39,8 +39,8 @@ function UploadForm({ setIsOpen, uploadType,loaneeRefetch }: Props) {
   const [error, setError] = useState("");
 
   const initialFormValue: FormValues = {
-    loaneeFile:  userData || null,
-    repaymentFile: repaymentData ||  null,
+    loaneeFile:   null,
+    repaymentFile: null,
   };
 
   const validationSchema = Yup.object().shape({
@@ -164,7 +164,7 @@ function UploadForm({ setIsOpen, uploadType,loaneeRefetch }: Props) {
                       handleDrop={handleDrop}
                       handleDragOver={handleDragOver}
                       setUploadedFile={(file) =>  {setFieldValue("loaneeFile", file); store.dispatch(setUserdataFile(file))}}
-                      initialFile={userData}
+                    //   initialFile={userData}
                     />
                     {errors.loaneeFile && touched.loaneeFile && (
                       <ErrorMessage
@@ -180,7 +180,7 @@ function UploadForm({ setIsOpen, uploadType,loaneeRefetch }: Props) {
                       handleDrop={handleDrop}
                       handleDragOver={handleDragOver}
                       setUploadedFile={(file) =>{ setFieldValue("repaymentFile", file); store.dispatch(setRepaymentFile(file));}}
-                      initialFile={repaymentData}
+                    //   initialFile={repaymentData}
                     />
                     {errors.repaymentFile && touched.repaymentFile && (
                       <ErrorMessage

@@ -137,7 +137,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver, set
                                     </p>
                                 )}
                                 {!loading && !error && !file && (
-                                    <p className={'text-green-500 font-normal text-[12px] leading-[150%]'}>Uploaded successfully</p>
+                                    <p className={'text-[#06792D] font-normal text-[12px] leading-[150%]'}>Uploaded successfully</p>
                                 )}
                                 {loading && (
                                     <p className={'text-black300 font-normal text-[12px] leading-[150%]'}>Uploading...</p>
