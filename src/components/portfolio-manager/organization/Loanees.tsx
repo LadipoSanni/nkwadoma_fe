@@ -172,6 +172,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
           if(inviteLoanees){
             setSelectedRows(new Set());
             setEnableButton(false)
+             router.push("/organizations/loanees/all")
             toast({
               description: inviteLoanees?.message,
               status: "success",
