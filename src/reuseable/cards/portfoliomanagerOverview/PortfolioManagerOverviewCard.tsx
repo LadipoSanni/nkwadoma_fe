@@ -47,10 +47,9 @@ const PortfolioManagerOverviewCard = ({id,isLoading,isFetching,isLoanData,loanDa
                                    id={'id'+loan.title}
                                    className={` bg-white w-full border ${isFetching  && isLoading ? 'hidden ': ''} rounded-md relative  border-[#ECECEC]  h-fit `}
                               >
-
                                   <div
-                                      style={{width:loan.amount}}
-                                      className={` h-[40px] ${loan.amount === '0%'? `bg-white` : `${loan.bgColor}` }  rounded-md `}
+                                      style={{width:Number(loan.amount) > 100 ? '100%' : loan.amount}}
+                                      className={` h-[40px] ${loan.amount === '0'? `bg-white` : `${loan.bgColor}` } ${Number(loan.amount) > 9 ? ' pr-2' : ''}   rounded-md `}
                                       id={loan.title + 'Bar'}
                                   >
 
@@ -60,7 +59,7 @@ const PortfolioManagerOverviewCard = ({id,isLoading,isFetching,isLoanData,loanDa
                                       className={`text-black300 w-full absolute top-0 left-0  gap-2   px-3  h-[40px]    flex justify-between   `}
                                   >
                                       <label id={'label'+ loan.title} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  ${loan.textColor} `}>{loan.title}</label>
-                                      <label id={ loan.title +'Percentage'} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  text-[#212221] `}>{loan.amount}</label>
+                                      <label id={ loan.title +'Percentage'} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  text-[#212221] `}>{loan.amount + '%'}</label>
 
                                   </div>
                               </div>

@@ -16,6 +16,8 @@ type Props = {
     name?: string;
     placeHolder?: string;
     triggerId?: string;
+    showRestButton?: boolean;
+    handleReset?: () => void;
     isItemDisabled?: (item: string | number | SelectItem) => boolean;
 };
 
@@ -25,10 +27,12 @@ function CustomSelect({
                           className,
                           selectContent,
                           name,
+                          showRestButton,
                           placeHolder,
                           id,
                           triggerId,
                           isItemDisabled,
+                          handleReset,
                       }: Props) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -85,6 +89,12 @@ function CustomSelect({
                             );
                         })}
                     </SelectGroup>
+                    {showRestButton && value !== 'Month' ?
+                        <button onChange={handleDropdownOpen}  onClick={handleReset} className={` grid border w-full  `}>
+                            All
+                        </button>
+                        : null
+                    }
                 </SelectContent>
             </Select>
         </div>

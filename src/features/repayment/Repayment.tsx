@@ -6,51 +6,82 @@ import Table from '@/reuseable/table/Table';
 import {
 MdOutlineLibraryBooks,
 } from "react-icons/md";
-import {
-    repaymentsData,
-    months, years} from "@/utils/LoanProductMockData";
+import {months} from "@/utils/LoanProductMockData";
 import { inter } from '@/app/fonts';
-import { useViewAllRepaymentHistoryQuery } from '@/service/admin/overview';
+import { useViewAllRepaymentHistoryQuery,useGetRepaymentHistoryYearRangeQuery, useSearchAllRepaymentHistoryQuery } from '@/service/admin/overview';
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
+import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
+import {MagnifyingGlassIcon} from "@radix-ui/react-icons";
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 const Repayment = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedValue, setSelectedValue] = useState<string>("");
+    const [selectedYear, setSelectedYear] = useState<string>("");
+    const [selectedMonth, setSelectedMonth] = useState<string>("");
+    const [selectedIndex, setSelectedIndex] = useState<number| string>('');
     const [hasNextPage,setNextPage] = useState(false)
-    const [totalPage,setTotalPage] = useState(0)
+    const [totalPage, setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
-    const [pageSize] = useState(10)
-    const [click, setClicked] = React.useState<object| ReactNode>('')
+    const [pageSize ] = useState(10)
 
     const props =  {
         pageSize: pageSize,
-            pageNumber: pageNumber,
+        pageNumber: pageNumber,
+        month:  selectedIndex ,
+        year:  selectedYear ,
     }
-    const {data} = useViewAllRepaymentHistoryQuery(props)
+    const {data, isFetching , isLoading} = useViewAllRepaymentHistoryQuery(props)
+    const searchProps = {
+        pageSize: pageSize,
+        pageNumber: pageNumber,
+        month: selectedIndex,
+        year: selectedYear,
+        searchTerm: searchTerm,
+    }
+    const  {data:getRepaymentYearRange} = useGetRepaymentHistoryYearRangeQuery({})
+    const {data:searchData, isLoading:isLoadinFetchedData, isFetching:isFetchingSearchedData } = useSearchAllRepaymentHistoryQuery(searchProps,{skip: !searchTerm})
 
 
-    useEffect(() => {
-        if(data && data?.data &&  data?.data?.body) {
-            setPageNumber(data?.data?.pageNumber)
-            setTotalPage(data?.data?.totalPages)
-            setNextPage(data?.data?.hasNextPage)
+    const filterMonth = (value: string) => {
+        if (value === 'All'){
+            setSelectedMonth('')
+        }else{
+            for (let i = 0; i < months.length; i++) {
+                if (months[i] === value) {
+                    setSelectedIndex(i + 1)
+                }
+            }
+            setSelectedMonth(value)        }
+    }
+
+
+    const filterYear = (value: string) => {
+        if (value === 'All'){
+            setSelectedYear('')
+        }else{
+            setSelectedYear(value)
         }
-    },[data])
-
-
-    const filterTable = (value: string) => {
-        console.log('click', click) 
-        setSelectedValue(value)
     }
+    useEffect(() => {
+        if(searchTerm && searchData && searchData?.data){
+            setNextPage(searchData?.data?.hasNextPage)
+            setTotalPage(searchData?.data?.totalPages)
+            setPageNumber(searchData?.data?.pageNumber)
+        }
+        else if(!searchTerm && data?.data?.body) {
+            setNextPage(data?.data?.hasNextPage)
+            setTotalPage(data?.data?.totalPages)
+            setPageNumber(data?.data?.pageNumber)
+        }
+    },[searchTerm,data])
+
     const getModeOfPayment = (mode?: string |ReactNode) => {
         switch (mode) {
             case 'TRANSFER' :
                 return <span className={` ${inter.className} bg-[#EEF5FF] text-[14px] text-[#142854] rounded-full w-fit h-fit py-1 px-2 `} >Bank transfer</span>
-                // break;
             case 'CASH':
                 return <span className={` ${inter.className}  bg-[#FEF6E8] text-[14px] text-[#66440A]rounded-full w-fit h-fit py-1 px-2 `} >Cash</span>
             case 'USSD':
@@ -72,8 +103,34 @@ const Repayment = () => {
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        setClicked(ID)
+        console.log(ID)
     };
+
+    const  getYea = (earlyYear: number,currentYear: number) => {
+        if (!earlyYear || !currentYear) {
+            const currentYear = new Date().getFullYear();
+            return [currentYear]
+        }else {
+            const aa : number[] = [earlyYear]
+            for (const element of aa) {
+                if (element < currentYear){
+                    aa.push(element + 1 )
+                }
+            }
+            return aa;
+        }
+    }
+
+    const handleResetYear = () => {
+        setSelectedYear('')
+    }
+    const handleResetMonth = () => {
+        setSelectedMonth('')
+        setSelectedIndex(0)
+    }
+
+    const getYears = getYea(getRepaymentYearRange?.data?.firstYear, getRepaymentYearRange?.data?.lastYear)
+
 
     return (
         <main
@@ -89,33 +146,57 @@ const Repayment = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style="md:w-20 w-full"
                 />
-                {repaymentsData && repaymentsData?.length > 0  ?
+                {/*// excess Cakza*/}
+                {/*{data?.data?.firstYear && data?.data?.lastYear   ?*/}
                    <div className={` grid grid-cols-2 md:flex lg:flex gap-4 h-fit md:w-fit lg:w-fit w-full  `}>
                        <CustomSelect
                            id="filterMonth"
-                           value={selectedValue}
-                           onChange={(value) => filterTable(value)}
+                           value={selectedMonth}
+                           onChange={(value) => filterMonth(value)}
                            selectContent={months}
                            placeHolder="Month"
+                           showRestButton={true}
+                           handleReset={handleResetMonth}
                            triggerId="monthFilterTrigger"
                            className="h-11  w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                        />
                        <CustomSelect
                            id="filterByYear"
-                           value={selectedValue}
-                           onChange={(value) => filterTable(value)}
-                           selectContent={years}
-                           placeHolder="year"
+                           showRestButton={true}
+                           value={selectedYear}
+                           onChange={(value) => filterYear(value)}
+                           handleReset={handleResetYear}
+                           selectContent={getYears}
+                           placeHolder="Year"
                            triggerId="yearFilterTrigger"
                            className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                        />
                    </div>
-                    : null}
             </div>
-
             <div>
+                { selectedMonth?.length > 0  && data?.data?.body?.length === 0 ?
+                    <TableEmptyState
+                        icon={<MagnifyingGlassIcon/>}
+                        name={'filtered dates repayment'}
+                        className={''}
+                        // optionalFilterName={optionalFilterName}
+                        condition={true}
+                        isSearch={true}
+                    />
+                     :  selectedYear?.length > 0 && data?.data?.body?.length === 0 ?
+                        <TableEmptyState
+                            icon={<MagnifyingGlassIcon/>}
+                            name={'filtered dates repayment'}
+                            className={''}
+                            // optionalFilterName={optionalFilterName}
+                            condition={true}
+                            isSearch={true}
+                        />
+
+                    :
+
                     <Table
-                    tableData={data?.data?.body}
+                    tableData={searchTerm?.length > 0 ? searchData?.data?.body : data?.data?.body}
                     // tableData={repaymentsData}
                     tableHeader={tableHeader}
                     handleRowClick={handleRowClick}
@@ -124,7 +205,8 @@ const Repayment = () => {
                     tableCellStyle={'h-12'}
                     // optionalFilterName='endownment'
                     condition={true}
-                    sideBarTabName='repayment'
+                    searchEmptyState={searchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
+                    sideBarTabName={'repayment'}
                     icon={MdOutlineLibraryBooks}
                     staticHeader={"Name"}
                     staticColunm={'name'}
@@ -132,8 +214,9 @@ const Repayment = () => {
                     pageNumber={pageNumber}
                     setPageNumber={setPageNumber}
                     totalPages={totalPage}
-                    isLoading={false}
+                    isLoading={isLoading|| isFetching|| isLoadinFetchedData || isFetchingSearchedData}
                 />
+            }
             </div>
 
             
