@@ -200,17 +200,19 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
          />  
         </div>
         <div className='mt-3 md:mt-0 gap-4 flex'  >
-        { tabType === "All" ?
-         <Button
-           id="inviteLoanee"
-           aria-disabled={!enableButton}
-         variant={"outline"}
-         disabled={selectedRows.size === 0 || inviteIsloading }
-         className={`h-[45px] w-full font-semibold md:w-[90px]  ${enableButton  ? "border-[#142854] text-[#142854]" :"border-[#ECECEC] text-[#A8A8A8] shadow-none"  }`}
-         onClick={handleInvite}
-         >
-         { inviteIsloading?  <Isloading/> : " Invite"}
-        </Button> : <Button
+        { 
+        // tabType === "All" ?
+        //  <Button
+        //    id="inviteLoanee"
+        //    aria-disabled={!enableButton}
+        //  variant={"outline"}
+        //  disabled={selectedRows.size === 0 || inviteIsloading }
+        //  className={`h-[45px] w-full font-semibold md:w-[90px]  ${enableButton  ? "border-[#142854] text-[#142854]" :"border-[#ECECEC] text-[#A8A8A8] shadow-none"  }`}
+        //  onClick={handleInvite}
+        //  >
+        //  { inviteIsloading?  <Isloading/> : " Invite"}
+        // </Button> : 
+        <Button
         id='action'
        data-testid='actionButton'
          aria-disabled={!enableButton}
@@ -220,7 +222,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         onClick={handleClick}
          >
            { statusIsloading? <Isloading/> : buttonName}
-        </Button>}
+        </Button>
+        }
         {  tabType === "All" &&
           <Button
           variant={`secondary`}
