@@ -112,7 +112,6 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
 
       const handleSelectedRow = (rows: Set<string>) => {
           setSelectedRows(rows)
-
         }
 
         const handleRowClick = (row: TableRowData) => {
@@ -256,7 +255,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         pageNumber={page}
         setPageNumber={setPageNumber}
         totalPages={totalPage}
-        enableRowSelection={true}
+        enableRowSelection={false}
         enableButton={() =>setEnableButton(true) }
         disabledButton={()=> setEnableButton(false) }
         handleSelectedRow={handleSelectedRow}
