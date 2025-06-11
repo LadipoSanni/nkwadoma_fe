@@ -19,6 +19,7 @@ interface FormValues {
 interface Props {
   uploadType?: "loaneeData" | "repaymentData";
   setIsOpen?: (e: boolean) => void;
+  loaneeRefetch?: (() => void) | null;
 }
 
 interface ApiError {
@@ -28,7 +29,7 @@ interface ApiError {
     };
   }
 
-function UploadForm({ setIsOpen, uploadType }: Props) {
+function UploadForm({ setIsOpen, uploadType,loaneeRefetch }: Props) {
   const userData = useAppSelector(store => store?.csv?.userdataFile)
   const repaymentData = useAppSelector(store => store?.csv?.repaymentFile)
   const cohortDetails = useAppSelector((state) => state.cohort?.selectedCohortInOrganization)
@@ -71,6 +72,9 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
         if(uploadUserFile) {
             handleCloseModal()
             store.dispatch(resetCsvStatus()) 
+            if(loaneeRefetch ){
+                loaneeRefetch()
+            }
             toast({
                 description: uploadUserFile.message,
                 status: "success",
@@ -89,6 +93,9 @@ function UploadForm({ setIsOpen, uploadType }: Props) {
         if(uploadFile) {
             handleCloseModal()
             store.dispatch(resetRepaymentdata())
+            if(loaneeRefetch ){
+                loaneeRefetch()
+            }
             toast({
               description: uploadFile.message,
               status: "success",

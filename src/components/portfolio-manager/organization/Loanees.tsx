@@ -4,8 +4,8 @@ import dynamic from "next/dynamic";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import { Button } from '@/components/ui/button';
 import CheckBoxTable from '@/reuseable/table/Checkbox-table';
-import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery,useUpdateLoaneeStatusMutation} from "@/service/admin/cohort_query";
-import {store, useAppSelector} from "@/redux/store";
+import {useSearchForLoaneeInACohortQuery, useViewAllLoaneeQuery,useUpdateLoaneeStatusMutation,useInviteLoaneeMutation} from "@/service/admin/cohort_query";
+import {useAppSelector} from "@/redux/store";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {MdOutlinePerson, MdSearch} from "react-icons/md";
 import {formatAmount} from '@/utils/Format';
@@ -16,8 +16,8 @@ import Modal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import UploadCSV from './Upload-csv';
 import {setLoaneeId} from "@/redux/slice/organization/organization";
-import {LoaneetDetails} from "@/types/loanee";
-
+// import {LoaneetDetails} from "@/types/loanee";
+import { store } from '@/redux/store';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -69,11 +69,12 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
     const [enableButton, setEnableButton] = useState(false)
     const [updateLoaneeStatus, {isLoading:statusIsloading}] = useUpdateLoaneeStatusMutation()
+     const [inviteLoanee, {isLoading:inviteIsloading}] = useInviteLoaneeMutation()
     const {toast} = useToast()
     const router = useRouter();
      const [isOpen, setIsOpen] = useState(false);
 
-      const {data, isLoading} = useViewAllLoaneeQuery({
+      const {data, isLoading,refetch} = useViewAllLoaneeQuery({
             cohortId: cohortId,
             pageSize: size,
             pageNumber: page,
@@ -111,13 +112,14 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
 
       const handleSelectedRow = (rows: Set<string>) => {
           setSelectedRows(rows)
-
         }
 
-        const handleRowClick = (row: LoaneetDetails) => {
-            store.dispatch(setLoaneeId(row?.id))
+        const handleRowClick = (row: TableRowData) => {
+            store.dispatch(setLoaneeId(String(row?.id)))
                router.push('/organizations/view-loanee-profile')
         }
+      
+   
       
        const handleModalOpen = () => {
           setIsOpen(!isOpen)
@@ -162,6 +164,29 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         }
       }
 
+      const handleInvite = async () => {
+         const loaneeId = Array.from(selectedRows)
+         try {
+          const inviteLoanees = await inviteLoanee(loaneeId).unwrap()
+          if(inviteLoanees){
+            setSelectedRows(new Set());
+            setEnableButton(false)
+             router.push("/organizations/loanees/all")
+            toast({
+              description: inviteLoanees?.message,
+              status: "success",
+            })
+          }
+         } 
+         catch (err) {
+          const error = err as ApiError;
+          toast({
+            description: error?.data?.message,
+            status: "error",
+          })
+         }
+      }
+
   return (
     <main>
       <div className='md:flex justify-between items-center'>
@@ -175,6 +200,18 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
          />  
         </div>
         <div className='mt-3 md:mt-0 gap-4 flex'  >
+        { 
+        tabType === "All" ?
+         <Button
+           id="inviteLoanee"
+           aria-disabled={!enableButton}
+         variant={"outline"}
+         disabled={selectedRows.size === 0 || inviteIsloading }
+         className={`h-[45px] w-full font-semibold md:w-[90px]  ${enableButton  ? "border-[#142854] text-[#142854]" :"border-[#ECECEC] text-[#A8A8A8] shadow-none"  }`}
+         onClick={handleInvite}
+         >
+         { inviteIsloading?  <Isloading/> : " Invite"}
+        </Button> : 
         <Button
         id='action'
        data-testid='actionButton'
@@ -186,6 +223,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
          >
            { statusIsloading? <Isloading/> : buttonName}
         </Button>
+        }
         {  tabType === "All" &&
           <Button
           variant={`secondary`}
@@ -204,8 +242,6 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
         tableData={getTableData()}
         tableHeader={tableHeaderintegrated}
-        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         handleRowClick={handleRowClick}
         staticHeader="Loanee"
         staticColunm="firstName"
@@ -219,10 +255,11 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         pageNumber={page}
         setPageNumber={setPageNumber}
         totalPages={totalPage}
-        enableRowSelection={true}
+        enableRowSelection={false}
         enableButton={() =>setEnableButton(true) }
         disabledButton={()=> setEnableButton(false) }
         handleSelectedRow={handleSelectedRow}
+         sx='cursor-pointer'
         />}
       </div>
        <div>
@@ -234,7 +271,10 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
           icon={Cross2Icon}
           headerTitle='Upload csv'
         >
-        <UploadCSV setIsOpen={setIsOpen}/>
+        <UploadCSV 
+        setIsOpen={setIsOpen}
+        loaneeRefetch={refetch}
+        />
         </Modal>
        </div>
     </main>
