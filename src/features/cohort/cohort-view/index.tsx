@@ -108,7 +108,7 @@ const CohortView = () => {
 
 const currentTabState = tabStates[cohortTab];
    
-   const { data: cohortData,isLoading } = useGetAllCohortsByOrganisationQuery({  ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+   const { data: cohortData,isLoading,refetch:refetchCohortData } = useGetAllCohortsByOrganisationQuery({  ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
     ? { organizationId } 
     : {}),cohortStatus: cohortTab.toUpperCase(),pageSize: 10, pageNumber:currentTabState.pageNumber }, { refetchOnMountOrArgChange: true, })
     
@@ -476,7 +476,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
              className='pb-1'
               icon={Cross2Icon}
           >
-            {user_role === "PORTFOLIO_MANAGER"? <AddCohortInAnOrganization  setIsOpen={setIsOpen} organizationId={organizationId}/> : <CreateCohort setIsOpen={setIsOpen}/> }
+            {user_role === "PORTFOLIO_MANAGER"? <AddCohortInAnOrganization  setIsOpen={setIsOpen} organizationId={organizationId} cohortRefetch={refetchCohortData}/> : <CreateCohort setIsOpen={setIsOpen}/> }
           </Modal>
         </div>
     </div>

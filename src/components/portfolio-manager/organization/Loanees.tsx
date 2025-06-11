@@ -16,7 +16,7 @@ import Modal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import UploadCSV from './Upload-csv';
 import {setLoaneeId} from "@/redux/slice/organization/organization";
-import {LoaneetDetails} from "@/types/loanee";
+// import {LoaneetDetails} from "@/types/loanee";
 import { store } from '@/redux/store';
 
 interface TableRowData {
@@ -74,7 +74,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
     const router = useRouter();
      const [isOpen, setIsOpen] = useState(false);
 
-      const {data, isLoading} = useViewAllLoaneeQuery({
+      const {data, isLoading,refetch} = useViewAllLoaneeQuery({
             cohortId: cohortId,
             pageSize: size,
             pageNumber: page,
@@ -268,7 +268,10 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
           icon={Cross2Icon}
           headerTitle='Upload csv'
         >
-        <UploadCSV setIsOpen={setIsOpen}/>
+        <UploadCSV 
+        setIsOpen={setIsOpen}
+        loaneeRefetch={refetch}
+        />
         </Modal>
        </div>
     </main>

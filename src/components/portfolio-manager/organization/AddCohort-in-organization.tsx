@@ -19,6 +19,7 @@ import { convertSpreadsheetToCsv } from "@/utils/convert-csv";
 interface createCohortProps {
   setIsOpen?: (e: boolean) => void;
   organizationId?: string
+  cohortRefetch?: (() => void) | null;
 }
 
 interface viewAllProps {
@@ -35,7 +36,7 @@ interface ApiError {
 
 
 
-const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,organizationId}) => {
+const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,organizationId,cohortRefetch}) => {
   const [startDate, setDate] = useState<Date>();
   const [programId, setProgramId] = useState("");
   // const [loanProductId, setLoanProductId] = useState("");
@@ -191,6 +192,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
             if(uploadFile) {
               resetForm();
               handleCloseModal()
+              if(cohortRefetch)cohortRefetch()
               toast({
                 description: result.message,
                 status: "success",
