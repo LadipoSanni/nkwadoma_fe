@@ -17,7 +17,7 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import UploadCSV from './Upload-csv';
 import {setLoaneeId} from "@/redux/slice/organization/organization";
 import {LoaneetDetails} from "@/types/loanee";
-
+import { store } from '@/redux/store';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -115,8 +115,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
 
         }
 
-        const handleRowClick = (row: LoaneetDetails) => {
-            store.dispatch(setLoaneeId(row?.id))
+        const handleRowClick = (row: TableRowData) => {
+            store.dispatch(setLoaneeId(String(row?.id)))
                router.push('/organizations/view-loanee-profile')
         }
       
@@ -239,8 +239,6 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
         tableData={getTableData()}
         tableHeader={tableHeaderintegrated}
-        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         handleRowClick={handleRowClick}
         staticHeader="Loanee"
         staticColunm="firstName"
@@ -258,6 +256,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         enableButton={() =>setEnableButton(true) }
         disabledButton={()=> setEnableButton(false) }
         handleSelectedRow={handleSelectedRow}
+         sx='cursor-pointer'
         />}
       </div>
        <div>
