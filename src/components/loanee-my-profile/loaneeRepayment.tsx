@@ -41,8 +41,7 @@ const LoaneeRepayment = ({loaneeId}:Props) => {
         pageSize: pageSize,
         pageNumber: pageNumber,
         loaneeId: loaneeId,
-        month: '',
-        year: '',
+
     }
     const {data, isFetching, isLoading} = useViewAllRepaymentHistoryQuery(props)
 

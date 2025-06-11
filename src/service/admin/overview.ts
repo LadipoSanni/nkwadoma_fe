@@ -14,7 +14,7 @@ export const portfolioOverviewApi = createApi({
         }),
         viewAllRepaymentHistory: builder.query({
             query: (data) => ({
-                url:   `/repayment/history/all?pageSize=${data.pageSize}&pageNumber=${data.pageNumber}&month=${data.month}&year=${data.year}`,
+                url:   `/repayment/history/all?${data.loaneeId ?`loaneeId=${data.loaneeId}& ` : ''}pageSize=${data.pageSize}&pageNumber=${data.pageNumber} ${data.month ? `&month=${data.month}` : ''}${data.year ? `&year=${data.year}`: ''}`,
                 method: 'GET'
             })
          }),
