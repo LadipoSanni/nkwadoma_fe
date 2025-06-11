@@ -315,7 +315,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                  handleDrop={handleDrop}
                  handleDragOver={handleDragOver}
                  setUploadedFile={setUploadedFile}
-                 labelName="Loanees Data"
+                 labelName="Loanees data"
                 />
               </div>
             

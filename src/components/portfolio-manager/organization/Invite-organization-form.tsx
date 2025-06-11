@@ -217,7 +217,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                     }
                                 </div>
                                 <div className=''>
-                                    <Label htmlFor="phoneNumber">Phone Number</Label>
+                                    <Label htmlFor="phoneNumber">Phone number</Label>
                                     <Field
                                         id="phoneNumber"
                                         name="phoneNumber"
@@ -236,7 +236,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                             className="text-red-500 text-sm"/>)}
                                 </div>
                                 <div>
-                                    <Label htmlFor="email">Email Address </Label>
+                                    <Label htmlFor="email">Email address </Label>
                                     <Field
                                         id="email"
                                         name="email"
@@ -298,7 +298,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         }
                                     </div>
                                     <div>
-                                        <Label htmlFor="serviceOffering:">Service Offering</Label>
+                                        <Label htmlFor="serviceOffering:">Service offering</Label>
                                         <CustomSelect
                                             triggerId='serviceOfferingTriggerId'
                                             id='serviceOffering'
@@ -322,7 +322,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                 </div>
                                 <div className='grid md:grid-cols-2 gap-4 w-full relative bottom-5'>
                                     <div>
-                                        <Label htmlFor="rcNumber">Registration Number</Label>
+                                        <Label htmlFor="rcNumber">Registration number</Label>
                                         <Field
                                             id="rcNumber"
                                             name="rcNumber"
@@ -345,7 +345,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         }
                                     </div>
                                     <div>
-                                        <Label htmlFor="tin">Tax Number</Label>
+                                        <Label htmlFor="tin">Tax number</Label>
                                         <Field
                                             id="tin"
                                             name="tin"
@@ -370,7 +370,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                 </div>
                                 <div className='grid md:grid-cols-2 gap-4 w-full relative'>
                                     <div className='relative bottom-5'>
-                                        <Label htmlFor="adminFirstName">Admin First Name</Label>
+                                        <Label htmlFor="adminFirstName">Admin first name</Label>
                                         <Field
                                             id="adminFirstName"
                                             name="adminFirstName"
@@ -392,7 +392,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                             )}
                                     </div>
                                     <div className='relative bottom-5'>
-                                        <Label htmlFor="adminLastName">Admin Last Name</Label>
+                                        <Label htmlFor="adminLastName">Admin last name</Label>
                                         <Field
                                             id="adminLastName"
                                             name="adminLastName"
@@ -415,7 +415,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                     </div>
                                 </div>
                                 <div className='relative bottom-5'>
-                                    <Label htmlFor="adminEmail">Admin Email Address</Label>
+                                    <Label htmlFor="adminEmail">Admin email address</Label>
                                     <Field
                                         id="adminEmail"
                                         name="adminEmail"
