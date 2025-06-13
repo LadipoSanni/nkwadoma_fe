@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "../index.module.css"
+import styles from '@/features/Overview/index.module.css';
 import PortfolioManagerOverviewCard from "@/reuseable/cards/portfoliomanagerOverview/PortfolioManagerOverviewCard";
 import Barcharts from "@/features/Overview/PortfolioMnanager/Barcharts";
 import PerformanceCard from "@/reuseable/cards/perfomance-card/performanceCard";
@@ -78,12 +78,12 @@ const PortfolioManager = () => {
 
     return (
        <div className={` pt-8 pb-`}>
-           <div className={`px-5 h-[82vh] w-[100%] gap-8  md:w-[100%] md:grid md:gap-8  ${styles.container}   `}>
-               <div className={` w-[100%] md:w-[100%] gap-8 md:mb-0 sm:mb-8 mb-8  md:h-auto m ${styles.tab} md:gap-5 md:w- flex  `}>
+           <div className={`px-5 h-[82vh] w-[100%] gap-8  md:w-[100%] md:grid md:gap-8  ${styles.container}  `}>
+               <section className={`   flex gap-4  overflow-scroll ${styles.overviewCard} `}>
                    <PortfolioManagerOverviewCard isFetching={isFetching} isLoading={isLoading} id={'vehicleCard'} cardData={cardData1} clickView={routeToInvestmentVehicle}/>
                    <PortfolioManagerOverviewCard isFetching={isFetching} isLoading={isLoading} id={'vehicleCard2'} cardData={cardData2} clickView={routeToFinancier}/>
                    <PortfolioManagerOverviewCard isFetching={isFetching} isLoading={isLoading} loanData={loanData}  isLoanData={true} id={'vehicleCard3'} cardData={cardData3} clickView={routeToLoans}/>
-               </div>
+               </section>
                <div className={`  w-full md:w-full pb-4  `}>
                    <Barcharts/>
                </div>

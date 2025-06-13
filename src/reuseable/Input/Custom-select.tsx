@@ -39,6 +39,10 @@ function CustomSelect({
     const handleDropdownOpen = () => {
         setDropdownOpen(!dropdownOpen);
     };
+    const handle = () => {
+        handleReset();
+        setDropdownOpen(false);
+    }
 
     return (
         <div>
@@ -90,7 +94,7 @@ function CustomSelect({
                         })}
                     </SelectGroup>
                     {showRestButton && value !== 'Month' ?
-                        <button onChange={handleDropdownOpen}  onClick={handleReset} className={` grid border w-full  `}>
+                        <button  onClick={handle} className={` grid hover:border w-full  `}>
                             All
                         </button>
                         : null

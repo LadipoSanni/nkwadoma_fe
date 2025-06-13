@@ -43,12 +43,12 @@ const PortfolioManagerOverviewCard = ({id,isLoading,isFetching,isLoanData,loanDa
                   {isLoanData &&
                       <main className={`w-full  grid gap-4 `}>
                           {loanData?.map((loan, index) => (
-                              <div key={index}
+                              <div key={'key'+index}
                                    id={'id'+loan.title}
-                                   className={` bg-white w-full border ${isFetching  && isLoading ? 'hidden ': ''} rounded-md relative  border-[#ECECEC]  h-fit `}
+                                   className={` bg-white sm:w-[15rem] md:w-full lg:w-full w-full border ${isFetching  && isLoading ? 'hidden ': ''} rounded-md relative  border-[#ECECEC]  h-fit `}
                               >
                                   <div
-                                      style={{width:Number(loan.amount) > 100 ? '100%' : loan.amount}}
+                                      style={{width:Number(loan.amount) < 100 ? `${Number(loan.amount)}%` : '100%'}}
                                       className={` h-[40px] ${loan.amount === '0'? `bg-white` : `${loan.bgColor}` } ${Number(loan.amount) > 9 ? ' pr-2' : ''}   rounded-md `}
                                       id={loan.title + 'Bar'}
                                   >
@@ -56,10 +56,10 @@ const PortfolioManagerOverviewCard = ({id,isLoading,isFetching,isLoanData,loanDa
                                   </div>
 
                                   <div
-                                      className={`text-black300 w-full absolute top-0 left-0  gap-2   px-3  h-[40px]    flex justify-between   `}
+                                      className={`text-black300 w-full b absolute top-0 left-0  gap-2   px-3  h-[40px]    flex justify-between   `}
                                   >
-                                      <label id={'label'+ loan.title} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  ${loan.textColor} `}>{loan.title}</label>
-                                      <label id={ loan.title +'Percentage'} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  text-[#212221] `}>{loan.amount + '%'}</label>
+                                      <p id={'label'+ loan.title} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  ${loan.textColor} `}>{loan.title}</p>
+                                      <p id={ loan.title +'Percentage'} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  text-[#212221] `}>{loan.amount + '%'}</p>
 
                                   </div>
                               </div>
@@ -71,7 +71,7 @@ const PortfolioManagerOverviewCard = ({id,isLoading,isFetching,isLoanData,loanDa
                 <div id={`balanceLinkBlock`}
                      className="flex bg-white  mt-auto h-fit   justify-end">
                     <Button  onClick={clickView} className={`bg-[#D9EAFF] ${inter.className} md:w-fit md:h-fit px-1 py-1 md:py-1 md:px-2  underline md:text-[#142854] text-[#142854] text-[14px] shadow-none  hover:bg-[#D9EAFF] w-fit h-fit `}>
-                        view
+                        View
                     </Button>
                 </div>
             </div>
