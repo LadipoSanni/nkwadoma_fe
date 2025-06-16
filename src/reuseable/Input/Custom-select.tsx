@@ -40,7 +40,10 @@ function CustomSelect({
         setDropdownOpen(!dropdownOpen);
     };
     const handle = () => {
-        handleReset();
+        if (handleReset){
+            handleReset();
+
+        }
         setDropdownOpen(false);
     }
 
