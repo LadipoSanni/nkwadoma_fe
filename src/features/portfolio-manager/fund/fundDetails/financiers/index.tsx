@@ -50,6 +50,7 @@ function Financiers() {
      const [totalPage,setTotalPage] = useState(0)
      const [pageNumber,setPageNumber] = useState(0)
      const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
+     const isDisabled = true;
     const param = {
       pageNumber: pageNumber,
       pageSize: 10,
@@ -123,9 +124,10 @@ function Financiers() {
           variant={"secondary"}
           size={"lg"}
           id='inviteFinancierModal'
-          className={` bg-meedlBlue text-meedlWhite  h-12 flex justify-center items-center md:max-w-32 w-full cursor-pointer`}
+          className={` bg-meedlBlue text-meedlWhite ${isDisabled? "bg-[#D7D7D7] hover:bg-[#D7D7D7]" : "bg-meedlBlue cursor-pointer"}  h-12 flex justify-center items-center md:max-w-32 w-full `}
           // className={` bg-neutral650 text-meedlWhite  h-12 flex justify-center items-center md:max-w-32 w-full cursor-auto`}
           onClick={handleOpenModal}
+          disabled={isDisabled}
          >
           Invite financier
          </Button>

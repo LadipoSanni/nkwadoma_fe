@@ -44,7 +44,7 @@ describe("SubmitAndCancelButton", () => {
 
      test('Cancel button has correct variant class', () => { 
         render(<SubmitAndCancelButton isValid={true} isLoading={false} handleCloseModal={jest.fn()} submitButtonName="Publish" />); 
-        expect(screen.getByText('Cancel')).toHaveClass('focus-visible:ring-1'); }); 
+        expect(screen.getByText('Cancel')).toHaveClass('bg-white'); }); 
         
     test('Submit button has correct variant class when valid', () => { 
         render(<SubmitAndCancelButton isValid={true} isLoading={false} handleCloseModal={jest.fn()} submitButtonName="Publish" />); 
