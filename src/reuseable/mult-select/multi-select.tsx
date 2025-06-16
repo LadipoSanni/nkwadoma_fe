@@ -4,6 +4,7 @@ import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { Badge } from "@/components/ui/badge";
 import { XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toTitleCase } from "@/utils/GlobalMethods";
 
 type Props = {
   multiselectList: { label: string; value: string }[];
@@ -138,7 +139,7 @@ function Multiselect({
                   toggleOption(opt);
                 }}
               >
-                {opt}
+              {toTitleCase(opt)}
                 <XIcon className="ml-2 h-4 w-4 cursor-pointer text-[#939CB0]" />
               </Badge>
             ))
