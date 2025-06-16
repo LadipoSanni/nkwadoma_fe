@@ -86,11 +86,11 @@ const PortfolioManager = () => {
                <div className={`px-4  w-full md:w-full pb-4  `}>
                    <Barcharts/>
                </div>
-               <div className={` px-5 w-full grid sm:grid   xl:flex lg:flex md:flex  pb-4 gap-6 `}>
+               <div className={` px-4 w-full grid sm:grid   xl:flex lg:flex md:flex  pb-4 gap-6 `}>
                    <PerformanceCard id={'ownership'}  isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={true} maxWidth={'50%'} title={'Net AUM return'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                    <PerformanceCard id={'netLoanPortfolioReturn'} isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={true} maxWidth={'50%'} title={'Net loan portfolio return'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                </div>
-               <div className={` px-5  w-full grid  md:flex pb-4 gap-6 `}>
+               <div className={` px-4  w-full grid  md:flex pb-4 gap-6 `}>
                    <PerformanceCard id={'totalCustodianTrusteeFee'}  isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total custodian/trustee fee'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                    <PerformanceCard id={'ownership'} isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total fund manager fee'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                </div>

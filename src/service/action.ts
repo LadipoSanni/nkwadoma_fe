@@ -28,7 +28,13 @@ export async function refreshTokenAction () {
 
 export  function getToken () {
     if (isTokenExpired(storedAccessToken)) {
-         refreshTokenAction()
+        console.log('access token expired');
+         refreshTokenAction().then(result => {
+             console.log(result);
+         })
+             .catch(error => {
+                 console.error(error);
+             });
     }
     return storedAccessToken;
 }
