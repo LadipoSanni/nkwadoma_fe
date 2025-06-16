@@ -10,9 +10,9 @@
 .overviewCard {
     width: 100%;
     display: flex;
-    /*overflow: scroll;*/
-    /*-ms-overflow-style: none;*/
-    /*scrollbar-width: none;*/
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 
