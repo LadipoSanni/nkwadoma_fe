@@ -42,6 +42,8 @@ import {loaneeLoanBreakDown} from "@/types/loan/loan-request.type";
 import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import CreditScore from "@/features/display/CreditScore";
+import { getInitial } from '@/utils/GlobalMethods';
+
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -228,7 +230,8 @@ function LoanDetails() {
     }
 
 
-    const userFirstLetter: string | undefined = data?.data?.firstName ? getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName) : ''
+    // const userFirstLetter: string | undefined = data?.data?.userIdentity?.firstName ? getFirstLetterOfWord(data?.data?.userIdentity?.firstName) + "" + getFirstLetterOfWord(data?.data?.userIdentity?.lastName) : ''
+    const userFirstLetter = data?.data?.userIdentity?.firstName ?  getInitial(data?.data?.userIdentity?.firstName,data?.data?.userIdentity?.lastName) : ""
 
     return (
         <>
@@ -263,9 +266,9 @@ function LoanDetails() {
                                     <p id={'loaneeNameOnLoanRequestDetails'}
                                          data-testid={'loaneeNameOnLoanRequestDetails'}
                                          className={`${cabinetGroteskMediumBold.className} text-black break-all  flex text-xl gap-2 md:flex md:gap-2 md:text-[28px]  `}>
-                                        {data?.data?.firstName}
+                                        {data?.data?.userIdentity?.firstName}
                                         &ensp;
-                                        {data?.data?.lastName}
+                                        {data?.data?.userIdentity?.lastName}
                                     </p>
                                     <div
                                         className={`flex gap-2  ${inter.className}  break-all   text-sm text-black400  `}
