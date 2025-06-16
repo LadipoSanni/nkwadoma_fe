@@ -149,7 +149,7 @@ const Repayment = () => {
                 />
                 {/*// excess Cakza*/}
                 {/*{data?.data?.firstYear && data?.data?.lastYear   ?*/}
-                   <div className={` grid grid-cols-3 md:flex lg:flex gap-4 h-fit md:w-fit lg:w-fit w-full  `}>
+                   <div className={` grid grid-cols-3 bg-red-200 md:flex lg:flex gap-4 h-fit md:w-fit lg:w-fit w-full  `}>
                        <CustomSelect
                            id="filterMonth"
                            value={selectedMonth}
