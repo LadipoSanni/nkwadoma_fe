@@ -171,7 +171,7 @@ function CommercialFund() {
       </div>
       <div>
             { searchTerm && viewAllInvestmentVehicle.length === 0? <div>
-                <SearchEmptyState icon={MdSearch} name='Endowment vehicle'/>
+                <SearchEmptyState icon={MdSearch} name='Commercial vehicle'/>
             </div> : <div  className='mt-6'>
                 <Table
                 tableData={tableData} 
@@ -180,7 +180,7 @@ function CommercialFund() {
                 tableHeight={54}
                 sx='cursor-pointer'
                 tableCellStyle={'h-12'}
-                optionalFilterName='endownment'
+                optionalFilterName='commercial'
                 condition={true}
                 sideBarTabName='fund'
                 icon={MdOutlinePayments}
