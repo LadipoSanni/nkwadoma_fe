@@ -14,6 +14,7 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {MagnifyingGlassIcon} from "@radix-ui/react-icons";
+import DropdownFilter from "@/reuseable/Dropdown/DropdownFilter";
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
@@ -148,7 +149,7 @@ const Repayment = () => {
                 />
                 {/*// excess Cakza*/}
                 {/*{data?.data?.firstYear && data?.data?.lastYear   ?*/}
-                   <div className={` grid grid-cols-2 md:flex lg:flex gap-4 h-fit md:w-fit lg:w-fit w-full  `}>
+                   <div className={` grid grid-cols-3 md:flex lg:flex gap-4 h-fit md:w-fit lg:w-fit w-full  `}>
                        <CustomSelect
                            id="filterMonth"
                            value={selectedMonth}
@@ -171,6 +172,7 @@ const Repayment = () => {
                            triggerId="yearFilterTrigger"
                            className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                        />
+                       <DropdownFilter/>
                    </div>
             </div>
             <div>
