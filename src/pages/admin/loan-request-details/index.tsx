@@ -39,7 +39,6 @@ import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import CreateLoanOffer from "@/reuseable/modals/createLoanOffer/Index";
 import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
 import {loaneeLoanBreakDown} from "@/types/loan/loan-request.type";
-import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import CreditScore from "@/features/display/CreditScore";
 import { getInitial } from '@/utils/GlobalMethods';
