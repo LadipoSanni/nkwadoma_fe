@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Tables from "@/reuseable/table/LoanProductTable";
+import Table from '@/reuseable/table/Table';
 import { MdOutlineInventory2, MdSearch } from "react-icons/md";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -25,9 +25,11 @@ const LoanProductPage = () => {
     const [allLoanee, setAllLoanProduct] = useState<TableRowData[]>([]);
     const [createProduct, setCreateProduct] = React.useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-    const size = 300;
-    const number = 0;
-    const { data, isLoading } = useViewAllLoanProductQuery({ pageSize: size, pageNumber: number });
+    const [hasNextPage,setNextPage] = useState(false)
+    const [totalPage,setTotalPage] = useState(0)
+     const [pageNumber,setPageNumber] = useState(0)
+    const size = 10;
+    const { data, isLoading } = useViewAllLoanProductQuery({ pageSize: size, pageNumber:pageNumber });
     const { data: searchResult } = useSearchLoanProductQuery(
         { loanProductName: searchTerm },
         { skip: !searchTerm }
@@ -40,6 +42,9 @@ const LoanProductPage = () => {
         } else if (!searchTerm && data && data?.data) {
             const result = data?.data?.body;
             setAllLoanProduct(result);
+            setNextPage(data?.data?.hasNextPage)
+            setTotalPage(data?.data?.totalPages)
+            setPageNumber(data?.data?.pageNumber)
         }
     }, [data, searchTerm, searchResult]);
 
@@ -99,8 +104,8 @@ const LoanProductPage = () => {
         {
             title: 'Amount repaid',
             sortable: true,
-            id: 'minRepaymentAmount',
-            selector: (row: TableRowData) => formatAmount(row.amountRepaid)
+            id: 'totalAmountRepaid',
+            selector: (row: TableRowData) => formatAmount(row.totalAmountRepaid)
         },
         {
             title: 'Amount earned',
@@ -156,11 +161,11 @@ const LoanProductPage = () => {
                     </div>
                 ) : searchTerm && searchResult && searchResult?.data.length === 0 ? (
                         <div className={`flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40`}>
-                            <SearchEmptyState name={"loan product"} icon={MdSearch} />
+                            <SearchEmptyState name={"Loan product"} icon={MdSearch} />
                         </div>
                 ) : allLoanee.length > 0 ? (
-                    <Tables
-                        tableData={allLoanee.slice().reverse()}
+                    <Table
+                        tableData={allLoanee}
                         handleRowClick={handleRowClick}
                         tableHeader={loanProductHeader}
                         tableHeight={58}
@@ -170,11 +175,14 @@ const LoanProductPage = () => {
                         showKirkBabel={false}
                         kirkBabDropdownOption={dropDownOption}
                         tableCellStyle={"h-12"}
-                        optionalRowsPerPage={10}
                         icon={MdOutlineInventory2}
                         sideBarTabName={"loan product"}
                         isLoading={isLoading}
                         condition={true}
+                        totalPages={totalPage}
+                        hasNextPage={hasNextPage}
+                        pageNumber={pageNumber}
+                        setPageNumber={setPageNumber}
                     />
                 ) : ""}
             </div>

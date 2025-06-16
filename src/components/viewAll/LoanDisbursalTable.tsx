@@ -26,7 +26,7 @@ function Index() {
     const clickedOrganizationId = useAppSelector(state => state.selectedLoan?.clickedOrganization)
 
     const request = {
-        pageSize: 100,
+        pageSize: 400,
         pageNumber: 0
     }
 
@@ -35,7 +35,7 @@ function Index() {
     const {data, isLoading: isLoading} = useViewAllLoanDisbursalByOrgIdQuery(
         {
             organizationId: clickedOrganizationId?.id,
-            pageSize: 100,
+            pageSize: 400,
             pageNumber: 0,
         },
         {refetchOnMountOrArgChange: true, skip:!clickedOrganizationId}
@@ -118,6 +118,7 @@ function Index() {
                             sideBarTabName='Loans'
                             optionalFilterName='graduate'
                             condition={true}
+                            optionalRowsPerPage={10}
                         />
                     </div>
                 )

@@ -105,7 +105,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
 
       const tableHeaderintegrated = [
               {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
-              {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
+              {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) =>  formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
               {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountRequested))},
               {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountReceived))},
           ];
@@ -255,7 +255,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         pageNumber={page}
         setPageNumber={setPageNumber}
         totalPages={totalPage}
-        enableRowSelection={true}
+        enableRowSelection={false}
         enableButton={() =>setEnableButton(true) }
         disabledButton={()=> setEnableButton(false) }
         handleSelectedRow={handleSelectedRow}

@@ -55,7 +55,7 @@ const TopBar = () => {
         if (data?.data?.allNotificationsCount !== undefined) {
             store.dispatch(setCurrentTotalNotification(data.data.allNotificationsCount));
         }
-        refetch()
+         refetch()
         if (user_role === "FINANCIER" && pathname?.startsWith("/kyc")) {
             store.dispatch(setCurrentNavbarItem("KYC verification"));
         }

@@ -77,13 +77,13 @@ const PortfolioManager = () => {
     }
 
     return (
-       <div className={` pt-8  h-[81vh]  ${styles.container} `}>
-           <section className={` px-5 mb-6  flex gap-4  overflow-scroll ${styles.overviewCard} `}>
+       <div className={` pt-8 w-full  h-[82vh]  ${styles.container} `}>
+           <section className={` px-4 mb-6  flex gap-4  overflow-scroll ${styles.overviewCard} `}>
                <PortfolioManagerOverviewCard isFetching={isFetching} isLoading={isLoading} id={'vehicleCard'} cardData={cardData1} clickView={routeToInvestmentVehicle}/>
                <PortfolioManagerOverviewCard isFetching={isFetching} isLoading={isLoading} id={'vehicleCard2'} cardData={cardData2} clickView={routeToFinancier}/>
                <PortfolioManagerOverviewCard isFetching={isFetching} isLoading={isLoading} loanData={loanData}  isLoanData={true} id={'vehicleCard3'} cardData={cardData3} clickView={routeToLoans}/>
            </section>
-               <div className={`px-5  w-full md:w-full pb-4  `}>
+               <div className={`px-4  w-full md:w-full pb-4  `}>
                    <Barcharts/>
                </div>
                <div className={` px-5 w-full grid sm:grid   xl:flex lg:flex md:flex  pb-4 gap-6 `}>
