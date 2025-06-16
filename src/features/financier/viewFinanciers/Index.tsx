@@ -60,6 +60,7 @@ const ViewFinanciers = () => {
     const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter()
+    const isDisabled = true;
 
     const [tabStates, setTabStates] = useState<Record<string, TabState>>({
             active: { pageNumber: 0, totalPages: 0, hasNextPage: false },
@@ -175,9 +176,10 @@ const ViewFinanciers = () => {
                 <Button
                     variant={"secondary"}
                     size={"lg"}
-                    className={`${inter.className} bg-meedlBlue text-meedlWhite h-[2.8125rem] w-full md:w-fit flex justify-center items-center`}
+                    className={`${inter.className}  ${isDisabled? "bg-[#D7D7D7] hover:bg-[#D7D7D7]" : "bg-meedlBlue"}  text-meedlWhite h-[2.8125rem] w-full md:w-fit flex justify-center items-center`}
                     id='createProgramModal'
                     onClick={() => setIsModalOpen(true)}
+                    disabled={isDisabled}
                 >
                     Invite financier
                 </Button>
