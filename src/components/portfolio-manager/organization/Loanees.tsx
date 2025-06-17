@@ -24,9 +24,9 @@ interface TableRowData {
 }
 
 
- interface rowData {
-      [key: string]: string | number | null | React.ReactNode | object;
-     }
+//  interface rowData {
+//       [key: string]: string | number | null | React.ReactNode | object;
+//      }
 
 interface userIdentity {
     firstName: string;
