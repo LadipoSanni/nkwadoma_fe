@@ -57,10 +57,10 @@ interface deleteCohortProps {
             </div>
 
             <div className={`flex flex-row justify-end gap-3 py-5`}>
-                <Button size={'lg'} variant={'outline'}
+                <button
                         id="cancelDeleteButtton"
-                        className={`${inter.className} h-12 text-sm font-semibold leading-6 text-meedlBlack`}
-                        onClick={handleCanCelCohort}>Cancel</Button>
+                        className={`${inter.className} h-12 text-sm font-semibold leading-6 text-[#142854] border-solid border-[#142854] border-[1px] w-28 rounded-md hover:bg-[#E8EAEE] focus:bg-[#E8EAEE] `}
+                        onClick={handleCanCelCohort}>Cancel</button>
                 <Button size={'lg'} variant={'secondary'}
                         className={`${inter.className} h-12 bg-error450 text-sm font-semibold leading-6 text-meedlWhite`}
                         id="deleteButton"

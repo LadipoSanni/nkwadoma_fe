@@ -299,7 +299,7 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                     <Button
                                         type='submit'
                                         variant="secondary"
-                                        className={`w-full md:w-36 h-[57px] ${!isValid ? 'bg-neutral650 cursor-not-allowed ' : 'hover:bg-meedlBlue bg-meedlBlue cursor-pointer'}`}
+                                        className={`w-full md:w-36 h-[57px] ${!isValid ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7]' : 'cursor-pointer'}`}
                                         disabled={!isValid}
                                     >
                                         Continue
@@ -389,13 +389,13 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                                     </Button>
                                     {disableAddLoaneeButton ?
                                         <Button
-                                            className={`w-full md:w-36 h-[57px] hover:bg-[#D0D5DD] bg-[#D0D5DD] cursor-pointer`}>
+                                            className={`w-full md:w-36 h-[57px] hover:bg-[#D0D5DD] bg-[#D0D5DD] `}>
                                             Add
                                         </Button>
                                         :
                                         <Button
                                             variant="secondary"
-                                            className="w-full md:w-36 h-[57px] hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
+                                            className="w-full md:w-36 h-[57px]  cursor-pointer"
                                             type="submit"
                                         >
                                             {isLoadingAddLoanee ? (
