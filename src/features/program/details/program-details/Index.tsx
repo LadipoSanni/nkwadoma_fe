@@ -221,7 +221,7 @@ const ProgramDetails = () => {
                         icon={Cross2Icon}
                     >
                         <EditProgramForm
-                            programId={programId}
+                            // programId={programId}
                             setIsOpen={setIsOpen}
                             programDetail={progamDetail}
                         />
