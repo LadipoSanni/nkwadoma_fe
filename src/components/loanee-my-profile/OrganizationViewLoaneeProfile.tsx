@@ -14,7 +14,7 @@ const OrganizationViewLoaneeProfile = () => {
     const loaneeId = id
     const  {data, isLoading, isFetching} = useGetLoaneeDetailsQuery(loaneeId)
     const  handleBack = () => {
-        router.push('/organizations/loanees/all')
+        router.push('/organizations/loanees/invited')
     }
 
     const userName = data?.data?.userIdentity?.firstName + ' '+ data?.data?.userIdentity?.lastName

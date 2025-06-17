@@ -240,7 +240,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         
         <CheckBoxTable
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
-        tableData={getTableData()}
+        tableData={tabType === 'Invited'? [] : getTableData()}
         tableHeader={tableHeaderintegrated}
         handleRowClick={handleRowClick}
         staticHeader="Loanee"
