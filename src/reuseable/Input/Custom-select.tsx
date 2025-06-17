@@ -74,7 +74,7 @@ function CustomSelect({
                     className="border-none border-[#FAFBFC] text-[#404653] text-sm"
                     style={{ zIndex: 1000 }}
                 >
-                    <SelectGroup className="selectgroup">
+                    <SelectGroup className="selectgroup ">
                         {selectContent?.map((content, index) => {
                             // Determine value and display text
                             const itemValue = typeof content === 'object' ? content.name : String(content);
@@ -87,7 +87,7 @@ function CustomSelect({
                                         key={`${itemValue}-${index}`}
                                         id={itemId}
                                         value={itemValue}
-                                        className={itemValue}
+                                        className={`${itemValue} hover:bg-[#EEF5FF]`}
                                         disabled={isItemDisabled ? isItemDisabled(content) : false}
                                     >
                                         {itemDisplay}

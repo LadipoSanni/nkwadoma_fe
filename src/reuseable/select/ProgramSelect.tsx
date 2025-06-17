@@ -246,7 +246,7 @@ const ProgramSelect: React.FC<ProgramSelectProps> = ({
                         id={item.id}
                         key={item.id}
                         value={item.name}
-                        className="focus:bg-lightBlue200 focus:text-meedlBlue text-lightBlue950"
+                        className="  text-lightBlue950 hover:bg-[#EEF5FF] focus:bg-[#EEF5FF]"
                       >
                         {item?.name}
                       </SelectItem>
