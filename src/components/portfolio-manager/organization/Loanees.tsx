@@ -49,6 +49,7 @@ const Loanees = dynamic(
     status?: string
     tabType?: string
     condition?: string
+    uploadedStatus?: string
  }
 
  interface ApiError {
@@ -58,7 +59,7 @@ const Loanees = dynamic(
   };
 }
 
-function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
+function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: Props) {
     const [searchTerm, setSearchTerm] = useState("");
     const cohortDetails = useAppSelector((state) => state.cohort.selectedCohortInOrganization)
     const cohortId = cohortDetails?.id;
@@ -78,7 +79,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
             cohortId: cohortId,
             pageSize: size,
             pageNumber: page,
-            status: status
+            status: status,
+            uploadedStatus: uploadedStatus
         })
 
       const {data: searchResults, isLoading: isLoadingSearch} = useSearchForLoaneeInACohortQuery({
@@ -127,8 +129,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
 
         const getTableData = () => {
           if (!data?.data?.body) return [];
-          if (searchTerm) return searchResults?.data?.body || [];
-          return data?.data?.body;
+         else if (searchTerm) return searchResults?.data?.body || [];
+         else return data?.data?.body;
       }
 
       const handleClick= async () => {
@@ -171,7 +173,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
           if(inviteLoanees){
             setSelectedRows(new Set());
             setEnableButton(false)
-            //  router.push("/organizations/loanees/all")
+            router.push("/organizations/loanees/invited")
             toast({
               description: inviteLoanees?.message,
               status: "success",

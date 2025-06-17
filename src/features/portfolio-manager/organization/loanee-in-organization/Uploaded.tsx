@@ -5,9 +5,9 @@ function Uploaded() {
   return (
     <div>
       <Loanees
-        buttonName='Archive'
         tabType='All'
         condition= 'ARCHIVE'
+        uploadedStatus="ADDED"
       />
     </div>
   )
