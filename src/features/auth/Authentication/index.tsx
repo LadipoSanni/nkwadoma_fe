@@ -17,15 +17,19 @@ const Index : React.FC<AuthProps> = ({children}) => {
     const refreshToken = getUserDetailsFromStorage('refresh_token' )
     const [logout] = useLogoutMutation()
 
+    console.log('token',token)
+    console.log('refresh_token',refreshToken)
     const {toast} = useToast()
     const response = isTokenExpired(token ? token : '')
     const response2 = isTokenExpired(refreshToken ? refreshToken : '')
+    console.log('response',response)
+    console.log('response2',response2)
     useEffect(() => {
-        checkUserToken(response, response2)
+        checkUserToken(response)
     }, [response, response2,token,refreshToken]);
 
-    const checkUserToken = (isTokenExpired: boolean, isRefreshTokenExpired: boolean) => {
-        if (isTokenExpired && isRefreshTokenExpired) {
+    const checkUserToken = (isTokenExpired: boolean) => {
+        if (isTokenExpired ) {
             logout({})
             toast({
                 description: "Session expired. Please login again",

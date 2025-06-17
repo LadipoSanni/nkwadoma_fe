@@ -49,16 +49,17 @@ export const isUserAdmin = (role: string) => {
 }
 
 export const isTokenExpired = (token?: string): boolean => {
-    try {
-        if (token) {
+    if (!token) {
+        return true;
+    }else{
+        try {
             const decoded: { exp: number } = jwtDecode(token);
             const expiryTime = decoded.exp  * 1000;
             return isAfter(Date.now(), expiryTime);
+        }catch (error){
+            console.log(error);
+            return true;
         }
-        return false;
-    } catch (e) {
-        console.log("error:: ", e)
-        return false;
     }
 }
 

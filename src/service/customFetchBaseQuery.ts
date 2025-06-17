@@ -15,6 +15,7 @@ export const customFetchBaseQuery = fetchBaseQuery({
         : undefined,
     prepareHeaders: (headers,{ endpoint }) => {
         const token =  getToken()
+        console.log('returned token', token)
         if (token) {
             headers.set('authorization', `Bearer ${token}`);
             if (endpoint !== 'uploadLoaneeFile'  && endpoint !== 'uploadRepaymentFile') {
