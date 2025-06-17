@@ -21,11 +21,12 @@ const FormButtons: React.FC<FormButtonsProps> = ({ isButtonDisabled, setIsFormSu
     return (
     <div id="formButtonsContainer" className={'md:flex grid gap-5 mt-3 md:justify-end md:items-end sticky inset-0 bg-white py-3'}>
         <Button id="cancelButton" className={'border-meedlBlue font-bold text-meedlBlue w-full md:w-[8.75rem] h-[3.5625rem] border border-solid'} asChild>
-            <DialogClose onClick={setClearField}>Cancel</DialogClose>
+            <DialogClose onClick={setClearField} className='hover:bg-[#E8EAEE] focus:bg-[#E8EAEE]'>Cancel</DialogClose>
         </Button>
        {!isSubmitType? <Button
             id="continueButton"
-            className={`text-meedlWhite font-bold ${isButtonDisabled ? 'bg-neutral650 hover:bg-neutral650' : 'bg-meedlBlue hover:bg-meedlBlue'} w-full md:w-[8.75rem] h-[3.5625rem]`}
+            variant={"secondary"}
+            className={`text-meedlWhite font-bold ${isButtonDisabled ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7]' : 'bg-meedlBlue'} w-full md:w-[8.75rem] h-[3.5625rem]`}
             disabled={isButtonDisabled}
             onClick={setFormSubmitted}
         >
@@ -34,7 +35,7 @@ const FormButtons: React.FC<FormButtonsProps> = ({ isButtonDisabled, setIsFormSu
         : 
         <Button
         disabled={isButtonDisabled}
-        className={`text-meedlWhite font-bold ${isButtonDisabled ? 'bg-neutral650 hover:bg-neutral650' : 'bg-meedlBlue hover:bg-meedlBlue'} w-full md:w-[8.75rem] h-[3.5625rem]`}
+        className={`text-meedlWhite font-bold ${isButtonDisabled ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7]' : 'bg-meedlBlue hover:bg-[#435376]'} w-full md:w-[8.75rem] h-[3.5625rem]`}
         id="submitButton"
         type='submit'
         >

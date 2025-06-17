@@ -350,13 +350,13 @@ const OrganizationDetails = () => {
                     {organizationDetails?.data.websiteAddress}
                   </a>
                 </div>
-                <div className="mt-5">
+                <div className="mt-5 ">
                   {  organizationDetails?.data.status == "INVITED"?
                   "" :
                   <Button
                      id='activateAndDeactiveButton'
                      variant={'outline'}
-                     className="w-full xl:w-[24vw] lg:w-[31vw] md:w-[36vw] h-[45px] text-[#142854] font-semibold border-solid border-[#142854]"
+                     className="w-full   md:w-[25vw]  h-[45px] text-[#142854] font-semibold border-solid border-[#142854]"
                      onClick={organizationDetails?.data.status === "ACTIVE"? handleDeactivateClick : handleActivateClick }
                   >
                     {

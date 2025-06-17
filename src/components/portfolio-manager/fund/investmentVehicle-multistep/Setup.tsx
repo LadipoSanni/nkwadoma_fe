@@ -519,11 +519,11 @@ function Setup({investmentVehicleType}: Props) {
 
                         <Button
                             id='submitInvestment'
-                            variant={"default"}
+                            variant={"secondary"}
                             className={` w-full lg:w-36 h-[48px] ${
                                 !isValid
                                     ? "bg-neutral650 cursor-auto hover:bg-neutral650 "
-                                    : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
+                                    : " bg-meedlBlue cursor-pointer"
                             }`}
                             type="submit"
                             disabled={!isValid}

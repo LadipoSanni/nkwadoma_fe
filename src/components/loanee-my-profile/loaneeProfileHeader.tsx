@@ -98,31 +98,36 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                }
 
                {userRole === 'LOANEE' &&
-               <Menubar className={'w-fit mt-auto mb-auto h-fit'}>
-                   <MenubarMenu >
-                       <MenubarTrigger className={` bg-[#F9F9F9] w-fit h-fit py-1.5  px-1.5 md:py-2 md:px-2 lg:py-2 lg:px-2 mt-auto mb-auto   rounded-full `} >
-                           <MdMoreHoriz  color={'#6A6B6A'} className={` h-4 w-4 md:h-5 md:w-5 lg:h-5 lg:w-5 `} />
-                       </MenubarTrigger>
-                       <MenubarContent>
-                           <MenubarItem
-                               id={`dropOut`}
-                               onClick={() => handleOpenModal('dropOut', 'Drop out', 'Drop out')}
-                               className={` ${inter.className} text-[14px] text-[#212221] w-full hover:text-[#142854] hover:bg-[#D9EAFF] `}
-                           >
+                   <div className={`h-full  grid content-center`}>
+                       <Menubar  className={'w-fit mt-auto mb-auto h-fit'}>
+                           <MenubarMenu >
+                               <MenubarTrigger disabled={true} className={` bg-[#F9F9F9] w-fit h-fit py-1.5  px-1.5 md:py-2 md:px-2 lg:py-2 lg:px-2 mt-auto mb-auto   rounded-full `} >
+                                   <MdMoreHoriz
+                                       // color={'#6A6B6A'}
+                                       color={'#d0d0d0'}
+                                                 className={` cursor-not-allowed h-4 w-4 md:h-5 md:w-5 lg:h-5 lg:w-5 `} />
+                               </MenubarTrigger>
+                               <MenubarContent  className={`hidden`}>
+                                   <MenubarItem
+                                       id={`dropOut`}
+                                       onClick={() => handleOpenModal('dropOut', 'Drop out', 'Drop out')}
+                                       className={` ${inter.className} text-[14px] text-[#212221] w-full hover:text-[#142854] hover:bg-[#D9EAFF] `}
+                                   >
 
-                               Drop out
-                           </MenubarItem>
-                           <MenubarItem
-                               id={`deferCohort`}
-                               onClick={() => handleOpenModal('deferCohort', 'Defer cohort', 'Defer')}
-                               className={`${inter.className} text-[14px] text-[#212221] w-full hover:text-[#142854] hover:bg-[#D9EAFF] `}
-                           >
+                                       Drop out
+                                   </MenubarItem>
+                                   <MenubarItem
+                                       id={`deferCohort`}
+                                       onClick={() => handleOpenModal('deferCohort', 'Defer cohort', 'Defer')}
+                                       className={`${inter.className} text-[14px] text-[#212221] w-full hover:text-[#142854] hover:bg-[#D9EAFF] `}
+                                   >
 
-                               Defer cohort
-                           </MenubarItem>
-                       </MenubarContent>
-                   </MenubarMenu>
-               </Menubar>
+                                       Defer cohort
+                                   </MenubarItem>
+                               </MenubarContent>
+                           </MenubarMenu>
+                       </Menubar>
+                   </div>
                }
            </div>
 

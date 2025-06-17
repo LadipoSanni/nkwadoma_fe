@@ -30,7 +30,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                     key={item?.id + index}
                     id={item.id}
                     data-testid={item.id}
-                    className={`inline-flex h-fit hover:rounded hover:bg-[#f6f6f8] py-2 gap-2 px-1 w-full ${item.isActive ? `${(currentTab === item.name ?currentTabStyle : noStyle  )}` :  ''}  `}
+                    className={`inline-flex h-fit ${item?.isActive ? 'hover:rounded hover:bg-[#f6f6f8]' : 'cursor-not-allowed'}  py-2 gap-2 px-1 w-full ${item.isActive ? `${(currentTab === item.name ?currentTabStyle : noStyle  )}` :  ''}  `}
                     onClick={() => {handleClick(item.name, item.route, item.isActive)}}
                 >
                     <div className={` flex gap-2`}>

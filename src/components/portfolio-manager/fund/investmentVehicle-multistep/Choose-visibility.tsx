@@ -80,6 +80,7 @@ function ChooseVisibility() {
       pageNumber: pageNumber,
       pageSize: 10,
       }
+    const isPrivateDisabled = true;
 
     const props = {
         investmentVehicleId: investmentVehicleId,
@@ -377,8 +378,13 @@ function ChooseVisibility() {
                     )}
           </div>
           <div 
-          className={`py-5  border-[1px] rounded-xl cursor-pointer px-4 ${values.status === 'PRIVATE' ? 'border-[#142854]' : ''}`}
-        onClick={() => setFieldValue('status', 'PRIVATE')}
+          className={`py-5  border-[1px] rounded-xl px-4 ${values.status === 'PRIVATE' ? 'border-[#142854]' : ''} ${
+            isPrivateDisabled 
+              ? 'opacity-50 cursor-not-allowed' 
+              : 'cursor-pointer'
+          }`}
+        // onClick={() => setFieldValue('status', 'PRIVATE')}
+        onClick={!isPrivateDisabled ? () => setFieldValue('status', 'PRIVATE') : undefined}
           >
           <label className="flex items-center space-x-2 ">
               <input
@@ -386,12 +392,16 @@ function ChooseVisibility() {
                 name="Private"
                 value="PRIVATE"
                 checked={values.status === 'PRIVATE'}
-                onChange={() => setFieldValue('status', "PRIVATE")}
+                // onChange={() => setFieldValue('status', "PRIVATE")}
+                onChange={!isPrivateDisabled ? () => setFieldValue('status', 'PRIVATE') : undefined}
                 className="hidden" 
                 id="private" 
+                disabled={isPrivateDisabled}
               />
-              <span className="relative w-4 h-4 border-[1px] border-[#D7D7D7] rounded-full flex items-center justify-center cursor-pointer">
-                {values.status === 'PRIVATE' && (
+              <span className={`relative w-4 h-4 border-[1px]  rounded-full flex items-center justify-center cursor-pointer ${
+      isPrivateDisabled ? 'border-[#D7D7D7]/50' : 'border-[#D7D7D7]'
+    }`}>
+                {values.status === 'PRIVATE' && !isPrivateDisabled  && (
                   <span className="absolute w-4 h-4 bg-meedlBlue rounded-full"></span>
                 )}
                 {values.status === 'PRIVATE' && (
@@ -693,8 +703,8 @@ function ChooseVisibility() {
                   id="submitInvestment"
                   className={`w-full md:w-24 h-[46px] rounded-md ${
                     !isValid
-                      ? "bg-neutral650 cursor-auto text-white hover:bg-neutral650"
-                      : "hover:bg-meedlBlue bg-meedlBlue text-white cursor-pointer"
+                      ? "bg-[#D7D7D7] cursor-auto text-white hover:bg-[#D7D7D7]"
+                      : "hover:bg-[#435376] bg-meedlBlue text-white cursor-pointer focus:bg-meedlBlue"
                   }`}
                   type="submit"
                   disabled={!isValid}

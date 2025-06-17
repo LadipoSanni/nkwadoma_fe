@@ -317,11 +317,12 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
                   </Button>
                 
                     <Button
+                      variant={"secondary"}
                       id="CreateCohortButton"
                       className={`text-meedlWhite font-bold ${
                         createButtonDisabled || !isItemListValid
-                          ? "bg-neutral650 hover:bg-neutral650"
-                          : "bg-meedlBlue hover:bg-meedlBlue"
+                          ? "bg-[#D7D7D7] hover:bg-[#D7D7D7]"
+                          : "cursor-pointer"
                       } w-full md:w-[8.75rem] h-[3.5625rem]`}
                        disabled={createButtonDisabled || !isItemListValid}
                       type="submit"

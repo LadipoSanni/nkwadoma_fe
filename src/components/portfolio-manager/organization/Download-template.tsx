@@ -27,7 +27,7 @@ function DownloadTemplate({name,fileUrl,fileName}: Props) {
       <p className='text-[#6A6B6A]'>This template include columns necessary to import {name}s</p>
       <div className='relative  bottom-1'>
       <Button
-      className='border-none shadow-none text-[#142854] '
+      className='border-none shadow-none text-[#142854] hover:bg-white focus:bg-white '
       variant={'outline'}
       onClick={handleDownload}
       type="button" 

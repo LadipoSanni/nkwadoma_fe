@@ -53,8 +53,8 @@ export const programApi = createApi({
             invalidatesTags: ['program'],
         }),
         updateProgram: builder.mutation({
-            query: ({ id, data }) => ({
-                url: `/program/${id}`,
+            query: ({  data }) => ({
+                url: `/program/edit`,
                 method: "PATCH",
                 body: data,
             }),

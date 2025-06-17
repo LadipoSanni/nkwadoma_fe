@@ -33,7 +33,7 @@ interface ProgramDetail {
 
 
 type Props = {
-    programId? : string;
+    // programId? : string;
    setIsOpen? : (e:boolean) => void;
    programDetail?: ProgramDetail
 }
@@ -49,7 +49,7 @@ interface ApiError {
 
 
 
-function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
+function EditProgramForm({setIsOpen,programDetail}: Props) {
   const [updateProgram, { isLoading }] = useUpdateProgramMutation();
   // const queryClient = useQueryClient();
   const [error, setError] =  useState('');
@@ -134,7 +134,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
     }
     
     try {
-     const update = await updateProgram({ id:programId, data: values }).unwrap();
+     const update = await updateProgram({  data: values }).unwrap();
     //  queryClient.invalidateQueries({ queryKey: ['program'] });
     if(update){
       toastPopUp.showToast();
@@ -324,8 +324,8 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                 </Button>
                 <Button 
                 id='editProgramSaveButton'
-                variant={'default'} 
-                className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-neutral650 cursor-not-allowed " :"hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
+                variant={'secondary'} 
+                className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " :"  cursor-pointer"}`}
                 type='submit'
                 disabled={!isValid}
                 >

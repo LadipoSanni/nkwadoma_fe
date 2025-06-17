@@ -538,7 +538,6 @@ const ProgramView = () => {
                     >
 
                         <EditProgramForm
-                            programId={programId}
                             setIsOpen={setEditOpen}
                             programDetail={progamDetail}
                         />
