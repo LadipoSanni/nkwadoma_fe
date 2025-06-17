@@ -43,29 +43,30 @@ function NotificationLayout({children}: Props) {
        const totalNotification = useAppSelector(state => (state?.notification?.totalNotifications))
        const [searchTerm, setSearchTerm] = useState('');
        const [selectAll, setSelectAll] = useState(false);
+       const [totalSearchedNotification,setTotalSearchedNotification] = useState("")
        const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
        const [pageNumber,setPageNumber] = useState(0)
        const pageSize = 10
-      //  const [getPaginatedDatas, setPaginatedData] = useState<notificationProps[]>([])
        const [hasNextPage,setHasNextPage] = useState(false)
-      //  const [totalPage,setTotalPage] = useState(0)
-       const [notificationDatas,setNotificationData]= useState<notificationProp[]>([])
-      //  const [totalItem, setTotalItem] = useState(0)
+      //  const [notificationDatas,setNotificationData]= useState<notificationProp[]>([])
        const [isDeleteOpen, setIsDeleteOpen] = useState(false);
        const [isMobile, setIsMobile] = useState(false);
        const [activeNotificationId, setActiveNotificationId] = useState<string | null>(null);
        const router = useRouter();
        const {toast} = useToast()
+       const [searchHasNextPage,setSearchHasNextPage] = useState(false)
+       const [pageSearchNumber,setSearchPageNumber] = useState(0)
+
        const param = {
         title : searchTerm,
         pageSize: 10,
-        pageNumber: pageNumber
+        pageNumber: pageSearchNumber
     }
 
        const [deleteNotification,{isLoading:isloading}] = useDeleteNotificationMutation()
       
        const {data,isLoading} = useViewAllNotificationQuery({pageSize: pageSize,pageNumber: pageNumber},{ refetchOnMountOrArgChange: true })
-       const {data: searchData} = useSearchNotificationQuery({param},{skip: !searchTerm})
+       const {data: searchData, refetch} = useSearchNotificationQuery({param},{skip: !searchTerm})
 
        useEffect(() => {
         const mediaQuery = window.matchMedia('(max-width: 767px)'); 
@@ -77,28 +78,31 @@ function NotificationLayout({children}: Props) {
         return () => mediaQuery.removeEventListener('change', handleResize);
     }, []);
 
+         const getData = (): notificationProp[] => {
+          if (!data?.data?.body) return [];
+          if (searchTerm) return searchData?.data?.body || [];
+          return data?.data?.body;
+         }
+
        useEffect(()=> {
         if (searchTerm && searchData && searchData?.data) {
           const result = searchData?.data?.body
-          setNotificationData(result)
-          setHasNextPage(searchData?.data?.hasNextPage)
-          setPageNumber(searchData?.data?.pageNumber)
+         
+          setSearchHasNextPage(searchData?.data?.hasNextPage)
+          setSearchPageNumber(searchData?.data?.pageNumber)
+          setTotalSearchedNotification(searchData?.data?.totalElement)
           setActiveNotificationId("")
         } 
         else  if(!searchTerm && data && data?.data){
-             setNotificationData(data?.data?.body)
+           
              setHasNextPage(data?.data?.hasNextPage)
              setPageNumber(data?.data?.pageNumber)
              setActiveNotificationId("")
           }
-          //  const paginated = getPaginatedData(pageNumber, pageSize, notificationMockData);
-          //   setPaginatedData(paginated.notifications)
-          //   setPageNumber(paginated.pageNumber)
-          //   setHasNextPage(paginated.hasNextPage)
-          //   setTotalItem(paginated.totalItems)
-            // console.log("The paginated data: ",paginated)
+         
          },[searchTerm, searchData,data])
-
+ 
+        
        
          const handleCheckedRow = (id: string) => {
             setSelectedRows((prevSelected) => {
@@ -118,7 +122,7 @@ function NotificationLayout({children}: Props) {
                 setSelectedRows(new Set());
                }else {
                 const allRowIndexes: Set<string> = new Set();
-                notificationDatas?.forEach((data) => allRowIndexes.add(String(data.id)));
+                getData()?.forEach((data) => allRowIndexes.add(String(data.id)));
                 setSelectedRows(allRowIndexes);
               }
               setSelectAll(!selectAll);
@@ -131,19 +135,25 @@ function NotificationLayout({children}: Props) {
                   };
 
                const handleLeftChange = () => {
+                 if(searchTerm && pageSearchNumber > 0){
+                     setSearchPageNumber(pageSearchNumber - 1)
+                 }else
                  if (pageNumber > 0) {
                    setPageNumber(pageNumber - 1);
                  }
                }
            
                const handleRightChange = () => {
+                  if(searchTerm && searchHasNextPage){
+                    setSearchPageNumber(pageSearchNumber + 1)
+                  } else
                  if (hasNextPage) {
                    setPageNumber(pageNumber + 1);
                  }
                }
            
-               const trackCountFirst = pageNumber  * pageSize + 1;
-               const trackCountLast = Math.min((pageNumber + 1) * pageSize, totalNotification);
+               const trackCountFirst = searchTerm ? pageSearchNumber * pageSize + 1 : pageNumber  * pageSize + 1;
+               const trackCountLast = searchTerm ? Math.min((pageSearchNumber + 1)* pageSize,Number(totalSearchedNotification)) : Math.min((pageNumber + 1) * pageSize, totalNotification);
 
                const handleDeleteOpen = () =>{
                 setIsDeleteOpen(true)
@@ -152,7 +162,21 @@ function NotificationLayout({children}: Props) {
             const handleDeleteNotification = async (ids: string[]) => {
                 try{
                   const deleteNotifications = await deleteNotification(ids).unwrap()
-                  if(deleteNotifications){
+                 if (searchTerm && searchData?.data?.body && deleteNotifications) {
+                    setSelectAll(false)
+                    setSelectedRows(new Set());
+                    refetch()
+                    setTimeout(() => {
+                      toast({
+                        description: deleteNotifications?.data?.message || `${selectedRows.size === 1? "Notification deleted successfully" : "Notifications deleted successfully"} `,
+                        status: "success",
+                    })
+                    })
+                    router.push("/notifications/notification")
+                  } else 
+                   if(deleteNotifications){
+                    setSelectAll(false)
+                    setSelectedRows(new Set());
                     setTimeout(() => {
                       toast({
                         description: deleteNotifications?.data?.message || `${selectedRows.size === 1? "Notification deleted successfully" : "Notifications deleted successfully"} `,
@@ -205,10 +229,10 @@ function NotificationLayout({children}: Props) {
         </div>
          <div>
            {
-            searchTerm && notificationDatas.length === 0? <div className='relative bottom-8 top-8'>
+            searchTerm && getData().length === 0? <div className='relative bottom-8 top-8'>
               <SearchEmptyState icon={MdSearch} name='Notification'/>
             </div> :
-        notificationDatas.length === 0? (
+       getData().length === 0? (
         <div className='relative bottom-8 top-8 '>
           <EmptyState
            icon={() => (
@@ -267,7 +291,7 @@ function NotificationLayout({children}: Props) {
 
           >
           {
-            notificationDatas.map((notification, index)=> (
+            getData().map((notification, index)=> (
               <div key={index} className={`flex items-center w-full border-t md:border-none  ${
     activeNotificationId === notification.id ? "bg-[#F9F9F9] data-[state=active]:bg-[#F9F9F9]" : ""
 } ${
@@ -327,13 +351,13 @@ function NotificationLayout({children}: Props) {
           </div>   
           <div className='border-t flex justify-end'>
           <NotificationButton
-            totalItem={totalNotification}
+            totalItem={searchTerm? Number(totalSearchedNotification) : totalNotification}
             handleLeftChange={handleLeftChange}
             handleRightChange={handleRightChange}
             trackCountFirst={trackCountFirst}
             trackCountLast={trackCountLast}
-            pageNumber={pageNumber}
-            hasNextPage={hasNextPage}
+            pageNumber={searchTerm? pageSearchNumber : pageNumber}
+            hasNextPage={searchTerm? searchHasNextPage : hasNextPage}
             style='mt-4 px-4'
             testIdNext='handleNext'
             testIdPrevious='handlePrevious'
@@ -365,6 +389,7 @@ function NotificationLayout({children}: Props) {
               handleMultipleDelete={handleDeleteNotification}
               isLoading={isloading}
               ids={Array.from(selectedRows)}
+              
            />
           </DeleteModal>
         </div> 
