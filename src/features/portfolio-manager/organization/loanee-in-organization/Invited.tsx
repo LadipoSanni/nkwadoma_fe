@@ -6,6 +6,8 @@ function Invited() {
     <div>
       <Loanees
         tabType='Invited'
+        // uploadedStatus="INVITED"
+         uploadedStatus="ADDED"
       />
     </div>
   )

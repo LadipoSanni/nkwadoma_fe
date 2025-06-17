@@ -54,7 +54,8 @@ export const cohortApi = createApi({
                 cohortId?: string,
                 pageNumber?: number;
                 pageSize?: number;
-                status?: string
+                status?: string;
+                uploadedStatus? : string
             }) => ({
                 url: '/loanee/cohorts/loanees',
                 method: "GET",

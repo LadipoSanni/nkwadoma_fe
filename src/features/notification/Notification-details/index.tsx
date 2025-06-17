@@ -50,7 +50,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
       router.push("/organizations/details");
   }
   }
-
+//LOAN_OFFER_DECISION
    const buttonName = () => {
     if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
       return "financier"
@@ -103,17 +103,17 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                              </span>,
                          </div>
                         <div>
-                        <p className="md">
+                        <p className=" lowercase first-letter:uppercase">
                          {/* {getPaginatedDatas.find((item) => item.type === activeTab)?.message} */}
                          {notification?.data?.contentDetail}
                          </p>
                         </div>
                         <div className='mt-4 mb-4'>
-                         {notification?.data?.notificationFlag !== null? (<p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>): ""}
+                         {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"? (<p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>): ""}
                          <p>If you have any question or further assistance, our customer service team is here to help you</p>
                         </div>
                          <div>
-                          {notification?.data?.notificationFlag !== null?
+                          {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"?
                           <Button 
                            onClick={handleRoute}
                            className='bg-[#142854] hover:bg-[#142854] h-[45px] text-[14px]'
@@ -122,7 +122,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                              View <span className='lowercase ml-1'> {buttonName()}</span>
                              
                            </Button>
-                           : ""}
+                           : notification?.data?.notificationFlag === null && "" }
                          </div>
                         </div>
     </div>

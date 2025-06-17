@@ -8,6 +8,9 @@ function Uploaded() {
         buttonName='Archive'
         tabType='All'
         condition= 'ARCHIVE'
+        // tabType='All'
+        // condition= 'ARCHIVE'
+        // uploadedStatus="ADDED"
       />
     </div>
   )
