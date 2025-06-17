@@ -30,6 +30,8 @@ export const loanProductApi = createApi({
         searchLoanProduct: builder.query({
             query: (param: {
                 loanProductName: string,
+                pageSize?: number;
+                pageNumber?: number
             }) => ({
                 url: '/loan/loan-product/search',
                 method: 'GET',
