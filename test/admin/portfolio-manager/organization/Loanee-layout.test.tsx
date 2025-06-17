@@ -71,7 +71,7 @@ describe("InviteOrganizationForm", () => {
             <OrganizationLoaneeLayout>{mockChildren}</OrganizationLoaneeLayout>
           </Providers>
         );
-        expect(screen.getByText("All")).toBeInTheDocument();
+        expect(screen.getByText("Uploaded")).toBeInTheDocument();
         expect(screen.getByText("Archived")).toBeInTheDocument();
       });
 
@@ -81,7 +81,7 @@ describe("InviteOrganizationForm", () => {
             <OrganizationLoaneeLayout>{mockChildren}</OrganizationLoaneeLayout>
           </Providers>
         );
-        const repaymentTab = screen.queryByText("All");
+        const repaymentTab = screen.queryByText("Uploaded");
         expect(repaymentTab).toBeInTheDocument();
       });
 

@@ -50,7 +50,8 @@ export const financierTabData = [
 ]
 
 export const loaneeTabData = [
-    {name: "All", value:"/organizations/loanees/all"},
+    {name: "Invited", value:"/organizations/loanees/invited"},
+    {name: "Uploaded", value:"/organizations/loanees/uploaded"},
     {name: "Archived",value: "/organizations/loanees/archived"}
 ]
 
