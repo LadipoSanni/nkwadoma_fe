@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
     Menubar,
     MenubarContent,
@@ -7,7 +7,7 @@ import {
     MenubarTrigger,
 } from "@/components/ui/menubar"
 import {inter600,inter700, inter500} from '@/app/fonts'
-import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
+import {ChevronDownIcon} from "@radix-ui/react-icons";
 import styles from './index.module.css'
 
 
@@ -24,41 +24,36 @@ interface Props {
 }
 
 const DropdownFilter = ({title,sx, handleFilter,clearFilter,setSelectItem,items,selectedItem, placeholder}: Props) => {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-
-    const handleDropdownOpen = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
+    // const [dropdownOpen, setDropdownOpen] = useState(false);
+    //
+    // const handleDropdownOpen = () => {
+    //     setDropdownOpen(!dropdownOpen);
+    // };
 
 
 
 
     return (
       <div id={'dropdownFilter'} data-testid="dropdownFilter">
-        <Menubar >
+        <Menubar  >
             <MenubarMenu >
                 <MenubarTrigger
                     id={'dropdownTrigger'}
                     data-testid="dropdownTrigger"
-                    onChange={handleDropdownOpen}
-                    className={` w-fit  `}>
-                   <div className={` px-2 h-fit flex gap-4 mt-2  rounded-md py-2 ring-1 ring-[#D0D5DD] bg-[#F6F6F6] border-[#D0D5DD] `}>
+                    className={` px-2 h-fit flex gap-4 mt-2 w-fit sm:w-full  rounded-md py-2 ring-1 ring-[#D0D5DD] bg-[#F6F6F6] border-[#D0D5DD] `}>
                        {placeholder}
 
 
-                       {dropdownOpen ? (
-                           <ChevronUpIcon onClick={handleDropdownOpen} data-testid="ChevronUpIcon" id="chevronUp" className="h-4 font-semibold" />
-                       ) : (
-                           <ChevronDownIcon onClick={handleDropdownOpen} data-testid="ChevronDownIcon" id="chevronDown" className="h-4 font-semibold" />
-                       )}
-                   </div>
+                           <ChevronDownIcon  data-testid="ChevronUpIcon" id="chevronUp" className="h-4 font-semibold" />
 
                 </MenubarTrigger>
                 <MenubarContent className={` w-[23em] sm:w-[23em] md:w-[25em]  px-6 py-4 `}>
                     <p className={`${inter600.className} text-[14px] mb-4 `}>{title}</p>
                     <div className={` max-h-[250px] ${styles.container}  h-fit ${sx ? `${sx}` : ` grid grid-cols-5 `} gap-3   w-full mb-10`}>
                         {items?.map((month, index) => (
-                            <button id={'item:'+ index} key={'key: '+ month} onClick={() => {setSelectItem(month)}} className={` ${inter500.className} ${selectedItem === month ? 'bg-[#E6F1FF] text-[#142854] md:bg-[#E6F1FF] md:text-[#142854] '  : ''} w-fit h-fit rounded-full text-[13px]  py-1 px-2 bg-[#F6F6F6] text-[#6A6B6A] hover:bg-[#E6F1FF] hover:text-[#142854] `}>{month}</button>
+                            <button id={'item:'+ index} key={'key: '+ month} onClick={() => {setSelectItem(month)}} className={` ${inter500.className} ${selectedItem === month ? 'bg-[#E6F1FF] text-[#142854] md:bg-[#E6F1FF] md:text-[#142854] '  : 'bg-[#F6F6F6] text-[#6A6B6A]'} w-fit h-fit rounded-full text-[13px]  py-1 px-2  hover:bg-[#E6F1FF] hover:text-[#142854] `}>
+                                {month}
+                            </button>
                          ))}
                     </div>
                     <div className={` h-fit w-full flex justify-between `}>
