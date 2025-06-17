@@ -199,7 +199,7 @@ const Details = () => {
                                           <Button
                                               id="view-document"
                                               type="button"
-                                              variant={"default"}
+                                              variant={"outline"}
                                               onClick={handleViewDocument}
                                               className="text-meedlBlue border-[1px] border-meedlBlue rounded-[20px] font-semibold text-[12px] md:px-4 px-3 py-2"
                                               disabled={!docUrl || isVerifying}
@@ -242,7 +242,7 @@ const Details = () => {
                                           <Button
                                               id="view-document"
                                               type="button"
-                                              variant={"default"}
+                                              variant={"outline"}
                                               onClick={handleView}
                                               className="text-meedlBlue border-[1px] border-meedlBlue rounded-[20px] font-semibold text-[12px] md:px-4 px-3 py-2"
                                               disabled={!docUrl || isVerifying}

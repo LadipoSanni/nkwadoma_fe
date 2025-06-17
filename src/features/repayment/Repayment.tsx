@@ -223,7 +223,7 @@ const Repayment = () => {
                           tableHeader={tableHeader}
                           handleRowClick={handleRowClick}
                           tableHeight={54}
-                          sx='cursor-pointer'
+                        //   sx='cursor-pointer'
                           tableCellStyle={'h-12'}
                           // optionalFilterName='endownment'
                           condition={true}
