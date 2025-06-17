@@ -147,7 +147,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
             setSelectedRows(new Set());
             setEnableButton(false)
             if(status === "ARCHIVE"){
-              router.push("/organizations/loanees/all")
+              router.push("/organizations/loanees/uploaded")
             }else {
               router.push("/organizations/loanees/archived")
             }
@@ -171,7 +171,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
           if(inviteLoanees){
             setSelectedRows(new Set());
             setEnableButton(false)
-             router.push("/organizations/loanees/all")
+            //  router.push("/organizations/loanees/all")
             toast({
               description: inviteLoanees?.message,
               status: "success",
@@ -211,7 +211,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
          onClick={handleInvite}
          >
          { inviteIsloading?  <Isloading/> : " Invite"}
-        </Button> : 
+        </Button> : tabType !== "Invited"?
         <Button
         id='action'
        data-testid='actionButton'
@@ -222,7 +222,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         onClick={handleClick}
          >
            { statusIsloading? <Isloading/> : buttonName}
-        </Button>
+        </Button> : ""
         }
         {  tabType === "All" &&
           <Button
@@ -240,7 +240,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         
         <CheckBoxTable
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
-        tableData={getTableData()}
+        tableData={tabType === 'Invited'? [] : getTableData()}
         tableHeader={tableHeaderintegrated}
         handleRowClick={handleRowClick}
         staticHeader="Loanee"
@@ -255,7 +255,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         pageNumber={page}
         setPageNumber={setPageNumber}
         totalPages={totalPage}
-        enableRowSelection={false}
+        enableRowSelection={tabType === 'All' || tabType === 'Archived' ? true : false}
         enableButton={() =>setEnableButton(true) }
         disabledButton={()=> setEnableButton(false) }
         handleSelectedRow={handleSelectedRow}
