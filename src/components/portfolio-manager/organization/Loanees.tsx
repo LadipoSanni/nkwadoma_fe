@@ -16,7 +16,6 @@ import Modal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import UploadCSV from './Upload-csv';
 import {setLoaneeId} from "@/redux/slice/organization/organization";
-// import {LoaneetDetails} from "@/types/loanee";
 import { store } from '@/redux/store';
 
 interface TableRowData {
