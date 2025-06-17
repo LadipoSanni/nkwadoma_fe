@@ -86,8 +86,6 @@ function NotificationLayout({children}: Props) {
 
        useEffect(()=> {
         if (searchTerm && searchData && searchData?.data) {
-          const result = searchData?.data?.body
-         
           setSearchHasNextPage(searchData?.data?.hasNextPage)
           setSearchPageNumber(searchData?.data?.pageNumber)
           setTotalSearchedNotification(searchData?.data?.totalElement)
