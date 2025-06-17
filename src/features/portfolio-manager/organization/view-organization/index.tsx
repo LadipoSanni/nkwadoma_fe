@@ -13,7 +13,7 @@ import { formatAmount } from '@/utils/Format';
 import { useRouter } from 'next/navigation';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import { MdSearch } from 'react-icons/md';
-import { setOrganizationTabStatus,setOrganizationId,resetOrganizationId} from '@/redux/slice/organization/organization';
+import { setOrganizationTabStatus,setOrganizationId,resetOrganizationId,resetOrganizationDetailsStatus} from '@/redux/slice/organization/organization';
 import { useAppSelector } from '@/redux/store';
 import { store } from "@/redux/store";
 import { resetNotification } from '@/redux/slice/notification/notification';
@@ -108,6 +108,7 @@ function Organization() {
         }
         store.dispatch(resetOrganizationId())
         store.dispatch(resetNotification())
+        store.dispatch(resetOrganizationDetailsStatus())
     }, [searchTerm, searchResults, data, tabType]);
 
     const handleInviteOrganizationClick = () => {
