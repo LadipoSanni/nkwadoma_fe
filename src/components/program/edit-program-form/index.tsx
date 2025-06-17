@@ -134,7 +134,7 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
     }
     
     try {
-     const update = await updateProgram({ id:programId, data: values }).unwrap();
+     const update = await updateProgram({  data: values }).unwrap();
     //  queryClient.invalidateQueries({ queryKey: ['program'] });
     if(update){
       toastPopUp.showToast();
