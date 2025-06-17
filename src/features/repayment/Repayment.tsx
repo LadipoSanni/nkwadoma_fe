@@ -1,7 +1,6 @@
 'use client'
 import React, {ReactNode, useEffect, useState} from 'react';
 import SearchInput from "@/reuseable/Input/SearchInput";
-import CustomSelect from "@/reuseable/Input/Custom-select";
 import Table from '@/reuseable/table/Table';
 import {
 MdOutlineLibraryBooks,
@@ -15,24 +14,27 @@ import {formatAmount} from "@/utils/Format";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {MagnifyingGlassIcon} from "@radix-ui/react-icons";
 import DropdownFilter from "@/reuseable/Dropdown/DropdownFilter";
+import { IoMdClose } from "react-icons/io";
+
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 const Repayment = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedYear, setSelectedYear] = useState<string>("");
-    const [selectedMonth, setSelectedMonth] = useState<string>("");
+    const [selectedYear, setSelectedYear] = useState<string | number>("");
+    const [selectedMonth, setSelectedMonth] = useState<string | number>("");
     const [selectedIndex, setSelectedIndex] = useState<number| string>('');
     const [hasNextPage,setNextPage] = useState(false)
     const [totalPage, setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
     const [pageSize ] = useState(10)
+    const [year, setYear] = useState<number | string>('');
 
     const props =  {
         pageSize: pageSize,
         pageNumber: pageNumber,
         month:  selectedIndex ,
-        year:  selectedYear ,
+        year:  year ,
     }
     const {data, isFetching , isLoading} = useViewAllRepaymentHistoryQuery(props)
     const searchProps = {
@@ -46,21 +48,17 @@ const Repayment = () => {
     const {data:searchData, isLoading:isLoadinFetchedData, isFetching:isFetchingSearchedData } = useSearchAllRepaymentHistoryQuery(searchProps,{skip: !searchTerm})
 
 
-    const filterMonth = (value: string) => {
-        if (value === 'All'){
+    const setMonthItem = (value: string | number) => {
+        if (value === selectedMonth){
             setSelectedMonth('')
-        }else{
-            for (let i = 0; i < months.length; i++) {
-                if (months[i] === value) {
-                    setSelectedIndex(i + 1)
-                }
-            }
-            setSelectedMonth(value)        }
+        }else {
+            setSelectedMonth(value)
+        }
     }
 
 
-    const filterYear = (value: string) => {
-        if (value === 'All'){
+    const setYearItem = (value: string| number) => {
+        if (value === selectedYear){
             setSelectedYear('')
         }else{
             setSelectedYear(value)
@@ -108,7 +106,16 @@ const Repayment = () => {
     };
 
     const  getYea = (earlyYear: number,currentYear: number) => {
-        if (!earlyYear || !currentYear) {
+        if (!currentYear) {
+            const aa : number[] = [earlyYear]
+            const today = new Date().getFullYear();
+            for (const element of aa) {
+                if (element < today){
+                    aa.push(element + 1 )
+                }
+            }
+            return aa;
+        }else if (!earlyYear) {
             const currentYear = new Date().getFullYear();
             return [currentYear]
         }else {
@@ -122,12 +129,23 @@ const Repayment = () => {
         }
     }
 
-    const handleResetYear = () => {
-        setSelectedYear('')
+    const handleFilterYear = () => {
+        setYear(selectedYear)
     }
-    const handleResetMonth = () => {
+    const clearMonthFilter = () => {
         setSelectedMonth('')
         setSelectedIndex(0)
+    }
+    const filterMonth = () => {
+        for (let i = 0; i < months.length; i++) {
+            if (months[i] === selectedMonth) {
+                setSelectedIndex(i + 1)
+            }
+        }
+    }
+    const clearYearFilter = () => {
+        setSelectedYear('')
+        setYear('')
     }
 
     const getYears = getYea(getRepaymentYearRange?.data?.firstYear, getRepaymentYearRange?.data?.lastYear)
@@ -147,81 +165,82 @@ const Repayment = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style="md:w-20 w-full"
                 />
-                {/*// excess Cakza*/}
-                {/*{data?.data?.firstYear && data?.data?.lastYear   ?*/}
-                   <div className={` grid grid-cols-3 bg-red-200 md:flex lg:flex gap-4 h-fit md:w-fit lg:w-fit w-full  `}>
-                       <CustomSelect
-                           id="filterMonth"
-                           value={selectedMonth}
-                           onChange={(value) => filterMonth(value)}
-                           selectContent={months}
-                           placeHolder="Month"
-                           showRestButton={true}
-                           handleReset={handleResetMonth}
-                           triggerId="monthFilterTrigger"
-                           className="h-11  w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                   <div className={` grid grid-cols-2  md:flex lg:flex gap-4 h-fit md:w-fit lg:w-fit w-full  `}>
+                       <DropdownFilter
+                           title={'Filter by month'}
+                           selectedItem={selectedMonth}
+                           handleFilter={filterMonth}
+                           items={months}
+                           setSelectItem={setMonthItem}
+                           clearFilter={clearMonthFilter}
+                           placeholder={'Month'}
+                           sx={'grid grid-cols-3'}
                        />
-                       <CustomSelect
-                           id="filterByYear"
-                           showRestButton={true}
-                           value={selectedYear}
-                           onChange={(value) => filterYear(value)}
-                           handleReset={handleResetYear}
-                           selectContent={getYears}
-                           placeHolder="Year"
-                           triggerId="yearFilterTrigger"
-                           className="h-11 md:w-sm w-full mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+
+                       <DropdownFilter
+                           title={'Filter by year'}
+                           selectedItem={selectedYear}
+                           handleFilter={handleFilterYear}
+                           items={getYears}
+                           setSelectItem={setYearItem}
+                           clearFilter={clearYearFilter}
+                           placeholder={'Year'}
+                           sx={'grid grid-cols-5'}
                        />
-                       <DropdownFilter/>
                    </div>
             </div>
             <div>
-                { selectedMonth?.length > 0  && data?.data?.body?.length === 0 ?
+                { selectedMonth  && data?.data?.body?.length === 0 ?
                     <TableEmptyState
                         icon={<MagnifyingGlassIcon/>}
                         name={'filtered dates repayment'}
                         className={''}
-                        // optionalFilterName={optionalFilterName}
                         condition={true}
                         isSearch={true}
                     />
-                     :  selectedYear?.length > 0 && data?.data?.body?.length === 0 ?
+                     :  selectedYear && data?.data?.body?.length === 0 ?
                         <TableEmptyState
                             icon={<MagnifyingGlassIcon/>}
                             name={'filtered dates repayment'}
                             className={''}
-                            // optionalFilterName={optionalFilterName}
                             condition={true}
                             isSearch={true}
                         />
-
                     :
 
-                    <Table
-                    tableData={searchTerm?.length > 0 ? searchData?.data?.body : data?.data?.body}
-                    // tableData={repaymentsData}
-                    tableHeader={tableHeader}
-                    handleRowClick={handleRowClick}
-                    tableHeight={54}
-                    sx='cursor-pointer'
-                    tableCellStyle={'h-12'}
-                    // optionalFilterName='endownment'
-                    condition={true}
-                    searchEmptyState={searchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
-                    sideBarTabName={'repayment'}
-                    icon={MdOutlineLibraryBooks}
-                    staticHeader={"Name"}
-                    staticColunm={'name'}
-                    hasNextPage={hasNextPage}
-                    pageNumber={pageNumber}
-                    setPageNumber={setPageNumber}
-                    totalPages={totalPage}
-                    isLoading={isLoading|| isFetching|| isLoadinFetchedData || isFetchingSearchedData}
-                />
+                  <div>
+                      <div className={` mb-2 flex gap-2 `}>
+                          {selectedMonth &&<div
+                              className={` flex  w-fit h-fit rounded-full gap-1 text-[13px]  py-1 px-2 bg-[#F6F6F6] text-black `}>{selectedMonth}
+                              <IoMdClose className={'mt-auto mb-auto text-[13px]  '} onClick={clearMonthFilter} color={'#212221'}/></div>}
+                          {selectedYear && <div
+                              className={` flex  w-fit h-fit rounded-full gap-1 text-[13px]  py-1 px-2 bg-[#F6F6F6] text-black `}>{selectedYear}
+                              <IoMdClose className={'mt-auto mb-auto text-[13px]  '} onClick={clearYearFilter} color={'#212221'}/></div>}
+                      </div>
+                      <Table
+                          tableData={searchTerm?.length > 0 ? searchData?.data?.body : data?.data?.body}
+                          // tableData={repaymentsData}
+                          tableHeader={tableHeader}
+                          handleRowClick={handleRowClick}
+                          tableHeight={54}
+                          sx='cursor-pointer'
+                          tableCellStyle={'h-12'}
+                          // optionalFilterName='endownment'
+                          condition={true}
+                          searchEmptyState={searchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
+                          sideBarTabName={'repayment'}
+                          icon={MdOutlineLibraryBooks}
+                          staticHeader={"Name"}
+                          staticColunm={'name'}
+                          hasNextPage={hasNextPage}
+                          pageNumber={pageNumber}
+                          setPageNumber={setPageNumber}
+                          totalPages={totalPage}
+                          isLoading={isLoading|| isFetching|| isLoadinFetchedData || isFetchingSearchedData}
+                      />
+                  </div>
             }
             </div>
-
-            
         </main>
     );
 };
