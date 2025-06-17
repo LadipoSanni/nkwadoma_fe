@@ -29,6 +29,8 @@ const Repayment = () => {
     const [pageNumber,setPageNumber] = useState(0)
     const [pageSize ] = useState(10)
     const [year, setYear] = useState<number | string>('');
+    const [displayedYear, setDisplayedYear] = useState('')
+    const [displayedMonth, setDisplayedMonth] = useState('')
 
     const props =  {
         pageSize: pageSize,
@@ -131,10 +133,12 @@ const Repayment = () => {
 
     const handleFilterYear = () => {
         setYear(selectedYear)
+        setDisplayedYear(String(selectedYear))
     }
     const clearMonthFilter = () => {
         setSelectedMonth('')
         setSelectedIndex(0)
+        setDisplayedMonth('')
     }
     const filterMonth = () => {
         for (let i = 0; i < months.length; i++) {
@@ -142,10 +146,12 @@ const Repayment = () => {
                 setSelectedIndex(i + 1)
             }
         }
+        setDisplayedMonth(String(String(selectedMonth)))
     }
     const clearYearFilter = () => {
         setSelectedYear('')
         setYear('')
+        setDisplayedYear('')
     }
 
     const getYears = getYea(getRepaymentYearRange?.data?.firstYear, getRepaymentYearRange?.data?.lastYear)
@@ -165,7 +171,7 @@ const Repayment = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style="md:w-20 w-full"
                 />
-                   <div className={` grid grid-cols-2  md:flex lg:flex gap-4 h-fit md:w-fit lg:w-fit w-full  `}>
+                   <div className={` flex h-fit sm:w-full gap-2 sm:grid sm:grid-cols-2 w-fit md:w-fit lg:w-fit  `}>
                        <DropdownFilter
                            title={'Filter by month'}
                            selectedItem={selectedMonth}
@@ -191,30 +197,50 @@ const Repayment = () => {
             </div>
             <div>
                 { selectedMonth  && data?.data?.body?.length === 0 ?
-                    <TableEmptyState
-                        icon={<MagnifyingGlassIcon/>}
-                        name={'filtered dates repayment'}
-                        className={''}
-                        condition={true}
-                        isSearch={true}
-                    />
+                   <div>
+                       <div className={` mb-2 flex gap-2 `}>
+                           {displayedMonth &&<div
+                               className={` flex  w-fit h-fit rounded-full gap-1 text-[13px]  py-1 px-2 bg-[#F6F6F6] text-black `}>{displayedMonth}
+                               <IoMdClose className={'mt-auto mb-auto text-[13px]  '} onClick={clearMonthFilter} color={'#212221'}/></div>}
+                           {displayedYear && <div
+                               className={` flex  w-fit h-fit rounded-full gap-1 text-[13px]  py-1 px-2 bg-[#F6F6F6] text-black `}>{displayedYear}
+                               <IoMdClose className={'mt-auto mb-auto text-[13px]  '} onClick={clearYearFilter} color={'#212221'}/></div>}
+                       </div>
+                       <TableEmptyState
+                           icon={<MagnifyingGlassIcon/>}
+                           name={'filtered dates repayment'}
+                           className={''}
+                           condition={true}
+                           isSearch={true}
+                       />
+                   </div>
                      :  selectedYear && data?.data?.body?.length === 0 ?
-                        <TableEmptyState
-                            icon={<MagnifyingGlassIcon/>}
-                            name={'filtered dates repayment'}
-                            className={''}
-                            condition={true}
-                            isSearch={true}
-                        />
+                        <div>
+                            <div className={` mb-2 flex gap-2 `}>
+                                {displayedMonth &&<div
+                                    className={` flex  w-fit h-fit rounded-full gap-1 text-[13px]  py-1 px-2 bg-[#F6F6F6] text-black `}>{displayedMonth}
+                                    <IoMdClose className={'mt-auto mb-auto text-[13px]  '} onClick={clearMonthFilter} color={'#212221'}/></div>}
+                                {displayedYear && <div
+                                    className={` flex  w-fit h-fit rounded-full gap-1 text-[13px]  py-1 px-2 bg-[#F6F6F6] text-black `}>{displayedYear}
+                                    <IoMdClose className={'mt-auto mb-auto text-[13px]  '} onClick={clearYearFilter} color={'#212221'}/></div>}
+                            </div>
+                            <TableEmptyState
+                                icon={<MagnifyingGlassIcon/>}
+                                name={'filtered dates repayment'}
+                                className={''}
+                                condition={true}
+                                isSearch={true}
+                            />
+                        </div>
                     :
 
                   <div>
                       <div className={` mb-2 flex gap-2 `}>
-                          {selectedMonth &&<div
-                              className={` flex  w-fit h-fit rounded-full gap-1 text-[13px]  py-1 px-2 bg-[#F6F6F6] text-black `}>{selectedMonth}
+                          {displayedMonth &&<div
+                              className={` flex  w-fit h-fit rounded-full gap-1 text-[13px]  py-1 px-2 bg-[#F6F6F6] text-black `}>{displayedMonth}
                               <IoMdClose className={'mt-auto mb-auto text-[13px]  '} onClick={clearMonthFilter} color={'#212221'}/></div>}
-                          {selectedYear && <div
-                              className={` flex  w-fit h-fit rounded-full gap-1 text-[13px]  py-1 px-2 bg-[#F6F6F6] text-black `}>{selectedYear}
+                          {displayedYear && <div
+                              className={` flex  w-fit h-fit rounded-full gap-1 text-[13px]  py-1 px-2 bg-[#F6F6F6] text-black `}>{displayedYear}
                               <IoMdClose className={'mt-auto mb-auto text-[13px]  '} onClick={clearYearFilter} color={'#212221'}/></div>}
                       </div>
                       <Table
