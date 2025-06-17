@@ -20,6 +20,7 @@ const LoaneeButton = ({
     return (
         <Dialog.Close asChild>
         <Button
+           variant={"secondary"}
             data-testid="auth-button"
             disabled={disable}
             id={id}
@@ -30,7 +31,7 @@ const LoaneeButton = ({
                 height: `${height ? height : '3rem'}`,
                 width: `${width}`,
                 color: `${textColor}`,
-                backgroundColor: `${disable ? "#D0D0D0" : backgroundColor}`
+                backgroundColor: `${disable ? "#D7D7D7" : backgroundColor}`
             }}
             className={`grid place-content-center rounded font-bold text-sm`}
         >

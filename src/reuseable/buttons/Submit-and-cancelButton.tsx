@@ -48,7 +48,7 @@ function SubmitAndCancelButton({ isValid, isLoading, handleCloseModal,submitButt
          </Button> :
          <Button
          variant={'default'} 
-         className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-neutral650 cursor-auto hover:bg-neutral650" : "hover:bg-[#435376] focus:bg-meedlBlue bg-meedlBlue cursor-pointer"}`} 
+         className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-[#D7D7D7] cursor-auto hover:bg-[#D7D7D7]" : "hover:bg-[#435376] focus:bg-meedlBlue bg-meedlBlue cursor-pointer"}`} 
          disabled={!isValid} 
          onClick={handleContinueOrBack}
          id={`continue${id}`}

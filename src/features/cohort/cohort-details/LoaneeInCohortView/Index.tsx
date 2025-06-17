@@ -188,7 +188,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                                 aria-disabled={!enableButton}
                                 variant={"outline"}
                                     size={"lg"}
-                                    className={`bg-neutral100  ${enableButton ? ' border-solid ring-1 ring-[#142854] border-[#142854] text-[#142854] ' : 'text-[#939CB0] border border-neutral650'} md:border-solid md:border-neutral650 border-solid border border-neutral650 w-full h-12 flex justify-center items-center`}
+                                    className={`bg-neutral100  ${enableButton ? ' border-solid ring-1 ring-[#142854] border-[#142854] text-[#142854] ' : 'text-[#939CB0] border border-neutral650'} md:border-solid md:border-neutral650 border-solid border border-neutral650 hover:border-neutral650 hover:bg-neutral100 w-full h-12 flex justify-center items-center`}
                                     onClick={handleRefer} disabled={selectedRows.size === 0 || isLoadingRefer}>
                                 {isLoadingRefer ? <Isloading /> : 'Refer'}
 

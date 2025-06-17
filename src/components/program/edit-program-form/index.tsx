@@ -324,8 +324,8 @@ function EditProgramForm({programId,setIsOpen,programDetail}: Props) {
                 </Button>
                 <Button 
                 id='editProgramSaveButton'
-                variant={'default'} 
-                className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-neutral650 cursor-not-allowed " :"hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
+                variant={'secondary'} 
+                className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " :"  cursor-pointer"}`}
                 type='submit'
                 disabled={!isValid}
                 >

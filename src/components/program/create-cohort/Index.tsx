@@ -202,9 +202,10 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
         <Dialog open={isModalOpen} onOpenChange={(open) => setIsModalOpen(open)}>
             <DialogTrigger asChild>
                 <Button
+                    variant={"secondary"}
                     id="createCohortButton"
                     size={"lg"}
-                    className={`${triggerButtonStyle} ${inter.className} h-12 shadow-none bg-meedlBlue hover:bg-meedlBlue cursor-pointer text-meedlWhite md:mt-0 mt-3 text-sm font-semibold leading-5`}
+                    className={`${triggerButtonStyle} ${inter.className} h-12 shadow-none hover:bg-[#435376]  cursor-pointer  md:mt-0 mt-3 text-sm font-semibold`}
                 >
                     Create cohort
                 </Button>
@@ -329,7 +330,7 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
                                         className={`text-meedlWhite font-bold ${
                                             createButtonDisabled || !isItemListValid
                                                 ? "bg-neutral650 hover:bg-neutral650"
-                                                : "bg-meedlBlue hover:bg-meedlBlue"
+                                                : "bg-meedlBlue hover:bg-[#435376]"
                                         } w-full md:w-[8.75rem] h-[3.5625rem]`}
                                         disabled={createButtonDisabled || !isItemListValid}
                                         type="submit"

@@ -655,7 +655,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         Cancel
                                     </Button>
                                     <Button
-                                        className={`h-12 w-32 ${!isValid ? 'bg-neutral650 text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
+                                        className={`h-12 w-32 ${!isValid ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7] text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
                                         variant={"secondary"}
                                         type={"submit"}
                                         disabled={!isValid}

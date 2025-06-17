@@ -14,6 +14,7 @@ import Kebab from "@/reuseable/Kebab/Kebab";
 import {IoEllipsisHorizontalSharp} from "react-icons/io5";
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import TableModal from "@/reuseable/modals/TableModal";
+import DeleteModal from '@/reuseable/modals/Delete-modal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 import EditProgramForm from "@/components/program/edit-program-form";
 import DeleteCohort from "@/reuseable/details/DeleteCohort";
@@ -192,7 +193,8 @@ const ProgramDetails = () => {
                             <div id={`buttons`} className={'flex md:justify-between gap-5'}>
                                 <Button onClick={handleModalClick}
                                         id="editButton"
-                                        className={'bg-meedlBlue w-[18.1875rem] h-[2.8125rem] text-meedlWhite hover:bg-meedlBlue shadow-none'}>Edit
+                                        variant={"secondary"}
+                                        className={' w-[18.1875rem] h-[2.8125rem] text-meedlWhite  shadow-none'}>Edit
                                     program</Button>
                                 {
                                  <div role={"button"}
@@ -225,7 +227,7 @@ const ProgramDetails = () => {
                         />
                     </TableModal>
 
-                    <TableModal
+                    <DeleteModal
                         isOpen={isDeleteOpen}
                         closeModal={() => setIsDeleteOpen(false)}
                         closeOnOverlayClick={true}
@@ -240,7 +242,7 @@ const ProgramDetails = () => {
                             id={programId}
                             isLoading={isLoading}
                         />
-                    </TableModal>
+                    </DeleteModal>
                 </>
             }
         </main>
