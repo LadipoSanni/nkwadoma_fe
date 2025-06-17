@@ -265,7 +265,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         
         <CheckBoxTable
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
-        tableData={ getTableData()}
+        tableData={tabType === 'Invited'? [] : getTableData()}
         tableHeader={tabType === 'Invited'? tableHeaderintegrated : tableHeader}
         handleRowClick={handleRowClick}
         staticHeader="Loanee"
