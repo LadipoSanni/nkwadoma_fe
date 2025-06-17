@@ -280,6 +280,7 @@ const ChangeInstitutionModal = () => {
                         className="  py-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
                         <Dialog.Close asChild>
                             <Button
+                                 variant={"outline"}
                                 id={'cancel'} data-testid={'cancel'}
                                 className={` border border-meedlBlue rounded-md text-sm h-fit md:w-fit md:px-10 md:py-4 py-4   text-meedlBlue`}
                             >
@@ -289,7 +290,7 @@ const ChangeInstitutionModal = () => {
                         <div className={`w-full  md:w-[8rem]`}>
                             <ConfirmOrgButton
                                 disable={disabled}
-                                backgroundColor={'#142854'} textColor={"white"}
+                                backgroundColor={''} textColor={"white"}
                                 id={"continueButtonOnOrganizationModal"}
                                 height={'3.4rem'}
                                 data-testid={`continueButtonOnOrganizationModal`}

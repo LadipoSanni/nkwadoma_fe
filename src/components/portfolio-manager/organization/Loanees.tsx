@@ -105,7 +105,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
 
       const tableHeaderintegrated = [
               {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
-              {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
+              {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) =>  formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
               {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountRequested))},
               {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountReceived))},
           ];
@@ -207,7 +207,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
            aria-disabled={!enableButton}
          variant={"outline"}
          disabled={selectedRows.size === 0 || inviteIsloading }
-         className={`h-[45px] w-full font-semibold md:w-[90px]  ${enableButton  ? "border-[#142854] text-[#142854]" :"border-[#ECECEC] text-[#A8A8A8] shadow-none"  }`}
+         className={`h-[45px] w-full font-semibold md:w-[90px]  ${enableButton  ? "border-[#142854] text-[#142854]" :"border-[#ECECEC] hover:border-[#ECECEC] hover:bg-white text-[#A8A8A8] shadow-none"  }`}
          onClick={handleInvite}
          >
          { inviteIsloading?  <Isloading/> : " Invite"}
@@ -217,7 +217,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
        data-testid='actionButton'
          aria-disabled={!enableButton}
          variant={tabType === "All"? "outline" :`secondary`}
-        className={`h-[45px] w-full font-semibold ${tabType === "All"? "md:w-[90px] " : "md:w-[110px]"} ${enableButton && tabType === "All" ? "border-[#142854] text-[#142854]" : !enableButton && tabType === "All"? "border-[#ECECEC] text-[#A8A8A8] shadow-none" : enableButton && tabType === "Archived" ? "bg-[#142854]" :  !enableButton && tabType === "Archived" && "bg-[#B6BCCA]" }`}
+        className={`h-[45px] w-full font-semibold ${tabType === "All"? "md:w-[90px] " : "md:w-[110px]"} ${enableButton && tabType === "All" ? "border-[#142854] text-[#142854]" : !enableButton && tabType === "All"? "border-[#ECECEC] text-[#A8A8A8] shadow-none" : enableButton && tabType === "Archived" ? "bg-[#142854]" :  !enableButton && tabType === "Archived" && "bg-[#B6BCCA] hover:bg-[#B6BCCA]" }`}
         disabled={selectedRows.size === 0 || statusIsloading}
         onClick={handleClick}
          >
@@ -255,7 +255,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         pageNumber={page}
         setPageNumber={setPageNumber}
         totalPages={totalPage}
-        enableRowSelection={true}
+        enableRowSelection={false}
         enableButton={() =>setEnableButton(true) }
         disabledButton={()=> setEnableButton(false) }
         handleSelectedRow={handleSelectedRow}

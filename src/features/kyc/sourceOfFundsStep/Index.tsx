@@ -142,6 +142,7 @@ const SourceOfFundsStep = () => {
                                 placeholder="Select source"
                                 className=""
                                 selectedValues={values.sourceOfFund}
+                                isShowButton={true}
                             />
 
                             {values.sourceOfFund.includes('Others') && (

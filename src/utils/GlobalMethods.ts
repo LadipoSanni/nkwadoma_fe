@@ -201,3 +201,8 @@ export const ensureHttpsUrl = (url: string | null | undefined): string | undefin
     const cleaned = url.trim().replace(/^(https?:\/\/)?/i, '');
     return cleaned ? `https://${cleaned}` : undefined;
   };
+
+  export const toTitleCase = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+  

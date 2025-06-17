@@ -227,8 +227,8 @@ function StatusReusable({
                   id="submitInvestment"
                   className={`w-full md:w-40 h-[46px] rounded-md ${
                     !isValid
-                      ? "bg-neutral650 cursor-auto text-white hover:bg-neutral650"
-                      : "hover:bg-meedlBlue bg-meedlBlue text-white cursor-pointer"
+                      ? "cursor-auto text-white hover:bg-[#D7D7D7] bg-[#D7D7D7]"
+                      : "hover:bg-[#435376] bg-meedlBlue text-white cursor-pointer focus:bg-meedlBlue"
                   }`}
                   type="submit"
                   disabled={!isValid}

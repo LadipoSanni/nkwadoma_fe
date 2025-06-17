@@ -25,6 +25,7 @@ import { getItemFromLocalStorage, setItemToLocalStorage } from '@/utils/storage'
 const TopBar = () => {
     const [arrowToggled, setArrowToggled] = useState(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [isFocus, setFocus] =  useState(false);
     const currentTab = useAppSelector(state => state.adminLayout.currentNavbarItem);
     const user_role = getUserDetailsFromStorage('user_role');
     const user_name = getUserDetailsFromStorage("user_name");
@@ -55,7 +56,7 @@ const TopBar = () => {
         if (data?.data?.allNotificationsCount !== undefined) {
             store.dispatch(setCurrentTotalNotification(data.data.allNotificationsCount));
         }
-        refetch()
+         refetch()
         if (user_role === "FINANCIER" && pathname?.startsWith("/kyc")) {
             store.dispatch(setCurrentNavbarItem("KYC verification"));
         }
@@ -73,6 +74,7 @@ const TopBar = () => {
     };
 
     const handleNotification = () => {
+        setFocus(true)
         router.push("/notifications/notification")
        store.dispatch(setCurrentNavbarItem('Notification'))  
     }
@@ -109,7 +111,7 @@ const TopBar = () => {
                           <div className='relative left-3 md:left-0'>
                             <Button
                             className='text-black shadow-none mt-1 cursor-auto'
-                            onClick={handleNotification}
+                           
                             >
                                 {
                                  isNotificationPage?
@@ -123,10 +125,12 @@ const TopBar = () => {
                                <BellIcon
                                 style={{ width: '22px',height: '21px',stroke: '#000', strokeWidth: '0.6'}}
                                />
-                               <div className='absolute'>
+                               <div className='absolute'
+                                 onClick={handleNotification}
+                               >
                                 { data === undefined || data?.data?.unreadCount === null ? "" :
                                 (data?.data?.unreadCount  === 0? "" : <Badge
-                                 className={`relative bg-[#142854] hover:bg-[#142854] bottom-7 left-2  text-white text-xs rounded-full  flex items-center justify-center ${data?.data?.unreadCount > 99 ? "w-7 h-6"  : "w-4 h-5"}`}
+                                 className={`relative bg-[#142854] hover:bg-[#435376] focus:bg-[#142854] ${isFocus && "bg-[#142854]"} bottom-7 left-2  text-white text-xs rounded-full  flex items-center justify-center ${data?.data?.unreadCount > 99 ? "w-7 h-6"  : "w-4 h-5"}`}
                                 >
                                   {data?.data?.unreadCount > 99 ? "99+" : data?.data?.unreadCount }
                                 </Badge>)}

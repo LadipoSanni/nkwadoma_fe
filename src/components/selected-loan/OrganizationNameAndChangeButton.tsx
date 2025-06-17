@@ -43,7 +43,7 @@ const OrganizationNameAndChangeButton = () => {
             </div>
             <Button id="changeOrganizationButton" data-testid={'changeOrganizationButton'} size={"lg"}
                     variant={"secondary"}
-                    className={` ${inter.className} text-meedlBlue pt-0.5 underline w-fit h-fit md:font-size-0.875rem md:font-light px-1 bg-blue500 rounded `}
+                    className={` ${inter.className} text-meedlBlue pt-0.5 underline w-fit h-fit md:font-size-0.875rem md:font-light px-1 bg-blue500 hover:bg-blue-200 focus:bg-blue500 rounded `}
                     onClick={()=> setIsModalOpen(true)}
             >Change
             </Button>

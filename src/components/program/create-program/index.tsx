@@ -344,8 +344,8 @@ function CreateProgram({setIsOpen}:Props) {
                 </Button>
                 <Button 
                 id='createProgramButton'
-                variant={'default'} 
-                className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-neutral650 cursor-not-allowed " :"hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
+                variant={"secondary"}
+                className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " :" bg-meedlBlue cursor-pointer"}`}
                 type='submit'
                 disabled={!isValid}
                 >

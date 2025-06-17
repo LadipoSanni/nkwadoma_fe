@@ -422,6 +422,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         className="w-full p-3 border rounded focus:outline-none mt-3"
                                         placeholder="Enter admin email address"
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("adminEmail", e.target.value.replace(/\s+/g, ''))}
+                                        onFocus={() => setFieldTouched("adminEmail", true, false)}
                                     />
                                     {
                                         errors.adminEmail && touched.adminEmail && (
@@ -468,8 +469,8 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                     </Button>
                                     <Button
                                         id='inviteOrganization'
-                                        variant={'default'}
-                                        className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-neutral650 cursor-not-allowed " : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
+                                        variant={'secondary'}
+                                        className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " : " bg-meedlBlue cursor-pointer"}`}
                                         type='submit'
                                         disabled={!isValid}
 
