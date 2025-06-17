@@ -114,8 +114,8 @@ const ProgramDetails = () => {
             tagText: progamDetail.duration <= 1 ? 'month' : 'months',
             textColor: "text-meedlBlue",
         },
-        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: progamDetail.numberOfCohort <= 1 ? 'month' : 'months', textColor: "text-success700"},
-        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: progamDetail.numberOfLoanees <= 1 ? 'month' : 'months', textColor: "text-warning900" },
+        {tagIcon: MdOutlinePeopleAlt, tagCount: progamDetail.numberOfCohort, tagButtonStyle: "bg-warning80", tagText: progamDetail.numberOfCohort <= 1 ? 'cohort' : 'cohorts', textColor: "text-success700"},
+        {tagIcon: MdPersonOutline, tagCount: progamDetail.numberOfLoanees || 0, tagButtonStyle : "bg-warning50", tagText: progamDetail.numberOfLoanees <= 1 ? 'loanee' : 'loanees', textColor: "text-warning900" },
     ];
 
     const programOptions = [
@@ -221,7 +221,7 @@ const ProgramDetails = () => {
                         icon={Cross2Icon}
                     >
                         <EditProgramForm
-                            programId={programId}
+                            // programId={programId}
                             setIsOpen={setIsOpen}
                             programDetail={progamDetail}
                         />
