@@ -55,7 +55,7 @@ const LoaneeRepayment = ({loaneeId}:Props) => {
     },[data])
 
     const tableHeader = [
-        { title: 'Payment date', sortable: true, id: 'paymentDate', selector: (row: TableRowData) =><div>{dayjs(row.paymentDateTime?.toString()).format('MMM D, YYYY')}</div>},
+        { title: 'Payment date', sortable: true, id: 'paymentDate', selector: (row: TableRowData) =><div>{row?.paymentDateTime ? dayjs(row.paymentDateTime?.toString()).format('MMM D, YYYY') : ''}</div>},
         { title: 'Amount paid', sortable: true, id: 'amountPaid', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountPaid)}</div> },
         { title: 'Payment mode', sortable: true, id: 'modeOfPayment', selector: (row: TableRowData) => <div className={`  `}>{getModeOfPayment(row.modeOfPayment)}</div>},
     ];
