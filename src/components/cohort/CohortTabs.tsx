@@ -197,13 +197,25 @@ useEffect(() => {
   
   
   const ProgramHeader = [
-    { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => row.name },
-    { title: <div className='relative lg:right-2 lg:left-2'>Start date</div>, sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatMonthInDate(row?.startDate)},
-    { title: 'No. of loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => row.numberOfLoanees || 0 },
-    { title: <div className='lg:w-28'>Tuition</div>, sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => formatAmount(row.tuitionAmount)},
-    { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className=''>{formatAmount(row.amountRecieved)}</div> },
-    { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className=''>{formatAmount(row.amountRequested)}</div> },
-    { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className=''>{formatAmount(row.amountOutstanding)}</div> },
+    { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => <div className="truncate">{row.name}</div> },
+    { title: <div className='relative lg:right-2 lg:left-2'>Start date</div>, sortable: true, id: 'startDate', selector: (row:TableRowData ) =>(
+      <div className="truncate">{formatMonthInDate(row?.startDate)}</div>
+    )},
+    { title: 'No. of loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => (
+      <div className="truncate">{row.numberOfLoanees || 0}</div>
+    ) },
+    { title: <div className='lg:w-28'>Tuition</div>, sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => (
+      <div className="truncate">{formatAmount(row.tuitionAmount)}</div>
+    )},
+    { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => (
+      <div className="truncate">{formatAmount(row.amountRecieved)}</div>
+    )},
+    { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => (
+      <div className="truncate">{formatAmount(row.amountRequested)}</div>
+    ) },
+    { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  (
+      <div className="truncate">{formatAmount(row.amountOutstanding)}</div>
+    ) },
 
   ]
 

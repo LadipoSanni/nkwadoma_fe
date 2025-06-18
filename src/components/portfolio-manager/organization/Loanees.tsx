@@ -302,6 +302,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         <UploadCSV 
         setIsOpen={setIsOpen}
         loaneeRefetch={refetch}
+        isLoaneeEmpty={data?.data?.body?.length === 0 ? true : false}
         />
         </Modal>
        </div>
