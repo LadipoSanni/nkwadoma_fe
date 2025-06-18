@@ -78,11 +78,11 @@ function Organization() {
         pageSize,
     }
 
-    const { data, isLoading } = useViewAllOrganizationByStatusQuery(dataElement, {
+    const { data, isLoading,isFetching} = useViewAllOrganizationByStatusQuery(dataElement, {
         refetchOnMountOrArgChange: tabType === "active" || tabType === "deactivated"
     });
 
-    const { data: searchResults, isLoading: isloading } = useSearchOrganisationByNameQuery(searchElement, { skip: !searchTerm });
+    const { data: searchResults, isLoading: isloading, isFetching: isfetching } = useSearchOrganisationByNameQuery(searchElement, { skip: !searchTerm });
 
     useEffect(() => {
         if (searchTerm && searchResults && searchResults.data) {
@@ -168,7 +168,7 @@ function Organization() {
                 pageNumber={currentTabState.pageNumber}
                 setPageNumber={handlePageChange}
                 totalPages={currentTabState.totalPages}
-                isLoading={isLoading || isloading}
+                isLoading={isLoading || isloading || isFetching || isfetching}
             />
         );
     };
