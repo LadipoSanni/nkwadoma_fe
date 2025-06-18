@@ -56,17 +56,40 @@ function NotificationLayout({children}: Props) {
        const {toast} = useToast()
        const [searchHasNextPage,setSearchHasNextPage] = useState(false)
        const [pageSearchNumber,setSearchPageNumber] = useState(0)
+       const [isPaginationLoading, setIsPaginationLoading] = useState(false);
+       const [isTyping, setIsTyping] = useState(false);
 
-       const param = {
-        title : searchTerm,
-        pageSize: 10,
-        pageNumber: pageSearchNumber
+    function useDebounce<T>(value: T, delay: number): T {
+      const [debouncedValue, setDebouncedValue] = useState(value);
+    
+      useEffect(() => {
+        const timer = setTimeout(() => {
+          setDebouncedValue(value);
+          setIsTyping(false);
+        }, delay);
+    
+        return () => {
+          clearTimeout(timer);
+        };
+      }, [value, delay]);
+    
+      return debouncedValue;
     }
+
+    const debouncedSearchTerm = useDebounce(searchTerm, 1000);
+
+
+    const param = {
+      title : debouncedSearchTerm,
+      pageSize: 10,
+      pageNumber: pageSearchNumber
+  }
+
 
        const [deleteNotification,{isLoading:isloading}] = useDeleteNotificationMutation()
       
-       const {data,isLoading,isFetching:isNotificationFetching} = useViewAllNotificationQuery({pageSize: pageSize,pageNumber: pageNumber},{ refetchOnMountOrArgChange: true })
-       const {data: searchData, refetch, isLoading:isSearchLoading,isFetching} = useSearchNotificationQuery({param},{skip: !searchTerm})
+       const {data,isLoading} = useViewAllNotificationQuery({pageSize: pageSize,pageNumber: pageNumber},{ refetchOnMountOrArgChange: true })
+       const {data: searchData, refetch, isLoading:isSearchLoading,isFetching} = useSearchNotificationQuery({param},{skip: !debouncedSearchTerm})
 
        useEffect(() => {
         const mediaQuery = window.matchMedia('(max-width: 767px)'); 
@@ -78,29 +101,34 @@ function NotificationLayout({children}: Props) {
         return () => mediaQuery.removeEventListener('change', handleResize);
     }, []);
 
-         const getData = (): notificationProp[] => {
-          if (!data?.data?.body) return [];
-         else if (searchTerm) return searchData?.data?.body || [];
-         else return data?.data?.body;
-         }
 
        useEffect(()=> {
-        if (searchTerm && searchData && searchData?.data) {
+        if (debouncedSearchTerm && searchData && searchData?.data) {
           setSearchHasNextPage(searchData?.data?.hasNextPage)
           setSearchPageNumber(searchData?.data?.pageNumber)
           setTotalSearchedNotification(searchData?.data?.totalElement)
           setActiveNotificationId("")
         } 
-        else  if(!searchTerm && data && data?.data){
+        else  if(!debouncedSearchTerm && data && data?.data){
            
              setHasNextPage(data?.data?.hasNextPage)
              setPageNumber(data?.data?.pageNumber)
              setActiveNotificationId("")
           }
          
-         },[searchTerm, searchData,data])
+         },[debouncedSearchTerm, searchData,data])
+
+         useEffect(() => {
+          if (data || searchData) {
+            setIsPaginationLoading(false); 
+          }
+        }, [data, searchData]);
  
-        
+        const getData = (): notificationProp[] => {
+          if (!data?.data?.body) return [];
+         else if (debouncedSearchTerm) return searchData?.data?.body || [];
+         else return data?.data?.body;
+         }
        
          const handleCheckedRow = (id: string) => {
             setSelectedRows((prevSelected) => {
@@ -130,10 +158,12 @@ function NotificationLayout({children}: Props) {
 
            const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                       setSearchTerm(event.target.value);
+                      setIsTyping(true);
                   };
 
                const handleLeftChange = () => {
-                 if(searchTerm && pageSearchNumber > 0){
+                setIsPaginationLoading(true)
+                 if(debouncedSearchTerm && pageSearchNumber > 0){
                      setSearchPageNumber(pageSearchNumber - 1)
                  }else
                  if (pageNumber > 0) {
@@ -142,7 +172,8 @@ function NotificationLayout({children}: Props) {
                }
            
                const handleRightChange = () => {
-                  if(searchTerm && searchHasNextPage){
+                setIsPaginationLoading(true)
+                  if(debouncedSearchTerm && searchHasNextPage){
                     setSearchPageNumber(pageSearchNumber + 1)
                   } else
                  if (hasNextPage) {
@@ -150,8 +181,8 @@ function NotificationLayout({children}: Props) {
                  }
                }
            
-               const trackCountFirst = searchTerm ? pageSearchNumber * pageSize + 1 : pageNumber  * pageSize + 1;
-               const trackCountLast = searchTerm ? Math.min((pageSearchNumber + 1)* pageSize,Number(totalSearchedNotification)) : Math.min((pageNumber + 1) * pageSize, totalNotification);
+               const trackCountFirst = debouncedSearchTerm ? pageSearchNumber * pageSize + 1 : pageNumber  * pageSize + 1;
+               const trackCountLast = debouncedSearchTerm ? Math.min((pageSearchNumber + 1)* pageSize,Number(totalSearchedNotification)) : Math.min((pageNumber + 1) * pageSize, totalNotification);
 
                const handleDeleteOpen = () =>{
                 setIsDeleteOpen(true)
@@ -214,7 +245,7 @@ function NotificationLayout({children}: Props) {
   return (
     <div className={`w-full h-full md:flex ${inter.className}`}>
      <div className='md:border-r  lg:min-w-[28.125rem]'>
-    { isLoading || isloading || isSearchLoading || isNotificationFetching || isFetching ? <div><SkeletonForViewNotification/></div> :
+    { isLoading || isloading || isSearchLoading || isPaginationLoading || isFetching ? <div><SkeletonForViewNotification/></div> :
           <div className='h-full'>
         <div className='md:px-3 px-3 pt-4 md:pt-4 md:pr-7'>
         <SearchInput
@@ -227,7 +258,7 @@ function NotificationLayout({children}: Props) {
         </div>
          <div>
            {
-            searchTerm && getData().length === 0? <div className='relative bottom-8 top-8'>
+            !isTyping && debouncedSearchTerm && getData().length === 0? <div className='relative bottom-8 top-8'>
               <SearchEmptyState icon={MdSearch} name='Notification'/>
             </div> :
        getData().length === 0? (
