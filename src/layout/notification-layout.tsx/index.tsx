@@ -65,8 +65,8 @@ function NotificationLayout({children}: Props) {
 
        const [deleteNotification,{isLoading:isloading}] = useDeleteNotificationMutation()
       
-       const {data,isLoading} = useViewAllNotificationQuery({pageSize: pageSize,pageNumber: pageNumber},{ refetchOnMountOrArgChange: true })
-       const {data: searchData, refetch, isLoading:isSearchLoading} = useSearchNotificationQuery({param},{skip: !searchTerm})
+       const {data,isLoading,isFetching:isNotificationFetching} = useViewAllNotificationQuery({pageSize: pageSize,pageNumber: pageNumber},{ refetchOnMountOrArgChange: true })
+       const {data: searchData, refetch, isLoading:isSearchLoading,isFetching} = useSearchNotificationQuery({param},{skip: !searchTerm})
 
        useEffect(() => {
         const mediaQuery = window.matchMedia('(max-width: 767px)'); 
@@ -214,7 +214,7 @@ function NotificationLayout({children}: Props) {
   return (
     <div className={`w-full h-full md:flex ${inter.className}`}>
      <div className='md:border-r  lg:min-w-[28.125rem]'>
-    { isLoading || isloading || isSearchLoading ? <div><SkeletonForViewNotification/></div> :
+    { isLoading || isloading || isSearchLoading || isNotificationFetching || isFetching ? <div><SkeletonForViewNotification/></div> :
           <div className='h-full'>
         <div className='md:px-3 px-3 pt-4 md:pt-4 md:pr-7'>
         <SearchInput
