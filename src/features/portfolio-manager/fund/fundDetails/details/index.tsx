@@ -221,8 +221,8 @@ const Details = () => {
                                   <Button
                                       id='view-document'
                                       type='button'
-                                      variant={"default"}
-                                      className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[8.9vh]"}`}
+                                      variant={"outline"}
+                                      className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]   font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[8.9vh]"}`}
                                       onClick={handleViewDocument}
                                       disabled={!docUrl || isVerifying}
                                       aria-label={`View ${docFilename}`}
@@ -247,8 +247,8 @@ const Details = () => {
                                   <Button
                                       id='edit_visibility'
                                       type='button'
-                                      variant={"default"}
-                                      className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold'
+                                      variant={"outline"}
+                                      className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]   rounded-2xl h-7 w-[8.5vh] font-semibold'
                                       onClick={handleChangeVisibility}
 
                                   >
@@ -272,8 +272,8 @@ const Details = () => {
                                   <Button
                                       id='edit_status'
                                       type='button'
-                                      variant={"default"}
-                                      className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]  hover:bg-white rounded-2xl h-7 w-[8.5vh] font-semibold '
+                                      variant={"outline"}
+                                      className='border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]   rounded-2xl h-7 w-[8.5vh] font-semibold '
                                       onClick={handleChangeStatus}
 
                                   >

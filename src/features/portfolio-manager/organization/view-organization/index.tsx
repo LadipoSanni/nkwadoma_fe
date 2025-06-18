@@ -13,7 +13,7 @@ import { formatAmount } from '@/utils/Format';
 import { useRouter } from 'next/navigation';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import { MdSearch } from 'react-icons/md';
-import { setOrganizationTabStatus,setOrganizationId,resetOrganizationId} from '@/redux/slice/organization/organization';
+import { setOrganizationTabStatus,setOrganizationId,resetOrganizationId,resetOrganizationDetailsStatus} from '@/redux/slice/organization/organization';
 import { useAppSelector } from '@/redux/store';
 import { store } from "@/redux/store";
 import { resetNotification } from '@/redux/slice/notification/notification';
@@ -78,11 +78,11 @@ function Organization() {
         pageSize,
     }
 
-    const { data, isLoading } = useViewAllOrganizationByStatusQuery(dataElement, {
+    const { data, isLoading,isFetching} = useViewAllOrganizationByStatusQuery(dataElement, {
         refetchOnMountOrArgChange: tabType === "active" || tabType === "deactivated"
     });
 
-    const { data: searchResults, isLoading: isloading } = useSearchOrganisationByNameQuery(searchElement, { skip: !searchTerm });
+    const { data: searchResults, isLoading: isloading, isFetching: isfetching } = useSearchOrganisationByNameQuery(searchElement, { skip: !searchTerm });
 
     useEffect(() => {
         if (searchTerm && searchResults && searchResults.data) {
@@ -108,6 +108,7 @@ function Organization() {
         }
         store.dispatch(resetOrganizationId())
         store.dispatch(resetNotification())
+        store.dispatch(resetOrganizationDetailsStatus())
     }, [searchTerm, searchResults, data, tabType]);
 
     const handleInviteOrganizationClick = () => {
@@ -167,7 +168,7 @@ function Organization() {
                 pageNumber={currentTabState.pageNumber}
                 setPageNumber={handlePageChange}
                 totalPages={currentTabState.totalPages}
-                isLoading={isLoading || isloading}
+                isLoading={isLoading || isloading || isFetching || isfetching}
             />
         );
     };

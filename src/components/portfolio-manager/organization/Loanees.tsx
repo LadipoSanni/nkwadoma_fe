@@ -16,12 +16,14 @@ import Modal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
 import UploadCSV from './Upload-csv';
 import {setLoaneeId} from "@/redux/slice/organization/organization";
-// import {LoaneetDetails} from "@/types/loanee";
 import { store } from '@/redux/store';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
+
+
+
 interface userIdentity {
     firstName: string;
     lastName: string;
@@ -49,6 +51,7 @@ const Loanees = dynamic(
     status?: string
     tabType?: string
     condition?: string
+    uploadedStatus?: string
  }
 
  interface ApiError {
@@ -58,7 +61,7 @@ const Loanees = dynamic(
   };
 }
 
-function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
+function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: Props) {
     const [searchTerm, setSearchTerm] = useState("");
     const cohortDetails = useAppSelector((state) => state.cohort.selectedCohortInOrganization)
     const cohortId = cohortDetails?.id;
@@ -78,7 +81,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
             cohortId: cohortId,
             pageSize: size,
             pageNumber: page,
-            status: status
+            status: status,
+            uploadedStatus: uploadedStatus
         })
 
       const {data: searchResults, isLoading: isLoadingSearch} = useSearchForLoaneeInACohortQuery({
@@ -106,9 +110,17 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
       const tableHeaderintegrated = [
               {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
               {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) =>  formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
+              {title: "Status", sortable: true, id: "loaneeStatus", selector: (row: viewAllLoanees) =>  <span  className={`${row?.loaneeStatus === "ACTIVE" ? 'text-[#063F1A] bg-[#E7F5EC]' : 'text-[#142854] bg-[#FEF6E8]'} rounded-[32px] px-2 py-1`}>{row?.loaneeStatus === "ACTIVE"? "Active" : "Pending"}</span> },
               {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountRequested))},
               {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountReceived))},
           ];
+
+          const tableHeader = [
+            {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
+            {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) =>  formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
+            {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountRequested))},
+            {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountReceived))},
+        ];
 
       const handleSelectedRow = (rows: Set<string>) => {
           setSelectedRows(rows)
@@ -119,7 +131,20 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
                router.push('/organizations/view-loanee-profile')
         }
       
-   
+        // const dropDownOption = [
+  
+        //   {
+        //     name: "Archive",
+        //     id: "1"
+        //   }
+        
+        // ]
+
+        // const handleDropdown = (id:string,row: rowData) => {
+        //  if(id === "1"){
+        //   setSelectedRows(row?.id)
+        //  }
+        // }
       
        const handleModalOpen = () => {
           setIsOpen(!isOpen)
@@ -127,8 +152,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
 
         const getTableData = () => {
           if (!data?.data?.body) return [];
-          if (searchTerm) return searchResults?.data?.body || [];
-          return data?.data?.body;
+         else if (searchTerm) return searchResults?.data?.body || [];
+         else return data?.data?.body;
       }
 
       const handleClick= async () => {
@@ -171,7 +196,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
           if(inviteLoanees){
             setSelectedRows(new Set());
             setEnableButton(false)
-            //  router.push("/organizations/loanees/all")
+            router.push("/organizations/loanees/invited")
             toast({
               description: inviteLoanees?.message,
               status: "success",
@@ -240,8 +265,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         
         <CheckBoxTable
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
-        tableData={getTableData()}
-        tableHeader={tableHeaderintegrated}
+        tableData={tabType === 'Invited'? [] : getTableData()}
+        tableHeader={tabType === 'Invited'? tableHeaderintegrated : tableHeader}
         handleRowClick={handleRowClick}
         staticHeader="Loanee"
         staticColunm="firstName"
@@ -255,11 +280,14 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         pageNumber={page}
         setPageNumber={setPageNumber}
         totalPages={totalPage}
-        enableRowSelection={tabType === 'All' || tabType === 'Archived' ? true : false}
+        // enableRowSelection={tabType === 'All' || tabType === 'Archived' ? true : false}
+        enableRowSelection={false}
         enableButton={() =>setEnableButton(true) }
         disabledButton={()=> setEnableButton(false) }
         handleSelectedRow={handleSelectedRow}
          sx='cursor-pointer'
+        //  kirkBabDropdownOption={tabType === 'Invited' ? dropDownOption : undefined}
+        //  showKirkBabel={tabType === 'Invited' ? true: false}
         />}
       </div>
        <div>
@@ -274,6 +302,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition}: Props) {
         <UploadCSV 
         setIsOpen={setIsOpen}
         loaneeRefetch={refetch}
+        isLoaneeEmpty={data?.data?.body?.length === 0 ? true : false}
         />
         </Modal>
        </div>

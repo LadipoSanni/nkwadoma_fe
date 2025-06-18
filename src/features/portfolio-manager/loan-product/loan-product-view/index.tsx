@@ -28,16 +28,23 @@ const LoanProductPage = () => {
     const [hasNextPage,setNextPage] = useState(false)
     const [totalPage,setTotalPage] = useState(0)
      const [pageNumber,setPageNumber] = useState(0)
+    
+     const [seachPageNumber,setSearchPageNumber]= useState(0)
+     const [searchHasNextPage,setSearchNextPage] = useState(false)
+
     const size = 10;
     const { data, isLoading } = useViewAllLoanProductQuery({ pageSize: size, pageNumber:pageNumber });
-    const { data: searchResult } = useSearchLoanProductQuery(
-        { loanProductName: searchTerm },
+    const { data: searchResult, isLoading: isSearchLoading } = useSearchLoanProductQuery(
+        { loanProductName: searchTerm, pageSize: size, pageNumber:seachPageNumber },
         { skip: !searchTerm }
     );
 
     useEffect(() => {
         if (searchTerm && searchResult && searchResult?.data) {
-            const result = searchResult?.data;
+            const result = searchResult?.data?.body;
+            setSearchNextPage(searchResult.data?.hasNextPage)
+            setTotalPage(searchResult?.data?.totalPages)
+           setSearchPageNumber(searchResult?.data?.pageNumber)
             setAllLoanProduct(result);
         } else if (!searchTerm && data && data?.data) {
             const result = data?.data?.body;
@@ -159,7 +166,7 @@ const LoanProductPage = () => {
                     <div className={`w-full h-fit md:w-full md:h-full`}>
                         <SkeletonForTable />
                     </div>
-                ) : searchTerm && searchResult && searchResult?.data.length === 0 ? (
+                ) : searchTerm && searchResult && searchResult?.data?.body?.length === 0 ? (
                         <div className={`flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40`}>
                             <SearchEmptyState name={"Loan product"} icon={MdSearch} />
                         </div>
@@ -177,12 +184,12 @@ const LoanProductPage = () => {
                         tableCellStyle={"h-12"}
                         icon={MdOutlineInventory2}
                         sideBarTabName={"loan product"}
-                        isLoading={isLoading}
+                        isLoading={isLoading || isSearchLoading}
                         condition={true}
                         totalPages={totalPage}
-                        hasNextPage={hasNextPage}
-                        pageNumber={pageNumber}
-                        setPageNumber={setPageNumber}
+                        hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPage}
+                        pageNumber={searchTerm !== ""? seachPageNumber :  pageNumber}
+                        setPageNumber={searchTerm !== ""? setSearchPageNumber : setPageNumber}
                     />
                 ) : ""}
             </div>

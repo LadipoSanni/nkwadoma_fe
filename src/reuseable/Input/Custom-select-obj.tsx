@@ -64,7 +64,7 @@ function CustomSelectObj({ value, onChange, className, selectContent, name, plac
                   key={`${content.value}-${index}`}
                   id={`${content.value}`}
                   value={String(content.value)}
-                  className={`${content.value}`}
+                  className={`${content.value} hover:bg-[#EEF5FF]`}
                   disabled={isItemDisabled ? isItemDisabled(content.value) : false}
                 >
                   {content.label}
