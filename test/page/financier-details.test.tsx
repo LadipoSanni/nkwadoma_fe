@@ -3,7 +3,8 @@ import {render, screen} from '@testing-library/react'
 import {Providers} from "@/app/provider";
 
 jest.mock('next/navigation', ()=> ({
-    useRouter: jest.fn()
+    useRouter: jest.fn(),
+    usePathname: () => jest.fn(),
 }));
 describe('testing financier details page', () => {
     beforeEach(()=> {

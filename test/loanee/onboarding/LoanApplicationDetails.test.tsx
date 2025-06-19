@@ -10,6 +10,7 @@ jest.mock('next/navigation', () => ({
         replace: jest.fn(),
         prefetch: jest.fn(),
     })),
+    usePathname: () => jest.fn(),
 }));
 
 describe('LoanApplicationDetails', () => {
@@ -19,7 +20,7 @@ describe('LoanApplicationDetails', () => {
         initialDeposit: "0.00",
         referredBy: "",
     }
-    it('renders the header correctly', () => {
+    it('renderns the header correctly', () => {
         render(
             <Providers>
                 <LoaneeOnboarding />

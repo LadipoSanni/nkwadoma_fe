@@ -3,6 +3,7 @@ import LoanDisbursalTable from "@/components/viewAll/LoanDisbursalTable";
 import {render, screen} from "@testing-library/react";
 import {Providers} from "@/app/provider";
 
+const mockUsePathname = jest.fn();
 // Mock useRouter:
 jest.mock("next/navigation", () => ({
     useRouter() {
@@ -10,6 +11,8 @@ jest.mock("next/navigation", () => ({
             prefetch: () => null
         };
     },
+    usePathname: () => mockUsePathname,
+
     // useSearchParams: jest.fn().mockImplementation(() => {
     //     return new URLSearchParams(window.location.search);
     // }),

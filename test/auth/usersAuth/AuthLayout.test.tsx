@@ -4,13 +4,17 @@ import Step1 from "@/features/auth/usersAuth/reset-password/enter-email-componen
 import Index from "@/layout/authLayout";
 
 
+const mockUsePathname = jest.fn();
+
 // Mock useRouter:
 jest.mock("next/navigation", () => ({
     useRouter() {
         return {
             prefetch: () => null
         };
-    }
+    },
+    usePathname: () => mockUsePathname,
+
 }));
 
 describe("test auth layout ", ()=> {

@@ -86,6 +86,7 @@ import { Providers } from '@/app/provider';
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
     useNavigation: jest.fn(),
+    usePathname: () => jest.fn(),
 }));
 
 import {useRouter} from "next/navigation";

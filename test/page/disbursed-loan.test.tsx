@@ -5,7 +5,8 @@ import {Providers} from "@/app/provider";
 // import {userEvent} from "@testing-library/user-event";
 
 jest.mock('next/navigation', ()=> ({
-    useRouter: jest.fn()
+    useRouter: jest.fn(),
+    usePathname: () => jest.fn(),
 }))
 
 describe('test loan disburse details page', ()=> {
