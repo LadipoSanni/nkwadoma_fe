@@ -1,5 +1,7 @@
 'use client'
 import React from 'react';
+import {getUserDetailsFromStorage} from "@/components/topBar/action";
+import { redirect } from 'next/navigation';
 // import {getUserDetailsFromStorage} from "@/components/topBar/action";
 // import {redirect} from "next/navigation";
 // import {useToast} from "@/hooks/use-toast";
@@ -13,7 +15,7 @@ children: React.ReactNode;
 }
 const Index : React.FC<AuthProps> = ({children}) => {
     // const user_role = getUserDetailsFromStorage('user_role')
-    // const token = getUserDetailsFromStorage('access_token' )
+    const token = getUserDetailsFromStorage('access_token' )
     // const refreshToken = getUserDetailsFromStorage('refresh_token' )
     // const [logout] = useLogoutMutation()
 
@@ -43,19 +45,14 @@ const Index : React.FC<AuthProps> = ({children}) => {
 
 
 
-    // return token ? (
-    //     <div>
-    //         {children}
-    //     </div>
-    // ):
-    //     (
-    //         redirect('/auth/login')
-    //     );
-    return(
+    return token ? (
         <div>
             {children}
         </div>
-    )
+    ):
+        (
+            redirect('/auth/login')
+        );
 };
 
 export default Index;
