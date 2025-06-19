@@ -13,6 +13,7 @@ jest.mock("next/navigation", () => ({
             prefetch: () => null
         };
     },
+
     usePathname: () => mockUsePathname,
 
 }));
