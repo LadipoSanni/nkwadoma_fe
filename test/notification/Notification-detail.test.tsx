@@ -13,6 +13,12 @@ jest.mock('next/navigation', () => ({
 describe('NotificationDetail Component',()=> {
   const mockPush = jest.fn();
     beforeEach(() => {
+      global.fetch = jest.fn(() =>
+          Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          }))
+      );
         jest.clearAllMocks();
           cleanup();
 

@@ -22,12 +22,12 @@ jest.mock("next/navigation", () => ({
 describe("test loan request details page component", ()=> {
 
     beforeEach(async ()=> {
-        // global.fetch = jest.fn(() =>
-        //     Promise.resolve(new Response(JSON.stringify({ data: [] }), {
-        //         status: 200,
-        //         headers: { 'Content-Type': 'application/json' },
-        //     }))
-        // );
+        global.fetch = jest.fn(() =>
+            Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }))
+        );
         // render(
         //     <Providers>
         //         <LoanDetails/>
