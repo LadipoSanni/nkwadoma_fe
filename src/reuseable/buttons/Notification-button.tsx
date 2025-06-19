@@ -27,7 +27,7 @@ function NotificationButton({handleLeftChange,handleRightChange,totalItem,trackC
         id='previous'
         data-testid={testIdPrevious}
         className={`rounded-full bg-[#f9f9f9] flex items-center h-7 w-7 justify-center ${pageNumber === 0? "cursor-none" : "cursor-pointer"}`}
-        onClick={handleLeftChange}
+        onClick={pageNumber !== 0? handleLeftChange : undefined}
         >
             <ChevronLeft 
             color={pageNumber === 0 ? "#B6BCCA" : "#435376"}
@@ -36,8 +36,9 @@ function NotificationButton({handleLeftChange,handleRightChange,totalItem,trackC
         <div 
          id='next'
          data-testid={testIdNext}
-        onClick={handleRightChange}  
+        onClick={hasNextPage? handleRightChange : undefined}  
         className={`rounded-full bg-[#f9f9f9] flex items-center h-7 w-7 justify-center ${!hasNextPage? "cursor-none" : "cursor-pointer"}`}
+        
         >
             <ChevronRight 
             color={!hasNextPage?"#B6BCCA": "#435376"}
