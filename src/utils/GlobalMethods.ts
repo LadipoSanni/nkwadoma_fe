@@ -50,11 +50,13 @@ export const isUserAdmin = (role: string) => {
 
 export const isTokenExpired = (token?: string): boolean => {
     if (!token) {
+        console.log('invalid token')
         return true;
     }else{
         try {
             const decoded: { exp: number } = jwtDecode(token);
             const expiryTime = decoded.exp  * 1000;
+            console.log('is it: ', isAfter(Date.now(), expiryTime))
             return isAfter(Date.now(), expiryTime);
         }catch (error){
             console.log(error);
