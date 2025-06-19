@@ -13,13 +13,21 @@ export const customFetchBaseQuery = fetchBaseQuery({
     // fetchFn: typeof window === 'undefined'
     //     ? (fetch as unknown as typeof globalThis.fetch)
     //     : undefined,
-    prepareHeaders: (headers,{ endpoint }) => {
-        const token =  getToken()
-        if (token) {
-            headers.set('authorization', `Bearer ${token}`);
-            if (endpoint !== 'uploadLoaneeFile'  && endpoint !== 'uploadRepaymentFile') {
-                headers.set('Content-Type', 'application/json');
-              }
+    prepareHeaders: async (headers,{ endpoint }) => {
+        try {
+            const token = await getToken();
+
+            if (token) {
+                headers.set('authorization', `Bearer ${token}`);
+                if (
+                    endpoint !== 'uploadLoaneeFile' &&
+                    endpoint !== 'uploadRepaymentFile'
+                ) {
+                    headers.set('Content-Type', 'application/json');
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching token:', error);
         }
 
         return headers;
