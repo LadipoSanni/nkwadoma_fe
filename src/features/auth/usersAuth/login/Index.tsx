@@ -198,8 +198,6 @@ const Login: React.FC = () => {
                             description: "Login successful",
                             status: "success",
                         });
-                        console.log('on logging in access token: ',access_token)
-                        console.log('on logging in refrssh token: ', refresh_token)
                         if (user_role) {
                             storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                             setUserRoles(user_roles)
