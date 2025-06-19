@@ -93,7 +93,12 @@ import {useRouter} from "next/navigation";
 
 describe('program-view Component', () => {
     const mockPush = jest.fn();
-
+    global.fetch = jest.fn(() =>
+        Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        }))
+    );
     beforeEach(() => {
         jest.clearAllMocks();
         cleanup();

@@ -38,6 +38,12 @@ describe("ViewAllLoanRequest", ()=>{
 
 
     beforeEach(() => {
+        global.fetch = jest.fn(() =>
+            Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }))
+        );
         render(
             <Providers>
                 <Index />

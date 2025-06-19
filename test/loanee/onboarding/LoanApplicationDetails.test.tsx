@@ -20,6 +20,12 @@ describe('LoanApplicationDetails', () => {
         initialDeposit: "0.00",
         referredBy: "",
     }
+    global.fetch = jest.fn(() =>
+        Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        }))
+    );
     it('renderns the header correctly', () => {
         render(
             <Providers>

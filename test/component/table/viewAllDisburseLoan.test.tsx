@@ -23,6 +23,12 @@ jest.mock("next/navigation", () => ({
 }));
 
 describe('test view all loan disbursal', () => {
+    global.fetch = jest.fn(() =>
+        Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        }))
+    );
     beforeEach(() => {
         render(
             <Providers>
