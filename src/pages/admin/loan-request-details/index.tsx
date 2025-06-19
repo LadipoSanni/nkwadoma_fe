@@ -233,14 +233,14 @@ function LoanDetails() {
     const userFirstLetter = data?.data?.userIdentity?.firstName ?  getInitial(data?.data?.userIdentity?.firstName,data?.data?.userIdentity?.lastName) : ""
 
     return (
-        <>
+        <div id={'loanRequestDetails'} data-testid={'loanRequestDetails'}>
             {
                 isLoading ? (
                     <SkeletonForDetailPage/>
                 ) : (
                     <div
                         id={"loanRequestDetails"}
-                        data-testid={"loanRequestDetails"}
+                        data-testid={"loanRequestDetailss"}
                         className={`  md:px-8 w-full h-full md:grid md:gap-4 px-3 pt-4 md:pt-4 `}
                     >
                         <BackButton handleClick={backToLoanRequest} iconBeforeLetters={true} text={"Back to loan request"}
@@ -391,7 +391,7 @@ function LoanDetails() {
                     </div>
                 )
             }
-        </>
+        </div>
 
     )
 }
