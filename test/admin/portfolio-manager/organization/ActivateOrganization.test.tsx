@@ -3,10 +3,13 @@ import ActivateOrganization from "@/components/portfolio-manager/organization/Ac
 import { useRouter } from 'next/navigation';
 import { Providers } from "@/app/provider";
 
+const mockUsePathname = jest.fn();
 
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
-  }));
+    usePathname: () => mockUsePathname,
+
+}));
  
   const handleCloseModal = jest.fn(); 
 

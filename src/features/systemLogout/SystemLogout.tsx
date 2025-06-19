@@ -6,7 +6,7 @@ import {clearData} from "@/utils/storage";
 import {persistor} from "@/redux/store";
 import {useToast} from "@/hooks/use-toast";
 
-export default function Index() {
+export default function SystemLogout() {
     const pathname = usePathname();
     const [logout] = useLogoutMutation()
     const {toast} = useToast()
