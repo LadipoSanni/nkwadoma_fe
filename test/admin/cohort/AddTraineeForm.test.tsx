@@ -7,6 +7,12 @@ import { Providers } from "@/app/provider";
 describe("AddTraineeForm", () => {
     beforeEach(() => {
         cleanup()
+        global.fetch = jest.fn(() =>
+            Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }))
+        );
         jest.spyOn(console,'log').mockReturnValue();
         jest.spyOn(console,'warn').mockReturnValue();
         jest.spyOn(console,'error').mockReturnValue();
