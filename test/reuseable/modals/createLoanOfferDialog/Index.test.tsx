@@ -8,6 +8,7 @@ jest.mock("next/navigation", () => ({
             prefetch: () => null
         };
     },
+    usePathname: () => jest.fn(),
 
 }));
 
@@ -17,6 +18,14 @@ describe('CreateLoanOffer Component', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+        global.fetch = jest.fn(() =>
+            Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }))
+        );
+        // await act( async () => render(<TestApp/>));
+
     });
 
     test('renders CreateLoanOffer component', () => {

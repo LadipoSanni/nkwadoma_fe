@@ -1,9 +1,12 @@
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import CohortTabs from "@/components/cohort/CohortTabs";
 import { Providers } from "@/app/provider";
+const mockUsePathname = jest.fn();
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  usePathname: () => mockUsePathname,
+
 }));
 
 import { useRouter } from 'next/navigation';

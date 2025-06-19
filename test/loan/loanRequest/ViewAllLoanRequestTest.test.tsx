@@ -9,6 +9,8 @@ import {Providers} from "@/app/provider";
 
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
+    useParams: jest.fn(),
+    usePathname: () => jest.fn(),
   }));
   ;
 import { useRouter } from 'next/navigation';
@@ -36,6 +38,12 @@ describe("ViewAllLoanRequest", ()=>{
 
 
     beforeEach(() => {
+        global.fetch = jest.fn(() =>
+            Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }))
+        );
         render(
             <Providers>
                 <Index />

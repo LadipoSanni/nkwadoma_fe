@@ -7,6 +7,7 @@ import {useRouter} from "next/navigation";
 import {store} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 import {useViewMeedlPortfolioQuery} from "@/service/admin/overview";
+import {setCurrentTab, setCurrentTabStatus} from "@/redux/slice/loan/selected-loan";
 
 const PortfolioManager = () => {
 
@@ -73,6 +74,8 @@ const PortfolioManager = () => {
     const routeToLoans = () => {
         store.dispatch(setCurrentNavBottomItem('Loan'))
         store.dispatch(setCurrentNavbarItem('Loan'))
+        store.dispatch(setCurrentTab('Loan requests'))
+        store.dispatch(setCurrentTabStatus('LOAN_REQUEST'))
         router.push('/loan/loan-request')
     }
 

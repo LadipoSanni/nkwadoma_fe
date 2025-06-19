@@ -7,11 +7,18 @@ import { Providers } from "@/app/provider";
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  usePathname: () => jest.fn(),
 }));
 
 describe('NotificationDetail Component',()=> {
   const mockPush = jest.fn();
     beforeEach(() => {
+      global.fetch = jest.fn(() =>
+          Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          }))
+      );
         jest.clearAllMocks();
           cleanup();
 

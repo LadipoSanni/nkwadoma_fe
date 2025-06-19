@@ -177,11 +177,11 @@ function LoanDetails() {
     ]
 
     const basic = [
-        {label: 'Gender', value: data?.data.userIdentity.gender},
-        {label: 'Email address', value: data?.data.userIdentity.email},
-        {label: 'Phone number', value: data?.data?.userIdentity.phoneNumber},
-        {label: 'Date of birth', value: data?.data?.userIdentity.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.userIdentity.maritalStatus},
+        {label: 'Gender', value: data?.data?.userIdentity?.gender},
+        {label: 'Email address', value: data?.data?.userIdentity?.email},
+        {label: 'Phone number', value: data?.data?.userIdentity?.phoneNumber},
+        {label: 'Date of birth', value: data?.data?.userIdentity?.dateOfBirth},
+        {label: 'Marital status', value: data?.data?.userIdentity?.maritalStatus},
         {label: 'Nationality', value: data?.data?.userIdentity?.nationality},
         {label: 'State of origin ', value: data?.data?.userIdentity?.stateOfOrigin},
         {label: 'State of residence', value: data?.data?.userIdentity?.stateOfResidence},
@@ -190,9 +190,9 @@ function LoanDetails() {
     ]
 
     const additional = [
-        {label: 'Alternate email address', value: data?.data.alternateEmail},
-        {label: 'Alternate phone number', value: data?.data.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data.alternateContactAddress},
+        {label: 'Alternate email address', value: data?.data?.alternateEmail},
+        {label: 'Alternate phone number', value: data?.data?.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: data?.data?.alternateContactAddress},
         {
             label: 'Next of kin name',
             value: data?.data?.nextOfKin?.firstName && data?.data?.nextOfKin?.lastName
@@ -233,14 +233,14 @@ function LoanDetails() {
     const userFirstLetter = data?.data?.userIdentity?.firstName ?  getInitial(data?.data?.userIdentity?.firstName,data?.data?.userIdentity?.lastName) : ""
 
     return (
-        <>
+        <div id={'loanRequestDetails'} data-testid={'loanRequestDetails'}>
             {
                 isLoading ? (
                     <SkeletonForDetailPage/>
                 ) : (
                     <div
                         id={"loanRequestDetails"}
-                        data-testid={"loanRequestDetails"}
+                        data-testid={"loanRequestDetailss"}
                         className={`  md:px-8 w-full h-full md:grid md:gap-4 px-3 pt-4 md:pt-4 `}
                     >
                         <BackButton handleClick={backToLoanRequest} iconBeforeLetters={true} text={"Back to loan request"}
@@ -391,7 +391,7 @@ function LoanDetails() {
                     </div>
                 )
             }
-        </>
+        </div>
 
     )
 }
