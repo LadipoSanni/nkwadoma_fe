@@ -24,9 +24,9 @@ const Index : React.FC<AuthProps> = ({children}) => {
     const response2 = isTokenExpired(refreshToken ? refreshToken : '')
     console.log('response',response)
     console.log('response2',response2)
-    useEffect(() => {
-        checkUserToken(response)
-    }, [response, response2,token,refreshToken]);
+    // useEffect(() => {
+    //     checkUserToken(response)
+    // }, [response, response2,token,refreshToken]);
 
     const checkUserToken = (isTokenExpired: boolean) => {
         if (isTokenExpired ) {
@@ -43,14 +43,19 @@ const Index : React.FC<AuthProps> = ({children}) => {
 
 
 
-    return token ? (
+    // return token ? (
+    //     <div>
+    //         {children}
+    //     </div>
+    // ):
+    //     (
+    //         redirect('/auth/login')
+    //     );
+    return(
         <div>
             {children}
         </div>
-    ):
-        (
-            redirect('/auth/login')
-        );
+    )
 };
 
 export default Index;
