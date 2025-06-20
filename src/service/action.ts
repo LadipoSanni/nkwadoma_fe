@@ -5,14 +5,16 @@ import axios from 'axios';
 
 export async  function refreshTokenAction (token?: string) {
     const url = `https://api-systest.meedl.africa/api/v1/auth/refresh-token`;
-         await axios.post(url, {refreshToken: token})
-             .then((response ) => {
-                 const json =  response;
-                 setItemSessionStorage("access_token", json?.data?.data?.access_token);
-                 setItemSessionStorage("refresh_token",json?.data?.data?.refresh_token)
-             }).catch((error) => {
-             console.log('error', error);
-         })
+    try {
+        const response = await axios.post(url, { refreshToken: token });
+        const accessToken = response?.data?.data?.access_token;
+        const refreshToken = response?.data?.data?.refresh_token;
+
+        setItemSessionStorage("access_token", accessToken);
+        setItemSessionStorage("refresh_token", refreshToken);
+    } catch (error) {
+        console.error('Error refreshing token:', error);
+    }
 
 
 }
