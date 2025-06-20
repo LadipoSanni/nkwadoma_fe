@@ -22,6 +22,7 @@ import {marketplaceApi} from "@/service/financier/marketplace";
 import {portfolioOverviewApi} from '@/service/admin/overview'
 import {publicInvestmentApi} from "@/service/unauthorized/view-investment";
 import { loanBookApi } from '@/service/admin/loan_book';
+import {unauthorizedApis} from "@/service/unauthorized/action";
 
 
 const persistConfig = {
@@ -55,7 +56,7 @@ export const store = configureStore({
             financierOnboardingAndDashboardApi.middleware,
             marketplaceApi.middleware,
             portfolioOverviewApi.middleware,
-            publicInvestmentApi.middleware,
+            unauthorizedApis.middleware,
             loanBookApi.middleware,
         ]),
 });

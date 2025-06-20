@@ -2,8 +2,8 @@ import {createApi} from "@reduxjs/toolkit/query/react";
 import {customFetchBaseQuery} from "@/service/customFetchBaseQuery";
 
 
-export const publicInvestmentApi = createApi({
-    reducerPath: "publicInvestmentApi",
+export const unauthorizedApis = createApi({
+    reducerPath: "unauthorizedApis",
     baseQuery: customFetchBaseQuery,
     endpoints: (builder) => ({
         viewPublicInvestmentDetails: builder.query({
@@ -12,9 +12,16 @@ export const publicInvestmentApi = createApi({
                 method: 'GET',
             })
         }),
+        refreshToken: builder.mutation({
+            query: (rrefreshToken:string| undefined) => ({
+                url: ``,
+                method: 'POST'
+            })
+
+        }),
 
 
     })
 })
 
-export const  {useViewPublicInvestmentDetailsQuery} = publicInvestmentApi;
+export const  {useViewPublicInvestmentDetailsQuery} = unauthorizedApis;
