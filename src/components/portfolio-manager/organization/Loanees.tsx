@@ -17,6 +17,7 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import UploadCSV from './Upload-csv';
 import {setLoaneeId} from "@/redux/slice/organization/organization";
 import { store } from '@/redux/store';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -77,7 +78,9 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
     const router = useRouter();
      const [isOpen, setIsOpen] = useState(false);
 
-      const {data, isLoading,refetch} = useViewAllLoaneeQuery({
+      const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+
+      const {data, isLoading,refetch,isFetching} = useViewAllLoaneeQuery({
             cohortId: cohortId,
             pageSize: size,
             pageNumber: page,
@@ -85,27 +88,27 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
             uploadedStatus: uploadedStatus
         })
 
-      const {data: searchResults, isLoading: isLoadingSearch} = useSearchForLoaneeInACohortQuery({
-                 loaneeName: searchTerm,
+      const {data: searchResults, isLoading: isLoadingSearch, isFetching: isfetching} = useSearchForLoaneeInACohortQuery({
+                 loaneeName: debouncedSearchTerm,
                  cohortId: cohortId,
                  status: status,
                  pageSize: size,
                  pageNumber: page,
              },
-             {skip: !searchTerm || !cohortId})
+             {skip: !debouncedSearchTerm || !cohortId})
             
       useEffect(() => {
-         if(searchTerm && searchResults && searchResults?.data){
+         if(debouncedSearchTerm && searchResults && searchResults?.data){
           setNextPage(searchResults?.data?.hasNextPage)
           setTotalPage(searchResults?.data?.totalPages)
           setPageNumber(searchResults?.data?.pageNumber)
          }
-        else if(!searchTerm && data && data?.data) {
+        else if(!debouncedSearchTerm && data && data?.data) {
           setNextPage(data?.data?.hasNextPage)
           setTotalPage(data?.data?.totalPages)
           setPageNumber(data?.data?.pageNumber)
         }
-      },[searchTerm,data,searchResults])      
+      },[debouncedSearchTerm,data,searchResults])      
 
       const tableHeaderintegrated = [
               {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
@@ -152,7 +155,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
 
         const getTableData = () => {
           if (!data?.data?.body) return [];
-         else if (searchTerm) return searchResults?.data?.body || [];
+         else if (debouncedSearchTerm) return searchResults?.data?.body || [];
          else return data?.data?.body;
       }
 
@@ -261,7 +264,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         </div>
       </div>
       <div className='mt-4'>
-       { searchTerm && searchResults?.data?.body?.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanees'/></div> :
+       { !isTyping && debouncedSearchTerm  && searchResults?.data?.body?.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanees'/></div> :
         
         <CheckBoxTable
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
@@ -273,7 +276,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         icon={MdOutlinePerson}
         sideBarTabName="loanees"
         tableCellStyle="h-12"
-        isLoading={isLoading || isLoadingSearch}
+        isLoading={isLoading || isLoadingSearch || isFetching || isfetching}
         condition={true}
         tableHeight={40}
         hasNextPage={hasNextPage}

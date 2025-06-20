@@ -53,10 +53,11 @@ interface cohortList {
   totalPages: number;
   pageNumber: number
   handlePageChange:  (value: React.SetStateAction<number>, tabType?: string) => void;
+  isTyping?: boolean
 }
 
 
-const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,searchTerm,userRole,currentTab,hasNextPage,totalPages,handlePageChange,pageNumber}:cohortList) => {
+const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,searchTerm,userRole,currentTab,hasNextPage,totalPages,handlePageChange,pageNumber,isTyping}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
   // const [programId, setProgramId] = React.useState("")
@@ -221,7 +222,7 @@ useEffect(() => {
 
 
   const renderTable = (tabValue: string) => {
-        const isEmpty = searchTerm && listOfCohorts.length === 0
+        const isEmpty =!isTyping && searchTerm && listOfCohorts.length === 0
         const emptyStateName = `${tabValue.charAt(0).toUpperCase() + tabValue.slice(1)} cohort`;
 
         return isEmpty ? (

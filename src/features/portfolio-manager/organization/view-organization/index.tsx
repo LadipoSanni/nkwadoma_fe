@@ -17,6 +17,7 @@ import { setOrganizationTabStatus,setOrganizationId,resetOrganizationId,resetOrg
 import { useAppSelector } from '@/redux/store';
 import { store } from "@/redux/store";
 import { resetNotification } from '@/redux/slice/notification/notification';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -65,6 +66,8 @@ function Organization() {
 
     const currentTabState = tabStates[tabType];
 
+      const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+
     const dataElement = {
         pageNumber: currentTabState.pageNumber,
         pageSize,
@@ -72,20 +75,21 @@ function Organization() {
     };
 
     const searchElement = {
-        name:searchTerm,
+        name:debouncedSearchTerm,
         status: tabType.toUpperCase(),
         pageNumber: currentTabState.pageNumber,
         pageSize,
     }
 
+
     const { data, isLoading,isFetching} = useViewAllOrganizationByStatusQuery(dataElement, {
         refetchOnMountOrArgChange: tabType === "active" || tabType === "deactivated"
     });
 
-    const { data: searchResults, isLoading: isloading, isFetching: isfetching } = useSearchOrganisationByNameQuery(searchElement, { skip: !searchTerm });
+    const { data: searchResults, isLoading: isloading, isFetching: isfetching } = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
 
     useEffect(() => {
-        if (searchTerm && searchResults && searchResults.data) {
+        if (debouncedSearchTerm && searchResults && searchResults.data) {
             setOrganizationList(searchResults.data?.body);
             setTabStates(prev => ({
                 ...prev,
@@ -95,7 +99,7 @@ function Organization() {
                     hasNextPage:searchResults.data.hasNextPage
                 }
             }));
-        } else if (!searchTerm && data && data?.data) {
+        } else if (!debouncedSearchTerm && data && data?.data) {
             setOrganizationList(data?.data?.body);
             setTabStates(prev => ({
                 ...prev,
@@ -109,7 +113,7 @@ function Organization() {
         store.dispatch(resetOrganizationId())
         store.dispatch(resetNotification())
         store.dispatch(resetOrganizationDetailsStatus())
-    }, [searchTerm, searchResults, data, tabType]);
+    }, [debouncedSearchTerm, searchResults, data, tabType]);
 
     const handleInviteOrganizationClick = () => {
         setIsOpen(!isOpen);
@@ -145,7 +149,7 @@ function Organization() {
     ];
 
     const renderTable = (tabValue: string) => {
-        const isEmpty = searchTerm && organizationList.length === 0;
+        const isEmpty = !isTyping && debouncedSearchTerm  && organizationList.length === 0;
         const emptyStateName = `${tabValue.charAt(0).toUpperCase() + tabValue.slice(1)} organization`;
 
         return isEmpty ? (
