@@ -31,6 +31,9 @@ import { store, useAppSelector } from "@/redux/store";
 import { setOrganizationDetail } from "@/redux/slice/organization/organization";
 import CohortView from "@/features/cohort/cohort-view";
 import { ensureHttpsUrl } from "@/utils/GlobalMethods";
+import { useDebounce } from '@/hooks/useDebounce';
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
+import { MdSearch } from 'react-icons/md';
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -55,7 +58,7 @@ const OrganizationDetails = () => {
   const organizationDetailTab = useAppSelector(store => store.organization?.organizationDetailTab)
   const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
   const notification = useAppSelector(state => (state?.notification?.setNotification))
-   const { data: adminData,isLoading: isloadingAdmin } = useViewAllAdminsInOrganizationQuery(
+   const { data: adminData,isLoading: isloadingAdmin,isFetching } = useViewAllAdminsInOrganizationQuery(
     {
       organizationId: organizationId,
       pageNumber: page,
@@ -63,6 +66,9 @@ const OrganizationDetails = () => {
     },
     { skip: organizationDetailTab !== "admins"}
   );
+   
+   const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+
   const { data: organizationDetails, isLoading } = useGetOrganizationDetailsQuery(
     {
       id: organizationId,
@@ -72,30 +78,30 @@ const OrganizationDetails = () => {
 
   const param = {
     organizationId: organizationId,
-    name:searchTerm,
+    name:debouncedSearchTerm,
     pageNumber: page,
     pageSize: 300,
   }
 
-  const {data: searchResult,isLoading: isloadingSearch} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !searchTerm})
+  const {data: searchResult,isLoading: isloadingSearch, isFetching:isSearchFetching} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !debouncedSearchTerm})
 
   const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);
 
     useEffect(() => {
-      if (searchTerm && searchResult && searchResult.data) {
+      if (debouncedSearchTerm && searchResult && searchResult.data) {
         const admins = searchResult?.data?.body
         setAdminList(admins);
         setPageNumber(searchResult?.data?.pageNumber)
         setTotalPage(searchResult?.data?.totalPages)
         hasNextPage(searchResult?.data?.hasNextPage)
-      } else if (!searchTerm && adminData && adminData?.data) {
+      } else if (!debouncedSearchTerm&& adminData && adminData?.data) {
         const admins = adminData?.data?.body;
         setAdminList(admins);
         setPageNumber( adminData?.data?.pageNumber)
         setTotalPage(adminData?.data?.totalPages)
         hasNextPage(adminData?.data?.hasNextPage)
       }
-    },[searchTerm, searchResult,adminData]);
+    },[debouncedSearchTerm, searchResult,adminData]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value);
@@ -411,6 +417,10 @@ const OrganizationDetails = () => {
               gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             }}
           >
+            {
+               !isTyping && debouncedSearchTerm  && adminList.length === 0?  <div>
+                 <SearchEmptyState icon={MdSearch} name={"Search"} />
+               </div> :
             <Table
               tableData={adminList}
               tableHeader={adminsHeader}
@@ -427,8 +437,9 @@ const OrganizationDetails = () => {
               pageNumber={page}
               setPageNumber={setPageNumber}
               totalPages={totalPage}
-              isLoading={isloadingAdmin || isloadingSearch}
+              isLoading={isloadingAdmin || isloadingSearch || isFetching || isSearchFetching}
             />
+            }
           </div>
 
           {/* <InviteAdminDialog

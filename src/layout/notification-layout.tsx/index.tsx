@@ -19,6 +19,7 @@ import {useAppSelector} from "@/redux/store";
 import {useToast} from "@/hooks/use-toast"
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface Props{
     children: ReactNode
@@ -57,29 +58,31 @@ function NotificationLayout({children}: Props) {
        const [searchHasNextPage,setSearchHasNextPage] = useState(false)
        const [pageSearchNumber,setSearchPageNumber] = useState(0)
        const [isPaginationLoading, setIsPaginationLoading] = useState(false);
-       const [isTyping, setIsTyping] = useState(false);
+      //  const [isTyping, setIsTyping] = useState(false);
        const [totalPage,setTotalPage] = useState(0)
        const [totalSearchPage,setTotalSearchPage] = useState(0)
 
+       const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
-    function useDebounce<T>(value: T, delay: number): T {
-      const [debouncedValue, setDebouncedValue] = useState(value);
-    
-      useEffect(() => {
-        const timer = setTimeout(() => {
-          setDebouncedValue(value);
-          setIsTyping(false);
-        }, delay);
-    
-        return () => {
-          clearTimeout(timer);
-        };
-      }, [value, delay]);
-    
-      return debouncedValue;
-    }
 
-    const debouncedSearchTerm = useDebounce(searchTerm, 1000);
+    // function useDebounce<T>(value: T, delay: number): T {
+    //   const [debouncedValue, setDebouncedValue] = useState(value);
+    
+    //   useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //       setDebouncedValue(value);
+    //       setIsTyping(false);
+    //     }, delay);
+    
+    //     return () => {
+    //       clearTimeout(timer);
+    //     };
+    //   }, [value, delay]);
+    
+    //   return debouncedValue;
+    // }
+
+    // const debouncedSearchTerm = useDebounce(searchTerm, 1000);
 
 
     const param = {
@@ -165,7 +168,6 @@ function NotificationLayout({children}: Props) {
 
            const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                       setSearchTerm(event.target.value);
-                      setIsTyping(true);
                   };
 
                const handleLeftChange = () => {
@@ -205,11 +207,14 @@ function NotificationLayout({children}: Props) {
                         selectedRows.has(item.id)
                       );
                       
-                      if(selectAll || allItemsOnPageSelected) {
+                      if(pageSearchNumber > 0 && (selectAll || allItemsOnPageSelected) ){
                         const newPageNumber = Math.max(0, pageSearchNumber - 1);
-                    setSearchPageNumber(newPageNumber);
+                        setSearchPageNumber(newPageNumber);
                     
                     await new Promise(resolve => setTimeout(resolve, 600));
+                       if(totalNotification === Number(totalSearchedNotification)){
+                           setPageNumber(0)
+                       }
                       }
                     }
                     setSelectAll(false)
