@@ -200,7 +200,7 @@ const currentTabState = tabStates[cohortTab];
             hasNextPage:cohortsByProgram?.data.hasNextPage
         }
     }));
-     } }, [cohortsByProgram]);
+     } }, [cohortsByProgram,cohortTab]);
 
      const loadMore = () => {
       if (!isFetching && hasNextPage) {

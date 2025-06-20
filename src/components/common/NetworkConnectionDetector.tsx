@@ -17,7 +17,7 @@ const NetworkConnectionDetector = ({children}: props) => {
                 description: `No internet connection`,
             })
         }
-    }, [isOnline]);
+    }, [isOnline,toast]);
 
      function useOnlineStatus() {
         const isOnline = useSyncExternalStore(subscribe, () => navigator.onLine, () => true);
