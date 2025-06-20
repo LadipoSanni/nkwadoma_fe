@@ -58,6 +58,9 @@ function NotificationLayout({children}: Props) {
        const [pageSearchNumber,setSearchPageNumber] = useState(0)
        const [isPaginationLoading, setIsPaginationLoading] = useState(false);
        const [isTyping, setIsTyping] = useState(false);
+       const [totalPage,setTotalPage] = useState(0)
+       const [totalSearchPage,setTotalSearchPage] = useState(0)
+
 
     function useDebounce<T>(value: T, delay: number): T {
       const [debouncedValue, setDebouncedValue] = useState(value);
@@ -107,10 +110,11 @@ function NotificationLayout({children}: Props) {
           setSearchHasNextPage(searchData?.data?.hasNextPage)
           setSearchPageNumber(searchData?.data?.pageNumber)
           setTotalSearchedNotification(searchData?.data?.totalElement)
+          setTotalSearchPage(searchData?.data?.totalPages)
           setActiveNotificationId("")
         } 
         else  if(!debouncedSearchTerm && data && data?.data){
-           
+             setTotalPage(data?.data?.totalPages)
              setHasNextPage(data?.data?.hasNextPage)
              setPageNumber(data?.data?.pageNumber)
              setActiveNotificationId("")
@@ -122,7 +126,10 @@ function NotificationLayout({children}: Props) {
           if (data || searchData) {
             setIsPaginationLoading(false); 
           }
-        }, [data, searchData]);
+         if(!searchTerm){
+           setSearchPageNumber(0)
+         }
+        }, [data, searchData,searchTerm]);
  
         const getData = (): notificationProp[] => {
           if (!data?.data?.body) return [];
@@ -192,6 +199,19 @@ function NotificationLayout({children}: Props) {
                 try{
                   const deleteNotifications = await deleteNotification(ids).unwrap()
                  if (searchTerm && searchData?.data?.body && deleteNotifications) {
+                    if((pageSearchNumber + 1) === totalSearchPage ){
+                      const currentPageItems = getData();
+                      const allItemsOnPageSelected = currentPageItems.every(item => 
+                        selectedRows.has(item.id)
+                      );
+                      
+                      if(selectAll || allItemsOnPageSelected) {
+                        const newPageNumber = Math.max(0, pageSearchNumber - 1);
+                    setSearchPageNumber(newPageNumber);
+                    
+                    await new Promise(resolve => setTimeout(resolve, 600));
+                      }
+                    }
                     setSelectAll(false)
                     setSelectedRows(new Set());
                     refetch()
@@ -204,6 +224,16 @@ function NotificationLayout({children}: Props) {
                     router.push("/notifications/notification")
                   } else 
                    if(deleteNotifications){
+                    if((pageNumber + 1) === totalPage) {
+                      const currentPageItems = getData();
+                      const allItemsOnPageSelected = currentPageItems.every(item => 
+                        selectedRows.has(item.id)
+                      );
+                      
+                      if((pageNumber > 0) && (selectAll || allItemsOnPageSelected)) {
+                        setPageNumber(pageNumber - 1);
+                      }
+                    }
                     setSelectAll(false)
                     setSelectedRows(new Set());
                     setTimeout(() => {
@@ -223,6 +253,8 @@ function NotificationLayout({children}: Props) {
                 })
                 }
             }
+
+            console.log("The totalElement: ",totalSearchedNotification)
 
             const handleTabClick = (id: string) => {
                 router.push(`/notifications/notification/${id}`);

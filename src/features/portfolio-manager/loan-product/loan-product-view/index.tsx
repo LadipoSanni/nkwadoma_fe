@@ -170,7 +170,7 @@ const LoanProductPage = () => {
                         <div className={`flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40`}>
                             <SearchEmptyState name={"Loan product"} icon={MdSearch} />
                         </div>
-                ) : allLoanee.length > 0 ? (
+                ) :  (
                     <Table
                         tableData={allLoanee}
                         handleRowClick={handleRowClick}
@@ -191,7 +191,7 @@ const LoanProductPage = () => {
                         pageNumber={searchTerm !== ""? seachPageNumber :  pageNumber}
                         setPageNumber={searchTerm !== ""? setSearchPageNumber : setPageNumber}
                     />
-                ) : ""}
+                ) }
             </div>
             <div className={`md:max-w-sm`} id={`CreateLoanProduct`}>
                 <TableModal
