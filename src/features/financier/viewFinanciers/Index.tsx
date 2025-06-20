@@ -79,8 +79,8 @@ const ViewFinanciers = () => {
     }
 
 
-    const {data, isLoading, refetch} = useGetAllActiveAndInvitedFinanciersQuery(param)
-    const {data:searchData, isLoading: searchIsLoading} = useSearchFinancierQuery({name:searchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !searchTerm})
+    const {data, isLoading, refetch,isFetching} = useGetAllActiveAndInvitedFinanciersQuery(param)
+    const {data:searchData, isLoading: searchIsLoading,isFetching: isSearchFetching} = useSearchFinancierQuery({name:searchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !searchTerm})
 
     useEffect(()=>{
         if(searchTerm && searchData && searchData?.data){
@@ -223,7 +223,8 @@ const ViewFinanciers = () => {
                                     pageNumber={currentTabState.pageNumber}
                                     setPageNumber={handlePageChange}
                                     totalPages={currentTabState.totalPages}
-                                    isLoading={isLoading || searchIsLoading}
+                                    isLoading={isLoading || searchIsLoading || isFetching || isSearchFetching}
+                                    tableCellStyle={'h-12'}
                                 />
                             )}
                         </div>
