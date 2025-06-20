@@ -13,9 +13,10 @@ export const unauthorizedApis = createApi({
             })
         }),
         refreshToken: builder.mutation({
-            query: (rrefreshToken:string| undefined) => ({
-                url: ``,
-                method: 'POST'
+            query: (data) => ({
+                url: `/auth/refresh-token`,
+                method: 'POST',
+                body: data
             })
 
         }),
@@ -24,4 +25,4 @@ export const unauthorizedApis = createApi({
     })
 })
 
-export const  {useViewPublicInvestmentDetailsQuery} = unauthorizedApis;
+export const  {useViewPublicInvestmentDetailsQuery, useRefreshTokenMutation} = unauthorizedApis;
