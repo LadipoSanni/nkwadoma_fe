@@ -17,7 +17,7 @@ export async  function refreshTokenAction (token?: string) {
          await axios.post(url, {refreshToken: token})
              .then((response ) => {
                  const json =  response;
-                 console.log('json', json);
+                 // console.log('json', json);
                  setItemSessionStorage("access_token", json?.data?.access_token);
                  setItemSessionStorage("refresh_token",json?.data?.refresh_token)
              }).catch((error) => {
