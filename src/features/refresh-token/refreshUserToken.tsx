@@ -1,39 +1,55 @@
+import React, {useEffect} from "react";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
-import {redirect} from "next/navigation";
-import {useToast} from "@/hooks/use-toast";
+// import {redirect} from "next/navigation";
+// import {useToast} from "@/hooks/use-toast";
 import {isTokenExpired} from "@/utils/GlobalMethods";
-import {clearData} from "@/utils/storage";
-import {persistor} from "@/redux/store";
-import {useLogoutMutation} from "@/service/users/api";
+import {clearData, getItemSessionStorage, setItemSessionStorage} from "@/utils/storage";
+// import {persistor} from "@/redux/store";
+// import {useLogoutMutation} from "@/service/users/api";
+// import {useEffect} from "react";
+import {useRefreshTokenMutation} from "@/service/unauthorized/action";
 
-const RefreshUserToken = () => {
-    const refreshToken = getUserDetailsFromStorage('refresh_token' )
+
+interface Props {
+    children: React.ReactNode;
+}
+const RefreshUserToken = ({children}: Props) => {
+    const refreshToken = getUserDetailsFromStorage('refresh_token')
     const [refreshUserToken ] = useRefreshTokenMutation()
+    const  storedAccessToken  = getItemSessionStorage('access_token');
+    const isAccessTokenExpired = isTokenExpired(storedAccessToken || '')
+    // const response2 = isTokenExpired(refreshToken || '')
 
-    console.log('token',token)
-    console.log('refresh_token',refreshToken)
-    const {toast} = useToast()
-    const response = isTokenExpired(token ? token : '')
-    const response2 = isTokenExpired(refreshToken ? refreshToken : '')
-    console.log('response',response)
-    console.log('response2',response2)
+
     useEffect(() => {
-        checkUserToken(response)
-    }, [response, response2,token,refreshToken]);
+        const tryRefreshToken = async () => {
+            if (isAccessTokenExpired) {
+                const data = {
+                    refreshToken: refreshToken,
+                };
 
-    const checkUserToken = (isTokenExpired: boolean) => {
-        if (isTokenExpired ) {
-            logout({})
-            toast({
-                description: "Session expired. Please login again",
-                status: "error",
-            });
-            clearData()
-            persistor.purge();
-            redirect("/auth/login")
-        }
-    }
-    return null
+                try {
+                    const response = await refreshUserToken(data);
+                    const accessToken = response?.data?.data?.access_token;
+                    const refreshToken = response?.data?.data?.refresh_token;
+                    setItemSessionStorage("access_token", accessToken);
+                    setItemSessionStorage("refresh_token", refreshToken);
+                    console.log('refresh user response:', response);
+                } catch (error) {
+                    console.error('Failed to refresh token', error);
+                }
+            }
+        };
+
+        tryRefreshToken();
+    }, [isAccessTokenExpired, refreshToken, storedAccessToken]);
+
+    return (
+        <div>
+            {children}
+        </div>
+    )
+
 };
 
 export default RefreshUserToken;
