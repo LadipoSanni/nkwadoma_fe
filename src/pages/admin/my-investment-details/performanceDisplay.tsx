@@ -37,7 +37,7 @@ const PerformanceDisplay = ({barChartTabContent,onChangeDate,currentInvestmentYe
                                        tabContent={barChartTabContent} handleChange={handleBarChartTabChange}/>
                         </div>
 
-                        <MeedlBarChart dataKey={'value'} maxWidth={'100%'} maxHeight={'30rem'} chartData={chartData} componentId={'details'}/>
+                        <MeedlBarChart dataKey={'value'}  chartData={chartData} componentId={'details'}/>
                     </div>
                 </div>
             </div>

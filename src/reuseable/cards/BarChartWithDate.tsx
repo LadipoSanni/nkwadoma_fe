@@ -26,8 +26,10 @@ const BarChartWithDate = ({id,onChange,currentYear, years, cardTile, displayDate
                         <TabSwitch componentId={'myInvestmentBarChartTabSwitch'} currentTab={currentMonthDate}
                                    tabContent={displayDates} handleChange={changeCurrentMonth}/>
                     </div>
+                    {/*<div className={`w-full md:w-full `}>*/}
+                        <MeedlBarChart dataKey={'value'}  chartData={chartData} componentId={'details'}/>
+                    {/*</div>*/}
 
-                    <MeedlBarChart dataKey={'value'} maxWidth={'100%'} maxHeight={'30rem'} chartData={chartData} componentId={'details'}/>
                 </div>
             </div>
         </div>
