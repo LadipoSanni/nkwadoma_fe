@@ -41,7 +41,7 @@ const RefreshUserToken = ({children}: Props) => {
                     if (accessToken && newRefreshToken) {
                         sessionStorage.setItem('access_token', accessToken);
                         sessionStorage.setItem('refresh_token', newRefreshToken);
-                        console.log('Token refreshed:', response);
+                        // console.log('Token refreshed:', response);
 
                         // Optionally, update your app state here or trigger re-render
                     }
@@ -64,7 +64,7 @@ const RefreshUserToken = ({children}: Props) => {
                     if (accessToken && newRefreshToken) {
                         sessionStorage.setItem('access_token', accessToken);
                         sessionStorage.setItem('refresh_token', newRefreshToken);
-                        console.log('Token refreshed immediately:', response);
+                        // console.log('Token refreshed immediately:', response);
                     }
                 } catch (error) {
                     console.error('Failed to refresh token immediately', error);
