@@ -20,7 +20,6 @@ import { financierApi } from '@/service/admin/financier';
 import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
 import {marketplaceApi} from "@/service/financier/marketplace";
 import {portfolioOverviewApi} from '@/service/admin/overview'
-import {publicInvestmentApi} from "@/service/unauthorized/view-investment";
 import { loanBookApi } from '@/service/admin/loan_book';
 import {unauthorizedApis} from "@/service/unauthorized/action";
 
