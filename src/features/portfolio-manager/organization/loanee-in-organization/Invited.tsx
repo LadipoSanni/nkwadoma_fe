@@ -7,7 +7,8 @@ function Invited() {
       <Loanees
         tabType='Invited'
         // uploadedStatus="INVITED"
-         uploadedStatus="ADDED"
+         uploadedStatus="INVITED"
+         condition= 'ARCHIVE'
       />
     </div>
   )

@@ -212,7 +212,7 @@ const ViewFinanciers = () => {
                                     tableData={financiers}
                                     tableHeader={financierHeader}
                                     handleRowClick={handleRowClick}
-                                    tableHeight={58}
+                                    tableHeight={55}
                                     icon={MdOutlineBusinessCenter }
                                     sideBarTabName='financier'
                                     condition={true}
@@ -235,7 +235,7 @@ const ViewFinanciers = () => {
                             tableData={financiers}
                             tableHeader={financierHeader}
                             handleRowClick={handleRowClick}
-                            tableHeight={58}
+                            tableHeight={55}
                             icon={MdOutlineBusinessCenter }
                             sideBarTabName='financier'
                             condition={true}
@@ -246,7 +246,8 @@ const ViewFinanciers = () => {
                             pageNumber={currentTabState.pageNumber}
                             setPageNumber={handlePageChange}
                             totalPages={currentTabState.totalPages}
-                            isLoading={isLoading || searchIsLoading}
+                            isLoading={isLoading || searchIsLoading || isFetching || isSearchFetching}
+                            tableCellStyle={'h-12'}
                         />
 
                     </TabsContent>
