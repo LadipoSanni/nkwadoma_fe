@@ -19,6 +19,7 @@ import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 import { store } from '@/redux/store'
 import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization} from '@/redux/slice/create/cohortSlice'
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 
 
@@ -152,7 +153,7 @@ useEffect(() => {
      if(userRole === "PORTFOLIO_MANAGER"){
          const cohort = {name: String(row?.name),id: String(row?.id)}
          store.dispatch(setSelectedCohortInOrganization(cohort))
-      router.push('/organizations/loanees/uploaded')
+         router.push('/organizations/loanees/uploaded')
      }else {
       router.push('/cohort/cohort-details')
      }
@@ -167,7 +168,9 @@ useEffect(() => {
       setItemSessionStorage("programsId", String(row.programId))
       store.dispatch(setcohortId(String(row.id)))
       if(userRole === "PORTFOLIO_MANAGER"){
-        router.push('')
+        const cohort = {name: String(row?.name),id: String(row?.id)}
+        store.dispatch(setSelectedCohortInOrganization(cohort))
+        router.push('/organizations/loanees/uploaded')
        }else {
         router.push('/cohort/cohort-details')
        }
@@ -198,7 +201,7 @@ useEffect(() => {
   
   
   const ProgramHeader = [
-    { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => <div className="truncate">{row.name}</div> },
+    { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => <div className="truncate">{capitalizeFirstLetters(row.name?.toString())}</div> },
     { title: <div className='relative lg:right-2 lg:left-2'>Start date</div>, sortable: true, id: 'startDate', selector: (row:TableRowData ) =>(
       <div className="truncate">{formatMonthInDate(row?.startDate)}</div>
     )},
