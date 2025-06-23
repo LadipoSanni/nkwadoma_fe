@@ -2,11 +2,13 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
 interface authSlice {
-    resetPasswordUserInput : string
+    resetPasswordUserInput : string,
+    error: string,
 }
 
 const initialState : authSlice = {
-    resetPasswordUserInput: ''
+    resetPasswordUserInput: '',
+    error: '',
 }
 
 export const authSlice = createSlice({
@@ -15,9 +17,12 @@ export const authSlice = createSlice({
     reducers: {
         setUserPasswordInput: (state, action: PayloadAction<string>) =>{
          state.resetPasswordUserInput = action.payload
+        },
+        setError: (state, action: PayloadAction<string>) =>{
+            state.error = action.payload
         }
     }
 })
 
-export const  {setUserPasswordInput} = authSlice.actions;
+export const  {setUserPasswordInput, setError} = authSlice.actions;
 export default authSlice.reducer;
