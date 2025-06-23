@@ -23,9 +23,10 @@ interface VerificationSuccessDialogProps {
     buttonText: string;
     routeToOverview?: boolean;
     stopCamera?: () => void;
+    showWarningIcon?: boolean;
 }
 
-const SuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ open, onClose, onContinue, title, message, buttonText, routeToOverview, stopCamera }) => {
+const SuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ showWarningIcon,open, onClose, onContinue, title, message, buttonText, routeToOverview, stopCamera }) => {
     const dispatch = useDispatch();
     const router = useRouter();
 
@@ -47,7 +48,11 @@ const SuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ open, onClose
             <DialogContent className={'max-w-[350px] md:max-w-[416px] [&>button]:hidden gap-5 py-5 px-5'}>
                 <DialogHeader>
                     <DialogTitle className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>
-                        <Image id={'successIcon'} data-testid={'successIcon'} width={70} height={70} src={'/Icon - Success (1).svg'} alt={'success icon'} priority={true} />
+                        {showWarningIcon ?
+                            <Image id={'warningIcon'} data-testid={'warningIcon'} width={70} height={70} src={'/Icon - Warning.svg'} alt={'warning icon'} priority={true} />
+                        :
+                            <Image id={'successIcon'} data-testid={'successIcon'} width={70} height={70} src={'/Icon - Success (1).svg'} alt={'success icon'} priority={true} />
+                        }
                     </DialogTitle>
                 </DialogHeader>
                 <section className={`${inter.className} grid gap-7`}>

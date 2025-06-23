@@ -49,8 +49,10 @@ const ConfirmLoanReferralAcceptance = () => {
                     store.dispatch(setLoaneeIdentityVerifiedStatus(true))
                     router.push('/overview');
                 }}
-                title={'Acceptance process successful'}
-                message={'Congratulations! You have successfully completed the loan referral acceptance process'}
+                showWarningIcon={true}
+                title={'Acceptance process under review'}
+                message={'Your application is under review'}
+                // message={'Congratulations! You have successfully completed the loan referral acceptance process'}
                 buttonText={'Go to dashboard'}
                 routeToOverview={true}
             />
