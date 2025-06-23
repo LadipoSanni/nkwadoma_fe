@@ -1,6 +1,7 @@
 
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
-import {getToken} from "./action";
+// import {getToken} from "./action";
+import {getItemSessionStorage} from "@/utils/storage";
 
 
 
@@ -13,9 +14,9 @@ export const customFetchBaseQuery = fetchBaseQuery({
     fetchFn: typeof window === 'undefined'
         ? (fetch as unknown as typeof globalThis.fetch)
         : undefined,
-    prepareHeaders: async (headers,{ endpoint }) => {
-        try {
-            const token = await getToken();
+    prepareHeaders:  (headers,{ endpoint }) => {
+        // try {
+            const token = getItemSessionStorage("access_token")
 
             if (token) {
                 headers.set('authorization', `Bearer ${token}`);
@@ -26,9 +27,9 @@ export const customFetchBaseQuery = fetchBaseQuery({
                     headers.set('Content-Type', 'application/json');
                 }
             }
-        } catch (error) {
-            console.error('Error fetching token:', error);
-        }
+        // } catch (error) {
+        //     console.error('Error fetching token:', error);
+        // }
 
         return headers;
     },
