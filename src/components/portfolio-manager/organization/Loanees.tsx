@@ -233,14 +233,15 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
             };
             
             const result = await updateLoaneeStatus(formData).unwrap();
-            
-            toast({
-              description: `Loanee archived successfully`,
-              status: "success",
-            });
-            
-            setSelectedRows(new Set()); 
-            router.push("/organizations/loanees/archived");
+            if(result){
+              toast({
+                description: `Loanee archived successfully`,
+                status: "success",
+              });
+              setSelectedRows(new Set()); 
+              router.push("/organizations/loanees/archived");
+            }
+           
           } catch (err) {
             const error = err as ApiError;
             toast({ description: error?.data?.message, status: "error" });
