@@ -31,7 +31,7 @@ import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
 import {marketplaceApi} from "@/service/financier/marketplace";
 import {portfolioOverviewApi} from '@/service/admin/overview'
 import kycFormReducer from "@/redux/slice/kyc/kycFormSlice";
-import {publicInvestmentApi} from "@/service/unauthorized/view-investment";
+import {unauthorizedApis} from "@/service/unauthorized/action";
 import OrganizationReducer from "./slice/organization/organization"
 import { loanBookApi } from '@/service/admin/loan_book';
 import CsvReducer from "@/redux/slice/csv/csv"
@@ -70,7 +70,7 @@ const appReducer = combineReducers({
     [financierOnboardingAndDashboardApi.reducerPath]: financierOnboardingAndDashboardApi.reducer,
     [marketplaceApi.reducerPath]: marketplaceApi.reducer,
     [portfolioOverviewApi.reducerPath]: portfolioOverviewApi.reducer,
-    [publicInvestmentApi.reducerPath]: publicInvestmentApi.reducer,
+    [unauthorizedApis.reducerPath]: unauthorizedApis.reducer,
     [loanBookApi.reducerPath]: loanBookApi.reducer
 });
 

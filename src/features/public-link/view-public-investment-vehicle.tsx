@@ -5,7 +5,7 @@ import Image from "next/image";
 import {cabinetGroteskMediumBold600, inter} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import {useRouter, useSearchParams} from "next/navigation";
-import {useViewPublicInvestmentDetailsQuery} from "@/service/unauthorized/view-investment";
+import {useViewPublicInvestmentDetailsQuery} from "@/service/unauthorized/action";
 import {formatAmount} from "@/utils/Format";
 import MarketDetailsSkeleton from '@/reuseable/Skeleton-loading-state/MarketDetails';
 import LoanEmptyState from "@/reuseable/emptyStates/Index";
