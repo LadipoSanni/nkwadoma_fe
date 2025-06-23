@@ -158,7 +158,8 @@ function CheckBoxTable<T extends TableRowData>({
     setSelectAll(!selectAll);
   };
 
-  const handleRowSelect = (rowIndex: string) => {
+  const handleRowSelect = (rowIndex: string, e: React.MouseEvent | React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     const updatedSelectedRows = new Set(selectedRows);
     if (updatedSelectedRows.has(rowIndex)) {
       updatedSelectedRows.delete(rowIndex);
@@ -292,7 +293,10 @@ function CheckBoxTable<T extends TableRowData>({
                             type="checkbox"
                             id={`rowCheckBox`}
                             checked={selectedRows.has(String(row.id))}
-                            onChange={() => handleRowSelect(String(row.id))}
+                            onChange={(e) => {
+                              e.stopPropagation(); 
+                              handleRowSelect(String(row.id), e); 
+                            }}
                             className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md `}
                           />
                         </TableCell>
@@ -458,7 +462,11 @@ function CheckBoxTable<T extends TableRowData>({
                             type="checkbox"
                             id={`rowCheckBoxMobile`}
                             checked={selectedRows.has(String(row.id))}
-                            onChange={() => handleRowSelect(String(row.id))}
+                            onChange={(e) => {
+                              e.stopPropagation(); 
+                              handleRowSelect(String(row.id), e); 
+                            }}
+                            onClick={(e) => e.stopPropagation()}
                             className={`border-2 border-[#D7D7D7] accent-meedlBlue rounded-md`}
                           />
                         </TableCell>
