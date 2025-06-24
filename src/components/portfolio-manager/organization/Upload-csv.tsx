@@ -12,7 +12,7 @@ interface Props{
 setIsOpen : (e: boolean) => void;
 loaneeRefetch?: (() => void) | null;
 isLoaneeEmpty?: boolean;
-isInvitedLoanee?: boolean;
+// isInvitedLoanee?: boolean;
 }
 
 const tabData = [
@@ -21,7 +21,7 @@ const tabData = [
    
 ];
 
-function UploadCSV({setIsOpen,loaneeRefetch,isLoaneeEmpty,isInvitedLoanee}:Props) {
+function UploadCSV({setIsOpen,loaneeRefetch,isLoaneeEmpty}:Props) {
     const tabType = useAppSelector(state => state?.csv?.uploadCsvTab)
 
     const tabContent = [
@@ -67,7 +67,7 @@ function UploadCSV({setIsOpen,loaneeRefetch,isLoaneeEmpty,isInvitedLoanee}:Props
                                    data-testid={`tabDataName${tab.value}`} 
                                    value={tab.value} 
                                    key={index}
-                                   disabled={tab.value === 'repayment' && isLoaneeEmpty  && tab.value === 'repayment' &&  isInvitedLoanee }
+                                   disabled={tab.value === 'repayment' && isLoaneeEmpty  && tab.value === 'repayment'  }
                                >
                                    {tab.name}
                                </TabsTrigger>
