@@ -47,7 +47,7 @@ function OrganizationLoaneeLayout({children}:props) {
       </div> 
      </div>
         <div>
-         <TabSwitch tabData={loaneeTabData} defaultTab='/organizations/loanees/uploaded'>
+         <TabSwitch tabData={loaneeTabData} defaultTab='/organizations/loanees/uploaded' disabledTabs={['/organizations/loanees/archived','/organizations/loanees/invited']}>
          {children}
          </TabSwitch>
         </div>
