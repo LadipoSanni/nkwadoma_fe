@@ -11,7 +11,6 @@ export default function SystemLogout() {
     const [logout] = useLogoutMutation()
     const {toast} = useToast()
 
-    // console.log('pathname', pathname)
 
     const logouts = async() => {
         if (!pathname?.includes('/auth') ) {
