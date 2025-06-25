@@ -64,7 +64,7 @@ const LoaneeOnboarding = () => {
             // }
         }
 
-    }, [data, loanReferralDetailsIsLoading, currentStep]);
+    }, [data, loanReferralDetailsIsLoading, currentStep,dispatch,router]);
 
 
 

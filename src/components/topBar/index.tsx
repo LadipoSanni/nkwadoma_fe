@@ -111,7 +111,7 @@ const TopBar = () => {
                           <div className='relative left-3 md:left-0'>
                             <Button
                             className='text-black shadow-none mt-1 cursor-auto'
-                           
+                            onClick={handleNotification}
                             >
                                 {
                                  isNotificationPage?
@@ -126,7 +126,7 @@ const TopBar = () => {
                                 style={{ width: '22px',height: '21px',stroke: '#000', strokeWidth: '0.6'}}
                                />
                                <div className='absolute'
-                                 onClick={handleNotification}
+                                
                                >
                                 { data === undefined || data?.data?.unreadCount === null ? "" :
                                 (data?.data?.unreadCount  === 0? "" : <Badge
