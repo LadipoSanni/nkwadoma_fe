@@ -6,12 +6,15 @@ interface SearchInputProps {
     id: string,
     value: string,
     onChange: React.ChangeEventHandler<HTMLInputElement>;
+    style?: string
+    testId?: string
+    
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({id,value,onChange}: SearchInputProps) => {
+const SearchInput: React.FC<SearchInputProps> = ({id,value,onChange,style,testId}: SearchInputProps) => {
     return (
         <div
-            className={`${inter.className} md:w-[20.25rem] w-full text-[14px] h-[2.8125rem] flex items-center gap-2 border border-neutral650 rounded-md p-3`}
+            className={`${inter.className} ${style} md:w-[20.25rem] w-full text-[14px] h-[2.8125rem] flex items-center gap-2 border border-neutral650 rounded-md p-3`}
             id={`${id}Block`}>
             <MdSearch className="text-neutral950 w-5 h-5"/>
             <input
@@ -21,6 +24,8 @@ const SearchInput: React.FC<SearchInputProps> = ({id,value,onChange}: SearchInpu
                 className="flex-grow outline-none bg-transparent h-full text-grey450"
                 value={value}
                 onChange={onChange}
+                data-testid={testId}
+                
             />
         </div>
     );

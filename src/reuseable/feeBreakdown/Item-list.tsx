@@ -74,11 +74,11 @@ const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, s
     };    return (
         <>
             {items.map((item, index) => (
-                <div key={index} id={`itemContainer${index}`} className="flex gap-5">
+                <div key={index} id={`itemContainer${index}`} className="md:grid grid-cols-2 gap-4 ">
                     <div className="grid gap-2">
                         <Input type="text" id={`itemInputField${index}`} name={`itemName-${index}`}
                                placeholder="Item Name"
-                               className="p-4 focus-visible:outline-0 md:w-[14.4375rem] w-[6.25rem] shadow-none focus-visible:ring-transparent rounded-md h-[3.10rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"
+                               className="p-4 focus-visible:outline-0  w-full shadow-none focus-visible:ring-transparent rounded-md h-[3.10rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650"
                                value={item.itemName} onChange={(e) => {
                             const newItems = [...items];
                             newItems[index].itemName = e.target.value;
@@ -93,23 +93,15 @@ const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, s
 
                         {errors[index] && <span className="text-[14px] text-red-500">{errors[index]}</span>}
                     </div>
-                    <div className="grid gap-2">
-                        <div className="flex gap-2">
-                            {/* <Select>
-                            <SelectTrigger id={`itemSelectTrigger${index}`} className={'mt-0 mb-0 min-w-[78px]'}>
-                                <SelectValue placeholder="NGN">NGN</SelectValue>
-                            </SelectTrigger>
-                            <SelectContent id={`itemSelectContent${index}`}>
-                                <SelectItem value="NGN">NGN</SelectItem>
-                            </SelectContent>
-                        </Select> */}
+                    {/* <div className="grid gap-2"> */}
+                        <div className="flex gap-2 mt-2 md:mt-0">
                             <CurrencySelectInput
                                 selectedcurrency={item.currency || selectCurrency}
                                 setSelectedCurrency={(currency) => handleCurrencyChange(index, currency)}
                                 className="mt-0 mb-0 min-w-[78px] h-[3.10rem]"
                             />
                             <div
-                                className={`flex justify-between gap-2 items-center ${
+                                className={`flex  gap-2 items-center ${
                                     errors[index] === 'Use letters or numbers, and include at least one letter'
                                         ? 'mb-12'
                                         : errors[index] === 'Special characters are not allowed' || errors[index] === 'Only numbers are not allowed'
@@ -124,15 +116,21 @@ const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, s
                                     id={`itemAmount${index}`}
                                     name={`itemAmount-${index}`}
                                     placeholder="0.00"
-                                    className="p-4 focus-visible:outline-0 w-[6.25rem] md:w-[8.25rem] shadow-none focus-visible:ring-transparent rounded-md h-[3.10rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    className="p-4 focus-visible:outline-0 md:w-[6.5rem]  lg:w-[8.5rem] w-full shadow-none focus-visible:ring-transparent rounded-md h-[3.10rem] font-normal leading-[21px] text-[14px] placeholder:text-grey150 text-black500 border border-solid border-neutral650 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     value={item.itemAmount}
                                     defaultValue="0.00"
-                                    // onValueChange={(values) => {
-                                    //     const newItems = [...items];
-                                    //     newItems[index].itemAmount = values.value;
-                                    //     setItems(newItems);
-                                    // }}
                                     onValueChange={(values) => { const newItems = [...items]; const amount = values.value; 
+
+                                        if (amount.includes('-')) {
+                                            setErrors(prevErrors => {
+                                              const newErrors = [...prevErrors];
+                                              newErrors[index] = 'Negative values are not allowed';
+                                              return newErrors;
+                                            });
+                                            setIsItemListValid(false);
+                                            return; 
+                                          }
+                                      
                                          if (amount.length > 1 && amount.startsWith('0')) { 
                                             setErrors(prevErrors => { const newErrors = [...prevErrors]; newErrors[index] = 'Item amount cannot start with 0'; return newErrors; }); 
                                             setIsItemListValid(false); }
@@ -157,7 +155,7 @@ const ItemList: React.FC<ItemListProps> = ({items, setItems, handleDeleteItem, s
                                 }
                             </div>
                         </div>
-                    </div>
+                    {/* </div> */}
                 </div>
             ))}
         </>

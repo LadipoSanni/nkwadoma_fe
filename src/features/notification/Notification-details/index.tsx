@@ -1,0 +1,134 @@
+
+import React,{useEffect} from 'react'
+import {inter} from "@/app/fonts"
+import { Button } from '@/components/ui/button'
+import { getInitials } from '@/utils/GlobalMethods';
+import SkeletonforNotificationDetails from '@/reuseable/Skeleton-loading-state/Skeleton-for-notification-details';
+import BackButton from '@/components/back-button';
+import { useRouter } from 'next/navigation';
+import { useViewNotificationDetailsQuery } from '@/service/notification/notification_query';
+import {store} from "@/redux/store";
+import { setCurrentFinancierId} from '@/redux/slice/financier/financier';
+import { setNotification,resetNotification,setNotificationId } from '@/redux/slice/notification/notification';
+import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
+import { setOrganizationId,setOrganizationDetail} from '@/redux/slice/organization/organization';
+
+// interface NotificationDetailsPageProps{
+//     notification?: NotificationProps
+// }
+
+interface notificationIdProp {
+  notificationId: string;
+}
+
+function NotificationDetailPage({notificationId}: notificationIdProp) {
+  
+  const router = useRouter();
+  const handleBack = () => {
+    router.back()
+  }
+
+    useEffect(()=> {
+        store.dispatch(resetNotification())
+    })
+
+
+  const {data:notification,isLoading} = useViewNotificationDetailsQuery(notificationId,{skip: !notificationId})
+
+  const handleRoute = () => {
+      store.dispatch(setNotification("notification"))
+      store.dispatch(setNotificationId(notification?.data?.id))
+     if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
+        store.dispatch(setCurrentFinancierId(notification?.data?.contentId))
+        router.push("/funds/financier-details")
+     }else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE") {
+         store.dispatch(setMarketInvestmentVehicleId({marketInvestmentVehicleId:notification?.data?.contentId }))
+         router.push("/marketplace/details");
+     }else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION") {
+      store.dispatch(setOrganizationId(notification?.data?.contentId))
+      store.dispatch(setOrganizationDetail("details"))
+      router.push("/organizations/details");
+  }
+  }
+//LOAN_OFFER_DECISION
+   const buttonName = () => {
+    if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
+      return "financier"
+   } else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE"){
+      return "investment vehicle"
+   } else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION"){
+    return "organization"
+ }
+  
+   }
+
+
+  return (
+    <div className={`w-full pr-9 md:pr-16 py-4 px-4 md:px-0 ${inter.className}`}>
+
+      {!notificationId ? <div className='flex justify-center items-center'>Not found</div> : isLoading? <div><SkeletonforNotificationDetails/></div> :
+      <div>
+      <div className='md:hidden mt-3 mb-7'>
+        <BackButton 
+      id="notificationBackButton" 
+      handleClick={handleBack} textColor='' 
+      iconBeforeLetters={true}
+      text='Back'
+      />
+      </div>
+      <p className="font-medium">
+                    {notification?.data?.title}
+     </p>
+      <div className='text-[14px]'>
+                        <div className="flex items-center">
+                         <div className='flex gap-3 mt-5 mb-6'>
+                           <div className="w-8 h-8 bg-[#E7F5EC] text-[16px] text-[#085322] rounded-full flex items-center justify-center">
+                             <span className="text-sm font-medium">
+                               {getInitials(notification?.data?.senderFullName || "")}
+                             </span>
+                           </div>
+                            <div>
+                              <p className='text-[14px]'>
+                               {notification?.data?.senderMail}
+                               </p>
+                              <p className='text-[14px] text-[#475467]'>
+                               {notification?.data?.duration}
+                               </p>
+                            </div>
+                           </div>
+                         </div>
+                         <div className='mb-4'>
+                           Hello <span>
+                             {notification?.data?.firstName}
+                             </span>,
+                         </div>
+                        <div>
+                        <p className=" lowercase first-letter:uppercase">
+                         {/* {getPaginatedDatas.find((item) => item.type === activeTab)?.message} */}
+                         {notification?.data?.contentDetail}
+                         </p>
+                        </div>
+                        <div className='mt-4 mb-4'>
+                         {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"? (<p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>): ""}
+                         <p>If you have any question or further assistance, our customer service team is here to help you</p>
+                        </div>
+                         <div>
+                          {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"?
+                          <Button 
+                           onClick={handleRoute}
+                           className='bg-[#142854] hover:bg-[#142854] h-[45px] text-[14px]'
+                            // className='bg-[#F9F9F9] hover:bg-[#F9F9F9] text-grey100 h-[45px] text-[14px] cursor-none shadow-none'
+                           >
+                             View <span className='lowercase ml-1'> {buttonName()}</span>
+                             
+                           </Button>
+                           : notification?.data?.notificationFlag === null && "" }
+                         </div>
+                        </div>
+    </div>
+}
+    </div>
+  )
+}
+
+export default NotificationDetailPage;

@@ -1,0 +1,224 @@
+"use client"
+import React,{useState,useEffect} from 'react'
+import BackButton from '@/components/back-button';
+import {useAppSelector} from "@/redux/store";
+import { useRouter } from 'next/navigation';
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
+import { MdSearch } from 'react-icons/md'
+import Table from '@/reuseable/table/Table';
+import SearchInput from "@/reuseable/Input/SearchInput";
+import {formatMonthInDate} from '@/utils/Format';
+import {formatAmount} from '@/utils/Format';
+import {MdOutlinePayments} from 'react-icons/md';
+import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
+import { setCreateInvestmentField,setDraftId,clearDraftId} from '@/redux/slice/vehicle/vehicle';
+import {store} from "@/redux/store";
+import { setIsDraft,resetDraft } from '@/redux/slice/multiselect/vehicle-multiselect';
+
+interface TableRowData {
+    [key: string]: string | number | null | React.ReactNode;
+}
+
+interface investmentVehicleProps     {
+    id: string,
+    name: string,
+    investmentVehicleType: string,
+    mandate: string,
+    sponsors: string,
+    tenure: number,
+    size: number,
+    rate: number,
+    fundRaisingStatus?: string,
+    totalAmountInInvestmentVehicle: number,
+    amountRaised?: string,
+    amountDisbursed?: string,
+    amountAvailable?: string,
+    totalIncomeGenerated?: string,
+    netAssetValue?: string
+}
+
+
+
+function ViewDraft() {
+    const router = useRouter();
+    const vehicleType = useAppSelector(state => (state.vehicle?.vehicleType))
+    const investmentType = useAppSelector(state => (state?.vehicle?.setInvestmentVehicleType))
+    const [searchTerm, setSearchTerm] = useState("")
+    const [pageNumber, setPageNumber] = useState(0);
+     const [hasNextPage,setNextPage] = useState(false)
+     const [totalPage,setTotalPage] = useState(0)
+      const [investmentVehicleDraft, setinvestmentVehicleDraft] = useState<investmentVehicleProps[]>([]);
+      const param = {
+        investmentVehicleType: investmentType,
+        investmentVehicleStatus: "DRAFT",
+        pageSize: 10,
+        pageNumber: pageNumber
+    }
+    const {data: searchData} = useSearchInvestmentVehicleByNameAndTypeQuery({ investmentVehicleName: searchTerm,param},{skip: !searchTerm})
+    
+
+    const { data, isLoading} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery(
+            {
+                pageSize: 10,
+                pageNumber,
+                investmentVehicleType : investmentType,
+                investmentVehicleStatus: "DRAFT",
+            },
+            { refetchOnMountOrArgChange: true }
+        );
+
+
+ useEffect(() => {
+    if (searchTerm && searchData && searchData?.data) {
+        const result = searchData?.data?.body
+        setinvestmentVehicleDraft(result)
+        setNextPage(searchData?.data?.hasNextPage)
+        setTotalPage(searchData?.data?.totalPages)
+        setPageNumber(searchData?.data?.pageNumber)
+    } 
+    else if(data && data.data) {
+        setinvestmentVehicleDraft(data?.data?.body)
+       setNextPage(data.data?.hasNextPage)
+       setTotalPage(data.data?.totalPages)
+       setPageNumber(data?.data?.pageNumber)
+    }
+    store.dispatch(resetDraft())
+   },[searchTerm, searchData,data])
+
+const handleRowClick = (row: TableRowData) => {
+       store.dispatch(setDraftId(String(row?.id)))
+    const investmentVehicleData  = {
+        id: row?.id ? String(row?.id) : "",
+        name: row?.name ? String(row?.name) : "",
+        investmentVehicleType:row?.investmentVehicleType ? String(row?.investmentVehicleType) : "",
+        mandate:row?.mandate ? String(row?.mandate) : "",
+        tenure:row?.tenure ? String(row?.tenure) : "",
+        size: row?.size ? String(row?.size) : "",
+        rate: row?.rate ? String(row?.rate) : "",
+        trustee:row?.trustee ? String(row?.trustee) : "",
+        custodian:row?.custodian ? String(row?.custodian) : "",
+        bankPartner:row?.bankPartner? String(row?.bankPartner) : "",
+        fundManager:row?.fundManager? String(row?.fundManager) : "",
+        startDate: row?.startDate ? String(row.startDate) : "",
+        minimumInvestmentAmount:row?.minimumInvestmentAmount? String(row?.minimumInvestmentAmount) : "",
+        sponsors: '',
+       }
+    store.dispatch(setCreateInvestmentField(investmentVehicleData))
+    store.dispatch(setIsDraft(true))
+    router.push('/vehicle/setup')
+    }
+
+    const handleBack=()=> {
+        store.dispatch(clearDraftId())
+        if(vehicleType === "commercial"){
+            router.push("/vehicle/commercial-vehicle")
+        }else {
+            router.push("/vehicle/endownment-vehicle")
+        }
+       }
+
+       const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+       }
+
+       const draftHeader = [
+        {
+                            title: <div className='h-11 flex justify-center items-center'>Vehicle</div>,
+                            sortable: true,
+                            id: 'name',
+                            selector: (row: TableRowData) => row.name
+                        },
+                        {
+                            title: <div className='lg:pl-6 '>Start Date</div>,
+                            sortable: true,
+                            id: 'startDate',
+                            selector: (row: TableRowData) => <div>{row?.startDate? formatMonthInDate(row?.startDate): "_"}</div> 
+                        },
+                        {title: 'Tenure(months)', sortable: true, id: 'tenure', selector: (row: TableRowData) => <div>{row.tenure?row.tenure: "-"}</div>},
+                        {
+                            title: <div className='md:pr-5 md:pl-8 relative md:right-6 '>vehicle size</div>,
+                            sortable: true,
+                            id: 'size',
+                            selector: (row: TableRowData) => <div className=''>{row.size? formatAmount(row.size): "_"}</div>
+                        },
+                        {
+                            title: 'Interest rate(%)',
+                            sortable: true,
+                            id: ' rate',
+                            selector: (row: TableRowData) => <div>{row.rate?row.rate : "_"}</div>
+                        },
+                        {
+                            title: 'Amount collected',
+                            sortable: true,
+                            id: 'amountRaised',
+                            selector: (row: TableRowData) => <div className='ml-4'>{row.amountRaised? formatAmount(row.amountRaised) : "-"}</div>
+                        },
+                        {
+                            title: 'Amount disbursed',
+                            sortable: true,
+                            id: ' amountDisbursed',
+                            selector: (row: TableRowData) => <div className='ml-6'>{row.amountDisbursed? formatAmount(row.amountDisbursed): "_"}</div>
+                        },
+                        {
+                            title: 'Amount available',
+                            sortable: true,
+                            id: 'amountAvailable',
+                            selector: (row: TableRowData) => <div className='ml-8'>{row.amountAvailable? formatAmount(row.amountAvailable): "_"}</div>
+                        },
+       ]
+
+       const tableData = investmentVehicleDraft as unknown as TableRowData[]
+       
+
+  return (
+    <div className='px-5 py-5'>
+       <div>
+         <BackButton
+           id="createFundBackButton" 
+           handleClick={handleBack}
+           iconBeforeLetters={true}
+           text='Back'
+           textColor='' 
+         />
+        </div>
+        <div className='mt-4 text-[24px] mb-3'>
+            <p>Draft</p>
+        </div>
+          <div className='grid grid-cols-1 gap-y-4'>
+        <div>
+         <SearchInput
+          id='searchDraft'
+          value={searchTerm}
+          onChange={handleChange}
+         />
+        </div>
+         <div> 
+         { searchTerm && investmentVehicleDraft.length === 0? <div>
+                <SearchEmptyState icon={MdSearch} name='Draft'/>
+            </div> :
+           <Table
+           tableData={tableData} 
+           tableHeader={draftHeader}
+           handleRowClick={handleRowClick}
+           tableHeight={50}
+            sx='cursor-pointer'
+            tableCellStyle={'h-12'}
+            //  optionalFilterName='draft'
+             condition={true}
+             sideBarTabName='draft'
+             icon={MdOutlinePayments}
+             staticHeader={"Vehicle"}
+             staticColunm={'name'}
+             hasNextPage={hasNextPage}
+             pageNumber={pageNumber}
+             setPageNumber={setPageNumber}
+             totalPages={totalPage}
+             isLoading={isLoading}
+           /> }
+         </div>
+         </div>
+    </div>
+  )
+}
+
+export default ViewDraft

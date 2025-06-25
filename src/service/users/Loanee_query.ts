@@ -50,6 +50,13 @@ export const loaneeApi = createApi({
                 method: 'GET'
             })
         }),
+        getLoaneeDetails: builder.query ({
+            query: (loaneeId?: string) =>({
+                url: `/loanee/${loaneeId ? loaneeId : 'details'}`,
+                method: 'GET'
+            }),
+
+        })
 
     })
 })
@@ -63,6 +70,7 @@ export const {
     useVerifyIdentityMutation,
     useRespondToLoanReferralMutation,
     // useLazyIsIdentityVerifiedQuery,
+    useGetLoaneeDetailsQuery,
     useGetLoaneeIdentityVerificationDetailsQuery
 } = loaneeApi;
 

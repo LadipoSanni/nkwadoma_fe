@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SelectedLoanState {
     currentTab: string;
+    currentTabStatus: string
     clickedDisbursedLoanIdNumber: string | object | React.ReactNode;
     clickedOrganization: {
         id: string | number;
@@ -9,6 +10,8 @@ interface SelectedLoanState {
         logoImage: string;
     } | null;
     disbursedLoanAccountId: string;
+    clickedLoanProductId: string;
+    fundProductAvailableAmount: number;
 }
 
 const initialState: SelectedLoanState = {
@@ -16,6 +19,9 @@ const initialState: SelectedLoanState = {
     clickedOrganization: null,
     clickedDisbursedLoanIdNumber: "",
     disbursedLoanAccountId:"",
+    clickedLoanProductId:"",
+    fundProductAvailableAmount: 0,
+    currentTabStatus: "LOAN_REQUEST"
 };
 
 export const selectedLoanSlice = createSlice({
@@ -34,9 +40,24 @@ export const selectedLoanSlice = createSlice({
         setDisbursedLoanIdNumber: (state, action: PayloadAction<string | object | React.ReactNode>) => {
             state.clickedDisbursedLoanIdNumber = action.payload;
         },
+        setClickedLoanProductId: (state, action: PayloadAction<string>) => {
+            state.clickedLoanProductId = action.payload;
+        },
+        setFundProductAvailableAmount: (state, action: PayloadAction<number>) => {
+            state.fundProductAvailableAmount = action.payload;
+        },
+        setCurrentTabStatus: (state, action: PayloadAction<string>) => {
+            state.currentTabStatus = action.payload;
+        },
+        resetTab: (state) => {
+            state.currentTab = "Loan requests"
+            state.currentTabStatus = "LOAN_REQUEST"
+            state.clickedOrganization = null
+        }
+       
     },
 });
 
-export const { setCurrentTab, setClickedOrganization, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber } = selectedLoanSlice.actions;
+export const { setCurrentTab, setClickedOrganization, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId, setFundProductAvailableAmount,setCurrentTabStatus,resetTab } = selectedLoanSlice.actions;
 
 export default selectedLoanSlice.reducer;

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { inter } from '@/app/fonts';
 import {BiArrowBack} from "react-icons/bi";
+import { usePathname } from 'next/navigation'; 
 
 type Tab = {
   name: string;
@@ -18,11 +19,13 @@ type Props = {
   backClickRoutePath?: string;
   condition?: boolean;
   disabledTabs?: string[];
+  style?: string
 };
 
-function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRoutePath,condition,disabledTabs}: Props) {
+function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRoutePath,condition,disabledTabs,style}: Props) {
   const navigate = useRouter();
   const [activeTab, setActiveTab] = useState(defaultTab);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleRouteChange = (url: string) => {
@@ -38,6 +41,12 @@ function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRouteP
     };
   }, []);
 
+  useEffect(() => {
+    if (!pathname) return;
+    const matchingTab = tabData.find(tab => tab.value === pathname);
+    setActiveTab(matchingTab ? pathname : defaultTab);
+  }, [pathname, tabData, defaultTab]); 
+
   const handleTabChange = (value: string) => {
     setActiveTab(value);
     navigate.push(value);
@@ -48,11 +57,11 @@ function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRouteP
   }
 
   return (
-    <div className={`px-4 md:px-8 py-3 ${inter.className}`}>
+    <div className={`px-4 md:px-6 ${inter.className} ${style}`}>
       {!condition? "" :
        <div className={`flex py-3 space-x-1 text-meedlBlue cursor-pointer`} id={`backClick${backClickName}`} onClick={handleRouteBack}>
        <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`}/>
-       <h1 id={`backClickText`} data-testid={`backClickText `} >Back to {backClickName}</h1>
+       <h1 id={`backClickText`} data-testid={`backClickText `} className='text-[14px] font-medium]'>Back to {backClickName}</h1>
        </div>
       }
       <Tabs value={activeTab} onValueChange={handleTabChange}>

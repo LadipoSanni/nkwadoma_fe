@@ -139,7 +139,8 @@
 
   @media (min-width: 768px) {
     .body {
-      width: var(--modal-width, auto); 
+      /* width: var(--modal-width, 60%);  */
+      width: 50%;
     }
   }
 
@@ -147,7 +148,15 @@
   @media (min-width: 1024px) {
   
     .body {
-      width: var(--modal-width, 30%); 
+      /* width: var(--modal-width, 30%);  */
+      width: 50%;
+    }
+  }
+
+  @media (min-width: 1280px) {
+
+    .body {
+      width: 40%;  
     }
   }
   

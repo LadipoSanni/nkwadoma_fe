@@ -49,7 +49,7 @@ describe("TableEmptyState", () => {
         const iconContainer = screen.getByTestId('icon-container');
         expect(iconContainer).toBeInTheDocument();
         expect(iconContainer).toHaveClass('bg-lightBlue500');
-        expect(iconContainer).toHaveClass('w-20 h-20');
+        expect(iconContainer).toHaveClass('w-24 h-24');
       });
 
 

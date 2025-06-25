@@ -14,6 +14,7 @@ jest.mock("next/navigation", () => ({
     useSearchParams: jest.fn().mockImplementation(() => {
         return new URLSearchParams(window.location.search);
     }),
+    usePathname: () => jest.fn(),
 }));
 
 jest.setTimeout(10000);

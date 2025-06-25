@@ -1,7 +1,5 @@
 "use client"
 import React from "react";
-import LoanEmptyState from "@/reuseable/emptyStates/Index";
-import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/index";
 import {useRouter} from "next/navigation";
@@ -11,6 +9,8 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import {useAppSelector} from "@/redux/store";
 import { useViewAllLoanOfferQuery , useViewLoanInAnOrganizationQuery} from "@/service/admin/loan/loan-offer-api";
+import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
+import {Icon} from "@iconify/react";
 
 
 
@@ -41,7 +41,7 @@ const Index = () => {
         pageSize: 100,
         organizationId: clickedOrganization?.id
     }
-    const {data: viewAllLoanOffersInAnOrganizationData, isLoading:isLoadingOrganizationLoanOffer } = useViewLoanInAnOrganizationQuery(requestBody)
+    const {data: viewAllLoanOffersInAnOrganizationData, isLoading:isLoadingOrganizationLoanOffer } = useViewLoanInAnOrganizationQuery(requestBody, {skip:!clickedOrganization})
     const sortedViewAllLoanOffer = (data?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
     const sortedViewAllLoanOfferInAnOrg = (viewAllLoanOffersInAnOrganizationData?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
 
@@ -49,8 +49,8 @@ const Index = () => {
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
         { title: 'Loan product', sortable: true, id: 'loanProduct', selector: (row: TableRowData) =>row.loanProductName },
         { title: 'Offer date', sortable: true, id: 'offerDate', selector: (row: TableRowData) => <div>{dayjs(row.dateOffered?.toString()).format('MMM D, YYYY')}</div> },
-        { title: 'Amount Requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountRequested)}</div>},
-        { title: 'Amount Approved', sortable: true, id: 'amountApproved', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountApproved)}</div>}
+        { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountRequested)}</div>},
+        { title: 'Amount approved', sortable: true, id: 'amountApproved', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountApproved)}</div>}
     ];
 
 
@@ -62,7 +62,7 @@ const Index = () => {
 
     return (
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
-             className={`grid md:px-3 md:overflow-hidden  md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
+            //  className={`grid md:px-3 md:overflow-hidden  md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {isLoading || isLoadingOrganizationLoanOffer ? (
                 <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
@@ -70,23 +70,23 @@ const Index = () => {
                 </div>
             ) :sortedViewAllLoanOfferInAnOrg.length === 0 || data?.data?.body?.length === 0 ?
                 (
-                    <LoanEmptyState
-                        id={'LoanRequestEmptyState'}
-                        icon={<Icon icon="material-symbols:money-bag-outline"
-                                    height={"2rem"}
-                                    width={"2em"}
-                                    color={'#142854'}
-                        ></Icon >} iconBg={'#D9EAFF'} title={'Loan offers will show here'} description={clickedOrganization?.id ? 'There are no loan offers in this organization yet': `There are no loan requests available yet` } />
+                    <TableEmptyState name={"loan offer"}   icon={
+                        <Icon
+                            icon="material-symbols:money-bag-outline"
+                            height="2.5rem"
+                            width="2.5rem"
+                        />
+                    } condition={true} descriptionId={clickedOrganization?.id ? 'There are no loan offers in this organization yet': `There are no loan offers available yet` }/>
                 ) :
                 (
-                    <div className={`md:w-full  w-full h-full md:h-full `}>
+                    <div className={` `}>
 
                         <Tables
                             tableData={clickedOrganization?.id  ? sortedViewAllLoanOfferInAnOrg : sortedViewAllLoanOffer}
                             isLoading={isLoading || isLoadingOrganizationLoanOffer}
                             handleRowClick={handleRowClick}
                             tableHeader={loanOfferHeader}
-                            tableHeight={52}
+                            tableHeight={54}
                             sx='cursor-pointer'
                             staticColunm='firstName'
                             staticHeader='Loanee'

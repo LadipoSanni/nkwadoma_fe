@@ -10,6 +10,8 @@ import Isloading from '@/reuseable/display/Isloading';
 import {useInviteOrganizationMutation} from '@/service/admin/organization';
 import {useToast} from "@/hooks/use-toast";
 import {useQueryClient} from '@tanstack/react-query';
+import { store } from '@/redux/store';
+import { setOrganizationTabStatus } from '@/redux/slice/organization/organization';
 
 interface ApiError {
     status: number;
@@ -100,7 +102,13 @@ function InviteOrganizationForm({setIsOpen}: props) {
                 function () {
                     const {email, adminEmail} = this.parent;
                     return email !== adminEmail;
-                })
+                }),
+        websiteAddress: Yup.string()
+        .matches(
+            /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/,
+            'Enter a valid website URL'
+        )
+        .nullable(),
     })
 
     const handleSubmit = async (values: typeof initialFormValue) => {
@@ -136,13 +144,13 @@ function InviteOrganizationForm({setIsOpen}: props) {
             const result = await inviteOrganization(formData).unwrap();
             if (result) {
                 queryClient.invalidateQueries({queryKey: ['invite']});
+                store.dispatch(setOrganizationTabStatus("invited"))
                 toast({
                     description: result.message,
                     status: "success",
                 });
-                if (setIsOpen) {
-                    setIsOpen(false);
-                }
+                handleCloseModal()
+                
             }
 
         } catch (err) {
@@ -169,18 +177,21 @@ function InviteOrganizationForm({setIsOpen}: props) {
                 onSubmit={handleSubmit}
                 validateOnMount={true}
                 validationSchema={validationSchema}
+                validateOnChange={true}
+                validateOnBlur={true}  
             >
                 {
-                    ({errors, isValid, touched, setFieldValue, values}) => (
+                    ({errors, isValid, touched, setFieldValue, values,setFieldTouched}) => (
                         <Form className={`${inter.className}`}>
-                            <div
-                                className='grid grid-cols-1 gap-y-4 md:max-h-[540px] overflow-y-auto'
+                            <div >
+                                <div
+                                className='grid grid-cols-1 gap-y-4 md:max-h-[56.5vh] overflow-y-auto'
                                 style={{
                                     scrollbarWidth: 'none',
                                     msOverflowStyle: 'none',
 
                                 }}
-                            >
+                                >
                                 <div className=''>
                                     <Label htmlFor="Name">Name</Label>
                                     <Field
@@ -206,7 +217,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                     }
                                 </div>
                                 <div className=''>
-                                    <Label htmlFor="phoneNumber">Phone Number</Label>
+                                    <Label htmlFor="phoneNumber">Phone number</Label>
                                     <Field
                                         id="phoneNumber"
                                         name="phoneNumber"
@@ -225,7 +236,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                             className="text-red-500 text-sm"/>)}
                                 </div>
                                 <div>
-                                    <Label htmlFor="email">Email Address </Label>
+                                    <Label htmlFor="email">Email address </Label>
                                     <Field
                                         id="email"
                                         name="email"
@@ -251,7 +262,17 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         name="websiteAddress"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
                                         placeholder="Enter website"
+                                        onFocus={() => setFieldTouched("websiteAddress", true, false)}
                                     />
+                                      {
+                                        errors.websiteAddress && touched.websiteAddress && (
+                                            <ErrorMessage
+                                                name="websiteAddress"
+                                                component="div"
+                                                className="text-red-500 text-sm"
+                                            />
+                                        )
+                                    }
                                 </div>
                                 <div className='grid md:grid-cols-2 gap-4 w-full'>
                                     <div>
@@ -277,7 +298,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         }
                                     </div>
                                     <div>
-                                        <Label htmlFor="serviceOffering:">Service Offering</Label>
+                                        <Label htmlFor="serviceOffering:">Service offering</Label>
                                         <CustomSelect
                                             triggerId='serviceOfferingTriggerId'
                                             id='serviceOffering'
@@ -301,7 +322,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                 </div>
                                 <div className='grid md:grid-cols-2 gap-4 w-full relative bottom-5'>
                                     <div>
-                                        <Label htmlFor="rcNumber">Registration Number</Label>
+                                        <Label htmlFor="rcNumber">Registration number</Label>
                                         <Field
                                             id="rcNumber"
                                             name="rcNumber"
@@ -324,7 +345,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         }
                                     </div>
                                     <div>
-                                        <Label htmlFor="tin">Tax Number</Label>
+                                        <Label htmlFor="tin">Tax number</Label>
                                         <Field
                                             id="tin"
                                             name="tin"
@@ -349,7 +370,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                 </div>
                                 <div className='grid md:grid-cols-2 gap-4 w-full relative'>
                                     <div className='relative bottom-5'>
-                                        <Label htmlFor="adminFirstName">Admin First Name</Label>
+                                        <Label htmlFor="adminFirstName">Admin first name</Label>
                                         <Field
                                             id="adminFirstName"
                                             name="adminFirstName"
@@ -371,7 +392,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                             )}
                                     </div>
                                     <div className='relative bottom-5'>
-                                        <Label htmlFor="adminLastName">Admin Last Name</Label>
+                                        <Label htmlFor="adminLastName">Admin last name</Label>
                                         <Field
                                             id="adminLastName"
                                             name="adminLastName"
@@ -394,13 +415,14 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                     </div>
                                 </div>
                                 <div className='relative bottom-5'>
-                                    <Label htmlFor="adminEmail">Admin Email Address</Label>
+                                    <Label htmlFor="adminEmail">Admin email address</Label>
                                     <Field
                                         id="adminEmail"
                                         name="adminEmail"
                                         className="w-full p-3 border rounded focus:outline-none mt-3"
                                         placeholder="Enter admin email address"
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("adminEmail", e.target.value.replace(/\s+/g, ''))}
+                                        onFocus={() => setFieldTouched("adminEmail", true, false)}
                                     />
                                     {
                                         errors.adminEmail && touched.adminEmail && (
@@ -433,6 +455,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
              </div>
 
              </div> */}
+             </div>
 
                                 <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>
                                     <Button
@@ -446,8 +469,8 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                     </Button>
                                     <Button
                                         id='inviteOrganization'
-                                        variant={'default'}
-                                        className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-neutral650 cursor-not-allowed " : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
+                                        variant={'secondary'}
+                                        className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " : " bg-meedlBlue cursor-pointer"}`}
                                         type='submit'
                                         disabled={!isValid}
 

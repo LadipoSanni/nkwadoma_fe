@@ -10,6 +10,7 @@ jest.mock('next/navigation', () => ({
         replace: jest.fn(),
         prefetch: jest.fn(),
     })),
+    usePathname: () => jest.fn(),
 }));
 
 describe('LoanApplicationDetails', () => {
@@ -19,7 +20,13 @@ describe('LoanApplicationDetails', () => {
         initialDeposit: "0.00",
         referredBy: "",
     }
-    it('renders the header correctly', () => {
+    global.fetch = jest.fn(() =>
+        Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        }))
+    );
+    it('renderns the header correctly', () => {
         render(
             <Providers>
                 <LoaneeOnboarding />

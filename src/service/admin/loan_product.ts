@@ -30,6 +30,8 @@ export const loanProductApi = createApi({
         searchLoanProduct: builder.query({
             query: (param: {
                 loanProductName: string,
+                pageSize?: number;
+                pageNumber?: number
             }) => ({
                 url: '/loan/loan-product/search',
                 method: 'GET',
@@ -53,12 +55,29 @@ export const loanProductApi = createApi({
             }),
             providesTags: [`loanProduct`]
         }),
+
+        getAllLoaneeInALoanProduct: builder.query<
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            any, {
+            loanProductId: string;
+            pageSize: number;
+            pageNumber: number }>({
+            query: ({ loanProductId, pageSize, pageNumber }) =>
+                `/loanee/loanProduct/loanees/${loanProductId}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
+        }),
+
+        searchLoaneesInALoanProduct: builder.query({
+            query: ({ loanProductId, name, pageSize = 10, pageNumber = 0 }) =>
+                `/loanee/loan-product/search/loanees/${loanProductId}?name=${name}&pageSize=${pageSize}&pageNumber=${pageNumber}`,
+        }),
     }),
 })
 export const {
     useViewAllLoanProductQuery,
     useSearchLoanProductQuery,
     useCreateLoanProductMutation,
-    useGetLoanProductDetailsByIdQuery
+    useGetLoanProductDetailsByIdQuery,
+    useGetAllLoaneeInALoanProductQuery,
+    useSearchLoaneesInALoanProductQuery,
 } = loanProductApi;
 

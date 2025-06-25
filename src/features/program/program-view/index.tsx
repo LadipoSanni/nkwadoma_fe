@@ -1,5 +1,5 @@
 "use client"
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef, useCallback } from 'react';
 import {cabinetGrotesk, inter} from '@/app/fonts';
 import SearchInput from "@/reuseable/Input/SearchInput";
 import AllProgramsCard from "@/reuseable/cards/AllProgramsList";
@@ -10,11 +10,11 @@ import {formatAmount} from '@/utils/Format'
 import {Book} from 'lucide-react';
 import {MdGridView, MdOutlineDateRange, MdOutlinePeopleAlt, MdOutlineViewList, MdPersonOutline} from "react-icons/md";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {setItemSessionStorage} from '@/utils/storage';
 import {Button} from "@/components/ui/button";
 import TableModal from "@/reuseable/modals/TableModal";
+import DeleteModal from '@/reuseable/modals/Delete-modal';
 import {useRouter} from 'next/navigation'
-import {DeleteCohort} from '@/reuseable/details/DeleteCohort'
+import DeleteProgram from '@/reuseable/details/DeleteCohort'
 import EditProgramForm from '@/components/program/edit-program-form';
 import {useGetAllProgramsQuery} from '@/service/admin/program_query';
 import {useDeleteProgramMutation} from '@/service/admin/program_query';
@@ -27,6 +27,8 @@ import {useToast} from "@/hooks/use-toast"
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
+import {store} from "@/redux/store";
+import {setCurrentProgramId} from "@/redux/slice/program/programSlice";
 
 
 interface TableRowData {
@@ -65,15 +67,10 @@ interface viewAllProgramProps extends TableRowData {
 const ProgramView = () => {
     const [view, setView] = useState<string>('grid');
     const [searchTerm, setSearchTerm] = useState('');
+    const [pageNumber, setPageNumber] = useState(0);
+    const [hasNextPage, setHasNextPage] = useState(true);
     const {toast} = useToast()
-    // const [dummyData, setDummyData] = useState<{
-    //     cohorts: number;
-    //     description: string;
-    //     months: number;
-    //     title: string;
-    //     trainees: number;
-    //     programId: string;
-    // }[]>([]);
+
     const router = useRouter()
 
     const [programView, setProgramView] = useState<viewAllProgramProps[]>([])
@@ -92,59 +89,116 @@ const ProgramView = () => {
         }
     )
 
-    const [programId, setProgramId] = React.useState("")
-    const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
+    const [programId, setProgramId] = useState("");
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
-    const [page] = useState(0);
-    // const [totalPage, setTotalPage] = useState(0);
-    const size = 300;
-    const [deleteProgram, setDeleteProgram] = useState("")
+    const [deleteProgram, setDeleteProgram] = useState("");
 
-    const {data, isLoading} = useGetAllProgramsQuery({
-        pageSize: size,
-        pageNumber: page
-    },{ refetchOnMountOrArgChange: true, })
-    const [deleteItem] = useDeleteProgramMutation()
-    const {data: searchResults} = useSearchProgramQuery(searchTerm, {skip: !searchTerm});
+    // Conditional pageSize based on view
+    const pageSize = view === 'grid' ? 10 : 100;
+
+    const { data, isLoading, isFetching } = useGetAllProgramsQuery(
+        { pageSize,
+            pageNumber: view === 'grid' ? pageNumber : 0
+        },
+        { refetchOnMountOrArgChange: true }
+    );
+    const [deleteItem] = useDeleteProgramMutation();
+    const { data: searchResults, isFetching: isSearchFetching, error: searchError } = useSearchProgramQuery(searchTerm, { skip: !searchTerm});
+    const { data: program, isLoading: loading, refetch } = useGetProgramByIdQuery(
+        { id: programId },
+        {
+            skip: !programId,
+            refetchOnMountOrArgChange: true
+        }
+    );
+
+    const observer = useRef<IntersectionObserver | null>(null);
 
     useEffect(() => {
-        if (data && data?.data) {
-            const programs = data?.data?.body
-            setProgramView(programs)
-            // setTotalPage(data?.data?.totalPages)
+        setPageNumber(0);
+        setProgramView([]);
+        setHasNextPage(true);
+    }, [searchTerm, view]);
+
+    useEffect(() => {
+        if (searchTerm && searchResults?.data) {
+            const programs = searchResults.data as viewAllProgramProps[];
+            setProgramView((prev) => {
+                const newPrograms = pageNumber === 0 || view === 'list' ? programs : [...prev, ...programs];
+                const uniquePrograms = newPrograms.reduce<viewAllProgramProps[]>((acc, program) => {
+                    if (!acc.some((p) => p.id === program.id)) {
+                        acc.push(program);
+                    }
+                    return acc;
+                }, []);
+                return uniquePrograms;
+            });
+            setHasNextPage(view === 'grid' ? searchResults.data.hasNextPage : false);
+        } else if (!searchTerm && data?.data?.body) {
+            const programs = data.data.body as viewAllProgramProps[];
+            setProgramView((prev) => {
+                const newPrograms = pageNumber === 0 || view === 'list' ? programs : [...prev, ...programs];
+                const uniquePrograms = newPrograms.reduce<viewAllProgramProps[]>((acc, program) => {
+                    if (!acc.some((p) => p.id === program.id)) {
+                        acc.push(program);
+                    }
+                    return acc;
+                }, []);
+                return uniquePrograms;
+            });
+            setHasNextPage(view === 'grid' ? data.data.hasNextPage : false);
         }
+        if (searchError) {
+            toast({
+                description: "Failed to fetch search results",
+                status: "error",
+            });
+        }
+    }, [searchTerm, searchResults, data, pageNumber, view, searchError, toast]);
 
-    }, [data])
+    const lastCardObserver = useCallback(
+        (node: HTMLDivElement | null) => {
+            if (isLoading || isFetching || isSearchFetching || !hasNextPage || view !== 'grid') return;
 
+            if (observer.current) observer.current.disconnect();
+
+            observer.current = new IntersectionObserver(
+                (entries) => {
+                    if (entries[0].isIntersecting) {
+                        setPageNumber((prevPage) => prevPage + 1);
+                    }
+                },
+                {
+                    rootMargin: "100px",
+                }
+            );
+
+            if (node) observer.current.observe(node);
+        },
+        [isLoading, isFetching, isSearchFetching, hasNextPage, view]
+    );
+
+    useEffect(() => {
+        return () => {
+            if (observer.current) observer.current.disconnect();
+        };
+    }, []);
 
     const handleRowClick = (row: TableRowData) => {
-        router.push('/program/details')
-        // console.log('The row: ',row.id)
-        setItemSessionStorage("programId", String(row.id))
+        store.dispatch(setCurrentProgramId(String(row?.id)))
+        router.push('/program/program-details')
 
 
     }
+
 
 
     const handleProgramDetailsOnclick = (id: string) => {
-        router.push('/program/details')
+        store.dispatch(setCurrentProgramId(id))
         setProgramId(id)
-        setItemSessionStorage("programId", id)
-
+        router.push('/program/program-details')
     }
-
-
-    useEffect(() => {
-        if (searchTerm && searchResults && searchResults.data) {
-            const programs = searchResults.data;
-            setProgramView(programs);
-        } else if
-        (data && data?.data) {
-            const programs = data?.data?.body
-            setProgramView(programs)
-            // setSearchTerm("")
-        }
-    }, [searchTerm, searchResults, data]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -158,10 +212,12 @@ const ProgramView = () => {
             sortable: true,
             id: 'programStatus',
             selector: (row: TableRowData) => <span
-                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.programStatus === "Accepted" ? "text-success600 bg-[#E6F4EB]" : "text-error600 bg-error50"} `}>{capitalizeFirstLetters(String(row.programStatus ?? "Declined"))}</span>
+                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.programStatus === "ACTIVE" ? "text-success600 bg-success50" : "text-error600 bg-error50"} `}>
+                {capitalizeFirstLetters(String(row.programStatus ?? "Declined"))}
+            </span>
         },
         {
-            title: 'No. of Cohorts',
+            title: 'No. of cohorts',
             sortable: true,
             id: 'numberOfCohort',
             selector: (row: TableRowData) => row.numberOfCohort ?? "0"
@@ -173,19 +229,19 @@ const ProgramView = () => {
             selector: (row: TableRowData) => row.numberOfLoanees ?? "0"
         },
         {
-            title: 'Amount Disbursed',
+            title: 'Amount disbursed',
             sortable: true,
             id: 'totalAmountDisbursed',
             selector: (row: TableRowData) => formatAmount(row.totalAmountDisbursed)
         },
         {
-            title: 'Amount Repaired',
+            title: 'Amount repaid',
             sortable: true,
             id: 'totalAmountRepaid',
             selector: (row: TableRowData) => formatAmount(row.totalAmountRepaid)
         },
         {
-            title: 'Amount Outstanding',
+            title: 'Amount outstanding',
             sortable: true,
             id: 'totalAmountOutstanding',
             selector: (row: TableRowData) => formatAmount(row.totalAmountOutstanding)
@@ -194,21 +250,6 @@ const ProgramView = () => {
 
     ]
 
-    // useEffect(() => {
-    //     const data = Array.from({length: 9}, (_, index) => ({
-    //         cohorts: Math.floor(Math.random() * 20) + 1,
-    //         description: `Design thinking is a process for creative problem solving. Design thinking has a human-centered core. It encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes.${index + 1}`,
-    //         months: Math.floor(Math.random() * 12) + 1,
-    //         title: `Program Thinking ${index + 1}`,
-    //         trainees: Math.floor(Math.random() * 100) + 1,
-    //         programId: `${index + 1}`
-    //     }));
-    //     setDummyData(data);
-    // }, []);
-    const {data: program, isLoading: loading, refetch} = useGetProgramByIdQuery({id: programId}, {
-        skip: !programId,
-        refetchOnMountOrArgChange: true
-    });
 
     const dropDownOption = [
         {name: 'View Program', id: '1'},
@@ -218,8 +259,8 @@ const ProgramView = () => {
 
     const handleDropdownClick = async (id: string, row: rowData) => {
         if (id === "1") {
-            router.push('/program/details')
-            setItemSessionStorage("programId", String(row.id))
+            store.dispatch(setCurrentProgramId(String(row?.id)))
+            router.push('/program/program-details')
 
 
         } else if (id === "2") {
@@ -243,8 +284,9 @@ const ProgramView = () => {
 
     const handleCardDropDownClick = async (optionId: string, id: string) => {
         if (optionId === "1") {
-            router.push(`/program/details`);
-            setItemSessionStorage("programId", id)
+            store.dispatch(setCurrentProgramId(id))
+            router.push(`/program/program-details`);
+
         } else if (optionId === "2") {
             setProgramId(id);
             if (programId) {
@@ -327,11 +369,7 @@ const ProgramView = () => {
     }, [editOpen, program])
 
 
-    // const tagButtonData = [
-    //     {tagIcon: MdPersonOutline, tagCount: 10, tagButtonStyle: "bg-tagButtonColor", tagText: "trainees"},
-    //     {tagIcon: MdOutlineDateRange, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "months"},
-    //     {tagIcon: MdOutlinePeopleAlt, tagCount: 50, tagButtonStyle: "bg-tagButtonColor", tagText: "cohorts"},
-    // ];
+
 
     const [isOpen, setIsOpen] = React.useState(false);
 
@@ -390,93 +428,105 @@ const ProgramView = () => {
                     </TableModal>
                 </div>
             </section>
-            <div id="programContent" className={'grid gap-4 relative bottom-3 overflow-hidden'}>
-                <DisplayOptions setView={setView} activeView={view} options={options}/>
-                {view === 'grid' ? (
-                    <div
-                        id={'programGrid'}
-                        className={'grid gap-6 pr-2 overflow-y-auto'}
-                        style={{
-                            height: '62vh',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
-                        }}
-                    >
-                        {isLoading ? (<SkeletonForGrid/>) :
-                            (searchTerm && programView.length === 0? <div><SearchEmptyState icon={MdSearch} name='Program'/></div> : 
-                         ( 
-                         programView.length === 0 ?
-                                <TableEmptyState
-                                    icon={Book}
-                                    name='program'
-                                /> :
-                            programView.slice().reverse().map((program, index) => {
-
-                                    const tagButtonData = [{
+            {isLoading && pageNumber === 0 || isSearchFetching ? (
+                <SkeletonForGrid />
+            ) : searchTerm && programView.length === 0 && !isSearchFetching ? (
+                <div className={`grid justify-center items-center text-center min-h-[60vh] w-full`}>
+                    <SearchEmptyState icon={MdSearch} name="Program" />
+                </div>
+            ) : programView.length === 0 ? (
+                <TableEmptyState
+                    name={"program"}
+                    icon={<Book width={"2.5rem"} height={"2.5rem"}/>}
+                    condition={true}
+                />
+                // <TableEmptyState icon={Book} name="program" condition={true}/>
+            ) : (
+                <div
+                    id="programContent"
+                    className={`grid gap-4 relative bottom-3 overflow-hidden`}>
+                    <DisplayOptions setView={setView} activeView={view} options={options} />
+                    {view === "grid" ? (
+                        <div
+                            id={"programGrid"}
+                            className="grid grid-cols-1 pr-2 md:grid-cols-3 w-full h-[66vh] sm:grid-cols-1 lg:grid-cols-3 gap-y-6 gap-x-4 overflow-y-auto overflow-x-hidden"
+                        >
+                            {programView.map((program, index) => {
+                                const tagButtonData = [
+                                    {
                                         tagIcon: MdPersonOutline,
                                         tagCount: Number(program.numberOfLoanees ?? 0),
-                                        tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
-                                        tagText: 'loanees'
+                                        tagButtonStyle: "bg-tagButtonColor text-meedlBlue",
+                                        tagText: Number(program.numberOfLoanees ?? 0) <= 1 ? "loanee" : "loanees",
                                     },
-                                        {
-                                            tagIcon: MdOutlineDateRange,
-                                            tagCount: Number(program.duration ?? 0),
-                                            tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
-                                            tagText: 'months'
-                                        },
-                                        {
-                                            tagIcon: MdOutlinePeopleAlt,
-                                            tagCount: Number(program.numberOfCohort ?? 0),
-                                            tagButtonStyle: 'bg-tagButtonColor text-meedlBlue',
-                                            tagText: 'cohorts'
-                                        }];
-                                    return (
+                                    {
+                                        tagIcon: MdOutlineDateRange,
+                                        tagCount: Number(program.duration ?? 0),
+                                        tagButtonStyle: "bg-tagButtonColor text-meedlBlue",
+                                        tagText: Number(program.duration ?? 0) <= 1 ? "month" : "months",
+                                    },
+                                    {
+                                        tagIcon: MdOutlinePeopleAlt,
+                                        tagCount: Number(program.numberOfCohort ?? 0),
+                                        tagButtonStyle: "bg-tagButtonColor text-meedlBlue",
+                                        tagText: Number(program.numberOfCohort ?? 0) <= 1 ? "cohort" : "cohorts",
+                                    },
+                                ];
+
+                                const isLastCard = index === programView.length - 1;
+
+                                return (
+                                    <div key={`wrapper-${program.id}-${index}`} ref={isLastCard ? lastCardObserver : null}>
                                         <AllProgramsCard
-                                            key={index}
-                                            description={program.programDescription ?? ''}
-                                            title={program.name ?? ''}
-                                            id={program.id ?? ""} dropdownOption={dropDownOption}
+                                            key={program.id}
+                                            description={program.programDescription || "No description"}
+                                            title={program.name ?? ""}
+                                            id={program.id ?? ""}
+                                            dropdownOption={dropDownOption}
                                             tagButtonData={tagButtonData}
                                             onEdit={handleEditProgram}
                                             onDelete={handleDeleteProgram}
-                                            handleCardDropDownClick={(optionId: string) => handleCardDropDownClick(optionId, program.id ?? '')}
-                                            handleProgramDetails={() => handleProgramDetailsOnclick(program.id ?? '')}
+                                            handleCardDropDownClick={(optionId: string) =>
+                                                handleCardDropDownClick(optionId, program.id ?? "")
+                                            }
+                                            handleProgramDetails={() => handleProgramDetailsOnclick(program.id ?? "")}
                                         />
-                                    )
-                                }
-                            )) 
-
+                                    </div>
+                                );
+                            })}
+                            {
+                                isFetching && pageNumber > 0 && (
+                                // <SkeletonForGrid/>
+                                <div className="col-span-full text-center py-4">Loading more...</div>
+                            )
+                            }
+                        </div>
+                    ) : (
+                        <div id="programListView" className={"grid -6"} style={{ height: "62vh" }}>
+                            {searchTerm && programView.length === 0 && !isSearchFetching ? (
+                                <SearchEmptyState icon={MdSearch} name="Program" />
+                            ) : (
+                                <Table
+                                    tableData={programView}
+                                    tableHeader={ProgramHeader}
+                                    staticHeader={"program"}
+                                    staticColunm={"name"}
+                                    tableHeight={52}
+                                    handleRowClick={handleRowClick}
+                                    sx="cursor-pointer"
+                                    showKirkBabel={true}
+                                    kirkBabDropdownOption={dropDownOption}
+                                    icon={Book}
+                                    sideBarTabName="program"
+                                    handleDropDownClick={handleDropdownClick}
+                                    optionalRowsPerPage={10}
+                                    isLoading={false}
+                                />
                             )}
-
-                    </div>
-                ) : (
-                    <div
-                        id="programListView"
-                        className={'grid -6'}
-                        style={{
-                            height: '62vh',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
-                        }}
-                    >
-                     {searchTerm && programView.length === 0? <div><SearchEmptyState icon={MdSearch} name='Program'/></div> : <Table
-                            tableData={programView.slice().reverse()}
-                            tableHeader={ProgramHeader}
-                            staticHeader={"Programs"}
-                            staticColunm={'name'}
-                            tableHeight={52}
-                            handleRowClick={handleRowClick}
-                            sx='cursor-pointer'
-                            showKirkBabel={true}
-                            kirkBabDropdownOption={dropDownOption}
-                            icon={Book}
-                            sideBarTabName='program'
-                            handleDropDownClick={handleDropdownClick}
-                            optionalRowsPerPage={10}
-                            isLoading={isLoading}
-                        />
-                }
-                    </div>
-                )}
-            </div>
+                        </div>
+                    )}
+                </div>
+            )}
             <div>
                 {loading ? "" : (
                     <TableModal
@@ -488,21 +538,20 @@ const ProgramView = () => {
                     >
 
                         <EditProgramForm
-                            programId={programId}
                             setIsOpen={setEditOpen}
                             programDetail={progamDetail}
                         />
                     </TableModal>
                 )
                 }
-                <TableModal
+                <DeleteModal
                     isOpen={isDeleteOpen}
                     closeOnOverlayClick={true}
                     closeModal={() => setIsDeleteOpen(false)}
                     icon={Cross2Icon}
                     width='auto'
                 >
-                    <DeleteCohort
+                    <DeleteProgram
                         setIsOpen={() => setIsDeleteOpen(false)}
                         headerTitle='Program'
                         title='program'
@@ -510,7 +559,7 @@ const ProgramView = () => {
                         id={programId}
                         errorDeleted={deleteProgram}
                     />
-                </TableModal>
+                </DeleteModal>
             </div>
 
         </main>

@@ -1,6 +1,6 @@
 import React from 'react'
 import {navbarRouterItemsProps} from "@/types/Component.type";
-import {inter} from "@/app/fonts";
+import { inter500,inter, } from "@/app/fonts";
 interface Props <T extends navbarRouterItemsProps> {
     navbarItems: T[] | undefined,
     currentTab: string | undefined | string[] | null,
@@ -13,7 +13,7 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
 
 
     const currentTabStyle =  'rounded bg-[#f6f6f8]';
-    const currentTabNameStyle =  `text-meedleBlue`
+    const currentTabNameStyle =  `text-meedleBlue md:text-meedlBlue`
     const tabNameStyle =  `text-[#626F8C]`;
     const noStyle = ``;
 
@@ -30,16 +30,17 @@ function NavbarRouter<T extends navbarRouterItemsProps>({navbarItems, handleClic
                     key={item?.id + index}
                     id={item.id}
                     data-testid={item.id}
-                    className={`inline-flex h-fit py-2 gap-2 px-1 w-full ${item.isActive ? `${(currentTab === item.name ?currentTabStyle : noStyle  )}` :  ''}  `}
+                    className={`inline-flex h-fit ${item?.isActive ? 'hover:rounded hover:bg-[#f6f6f8]' : 'cursor-not-allowed'}  py-2 gap-2 px-1 w-full ${item.isActive ? `${(currentTab === item.name ?currentTabStyle : noStyle  )}` :  ''}  `}
                     onClick={() => {handleClick(item.name, item.route, item.isActive)}}
                 >
                     <div className={` flex gap-2`}>
                         <div id={'navbarRouteIcon' + item.id}
                              data-testid={'navbarRouteIcon' + item.id}
+                             className={` mt-auto mb-auto`}
                         >{item?.icon}</div>
                         <span id={'navbarRouterName' + item.id}
                               data-testid={`navbarRouteName` + item.id}
-                              className={`text-xs mt-auto mb-auto font-thin   ${inter.className}  ${item.isActive ? `${(currentTab !== item.name ? tabNameStyle : currentTabNameStyle)}` : 'text-[#d7d7d7]'} `}>{item.name}</span>
+                              className={`text-xs mt-auto mb-auto hover:text-meedleBlue   ${currentTab === item?.name ? ` ${inter500.className} ` : ` ${inter.className}`}   ${item.isActive ? `${(currentTab !== item.name ? tabNameStyle : currentTabNameStyle)}` : 'text-[#d7d7d7]'} `}>{item.name}</span>
 
                     </div>
                 </button>

@@ -1,25 +1,32 @@
 import React from 'react';
-import BalanceCard from '@/reuseable/cards/BalanceCard/Index'
-import {inter} from '@/app/fonts'
+import BalanceCard from '@/reuseable/cards/BalanceCard/Index';
+import {inter} from '@/app/fonts';
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Icon} from "@iconify/react";
 
+const loaneeCardData = [
+    {
+        title: "Wallet balance", amount: "₦0.00", linkText: "Go to wallet"
+    },
+    {
+        title: "Loan balance", amount: "₦0.00", linkText: "Go to repayment"
+    }
+];
 
 const LoaneeOverview = () => {
     return (
         <main id={'OverviewTr'}
-              className={` ${inter.className} h-full w-full bg-learnSpaceWhite rounded-[8px]`}>
-            <BalanceCard/>
+              className={`md:pt-8 ${inter.className} h-full w-full bg-learnSpaceWhite rounded-[8px] md:px-10`}>
+            <BalanceCard cardData={loaneeCardData} />
             <TableEmptyState
                 name={'Repayment'}
-                icon={() => (
+                icon={
                     <Icon
-                        icon='iconoir:hand-cash'
-                        color={'#142854'}
-                        height={"40px"}
-                        width={"40px"}
+                    icon="iconoir:hand-cash"
+                    height="2.5rem"
+                    width="2.5rem"
                     />
-                )}
+                }
                 condition={true}
             />
         </main>

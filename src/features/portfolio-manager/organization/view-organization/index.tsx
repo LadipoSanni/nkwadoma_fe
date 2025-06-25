@@ -1,340 +1,241 @@
 "use client";
-import React, {useEffect, useState} from 'react'
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
-import Tables from '@/reuseable/table/LoanProductTable'
-import {inter} from '@/app/fonts'
-import OrganizationActionBar from '@/components/portfolio-manager/organization/Organization-action-bar'
-// import {organizationList} from '@/utils/LoanRequestMockData/cohortProduct';
-import {MdOutlineAccountBalance} from 'react-icons/md';
+import React, { useEffect, useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { inter } from '@/app/fonts';
+import OrganizationActionBar from '@/components/portfolio-manager/organization/Organization-action-bar';
+import { MdOutlineAccountBalance } from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
+import Table from '@/reuseable/table/Table';
 import InviteOrganizationForm from '@/components/portfolio-manager/organization/Invite-organization-form';
-import {Cross2Icon} from "@radix-ui/react-icons";
-import {useViewAllOrganizationsQuery} from "@/service/admin/organization";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { useViewAllOrganizationByStatusQuery, useSearchOrganisationByNameQuery } from "@/service/admin/organization";
 import { formatAmount } from '@/utils/Format';
-import { useSearchOrganisationByNameQuery } from '@/service/admin/organization';
-import { setItemSessionStorage } from '@/utils/storage';
-import { useRouter } from 'next/navigation'
-import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
-import { MdSearch } from 'react-icons/md'
-// import DataTable from '@/reuseable/table/Table';
-
-
+import { useRouter } from 'next/navigation';
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
+import { MdSearch } from 'react-icons/md';
+import { setOrganizationTabStatus,setOrganizationId,resetOrganizationId,resetOrganizationDetailsStatus} from '@/redux/slice/organization/organization';
+import { useAppSelector } from '@/redux/store';
+import { store } from "@/redux/store";
+import { resetNotification } from '@/redux/slice/notification/notification';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
-
 const tabData = [
-    {
-        name: "Active",
-        value: "active"
-    },
-    {
-        name: "Invited",
-        value: "invite"
-    },
-    {
-        name: "Deactivated",
-        value: "deactivate"
-    }
-]
+    { name: "Active", value: "active" },
+    { name: "Invited", value: "invited" },
+    { name: "Deactivated", value: "deactivated" }
+];
 
-interface organizationListPros extends TableRowData{
-    name:string,
-    rcNumber: string,
-    totalDebtRepaid:string,
-    totalCurrentDebt:string,
-    totalHistoricalDebt:string,
-    repaymentRate:number,
-    phoneNumber:string,
-    numberOfPrograms: number,
-    tin:string,
-    invitedDate:string,
-    numberOfLoanees:string,
-    status: string,
-    
-
+interface organizationListPros extends TableRowData {
+    name: string;
+    rcNumber: string;
+    totalDebtRepaid: string;
+    totalCurrentDebt: string;
+    totalHistoricalDebt: string;
+    repaymentRate: number;
+    phoneNumber: string;
+    numberOfPrograms: number;
+    tin: string;
+    invitedDate: string;
+    numberOfLoanees: string;
+    status: string;
 }
 
-
+interface TabState {
+    pageNumber: number;
+    totalPages: number;
+    hasNextPage: boolean;
+}
 
 function Organization() {
-
-   
-
+    const tabType = useAppSelector(state => state?.organization?.organizationStatusTab);
     const [isOpen, setIsOpen] = useState(false);
-    const [pageNumber,setPageNumber] = useState<number>(0);
-  const [pageSize] = useState(300);
-    const router = useRouter()
-
-    const handleInviteOrganizationClick = () => {
-        setIsOpen(!isOpen);
-    }
-    const dataElement = {
-        pageNumber,
-        pageSize
-    }
+    const [pageSize] = useState(10);
+    const router = useRouter();
     const [searchTerm, setSearchTerm] = useState('');
     const [organizationList, setOrganizationList] = useState<organizationListPros[]>([]);
 
-    const {data,refetch} = useViewAllOrganizationsQuery(dataElement)
-    const { data: searchResults } = useSearchOrganisationByNameQuery(searchTerm, { skip: !searchTerm });
+    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
+        active: { pageNumber: 0, totalPages: 0, hasNextPage: false },
+        invited: { pageNumber: 0, totalPages: 0, hasNextPage: false },
+        deactivated: { pageNumber: 0, totalPages: 0, hasNextPage: false }
+    });
 
-    
+    const currentTabState = tabStates[tabType];
 
-  
+      const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
-    // useEffect(()=> {
-    //     if (searchTerm && searchResults && searchResults.data) {
-    //         const organizations = searchResults.data;
-    //         setOrganizationList(organizations);
-    //     } else if (!searchTerm && data && data?.data) {
-    //         const organizations = data?.data?.body;
-    //         setOrganizationList(organizations);
-    //         setPageNumber(data?.data?.pageNumber)
-           
-    //     }
-    // },[searchTerm,searchResults,data])
+    const dataElement = {
+        pageNumber: currentTabState.pageNumber,
+        pageSize,
+        status: tabType.toUpperCase(),
+    };
 
-    useEffect(()=> {
-        const sortedOrganizations = (data?.data?.body.slice() ?? []).sort((a: organizationListPros, b: organizationListPros) => new Date(b.invitedDate).getTime() - new Date(a.invitedDate).getTime());
-        if (searchTerm && searchResults && searchResults.data) {
-            const organizations = searchResults.data;
-            setOrganizationList(organizations);
-        } else if (!searchTerm && data && data?.data) {
-            // const organizations = data?.data?.body;
-            setOrganizationList(sortedOrganizations );
-            setPageNumber(data?.data?.pageNumber)
-           
-        }
-    },[searchTerm,searchResults,data])
-
-    //  const handleNextPage = () => {
-    //     if(data?.data?.hasNextPage){
-    //         setPageNumber((prevPage) => prevPage + 1);
-    //     }
-    //  }
-
-    //  const handlePreviousPage = () => {
-    //     if(pageNumber > 0){
-    //         setPageNumber((prevPage) => prevPage - 1);
-    //     }
-    //  }
-
-    
-
-    useEffect(() => {
-        
-        refetch();
-      }, [pageNumber, refetch]);
-
-    const handleRowClick = (row:TableRowData) => {
-         router.push('/organizations/details')
-         setItemSessionStorage("organisationId",String(row.id))
-        
+    const searchElement = {
+        name:debouncedSearchTerm,
+        status: tabType.toUpperCase(),
+        pageNumber: currentTabState.pageNumber,
+        pageSize,
     }
 
 
+    const { data, isLoading,isFetching} = useViewAllOrganizationByStatusQuery(dataElement, {
+        refetchOnMountOrArgChange: tabType === "active" || tabType === "deactivated"
+    });
+
+    const { data: searchResults, isLoading: isloading, isFetching: isfetching } = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
+
+    useEffect(() => {
+        if (debouncedSearchTerm && searchResults && searchResults.data) {
+            setOrganizationList(searchResults.data?.body);
+            setTabStates(prev => ({
+                ...prev,
+                [tabType]: {
+                    pageNumber: searchResults.data.pageNumber,
+                    totalPages: searchResults.data.totalPages,
+                    hasNextPage:searchResults.data.hasNextPage
+                }
+            }));
+        } else if (!debouncedSearchTerm && data && data?.data) {
+            setOrganizationList(data?.data?.body);
+            setTabStates(prev => ({
+                ...prev,
+                [tabType]: {
+                    pageNumber: data.data.pageNumber,
+                    totalPages: data.data.totalPages,
+                    hasNextPage: data.data.hasNextPage
+                }
+            }));
+        }
+        store.dispatch(resetOrganizationId())
+        store.dispatch(resetNotification())
+        store.dispatch(resetOrganizationDetailsStatus())
+    }, [debouncedSearchTerm, searchResults, data, tabType]);
+
+    const handleInviteOrganizationClick = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const handleRowClick = (row: TableRowData) => {
+        store.dispatch(setOrganizationId(String(row.id)))
+        router.push('/organizations/details');
+    };
+
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
-        // console.log("the eventsearch: ",event)
     };
-      
 
-    const activeOrganization = organizationList.filter(organization => organization.status === 'ACTIVE' );
-    const invitedOrganization = organizationList.filter(organization => organization.status === 'INVITED');
-    const deactivatedOrganization = organizationList.filter(organization => organization.status === 'DEACTIVATED');
-
+    const handlePageChange: React.Dispatch<React.SetStateAction<number>> = (value) => {
+        const newPage = typeof value === 'function' ? value(currentTabState.pageNumber) : value;
+        setTabStates(prev => ({
+            ...prev,
+            [tabType]: {
+                ...prev[tabType],
+                pageNumber: newPage
+            }
+        }));
+    };
     
-  
     const organizationHeader = [
-        {title: <div>Name</div>, sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
-        {title: "No. of loanees", sortable: true, id: 'numberOfLoanees', selector: (row: TableRowData) => row.numberOfLoanees},
-        {
-            title: "Historical debt",
-            sortable: true,
-            id: 'totalHistoricalDebt',
-            selector: (row: TableRowData) => formatAmount(row.totalHistoricalDebt)},
-        {
-            title: "Repayment rate(%)",
-            sortable: true,
-            id: 'repaymentRate',
-            selector: (row: TableRowData) => row.repaymentRate
-        },
-        {title: "Debt repaid", sortable: true, id: 'totalDebtRepaid', selector: (row: TableRowData) => formatAmount(row.totalDebtRepaid)},
-        {title: "Current debt", sortable: true, id: 'totalCurrentDebt', selector: (row: TableRowData) => formatAmount(row.totalCurrentDebt)},
-    ]
+        { title: <div>Name</div>, sortable: true, id: 'name', selector: (row: TableRowData) => row.name },
+        { title: "No. of loanees", sortable: true, id: 'numberOfLoanees', selector: (row: TableRowData) => row.numberOfLoanees },
+        { title: "Historical debt", sortable: true, id: 'totalHistoricalDebt', selector: (row: TableRowData) => formatAmount(row.totalHistoricalDebt) },
+        { title: "Repayment rate(%)", sortable: true, id: 'repaymentRate', selector: (row: TableRowData) => row.repaymentRate },
+        { title: "Debt repaid", sortable: true, id: 'totalDebtRepaid', selector: (row: TableRowData) => formatAmount(row.totalDebtRepaid) },
+        { title: "Current debt", sortable: true, id: 'totalCurrentDebt', selector: (row: TableRowData) => formatAmount(row.totalCurrentDebt) },
+    ];
 
+    const renderTable = (tabValue: string) => {
+        const isEmpty = !isTyping && debouncedSearchTerm  && organizationList.length === 0;
+        const emptyStateName = `${tabValue.charAt(0).toUpperCase() + tabValue.slice(1)} organization`;
 
-    const tabContent = [
-        {
-            actionBar: <div>
+        return isEmpty ? (
+            <SearchEmptyState icon={MdSearch} name={emptyStateName} />
+        ) : (
+            <Table
+                tableData={organizationList}
+                tableHeader={organizationHeader}
+                tableHeight={55}
+                sx='cursor-pointer'
+                handleRowClick={handleRowClick}
+                tableCellStyle={'h-12'}
+                staticHeader='Name'
+                staticColunm='name'
+                sideBarTabName='Organization'
+                optionalFilterName={tabValue}
+                condition={true}
+                icon={MdOutlineAccountBalance}
+                hasNextPage={currentTabState.hasNextPage}
+                pageNumber={currentTabState.pageNumber}
+                setPageNumber={handlePageChange}
+                totalPages={currentTabState.totalPages}
+                isLoading={isLoading || isloading || isFetching || isfetching}
+            />
+        );
+    };
+
+    const tabContent = tabData.map(tab => ({
+        value: tab.value,
+        content: (
+            <div>
                 <OrganizationActionBar
-                    id='activeId'
-                    inviteButton='active'
+                    id={`${tab.value}Id`}
+                    inviteButton={tab.value}
                     value={searchTerm}
                     onChange={handleSearchChange}
                     handleInviteOrganizationClick={handleInviteOrganizationClick}
                 />
-            </div>,
-            value: "active",
-            table: <div>
-               {
-                searchTerm && activeOrganization.length === 0? <div><SearchEmptyState icon={MdSearch} name='Active organization'/></div> :
-                <Tables
-                    tableData={activeOrganization}
-                    tableHeader={organizationHeader}
-                    tableHeight={52}
-                    sx='cursor-pointer'
-                    handleRowClick={handleRowClick}
-                    tableCellStyle={'h-12'}
-                    optionalRowsPerPage={10}
-                    staticHeader='Name'
-                    staticColunm='name'
-                    sideBarTabName='organization'
-                    optionalFilterName='active'
-                    condition={true}
-                    icon={MdOutlineAccountBalance}
-                />
-    //             <DataTable
-    //   tableData={activeOrganization.slice().reverse()}
-    //   tableHeader={organizationHeader}
-    //   tableHeight={52}
-    //   sx="cursor-pointer"
-    //   handleRowClick={handleRowClick}
-    //   tableCellStyle="h-12"
-    // //   optionalRowsPerPage={pageSize}
-    //   staticHeader="Name"
-    //   staticColunm="name"
-    //   sideBarTabName="organization"
-    //   optionalFilterName="active"
-    //   condition
-    //   icon={MdOutlineAccountBalance}
-    //   totalPages={data?.data?.totalPages}
-    //   pageNumber={pageNumber}
-    //   hasNextPage={data?.data?.hasNextPage}
-    //   setPageNumber={setPageNumber}
-    // />
-               }
-               {/* <button className='bg-slate-100'
-               onClick={handleNextPage}
-               >
-                next
-               </button>
-               <div></div>
-               <button className='bg-slate-100'
-               onClick={handlePreviousPage}
-               >
-                back
-               </button> */}
+                <div className='mt-6'>
+                    {renderTable(tab.value)}
+                </div>
             </div>
-        },
-        {
-            actionBar: <div>
-                <OrganizationActionBar
-                    id='inviteId'
-                    inviteButton='invited'
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    handleInviteOrganizationClick={handleInviteOrganizationClick}
-                />
-            </div>,
-            value: "invite",
-            table: <div>
+        )
+    }));
 
-               { searchTerm && invitedOrganization.length === 0? <div><SearchEmptyState icon={MdSearch} name='Invited organization'/></div> :<Tables
-                    tableData={invitedOrganization}
-                    tableHeader={organizationHeader}
-                    tableHeight={52}
-                    sx='cursor-pointer'
-                    handleRowClick={handleRowClick}
-                    tableCellStyle={'h-12'}
-                    optionalRowsPerPage={10}
-                    staticHeader='Name'
-                    staticColunm='name'
-                    sideBarTabName='organization'
-                    optionalFilterName='invited'
-                    icon={MdOutlineAccountBalance}
-                    condition={true}
-
-                />
-               }
-            </div>
-        },
-        {
-            actionBar: <div>
-                <OrganizationActionBar
-                    id='deactivateId'
-                    inviteButton='deactivated'
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    handleInviteOrganizationClick={handleInviteOrganizationClick}
-                />
-            </div>,
-            value: "deactivate",
-            table: <div>
-                {
-                    searchTerm && invitedOrganization.length === 0? <div><SearchEmptyState icon={MdSearch} name='Deactivated organization'/></div> :
-                    <Tables
-                    tableData={deactivatedOrganization}
-                    tableHeader={organizationHeader}
-                    tableHeight={52}
-                    sx='cursor-pointer'
-                    handleRowClick={handleRowClick}
-                    tableCellStyle={'h-12'}
-                    optionalRowsPerPage={10}
-                    staticHeader='Name'
-                    staticColunm='name'
-                    sideBarTabName='organization'
-                    optionalFilterName='deactivated'
-                    condition={true}
-                    icon={MdOutlineAccountBalance}
-                />
-        }
-            </div>
-        }
-    ]
     return (
         <div className={`px-6 py-5 ${inter.className}`}>
-            
-            <Tabs defaultValue='active'>
-                <TabsList className={`z-50 `}>
+            <Tabs 
+                value={tabType} 
+                onValueChange={(value) => {
+                    store.dispatch(setOrganizationTabStatus(value));
+                }}
+            >
+                <TabsList className={`z-50`}>
                     {tabData.map((tab, index) => (
-                        <TabsTrigger id={`${tab.name}-${index}`} data-testid={`tabDataName${tab.value}`} value={tab.value} key={index}>
+                        <TabsTrigger 
+                            id={`${tab.name}-${index}`} 
+                            data-testid={`tabDataName${tab.value}`} 
+                            value={tab.value} 
+                            key={index}
+                        >
                             {tab.name}
                         </TabsTrigger>
                     ))}
                 </TabsList>
-                {
-                    tabContent.map((tab, index) => (
-                        <TabsContent key={index} value={tab.value} className='mt-5'>
-                            <div className='mt-8'>
-                                {tab.actionBar}
-                            </div>
-                            <div className='mt-6'>
-                               {tab.table}
-                            </div>
-                        </TabsContent>
-                    ))
-                }
+                
+                {tabContent.map((tab, index) => (
+                    <TabsContent key={index} value={tab.value} className='mt-5'>
+                        {tab.content}
+                    </TabsContent>
+                ))}
             </Tabs>
-            <div>
-                <TableModal
-                    isOpen={isOpen}
-                    closeModal={() => setIsOpen(false)}
-                    className='pb-1'
-                    headerTitle='Invite organization'
-                    closeOnOverlayClick={true}
-                    icon={Cross2Icon}
-                >
-                    <InviteOrganizationForm
-                        setIsOpen={setIsOpen}
-                    />
-                </TableModal>
-            </div>
+
+            <TableModal
+                isOpen={isOpen}
+                closeModal={() => setIsOpen(false)}
+                className='pb-1'
+                headerTitle='Invite organization'
+                closeOnOverlayClick={true}
+                icon={Cross2Icon}
+                width='36%'
+            >
+                <InviteOrganizationForm setIsOpen={setIsOpen} />
+            </TableModal>
         </div>
-    )
+    );
 }
 
-export default Organization
+export default Organization;

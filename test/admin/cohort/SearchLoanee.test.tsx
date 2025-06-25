@@ -5,7 +5,16 @@ import {Providers} from "@/app/provider";
 import {Input} from "@/components/ui/input";
 
 describe("LoaneeInCohortView - Search Functionality (Integration)", () => {
+    beforeEach(() => {
+        global.fetch = jest.fn(() =>
+            Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }))
+        );
+    })
     it("should test that search input placeholder is search",  () => {
+
         render(
             <Providers>
             <LoaneeInCohortView />

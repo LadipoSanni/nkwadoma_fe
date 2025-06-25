@@ -44,10 +44,16 @@ export const organizationApi = createApi({
         }),
 
         searchOrganisationByName: builder.query({
-            query: (name) => ({
+            query: (param: {
+                 name: string,
+                 status?: string,
+                pageSize: number,
+                pageNumber: number,
+                
+       }) => ({
                 url: '/organization/search',
                 method: 'GET',
-                params: {name},
+                params: param,
             }),
         }),
         inviteAdmin: builder.mutation({
@@ -129,9 +135,14 @@ export const organizationApi = createApi({
             providesTags: ['admin']
         }),
         viewOrganizations : builder.query({
-           query: ()=> ({
+           query: (param: {
+           loanType: string,
+            pageSize: number,
+            pageNumber: number,
+           })=> ({
                url: `/organizations`,
-               method: 'GET'
+               method: 'GET',
+               params: param
            })
         }),
         searchOrganizationAsPortfolioManager : builder.query({
@@ -146,8 +157,19 @@ export const organizationApi = createApi({
                method: 'GET',
                params: param
             })
+        }),
+        viewAllOrganizationByStatus: builder.query({
+            query: (param:{
+                pageNumber: number,
+                pageSize: number,
+                status: string
+            }) => ({
+                url: "/organization/all/status",
+                method: 'GET',
+                params: param
+            })
         })
     })
 })
 
-export const { useViewOrganizationsQuery, useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery,useDeactivateOrganizationMutation,useActivateOrganizationMutation,useViewOrganizationAdminQuery,useSearchOrganizationAsPortfolioManagerQuery} = organizationApi
+export const { useViewOrganizationsQuery, useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery,useDeactivateOrganizationMutation,useActivateOrganizationMutation,useViewOrganizationAdminQuery,useSearchOrganizationAsPortfolioManagerQuery,useViewAllOrganizationByStatusQuery} = organizationApi

@@ -14,6 +14,7 @@ import SkeletonForLoanOrg from "@/reuseable/Skeleton-loading-state/Skeleton-for-
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {ChangeOrganization} from "@/types/loan/loan-request.type";
+// import InfiniteScroll from "react-infinite-scroll-component";
 
 
 interface OrganizationType {
@@ -32,18 +33,38 @@ interface SaveClickedId {
 
 const ChangeInstitutionModal = () => {
 
-    const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
+    const currentTab = useAppSelector(state => state?.selectedLoan?.currentTab)
+    const currentTabStatus = useAppSelector(state => state?.selectedLoan?.currentTabStatus)
     const [current, setCurrent] = useState<number | string>('')
     const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
-
+    const [pageNumber] = useState(0)
+    // const [nextPage,setNextPage] = useState(false)
+    // const [totalPage,setTotalPage] = useState(0)
     const [disabled, setDisabled] = React.useState(true)
     const [searchTerm, setSearchTerm] = useState('');
-    const {data, isLoading} = useViewOrganizationsQuery(9);
+    const pageSize = 10
+
+    const searchElement = {
+        name:searchTerm,
+        pageNumber: pageNumber,
+        pageSize,
+    }
+
+   
+
+    const element = {
+        loanType:currentTabStatus,
+        pageNumber: pageNumber,
+        pageSize,
+    }
+
+    const {data, isLoading} = useViewOrganizationsQuery(element);
     const {
         data: searchResults,
-    } = useSearchOrganisationByNameQuery(searchTerm, {skip: !searchTerm});
-    const organisationList: ChangeOrganization[] = searchTerm.length > 0 ? searchResults?.data.body || [] : data?.data
+    } = useSearchOrganisationByNameQuery(searchElement, {skip: !searchTerm});
+    const organisationList: ChangeOrganization[] = searchTerm.length > 0 ? searchResults?.data.body || [] : data?.data?.body
 
+   
     const handleClick = (id: string | number, name?: string, logoImage?: string) => {
         if (id === current) {
             setCurrent('');
@@ -58,13 +79,13 @@ const ChangeInstitutionModal = () => {
     const getLoanCounts = (index: number) => {
         switch (currentTab) {
             case 'Loan requests':
-                return roundUpAmount(data?.data?.at(index)?.loanRequestCount.toString());
+                return roundUpAmount(data?.data?.body?.at(index)?.loanRequestCount.toString());
             case 'Loan offers':
-                return roundUpAmount(data?.data?.at(index)?.loanOfferCount.toString());
+                return roundUpAmount(data?.data?.body?.at(index)?.loanOfferCount.toString());
             case 'Disbursed loan':
-                return roundUpAmount(data?.data?.at(index)?.loanDisbursalCount.toString());
+                return roundUpAmount(data?.data?.body?.at(index)?.loanDisbursalCount.toString());
             case 'Loan referrals':
-                return roundUpAmount(data?.data?.at(index)?.loanReferralCount.toString())
+                return roundUpAmount(data?.data?.body?.at(index)?.loanReferralCount.toString())
         }
     }
 
@@ -95,21 +116,6 @@ const ChangeInstitutionModal = () => {
     };
 
     return (
-        // <Dialog.Root>
-        //     <Dialog.Trigger asChild>
-        //         <Button id="changeOrganizationButton" data-testid={'changeOrganizationButton'} size={"lg"}
-        //                 variant={"secondary"}
-        //                 className={` ${inter.className} text-meedlBlue pt-0.5 underline w-fit h-fit md:font-size-0.875rem md:font-light px-1 bg-blue500 rounded `}>Change
-        //         </Button>
-        //     </Dialog.Trigger>
-        //     <div className='hidden'><Dialog.DialogDescription></Dialog.DialogDescription></div>
-        //     <Dialog.Portal>
-        //         <Dialog.Overlay className="fixed inset-0 bg-[#344054B2] data-[state=open]:animate-overlayShow"/>
-        //         <Dialog.Content
-        //             className={`fixed left-1/2 top-1/2 ${styles.container} md:h-[75vh] md:w-[40vw] h-[90vh] w-[90vw] grid grid-rows-3 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white py-6 px-5 md:py-6 md:px-5 `}>
-        //             <Dialog.Title className={`${cabinetGroteskRegular.className}  text-2xl`}>
-        //                 Organization
-        //             </Dialog.Title>
         <div>
                     <div
                         className={` h-full md:h-full w-full md:w-full `}
@@ -131,12 +137,12 @@ const ChangeInstitutionModal = () => {
                                 <SkeletonForLoanOrg/>
                             </div> :
                             (<div
-                                className={`${styles.organizations} md:w-[30vw] max-h-[25rem]   py-2 grid gap-3 md:grid md:gap-3 md:py-4 `}>
+                                className={`${styles.organizations} space-y-3 lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto  py-2 grid md:grid`}>
                                 {searchTerm ? (
                                         searchResults?.data.length === 0 || !searchResults ?
                                             <SearchEmptyState name={"organization"}
                                                               icon={MdSearch}/> :
-                                            searchResults?.data.map((searchResult: OrganizationType, index: number) => {
+                                            searchResults?.data?.body?.map((searchResult: OrganizationType, index: number) => {
 
                                                 const initial = getInitials(searchResult.name)
                                                 return (
@@ -271,10 +277,11 @@ const ChangeInstitutionModal = () => {
                     </div>
 
                     <div
-                        className="  pb-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
+                        className="  py-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
                         <Dialog.Close asChild>
                             <Button
-                                id={'cancel'} data-testid={'cancel'} onClick={handleContinue}
+                                 variant={"outline"}
+                                id={'cancel'} data-testid={'cancel'}
                                 className={` border border-meedlBlue rounded-md text-sm h-fit md:w-fit md:px-10 md:py-4 py-4   text-meedlBlue`}
                             >
                                 Cancel
@@ -283,7 +290,7 @@ const ChangeInstitutionModal = () => {
                         <div className={`w-full  md:w-[8rem]`}>
                             <ConfirmOrgButton
                                 disable={disabled}
-                                backgroundColor={'#142854'} textColor={"white"}
+                                backgroundColor={''} textColor={"white"}
                                 id={"continueButtonOnOrganizationModal"}
                                 height={'3.4rem'}
                                 data-testid={`continueButtonOnOrganizationModal`}
@@ -295,17 +302,6 @@ const ChangeInstitutionModal = () => {
                         </div>
                     </div>
 </div>
-        //             <Dialog.Close asChild>
-        //                 <button
-        //                     className="absolute right-4 top-6  inline-flex size-[25px]  "
-        //                     aria-label="Close"
-        //                 >
-        //                     <Cross2Icon className={`text-[#939CB0] w-7 h-7`}/>
-        //                 </button>
-        //             </Dialog.Close>
-        //         </Dialog.Content>
-        //     </Dialog.Portal>
-        // </Dialog.Root>
     )
 
 }

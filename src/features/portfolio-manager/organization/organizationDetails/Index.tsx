@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import { DetailsTabContainer } from "@/reuseable/details/DetailsTabContainer";
 import SearchInput from "@/reuseable/Input/SearchInput";
-import LoanProductTable from "@/reuseable/table/LoanProductTable";
+import Table from "@/reuseable/table/Table";
 import { Book } from "lucide-react";
 // import InviteAdminDialog from "@/reuseable/modals/InviteAdminDialog/Index";
 import {
@@ -15,7 +15,7 @@ import {
   useGetOrganizationDetailsQuery,
 } from "@/service/admin/organization";
 import { useRouter } from "next/navigation";
-import { getItemSessionStorage } from "@/utils/storage";
+// import { getItemSessionStorage } from "@/utils/storage";
 import { formatAmount } from "@/utils/Format";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 // import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization"
@@ -25,9 +25,15 @@ import DeactivateOrganization from "@/components/portfolio-manager/organization/
 import TableModal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
-import Link from "next/link";
+// import Link from "next/link";
 import { useSearchOrganizationAsPortfolioManagerQuery } from "@/service/admin/organization";
-
+import { store, useAppSelector } from "@/redux/store";
+import { setOrganizationDetail } from "@/redux/slice/organization/organization";
+import CohortView from "@/features/cohort/cohort-view";
+import { ensureHttpsUrl } from "@/utils/GlobalMethods";
+import { useDebounce } from '@/hooks/useDebounce';
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
+import { MdSearch } from 'react-icons/md';
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -39,57 +45,63 @@ interface adminProps extends TableRowData {
   status: string
 }
 
+
 const OrganizationDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState('');
-  const [page] = useState(0);
-  const [orgId, setOrgList] = useState("");
+  const [page,setPageNumber] = useState(0);
+  const [totalPage,setTotalPage] = useState(0);
+  const [nextPage,hasNextPage] = useState(false)
   const [searchTerm, setSearchTerm] = useState('');
   const [adminList, setAdminList] = useState<adminProps[]>([])
-   const { data: adminData } = useViewAllAdminsInOrganizationQuery(
+  const organizationId = useAppSelector(store => store.organization?.setOrganizationId)
+  const organizationDetailTab = useAppSelector(store => store.organization?.organizationDetailTab)
+  const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
+  const notification = useAppSelector(state => (state?.notification?.setNotification))
+   const { data: adminData,isLoading: isloadingAdmin,isFetching } = useViewAllAdminsInOrganizationQuery(
     {
-      organizationId: orgId,
+      organizationId: organizationId,
       pageNumber: page,
       pageSize: 300,
     },
-    { skip: !orgId }
+    { skip: organizationDetailTab !== "admins"}
   );
+   
+   const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+
   const { data: organizationDetails, isLoading } = useGetOrganizationDetailsQuery(
     {
-      id: orgId,
+      id: organizationId,
     },
-    { skip: !orgId }
+    { skip: !organizationId }
   );
 
   const param = {
-    organizationId: orgId,
-    name:searchTerm,
+    organizationId: organizationId,
+    name:debouncedSearchTerm,
     pageNumber: page,
     pageSize: 300,
   }
 
-  // const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
-  const {data: searchResult} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !searchTerm})
+  const {data: searchResult,isLoading: isloadingSearch, isFetching:isSearchFetching} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !debouncedSearchTerm})
 
-  const organizationLink = organizationDetails?.data.websiteAddress ? organizationDetails?.data.websiteAddress :
-      ''
-
-  useEffect(() => {
-    const id = getItemSessionStorage("organisationId");
-    if (id) {
-      setOrgList(id);
-    }
-  }, []);
+  const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);
 
     useEffect(() => {
-      if (searchTerm && searchResult && searchResult.data) {
+      if (debouncedSearchTerm && searchResult && searchResult.data) {
         const admins = searchResult?.data?.body
         setAdminList(admins);
-      } else if (!searchTerm && adminData && adminData?.data) {
+        setPageNumber(searchResult?.data?.pageNumber)
+        setTotalPage(searchResult?.data?.totalPages)
+        hasNextPage(searchResult?.data?.hasNextPage)
+      } else if (!debouncedSearchTerm&& adminData && adminData?.data) {
         const admins = adminData?.data?.body;
         setAdminList(admins);
+        setPageNumber( adminData?.data?.pageNumber)
+        setTotalPage(adminData?.data?.totalPages)
+        hasNextPage(adminData?.data?.hasNextPage)
       }
-    },[searchTerm, searchResult,adminData]);
+    },[debouncedSearchTerm, searchResult,adminData]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value);
@@ -103,7 +115,12 @@ const OrganizationDetails = () => {
   
 
   const handleBackClick = () => {
+    if (notification === "notification"){
+      router.push(`/notifications/notification/${notificationId}`);
+  } else {
     router.push("/organizations");
+  }
+   
   };
 
   const handleActivateClick = () => {
@@ -228,10 +245,14 @@ const OrganizationDetails = () => {
       >
         <MdOutlineArrowBack className={"h-5 w-5 text-meedlBlue"} />
         <p className={"text-meedlBlue font-medium text-[14px] leading-[150%]"}>
-          Back to organization
+         {notification === "notification"? "Back to notification" : "Back to organization"}
         </p>
       </div>
-      <Tabs id="organizationTabs" defaultValue="details">
+      <Tabs id="organizationTabs"  value={organizationDetailTab}
+        onValueChange={(value) => {
+          store.dispatch(setOrganizationDetail(value))
+        }}
+      >
         <TabsList
           id="tabsList"
           className={
@@ -249,6 +270,15 @@ const OrganizationDetails = () => {
           </TabsTrigger>
           <TabsTrigger
             id="adminsTab"
+            value="cohorts"
+            className={
+              "py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom"
+            }
+          >
+            Cohort
+          </TabsTrigger>
+          <TabsTrigger
+            id="adminsTab"
             value="admins"
             className={
               "py-1 px-2 gap-1 items-center rounded-md h-[1.8125rem] data-[state=active]:shadow-custom"
@@ -262,7 +292,7 @@ const OrganizationDetails = () => {
             id="detailsContainer"
             className={"mt-10 grid gap-9 md:gap-0 md:flex  md:justify-between"}
           >
-            
+            <div className="w-full mb-4">
             <section id="bannerSection" className={"relative"}>
               {organizationDetails?.data.bannerImage ? (
                 <Image
@@ -315,22 +345,24 @@ const OrganizationDetails = () => {
                   className={"flex items-center gap-2"}
                 >
                   <IoGlobeOutline className={"h-5 w-5 text-meedlBlue"} />
-                  <Link
+                  <a
                       href={organizationLink}
+                       target="_blank"
+                     rel="noopener noreferrer"
                     className={
-                      "text-meedlBlue text-[14px] font-medium leading-[150%]"
+                      "text-meedlBlue text-[14px] font-medium leading-[150%] truncate max-w-[17rem]  md:max-w-[16rem] lg:max-w-[25rem] xl:max-w-[30rem] lg:whitespace-normal "
                     }
                   >
                     {organizationDetails?.data.websiteAddress}
-                  </Link>
+                  </a>
                 </div>
-                <div className="mt-5">
+                <div className="mt-5 ">
                   {  organizationDetails?.data.status == "INVITED"?
                   "" :
                   <Button
                      id='activateAndDeactiveButton'
                      variant={'outline'}
-                     className="w-full h-[45px] text-[#142854] font-semibold border-solid border-[#142854]"
+                     className="w-full   md:w-[25vw]  h-[45px] text-[#142854] font-semibold border-solid border-[#142854]"
                      onClick={organizationDetails?.data.status === "ACTIVE"? handleDeactivateClick : handleActivateClick }
                   >
                     {
@@ -344,9 +376,11 @@ const OrganizationDetails = () => {
                 </div>
               </div>
             </section>
+            
+            </div>
             <div
               id="detailsTabContainer"
-              className={`relative md:w-6/12 md:pt-0 pt-0`}
+              className={`relative w-full md:pt-0 pt-0`}
             >
               <DetailsTabContainer
                 isTable={false}
@@ -358,7 +392,9 @@ const OrganizationDetails = () => {
             </div>
           </div>
         </TabsContent>
-
+       <TabsContent id="adminsContent" value="cohorts" className={"mt-4"}>
+       <CohortView/>
+       </TabsContent>
         <TabsContent id="adminsContent" value="admins" className={"mt-4"}>
           <section
             id="adminActions"
@@ -381,20 +417,29 @@ const OrganizationDetails = () => {
               gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             }}
           >
-            <LoanProductTable
+            {
+               !isTyping && debouncedSearchTerm  && adminList.length === 0?  <div>
+                 <SearchEmptyState icon={MdSearch} name={"Search"} />
+               </div> :
+            <Table
               tableData={adminList}
               tableHeader={adminsHeader}
               staticHeader={"Full name"}
               staticColunm={"fullName"}
               tableHeight={42}
               handleRowClick={() => {}}
-              // sx='cursor-pointer'
-              icon={Book}
+              icon={<Book/>}
               sideBarTabName="Admin"
-              optionalRowsPerPage={10}
+              // optionalRowsPerPage={10}
               tableCellStyle="h-12"
               searchEmptyState={true}
+              hasNextPage={nextPage}
+              pageNumber={page}
+              setPageNumber={setPageNumber}
+              totalPages={totalPage}
+              isLoading={isloadingAdmin || isloadingSearch || isFetching || isSearchFetching}
             />
+            }
           </div>
 
           {/* <InviteAdminDialog
@@ -413,7 +458,7 @@ const OrganizationDetails = () => {
            headerTitle={modalType === "activate"? "Activate Reason" : "Deactivate Reason" }
           >
             {
-              modalType === "activate" ? (<ActivateOrganization setIsOpen={setIsModalOpen} id={orgId}/>) : (<DeactivateOrganization setIsOpen={setIsModalOpen} id={orgId}/>)
+              modalType === "activate" ? (<ActivateOrganization setIsOpen={setIsModalOpen} id={organizationId}/>) : (<DeactivateOrganization setIsOpen={setIsModalOpen} id={organizationId}/>)
             }
           </TableModal>
         </div>

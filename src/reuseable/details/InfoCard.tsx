@@ -8,20 +8,20 @@ type Props = {
   description?: string,
 }
 
-function InfoCard({icon: Icon,fundTitle,description}: Props) {
+function          InfoCard({icon: Icon,fundTitle,description}: Props) {
   return (
     <div 
     // className='mb-9 md:mb-0 w-full'
     className='mb-9 md:mb-0 w-full flex flex-col  items-start'
     >
-       <div className='mb-2 mt-2' >
+       <div className=' mt-2' >
          {Icon && 
-          <div id='emptyStateIconId' data-testid="icon-container" className='bg-lightBlue500 w-32 h-32 flex justify-center items-center rounded-full mb-6 font-extrabold'>
-         <Icon style={{fontSize:"3.2rem",color:"#142854"}}/>
+          <div id='emptyStateIconId' data-testid="icon-container" className='bg-lightBlue500 h-[7.5rem] w-[7.5rem] flex justify-center items-center rounded-full mb-6 font-extrabold'>
+         <Icon className={`h-[50px] w-[50px] text-meedlBlue`}/>
          </div>
          }
          </div>
-         <div className={` w-full`}>
+         <div className={`relative bottom-[6px] w-full`}>
          <p className={`w-full md:w-auto capitalize ${cabinetGrotesk.className}`}
          id='fundTitleId'
         style={{ height: "auto", maxHeight: "280px", overflowY: "auto", minWidth: "250px", maxWidth: "60%", wordWrap: "break-word", overflowWrap: "break-word", flex: "1 1 auto",fontSize:"24px" }}

@@ -148,7 +148,13 @@ function CreateProgram({setIsOpen}:Props) {
             ({errors, isValid, touched,setFieldValue,values}) => (
               <Form className={`${inter.className}`}>
                 <div
-                className='grid grid-cols-1 gap-y-4'
+                // className='grid grid-cols-1 gap-y-4'
+                className='grid grid-cols-1 gap-y-4 md:max-h-[56.5vh] overflow-y-auto'
+                style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
+
+                }}
                 >
                   <div>
                   <Label htmlFor="programName">Program name</Label>
@@ -192,7 +198,7 @@ function CreateProgram({setIsOpen}:Props) {
                       value={values.deliveryType} 
                       onChange={(value) => setFieldValue("deliveryType", value)} 
                       name="deliveryType"
-                      placeHolder='Select a program Delivery Type'
+                      placeHolder='Select a program delivery type'
                     />
                      {
                     errors.deliveryType && touched.deliveryType &&  (
@@ -247,7 +253,7 @@ function CreateProgram({setIsOpen}:Props) {
                       scrollbarWidth: 'none',
                        msOverflowStyle: 'none'
                       }}> 
-                    <Label htmlFor="programDuration" style={{ display: 'inline-block',WebkitOverflowScrolling: 'touch' }}>Program duration (Months)</Label> 
+                    <Label htmlFor="programDuration" style={{ display: 'inline-block',WebkitOverflowScrolling: 'touch' }}>Program duration (months)</Label>
                     </div>
                     <CustomSelect
                       selectContent={programDurations}
@@ -338,8 +344,8 @@ function CreateProgram({setIsOpen}:Props) {
                 </Button>
                 <Button 
                 id='createProgramButton'
-                variant={'default'} 
-                className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-neutral650 cursor-not-allowed " :"hover:bg-meedlBlue bg-meedlBlue cursor-pointer"}`}
+                variant={"secondary"}
+                className={`w-full md:w-36 h-[57px] ${ !isValid? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " :" bg-meedlBlue cursor-pointer"}`}
                 type='submit'
                 disabled={!isValid}
                 >

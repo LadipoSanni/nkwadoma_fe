@@ -222,7 +222,7 @@ const LoanOfferDetails = () => {
                     data-testid={"loanOfferDetails"}
                     className={`md:px-8 w-full h-full  px-3 pt-4 md:pt-4`}
                 >
-                    <BackButton handleClick={backToLoanOffer} iconRight={true} text={"Back to loan offer"}
+                    <BackButton handleClick={backToLoanOffer} iconBeforeLetters={true} text={"Back to loan offer"}
                                 id={"loanOfferDetailsBackButton"} textColor={'#142854'}/>
 
                     <div

@@ -39,9 +39,10 @@ import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import CreateLoanOffer from "@/reuseable/modals/createLoanOffer/Index";
 import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
 import {loaneeLoanBreakDown} from "@/types/loan/loan-request.type";
-import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import CreditScore from "@/features/display/CreditScore";
+import { getInitial } from '@/utils/GlobalMethods';
+
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -71,10 +72,7 @@ function LoanDetails() {
         }
 
     }
-    const onSubmit = (data: { amountApproved: string, loanProduct: string }) => {
-        // this is so it doesn't throw unuse variable error
-        console.log("data: ", data)
-    }
+
     const id: string = getId()
     const {data, isLoading} = useViewLoanRequestDetailsQuery(id)
     const backToLoanRequest = () => {
@@ -179,11 +177,11 @@ function LoanDetails() {
     ]
 
     const basic = [
-        {label: 'Gender', value: data?.data.userIdentity.gender},
-        {label: 'Email address', value: data?.data.userIdentity.email},
-        {label: 'Phone number', value: data?.data?.userIdentity.phoneNumber},
-        {label: 'Date of birth', value: data?.data?.userIdentity.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.userIdentity.maritalStatus},
+        {label: 'Gender', value: data?.data?.userIdentity?.gender},
+        {label: 'Email address', value: data?.data?.userIdentity?.email},
+        {label: 'Phone number', value: data?.data?.userIdentity?.phoneNumber},
+        {label: 'Date of birth', value: data?.data?.userIdentity?.dateOfBirth},
+        {label: 'Marital status', value: data?.data?.userIdentity?.maritalStatus},
         {label: 'Nationality', value: data?.data?.userIdentity?.nationality},
         {label: 'State of origin ', value: data?.data?.userIdentity?.stateOfOrigin},
         {label: 'State of residence', value: data?.data?.userIdentity?.stateOfResidence},
@@ -192,9 +190,9 @@ function LoanDetails() {
     ]
 
     const additional = [
-        {label: 'Alternate email address', value: data?.data.alternateEmail},
-        {label: 'Alternate phone number', value: data?.data.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data.alternateContactAddress},
+        {label: 'Alternate email address', value: data?.data?.alternateEmail},
+        {label: 'Alternate phone number', value: data?.data?.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: data?.data?.alternateContactAddress},
         {
             label: 'Next of kin name',
             value: data?.data?.nextOfKin?.firstName && data?.data?.nextOfKin?.lastName
@@ -231,20 +229,21 @@ function LoanDetails() {
     }
 
 
-    const userFirstLetter: string | undefined = data?.data?.firstName ? getFirstLetterOfWord(data?.data?.firstName) + "" + getFirstLetterOfWord(data?.data?.lastName) : ''
+    // const userFirstLetter: string | undefined = data?.data?.userIdentity?.firstName ? getFirstLetterOfWord(data?.data?.userIdentity?.firstName) + "" + getFirstLetterOfWord(data?.data?.userIdentity?.lastName) : ''
+    const userFirstLetter = data?.data?.userIdentity?.firstName ?  getInitial(data?.data?.userIdentity?.firstName,data?.data?.userIdentity?.lastName) : ""
 
     return (
-        <>
+        <div id={'loanRequestDetails'} data-testid={'loanRequestDetails'}>
             {
                 isLoading ? (
                     <SkeletonForDetailPage/>
                 ) : (
                     <div
                         id={"loanRequestDetails"}
-                        data-testid={"loanRequestDetails"}
-                        className={`  md:px-8 w-full h-full  px-3 pt-4 md:pt-4 `}
+                        data-testid={"loanRequestDetailss"}
+                        className={`  md:px-8 w-full h-full md:grid md:gap-4 px-3 pt-4 md:pt-4 `}
                     >
-                        <BackButton handleClick={backToLoanRequest} iconRight={true} text={"Back to loan request"}
+                        <BackButton handleClick={backToLoanRequest} iconBeforeLetters={true} text={"Back to loan request"}
                                     id={"loanRequestDetailsBackButton"} textColor={'#142854'}/>
                         <div
                             id={`ImageComponentOnLoanRequestDetails`}
@@ -266,9 +265,9 @@ function LoanDetails() {
                                     <p id={'loaneeNameOnLoanRequestDetails'}
                                          data-testid={'loaneeNameOnLoanRequestDetails'}
                                          className={`${cabinetGroteskMediumBold.className} text-black break-all  flex text-xl gap-2 md:flex md:gap-2 md:text-[28px]  `}>
-                                        {data?.data?.firstName}
+                                        {data?.data?.userIdentity?.firstName}
                                         &ensp;
-                                        {data?.data?.lastName}
+                                        {data?.data?.userIdentity?.lastName}
                                     </p>
                                     <div
                                         className={`flex gap-2  ${inter.className}  break-all   text-sm text-black400  `}
@@ -288,7 +287,7 @@ function LoanDetails() {
                                 </div>
                             </div>
                             <div
-                                className={` ${styles.loanRequestDetails} md:max-w-[50%]  h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4  grid gap-3 md:grid md:gap-3`}
+                                className={` ${styles.loanRequestDetails} md:max-w-[50%]  h-full md:overflow-x-auto  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4  grid gap-3 md:grid md:gap-3`}
                             >
                                 <div
                                     className={` ${styles.tabConnector} md:w-fit py-3 pl-1 md:sticky md:top-0 md:py-3 md:bg-white h-fit md:h-fit  flex md:flex `}
@@ -381,7 +380,7 @@ function LoanDetails() {
                                         </button>
                                     }
                                     <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer}
-                                                     setIsOpen={open} onSubmit={onSubmit}/>
+                                                     setIsOpen={open} />
                                     <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()}
                                                       setIsOpen={setOpenDeclineOffer} loanProductId={id}
                                                       title={"Decline loan request"}/>
@@ -392,7 +391,7 @@ function LoanDetails() {
                     </div>
                 )
             }
-        </>
+        </div>
 
     )
 }

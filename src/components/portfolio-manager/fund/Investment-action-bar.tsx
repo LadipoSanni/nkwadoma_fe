@@ -10,10 +10,11 @@ interface props {
     onChange: React.ChangeEventHandler<HTMLInputElement>;
     handleDraftClick: ()=> void;
     handleCreateInvestmentVehicleClick: ()=> void;
+    buttonName: string
 
 }
 
-function InvestmentActionBar({id,value,onChange,handleDraftClick,handleCreateInvestmentVehicleClick}:props) {
+function InvestmentActionBar({id,value,onChange,handleDraftClick,handleCreateInvestmentVehicleClick,buttonName}:props) {
    
    
   return (
@@ -29,8 +30,7 @@ function InvestmentActionBar({id,value,onChange,handleDraftClick,handleCreateInv
                 <Button
            variant={`outline`}
            id='draftButton'
-          //  className='border-solid border-[#142854] h-[45px] md:w-[105px] font-semibold text-[#142854] w-full  md:mt-0 mt-3 cursor-not-allowed'
-          className='border-solid border-white h-[45px] md:w-[105px] font-semibold bg-neutral650 text-white w-full  md:mt-0 mt-3 cursor-default'
+           className='border-solid border-[#142854] cursor-pointer h-[45px] md:w-[105px] font-semibold text-[#142854] w-full  md:mt-0 mt-3'
            onClick={handleDraftClick}
            >
             Drafts
@@ -39,10 +39,10 @@ function InvestmentActionBar({id,value,onChange,handleDraftClick,handleCreateInv
            <div className='md:mt-0 mt-3'>
            <Button
            variant={`secondary`}
-           className='h-[45px] w-full font-semibold md:w-[217px]'
+           className='h-[45px] w-full font-semibold md:w-[200px]'
            onClick={handleCreateInvestmentVehicleClick}
            >
-            Create investment vehicle
+            {buttonName}
            </Button>
            </div>
            </div>

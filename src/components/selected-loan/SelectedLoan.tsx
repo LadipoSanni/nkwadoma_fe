@@ -2,14 +2,14 @@ import React from 'react';
 import SelectedLoanHeader from "@/components/selected-loan/SelectedLoanHeader";
 import styles from "./SelectedLoan.module.css"
 
-type props = {
+interface props  {
     children: React.ReactNode;
 }
 
 const SelectedLoan = ({children}: props) => {
     return (
         <div>
-            <div id={'selectedLoanLayout'} className={` ${styles.layout}  grid md:grid  absolute gap-1 h-[100%] w-[100%] md:h-[100%] md:w-[100%] `}>
+            <div id={'selectedLoanLayout'} className={` ${styles.layout}  grid md:grid  absolute gap-1 h-[100%] w-[100%] md:h-[100%] md:w-[100%] pr-2 md:pr-0`}>
                     <SelectedLoanHeader/>
                     <div id={'childrenOnLoan'}
                          data-testid={'childrenOnLoan'}

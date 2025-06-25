@@ -10,7 +10,7 @@ interface LoanBreakdown {
 export const cohortApi = createApi({
     reducerPath: 'cohortApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['cohort'],
+    tagTypes: ['cohort','loanee'],
     endpoints: (builder) => ({
         createCohort: builder.mutation({
             query: (formData: {
@@ -47,19 +47,21 @@ export const cohortApi = createApi({
                 method: "POST",
                 body: formData
             }),
-            invalidatesTags: ({id}) => [{type: 'cohort', id}],
+            invalidatesTags: ({id}) => [{type: 'loanee', id}],
         }),
         viewAllLoanee: builder.query({
             query: (data: {
                 cohortId?: string,
                 pageNumber?: number;
                 pageSize?: number;
+                status?: string;
+                uploadedStatus? : string
             }) => ({
-                url: '/cohort/all/loanee',
+                url: '/loanee/cohorts/loanees',
                 method: "GET",
                 params: data,
             }),
-            providesTags: ['cohort'],
+            providesTags: ['cohort','loanee'],
         }),
 
         viewCohortDetails: builder.query({
@@ -73,6 +75,8 @@ export const cohortApi = createApi({
 
         getAllCohortsByOrganisation: builder.query({
             query: (param: {
+                organizationId?: string;
+                cohortStatus: string
                 pageSize?: number;
                 pageNumber?: number;
             }) => ({
@@ -80,17 +84,25 @@ export const cohortApi = createApi({
                 method: "GET",
                 params: param,
             }),
-            providesTags: ['cohort'],
+            providesTags: ['cohort','loanee'],
         }),
 
         searchCohortByOrganisation: builder.query({
-            query: (cohortName) => ({
-                url: '/searchCohort',
+            query: (param: { 
+                cohortName: string;
+                organizationId?: string;
+                programId?: string;
+                cohortStatus?: string;
+                pageSize?: number;
+                pageNumber?: number;
+                 }) => ({
+                url: `/searchCohort`,
                 method: 'GET',
-                params: {cohortName},
+                params: param
             }),
 
         }),
+
 
         editCohort: builder.mutation({
             query: ({data}) => ({
@@ -128,8 +140,11 @@ export const cohortApi = createApi({
             query: (param: {
                 loaneeName: string,
                 cohortId?: string,
+                status?: string,
+                pageSize?: number;
+                pageNumber?: number;
             }) => ({
-                url: '/cohort/searchForLoanee',
+                url: '/loanee/cohorts/search/loanees',
                 method: 'GET',
                 params: param,
             })
@@ -140,16 +155,48 @@ export const cohortApi = createApi({
                 method: 'POST',
                 body: data
             }),
-            invalidatesTags: ['cohort'],
+            invalidatesTags: ['loanee'],
         }),
         addLoaneeToCohort: builder.mutation({
             query: (data) => ({
-                url: `/addLoaneeToCohort`,
+                url: `/loanee/cohort`,
                 method: 'POST',
                 body: data
             }),
             invalidatesTags: ['cohort'],
         }),
+        getAllCohortByAParticularProgram: builder.query({
+            query: (param: {
+                programId?:string;
+                cohortStatus?: string;
+                pageSize?: number;
+                pageNumber?: number;
+            }) => ({
+                url: '/cohort/all',
+                method: "GET",
+                params: param,
+
+            }),
+            providesTags: ['cohort'],
+        }),
+          updateLoaneeStatus: builder.mutation({
+            query: (data: {
+                loaneeIds: string[]; 
+                loaneeStatus: string}) => ({
+                url: '/loanee/status', 
+                method: 'POST',              
+                body:data,  
+              }), 
+              invalidatesTags: ['loanee'],
+          }),
+          inviteLoanee: builder.mutation({
+            query: (loaneeIds: string[]) => ({
+                url: '/loanee/invite', 
+                method: 'POST',              
+                body: loaneeIds,  
+              }), 
+              invalidatesTags: ['loanee'],
+          }),
     })
 })
 
@@ -166,6 +213,9 @@ export const {
     useDeleteCohortMutation, useEditCohortMutation,
     useGetCohortDetailsQuery, useReferLoaneeMutation,
     useSearchForLoaneeInACohortQuery,
-    useGetCohortDetailsBreakdownQuery
+    useGetCohortDetailsBreakdownQuery,
+    useGetAllCohortByAParticularProgramQuery,
+    useUpdateLoaneeStatusMutation,
+    useInviteLoaneeMutation
 } = cohortApi;
 

@@ -8,12 +8,14 @@ import {useCreatePasswordMutation} from "@/service/auths/api";
 import {useRouter, useSearchParams} from 'next/navigation'
 import { useToast} from "@/hooks/use-toast";
 import {jwtDecode} from "jwt-decode";
-import {storeUserDetails} from "@/features/auth/usersAuth/login/action";
+import {setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
+import { setMarketInvestmentVehicleId } from '@/redux/slice/investors/MarketPlaceSlice';
 import {encryptText} from "@/utils/encrypt";
+
 
 
 const CreatePassword = () => {
@@ -26,9 +28,7 @@ const CreatePassword = () => {
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
     const encryptedPassword =  encryptText(password)
 
-
     const disable = !criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton;
-
 
 
 
@@ -39,6 +39,7 @@ const CreatePassword = () => {
         "Must contain one lowercase character",
         "Must contain one digit"
     ];
+
 
     const validatePassword = (password: string) => {
         const criteria = [
@@ -64,15 +65,33 @@ const CreatePassword = () => {
 
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
-    const getUserToken = () => {
-            if (searchParams){
-                const pathVariable = searchParams.get("token")
-                if (pathVariable){
-                    return pathVariable
-                }
-            }
-    }
 
+   
+    const getUserToken = () => {
+        if (searchParams) {
+          const rawToken = searchParams.get("token");
+      
+          if (rawToken?.includes("?investmentVehicleId=")) {
+            const [token, vehicleId] = rawToken.split("?investmentVehicleId=");
+            return {
+              token: token,
+              investmentVehicleId: vehicleId || null, 
+            };
+          }
+      
+          return {
+            token: rawToken,
+            investmentVehicleId: null, 
+          };
+        }
+      
+        return {
+          token: null,
+          investmentVehicleId: null,
+        };
+      };
+
+     
     const getUserRoles = (returnsRole: string) => {
         if (returnsRole) {
             // ADMIN_ROLES.filter(returnsRole)
@@ -96,40 +115,67 @@ const CreatePassword = () => {
         };
 
     }
+
+
+    const routeUserToTheirDashboard = async (userRole?: string) => {
+        switch (userRole) {
+            case 'LOANEE' :
+                store.dispatch(setCurrentNavbarItem("overview"))
+                router.push("/onboarding")
+                break;
+            case 'ORGANIZATION_ADMIN':
+                store.dispatch(setCurrentNavbarItem("Program"))
+                router.push("/program")
+                break;
+            case 'PORTFOLIO_MANAGER':
+                store.dispatch(setCurrentNavbarItem("Loan"))
+                router.push("/Overview")
+                break;
+            case "FINANCIER":
+                const { investmentVehicleId } = getUserToken(); 
+                if (investmentVehicleId) {
+                     store.dispatch(setMarketInvestmentVehicleId({marketInvestmentVehicleId: investmentVehicleId }))
+                    store.dispatch(setCurrentNavbarItem("Marketplace"));
+                    router.push(`/marketplace/details`);
+                  } else {
+                    store.dispatch(setCurrentNavbarItem("Overview"))
+                    router.push('/Overview')
+                  }
+                break;
+        }
+    }
+
     const handleCreatePassword = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
         setDisableButton(true)
-        const token = getUserToken()
+        const { token } = getUserToken();
 
         try {
             const response = await createPassword({token: token
                 , password: encryptedPassword}).unwrap()
-            const access_token = response?.data?.accessToken
-            const refreshToken = response?.data?.refreshToken
-            const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-            const user_email = decode_access_token?.email
-            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            const userName = decode_access_token?.name
-            const user_roles = decode_access_token?.realm_access?.roles
-            const user_role = user_roles.filter(getUserRoles).at(0)
-            clearData()
-            await persistor.purge();
-            if (user_role) {
-                storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
-                if (user_role === 'LOANEE') {
-                    store.dispatch(setCurrentNavbarItem("overview"))
-                    router.push("/onboarding")
-                } else if(user_role === 'ORGANIZATION_ADMIN') {
-                    store.dispatch(setCurrentNavbarItem("Program"))
-                    router.push("/program")
-                }else if(user_role === 'PORTFOLIO_MANAGER'){
-                    store.dispatch(setCurrentNavbarItem("Loan"))
-                    router.push("/loan/loan-request")
+             if(response?.data)  {
+                const access_token = response?.data?.accessToken
+                const refreshToken = response?.data?.refreshToken
+                const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+                const user_email = decode_access_token?.email
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                const userName = decode_access_token?.name
+                const user_roles = decode_access_token?.realm_access?.roles
+                const user_role = user_roles.filter(getUserRoles).at(0)
+                clearData()
+                await persistor.purge();
+                toast({
+                    description: "Password created successfully",
+                    status: "success",
+                });
+                if (user_role) {
+                    storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
+                    setUserRoles(user_roles)
+                    await routeUserToTheirDashboard(user_role)
+    
                 }
-
-            }
-
+             } 
 
         }catch (error){
             toast({
@@ -144,43 +190,43 @@ const CreatePassword = () => {
 
     return (
         <form id={'create-password-block'}
-                 className={'bg-white shadow-custom h-fit rounded-xl w-full md:w-[60%] md:mr-10 md:bg-meedlWhite md:ml-40 md:h-fit mb-10 py-6 px-5 grid gap-3 '}>
+              className={'bg-white shadow-custom h-fit rounded-xl w-full md:w-[60%] md:mr-10 md:bg-meedlWhite md:ml-40 md:h-fit mb-10 py-6 px-5 grid gap-3 '}>
             <h1 id={'create-password-title'}
                 className={`${cabinetGrotesk.className} antialiased text-meedlBlue font-[500] text-[24px] md:text-[30px] leading-[145%] `}>Create your password</h1>
-                <main id={'create-password-main'} className={'grid gap-[24.14px]'}>
-                    <div id={'create-password-inputs'} className={'grid gap-4'}>
-                        <AuthInputField
-                            label={'Password'}
-                            id={'password'}
-                            type={'password'}
-                            endAdornment={'Show'}
-                            placeholder={'Enter password'}
-                            value={password}
-                            onChange={handlePasswordChange}
-                            errorMessage={remainingCriteria.length === 1 ? remainingCriteria[0] : ''}
-                        />
-                        <PasswordCriteria id={'createPasswordCriteria'} criteriaStatus={criteriaStatus} />
-                        <AuthInputField
-                            label={'Confirm Password'}
-                            id={'confirmPassword'}
-                            type={'password'}
-                            endAdornment={'show'}
-                            placeholder={'Enter password'}
-                            value={confirmPassword}
-                            onChange={handleConfirmPasswordChange}
-                        />
-                    </div>
-                </main>
-                <AuthButton
-                    backgroundColor={criteriaStatus.every(Boolean) && password === confirmPassword ? '#142854' : '#D0D5DD'}
-                    buttonText={'Create password'}
-                    disable={disable}
-                    handleClick={(e)=>{handleCreatePassword(e)}}
-                    id={"createPasswordButton"}
-                    textColor={'#FFFFFF'}
-                    width={'100%'}
-                    isLoading={isLoading}
-                />
+            <main id={'create-password-main'} className={'grid gap-[24.14px]'}>
+                <div id={'create-password-inputs'} className={'grid gap-4'}>
+                    <AuthInputField
+                        label={'Password'}
+                        id={'password'}
+                        type={'password'}
+                        endAdornment={'Show'}
+                        placeholder={'Enter password'}
+                        value={password}
+                        onChange={handlePasswordChange}
+                        errorMessage={remainingCriteria.length === 1 ? remainingCriteria[0] : ''}
+                    />
+                    <PasswordCriteria id={'createPasswordCriteria'} criteriaStatus={criteriaStatus} />
+                    <AuthInputField
+                        label={'Confirm Password'}
+                        id={'confirmPassword'}
+                        type={'password'}
+                        endAdornment={'show'}
+                        placeholder={'Enter password'}
+                        value={confirmPassword}
+                        onChange={handleConfirmPasswordChange}
+                    />
+                </div>
+            </main>
+            <AuthButton
+                backgroundColor={criteriaStatus.every(Boolean) && password === confirmPassword ? '#142854' : '#D0D5DD'}
+                buttonText={'Create password'}
+                disable={disable}
+                handleClick={(e)=>{handleCreatePassword(e)}}
+                id={"createPasswordButton"}
+                textColor={'#FFFFFF'}
+                width={'100%'}
+                isLoading={isLoading}
+            />
         </form>
     );
 };

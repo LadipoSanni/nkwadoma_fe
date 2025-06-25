@@ -46,6 +46,7 @@ const ViewOrganizationDetail = () => {
   const[] = useState('');
   const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
 
+  
   const dataElement = {
     pageNumber: 0,
     pageSize: 300
@@ -305,13 +306,16 @@ const ViewOrganizationDetail = () => {
                   className={"flex items-center gap-2"}
                 >
                   <IoGlobeOutline className={"h-5 w-5 text-meedlBlue"} />
-                  <p
+                  <a
                     className={
                       "text-meedlBlue text-[14px] font-medium leading-[150%]"
                     }
+                    href={organizationDetail?.data.websiteAddress}
+                    target='_blank'
+                    rel='noopener noreferrer'
                   >
                     {organizationDetail?.data.websiteAddress}
-                  </p>
+                  </a>
                 </div>
               </div>
             </section>

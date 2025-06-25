@@ -1,4 +1,3 @@
-// src/redux/reducer.ts
 import { combineReducers } from 'redux';
 import adminLayoutReducer from '@/redux/slice/layout/adminLayout';
 import selectedLoanReducer from '@/redux/slice/loan/selected-loan';
@@ -17,7 +16,25 @@ import { loanDisbursalApi } from '@/service/admin/loan/Loan-disbursal-api';
 import loanReferralReducer from '@/service/users/loanRerralSlice';
 import cohortReducer from './slice/create/cohortSlice'
 import cameraReducer from  './slice/camera/camera-slice'
+import vehicleReducer from './slice/vehicle/vehicle'
+import programSliceReducer from './slice/program/programSlice'
 import {userApi} from '@/service/users/api';
+import { notificationApi } from '@/service/notification/notification_query';
+import notificationReducer  from './slice/notification/notification';
+import vehicleMultistepReducer from './slice/multiselect/vehicle-multiselect'
+import { financierApi } from '@/service/admin/financier';
+import financierReducer  from '@/redux/slice/financier/financier';
+import MarketPlaceReducer from "./slice/investors/MarketPlaceSlice";
+import kycMultistepReducer from './slice/multiselect/kyc-multiselect'
+
+import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
+import {marketplaceApi} from "@/service/financier/marketplace";
+import {portfolioOverviewApi} from '@/service/admin/overview'
+import kycFormReducer from "@/redux/slice/kyc/kycFormSlice";
+import {unauthorizedApis} from "@/service/unauthorized/action";
+import OrganizationReducer from "./slice/organization/organization"
+import { loanBookApi } from '@/service/admin/loan_book';
+import CsvReducer from "@/redux/slice/csv/csv"
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -27,6 +44,16 @@ const appReducer = combineReducers({
     loanReferral: loanReferralReducer,
     cohort: cohortReducer,
     camera: cameraReducer,
+    vehicle: vehicleReducer,
+    program: programSliceReducer,
+    notification: notificationReducer ,
+    vehicleMultistep:vehicleMultistepReducer,
+    marketPlace: MarketPlaceReducer,
+    financier:financierReducer,
+    kycMultistep:kycMultistepReducer,
+    kycForm: kycFormReducer,
+    organization: OrganizationReducer,
+    csv: CsvReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
@@ -38,6 +65,13 @@ const appReducer = combineReducers({
     [fundApi.reducerPath]: fundApi.reducer,
     [loanOfferApi.reducerPath]: loanOfferApi.reducer,
     [loanDisbursalApi.reducerPath]: loanDisbursalApi.reducer,
+    [notificationApi.reducerPath]:  notificationApi.reducer,
+    [financierApi.reducerPath]: financierApi.reducer,
+    [financierOnboardingAndDashboardApi.reducerPath]: financierOnboardingAndDashboardApi.reducer,
+    [marketplaceApi.reducerPath]: marketplaceApi.reducer,
+    [portfolioOverviewApi.reducerPath]: portfolioOverviewApi.reducer,
+    [unauthorizedApis.reducerPath]: unauthorizedApis.reducer,
+    [loanBookApi.reducerPath]: loanBookApi.reducer
 });
 
 export default appReducer;

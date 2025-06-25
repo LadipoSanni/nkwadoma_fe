@@ -5,7 +5,7 @@ import {store, useAppSelector} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation";
 import {cabinetGroteskRegular, inter} from "@/app/fonts";
-import styles from "@/pages/admin/loan-request-details/index.module.css";
+import styles from "./index.module.css";
 import {Breakdown} from "@/reuseable/details/breakdown";
 import {NumericFormat} from "react-number-format";
 import dayjs from "dayjs";
@@ -32,7 +32,7 @@ const Index = () => {
         router.push('/loan/loan-disbursal')
     }
 
-    const breakDown = details?.data.loaneeLoanBreakDowns.map((item: LoaneeLoanBreakDown) => ({
+    const breakDown = details?.data?.loaneeLoanBreakDowns?.map((item: LoaneeLoanBreakDown) => ({
         itemName: item.itemName,
         itemAmount: `₦${item.itemAmount.toLocaleString()}`,
     })) || [];
@@ -48,14 +48,14 @@ const Index = () => {
     }
 
     const basicDetails = [
-        {label: 'Gender', value: details?.data.userIdentity.gender},
-        {label: 'Email address', value: details?.data.userIdentity.email},
-        {label: 'Phone number', value: details?.data.userIdentity.phoneNumber},
-        {label: 'Date of birth', value: details?.data.userIdentity.dateOfBirth},
-        {label: 'Marital status', value: details?.data.userIdentity.maritalStatus},
-        {label: 'Nationality', value: details?.data.userIdentity.nationality},
-        {label: 'State of origin', value: details?.data.userIdentity.stateOfOrigin},
-        {label: 'State of residence', value: details?.data.userIdentity.stateOfResidence},
+        {label: 'Gender', value: details?.dataa?.userIdentity?.gender},
+        {label: 'Email address', value: details?.data?.userIdentity?.email},
+        {label: 'Phone number', value: details?.data?.userIdentity?.phoneNumber},
+        {label: 'Date of birth', value: details?.data?.userIdentity?.dateOfBirth},
+        {label: 'Marital status', value: details?.data?.userIdentity?.maritalStatus},
+        {label: 'Nationality', value: details?.data?.userIdentity?.nationality},
+        {label: 'State of origin', value: details?.data?.userIdentity?.stateOfOrigin},
+        {label: 'State of residence', value: details?.data?.userIdentity?.stateOfResidence},
         {label: 'Residential address', value: details?.deta?.userIdentity?.residentialAddress},
     ];
     const startDate = dayjs(details?.data.startData?.toString()).format('MMM D, YYYY');
@@ -70,11 +70,10 @@ const Index = () => {
                     thousandSeparator=","
                     decimalScale={2}
                     fixedDecimalScale={true}
-                    // value={'200000'}
                     disabled={true}
                     prefix={'₦'}
                     className='bg-grey105 flex md:place-items-end '
-                    value={details?.data.tuitionAmount}
+                    value={details?.data?.tuitionAmount}
                 />
         },
         { label: 'Start date', value: startDate},
@@ -87,11 +86,8 @@ const Index = () => {
                 decimalScale={2}
                 fixedDecimalScale={true}
                 disabled={true}
-                // value={'200000'}
                 prefix={'₦'}
-                value={details?.data.loanAmountRequested}
-                // placeholder={${detail.itemName}}
-                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
+                value={details?.data?.loanAmountRequested}
                 className='bg-grey105 flex md:place-items-end'
             />
         },
@@ -103,30 +99,28 @@ const Index = () => {
                 thousandSeparator=","
                 decimalScale={2}
                 fixedDecimalScale={true}
-                // value={'200000'}
                 prefix={'₦'}
-                value={details?.data.initialDeposit}
+                value={details?.data?.initialDeposit}
                 disabled={true}
-                // placeholder={${detail.itemName}}
-                // className="w-full p-3 h-[3.2rem] border rounded focus:outline-none"
                 className='bg-grey105 flex md:place-items-end'
             />
         },
 
 
+
     ]
 
     const alternate = [
-        {label: 'Alternate email address', value: details?.data.userIdentity.alternateEmail},
-        {label: 'Alternate phone number', value: details?.data.userIdentity.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: details?.data.userIdentity.alternateContactAddress},
+        {label: 'Alternate email address', value: details?.data?.userIdentity?.alternateEmail},
+        {label: 'Alternate phone number', value: details?.data?.userIdentity?.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: details?.data?.userIdentity?.alternateContactAddress},
         {
             label: 'Next of kin name',
-            value: `${details?.data.nextOfKin.firstName} ${details?.data.nextOfKin.lastName}`
+            value: `${details?.data?.nextOfKin?.firstName} ${details?.data?.nextOfKin?.lastName}`
         },
-        {label: 'Next of kin email address', value: details?.data.nextOfKin.email},
-        {label: 'Next of kin phone number', value: details?.data.nextOfKin.phoneNumber},
-        {label: 'Next of kin relationship', value: details?.data.nextOfKin.nextOfKinRelationship},
+        {label: 'Next of kin email address', value: details?.data?.nextOfKin?.email},
+        {label: 'Next of kin phone number', value: details?.data?.nextOfKin?.phoneNumber},
+        {label: 'Next of kin relationship', value: details?.data?.nextOfKin?.nextOfKinRelationship},
     ];
 
     const getCurrentDataList = () => {
@@ -154,13 +148,13 @@ const Index = () => {
     const initial = getInitials(`${details?.data.firstName} ${details?.data.lastName}`);
 
     return (
-        <>{isLoading ? (<SkeletonForDetailPage/>) : (
+        <div id={'disbursedLoanMainContainer'} data-testid={'disbursedLoanMainContainer'}>{isLoading ? (<SkeletonForDetailPage/>) : (
             <div
                 id={'disbursedLoanMainContainer'}
-                data-testid={'disbursedLoanMainContainer'}
-                className={'md:px-8 w-full h-full  px-3 pt-4 md:pt-4'}
+                data-testid={'disbursedLoanMainContainers'}
+                className={'md:px-8 w-full max:h-96  px-3 pt-4 md:pt-4'}
             >
-                <BackButton handleClick={backToViewAllDisbursedLoan} iconRight={true} text={"Back to disbursed loan"}
+                <BackButton handleClick={backToViewAllDisbursedLoan} iconBeforeLetters={true} text={"Back to disbursed loan"}
                             id={"disbursedLoanDetailsBackButton"} textColor={'#142854'}/>
                 <div
                     id={'disbursedLoanDetailsPageContainer'}
@@ -169,7 +163,6 @@ const Index = () => {
                 >
                     <div>
                         <Card id={"loaneeImageOnDisbursedLoanDetails"} data-testid={"loaneeImageOnDisbursedLoanDetails"}
-                            // className={`h-[8rem] w-[8rem] md:w-[8rem] md:h-[8rem]`}
                               className="rounded-lg md:max-w-md "
                         >
                             {details?.data.image ? (
@@ -226,9 +219,14 @@ const Index = () => {
                                         <div
                                             className={'md:flex md:py-2 md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                                             <div
-                                                className={'text-black300 text-[14px] leading-[150%] font-normal'}>{item.label}</div>
+                                                id={`loanDisbursalDetailsName`}
+                                                data-testid={`loanDisbursalDetailsName`}
+                                                className={` ${inter.className} text-black300 md:text-black300 md:text-[14px] text-[14px`}>{item.label}</div>
+
                                             <div
-                                                className={'text-black500  break-all md:max-w-[50%]  text-[14px] leading-[150%] font-normal'}> {item.value ? item?.value : 'Not provided'}</div>
+                                                id={`loanDisbursalDetailsValue`}
+                                                data-testid={`loanDisbursalDetailsValue`}
+                                                className={`text-black500 ${inter.className} md:max-w-[40%] md:text-[14px] md:text-black500 md:break-all break-all text-black500 text-[14px]`}> {item.value ? item?.value : 'Not provided'} </div>
                                         </div>
                                     </li>
                                 ))
@@ -246,7 +244,7 @@ const Index = () => {
                 </div>
             </div>
         )}
-        </>
+        </div>
     );
 };
 

@@ -23,7 +23,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver, set
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [fileName, setFileName] = useState("");
-    const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(initialImageUrl || null); // Initialize with initialImageUrl
+    const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(initialImageUrl || null); 
 
     useEffect(() => {
         if (file) {
@@ -51,7 +51,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver, set
             }
             setLoading(true);
             setFile(selectedFile);
-            setError(null); // Clear any previous error
+            setError(null); 
            
             try { 
                 const uploadedFileUrl = await uploadImageToCloudinary(selectedFile); 
@@ -79,7 +79,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver, set
             }
             setLoading(true);
             setFile(droppedFile);
-            setError(null); // Clear any previous error
+            setError(null); 
             handleDrop(event);
             try { 
                 const uploadedFileUrl = await uploadImageToCloudinary(droppedFile); 
@@ -137,7 +137,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ handleDrop, handleDragOver, set
                                     </p>
                                 )}
                                 {!loading && !error && !file && (
-                                    <p className={'text-green-500 font-normal text-[12px] leading-[150%]'}>Uploaded successfully</p>
+                                    <p className={'text-[#06792D] font-normal text-[12px] leading-[150%]'}>Uploaded successfully</p>
                                 )}
                                 {loading && (
                                     <p className={'text-black300 font-normal text-[12px] leading-[150%]'}>Uploading...</p>

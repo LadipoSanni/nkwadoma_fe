@@ -1,6 +1,6 @@
 export const fundTabData = [ 
-    { name: "Details", value: "/funds/details" },
-     { name: "Financiers", value: "/funds/financiers" }, 
+    { name: "Details", value: "/vehicle/details" },
+     { name: "Financiers", value: "/vehicle/financiers" },
 ];
 
 export const loanProductTab = [
@@ -13,3 +13,45 @@ export const settingsTab = [
     { name: "Team", value: "/settings/team" },
     { name: "Roles & Permissions", value: "/settings/roles-&-permissions" },
 ]
+
+export const vehicleTab = [
+    {name: "Commercial ", value: "/vehicle/commercial-vehicle"},
+    {name: "Endowment ", value: "/vehicle/endownment-vehicle"}
+]
+
+export const programDetailTab = [
+    {name: "Details", value: "/program/program-details"},
+    {name: "Cohort", value: "/program/program-cohorts"}
+]
+
+export const steps = [
+    { id: 'setup', title: 'Setup' },
+    { id: 'status', title: 'Status' },
+    { id: 'visibility', title: 'Visibility' },
+
+  ];
+
+export const kycSteps = [
+    { id: 'identification', title: 'Identification' },
+    { id:"sof", title: 'Source of funds' },
+    { id: 'beneficial-owner', title: 'Beneficial Owner' },
+    { id: 'political-exposure', title: 'Political exposure' },
+
+];
+
+export const marketplaceInvestment = [
+    { id: 'transfer', title: 'Transfer funds' },
+    // { id: 'confirmTransfer', title: 'Confirm transfer' },
+  ];
+
+export const financierTabData = [
+{name: 'Details', value: '/financier/details'},
+{name: 'Investment vehicle', value: '/financier/investmentVehicles'}
+]
+
+export const loaneeTabData = [
+    {name: "Invited", value:"/organizations/loanees/invited"},
+    {name: "Uploaded", value:"/organizations/loanees/uploaded"},
+    {name: "Archived",value: "/organizations/loanees/archived"}
+]
+

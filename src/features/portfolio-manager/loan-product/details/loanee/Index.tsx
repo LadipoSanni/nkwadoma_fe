@@ -1,103 +1,90 @@
-"use client"
-import React from 'react';
-import 'react-quill/dist/quill.snow.css'; // Import the styles
-import 'react-quill-new/dist/quill.snow.css';
+"use client";
+import React, {useState,useEffect} from 'react';
+import SearchInput from "@/reuseable/Input/SearchInput";
+import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
+import {MdOutlinePerson, MdSearch} from "react-icons/md";
+import Tables from "@/reuseable/table/LoanProductTable";
+import {useAppSelector} from "@/redux/store";
+import {useGetAllLoaneeInALoanProductQuery, useSearchLoaneesInALoanProductQuery} from "@/service/admin/loan_product";
 
-const DescriptionEditor: React.FC = () => {
 
+interface TableRowData {
+    [key: string]: string | number | null | React.ReactNode ;
+}
+
+interface loanDetails extends TableRowData{
+    firstName: string;
+    lastName: string;
+    performance: string;
+    instituteName: string;
+}
+
+export function Loanees() {
+    const id = useAppSelector(state => (state.selectedLoan.clickedLoanProductId))
+    const [loanProductId] = useState(id);
+    const [loanees, setLoanees] = useState<loanDetails[]>([])
+    const [searchTerm, setSearchTerm] = useState('');
+    const [page] = useState(0);
+    const size = 100;
+
+    const {data: allLoanee, isLoading:allLoaneeIsLoading} = useGetAllLoaneeInALoanProductQuery({
+        loanProductId: id,
+        pageSize: size,
+        pageNumber: page
+    }, {refetchOnMountOrArgChange: true, skip: !loanProductId});
+
+    const {data: searchResults, isLoading} = useSearchLoaneesInALoanProductQuery({
+        loanProductId: id,
+        name: searchTerm,
+    }, {skip: !searchTerm || !loanProductId})
+
+    useEffect(() => {
+        if (searchTerm && searchResults?.data?.body) {
+            setLoanees(searchResults.data.body);
+        } else if (!searchTerm && allLoanee?.data?.body) {
+            setLoanees(allLoanee.data.body);
+        }
+    }, [searchTerm, searchResults?.data?.body, allLoanee?.data?.body]);
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
+    const LoanProductLoaneeHeader = [
+        {title: "Name", sortable: true, id: "name",
+            selector: (row: TableRowData) =>
+                `${(row.firstName as string).charAt(0).toUpperCase()}${(row.firstName as string).slice(1).toLowerCase()} ${(row.lastName as string).charAt(0).toUpperCase()}${(row.lastName as string).slice(1).toLowerCase()}`
+        },
+        {title: "Status", sortable: true, id: "performance", selector: (row: TableRowData) => <span
+                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.performance  === "PERFORMANCE" ? "text-success600 bg-success50" : "text-error600 bg-error50"} `}>
+                {row.performance ?? "No record"}
+            </span>
+        },
+        {title: "Organization", sortable: true, id: "instituteName", selector: (row: TableRowData) => row.instituteName},
+
+    ];
     return (
-        <div className="pt-4">
-            {/*<Label htmlFor="loanProductTermsAndConditionId">Loan product terms and*/}
-            {/*    condition</Label>*/}
-            {/*<ReactQuill*/}
-            {/*    theme="snow"*/}
-            {/*    value={values.loanProductTermsAndCondition}*/}
-            {/*    onChange={(content) => {*/}
-            {/*        if (content.length <= maxChars) {*/}
-            {/*            setFieldValue("loanProductTermsAndCondition", content);*/}
-            {/*            setError(''); // Clear error when within limit.*/}
-            {/*        } else {*/}
-            {/*            setError('Product condition must be 2500 characters or less');*/}
-            {/*        }*/}
-            {/*    }}*/}
-            {/*    // onPaste={(e: React.ClipboardEvent<HTMLDivElement>) => {*/}
-            {/*    //     const paste = e.clipboardData.getData('text');*/}
-            {/*    //     if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {*/}
-            {/*    //         e.preventDefault();*/}
-            {/*    //         setError('Product condition must be 2500 characters or less');*/}
-            {/*    //     }*/}
-            {/*    // }}*/}
-            {/*    modules={{*/}
-            {/*        toolbar: [*/}
-            {/*            ['bold', 'italic', 'underline', 'strike'],        // Text formatting options*/}
-            {/*            [{list: 'ordered'}, {list: 'bullet'}],       // Lists*/}
-            {/*            ['link'],                                         // Links*/}
-            {/*            ['clean'],                                        // Remove formatting*/}
-            {/*        ],*/}
-            {/*    }}*/}
-            {/*    formats={[*/}
-            {/*        'bold', 'italic', 'underline', 'strike',*/}
-            {/*        'list', 'bullet',*/}
-            {/*        'link',*/}
-            {/*    ]}*/}
-            {/*    className="w-full p-3 border rounded focus:outline-none mt-2 text-sm"*/}
-            {/*    placeholder="Enter terms and condition"*/}
-            {/*/>*/}
-            {/*{*/}
-            {/*    errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (*/}
-            {/*        <ErrorMessage*/}
-            {/*            name="loanProductTermsAndCondition"*/}
-            {/*            component="div"*/}
-            {/*            id="loanProductTermsAndConditionError"*/}
-            {/*            className="text-red-500 text-sm"*/}
-            {/*        />*/}
-            {/*    )*/}
-            {/*}*/}
-            {/*{error && <div className="text-red-500 text-sm">{error}</div>}*/}
-
-
-            {/*<div className={`pt-4`}>*/}
-            {/*    <Label htmlFor="loanProductTermsAndCondition">Loan product terms and*/}
-            {/*        condition</Label>*/}
-            {/*    <Field*/}
-            {/*        as="textarea"*/}
-            {/*        id="loanProductTermsAndConditionId"*/}
-            {/*        name="loanProductTermsAndCondition"*/}
-            {/*        className="w-full p-3 border rounded focus:outline-none mt-2 resize-none text-sm"*/}
-            {/*        placeholder="Enter terms and condition"*/}
-            {/*        rows={4}*/}
-            {/*        maxLength={maxChars}*/}
-            {/*        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {*/}
-            {/*            const value = e.target.value;*/}
-            {/*            if (value.length <= maxChars) {*/}
-            {/*                setFieldValue("loanProductTermsAndCondition", value);*/}
-            {/*            }*/}
-            {/*        }}*/}
-            {/*        onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => {*/}
-            {/*            const paste = e.clipboardData.getData('text');*/}
-            {/*            if (paste.length + values.loanProductTermsAndCondition.length > maxChars) {*/}
-            {/*                e.preventDefault();*/}
-            {/*                // setFieldValue("loanProductTermsAndCondition", paste);*/}
-            {/*                setError('Product condition must be 2500 characters or less');*/}
-            {/*            }*/}
-            {/*        }}*/}
-            {/*    />*/}
-            {/*    {*/}
-            {/*        errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (*/}
-            {/*            <ErrorMessage*/}
-            {/*                name="loanProductTermsAndCondition"*/}
-            {/*                component="div"*/}
-            {/*                id='loanProductTermsAndConditionError'*/}
-            {/*                className="text-red-500 text-sm"*/}
-            {/*            />*/}
-            {/*        )*/}
-            {/*    }*/}
-            {/*</div>*/}
+        <div>
+            <div id={`loanProductTab2`} className={'grid gap-4'}>
+                <SearchInput id={'loanProductLoaneeSearch'} value={searchTerm} onChange={handleSearchChange}/>
+                <div>
+                    {searchTerm && loanees.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :
+                        <Tables
+                            tableData={loanees}
+                            tableHeader={LoanProductLoaneeHeader}
+                            staticHeader={'loanee'}
+                            staticColunm={'name'}
+                            tableHeight={58}
+                            icon={MdOutlinePerson}
+                            sideBarTabName={"loanee"}
+                            handleRowClick={() => {
+                            }}
+                            optionalRowsPerPage={10}
+                            tableCellStyle={'h-12'}
+                            condition={true}
+                            isLoading={isLoading || allLoaneeIsLoading}
+                        />}
+                </div>
+            </div>
         </div>
-
     );
-};
-
-export default DescriptionEditor;
-
-
+}

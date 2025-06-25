@@ -1,0 +1,55 @@
+.tab{
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+
+.overviewCard {
+    width: 100%;
+    display: flex;
+    overflow: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+
+.container{
+    width: 100%;
+    background-color: white;
+}
+
+.tabContent{
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+
+
+@media only screen and (min-width: 600px){
+    .container{
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 10px;
+
+    }
+
+    .container::-webkit-scrollbar {
+        width: 2px;
+    }
+    .container::-webkit-scrollbar-track{
+        background-color: white;
+        padding-right: 1px;
+    }
+    .container::-webkit-scrollbar-thumb{
+        width: 1px;
+        background-color: #D9D9D9;
+        height: 4px;
+    }
+
+}

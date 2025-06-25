@@ -5,15 +5,15 @@ import * as Yup from "yup";
 import { Label } from "@/components/ui/label";
 import { inter } from "@/app/fonts";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
-// import RichTextEditor from '@/reuseable/Input/Ritch-text-editor';
 import Isloading from "@/reuseable/display/Isloading";
 import { useCreateInvestmentVehicleMutation } from "@/service/admin/fund_query";
 import { useToast } from "@/hooks/use-toast";
 import { validateNumber, validatePositiveNumberWithIndexNumbers } from "@/utils/Format";
 import { validateText, validateNumberLimit } from "@/utils/Format";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat";
-// import CustomNumberFormat from '@/reuseable/Input/CustomNumberFormat';
 import FormikCustomQuillField from "@/reuseable/textArea/FormikCustomQuillField";
+import ChooseVisibility from "./investmentVehicle-multistep/Choose-visibility";
+
 
 interface ApiError {
   status: number;
@@ -49,14 +49,19 @@ function CreateInvestmentVehicle({
 }: props) {
   const [selectCurrency, setSelectCurrency] = useState("NGN");
   const [isError, setError] = useState("");
-  const [createInvestmentVehicle, { isLoading }] =
-    useCreateInvestmentVehicleMutation();
+  const [vehicleTypeStatus, setVehicleTypeStatus] = useState('');
+  const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
   const { toast } = useToast();
+  const [step, setStep] = useState(1);
 
   const handleCloseModal = () => {
     if (setIsOpen) {
       setIsOpen(false);
     }
+  };
+
+  const handleContinue = () => {
+    setStep(2); 
   };
 
   const validationSchema = Yup.object().shape({
@@ -151,10 +156,6 @@ function CreateInvestmentVehicle({
     tenure: Yup.string()
       .trim()
       .required("Tenor size is required")
-      // .matches(
-      //   /^[1-9]\d*$/,
-      //   "Tenor must be a positive number and cannot start with zero."
-      // )
       .matches(
         /^[1-9]\d{0,2}$/,
         "Tenor must be a three-digit positive number and cannot start with zero."
@@ -192,26 +193,35 @@ function CreateInvestmentVehicle({
     ),
   });
 
-  const handleSubmit = async (values: typeof initialFormValue) => {
+  const draftValidationSchema = Yup.object().shape({
+    name: Yup.string()
+      .trim()
+      .required("Name is required"), 
+  });
+
+  const handleDraft = async (values: typeof initialFormValue) => {
+    setVehicleTypeStatus("DRAFT")
     const formData = {
       name: values.name,
       sponsors: values.sponsors,
       fundManager: values.fundManager,
       minimumInvestmentAmount: values.minimumInvestmentAmount,
       mandate: values.mandate,
-      tenure: values.tenure,
+      tenure: values.tenure || "1",
       size: values.size,
       rate: values.rate,
       bankPartner: values.bankPartner,
       trustee: values.trustee,
       custodian: values.custodian,
       investmentVehicleType: investmentVehicleType,
+      investmentVehicleStatus : "DRAFT"
     };
     try {
       const create = await createInvestmentVehicle(formData).unwrap();
+      // setIsChecked(true)
       if (create) {
         toast({
-          description: create.message,
+          description: "Successfully added to draft",
           status: "success",
         });
         handleCloseModal();
@@ -222,9 +232,74 @@ function CreateInvestmentVehicle({
     }
   };
 
-  // const maxChars = 1500;
+  const handleSaveDraft = async (
+    values: typeof initialFormValue,
+    setFieldError: (field: string, message: string) => void
+  ) => {
+    try {
+      await draftValidationSchema.validate(values, { abortEarly: false });
+  
+      await handleDraft(values);
+    } catch (validationErrors) {
+      if (validationErrors instanceof Yup.ValidationError) {
+        const errors = validationErrors.inner.reduce((acc, err) => {
+          acc[err.path || ""] = err.message;
+          return acc;
+        }, {} as Record<string, string>);
+        setFieldError("name", errors.name); 
+        if(errors.name){
+          toast({
+            description:  errors.name,
+            status: "error",
+          });
+        }
+        
+      }
+    }
+  };
+
+  
+ 
+  
+   
+  const handleSubmit = async (values: typeof initialFormValue) => {
+    setVehicleTypeStatus("PUBLISH")
+    const formData = {
+      name: values.name,
+      sponsors: values.sponsors,
+      fundManager: values.fundManager,
+      minimumInvestmentAmount: values.minimumInvestmentAmount,
+      mandate: values.mandate,
+      tenure: values.tenure || "1",
+      size: values.size,
+      rate: values.rate,
+      bankPartner: values.bankPartner,
+      trustee: values.trustee,
+      custodian: values.custodian,
+      investmentVehicleType: investmentVehicleType,
+      
+    };
+    try {
+      const create = await createInvestmentVehicle(formData).unwrap();
+      if (create) {
+        toast({
+          description: create.message,
+          status: "success",
+        });
+        // handleCloseModal();
+        handleContinue()
+      }
+    } catch (err) {
+      const error = err as ApiError;
+      setError(error?.data?.message);
+    }
+  };
+
+  
+
   return (
     <div id="createInvestmentVehicleId">
+      { step === 1?
       <Formik
         initialValues={initialFormValue}
         onSubmit={handleSubmit}
@@ -237,16 +312,18 @@ function CreateInvestmentVehicle({
           touched,
           setFieldValue,
           setFieldError,
-          // values
+           values
         }) => (
           <Form className={`${inter.className}`}>
             <div
-              className="grid grid-cols-1 gap-y-4 md:max-h-[540px] overflow-y-auto"
-              style={{
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
-              }}
+              className=""
             >
+              <div className="grid grid-cols-1 gap-y-4 lg:max-h-[56.5vh] md:max-h-[50vh] overflow-y-auto"
+                 style={{
+                  scrollbarWidth: "none",
+                  msOverflowStyle: "none",
+                }}
+              >
               <div>
                 <Label htmlFor="name">Name</Label>
                 <Field
@@ -255,16 +332,6 @@ function CreateInvestmentVehicle({
                   placeholder="Enter name"
                   className="w-full p-3 border rounded focus:outline-none mt-2"
                   onChange={validateText("name", setFieldValue)}
-                  //   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("name", e.target.value.replace(/[^a-zA-Z0-9_\-\/]/g,''))}
-                  // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  //     const value = e.target.value; const regex = /^[a-zA-Z][a-zA-Z0-9_\-\/]*$/;
-                  //      if (regex.test(value) || value === "") {
-                  //          setFieldValue("name", value);
-                  //         }
-
-                  //          else {
-                  //          setFieldValue("name", value.replace(/[^a-zA-Z0-9_\-\/]/g, '').replace(/^[^a-zA-Z]/, ''));
-                  //         } }}
                 />
                 {errors.name && touched.name && (
                   <ErrorMessage
@@ -485,12 +552,6 @@ function CreateInvestmentVehicle({
                     name="custodian"
                     placeholder="Enter custodian"
                     className="w-full p-3 border rounded focus:outline-none mt-2"
-                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    //   setFieldValue(
-                    //     "custodian",
-                    //     e.target.value.replace(/[^a-zA-Z\s]/g, "")
-                    //   )
-                    // }
                   />
                   {errors.custodian && touched.custodian && (
                     <ErrorMessage
@@ -503,31 +564,6 @@ function CreateInvestmentVehicle({
               </div>
               <div className="relative bottom-3">
                 <Label htmlFor="mandate">Vehicle mandate</Label>
-
-                {/* <Field
-                 as="textarea"
-                id="mandate"
-                name="mandate"
-                className="w-full p-3 border rounded focus:outline-none mt-2 resize-none "
-                placeholder="Enter cohort description"
-                rows={4}
-                maxLength={maxChars}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { 
-                  const value = e.target.value; 
-                  if (value.length <= maxChars) { 
-                    setFieldValue("mandate", value);
-                    setError('')
-                   } }} 
-                onPaste={(e: React.ClipboardEvent<HTMLTextAreaElement>) => { 
-                  const paste = e.clipboardData.getData('text'); 
-                  if (paste.length + values.mandate.length > maxChars) { 
-                    e.preventDefault(); 
-                    setError('Mandate must be 2500 characters or less'); } 
-                    else {
-                      setError('')
-                    }
-                  }}
-                /> */}
                 <Field
                   name="mandate"
                   component={FormikCustomQuillField}
@@ -547,29 +583,35 @@ function CreateInvestmentVehicle({
                </div>  
                 )}
               </div>
-              <div className="md:flex gap-4 justify-end mt-2 mb-4 md:mb-0">
-                <Button
-                  variant={"outline"}
-                  type="reset"
-                  className="w-full md:w-36 h-[57px] mb-4"
-                  // onClick={() => handleReset(resetForm)}
-                  onClick={handleCloseModal}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant={"default"}
-                  className={`w-full md:w-36 h-[57px] ${
-                    !isValid
-                      ? "bg-neutral650 cursor-not-allowed "
-                      : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
-                  }`}
-                  type="submit"
-                  disabled={!isValid}
-                >
-                  {isLoading ? <Isloading /> : "Publish"}
-                </Button>
               </div>
+                    <div className= "md:flex gap-4 justify-end mt-2 mb-4 md:mb-0">
+                        <Button
+                            variant={"outline"}
+                             type="button"
+                           className='w-full lg:w-36 h-[57px] mb-4 border-solid border-[#142854] text-[#142854]'
+                            // onClick={() => handleReset(resetForm)}
+                            onClick={()=> handleSaveDraft(values,setFieldError)}
+                        >
+                          {
+                            vehicleTypeStatus === "DRAFT" && isLoading?  <Isloading /> : "Save to draft"
+                          }
+                            
+                        </Button>
+                        <Button
+                            variant={"default"}
+                            className={` w-full lg:w-36 h-[57px] ${
+                                !isValid
+                                    ? "bg-neutral650 cursor-auto hover:bg-neutral650 "
+                                    : "hover:bg-meedlBlue bg-meedlBlue cursor-pointer"
+                            }`}
+                            type="submit"
+                            disabled={!isValid}
+                        >
+                            {vehicleTypeStatus === "PUBLISH" && isLoading ? <Isloading /> : "Publish"}
+                        </Button>
+
+                    </div>
+
             </div>
             <p
               className={`text-error500 flex justify-center items-center ${
@@ -580,9 +622,15 @@ function CreateInvestmentVehicle({
             </p>
           </Form>
         )}
-      </Formik>
+      </Formik> 
+      : 
+      <div>
+        <ChooseVisibility/>
+      </div>
+      }
     </div>
   );
 }
 
 export default CreateInvestmentVehicle;
+

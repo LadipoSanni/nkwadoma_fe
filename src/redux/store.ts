@@ -15,12 +15,19 @@ import { fundApi } from '@/service/admin/fund_query';
 import { loanOfferApi } from '@/service/admin/loan/loan-offer-api';
 import { loanDisbursalApi } from '@/service/admin/loan/Loan-disbursal-api';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { notificationApi } from '@/service/notification/notification_query';
+import { financierApi } from '@/service/admin/financier';
+import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
+import {marketplaceApi} from "@/service/financier/marketplace";
+import {portfolioOverviewApi} from '@/service/admin/overview'
+import { loanBookApi } from '@/service/admin/loan_book';
+import {unauthorizedApis} from "@/service/unauthorized/action";
 
 
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'loanReferral'],
+    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep', 'loanReferral', 'kycForm','notification','organization','cohort','csv'],
 };
 
 const persistedReducer = persistReducer(persistConfig, appReducer);
@@ -43,6 +50,13 @@ export const store = configureStore({
             loanOfferApi.middleware,
             loanDisbursalApi.middleware,
             userApi.middleware,
+            notificationApi.middleware,
+            financierApi.middleware,
+            financierOnboardingAndDashboardApi.middleware,
+            marketplaceApi.middleware,
+            portfolioOverviewApi.middleware,
+            unauthorizedApis.middleware,
+            loanBookApi.middleware,
         ]),
 });
 

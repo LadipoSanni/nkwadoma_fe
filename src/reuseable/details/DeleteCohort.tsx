@@ -3,22 +3,23 @@ import DeleteIcon from '../../../public/Icon - Delete.png'
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {inter, cabinetGrotesk} from "@/app/fonts";
-// import ToastPopUp from '@/reuseable/notification/ToastPopUp';
 import Isloading from "../display/Isloading";
 
 interface deleteCohortProps {
-    id?: string,
+    id?: string ;
     setIsOpen?: (e: boolean | undefined) => void,
     headerTitle: string,
     title: string,
     handleDelete?: (id: string) => void;
+    handleMultipleDelete?: (id: string[]) => void;
     isLoading?: boolean
-    errorDeleted?: string
+    errorDeleted?: string;
+    ids?: string[];
 
 }
 
 
-export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading}) => {
+ const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitle, title,handleDelete,id,isLoading,ids,handleMultipleDelete}) => {
  
 
     const handleCanCelCohort = () => {
@@ -32,6 +33,11 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
         if(handleDelete){
             handleDelete(id ?? "");
             if (setIsOpen) setIsOpen(false); 
+        }else {
+             if(handleMultipleDelete){
+             handleMultipleDelete(ids ?? [])
+             if (setIsOpen) setIsOpen(false); 
+             }
         }
      
     }
@@ -51,12 +57,12 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
             </div>
 
             <div className={`flex flex-row justify-end gap-3 py-5`}>
-                <Button size={'lg'} variant={'outline'}
+                <button
                         id="cancelDeleteButtton"
-                        className={`${inter.className} h-12 text-sm font-semibold leading-6 text-meedlBlack`}
-                        onClick={handleCanCelCohort}>Cancel</Button>
+                        className={`${inter.className} h-12 text-sm font-semibold leading-6 text-[#142854] bg-white border-solid border-[#142854] border-[1px] w-28 rounded-md hover:bg-[#E8EAEE]  `}
+                        onClick={handleCanCelCohort}>Cancel</button>
                 <Button size={'lg'} variant={'secondary'}
-                        className={`${inter.className} h-12 bg-error450 text-sm font-semibold leading-6 text-meedlWhite`}
+                        className={`${inter.className} h-12 bg-error450 hover:bg-error450 focus:bg-error450 text-sm font-semibold leading-6 text-meedlWhite`}
                         id="deleteButton"
                         onClick={handleDeleteCohort}>
                             {
@@ -68,3 +74,5 @@ export const DeleteCohort: React.FC<deleteCohortProps> = ({setIsOpen, headerTitl
         </div>
     )
 }
+
+export default DeleteCohort

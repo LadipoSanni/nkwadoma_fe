@@ -102,7 +102,7 @@ const LoaneeOnboarding = () => {
     };
 
     return (
-        <div id="loanApplicationDetailsContainer" className={`md:overflow-visible overflow-y-auto h-[calc(100vh-8rem)] md:h-auto grid pr-1.5 md:gap-[58px] gap-6 ${inter.className}`}>
+        <div id="loanApplicationDetailsContainer" className={`md:overflow-visible overflow-y-auto h-[calc(100vh-8rem)] md:h-auto grid pr-1.5 md:gap-[58px] gap-6 md:px-10 ${inter.className}`}>
             <header id="loanReferralAcceptanceHeader" className={'flex items-start border-b-lightBlue250 border-b border-solid w-full py-5'}>
                 <h1 id="loanReferralAcceptanceTitle" className={`${cabinetGrotesk.className} md:text-[28px] text-[16px] leading-[120%]`}>Loan referral acceptance process</h1>
             </header>

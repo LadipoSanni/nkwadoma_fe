@@ -15,6 +15,7 @@ import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
+import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
 import {encryptText} from "@/utils/encrypt";
 
 
@@ -45,16 +46,21 @@ const Login: React.FC = () => {
     const [showEmailMessage, setShowEmailMessage] = useState(false)
     const encryptedPassword =  encryptText(password)
 
-    const getUserLoanOfferId = () => {
+    const getVariableFromRoute = (name: string) => {
         if (searchParams){
-            const pathVariable = searchParams.get("loanOfferId")
+            const pathVariable = searchParams.get(name)
             if (pathVariable){
                 return pathVariable
             }
         }
     }
 
-    const loanOfferId =  getUserLoanOfferId()
+    const loanOfferId =  getVariableFromRoute('loanOfferId')
+
+    const vehicleId = getVariableFromRoute('vehicleId')
+    const vehicleType = getVariableFromRoute('vehicleType')
+
+
 
 
 
@@ -68,8 +74,6 @@ const Login: React.FC = () => {
             setValidEmail(false)
             setShowEmailMessage(true)
         }
-
-
     }
 
     const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,53 +87,111 @@ const Login: React.FC = () => {
 
     const getUserRoles = (returnsRole: string) => {
         if (returnsRole) {
-            // ADMIN_ROLES.filter(returnsRole)
             for (let i = 0; i < ADMIN_ROLES.length; i++) {
                 if (ADMIN_ROLES.at(i) === returnsRole) {
                     return ADMIN_ROLES.at(i)
                 }
             }
-
         }
     }
 
     const routeLoanee = async (loanOfferId?: string) => {
         if(loanOfferId) {
-                        store.dispatch(setCurrentNavbarItem("Accept loan offer"))
-                        router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
+            store.dispatch(setCurrentNavbarItem("Accept loan offer"))
+            router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
 
         }else{
-                    store.dispatch(setCurrentNavbarItem("overview"))
-                    router.push("/onboarding")
-                }
+            store.dispatch(setCurrentNavbarItem("overview"))
+            router.push("/onboarding")
+        }
     }
 
+    const  routeFinancier = async (vehicleId?: string, vehicleType?: string) => {
+        if (vehicleId){
+            store.dispatch(
+                setMarketInvestmentVehicleId({
+                    marketInvestmentVehicleId: vehicleId,
+                    vehicleType: vehicleType,
+                })
+            )
+            store.dispatch(setCurrentNavbarItem("Marketplace"))
+            router.push("/marketplace/details")
+        }else{
+            store.dispatch(setCurrentNavbarItem("Overview"))
+            router.push('/Overview')
+        }
+    }
+
+
+    const routeUserToTheirDashboard = async (userRole?: string) => {
+        switch (userRole) {
+            case 'LOANEE' :
+                await routeLoanee(loanOfferId)
+                break;
+            case 'ORGANIZATION_ADMIN':
+                store.dispatch(setCurrentNavbarItem("Program"))
+                router.push("/program")
+                break;
+            case 'PORTFOLIO_MANAGER':
+                store.dispatch(setCurrentNavbarItem("Overview"))
+                router.push("/Overview")
+                break;
+            case "FINANCIER":
+                await routeFinancier(vehicleId, vehicleType)
+                break;
+        }
+    }
+
+    const destructureLoginEndpointCallResponse = (response: object) => {
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const access_token = response?.data?.access_token
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const refresh_token = response?.data?.refresh_token
+        const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
+        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        const userName = decode_access_token?.name
+        const user_email = decode_access_token?.email
+        const user_roles = decode_access_token?.realm_access?.roles
+        const user_role = user_roles.filter(getUserRoles).at(0)
+        // console.log('access_token: ', access_token, 'decode_access_token:', decode_access_token)
+        // const decoded_re = jwtDecode<CustomJwtPayload>(refresh_token)
+        // console.log('decode: ', decode_access_token,'decoded_re: ', decoded_re)
+        return {
+            access_token,
+            refresh_token,
+            decode_access_token,
+            userName,
+            user_email,
+            user_roles,
+            user_role,
+
+        }
+    }
 
 
     const {toast} = useToast()
     const handleLogin = async (e?:React.MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
-
-
         if (!navigator.onLine) {
                 toast({
                     description: "No internet connection",
                     status: "error",
                 })
-            } else {
+        } else {
                 try {
                     const response = await login({email:email, password:encryptedPassword}).unwrap()
                     if (response?.data) {
-
-                        const access_token = response?.data?.access_token
-                        const refresh_token = response?.data?.refresh_token
-                        const decode_access_token = jwtDecode<CustomJwtPayload>(access_token)
-                        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-expect-error
-                        const userName = decode_access_token?.name
-                        const user_email = decode_access_token?.email
-                        const user_roles = decode_access_token?.realm_access?.roles
-                        const user_role = user_roles.filter(getUserRoles).at(0)
+                        const  {
+                            access_token,
+                            refresh_token,
+                            userName,
+                            user_email,
+                            user_roles,
+                            user_role,
+                        } = destructureLoginEndpointCallResponse(response)
                         clearData()
                         await persistor.purge();
                         toast({
@@ -139,19 +201,7 @@ const Login: React.FC = () => {
                         if (user_role) {
                             storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                             setUserRoles(user_roles)
-                            switch (user_role) {
-                                case 'LOANEE' :
-                                   await routeLoanee(loanOfferId)
-                                    break;
-                                case 'ORGANIZATION_ADMIN':
-                                    store.dispatch(setCurrentNavbarItem("Program"))
-                                    router.push("/program")
-                                    break;
-                                case 'PORTFOLIO_MANAGER':
-                                    store.dispatch(setCurrentNavbarItem("Loan"))
-                                    router.push("/loan/loan-request")
-                                    break;
-                            }
+                            await routeUserToTheirDashboard(user_role)
                         }
                     }
                 } catch (error) {
@@ -165,8 +215,8 @@ const Login: React.FC = () => {
 
                     }
                 }
-            }
         }
+    }
 
 
     const isFormValid = validEmail && password.length >= 8;

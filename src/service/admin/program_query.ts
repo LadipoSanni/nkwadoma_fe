@@ -8,6 +8,7 @@ export const programApi = createApi({
     endpoints: (builder) => ({
         getAllPrograms: builder.query({
             query: (param: {
+                organizationId?: string;
                 pageSize?: number;
                 pageNumber?: number;
             }) => ({
@@ -33,13 +34,8 @@ export const programApi = createApi({
             invalidatesTags:  ({ id }) => [{ type: 'program', id }],
         }),
         searchProgram: builder.query({
-            query: (name) => ({
-        url: '/program/search', 
-        method: 'GET',
-        params: { name }, 
-      }),
-    //    transformResponse: (response) => response.data, 
-    }),
+            query: (name) => `program/search?name=${name}`,
+        }),
         createProgram: builder.mutation({
             query: (formData:
                  {
@@ -57,25 +53,13 @@ export const programApi = createApi({
             invalidatesTags: ['program'],
         }),
         updateProgram: builder.mutation({
-            query: ({ id, data }) => ({
-                url: `/program/${id}`,
+            query: ({  data }) => ({
+                url: `/program/edit`,
                 method: "PATCH",
                 body: data,
             }),
-             invalidatesTags:  ({ id }) => [{ type: 'program', id }],  
-        }),
-        getAllCohortByAParticularProgram: builder.query({
-            query: (param: {
-                programId?:string,
-                pageSize?: number;
-                pageNumber?: number;
-            }) => ({
-                url: '/cohort/all',
-                method: "GET",
-                params: param,
-  
-            }),
-            providesTags: ['program'],
+            //  invalidatesTags:  ({ id }) => [{ type: 'program', id }], 
+            invalidatesTags: ['program'], 
         }),
 
         searchCohortsInAParticularProgram: builder.query({
@@ -94,4 +78,4 @@ export const programApi = createApi({
 })
 
 
-export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery, useCreateProgramMutation, useUpdateProgramMutation, useGetAllCohortByAParticularProgramQuery, useSearchCohortsInAParticularProgramQuery} = programApi;
+export const { useGetAllProgramsQuery, useGetProgramByIdQuery, useDeleteProgramMutation,useSearchProgramQuery , useCreateProgramMutation, useUpdateProgramMutation, useSearchCohortsInAParticularProgramQuery} = programApi;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from "@/components/selected-loan/SelectedLoan.module.css";
+import {inter500, inter} from "@/app/fonts";
 
 interface props {
     tabContent: string[],
@@ -31,7 +32,7 @@ const TabSwitch = ({tabContent, currentTab, componentId, handleChange}: props) =
                 <div
                     data-testid={'TabSwitchStatusBoxName'}
                     id={"TabSwitchStatusBoxName"}
-                    className={`flex gap-1 text-nowrap whitespace-nowrap text-sm w-object-fit md:w-auto md:text-sm`}
+                    className={`  ${index === currentTab ? `text-black500 ${inter500.className}` : `text-black300 ${inter.className}`}  flex gap-1 text-nowrap whitespace-nowrap text-[14px] w-object-fit md:w-auto md:text-[14px]`}
                 >{name}</div>
 
             </button>
@@ -42,14 +43,14 @@ const TabSwitch = ({tabContent, currentTab, componentId, handleChange}: props) =
         <div
             id={componentId}
             data-testid={componentId}
-            className={` ${styles.tab} flex bg-[#fafbfc]  w-auto ml-1 mt-1 md:w-fit h-fit md:h-fit md:rounded-md rounded-md `}
+            className={` ${styles.tab} flex bg-[#F2F2F2] md:bg-[#F2F2F2] w-fit    ml-1 mt-1 md:w-fit h-fit md:h-fit md:rounded-md rounded-md `}
         >
             {tabContent?.map((item, index) => (
                 <div
                     key={item}
                     id={"index" + item}
                     data-testid={"index" + item}
-                    className={`flex place-self-center w-auto  md:h-auto md:px-2 md:w-auto `}
+                    className={`flex place-self-center w-auto  md:h-auto md:px- md:w-auto `}
                 >
                     <MenuItem name={item} index={index} handleChange={handleChange}/>
                 </div>

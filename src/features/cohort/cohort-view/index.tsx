@@ -13,17 +13,25 @@ import {Icon} from "@iconify/react";
 import CohortTabs from '../../../components/cohort/CohortTabs'
 import CreateCohort from "@/reuseable/modals/CreateCohort";
 import { inter } from '@/app/fonts'
-import { useGetAllCohortsByOrganisationQuery } from '@/service/admin/cohort_query'
+import {
+    useGetAllCohortByAParticularProgramQuery,
+    useGetAllCohortsByOrganisationQuery
+} from '@/service/admin/cohort_query'
 import { useSearchCohortByOrganisationQuery } from '@/service/admin/cohort_query'
-// import { debounce } from 'lodash';
-import { useGetAllCohortByAParticularProgramQuery } from '@/service/admin/program_query'
 import { useGetAllProgramsQuery } from '@/service/admin/program_query'
 import { useDeleteCohortMutation } from '@/service/admin/cohort_query'
 import {useToast} from "@/hooks/use-toast"
-
-
-
-
+import InfiniteScroll from "react-infinite-scroll-component";
+import SkeletonForLoanOrg from '@/reuseable/Skeleton-loading-state/Skeleton-for-loan-organizations'
+import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate'
+import { Book } from 'lucide-react';
+import Modal from "@/reuseable/modals/TableModal";
+import {Cross2Icon} from "@radix-ui/react-icons";
+import { getUserDetailsFromStorage } from "@/components/topBar/action";
+import AddCohortInAnOrganization from '@/components/portfolio-manager/organization/AddCohort-in-organization'
+import { useAppSelector } from '@/redux/store'
+import { useDebounce } from '@/hooks/useDebounce';
+// import { resetcohortId, } from '@/redux/slice/create/cohortSlice'
 
 
 
@@ -34,24 +42,6 @@ export const initialFormValue = {
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
  }
-
-export const programData = {
-  "value 1" : "Design Thinking",
-  "value 2" : "Software Engineering",
-  "value 3" : "Data Science",
-  "value 4" : "Cybersecurity",
-  "value 5" : "UX/UI Design",
-  "value 6" : "Product design",
-  "value 7" : "Digital Marketing",
-  "value 8" : "Business Administration",
-  "value 9" : "Finance",
-  "value 10" : "Human Resources",
-  "value 11" : "Project Management",
-  "value 12" : "Product Marketing",
-   "value 13" : "Product Management",
-}
-
-
 
 interface allCohortsProps extends TableRowData {
    name:string,
@@ -82,70 +72,149 @@ interface ApiError {
 }
 
 
+interface TabState {
+  pageNumber: number;
+  totalPages: number;
+  hasNextPage: boolean;
+}
+
+
+
 const CohortView = () => {
   const [isDropdown,setIsDropdown] = useState(false)
   const [selectProgram, setSelectProgram] = useState('')
   const [organisationCohort,setOrganisationCohort] = useState<allCohortsProps[]>([])
   const [originalCohortData, setOriginalCohortData] = useState<allCohortsProps[]>([]);
   const [listOfPrograms, setListOfPrograms] = useState<viewAllProgramProps[]>([])
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [programId, setProgramId] = useState('');
   const [pendingProgramId, setPendingProgramId] = useState('');
   const [deleteProgram, setDeleteProgram] = useState("")
-   const [isLoadings] = useState(false);
-   const [page] = useState(0);
-   const size = 300;
+   const [hasNextPage, setNextPage] = useState(true);
+   const [pageNumber,setPageNumber] = useState(0);
+   const [isOpen, setIsOpen] = React.useState(false);
+   const [page] = useState(0)
+   const size = 10;
    const {toast} = useToast()
+   const user_role = getUserDetailsFromStorage('user_role');
+   const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
+   const organizationId = useAppSelector(state => state?.organization?.setOrganizationId)
+  const organisationTabStatus = useAppSelector(store => store?.organization?.organizationStatusTab)
+   const [tabStates, setTabStates] = useState<Record<string, TabState>>({
+    incoming: { pageNumber: 0, totalPages: 0, hasNextPage: false },
+    current: { pageNumber: 0, totalPages: 0, hasNextPage: false },
+    graduated: { pageNumber: 0, totalPages: 0, hasNextPage: false }
+});
 
-   const { data: cohortData } = useGetAllCohortsByOrganisationQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })  
-   const { data: searchData } = useSearchCohortByOrganisationQuery(searchTerm, { skip:!searchTerm })
-   const { data: programDatas, isLoading } = useGetAllProgramsQuery({ pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, })
-  const { data: cohortsByProgram, refetch } = useGetAllCohortByAParticularProgramQuery({ programId, pageSize: size, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
+const currentTabState = tabStates[cohortTab];
+
+ const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+   
+   const { data: cohortData,isLoading,refetch:refetchCohortData,isFetching:isfetching  } = useGetAllCohortsByOrganisationQuery({  ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+    ? { organizationId } 
+    : {}),cohortStatus: cohortTab.toUpperCase(),pageSize: 10, pageNumber:currentTabState.pageNumber }, { refetchOnMountOrArgChange: true, })
+    
+    const { data: searchData, isLoading: searchIsloading, isFetching: isSearchFetching } = useSearchCohortByOrganisationQuery({cohortName: debouncedSearchTerm,...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+      ? { organizationId } 
+      : {}),programId: programId,cohortStatus: cohortTab.toUpperCase(), pageSize: size, pageNumber: currentTabState.pageNumber,}, { skip: !debouncedSearchTerm });
+
+   const { data: programDatas, isLoading: programIsloading,isFetching } = useGetAllProgramsQuery({ ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+    ? { organizationId } 
+    : {}),pageSize: size, pageNumber: pageNumber }, { skip: !isCreateModalOpen, refetchOnMountOrArgChange: true, })
+  const { data: cohortsByProgram, refetch, isLoading: cohortIsLoading } = useGetAllCohortByAParticularProgramQuery({ programId,cohortStatus: cohortTab.toUpperCase(), pageSize: 300, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
  
+  const handleModalOpen = () => {
+    setIsOpen(!isOpen)
+}
 
-  //  useEffect(const {toast} = useToast()() => { 
-  //   if (cohortData && cohortData?.data) { 
-  //     const result = cohortData?.data?.body; 
-  //     setOrganisationCohort(result); 
-  //     setOriginalCohortData(result);  
-  //   } }, [cohortData]);
 
    useEffect(() => {
-    if(searchTerm && searchData && searchData?.data) {
-      const result = searchData?.data
+    if(debouncedSearchTerm && searchData && searchData?.data) {
+      const result = searchData?.data?.body
       setOrganisationCohort(result)
+      setTabStates(prev => ({
+        ...prev,
+        [cohortTab]: {
+            pageNumber: searchData?.data.pageNumber,
+            totalPages: searchData?.data.totalPages,
+            hasNextPage:searchData?.data.hasNextPage
+        }
+    }));
     }
-    else if(!searchTerm && cohortData && cohortData?.data) {
+    else if(!debouncedSearchTerm && cohortData && cohortData?.data) {
         const result = cohortData?.data?.body
       setOrganisationCohort(result)
       setOriginalCohortData(result);  
+      setTabStates(prev => ({
+        ...prev,
+        [cohortTab]: {
+            pageNumber: cohortData?.data.pageNumber,
+            totalPages: cohortData?.data.totalPages,
+            hasNextPage:cohortData?.data.hasNextPage
+        }
+    }));
     }
-   },[searchTerm,searchData,cohortData])
+    
+   },[debouncedSearchTerm,searchData,cohortData,cohortTab])
 
-   useEffect(() => {
-    if( programDatas &&  programDatas?.data ) {
-        const programs =  programDatas?.data?.body
-        setListOfPrograms(programs)
-       
-    }
-   
-},[programDatas])
+    const handlePageChange: React.Dispatch<React.SetStateAction<number>> = (value) => {
+           const newPage = typeof value === 'function' ? value(currentTabState.pageNumber) : value;
+           setTabStates(prev => ({
+               ...prev,
+               [cohortTab]: {
+                   ...prev[cohortTab],
+                   pageNumber: newPage
+               }
+           }));
+       };
 
-   useEffect(() => { 
+    useEffect(() => {
+        if (programDatas && programDatas?.data) {
+            const sortedPrograms = [...programDatas.data.body].sort((a, b) =>
+                a.name.localeCompare(b.name)
+            );
+
+            setListOfPrograms((prev) => {
+                if (pageNumber === 0) {
+                    return sortedPrograms;
+                }
+                const newPrograms = sortedPrograms.filter(
+                    (newProgram: viewAllProgramProps) => !prev.some((prev) => prev.id === newProgram.id)
+                );
+                return [...prev, ...newPrograms].sort((a, b) => a.name.localeCompare(b.name));
+            });
+
+            setNextPage(programDatas?.data?.hasNextPage);
+        }
+    }, [programDatas,pageNumber]);
+
+
+    useEffect(() => {
     if (cohortsByProgram && cohortsByProgram?.data) { 
       const result = cohortsByProgram?.data?.body; 
       setOrganisationCohort(result);
-     } }, [cohortsByProgram]);
+      setTabStates(prev => ({
+        ...prev,
+        [cohortTab]: {
+            pageNumber: cohortsByProgram?.data.pageNumber,
+            totalPages: cohortsByProgram?.data.totalPages,
+            hasNextPage:cohortsByProgram?.data.hasNextPage
+        }
+    }));
+     } }, [cohortsByProgram,cohortTab]);
 
-
-  // console.log("The organisationCohort: ",listOfPrograms)
-  // console.log("The organisationCohort: ", organisationCohort);
+     const loadMore = () => {
+      if (!isFetching && hasNextPage) {
+          setPageNumber((prevPage) => prevPage + 1);
+      }
+  };
 
 
    const toggleDropdown = useCallback(() => {
     setIsDropdown((prev) => !prev);
-    
+    setIsCreateModalOpen(true)
   }, []);
 
 
@@ -163,7 +232,6 @@ const CohortView = () => {
        }
   }
 
-  // console.log("The hhhid: ",programId)
 
  const validationSchema = Yup.object().shape({
    selectProgram: Yup.string().required('Program is required'),
@@ -220,9 +288,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
 
   return (
     <div className=''>
-        <div id='cohortName' className='md:px-8 px-4'>
-          {/* <h1 className={`mt-5 font-semibold text-2xl mb-4 normal-case z-50 ${cabinetGrotesk.className}`}>Cohort</h1> */}
-          <div id='buttonFilterCreate' className={`md:flex justify-between items-center z-50 relative top-6 bottom-2 ${inter.className}`}>
+        <div id='cohortName' className={` ${user_role === "PORTFOLIO_MANAGER"? "" : "md:px-6 px-4"}`}>
+          <div id='buttonFilterCreate' className={`md:flex justify-between items-center z-50 relative  ${inter.className} ${user_role === "PORTFOLIO_MANAGER"? "top-2" : "top-6  bottom-2"}`}>
             <div id='buttonFilter' className='flex gap-4'>
             <div className='relative'>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -234,7 +301,6 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
               className='w-full lg:w-96 h-11 focus-visible:ring-0 shadow-none  border-solid border border-neutral650  text-grey450 pl-10'
               value={searchTerm}
               onChange={handleSearchChange}
-              //  onKeyUp={handleKeyUp}
               />
             </div>
              <div className='z-10'>
@@ -283,8 +349,30 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                       <SelectContent
                       className='border-none border-[#FAFBFC] text-[#404653]  text-sm z-50'
                       >
-                        <SelectGroup
-                          className=''
+                        {
+                          programIsloading? (<div><SkeletonForLoanOrg/></div>) : listOfPrograms.length === 0? (<div>
+                           <div className='relative bottom-6'>
+                            <GeneralEmptyState
+                            icon={Book}
+                            iconSize='1.6rem'
+                            iconContainerClass='w-[30px] h-[30px]'
+                            message={<div className='relative bottom-2'>
+                              <p>No program available</p>
+                            </div>}
+                            />
+                          </div>
+                          </div>) : (
+                            <div >
+                             <InfiniteScroll
+                               dataLength={listOfPrograms.length}
+                               next={loadMore}
+                               hasMore={hasNextPage}
+                               loader = {isFetching ?  <SkeletonForLoanOrg /> : null}
+                               height="30.5vh"
+                               className="w-full"
+                             >
+                             <SelectGroup
+                          className='w-full'
                         >
                           {listOfPrograms.map((value,index) => (
                            <SelectItem key={value.id} id={`${value}-${index}`} value={value.name} className='hover:bg-blue-200'>
@@ -292,18 +380,17 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                            </SelectItem>
                           ))}
                         </SelectGroup>
-
+                             </InfiniteScroll>
+                          </div>)
+                        }
                       </SelectContent>
 
                       </Select>
-                      {/* <div>
-                        {errors.selectProgram && touched.selectProgram && ( <div className='text-red-500'>{errors.selectProgram}</div>)}
-                      </div> */}
+                     
                       <div className='flex justify-between items-center pt-7'>
 
                         <Button
                         id='resetButton'
-                        // type="reset"
                         variant={`outline`}
                         className='text-meedlBlue h-[38px] font-bold ring-meedlBlue border-meedlBlue border-solid w-[80px]'
                         onClick={()=> {
@@ -312,6 +399,14 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                           setProgramId("")
                           setPendingProgramId("") 
                           setOrganisationCohort(originalCohortData);
+                          setTabStates(prev => ({
+                            ...prev,
+                            [cohortTab]: {
+                              pageNumber: 0,  
+                              totalPages: cohortData?.data?.totalPages || 0,  // Restore original total pages
+                              hasNextPage: cohortData?.data?.hasNextPage || false
+                            }
+                          }));
                         }}
                         >
                           Reset
@@ -325,7 +420,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                         type='submit'
                         disabled={!isValid}
                         >
-                           {isLoadings ? (
+                           {cohortIsLoading ? (
                                                 <div id={'loadingLoopIconDiv'} className="flex items-center justify-center">
                                                     <Icon id={'Icon'} icon={loadingLoop} width={24} height={24}/>
                                                 </div>
@@ -344,16 +439,50 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
              </div>
             </div>
              <div className='md:mt-0 mt-4'>
+               <Button variant={"secondary"}
+                  size={"lg"}
+                  className={`${inter.className}   h-12 flex justify-center items-center w-full ${user_role === "PORTFOLIO_MANAGER" && organisationTabStatus !== "active"? "bg-gray text-grey150" : "bg-meedlBlue text-meedlWhite"}`}
+                  id='createProgramModal'
+                   onClick={handleModalOpen}
+                   disabled={user_role === "PORTFOLIO_MANAGER" && organisationTabStatus !== "active" ? true : false}
+                  >
+                   {user_role === "PORTFOLIO_MANAGER"? "Add cohort" : "Create cohort"}
+                </Button>
 
-                 <CreateCohort  triggerButtonStyle={`w-full`}/>
              </div>
           </div>
         </div>
         <div>
         </div>
-        <div className='mt-12 w-[96%]  mr-auto ml-auto relative '>
-         <CohortTabs isLoading={isLoading} listOfCohorts={organisationCohort} handleDelete={handleDeleteCohortByOrganisation} errorDeleted={deleteProgram} searchTerm={searchTerm}/>
+        <div className={` ${user_role === "PORTFOLIO_MANAGER"? "mt-8" : " mr-auto ml-auto relative w-[96%] mt-12 "}`}>
+         <CohortTabs 
+         isLoading={isLoading || searchIsloading || cohortIsLoading || isfetching || isSearchFetching } 
+         listOfCohorts={organisationCohort} 
+         handleDelete={handleDeleteCohortByOrganisation} 
+         errorDeleted={deleteProgram} 
+         userRole={user_role} 
+         currentTab={cohortTab}
+         handlePageChange={handlePageChange}
+         hasNextPage={currentTabState.hasNextPage}
+         pageNumber={currentTabState.pageNumber}
+         totalPages={currentTabState.totalPages}
+         isTyping={isTyping}
+         searchTerm={debouncedSearchTerm}
+         />
          
+        </div>
+        <div>
+          <Modal
+            isOpen={isOpen}
+            closeOnOverlayClick={true}
+            closeModal={() => setIsOpen(false)}
+             width='36%'
+            headerTitle={user_role === "PORTFOLIO_MANAGER"? "Add cohort" : 'Create cohort'}
+             className='pb-1'
+              icon={Cross2Icon}
+          >
+            {user_role === "PORTFOLIO_MANAGER"? <AddCohortInAnOrganization  setIsOpen={setIsOpen} organizationId={organizationId} cohortRefetch={refetchCohortData}/> : <CreateCohort setIsOpen={setIsOpen}/> }
+          </Modal>
         </div>
     </div>
   )

@@ -6,10 +6,9 @@ import {inter} from "@/app/fonts";
 import {DetailsTabContainer} from "@/reuseable/details/DetailsTabContainer";
 import DetailsImageSection from "@/reuseable/details/DetailsImageSection";
 import {MdPersonOutline} from "react-icons/md";
-import {BiArrowBack} from "react-icons/bi";
 import TableModal from "@/reuseable/modals/TableModal";
 import {Cross2Icon} from "@radix-ui/react-icons";
-import {DeleteCohort} from "@/reuseable/details/DeleteCohort";
+import DeleteCohort from "@/reuseable/details/DeleteCohort";
 import EditCohortForm from "@/components/cohort/EditCohortForm";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useGetCohortDetailsBreakdownQuery, useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
@@ -18,6 +17,8 @@ import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohor
 import { formatMonthInDate } from "@/utils/Format";
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import BackButton from "@/components/back-button";
+import { useAppSelector } from "@/redux/store";
 
 
 interface breakDown {
@@ -30,13 +31,14 @@ const CohortDetails = () => {
     const [isEditOpen, setEditOpen] = React.useState(false);
 
     const [breakdown, setBreakdown] = useState<breakDown[]>([]);
+    const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
 
-    const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
+    // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
     const {data: cohortDetails, isLoading} = useViewCohortDetailsQuery({
-        cohortId: cohortsId
+        cohortId: cohortId
     }, {refetchOnMountOrArgChange: true});
 
-    const {data: cohortBreakDown} = useGetCohortDetailsBreakdownQuery({cohortId: cohortsId}, {skip: !cohortsId})
+    const {data: cohortBreakDown} = useGetCohortDetailsBreakdownQuery({cohortId: cohortId}, {skip: !cohortId})
 
     useEffect(() => {
         if (cohortBreakDown && cohortBreakDown?.data) {
@@ -103,8 +105,9 @@ const CohortDetails = () => {
     const id = "1";
 
     const dataList = [
-        {label: "Start Date", value: formatMonthInDate(details.startDate)},
-        {label: "End Date", value: formatMonthInDate(details.expectedEndDate)},
+        {label: "Tuition amount", value: formatAmount(details.tuitionAmount)},
+        {label: "Start date", value: formatMonthInDate(details.startDate)},
+        {label: "End date", value: formatMonthInDate(details.expectedEndDate)},
         {
             label: "Cohort status",
             value: <div
@@ -112,12 +115,11 @@ const CohortDetails = () => {
                 {capitalizeFirstLetters(details.cohortStatus)}
             </div>
         },
-        {label: "Number of Dropout", value: details.numberOfDropOut},
+        {label: "Number of dropouts", value: details.numberOfDropOut},
         {label: "Dropout rate", value: "0"},
         {label: "Number employed", value: details.numberOfEmployed},
         {label: "Employment rate", value: "0"},
         {label: "Average starting salary", value: "0"},
-        {label: "Tuition amount", value: formatAmount(details.tuitionAmount)},
     ];
 
     const loanDetail = [
@@ -129,7 +131,7 @@ const CohortDetails = () => {
 
     const tagButtonData = [
         {tagIcon: FiBook, tagCount: details?.programName, tagButtonStyle: "bg-lightBlue100 text-meedlBlue", tagText: ""},
-        {tagIcon: MdPersonOutline, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-warning50 text-meedlBlue", tagText: "Loanees"},
+        {tagIcon: MdPersonOutline, tagCount: details?.numberOfLoanees, tagButtonStyle: "bg-warning50 text-meedlBlue", tagText: details?.numberOfLoanees <= 1 ? "loanee" : "loanees"},
     ];
 
 
@@ -152,13 +154,9 @@ const CohortDetails = () => {
     return (
         <>{isLoading? (<SkeletonForDetailPage/>): (
             <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
-                <div className={` `} id={`backClickContainer`}>
-                    <div className={`flex py-2 space-x-1 text-meedlBlue`} id={`backClick`}
-                         data-testid={`backClick `}>
-                        <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`} onClick={handleBackClick}/>
-                        <h1 id={`backClickText`} data-testid={`backClickText `} className={`cursor-pointer`}
-                            onClick={handleBackClick}>Back to cohort</h1>
-                    </div>
+                <div className={` pb-4 `} id={`backClickContainer`} data-testid={'backClickContainer'}>
+                    <BackButton handleClick={handleBackClick} iconBeforeLetters={true} text={"Back to cohort"}
+                                id={"backClick"} textColor={'#142854'}/>
                 </div>
 
                 <Tabs
@@ -180,8 +178,8 @@ const CohortDetails = () => {
 
                     <div id={`tabsContentDiv`}>
                         <TabsContent value="details" className={'mt-4'} id={`tabsContent`}>
-                            <div className={`py-1 flex md:flex-row flex-col md:justify-between`} id={`sections`}>
-                                <div id={`firstSection`}>
+                            <div className={`py-1 flex md:flex-row flex-col  h-full md:justify-between`} id={`sections`}>
+                                <div className={`w-full md:w-1/3 md:h-[70vh] md:max-h-none`} id={`firstSection`}>
                                     <DetailsImageSection imageSrc={details.imageUrl} cohortTitle={details.name}
                                                          cohortDescription={details.cohortDescription}
                                                          handleDropdownClicked={handleDropdownClick}
@@ -190,7 +188,7 @@ const CohortDetails = () => {
                                                          icon={FiBook}
                                     />
                                 </div>
-                                <div className={`md:w-6/12 min-w-sm pt-0 h-[96%]`} id={`secondSection`}>
+                                <div className={`w-full md:w-1/2 overflow-x-hidden`} id={`secondSection`}>
                                     <DetailsTabContainer isTable={false} isNotTableDataList={loanDetail}
                                                          dataList={dataList}
                                                          tabTitle1={"Cohort details"} tabTitle2={"Loan details"}

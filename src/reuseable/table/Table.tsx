@@ -63,7 +63,7 @@ interface Props<T extends TableRowData> {
   kirkBabDropdownOption?: DropdownOption[];
   sideBarTabName?: string;
   emptyStateStyle?: string;
-  icon?: ElementType;
+  icon?: ElementType | React.ReactNode ;
   optionalFilterName?: string;
 //   optionalRowsPerPage?: number;
   tableCellStyle?: string;
@@ -162,17 +162,18 @@ function DataTable<T extends TableRowData>({
     return value;
   };
 
-  const isLastPage = pageNumber === totalPages;
+  const isLastPage = pageNumber + 1 === totalPages;
+
 
   return (
     <div id="loanProductTableContainer" className={`w-[100%] `}>
       {isLoading ? (
         <SkeletonForTable />
-      ) : tableData?.length === 0 ? (
+      ) : tableData?.length === 0 || !tableData ? (
           <div>
             {searchEmptyState ?
                 <TableEmptyState
-                    icon={MagnifyingGlassIcon}
+                    icon={<MagnifyingGlassIcon/>}
                     name={sideBarTabName}
                     className={emptyStateStyle}
                     optionalFilterName={optionalFilterName}
@@ -260,7 +261,7 @@ function DataTable<T extends TableRowData>({
                         >
                           <div
                             id={`dynamicTableBodyCellDiv${rowIndex}${column.id}`}
-                            className={`${Styles.tableBodyItem} ${tableStyle}  truncate pt-2 pb-2 pr-2 pl-2`}
+                            className={`${Styles.tableBodyItem} ${tableStyle}  truncate `}
                             // style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", maxWidth: "200px",  }}
                           >
                             {/* {column.selector ? column.selector(row) : row[column.id]} */}

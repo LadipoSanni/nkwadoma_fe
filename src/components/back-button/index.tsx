@@ -1,29 +1,33 @@
+'use client'
 import React from 'react';
-import {  ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons"
-import {inter} from "@/app/fonts";
+import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import { inter500} from "@/app/fonts";
 interface props {
     id: string,
     textColor: string,
-    iconRight: boolean,
+    iconBeforeLetters: boolean,
     text: string,
-    handleClick: ()=> void
+    handleClick: ()=> void,
+    sx?: string,
 
 }
 
-const BackButton = ({id,text, textColor, handleClick, iconRight}: props) => {
+const BackButton = ({id,text,sx, textColor, handleClick, iconBeforeLetters}: props) => {
     return (
         <button
             id={id}
             data-testid={id}
-            className={`w-fit h-fit md:w-fit md:flex items-center text-${textColor} md:fit flex gap-1`}
+            className={`w-fit h-fit md:w-fit md:flex items-center ${sx} text-${textColor} md:fit flex gap-1`}
             onClick={handleClick}
         >
-            {iconRight &&
-                <ArrowLeftIcon/>
+            {iconBeforeLetters &&
+                <MdArrowBack  style={{color: `${textColor}`}}/>
             }
-            <span id={ text+`id`} data-testid={ text+`id`} className={` ${inter.className} text-sm text-${textColor} `}>{text}</span>
-            {!iconRight &&
-                <ArrowRightIcon/>
+            <span
+                style={{color: `${textColor}`}}
+                id={ text+`id`} data-testid={ text+`id`} className={` ${inter500.className} text-[14px]  text-${textColor} `}>{text}</span>
+            {!iconBeforeLetters &&
+                <MdArrowForward style={{color: `${textColor}`}}/>
             }
 
         </button>

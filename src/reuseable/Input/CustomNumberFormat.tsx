@@ -2,9 +2,12 @@ import React from 'react';
 import {FieldProps} from 'formik';
 
 
-const formatNumberWithCommas = (value: string) => {
-    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+const formatNumberWithCommas = (value: string | number) => {
+    const stringValue = typeof value === "number" ? value.toString() : value;
+    return stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+
 
 
 const CustomInputField: React.FC<FieldProps> = ({field, form}) => {

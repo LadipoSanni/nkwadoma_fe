@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Tables from "@/reuseable/table/LoanProductTable";
+import Table from '@/reuseable/table/Table';
 import { MdOutlineInventory2, MdSearch } from "react-icons/md";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -11,10 +11,10 @@ import TableModal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index";
-import { setItemSessionStorage } from "@/utils/storage";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
-import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
+import {store} from "@/redux/store";
+import {setClickedLoanProductId} from "@/redux/slice/loan/selected-loan";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -25,21 +25,33 @@ const LoanProductPage = () => {
     const [allLoanee, setAllLoanProduct] = useState<TableRowData[]>([]);
     const [createProduct, setCreateProduct] = React.useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-    const size = 300;
-    const number = 0;
-    const { data, isLoading } = useViewAllLoanProductQuery({ pageSize: size, pageNumber: number });
-    const { data: searchResult } = useSearchLoanProductQuery(
-        { loanProductName: searchTerm },
+    const [hasNextPage,setNextPage] = useState(false)
+    const [totalPage,setTotalPage] = useState(0)
+     const [pageNumber,setPageNumber] = useState(0)
+    
+     const [seachPageNumber,setSearchPageNumber]= useState(0)
+     const [searchHasNextPage,setSearchNextPage] = useState(false)
+
+    const size = 10;
+    const { data, isLoading } = useViewAllLoanProductQuery({ pageSize: size, pageNumber:pageNumber });
+    const { data: searchResult, isLoading: isSearchLoading } = useSearchLoanProductQuery(
+        { loanProductName: searchTerm, pageSize: size, pageNumber:seachPageNumber },
         { skip: !searchTerm }
     );
 
     useEffect(() => {
         if (searchTerm && searchResult && searchResult?.data) {
-            const result = searchResult?.data;
+            const result = searchResult?.data?.body;
+            setSearchNextPage(searchResult.data?.hasNextPage)
+            setTotalPage(searchResult?.data?.totalPages)
+           setSearchPageNumber(searchResult?.data?.pageNumber)
             setAllLoanProduct(result);
         } else if (!searchTerm && data && data?.data) {
             const result = data?.data?.body;
             setAllLoanProduct(result);
+            setNextPage(data?.data?.hasNextPage)
+            setTotalPage(data?.data?.totalPages)
+            setPageNumber(data?.data?.pageNumber)
         }
     }, [data, searchTerm, searchResult]);
 
@@ -55,8 +67,8 @@ const LoanProductPage = () => {
     };
 
     const handleRowClick = (row: TableRowData) => {
+        store.dispatch(setClickedLoanProductId(String(row?.id)))
         router.push('/loan-product/loan-product-details');
-        setItemSessionStorage("LoanProductId", String(row.id));
     };
 
     const loanProductHeader = [
@@ -81,11 +93,11 @@ const LoanProductPage = () => {
         {
             title: 'No. of loanees',
             sortable: true,
-            id: 'numberOfLoanees',
-            selector: (row: TableRowData) => row.numberOfLoanees
+            id: 'totalNumberOfLoanee',
+            selector: (row: TableRowData) => row.totalNumberOfLoanee
         },
         {
-            title: 'Cost of funds (%)',
+            title: 'Cost of vehicle (%)',
             sortable: true,
             id: 'costOfFund',
             selector: (row: TableRowData) => row.costOfFund
@@ -99,8 +111,8 @@ const LoanProductPage = () => {
         {
             title: 'Amount repaid',
             sortable: true,
-            id: 'minRepaymentAmount',
-            selector: (row: TableRowData) => formatAmount(row.amountRepaid)
+            id: 'totalAmountRepaid',
+            selector: (row: TableRowData) => formatAmount(row.totalAmountRepaid)
         },
         {
             title: 'Amount earned',
@@ -144,7 +156,7 @@ const LoanProductPage = () => {
                     <Button variant={"secondary"}
                             size={"lg"}
                             onClick={handleCreateButton}
-                            className={`bg-meedlBlue h-12 py-5 px-6  w-full hover:bg-meedlBlue focus-visible:ring-0 shadow-none`}
+                            className={`bg-meedlBlue h-12 py-5 px-6  w-full   shadow-none`}
                     >Create loan product</Button>
                 </div>
             </div>
@@ -154,29 +166,32 @@ const LoanProductPage = () => {
                     <div className={`w-full h-fit md:w-full md:h-full`}>
                         <SkeletonForTable />
                     </div>
-                ) : searchTerm && searchResult && searchResult?.data.length === 0 ? (
-                    <SearchEmptyState name={"loan product"} icon={MdSearch} />
-                ) : allLoanee.length > 0 ? (
-                    <Tables
-                        tableData={allLoanee.slice().reverse()}
+                ) : searchTerm && searchResult && searchResult?.data?.body?.length === 0 ? (
+                        <div className={`flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40`}>
+                            <SearchEmptyState name={"Loan product"} icon={MdSearch} />
+                        </div>
+                ) :  (
+                    <Table
+                        tableData={allLoanee}
                         handleRowClick={handleRowClick}
                         tableHeader={loanProductHeader}
-                        tableHeight={52}
+                        tableHeight={58}
                         sx='cursor-pointer'
                         staticColunm="name"
-                        staticHeader="Loan Product"
+                        staticHeader="loan product"
                         showKirkBabel={false}
                         kirkBabDropdownOption={dropDownOption}
                         tableCellStyle={"h-12"}
-                        optionalRowsPerPage={10}
                         icon={MdOutlineInventory2}
-                        sideBarTabName={"Loan product"}
-                        isLoading={isLoading}
+                        sideBarTabName={"loan product"}
+                        isLoading={isLoading || isSearchLoading}
                         condition={true}
+                        totalPages={totalPage}
+                        hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPage}
+                        pageNumber={searchTerm !== ""? seachPageNumber :  pageNumber}
+                        setPageNumber={searchTerm !== ""? setSearchPageNumber : setPageNumber}
                     />
-                ) : (
-                    <TableEmptyState name={"loan product"} icon={MdOutlineInventory2} condition={true} />
-                )}
+                ) }
             </div>
             <div className={`md:max-w-sm`} id={`CreateLoanProduct`}>
                 <TableModal

@@ -5,7 +5,7 @@ import fn = jest.fn;
 describe("test button component" , () => {
 
     beforeEach(() => {
-        render(<BackButton handleClick={fn} id={"testing"} textColor={'#142854'} iconRight={true} text={"backto loan"} />)
+        render(<BackButton handleClick={fn} id={"testing"} textColor={'#142854'} iconBeforeLetters={true} text={"backto loan"} />)
     })
 
     test("test that button component display when it is called ", ()=> {

@@ -29,7 +29,6 @@ const config: Config = {
 				forgetPasswordBlue: '#475467',
 				yellow50: '#FFFEF4',
 				yellow100: '#FEFDDD',
-				yellow150: '#FEF6E8',
 				yellow200: '#FEFCCD',
 				yellow300: '#FDFBB6',
 				yellow400: '#FDFAA8',
@@ -37,7 +36,6 @@ const config: Config = {
 				yellow600: '#E5E385',
 				yellow700: '#B3B168',
 				yellow800: '#8B8950',
-				yellow850: '#86590D',
 				yellow900: '#6A693D',
 				lightBlue50: '#FBFDFF',
 				lightBlue100: '#F3F8FF',
@@ -82,11 +80,13 @@ const config: Config = {
 				warning50: '#FCF4E7',
 				warning80: '#E7F5EC',
 				warning100: '#F4DDB4',
+				warning150: '#FEF6E8',
 				warning200: '#EFCC90',
 				warning300: '#E8B55D',
 				warning400: '#E4A63D',
 				warning500: '#DD900D',
 				warning600: '#C9830C',
+				warning650: '#66440A',
 				warning700: '#9D6609',
 				warning800: '#7A4F07',
 				warning900: '#5D3C05',
@@ -117,6 +117,7 @@ const config: Config = {
 				neutral900: '#606060',
 				neutral950: '#667085',
 				navBorder: '#E0E3E8',
+				black100: '#BABABA',
 				black300: '#6A6B6A',
 				black400: '#4D4E4D',
 				black500: '#212221',
@@ -183,10 +184,16 @@ const config: Config = {
 					'5': 'hsl(var(--chart-5))'
 				}
 			},
+			screens: {
+				'sm': '576px',
+				'md': '960px',
+				'lg': '1440px',
+				'xl': '1280px',
+			    '2xl': '1536px',
+			},
 			boxShadow: {
 				custom: '0px 0px 0px 1px rgba(18, 55, 105, 0.08)',
 				boxShadowLight: '0px 2px 8px 0px rgba(99, 99, 99, 0.12)'
-
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

@@ -2,9 +2,9 @@
 import React from 'react';
 import {store, useAppSelector} from "@/redux/store";
 import styles from "./SelectedLoan.module.css"
-import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
+import {setCurrentTab,setCurrentTabStatus} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation"
-import {inter} from "@/app/fonts";
+import {inter, inter500} from "@/app/fonts";
 
 interface menuItemsProps {
     name: string,
@@ -16,19 +16,20 @@ const  SelectLoanTab = () => {
     const currentTab = useAppSelector(state => state.selectedLoan.currentTab)
 
     const tabContent = [
-        {name: "Loan referrals", id: "loanReferrals", route: 'loan-referral'},
-        {name: "Loan requests", id: "loanRequests", route: "loan-request"},
-        {name: 'Loan offers', id: 'loanOffers', route: "loan-offer"},
-        {name: 'Disbursed loan', id: "loanDisbursal", route: 'loan-disbursal'},
-        {name: 'Loan book', id: "loanBook", route: "loan-book"},
+        {name: "Loan referrals", id: "loanReferrals", route: 'loan-referral',status: 'LOAN_REFERRAL'},
+        {name: "Loan requests", id: "loanRequests", route: "loan-request",status: 'LOAN_REQUEST'},
+        {name: 'Loan offers', id: 'loanOffers', route: "loan-offer",status: 'LOAN_OFFER'},
+        {name: 'Disbursed loan', id: "loanDisbursal", route: 'loan-disbursal', status: "LOAN_DISBURSAL"},
+        {name: 'Loan book', id: "loanBook", route: "loan-book", status: "LOAN_BOOK"},
 
     ]
 
 
+
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        // setCurrentTabs(newValue)
         if (newValue !== 0 && newValue !== 4) {
             store.dispatch(setCurrentTab(tabContent[newValue].name))
+            store.dispatch(setCurrentTabStatus(tabContent[newValue].status))
             router.push(`/loan/${tabContent[newValue].route}`)
         }
 
@@ -41,7 +42,7 @@ const  SelectLoanTab = () => {
                 id="loanStatusBox"
                 data-testid="loanStatusBox"
                 style={{textTransform: 'none', color: 'black'}}
-                className={` py-1 flex px-2 place-self-center mr-auto ml-auto text-sm ${currentTab === 'Loan referrals' ? `text-[#efefef] ` : `${currentTab === name ? `  rounded-md border px-2 border-[#e5e8ec] ${styles.selectedLoan}` : `text-black300`}`}`}
+                className={` py-1 flex px-2  place-self-center mr-auto ml-auto text-sm ${currentTab === 'Loan referrals' ? `text-[#efefef] ` : `${currentTab === name ? `  rounded-md border px-2 border-[#e5e8ec] ${styles.selectedLoan}` : `text-black300`}`}`}
                 onClick={(event) => {
                     handleChange(event, index)
                 }}
@@ -49,7 +50,7 @@ const  SelectLoanTab = () => {
                 <div
                     data-testid={name}
                     id={"loanStatusText"}
-                    className={`flex ${name === 'Loan referrals' ||  name === 'Loan book' ? 'text-[#c3c2c2] md:text-[#c3c2c2]' : ``} gap-1 text-nowrap whitespace-nowrap ${inter.className} text-sm w-object-fit md:w-auto md:text-sm`}
+                    className={`flex ${name === 'Loan referrals' ||  name === 'Loan book' ? 'text-[#c3c2c2] md:text-[#c3c2c2]' : ``} gap-1 text-nowrap whitespace-nowrap ${currentTab === name ? ` ${inter500.className} text-black500 `: `${inter.className} text-black300`}  text-sm w-object-fit md:w-auto md:text-sm`}
                 >{name}</div>
 
             </button>
