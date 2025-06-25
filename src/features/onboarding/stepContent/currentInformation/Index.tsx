@@ -117,7 +117,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
             Object.values(newErrors).every((error) => error === "");
 
         setIsButtonDisabled(!isFormValid);
-    }, [values,errors]);
+    }, [values]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
