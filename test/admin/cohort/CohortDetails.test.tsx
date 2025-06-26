@@ -1,4 +1,4 @@
-import {render, screen, fireEvent, cleanup} from "@testing-library/react";
+import {render,  cleanup} from "@testing-library/react";
 import {useRouter} from "next/navigation";
 import "@testing-library/jest-dom";
 import CohortDetails from "../../../src/features/cohort/cohort-details/details/Index";
