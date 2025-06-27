@@ -138,7 +138,7 @@ const GoogleLocationsearch: React.FC<GoogleLocationSearchProps> = ({
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           onKeyDown={handleKeyDown}
-          className={`w-full p-2 border rounded-md ${error ? 'border-red-500' : 'border-gray-300'} min-h-[100px]`}
+          className={`w-full p-2 border rounded-md focus:outline-none  resize-none ${error ? 'border-red-500' : 'border-gray-300'} min-h-[100px]`}
           autoComplete="off"
         />
       ) : (
@@ -154,7 +154,7 @@ const GoogleLocationsearch: React.FC<GoogleLocationSearchProps> = ({
           autoComplete="off"
         />
       )}
-   {helperText && <p className={`text-sm mt-1 ${error ? "text-red-500" : "text-gray-600"}`}>{helperText}</p>}
+   {helperText && <p className={`text-[12px] mt-1  ${error ? "text-red-500" : "text-grey400"}`}>{helperText}</p>}
 
    {
     showDropdown && data.length > 0 && isScriptLoaded && (

@@ -8,11 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useSaveNextOfKinDetailsMutation } from "@/service/users/Loanee_query";
 import ProgramSelect from "@/reuseable/select/ProgramSelect";
-import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
+// import DescriptionTextarea from "@/reuseable/textArea/DescriptionTextarea";
 import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
 import Isloading from "@/reuseable/display/Isloading";
 import {setLoaneeCurrentInfo} from "@/service/users/loanRerralSlice";
 import {LoaneeCurentInformation} from "@/types/loanee";
+import GoogleLocationsearch from '@/reuseable/google-location/Google-location-search';
 
 interface CurrentInformationProps {
     setCurrentStep?: (step: number) => void;
@@ -132,10 +133,12 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
             selectedProgram,
         };
         try {
-            await saveNextOfKinDetails(dataToSubmit);
+          const result =  await saveNextOfKinDetails(dataToSubmit).unwrap();
+           if(result){
             setIsModalOpen(false);
             dispatch(setLoaneeCurrentInfo(values))
             setIsFormSubmitted(true);
+           }
         } catch (error) {
             console.error(error);
         }
@@ -278,7 +281,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                 label="Current phone number"
                                 placeholder="+234" id={'phoneNumber'} />
                             {touched.phoneNumber && errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
-                            <div className={'grid gap-2'}>
+                            {/* <div className={'grid gap-2'}>
                                 <DescriptionTextarea
                                     description={values.alternateContactAddress}
                                     setDescription={(description) => setValues((prev) => ({
@@ -286,7 +289,21 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                         alternateContactAddress: description
                                     }))} maximumDescription={500} label={'Current residential address'}
                                     placeholder={'Enter residential address'} />
-                            </div>
+                            </div> */}
+                            <div className={'grid gap-1'}>
+                        <Label className="block text-sm font-medium text-labelBlue">
+                            Current residential address
+                        </Label>
+                        <GoogleLocationsearch
+                            address={values.contactAddress}
+                            setAddress={(address) => setValues(prev => ({
+                            ...prev,
+                            contactAddress: address || ""
+                            }))}
+                            variant="textarea"
+                            helperText="Start typing to search addresses"
+                        />
+                         </div>
                             <div className={'grid gap-2'}>
                                 <Label htmlFor="nextOfKinFirstName"
                                     className="block text-sm font-medium text-labelBlue">Current next of
@@ -336,7 +353,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                 />
                                 {errors.alternatePhoneNumber && <p className="text-red-500 text-sm">{errors.alternatePhoneNumber}</p>}
                             </div>
-                            <div className={'grid gap-2'}>
+                            {/* <div className={'grid gap-2'}>
                                 <DescriptionTextarea
                                     description={values.contactAddress}
                                     setDescription={(description) => setValues((prev) => ({
@@ -344,7 +361,21 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                         contactAddress: description
                                     }))} maximumDescription={500} label={'Current next of kin’s residential address'}
                                     placeholder={'Enter residential address'} />
-                            </div>
+                            </div> */}
+                            <div className={'grid gap-2'}>
+                        <Label className="block text-sm font-medium text-labelBlue">
+                            Current next of kin&apos;s residential address
+                        </Label>
+                        <GoogleLocationsearch
+                            address={values.alternateContactAddress}
+                            setAddress={(address) => setValues(prev => ({
+                            ...prev,
+                            alternateContactAddress: address || ""
+                            }))}
+                            variant="textarea"
+                            helperText="Start typing to search addresses"
+                        />
+                        </div>
                             <div className={'grid gap-2'}>
                                 <ProgramSelect
                                     selectedProgram={values.nextOfKinRelationship}

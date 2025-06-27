@@ -12,6 +12,7 @@ import { cabinetGrotesk, inter } from '@/app/fonts';
 import Connector from '@/components/common/Connector';
 import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 import Isloading from "@/reuseable/display/Isloading";
+import { useToast } from "@/hooks/use-toast";
 
 const DynamicIdentityVerificationModal = dynamic(() => import('@/reuseable/modals/IdentityVerificationModal'), {
     ssr: false
@@ -29,6 +30,13 @@ interface BackendDetails {
     id: string;
 }
 
+interface ApiError {
+    status: number;
+    data: {
+      message: string;
+    };
+  }
+
 const LoaneeOnboarding = () => {
     const dispatch = useDispatch();
     const router = useRouter();
@@ -38,7 +46,7 @@ const LoaneeOnboarding = () => {
     const [respondToLoanReferral, {isLoading}] = useRespondToLoanReferralMutation({});
     const [loanReferralId, setLoanReferralId] = useState("");
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
-
+    const { toast } = useToast();
 
     useEffect(() => {
         if ( data?.data?.identityVerified  === true  ){
@@ -84,16 +92,26 @@ const LoaneeOnboarding = () => {
     };
 
     const handleAcceptLoanReferral = async () => {
-        const requestData = {
-            id: loanReferralId,
-            loanReferralStatus: "ACCEPTED"
-        };
-        if (requestData.id) {
-            await respondToLoanReferral(requestData).unwrap();
-            dispatch(setCurrentStep(currentStep + 1));
-        } else {
-            console.log("No loan referral detected.");
+        try {
+            const requestData = {
+                id: loanReferralId,
+                loanReferralStatus: "ACCEPTED"
+            };
+            if (requestData.id) {
+               const result =  await respondToLoanReferral(requestData).unwrap();
+               if(result){
+                dispatch(setCurrentStep(currentStep + 1));
+               }
+            } 
+            
+        } catch (err) {
+            const error = err as ApiError;
+            toast({
+                description: error?.data?.message,
+                status: "error",
+            })
         }
+       
     };
 
     const handleThirdStepContinue = () => {
