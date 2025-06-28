@@ -14,6 +14,7 @@ import Isloading from "@/reuseable/display/Isloading";
 import {setLoaneeCurrentInfo} from "@/service/users/loanRerralSlice";
 import {LoaneeCurentInformation} from "@/types/loanee";
 import GoogleLocationsearch from '@/reuseable/google-location/Google-location-search';
+import LoaneeCurrentInformation from '@/components/loanee/Loanee-current-information';
 
 interface CurrentInformationProps {
     setCurrentStep?: (step: number) => void;
@@ -35,6 +36,18 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         alternatePhoneNumber: "",
         alternateContactAddress: "",
     });
+
+    const initialFormValue = {
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        nextOfKinRelationship: "",
+        contactAddress: "",
+        alternateEmail: "",
+        alternatePhoneNumber: "",
+        alternateContactAddress: "",
+      }
 
     const [errors, setErrors] = useState({
         email: "",
@@ -126,6 +139,11 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         setTouched((prev) => ({ ...prev, [id]: true }));
     };
 
+    const handleSubmits = (values: typeof initialFormValue) => {
+        console.log(values)
+        setIsFormSubmitted(true);
+      }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const dataToSubmit = {
@@ -152,28 +170,37 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         }
     }
 
+    function handleEditClick() {
+        setIsFormSubmitted(false);
+    }
+
     return (
         <>
             <main className={'grid gap-[22px]'}>
                 {!isFormSubmitted ? (
-                    <div
-                        className={` ${inter.className} bg-grey105 w-full h-[22rem] gap-8 flex flex-col items-center justify-center`}>
-                        <div
-                            className={'md:h-20 md:w-20 h-[60px] w-[60px] bg-blue500 rounded-full grid place-content-center'}>
-                            <MdPersonOutline className={'h-8 w-8 text-meedlBlue'} />
-                        </div>
-                        <div className={'grid place-content-center place-items-center text-center gap-2'}>
-                            <h1 className={`${cabinetGrotesk.className} md:w-[20.875rem] w-[13.75rem] md:text-[20px] text-[18px] leading-[120%] font-medium text-meedlBlack`}>Current
-                                information will appear here</h1>
-                            <p className={'text-[14px] font-normal leading-[150%] text-#57595D w-[13.75rem] md:w-[317px]'}>To
-                                add your current information, click on the <span className={'font-semibold '}>add current information</span> button
-                            </p>
-                            <Button
-                                className={'h-[2.8125rem] w-[13.75rem] mt-5 px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md'}
-                                onClick={() => setIsModalOpen(true)}>Add current information</Button>
-                        </div>
+                    // <div
+                    //     className={` ${inter.className} bg-grey105 w-full h-[22rem] gap-8 flex flex-col items-center justify-center`}>
+                    //     <div
+                    //         className={'md:h-20 md:w-20 h-[60px] w-[60px] bg-blue500 rounded-full grid place-content-center'}>
+                    //         <MdPersonOutline className={'h-8 w-8 text-meedlBlue'} />
+                    //     </div>
+                    //     <div className={'grid place-content-center place-items-center text-center gap-2'}>
+                    //         <h1 className={`${cabinetGrotesk.className} md:w-[20.875rem] w-[13.75rem] md:text-[20px] text-[18px] leading-[120%] font-medium text-meedlBlack`}>Current
+                    //             information will appear here</h1>
+                    //         <p className={'text-[14px] font-normal leading-[150%] text-#57595D w-[13.75rem] md:w-[317px]'}>To
+                    //             add your current information, click on the <span className={'font-semibold '}>add current information</span> button
+                    //         </p>
+                    //         <Button
+                    //             className={'h-[2.8125rem] w-[13.75rem] mt-5 px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md'}
+                    //             onClick={() => setIsModalOpen(true)}>Add current information</Button>
+                    //     </div>
+                    // </div>
+                    <div>
+                        <LoaneeCurrentInformation initialFormValue={initialFormValue} handleSubmit={handleSubmits}/>
+
                     </div>
                 ) : (
+                    <div>
                     <div className={'bg-grey105 p-5  grid gap-9 rounded-md'}>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
                             <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current email
@@ -232,15 +259,30 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                         </div>
 
                     </div>
-                )}
-                <Button
+
+                    <div className='flex gap-4 items-center mt-6 justify-end'>
+                    <Button
+                    id="continueButton"
+                    className={"h-[2.8125rem]"}
+                    onClick={handleEditClick}
+                    variant={'outline'}
+                >
+                    Edit
+                </Button>
+                    <Button
                     id="continueButton"
                     className={`text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem] ${isFormSubmitted ? 'bg-meedlBlue hover:bg-meedlBlue focus:bg-meedlBlue' : 'bg-neutral650'}`}
                     disabled={!isFormSubmitted}
                     onClick={handleContinueClick}
+                    type='submit'
                 >
                     Continue
                 </Button>
+                    </div>
+                 
+                </div>
+                )}
+                
             </main>
 
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -267,7 +309,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                     value={values.alternateEmail} onChange={handleChange} />
                                 {errors.alternateEmail && <p className="text-red-500 text-sm">{errors.alternateEmail}</p>}
                             </div>
-                            <PhoneNumberSelect
+                            {/* <PhoneNumberSelect
                                 selectedCountryCode={values.phoneNumber}
                                 setSelectedCountryCode={(code) => setValues((prev) => ({
                                     ...prev,
@@ -277,9 +319,9 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                 setPhoneNumber={(number) => setValues((prev) => ({ ...prev, phoneNumber: number }))}
                                 isSelectOpen={isSelectOpen}
                                 setIsSelectOpen={setIsSelectOpen}
-                                countryCodeOptions={[{ id: "1", name: "+234" }]}
+                                // countryCodeOptions={[{ id: "1", name: "+234" }]}
                                 label="Current phone number"
-                                placeholder="+234" id={'phoneNumber'} />
+                                placeholder="+234" id={'phoneNumber'} /> */}
                             {touched.phoneNumber && errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
                             {/* <div className={'grid gap-2'}>
                                 <DescriptionTextarea
@@ -295,10 +337,10 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                             Current residential address
                         </Label>
                         <GoogleLocationsearch
-                            address={values.contactAddress}
+                            address={values.alternateContactAddress}
                             setAddress={(address) => setValues(prev => ({
                             ...prev,
-                            contactAddress: address || ""
+                            alternateContactAddress: address || ""
                             }))}
                             variant="textarea"
                             helperText="Start typing to search addresses"
@@ -336,7 +378,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                 {touched.email && errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                             </div>
                             <div className={'grid gap-2'}>
-                                <PhoneNumberSelect
+                                {/* <PhoneNumberSelect
                                     id={'alternatePhoneNumber'}
                                     selectedCountryCode={values.alternatePhoneNumber}
                                     setSelectedCountryCode={(code) => setValues((prev) => ({
@@ -347,10 +389,10 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                     setPhoneNumber={(number) => setValues((prev) => ({ ...prev, alternatePhoneNumber: number }))}
                                     isSelectOpen={isSelectOpen}
                                     setIsSelectOpen={setIsSelectOpen}
-                                    countryCodeOptions={[{ id: "1", name: "+234" }]}
+                                    // countryCodeOptions={[{ id: "1", name: "+234" }]}
                                     label="Current next of Kin's phone number"
                                     placeholder="+234"
-                                />
+                                /> */}
                                 {errors.alternatePhoneNumber && <p className="text-red-500 text-sm">{errors.alternatePhoneNumber}</p>}
                             </div>
                             {/* <div className={'grid gap-2'}>
@@ -367,10 +409,10 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                             Current next of kin&apos;s residential address
                         </Label>
                         <GoogleLocationsearch
-                            address={values.alternateContactAddress}
+                            address={values.contactAddress}
                             setAddress={(address) => setValues(prev => ({
                             ...prev,
-                            alternateContactAddress: address || ""
+                            contactAddress: address || ""
                             }))}
                             variant="textarea"
                             helperText="Start typing to search addresses"
@@ -395,7 +437,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                                     setId={(id: string) => setSelectedProgram(id)}
                                     label={'Current next of Kin\'s relationship'}
                                     placeholder={'Select relationship'} />
-                            </div>
+                            </div> 
                             <div className="flex justify-end gap-5 mt-3">
                                 <DialogClose asChild>
                                     <Button type="button"

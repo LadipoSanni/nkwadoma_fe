@@ -136,10 +136,10 @@ const LoaneeOnboarding = () => {
                     ))}
                 </aside>
                 <section id="loanApplicationDetailsSection" className={'grid md:p-5 py-5 px-3 md:gap-[22px] gap-5 md:w-[43vw] w-full md:max-h-[calc(100vh-19rem)] md:overflow-y-auto rounded-md border border-lightBlue250'}>
-                    <h2 id="loanApplicationDetailsTitle" className={`${cabinetGrotesk.className} text-labelBlue md:text-[20px] text-[16px] leading-[120%]`}>
+                    <h2 id="loanApplicationDetailsTitle" className={`${cabinetGrotesk.className} text-labelBlue md:text-[20px] text-[16px] leading-[120%] font-bold`}>
                         {currentStep === 0 && 'Loan application details'}
                         {currentStep === 1 && 'Verify your identity'}
-                        {currentStep === 2 && 'Current information'}
+                        {currentStep === 2 && 'Additional information'}
                         {currentStep === 3 && 'Confirm loan referral acceptance'}
                     </h2>
                     <StepContent step={currentStep} setCurrentStep={(step) => dispatch(setCurrentStep(step))} loaneeLoanDetail={data?.data} />
