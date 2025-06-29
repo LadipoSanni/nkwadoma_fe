@@ -19,7 +19,6 @@ jobs:
           node-version: '20'
 
       - name: 🌍 Create .env File for Nkwadoma Frontend
-        working-directory: nkwadoma_fe
         run: |
           echo "APP_DEV_AUTH_URL=${{ secrets.APP_DEV_AUTH_URL }}" >> .env
           echo "APP_DEV_IV_ENCRYPTION_SECRET_KEY=${{ secrets.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}" >> .env
@@ -33,17 +32,15 @@ jobs:
           echo "NEXT_PUBLIC_UPLOAD_PRESET=${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}" >> .env
 
       - name: 📦 Install Dependencies and Build
-        working-directory: nkwadoma_fe
         run: |
           npm install --legacy-peer-deps
           npm run build
 
-      - name: 🚀 Deploy to /home/solomon/semicolon/frontend/nkwadoma
-        working-directory: nkwadoma_fe
+      - name: 🚚 Move Build Files to /home/solomon/semicolon/frontend/nkwadoma
         run: |
           mkdir -p /home/solomon/semicolon/frontend/nkwadoma
-          sudo rm -rf /home/solomon/semicolon/frontend/nkwadoma/*
-          sudo cp -r .next public package.json next.config.* .env /home/solomon/semicolon/frontend/nkwadoma/
+          rm -rf /home/solomon/semicolon/frontend/nkwadoma/*
+          cp -r .next public package.json next.config.* .env /home/solomon/semicolon/frontend/nkwadoma/
 
       - name: 🔄 Restart PM2 App (Nkwadoma Frontend on Port 3010)
         run: |
