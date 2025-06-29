@@ -3,7 +3,7 @@ name: 🚀 Deploy Nkwadoma Frontend to Local Server (Self-Hosted)
 on:
   push:
     branches:
-      -banjoSolomon-patch-1  
+      - banjoSolomon-patch-1 
 
 jobs:
   deploy:
@@ -30,7 +30,6 @@ jobs:
           echo "NEXT_PUBLIC_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}" >> .env
           echo "NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}" >> .env
           echo "NEXT_PUBLIC_UPLOAD_PRESET=${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}" >> .env
-          
 
       - name: 📦 Install Dependencies and Build
         run: |
