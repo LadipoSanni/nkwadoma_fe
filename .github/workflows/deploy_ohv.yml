@@ -40,7 +40,7 @@ jobs:
         run: |
           mkdir -p /home/solomon/semicolon/frontend/nkwadoma
           rm -rf /home/solomon/semicolon/frontend/nkwadoma/*
-          cp -r . next.config.* package.json package-lock.json public .env /home/solomon/semicolon/frontend/nkwadoma/
+          cp -r .next public package.json package-lock.json next.config.* .env /home/solomon/semicolon/frontend/nkwadoma/
 
       - name: 🔄 Restart PM2 App (Nkwadoma Frontend on Port 3010)
         run: |
@@ -49,3 +49,4 @@ jobs:
           npm install --legacy-peer-deps
           npm run build
           pm2 start "npx next start -p 3010 -H 0.0.0.0" --name nkwadoma-app
+          pm2 save
