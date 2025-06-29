@@ -1,0 +1,50 @@
+name: 🚀 Deploy Nkwadoma Frontend to Local Server (Self-Hosted)
+
+on:
+  push:
+    branches:
+      -banjoSolomon-patch-1  
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, nkwadoma-FE]
+
+    steps:
+      - name: ✅ Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 🧰 Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: 🌍 Create .env File for Nkwadoma Frontend
+        run: |
+          echo "APP_DEV_AUTH_URL=${{ secrets.APP_DEV_AUTH_URL }}" >> .env
+          echo "APP_DEV_IV_ENCRYPTION_SECRET_KEY=${{ secrets.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}" >> .env
+          echo "APP_DEV_IV_KEY=${{ secrets.APP_DEV_IV_KEY }}" >> .env
+          echo "APP_URL=${{ secrets.APP_URL }}" >> .env
+          echo "APP_VERSION=${{ secrets.APP_VERSION }}" >> .env
+          echo "BACKEND_BASE_URL=${{ secrets.BACKEND_BASE_URL }}" >> .env
+          echo "FRONTEND_BASE_URL=${{ secrets.FRONTEND_BASE_URL }}" >> .env
+          echo "NEXT_PUBLIC_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}" >> .env
+          echo "NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}" >> .env
+          echo "NEXT_PUBLIC_UPLOAD_PRESET=${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}" >> .env
+
+      - name: 📦 Install Dependencies and Build
+        run: |
+          npm install --legacy-peer-deps
+          npm run build
+
+      - name: 🚀 Deploy to /home/solomon/semicolon/frontend/nkwadoma
+        run: |
+          mkdir -p /home/solomon/semicolon/frontend/nkwadoma
+          rm -rf /home/solomon/semicolon/frontend/nkwadoma/*
+          cp -r .next public package.json next.config.* .env /home/solomon/semicolon/frontend/nkwadoma/
+
+      - name: 🔄 Restart PM2 App (Nkwadoma Frontend on Port 3010)
+        run: |
+          pm2 delete nkwadoma-app || true
+          cd /home/solomon/semicolon/frontend/nkwadoma
+          npm install --legacy-peer-deps
+          pm2 start "npx next start -p 3010 -H 0.0.0.0" --name nkwadoma-app
