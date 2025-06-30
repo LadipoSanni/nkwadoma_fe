@@ -142,7 +142,7 @@ const LoaneeOnboarding = () => {
                         {currentStep === 2 && 'Additional information'}
                         {currentStep === 3 && 'Confirm loan referral acceptance'}
                     </h2>
-                    <div className='md:max-h-[calc(100vh-26rem)] md:overflow-y-auto '>
+                    <div className='md:max-h-[calc(100vh-26rem)] md:overflow-y-auto pr-4'>
                     <StepContent step={currentStep} setCurrentStep={(step) => dispatch(setCurrentStep(step))} loaneeLoanDetail={data?.data} />
                     </div>
                     

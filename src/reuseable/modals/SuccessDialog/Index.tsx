@@ -39,13 +39,21 @@ const SuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ showWarningIc
         onContinue();
         if (routeToOverview) {
             router.push('/overview');
+            onClose(); 
         }
+       
     };
 
     return (
-        <Dialog open={open} onOpenChange={onClose}>
+        <Dialog open={open}  onOpenChange={(isOpen) => !isOpen && onClose()} 
+        >
             {/*<DialogOverlay className="bg-[rgba(52,64,84,0.70)] " />*/}
-            <DialogContent className={'max-w-[350px] md:max-w-[416px] [&>button]:hidden gap-5 py-5 px-5'}>
+            <DialogContent 
+            className={'max-w-[350px] md:max-w-[416px] [&>button]:hidden gap-5 py-5 px-5'}
+            onInteractOutside={(e) => e.preventDefault()} 
+            onEscapeKeyDown={(e) => e.preventDefault()}  
+
+            >
                 <DialogHeader>
                     <DialogTitle className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>
                         {showWarningIcon ?
