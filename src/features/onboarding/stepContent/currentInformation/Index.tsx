@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 // import { MdClose, MdPersonOutline } from "react-icons/md";
 // import { cabinetGrotesk, inter } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
-// import { useSaveNextOfKinDetailsMutation } from "@/service/users/Loanee_query";
 import {setLoaneeCurrentInfo, setIsFormSubmited} from "@/service/users/loanRerralSlice";
 // import {LoaneeCurentInformation} from "@/types/loanee";
 import LoaneeCurrentInformation from '@/components/loanee/Loanee-current-information';
@@ -172,7 +171,7 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                     <div className='flex gap-4 items-center mt-6 justify-end'>
                     <Button
                     id="continueButton"
-                    className={"h-[2.8125rem]"}
+                    className={"h-[2.8125rem] w-20"}
                     onClick={handleEditClick}
                     variant={'outline'}
                 >
