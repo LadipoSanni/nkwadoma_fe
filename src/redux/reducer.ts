@@ -35,6 +35,7 @@ import {unauthorizedApis} from "@/service/unauthorized/action";
 import OrganizationReducer from "./slice/organization/organization"
 import { loanBookApi } from '@/service/admin/loan_book';
 import CsvReducer from "@/redux/slice/csv/csv"
+import { countryApi } from '@/service/admin/external-api/countryCalling_code_query';
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -71,7 +72,8 @@ const appReducer = combineReducers({
     [marketplaceApi.reducerPath]: marketplaceApi.reducer,
     [portfolioOverviewApi.reducerPath]: portfolioOverviewApi.reducer,
     [unauthorizedApis.reducerPath]: unauthorizedApis.reducer,
-    [loanBookApi.reducerPath]: loanBookApi.reducer
+    [loanBookApi.reducerPath]: loanBookApi.reducer,
+    [countryApi.reducerPath]: countryApi.reducer
 });
 
 export default appReducer;

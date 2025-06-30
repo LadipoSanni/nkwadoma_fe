@@ -95,15 +95,15 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
             uploadedStatus: uploadedStatus
         })
 
-        // const {data: invitedData} = useViewAllLoaneeQuery({
-        //   cohortId: cohortId,
-        //   pageSize:  size,               
-        //   pageNumber: 0,             
-        //   uploadedStatus: "INVITED"    
-        // }, {
-        //   skip: !cohortId &&  tabType === "Invited",            
-        //   refetchOnMountOrArgChange: true
-        // });
+        const {data: invitedData} = useViewAllLoaneeQuery({
+          cohortId: cohortId,
+          pageSize:  size,               
+          pageNumber: 0,             
+          uploadedStatus: "INVITED"    
+        }, {
+          skip: !cohortId &&  tabType === "Invited",            
+          refetchOnMountOrArgChange: true
+        });
 
       const {data: searchResults, isLoading: isLoadingSearch, isFetching: isfetching} = useSearchForLoaneeInACohortQuery({
                  loaneeName: debouncedSearchTerm,
@@ -328,7 +328,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         pageNumber={page}
         setPageNumber={setPageNumber}
         totalPages={totalPage}
-        // enableRowSelection={tabType === 'All' || tabType === 'Archived' ? true : false}
+        enableRowSelection={tabType === 'All' || tabType === 'Archived' ? true : false}
         enableButton={() =>setEnableButton(true) }
         disabledButton={()=> setEnableButton(false) }
         handleSelectedRow={handleSelectedRow}
@@ -351,7 +351,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         setIsOpen={setIsOpen}
         loaneeRefetch={refetch}
         isLoaneeEmpty={data?.data?.body?.length === 0 ? true : false}
-        // isInvitedLoanee={invitedData?.data?.body?.length === 0 ? true : false}
+        isInvitedLoanee={invitedData?.data?.body?.length === 0 ? true : false}
         />
         </Modal>
        </div>
