@@ -6,11 +6,17 @@ import { useRouter } from 'next/navigation';
 import {store} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 import {setLoaneeIdentityVerifiedStatus} from "@/service/users/loanRerralSlice";
+import { setCurrentStep } from '@/service/users/loanRerralSlice';
+
 
 const ConfirmLoanReferralAcceptance = () => {
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const router = useRouter();
+
+    const handleBack =() => {
+        store.dispatch(setCurrentStep(2))
+    }
 
     return (
         <div className="flex flex-col gap-[22px]">
@@ -31,14 +37,26 @@ const ConfirmLoanReferralAcceptance = () => {
                     financial information, and any supporting documentation submitted.
                 </label>
             </div>
+            <div className='flex justify-end gap-4'>
+            <Button
+              variant={'outline'}
+             id='backButton'
+             className={` text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem]`}
+             onClick={handleBack}
+            >
+             Back
+            </Button>
             <Button
                 id="continueButton"
-                className={`text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem] ${!isCheckboxChecked ? 'bg-blue50 ' : 'bg-meedlBlue hover:bg-meedlBlue focus:bg-meedlBlue'}`}
+                className={`text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem] ${!isCheckboxChecked ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7] ' : 'bg-meedlBlue  '}`}
                 disabled={!isCheckboxChecked}
                 onClick={() => setIsDialogOpen(true)}
+                variant={'secondary'}
             >
-                Continue
+                submit
             </Button>
+            </div>
+            
             <SuccessDialog
                 open={isDialogOpen}
                 onClose={() => setIsDialogOpen(false)}

@@ -186,6 +186,8 @@ const ProgramSelect: React.FC<ProgramSelectProps> = ({
       <Label htmlFor={uniqueId}
              className="block text-[14px] font-medium leading-[22px] text-labelBlue">{label}</Label>
       <Select
+        defaultValue={selectedProgram || undefined}
+        value={selectedProgram || undefined}
         onValueChange={(value) => {
           const selectedProgram = selectOptions.find((program) => program.name === value);
           if (selectedProgram) {
