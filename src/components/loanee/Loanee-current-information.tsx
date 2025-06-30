@@ -9,7 +9,8 @@ import Select from "@/reuseable/select/ProgramSelect";
 import { Button } from "@/components/ui/button";
 import { useGetCountriesQuery } from '@/service/admin/external-api/countryCalling_code_query';
 
- interface initialFormValue {
+
+export interface initialFormValue {
   firstName: string;
   lastName: string;
   email: string;
@@ -44,6 +45,8 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
       }
     }
   }, [countries]);
+
+  
 
   return (
     <div>
