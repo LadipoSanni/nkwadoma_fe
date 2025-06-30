@@ -40,16 +40,16 @@ const DropdownFilter = ({title,sx, handleFilter,clearFilter,setSelectItem,items,
                 <MenubarTrigger
                     id={'dropdownTrigger'}
                     data-testid="dropdownTrigger"
-                    className={` px-2 h-fit flex gap-4 mt-2 w-fit sm:w-full  rounded-md py-2 ring-1 ring-[#D0D5DD] bg-[#F6F6F6] border-[#D0D5DD] `}>
+                    className={` px-2 h-fit flex justify-between 4 mt-2 w-fit sm:w-full  rounded-md py-2 ring-1 ring-[#D0D5DD] bg-[#F6F6F6] border-[#D0D5DD] `}>
                        {placeholder}
 
 
                            <ChevronDownIcon  data-testid="ChevronUpIcon" id="chevronUp" className="h-4 font-semibold" />
 
                 </MenubarTrigger>
-                <MenubarContent className={` w-[23em] sm:w-[23em] md:w-[25em]  px-6 py-4 `}>
+                <MenubarContent className={` w-[23em] sm:w-[20em] md:w-[23em] md:px-4 px-3 py-4 `}>
                     <p className={`${inter600.className} text-[14px] mb-4 `}>{title}</p>
-                    <div className={` max-h-[250px] ${styles.container}  h-fit ${sx ? `${sx}` : ` grid grid-cols-5 `} gap-3   w-full mb-10`}>
+                    <div className={` max-h-[220px] ${styles.container}  h-fit ${sx ? `${sx}` : `flex flex-wrap`}  gap-3  w-full mb-10`}>
                         {items?.map((month, index) => (
                             <button id={'item:'+ index} key={'key: '+ month} onClick={() => {setSelectItem(month)}} className={` ${inter500.className} ${selectedItem === month ? 'bg-[#E6F1FF] text-[#142854] md:bg-[#E6F1FF] md:text-[#142854] '  : 'bg-[#F6F6F6] text-[#6A6B6A]'} w-fit h-fit rounded-full text-[13px]  py-1 px-2  hover:bg-[#E6F1FF] hover:text-[#142854] `}>
                                 {month}

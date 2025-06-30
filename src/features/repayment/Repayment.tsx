@@ -180,7 +180,6 @@ const Repayment = () => {
                            setSelectItem={setMonthItem}
                            clearFilter={clearMonthFilter}
                            placeholder={'Month'}
-                           sx={'grid grid-cols-3'}
                        />
 
                        <DropdownFilter
