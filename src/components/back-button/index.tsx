@@ -17,7 +17,7 @@ const BackButton = ({id,text,sx, textColor, handleClick, iconBeforeLetters}: pro
         <button
             id={id}
             data-testid={id}
-            className={`w-fit h-fit md:w-fit md:flex items-center bg-red-100 ${sx} text-${textColor} md:fit flex gap-1`}
+            className={`w-fit h-fit md:w-fit md:flex items-center  ${sx} text-${textColor} md:fit flex gap-1`}
             onClick={handleClick}
         >
             {iconBeforeLetters &&
