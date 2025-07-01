@@ -253,6 +253,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                             className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Liveness
                             check</DialogTitle>
                     </DialogHeader>
+                    
                     <div className={`${inter.className} grid gap-5`}>
                         {showCamera ? (
                             <CapturePhotoWithTips onCapture={handleCapture} />

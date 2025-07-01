@@ -95,9 +95,20 @@ export const LoaneeInformationvalidationSchema = Yup.object().shape({
     .email('Invalid email address')
     .required('Email address is required'),
   alternatePhoneNumber: Yup.string()
-  .transform((value) => value.replace(/\s+/g, '')) 
-  .matches(/^\+?\d{7,20}$/, 'Phone number must be 7 to 20 digits ')
-    .required('Phone number is required'),
+  // .transform((value) => value.replace(/\s+/g, '')) 
+  // .matches(/^\+?\d{7,20}$/, 'Phone number must be 7 to 20 digits ')
+    .required('Phone number is required')
+    .test(
+      'phone-validation',
+      ' ', 
+      function(value) {
+        if (this.parent.alternatePhoneNumberError) {
+          return true;
+        }
+        if (!value) return false;
+        return /^\+?\d{7,20}$/.test(value.replace(/\s+/g, ''));
+      }
+    ),
   firstName: Yup.string()
     .trim()
     .required('First name is required'),
@@ -105,9 +116,20 @@ export const LoaneeInformationvalidationSchema = Yup.object().shape({
     .trim()
     .required('Last name is required'),
   phoneNumber: Yup.string()
-  .transform((value) => value.replace(/\s+/g, '')) 
-  .matches(/^\+?\d{7,20}$/, 'Phone number must be 7 to 20 digits ')
-    .required('Next of kin phone number is required'),
+  // .transform((value) => value.replace(/\s+/g, '')) 
+  // .matches(/^\+?\d{7,20}$/, 'Phone number must be 7 to 20 digits ')
+  .required('Next of kin phone number is required')
+  .test(
+    'phone-validation',
+    ' ',
+    function(value) {
+      if (this.parent.alternatePhoneNumberError) {
+        return true;
+      }
+      if (!value) return false;
+      return /^\+?\d{7,20}$/.test(value.replace(/\s+/g, ''));
+    }
+  ),
   alternateContactAddress: Yup.string()
     .required('Residential address is required'),
   email: Yup.string()
