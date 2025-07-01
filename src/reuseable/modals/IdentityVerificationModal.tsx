@@ -247,13 +247,17 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
 
             <Dialog open={isSecondModalOpen && !showSuccessDialog} onOpenChange={setIsSecondModalOpen}>
                 {/*<DialogOverlay className="bg-[rgba(52,64,84,0.70)] " />*/}
-                <DialogContent className={'max-w-[425px] md:max-w-[460px] [&>button]:hidden gap-6 py-5 px-5'}>
+                <DialogContent 
+                className={'max-w-[425px] md:max-w-[460px] [&>button]:hidden gap-6 py-5 px-5'}
+                onInteractOutside={(e) => e.preventDefault()} 
+                onEscapeKeyDown={(e) => e.preventDefault()}   
+                >
                     <DialogHeader className={'flex py-3'} id="secondModalHeader">
                         <DialogTitle
                             className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>Liveness
                             check</DialogTitle>
                     </DialogHeader>
-                    
+
                     <div className={`${inter.className} grid gap-5`}>
                         {showCamera ? (
                             <CapturePhotoWithTips onCapture={handleCapture} />

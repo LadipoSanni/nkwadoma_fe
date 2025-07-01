@@ -43,7 +43,11 @@ const WarningModal = ({ open, onClose, onContinue, title, message, buttonText, r
 
     return (
         <Dialog  open={open} onOpenChange={onClose}>
-            <DialogContent id={'warningModalOnVerification'} className={'max-w-[350px] md:max-w-[416px] [&>button]:hidden gap-5 py-5 px-5'}>
+            <DialogContent 
+            id={'warningModalOnVerification'} className={'max-w-[350px] md:max-w-[416px] [&>button]:hidden gap-5 py-5 px-5'}
+            onInteractOutside={(e) => e.preventDefault()} 
+            onEscapeKeyDown={(e) => e.preventDefault()}
+            >
                 <DialogHeader>
                     <DialogTitle  className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>
                         <Image id={'warningIcon'} data-testid={'warningIcon'} width={70} height={70} src={'/Icon - Warning.svg'} alt={'warning icon'} priority={true} />
