@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { cabinetGrotesk, inter } from '@/app/fonts';
 import { setCurrentStep, setLoanReferralStatus } from '@/service/users/loanRerralSlice';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
 interface VerificationSuccessDialogProps {
@@ -59,9 +58,14 @@ const WarningModal = ({ open, onClose, onContinue, title, message, buttonText, r
                         <p  id={'modalMessage'} className={'text-gray1 text-[14px] leading-[150%] font-normal'}>{message}</p>
                     </div>
                     <div className="flex justify-end">
-                        <Button id={'actionButton'} className="h-[3.5625rem] text-[14px] font-semibold leading-[150%] w-[8.75rem] px-5 py-3 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md" onClick={handleContinue}>
+                        <button 
+                        id={'actionButton'} 
+                        className="h-[3.5625rem] text-[14px] font-semibold leading-[150%] w-[8.75rem] px-5 py-3  text-white rounded-md hover:bg-[#435376] bg-meedlBlue" 
+                        onClick={handleContinue}
+                         type='button'
+                        >
                             {buttonText}
-                        </Button>
+                        </button>
                     </div>
                 </section>
             </DialogContent>

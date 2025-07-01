@@ -231,11 +231,15 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                 </div>
                                 <div className="md:flex grid md:justify-end gap-5 mt-3">
                                     <Button type="button" onClick={onClose}
-                                            className="h-[3.5625rem] md:w-[8.75rem] w-full  border border-meedlBlue text-meedlBlue px-4 py-2 bg-gray-300 rounded-md">Cancel
+                                            className="h-[3.5625rem] md:w-[8.75rem] w-full  border border-meedlBlue text-meedlBlue px-4 py-2 bg-gray-300 rounded-md"
+                                            variant={'outline'}
+                                            >Cancel
                                     </Button>
                                     <Button type="submit"
-                                            className={`h-[3.5625rem] md:w-[8.75rem] w-full px-4 py-2 ${!methods.formState.isValid ? 'bg-[#D0D5DD]' : 'bg-meedlBlue'} hover:bg-meedlBlue text-white rounded-md`}
-                                            disabled={!methods.formState.isValid}>Continue
+                                            className={`h-[3.5625rem] md:w-[8.75rem] w-full px-4 py-2 ${!methods.formState.isValid ? 'bg-[#D0D5DD] hover:bg-[#D0D5DD]' : 'bg-meedlBlue'}  text-white rounded-md`}
+                                            disabled={!methods.formState.isValid}
+                                            variant={'secondary'}
+                                            >Continue
                                     </Button>
                                 </div>
                                 <p className={"text-red-800 text-[13px]"} id={"encryptionFailure"}>{isDataError}</p>
@@ -278,15 +282,15 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
                                             the verification</p>
                                     </div>
                                     <div className="flex justify-end gap-5 mt-4">
-                                        <Button
-                                            className="h-[3.5625rem] w-[8.75rem] px-4 py-2 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md"
+                                        <button
+                                          type='button'
+                                            className=" h-[3.5625rem] w-[8.75rem] px-4 py-2  text-white rounded-md hover:bg-[#435376] bg-meedlBlue"
                                             onClick={() => {
-                                                // console.log('Setting showCamera to true');
                                                 setShowCamera(true);
                                             }}
                                         >
                                             Continue
-                                        </Button>
+                                        </button>
                                     </div>
                                 </div>
                             </>
