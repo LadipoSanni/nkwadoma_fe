@@ -33,6 +33,8 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
   const [countryCode, setCountryCode] = useState("NG")
   const [isRelationshipSelectOpen, setIsRelationshipSelectOpen] = useState(false);
   const [nextOfCountryCode, setNextOfCountryCod] = useState("NG")
+  const [isPhoneNumberError,setPhoneNumberError] = useState(false)
+  const [isAltPhoneNumberError,setAltPhoneNumberError] = useState(false)
 
   const { data: countries, isLoading } = useGetCountriesQuery();
   
@@ -61,7 +63,10 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
           errors,
           touched,
           setFieldValue,
-           values,isValid,isSubmitting
+           values,isValid,isSubmitting,
+           setFieldError,
+           handleBlur,
+          //  setFieldTouched
         })=> (
           <Form
           className={`${inter.className}`}
@@ -98,14 +103,18 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
                 label="Alternate phone number"
                 placeholder="Select code"
                  id="phone"
+                  setFieldError={setFieldError}
+                  name="alternatePhoneNumber"
+                  onBlur={handleBlur}
+                  setError={setPhoneNumberError}
                 />
-                 {errors.alternatePhoneNumber && touched.alternatePhoneNumber && (
+                 {/* {errors.alternatePhoneNumber && touched.alternatePhoneNumber && (
                     <ErrorMessage
                     name="alternatePhoneNumber"
                     component="div"
                     className="text-red-500 text-sm"
                     />
-                 )}
+                 )} */}
                </div>
 
                <div className={'grid'}>
@@ -206,15 +215,19 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
                   isLoading= {isLoading}
                 label="Alternate next of kin's phone number"
                 placeholder="Select code"
-                 id="alternatephone"
+                 id="phoneNumber"
+                 setFieldError={setFieldError}
+                 name="phoneNumber"
+                 onBlur={handleBlur}
+                 setError={setAltPhoneNumberError}
                 />
-                  {errors.phoneNumber && touched.phoneNumber && (
+                  {/* {errors.phoneNumber && touched.phoneNumber && (
                     <ErrorMessage
                     name="phoneNumber"
                     component="div"
                     className="text-red-500 text-sm"
                     />
-                 )}
+                 )} */}
                 </div>
 
                 <div className={'grid '}>
@@ -283,9 +296,9 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
               <Button
               id='additionalinformation'
               variant={'secondary'}
-              className={`w-full md:w-20 h-[50px] ${!isValid ? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " : " bg-meedlBlue cursor-pointer"}`}
+              className={`w-full md:w-20 h-[50px] ${!isValid || isSubmitting || isAltPhoneNumberError || isPhoneNumberError ? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " : " bg-meedlBlue cursor-pointer"}`}
               type='submit'
-              disabled={!isValid ||isSubmitting}
+              disabled={!isValid ||isSubmitting || isAltPhoneNumberError || isPhoneNumberError}
               >
                 Add
               </Button>

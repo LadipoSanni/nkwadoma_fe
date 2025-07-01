@@ -7,6 +7,13 @@ describe('InviteAdminDialog Component', () => {
     const mockSetIsModalOpen = jest.fn();
 
     beforeEach(() => {
+        jest.clearAllMocks();
+        jest.spyOn(console, 'log').mockReturnValue();
+        jest.spyOn(console, 'warn').mockReturnValue();
+        jest.spyOn(console, 'error').mockReturnValue();
+      });
+
+    beforeEach(() => {
         cleanup();
         jest.clearAllMocks();
     });

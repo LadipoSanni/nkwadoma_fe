@@ -179,11 +179,11 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                 </Button>
                     <Button
                     id="continueButton"
-                    className={`text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem] ${isFormSubmitted ? 'bg-meedlBlue hover:bg-meedlBlue focus:bg-meedlBlue' : 'bg-neutral650'}`}
+                    className={`text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem] ${isFormSubmitted ? 'bg-meedlBlue ' : 'bg-neutral650 hover:bg-neutral650'}`}
                     disabled={!isFormSubmitted}
                     onClick={handleContinueClick}
                     type='submit'
-                    variant={"default"}
+                    variant={"secondary"}
                 >
                     Continue
                 </Button>

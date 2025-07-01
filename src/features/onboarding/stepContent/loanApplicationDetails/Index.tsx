@@ -22,7 +22,7 @@ const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeL
 
     const formattedCohortStartDate = isValid(new Date(cohortStartDate)) ? format(new Date(cohortStartDate), 'dd MMM, yyyy') : 'Date not available';
 
-
+    const total = Number(tuitionAmount)  -  Number(initialDeposit)
 
     return (
         <div id="loanApplicationDetailsContent" className={'rounded-md grid gap-9 p-5 bg-grey105'}>
@@ -54,7 +54,7 @@ const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeL
                         <h3 id="tuitionBreakdownTotalLabel"
                             className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Total</h3>
                         <p id="tuitionBreakdownTotalValue"
-                           className={`text-black500 text-[14px] font-semibold leading-[150%]`}><NumericFormat value={loanAmountRequested} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} /></p>
+                           className={`text-black500 text-[14px] font-semibold leading-[150%]`}><NumericFormat value={total} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} /></p>
                     </div>
                 </CollapsibleContent>
             </Collapsible>

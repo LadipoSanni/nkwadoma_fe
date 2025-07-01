@@ -157,9 +157,10 @@ const LoaneeOnboarding = () => {
                     {(currentStep === 0 || currentStep === 1) && (
                         <Button
                             id="continueButton"
-                            className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem] hover:bg-meedlBlue focus:bg-meedlBlue'}
+                            className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem]'}
                             onClick={handleNext}
                             disabled={isLoading}
+                            variant={'secondary'}
                         >
                             { isLoading ? <Isloading/> :
                                 <>
