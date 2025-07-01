@@ -30,14 +30,7 @@ export const loanRequestApi = createApi({
                 method: 'GET',
             })
         }),
-        viewLoanRequestsOfCurrentOrganization : builder.query({
-            query: (data:{pageSize: number, pageNumber: number, organizationId: string | number | undefined})=> ({
-                url: `loan/${data.organizationId}/loan-requests?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}`,
-                // url: `/loan/${data.organizationId}/loan-requests?pageSize=${data.pageSize}?pageNumber=${data.pageNumber}`,
-                method: 'GET',
-            }),
-            providesTags: ['loanRequests', 'create-loan-offer', 'accept-loan-offer']
-        }),
+
 
 
     })
@@ -47,5 +40,4 @@ export const {
     useViewAllLoanRequestQuery,
     useViewLoanRequestDetailsQuery,
     useRespondToLoanRequestMutation,
-    useViewLoanRequestsOfCurrentOrganizationQuery,
 } = loanRequestApi;

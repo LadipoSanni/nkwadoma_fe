@@ -17,17 +17,17 @@ const BackButton = ({id,text,sx, textColor, handleClick, iconBeforeLetters}: pro
         <button
             id={id}
             data-testid={id}
-            className={`w-fit h-fit md:w-fit md:flex items-center ${sx} text-${textColor} md:fit flex gap-1`}
+            className={`w-fit h-fit md:w-fit md:flex items-center bg-red-100 ${sx} text-${textColor} md:fit flex gap-1`}
             onClick={handleClick}
         >
             {iconBeforeLetters &&
-                <MdArrowBack  style={{color: `${textColor}`}}/>
+                <MdArrowBack  className={` ${textColor ? `text-[#142854]` : `hover:text-[#435376]`} `} style={{color: `${textColor}`}}/>
             }
             <span
                 style={{color: `${textColor}`}}
-                id={ text+`id`} data-testid={ text+`id`} className={` ${inter500.className} text-[14px]  text-${textColor} `}>{text}</span>
+                id={ text+`id`} data-testid={ text+`id`} className={` ${inter500.className} text-[14px] ${textColor ? `text-[#142854]` : `hover:text-[#435376]`}   text-${textColor} `}>{text}</span>
             {!iconBeforeLetters &&
-                <MdArrowForward style={{color: `${textColor}`}}/>
+                <MdArrowForward  className={`${textColor ? `text-[#142854]` : `hover:text-[#435376]`} `} style={{color: `${textColor}`}}/>
             }
 
         </button>
