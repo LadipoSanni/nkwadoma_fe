@@ -43,7 +43,6 @@ const Index = () => {
         organizationId: clickedOrganization?.id || '',
     }
 
-    console.log('requear: ', request)
 
     const { data, isLoading} = useViewAllLoanRequestQuery(request)
 
