@@ -15,6 +15,13 @@ jest.mock('next/navigation', () => ({
 
 describe('LoaneeOverview Component', () => {
     beforeEach(() => {
+          jest.spyOn(console,'log').mockReturnValue()
+          jest.spyOn(console,'warn').mockReturnValue()
+          jest.spyOn(console,'error').mockReturnValue()
+      });
+
+
+    beforeEach(() => {
         cleanup();
     });
 

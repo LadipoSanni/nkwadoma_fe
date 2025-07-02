@@ -12,6 +12,7 @@ import {useToast} from "@/hooks/use-toast";
 import {useQueryClient} from '@tanstack/react-query';
 import { store } from '@/redux/store';
 import { setOrganizationTabStatus } from '@/redux/slice/organization/organization';
+import PhoneNumberSelect from '@/reuseable/select/phoneNumberSelect/Index';
 
 interface ApiError {
     status: number;
@@ -46,6 +47,9 @@ function InviteOrganizationForm({setIsOpen}: props) {
     //  const industries = [ "MANUFACTURING", "INSURANCE", "LOGISTIC", "TELECOMMUNICATION", "REAL ESTATE", "AUTOMOBILE", "FASHION", "AVIATION", "AGRICULTURE", "EDUCATION", "HEALTHCARE", "ENTERTAINMENT", "HOSPITALITY", "FMCG", "TECHNOLOGY", "FINANCE" ];
     const industries = ["EDUCATION", "BANKING"]
     const serviceOfferings = ["TRAINING", "FINANCIAL ADVISORY", "INSURANCE SERVICES", "LOAN SERVICES", "ACCOUNTING AND BOOKKEEPING", "INVESTMENT ADVISORY", "RISK MANAGEMENT", "CORPORATE FINANCE", "TAX SERVICES", "BANKING SERVICES", "CRYPTOCURRENCY SERVICES", "SOFTWARE DEVELOPMENT", "WEB DEVELOPMENT", "CLOUD SERVICES", "CYBERSECURITY SERVICES", "DATABASE MANAGEMENT", "AI AND MACHINE LEARNING", "BUSINESS INTELLIGENCE", "DEVOPS SERVICES", "BLOCKCHAIN SERVICES", "DISTRIBUTION SERVICES", "MARKETING AND BRANDING", "SALES SERVICES", "CUSTOMER SERVICE AND SUPPORT", "SUSTAINABILITY SERVICES", "CONSUMER ENGAGEMENT AND LOYALTY", "TECHNOLOGY AND INNOVATION", "HOTEL SERVICES", "RESTAURANT SERVICES", "EVENT PLANNING", "TRAVEL AND TOUR SERVICES", "CORPORATE RETREATS", "SPA AND WELLNESS", "TRANSPORTATION", "FILM AND TELEVISION", "MUSIC", "THEATRE", "SPORTS AND FITNESS", "GAMING", "EVENT AND PARTIES", "TELECOMMUNICATION", "PHOTOGRAPHY"];
+
+     const [countryCode, setCountryCode] = useState("NG")
+     const [isPhoneNumberError,setPhoneNumberError] = useState(false)
 
     const [error, setError] = useState("");
 
@@ -89,9 +93,9 @@ function InviteOrganizationForm({setIsOpen}: props) {
         adminLastName: Yup.string()
             .trim()
             .required('Admin last name is required'),
-        phoneNumber: Yup.string()
-            .required('Phone number is required')
-            .matches(/^(0)(70|71|80|81|90|91)\d{8}$/, 'Invalid phone number'),
+        phoneNumber: Yup.string(),
+            // .required('Phone number is required')
+            // .matches(/^(0)(70|71|80|81|90|91)\d{8}$/, 'Invalid phone number'),
         adminEmail: Yup.string()
             .email('Invalid email address')
             // .matches(/^\S*$/, 'Email address should not contain spaces')
@@ -181,7 +185,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                 validateOnBlur={true}  
             >
                 {
-                    ({errors, isValid, touched, setFieldValue, values,setFieldTouched}) => (
+                    ({errors, isValid, touched, setFieldValue, values,setFieldTouched,setFieldError,handleBlur}) => (
                         <Form className={`${inter.className}`}>
                             <div >
                                 <div
@@ -218,7 +222,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                 </div>
                                 <div className=''>
                                     <Label htmlFor="phoneNumber">Phone number</Label>
-                                    <Field
+                                    {/* <Field
                                         id="phoneNumber"
                                         name="phoneNumber"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
@@ -233,9 +237,25 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         <ErrorMessage
                                             name="phoneNumber"
                                             component="div"
-                                            className="text-red-500 text-sm"/>)}
+                                            className="text-red-500 text-sm"/>
+                                            )} */}
+                                            <div className='relative bottom-3'>
+                                       <PhoneNumberSelect
+                                       selectedCountryCode={countryCode}
+                                       setSelectedCountryCode={(code) => setCountryCode(code)}
+                                       phoneNumber={values.phoneNumber}
+                                       setPhoneNumber={(num) => setFieldValue('phoneNumber', num)}
+                                     label=''
+                                       placeholder="Select code"
+                                       id="phoneNumber"
+                                       setFieldError={setFieldError}
+                                       onBlur={handleBlur}
+                                      setError={setPhoneNumberError}
+                                      name='phoneNumber'
+                                       />     
+                                       </div>
                                 </div>
-                                <div>
+                                <div className='relative bottom-6'>
                                     <Label htmlFor="email">Email address </Label>
                                     <Field
                                         id="email"
@@ -255,7 +275,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         )
                                     }
                                 </div>
-                                <div>
+                                <div className='relative bottom-6'>
                                     <Label htmlFor="websiteAddress">Website (optional)</Label>
                                     <Field
                                         id="website"
@@ -274,7 +294,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         )
                                     }
                                 </div>
-                                <div className='grid md:grid-cols-2 gap-4 w-full'>
+                                <div className='grid md:grid-cols-2 gap-4 w-full relative bottom-6'>
                                     <div>
                                         <Label htmlFor="industry">Industry</Label>
                                         <CustomSelect
@@ -297,7 +317,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                             )
                                         }
                                     </div>
-                                    <div>
+                                    <div className='relative bottom-5 md:bottom-0'>
                                         <Label htmlFor="serviceOffering:">Service offering</Label>
                                         <CustomSelect
                                             triggerId='serviceOfferingTriggerId'
@@ -320,7 +340,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         }
                                     </div>
                                 </div>
-                                <div className='grid md:grid-cols-2 gap-4 w-full relative bottom-5'>
+                                <div className='grid md:grid-cols-2 gap-4 w-full relative md:bottom-10 bottom-16'>
                                     <div>
                                         <Label htmlFor="rcNumber">Registration number</Label>
                                         <Field
@@ -368,7 +388,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                         }
                                     </div>
                                 </div>
-                                <div className='grid md:grid-cols-2 gap-4 w-full relative'>
+                                <div className='grid md:grid-cols-2 gap-4 w-full relative md:bottom-4 bottom-9'>
                                     <div className='relative bottom-5'>
                                         <Label htmlFor="adminFirstName">Admin first name</Label>
                                         <Field
@@ -414,7 +434,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                             )}
                                     </div>
                                 </div>
-                                <div className='relative bottom-5'>
+                                <div className='relative md:bottom-8 bottom-12'>
                                     <Label htmlFor="adminEmail">Admin email address</Label>
                                     <Field
                                         id="adminEmail"
@@ -433,28 +453,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                             />
                                         )}
                                 </div>
-                                {/* <div className='relative bottom-5'>
-             <Label htmlFor="logoImage">Logo Image (optional)</Label>
-             <div className='mt-2'>
-            <FileUpload
-            handleDrop={handleDrop}
-            handleDragOver={handleDragOver}
-            setUploadedImageUrl={(url: string | null) => setFieldValue("logoImage",url)}
-            />
-             </div>
-             </div> */}
-
-                                {/* <div className='relative bottom-5'>
-             <Label htmlFor="coverImage">Cover Image (optional)</Label>
-             <div className='mt-2'>
-            <FileUpload
-            handleDrop={handleDrop}
-            handleDragOver={handleDragOver}
-            setUploadedImageUrl={(url: string | null) => setFieldValue("coverImage",url)}
-            />
-             </div>
-
-             </div> */}
+                          
              </div>
 
                                 <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>
@@ -470,9 +469,9 @@ function InviteOrganizationForm({setIsOpen}: props) {
                                     <Button
                                         id='inviteOrganization'
                                         variant={'secondary'}
-                                        className={`w-full md:w-36 h-[57px] ${!isValid ? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " : " bg-meedlBlue cursor-pointer"}`}
+                                        className={`w-full md:w-36 h-[57px] ${!isValid || isPhoneNumberError ? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " : " bg-meedlBlue cursor-pointer"}`}
                                         type='submit'
-                                        disabled={!isValid}
+                                        disabled={!isValid || isPhoneNumberError}
 
                                     >
                                         {isLoading ? (<Isloading/>) : (
