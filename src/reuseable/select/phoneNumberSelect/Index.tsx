@@ -1,3 +1,4 @@
+
 // import React, { useMemo, useState } from 'react';
 // import {
 //   Select,
@@ -15,7 +16,7 @@
 // import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js';
 
 // interface Country {
-//   id: string,
+//   id: string;
 //   name: string;
 //   code: string;
 //   dialCode: string;
@@ -32,8 +33,12 @@
 //   label: string;
 //   placeholder: string;
 //   id: string;
+//   name: string;
 //   countries: Country[];
 //   isLoading: boolean;
+//   setFieldError: (field: string, message: string | undefined) => void;
+//   onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+//   setError: (isError: boolean) => void
 // }
 
 // const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
@@ -46,10 +51,14 @@
 //   label,
 //   placeholder,
 //   id,
+//   name,
 //   countries,
-//   isLoading
+//   isLoading,
+//   setFieldError,
+//   onBlur,
+//   setError
 // }) => {
-//   const [error, setError] = useState<string | null>(null);
+//   const [localError, setLocalError] = useState<string | null>(null);
 
 //   const displayedCountries = useMemo(() => {
 //     if (!countries) return [];
@@ -66,19 +75,28 @@
 //   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 //     const raw = e.target.value.replace(/\D/g, '');
 //     setPhoneNumber(raw);
-//     if (error) setError(null);
+//     if (localError) {
+//       setLocalError(null);
+//       setFieldError(name, undefined);
+//     }
 //   };
 
-//   const handleBlur = () => {
-//     setError(null); 
+//   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+//     onBlur(e);
+//     setLocalError(null);
+//     setFieldError(name, undefined);
     
 //     if (!selectedCountry?.code) {
-//       setError('Please select a country first');
+//       const errorMsg = 'Please select a country first';
+//       setLocalError(errorMsg);
+//       setFieldError(name, errorMsg);
 //       return;
 //     }
 
 //     if (!phoneNumber) {
-//       setError('Please enter a phone number');
+//       const errorMsg = 'Phone number is required';
+//       setLocalError(errorMsg);
+//       setFieldError(name, errorMsg);
 //       return;
 //     }
 
@@ -90,12 +108,18 @@
       
 //       if (parsed?.isValid()) {
 //         setPhoneNumber(parsed.formatInternational());
+//         setError(false)
 //       } else {
-//         setError(`Invalid phone number for ${selectedCountry.name}`);
+//         const errorMsg = `Invalid phone number for ${selectedCountry.name}`;
+//         setError(true)
+//         setLocalError(errorMsg);
+//         setFieldError(name, errorMsg);
 //       }
 //     } catch (err) {
 //       console.warn('Phone formatting failed:', err);
-//       setError('Invalid phone number format');
+//       const errorMsg = 'Invalid phone number format';
+//       setLocalError(errorMsg);
+//       setFieldError(name, errorMsg);
 //     }
 //   };
 
@@ -110,7 +134,13 @@
 //           value={selectedCountry?.name} 
 //           onValueChange={(value) => {
 //             const match = displayedCountries.find((opt) => opt.name === value);
-//             if (match) setSelectedCountryCode(match.id);
+//             if (match) {
+//               setSelectedCountryCode(match.id);
+//               if (localError) {
+//                 setLocalError(null);
+//                 setFieldError(name, undefined);
+//               }
+//             }
 //           }}
 //           onOpenChange={setIsSelectOpen}
 //         >
@@ -161,20 +191,21 @@
 //           </SelectContent>
 //         </Select>
 
-//         <div className="flex-1">
+//         <div className="flex-1 relative">
 //           <Input
 //             id={id}
+//             name={name}
 //             value={phoneNumber}
 //             onChange={handlePhoneChange}
 //             onBlur={handleBlur}
 //             placeholder="Enter phone number"
 //             className={`p-4 h-14 w-full focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-r-md font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid ${
-//               error ? 'border-red-500' : 'border-[#B6BCCA]'
+//               localError ? 'border-red-500' : 'border-[#B6BCCA]'
 //             } rounded-md border-opacity-65 relative bottom-1`}
 //             maxLength={20}
 //           />
-//           {error && (
-//             <p className="absolute mt-1 text-sm text-red-500">{error}</p>
+//           {localError && (
+//             <p className="absolute mt-1 text-sm text-red-500">{localError}</p>
 //           )}
 //         </div>
 //       </div>
@@ -185,8 +216,7 @@
 // export default PhoneNumberSelect;
 
 
-
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
   Select,
   SelectContent,
@@ -201,51 +231,58 @@ import Isloading from '@/reuseable/display/Isloading';
 import Image from 'next/image';
 import { Virtuoso } from 'react-virtuoso';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js';
+import { useGetCountriesQuery } from '@/service/admin/external-api/countryCalling_code_query';
 
-interface Country {
-  id: string;
-  name: string;
-  code: string;
-  dialCode: string;
-  flag: string;
-}
 
 interface PhoneNumberSelectProps {
-  selectedCountryCode: string;
-  setSelectedCountryCode: (code: string) => void;
   phoneNumber: string;
   setPhoneNumber: (number: string) => void;
-  isSelectOpen: boolean;
-  setIsSelectOpen: (open: boolean) => void;
   label: string;
-  placeholder: string;
   id: string;
   name: string;
-  countries: Country[];
-  isLoading: boolean;
   setFieldError: (field: string, message: string | undefined) => void;
   onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  setError: (isError: boolean) => void
+  setError: (isError: boolean) => void;
+  placeholder?: string;
+  selectedCountryCode?: string;
+  setSelectedCountryCode?: (code: string) => void;
+  defaultCountry?: string;
 }
 
 const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
-  selectedCountryCode,
-  setSelectedCountryCode,
   phoneNumber,
   setPhoneNumber,
-  isSelectOpen,
-  setIsSelectOpen,
   label,
-  placeholder,
   id,
   name,
-  countries,
-  isLoading,
   setFieldError,
   onBlur,
-  setError
+  setError,
+  placeholder = "Select code",
+  selectedCountryCode,
+  setSelectedCountryCode,
+  defaultCountry = "NG"
 }) => {
   const [localError, setLocalError] = useState<string | null>(null);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [internalCountryCode, setInternalCountryCode] = useState(defaultCountry);
+  
+  const { data: countries, isLoading } = useGetCountriesQuery();
+
+  const isCountryControlled = typeof selectedCountryCode !== 'undefined' && 
+                             typeof setSelectedCountryCode !== 'undefined';
+  
+  const currentCountryCode = isCountryControlled ? selectedCountryCode : internalCountryCode;
+  const setCurrentCountryCode = isCountryControlled ? setSelectedCountryCode! : setInternalCountryCode;
+
+  useEffect(() => {
+    if (countries && !isCountryControlled) {
+      const country = countries.find(c => c.id === defaultCountry);
+      if (country) {
+        setInternalCountryCode(country.id);
+      }
+    }
+  }, [countries, defaultCountry, isCountryControlled]);
 
   const displayedCountries = useMemo(() => {
     if (!countries) return [];
@@ -256,8 +293,8 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
 
   const selectedCountry = useMemo(() => {
     if (!countries) return null;
-    return countries.find((c) => c.id === selectedCountryCode);
-  }, [countries, selectedCountryCode]);
+    return countries.find((c) => c.id === currentCountryCode);
+  }, [countries, currentCountryCode]);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, '');
@@ -265,6 +302,7 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
     if (localError) {
       setLocalError(null);
       setFieldError(name, undefined);
+      setError(false);
     }
   };
 
@@ -277,6 +315,7 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
       const errorMsg = 'Please select a country first';
       setLocalError(errorMsg);
       setFieldError(name, errorMsg);
+      setError(true);
       return;
     }
 
@@ -284,6 +323,7 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
       const errorMsg = 'Phone number is required';
       setLocalError(errorMsg);
       setFieldError(name, errorMsg);
+      setError(true);
       return;
     }
 
@@ -295,10 +335,10 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
       
       if (parsed?.isValid()) {
         setPhoneNumber(parsed.formatInternational());
-        setError(false)
+        setError(false);
       } else {
         const errorMsg = `Invalid phone number for ${selectedCountry.name}`;
-        setError(true)
+        setError(true);
         setLocalError(errorMsg);
         setFieldError(name, errorMsg);
       }
@@ -307,6 +347,7 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
       const errorMsg = 'Invalid phone number format';
       setLocalError(errorMsg);
       setFieldError(name, errorMsg);
+      setError(true);
     }
   };
 
@@ -317,15 +358,15 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
       </Label>
       <div className="flex gap-2 items-center">
         <Select
-          defaultValue={selectedCountry?.name} 
-          value={selectedCountry?.name} 
+          value={selectedCountry?.name}
           onValueChange={(value) => {
             const match = displayedCountries.find((opt) => opt.name === value);
             if (match) {
-              setSelectedCountryCode(match.id);
+              setCurrentCountryCode(match.id);
               if (localError) {
                 setLocalError(null);
                 setFieldError(name, undefined);
+                setError(false);
               }
             }
           }}
@@ -386,9 +427,9 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
             onChange={handlePhoneChange}
             onBlur={handleBlur}
             placeholder="Enter phone number"
-            className={`p-4 h-14 w-full focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-r-md font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid ${
-              localError ? 'border-red-500' : 'border-[#B6BCCA]'
-            } rounded-md border-opacity-65 relative bottom-1`}
+            className={`p-4 h-14 w-full focus-visible:outline-0 shadow-none focus-visible:ring-transparent rounded-r-md font-normal leading-[21px] text-[14px] placeholder:text-grey250 text-black500 border border-solid 
+              border-[#B6BCCA]
+            rounded-md border-opacity-65 relative bottom-1`}
             maxLength={20}
           />
           {localError && (

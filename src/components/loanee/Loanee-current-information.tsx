@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState} from 'react'
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { LoaneeInformationvalidationSchema} from '@/utils/validation-schema';
 import { inter } from "@/app/fonts";
@@ -7,7 +7,6 @@ import PhoneNumberSelect from '@/reuseable/select/phoneNumberSelect/Index';
 import GoogleLocationsearch from '@/reuseable/google-location/Google-location-search';
 import Select from "@/reuseable/select/ProgramSelect";
 import { Button } from "@/components/ui/button";
-import { useGetCountriesQuery } from '@/service/admin/external-api/countryCalling_code_query';
 
 
 export interface initialFormValue {
@@ -36,19 +35,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
   const [isPhoneNumberError,setPhoneNumberError] = useState(false)
   const [isAltPhoneNumberError,setAltPhoneNumberError] = useState(false)
 
-  const { data: countries, isLoading } = useGetCountriesQuery();
-  
-  useEffect(() => {
-    if (countries) {
-      const nigeria = countries.find(c => c.id === "NG");
-      if (nigeria) {
-        setCountryCode(nigeria.id);
-        setNextOfCountryCod(nigeria.id);
-      }
-    }
-  }, [countries]);
 
-  
 
   return (
     <div>
@@ -66,7 +53,6 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
            values,isValid,isSubmitting,
            setFieldError,
            handleBlur,
-          //  setFieldTouched
         })=> (
           <Form
           className={`${inter.className}`}
@@ -96,10 +82,6 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
                   setSelectedCountryCode={(code) => setCountryCode(code)}
                   phoneNumber={values.alternatePhoneNumber}
                   setPhoneNumber={(num) => setFieldValue('alternatePhoneNumber', num)}
-                  isSelectOpen={false}
-                  setIsSelectOpen={() => {}} 
-                  countries={countries || []}
-                  isLoading= {isLoading}
                 label="Alternate phone number"
                 placeholder="Select code"
                  id="phone"
@@ -209,10 +191,6 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
                   setSelectedCountryCode={(code) => setNextOfCountryCod(code)}
                   phoneNumber={values.phoneNumber}
                   setPhoneNumber={(num) => setFieldValue('phoneNumber', num)}
-                  isSelectOpen={false}
-                  setIsSelectOpen={() => {}} 
-                  countries={countries || []}
-                  isLoading= {isLoading}
                 label="Alternate next of kin's phone number"
                 placeholder="Select code"
                  id="phoneNumber"
@@ -220,6 +198,8 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
                  name="phoneNumber"
                  onBlur={handleBlur}
                  setError={setAltPhoneNumberError}
+                // selectedCountryCode={countryCode}
+                // setSelectedCountryCode={setCountryCode}
                 />
                   {/* {errors.phoneNumber && touched.phoneNumber && (
                     <ErrorMessage
