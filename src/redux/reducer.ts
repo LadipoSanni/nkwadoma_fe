@@ -26,7 +26,7 @@ import { financierApi } from '@/service/admin/financier';
 import financierReducer  from '@/redux/slice/financier/financier';
 import MarketPlaceReducer from "./slice/investors/MarketPlaceSlice";
 import kycMultistepReducer from './slice/multiselect/kyc-multiselect'
-
+import { UnknownAction } from '@reduxjs/toolkit'; 
 import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
 import {marketplaceApi} from "@/service/financier/marketplace";
 import {portfolioOverviewApi} from '@/service/admin/overview'
@@ -76,4 +76,22 @@ const appReducer = combineReducers({
     [countryApi.reducerPath]: countryApi.reducer
 });
 
-export default appReducer;
+// export default appReducer;
+
+
+const rootReducer = (
+    state: ReturnType<typeof appReducer> | undefined,
+    action: UnknownAction
+) => {
+    if (action.type === 'RESET_STATE') {
+        return appReducer(undefined, action);
+    }
+    return appReducer(state, action);
+};
+
+export default rootReducer;
+
+export const resetAllState = () => ({
+    type: 'RESET_STATE' as const
+});
+

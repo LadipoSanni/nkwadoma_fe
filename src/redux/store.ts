@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage/session';
-import appReducer from '@/redux/reducer';
+import rootReducer from '@/redux/reducer';
 import { authApi } from '@/service/auths/api';
 import { programApi } from '@/service/admin/program_query';
 import { cohortApi } from '@/service/admin/cohort_query';
@@ -31,7 +31,7 @@ const persistConfig = {
     whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep', 'loanReferral', 'kycForm','notification','organization','cohort','csv'],
 };
 
-const persistedReducer = persistReducer(persistConfig, appReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
     reducer: persistedReducer,
