@@ -5,6 +5,8 @@ import {useLogoutMutation} from "@/service/users/api";
 import {clearData} from "@/utils/storage";
 import {persistor} from "@/redux/store";
 import {useToast} from "@/hooks/use-toast";
+import { store } from '@/redux/store';
+import { resetAllState } from '@/redux/reducer';
 
 export default function SystemLogout() {
     const pathname = usePathname();
@@ -19,6 +21,7 @@ export default function SystemLogout() {
                 description: "Session expired. Please login again",
                 status: "error",
             });
+             store.dispatch(resetAllState());
             await persistor.purge();
             clearData()
             redirect("/auth/login")
