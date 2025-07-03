@@ -5,7 +5,7 @@ import Details from "@/components/loanee-my-profile/Details";
 import styles from './index.module.css'
 import LoaneeRepayment from "@/components/loanee-my-profile/loaneeRepayment";
 
-interface kk
+export interface LoaneeBasicDetails
 {
     "firstName": string,
     "lastName": string,
@@ -38,7 +38,7 @@ interface kk
 }
 
 interface props{
-    data?: kk;
+    data?: LoaneeBasicDetails;
     loaneeId:string;
     isLoading: boolean
 }

@@ -3,10 +3,10 @@ import { inter500, inter} from "@/app/fonts";
 import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/components/ui/tabs";
 
 import styles from "@/components/loanee-my-profile/index.module.css";
-import {LoaneeDetails} from "@/types/loanee";
+import {LoaneeBasicDetails} from "@/components/loanee-my-profile/PmLoaneeLoanDetails";
 import {getItemSessionStorage} from "@/utils/storage";
 interface props{
-    data?: LoaneeDetails,
+    data?: LoaneeBasicDetails,
     isLoading?: boolean,
 }
 
@@ -14,29 +14,28 @@ interface props{
 const LoaneeBasicDetails = ({data, isLoading}: props) => {
 
     const userRole  = getItemSessionStorage("user_role")
-        const basicData = data?.userIdentity
+    const nextOfFullName = data?.nextOfKinFirstName + ' ' + data?.nextOfKinLastName
 
-        const basicDetails = [
-            {label: 'Gender', value: `${basicData?.gender ? basicData?.gender : 'Not provided'}`},
-            {label: 'Date of birth', value: `${basicData?.dateOfBirth ? basicData?.dateOfBirth : 'Not provided'}`},
-            {label: 'Marital status', value: `${basicData?.maritalStatus ? basicData?.maritalStatus : 'Not provided'}`},
-            {label: 'Nationality', value: `${basicData?.nationality ? basicData?.nationality : 'Not provided'}`},
-            {label: 'State of origin ', value: `${basicData?.stateOfOrigin ? basicData?.stateOfOrigin : 'Not provided'}`},
-            {label: 'State of residence', value: `${basicData?.stateOfResidence ? basicData?.stateOfResidence : 'Not provided'}`},
-            {label: 'Residential address', value: `${basicData?.residentialAddress ? basicData?.residentialAddress : 'Not provided'}`},
-            {label: 'Phone number', value: `${basicData?.phoneNumber ? basicData?.phoneNumber : 'Not provided'}`},
-            {label: 'Alternate residential address', value: `${basicData?.residentialAddress ? basicData?.residentialAddress : 'Not provided'}`},
-            // {label: 'Alternate email address', value: ''},
-            {label: 'Alternate email address', value: `${basicData?.alternateEmail? basicData?.alternateEmail : 'Not provided'}`},
-            {label: 'Next of kin full name', value: `${basicData?.nextOfKinResponse}`},
-            {label: 'Next of kin phone number', value: ''},
-            {label: 'Next of kin residential address', value: ''},
-            {label: 'Next of kin relationship ', value: ''},
-            {label: 'Highest level of education ', value: ''},
-            {label: 'Institution name ', value: data?.institutionName},
-            {label: 'Program of study ', value: data?.programOfStudy},
+    const basicDetails = [
+        {label: 'Gender', value: `${data?.gender ? data?.gender : 'Not provided'}`},
+        {label: 'Date of birth', value: `${data?.dateOfBirth ? data?.dateOfBirth : 'Not provided'}`},
+        {label: 'Marital status', value: `${data?.maritalStatus ? data?.maritalStatus : 'Not provided'}`},
+        {label: 'Nationality', value: `${data?.nationality ? data?.nationality : 'Not provided'}`},
+        {label: 'State of origin ', value: `${data?.stateOfOrigin ? data?.stateOfOrigin : 'Not provided'}`},
+        {label: 'State of residence', value: `${data?.stateOfResidence ? data?.stateOfResidence : 'Not provided'}`},
+        {label: 'Residential address', value: `${data?.residentialAddress ? data?.residentialAddress : 'Not provided'}`},
+        {label: 'Phone number', value: `${data?.phoneNumber ? data?.phoneNumber : 'Not provided'}`},
+        {label: 'Alternate residential address', value: `${data?.residentialAddress ? data?.residentialAddress : 'Not provided'}`},
+        {label: 'Alternate email address', value: `${data?.alternateEmail? data?.alternateEmail : 'Not provided'}`},
+        {label: 'Next of kin full name', value: nextOfFullName},
+        {label: 'Next of kin phone number', value: `${data?.nextOfKinPhoneNumber ? data?.nextOfKinPhoneNumber : 'Not provided'}`},
+        {label: 'Next of kin residential address', value: `${data?.nextOfKinResidentialAddress ? data?.nextOfKinResidentialAddress : 'Not provided'}`},
+        {label: 'Next of kin relationship ', value: `${data?.nextOfKinRelationship ? data?.nextOfKinRelationship : 'Not provided'}`},
+        {label: 'Highest level of education ', value: `${data?.highestLevelOfEducation ? data?.highestLevelOfEducation : `Not provided`}`},
+        {label: 'Institution name ', value: `${data?.organizationName ? data?.organizationName : 'Not provided'}`},
+        {label: 'Program of study ', value: `${data?.programName ? data?.programName : 'Not provided'}`},
 
-        ]
+    ]
 
 
 
