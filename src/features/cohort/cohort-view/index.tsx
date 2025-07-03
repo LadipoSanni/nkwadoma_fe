@@ -172,8 +172,8 @@ const currentTabState = tabStates[cohortTab];
 
     useEffect(() => {
         if (programDatas && programDatas?.data) {
-            const sortedPrograms = [...programDatas.data.body].sort((a, b) =>
-                a.name.localeCompare(b.name)
+            const sortedPrograms = [...programDatas?.data?.body].sort((a, b) =>
+                a?.name?.localeCompare(b?.name)
             );
 
             setListOfPrograms((prev) => {
@@ -181,9 +181,9 @@ const currentTabState = tabStates[cohortTab];
                     return sortedPrograms;
                 }
                 const newPrograms = sortedPrograms.filter(
-                    (newProgram: viewAllProgramProps) => !prev.some((prev) => prev.id === newProgram.id)
+                    (newProgram: viewAllProgramProps) => !prev.some((prev) => prev?.id === newProgram?.id)
                 );
-                return [...prev, ...newPrograms].sort((a, b) => a.name.localeCompare(b.name));
+                return [...prev, ...newPrograms]?.sort((a, b) => a?.name?.localeCompare(b?.name));
             });
 
             setNextPage(programDatas?.data?.hasNextPage);
