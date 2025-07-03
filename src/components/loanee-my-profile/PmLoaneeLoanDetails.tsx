@@ -73,14 +73,16 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
         <div className={`md:max-h-fit md:w-[55%] sm:w-[100%] w-[100%] px-4 pb-6 md:border-r md:border-r-grey-200 `}>
             <Tabs  defaultValue={'loanInfo'}>
               <div className={` py-4 `}>
-                  <TabsList className="grid w-fit px-0 md:grid-cols-2 lg:grid-cols-2   grid-cols-4">
-                      <TabsTrigger id={'loanInfo'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanInfo">Loan Information</TabsTrigger>
-                      <TabsTrigger id={'repayment'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="repayment">Repayment</TabsTrigger>
-                      <TabsTrigger id={'bioDetail'} className={`w-fit ${inter.className} md:hidden lg:hidden flex text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="bioDetails">Bio details</TabsTrigger>
-                      <TabsTrigger id={'document'} className={`w-fit ${inter.className} md:hidden lg:hidden flex text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="documents">Documents</TabsTrigger>
+                  <TabsList className="w-full md:w-fit lg:w-fit ">
+                    <div className={`w-full ${styles.container}  flex h-fit `}>
+                        <TabsTrigger id={'loanInfo'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanInfo">Loan Information</TabsTrigger>
+                        <TabsTrigger id={'repayment'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="repayment">Repayment</TabsTrigger>
+                        <TabsTrigger id={'bioDetail'} className={`w-fit ${inter.className} md:hidden lg:hidden flex text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="bioDetails">Bio details</TabsTrigger>
+                        <TabsTrigger id={'document'} className={`w-fit ${inter.className} md:hidden lg:hidden flex text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="documents">Documents</TabsTrigger>
+                    </div>
                   </TabsList>
               </div>
-                <div className={`md:max-h-[55vh]  grid gap-4 w-full  ${styles.container} `}>
+                <div className={`md:max-h-[55vh]  py-0  grid gap-4 w-full  ${styles.container} `}>
                     <TabsContent value={'loanInfo'} className={` grid gap-3 `}>
                         <Details id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.amountReceived} valueType={'currency'} />
                         <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>

@@ -6,7 +6,7 @@ import LoaneeBasicDetails from "@/components/loanee-my-profile/LoaneeBasicDetail
 import PmLoaneeLoanDetails from "@/components/loanee-my-profile/PmLoaneeLoanDetails";
 import {useRouter} from "next/navigation";
 import { useAppSelector } from '@/redux/store';
-import {useGetLoaneeDetailsQuery, useViewLoaneeInACohortDetailsQuery} from "@/service/users/Loanee_query";
+import { useViewLoaneeInACohortDetailsQuery} from "@/service/users/Loanee_query";
 
 const OrganizationViewLoaneeProfile = () => {
     const id =  useAppSelector(state => state.organization.loaneeId)
