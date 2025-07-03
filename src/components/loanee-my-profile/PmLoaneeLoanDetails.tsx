@@ -83,18 +83,18 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
               </div>
                 <div className={`md:max-h-[55vh]  grid gap-4 w-full  ${styles.container} `}>
                     <TabsContent value={'loanInfo'} className={` grid gap-3 `}>
-                        <Details id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.loanAmount} valueType={'currency'} />
+                        <Details id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.amountReceived} valueType={'currency'} />
                         <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>
-                            <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.loaneeLoanDetail?.amountOutstanding} valueType={'currency'} />
-                            <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.loaneeLoanDetail?.amountRepaid} valueType={'currency'}  />
+                            <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.amountOutstanding} valueType={'currency'} />
+                            <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.amountPaid} valueType={'currency'}  />
                         </div>
                         <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
-                            <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? data?.interestRate : 0} valueType={'percentage'} />
+                            <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? Number(data?.interestRate) : 0} valueType={'percentage'} />
                             <Details isLoading={isLoading} id={'interestIncured'}    maxWidth={'100%'} name={'Incurred interest'} value={0} valueType={'percentage'}  />
                         </div>
                         <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
-                            <Details isLoading={isLoading} id={'deptPercentage'}    maxWidth={'100%'} name={'Debt percentage'} value={0} valueType={'percentage'} />
-                            <Details isLoading={isLoading} id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={0} valueType={'percentage'}  />
+                            <Details isLoading={isLoading} id={'deptPercentage'}    maxWidth={'100%'} name={'Debt percentage'} value={Number(data?.debtPercentage)} valueType={'percentage'} />
+                            <Details isLoading={isLoading} id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={Number(data?.repaymentPercentage)} valueType={'percentage'}  />
                         </div>
                     </TabsContent>
                     <TabsContent className={'  py-0 h-full  '} value={'repayment'}>
