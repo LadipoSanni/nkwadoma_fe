@@ -58,7 +58,6 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
         {label: 'Residential address', value: `${data?.residentialAddress ? data?.residentialAddress : 'Not provided'}`},
         {label: 'Phone number', value: `${data?.phoneNumber ? data?.phoneNumber : 'Not provided'}`},
         {label: 'Alternate residential address', value: `${data?.residentialAddress ? data?.residentialAddress : 'Not provided'}`},
-        // {label: 'Alternate email address', value: ''},
         {label: 'Alternate email address', value: `${data?.alternateEmail? data?.alternateEmail : 'Not provided'}`},
         {label: 'Next of kin full name', value: nextOfFullName},
         {label: 'Next of kin phone number', value: `${data?.nextOfKinPhoneNumber ? data?.nextOfKinPhoneNumber : 'Not provided'}`},
