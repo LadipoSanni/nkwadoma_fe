@@ -25,6 +25,13 @@ import { useRouter } from 'next/navigation';
 describe("ViewAllLoanRequest", ()=>{
     const mockPush = jest.fn();
 
+    beforeEach(() => {
+        jest.clearAllMocks();
+        jest.spyOn(console, 'log').mockReturnValue();
+        jest.spyOn(console, 'warn').mockReturnValue();
+        jest.spyOn(console, 'error').mockReturnValue();
+      });
+
    
     beforeEach(() => {
         jest.clearAllMocks();
