@@ -86,10 +86,10 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
 
                            }
                            <div className={` flex gap-2`}>
-                               <p id={'loaneeCohort'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{capitalizeFirstLetters(cohort)}</p>
-                               {cohort || program ? <Circle color={'#ECECEC'}
+                               <p id={'loaneeCohort'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{capitalizeFirstLetters(program)}</p>
+                               {cohort && program ? <Circle color={'#ECECEC'}
                                                             className="h-1 w-1 text-[#ECECEC] mt-auto mb-auto  fill-primary"/>: null}
-                               <p id={'loaneeProgram'} data-testid={'loaneeProgram'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{capitalizeFirstLetters(program)}</p>
+                               <p id={'loaneeProgram'} data-testid={'loaneeProgram'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{capitalizeFirstLetters(cohort)}</p>
                            </div>
                        </div>
                    </div>
