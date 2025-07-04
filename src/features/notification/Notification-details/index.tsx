@@ -115,8 +115,10 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                          <div>
                           {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"?
                           <Button 
+                           type='button'
+                           variant={'secondary'}
                            onClick={handleRoute}
-                           className='bg-[#142854] hover:bg-[#142854] h-[45px] text-[14px]'
+                           className='h-[45px] text-[14px]'
                             // className='bg-[#F9F9F9] hover:bg-[#F9F9F9] text-grey100 h-[45px] text-[14px] cursor-none shadow-none'
                            >
                              View <span className='lowercase ml-1'> {buttonName()}</span>
