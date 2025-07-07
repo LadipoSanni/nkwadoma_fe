@@ -177,7 +177,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
       const handleClick= async () => {
           const formData = {
             loaneeIds: Array.from(selectedRows),
-            loaneeStatus:condition || ""
+            loaneeStatus:condition || "",
+            cohortId: cohortId || ""
           }
         try {
          const updateStatus =  await updateLoaneeStatus(formData).unwrap()
@@ -239,6 +240,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
             const formData = {
               loaneeIds: [loaneeId],
               loaneeStatus: condition || "",
+              cohortId: cohortId || ""
             };
             
             const result = await updateLoaneeStatus(formData).unwrap();
