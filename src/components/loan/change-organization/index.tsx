@@ -35,7 +35,8 @@ const ChangeInstitutionModal = () => {
 
     const currentTab = useAppSelector(state => state?.selectedLoan?.currentTab)
     const currentTabStatus = useAppSelector(state => state?.selectedLoan?.currentTabStatus)
-    const [current, setCurrent] = useState<number | string>('')
+    // const clickedOrganization = useAppSelector(state => state.selectedLoan?.clickedOrganization)
+    const [current, setCurrent] = useState<number | string>()
     const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
     const [pageNumber] = useState(0)
     // const [nextPage,setNextPage] = useState(false)
@@ -64,7 +65,8 @@ const ChangeInstitutionModal = () => {
     } = useSearchOrganisationByNameQuery(searchElement, {skip: !searchTerm});
     const organisationList: ChangeOrganization[] = searchTerm.length > 0 ? searchResults?.data.body || [] : data?.data?.body
 
-   
+
+    console.log('current: ', current)
     const handleClick = (id: string | number, name?: string, logoImage?: string) => {
         if (id === current) {
             setCurrent('');
@@ -114,6 +116,10 @@ const ChangeInstitutionModal = () => {
         }
         return initials.toUpperCase();
     };
+
+    const handleCancel  = () => {
+        store.dispatch(setClickedOrganization({id: '', name: '', logoImage: ''}));
+    }
 
     return (
         <div>
@@ -280,6 +286,7 @@ const ChangeInstitutionModal = () => {
                         className="  py-4   md:flex md:justify-end h-fit  grid gap-3 md:gap-4  md:h-fit   w-full md:w-full ">
                         <Dialog.Close asChild>
                             <Button
+                                onClick={handleCancel}
                                  variant={"outline"}
                                 id={'cancel'} data-testid={'cancel'}
                                 className={` border border-meedlBlue rounded-md text-sm h-fit md:w-fit md:px-10 md:py-4 py-4   text-meedlBlue`}

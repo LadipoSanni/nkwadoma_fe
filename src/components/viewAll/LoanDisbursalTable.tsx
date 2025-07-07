@@ -25,6 +25,7 @@ function Index() {
 
     const clickedOrganizationId = useAppSelector(state => state.selectedLoan?.clickedOrganization)
 
+    console.log('clickedOrganizationId', clickedOrganizationId)
     const request = {
         pageSize: 400,
         pageNumber: 0
@@ -41,8 +42,7 @@ function Index() {
         {refetchOnMountOrArgChange: true, skip:!clickedOrganizationId}
     );
 
-    console.log('data: ', allDisbursedLoan);
-    console.log('organizationId: ', data)
+
 
 
     const loanDisbursalHeader = [
