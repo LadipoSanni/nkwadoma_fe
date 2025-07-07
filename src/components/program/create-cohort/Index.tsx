@@ -34,10 +34,7 @@ interface createCohortProps {
     triggerButtonStyle: string;
 }
 
-interface viewAllProgramProps {
-    id?: string;
-    name: string;
-}
+
 
 interface ApiError {
     status: number;
