@@ -10,7 +10,9 @@ export const loanOfferApi = createApi({
         viewAllLoanOffer : builder.query({
             query: (data:  {
                 pageNumber?: number;
-                pageSize?: number;}) => ({
+                pageSize?: number;
+                organizationId?:string | number;
+            }) => ({
                 url: `/loan/loanOffer/all`,
                 method: 'GET',
                 params: data
@@ -38,14 +40,14 @@ export const loanOfferApi = createApi({
             }),
             invalidatesTags: ['loanOffer', 'disburse-loan-offer']
         }),
-        viewLoanInAnOrganization: builder.query({
-            query: (body: {organizationId: number| string| undefined, pageSize: number, pageNumber: number})=> ({
-                url: `/loan/organization/view-all-loanOffers?organizationId=${body.organizationId}&pageSize=${body.pageSize}&pageNumber=${body.pageNumber}`,
-                method: 'GET',
-            }),
-            providesTags: ['loanOffer']
-        }),
+        // viewLoanInAnOrganization: builder.query({
+        //     query: (body: {organizationId: number| string| undefined, pageSize: number, pageNumber: number})=> ({
+        //         url: `/loan/organization/view-all-loanOffers?organizationId=${body.organizationId}&pageSize=${body.pageSize}&pageNumber=${body.pageNumber}`,
+        //         method: 'GET',
+        //     }),
+        //     providesTags: ['loanOffer']
+        // }),
 
     })
 })
-export const {useViewAllLoanOfferQuery,useViewLoanInAnOrganizationQuery, useViewLoanOfferDetailsQuery, useDisburseLoanOfferMutation, useRespondToLoanOfferMutation } = loanOfferApi
+export const {useViewAllLoanOfferQuery, useViewLoanOfferDetailsQuery, useDisburseLoanOfferMutation, useRespondToLoanOfferMutation } = loanOfferApi

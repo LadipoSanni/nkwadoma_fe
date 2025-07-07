@@ -41,6 +41,9 @@ function Index() {
         {refetchOnMountOrArgChange: true, skip:!clickedOrganizationId}
     );
 
+    console.log('data: ', allDisbursedLoan);
+    console.log('organizationId: ', data)
+
 
     const loanDisbursalHeader = [
         {
