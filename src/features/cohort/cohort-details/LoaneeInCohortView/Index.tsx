@@ -61,13 +61,15 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
     const [isReferred, setIsReferred] = React.useState("Not referred");
     const [enableButton, setEnableButton] = useState(false)
-
+    const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
     const cohortId =  useAppSelector(store=> store?.cohort?.setCohortId)
     const size = 10;
     const [page,setPageNumber] = useState(0);
     const [totalPage,setTotalPage] = useState(0)
     const [hasNextPage,setNextPage] = useState(false)
     const status = isReferred === "Not referred"? "ADDED" : "REFERRED"
+
+   
 
     const {data,isLoading: loaneeIsloading} = useViewAllLoaneeQuery({
         cohortId: cohortId,
@@ -197,8 +199,11 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         <div id={`addTraineeButton`}>
                             <Button variant={"secondary"}
                                     size={"lg"}
-                                    className={`bg-meedlBlue text-meedlWhite w-full h-12 flex justify-center items-center`}
-                                    onClick={handleAddLoane}>Add Loanee</Button>
+                                    className={` w-full h-12 flex justify-center items-center  ${cohortTab === "incoming" || cohortTab ===  "current"? "bg-meedlBlue text-meedlWhite" : "bg-[#D7D7D7] hover:bg-[#D7D7D7]"}`}
+                                    onClick={handleAddLoane}
+                                    disabled={cohortTab === "graduated"}
+                                    >Add Loanee</Button>
+                                    
                         </div>
                         <div className={`md:hidden block`} id={`smallScreenReferButton`}>
                             <Button
@@ -238,7 +243,11 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         enableButton={() =>setEnableButton(true) }
                         disabledButton={()=> setEnableButton(false) }
                         handleSelectedRow={handleSelectedRow}
-                        enableRowSelection={isReferred === "Not referred"? true : false}
+                        enableRowSelection={cohortTab === "graduated" 
+                            ? false 
+                            : isReferred === "Not referred" 
+                              ? true 
+                              : false}
                     />
                   </div>
 
