@@ -182,7 +182,10 @@ export const cohortApi = createApi({
           updateLoaneeStatus: builder.mutation({
             query: (data: {
                 loaneeIds: string[]; 
-                loaneeStatus: string}) => ({
+                loaneeStatus: string;
+                cohortId: string
+            }
+            ) => ({
                 url: '/loanee/status', 
                 method: 'POST',              
                 body:data,  
