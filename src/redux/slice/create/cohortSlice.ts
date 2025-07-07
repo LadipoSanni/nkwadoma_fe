@@ -8,6 +8,7 @@ interface CohortState {
    setCohortId: string,
   selectedCohortInOrganization: {name: string, id: string} | undefined ;
   
+  
 }
 
 const initialState: CohortState = {

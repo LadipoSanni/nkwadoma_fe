@@ -20,7 +20,7 @@ import { MdSearch } from 'react-icons/md'
 import { store } from '@/redux/store'
 import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization} from '@/redux/slice/create/cohortSlice'
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-
+import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
 
 
 interface allCohortsProps extends TableRowData {
@@ -155,6 +155,7 @@ useEffect(() => {
          store.dispatch(setSelectedCohortInOrganization(cohort))
          router.push('/organizations/loanees/uploaded')
      }else {
+      store.dispatch(setcohortOrProgramRoute("cohort"))
       router.push('/cohort/cohort-details')
      }
      setItemSessionStorage("programsId", String(row.programId))
@@ -172,6 +173,7 @@ useEffect(() => {
         store.dispatch(setSelectedCohortInOrganization(cohort))
         router.push('/organizations/loanees/uploaded')
        }else {
+         store.dispatch(setcohortOrProgramRoute("cohort"))
         router.push('/cohort/cohort-details')
        }
   }

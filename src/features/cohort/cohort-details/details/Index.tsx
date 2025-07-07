@@ -32,6 +32,7 @@ const CohortDetails = () => {
 
     const [breakdown, setBreakdown] = useState<breakDown[]>([]);
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
+    const cohortOrProgramRoute = useAppSelector(store => store?.program?.cohortOrProgramRoute)
 
     // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
     const {data: cohortDetails, isLoading} = useViewCohortDetailsQuery({
@@ -136,9 +137,15 @@ const CohortDetails = () => {
 
 
     const router = useRouter();
+
     const handleBackClick = () => {
+        if(cohortOrProgramRoute === "program"){
+            router.push('/program/program-cohorts')
+        }else{
         router.push('/cohort')
+
     }
+}
 
     const handleDropdownClick = (id: string) => {
         if (id === "1") {
@@ -155,7 +162,7 @@ const CohortDetails = () => {
         <>{isLoading? (<SkeletonForDetailPage/>): (
             <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
                 <div className={` pb-4 `} id={`backClickContainer`} data-testid={'backClickContainer'}>
-                    <BackButton handleClick={handleBackClick} iconBeforeLetters={true} text={"Back to cohort"}
+                    <BackButton handleClick={handleBackClick} iconBeforeLetters={true} text={ "Back to cohort"}
                                 id={"backClick"} textColor={'#142854'}/>
                 </div>
 
