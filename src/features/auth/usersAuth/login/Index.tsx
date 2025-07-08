@@ -17,6 +17,7 @@ import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 import {setMarketInvestmentVehicleId} from "@/redux/slice/investors/MarketPlaceSlice";
 import {encryptText} from "@/utils/encrypt";
+import {setCurrentStep} from "@/service/users/loanRerralSlice";
 
 
 interface CustomJwtPayload {
@@ -101,8 +102,9 @@ const Login: React.FC = () => {
             router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
 
         }else{
-            store.dispatch(setCurrentNavbarItem("overview"))
-            router.push("/onboarding")
+            store.dispatch(setCurrentNavbarItem("Overview"))
+            store.dispatch(setCurrentStep(1))
+            router.push("/overview")
         }
     }
 
