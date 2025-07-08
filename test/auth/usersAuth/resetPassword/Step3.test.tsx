@@ -1,5 +1,5 @@
 import "@testing-library/react"
-import {render, screen} from "@testing-library/react";
+import {render, screen,cleanup} from "@testing-library/react";
 import Index from "../../../../src/features/auth/usersAuth/reset-password/change-password";
 import {Providers} from "@/app/provider";
 
@@ -21,6 +21,13 @@ jest.mock("next/navigation", () => ({
 }));
 
 describe('test step 3', () => {
+       beforeEach(() => {
+            cleanup()
+              jest.spyOn(console,'log').mockReturnValue()
+              jest.spyOn(console,'warn').mockReturnValue()
+              jest.spyOn(console,'error').mockReturnValue()
+          });
+    
 
     it('should contain parent container', () => {
         render(

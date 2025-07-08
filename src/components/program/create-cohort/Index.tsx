@@ -19,7 +19,6 @@ import {
 } from "@/reuseable/feeBreakdown";
 import { CohortNameInput, FileUpload } from "@/reuseable/Input";
 import { useCreateCohortMutation } from "@/service/admin/cohort_query";
-import { useGetAllProgramsQuery } from "@/service/admin/program_query";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
@@ -35,10 +34,7 @@ interface createCohortProps {
     triggerButtonStyle: string;
 }
 
-interface viewAllProgramProps {
-    id?: string;
-    name: string;
-}
+
 
 interface ApiError {
     status: number;
@@ -57,30 +53,15 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
     const [createButtonDisabled, setCreateButtonDisabled] = useState(true)
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
     const [loanBreakdowns, setLoanBreakdowns] = useState<{ itemName: string; itemAmount: string; currency: string }[]>([ { itemName: "Tuition", itemAmount: "", currency: "NGN" }  ]);
-    const [programView, setProgramView] = useState<viewAllProgramProps[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [imageUrl, setUploadedUrl] = useState<string | null>(null);
-    const [page] = useState(0);
-    const size = 200;
     const [error, setError] = useState("");
     const [descriptionError, setDescriptionError] = useState<string | null>(null);
     const [isItemListValid, setIsItemListValid] = useState(true);
     const [totalAmount, setTotalAmount] = useState(0);
     const [initialItemAmount, setInitialItemAmount] = useState("");
-
-    const { data } = useGetAllProgramsQuery(
-        { pageSize: size, pageNumber: page },
-        { refetchOnMountOrArgChange: true }
-    );
     const [createCohort, { isLoading }] = useCreateCohortMutation();
 
-    useEffect(() => {
-        if (data && data?.data) {
-            const programs = data?.data?.body;
-            setProgramView(programs);
-        }
-    }, [data]);
-    console.log(programView)
 
     const { toast } = useToast();
 
