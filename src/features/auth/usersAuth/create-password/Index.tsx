@@ -72,7 +72,15 @@ const CreatePassword = () => {
         if (searchParams) {
             const rawToken = searchParams.get("token");
             const loanReferralId = searchParams.get("loanReferralId");
-            console.log('loanReferralId:', loanReferralId)
+            if(rawToken?.includes("?loanReferralId")){
+                const [token, loanReferralId] = rawToken.split("?loanReferralId=");
+                return {
+                    token: token,
+                    investmentVehicleId: null,
+                    loanReferralId: loanReferralId
+                };
+
+            }
             if (rawToken?.includes("?investmentVehicleId=")) {
                 const [token, vehicleId] = rawToken.split("?investmentVehicleId=");
                 return {
@@ -159,7 +167,6 @@ const CreatePassword = () => {
         e?.preventDefault()
         setDisableButton(true)
         const { token } = getUserToken();
-        console.log('token:: ', token)
         try {
             const response = await createPassword({token: token
                 , password: encryptedPassword}).unwrap()
