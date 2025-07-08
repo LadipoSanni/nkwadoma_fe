@@ -40,10 +40,11 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const [errorMessage, setErrorMessage] = useState("");
     const [respondToLoanRequest, {isError, isLoading: isLoanOfferCreating, error}] = useRespondToLoanRequestMutation(); // Use the new mutation
     const [amount , setAmount] = useState('');
-    const isValid = amount.length > 0 && selectedLoanProductId !== null;
+    const isValid = amount.length > 0 && selectedLoanProductId !== "";
     const [pageNumber,setPageNumber] = useState(0)
     const [loanProducts, setLoanProducts] = useState<selectedIdType[]>([])
 
+    console.log(selectedLoanProductId)
     const parameter = {
         pageSize: 10,
         pageNumber: pageNumber
