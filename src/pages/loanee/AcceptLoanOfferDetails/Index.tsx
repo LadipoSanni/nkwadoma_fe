@@ -18,6 +18,7 @@ import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import styles from "@/pages/admin/loanOfferDetails/index.module.css";
 import {NumericFormat} from "react-number-format";
 import Isloading from '@/reuseable/display/Isloading'
+import { useAppSelector } from '@/redux/store';
 
 const AcceptLoanOfferDetails = dynamic(
     () => Promise.resolve(AcceptLoanOffer),
@@ -42,14 +43,21 @@ const AcceptLoanOffer: React.FC = () => {
             return ""
         }
     }
+     const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
+      const notification = useAppSelector(state => (state?.notification?.setNotification))
+    const loanOfferIds = useAppSelector((state) => state?.loanOffer?.loanOfferId)
 
     const loanOfferId: string = getUserToken()
 
-    const { data } = useViewLoanOfferDetailsQuery(loanOfferId);
+    const { data } = useViewLoanOfferDetailsQuery(loanOfferId || loanOfferIds);
     const [respondToLoanOffer, {isLoading}] = useRespondToLoanOfferMutation();
 
-    const backToOverview = () => {
+    const handleBackClick = () => {
+        if (notification === "notification"){
+            router.push(`/notifications/notification/${notificationId}`);
+        } else {
         router.push("/overview");
+        }
     };
 
     const loanRequestDetailsTab = [
@@ -268,12 +276,12 @@ const AcceptLoanOffer: React.FC = () => {
         <div
             id="loanRequestDetails"
             data-testid="loanRequestDetails"
-            className={`w-full h-full md:px-10 ${inter.className}`}
+            className={`w-full h-full md:px-10 py-5 ${inter.className}`}
         >
             <BackButton
-                handleClick={backToOverview}
+                handleClick={handleBackClick}
                 iconBeforeLetters={true}
-                text="Back to overview"
+                text={notification === "notification"? "Back to notification" : "Back to overview"}
                 id="loanRequestDetailsBackButton"
                 textColor="#142854"
             />
