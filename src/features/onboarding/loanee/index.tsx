@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import {RootState, store} from '@/redux/store';
+import {RootState, store, useAppSelector} from '@/redux/store';
 import { setLoanReferralStatus, setCurrentStep, setLoaneeIdentityVerifiedStatus } from '@/service/users/loanRerralSlice';
 import { useViewLoanReferralDetailsQuery, useRespondToLoanReferralMutation } from "@/service/users/Loanee_query";
 import { Button } from '@/components/ui/button';
@@ -47,6 +47,9 @@ const LoaneeOnboarding = () => {
     const [loanReferralId, setLoanReferralId] = useState("");
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
     const { toast } = useToast();
+    const id = useAppSelector(state => state.selectedLoan.loanReferralId)
+
+    console.log('loanReferralIvd:: ', id)
 
     useEffect(() => {
         if ( data?.data?.identityVerified  === true  ){

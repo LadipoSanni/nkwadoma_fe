@@ -67,36 +67,34 @@ const CreatePassword = () => {
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
 
-   
+
     const getUserToken = () => {
         if (searchParams) {
-          const rawToken = searchParams.get("token");
-          const loanReferralId = searchParams.get("loanReferralId");
-          if(loanReferralId){
-              return {
-                  token: rawToken,
-                  investmentVehicleId: null,
-                  loanReferralId: loanReferralId,
-              };
-          }else if (rawToken?.includes("?investmentVehicleId=")) {
-            const [token, vehicleId] = rawToken.split("?investmentVehicleId=");
+            const rawToken = searchParams.get("token");
+            const loanReferralId = searchParams.get("loanReferralId");
+            console.log('loanReferralId:', loanReferralId)
+            if (rawToken?.includes("?investmentVehicleId=")) {
+                const [token, vehicleId] = rawToken.split("?investmentVehicleId=");
+                return {
+                    token: token,
+                    investmentVehicleId: vehicleId || null,
+                    loanReferralId: loanReferralId
+                };
+            }
+
             return {
-              token: token,
-              investmentVehicleId: vehicleId || null, 
+                token: rawToken,
+                investmentVehicleId: null,
+                loanReferralId: loanReferralId
             };
-          }
-      
-          return {
-            token: rawToken,
-            investmentVehicleId: null, 
-          };
         }
-      
+
         return {
-          token: null,
-          investmentVehicleId: null,
+            token: null,
+            investmentVehicleId: null,
+            loanReferralId: "",
         };
-      };
+    };
 
      
     const getUserRoles = (returnsRole: string) => {
@@ -129,6 +127,7 @@ const CreatePassword = () => {
             case 'LOANEE' :
                 const { loanReferralId } = getUserToken();
                 if (loanReferralId) {
+                    console.log('loanReferralId: before routing loanee', loanReferralId)
                     store.dispatch(setLoanReferralId(loanReferralId))
                 }
                 store.dispatch(setCurrentNavbarItem("overview"))
@@ -160,7 +159,7 @@ const CreatePassword = () => {
         e?.preventDefault()
         setDisableButton(true)
         const { token } = getUserToken();
-
+        console.log('token:: ', token)
         try {
             const response = await createPassword({token: token
                 , password: encryptedPassword}).unwrap()
