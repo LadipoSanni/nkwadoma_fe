@@ -15,6 +15,7 @@ import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 import { setMarketInvestmentVehicleId } from '@/redux/slice/investors/MarketPlaceSlice';
 import {encryptText} from "@/utils/encrypt";
+import {setLoanReferralId} from "@/redux/slice/loan/selected-loan";
 
 
 
@@ -70,8 +71,14 @@ const CreatePassword = () => {
     const getUserToken = () => {
         if (searchParams) {
           const rawToken = searchParams.get("token");
-      
-          if (rawToken?.includes("?investmentVehicleId=")) {
+          const loanReferralId = searchParams.get("loanReferralId");
+          if(loanReferralId){
+              return {
+                  token: rawToken,
+                  investmentVehicleId: null,
+                  loanReferralId: loanReferralId,
+              };
+          }else if (rawToken?.includes("?investmentVehicleId=")) {
             const [token, vehicleId] = rawToken.split("?investmentVehicleId=");
             return {
               token: token,
@@ -120,6 +127,10 @@ const CreatePassword = () => {
     const routeUserToTheirDashboard = async (userRole?: string) => {
         switch (userRole) {
             case 'LOANEE' :
+                const { loanReferralId } = getUserToken();
+                if (loanReferralId) {
+                    store.dispatch(setLoanReferralId(loanReferralId))
+                }
                 store.dispatch(setCurrentNavbarItem("overview"))
                 router.push("/onboarding")
                 break;
