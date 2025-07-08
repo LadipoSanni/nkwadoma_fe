@@ -29,13 +29,6 @@ import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import {store} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
-
-// import {
-//     DropdownMenu,
-//     DropdownMenuContent,
-//     DropdownMenuItem,
-//     DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu"
 import CreateLoanOffer from "@/reuseable/modals/createLoanOffer/Index";
 import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
 import {loaneeLoanBreakDown} from "@/types/loan/loan-request.type";
@@ -180,7 +173,7 @@ function LoanDetails() {
         {label: 'Gender', value: data?.data?.userIdentity?.gender},
         {label: 'Email address', value: data?.data?.userIdentity?.email},
         {label: 'Phone number', value: data?.data?.userIdentity?.phoneNumber},
-        {label: 'Date of birth', value: data?.data?.userIdentity?.dateOfBirth},
+        {label: 'Date of birth', value: data?.data?.userIdentity?.dateOfBirth ? dayjs(data?.data?.userIdentity?.dateOfBirth?.toString()).format('MMM D, YYYY') : ''},
         {label: 'Marital status', value: data?.data?.userIdentity?.maritalStatus},
         {label: 'Nationality', value: data?.data?.userIdentity?.nationality},
         {label: 'State of origin ', value: data?.data?.userIdentity?.stateOfOrigin},
@@ -348,7 +341,7 @@ function LoanDetails() {
                                              id={'loanRequestDetailsApproveLoanRequestButton'}
                                              data-testid={'loanRequestDetailsApproveLoanRequestButton'}
                                              onClick={() => setOpenCreateLoanOffer(true)}
-                                             className="text-meedlBlue hover:bg-[#EEF5FF] rounded-md"
+                                             className="text-meedlBlue hover:!cursor-pointer  hover:!bg-[#EEF5FF] rounded-md"
                                            >
                                              Approve loan request
                                            </MenubarItem>
@@ -356,7 +349,7 @@ function LoanDetails() {
                                              id={'loanRequestDetailsDeclineLoanRequestButton'}
                                              data-testid={'loanRequestDetailsDeclineLoanRequestButton'}
                                              onClick={() => setOpenDeclineLoanRequestModal(true)}
-                                             className="text-error500 hover:text-error500 hover:bg-error50 rounded-md"
+                                             className="text-error500 hover:!cursor-pointer hover:!text-error500 hover:!bg-error50 rounded-md"
                                            >
                                              Decline loan request
                                            </MenubarItem>
