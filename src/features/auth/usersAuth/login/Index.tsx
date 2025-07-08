@@ -102,9 +102,9 @@ const Login: React.FC = () => {
             router.push(`/accept-loan-offer?loanOfferId=${loanOfferId}`)
 
         }else{
-            store.dispatch(setCurrentNavbarItem("Onboarding"))
+            store.dispatch(setCurrentNavbarItem("Overview"))
             store.dispatch(setCurrentStep(1))
-            router.push("/onboarding")
+            router.push("/overview")
         }
     }
 
