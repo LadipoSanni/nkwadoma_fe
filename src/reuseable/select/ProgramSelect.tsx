@@ -150,6 +150,11 @@ import { Book } from 'lucide-react';
 interface viewAllProgramProps {
   id?: string;
   name: string;
+  organizationName?: string;
+  userIdentity?: {
+    firstName?: string,
+    lastName?: string,
+  }
 }
 
 interface ProgramSelectProps {
@@ -164,6 +169,7 @@ interface ProgramSelectProps {
   infinityScroll?: InfiniteScrollProps;
   isLoading?: boolean;
   onOpenChange?: (open: boolean) => void;
+  emptyState? : string
 }
 
 const ProgramSelect: React.FC<ProgramSelectProps> = ({
@@ -177,7 +183,8 @@ const ProgramSelect: React.FC<ProgramSelectProps> = ({
   label,
   infinityScroll,
   isLoading,
-  onOpenChange
+  onOpenChange,
+  emptyState = "No program available"
 }) => {
   const uniqueId = `select${Math.random().toString(36).substring(2, 9)}`;
 
@@ -213,14 +220,14 @@ const ProgramSelect: React.FC<ProgramSelectProps> = ({
         >
           {isLoading ? (
             <div><SkeletonForLoanOrg/></div>
-          ) : selectOptions.length === 0 ? (
+          ) : selectOptions?.length === 0 ? (
             <div>
               <GeneralEmptyState
                 icon={Book}
                 iconSize='1.6rem'
                 iconContainerClass='w-[30px] h-[30px]'
                 message={<div className='relative bottom-2'>
-                  <p>No program available</p>
+                  <p>{emptyState}</p>
                 </div>}
               />
             </div>
@@ -243,28 +250,28 @@ const ProgramSelect: React.FC<ProgramSelectProps> = ({
                   className="w-full"
                 >
                   <SelectGroup className="w-full">
-                    {selectOptions.map((item) => (
+                    {selectOptions?.map((item) => (
                       <SelectItem
                         id={item.id}
                         key={item.id}
-                        value={item.name}
+                        value={item?.name? item?.name : item?.organizationName? item?.organizationName : item?.userIdentity?.firstName + " " +  item?.userIdentity?.lastName}
                         className="  text-lightBlue950 hover:bg-[#EEF5FF] focus:bg-[#EEF5FF]"
                       >
-                        {item?.name}
+                        {item?.name? item?.name : item?.organizationName? item?.organizationName : item?.userIdentity?.firstName + " " +  item?.userIdentity?.lastName}
                       </SelectItem>
                     ))}
                   </SelectGroup>
                 </InfiniteScroll>
               ) : (
                 <SelectGroup className="w-full">
-                  {selectOptions.map((program) => (
+                  {selectOptions?.map((item) => (
                     <SelectItem 
-                      id={`program${program.name.replace(/\s+/g, '')}`}
+                      id={`program${item.name.replace(/\s+/g, '')}`}
                       className="focus:bg-lightBlue200 focus:text-meedlBlue text-lightBlue950"
-                      key={program.id} 
-                      value={program.name}
+                      key={item.id} 
+                      value={item.name}
                     >
-                      {program?.name}
+                     {item?.name? item?.name : item?.organizationName? item?.organizationName : item?.userIdentity?.firstName + " " +  item?.userIdentity?.lastName}
                     </SelectItem>
                   ))}
                 </SelectGroup>

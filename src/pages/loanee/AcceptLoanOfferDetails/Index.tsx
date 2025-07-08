@@ -25,6 +25,13 @@ const AcceptLoanOfferDetails = dynamic(
     {ssr: false}
 )
 
+interface ApiError {
+    status: number;
+    data: {
+      message: string;
+    };
+  }
+
 const AcceptLoanOffer: React.FC = () => {
     const [currentTab, setCurrentTab] = useState(0);
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -210,7 +217,7 @@ const AcceptLoanOffer: React.FC = () => {
 
     const handleAccept = async () => {
         const payload = {
-            loanOfferId: loanOfferId,
+            loanOfferId: loanOfferId || loanOfferIds,
             loaneeResponse: 'ACCEPTED' as const
         };
 
@@ -231,9 +238,10 @@ const AcceptLoanOffer: React.FC = () => {
             });
             router.push('/overview');
         } catch (error) {
+            const err =  error as ApiError;
             const errorMessage = (error instanceof Error) ? error.message : 'Error occurred, please try again';
             toast({
-                description: errorMessage,
+                description: err?.data?.message ||  errorMessage,
                 status: 'error'
             });
         }
@@ -241,7 +249,7 @@ const AcceptLoanOffer: React.FC = () => {
 
     const handleDecline = async () => {
         const payload = {
-            loanOfferId: loanOfferId,
+            loanOfferId: loanOfferId || loanOfferIds,
             loaneeResponse: 'DECLINED' as const
         };
 
@@ -261,9 +269,10 @@ const AcceptLoanOffer: React.FC = () => {
             });
             router.push('/overview');
         } catch (error) {
+            const err =  error as ApiError;
             const errorMessage = (error instanceof Error) ? error.message : 'Error occurred, please try again';
             toast({
-                description: errorMessage,
+                description: err?.data?.message || errorMessage,
                 status: 'error'
             });
         }
@@ -357,7 +366,7 @@ const AcceptLoanOffer: React.FC = () => {
                                     <div className="px-5">
                                         <Breakdown breakDown={data?.data?.loaneeBreakdown}/>
                                     </div>
-                                    <div className="flex items-start gap-4 bg-grey105 p-5">
+                                   { data?.data?.loaneeResponse === "ACCEPTED" ||  data?.data?.loaneeResponse === "DECLINED"?  <div className='bg-grey105 p-4'></div> : <div className="flex items-start gap-4 bg-grey105 p-5">
                                         <Checkbox
                                             id="confirmCheckbox"
                                             className="data-[state=checked]:bg-[#142854]"
@@ -373,7 +382,7 @@ const AcceptLoanOffer: React.FC = () => {
                                                 Loan terms & conditions
                                             </span>
                                         </label>
-                                    </div>
+                                    </div>}
                                 </section>
                             )}
                         </ul>

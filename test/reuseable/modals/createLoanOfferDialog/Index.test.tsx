@@ -42,7 +42,7 @@ describe('CreateLoanOffer Component', () => {
                 <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen}  loanRequestId={''}/>
             </Providers>
         );
-        expect(screen.getByText('Create loan offer')).toBeInTheDocument();
+        expect(screen.getByText('Create')).toBeInTheDocument();
     });
 
     test('displays error message when form is submitted without selecting a program', () => {

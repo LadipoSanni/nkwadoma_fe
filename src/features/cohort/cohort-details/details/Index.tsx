@@ -21,6 +21,7 @@ import BackButton from "@/components/back-button";
 import { useAppSelector } from "@/redux/store";
 import {setcohortStatusTab} from '@/redux/slice/create/cohortSlice'
 import { store } from "@/redux/store";
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
 interface breakDown {
     itemName: string;
@@ -153,6 +154,7 @@ const CohortDetails = () => {
 
     const handleBackClick = () => {
         if(cohortOrProgramRoute === "program"){
+             store.dispatch(setCurrentNavbarItem('Program'))
             router.push('/program/program-cohorts')
         }else{
         router.push('/cohort')
