@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import {useAppSelector} from "@/redux/store";
-import { useViewAllLoanOfferQuery , useViewLoanInAnOrganizationQuery} from "@/service/admin/loan/loan-offer-api";
+import { useViewAllLoanOfferQuery } from "@/service/admin/loan/loan-offer-api";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Icon} from "@iconify/react";
 
@@ -17,33 +17,35 @@ import {Icon} from "@iconify/react";
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
-interface viewAllLoanOfferProps{
-    id: string,
-    amountRequested: number,
-    amountApproved: number,
-    dateOffered: string,
-    loanProductName: string,
-    firstName: string,
-    lastName: string,
-    loanOfferResponse: string
-}
+// interface viewAllLoanOfferProps{
+//     id: string,
+//     amountRequested: number,
+//     amountApproved: number,
+//     dateOffered: string,
+//     loanProductName: string,
+//     firstName: string,
+//     lastName: string,
+//     loanOfferResponse: string
+// }
 
 const Index = () => {
     const router = useRouter();
+    const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
     const request ={
         pageSize: 100,
-        pageNumber: 0
-    }
-    const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
-    const { data, isLoading} = useViewAllLoanOfferQuery(request)
-    const requestBody = {
         pageNumber: 0,
-        pageSize: 100,
-        organizationId: clickedOrganization?.id
+        organizationId: clickedOrganization?.id || "",
     }
-    const {data: viewAllLoanOffersInAnOrganizationData, isLoading:isLoadingOrganizationLoanOffer } = useViewLoanInAnOrganizationQuery(requestBody, {skip:!clickedOrganization})
-    const sortedViewAllLoanOffer = (data?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
-    const sortedViewAllLoanOfferInAnOrg = (viewAllLoanOffersInAnOrganizationData?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
+    const { data, isLoading} = useViewAllLoanOfferQuery(request)
+    // const requestBody = {
+    //     pageNumber: 0,
+    //     pageSize: 100,
+    //     organizationId: clickedOrganization?.id
+    // }
+    // const {data: viewAllLoanOffersInAnOrganizationData, isLoading:isLoadingOrganizationLoanOffer } = useViewLoanInAnOrganizationQuery(requestBody, {skip:!clickedOrganization})
+    // const sortedViewAllLoanOffer = (data?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
+    // const sortedViewAllLoanOfferInAnOrg = (viewAllLoanOffersInAnOrganizationData?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
+
 
     const loanOfferHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
@@ -64,11 +66,11 @@ const Index = () => {
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
             //  className={`grid md:px-3 md:overflow-hidden  md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
-            {isLoading || isLoadingOrganizationLoanOffer ? (
+            {isLoading  ? (
                 <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
                     <SkeletonForTable />
                 </div>
-            ) :sortedViewAllLoanOfferInAnOrg.length === 0 || data?.data?.body?.length === 0 ?
+            ) :data?.data?.body?.length === 0 ?
                 (
                     <TableEmptyState name={"loan offer"}   icon={
                         <Icon
@@ -82,8 +84,8 @@ const Index = () => {
                     <div className={` `}>
 
                         <Tables
-                            tableData={clickedOrganization?.id  ? sortedViewAllLoanOfferInAnOrg : sortedViewAllLoanOffer}
-                            isLoading={isLoading || isLoadingOrganizationLoanOffer}
+                            tableData={data?.data?.body}
+                            isLoading={isLoading}
                             handleRowClick={handleRowClick}
                             tableHeader={loanOfferHeader}
                             tableHeight={54}
