@@ -19,7 +19,8 @@ import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import BackButton from "@/components/back-button";
 import { useAppSelector } from "@/redux/store";
-
+import {setcohortStatusTab} from '@/redux/slice/create/cohortSlice'
+import { store } from "@/redux/store";
 
 interface breakDown {
     itemName: string;
@@ -73,6 +74,18 @@ const CohortDetails = () => {
         amountOutstanding: 0,
         repaymentRate: 0
     })
+
+    useEffect(() => {
+        if( details?.cohortStatus === "GRADUATED"){
+            store.dispatch(setcohortStatusTab("graduated"))
+            
+        }else if(details?.cohortStatus === "CURRENT"){
+            store.dispatch(setcohortStatusTab("current"))
+
+        }else if(details?.cohortStatus === "INCOMING"){
+            store.dispatch(setcohortStatusTab("incoming"))
+        }
+    },[details?.cohortStatus])
 
     useEffect(() => {
         if (cohortDetails && cohortDetails?.data) {

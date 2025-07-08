@@ -28,7 +28,7 @@ import { countryApi } from '@/service/admin/external-api/countryCalling_code_que
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep', 'loanReferral', 'kycForm','notification','organization','cohort','csv'],
+    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep', 'loanReferral', 'kycForm','notification','organization','cohort','csv','loanOffer'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

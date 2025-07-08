@@ -12,6 +12,7 @@ import { setCurrentFinancierId} from '@/redux/slice/financier/financier';
 import { setNotification,resetNotification,setNotificationId } from '@/redux/slice/notification/notification';
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
 import { setOrganizationId,setOrganizationDetail} from '@/redux/slice/organization/organization';
+import { setLoanOfferId } from '@/redux/slice/loan/loan-offer';
 
 // interface NotificationDetailsPageProps{
 //     notification?: NotificationProps
@@ -48,9 +49,12 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
       store.dispatch(setOrganizationId(notification?.data?.contentId))
       store.dispatch(setOrganizationDetail("details"))
       router.push("/organizations/details");
+  } else if (notification?.data?.notificationFlag === "LOAN_OFFER"){
+      store.dispatch(setLoanOfferId(notification?.data?.contentId))
+      router.push("/accept-loan-offer");
   }
   }
-//LOAN_OFFER_DECISION
+
    const buttonName = () => {
     if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
       return "financier"
@@ -58,6 +62,8 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
       return "investment vehicle"
    } else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION"){
     return "organization"
+ }else if (notification?.data?.notificationFlag === "LOAN_OFFER"){
+   return "loan offer"
  }
   
    }
