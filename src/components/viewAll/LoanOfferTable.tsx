@@ -17,16 +17,16 @@ import {Icon} from "@iconify/react";
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
-interface viewAllLoanOfferProps{
-    id: string,
-    amountRequested: number,
-    amountApproved: number,
-    dateOffered: string,
-    loanProductName: string,
-    firstName: string,
-    lastName: string,
-    loanOfferResponse: string
-}
+// interface viewAllLoanOfferProps{
+//     id: string,
+//     amountRequested: number,
+//     amountApproved: number,
+//     dateOffered: string,
+//     loanProductName: string,
+//     firstName: string,
+//     lastName: string,
+//     loanOfferResponse: string
+// }
 
 const Index = () => {
     const router = useRouter();
