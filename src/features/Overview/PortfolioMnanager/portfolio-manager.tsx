@@ -14,15 +14,15 @@ const PortfolioManager = () => {
     const router = useRouter();
     const {data, isFetching, isLoading } = useViewMeedlPortfolioQuery({})
     const cardData1 = [
-        {title: "Total investment vehicles", amount: `${data?.data?.totalNumberOfInvestmentVehicle ? data?.data?.totalNumberOfInvestmentVehicle?.toString() : '0'}`,},
-        {title: "Commercial funds", amount: `${data?.data?.totalNumberOfCommercialFundsInvestmentVehicle ? data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
-        {title: "Endowment", amount: `${data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle ? data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
+        {title: `Total investment vehicles`, amount: `${data?.data?.totalNumberOfInvestmentVehicle ? data?.data?.totalNumberOfInvestmentVehicle?.toString() : '0'}`,},
+        {title: `${Number(data?.data?.totalNumberOfCommercialFundsInvestmentVehicle) > 1 ? `Commercial funds` : `Commercial fund`}`, amount: `${data?.data?.totalNumberOfCommercialFundsInvestmentVehicle ? data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
+        {title: `${Number(data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle) > 1  ? `Endowment funds` : `Endowment fund`}`, amount: `${data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle ? data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
     ]
 
     const cardData2 = [
-        {title: "Total number of financier", amount: `${data?.data?.totalNumberOfFinancier ?data?.data?.totalNumberOfFinancier?.toString() : '0'}`,},
-        {title: "Individual", amount: `${data?.data?.totalNumberOfIndividualFinancier ? data?.data?.totalNumberOfIndividualFinancier?.toString() : '0'}`,showIcon: true},
-        {title: "Corporate", amount: `${data?.data?.totalNumberOfLoans ? data?.data?.totalNumberOfInstitutionalFinancier?.toString() : '0'}`,showIcon: true},
+        {title: "Total number of financiers", amount: `${data?.data?.totalNumberOfFinancier ?data?.data?.totalNumberOfFinancier?.toString() : '0'}`,},
+        {title: `${Number(data?.data?.totalNumberOfIndividualFinancier) > 1 ? `Individuals` : `Individual`} `, amount: `${data?.data?.totalNumberOfIndividualFinancier ? data?.data?.totalNumberOfIndividualFinancier?.toString() : '0'}`,showIcon: true},
+        {title: `${Number(data?.data?.totalNumberOfInstitutionalFinancier) > 1 ? `Corporates` : `Corporate`}`, amount: `${data?.data?.totalNumberOfLoans ? data?.data?.totalNumberOfInstitutionalFinancier?.toString() : '0'}`,showIcon: true},
     ]
     const cardData3 = [
         {title: "Total number of loans", amount: `${data?.data?.totalNumberOfLoans ? data?.data?.totalNumberOfLoans?.toString() : '0'}`,},
@@ -52,7 +52,7 @@ const PortfolioManager = () => {
     const loanData = [
         {title: "Loan referrals", amount: `${ data?.data?.loanReferralPercentage ? Math.round(Number(data?.data?.loanReferralPercentage?.toString()))  : '0'}`,textColor: 'text-[#66440A]',bgColor: 'bg-[#FEF6E8]',},
         {title: "Loan offers", amount:  `${ data?.data?.loanOfferPercentage ? Math.round(Number(data?.data?.loanOfferPercentage?.toString()))  : '0'}`,textColor: 'text-[#142854]',bgColor: 'bg-[#D9EAFF]',},
-        {title: "Disbursed loan", amount: `${ data?.data?.loanDisbursalPercentage ? Math.round(Number(data?.data?.loanDisbursalPercentage?.toString()))  : '0'}`,textColor: 'text-[#0e4c23]',bgColor: 'bg-[#E6F2EA]',},
+        {title: "Disbursed loans", amount: `${ data?.data?.loanDisbursalPercentage ? Math.round(Number(data?.data?.loanDisbursalPercentage?.toString()))  : '0'}`,textColor: 'text-[#0e4c23]',bgColor: 'bg-[#E6F2EA]',},
 
     ]
 
