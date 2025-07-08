@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import {RootState, store} from '@/redux/store';
+import {RootState, store, useAppSelector} from '@/redux/store';
 import { setLoanReferralStatus, setCurrentStep, setLoaneeIdentityVerifiedStatus } from '@/service/users/loanRerralSlice';
 import { useViewLoanReferralDetailsQuery, useRespondToLoanReferralMutation } from "@/service/users/Loanee_query";
 import { Button } from '@/components/ui/button';
@@ -42,11 +42,13 @@ const LoaneeOnboarding = () => {
     const router = useRouter();
     const { currentStep } = useSelector((state: RootState) => state.loanReferral);
     const [showModal, setShowModal] = useState(false);
-    const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery({});
+    const id = useAppSelector(state => state.selectedLoan.loanReferralId)
+    const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery(id);
     const [respondToLoanReferral, {isLoading}] = useRespondToLoanReferralMutation({});
     const [loanReferralId, setLoanReferralId] = useState("");
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
     const { toast } = useToast();
+
 
     useEffect(() => {
         if ( data?.data?.identityVerified  === true  ){
@@ -64,12 +66,6 @@ const LoaneeOnboarding = () => {
 
         if (data?.statusCode === "OK" && data?.data) {
             setBackendDetails(data.data);
-            // if (data?.data?.loanReferralStatus === "AUTHORIZED" && currentStep === steps.length - 1) {
-            //     console.log('current step: ', currentStep)
-            //     console.log('current step - 1: ',steps.length - 1)
-            //     console.log('found the bug')
-            //     router.push("/overview");
-            // }
         }
 
     }, [data, loanReferralDetailsIsLoading, currentStep,dispatch,router]);

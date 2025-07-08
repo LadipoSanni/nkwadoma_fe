@@ -52,7 +52,7 @@ export const DetailsTabContainer: React.FC<detailContainerProps> = ({
                         <TabsContent value={"trainee-details-mock-data"} id="cohort-details-content"
                                      data-testid="cohort-details-content" className={`py-2`}>
                             <div
-                                className={`bg-[#F9F9F9] grid gap-4 min-h-[45vh] md:max-h-[60vh] px-5 py-2 overflow-x-hidden w-full md:overflow-y-auto rounded-sm`}>
+                                className={`bg-[#F9F9F9] grid gap-4 min-h-[45vh] md:max-h-[53vh] px-5 py-2 overflow-x-hidden w-full md:overflow-y-auto rounded-sm`}>
                                 {dataList?.map((item, index) => (
                                     <div id={`data-item-${index}`} data-testid={`data-item-${index}`}
                                          key={index}

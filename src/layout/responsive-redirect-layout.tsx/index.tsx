@@ -14,7 +14,7 @@ function ResponsiveRedirect({ children, mobilePath, webPath }: ResponsiveRedirec
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        const mediaQuery = window.matchMedia('(max-width: 767px)');
+        const mediaQuery = window.matchMedia('(max-width: 959px)');
         setIsMobile(mediaQuery.matches);
 
         const handleResize = () => {

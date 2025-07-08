@@ -35,7 +35,8 @@ import {loaneeLoanBreakDown} from "@/types/loan/loan-request.type";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import CreditScore from "@/features/display/CreditScore";
 import { getInitial } from '@/utils/GlobalMethods';
-
+import Modal from '@/reuseable/modals/TableModal';
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -372,13 +373,26 @@ function LoanDetails() {
 
                                         </button>
                                     }
-                                    <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer}
-                                                     setIsOpen={open} />
+                                    {/* <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer}
+                                                     setIsOpen={open} /> */}
                                     <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()}
                                                       setIsOpen={setOpenDeclineOffer} loanProductId={id}
                                                       title={"Decline loan request"}/>
 
                                 </div>
+                                 <Modal
+                                   isOpen={openCreateLoanOffer}
+                                   closeModal={() => open(false)}
+                                   className='pb-1'
+                                   closeOnOverlayClick={true}
+                                   headerTitle='Create loan offer'
+                                   width='36%'
+                                    icon={Cross2Icon}
+                                 >
+                                    <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer}
+                                                     setIsOpen={open} />
+
+                                 </Modal>
                             </div>
                         </div>
                     </div>

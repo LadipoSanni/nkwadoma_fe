@@ -19,7 +19,9 @@ import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import BackButton from "@/components/back-button";
 import { useAppSelector } from "@/redux/store";
-
+import {setcohortStatusTab} from '@/redux/slice/create/cohortSlice'
+import { store } from "@/redux/store";
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
 interface breakDown {
     itemName: string;
@@ -32,6 +34,7 @@ const CohortDetails = () => {
 
     const [breakdown, setBreakdown] = useState<breakDown[]>([]);
     const cohortId = useAppSelector(store => store?.cohort?.setCohortId)
+    const cohortOrProgramRoute = useAppSelector(store => store?.program?.cohortOrProgramRoute)
 
     // const cohortsId = sessionStorage.getItem("cohortId") ?? undefined;
     const {data: cohortDetails, isLoading} = useViewCohortDetailsQuery({
@@ -72,6 +75,18 @@ const CohortDetails = () => {
         amountOutstanding: 0,
         repaymentRate: 0
     })
+
+    useEffect(() => {
+        if( details?.cohortStatus === "GRADUATED"){
+            store.dispatch(setcohortStatusTab("graduated"))
+            
+        }else if(details?.cohortStatus === "CURRENT"){
+            store.dispatch(setcohortStatusTab("current"))
+
+        }else if(details?.cohortStatus === "INCOMING"){
+            store.dispatch(setcohortStatusTab("incoming"))
+        }
+    },[details?.cohortStatus])
 
     useEffect(() => {
         if (cohortDetails && cohortDetails?.data) {
@@ -136,9 +151,16 @@ const CohortDetails = () => {
 
 
     const router = useRouter();
+
     const handleBackClick = () => {
+        if(cohortOrProgramRoute === "program"){
+             store.dispatch(setCurrentNavbarItem('Program'))
+            router.push('/program/program-cohorts')
+        }else{
         router.push('/cohort')
+
     }
+}
 
     const handleDropdownClick = (id: string) => {
         if (id === "1") {
@@ -155,7 +177,7 @@ const CohortDetails = () => {
         <>{isLoading? (<SkeletonForDetailPage/>): (
             <main className={`${inter.className}  py-3 md:px-10 px-3 w-full`} id={`cohortDetails`}>
                 <div className={` pb-4 `} id={`backClickContainer`} data-testid={'backClickContainer'}>
-                    <BackButton handleClick={handleBackClick} iconBeforeLetters={true} text={"Back to cohort"}
+                    <BackButton handleClick={handleBackClick} iconBeforeLetters={true} text={ "Back to cohort"}
                                 id={"backClick"} textColor={'#142854'}/>
                 </div>
 

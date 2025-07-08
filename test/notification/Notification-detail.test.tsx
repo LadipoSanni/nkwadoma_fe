@@ -1,6 +1,5 @@
-import { cleanup, screen, render} from "@testing-library/react";
+import { cleanup,  render} from "@testing-library/react";
 import NotificationDetailPage from "@/features/notification/Notification-details";
-import { getInitials } from "@/utils/GlobalMethods";
 import { useRouter } from 'next/navigation';
 import { Providers } from "@/app/provider";
 
@@ -11,6 +10,13 @@ jest.mock('next/navigation', () => ({
 }));
 
 describe('NotificationDetail Component',()=> {
+
+  beforeEach(() => {
+      jest.spyOn(console,'log').mockReturnValue()
+      jest.spyOn(console,'warn').mockReturnValue()
+      jest.spyOn(console,'error').mockReturnValue()
+  });
+
   const mockPush = jest.fn();
     beforeEach(() => {
       global.fetch = jest.fn(() =>
@@ -26,9 +32,6 @@ describe('NotificationDetail Component',()=> {
             push: mockPush,
           });
   
-          jest.spyOn(console, 'log').mockReturnValue();
-          jest.spyOn(console, 'warn').mockReturnValue();
-          jest.spyOn(console, 'error').mockReturnValue();
       })
 
       const mockNotification = {

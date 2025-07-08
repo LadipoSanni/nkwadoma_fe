@@ -39,8 +39,8 @@ export const loaneeApi = createApi({
             }),
         }),
         viewLoanReferralDetails: builder.query ({
-            query: () => ({
-                url: `/loan-referral`,
+            query: (loanReferralId?: string) => ({
+                url: `/loan-referral?loanReferralId=${loanReferralId}`,
                 method: "GET",
             }),
         }),

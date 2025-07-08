@@ -15,6 +15,7 @@ import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 import { setMarketInvestmentVehicleId } from '@/redux/slice/investors/MarketPlaceSlice';
 import {encryptText} from "@/utils/encrypt";
+import {setLoanReferralId} from "@/redux/slice/loan/selected-loan";
 
 
 
@@ -66,30 +67,42 @@ const CreatePassword = () => {
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
 
-   
+
     const getUserToken = () => {
         if (searchParams) {
-          const rawToken = searchParams.get("token");
-      
-          if (rawToken?.includes("?investmentVehicleId=")) {
-            const [token, vehicleId] = rawToken.split("?investmentVehicleId=");
+            const rawToken = searchParams.get("token");
+            const loanReferralId = searchParams.get("loanReferralId");
+            if(rawToken?.includes("?loanReferralId")){
+                const [token, loanReferralId] = rawToken.split("?loanReferralId=");
+                return {
+                    token: token,
+                    investmentVehicleId: null,
+                    loanReferralId: loanReferralId
+                };
+
+            }
+            if (rawToken?.includes("?investmentVehicleId=")) {
+                const [token, vehicleId] = rawToken.split("?investmentVehicleId=");
+                return {
+                    token: token,
+                    investmentVehicleId: vehicleId || null,
+                    loanReferralId: loanReferralId
+                };
+            }
+
             return {
-              token: token,
-              investmentVehicleId: vehicleId || null, 
+                token: rawToken,
+                investmentVehicleId: null,
+                loanReferralId: loanReferralId
             };
-          }
-      
-          return {
-            token: rawToken,
-            investmentVehicleId: null, 
-          };
         }
-      
+
         return {
-          token: null,
-          investmentVehicleId: null,
+            token: null,
+            investmentVehicleId: null,
+            loanReferralId: "",
         };
-      };
+    };
 
      
     const getUserRoles = (returnsRole: string) => {
@@ -120,6 +133,11 @@ const CreatePassword = () => {
     const routeUserToTheirDashboard = async (userRole?: string) => {
         switch (userRole) {
             case 'LOANEE' :
+                const { loanReferralId } = getUserToken();
+                if (loanReferralId) {
+                    console.log('loanReferralId: before routing loanee', loanReferralId)
+                    store.dispatch(setLoanReferralId(loanReferralId))
+                }
                 store.dispatch(setCurrentNavbarItem("overview"))
                 router.push("/onboarding")
                 break;
@@ -149,7 +167,6 @@ const CreatePassword = () => {
         e?.preventDefault()
         setDisableButton(true)
         const { token } = getUserToken();
-
         try {
             const response = await createPassword({token: token
                 , password: encryptedPassword}).unwrap()
