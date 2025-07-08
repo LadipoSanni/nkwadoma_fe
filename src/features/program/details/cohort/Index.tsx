@@ -14,6 +14,7 @@ import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
 import { useSearchCohortByOrganisationQuery } from '@/service/admin/cohort_query'
 import Table from '@/reuseable/table/Table';
 import { useDebounce } from '@/hooks/useDebounce';
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
 interface loanDetails {
     totalAmountRepaid?: number;
@@ -94,6 +95,7 @@ const ProgramCohortDetails= ()=> {
     const handleRowClick = (row: TableRowData) => {
       store.dispatch(setcohortId(String(row.id)))
       store.dispatch(setcohortOrProgramRoute("program"))
+        store.dispatch(setCurrentNavbarItem('Cohort'))
       router.push('/cohort/cohort-details')
     }
 

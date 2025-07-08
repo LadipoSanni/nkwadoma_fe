@@ -1,9 +1,7 @@
 import React, {useEffect, useState } from 'react';
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { cabinetGrotesk, inter } from "@/app/fonts";
-import { MdClose } from "react-icons/md";
+import {  inter } from "@/app/fonts";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import { NumericFormat } from "react-number-format";
 import { useRespondToLoanRequestMutation } from "@/service/admin/loan/loan-request-api"; // Import the new mutation
@@ -19,7 +17,7 @@ import {LoanProduct} from "@/types/Component.type";
 
 interface CreateLoanOfferProps {
     onSubmit?: (data: { amountApproved: string, loanProduct: string }) => void;
-    isOpen: boolean;
+    isOpen?: boolean;
     setIsOpen: (value: boolean) => void;
     loanRequestId: string;
 }
@@ -122,37 +120,13 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
 
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogContent
-                id="createLoanOfferDialogContent"
-                className="max-w-[425px] md:max-w-[533px] [&>button]:hidden gap-8 py-5 pl-5 pr-2"
-            >
-                <DialogHeader id="createCohortDialogHeader">
-                    <DialogTitle
-                        className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}
-                    >
-                        Create loan offer
-                    </DialogTitle>
-                    <DialogClose asChild>
-                        <button
-                            id="createCohortDialogCloseButton"
-                            className="absolute right-5"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            <MdClose
-                                id={"createCohortCloseIcon"}
-                                className="h-6 w-6 text-neutral950"
-                            />
-                        </button>
-                    </DialogClose>
-                </DialogHeader>
                 <form
                     id="createCohortForm"
                     className={`grid gap-5 ${inter.className} pr-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`}
                     style={{ scrollbarGutter: "stable both-edge" }}
                     onSubmit={handleSubmit}
                 >
-                    <div className="grid gap-2">
+                    <div className="grid gap-2 mt-4">
                         <Label htmlFor="amountApproved">Amount approved</Label>
                         <div className={'flex gap-2'}>
                             <CurrencySelectInput
@@ -201,16 +175,17 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                         // @ts-expect-error
                         <div className="text-red-500 text-sm">{error?.data?.message}</div>
                     )}
-                    <div className={'flex justify-end gap-2'}>
-                        <DialogClose asChild>
-                            <Button
+                    <div className={'md:flex  justify-end gap-2 relative  bottom-4 '}>
+                         <div className='mb-4 md:mb-0'>
+                         <Button
                                 id="CancelCohortButton"
                                 variant={"outline"}
-                                className={`text-meedlBlue font-bold border-solid border-meedlBlue w-full md:w-[8.75rem] h-[3.5625rem]`}
+                                className={`text-meedlBlue font-bold border-solid border-meedlBlue w-full md:w-[8.75rem] h-[3.5625rem] `}
+                                onClick={() => setIsOpen(false)}
                             >
                                 Back
                             </Button>
-                        </DialogClose>
+                         </div>
                         <Button
                             id="CreateCohortButton"
                             className={`text-meedlWhite gap-2 font-bold ${!isValid ? 'bg-neutral650' : 'bg-meedlBlue hover:bg-meedlBlue'} w-full md:w-[8.75rem] h-[3.5625rem]`}
@@ -218,13 +193,11 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                             disabled={!isValid}
 
                         >
-                            {isLoanOfferCreating && <Loader2 className="animate-spin" />}
-                            Create
+                            {isLoanOfferCreating? <Loader2 className="animate-spin"  />  : "Create"}
+                           
                         </Button>
                     </div>
                 </form>
-            </DialogContent>
-        </Dialog>
     );
 };
 
