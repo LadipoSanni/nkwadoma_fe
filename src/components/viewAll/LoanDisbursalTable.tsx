@@ -63,13 +63,13 @@ function Index() {
             title: 'Deposit',
             sortable: true,
             id: 'initialDeposit',
-            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div>
+            selector: (row: TableRowData) => <div className=''>{formatAmount(row.initialDeposit)}</div>
         },
         {
             title: 'Amount requested',
             sortable: true,
             id: 'amountRequested',
-            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>
+            selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountRequested)}</div>
         }
     ];
 

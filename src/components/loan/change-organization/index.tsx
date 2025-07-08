@@ -36,7 +36,6 @@ const ChangeInstitutionModal = () => {
     const currentTab = useAppSelector(state => state?.selectedLoan?.currentTab)
     const currentTabStatus = useAppSelector(state => state?.selectedLoan?.currentTabStatus)
     const clickedOrganization = useAppSelector(state => state.selectedLoan?.clickedOrganization)
-    console.log('clecKK ', clickedOrganization)
     const [current, setCurrent] = useState<number | string>()
     const [saveClickedId, setSaveClickedId] = useState<SaveClickedId | null>(null);
     const [pageNumber] = useState(0)
@@ -67,7 +66,6 @@ const ChangeInstitutionModal = () => {
     const organisationList: ChangeOrganization[] = searchTerm.length > 0 ? searchResults?.data.body || [] : data?.data?.body
 
 
-    console.log('current: ', current)
     const handleClick = (id: string | number, name?: string, logoImage?: string) => {
         if (id === current) {
             setCurrent('');
