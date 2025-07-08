@@ -98,7 +98,7 @@ function NotificationLayout({children}: Props) {
        const {data: searchData, refetch, isLoading:isSearchLoading,isFetching} = useSearchNotificationQuery({param},{skip: !debouncedSearchTerm})
 
        useEffect(() => {
-        const mediaQuery = window.matchMedia('(max-width: 767px)'); 
+        const mediaQuery = window.matchMedia('(max-width: 959px)'); 
         setIsMobile(mediaQuery.matches);
 
         const handleResize = () => setIsMobile(mediaQuery.matches);
@@ -259,7 +259,6 @@ function NotificationLayout({children}: Props) {
                 }
             }
 
-            console.log("The totalElement: ",totalSearchedNotification)
 
             const handleTabClick = (id: string) => {
                 router.push(`/notifications/notification/${id}`);

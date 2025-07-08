@@ -44,7 +44,7 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const [amount , setAmount] = useState('');
     const isValid = amount.length > 0 && selectedLoanProductId !== null;
     const [pageNumber,setPageNumber] = useState(0)
-    const [loanProducts, setLoanProducts] = useState<selectedIdType[]>()
+    const [loanProducts, setLoanProducts] = useState<selectedIdType[]>([])
 
     const parameter = {
         pageSize: 10,
@@ -178,8 +178,6 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
                     </div>
                     <CustomSelectId
                         placeholder={'Select loan product'}
-                        //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-expect-error
                         selectContent={loanProducts}
                         value={selectedLoanProductId}
                         onChange={(value) => handleOnSelectLoanProductModal(value)}
