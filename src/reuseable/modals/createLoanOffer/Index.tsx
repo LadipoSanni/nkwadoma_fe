@@ -44,7 +44,6 @@ const CreateLoanOffer: React.FC<CreateLoanOfferProps> = ({ onSubmit, isOpen, set
     const [pageNumber,setPageNumber] = useState(0)
     const [loanProducts, setLoanProducts] = useState<selectedIdType[]>([])
 
-    console.log(selectedLoanProductId)
     const parameter = {
         pageSize: 10,
         pageNumber: pageNumber
