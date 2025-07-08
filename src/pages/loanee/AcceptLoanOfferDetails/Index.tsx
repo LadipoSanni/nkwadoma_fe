@@ -1,5 +1,5 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
@@ -19,6 +19,7 @@ import styles from "@/pages/admin/loanOfferDetails/index.module.css";
 import {NumericFormat} from "react-number-format";
 import Isloading from '@/reuseable/display/Isloading'
 import { useAppSelector } from '@/redux/store';
+import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 
 const AcceptLoanOfferDetails = dynamic(
     () => Promise.resolve(AcceptLoanOffer),
@@ -53,10 +54,11 @@ const AcceptLoanOffer: React.FC = () => {
      const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
       const notification = useAppSelector(state => (state?.notification?.setNotification))
     const loanOfferIds = useAppSelector((state) => state?.loanOffer?.loanOfferId)
+    
 
     const loanOfferId: string = getUserToken()
 
-    const { data } = useViewLoanOfferDetailsQuery(loanOfferId || loanOfferIds);
+    const { data,isLoading:isloading,refetch } = useViewLoanOfferDetailsQuery(loanOfferId || loanOfferIds);
     const [respondToLoanOffer, {isLoading}] = useRespondToLoanOfferMutation();
 
     const handleBackClick = () => {
@@ -66,6 +68,12 @@ const AcceptLoanOffer: React.FC = () => {
         router.push("/overview");
         }
     };
+
+    useEffect(() => {
+        if(data?.data?.loaneeResponse === "ACCEPTED" ||  data?.data?.loaneeResponse === "DECLINED") {
+           refetch()
+        }
+    },[refetch])
 
     const loanRequestDetailsTab = [
         "Basic details",
@@ -282,6 +290,8 @@ const AcceptLoanOffer: React.FC = () => {
 
 
     return (
+        <>
+       { isloading ? ( <SkeletonForDetailPage /> ) : (
         <div
             id="loanRequestDetails"
             data-testid="loanRequestDetails"
@@ -448,6 +458,8 @@ const AcceptLoanOffer: React.FC = () => {
                 </div>
             </div>
         </div>
+    )}
+        </>
     );
 };
 export default AcceptLoanOfferDetails;
