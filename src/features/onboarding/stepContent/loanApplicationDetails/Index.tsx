@@ -47,7 +47,7 @@ const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeL
                             <DetailItem key={index} label={breakdown.itemName}
                                         value={<NumericFormat value={breakdown.itemAmount} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
                         ))}
-                        <DetailItem label="Initial deposit" value={<NumericFormat value={initialDeposit} displayType={'text'} allowNegative={false} thousandSeparator={true} prefix={'-₦'} decimalScale={2} fixedDecimalScale={true} />} />
+                        <DetailItem label="Initial deposit" value={<NumericFormat value={initialDeposit} displayType={'text'} allowNegative={false} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
                     </div>
                     <div id="tuitionBreakdownTotalContainer"
                          className={'flex justify-between py-5 px-3 border-t border-t-lightBlue250'}>

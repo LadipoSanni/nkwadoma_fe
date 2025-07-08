@@ -12,6 +12,7 @@ interface SelectedLoanState {
     disbursedLoanAccountId: string;
     clickedLoanProductId: string;
     fundProductAvailableAmount: number;
+    loanReferralId: string;
 }
 
 const initialState: SelectedLoanState = {
@@ -21,7 +22,8 @@ const initialState: SelectedLoanState = {
     disbursedLoanAccountId:"",
     clickedLoanProductId:"",
     fundProductAvailableAmount: 0,
-    currentTabStatus: "LOAN_REQUEST"
+    currentTabStatus: "LOAN_REQUEST",
+    loanReferralId: "",
 };
 
 export const selectedLoanSlice = createSlice({
@@ -30,6 +32,9 @@ export const selectedLoanSlice = createSlice({
     reducers: {
         setCurrentTab: (state, action: PayloadAction<string>) => {
             state.currentTab = action.payload;
+        },
+        setLoanReferralId: (state, action: PayloadAction<string>) => {
+          state.loanReferralId = action.payload;
         },
         setClickedOrganization: (state, action: PayloadAction<{ id: string | number; name: string; logoImage: string }>) => {
             state.clickedOrganization = action.payload;
@@ -58,6 +63,6 @@ export const selectedLoanSlice = createSlice({
     },
 });
 
-export const { setCurrentTab, setClickedOrganization, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId, setFundProductAvailableAmount,setCurrentTabStatus,resetTab } = selectedLoanSlice.actions;
+export const { setCurrentTab, setClickedOrganization,setLoanReferralId, setClickedDisbursedLoanIdNumber, setDisbursedLoanIdNumber, setClickedLoanProductId, setFundProductAvailableAmount,setCurrentTabStatus,resetTab } = selectedLoanSlice.actions;
 
 export default selectedLoanSlice.reducer;
