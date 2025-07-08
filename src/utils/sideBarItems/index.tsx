@@ -41,7 +41,7 @@ export const getPortfolioManagerSideBarItems =  (currentItem: string) => {
 export const getLoaneeSideBarItems = (currentItem: string, isLoaneeIdentityVerified: boolean) => {
 
     const items : navbarRouterItemsProps[] = [
-        {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem]  ${isLoaneeIdentityVerified ? `${currentItem === 'Overview' ? currentTextLiterals : textLiterals} ` : 'text-[#d7d7d7] md:text-[#d7d7d7]'} `}/>, id: 'overview', isActive: isLoaneeIdentityVerified, name: "Overview", route: '/Overview'},
+        {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem]  ${isLoaneeIdentityVerified ? `${currentItem === 'Overview' ? currentTextLiterals : textLiterals} ` : 'text-[#d7d7d7] md:text-[#d7d7d7]'} `}/>, id: 'overview', isActive: true, name: "Overview", route: '/Overview'},
         {icon: <MdOutlineAccountBalanceWallet className={` h-[1.2rem] w-[1.2rem] text-[#d7d7d7] md:text-[#d7d7d7`}/>, id: 'wallet', name: "Wallet", isActive: false, route: '/wallet'},
         // {icon: <Icon icon='iconoir:hand-cash' color={'#d7d7d7'} height={"1.2rem"} width={"1.3rem"}/>, id: 'repayment', isActive: true, name: "My profile", route: '/repayment'}, className={` h-[1.2rem] w-[1.2rem]  ${isLoaneeIdentityVerified ? `${currentItem === 'My profile' ? currentTextLiterals : textLiterals} ` : 'text-navbarIconColor md:text-navbarIconColor'} `}
         {icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={'d7d7d7'}></Icon>, id: 'myLoan', isActive: false, name: "My loan", route: '/myLoan'},
