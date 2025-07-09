@@ -29,7 +29,7 @@ const LoaneeOverview = dynamic(
 const Loanee = () => {
 
     const router = useRouter()
-    const {data} = useCheckLoaneeStatusQuery({})
+    const {data, isLoading} = useCheckLoaneeStatusQuery({})
     const handleBannerClick = () => {
         store.dispatch(setCurrentNavbarItem("verification"))
         store.dispatch(setCurrentStep(1))
@@ -38,7 +38,7 @@ const Loanee = () => {
     return (
         <main id={'OverviewTr'}
               className={` ${inter.className} h-full w-full pt-8 bg-learnSpaceWhite rounded-[8px] md:px-6`}>
-            {!data?.data?.identityVerified &&
+            {!data?.data?.identityVerified || isLoading ?
                 <button
                 onClick={() => {
                     handleBannerClick()
@@ -49,6 +49,7 @@ const Loanee = () => {
                     Identity verification is not successful, try again.
                 </p>
             </button>
+                : null
         }
             <BalanceCard cardData={loaneeCardData} />
             <TableEmptyState
