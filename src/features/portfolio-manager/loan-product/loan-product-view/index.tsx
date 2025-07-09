@@ -15,6 +15,7 @@ import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-ta
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {store} from "@/redux/store";
 import {setClickedLoanProductId} from "@/redux/slice/loan/selected-loan";
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -32,35 +33,33 @@ const LoanProductPage = () => {
      const [seachPageNumber,setSearchPageNumber]= useState(0)
      const [searchHasNextPage,setSearchNextPage] = useState(false)
 
+     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+
     const size = 10;
-    const { data, isLoading } = useViewAllLoanProductQuery({ pageSize: size, pageNumber:pageNumber });
-    const { data: searchResult, isLoading: isSearchLoading } = useSearchLoanProductQuery(
-        { loanProductName: searchTerm, pageSize: size, pageNumber:seachPageNumber },
-        { skip: !searchTerm }
+    const { data, isLoading,isFetching } = useViewAllLoanProductQuery({ pageSize: size, pageNumber:pageNumber });
+    const { data: searchResult, isLoading: isSearchLoading, isFetching: isfetching } = useSearchLoanProductQuery(
+        { loanProductName: debouncedSearchTerm, pageSize: size, pageNumber:seachPageNumber },
+        { skip: !debouncedSearchTerm }
     );
 
+    const getTableData = () => {
+        if (!data?.data?.body) return [];
+        if (debouncedSearchTerm) return searchResult?.data?.body || [];
+        return data?.data?.body;
+    }
+
     useEffect(() => {
-        if (searchTerm && searchResult && searchResult?.data) {
-            const result = searchResult?.data?.body;
+        if (debouncedSearchTerm && searchResult && searchResult?.data) {
             setSearchNextPage(searchResult.data?.hasNextPage)
             setTotalPage(searchResult?.data?.totalPages)
            setSearchPageNumber(searchResult?.data?.pageNumber)
-            setAllLoanProduct(result);
-        } else if (!searchTerm && data && data?.data) {
-            const result = data?.data?.body;
-            setAllLoanProduct(result);
+        } else if (!debouncedSearchTerm && data && data?.data) {
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
         }
     }, [data, searchTerm, searchResult]);
 
-    useEffect(() => {
-        if (data && data?.data) {
-            const all = data?.data?.body;
-            setAllLoanProduct(all);
-        }
-    }, [data]);
 
     const handleCreateButton = () => {
         setCreateProduct(true);
@@ -122,20 +121,7 @@ const LoanProductPage = () => {
         },
     ];
 
-    const dropDownOption = [
-        {
-            name: "View Program",
-            id: "1"
-        },
-        {
-            name: "Edit Program",
-            id: "2"
-        },
-        {
-            name: "Delete Program",
-            id: "3"
-        }
-    ];
+   
 
     return (
         <main id={`mainDiv`} className={`px-5 py-6`}>
@@ -166,25 +152,23 @@ const LoanProductPage = () => {
                     <div className={`w-full h-fit md:w-full md:h-full`}>
                         <SkeletonForTable />
                     </div>
-                ) : searchTerm && searchResult && searchResult?.data?.body?.length === 0 ? (
+                ) : !isTyping && debouncedSearchTerm && searchResult && searchResult?.data?.body?.length === 0 ? (
                         <div className={`flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40`}>
                             <SearchEmptyState name={"Loan product"} icon={MdSearch} />
                         </div>
                 ) :  (
                     <Table
-                        tableData={allLoanee}
+                        tableData={getTableData()}
                         handleRowClick={handleRowClick}
                         tableHeader={loanProductHeader}
                         tableHeight={58}
                         sx='cursor-pointer'
                         staticColunm="name"
                         staticHeader="loan product"
-                        showKirkBabel={false}
-                        kirkBabDropdownOption={dropDownOption}
                         tableCellStyle={"h-12"}
                         icon={MdOutlineInventory2}
                         sideBarTabName={"loan product"}
-                        isLoading={isLoading || isSearchLoading}
+                        isLoading={isLoading || isSearchLoading || isFetching || isfetching}
                         condition={true}
                         totalPages={totalPage}
                         hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPage}
