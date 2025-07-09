@@ -264,7 +264,13 @@ const LoanOfferDetails = () => {
 
                         </div>
                         <div
-                            className={` ${styles.loanOfferDetails} md:w-fit md:bg-white md:max-w-[60%]   h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}
+                            className={` ${styles.loanOfferDetails}
+                             md:w-fit md:bg-white md:max-w-[60%]  
+                              h-full  w-full md:max-h-[70vh] 
+                              md:h-fit border border-gray500 rounded-md 
+                              md:px-4 grid gap-3 md:grid md:gap-3  overflow-x-auto md:overflow-x-auto
+                              
+                              `}
                         >
 
                             <div
@@ -297,7 +303,7 @@ const LoanOfferDetails = () => {
                                     )}
                                     {currentTab === 0 && (
                                         <section>
-                                            <div className={'px-5'}>
+                                            <div className={'px-5 py-3'}>
                                                 <Breakdown breakDown={breakDown}/>
                                             </div>
                                         </section>
