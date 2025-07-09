@@ -10,7 +10,7 @@ import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {setCurrentStep} from "@/service/users/loanRerralSlice";
 import {useRouter} from "next/navigation";
 import {useCheckLoaneeStatusQuery} from "@/service/users/Loanee_query";
-// import {useSelector} from "react-redux";
+import dynamic from "next/dynamic";
 
 const loaneeCardData = [
     {
@@ -21,7 +21,12 @@ const loaneeCardData = [
     }
 ];
 
-const LoaneeOverview = () => {
+const LoaneeOverview = dynamic(
+    () => Promise.resolve(Loanee),
+    {ssr: false}
+)
+
+const Loanee = () => {
 
     const router = useRouter()
     const {data} = useCheckLoaneeStatusQuery({})
