@@ -295,7 +295,7 @@ const AcceptLoanOffer: React.FC = () => {
         <div
             id="loanRequestDetails"
             data-testid="loanRequestDetails"
-            className={`w-full h-full md:px-10 py-5 ${inter.className}`}
+            className={`w-full h-full md:px-10 py-5 pr-[10px] lg:pr-0 ${inter.className}`}
         >
             <BackButton
                 handleClick={handleBackClick}
@@ -308,7 +308,7 @@ const AcceptLoanOffer: React.FC = () => {
             <div
                 id="ImageComponentOnLoanRequestDetails"
                 data-testid="ImageComponentOnLoanRequestDetails"
-                className="mt-10 mb-4 grid md:flex gap-3 h-fit md:justify-between md:gap-6 md:w-full md:h-fit"
+                className="mt-10 mb-4 grid md:flex gap-3 h-fit md:justify-between md:gap-6 md:w-full md:h-fit lg:pr-4"
             >
                 <div>
                     <Avatar
@@ -352,7 +352,16 @@ const AcceptLoanOffer: React.FC = () => {
                     </div>
                 </div>
 
-                <div className={`${styles.loanOfferDetails} md:w-fit  h-fit  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}>
+                <div className={`${styles.loanOfferDetails} 
+                md:w-fit  h-fit  w-full md:max-h-[70vh] 
+                md:h-fit border border-gray500 rounded-md 
+                md:px-4 grid gap-3 md:grid md:gap-3
+                 overflow-hidden        
+                md:overflow-y-auto      
+                relative 
+                px-3
+                
+                `}>
 
                     <div className={` ${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1 px-3 py-3 h-fit md:h-fit  flex md:flex`}>
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab} />
