@@ -23,7 +23,6 @@ interface TableRowData {
 
 const LoanProductPage = () => {
     const router = useRouter();
-    const [allLoanee, setAllLoanProduct] = useState<TableRowData[]>([]);
     const [createProduct, setCreateProduct] = React.useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [hasNextPage,setNextPage] = useState(false)
