@@ -20,6 +20,7 @@ import Isloading from "@/reuseable/display/Isloading";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import { useAppSelector } from '@/redux/store';
 import CheckBoxTable from '@/reuseable/table/Checkbox-table';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface userIdentity {
     firstName: string;
@@ -69,23 +70,23 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     const [hasNextPage,setNextPage] = useState(false)
     const status = isReferred === "Not referred"? "ADDED" : "REFERRED"
 
-   
+    const [debouncedSearchTerm, isTyping] = useDebounce(loaneeName, 1000);
 
-    const {data,isLoading: loaneeIsloading} = useViewAllLoaneeQuery({
+    const {data,isLoading: loaneeIsloading,isFetching} = useViewAllLoaneeQuery({
         cohortId: cohortId,
         status: status,
         pageSize: size,
         pageNumber: page
     })
 
-    const {data: searchResults, isLoading: isLoading} = useSearchForLoaneeInACohortQuery({
-            loaneeName: loaneeName,
+    const {data: searchResults, isLoading: isLoading,isFetching:isfetching} = useSearchForLoaneeInACohortQuery({
+            loaneeName: debouncedSearchTerm,
             cohortId: cohortId,
             status: status,
             pageSize: size,
             pageNumber: page
         },
-        {skip: !loaneeName || !cohortId})
+        {skip: !debouncedSearchTerm || !cohortId})
 
 
     const [refer, {isLoading: isLoadingRefer}] = useReferLoaneeToACohortMutation()
@@ -95,16 +96,16 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
     }
 
     useEffect(()=> {
-        if (loaneeName && searchResults && searchResults?.data) {
+        if (debouncedSearchTerm && searchResults && searchResults?.data) {
             setNextPage(searchResults?.data?.hasNextPage)
             setTotalPage(searchResults?.data?.totalPages)
             setPageNumber(searchResults?.data?.pageNumber)
-        }else if(!loaneeName && data &&  data?.data) {
+        }else if(!debouncedSearchTerm && data &&  data?.data) {
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
         }
-    },[loaneeName,searchResults,data])
+    },[debouncedSearchTerm,searchResults,data])
 
     const loanProduct = [
         {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row.userIdentity?.firstName + " " + row.userIdentity?.lastName},
@@ -117,7 +118,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
 
     const getTableData = () => {
         if (!data?.data?.body) return [];
-        if (loaneeName) return searchResults?.data?.body || [];
+        if (debouncedSearchTerm) return searchResults?.data?.body || [];
         return data?.data?.body;
     }
 
@@ -222,7 +223,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                 </div>
 
                 <div className={`pt-5 md:pt-2`} id={`traineeTable`}>
-                  {loaneeName && searchResults?.data?.body?.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :  
+                  {!isTyping &&  debouncedSearchTerm && searchResults?.data?.body?.length === 0? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :  
                   <div>
                     <CheckBoxTable
                         tableData={getTableData()}
@@ -233,7 +234,7 @@ export const LoaneeInCohortView = ({cohortFee}: props) => {
                         icon={MdOutlinePerson}
                         sideBarTabName="loanee"
                         tableCellStyle="h-12"
-                        isLoading={isLoading || loaneeIsloading}
+                        isLoading={isLoading || loaneeIsloading || isFetching || isfetching}
                         condition={true}
                         tableHeight={45}
                         hasNextPage={hasNextPage}
