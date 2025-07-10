@@ -17,7 +17,6 @@ const OrganizationViewLoaneeProfile = () => {
         cohortId: cohortId,
     }
     const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props)
-    console.log('loaneee Data: ', data)
     const  handleBack = () => {
         router.push('/organizations/loanees/uploaded')
     }
@@ -29,7 +28,7 @@ const OrganizationViewLoaneeProfile = () => {
         >
             <BackButton sx={'pl-5 pt-2 pb-4'} id={'backToViewLoanee'} handleClick={handleBack} iconBeforeLetters={true} textColor={'meedlBlue'} text={'Back'} />
             <LoaneeProfileHeader isLoading={isFetching || isLoading} userName={userName } program={data?.data?.programName} cohort={data?.data?.cohortName}/>
-            <div className={`flex w-full  max-h-[65vh]  `}>
+            <div className={`flex w-full  max-h-[60vh]  `}>
                 <PmLoaneeLoanDetails isLoading={isFetching || isLoading} loaneeId={id} data={data?.data} />
                 <LoaneeBasicDetails isLoading={isFetching || isLoading} data={data?.data} />
             </div>

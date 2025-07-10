@@ -70,6 +70,12 @@ export const loaneeApi = createApi({
             }),
             providesTags: ['loanee', 'accept-loan-offer']
 
+        }),
+        viewLoanDetails: builder.query ({
+            query: (loanId: string) =>({
+                url: `/loan/loan-disbursals/${loanId}`,
+                method: 'GET'
+            })
         })
 
     })
@@ -87,6 +93,7 @@ export const {
     useViewLoaneeInACohortDetailsQuery,
     // useLazyIsIdentityVerifiedQuery,
     useGetLoaneeDetailsQuery,
+    useViewLoanDetailsQuery,
     useGetLoaneeIdentityVerificationDetailsQuery
 } = loaneeApi;
 

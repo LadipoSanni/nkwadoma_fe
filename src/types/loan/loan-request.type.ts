@@ -1,31 +1,69 @@
 
 
-export interface LoanRequestType {
+export interface LoanType {
     id: string,
-    referredBy: string,
+    amountOutstanding: string,
+    amountRepaid: string,
     firstName: string,
     lastName: string,
+    cohortName: string,
+    programName: string,
+    amountRequested: string,
+    offerDate: string,
+    startDate: string,
+    initialDeposit: number,
+    tuitionAmount: number,
+    cohortStartDate: string,
+    referredBy: string,
     status: string,
     image: string,
-    loanAmountRequested: string,
-    alternateEmail: string,
-    alternateContactAddress: string,
-    alternatePhoneNumber: string,
+    creditScore: number,
+    loanAmountRequested: number,
+    loanAmountApproved: number,
     createdDate: string,
-    initialDeposit: string,
-    cohortStartDate: string,
-    programName: string,
-    nextOfKin: {
+    dateTimeOffered: string,
+    userIdentity: {
         id: string,
+        email: string,
         firstName: string,
         lastName: string,
-        email: string,
         phoneNumber: string,
-        nextOfKinRelationship: string,
-        contactAddress: string,
-        loanee: string
-    }
+        emailVerified: boolean,
+        enabled: boolean,
+        "createdAt": string,
+        "image": string,
+        "gender": string,
+        "dateOfBirth": string,
+        "stateOfOrigin": string,
+        "maritalStatus": string,
+        "stateOfResidence": string,
+        "nationality": string,
+        "residentialAddress": string,
+        "role": string,
+        "createdBy": string,
+        "alternateEmail": string,
+        "alternatePhoneNumber": string,
+        "alternateContactAddress": string,
+        "accessToken": string,
+        "refreshToken": string,
+        "organizationDomain": string,
+        "deactivationReason": string,
+        "reactivationReason": string,
+        "nextOfKinResponse": string,
+        "identityVerified": boolean
+},
+    "nextOfKin": {
+    "id": string,
+        "firstName": string,
+        "lastName": string,
+        "email": string,
+        "phoneNumber": string,
+        "nextOfKinRelationship": string,
+        "contactAddress": string
+},
+    "loaneeLoanBreakDowns": null
 }
+
 
 export interface LoanOrganization {
 

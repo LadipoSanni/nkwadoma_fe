@@ -3,7 +3,12 @@ import {render, screen, act, waitFor} from '@testing-library/react'
 import {Providers} from "@/app/provider";
 import Index from "@/pages/loanee/MyProfile";
 
-
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(),
+    useParams: jest.fn(),
+    usePathname: () => jest.fn(),
+}));
+;
 describe('test header', ()=> {
     beforeEach(async ()=> {
         global.fetch = jest.fn(() =>

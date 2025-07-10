@@ -3,8 +3,9 @@ import React from 'react';
 import LoaneeProfileHeader from "@/components/loanee-my-profile/loaneeProfileHeader";
 import LoaneeLoanDetails from '@/components/loanee-my-profile/LoaneeLoanDetails'
 import LoaneeBasicDetails from "@/components/loanee-my-profile/LoaneeBasicDetails";
-import { useGetLoaneeDetailsQuery } from '@/service/users/Loanee_query';
+import { useViewLoanDetailsQuery} from '@/service/users/Loanee_query';
 import dynamic from "next/dynamic";
+import {useAppSelector} from "@/redux/store";
 
 const Index = dynamic(
     () => Promise.resolve(LoaneeDetails),
@@ -12,9 +13,9 @@ const Index = dynamic(
 )
 
 const LoaneeDetails = () => {
-    const {data, isFetching, isLoading} = useGetLoaneeDetailsQuery('')
 
-    // console.log('data: ',data)
+    const selectedLoanId = useAppSelector(state => state.selectedLoan.clickedLoanId);
+    const {data, isFetching, isLoading} = useViewLoanDetailsQuery(selectedLoanId)
 
     return (
         <main
