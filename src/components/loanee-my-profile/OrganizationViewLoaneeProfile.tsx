@@ -17,7 +17,6 @@ const OrganizationViewLoaneeProfile = () => {
         cohortId: cohortId,
     }
     const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props)
-    console.log('loaneee Data: ', data)
     const  handleBack = () => {
         router.push('/organizations/loanees/uploaded')
     }
