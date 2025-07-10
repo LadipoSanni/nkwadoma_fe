@@ -2,6 +2,8 @@
 
 export interface LoanType {
     id: string,
+    amountOutstanding: string,
+    amountRepaid: string,
     firstName: string,
     lastName: string,
     cohortName: string,
