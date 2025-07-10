@@ -11,6 +11,7 @@ import {setCurrentStep} from "@/service/users/loanRerralSlice";
 import {useRouter} from "next/navigation";
 import {useCheckLoaneeStatusQuery} from "@/service/users/Loanee_query";
 import dynamic from "next/dynamic";
+import SkeletonForGrid from '@/reuseable/Skeleton-loading-state/Skeleton-for-grid';
 
 const loaneeCardData = [
     {
@@ -35,10 +36,14 @@ const Loanee = () => {
         store.dispatch(setCurrentStep(1))
         router.push("/onboarding")
     }
+
+    console.log(data)
     return (
         <main id={'OverviewTr'}
               className={` ${inter.className} h-full w-full pt-8 bg-learnSpaceWhite rounded-[8px] md:px-6`}>
-            {!data?.data?.identityVerified || isLoading ?
+               
+                   
+            { isLoading? <SkeletonForGrid/> :  <div> {!data?.data?.identityVerified  ?
                 <button
                 onClick={() => {
                     handleBannerClick()
@@ -49,8 +54,8 @@ const Loanee = () => {
                     Identity verification is not successful, try again.
                 </p>
             </button>
-                : null
-        }
+                : null }
+       
             <BalanceCard cardData={loaneeCardData} />
             <TableEmptyState
                 name={'Repayment'}
@@ -63,6 +68,9 @@ const Loanee = () => {
                 }
                 condition={true}
             />
+             </div>
+        }
+           
         </main>
     );
 };
