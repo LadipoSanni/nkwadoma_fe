@@ -27,9 +27,9 @@ const Myloans = () => {
     return (
         <div className={` w-full h-full grid gap-8 px-4 py-4  md:px-8 md:py-6`}>
             <div className={`w-full flex gap-4  md:gap-6 ${styles.overviewCard}   `}>
-                <Details isLoading={isLoading} sx={`  w-[20em] `} name={'Total loan amount'} valueType={"currency"}  id={'loaneeTotalLoan'} showAsWholeNumber={false}   maxWidth={'100%'}  value={'0'}/>
-                <Details isLoading={isLoading} sx={` w-[20em]  `} id={'loaneeTotalLoaneOutstanding'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount outstanding '} value={10000} valueType={'currency'}  />
-                <Details isLoading={isLoading} sx={` w-[20em]  `} id={'loaneeTotalAmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount repaid '} value={1000000000000000} valueType={'currency'}  />
+                <Details isLoading={isLoading} sx={`  w-[20em] md:w-full  `} name={'Total loan amount'} valueType={"currency"}  id={'loaneeTotalLoan'} showAsWholeNumber={false}   maxWidth={'100%'}  value={'0'}/>
+                <Details isLoading={isLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalLoaneOutstanding'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount outstanding '} value={10000} valueType={'currency'}  />
+                <Details isLoading={isLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalAmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount repaid '} value={1000000000000000} valueType={'currency'}  />
             </div>
 
           <div className={`w-full h-full grid md:grid md:grid-cols-3 `}>

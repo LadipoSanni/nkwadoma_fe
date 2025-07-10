@@ -3,7 +3,7 @@ import React from 'react';
 import LoaneeProfileHeader from "@/components/loanee-my-profile/loaneeProfileHeader";
 import LoaneeLoanDetails from '@/components/loanee-my-profile/LoaneeLoanDetails'
 import LoaneeBasicDetails from "@/components/loanee-my-profile/LoaneeBasicDetails";
-import {useGetLoaneeDetailsQuery, useViewLoanDetailsQuery} from '@/service/users/Loanee_query';
+import { useViewLoanDetailsQuery} from '@/service/users/Loanee_query';
 import dynamic from "next/dynamic";
 import {useAppSelector} from "@/redux/store";
 
