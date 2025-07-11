@@ -226,7 +226,7 @@ const Details = () => {
                                       id='view-document'
                                       type='button'
                                       variant={"outline"}
-                                      className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]   font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[8.9vh]"}`}
+                                      className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]   font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[11.9vh]"}`}
                                       onClick={handleViewDocument}
                                       disabled={!docUrl || isVerifying}
                                       aria-label={`View ${docFilename}`}
