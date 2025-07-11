@@ -252,9 +252,9 @@ const ProgramView = () => {
 
 
     const dropDownOption = [
-        {name: 'View Program', id: '1'},
-        {name: 'Edit Program', id: '2'},
-        {name: 'Delete Program', id: '3'}
+        {name: 'View program', id: '1'},
+        {name: 'Edit program', id: '2'},
+        {name: 'Delete program', id: '3'}
     ];
 
     const handleDropdownClick = async (id: string, row: rowData) => {
