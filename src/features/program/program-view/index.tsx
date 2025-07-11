@@ -206,7 +206,7 @@ const ProgramView = () => {
 
 
     const ProgramHeader = [
-        {title: 'Programs', sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
+        {title: 'Program', sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
         {
             title: <div className='relative md:right-4 md:left-4 '>Status</div>,
             sortable: true,
@@ -217,13 +217,13 @@ const ProgramView = () => {
             </span>
         },
         {
-            title: 'No. of cohorts',
+            title: 'No. of cohort',
             sortable: true,
             id: 'numberOfCohort',
             selector: (row: TableRowData) => row.numberOfCohort ?? "0"
         },
         {
-            title: 'No. of loanees',
+            title: 'No. of loanee',
             sortable: true,
             id: 'numberOfLoanees',
             selector: (row: TableRowData) => row.numberOfLoanees ?? "0"
