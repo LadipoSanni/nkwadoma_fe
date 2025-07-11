@@ -25,7 +25,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useAppSelector } from '@/redux/store';
 import { setFinancierStatusTab } from '@/redux/slice/financier/financier';
-
+import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 
 
 interface TableRowData {
@@ -107,6 +107,8 @@ const ViewFinanciers = () => {
             }));
            
         }
+        store.dispatch(resetAll())
+       store.dispatch(clearSaveCreateInvestmentField())
     },[searchTerm, searchData,data,tabType])
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {

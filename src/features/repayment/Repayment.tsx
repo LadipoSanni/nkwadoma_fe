@@ -16,6 +16,8 @@ import {MagnifyingGlassIcon} from "@radix-ui/react-icons";
 import DropdownFilter from "@/reuseable/Dropdown/DropdownFilter";
 import { IoMdClose } from "react-icons/io";
 import { useDebounce } from '@/hooks/useDebounce';
+import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
+import { store } from "@/redux/store";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -79,7 +81,9 @@ const Repayment = () => {
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
         }
-    },[debouncedSearchTerm,data])
+         store.dispatch(resetAll())
+        store.dispatch(clearSaveCreateInvestmentField())
+    },[debouncedSearchTerm,data,searchData])
 
     const getModeOfPayment = (mode?: string |ReactNode) => {
         switch (mode) {
