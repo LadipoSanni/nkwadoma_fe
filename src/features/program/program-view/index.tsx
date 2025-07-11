@@ -206,7 +206,7 @@ const ProgramView = () => {
 
 
     const ProgramHeader = [
-        {title: 'Programs', sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
+        {title: 'Program', sortable: true, id: 'name', selector: (row: TableRowData) => row.name},
         {
             title: <div className='relative md:right-4 md:left-4 '>Status</div>,
             sortable: true,
@@ -217,13 +217,13 @@ const ProgramView = () => {
             </span>
         },
         {
-            title: 'No. of cohorts',
+            title: 'No. of cohort',
             sortable: true,
             id: 'numberOfCohort',
             selector: (row: TableRowData) => row.numberOfCohort ?? "0"
         },
         {
-            title: 'No. of loanees',
+            title: 'No. of loanee',
             sortable: true,
             id: 'numberOfLoanees',
             selector: (row: TableRowData) => row.numberOfLoanees ?? "0"
@@ -252,9 +252,9 @@ const ProgramView = () => {
 
 
     const dropDownOption = [
-        {name: 'View Program', id: '1'},
-        {name: 'Edit Program', id: '2'},
-        {name: 'Delete Program', id: '3'}
+        {name: 'View program', id: '1'},
+        {name: 'Edit program', id: '2'},
+        {name: 'Delete program', id: '3'}
     ];
 
     const handleDropdownClick = async (id: string, row: rowData) => {

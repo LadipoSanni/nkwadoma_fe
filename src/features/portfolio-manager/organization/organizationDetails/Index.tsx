@@ -75,6 +75,7 @@ const OrganizationDetails = () => {
     },
     { skip: !organizationId }
   );
+  console.log('organiza:: ', organizationDetails);
 
   const param = {
     organizationId: organizationId,
@@ -147,7 +148,7 @@ const OrganizationDetails = () => {
               : "bg-[#FEF6E8] text-[#66440A]"
           }`}
         >
-          {organizationDetails?.data.status}
+          {capitalizeFirstLetters(organizationDetails?.data.status?.toLowerCase())}
         </span>
       ),
     },
@@ -164,14 +165,14 @@ const OrganizationDetails = () => {
       label: "Number of loanees",
       value: organizationDetails?.data.numberOfLoanees,
     },
-    { label: "Still in training", value: "0" },
+    { label: "Still in training", value: organizationDetails?.data?.stillInTraining },
   ];
 
   const loanDetail = [
-    { detail: "Number of loan requests", value: "0" },
-    { detail: "Pending loan offers", value: "0" },
-    { detail: "Number of performing loans", value: "0" },
-    { detail: "Number of non-performing loans", value: "0" },
+    { detail: "Number of loan requests", value: organizationDetails?.data?.loanRequestCount },
+    { detail: "Pending loan offers", value: organizationDetails?.data?.loanOfferCount },
+    { detail: "Number of performing loans", value: "" },
+    { detail: "Number of non-performing loans", value: "" },
     {
       detail: "Historical debt",
       value: organizationDetails?.data.totalHistoricalDebt,
@@ -186,8 +187,8 @@ const OrganizationDetails = () => {
     },
     { detail: "Amount outstanding", value: formatAmount("0") },
     {
-      detail: "Moratorium (in percent)",
-      value: formatAmount("0") + " " + "(0)" + "%",
+      detail: "Moratorium ",
+      value: "0" ,
     },
   ];
 

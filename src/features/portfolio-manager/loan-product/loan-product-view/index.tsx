@@ -74,7 +74,7 @@ const LoanProductPage = () => {
 
     const loanProductHeader = [
         {
-            title: 'Loan products',
+            title: 'Loan product',
             sortable: true,
             id: 'name',
             selector: (row: TableRowData) => row.name
@@ -92,7 +92,7 @@ const LoanProductPage = () => {
             selector: (row: TableRowData) => row.interestRate
         },
         {
-            title: 'No. of loanees',
+            title: 'No. of loanee',
             sortable: true,
             id: 'totalNumberOfLoanee',
             selector: (row: TableRowData) => row.totalNumberOfLoanee
@@ -155,7 +155,7 @@ const LoanProductPage = () => {
                         <SkeletonForTable />
                     </div>
                 ) : !isTyping && debouncedSearchTerm && searchResult && searchResult?.data?.body?.length === 0 ? (
-                        <div className={`flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full mt-40`}>
+                        <div className={`flex justify-center items-center text-center md:h-[40vh] h-[40%] w-full`}>
                             <SearchEmptyState name={"Loan product"} icon={MdSearch} />
                         </div>
                 ) :  (
