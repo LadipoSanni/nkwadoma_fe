@@ -24,28 +24,27 @@ interface TableRowData {
 }
 
 
-interface investmentVehicleProps     {
-    id: string,
-    name: string,
-    investmentVehicleType: string,
-    mandate: string,
-    sponsors: string,
-    tenure: number,
-    size: number,
-    rate: number,
-    fundRaisingStatus?: string,
-    totalAmountInInvestmentVehicle: number,
-    amountRaised?: string,
-    amountDisbursed?: string,
-    totalAvailableAmount?: number,
-    totalIncomeGenerated?: string,
-    netAssetValue?: string
-}
+// interface investmentVehicleProps     {
+//     id: string,
+//     name: string,
+//     investmentVehicleType: string,
+//     mandate: string,
+//     sponsors: string,
+//     tenure: number,
+//     size: number,
+//     rate: number,
+//     fundRaisingStatus?: string,
+//     totalAmountInInvestmentVehicle: number,
+//     amountRaised?: string,
+//     amountDisbursed?: string,
+//     totalAvailableAmount?: number,
+//     totalIncomeGenerated?: string,
+//     netAssetValue?: string
+// }
 
 function EndownmentFund() {
     const [searchTerm, setSearchTerm] = useState('');
     const [pageNumber,setPageNumber] = useState(0)
-    const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
     const [hasNextPage,setNextPage] = useState(false)
     const [totalPage,setTotalPage] = useState(0)
     const [pageSearchNumber,setPageSearchNumber] = useState(0)
