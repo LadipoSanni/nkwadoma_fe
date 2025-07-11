@@ -13,6 +13,7 @@ import { setNotification,resetNotification,setNotificationId } from '@/redux/sli
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
 import { setOrganizationId,setOrganizationDetail} from '@/redux/slice/organization/organization';
 import { setLoanOfferId } from '@/redux/slice/loan/loan-offer';
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
 // interface NotificationDetailsPageProps{
 //     notification?: NotificationProps
@@ -41,16 +42,20 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
       store.dispatch(setNotificationId(notification?.data?.id))
      if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
         store.dispatch(setCurrentFinancierId(notification?.data?.contentId))
+        store.dispatch(setCurrentNavbarItem("Financier"))
         router.push("/funds/financier-details")
      }else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE") {
          store.dispatch(setMarketInvestmentVehicleId({marketInvestmentVehicleId:notification?.data?.contentId }))
+         store.dispatch(setCurrentNavbarItem("Investment vehicle"))
          router.push("/marketplace/details");
      }else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION") {
       store.dispatch(setOrganizationId(notification?.data?.contentId))
       store.dispatch(setOrganizationDetail("details"))
+      store.dispatch(setCurrentNavbarItem("Organizations"))
       router.push("/organizations/details");
   } else if (notification?.data?.notificationFlag === "LOAN_OFFER"){
       store.dispatch(setLoanOfferId(notification?.data?.contentId))
+      store.dispatch(setCurrentNavbarItem("Loan offer"))
       router.push("/accept-loan-offer");
   }
   }
@@ -111,12 +116,12 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                         <div>
                         <p className=" lowercase first-letter:uppercase">
                          {/* {getPaginatedDatas.find((item) => item.type === activeTab)?.message} */}
-                         {notification?.data?.contentDetail}
+                         {notification?.data?.contentDetail}.
                          </p>
                         </div>
                         <div className='mt-4 mb-4'>
                          {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"? (<p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>): ""}
-                         <p>If you have any question or further assistance, our customer service team is here to help you</p>
+                         <p>If you have any questions or need further assistance, our customer service team is here to help</p>
                         </div>
                          <div>
                           {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"?

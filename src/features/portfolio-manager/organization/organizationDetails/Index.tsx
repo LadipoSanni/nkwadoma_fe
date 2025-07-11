@@ -34,6 +34,7 @@ import { ensureHttpsUrl } from "@/utils/GlobalMethods";
 import { useDebounce } from '@/hooks/useDebounce';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import { MdSearch } from 'react-icons/md';
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -117,6 +118,7 @@ const OrganizationDetails = () => {
 
   const handleBackClick = () => {
     if (notification === "notification"){
+       store.dispatch(setCurrentNavbarItem("Notification"))
       router.push(`/notifications/notification/${notificationId}`);
   } else {
     router.push("/organizations");

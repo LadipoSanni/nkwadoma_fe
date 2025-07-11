@@ -20,6 +20,8 @@ import {NumericFormat} from "react-number-format";
 import Isloading from '@/reuseable/display/Isloading'
 import { useAppSelector } from '@/redux/store';
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import {store} from "@/redux/store";
 
 const AcceptLoanOfferDetails = dynamic(
     () => Promise.resolve(AcceptLoanOffer),
@@ -63,8 +65,10 @@ const AcceptLoanOffer: React.FC = () => {
 
     const handleBackClick = () => {
         if (notification === "notification"){
+              store.dispatch(setCurrentNavbarItem("Notification"))
             router.push(`/notifications/notification/${notificationId}`);
         } else {
+            store.dispatch(setCurrentNavbarItem("Overview"))
         router.push("/overview");
         }
     };
@@ -73,7 +77,7 @@ const AcceptLoanOffer: React.FC = () => {
         if(data?.data?.loaneeResponse === "ACCEPTED" ||  data?.data?.loaneeResponse === "DECLINED") {
            refetch()
         }
-    },[refetch])
+    },[refetch,data])
 
     const loanRequestDetailsTab = [
         "Basic details",
