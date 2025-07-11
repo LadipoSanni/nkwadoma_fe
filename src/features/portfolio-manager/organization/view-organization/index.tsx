@@ -18,6 +18,7 @@ import { useAppSelector } from '@/redux/store';
 import { store } from "@/redux/store";
 import { resetNotification } from '@/redux/slice/notification/notification';
 import { useDebounce } from '@/hooks/useDebounce';
+import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -113,6 +114,8 @@ function Organization() {
         store.dispatch(resetOrganizationId())
         store.dispatch(resetNotification())
         store.dispatch(resetOrganizationDetailsStatus())
+        store.dispatch(resetAll())
+        store.dispatch(clearSaveCreateInvestmentField())
     }, [debouncedSearchTerm, searchResults, data, tabType]);
 
     const handleInviteOrganizationClick = () => {

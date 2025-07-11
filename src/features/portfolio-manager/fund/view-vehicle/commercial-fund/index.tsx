@@ -13,7 +13,7 @@ import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
 import { setInvestmentVehicleType } from '@/redux/slice/vehicle/vehicle';
-import { resetAll} from '@/redux/slice/vehicle/vehicle';
+import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import { clearAll} from '@/redux/slice/multiselect/vehicle-multiselect';
 
 interface TableRowData {
@@ -78,6 +78,7 @@ function CommercialFund() {
                  }
                  store.dispatch(resetAll())
                  store.dispatch(clearAll())
+                 store.dispatch(clearSaveCreateInvestmentField())
              }, [searchTerm, searchData, investmentVehicleData])
     
     

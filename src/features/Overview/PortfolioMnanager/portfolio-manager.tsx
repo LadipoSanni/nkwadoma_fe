@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import styles from '@/features/Overview/index.module.css';
 import PortfolioManagerOverviewCard from "@/reuseable/cards/portfoliomanagerOverview/PortfolioManagerOverviewCard";
 import Barcharts from "@/features/Overview/PortfolioMnanager/Barcharts";
@@ -8,6 +8,8 @@ import {store} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 import {useViewMeedlPortfolioQuery} from "@/service/admin/overview";
 import {setCurrentTab, setCurrentTabStatus} from "@/redux/slice/loan/selected-loan";
+import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
+import SkeletonForGrid from '@/reuseable/Skeleton-loading-state/Skeleton-for-grid';
 
 const PortfolioManager = () => {
 
@@ -49,6 +51,11 @@ const PortfolioManager = () => {
     //     { month: "September", value: 214,  },
     // ]
 
+     useEffect(() => {
+         store.dispatch(resetAll())
+         store.dispatch(clearSaveCreateInvestmentField())
+     },[])
+
     const loanData = [
         {title: "Loan referrals", amount: `${ data?.data?.loanReferralPercentage ? Math.round(Number(data?.data?.loanReferralPercentage?.toString()))  : '0'}`,textColor: 'text-[#66440A]',bgColor: 'bg-[#FEF6E8]',},
         {title: "Loan offers", amount:  `${ data?.data?.loanOfferPercentage ? Math.round(Number(data?.data?.loanOfferPercentage?.toString()))  : '0'}`,textColor: 'text-[#142854]',bgColor: 'bg-[#D9EAFF]',},
@@ -80,7 +87,10 @@ const PortfolioManager = () => {
     }
 
     return (
-       <div className={` pl-3 pt-8 w-full  h-[84vh]  ${styles.container} `}>
+        <div>
+
+     { isLoading || isFetching ? <div className='py-2'><SkeletonForGrid/></div> : 
+        <div className={` pl-3 pt-8 w-full  h-[84vh]  ${styles.container} `}>
            <section className={`  mb-6  flex gap-4  overflow-scroll ${styles.overviewCard} `}>
                <PortfolioManagerOverviewCard isFetching={isFetching} isLoading={isLoading} id={'vehicleCard'} cardData={cardData1} clickView={routeToInvestmentVehicle}/>
                <PortfolioManagerOverviewCard isFetching={isFetching} isLoading={isLoading} id={'vehicleCard2'} cardData={cardData2} clickView={routeToFinancier}/>
@@ -98,6 +108,8 @@ const PortfolioManager = () => {
                    <PerformanceCard id={'ownership'} isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total fund manager fee'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                </div>
            {/*</div>*/}
+       </div>
+       } 
        </div>
     );
 };
