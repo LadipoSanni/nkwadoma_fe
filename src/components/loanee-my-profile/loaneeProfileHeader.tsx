@@ -47,8 +47,9 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
 
     return (
        <div>
-           <BackButton id={'backtoMyLoans'} sx={`pl-3 pt-2  `} text={'Back'} handleClick={handleBack} textColor={'meedlBlue'} iconBeforeLetters={true}/>
-           <div id={'loaneeProfileHeader'}
+           {userRole === 'LOANEE' && <BackButton id={'backtoMyLoans'} sx={`pl-3 pt-2  `} text={'Back'} handleClick={handleBack}
+                        textColor={'meedlBlue'} iconBeforeLetters={true}/>
+           }           <div id={'loaneeProfileHeader'}
                 data-testid={'loaneeProfileHeader'}
                 className={`w-full h-fit md:h-[13vh]  py-4 border-b border-b-grey-200 px-4  mt-auto mb-auto  flex justify-between `}
            >
