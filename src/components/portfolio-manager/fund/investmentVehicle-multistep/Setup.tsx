@@ -530,7 +530,7 @@ function Setup({investmentVehicleType}: Props) {
                         >
                             {
                             vehicleTypeStatus === "SAVE-AND-CONTINUE" &&
-                             isLoading ? <Isloading /> : "Save and continue"}
+                             isLoading ? <Isloading /> : "Continue"}
                         </Button>
                     </div>
             </div>

@@ -16,6 +16,7 @@ import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {store} from "@/redux/store";
 import {setClickedLoanProductId} from "@/redux/slice/loan/selected-loan";
 import { useDebounce } from '@/hooks/useDebounce';
+import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -57,7 +58,9 @@ const LoanProductPage = () => {
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
         }
-    }, [data, searchTerm, searchResult]);
+         store.dispatch(resetAll())
+        store.dispatch(clearSaveCreateInvestmentField())
+    }, [data,debouncedSearchTerm, searchResult]);
 
 
     const handleCreateButton = () => {
