@@ -20,11 +20,11 @@ interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
    }
 
-interface adminProps extends TableRowData  {
-    fullName: string,
-     email: string,
-     status: string
-   }
+// interface adminProps extends TableRowData  {
+//     fullName: string,
+//      email: string,
+//      status: string
+//    }
 
 function Team() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +32,7 @@ function Team() {
      const [hasNextPage,setNextPage] = useState(false)
       const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
-  const [adminList, setAdminList] = useState<adminProps[]>([])
+  // const [adminList, setAdminList] = useState<adminProps[]>([])
 
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
@@ -45,13 +45,12 @@ function Team() {
     const {data: searchResults,isFetching: isfetching,isLoading: isSearchLoading} =  useSearchOrganisationAdminByNameQuery(debouncedSearchTerm,{skip: !debouncedSearchTerm})
 
     useEffect(()=> {
-      if(debouncedSearchTerm && searchResults && searchResults?.data){
-          const adminEmployees = searchResults.data
-          setAdminList(adminEmployees)
-      }
-     else if(!debouncedSearchTerm && adminData && adminData?.data  ){
-         const adminEmployees = adminData?.data?.body
-          setAdminList(adminEmployees)
+    //   if(debouncedSearchTerm && searchResults && searchResults?.data){
+         
+          
+    //   }
+    //  else 
+     if(!debouncedSearchTerm && adminData && adminData?.data  ){
           setNextPage(adminData?.data?.hasNextPage)
           setTotalPage(adminData?.data?.totalPages)
           setPageNumber(adminData?.data?.pageNumber)
