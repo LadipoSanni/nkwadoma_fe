@@ -65,7 +65,7 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({ description, setDes
 
     const toolbarOptions = [
         ['bold', 'italic', 'underline'],
-        ['link', 'formula'],
+        ['link'],
         [{ 'list': 'check' }],
         // [{ 'size': ['small', false, 'large', 'huge'] }],
         // [{ 'font': [] }],
@@ -88,6 +88,18 @@ const CustomQuillField: React.FC<CustomQuillFieldProps> = ({ description, setDes
                         right: auto !important;
                         transform: translateX(-20%) !important; 
                     }
+                    .ql-editor.ql-blank::before {
+      font-style: normal !important;
+    //   color: #9CA3AF !important; /* Optional: match your design's placeholder color */
+    }
+    .ql-toolbar .ql-picker-label {
+      min-width: 0 !important; 
+    }
+    .ql-tooltip {
+      left: 13% !important; 
+      right: auto !important;
+      transform: translateX(-20%) !important; 
+    }    
                 `}
             </style>
             <label htmlFor="customQuill" className="block text-sm font-medium text-labelBlue">{label}</label>

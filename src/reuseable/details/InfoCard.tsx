@@ -24,7 +24,7 @@ function          InfoCard({icon: Icon,fundTitle,description}: Props) {
          <div className={`relative bottom-[6px] w-full`}>
          <p className={`w-full md:w-auto capitalize ${cabinetGrotesk.className}`}
          id='fundTitleId'
-        style={{ height: "auto", maxHeight: "280px", overflowY: "auto", minWidth: "250px", maxWidth: "60%", wordWrap: "break-word", overflowWrap: "break-word", flex: "1 1 auto",fontSize:"24px" }}
+        style={{ height: "auto", maxHeight: "280px", overflowY: "auto", minWidth: "250px", maxWidth: "95%", wordWrap: "break-word", overflowWrap: "break-word", flex: "1 1 auto",fontSize:"24px" }}
          >
           {fundTitle}
          </p>
