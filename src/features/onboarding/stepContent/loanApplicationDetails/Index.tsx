@@ -20,9 +20,13 @@ const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeL
 
     const { initialDeposit, cohortStartDate, tuitionAmount, loanAmountRequested, referredBy, loaneeLoanBreakdowns = [] } = loaneeLoanDetail;
 
+    let totalValue = 0;
+    loaneeLoanDetail?.loaneeLoanBreakdowns?.forEach((loanAmount) => {
+        totalValue = totalValue +  Number(loanAmount?.itemAmount)
+    })
     const formattedCohortStartDate = isValid(new Date(cohortStartDate)) ? format(new Date(cohortStartDate), 'dd MMM, yyyy') : 'Date not available';
 
-    const total = Number(tuitionAmount)  -  Number(initialDeposit)
+    const total = totalValue + Number(tuitionAmount)  -  Number(initialDeposit)
 
     return (
         <div id="loanApplicationDetailsContent" className={'rounded-md grid gap-9 p-5 bg-grey105'}>
