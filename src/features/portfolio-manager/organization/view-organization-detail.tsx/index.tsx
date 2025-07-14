@@ -28,11 +28,11 @@ interface TableRowData {
   [key: string]: string | number | null | React.ReactNode ;
 }
 
-interface adminProps extends TableRowData  {
- fullName: string,
-  email: string,
-  status: string
-}
+// interface adminProps extends TableRowData  {
+//  fullName: string,
+//   email: string,
+//   status: string
+// }
 
 const ViewOrganizationDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
