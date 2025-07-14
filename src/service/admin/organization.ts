@@ -92,10 +92,10 @@ export const organizationApi = createApi({
              providesTags: [ "organization"]
         }),
         searchOrganisationAdminByName: builder.query({
-            query: (name) => ({
+            query: (param:{name: string,pageNumber: number,pageSize:number}) => ({
                 url: '/organization/search/admin',
                 method: 'GET',
-                params: {name},
+                params: param,
             }),
         }),
         deactivateOrganization: builder.mutation({
