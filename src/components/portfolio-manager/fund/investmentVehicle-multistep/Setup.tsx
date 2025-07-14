@@ -260,7 +260,8 @@ function Setup({investmentVehicleType}: Props) {
                 <div>
                 <Label htmlFor="name" className='text-[14px]'>Start date</Label>
               <DatePickerInput
-              selectedDate={values.startDate ? parseISO(values.startDate) : undefined}
+              // selectedDate={values.startDate ? parseISO(values.startDate) : undefined}
+              selectedDate={ parseISO(values.startDate) }
               // onDateChange={(date) => {
               //   const formattedDate = format(date, "yyyy-MM-dd");
               //   setFieldValue("startDate", formattedDate).then(() => {
