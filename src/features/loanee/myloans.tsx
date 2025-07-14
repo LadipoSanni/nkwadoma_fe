@@ -24,17 +24,18 @@ const Myloans = () => {
         store.dispatch(setClickedLoanId(loanId))
         router.push('/my-loan-profile');
     }
+    console.log('loaneeLoans:: ', loaneeLoans?.data?.body)
     return (
         <div className={` w-full h-full grid gap-8 px-4 py-4  md:px-8 md:py-6`}>
             <div className={`w-full flex gap-4  md:gap-6 ${styles.overviewCard}   `}>
                 <Details isLoading={isLoading} sx={`  w-[20em] md:w-full  `} name={'Total loan amount'} valueType={"currency"}  id={'loaneeTotalLoan'} showAsWholeNumber={false}   maxWidth={'100%'}  value={'0'}/>
-                <Details isLoading={isLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalLoaneOutstanding'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount outstanding '} value={10000} valueType={'currency'}  />
-                <Details isLoading={isLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalAmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount repaid '} value={1000000000000000} valueType={'currency'}  />
+                <Details isLoading={isLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalLoaneOutstanding'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount outstanding '} value={0} valueType={'currency'}  />
+                <Details isLoading={isLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalAmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount repaid '} value={0} valueType={'currency'}  />
             </div>
 
           <div className={`w-full h-full grid md:grid md:grid-cols-3 `}>
               {loaneeLoans?.data?.body?.map((loan:LoanType) => (
-                  <button  key={"key"+loan?.cohortName} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
+                  <div  key={"key"+loan?.cohortName} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
                       <div className={` flex gap-2   py-4  `}>
                           {/*<p id={'loaneeCohort'} className={`${inter.className} text-meedlBlue text-[16px] `}>{capitalizeFirstLetters(loan?.programName)}</p>*/}
                           {/*{loan?.cohortName && loan?.programName ? */}
@@ -60,7 +61,7 @@ const Myloans = () => {
                       <div className={`flex w-full pt-3 pb-1 justify-end`}>
                           <button onClick={() => {handleClick(loan?.id)}} className={`text-[14px] hover:bg-[#E8EAEE] focus:bg-[#E8EAEE] ${inter700.className} border border-meedlBlue w-fit h-fit px-4 py-2 rounded-md text-meedlBlue `}>view details</button>
                       </div>
-                  </button>
+                  </div>
               ))}
           </div>
         </div>
