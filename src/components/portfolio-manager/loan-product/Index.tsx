@@ -4,7 +4,7 @@ import {inter} from "@/app/fonts"
 import {Label} from '@/components/ui/label';
 import {Button} from '@/components/ui/button';
 import React, {useEffect, useState} from "react";
-import CustomSelect from "@/reuseable/Input/Custom-select";
+// import CustomSelect from "@/reuseable/Input/Custom-select";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
@@ -203,9 +203,9 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
             }),
     });
 
-    const investmentVehicleNames = investmentVehicleData?.data?.body
-        ?.map((vehicle: { name: string }) => vehicle.name)
-        ?.sort((a, b) => a.localeCompare(b)) || [];
+    // const investmentVehicleNames = investmentVehicleData?.data?.body
+    //     ?.map((vehicle: { name: string }) => vehicle.name)
+    //     ?.sort((a, b) => a.localeCompare(b)) || [];
 
     const toastPopUp = ToastPopUp({
         description: "Loan product Created successfully.",
