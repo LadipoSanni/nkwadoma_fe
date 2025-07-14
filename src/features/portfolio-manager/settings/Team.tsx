@@ -14,17 +14,17 @@ import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organizat
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
-
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
    }
 
-interface adminProps extends TableRowData  {
-    fullName: string,
-     email: string,
-     status: string
-   }
+// interface adminProps extends TableRowData  {
+//     fullName: string,
+//      email: string,
+//      status: string
+//    }
 
 function Team() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,29 +32,36 @@ function Team() {
      const [hasNextPage,setNextPage] = useState(false)
       const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
-  const [adminList, setAdminList] = useState<adminProps[]>([])
+  // const [adminList, setAdminList] = useState<adminProps[]>([])
+
+   const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
     const dataElement = {
       pageNumber:pageNumber,
       pageSize: 10
   }
-    const {data: adminData,isLoading} = useViewOrganizationAdminQuery(dataElement)
+    const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
    
-    const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
+    const {data: searchResults,isFetching: isfetching,isLoading: isSearchLoading} =  useSearchOrganisationAdminByNameQuery(debouncedSearchTerm,{skip: !debouncedSearchTerm})
 
     useEffect(()=> {
-      if(searchTerm && searchResults && searchResults?.data){
-          const adminEmployees = searchResults.data
-          setAdminList(adminEmployees)
-      }
-     else if(!searchTerm && adminData && adminData?.data  ){
-         const adminEmployees = adminData?.data?.body
-          setAdminList(adminEmployees)
+    //   if(debouncedSearchTerm && searchResults && searchResults?.data){
+         
+          
+    //   }
+    //  else 
+     if(!debouncedSearchTerm && adminData && adminData?.data  ){
           setNextPage(adminData?.data?.hasNextPage)
           setTotalPage(adminData?.data?.totalPages)
           setPageNumber(adminData?.data?.pageNumber)
       }
-    },[adminData,searchTerm,searchResults])
+    },[adminData,debouncedSearchTerm,searchResults])
+
+    const getTableData = () => {
+      if (!adminData?.data?.body) return [];
+      if (debouncedSearchTerm) return searchResults?.data || [];
+      return adminData?.data?.body;
+  }
 
     const handleModalOpen =() => {
         setIsModalOpen(true);
@@ -78,8 +85,7 @@ function Team() {
         id: "fullName",
         selector: (row: TableRowData) =>  <div className='md:relative right-1 left-1 -z-40'>{row.fullName}</div> ,
       },
-      { title: <div className='md:relative md:right-2 md:left-2'>Role</div>,sortable: true, id: 'role', selector: (row: TableRowData) => <div className={`${row.role === "PORTFOLIO_MANAGER"? "text-[#212221] bg-[#ECECEC] ": "text-[#142854] bg-[#EEF5FF]"} rounded-xl w-36 h-6 flex items-center justify-center md:relative md:-right-2 md:-left-2  -z-40`}>{capitalizeFirstLetters(String(row.role).replace(/_/g, ' '))}</div> },
-     
+
       {
         title: (
           <div id="adminStatusHeader" className="">
@@ -91,7 +97,7 @@ function Team() {
         selector: (row: TableRowData) => (
           <span
             id="adminStatus"
-            className={`pt-1 pb-1 pr-3 pl-3 rounded-xl relative right-2 -z-50 ${
+            className={`pt-1 pb-1 pr-3 pl-3  rounded-xl  relative  -z-50 ${
               row.status === "ACTIVE"
                 ? "text-[#063F1A] bg-[#E7F5EC]"
                 : row.status === "INVITED"
@@ -103,11 +109,13 @@ function Team() {
           </span>
         ),
       },
+      { title: <div className='md:relative md:right-2 md:left-2'>Role</div>,sortable: true, id: 'role', selector: (row: TableRowData) => <div className={`${row.role === "PORTFOLIO_MANAGER"? "text-[#212221] bg-[#ECECEC] ": "text-[#142854] bg-[#EEF5FF]"} rounded-xl w-36 h-6 flex items-center justify-center md:relative md:-right-2   -z-40`}>{capitalizeFirstLetters(String(row.role).replace(/_/g, ' '))}</div> },
+     
        {
         title:  <div className=''>Email</div>,
         sortable: true,
         id: "email",
-        selector: (row: TableRowData) => ( <div className="">{row.email ? row.email : "null"}</div>),
+        selector: (row: TableRowData) => ( <div className="truncate">{row.email ? row.email : "null"}</div>),
       },
     ];
 
@@ -124,9 +132,9 @@ function Team() {
          
         <div className='w-full mt-5'>
          {
-         searchTerm && adminList.length === 0? <div><SearchEmptyState icon={MdSearch} name='Colleague'/></div> : 
+         !isTyping && debouncedSearchTerm && searchResults?.data?.length === 0? <div><SearchEmptyState icon={MdSearch} name='Colleague'/></div> : 
           <Table
-          tableData={adminList.slice().reverse()}
+          tableData={getTableData()}
           tableHeader={adminsHeader}
           handleRowClick={()=>{}}
           tableHeight={48}
@@ -135,11 +143,11 @@ function Team() {
           sideBarTabName='colleague'
           staticHeader={"Full name"}
           staticColunm={"fullName"}
-          isLoading={isLoading}
+          isLoading={isLoading || isSearchLoading || isFetching || isfetching}
           hasNextPage={hasNextPage}
           pageNumber={pageNumber}
           setPageNumber={setPageNumber}
-          totalPages={totalPage}
+          totalPages={ totalPage}
          />
 }
         </div>
