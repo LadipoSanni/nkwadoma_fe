@@ -1,7 +1,6 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import logo from '@/public/default-logo.png'; // Your fallback logo
 
 type SafeImageProps = {
   src: string;
