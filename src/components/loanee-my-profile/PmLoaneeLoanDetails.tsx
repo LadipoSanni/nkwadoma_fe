@@ -34,7 +34,8 @@ export interface LoaneeBasicDetails
     "nextOfKinRelationship": string,
     "highestLevelOfEducation": string,
     "programName": string,
-    "organizationName": string
+    "organizationName": string,
+    amountRepaid: number,
 }
 
 interface props{
@@ -87,7 +88,7 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
                         <Details id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.amountReceived} valueType={'currency'} />
                         <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>
                             <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.amountOutstanding} valueType={'currency'} />
-                            <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.amountPaid} valueType={'currency'}  />
+                            <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.amountRepaid} valueType={'currency'}  />
                         </div>
                         <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
                             <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? Number(data?.interestRate) : 0} valueType={'percentage'} />
