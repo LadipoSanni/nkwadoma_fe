@@ -45,7 +45,6 @@ const LoaneeRepayment = ({loaneeId}:Props) => {
     }
     const {data, isFetching, isLoading} = useViewAllRepaymentHistoryQuery(props)
 
-    console.log('loanee repayment history: ', data)
 
     useEffect(() => {
         if(data && data?.data) {
