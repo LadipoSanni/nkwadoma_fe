@@ -22,7 +22,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import Table from "@/reuseable/table/Table";
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
-
+import { SafeImage } from "@/reuseable/images/Safe-image";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode ;
@@ -271,13 +271,15 @@ const ViewOrganizationDetail = () => {
             
             <section id="bannerSection" className={"relative"}>
               {organizationDetail?.data.bannerImage ? (
-                <Image
+                 <SafeImage
                   id="bannerImage"
                   src={organizationDetail.data.bannerImage}
                   alt="banner"
                   height={134}
                   width={351}
-                />
+                  priority={true}
+                  imageType="banner"
+                  />
               ) : (
                 <Image
                   id="bannerImage"
@@ -296,14 +298,16 @@ const ViewOrganizationDetail = () => {
               >
                 {
                   organizationDetail?.data.logoImage ?(
-                   <Image
-                   id="organizationLogo"
-                   src={organizationDetail?.data.logoImage}
-                   alt={"organization logo"}
-                   height={70}
-                   width={70}
-                   className={""}
-                 />
+                   <SafeImage
+                    id="organizationLogo"
+                    src={organizationDetail?.data.logoImage}
+                    alt={"organization logo"}
+                    height={70}
+                    width={70}
+                    priority={true}
+                    imageType="logo"
+                    orgName={firstCharInName}
+                    />
                   ) :( <div className="flex justify-center items-center font-extrabold text-4xl">{firstCharInName}</div>)
 
                 }

@@ -35,6 +35,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import { MdSearch } from 'react-icons/md';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import { SafeImage } from "@/reuseable/images/Safe-image";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -298,12 +299,14 @@ const OrganizationDetails = () => {
             <div className="w-full mb-4">
             <section id="bannerSection" className={"relative"}>
               {organizationDetails?.data.bannerImage ? (
-                <Image
-                  id="bannerImage"
-                  src={organizationDetails.data.bannerImage}
-                  alt="banner"
-                  height={134}
-                  width={351}
+                <SafeImage
+                id="bannerImage"
+                src={organizationDetails.data.bannerImage}
+                alt="banner"
+                height={134}
+                width={351}
+                priority={true}
+                imageType="banner"
                 />
               ) : (
                 <Image
@@ -323,14 +326,16 @@ const OrganizationDetails = () => {
               >
                 {
                   organizationDetails?.data.logoImage ?(
-                   <Image
-                   id="organizationLogo"
-                   src={organizationDetails?.data.logoImage}
-                   alt={"organization logo"}
-                   height={70}
-                   width={70}
-                   className={""}
-                 />
+                <SafeImage
+                id="organizationLogo"
+                src={organizationDetails?.data.logoImage}
+                alt={"organization logo"}
+                height={70}
+                width={70}
+                priority={true}
+                imageType="logo"
+                orgName={firstCharInName}
+                />
                   ) :( <div className="flex justify-center items-center font-extrabold text-4xl">{firstCharInName}</div>)
 
                 }
