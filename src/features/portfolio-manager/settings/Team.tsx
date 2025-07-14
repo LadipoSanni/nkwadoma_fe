@@ -137,7 +137,7 @@ function Team() {
          
         <div className='w-full mt-5'>
          {
-         !isTyping && debouncedSearchTerm && searchResults?.data?.length === 0? <div><SearchEmptyState icon={MdSearch} name='Colleague'/></div> : 
+         !isTyping && debouncedSearchTerm && searchResults?.data?.body.length === 0? <div><SearchEmptyState icon={MdSearch} name='Colleague'/></div> : 
           <Table
           tableData={getTableData()}
           tableHeader={adminsHeader}
