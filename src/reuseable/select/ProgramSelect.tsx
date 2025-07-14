@@ -154,7 +154,8 @@ interface viewAllProgramProps {
   userIdentity?: {
     firstName?: string,
     lastName?: string,
-  }
+  };
+  size?: number
 }
 
 interface ProgramSelectProps {
@@ -257,7 +258,10 @@ const ProgramSelect: React.FC<ProgramSelectProps> = ({
                         value={item?.name? item?.name : item?.organizationName? item?.organizationName : item?.userIdentity?.firstName + " " +  item?.userIdentity?.lastName}
                         className="  text-lightBlue950 hover:bg-[#EEF5FF] focus:bg-[#EEF5FF]"
                       >
+                        <div className='truncate max-w-[180px] sm:max-w-[220px] md:max-w-[260px]'>
                         {item?.name? item?.name : item?.organizationName? item?.organizationName : item?.userIdentity?.firstName + " " +  item?.userIdentity?.lastName}
+                        </div>
+                       
                       </SelectItem>
                     ))}
                   </SelectGroup>
@@ -271,7 +275,9 @@ const ProgramSelect: React.FC<ProgramSelectProps> = ({
                       key={item.id} 
                       value={item.name}
                     >
-                     {item?.name? item?.name : item?.organizationName? item?.organizationName : item?.userIdentity?.firstName + " " +  item?.userIdentity?.lastName}
+                      <div className='truncate max-w-[180px] sm:max-w-[220px] md:max-w-[260px]'>
+                      {item?.name? item?.name : item?.organizationName? item?.organizationName : item?.userIdentity?.firstName + " " +  item?.userIdentity?.lastName}
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectGroup>

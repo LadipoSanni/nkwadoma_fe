@@ -19,7 +19,7 @@ import {store, useAppSelector} from "@/redux/store";
 import {formatAmount} from "@/utils/Format";
 import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
 import styles from "@/features/market-place/Index.module.css";
-
+import Select from "@/reuseable/select/ProgramSelect";
 
 
 interface CreateLoanProductProps {
@@ -33,29 +33,65 @@ interface ApiError {
     };
 }
 
+interface viewAllProps {
+    id?: string;
+    name: string;
+    size?: number
+  }
+
 
 const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     const fundProductAvailableAmount = useAppSelector(state => (state.selectedLoan.fundProductAvailableAmount))
     const [selectCurrency, setSelectCurrency] = useState('NGN');
-    const [investmentVehicleObj, setInvestmentVehicleObj] = useState<{ [key: string]: string }>({});
+    // const [investmentVehicleObj, setInvestmentVehicleObj] = useState<{ [key: string]: string }>({});
     const [error, setError] = useState('');
+    const [fundPageNumber, setFundPageNumber] = useState(0);
+    const [hasNextfundPage, setHasNextfundPage] = useState(true);
+    const [investmentVehicleFund, setInvestmentVehicleFund] = useState<viewAllProps[]>([]);
+    const [selectedFund, setSelectedFund] = useState<string | null>(null);
+    const [isSelectOpen, setIsSelectOpen] = useState(false);
+    const [isFund, setIsFund] = useState(false)
+
     const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
-    const { data: investmentVehicleData } =
+    const { data: investmentVehicleData, isFetching, isLoading: isFundLoading } =
         useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
-            pageSize: 300,
-            pageNumber: 0,
+            pageSize: 10,
+            pageNumber: fundPageNumber,
             investmentVehicleStatus: "PUBLISHED",
-        });
+        },{ skip: !isFund});
+
+    // useEffect(() => {
+    //     if (investmentVehicleData?.data?.body) {
+    //         const obj: { [key: string]: string } = {};
+    //         investmentVehicleData.data.body.forEach((vehicle: { id: string; name: string; totalAvailableAmount: number }) => {
+    //             obj[vehicle.name] = vehicle.id;
+    //         });
+    //         setInvestmentVehicleObj(obj);
+    //     }
+    // }, [investmentVehicleData]);
 
     useEffect(() => {
-        if (investmentVehicleData?.data?.body) {
-            const obj: { [key: string]: string } = {};
-            investmentVehicleData.data.body.forEach((vehicle: { id: string; name: string; totalAvailableAmount: number }) => {
-                obj[vehicle.name] = vehicle.id;
+        if (investmentVehicleData?.data) {
+            setInvestmentVehicleFund((prev) => {
+                if(fundPageNumber  === 0){
+                    return [...investmentVehicleData.data.body].sort((a, b) => a.name.localeCompare(b.name));
+                }
+                const newFunds = investmentVehicleData?.data?.body.filter(
+                    (newFund: viewAllProps) => !prev.some((prevItem) => prevItem.id === newFund.id)
+                );
+                return [...prev, ...newFunds].sort((a,b) => a.name.localeCompare(b.name));
             });
-            setInvestmentVehicleObj(obj);
+            setHasNextfundPage(investmentVehicleData.data.hasNextPage);
         }
-    }, [investmentVehicleData]);
+    },[investmentVehicleData,fundPageNumber])
+
+      
+  const loadMoreFunds = () => {
+    if (!isFetching && hasNextfundPage) {
+        setFundPageNumber((prev) => prev + 1);
+    }
+  };
+
 
 
     const initialFormValue = {
@@ -182,6 +218,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
     });
 
     const handleSubmit = async (values: typeof initialFormValue) => {
+        console.log(values)
         if (!navigator.onLine) {
             networkPopUp.showToast();
             if (setIsOpen) {
@@ -193,7 +230,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
         const formData = {
             name: values.productName,
             // sponsors: [values.productSponsor],
-            investmentVehicleId: investmentVehicleObj[values.investmentVehicleId],
+            investmentVehicleId: values.investmentVehicleId,
             costOfFund: Number(values.costOfFunds),
             tenor: Number(values.tenor),
             loanProductSize: Number(values.loanProductSize),
@@ -276,7 +313,7 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
 
                                 <div className={`pt-4`}>
                                     <Label htmlFor="FundProduct">Fund product</Label>
-                                    <CustomSelect
+                                    {/* <CustomSelect
                                         triggerId='FundProductId'
                                         id="FundProduct"
                                         selectContent={investmentVehicleNames}
@@ -293,7 +330,33 @@ const CreateLoanProduct = ({setIsOpen}: CreateLoanProductProps) => {
                                         }}
                                         name="FundProduct"
                                         placeHolder='Select fund'
+                                    /> */}
+                                    <Select
+                                      selectedProgram={selectedFund}
+                                      setSelectedProgram={setSelectedFund}
+                                      isSelectOpen={isSelectOpen}
+                                      setIsSelectOpen={setIsSelectOpen}
+                                      selectOptions={investmentVehicleFund}
+                                      setId={(value) => {
+                                        setFieldValue("investmentVehicleId", value);
+                                        const selectedVehicle = investmentVehicleData?.data?.body?.find(
+                                            (vehicle: { name: string }) => vehicle.name === value
+                                        );
+                                        if (selectedVehicle) {
+                                            store.dispatch(setFundProductAvailableAmount(selectedVehicle.totalAvailableAmount))
+                                        }
+                                    }}
+                                    placeholder='Select fund'
+                                    isLoading={isFundLoading}
+                                     onOpenChange={(open) => setIsFund(open)}
+                                     infinityScroll={{
+                                        hasMore:hasNextfundPage,
+                                        loadMore: loadMoreFunds,
+                                        loader: isFetching
+                                     }}
+                                     label=""
                                     />
+                                      
                                     {errors.investmentVehicleId && touched.investmentVehicleId && (
                                         <ErrorMessage
                                             name="FundProduct"
