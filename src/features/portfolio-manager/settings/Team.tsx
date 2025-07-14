@@ -20,11 +20,7 @@ interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
    }
 
-// interface adminProps extends TableRowData  {
-//     fullName: string,
-//      email: string,
-//      status: string
-//    }
+
 
 function Team() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +28,8 @@ function Team() {
      const [hasNextPage,setNextPage] = useState(false)
       const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
-  // const [adminList, setAdminList] = useState<adminProps[]>([])
+    const [pageSearchNumber,setPageSearchNumber] = useState(0)
+    const [searchHasNextPage,setSearchHasNextPage]  = useState(false)
 
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
@@ -40,16 +37,24 @@ function Team() {
       pageNumber:pageNumber,
       pageSize: 10
   }
+    const searchDataElement = {
+      name:debouncedSearchTerm,
+      pageNumber: pageSearchNumber,
+      pageSize: 10
+    }
+
+
     const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
    
-    const {data: searchResults,isFetching: isfetching,isLoading: isSearchLoading} =  useSearchOrganisationAdminByNameQuery(debouncedSearchTerm,{skip: !debouncedSearchTerm})
+    const {data: searchResults,isFetching: isfetching,isLoading: isSearchLoading} =  useSearchOrganisationAdminByNameQuery(searchDataElement,{skip: !debouncedSearchTerm})
 
     useEffect(()=> {
-    //   if(debouncedSearchTerm && searchResults && searchResults?.data){
-         
-          
-    //   }
-    //  else 
+      if(debouncedSearchTerm && searchResults && searchResults?.data){
+        setSearchHasNextPage(searchResults?.data?.hasNextPage)
+          setTotalPage(searchResults?.data?.totalPages)
+          setPageSearchNumber(searchResults?.data?.pageNumber)    
+      }
+     else 
      if(!debouncedSearchTerm && adminData && adminData?.data  ){
           setNextPage(adminData?.data?.hasNextPage)
           setTotalPage(adminData?.data?.totalPages)
@@ -59,7 +64,7 @@ function Team() {
 
     const getTableData = () => {
       if (!adminData?.data?.body) return [];
-      if (debouncedSearchTerm) return searchResults?.data || [];
+      if (debouncedSearchTerm) return searchResults?.data?.body || [];
       return adminData?.data?.body;
   }
 
@@ -144,9 +149,9 @@ function Team() {
           staticHeader={"Full name"}
           staticColunm={"fullName"}
           isLoading={isLoading || isSearchLoading || isFetching || isfetching}
-          hasNextPage={hasNextPage}
-          pageNumber={pageNumber}
-          setPageNumber={setPageNumber}
+          hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPage}
+          pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}
+          setPageNumber={searchTerm !== ""? setPageSearchNumber : setPageNumber}
           totalPages={ totalPage}
          />
 }
