@@ -49,14 +49,14 @@ const setup = (props = {}) =>
         setup();
         const button = screen.getByTestId("calenderButton")
         fireEvent.click(button);
-        expect(screen.getByRole('dialog')).toBeVisible();
+        expect(screen.getByRole('listbox')).toBeVisible();
       });
 
       test('Closes the calendar popover on date selection', () => {
         setup();
         const button = screen.getByTestId("calenderButton")
         fireEvent.click(button);
-        expect(screen.getByRole('dialog')).toBeVisible();
+        expect(screen.getByRole('listbox')).toBeVisible();
         const selected = screen.getAllByText('29');
         fireEvent.click(selected[0]); 
         expect(screen.queryByRole('rounded-md border ')).not.toBeInTheDocument();
@@ -83,15 +83,16 @@ const setup = (props = {}) =>
       });
 
 
-
-  test('Applies the `calendarStyle` prop correctly to PopoverContent', () => {
-    const customCalendarStyle = 'custom-calendar-style';
-    setup({ calendarStyle: customCalendarStyle });
-
-    const button = screen.getByTestId("calenderButton")
-    fireEvent.click(button);
-    expect(screen.getByRole('dialog')).toHaveClass(customCalendarStyle);
-  });
+      test('Applies the `calendarStyle` prop correctly to SelectContent', () => {
+        const customCalendarStyle = 'custom-calendar-style';
+        setup({ calendarStyle: customCalendarStyle });
+      
+        const button = screen.getByTestId("calenderButton");
+        fireEvent.click(button);
+        
+        const selectContent = screen.getByRole('listbox');
+        expect(selectContent).toHaveClass(customCalendarStyle);
+      });
 
   test('Disables interaction when popover is open and clicking the button again and closing the popover content', () => {
     setup();
@@ -123,7 +124,7 @@ const setup = (props = {}) =>
     const button = screen.getByTestId("calenderButton")
     fireEvent.click(button);
 
-    const popoverContent = screen.getByRole('dialog');
+    const popoverContent = screen.getByRole('listbox');
     expect(popoverContent).toHaveClass('text-popover-foreground '); 
   });
 
