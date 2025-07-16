@@ -2,7 +2,7 @@
 import React from 'react';
 import {useViewAllLoanDisbursalQuery} from "@/service/admin/loan/Loan-disbursal-api";
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
-import {Circle} from "lucide-react";
+// import {Circle} from "lucide-react";
 import {inter, inter600,inter700, inter500} from '@/app/fonts';
 import {LoanType} from "@/types/loan/loan-request.type";
 import {useRouter} from "next/navigation";
@@ -24,7 +24,6 @@ const Myloans = () => {
         store.dispatch(setClickedLoanId(loanId))
         router.push('/my-loan-profile');
     }
-    console.log('loaneeLoans:: ', loaneeLoans?.data?.body)
     return (
         <div className={` w-full h-full grid gap-8 px-4 py-4  md:px-8 md:py-6`}>
             <div className={`w-full flex gap-4  md:gap-6 ${styles.overviewCard}   `}>
