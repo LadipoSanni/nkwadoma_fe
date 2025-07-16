@@ -31,7 +31,7 @@ const LoaneeLoanDetails = ({data, isLoading}:props ) => {
                 {/*<div id={'loanInfo'} className={`w-fit text-[18px] py-4 h-fit   text-[#212221] ${inter500.className} `}>Loan information</div>*/}
                 <div className={`  md:max-h-[60vh]  grid gap-4 w-full  ${styles.container}`}>
                      <TabsContent value={'loanInfo'} className={` grid gap-3 `}>
-                         <Details isLoading={isLoading} id={'loanAmount'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.loanAmount} valueType={'currency'} />
+                         <Details isLoading={isLoading} id={'loanAmount'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.loanAmountApproved} valueType={'currency'} />
                          <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>
                              <Details isLoading={isLoading} id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={0} valueType={'currency'} />
                              <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.loaneeLoanDetail?.amountRepaid} valueType={'currency'}  />

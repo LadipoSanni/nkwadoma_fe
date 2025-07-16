@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import {useViewAllLoanDisbursalQuery} from "@/service/admin/loan/Loan-disbursal-api";
+import {useViewAllLoanDisbursalQuery, useViewLoansTotalCalculationQuery} from "@/service/admin/loan/Loan-disbursal-api";
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
 // import {Circle} from "lucide-react";
 import {inter, inter600,inter700, inter500} from '@/app/fonts';
@@ -20,6 +20,7 @@ const Myloans = () => {
     }
     const router = useRouter()
     const {data: loaneeLoans, isLoading  } = useViewAllLoanDisbursalQuery(request)
+    const {data:loansTotalCalculations,isLoading:loansTotalCalculationsLoading } = useViewLoansTotalCalculationQuery({})
     const handleClick = (loanId:string) => {
         store.dispatch(setClickedLoanId(loanId))
         router.push('/my-loan-profile');
@@ -27,9 +28,9 @@ const Myloans = () => {
     return (
         <div className={` w-full h-full grid gap-8 px-4 py-4  md:px-8 md:py-6`}>
             <div className={`w-full flex gap-4  md:gap-6 ${styles.overviewCard}   `}>
-                <Details isLoading={isLoading} sx={`  w-[20em] md:w-full  `} name={'Total loan amount'} valueType={"currency"}  id={'loaneeTotalLoan'} showAsWholeNumber={false}   maxWidth={'100%'}  value={loaneeLoans?.metaData?.totalAmountReceived}/>
-                <Details isLoading={isLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalLoaneOutstanding'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount outstanding '} value={loaneeLoans?.metaData?.totalAmountOutstanding} valueType={'currency'}  />
-                <Details isLoading={isLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalAmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount repaid '} value={loaneeLoans?.metaData?.totalAmountRepaid} valueType={'currency'}  />
+                <Details isLoading={loansTotalCalculationsLoading} sx={`  w-[20em] md:w-full  `} name={'Total loan amount'} valueType={"currency"}  id={'loaneeTotalLoan'} showAsWholeNumber={false}   maxWidth={'100%'}  value={loansTotalCalculations?.data?.totalAmountReceived}/>
+                <Details isLoading={loansTotalCalculationsLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalLoaneOutstanding'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount outstanding '} value={loansTotalCalculations?.data?.totalAmountOutstanding} valueType={'currency'}  />
+                <Details isLoading={loansTotalCalculationsLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalAmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount repaid '} value={loansTotalCalculations?.data?.totalAmountRepaid} valueType={'currency'}  />
             </div>
 
           <div className={`w-full h-full grid md:grid md:grid-cols-3 `}>
@@ -39,8 +40,6 @@ const Myloans = () => {
                           <div className="rounded-full bg-[#ECECEC] flex py-1 px-2  ">
                                   {loan?.organizationName?.at(0)}
                           </div>
-                          {/*<Circle color={'#ECECEC'}*/}
-                          {/*                         className=" bg-[#ECECEC] w-6 h-6 mt-auto mb-auto rounded-full "/>*/}
                           <p id={'loaneeProgram'} data-testid={'loaneeProgram'}
                              className={`${inter600.className} mt-auto mb-auto text-black text-[16px] `}>{capitalizeFirstLetters(loan?.organizationName)}</p>
                       </div>
