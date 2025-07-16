@@ -17,6 +17,8 @@ const LoaneeDetails = () => {
     const selectedLoanId = useAppSelector(state => state.selectedLoan.clickedLoanId);
     const {data, isFetching, isLoading} = useViewLoanDetailsQuery(selectedLoanId)
 
+    console.log('loanee viewing loan data:', data)
+
     return (
         <main
             id={'loaneeProfile'}
