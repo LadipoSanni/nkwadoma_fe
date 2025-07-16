@@ -249,6 +249,17 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
                     }}
                        />
                 <DatePicker date={startDate} setDate={setDate} />
+                {/* <DatePickerInput  
+                    selectedDate={typeof startDate === 'string' ? parseISO(startDate) : startDate}
+                   onDateChange={
+                   (date) => {
+                                   if (date) {
+                                     setDate(date);
+                                   }
+                                 }
+                  } 
+                   className="p-6 mt-7 text-[14px] text-[#6A6B6A] h-14"
+                /> */}
               </div>
 
                   <CustomQuillField
