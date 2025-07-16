@@ -5,6 +5,7 @@ import { cabinetGrotesk, inter } from '@/app/fonts';
 import { setCurrentStep, setLoanReferralStatus } from '@/service/users/loanRerralSlice';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Image from 'next/image';
+import { useAppSelector } from '@/redux/store';
 
 interface VerificationSuccessDialogProps {
     open: boolean;
@@ -27,14 +28,19 @@ const steps = [
 const WarningModal = ({ open, onClose, onContinue, title, message, buttonText, routeToOverview, stopCamera }: VerificationSuccessDialogProps) => {
     const dispatch = useDispatch();
     const router = useRouter();
+     const isAdditionalDetailComplete = useAppSelector(store => store?.loanReferral?.isAdditionalDetailComplete)
 
     const handleContinue = () => {
         if (stopCamera) {
             stopCamera();
         }
-        dispatch(setCurrentStep(steps.length - 1));
+        if(isAdditionalDetailComplete){
+            router.push('/overview');
+        }else{
+         dispatch(setCurrentStep(steps.length - 1));
+         onContinue();
+        }
         dispatch(setLoanReferralStatus('AUTHORIZED'));
-        onContinue();
         if (routeToOverview) {
             router.push('/overview');
         }
