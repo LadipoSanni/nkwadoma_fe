@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+// import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format, getYear } from "date-fns";
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
@@ -100,9 +100,19 @@ function DatePickerInput({
     };
 
     return (
-        <Popover open={isOpen} onOpenChange={setIsOpen}>
-            <PopoverTrigger asChild>
-                <Button
+        <Select   open={isOpen} onOpenChange={setIsOpen}>
+            <SelectTrigger
+            data-testid="calenderButton"
+            className={cn(
+                "w-full flex justify-between border rounded text-left text-black p-5 shadow-none",
+                className,
+                disabled && "opacity-60 bg-gray-50 text-gray-500 cursor-not-allowed"
+            )}
+            onClick={() => setIsOpen(true)}
+            disabled={disabled}
+           
+             >
+                {/* <Button
                     data-testid="calenderButton"
                     className={cn(
                         "w-full flex justify-between border rounded text-left text-black p-5 shadow-none",
@@ -111,16 +121,16 @@ function DatePickerInput({
                     )}
                     onClick={() => setIsOpen(true)}
                     disabled={disabled}
-                >
+                > */}
                     {tempDate && !isNaN(tempDate.getTime()) ? (
-                        format(tempDate, 'dd-MM-yyyy')
+                       <span className='text-black'>{format(tempDate, 'dd-MM-yyyy')}</span> 
                     ) : (
                         <span className="text-grey400">{placeholder}</span>
                     )}
                     <MdOutlineDateRange className="w-5 h-5 ml-2 text-neutral950" />
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent
+                {/* </Button> */}
+            </SelectTrigger>
+            <SelectContent
                 align="start"
                 className={cn("bg-white w-auto p-1 ", calendarStyle)}
                 style={{ zIndex: 1000 }}
@@ -182,6 +192,7 @@ function DatePickerInput({
                         </SelectContent>
                     </Select>
                 </div>
+                <div style={{ zIndex: 10000 }}>
                 <Calendar
                     mode="single"
                     selected={tempDate}
@@ -189,8 +200,9 @@ function DatePickerInput({
                     month={currentMonth}
                     onMonthChange={setCurrentMonth}
                     disabled={disabledDate}
-                    initialFocus
                 />
+                </div>
+               
                 <div className='border-t-[1px] relative top-2 py-2 justify-between flex px-2 h-8'>
                     <Button
                         variant={'outline'}
@@ -209,8 +221,8 @@ function DatePickerInput({
                     </Button>
                 </div>
                 </div>
-            </PopoverContent>
-        </Popover>
+            </SelectContent>
+        </Select>
     );
 }
 

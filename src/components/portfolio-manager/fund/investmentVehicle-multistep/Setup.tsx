@@ -274,7 +274,7 @@ function Setup({investmentVehicleType}: Props) {
                   setFieldValue("startDate", formattedDate);
                 }
               }}
-                 className="p-6 mt-2 text-[14px] text-[#6A6B6A]"
+                 className="p-6 mt-2 text-[14px] text-[#6A6B6A] h-[49px]"
                 //  disabledDate={
                 //       (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
                 //     }
