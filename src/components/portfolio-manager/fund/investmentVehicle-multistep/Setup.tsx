@@ -260,16 +260,20 @@ function Setup({investmentVehicleType}: Props) {
                 <div>
                 <Label htmlFor="name" className='text-[14px]'>Start date</Label>
               <DatePickerInput
-              selectedDate={parseISO(values.startDate ?? "")}
+              // selectedDate={values.startDate ? parseISO(values.startDate) : undefined}
+              selectedDate={ parseISO(values.startDate) }
               // onDateChange={(date) => {
               //   const formattedDate = format(date, "yyyy-MM-dd");
               //   setFieldValue("startDate", formattedDate).then(() => {
               //     saveToRedux({ ...values, startDate: formattedDate });
               //   });
               // }}
-              onDateChange={(date) =>
-                setFieldValue("startDate", format(date, "yyyy-MM-dd"))
+              onDateChange={(date) => {
+                if (date) {
+                  const formattedDate = format(date, "yyyy-MM-dd");
+                  setFieldValue("startDate", formattedDate);
                 }
+              }}
                  className="p-6 mt-2 text-[14px] text-[#6A6B6A]"
                 //  disabledDate={
                 //       (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
