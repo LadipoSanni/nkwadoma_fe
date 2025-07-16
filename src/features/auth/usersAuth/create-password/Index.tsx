@@ -11,7 +11,7 @@ import {jwtDecode} from "jwt-decode";
 import {setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
-import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
+import {setCurrentNavbarItem,setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 import { setMarketInvestmentVehicleId } from '@/redux/slice/investors/MarketPlaceSlice';
 import {encryptText} from "@/utils/encrypt";
@@ -137,7 +137,8 @@ const CreatePassword = () => {
                 if (loanReferralId) {
                     store.dispatch(setLoanReferralId(loanReferralId))
                 }
-                store.dispatch(setCurrentNavbarItem("overview"))
+                store.dispatch(setCurrentNavbarItem("Verification"))
+                store.dispatch(setCurrentNavBottomItem('Verification'))
                 router.push("/onboarding")
                 break;
             case 'ORGANIZATION_ADMIN':

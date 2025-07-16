@@ -1,18 +1,19 @@
 'use client'
-import React,{useEffect} from 'react';
+import React,{useEffect,useState} from 'react';
 import BalanceCard from '@/reuseable/cards/BalanceCard/Index';
 import {inter, inter500} from '@/app/fonts';
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Icon} from "@iconify/react";
 import {MdOutlineErrorOutline} from "react-icons/md";
 import { store} from "@/redux/store";
-import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
+import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 import {setCurrentStep,setIsAdditionalDetailComplete,setIsidentityVerified} from "@/service/users/loanRerralSlice";
 import {useRouter} from "next/navigation";
-import {useCheckLoaneeStatusQuery} from "@/service/users/Loanee_query";
+import {useCheckLoaneeStatusQuery,useViewAllLoanRefferalsQuery} from "@/service/users/Loanee_query";
 import dynamic from "next/dynamic";
 import SkeletonForGrid from '@/reuseable/Skeleton-loading-state/Skeleton-for-grid';
-// import {setLoanReferralId} from "@/redux/slice/loan/selected-loan";
+import {setLoanReferralId} from "@/redux/slice/loan/selected-loan";
+
 
 const loaneeCardData = [
     {
@@ -28,21 +29,43 @@ const LoaneeOverview = dynamic(
     {ssr: false}
 )
 
-const Loanee = () => {
-    // const isUserverified = useAppSelector(store => store?.loanReferral?.isidentityVerified)
-    // const isAdditionalDetailComplete = useAppSelector(store => store?.loanReferral?.isAdditionalDetailComplete)
+interface LoanReferral {
+    id: string;
+    loanReferralStatus: string
+   
+  }
 
+const Loanee = () => {
     const router = useRouter()
-    const {data, isLoading} = useCheckLoaneeStatusQuery({})
+    const {data, isLoading,refetch} = useCheckLoaneeStatusQuery({})
+    const {data:loanRefferals} = useViewAllLoanRefferalsQuery({})
+    const [loanRefferalStatus,setLoanRefferalStatus] = useState("")
      
     useEffect(() => {
         store.dispatch(setIsAdditionalDetailComplete(data?.data?.additionalDetailsCompleted))
         store.dispatch(setIsidentityVerified(data?.data?.identityVerified))
-    },[data])
+
+        const viewLoanRefferals = loanRefferals?.data?.body as LoanReferral[] | undefined;
+        if(viewLoanRefferals && viewLoanRefferals.length > 0){
+            const firstId = viewLoanRefferals[0].id;
+            const loanRefferalStatus = viewLoanRefferals[0].loanReferralStatus
+            setLoanRefferalStatus(loanRefferalStatus)
+            store.dispatch(setLoanReferralId(firstId))
+           
+        }
+        if(loanRefferalStatus !== "AUTHORIZED" || !data?.data?.identityVerified || !data?.data?.additionalDetailsCompleted){
+            refetch()
+        }
+    },[data,loanRefferals,refetch])
 
 
     const handleBannerClick = () => {
-        store.dispatch(setCurrentNavbarItem("verification"))
+        store.dispatch(setCurrentNavbarItem("Verification"))
+         store.dispatch(setCurrentNavBottomItem('Verification'))
+        if(loanRefferalStatus !== "AUTHORIZED"){
+            store.dispatch(setCurrentStep(0))
+        }
+        else 
         if(!data?.data?.identityVerified){
             store.dispatch(setCurrentStep(1))
         }else if(!data?.data?.additionalDetailsCompleted){
