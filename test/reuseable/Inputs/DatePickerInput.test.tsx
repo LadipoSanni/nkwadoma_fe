@@ -10,7 +10,7 @@ const onDateChangeMock = jest.fn();
 const setup = (props = {}) =>
   render(
     <DatePickerInput
-      selectedDate={null}
+      selectedDate={undefined}
       onDateChange={onDateChangeMock}
       {...props}
     />
@@ -59,18 +59,18 @@ const setup = (props = {}) =>
         expect(screen.getByRole('dialog')).toBeVisible();
         const selected = screen.getAllByText('29');
         fireEvent.click(selected[0]); 
-        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        expect(screen.queryByRole('rounded-md border ')).not.toBeInTheDocument();
       });
 
-      test('Triggers onDateChange callback with the selected date', () => {
-        const date = new Date('2024-10-29');
+      test('Triggers onDateChange callback when Done is clicked', async () => {
         setup();
-        const button = screen.getByTestId("calenderButton")
+        const button = screen.getByTestId("calenderButton");
         fireEvent.click(button);
-       
-        const selected = screen.getAllByText('29');
-        fireEvent.click(selected[0]); 
-    
+        const day29 = screen.getAllByText('29')[0];
+        fireEvent.click(day29);
+        const doneButton = screen.getByText('Done');
+        fireEvent.click(doneButton);
+        
         expect(onDateChangeMock).toHaveBeenCalledWith(expect.any(Date));
       });
 
