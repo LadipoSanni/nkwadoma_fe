@@ -22,7 +22,7 @@ const LoaneeDetails = () => {
             id={'loaneeProfile'}
             className={`w-full  h-full`}
         >
-          <LoaneeProfileHeader isLoading={isLoading || isFetching} institutionName={data?.data?.institutionName} cohort={data?.data?.cohortName} program={data?.data?.programName}/>
+          <LoaneeProfileHeader isLoading={isLoading || isFetching} institutionName={data?.data?.organizationName} cohort={data?.data?.cohortName} program={data?.data?.programName}/>
            <div className={`flex w-full  max-h-[77vh]  `}>
                <LoaneeLoanDetails isLoading={isLoading || isFetching} data={data?.data}/>
                <LoaneeBasicDetails isLoading={isLoading || isFetching} data={data?.data}/>
