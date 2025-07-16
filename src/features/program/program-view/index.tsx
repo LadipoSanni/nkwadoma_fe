@@ -123,7 +123,7 @@ const ProgramView = () => {
 
     useEffect(() => {
         if (searchTerm && searchResults?.data) {
-            const programs = searchResults.data as viewAllProgramProps[];
+            const programs = searchResults.data?.body as viewAllProgramProps[];
             setProgramView((prev) => {
                 const newPrograms = pageNumber === 0 || view === 'list' ? programs : [...prev, ...programs];
                 const uniquePrograms = newPrograms.reduce<viewAllProgramProps[]>((acc, program) => {
