@@ -6,7 +6,9 @@ interface LoanReferralState {
     currentStep: number;
     isLoaneeIdentityVerified: boolean;
     loaneeCurrentInfo : LoaneeCurentInformation ;
-    isFormSubmitting : boolean
+    isFormSubmitting : boolean;
+    isAdditionalDetailComplete : boolean;
+    isidentityVerified : boolean
 }
 
 const initialState: LoanReferralState = {
@@ -14,6 +16,8 @@ const initialState: LoanReferralState = {
     currentStep: 0,
     isLoaneeIdentityVerified: false,
     isFormSubmitting: false,
+    isAdditionalDetailComplete: false,
+    isidentityVerified: false,
     loaneeCurrentInfo : {
         firstName: "",
         lastName: "",
@@ -60,10 +64,21 @@ const loanReferralSlice = createSlice({
         setIsFormSubmited: (state, action: PayloadAction<boolean>) => {
             state.isFormSubmitting = action.payload
         },
+        setIsAdditionalDetailComplete: (state, action: PayloadAction<boolean>) => {
+            state.isAdditionalDetailComplete =  action.payload
+        },
+        setIsidentityVerified: (state, action: PayloadAction<boolean>) => {
+            state.isidentityVerified =  action.payload
+        }
+
     },
 });
 
-export const { setLoanReferralStatus, setCurrentStep,setLoaneeCurrentInfo, setLoaneeIdentityVerifiedStatus,setIsFormSubmited,cleartLoaneeCurrentFieldInfo } = loanReferralSlice.actions;
+export const { setLoanReferralStatus, 
+              setCurrentStep,setLoaneeCurrentInfo,
+               setLoaneeIdentityVerifiedStatus,
+               setIsFormSubmited,cleartLoaneeCurrentFieldInfo,
+               setIsAdditionalDetailComplete,setIsidentityVerified} = loanReferralSlice.actions;
 
 export type { LoanReferralState };
 

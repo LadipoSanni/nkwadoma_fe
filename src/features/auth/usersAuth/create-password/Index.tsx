@@ -135,7 +135,6 @@ const CreatePassword = () => {
             case 'LOANEE' :
                 const { loanReferralId } = getUserToken();
                 if (loanReferralId) {
-                    console.log('loanReferralId: before routing loanee', loanReferralId)
                     store.dispatch(setLoanReferralId(loanReferralId))
                 }
                 store.dispatch(setCurrentNavbarItem("overview"))
