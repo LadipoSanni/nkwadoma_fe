@@ -55,13 +55,13 @@ const LoaneeOnboarding = () => {
             dispatch(setLoaneeIdentityVerifiedStatus(true))
             store.dispatch(setCurrentNavBottomItem('Overview'))
             store.dispatch(setCurrentNavbarItem('Overview'))
-            router.push('/overview')
+            // router.push('/overview')
         }
         if (data?.statusCode === "OK" && data?.data?.id) {
             setLoanReferralId(data?.data?.id);
             dispatch(setLoanReferralStatus(data?.data?.loanReferralStatus));
-            store.dispatch(setCurrentNavBottomItem(''))
-            store.dispatch(setCurrentNavbarItem(''))
+            store.dispatch(setCurrentNavBottomItem('Verification'))
+            store.dispatch(setCurrentNavbarItem('Verification'))
         }
 
         if (data?.statusCode === "OK" && data?.data) {
