@@ -8,7 +8,7 @@ import Table from '@/reuseable/table/Table';
 import {store} from "@/redux/store";
 import {setCurrentVehicleId,setVehicleType} from "@/redux/slice/vehicle/vehicle";
 import {formatMonthInDate} from '@/utils/Format';
-import {formatAmount} from '@/utils/Format';
+import {formatAmount,formatToTwoDecimals} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
@@ -140,7 +140,7 @@ function EndownmentFund() {
                        title: 'Interest rate(%)',
                        sortable: true,
                        id: ' rate',
-                       selector: (row: TableRowData) => <div className="truncate">{row.rate}</div>
+                       selector: (row: TableRowData) => <div className="truncate">{formatToTwoDecimals(row.rate)}</div>
                    },
                    {
                        title: 'Amount collected',
