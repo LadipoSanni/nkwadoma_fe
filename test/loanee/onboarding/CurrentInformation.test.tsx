@@ -43,6 +43,8 @@ const initialState: LoanReferralState = {
   currentStep: 0,
   isLoaneeIdentityVerified: false,
   isFormSubmitting: false,
+  isAdditionalDetailComplete: false,      
+  isidentityVerified: false, 
   loaneeCurrentInfo: {
     firstName: "",
     lastName: "",
