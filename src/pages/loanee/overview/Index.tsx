@@ -53,10 +53,10 @@ const Loanee = () => {
             store.dispatch(setLoanReferralId(firstId))
            
         }
-        if(loanRefferalStatus !== "AUTHORIZED" || !data?.data?.identityVerified || !data?.data?.additionalDetailsCompleted){
+        if(loanRefferalStatus === "AUTHORIZED" || data?.data?.identityVerified || data?.data?.additionalDetailsCompleted){
             refetch()
         }
-    },[data,loanRefferals,refetch])
+    },[data,loanRefferals,refetch,loanRefferalStatus])
 
 
     const handleBannerClick = () => {
@@ -95,7 +95,8 @@ const Loanee = () => {
                 : null }
        
             <BalanceCard cardData={loaneeCardData} />
-            <TableEmptyState
+              <div className='h-6 relative bottom-3'>
+              <TableEmptyState
                 name={'Repayment'}
                 icon={
                     <Icon
@@ -106,6 +107,7 @@ const Loanee = () => {
                 }
                 condition={true}
             />
+              </div>
              </div>
         }
            

@@ -43,6 +43,8 @@ const initialState: LoanReferralState = {
   currentStep: 0,
   isLoaneeIdentityVerified: false,
   isFormSubmitting: false,
+  isAdditionalDetailComplete: false,      
+  isidentityVerified: false, 
   loaneeCurrentInfo: {
     firstName: "",
     lastName: "",
@@ -109,7 +111,7 @@ describe('CurrentInformation Component', () => {
       </Provider>
     );
 
-    expect(screen.getByText('Current email address')).toBeInTheDocument();
+    expect(screen.getByText('Alternate email address')).toBeInTheDocument();
     expect(screen.getByText('john.alt@example.com')).toBeInTheDocument();
   });
 

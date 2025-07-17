@@ -122,7 +122,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
 
                <div className={'grid gap-2'}>
                <Label htmlFor="nextOfKinFirstName"
-                 className="block text-sm font-medium text-labelBlue">Alternate next of
+                 className="block text-sm font-medium text-labelBlue">Next of
                                                   Kin&#39;s
                                                   first name</Label>
                 <Field
@@ -146,7 +146,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
                </div>
                 <div className={'grid gap-2'}>
                 <Label htmlFor="nextOfKinLastName"
-                  className="block text-sm font-medium text-labelBlue">Alternate next of
+                  className="block text-sm font-medium text-labelBlue">Next of
                   Kin&#39;s
                   last name</Label>
                   <Field
@@ -169,8 +169,8 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
                 </div>
 
                 <div className={'grid gap-2'}>
-              <Label htmlFor="email" className="block text-sm font-medium text-labelBlue">Alternate
-              next of kin&#39;s email address</Label>
+              <Label htmlFor="email" className="block text-sm font-medium text-labelBlue">
+              Next of kin&#39;s email address</Label>
                <Field
                  name={"email"}
                  className="w-full p-3 border border-[#B6BCCA] rounded-md focus:outline-none mt-2 text-[14px] h-14 border-opacity-65"
@@ -191,7 +191,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
                   setSelectedCountryCode={(code) => setNextOfCountryCod(code)}
                   phoneNumber={values.phoneNumber}
                   setPhoneNumber={(num) => setFieldValue('phoneNumber', num)}
-                label="Alternate next of kin's phone number"
+                label="Next of kin's phone number"
                 placeholder="Select code"
                  id="phoneNumber"
                  setFieldError={setFieldError}
@@ -212,7 +212,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
 
                 <div className={'grid '}>
                  <Label className="block text-sm font-medium text-labelBlue">
-                   Alternative next of kin&apos;s residential address
+                   Next of kin&apos;s residential address
                  </Label>
                  <GoogleLocationsearch
               address={values.contactAddress}
@@ -257,7 +257,7 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
                     setFieldValue('nextOfKinRelationship', selected.name);
                   }
                 }}
-                label={'Current next of Kin\'s relationship'}
+                label={'Next of Kin\'s relationship'}
                 placeholder={'Select relationship'}
               />
               {errors.nextOfKinRelationship && touched.nextOfKinRelationship && (
