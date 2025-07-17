@@ -193,12 +193,7 @@ useEffect(() => {
     }
   }
 
-  // useEffect(()=> {
-  //   const id = getItemSessionStorage("programsId")
-  //   if (id) {
-  //     setProgramId(id)
-  //   }
-  // },[])
+
 
   
   

@@ -34,6 +34,9 @@ interface viewAllProgramProps {
     name?: string;
     tuitionAmount?: number;
     numberOfLoanees?: number;
+    amountOutstanding:number | string;
+    amountReceived: number | string;
+    amountRequested: number | string;
     loanDetails?: loanDetails
 }
 
@@ -116,19 +119,19 @@ const ProgramCohortDetails= ()=> {
             title: "Amount requested",
             sortable: true,
             id: "amountRequested",
-            selector: (row: ViewAllProgramProps) => formatAmount(row.loanDetails?.totalAmountRequested)
+            selector: (row: ViewAllProgramProps) => formatAmount(row?.amountRequested)
         },
         {
             title: "Amount received",
             sortable: true,
             id: "amountReceived",
-            selector: (row: ViewAllProgramProps) => formatAmount(row.loanDetails?.totalAmountRecieved)
+            selector: (row: ViewAllProgramProps) => formatAmount(row?.amountReceived)
         },
         {
             title: "Amount outstanding",
             sortable: true,
             id: "totalAmountOutstanding",
-            selector: (row: ViewAllProgramProps) => formatAmount(row.loanDetails?.totalAmountOutstanding)
+            selector: (row: ViewAllProgramProps) => formatAmount(row?.amountOutstanding)
         },
 
     ];
