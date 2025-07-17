@@ -5,13 +5,17 @@ import Connector from "@/components/common/Connector";
 import {Button} from "@/components/ui/button";
 import DetailItem from "@/reuseable/details/detail-Item/Index";
 import {NumericFormat} from "react-number-format";
-import { useViewLoanReferralDetailsQuery, useRespondToLoanReferralMutation } from "@/service/users/Loanee_query";
+import { useViewLoanReferralDetailsQuery,
+    //  useRespondToLoanReferralMutation
+     } from "@/service/users/Loanee_query";
 import { useAppSelector } from '@/redux/store';
 
 const ReviewLoan = () => {
 
     const id = useAppSelector(state => state.selectedLoan.loanReferralId)
-     const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery(id);
+     const { data, 
+        // isLoading: loanReferralDetailsIsLoading 
+    } = useViewLoanReferralDetailsQuery(id);
     //  const [respondToLoanReferral, {isLoading}] = useRespondToLoanReferralMutation({});
 
 
