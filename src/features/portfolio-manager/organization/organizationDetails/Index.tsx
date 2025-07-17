@@ -9,23 +9,19 @@ import { DetailsTabContainer } from "@/reuseable/details/DetailsTabContainer";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import Table from "@/reuseable/table/Table";
 import { Book } from "lucide-react";
-// import InviteAdminDialog from "@/reuseable/modals/InviteAdminDialog/Index";
 import {
   useViewAllAdminsInOrganizationQuery,
   useGetOrganizationDetailsQuery,
 } from "@/service/admin/organization";
 import { useRouter } from "next/navigation";
-// import { getItemSessionStorage } from "@/utils/storage";
 import { formatAmount } from "@/utils/Format";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-// import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization"
 import { Button } from "@/components/ui/button";
 import ActivateOrganization from "@/components/portfolio-manager/organization/ActivateOrganization";
 import DeactivateOrganization from "@/components/portfolio-manager/organization/DeactivateOrganization";
 import TableModal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
-// import Link from "next/link";
 import { useSearchOrganizationAsPortfolioManagerQuery } from "@/service/admin/organization";
 import { store, useAppSelector } from "@/redux/store";
 import { setOrganizationDetail } from "@/redux/slice/organization/organization";
@@ -77,7 +73,6 @@ const OrganizationDetails = () => {
     },
     { skip: !organizationId }
   );
-  console.log('organiza:: ', organizationDetails);
 
   const param = {
     organizationId: organizationId,
@@ -178,12 +173,12 @@ const OrganizationDetails = () => {
     { detail: "Number of non-performing loans", value: "" },
     {
       detail: "Historical debt",
-      value: organizationDetails?.data.totalAmountReceived,
+      value: formatAmount(organizationDetails?.data.totalAmountReceived),
     },
     {
       detail: "Amount repaid (in percent)",
       value:
-        formatAmount(organizationDetails?.data.totalDebtRepaid) +
+        formatAmount(organizationDetails?.data.totalDebtRepaid,false) +
         " " +
         `(${organizationDetails?.data.repaymentRate})` +
         "%",
