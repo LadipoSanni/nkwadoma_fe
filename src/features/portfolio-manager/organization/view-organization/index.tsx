@@ -146,7 +146,7 @@ function Organization() {
         { title: <div>Name</div>, sortable: true, id: 'name', selector: (row: TableRowData) => row.name },
         { title: "No. of loanees", sortable: true, id: 'numberOfLoanees', selector: (row: TableRowData) => row.numberOfLoanees },
         { title: "Historical debt", sortable: true, id: 'totalHistoricalDebt', selector: (row: TableRowData) => formatAmount(row.totalHistoricalDebt) },
-        { title: "Repayment rate(%)", sortable: true, id: 'repaymentRate', selector: (row: TableRowData) => row.repaymentRate },
+        { title: "Repayment rate(%)", sortable: true, id: 'repaymentRate', selector: (row: TableRowData) => Math.ceil(Number(row.repaymentRate)) },
         { title: "Debt repaid", sortable: true, id: 'totalDebtRepaid', selector: (row: TableRowData) => formatAmount(row.totalDebtRepaid) },
         { title: "Current debt", sortable: true, id: 'totalCurrentDebt', selector: (row: TableRowData) => formatAmount(row.totalCurrentDebt) },
     ];

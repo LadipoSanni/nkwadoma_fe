@@ -213,7 +213,7 @@ useEffect(() => {
     { title: <div className='lg:w-28'>Tuition</div>, sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => (
       <div className="truncate">{formatAmount(row.tuitionAmount)}</div>
     )},
-    { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => (
+    { title: 'Amount received', sortable: true, id: 'amountReceived', selector: (row:TableRowData) => (
       <div className="truncate">{formatAmount(row.amountRecieved)}</div>
     )},
     { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => (
