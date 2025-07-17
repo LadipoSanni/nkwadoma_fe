@@ -6,7 +6,7 @@ import { MdOutlineInventory2, MdSearch } from "react-icons/md";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSearchLoanProductQuery, useViewAllLoanProductQuery } from "@/service/admin/loan_product";
-import { formatAmount } from "@/utils/Format";
+import { formatAmount,formatToTwoDecimals } from "@/utils/Format";
 import TableModal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
@@ -101,7 +101,7 @@ const LoanProductPage = () => {
             title: 'Cost of vehicle (%)',
             sortable: true,
             id: 'costOfFund',
-            selector: (row: TableRowData) => row.costOfFund
+            selector: (row: TableRowData) => formatToTwoDecimals(row.costOfFund)
         },
         {
             title: 'Amount disbursed',

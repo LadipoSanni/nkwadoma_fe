@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React,{useEffect} from "react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/index";
 import {useRouter} from "next/navigation";
@@ -11,8 +11,8 @@ import {useAppSelector} from "@/redux/store";
 import { useViewAllLoanOfferQuery } from "@/service/admin/loan/loan-offer-api";
 import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Icon} from "@iconify/react";
-
-
+import { resetNotification } from '@/redux/slice/notification/notification';
+import { store } from "@/redux/store";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -45,6 +45,10 @@ const Index = () => {
     // const {data: viewAllLoanOffersInAnOrganizationData, isLoading:isLoadingOrganizationLoanOffer } = useViewLoanInAnOrganizationQuery(requestBody, {skip:!clickedOrganization})
     // const sortedViewAllLoanOffer = (data?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
     // const sortedViewAllLoanOfferInAnOrg = (viewAllLoanOffersInAnOrganizationData?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
+
+    useEffect(()=> {
+       store.dispatch(resetNotification()) 
+    })
 
 
     const loanOfferHeader = [
