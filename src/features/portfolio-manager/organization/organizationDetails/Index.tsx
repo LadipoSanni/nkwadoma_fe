@@ -178,7 +178,7 @@ const OrganizationDetails = () => {
     { detail: "Number of non-performing loans", value: "" },
     {
       detail: "Historical debt",
-      value: organizationDetails?.data.totalHistoricalDebt,
+      value: organizationDetails?.data.totalAmountReceived,
     },
     {
       detail: "Amount repaid (in percent)",
