@@ -57,6 +57,9 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
       store.dispatch(setLoanOfferId(notification?.data?.contentId))
       store.dispatch(setCurrentNavbarItem("Loan offer"))
       router.push("/accept-loan-offer");
+  } else if(notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
+     store.dispatch(setCurrentNavbarItem("Loan"))
+     router.push(`/loan-offer-details?id=${notification?.data?.contentId}`);
   }
   }
 
@@ -69,7 +72,9 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     return "organization"
  }else if (notification?.data?.notificationFlag === "LOAN_OFFER"){
    return "loan offer"
- }
+ }else if (notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
+  return "loan offer"
+}
   
    }
 
@@ -120,11 +125,15 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                          </p>
                         </div>
                         <div className='mt-4 mb-4'>
-                         {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"? (<p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>): ""}
+                         {/* {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"? */}
+                          {/* ( */}
+                            <p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>
+                            {/* ) */}
+                          {/* : ""} */}
                          <p>If you have any questions or need further assistance, our customer service team is here to help</p>
                         </div>
                          <div>
-                          {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"?
+                          {/* {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"? */}
                           <Button 
                            type='button'
                            variant={'secondary'}
@@ -135,7 +144,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                              View <span className='lowercase ml-1'> {buttonName()}</span>
                              
                            </Button>
-                           : notification?.data?.notificationFlag === null && "" }
+                           {/* : notification?.data?.notificationFlag === null && "" } */}
                          </div>
                         </div>
     </div>
