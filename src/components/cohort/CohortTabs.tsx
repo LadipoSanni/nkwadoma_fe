@@ -214,7 +214,7 @@ useEffect(() => {
       <div className="truncate">{formatAmount(row.tuitionAmount)}</div>
     )},
     { title: 'Amount received', sortable: true, id: 'amountReceived', selector: (row:TableRowData) => (
-      <div className="truncate">{formatAmount(row.amountRecieved)}</div>
+      <div className="truncate">{formatAmount(row.amountReceived)}</div>
     )},
     { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => (
       <div className="truncate">{formatAmount(row.amountRequested)}</div>
