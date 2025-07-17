@@ -111,56 +111,56 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                     <div>
                     <div className={'bg-grey105 p-5  grid gap-9 rounded-md'}>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3 '}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current email
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate email
                                 address</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.alternateEmail}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current phone
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate phone
                                 number</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.alternatePhoneNumber}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current residential
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Alternate residential
                                 address</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.alternateContactAddress}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of
                                 Kin&#39;s
                                 first
                                 name</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.firstName}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of
                                 Kin&#39;s
                                 last
                                 name</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.lastName}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of
                                 Kin&#39;s
                                 email
                                 address</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.email}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of
                                 Kin&#39;s
                                 phone
                                 number</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.phoneNumber}</p>
                         </div>
                          <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of
                                 Kin&#39;s
                                 residential address</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.contactAddress}</p>
                         </div>
                         <div className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-3'}>
-                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Current Next of
+                            <p className={'text-black300 text-[14px] leading-[150%] font-normal'}>Next of
                                 Kin&#39;s
                                 relationship</p>
                             <p className={'text-black500 text-[14px] leading-[150%] font-normal'}>{currentLoaneeInfo.nextOfKinRelationship}</p>
