@@ -109,7 +109,7 @@ describe('CurrentInformation Component', () => {
       </Provider>
     );
 
-    expect(screen.getByText('Current email address')).toBeInTheDocument();
+    expect(screen.getByText('Alternate email address')).toBeInTheDocument();
     expect(screen.getByText('john.alt@example.com')).toBeInTheDocument();
   });
 
