@@ -3,10 +3,10 @@ name: 🚀 Deploy Nkwadoma Frontend to Local Server (Self-Hosted)
 on:
   push:
     branches:
-      - banjoSolomon-patch-1
+      - Ikechukwu-Patrick-patch-1
   pull_request:
     branches:
-      - dev
+      - Ikechukwu-Patrick-patch-1
 
 jobs:
   deploy:
