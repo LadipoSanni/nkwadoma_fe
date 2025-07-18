@@ -4,6 +4,7 @@ import SelectedLoanHeader from "@/components/selected-loan/SelectedLoanHeader";
 import styles from "./SelectedLoan.module.css"
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import {store} from "@/redux/store";
+import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 
 interface props  {
     children: React.ReactNode;
@@ -15,6 +16,7 @@ const SelectedLoan = ({children}: props) => {
     useEffect(() => {
         store.dispatch(resetAll())
         store.dispatch(clearSaveCreateInvestmentField())
+        store.dispatch(setCurrentTab('Loan requests'))
     },[])
 
     return (

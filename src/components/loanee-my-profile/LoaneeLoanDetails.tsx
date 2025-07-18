@@ -33,23 +33,23 @@ const LoaneeLoanDetails = ({data, isLoading}:props ) => {
                      <TabsContent value={'loanInfo'} className={` grid gap-3 `}>
                          <Details isLoading={isLoading} id={'loanAmount'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.loanAmountApproved} valueType={'currency'} />
                          <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>
-                             <Details isLoading={isLoading} id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={0} valueType={'currency'} />
-                             <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={0} valueType={'currency'}  />
+                             <Details isLoading={isLoading} id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.loanAmountOutstanding} valueType={'currency'} />
+                             <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.loanAmountRepaid} valueType={'currency'}  />
                          </div>
                          <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
-                             <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={0} valueType={'percentage'} />
-                             <Details isLoading={isLoading}  id={'interestIncured'}    maxWidth={'100%'} name={'Interest incurred'} value={0} valueType={'percentage'}  />
+                             <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate} valueType={'percentage'} />
+                             <Details isLoading={isLoading}  id={'interestIncured'}    maxWidth={'100%'} name={'Interest incurred'} value={data?.interestIncurred} valueType={'percentage'}  />
                          </div>
                          <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
-                             <Details isLoading={isLoading}  id={'deptPercentage'}    maxWidth={'100%'} name={'Dept percentage'} value={0} valueType={'percentage'} />
-                             <Details isLoading={isLoading}  id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={0} valueType={'percentage'}  />
+                             <Details isLoading={isLoading}  id={'deptPercentage'}    maxWidth={'100%'} name={'Dept percentage'} value={data?.debtPercentage} valueType={'percentage'} />
+                             <Details isLoading={isLoading}  id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={data?.repaymentRate} valueType={'percentage'}  />
                          </div>
                          <div className={` pr-6 hidden  pt-3 md:hidden lg:hidden  gap-4`} >
                              <Document/>
                          </div>
                      </TabsContent>
                     <TabsContent value={'repayment'}>
-                        <LoaneeRepayment loaneeId={'loaneeId'}/>
+                        <LoaneeRepayment loaneeId={data?.id}/>
                     </TabsContent>
                 </div>
              </Tabs>

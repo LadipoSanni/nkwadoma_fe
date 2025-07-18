@@ -48,6 +48,7 @@ const RefreshUserToken = ({children}: Props) => {
 
         const refreshTime = Math.max(expirationTimeInMilliseconds - now - 10000, 0);
 
+
         const timeoutId = setTimeout(() => {
             (async () => {
                 if (!isMounted) return;
