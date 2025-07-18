@@ -68,7 +68,7 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
 
     const handleCapture = async (imageFile: File) => {
         loaneeIdentityData.imageUrl = await uploadImageToCloudinary(imageFile,"loanee_verification");
-        loaneeIdentityData.loanReferralId = invitedLoaneeFromPmId ? invitedLoaneeFromPmId : loanReferralId;
+        loaneeIdentityData.loanReferralId = invitedLoaneeFromPmId ? '' : loanReferralId;
         try {
             const formData: FormData = loaneeIdentityData;
             const data = await verifyIdentity(formData).unwrap();
