@@ -90,9 +90,7 @@ const CreatePassword = () => {
                 };
             }
             if (rawToken?.includes(('?cohortLoaneeId='))){
-                console.log('it is therrrrr')
                 const [token, cohortLoaneeId] = rawToken.split("?cohortLoaneeId=");
-                console.log('cohortLoaneeId', cohortLoaneeId);
                 return {
                     token: token,
                     investmentVehicleId: null,
@@ -150,7 +148,6 @@ const CreatePassword = () => {
                     store.dispatch(setLoanReferralId(loanReferralId))
                 }
                 if (cohortLoaneeId){
-                    console.log('setting to store before ')
                     store.dispatch(setCohortLoaneeId(cohortLoaneeId));
                 }
                 store.dispatch(setCurrentNavbarItem("Verification"))

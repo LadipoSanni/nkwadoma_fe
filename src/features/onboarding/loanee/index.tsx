@@ -138,7 +138,7 @@ const LoaneeOnboarding = () => {
     return (
         <div id="loanApplicationDetailsContainer" className={`md:overflow-visible overflow-y-auto h-[calc(100vh-8rem)] md:h-auto grid pr-1.5 md:gap-[58px] gap-6 md:px-10 ${inter.className}`}>
             <header id="loanReferralAcceptanceHeader" className={'flex items-start border-b-lightBlue250 border-b border-solid w-full py-5'}>
-                <h1 id="loanReferralAcceptanceTitle" className={`${cabinetGrotesk.className} md:text-[28px] text-[16px] leading-[120%]`}>Loan referral acceptance process</h1>
+                <h1 id="loanReferralAcceptanceTitle" className={`${cabinetGrotesk.className} md:text-[28px] text-[16px] leading-[120%]`}>{invitedLoaneeFromPmId ? `Loan review details` :`Loan referral acceptance process` }</h1>
             </header>
             <div id="loanApplicationStepsContainer" className={'md:flex md:justify-between grid gap-5 md:gap-0'}>
                 <aside id="loanApplicationStepsAside" className={'inline-flex flex-col items-start gap-1'}>
@@ -153,7 +153,7 @@ const LoaneeOnboarding = () => {
                 </aside>
                 <section id="loanApplicationDetailsSection" className={'grid md:p-5 py-5 px-3 md:gap-[22px] gap-5 md:w-[43vw] w-full rounded-md border border-lightBlue250'}>
                     <h2 id="loanApplicationDetailsTitle" className={`${cabinetGrotesk.className} text-labelBlue md:text-[20px] text-[16px] leading-[120%] font-bold`}>
-                        {currentStep === 0 && `${invitedLoaneeFromPmId ? `Loan review details` :`Loan application details` } `}
+                        {currentStep === 0 && `Loan application details`}
                         {currentStep === 1 && 'Verify your identity'}
                         {currentStep === 2 && 'Additional information'}
                         {currentStep === 3 && 'Confirm loan referral acceptance'}
