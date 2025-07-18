@@ -28,7 +28,6 @@ const LoaneeLoanDetails = ({data, isLoading}:props ) => {
                          <TabsTrigger id={'repayment'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="repayment">Repayment</TabsTrigger>
                     </TabsList>
                  </div>
-                {/*<div id={'loanInfo'} className={`w-fit text-[18px] py-4 h-fit   text-[#212221] ${inter500.className} `}>Loan information</div>*/}
                 <div className={`  md:max-h-[60vh]  grid gap-4 w-full  ${styles.container}`}>
                      <TabsContent value={'loanInfo'} className={` grid gap-3 `}>
                          <Details isLoading={isLoading} id={'loanAmount'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.loanAmountApproved ? data?.loanAmountApproved : 0} valueType={'currency'} />
