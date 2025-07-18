@@ -67,6 +67,9 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     store.dispatch(setLoanReferralId(notification?.data?.contentId))
        router.push(`/onboarding`);
        store.dispatch(setCurrentStep(0))
+  } else if(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE"){
+    router.push(`/organizations/loanees/uploaded`);
+   
   }
   }
 
@@ -83,7 +86,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   return "loan offer"
 } else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
   return "loan Referral"
-}
+} 
     
    }
 
@@ -134,15 +137,15 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                          </p>
                         </div>
                         <div className='mt-4 mb-4'>
-                         {/* {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"? */}
-                          {/* ( */}
+                         {notification?.data?.notificationFlag !== "REPAYMENT_UPLOAD_FAILURE"?
+                          ( 
                             <p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>
-                            {/* ) */}
-                          {/* : ""} */}
+                            ) 
+                          : ""} 
                          <p>If you have any questions or need further assistance, our customer service team is here to help</p>
                         </div>
                          <div>
-                          {/* {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"? */}
+                           {notification?.data?.notificationFlag !== "REPAYMENT_UPLOAD_FAILURE"?
                           <Button 
                            type='button'
                            variant={'secondary'}
@@ -153,7 +156,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                              View <span className='lowercase ml-1'> {buttonName()}</span>
                              
                            </Button>
-                           {/* : notification?.data?.notificationFlag === null && "" } */}
+                           :  "" } 
                          </div>
                         </div>
     </div>
