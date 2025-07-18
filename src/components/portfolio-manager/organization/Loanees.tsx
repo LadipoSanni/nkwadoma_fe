@@ -208,9 +208,13 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
       }
 
       const handleInvite = async () => {
-         const loaneeId = Array.from(selectedRows)
+        //  const loaneeId = Array.from(selectedRows)
+           const formData = {
+            loaneeIds : Array.from(selectedRows),
+            cohortId : cohortId
+           }
          try {
-          const inviteLoanees = await inviteLoanee(loaneeId).unwrap()
+          const inviteLoanees = await inviteLoanee(formData).unwrap()
           if(inviteLoanees){
             setSelectedRows(new Set());
             setEnableButton(false)

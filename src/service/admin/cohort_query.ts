@@ -193,10 +193,13 @@ export const cohortApi = createApi({
               invalidatesTags: ['loanee'],
           }),
           inviteLoanee: builder.mutation({
-            query: (loaneeIds: string[]) => ({
-                url: '/loanee/invite', 
+            query: (data: {
+                loaneeIds: string[];
+                cohortId?: string;
+            }) => ({
+                url: `/loanee/invite/${data.cohortId}`, 
                 method: 'POST',              
-                body: loaneeIds,  
+                body: data.loaneeIds, 
               }), 
               invalidatesTags: ['loanee'],
           }),
