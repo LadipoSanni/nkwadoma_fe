@@ -2,7 +2,7 @@
 import React from 'react';
 import {store, useAppSelector} from "@/redux/store";
 import styles from "./SelectedLoan.module.css"
-import {setCurrentTab,setCurrentTabStatus} from "@/redux/slice/loan/selected-loan";
+import {setCurrentTab,setCurrentTabStatus,setcurrentTabRoute} from "@/redux/slice/loan/selected-loan";
 import {useRouter} from "next/navigation"
 import {inter, inter500} from "@/app/fonts";
 
@@ -30,6 +30,7 @@ const  SelectLoanTab = () => {
         if (newValue !== 0 && newValue !== 4) {
             store.dispatch(setCurrentTab(tabContent[newValue].name))
             store.dispatch(setCurrentTabStatus(tabContent[newValue].status))
+            store.dispatch(setcurrentTabRoute(tabContent[newValue].route))
             router.push(`/loan/${tabContent[newValue].route}`)
         }
 
