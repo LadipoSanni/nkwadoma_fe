@@ -9,7 +9,7 @@ import { DetailsTabContainer } from "@/reuseable/details/DetailsTabContainer";
 import SearchInput from "@/reuseable/Input/SearchInput";
 // import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { Book } from "lucide-react";
-import { formatAmount } from "@/utils/Format";
+import { formatAmount,formatToTwoDecimals } from "@/utils/Format";
 import {  useGetDetailsOfOrganizationQuery } from '@/service/admin/organization';
 import TableModal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
@@ -123,31 +123,28 @@ const ViewOrganizationDetail = () => {
       label: "Number of loanees",
       value: organizationDetail?.data.numberOfLoanees,
     },
-    { label: "Still in training", value: "0" },
+    { label: "Still in training", value: organizationDetail?.data?.stillInTraining },
   ];
 
   const loanDetail = [
-    { detail: "Number of loan requests", value: "0" },
-    { detail: "Pending loan offers", value: "0" },
+    { detail: "Number of loan requests", value:organizationDetail?.data?.loanRequestCount },
+    { detail: "Pending loan offers", value:organizationDetail?.data?.pendingLoanOfferCount },
     { detail: "Number of performing loans", value: "0" },
     { detail: "Number of non-performing loans", value: "0" },
     {
       detail: "Historical debt",
-      value: organizationDetail?.data.totalHistoricalDebt,
+      value: formatAmount(organizationDetail?.data.totalAmountReceived),
     },
     {
       detail: "Amount repaid (in percent)",
       value:
         formatAmount(organizationDetail?.data.totalDebtRepaid) +
-        " " +
-        `(${organizationDetail?.data.repaymentRate})` +
-        "%",
+        " " + (`(${formatToTwoDecimals(organizationDetail?.data.repaymentRate)+ "%"})`) 
+
+        ,
     },
-    { detail: "Amount outstanding", value: formatAmount("0") },
-    {
-      detail: "Moratorium (in percent)",
-      value: formatAmount("0") + " " + "(0)" + "%",
-    },
+    { detail: "Amount outstanding", value: formatAmount(organizationDetail?.data?.totalCurrentDebt) },
+   
   ];
 
   // const adminsHeader = [

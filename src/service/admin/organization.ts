@@ -78,7 +78,7 @@ export const organizationApi = createApi({
         }),
 
         getOrganizationDetails: builder.query({
-            query:(param: {organizationId: string}) => ({
+            query:(param: {organizationId?: string}) => ({
                 url: `/organization/details`,
                 method: "GET",
                 params:param
