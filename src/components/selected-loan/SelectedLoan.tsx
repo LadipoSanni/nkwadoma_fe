@@ -16,7 +16,7 @@ const SelectedLoan = ({children}: props) => {
     useEffect(() => {
         store.dispatch(resetAll())
         store.dispatch(clearSaveCreateInvestmentField())
-        store.dispatch(setCurrentTab('Loan requests'))
+        // store.dispatch(setCurrentTab('Loan requests'))
     },[])
 
     return (
