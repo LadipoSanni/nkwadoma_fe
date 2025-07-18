@@ -122,7 +122,7 @@ export  function  getFirstLetterOfWord (word : undefined | string| null) {
                 }
             })
         })
-        return ans;
+        return ans?.charAt(0) + ans?.charAt(1);
     }
 }
 

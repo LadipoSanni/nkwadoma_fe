@@ -2,7 +2,6 @@
 import React from 'react';
 import {useViewAllLoanDisbursalQuery, useViewLoansTotalCalculationQuery} from "@/service/admin/loan/Loan-disbursal-api";
 import { capitalizeFirstLetters } from '@/utils/GlobalMethods';
-// import {Circle} from "lucide-react";
 import {inter, inter600,inter700, inter500} from '@/app/fonts';
 import {LoanType} from "@/types/loan/loan-request.type";
 import {useRouter} from "next/navigation";
@@ -51,11 +50,11 @@ const Myloans = () => {
                               </div>
                               <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`}>
                                   <p className={` ${inter.className} ${isLoading ? `hidden` : ``} text-[#6A6B6A] text-[14px] `}>Amount outstanding</p>
-                                  <div className={`${inter500.className} ${isLoading ? `hidden` : `flex `} text-black text-[14px]`}>{formatAmount(Number(loan?.amountOutstanding),false)}</div>
+                                  <div className={`${inter500.className} ${isLoading ? `hidden` : `flex `} text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountOutstanding),false)}</div>
                               </div>
                               <div className={`${isLoading ? `h-6 rounded bg-gray-200 animated_pulse w-[90%]  bg-[#F9F9F9]` : ``}`} >
                                   <p className={` ${inter.className} ${isLoading ? `hidden` : ``}  text-[#6A6B6A] text-[14px] `}>Amount repaid</p>
-                                  <p className={`${inter500.className} ${isLoading ? `hidden` : `flex`}  text-black text-[14px]`}>{formatAmount(Number(loan?.amountRepaid),false)}</p>
+                                  <p className={`${inter500.className} ${isLoading ? `hidden` : `flex`}  text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountRepaid),false)}</p>
                               </div>
                       </div>
                       <div className={`flex w-full pt-3 pb-1 justify-end`}>

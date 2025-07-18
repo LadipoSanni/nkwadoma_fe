@@ -21,7 +21,6 @@ const RefreshUserToken = ({children}: Props) => {
     const  storedAccessToken  = getItemSessionStorage('access_token');
 
     useEffect(() => {
-        let isMounted = true;
         if (!storedAccessToken) return;
 
         let decoded: { exp: number };
@@ -48,9 +47,9 @@ const RefreshUserToken = ({children}: Props) => {
 
         const refreshTime = Math.max(expirationTimeInMilliseconds - now - 10000, 0);
 
+
         const timeoutId = setTimeout(() => {
             (async () => {
-                if (!isMounted) return;
                 try {
                     const response = await refreshUserToken({ refreshToken });
                     const accessToken = response?.data?.data?.access_token;
@@ -58,7 +57,6 @@ const RefreshUserToken = ({children}: Props) => {
                     sessionStorage.setItem("access_token", accessToken);
                     sessionStorage.setItem("refresh_token", newRefreshToken);
                 } catch (error) {
-                    if (!isMounted) return;
                     console.error("Token refresh failed:", error);
                     logout({});
                     toast({
@@ -74,7 +72,6 @@ const RefreshUserToken = ({children}: Props) => {
         }, refreshTime);
 
         return () => {
-            isMounted = false;
             clearTimeout(timeoutId);
         };
     }, [storedAccessToken, refreshUserToken, refreshToken]);
