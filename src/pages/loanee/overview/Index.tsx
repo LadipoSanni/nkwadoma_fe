@@ -37,7 +37,7 @@ interface LoanReferral {
 
 const Loanee = () => {
     const router = useRouter()
-    const {data, isLoading,refetch} = useCheckLoaneeStatusQuery({})
+    const {data, isLoading,refetch,isFetching} = useCheckLoaneeStatusQuery({})
     const {data:loanRefferals} = useViewAllLoanRefferalsQuery({})
     const [loanRefferalStatus,setLoanRefferalStatus] = useState("")
      
@@ -52,9 +52,6 @@ const Loanee = () => {
             setLoanRefferalStatus(loanRefferalStatus)
             store.dispatch(setLoanReferralId(firstId))
            
-        }
-        if(loanRefferalStatus === "AUTHORIZED" || data?.data?.identityVerified || data?.data?.additionalDetailsCompleted){
-            refetch()
         }
     },[data,loanRefferals,refetch,loanRefferalStatus])
 
@@ -79,7 +76,7 @@ const Loanee = () => {
               className={` ${inter.className} h-full w-full pt-8 bg-learnSpaceWhite rounded-[8px] md:px-6`}>
                
                    
-            { isLoading? <SkeletonForGrid/> :  <div> {!data?.data?.identityVerified || !data?.data?.additionalDetailsCompleted ?
+            { isLoading || isFetching? <SkeletonForGrid/> :  <div> {!data?.data?.identityVerified || !data?.data?.additionalDetailsCompleted ?
                <div className='pr-2 lg:pr-0'>
                   <button
                 onClick={() => {

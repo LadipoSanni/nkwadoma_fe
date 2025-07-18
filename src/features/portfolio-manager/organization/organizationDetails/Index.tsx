@@ -69,7 +69,7 @@ const OrganizationDetails = () => {
 
   const { data: organizationDetails, isLoading } = useGetOrganizationDetailsQuery(
     {
-      id: organizationId,
+      organizationId: organizationId
     },
     { skip: !organizationId }
   );

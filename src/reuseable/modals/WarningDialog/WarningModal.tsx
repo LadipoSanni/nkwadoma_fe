@@ -5,7 +5,9 @@ import { cabinetGrotesk, inter } from '@/app/fonts';
 import { setCurrentStep, setLoanReferralStatus } from '@/service/users/loanRerralSlice';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import Image from 'next/image';
-import { useAppSelector } from '@/redux/store';
+import { useAppSelector} from '@/redux/store';
+import { useQueryClient } from '@tanstack/react-query';
+
 
 interface VerificationSuccessDialogProps {
     open: boolean;
@@ -27,14 +29,18 @@ const steps = [
 
 const WarningModal = ({ open, onClose, onContinue, title, message, buttonText, routeToOverview, stopCamera }: VerificationSuccessDialogProps) => {
     const dispatch = useDispatch();
+    const queryClient = useQueryClient();
     const router = useRouter();
      const isAdditionalDetailComplete = useAppSelector(store => store?.loanReferral?.isAdditionalDetailComplete)
 
-    const handleContinue = () => {
+    const handleContinue= async () => {
         if (stopCamera) {
             stopCamera();
         }
         if(isAdditionalDetailComplete){
+            await queryClient.invalidateQueries({ 
+                queryKey: ['checkLoaneeStatus'] 
+            });
             router.push('/overview');
         }else{
          dispatch(setCurrentStep(steps.length - 1));

@@ -6,6 +6,7 @@ import { setCurrentStep, setLoanReferralStatus } from '@/service/users/loanRerra
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useQueryClient } from '@tanstack/react-query';
 
 const steps = [
     'Loan application details',
@@ -29,13 +30,17 @@ interface VerificationSuccessDialogProps {
 const SuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ showWarningIcon,open, onClose, onContinue, title, message, buttonText, routeToOverview, stopCamera }) => {
     const dispatch = useDispatch();
     const router = useRouter();
+     const queryClient = useQueryClient();
 
-    const handleContinue = () => {
+    const handleContinue = async() => {
         if (stopCamera) {
             stopCamera();
         }
         dispatch(setCurrentStep(steps.length - 1));
         dispatch(setLoanReferralStatus('AUTHORIZED'));
+        await queryClient.invalidateQueries({ 
+            queryKey: ['checkLoaneeStatus'] 
+        });
         onContinue();
         if (routeToOverview) {
             router.push('/overview');
