@@ -12,6 +12,7 @@ import CryptoJS from "crypto-js";
 import { uploadImageToCloudinary } from "@/utils/UploadToCloudinary";
 import { useVerifyIdentityMutation } from "@/service/users/Loanee_query";
 import WarningModal from "@/reuseable/modals/WarningDialog/WarningModal";
+import {useAppSelector} from "@/redux/store";
 // import { clearCameraStream } from '@/redux/slice/camera/camera-slice';
 // import { useDispatch, useSelector } from 'react-redux';
 //  import { RootState } from '@/redux/store';
@@ -62,10 +63,12 @@ const IdentityVerificationModal: React.FC<IdentityVerificationModalProps> = ({
     const [verifyIdentity] = useVerifyIdentityMutation();
     const videoRef = useRef<HTMLVideoElement>(null);
     // const dispatch = useDispatch();
+    const invitedLoaneeFromPmId = useAppSelector(state => state.selectedLoan.cohortLoaneeId)
+
 
     const handleCapture = async (imageFile: File) => {
         loaneeIdentityData.imageUrl = await uploadImageToCloudinary(imageFile,"loanee_verification");
-        loaneeIdentityData.loanReferralId = loanReferralId;
+        loaneeIdentityData.loanReferralId = invitedLoaneeFromPmId ? invitedLoaneeFromPmId : loanReferralId;
         try {
             const formData: FormData = loaneeIdentityData;
             const data = await verifyIdentity(formData).unwrap();
