@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - banjoSolomon-patch-1
+  pull_request:
+    branches:
+      - dev
 
 jobs:
   deploy:
