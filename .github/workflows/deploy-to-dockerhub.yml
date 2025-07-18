@@ -21,9 +21,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Create .env file
+        run: |
+          echo "NEXT_PUBLIC_UPLOAD_PRESET=${{ secrets.NEXT_PUBLIC_UPLOAD_PRESET }}" > .env
+          echo "NEXT_PUBLIC_CLOUD_NAME=${{ secrets.NEXT_PUBLIC_CLOUD_NAME }}" >> .env
+          echo "APP_DEV_IV_KEY=${{ vars.APP_DEV_IV_KEY }}" >> .env
+          echo "APP_DEV_IV_ENCRYPTION_SECRET_KEY=${{ vars.APP_DEV_IV_ENCRYPTION_SECRET_KEY }}" >> .env
+      
       - name: Build Next.js app
         run: npm run build
 
+      
       - name: Run tests
         run: npm run test:ci
 
