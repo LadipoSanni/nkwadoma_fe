@@ -1,24 +1,24 @@
 'use client'
 import React from 'react';
-import {cabinetGrotesk, inter, cabinetGroteskMediumBold600} from "@/app/fonts";
-import Connector from "@/components/common/Connector";
-import {Button} from "@/components/ui/button";
 import DetailItem from "@/reuseable/details/detail-Item/Index";
 import {NumericFormat} from "react-number-format";
-import { useViewLoanReferralDetailsQuery,
+import {
+    useViewLoanDetailsOnOnboardingQuery
     //  useRespondToLoanReferralMutation
      } from "@/service/users/Loanee_query";
 import { useAppSelector } from '@/redux/store';
 
 const ReviewLoan = () => {
+    const invitedLoaneeFromPmId = useAppSelector(state => state.selectedLoan.cohortLoaneeId)
 
-    const id = useAppSelector(state => state.selectedLoan.loanReferralId)
+    // const id = useAppSelector(state => state.selectedLoan.loanReferralId)
      const { data, 
         // isLoading: loanReferralDetailsIsLoading 
-    } = useViewLoanReferralDetailsQuery(id);
+    } = useViewLoanDetailsOnOnboardingQuery(invitedLoaneeFromPmId);
     //  const [respondToLoanReferral, {isLoading}] = useRespondToLoanReferralMutation({});
 
 
+    console.log('data: ', data)
 
     return (
         <div className={` w-full h-full   grid gap-6  `}>

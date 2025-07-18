@@ -82,6 +82,12 @@ export const loaneeApi = createApi({
                 url: "/loanee/loan-referrals",
                  method: 'GET'
             })
+        }),
+        viewLoanDetailsOnOnboarding : builder.query ({
+            query: (cohortLoaneeId) => ({
+                url: `loanee/loan/detail?cohortLoaneeId=${cohortLoaneeId}`,
+                method: 'GET'
+            })
         })
     })
 })
@@ -90,6 +96,7 @@ export const loaneeApi = createApi({
 
 export const {
     // useIsIdentityVerifiedQuery,
+    useViewLoanDetailsOnOnboardingQuery,
     useCheckLoaneeStatusQuery,
      useSaveNextOfKinDetailsMutation,
     useViewLoanReferralDetailsQuery,
