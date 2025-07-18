@@ -43,12 +43,15 @@ const LoaneeOnboarding = () => {
     const { currentStep } = useSelector((state: RootState) => state.loanReferral);
     const [showModal, setShowModal] = useState(false);
     const id = useAppSelector(state => state.selectedLoan.loanReferralId)
+    const invitedLoaneeFromPmId = useAppSelector(state => state.selectedLoan.cohortLoaneeId)
+
     const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery(id,{skip: !id});
     const [respondToLoanReferral, {isLoading}] = useRespondToLoanReferralMutation({});
     const [loanReferralId, setLoanReferralId] = useState("");
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
     const { toast } = useToast();
 
+    console.log('this is a invited loanee')
     
 
     useEffect(() => {
@@ -150,7 +153,7 @@ const LoaneeOnboarding = () => {
                 </aside>
                 <section id="loanApplicationDetailsSection" className={'grid md:p-5 py-5 px-3 md:gap-[22px] gap-5 md:w-[43vw] w-full rounded-md border border-lightBlue250'}>
                     <h2 id="loanApplicationDetailsTitle" className={`${cabinetGrotesk.className} text-labelBlue md:text-[20px] text-[16px] leading-[120%] font-bold`}>
-                        {currentStep === 0 && 'Loan application details'}
+                        {currentStep === 0 && `${invitedLoaneeFromPmId ? `Loan review details` :`Loan application details` } `}
                         {currentStep === 1 && 'Verify your identity'}
                         {currentStep === 2 && 'Additional information'}
                         {currentStep === 3 && 'Confirm loan referral acceptance'}

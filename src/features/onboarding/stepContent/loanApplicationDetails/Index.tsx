@@ -5,6 +5,8 @@ import { LoaneeLoanDetail } from "@/features/onboarding/stepContent/Index";
 import DetailItem from "@/reuseable/details/detail-Item/Index";
 import { format, isValid } from 'date-fns';
 import { NumericFormat } from 'react-number-format';
+import {useAppSelector} from "@/redux/store";
+import ReviewLoan from "@/features/loanee/review-loan";
 
 interface LoanApplicationDetailsProps {
     loaneeLoanDetail: LoaneeLoanDetail | undefined;
@@ -12,11 +14,20 @@ interface LoanApplicationDetailsProps {
 
 const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeLoanDetail }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const invitedLoaneeFromPmId = useAppSelector(state => state.selectedLoan.cohortLoaneeId)
 
+    if (invitedLoaneeFromPmId) {
+        return (
+            <ReviewLoan/>
+        )
+    }
 
     if (!loaneeLoanDetail) {
         return <div>Loading...</div>;
     }
+
+
+
 
     const { initialDeposit, cohortStartDate, tuitionAmount, loanAmountRequested, referredBy, loaneeLoanBreakdowns = [] } = loaneeLoanDetail;
 

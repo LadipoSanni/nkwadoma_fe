@@ -15,7 +15,7 @@ import {setCurrentNavbarItem,setCurrentNavBottomItem} from "@/redux/slice/layout
 import {clearData} from "@/utils/storage";
 import { setMarketInvestmentVehicleId } from '@/redux/slice/investors/MarketPlaceSlice';
 import {encryptText} from "@/utils/encrypt";
-import {setLoanReferralId} from "@/redux/slice/loan/selected-loan";
+import {setLoanReferralId,setCohortLoaneeId } from "@/redux/slice/loan/selected-loan";
 
 
 
@@ -89,11 +89,23 @@ const CreatePassword = () => {
                     loanReferralId: loanReferralId
                 };
             }
+            if (rawToken?.includes(('?cohortLoaneeId='))){
+                console.log('it is therrrrr')
+                const [token, cohortLoaneeId] = rawToken.split("?cohortLoaneeId=");
+                console.log('cohortLoaneeId', cohortLoaneeId);
+                return {
+                    token: token,
+                    investmentVehicleId: null,
+                    loanReferralId: loanReferralId,
+                    cohortLoaneeId:cohortLoaneeId,
+                };
+            }
 
             return {
                 token: rawToken,
                 investmentVehicleId: null,
-                loanReferralId: loanReferralId
+                loanReferralId: loanReferralId,
+                cohortLoaneeId: null,
             };
         }
 
@@ -133,9 +145,13 @@ const CreatePassword = () => {
     const routeUserToTheirDashboard = async (userRole?: string) => {
         switch (userRole) {
             case 'LOANEE' :
-                const { loanReferralId } = getUserToken();
+                const { loanReferralId, cohortLoaneeId } = getUserToken();
                 if (loanReferralId) {
                     store.dispatch(setLoanReferralId(loanReferralId))
+                }
+                if (cohortLoaneeId){
+                    console.log('setting to store before ')
+                    store.dispatch(setCohortLoaneeId(cohortLoaneeId));
                 }
                 store.dispatch(setCurrentNavbarItem("Verification"))
                 store.dispatch(setCurrentNavBottomItem('Verification'))

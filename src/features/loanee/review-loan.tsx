@@ -22,14 +22,14 @@ const ReviewLoan = () => {
 
     return (
         <div className={` w-full h-full py-4 px-6  grid gap-6  `}>
-            <div className={`border-b border-[#ECECEC] py-4 `}>
-                <h1 id={'componentTitle'} data-testid={'componentTitle'} className={` ${cabinetGrotesk.className} py- w-full  text-[#101828]  text-[26px] `}>Loan review process</h1>
-            </div>
-            <div className={`grid   md:flex lg:flex md:justify-between lg:justify-between  `}>
-                <div className={`hidden md:flex h-fit  gap-3`}>
-                    <Connector showLine={false} isActive={true} isCompleted={false} />
-                    <p className={`text-[#142854] mt-auto mb-auto  text-[14px] ${inter.className}`}>Loan application</p>
-                </div>
+            {/*<div className={`border-b border-[#ECECEC] py-4 `}>*/}
+            {/*    <h1 id={'componentTitle'} data-testid={'componentTitle'} className={` ${cabinetGrotesk.className} py- w-full  text-[#101828]  text-[26px] `}>Loan review process</h1>*/}
+            {/*</div>*/}
+            {/*<div className={`grid   md:flex lg:flex md:justify-between lg:justify-between  `}>*/}
+            {/*    <div className={`hidden md:flex h-fit  gap-3`}>*/}
+            {/*        <Connector showLine={false} isActive={true} isCompleted={false} />*/}
+            {/*        <p className={`text-[#142854] mt-auto mb-auto  text-[14px] ${inter.className}`}>Loan application</p>*/}
+            {/*    </div>*/}
                 <div className={` md:w-[50%] rounded-md  lg:w-[50%] w-full border px-4 py-4  border-[#ECECEC]   `}>
                     <h2  className={` ${cabinetGroteskMediumBold600.className} pb-2 text-[22px]  `}>Loan application details</h2>
                     <div className={` rounded-md grid gap-9 p-5 bg-grey105 `}>
@@ -51,7 +51,7 @@ const ReviewLoan = () => {
                     </div>
                 </div>
 
-            </div>
+            {/*</div>*/}
         </div>
     );
 };
