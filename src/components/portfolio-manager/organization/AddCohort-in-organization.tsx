@@ -195,7 +195,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
               handleCloseModal()
               if(cohortRefetch)cohortRefetch()
               toast({
-                description: result.message + " " +  uploadFile.message,
+                description: result.message + "and " +  uploadFile.message,
                 status: "success",
               });
             }

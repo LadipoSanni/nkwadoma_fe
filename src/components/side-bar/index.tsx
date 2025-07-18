@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React,{useEffect} from 'react';
 import { useRouter } from "next/navigation";
 import {persistor, RootState, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
@@ -24,6 +24,8 @@ import NavbarContainer from "@/reuseable/ui/Navbar";
 // import { clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import { resetAllState } from '@/redux/reducer';
 import { notificationApi } from '@/service/notification/notification_query';
+import {setCurrentTab,setcurrentTabRoute} from "@/redux/slice/loan/selected-loan";
+
 
 
 const SideBar = () => {
@@ -31,9 +33,19 @@ const SideBar = () => {
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
+    const currentTab = useAppSelector(state => state.selectedLoan?.currentTab)
     const [logout] = useLogoutMutation()
     const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role')  : "user role";
     const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
+
+    
+
+    useEffect(() => {
+        if (userRole === "PORTFOLIO_MANAGER" && !currentTab) {
+            store.dispatch(setCurrentTab('Loan requests'));
+            store.dispatch(setcurrentTabRoute('loan-request'));
+          }
+    }, [userRole, currentTab])
 
 
     const closeSideBar = () => {
