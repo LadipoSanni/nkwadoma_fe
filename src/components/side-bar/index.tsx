@@ -24,7 +24,7 @@ import NavbarContainer from "@/reuseable/ui/Navbar";
 // import { clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import { resetAllState } from '@/redux/reducer';
 import { notificationApi } from '@/service/notification/notification_query';
-import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
+import {setCurrentTab,setcurrentTabRoute} from "@/redux/slice/loan/selected-loan";
 
 
 
@@ -38,11 +38,12 @@ const SideBar = () => {
     const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role')  : "user role";
     const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
 
-    console.log(currentTab)
+    
 
     useEffect(() => {
         if (userRole === "PORTFOLIO_MANAGER" && !currentTab) {
             store.dispatch(setCurrentTab('Loan requests'));
+            store.dispatch(setcurrentTabRoute('loan-request'));
           }
     }, [userRole, currentTab])
 
