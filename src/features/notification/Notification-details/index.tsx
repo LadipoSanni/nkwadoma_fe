@@ -14,6 +14,8 @@ import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlac
 import { setOrganizationId,setOrganizationDetail} from '@/redux/slice/organization/organization';
 import { setLoanOfferId } from '@/redux/slice/loan/loan-offer';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import { setLoanReferralId } from '@/redux/slice/loan/selected-loan';
+import {setCurrentStep} from "@/service/users/loanRerralSlice";
 
 // interface NotificationDetailsPageProps{
 //     notification?: NotificationProps
@@ -60,6 +62,11 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   } else if(notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
      store.dispatch(setCurrentNavbarItem("Loan"))
      router.push(`/loan-offer-details?id=${notification?.data?.contentId}`);
+  } else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
+    store.dispatch(setCurrentNavbarItem("Loan refferral"))
+    store.dispatch(setLoanReferralId(notification?.data?.contentId))
+       router.push(`/onboarding`);
+       store.dispatch(setCurrentStep(0))
   }
   }
 
@@ -74,8 +81,10 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
    return "loan offer"
  }else if (notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
   return "loan offer"
+} else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
+  return "loan Referral"
 }
-  
+    
    }
 
 

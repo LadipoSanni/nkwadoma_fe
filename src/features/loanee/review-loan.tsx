@@ -5,9 +5,18 @@ import Connector from "@/components/common/Connector";
 import {Button} from "@/components/ui/button";
 import DetailItem from "@/reuseable/details/detail-Item/Index";
 import {NumericFormat} from "react-number-format";
+import { useViewLoanReferralDetailsQuery,
+    //  useRespondToLoanReferralMutation
+     } from "@/service/users/Loanee_query";
+import { useAppSelector } from '@/redux/store';
 
 const ReviewLoan = () => {
 
+    const id = useAppSelector(state => state.selectedLoan.loanReferralId)
+     const { data, 
+        // isLoading: loanReferralDetailsIsLoading 
+    } = useViewLoanReferralDetailsQuery(id);
+    //  const [respondToLoanReferral, {isLoading}] = useRespondToLoanReferralMutation({});
 
 
 
@@ -24,7 +33,7 @@ const ReviewLoan = () => {
                 <div className={` md:w-[50%] rounded-md  lg:w-[50%] w-full border px-4 py-4  border-[#ECECEC]   `}>
                     <h2  className={` ${cabinetGroteskMediumBold600.className} pb-2 text-[22px]  `}>Loan application details</h2>
                     <div className={` rounded-md grid gap-9 p-5 bg-grey105 `}>
-                        <DetailItem id={'LoanAmount'} label="Loan amount" value={<NumericFormat value={'10000'} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
+                        <DetailItem id={'LoanAmount'} label="Loan amount" value={<NumericFormat value={data?.data?.loanAmountRequested} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
                         <DetailItem id={'amountOutstanding'} label="Amount outstanding" value={<NumericFormat value={'10000'} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
                         <DetailItem id={"amountRepaid"} label="Amount repaid" value={<NumericFormat value={'10000'} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
                         <DetailItem id={'interest'} label="Interest" value={`10%`} />

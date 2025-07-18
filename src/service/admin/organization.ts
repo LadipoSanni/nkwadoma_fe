@@ -78,11 +78,12 @@ export const organizationApi = createApi({
         }),
 
         getOrganizationDetails: builder.query({
-            query:({id}) => ({
-                url: `/organization/${id}`,
+            query:(param: {organizationId: string}) => ({
+                url: `/organization/details`,
                 method: "GET",
+                params:param
             }),
-            providesTags: (result, error, arg) => [{ type: 'organization', id: arg.id }],
+            providesTags: [ 'organization'],
         }),
         getDetailsOfOrganization: builder.query({
             query:() => ({

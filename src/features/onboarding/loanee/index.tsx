@@ -43,7 +43,7 @@ const LoaneeOnboarding = () => {
     const { currentStep } = useSelector((state: RootState) => state.loanReferral);
     const [showModal, setShowModal] = useState(false);
     const id = useAppSelector(state => state.selectedLoan.loanReferralId)
-    const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery(id);
+    const { data, isLoading: loanReferralDetailsIsLoading } = useViewLoanReferralDetailsQuery(id,{skip: !id});
     const [respondToLoanReferral, {isLoading}] = useRespondToLoanReferralMutation({});
     const [loanReferralId, setLoanReferralId] = useState("");
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
@@ -95,20 +95,36 @@ const LoaneeOnboarding = () => {
             };
             if (requestData.id) {
                const result =  await respondToLoanReferral(requestData).unwrap();
-               if(result){
+               if(result && !data?.data?.identityVerified ){
                 dispatch(setCurrentStep(currentStep + 1));
+               }else {
+                store.dispatch(setCurrentNavBottomItem('Overview'))
+                router.push("/overview")
                }
             } 
+
+           
             
         } catch (err) {
             const error = err as ApiError;
             toast({
-                description: error?.data?.message,
+                description: error?.data?.message || "Error occured",
                 status: "error",
             })
         }
        
     };
+
+    
+
+     const acceptAndRouteToOverview = () => {
+        handleAcceptLoanReferral()
+        toast({
+            description: "Loan Referral accepted successfully",
+            status: "success",
+        })
+       
+     }
 
     const handleThirdStepContinue = () => {
         setShowModal(false);
@@ -150,22 +166,36 @@ const LoaneeOnboarding = () => {
                             loanReferralId={loanReferralId}
                         />
                     )}
-                    {(currentStep === 0 || currentStep === 1) && (
-                        <Button
-                            id="continueButton"
-                            className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem]'}
-                            onClick={handleNext}
-                            disabled={isLoading}
-                            variant={'secondary'}
-                        >
-                            { isLoading ? <Isloading/> :
-                                <>
-                                    {currentStep === 1 ? 'Start identity verification' : 'Continue'}
-                                </>
-                            }
+                    { data?.data?.identityVerified ? (
+                         <Button
+                         id="acceptButton"
+                         onClick={acceptAndRouteToOverview}
+                         disabled={data?.data?.loanReferralStatus === "AUTHORIZED" || isLoading}
+                         variant={'secondary'}
+                         className={`${data?.data?.loanReferralStatus === "AUTHORIZED"? "bg-neutral650 cursor-auto hover:bg-neutral650" : "bg-meedlBlue"} text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem]`}
+                         >
+                             {
+                               isLoading ? <Isloading/> : "Accept"  
+                             }
+                             
+                         </Button>
+                    ) : !data?.data?.identityVerified && (currentStep === 0 || currentStep === 1) && (
+                         <Button
+                         id="continueButton"
+                         className={'bg-meedlBlue text-meedlWhite text-[14px] font-semibold leading-[150%] rounded-md self-end py-3 px-5 justify-self-end h-[2.8125rem]'}
+                         onClick={handleNext}
+                         disabled={isLoading}
+                         variant={'secondary'}
+                     >
+                         { isLoading ? <Isloading/> :
+                             <>
+                                 {currentStep === 1 ? 'Start identity verification' : 'Continue'}
+                             </>
+                         }
 
-                        </Button>
-                    )}
+                     </Button>
+                    )
+                }
                 </section>
             </div>
         </div>
