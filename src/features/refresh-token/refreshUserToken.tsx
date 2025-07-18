@@ -42,12 +42,8 @@ const RefreshUserToken = ({children}: Props) => {
                 description: "Session expired. Please login again",
                 status: "error",
             });
-            persistor.purge().then(() => {
-                clearData();
-                store.dispatch(setError("Token expired"));
-                redirect("/auth/login");
-            });
-            return;
+            clearData();
+            redirect("/auth/login");
         }
 
         const refreshTime = Math.max(expirationTimeInMilliseconds - now - 10000, 0);
