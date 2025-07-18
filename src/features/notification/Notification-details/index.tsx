@@ -81,8 +81,10 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
    return "loan offer"
  }else if (notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
   return "loan offer"
-} else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){}
-    return "loan Referral"
+} else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
+  return "loan Referral"
+}
+    
    }
 
 
