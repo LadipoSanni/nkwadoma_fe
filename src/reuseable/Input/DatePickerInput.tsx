@@ -132,7 +132,7 @@ function DatePickerInput({
             </SelectTrigger>
             <SelectContent
                 align="start"
-                className={cn("bg-white w-auto p-1 ", calendarStyle)}
+                className={cn("bg-white max-w-72 lg:w-auto  p-1 ", calendarStyle)}
                 style={{ zIndex: 1000 }}
             >
               <div className='relative bottom-6'>
@@ -203,7 +203,7 @@ function DatePickerInput({
                 />
                 </div>
                
-                <div className='border-t-[1px] relative top-2 py-2 justify-between flex px-2 h-8'>
+                <div className='border-t-[1px] max-w-[270px] lg:w-auto relative top-2 py-2 justify-between flex px-2 h-8'>
                     <Button
                         variant={'outline'}
                         className={`${!isDateComplete? "text-[#A8A8A8]" : "text-meedlBlue"} border-none bg-white hover:bg-white focus:bg-white  shadow-none`}
