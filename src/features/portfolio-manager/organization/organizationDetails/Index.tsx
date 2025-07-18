@@ -14,7 +14,7 @@ import {
   useGetOrganizationDetailsQuery,
 } from "@/service/admin/organization";
 import { useRouter } from "next/navigation";
-import { formatAmount } from "@/utils/Format";
+import { formatAmount,formatToTwoDecimals } from "@/utils/Format";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { Button } from "@/components/ui/button";
 import ActivateOrganization from "@/components/portfolio-manager/organization/ActivateOrganization";
@@ -168,7 +168,7 @@ const OrganizationDetails = () => {
 
   const loanDetail = [
     { detail: "Number of loan requests", value: organizationDetails?.data?.loanRequestCount },
-    { detail: "Pending loan offers", value: organizationDetails?.data?.loanOfferCount },
+    { detail: "Pending loan offers", value: organizationDetails?.data?.pendingLoanOfferCount },
     { detail: "Number of performing loans", value: "" },
     { detail: "Number of non-performing loans", value: "" },
     {
@@ -180,14 +180,11 @@ const OrganizationDetails = () => {
       value:
         formatAmount(organizationDetails?.data.totalDebtRepaid,false) +
         " " +
-        `(${organizationDetails?.data.repaymentRate})` +
-        "%",
+        (`(${formatToTwoDecimals(organizationDetails?.data.repaymentRate)+ "%"})`) 
+        ,
     },
-    { detail: "Amount outstanding", value: formatAmount("0") },
-    {
-      detail: "Moratorium ",
-      value: "0" ,
-    },
+    { detail: "Amount outstanding", value: formatAmount(organizationDetails?.data?.totalCurrentDebt) }
+    
   ];
 
   const adminsHeader = [

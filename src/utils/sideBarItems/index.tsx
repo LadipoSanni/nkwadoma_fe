@@ -25,7 +25,7 @@ export const usePortfolioManagerSideBarItems =  (currentItem: string) => {
     const currentTabRoute = useAppSelector(state => state.selectedLoan?.currentTabRoute)
     const items: navbarRouterItemsProps[] = [
         { icon: <MdOutlineHome color={currentItem === 'Overview' ? '#142854' : '#939cb0'} className={` h-[1.2rem] w-[1.2em] `}/>, id: 'Overview', name: 'Overview', isActive: true,route: '/Overview'},
-        {id: 'loan', name: 'Loan', route: `/loan/${currentTabRoute}`, isActive: true, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={currentItem === 'Loan' ? '#142854' : '#939cb0'}></Icon>},
+        {id: 'loan', name: 'Loan', route: `/loan/${currentTabRoute || 'loan-request'}`, isActive: true, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={currentItem === 'Loan' ? '#142854' : '#939cb0'}></Icon>},
         {id: 'loanProduct', name: 'Loan product', route: '/loan-product', isActive: true, icon: <MdOutlineInventory2 color={currentItem === 'Loan product' ? '#142854' : '#939CB0'}></MdOutlineInventory2>},
         {id: 'repayment', name: 'Repayment', route:'/repayment', icon: <MdOutlineLibraryBooks color={currentItem === 'Repayment' ? '#142854' : '#939CB0'}  />, isActive: true,},
         {id: 'organizations', name: 'Organizations', route: '/organizations', isActive: true, icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={currentItem === 'Organizations' ? '#142854' : '#939CB0'}></MdOutlineAccountBalance>},
