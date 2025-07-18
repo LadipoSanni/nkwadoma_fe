@@ -49,6 +49,7 @@ const LoaneeOnboarding = () => {
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
     const { toast } = useToast();
 
+    
 
     useEffect(() => {
         if ( data?.data?.identityVerified  === true  ){

@@ -12,7 +12,7 @@ import {
     getFinancierSideBarItems,
     getInstituteAdminSideBarItems,
     getLoaneeSideBarItems, getLogoutItem,
-    getPortfolioManagerSideBarItems,
+    usePortfolioManagerSideBarItems,
     getSettingItem
 } from "@/utils/sideBarItems";
 import Image from "next/image"
@@ -99,7 +99,7 @@ const SideBar = () => {
 
 
     const sideBarContent = [
-        {name: "PORTFOLIO_MANAGER", value: getPortfolioManagerSideBarItems(current)},
+        {name: "PORTFOLIO_MANAGER", value: usePortfolioManagerSideBarItems(current)},
         {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
         {name: 'LOANEE', value: getLoaneeSideBarItems(current, isLoaneeIdentityVerified) },
         {name: 'FINANCIER', value: getFinancierSideBarItems(current)},
