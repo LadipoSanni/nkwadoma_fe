@@ -51,8 +51,7 @@ const LoaneeOnboarding = () => {
     const [backendDetails, setBackendDetails] = useState<BackendDetails | null>(null);
     const { toast } = useToast();
 
-    console.log('this is a invited loanee')
-    
+
 
     useEffect(() => {
         if ( data?.data?.identityVerified  === true  ){
@@ -79,11 +78,16 @@ const LoaneeOnboarding = () => {
 
     const handleNext = () => {
         if (currentStep === 0) {
-            if (backendDetails?.loanReferralStatus === "PENDING") {
-                handleAcceptLoanReferral();
-            } else if (backendDetails?.loanReferralStatus === "AUTHORIZED") {
+            if (invitedLoaneeFromPmId){
                 dispatch(setCurrentStep(currentStep + 1));
+            }else{
+                if (backendDetails?.loanReferralStatus === "PENDING") {
+                    handleAcceptLoanReferral();
+                } else if (backendDetails?.loanReferralStatus === "AUTHORIZED") {
+                    dispatch(setCurrentStep(currentStep + 1));
+                }
             }
+
         } else if (currentStep === 1) {
             setShowModal(true);
         } else {

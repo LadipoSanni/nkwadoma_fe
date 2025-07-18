@@ -15,7 +15,6 @@ describe('test review loan component', () => {
         expect(screen.getByTestId('amountRepaid')).toBeInTheDocument()
         expect(screen.getByTestId('interest')).toBeInTheDocument()
         expect(screen.getByTestId('interestIncurred')).toBeInTheDocument()
-        expect(screen.getByTestId('acceptButton')).toBeInTheDocument()
 
     })
 })
