@@ -8,7 +8,7 @@ const nextConfig = {
         NEXT_PUBLIC_CLOUD_NAME: process.env.NEXT_PUBLIC_CLOUD_NAME,
         APP_URL:process.env.APP_URL,
     },
-    images: {domains: ['res.cloudinary.com', 'via.placeholder.com', "images.unsplash.com", "png.pngtree.com",'flagcdn.com','upload.wikimedia.org'],},
+    images: {domains: ['res.cloudinary.com', 'via.placeholder.com', "images.unsplash.com", "png.pngtree.com",'flagcdn.com','upload.wikimedia.org',"cdn.jsdelivr.net"],},
 };
 
 

@@ -41,6 +41,7 @@
     "@testing-library/user-event": "^14.5.2",
     "@tiptap/extension-underline": "^2.10.3",
     "@types/react-query": "^1.2.8",
+    "banks-ng": "1.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
