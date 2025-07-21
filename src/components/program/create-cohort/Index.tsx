@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { cabinetGrotesk, inter } from "@/app/fonts";
 import { Button } from "@/components/ui/button";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
-import { MdClose } from "react-icons/md";
-import DatePicker from "@/reuseable/date/DatePicker";
 import FormButtons from "@/reuseable/buttons/FormButtons";
 import {
     FeeBreakdownHeader,
@@ -19,19 +8,21 @@ import {
 } from "@/reuseable/feeBreakdown";
 import { CohortNameInput, FileUpload } from "@/reuseable/Input";
 import { useCreateCohortMutation } from "@/service/admin/cohort_query";
-import { DialogDescription } from "@radix-ui/react-dialog";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import TotalInput from "@/reuseable/display/TotalInput";
 import Isloading from "@/reuseable/display/Isloading";
 import CustomQuillField from "@/reuseable/textArea/Custom-quill-field";
 import {useSelector} from "react-redux";
 import {RootState} from "@/redux/store";
+import DatePickerInput from "@/reuseable/Input/DatePickerInput";
+import { Label } from "@/components/ui/label";
 
 
 
 interface createCohortProps {
-    triggerButtonStyle: string;
+    setIsOpen?: (e: boolean) => void;
+
 }
 
 
@@ -43,7 +34,7 @@ interface ApiError {
     };
 }
 
-const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle }) => {
+const CreateCohortInProgram: React.FC<createCohortProps> = ({ setIsOpen }) => {
     const currentProgramId = useSelector((state: RootState) => state.program.currentProgramId);
 
     const [startDate, setDate] = useState<Date>();
@@ -53,7 +44,6 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
     const [createButtonDisabled, setCreateButtonDisabled] = useState(true)
     const [isFormSubmitted, setIsFormSubmitted] = useState(false);
     const [loanBreakdowns, setLoanBreakdowns] = useState<{ itemName: string; itemAmount: string; currency: string }[]>([ { itemName: "Tuition", itemAmount: "", currency: "NGN" }  ]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [imageUrl, setUploadedUrl] = useState<string | null>(null);
     const [error, setError] = useState("");
     const [descriptionError, setDescriptionError] = useState<string | null>(null);
@@ -66,12 +56,12 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
     const { toast } = useToast();
 
     useEffect(() => {
-        if (name && startDate && cohortDescription && !descriptionError) {
+        if (name && startDate && !descriptionError) {
             setIsButtonDisabled(false);
         } else {
             setIsButtonDisabled(true);
         }
-    }, [name, startDate, cohortDescription, descriptionError]);
+    }, [name, startDate, descriptionError]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const areLoanBreakdownsValid = () => {
@@ -107,6 +97,12 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
         setInitialItemAmount("0.00");
     };
 
+    const handleCloseModal = () => {
+        if (setIsOpen) {
+            setIsOpen(false);
+        }
+    }
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!navigator.onLine) {
@@ -132,13 +128,15 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
             };
             try {
                 const result = await createCohort(formData).unwrap();
+                if(result){
                 setIsFormSubmitted(true);
-                setIsModalOpen(false);
                 resetForm();
+                handleCloseModal()
                 toast({
                     description: result.message,
                     status: "success",
                 });
+            }
 
             } catch (err) {
                 const error = err as ApiError;
@@ -146,19 +144,6 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
 
             }
         }else { setError("Description must be 2500 characters or less"); }
-    };
-
-    const handleReset = () => {
-        setIsFormSubmitted(false);
-        setDate(undefined);
-        setName("");
-        setDescription("");
-        setDescriptionError(null);
-        setIsButtonDisabled(true);
-        setCreateButtonDisabled(true);
-        setLoanBreakdowns([{ itemName: "Tuition", itemAmount: "", currency: "NGN" }]);
-        setError("");
-        setUploadedUrl(null);
     };
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -180,43 +165,7 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
     };
 
     return (
-        <Dialog open={isModalOpen} onOpenChange={(open) => setIsModalOpen(open)}>
-            <DialogTrigger asChild>
-                <Button
-                    variant={"secondary"}
-                    id="createCohortButton"
-                    size={"lg"}
-                    className={`${triggerButtonStyle} ${inter.className} h-12 shadow-none hover:bg-[#435376]  cursor-pointer  md:mt-0 mt-3 text-sm font-semibold`}
-                >
-                    Create cohort
-                </Button>
-            </DialogTrigger>
-            <DialogContent
-                id="createCohortDialogContent"
-                className="max-w-[320px] md:max-w-[533px] [&>button]:hidden gap-8 py-5 pl-5 pr-2"
-            >
-                <DialogHeader id="createCohortDialogHeader">
-                    <DialogTitle
-                        className={`${cabinetGrotesk.className} flex justify-start text-[28px] font-medium text-labelBlue leading-[120%]`}
-                    >
-                        Create cohort
-                    </DialogTitle>
-                    <DialogClose asChild>
-                        <button
-                            id="createCohortDialogCloseButton"
-                            className="absolute right-5"
-                            onClick={handleReset}
-                        >
-                            <MdClose
-                                id={"createCohortCloseIcon"}
-                                className="h-6 w-6 text-neutral950"
-                            />
-                        </button>
-                    </DialogClose>
-                </DialogHeader>
-                <div className="hidden">
-                    <DialogDescription></DialogDescription>
-                </div>
+        <div>
 
                 <form
                     id="cohortForm"
@@ -233,14 +182,30 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
                 >
                     {!isFormSubmitted ? (
                         <>
-                            <div id="programDateContainer" className={"md:flex md:flex-row flex-col gap-5"}>
+                            <div id="programDateContainer" className={"md:grid md:grid-cols-2 gap-3 "}>
                                 <div className={`w-full`}>
                                     <CohortNameInput cohortName={name} setCohortName={setName} />
                                 </div>
-                                <div className={`w-full`}>
-                                    <DatePicker date={startDate} setDate={setDate} />
+                                <div className={`w-full relative md:top-0 top-4 `}>
+                                    <Label>Start date</Label>
+                                    <div className="relative bottom-[8px]">
+                                    <DatePickerInput
+                                     selectedDate={typeof startDate === 'string' ? parseISO(startDate) : startDate}
+                                     onDateChange={
+                                        (date) => {
+                                                        if (date) {
+                                                          setDate(date);
+                                                        }else {
+                                                         setDate(undefined)
+                                                        }
+                                                      }
+                                       } 
+                                     className="rounded-md border-neutral650 text-[14px] text-[#6A6B6A] h-[53px]"
+                                    />
+                                    </div>
                                 </div>
                             </div>
+                            <div className="relative bottom-0 md:bottom-4">
                             <CustomQuillField
                                 description={cohortDescription}
                                 setDescription={setDescription}
@@ -260,6 +225,7 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
                                 setError={(error) => setDescriptionError(error)}
                                 name="Cohort description"
                             />
+                            </div>
 
                             {descriptionError && ( <div className="text-red-500 text-sm">{descriptionError}</div> )}
                             <FileUpload
@@ -294,7 +260,7 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
                                 <section
                                     id="Step2formButtonsContainer"
                                     className={
-                                        "md:flex grid gap-5 mt-3 md:justify-end md:items-end bg-meedlWhite"
+                                        "md:flex grid gap-5 mt-3 md:justify-end md:items-end bg-meedlWhite mb-4"
                                     }
                                 >
                                     <Button
@@ -335,8 +301,7 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ triggerButtonStyle
                 >
                     {error}
                 </div>
-            </DialogContent>
-        </Dialog>
+        </div>
     );
 };
 export default CreateCohortInProgram;

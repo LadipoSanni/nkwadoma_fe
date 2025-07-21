@@ -255,6 +255,8 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
                    (date) => {
                                    if (date) {
                                      setDate(date);
+                                   }else {
+                                    setDate(undefined)
                                    }
                                  }
                   } 

@@ -265,6 +265,8 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                    (date) => {
                                    if (date) {
                                      setDate(date);
+                                   }else {
+                                    setDate(undefined)
                                    }
                                  }
                   } 

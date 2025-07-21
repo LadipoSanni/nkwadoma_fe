@@ -268,12 +268,14 @@ const EditCohortForm = ({ setIsOpen, cohortDetail }: idProps) => {
                   <Label htmlFor="endDate">End date</Label>
                   <DatePickerInput
                     selectedDate={parseISO(values.expectedEndDate ?? "")}
-                    onDateChange={(date) =>
-                      setFieldValue(
-                        "expectedEndDate",
-                        format(date, "yyyy-MM-dd")
-                      )
-                    }
+                   onDateChange={(date) => {
+                                   if (date) {
+                                     const formattedDate = format(date, "yyyy-MM-dd");
+                                     setFieldValue("startDate", formattedDate); 
+                                   } else {
+                                     setFieldValue("startDate", ""); 
+                                   }
+                                 }}
                     className="p-6 mt-2"
                     disabled={true}
                     disabledDate={
