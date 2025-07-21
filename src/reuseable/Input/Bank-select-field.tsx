@@ -29,7 +29,7 @@ type Props = {
 
 
 
-function BankSelectField({ 
+const BankSelectField = ({ 
   value, 
   onChange, 
   className, 
@@ -38,22 +38,21 @@ function BankSelectField({
   triggerId, 
   isItemDisabled,
   setLogo 
-}: Props) {
+}: Props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const BANK_ACRONYMS: Record<string, string> = {
-    "United Bank For Africa": "UBA",
-    "Guaranty Trust Bank": "GTB",
-    "First City Monument Bank": "FCMB",
-    "First Bank of Nigeria": "FBN"
-  };
   
   const processedBanks = useMemo(() => {
+    const BANK_ACRONYMS: Record<string, string> = {
+        "United Bank For Africa": "UBA",
+        "Guaranty Trust Bank": "GTB",
+        "First City Monument Bank": "FCMB",
+        "First Bank of Nigeria": "FBN"
+      };
     return (getBanks() as Bank[]).map(bank => ({
       ...bank,
       displayName: BANK_ACRONYMS[bank.name] || bank.name
     }));
-  },[BANK_ACRONYMS]);
+  },[]);
 
   
   const selectedBank = useMemo(() => {

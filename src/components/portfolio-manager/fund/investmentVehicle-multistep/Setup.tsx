@@ -21,7 +21,7 @@ import {useAppSelector} from "@/redux/store";
 import { setCreateInvestmentField,clearSaveCreateInvestmentField,setDraftId,clearDraftId, setInvestmentVehicleType} from '@/redux/slice/vehicle/vehicle';
 import { validationSchema,draftValidationSchema } from '@/utils/validation-schema';
 import PdfAndDocFileUpload from '@/reuseable/Input/Pdf&docx-fileupload';
-import BankSelectField from '@/reuseable/Input/Bank-select-input';
+import BankSelectField from '@/reuseable/Input/Bank-select-field';
 
 interface ApiError {
     status: number;
@@ -428,7 +428,7 @@ function Setup({investmentVehicleType}: Props) {
                       triggerId='bankTriggerId'
                       id='bankId'
                       value={values.bankPartner}
-                      onChange={(value) => setFieldValue("bankPartner", value)}
+                      onChange={(value: string) => setFieldValue("bankPartner", value)}
                       bankName="bankPartner"
                        placeHolder='Select bank'
                        className='h-[3.0rem]'
