@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Select, SelectTrigger, SelectContent, SelectItem,  SelectGroup } from '@/components/ui/select';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectGroup } from '@/components/ui/select';
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { getBanks } from 'banks-ng';
 import Image from 'next/image';
@@ -27,8 +27,6 @@ type Props = {
   isItemDisabled?: (item: string) => boolean;
 };
 
-
-
 const BankSelectField = ({ 
   value, 
   onChange, 
@@ -40,21 +38,20 @@ const BankSelectField = ({
   setLogo 
 }: Props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  
+
   const processedBanks = useMemo(() => {
     const BANK_ACRONYMS: Record<string, string> = {
-        "United Bank For Africa": "UBA",
-        "Guaranty Trust Bank": "GTB",
-        "First City Monument Bank": "FCMB",
-        "First Bank of Nigeria": "FBN"
-      };
+      "United Bank For Africa": "UBA",
+      "Guaranty Trust Bank": "GTB",
+      "First City Monument Bank": "FCMB",
+      "First Bank of Nigeria": "FBN"
+    };
     return (getBanks() as Bank[]).map(bank => ({
       ...bank,
       displayName: BANK_ACRONYMS[bank.name] || bank.name
     }));
-  },[]);
+  }, []);
 
-  
   const selectedBank = useMemo(() => {
     return value ? processedBanks.find(b => b.name === value) || null : null;
   }, [value, processedBanks]);
@@ -68,6 +65,7 @@ const BankSelectField = ({
   };
 
   const renderBankItem = useMemo(() => 
+    // eslint-disable-next-line react/display-name
     (index: number, bank: ProcessedBank) => (
       <SelectItem
         id={`${id}${bank.id}`}
@@ -114,9 +112,7 @@ const BankSelectField = ({
                 className="w-4 h-4 rounded-sm"
               />
             )}
-            {/* <SelectValue placeholder={placeHolder} /> */}
-              {selectedBank ? selectedBank.displayName : <span className="text-grey400 opacity-50">{placeHolder}</span>}
-            {/* </SelectValue> */}
+            {selectedBank ? selectedBank.displayName : <span className="text-grey400 opacity-50">{placeHolder}</span>}
           </div>
           {dropdownOpen ? (
             <ChevronUpIcon className="h-4 font-semibold" />
@@ -137,7 +133,7 @@ const BankSelectField = ({
       </Select>
     </div>
   );
-}
+};
 
 BankSelectField.displayName = 'BankSelectField';
 
