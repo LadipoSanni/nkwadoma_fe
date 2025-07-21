@@ -271,7 +271,9 @@ function Setup({investmentVehicleType}: Props) {
               onDateChange={(date) => {
                 if (date) {
                   const formattedDate = format(date, "yyyy-MM-dd");
-                  setFieldValue("startDate", formattedDate);
+                  setFieldValue("startDate", formattedDate); 
+                } else {
+                  setFieldValue("startDate", ""); 
                 }
               }}
                  className="p-6 mt-2 text-[14px] text-[#6A6B6A] h-[49px]"

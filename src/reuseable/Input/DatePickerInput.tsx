@@ -11,7 +11,7 @@ import {ChevronDownIcon,ChevronUpIcon} from "lucide-react"
 
 interface Props {
     selectedDate: Date | undefined;
-    onDateChange: (date: Date) => void;
+    onDateChange: (date: Date | null) => void;
     className?: string;
     placeholder?: string;
     calendarStyle?: string;
@@ -96,6 +96,7 @@ function DatePickerInput({
 
     const handleClear = () => {
         setTempDate(undefined);
+        onDateChange(null)
         setCurrentMonth(new Date());
     };
 

@@ -15,6 +15,10 @@ import { useSearchCohortByOrganisationQuery } from '@/service/admin/cohort_query
 import Table from '@/reuseable/table/Table';
 import { useDebounce } from '@/hooks/useDebounce';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import Modal from '@/reuseable/modals/TableModal';
+import {Cross2Icon} from "@radix-ui/react-icons";
+import { Button } from '@/components/ui/button';
+import { inter } from '@/app/fonts';
 
 interface loanDetails {
     totalAmountRepaid?: number;
@@ -47,6 +51,7 @@ const ProgramCohortDetails= ()=> {
     const [programId] = useState(id);
     const [searchTerm, setSearchTerm] = useState('');
     const [page,setPageNumber] = useState(0);
+     const [isOpen, setIsOpen] = React.useState(false);
     const size = 10;
      const router = useRouter()
     const [totalPage,setTotalPage] = useState(0)
@@ -75,6 +80,10 @@ const ProgramCohortDetails= ()=> {
         if (!data?.data?.body) return [];
         if (debouncedSearchTerm) return searchResults?.data?.body || [];
         return data?.data?.body;
+    }
+
+    const handleModalOpen = () => {
+        setIsOpen(!isOpen)
     }
 
     useEffect(() => {
@@ -142,8 +151,16 @@ const ProgramCohortDetails= ()=> {
                         <div className={``}>
                             <SearchInput id={'programCohortSearch'} value={searchTerm} onChange={handleSearchChange}/>
                         </div>
-                        <div className=''>
-                            <CreateCohortInProgram  triggerButtonStyle={`w-full`}/>
+                        <div className='md:mt-0 mt-4'>
+                            {/* <CreateCohortInProgram  triggerButtonStyle={`w-full`}/> */}
+                            <Button
+                            variant={'secondary'}
+                            id='createProgramModal'
+                            className={`${inter.className}   h-12 flex justify-center items-center w-full`}
+                            onClick={handleModalOpen}
+                            >
+                            Create cohort
+                            </Button>
                         </div>
                     </div>
                     <div>
@@ -166,6 +183,19 @@ const ProgramCohortDetails= ()=> {
                             totalPages={totalPage}
                         />}
                     </div>
+                </div>
+                <div>
+                 <Modal
+                  isOpen={isOpen}
+                  closeOnOverlayClick={true}
+                  closeModal={() => setIsOpen(false)}
+                   width='36%'
+                 className='pb-1'
+                icon={Cross2Icon}
+                headerTitle='Create cohort'
+                 >
+                 <CreateCohortInProgram  setIsOpen={setIsOpen}/>
+                 </Modal>
                 </div>
             </div>
         );
