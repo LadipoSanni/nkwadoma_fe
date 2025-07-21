@@ -53,7 +53,7 @@ function BankSelectField({
       ...bank,
       displayName: BANK_ACRONYMS[bank.name] || bank.name
     }));
-  }, []);
+  },[BANK_ACRONYMS]);
 
   
   const selectedBank = useMemo(() => {
@@ -139,5 +139,7 @@ function BankSelectField({
     </div>
   );
 }
+
+BankSelectField.displayName = 'BankSelectField';
 
 export default BankSelectField;
