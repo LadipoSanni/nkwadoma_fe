@@ -21,6 +21,7 @@ import {useAppSelector} from "@/redux/store";
 import { setCreateInvestmentField,clearSaveCreateInvestmentField,setDraftId,clearDraftId, setInvestmentVehicleType} from '@/redux/slice/vehicle/vehicle';
 import { validationSchema,draftValidationSchema } from '@/utils/validation-schema';
 import PdfAndDocFileUpload from '@/reuseable/Input/Pdf&docx-fileupload';
+import BankSelectField from '@/reuseable/Input/Bank-select-field';
 
 interface ApiError {
     status: number;
@@ -47,6 +48,7 @@ function Setup({investmentVehicleType}: Props) {
       const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
       const { toast } = useToast();
        const router = useRouter();
+      
      
     const initialFormValue = {
       id: draftId || "",
@@ -406,10 +408,10 @@ function Setup({investmentVehicleType}: Props) {
                       )}
                   </div>
                 </div>
-                <div className='md:flex gap-4 relative md:bottom-9'>
+                <div className='md:grid md:grid-cols-2 gap-4 relative md:bottom-9'>
                    <div className="relative bottom-10  md:bottom-0">
                     <Label htmlFor="name">Bank partner</Label>
-                    <Field
+                    {/* <Field
                     id="bankPartner"
                     name="bankPartner"
                     placeholder="Enter bank partner"
@@ -420,7 +422,19 @@ function Setup({investmentVehicleType}: Props) {
                           e.target.value.replace(/[^a-zA-Z\s]/g, "")
                         )
                       }
-                    />
+                    /> */}
+                    <div className='relative bottom-1'>
+                    <BankSelectField
+                      triggerId='bankTriggerId'
+                      id='bankId'
+                      value={values.bankPartner}
+                      onChange={(value: string) => setFieldValue("bankPartner", value)}
+                      bankName="bankPartner"
+                       placeHolder='Select bank'
+                       className='h-[3.0rem]'
+                     />
+                    </div>
+                    
                     {errors.bankPartner && touched.bankPartner && (
                     <ErrorMessage
                         name="bankPartner"
