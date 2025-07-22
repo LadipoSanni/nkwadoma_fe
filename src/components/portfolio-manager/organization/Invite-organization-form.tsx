@@ -166,14 +166,6 @@ function InviteOrganizationForm({setIsOpen}: props) {
 
     }
 
-    // const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    //   event.preventDefault();
-    // };
-
-    // const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    //   event.preventDefault();
-    // };
-
     return (
         <div id='inviteOrganizationForm'>
             <Formik
