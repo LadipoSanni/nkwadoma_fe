@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { useDispatch } from 'react-redux';
 // import { MdClose, MdPersonOutline } from "react-icons/md";
 // import { cabinetGrotesk, inter } from "@/app/fonts";
@@ -7,6 +7,7 @@ import {setLoaneeCurrentInfo, setIsFormSubmited} from "@/service/users/loanRerra
 // import {LoaneeCurentInformation} from "@/types/loanee";
 import LoaneeCurrentInformation from '@/components/loanee/Loanee-current-information';
 import { store,useAppSelector } from "@/redux/store";
+import { formatInternationalNumber } from '@/utils/phoneNumber';
 
 interface CurrentInformationProps {
     setCurrentStep?: (step: number) => void;
@@ -18,6 +19,9 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
     const currentLoaneeInfo = useAppSelector(state => (state?.loanReferral?.loaneeCurrentInfo))
     const isFormSubmitted = useAppSelector(state => (state?.loanReferral?.isFormSubmitting))
     const dispatch = useDispatch();
+
+    const [countryCode, setCountryCode] = useState("NG")
+    const [nextCountryCode, setNextCountryCode] = useState("NG")
 
     const initialFormValue = {
         firstName: currentLoaneeInfo.firstName,
@@ -33,15 +37,25 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
 
 
     const saveToReduxSlice = (values: typeof initialFormValue) => {
+         const alternateFormattedPhoneNumber = formatInternationalNumber(
+                    values.alternatePhoneNumber, 
+                    countryCode
+                  );
+
+        const  formattedPhoneNumber = formatInternationalNumber(
+            values.phoneNumber, 
+            nextCountryCode
+          );
+        
         const additionalLoaneeInfo = {
         firstName: values.firstName,
         lastName: values.lastName,
         email: values.email,
-        phoneNumber: values.phoneNumber,
+        phoneNumber: formattedPhoneNumber || values.phoneNumber,
         nextOfKinRelationship: values.nextOfKinRelationship,
         contactAddress: values.contactAddress,
         alternateEmail: values.alternateEmail,
-        alternatePhoneNumber: values.alternatePhoneNumber,
+        alternatePhoneNumber: alternateFormattedPhoneNumber || values.alternatePhoneNumber,
         alternateContactAddress: values.alternateContactAddress,
         }
         store.dispatch(setLoaneeCurrentInfo(additionalLoaneeInfo)) 
@@ -104,7 +118,14 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
                     //     </div>
                     // </div>
                     <div>
-                        <LoaneeCurrentInformation initialFormValue={initialFormValue} handleSubmit={handleSubmits}/>
+                        <LoaneeCurrentInformation 
+                        initialFormValue={initialFormValue} 
+                        handleSubmit={handleSubmits}
+                        countryCode={countryCode}
+                        setCountryCode={setCountryCode}
+                        nextOfCountryCode={nextCountryCode}
+                        setNextOfCountryCode={setNextCountryCode}
+                        />
 
                     </div>
                 ) : (
