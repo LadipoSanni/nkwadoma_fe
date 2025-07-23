@@ -13,6 +13,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import { store } from '@/redux/store';
 import { setOrganizationTabStatus } from '@/redux/slice/organization/organization';
 import PhoneNumberSelect from '@/reuseable/select/phoneNumberSelect/Index';
+import { formatInternationalNumber } from '@/utils/phoneNumber';
 
 interface ApiError {
     status: number;
@@ -47,7 +48,6 @@ function InviteOrganizationForm({setIsOpen}: props) {
     //  const industries = [ "MANUFACTURING", "INSURANCE", "LOGISTIC", "TELECOMMUNICATION", "REAL ESTATE", "AUTOMOBILE", "FASHION", "AVIATION", "AGRICULTURE", "EDUCATION", "HEALTHCARE", "ENTERTAINMENT", "HOSPITALITY", "FMCG", "TECHNOLOGY", "FINANCE" ];
     const industries = ["EDUCATION", "BANKING"]
     const serviceOfferings = ["TRAINING", "FINANCIAL ADVISORY", "INSURANCE SERVICES", "LOAN SERVICES", "ACCOUNTING AND BOOKKEEPING", "INVESTMENT ADVISORY", "RISK MANAGEMENT", "CORPORATE FINANCE", "TAX SERVICES", "BANKING SERVICES", "CRYPTOCURRENCY SERVICES", "SOFTWARE DEVELOPMENT", "WEB DEVELOPMENT", "CLOUD SERVICES", "CYBERSECURITY SERVICES", "DATABASE MANAGEMENT", "AI AND MACHINE LEARNING", "BUSINESS INTELLIGENCE", "DEVOPS SERVICES", "BLOCKCHAIN SERVICES", "DISTRIBUTION SERVICES", "MARKETING AND BRANDING", "SALES SERVICES", "CUSTOMER SERVICE AND SUPPORT", "SUSTAINABILITY SERVICES", "CONSUMER ENGAGEMENT AND LOYALTY", "TECHNOLOGY AND INNOVATION", "HOTEL SERVICES", "RESTAURANT SERVICES", "EVENT PLANNING", "TRAVEL AND TOUR SERVICES", "CORPORATE RETREATS", "SPA AND WELLNESS", "TRANSPORTATION", "FILM AND TELEVISION", "MUSIC", "THEATRE", "SPORTS AND FITNESS", "GAMING", "EVENT AND PARTIES", "TELECOMMUNICATION", "PHOTOGRAPHY"];
-
      const [countryCode, setCountryCode] = useState("NG")
      const [isPhoneNumberError,setPhoneNumberError] = useState(false)
 
@@ -124,6 +124,11 @@ function InviteOrganizationForm({setIsOpen}: props) {
             });
             return;
         }
+        const formattedPhone = formatInternationalNumber(
+            values.phoneNumber, 
+            countryCode
+          );
+  
         const formData = {
             name: values.name,
             email: values.email,
@@ -133,7 +138,7 @@ function InviteOrganizationForm({setIsOpen}: props) {
             adminFirstName: values.adminFirstName,
             adminLastName: values.adminLastName,
             adminEmail: values.adminEmail,
-            phoneNumber: values.phoneNumber,
+            phoneNumber:formattedPhone || values.phoneNumber,
             adminRole: "ORGANIZATION_ADMIN",
             serviceOfferings: [
                 {
