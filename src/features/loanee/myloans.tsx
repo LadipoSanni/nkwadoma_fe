@@ -32,7 +32,7 @@ const Myloans = () => {
                 <Details isLoading={loansTotalCalculationsLoading} sx={` w-[20em] md:w-full `} id={'loaneeTotalAmountRepaid'} showAsWholeNumber={false}   maxWidth={'100%'} name={'Total amount repaid '} value={loansTotalCalculations?.data?.totalAmountRepaid} valueType={'currency'}  />
             </div>
 
-          <div className={`w-full h-full grid md:grid md:grid-cols-3 `}>
+          <div className={`w-full h-full grid  gap-4 md:grid md:grid-cols-3 `}>
               {loaneeLoans?.data?.body?.map((loan:LoanType) => (
                   <div  key={"key"+loan?.cohortName} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
                       <div className={` flex gap-2   py-4  `}>
@@ -57,7 +57,7 @@ const Myloans = () => {
                                   <p className={`${inter500.className} ${isLoading ? `hidden` : `flex`}  text-black text-[14px]`}>{formatAmount(Number(loan?.loanAmountRepaid),false)}</p>
                               </div>
                       </div>
-                      <div className={`flex w-full pt-3 pb-1 justify-end`}>
+                      <div className={`flex w-full  pt-3 pb-1 justify-end`}>
                           <button onClick={() => {handleClick(loan?.id)}} className={`text-[14px] hover:bg-[#E8EAEE] focus:bg-[#E8EAEE] ${inter700.className} border border-meedlBlue w-fit h-fit px-4 py-2 rounded-md text-meedlBlue `}>View details</button>
                       </div>
                   </div>
