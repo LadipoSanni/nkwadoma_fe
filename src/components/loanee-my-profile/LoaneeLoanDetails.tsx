@@ -37,11 +37,13 @@ const LoaneeLoanDetails = ({data, isLoading}:props ) => {
                          </div>
                          <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
                              <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? data?.interestRate : 0 } valueType={'percentage'} />
-                             <Details isLoading={isLoading}  id={'interestIncured'}    maxWidth={'100%'} name={'Interest incurred'} value={data?.interestIncurred ?data?.interestIncurred : 0} valueType={'percentage'}  />
+                             {/*<Details isLoading={isLoading}  id={'interestIncured'}    maxWidth={'100%'} name={'Interest incurred'} value={data?.interestIncurred ?data?.interestIncurred : 0} valueType={'percentage'}  />*/}
+                             <Details isLoading={isLoading}  id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={data?.repaymentRate ?data?.repaymentRate : 0} valueType={'percentage'}  />
+
                          </div>
                          <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
-                             <Details isLoading={isLoading}  id={'deptPercentage'}    maxWidth={'100%'} name={'Debt percentage'} value={data?.debtPercentage? data?.debtPercentage : 0} valueType={'percentage'} />
-                             <Details isLoading={isLoading}  id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={data?.repaymentRate ?data?.repaymentRate : 0} valueType={'percentage'}  />
+                             {/*<Details isLoading={isLoading}  id={'deptPercentage'}    maxWidth={'100%'} name={'Debt percentage'} value={data?.debtPercentage? data?.debtPercentage : 0} valueType={'percentage'} />*/}
+                             {/*<Details isLoading={isLoading}  id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={data?.repaymentRate ?data?.repaymentRate : 0} valueType={'percentage'}  />*/}
                          </div>
                          <div className={` pr-6 hidden  pt-3 md:hidden lg:hidden  gap-4`} >
                              <Document/>
