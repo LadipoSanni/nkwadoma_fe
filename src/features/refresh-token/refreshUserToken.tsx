@@ -36,7 +36,7 @@ const RefreshUserToken = ({children}: Props) => {
 
         if (expirationTimeInMilliseconds <= now) {
             console.warn("Token already expired");
-            logout({});
+            // await logout({});
             toast({
                 description: "Session expired. Please login again",
                 status: "error",
@@ -58,7 +58,7 @@ const RefreshUserToken = ({children}: Props) => {
                     sessionStorage.setItem("refresh_token", newRefreshToken);
                 } catch (error) {
                     console.error("Token refresh failed:", error);
-                    logout({});
+                    await logout({});
                     toast({
                         description: "Session expired. Please login again",
                         status: "error",
