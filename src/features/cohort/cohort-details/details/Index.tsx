@@ -140,8 +140,8 @@ const CohortDetails = () => {
     const loanDetail = [
         {detail: "Total amount disbursed", value: formatAmount(details.amountDisbursed)},
         {detail: "Total amount repaid", value: formatAmount(details.amountRepaid)},
-        {detail: "Total amount outstanding", value: formatAmount(details.numberOfEmployed)},
-        {detail: "Repayment rate", value: "%"},
+        {detail: "Total amount outstanding", value: formatAmount(details.amountOutstanding)},
+        {detail: "Repayment rate", value: Math.ceil(Number(details.repaymentRate)) +"%"},
     ]
 
     const tagButtonData = [
