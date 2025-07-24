@@ -24,8 +24,8 @@ const Details = () => {
 
 
     const dataList = [
-        {name: "Fund product", value: loanProduct?.data.investmentVehicleName || 'N/A'},
-        {name: "Product sponsor", value: loanProduct?.data.sponsor || 'N/A'},
+        {name: "Investment vehicle", value: loanProduct?.data.investmentVehicleName || ''},
+        {name: "Product sponsor", value: loanProduct?.data.sponsor || ''},
         {name: "Product size ", value: formatAmount(loanProduct?.data.loanProductSize) || '0'},
         {name: 'Tenor', value: `${loanProduct?.data?.tenor} ${loanProduct?.data?.tenor <= 1 ? 'month' : 'months'}`},
         // { label: "Tenor", value: loanProduct?.data.tenor + " months" },
@@ -36,7 +36,7 @@ const Details = () => {
         {name: "Amount disbursed", value: formatAmount(loanProduct?.data.totalAmountDisbursed) || 0},
         {name: "Amount repaid ", value: formatAmount(loanProduct?.data.totalAmountRepaid) || 0},
         {name: "Amount earned", value: formatAmount(loanProduct?.data.totalAmountEarned) || 0},
-        {name: "Cost of vehicle", value: loanProduct?.data.costOfFund + "%" || "0%"},
+        {name: "Cost of vehicle", value: Math.ceil(Number(loanProduct?.data.costOfFund)) + "%" || "0%"},
     ];
 
     const getFilenameFromUrl = (url: string) => {
