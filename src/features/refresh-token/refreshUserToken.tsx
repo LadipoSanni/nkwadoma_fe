@@ -22,7 +22,6 @@ const RefreshUserToken = ({children}: Props) => {
 
     useEffect(() => {
         if (!storedAccessToken) return;
-
         let decoded: { exp: number };
         try {
             decoded = jwtDecode(storedAccessToken);

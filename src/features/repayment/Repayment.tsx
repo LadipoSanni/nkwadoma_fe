@@ -106,7 +106,7 @@ const Repayment = () => {
         { title: 'Amount paid', sortable: true, id: 'amountPaid', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountPaid)}</div> },
         { title: 'Payment mode', sortable: true, id: 'modeOfPayment', selector: (row: TableRowData) => <div className={`  `}>{getModeOfPayment(row.modeOfPayment)}</div>},
         { title: 'Total amount repaid', sortable: true, id: 'totalAmountRepaid', selector: (row: TableRowData) =><div className=''>{formatAmount(row.totalAmountRepaid)}</div> },
-        { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountOustanding)}</div> },
+        { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountOutstanding)}</div> },
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
