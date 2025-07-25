@@ -3,7 +3,12 @@ import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 import userEvent from '@testing-library/user-event';
 import { Providers } from "@/app/provider";
 
-
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+    usePathname: () => jest.fn(),
+}));
 describe("AddTraineeForm", () => {
     beforeEach(() => {
         cleanup()

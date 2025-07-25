@@ -1,10 +1,11 @@
+'use client'
 import React, {useEffect} from "react";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import {clearData, getItemSessionStorage,} from "@/utils/storage";
 import {useRefreshTokenMutation} from "@/service/unauthorized/action";
 import {jwtDecode} from "jwt-decode";
 import {persistor, store} from "@/redux/store";
-import {redirect} from "next/navigation";
+import { useRouter } from "next/navigation";
 import {useLogoutMutation} from "@/service/users/api";
 import {useToast} from "@/hooks/use-toast";
 import {setError} from "@/redux/slice/auth/slice";
@@ -18,20 +19,31 @@ const RefreshUserToken = ({children}: Props) => {
     const [refreshUserToken ] = useRefreshTokenMutation()
     const [logout] = useLogoutMutation()
     const {toast} = useToast()
+    const router = useRouter();
+
     const  storedAccessToken  = getItemSessionStorage('access_token');
 
     useEffect(() => {
         if (!storedAccessToken) return;
+
         let decoded: { exp: number };
+
         try {
             decoded = jwtDecode(storedAccessToken);
         } catch (err) {
             console.error("Invalid token:", err);
+            toast({
+                description: "Session expired. Please login again",
+                status: "error",
+            });
+            clearData();
+            router.push("/auth/login");
             return;
         }
 
         const expirationTimeInMilliseconds = decoded.exp * 1000;
         const now = Date.now();
+
 
         if (expirationTimeInMilliseconds <= now) {
             console.warn("Token already expired");
@@ -41,7 +53,7 @@ const RefreshUserToken = ({children}: Props) => {
                 status: "error",
             });
             clearData();
-            redirect("/auth/login");
+            router.push("/auth/login");
         }
 
         const refreshTime = Math.max(expirationTimeInMilliseconds - now - 10000, 0);
@@ -65,7 +77,7 @@ const RefreshUserToken = ({children}: Props) => {
                     await persistor.purge();
                     clearData();
                     store.dispatch(setError("Token refresh failed"));
-                    redirect("/auth/login");
+                    router.push("/auth/login");
                 }
             })();
         }, refreshTime);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CreateCohort from '@/reuseable/modals/CreateCohort';
 import { Providers } from '@/app/provider';
@@ -12,6 +12,13 @@ jest.mock('@/components/ui/dialog', () => ({
   DialogHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DialogTitle: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DialogClose: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
+
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+    usePathname: () => jest.fn(),
 }));
 
 describe('CreateCohort Component', () => {
