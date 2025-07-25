@@ -16,7 +16,7 @@ import { setLoanOfferId } from '@/redux/slice/loan/loan-offer';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 import { setLoanReferralId } from '@/redux/slice/loan/selected-loan';
 import {setCurrentStep} from "@/service/users/loanRerralSlice";
-
+import { setNotificationCohortId,resetSelectedCohortInOrganization } from '@/redux/slice/create/cohortSlice';
 // interface NotificationDetailsPageProps{
 //     notification?: NotificationProps
 // }
@@ -67,9 +67,15 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     store.dispatch(setLoanReferralId(notification?.data?.contentId))
        router.push(`/onboarding`);
        store.dispatch(setCurrentStep(0))
-  } else if(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE"){
+  } else if(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE" || notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_SUCCESS" || notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_FAILURE"){
+    store.dispatch(setNotificationCohortId(notification?.data?.contentId))
+    store.dispatch(resetSelectedCohortInOrganization())
+    store.dispatch(setCurrentNavbarItem("Organizations"))
     router.push(`/organizations/loanees/uploaded`);
    
+  } else if(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_SUCCESS" ){
+    store.dispatch(setCurrentNavbarItem("Repayment"))
+    router.push(`/repayment`);
   }
   }
 
@@ -137,15 +143,15 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                          </p>
                         </div>
                         <div className='mt-4 mb-4'>
-                         {notification?.data?.notificationFlag !== "REPAYMENT_UPLOAD_FAILURE"?
-                          ( 
+                         {notification?.data?.notificationFlag !== "REPAYMENT_UPLOAD_FAILURE" || notification?.data?.notificationFlag !== "LOANEE_DATA_UPLOAD_FAILURE"?
+                         ( 
                             <p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>
-                            ) 
+                             ) 
                           : ""} 
                          <p>If you have any questions or need further assistance, our customer service team is here to help</p>
                         </div>
                          <div>
-                           {notification?.data?.notificationFlag !== "REPAYMENT_UPLOAD_FAILURE"?
+                           {/* {notification?.data?.notificationFlag !== "REPAYMENT_UPLOAD_FAILURE"? */}
                           <Button 
                            type='button'
                            variant={'secondary'}
@@ -156,7 +162,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                              View <span className='lowercase ml-1'> {buttonName()}</span>
                              
                            </Button>
-                           :  "" } 
+                          {/* //  :  "" }  */}
                          </div>
                         </div>
     </div>
