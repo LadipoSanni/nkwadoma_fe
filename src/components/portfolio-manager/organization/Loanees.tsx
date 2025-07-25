@@ -72,6 +72,7 @@ const Loanees = dynamic(
 function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: Props) {
     const [searchTerm, setSearchTerm] = useState("");
     const cohortDetails = useAppSelector((state) => state.cohort.selectedCohortInOrganization)
+     const notificationCohortId = useAppSelector((state) => state.cohort?.notificationCohortId)
     const cohortId = cohortDetails?.id;
     const [page,setPageNumber] = useState(0);
     const [totalPage,setTotalPage] = useState(0)
@@ -88,7 +89,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
       const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
       const {data, isLoading,refetch,isFetching} = useViewAllLoaneeQuery({
-            cohortId: cohortId,
+            cohortId: notificationCohortId || cohortId,
             pageSize: size,
             pageNumber: page,
             status: status,
@@ -96,23 +97,23 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         })
 
         const {data: invitedData} = useViewAllLoaneeQuery({
-          cohortId: cohortId,
+          cohortId:notificationCohortId || cohortId,
           pageSize:  size,               
           pageNumber: 0,             
           uploadedStatus: "INVITED"    
         }, {
-          skip: !cohortId &&  tabType === "Invited",            
+          skip: !notificationCohortId || !cohortId &&  tabType === "Invited",            
           refetchOnMountOrArgChange: true
         });
 
       const {data: searchResults, isLoading: isLoadingSearch, isFetching: isfetching} = useSearchForLoaneeInACohortQuery({
                  loaneeName: debouncedSearchTerm,
-                 cohortId: cohortId,
+                 cohortId: notificationCohortId || cohortId,
                  status: status,
                  pageSize: size,
                  pageNumber: page,
              },
-             {skip: !debouncedSearchTerm || !cohortId})
+             {skip: !debouncedSearchTerm ||  !notificationCohortId || !cohortId})
             
       useEffect(() => {
          if(debouncedSearchTerm && searchResults && searchResults?.data){
