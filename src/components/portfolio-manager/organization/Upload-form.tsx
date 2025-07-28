@@ -10,6 +10,7 @@ import { setUserdataFile,setRepaymentFile,resetCsvStatus,resetRepaymentdata } fr
 import { useUploadLoaneeFileMutation,useUploadRepaymentFileMutation } from "@/service/admin/loan_book";
 import { convertSpreadsheetToCsv } from "@/utils/convert-csv";
 import { useToast } from "@/hooks/use-toast";
+import { notificationApi } from '@/service/notification/notification_query';
 
 interface FormValues {
   loaneeFile: File | null;
@@ -59,7 +60,6 @@ function UploadForm({ setIsOpen, uploadType,loaneeRefetch }: Props) {
   const handleSubmit =  async  (values: FormValues) => {
      
    try {
-
     if (uploadType === "loaneeData"  &&  values.loaneeFile) {
         const csvData = await convertSpreadsheetToCsv(values.loaneeFile);
         const formData = new FormData(); 
@@ -72,6 +72,9 @@ function UploadForm({ setIsOpen, uploadType,loaneeRefetch }: Props) {
         if(uploadUserFile) {
             handleCloseModal()
             store.dispatch(resetCsvStatus()) 
+            setTimeout(() => {
+              store.dispatch(notificationApi.util.invalidateTags(['notification']));
+            }, 2000);
             if(loaneeRefetch ){
                 loaneeRefetch()
             }
@@ -93,6 +96,9 @@ function UploadForm({ setIsOpen, uploadType,loaneeRefetch }: Props) {
         if(uploadFile) {
             handleCloseModal()
             store.dispatch(resetRepaymentdata())
+            setTimeout(() => {
+              store.dispatch(notificationApi.util.invalidateTags(['notification']));
+            }, 2000);
             if(loaneeRefetch ){
                 loaneeRefetch()
             }
