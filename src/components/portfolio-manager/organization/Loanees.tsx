@@ -87,7 +87,6 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
     const router = useRouter();
      const [isOpen, setIsOpen] = useState(false);
 
-     console.log("Flag: ",notificationFlag)
 
       const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
