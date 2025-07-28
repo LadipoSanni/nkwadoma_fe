@@ -104,7 +104,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
           pageNumber: 0,             
           uploadedStatus: "INVITED"    
         }, {
-          skip: !notificationCohortId || !cohortId &&  tabType === "Invited",            
+          skip: !(notificationCohortId || cohortId) &&  tabType === "Invited",            
           refetchOnMountOrArgChange: true
         });
 
