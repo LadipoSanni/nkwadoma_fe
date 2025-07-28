@@ -174,7 +174,7 @@ function LoanDetails() {
         {label: 'Gender', value: data?.data?.userIdentity?.gender},
         {label: 'Email address', value: data?.data?.userIdentity?.email},
         {label: 'Phone number', value: data?.data?.userIdentity?.phoneNumber},
-        {label: 'Date of birth', value: data?.data?.userIdentity?.dateOfBirth ? dayjs(data?.data?.userIdentity?.dateOfBirth?.toString()).format('MMM D, YYYY') : ''},
+        {label: 'Date of birth', value: data?.data?.userIdentity?.dateOfBirth ? data?.data?.userIdentity?.dateOfBirth?.toString() : ''},
         {label: 'Marital status', value: data?.data?.userIdentity?.maritalStatus},
         {label: 'Nationality', value: data?.data?.userIdentity?.nationality},
         {label: 'State of origin ', value: data?.data?.userIdentity?.stateOfOrigin},
