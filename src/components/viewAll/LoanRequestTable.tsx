@@ -44,7 +44,7 @@ const Index = () => {
     }
 
 
-    const { data, isLoading} = useViewAllLoanRequestQuery(request)
+    const { data, isLoading} = useViewAllLoanRequestQuery(request,{refetchOnMountOrArgChange: true})
 
 
     const loanRequestHeader = [

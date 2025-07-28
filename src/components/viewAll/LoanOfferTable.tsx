@@ -36,7 +36,7 @@ const Index = () => {
         pageNumber: 0,
         organizationId: clickedOrganization?.id || "",
     }
-    const { data, isLoading} = useViewAllLoanOfferQuery(request)
+    const { data, isLoading} = useViewAllLoanOfferQuery(request,{refetchOnMountOrArgChange: true})
     // const requestBody = {
     //     pageNumber: 0,
     //     pageSize: 100,

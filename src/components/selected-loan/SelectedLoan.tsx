@@ -4,6 +4,7 @@ import SelectedLoanHeader from "@/components/selected-loan/SelectedLoanHeader";
 import styles from "./SelectedLoan.module.css"
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import {store} from "@/redux/store";
+import { notificationApi } from '@/service/notification/notification_query';
 // import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
 
 interface props  {
@@ -16,6 +17,11 @@ const SelectedLoan = ({children}: props) => {
     useEffect(() => {
         store.dispatch(resetAll())
         store.dispatch(clearSaveCreateInvestmentField())
+        const timer = setTimeout(() => {
+            store.dispatch(notificationApi.util.invalidateTags(['notification']));
+          }, 100);
+        
+          return () => clearTimeout(timer);
         // store.dispatch(setCurrentTab('Loan requests'))
     },[])
 

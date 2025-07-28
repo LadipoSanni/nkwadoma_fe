@@ -84,8 +84,8 @@ function Organization() {
     }
 
 
-    const { data, isLoading,isFetching} = useViewAllOrganizationByStatusQuery(dataElement, {
-        refetchOnMountOrArgChange: tabType === "active" || tabType === "deactivated"
+    const { data, isLoading,isFetching,refetch} = useViewAllOrganizationByStatusQuery(dataElement, {
+        refetchOnMountOrArgChange: true 
     });
 
     const { data: searchResults, isLoading: isloading, isFetching: isfetching } = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
@@ -236,7 +236,11 @@ function Organization() {
                 icon={Cross2Icon}
                 width='36%'
             >
-                <InviteOrganizationForm setIsOpen={setIsOpen} />
+                <InviteOrganizationForm 
+                setIsOpen={setIsOpen} 
+                organizationRefetch={refetch}
+                tabType={tabType}
+                />
             </TableModal>
         </div>
     );

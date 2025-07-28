@@ -5,15 +5,15 @@ import * as Yup from 'yup';
 import {Label} from '@/components/ui/label';
 import {inter} from "@/app/fonts"
 import CustomSelect from '@/reuseable/Input/Custom-select';
-// import { FileUpload } from '@/reuseable/Input';
+import { notificationApi } from '@/service/notification/notification_query';
 import Isloading from '@/reuseable/display/Isloading';
 import {useInviteOrganizationMutation} from '@/service/admin/organization';
 import {useToast} from "@/hooks/use-toast";
-import {useQueryClient} from '@tanstack/react-query';
 import { store } from '@/redux/store';
 import { setOrganizationTabStatus } from '@/redux/slice/organization/organization';
 import PhoneNumberSelect from '@/reuseable/select/phoneNumberSelect/Index';
 import { formatInternationalNumber } from '@/utils/phoneNumber';
+
 
 interface ApiError {
     status: number;
@@ -41,10 +41,12 @@ const initialFormValue = {
 
 interface props {
     setIsOpen?: (e: boolean) => void;
+    organizationRefetch?: (() => void) | null;
+    tabType?: string
 }
 
-function InviteOrganizationForm({setIsOpen}: props) {
-    const queryClient = useQueryClient();
+function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) {
+    // const queryClient = useQueryClient();
     //  const industries = [ "MANUFACTURING", "INSURANCE", "LOGISTIC", "TELECOMMUNICATION", "REAL ESTATE", "AUTOMOBILE", "FASHION", "AVIATION", "AGRICULTURE", "EDUCATION", "HEALTHCARE", "ENTERTAINMENT", "HOSPITALITY", "FMCG", "TECHNOLOGY", "FINANCE" ];
     const industries = ["EDUCATION", "BANKING"]
     const serviceOfferings = ["TRAINING", "FINANCIAL ADVISORY", "INSURANCE SERVICES", "LOAN SERVICES", "ACCOUNTING AND BOOKKEEPING", "INVESTMENT ADVISORY", "RISK MANAGEMENT", "CORPORATE FINANCE", "TAX SERVICES", "BANKING SERVICES", "CRYPTOCURRENCY SERVICES", "SOFTWARE DEVELOPMENT", "WEB DEVELOPMENT", "CLOUD SERVICES", "CYBERSECURITY SERVICES", "DATABASE MANAGEMENT", "AI AND MACHINE LEARNING", "BUSINESS INTELLIGENCE", "DEVOPS SERVICES", "BLOCKCHAIN SERVICES", "DISTRIBUTION SERVICES", "MARKETING AND BRANDING", "SALES SERVICES", "CUSTOMER SERVICE AND SUPPORT", "SUSTAINABILITY SERVICES", "CONSUMER ENGAGEMENT AND LOYALTY", "TECHNOLOGY AND INNOVATION", "HOTEL SERVICES", "RESTAURANT SERVICES", "EVENT PLANNING", "TRAVEL AND TOUR SERVICES", "CORPORATE RETREATS", "SPA AND WELLNESS", "TRANSPORTATION", "FILM AND TELEVISION", "MUSIC", "THEATRE", "SPORTS AND FITNESS", "GAMING", "EVENT AND PARTIES", "TELECOMMUNICATION", "PHOTOGRAPHY"];
@@ -116,7 +118,6 @@ function InviteOrganizationForm({setIsOpen}: props) {
     })
 
     const handleSubmit = async (values: typeof initialFormValue) => {
-        // console.log('The values: ',values);
         if (!navigator.onLine) {
             toast({
                 description: "No internet connection",
@@ -152,8 +153,11 @@ function InviteOrganizationForm({setIsOpen}: props) {
         try {
             const result = await inviteOrganization(formData).unwrap();
             if (result) {
-                queryClient.invalidateQueries({queryKey: ['invite']});
+                store.dispatch(notificationApi.util.invalidateTags(['notification']))
                 store.dispatch(setOrganizationTabStatus("invited"))
+                if(organizationRefetch && tabType === "invited"){
+                    organizationRefetch()
+                }
                 toast({
                     description: result.message,
                     status: "success",
