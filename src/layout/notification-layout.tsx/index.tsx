@@ -391,7 +391,7 @@ function NotificationLayout({children}: Props) {
                 />
                 </div>
                 <div className='flex-col flex items-start'>
-                  <div className="text-[14px] font-medium text-[#212221] xl:max-w-80 sm:max-w-full max-w-60 whitespace-nowrap overflow-hidden text-ellipsis">{notification.title}</div>
+                  <div className="text-[14px] font-medium text-[#212221]  max-w-60 lg:max-w-80 whitespace-nowrap overflow-hidden text-ellipsis">{notification.title}</div>
                 <div className='font-normal max-w-64 whitespace-nowrap overflow-hidden text-ellipsis'>{notification.contentDetail}</div>
                 </div>
                   

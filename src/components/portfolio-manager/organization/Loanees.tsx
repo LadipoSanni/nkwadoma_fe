@@ -73,6 +73,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
     const [searchTerm, setSearchTerm] = useState("");
     const cohortDetails = useAppSelector((state) => state.cohort.selectedCohortInOrganization)
      const notificationCohortId = useAppSelector((state) => state.cohort?.notificationCohortId)
+     const notificationFlag = useAppSelector((state) => state?.notification?.notificationFlag)
     const cohortId = cohortDetails?.id;
     const [page,setPageNumber] = useState(0);
     const [totalPage,setTotalPage] = useState(0)
@@ -85,6 +86,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
     const {toast} = useToast()
     const router = useRouter();
      const [isOpen, setIsOpen] = useState(false);
+
 
       const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
@@ -126,7 +128,13 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
           setTotalPage(data?.data?.totalPages)
           setPageNumber(data?.data?.pageNumber)
         }
-      },[debouncedSearchTerm,data,searchResults])      
+      },[debouncedSearchTerm,data,searchResults]) 
+      
+      useEffect(() => {
+        if(notificationCohortId && uploadedStatus === "ADDED" && notificationFlag === "LOANEE_DATA_UPLOAD_SUCCESS"){
+          refetch()
+        }
+      },[refetch,notificationCohortId,uploadedStatus,notificationFlag])
 
       const tableHeaderintegrated = [
               {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + row?.userIdentity?.lastName},

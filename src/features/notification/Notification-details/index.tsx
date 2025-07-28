@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useViewNotificationDetailsQuery } from '@/service/notification/notification_query';
 import {store} from "@/redux/store";
 import { setCurrentFinancierId} from '@/redux/slice/financier/financier';
-import { setNotification,resetNotification,setNotificationId } from '@/redux/slice/notification/notification';
+import { setNotification,resetNotification,setNotificationId,setNotificationFlag } from '@/redux/slice/notification/notification';
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
 import { setOrganizationId,setOrganizationDetail} from '@/redux/slice/organization/organization';
 import { setLoanOfferId } from '@/redux/slice/loan/loan-offer';
@@ -71,6 +71,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     store.dispatch(setNotificationCohortId(notification?.data?.contentId))
     store.dispatch(resetSelectedCohortInOrganization())
     store.dispatch(setCurrentNavbarItem("Organizations"))
+    store.dispatch(setNotificationFlag(notification?.data?.notificationFlag))
     router.push(`/organizations/loanees/uploaded`);
    
   } else if(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_SUCCESS" ){
