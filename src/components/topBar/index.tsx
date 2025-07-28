@@ -17,7 +17,7 @@ import { Button } from '../ui/button';
 import { BellIcon } from '@radix-ui/react-icons';
 import { Badge } from '../ui/badge';
 import { useNumberOfNotificationQuery } from '@/service/notification/notification_query';
-import { setCurrentTotalNotification } from '@/redux/slice/notification/notification';
+import { setCurrentTotalNotification,resetNotificationPageNumber } from '@/redux/slice/notification/notification';
 import {DISPLAYUSERROLE} from "@/components/topBar/variables";
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
 import { getItemFromLocalStorage, setItemToLocalStorage } from '@/utils/storage';
@@ -75,8 +75,9 @@ const TopBar = () => {
 
     const handleNotification = () => {
         setFocus(true)
-        router.push("/notifications/notification")
-       store.dispatch(setCurrentNavbarItem('Notification'))  
+        store.dispatch(setCurrentNavbarItem('Notification')) 
+        store.dispatch(resetNotificationPageNumber())
+        router.push("/notifications/notification") 
     }
 
     const isNotificationPage = /^\/notifications(?:\/.*)?$/.test(pathname || "");
