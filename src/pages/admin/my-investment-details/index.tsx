@@ -319,7 +319,7 @@ const MyInvestmentDetailsContent = () => {
                                             className={`  ${inter.className} text-black300 text-[14px]  font-normal`}>{item.label}</p>
                                         <div
                                             id={'value' + index}
-                                            className={` ${inter.className}  text-black500 text-[14px] le font-normal`}> {item.value ? item.value : 'Not provided'}</div>
+                                            className={` ${inter.className}  text-black500 text-[14px] le font-normal`}> {item.value ? item?.value : 'Not provided'}</div>
                                     </div>
                                 ))}
                             </div>

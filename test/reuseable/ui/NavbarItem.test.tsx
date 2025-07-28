@@ -11,6 +11,12 @@ const mockData: navbarRouterItemsProps[] = [
     {id: 'cohort', name: 'Cohort', route: '/cohort',icon:<MdOutlineHome/>},
 ]
 
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+    usePathname: () => jest.fn(),
+}));
 describe('test navbar item', ()=> {
     beforeEach(() => {
         cleanup()

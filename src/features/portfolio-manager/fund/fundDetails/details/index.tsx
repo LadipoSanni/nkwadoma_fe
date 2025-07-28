@@ -164,13 +164,13 @@ const Details = () => {
       const { type: statusTypes, value: statusValue } = getVehicleStatus();
 
     return (
-        <>
+        <div className={`${styles.container} `}>
             {isLoading ? (<SkeletonForDetailPage/>) : (
                 <div
                     className={`flex flex-col md:flex-row md:justify-between ${inter.className}`}
                 > 
                   <div className={`w-full   `}>
-                      <div className={` ${styles.container}  md:max-h-[70vh] w-full  md:max-w-[80%] `}>
+                      <div className={`  md:max-h-[70vh] w-full  md:max-w-[80%] `}>
                           <div >
                               <InfoCard
                                   icon={MdOutlinePayments}
@@ -183,10 +183,14 @@ const Details = () => {
                                   <div
                                       className={` rounded-full h-12 w-12 flex items-center justify-center  bg-[#d9eaff] text-meedlBlue text-sm font-semibold uppercase`}
                                   >
-                                      {data?.data.bankPartner
-                                          ?.split(" ")
-                                          .map((word: string) => word[0])
-                                          .join("")}
+                                    {
+                                    data?.data.fundManager
+                                        ?.split(" ")
+                                        .filter((word: string) => word.trim() !== "") 
+                                        .filter((_: string, i: number, arr: string[]) => i === 0 || i === arr.length - 1)
+                                        .map((word: string) => word[0].toUpperCase())
+                                        .join("")
+                                    }
                                   </div>
 
                                   <div className="flex flex-col gap-1">
@@ -215,14 +219,14 @@ const Details = () => {
                                               }}
                                           />
                                       </div>
-                                      <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px]  lg:whitespace-normal '>{docFilename}</p>
+                                      <p className='text-[14px] truncate max-w-[180px] md:max-w-[200px] lg:max-w-[280px]   '>{docFilename}</p>
                                   </div>
 
                                   <Button
                                       id='view-document'
                                       type='button'
                                       variant={"outline"}
-                                      className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]   font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[8.9vh]"}`}
+                                      className={`border-solid border-[1px] border-[#142854] text-[#142854] text-[12px]   font-semibold rounded-2xl h-7  ${docUrl? "w-[6.9vh]" : "w-[11.9vh]"}`}
                                       onClick={handleViewDocument}
                                       disabled={!docUrl || isVerifying}
                                       aria-label={`View ${docFilename}`}
@@ -241,7 +245,7 @@ const Details = () => {
                               <div className='bg-[#F9F9F9] flex justify-between px-4 py-4 rounded-lg items-center'>
 
                                   <div className='flex gap-2 items-center'>
-                                      <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{data?.data?.investmentVehicleVisibility === "DEFAULT"? "Only-me"  : capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p>
+                                      <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{data?.data?.investmentVehicleVisibility === "DEFAULT"? "Only me"  : capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p>
                                   </div>
 
                                   <Button
@@ -291,7 +295,7 @@ const Details = () => {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

@@ -37,7 +37,7 @@ const CreditScore = ({creditScore, creditScoreDescriptionId}: Props) => {
 
     const getCreditScoreDescription = (creditScore: number) => {
         if (creditScore === 0) {
-            return 'No activity'
+            return 'unscored'
         }
         if (creditScore > 0 &&   creditScore <= 549) {
             return 'Very poor'

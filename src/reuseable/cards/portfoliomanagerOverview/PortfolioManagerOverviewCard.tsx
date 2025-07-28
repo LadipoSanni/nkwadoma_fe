@@ -58,7 +58,7 @@ const PortfolioManagerOverviewCard = ({id,isLoading,isFetching,isLoanData,loanDa
                                   <div
                                       className={`text-black300 w-full b absolute top-0 left-0  gap-2   px-3  h-[40px]    flex justify-between   `}
                                   >
-                                      <p id={'label'+ loan.title} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  ${loan.textColor} `}>{loan.title}</p>
+                                      <p id={'label'+ loan.title} className={` ${inter500.className} text-[14px] mt-auto mb-auto text-nowrap whitespace-nowrap  ${loan.textColor} `}>{loan.title}</p>
                                       <p id={ loan.title +'Percentage'} className={` ${inter500.className} mt-auto mb-auto text-nowrap whitespace-nowrap  text-[#212221] `}>{loan.amount + '%'}</p>
 
                                   </div>

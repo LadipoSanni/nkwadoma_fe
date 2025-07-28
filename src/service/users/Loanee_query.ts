@@ -5,7 +5,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 export const loaneeApi = createApi({
     reducerPath: 'loaneeApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['loanee', 'accept-loan-offer'],
+    tagTypes: ['loanee', 'accept-loan-offer','loanOffer'],
     endpoints: (builder) => ({
 
         verifyIdentity: builder.mutation({
@@ -39,8 +39,8 @@ export const loaneeApi = createApi({
             }),
         }),
         viewLoanReferralDetails: builder.query ({
-            query: () => ({
-                url: `/loan-referral`,
+            query: (loanReferralId?: string) => ({
+                url: `/loan-referral?loanReferralId=${loanReferralId}`,
                 method: "GET",
             }),
         }),
@@ -56,8 +56,40 @@ export const loaneeApi = createApi({
                 method: 'GET'
             }),
 
-        })
+        }),
+        viewLoaneeInACohortDetails: builder.query ({
+            query: (data) => ({
+                url: `/loanee/cohorts/loanee?cohortId=${data.cohortId}&loaneeId=${data.loaneeId}`,
+                method:'GET'
+            })
+        }),
+        checkLoaneeStatus: builder.query ({
+            query : () => ({
+                url:  `/auth/userDetail`,
+                method: 'GET'
+            }),
+            providesTags: ['loanee', 'accept-loan-offer']
 
+        }),
+        viewLoanDetails: builder.query ({
+            query: (loanId: string) =>({
+                url: `/loan/loan-disbursals/${loanId}`,
+                method: 'GET'
+            }),
+            providesTags: ['loanOffer']
+        }),
+        viewAllLoanRefferals: builder.query({
+            query: () => ({
+                url: "/loanee/loan-referrals",
+                 method: 'GET'
+            })
+        }),
+        viewLoanDetailsOnOnboarding : builder.query ({
+            query: (cohortLoaneeId) => ({
+                url: `loanee/loan/detail?cohortLoaneeId=${cohortLoaneeId}`,
+                method: 'GET'
+            })
+        })
     })
 })
 
@@ -65,12 +97,17 @@ export const loaneeApi = createApi({
 
 export const {
     // useIsIdentityVerifiedQuery,
+    useViewLoanDetailsOnOnboardingQuery,
+    useCheckLoaneeStatusQuery,
      useSaveNextOfKinDetailsMutation,
     useViewLoanReferralDetailsQuery,
     useVerifyIdentityMutation,
     useRespondToLoanReferralMutation,
+    useViewLoaneeInACohortDetailsQuery,
     // useLazyIsIdentityVerifiedQuery,
     useGetLoaneeDetailsQuery,
-    useGetLoaneeIdentityVerificationDetailsQuery
+    useViewLoanDetailsQuery,
+    useGetLoaneeIdentityVerificationDetailsQuery,
+    useViewAllLoanRefferalsQuery
 } = loaneeApi;
 

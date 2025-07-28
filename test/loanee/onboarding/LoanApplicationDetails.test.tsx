@@ -10,16 +10,28 @@ jest.mock('next/navigation', () => ({
         replace: jest.fn(),
         prefetch: jest.fn(),
     })),
+    usePathname: () => jest.fn(),
 }));
 
 describe('LoanApplicationDetails', () => {
     const data = {
-        tuitionAmount: "0.00",
-        amountRequested: "0.00",
-        initialDeposit: "0.00",
-        referredBy: "",
-    }
-    it('renders the header correctly', () => {
+        tuitionAmount: '100000',
+        loanAmountRequested: '50000',
+        initialDeposit: '10000',
+        cohortStartDate: '2024-09-01',
+        referredBy: 'Friend',
+        loaneeLoanBreakdowns: [
+          { itemName: 'Books', itemAmount: 10000 },
+          { itemName: 'Lab Fee', itemAmount: 5000 },
+        ],
+      };
+    global.fetch = jest.fn(() =>
+        Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        }))
+    );
+    it('renderns the header correctly', () => {
         render(
             <Providers>
                 <LoaneeOnboarding />

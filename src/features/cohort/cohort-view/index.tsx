@@ -30,6 +30,7 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import AddCohortInAnOrganization from '@/components/portfolio-manager/organization/AddCohort-in-organization'
 import { useAppSelector } from '@/redux/store'
+import { useDebounce } from '@/hooks/useDebounce';
 // import { resetcohortId, } from '@/redux/slice/create/cohortSlice'
 
 
@@ -107,16 +108,18 @@ const CohortView = () => {
 });
 
 const currentTabState = tabStates[cohortTab];
+
+ const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
    
-   const { data: cohortData,isLoading,refetch:refetchCohortData } = useGetAllCohortsByOrganisationQuery({  ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+   const { data: cohortData,isLoading,refetch:refetchCohortData,isFetching:isfetching  } = useGetAllCohortsByOrganisationQuery({  ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
     ? { organizationId } 
     : {}),cohortStatus: cohortTab.toUpperCase(),pageSize: 10, pageNumber:currentTabState.pageNumber }, { refetchOnMountOrArgChange: true, })
     
-    const { data: searchData, isLoading: searchIsloading } = useSearchCohortByOrganisationQuery({cohortName: searchTerm,...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+    const { data: searchData, isLoading: searchIsloading, isFetching: isSearchFetching } = useSearchCohortByOrganisationQuery({cohortName: debouncedSearchTerm,...(user_role === "PORTFOLIO_MANAGER" && organizationId 
       ? { organizationId } 
-      : {}),programId: programId,cohortStatus: cohortTab.toUpperCase(), pageSize: size, pageNumber: currentTabState.pageNumber,}, { skip: !searchTerm });
+      : {}),programId: programId,cohortStatus: cohortTab.toUpperCase(), pageSize: size, pageNumber: currentTabState.pageNumber,}, { skip: !debouncedSearchTerm });
 
-   const { data: programDatas, isLoading: programIsloading,isFetching  } = useGetAllProgramsQuery({ ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+   const { data: programDatas, isLoading: programIsloading,isFetching } = useGetAllProgramsQuery({ ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
     ? { organizationId } 
     : {}),pageSize: size, pageNumber: pageNumber }, { skip: !isCreateModalOpen, refetchOnMountOrArgChange: true, })
   const { data: cohortsByProgram, refetch, isLoading: cohortIsLoading } = useGetAllCohortByAParticularProgramQuery({ programId,cohortStatus: cohortTab.toUpperCase(), pageSize: 300, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
@@ -128,7 +131,7 @@ const currentTabState = tabStates[cohortTab];
 
 
    useEffect(() => {
-    if(searchTerm && searchData && searchData?.data) {
+    if(debouncedSearchTerm && searchData && searchData?.data) {
       const result = searchData?.data?.body
       setOrganisationCohort(result)
       setTabStates(prev => ({
@@ -140,7 +143,7 @@ const currentTabState = tabStates[cohortTab];
         }
     }));
     }
-    else if(!searchTerm && cohortData && cohortData?.data) {
+    else if(!debouncedSearchTerm && cohortData && cohortData?.data) {
         const result = cohortData?.data?.body
       setOrganisationCohort(result)
       setOriginalCohortData(result);  
@@ -154,7 +157,7 @@ const currentTabState = tabStates[cohortTab];
     }));
     }
     
-   },[searchTerm,searchData,cohortData,cohortTab])
+   },[debouncedSearchTerm,searchData,cohortData,cohortTab])
 
     const handlePageChange: React.Dispatch<React.SetStateAction<number>> = (value) => {
            const newPage = typeof value === 'function' ? value(currentTabState.pageNumber) : value;
@@ -169,8 +172,8 @@ const currentTabState = tabStates[cohortTab];
 
     useEffect(() => {
         if (programDatas && programDatas?.data) {
-            const sortedPrograms = [...programDatas.data.body].sort((a, b) =>
-                a.name.localeCompare(b.name)
+            const sortedPrograms = [...programDatas?.data?.body].sort((a, b) =>
+                a?.name?.localeCompare(b?.name)
             );
 
             setListOfPrograms((prev) => {
@@ -178,9 +181,9 @@ const currentTabState = tabStates[cohortTab];
                     return sortedPrograms;
                 }
                 const newPrograms = sortedPrograms.filter(
-                    (newProgram: viewAllProgramProps) => !prev.some((prev) => prev.id === newProgram.id)
+                    (newProgram: viewAllProgramProps) => !prev.some((prev) => prev?.id === newProgram?.id)
                 );
-                return [...prev, ...newPrograms].sort((a, b) => a.name.localeCompare(b.name));
+                return [...prev, ...newPrograms]?.sort((a, b) => a?.name?.localeCompare(b?.name));
             });
 
             setNextPage(programDatas?.data?.hasNextPage);
@@ -200,7 +203,7 @@ const currentTabState = tabStates[cohortTab];
             hasNextPage:cohortsByProgram?.data.hasNextPage
         }
     }));
-     } }, [cohortsByProgram]);
+     } }, [cohortsByProgram,cohortTab]);
 
      const loadMore = () => {
       if (!isFetching && hasNextPage) {
@@ -453,16 +456,18 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
         </div>
         <div className={` ${user_role === "PORTFOLIO_MANAGER"? "mt-8" : " mr-auto ml-auto relative w-[96%] mt-12 "}`}>
          <CohortTabs 
-         isLoading={isLoading || searchIsloading || cohortIsLoading } 
+         isLoading={isLoading || searchIsloading || cohortIsLoading || isfetching || isSearchFetching } 
          listOfCohorts={organisationCohort} 
          handleDelete={handleDeleteCohortByOrganisation} 
-         errorDeleted={deleteProgram} searchTerm={searchTerm} 
+         errorDeleted={deleteProgram} 
          userRole={user_role} 
          currentTab={cohortTab}
          handlePageChange={handlePageChange}
          hasNextPage={currentTabState.hasNextPage}
          pageNumber={currentTabState.pageNumber}
          totalPages={currentTabState.totalPages}
+         isTyping={isTyping}
+         searchTerm={debouncedSearchTerm}
          />
          
         </div>

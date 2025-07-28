@@ -17,7 +17,7 @@ import { Button } from '../ui/button';
 import { BellIcon } from '@radix-ui/react-icons';
 import { Badge } from '../ui/badge';
 import { useNumberOfNotificationQuery } from '@/service/notification/notification_query';
-import { setCurrentTotalNotification } from '@/redux/slice/notification/notification';
+import { setCurrentTotalNotification,resetNotificationPageNumber } from '@/redux/slice/notification/notification';
 import {DISPLAYUSERROLE} from "@/components/topBar/variables";
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
 import { getItemFromLocalStorage, setItemToLocalStorage } from '@/utils/storage';
@@ -39,7 +39,7 @@ const TopBar = () => {
     const [displayName, setDisplayName] = useState(storedOrgName || user_name || '');
     const [userRole] = useState(user_role ? user_role : '');
 
-    const { data, refetch } = useNumberOfNotificationQuery({});
+    const { data} = useNumberOfNotificationQuery({});
 
     useEffect(() => {
         if (user_role === "FINANCIER" && isSuccess && financierData?.data) {
@@ -56,12 +56,12 @@ const TopBar = () => {
         if (data?.data?.allNotificationsCount !== undefined) {
             store.dispatch(setCurrentTotalNotification(data.data.allNotificationsCount));
         }
-         refetch()
+        //  refetch()
         if (user_role === "FINANCIER" && pathname?.startsWith("/kyc")) {
             store.dispatch(setCurrentNavbarItem("KYC verification"));
         }
 
-    },[data,refetch,pathname, user_role])
+    },[data,pathname, user_role])
 
 
     const toggleArrow = () => {
@@ -75,8 +75,9 @@ const TopBar = () => {
 
     const handleNotification = () => {
         setFocus(true)
-        router.push("/notifications/notification")
-       store.dispatch(setCurrentNavbarItem('Notification'))  
+        store.dispatch(setCurrentNavbarItem('Notification')) 
+        store.dispatch(resetNotificationPageNumber())
+        router.push("/notifications/notification") 
     }
 
     const isNotificationPage = /^\/notifications(?:\/.*)?$/.test(pathname || "");
@@ -111,7 +112,7 @@ const TopBar = () => {
                           <div className='relative left-3 md:left-0'>
                             <Button
                             className='text-black shadow-none mt-1 cursor-auto'
-                           
+                            onClick={handleNotification}
                             >
                                 {
                                  isNotificationPage?
@@ -126,7 +127,7 @@ const TopBar = () => {
                                 style={{ width: '22px',height: '21px',stroke: '#000', strokeWidth: '0.6'}}
                                />
                                <div className='absolute'
-                                 onClick={handleNotification}
+                                
                                >
                                 { data === undefined || data?.data?.unreadCount === null ? "" :
                                 (data?.data?.unreadCount  === 0? "" : <Badge

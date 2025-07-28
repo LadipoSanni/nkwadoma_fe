@@ -1,3 +1,4 @@
+'use client'
 import {cabinetGroteskBold, inter} from '@/app/fonts';
 import React from 'react';
 import { MdMoreHoriz } from "react-icons/md";
@@ -14,6 +15,8 @@ import {getItemSessionStorage} from "@/utils/storage";
 import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
+import BackButton from '../back-button';
+import {useRouter} from "next/navigation";
 
 interface Props {
     cohort: string,
@@ -30,7 +33,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
     const [modalButtonText, setModalButtonText] = React.useState('');
     const [modalTitle, setModalTitle] = React.useState('');
     const userRole  = getItemSessionStorage("user_role")
-
+    const router = useRouter()
 
     const handleOpenModal = (id: string, title: string, buttonText: string) => {
         setModalId(id);
@@ -38,10 +41,15 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
         setModalButtonText(buttonText);
         setOpenModal(true);
     }
+    const handleBack = () => {
+        router.push("/my-loans");
+    }
 
     return (
        <div>
-           <div id={'loaneeProfileHeader'}
+           {userRole === 'LOANEE' && <BackButton id={'backtoMyLoans'} sx={`pl-3 pt-2  `} text={'Back'} handleClick={handleBack}
+                        textColor={'meedlBlue'} iconBeforeLetters={true}/>
+           }           <div id={'loaneeProfileHeader'}
                 data-testid={'loaneeProfileHeader'}
                 className={`w-full h-fit md:h-[13vh]  py-4 border-b border-b-grey-200 px-4  mt-auto mb-auto  flex justify-between `}
            >
@@ -86,10 +94,10 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
 
                            }
                            <div className={` flex gap-2`}>
-                               <p id={'loaneeCohort'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{capitalizeFirstLetters(cohort)}</p>
-                               {cohort || program ? <Circle color={'#ECECEC'}
+                               <p id={'loaneeCohort'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{capitalizeFirstLetters(program)}</p>
+                               {cohort && program ? <Circle color={'#ECECEC'}
                                                             className="h-1 w-1 text-[#ECECEC] mt-auto mb-auto  fill-primary"/>: null}
-                               <p id={'loaneeProgram'} data-testid={'loaneeProgram'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{capitalizeFirstLetters(program)}</p>
+                               <p id={'loaneeProgram'} data-testid={'loaneeProgram'} className={`${inter.className} text-[#4D4E4D] text-[16px] `}>{capitalizeFirstLetters(cohort)}</p>
                            </div>
                        </div>
                    </div>
@@ -98,7 +106,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                }
 
                {userRole === 'LOANEE' &&
-                   <div className={`h-full  grid content-center`}>
+                   <div className={`h-full hidden  grid content-center`}>
                        <Menubar  className={'w-fit mt-auto mb-auto h-fit'}>
                            <MenubarMenu >
                                <MenubarTrigger disabled={true} className={` bg-[#F9F9F9] w-fit h-fit py-1.5  px-1.5 md:py-2 md:px-2 lg:py-2 lg:px-2 mt-auto mb-auto   rounded-full `} >

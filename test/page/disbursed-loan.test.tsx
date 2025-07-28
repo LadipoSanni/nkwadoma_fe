@@ -1,26 +1,42 @@
 import "@testing-library/react"
-import { render, screen} from "@testing-library/react";
+import {render, screen, act, waitFor,cleanup} from "@testing-library/react";
 import DisbursedLoanDetails from "../../src/features/portfolio-manager/disbursed-loan-details";
 import {Providers} from "@/app/provider";
 // import {userEvent} from "@testing-library/user-event";
 
 jest.mock('next/navigation', ()=> ({
-    useRouter: jest.fn()
+    useRouter: jest.fn(),
+    usePathname: () => jest.fn(),
 }))
 
 describe('test loan disburse details page', ()=> {
 
-    beforeEach(() => {
-        render(
+      beforeEach(() => {
+                 cleanup()
+                   jest.spyOn(console,'log').mockReturnValue()
+                   jest.spyOn(console,'warn').mockReturnValue()
+                   jest.spyOn(console,'error').mockReturnValue()
+               });
+
+    beforeEach(async () => {
+        global.fetch = jest.fn(() =>
+            Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }))
+        );
+        await act( async () => render(
             <Providers>
                 <DisbursedLoanDetails/>
             </Providers>
-        )
+        ))
     })
 
-    test('that component exist ', ()=> {
+    test('that component exist ', async ()=> {
         const container = screen.getByTestId("disbursedLoanMainContainer")
-        expect(container).toBeInTheDocument()
+        // expect(container).toBeInTheDocument()
+        await waitFor(() => expect(container).toBeInTheDocument());
+
     })
     // test('that component contains back button and its works', ()=> {
     //     const push = jest.fn();

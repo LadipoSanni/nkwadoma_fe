@@ -57,7 +57,9 @@ const ProgramDetails = () => {
             totalAmountDisbursed: 0,
             totalAmountOutstanding: 0,
             numberOfCohort: 0,
-            numberOfLoanees: 0
+            numberOfLoanees: 0,
+            repaymentRate: 0,
+            debtPercentage: 0,
         }
     )
 
@@ -83,6 +85,8 @@ const ProgramDetails = () => {
                 totalAmountOutstanding: detail?.totalAmountOutstanding || 0,
                 numberOfCohort: detail?.numberOfCohort,
                 numberOfLoanees: detail?.numberOfLoanees,
+                repaymentRate: detail?.repaymentRate || 0,
+                debtPercentage: detail?.debtPercentage || 0,
             });
         }
     }, [program])
@@ -100,8 +104,8 @@ const ProgramDetails = () => {
         {detail: "Total loan amount disbursed", value: formatAmount(progamDetail.totalAmountDisbursed)},
         {detail: "Total loan amount repaid", value: formatAmount(progamDetail.totalAmountRepaid)},
         {detail: "Total loan amount outstanding", value: formatAmount(progamDetail.totalAmountOutstanding)},
-        {detail: "Debt percentage", value: "0%"},
-        {detail: "Repayment rate", value: "0%"},
+        {detail: "Debt percentage", value: Math.ceil(Number(progamDetail?.debtPercentage))+"%"},
+        {detail: "Repayment rate", value: Math.ceil(Number(progamDetail?.repaymentRate))+"%"},
 
     ]
 

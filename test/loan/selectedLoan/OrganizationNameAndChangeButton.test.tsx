@@ -7,6 +7,7 @@ jest.mock("next/navigation", () => ({
     useRouter: () => ({
         push: jest.fn(),
     }),
+    usePathname: () => jest.fn(),
 }));
 describe("testing OrganizationNameAndChangeButton component", ()=> {
 

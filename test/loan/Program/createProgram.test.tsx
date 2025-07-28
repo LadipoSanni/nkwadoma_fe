@@ -2,6 +2,11 @@ import { render, screen, fireEvent,cleanup } from "@testing-library/react";
 import CreateProgram from "@/components/program/create-program";
 import {Providers} from "@/app/provider";
 
+
+
+jest.mock('next/navigation', ()=> ({
+    usePathname: () => jest.fn(),
+}));
 const setup = (props = {}) => {
     const defaultProps = {
         programDeliveryTypes: ["Online", "In-person"],

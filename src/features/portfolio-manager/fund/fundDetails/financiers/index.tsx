@@ -18,6 +18,7 @@ import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import  {MdSearch} from 'react-icons/md';
 import {store} from "@/redux/store";
 import { resetNotification } from '@/redux/slice/notification/notification';
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -92,6 +93,7 @@ function Financiers() {
      const handleRowClick = (row:TableRowData) => {
             store.dispatch(setCurrentFinancierId(String(row?.id)))
              store.dispatch(setFinancierMode("investment"))
+             store.dispatch(setCurrentNavbarItem("Financier"))
              router.push('/funds/financier-details')
            
             

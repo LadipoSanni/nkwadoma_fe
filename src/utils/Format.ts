@@ -218,6 +218,29 @@ export const validateNumberLimit =
     }
   };
 
+  export function formatToTwoDecimals(num: TableRowData[keyof TableRowData]) {
+    if (num === null || num === undefined) {
+      return '0.00'; 
+    }
+  
+    if (typeof num !== 'number' && typeof num !== 'string') {
+      throw new Error('Numeric value required');
+    }
+  
+    const numberValue = typeof num === 'string' ? parseFloat(num) : num;
+    
+    if (isNaN(numberValue)) {
+      throw new Error('Invalid number input');
+    }
+  
+    const formatted = parseFloat(numberValue.toFixed(2));
+    
+    return formatted.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
 //   interface NestedData {
 //     body?: TableRowData[];
 // }

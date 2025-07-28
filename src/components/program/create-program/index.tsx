@@ -43,10 +43,11 @@ function CreateProgram({setIsOpen}:Props) {
     
     // const maxChars = 2500;
 
-    const programDeliveryTypes = ["ONSITE", "ONLINE","HYBRID"];
+    // const programDeliveryTypes = ["Onsite", "Online","Hybrid"];
     // const programModes=["FULL_TIME", "PART_TIME"]
-    const programModes = [ { value: "FULL_TIME", label: "Full Time" }, { value: "PART_TIME", label: "Part Time" } ];
+    const programModes = [ { value: "FULL_TIME", label: "Full time" }, { value: "PART_TIME", label: "Part time" } ];
     const programDurations=Array.from({ length: 24 }, (_, i) => (i + 1).toString());
+    const programDeliveryType = [ { value: "ONSITE", label: "Onsite" }, { value: "ONLINE", label: "Online" },{ value: "HYBRID", label: "Hybrid" } ];
 
    
 
@@ -191,7 +192,7 @@ function CreateProgram({setIsOpen}:Props) {
                   <div >
                     <Label htmlFor="programDeliveryType">Program delivery type</Label>
                   
-                    <CustomSelect
+                    {/* <CustomSelect
                      triggerId='deliveryTypeTriggerId'
                       id="deliveryTypeSelect"
                       selectContent={programDeliveryTypes}
@@ -199,6 +200,16 @@ function CreateProgram({setIsOpen}:Props) {
                       onChange={(value) => setFieldValue("deliveryType", value)} 
                       name="deliveryType"
                       placeHolder='Select a program delivery type'
+                    /> */}
+                     <CustomSelectObj
+                     triggerId='deliveryTypeTriggerId'
+                      id="deliveryTypeSelect"
+                      selectContent={programDeliveryType}
+                      value={values.deliveryType} 
+                      onChange={(value) => setFieldValue("deliveryType", value)} 
+                     name="deliveryType"
+                      placeHolder='Select a program delivery type'
+                     
                     />
                      {
                     errors.deliveryType && touched.deliveryType &&  (

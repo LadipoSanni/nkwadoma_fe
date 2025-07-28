@@ -29,20 +29,14 @@ import {Button} from "@/components/ui/button";
 import {ChevronDownIcon, ChevronUpIcon} from "@radix-ui/react-icons";
 import {store} from "@/redux/store";
 import {setCurrentTab} from "@/redux/slice/loan/selected-loan";
-
-// import {
-//     DropdownMenu,
-//     DropdownMenuContent,
-//     DropdownMenuItem,
-//     DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu"
 import CreateLoanOffer from "@/reuseable/modals/createLoanOffer/Index";
 import DeclineLoanModal from "@/reuseable/modals/declineLoan/Index";
 import {loaneeLoanBreakDown} from "@/types/loan/loan-request.type";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import CreditScore from "@/features/display/CreditScore";
 import { getInitial } from '@/utils/GlobalMethods';
-
+import Modal from '@/reuseable/modals/TableModal';
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 const LoanDetailsContent = dynamic(
     () => Promise.resolve(LoanDetails),
@@ -177,11 +171,11 @@ function LoanDetails() {
     ]
 
     const basic = [
-        {label: 'Gender', value: data?.data.userIdentity.gender},
-        {label: 'Email address', value: data?.data.userIdentity.email},
-        {label: 'Phone number', value: data?.data?.userIdentity.phoneNumber},
-        {label: 'Date of birth', value: data?.data?.userIdentity.dateOfBirth},
-        {label: 'Marital status', value: data?.data?.userIdentity.maritalStatus},
+        {label: 'Gender', value: data?.data?.userIdentity?.gender},
+        {label: 'Email address', value: data?.data?.userIdentity?.email},
+        {label: 'Phone number', value: data?.data?.userIdentity?.phoneNumber},
+        {label: 'Date of birth', value: data?.data?.userIdentity?.dateOfBirth ? dayjs(data?.data?.userIdentity?.dateOfBirth?.toString()).format('MMM D, YYYY') : ''},
+        {label: 'Marital status', value: data?.data?.userIdentity?.maritalStatus},
         {label: 'Nationality', value: data?.data?.userIdentity?.nationality},
         {label: 'State of origin ', value: data?.data?.userIdentity?.stateOfOrigin},
         {label: 'State of residence', value: data?.data?.userIdentity?.stateOfResidence},
@@ -190,9 +184,9 @@ function LoanDetails() {
     ]
 
     const additional = [
-        {label: 'Alternate email address', value: data?.data.alternateEmail},
-        {label: 'Alternate phone number', value: data?.data.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: data?.data.alternateContactAddress},
+        {label: 'Alternate email address', value: data?.data?.alternateEmail},
+        {label: 'Alternate phone number', value: data?.data?.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: data?.data?.alternateContactAddress},
         {
             label: 'Next of kin name',
             value: data?.data?.nextOfKin?.firstName && data?.data?.nextOfKin?.lastName
@@ -233,14 +227,14 @@ function LoanDetails() {
     const userFirstLetter = data?.data?.userIdentity?.firstName ?  getInitial(data?.data?.userIdentity?.firstName,data?.data?.userIdentity?.lastName) : ""
 
     return (
-        <>
+        <div id={'loanRequestDetails'} data-testid={'loanRequestDetails'}>
             {
                 isLoading ? (
                     <SkeletonForDetailPage/>
                 ) : (
                     <div
                         id={"loanRequestDetails"}
-                        data-testid={"loanRequestDetails"}
+                        data-testid={"loanRequestDetailss"}
                         className={`  md:px-8 w-full h-full md:grid md:gap-4 px-3 pt-4 md:pt-4 `}
                     >
                         <BackButton handleClick={backToLoanRequest} iconBeforeLetters={true} text={"Back to loan request"}
@@ -348,7 +342,7 @@ function LoanDetails() {
                                              id={'loanRequestDetailsApproveLoanRequestButton'}
                                              data-testid={'loanRequestDetailsApproveLoanRequestButton'}
                                              onClick={() => setOpenCreateLoanOffer(true)}
-                                             className="text-meedlBlue hover:bg-[#EEF5FF] rounded-md"
+                                             className="text-meedlBlue hover:!cursor-pointer  hover:!bg-[#EEF5FF] rounded-md"
                                            >
                                              Approve loan request
                                            </MenubarItem>
@@ -356,7 +350,7 @@ function LoanDetails() {
                                              id={'loanRequestDetailsDeclineLoanRequestButton'}
                                              data-testid={'loanRequestDetailsDeclineLoanRequestButton'}
                                              onClick={() => setOpenDeclineLoanRequestModal(true)}
-                                             className="text-error500 hover:text-error500 hover:bg-error50 rounded-md"
+                                             className="text-error500 hover:!cursor-pointer hover:!text-error500 hover:!bg-error50 rounded-md"
                                            >
                                              Decline loan request
                                            </MenubarItem>
@@ -379,19 +373,32 @@ function LoanDetails() {
 
                                         </button>
                                     }
-                                    <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer}
-                                                     setIsOpen={open} />
+                                    {/* <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer}
+                                                     setIsOpen={open} /> */}
                                     <DeclineLoanModal isOpen={openDeclineLoanRequestModal} loanRequestId={getId()}
                                                       setIsOpen={setOpenDeclineOffer} loanProductId={id}
                                                       title={"Decline loan request"}/>
 
                                 </div>
+                                 <Modal
+                                   isOpen={openCreateLoanOffer}
+                                   closeModal={() => open(false)}
+                                   className='pb-1'
+                                   closeOnOverlayClick={true}
+                                   headerTitle='Create loan offer'
+                                   width='36%'
+                                    icon={Cross2Icon}
+                                 >
+                                    <CreateLoanOffer loanRequestId={getId()} isOpen={openCreateLoanOffer}
+                                                     setIsOpen={open} />
+
+                                 </Modal>
                             </div>
                         </div>
                     </div>
                 )
             }
-        </>
+        </div>
 
     )
 }

@@ -11,6 +11,8 @@ import UploadForm from './Upload-form';
 interface Props{
 setIsOpen : (e: boolean) => void;
 loaneeRefetch?: (() => void) | null;
+isLoaneeEmpty?: boolean;
+isInvitedLoanee?: boolean;
 }
 
 const tabData = [
@@ -19,7 +21,7 @@ const tabData = [
    
 ];
 
-function UploadCSV({setIsOpen,loaneeRefetch}:Props) {
+function UploadCSV({setIsOpen,loaneeRefetch,isLoaneeEmpty,isInvitedLoanee}:Props) {
     const tabType = useAppSelector(state => state?.csv?.uploadCsvTab)
 
     const tabContent = [
@@ -56,6 +58,7 @@ function UploadCSV({setIsOpen,loaneeRefetch}:Props) {
        onValueChange={(value) => {
         store.dispatch(setCurrentCsvStatus(value))
        }}
+       
        >
        <TabsList >
          {tabData.map((tab, index) => (
@@ -64,6 +67,7 @@ function UploadCSV({setIsOpen,loaneeRefetch}:Props) {
                                    data-testid={`tabDataName${tab.value}`} 
                                    value={tab.value} 
                                    key={index}
+                                   disabled={tab.value === 'repayment' && isLoaneeEmpty  && tab.value === 'repayment' && isInvitedLoanee }
                                >
                                    {tab.name}
                                </TabsTrigger>

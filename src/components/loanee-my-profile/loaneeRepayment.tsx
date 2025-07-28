@@ -29,7 +29,7 @@ const LoaneeRepayment = ({loaneeId}:Props) => {
                 return <span className={` ${inter.className} bg-[#EEF5FF] text-[14px] text-[#142854] rounded-full w-fit h-fit py-1 px-2 `} >Bank transfer</span>
             // break;
             case 'CASH':
-                return <span className={` ${inter.className}  bg-[#FEF6E8] text-[14px] text-[#66440A]rounded-full w-fit h-fit py-1 px-2 `} >Cash</span>
+                return <span className={` ${inter.className}  bg-[#FEF6E8] text-[14px] text-[#66440A] rounded-full w-fit h-fit py-1 px-2 `} >Cash</span>
             case 'USSD':
                 return <span className={` ${inter.className} bg-[#EEF5FF] text-[14px] text-[#142854] rounded-full w-fit h-fit py-1 px-2`}>Ussd</span>
             case 'BANK_DRAFT':
@@ -45,6 +45,7 @@ const LoaneeRepayment = ({loaneeId}:Props) => {
     }
     const {data, isFetching, isLoading} = useViewAllRepaymentHistoryQuery(props)
 
+
     useEffect(() => {
         if(data && data?.data) {
             setNextPage(data?.data?.hasNextPage)
@@ -55,7 +56,7 @@ const LoaneeRepayment = ({loaneeId}:Props) => {
     },[data])
 
     const tableHeader = [
-        { title: 'Payment date', sortable: true, id: 'paymentDate', selector: (row: TableRowData) =><div>{dayjs(row.paymentDateTime?.toString()).format('MMM D, YYYY')}</div>},
+        { title: 'Payment date', sortable: true, id: 'paymentDate', selector: (row: TableRowData) =><div>{row?.paymentDateTime ? dayjs(row.paymentDateTime?.toString()).format('MMM D, YYYY') : ''}</div>},
         { title: 'Amount paid', sortable: true, id: 'amountPaid', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountPaid)}</div> },
         { title: 'Payment mode', sortable: true, id: 'modeOfPayment', selector: (row: TableRowData) => <div className={`  `}>{getModeOfPayment(row.modeOfPayment)}</div>},
     ];

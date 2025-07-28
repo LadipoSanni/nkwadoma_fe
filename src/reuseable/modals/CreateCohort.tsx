@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import ProgramSelect from "@/reuseable/select/ProgramSelect";
-import DatePicker from "@/reuseable/date/DatePicker";
+// import DatePicker from "@/reuseable/date/DatePicker";
 import FormButtons from "@/reuseable/buttons/FormButtons";
 import {
   FeeBreakdownHeader,
@@ -12,11 +12,11 @@ import { CohortNameInput, FileUpload } from "@/reuseable/Input";
 import { useCreateCohortMutation } from "@/service/admin/cohort_query";
 import { useGetAllProgramsQuery } from "@/service/admin/program_query";
 import Isloading from "../display/Isloading";
-import { format } from "date-fns";
+import { format,parseISO } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import TotalInput from "@/reuseable/display/TotalInput";
 import CustomQuillField from "../textArea/Custom-quill-field";
-
+import DatePickerInput from "@/reuseable/Input/DatePickerInput";
 
 
 interface createCohortProps {
@@ -248,7 +248,20 @@ const CreateCohort: React.FC<createCohortProps> = ({ setIsOpen }) => {
                       loader: isFetching
                     }}
                        />
-                <DatePicker date={startDate} setDate={setDate} />
+                {/* <DatePicker date={startDate} setDate={setDate} /> */}
+                <DatePickerInput  
+                    selectedDate={typeof startDate === 'string' ? parseISO(startDate) : startDate}
+                   onDateChange={
+                   (date) => {
+                                   if (date) {
+                                     setDate(date);
+                                   }else {
+                                    setDate(undefined)
+                                   }
+                                 }
+                  } 
+                   className="p-6 top-[19px] relative text-[14px] text-[#6A6B6A] h-[54px] rounded-md border-neutral650"
+                />
               </div>
 
                   <CustomQuillField

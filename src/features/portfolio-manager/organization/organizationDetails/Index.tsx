@@ -9,28 +9,29 @@ import { DetailsTabContainer } from "@/reuseable/details/DetailsTabContainer";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import Table from "@/reuseable/table/Table";
 import { Book } from "lucide-react";
-// import InviteAdminDialog from "@/reuseable/modals/InviteAdminDialog/Index";
 import {
   useViewAllAdminsInOrganizationQuery,
   useGetOrganizationDetailsQuery,
 } from "@/service/admin/organization";
 import { useRouter } from "next/navigation";
-// import { getItemSessionStorage } from "@/utils/storage";
-import { formatAmount } from "@/utils/Format";
+import { formatAmount,formatToTwoDecimals } from "@/utils/Format";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-// import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization"
 import { Button } from "@/components/ui/button";
 import ActivateOrganization from "@/components/portfolio-manager/organization/ActivateOrganization";
 import DeactivateOrganization from "@/components/portfolio-manager/organization/DeactivateOrganization";
 import TableModal from "@/reuseable/modals/TableModal";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
-// import Link from "next/link";
 import { useSearchOrganizationAsPortfolioManagerQuery } from "@/service/admin/organization";
 import { store, useAppSelector } from "@/redux/store";
 import { setOrganizationDetail } from "@/redux/slice/organization/organization";
 import CohortView from "@/features/cohort/cohort-view";
 import { ensureHttpsUrl } from "@/utils/GlobalMethods";
+import { useDebounce } from '@/hooks/useDebounce';
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
+import { MdSearch } from 'react-icons/md';
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import { SafeImage } from "@/reuseable/images/Safe-image";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -55,7 +56,7 @@ const OrganizationDetails = () => {
   const organizationDetailTab = useAppSelector(store => store.organization?.organizationDetailTab)
   const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
   const notification = useAppSelector(state => (state?.notification?.setNotification))
-   const { data: adminData,isLoading: isloadingAdmin } = useViewAllAdminsInOrganizationQuery(
+   const { data: adminData,isLoading: isloadingAdmin,isFetching } = useViewAllAdminsInOrganizationQuery(
     {
       organizationId: organizationId,
       pageNumber: page,
@@ -63,39 +64,42 @@ const OrganizationDetails = () => {
     },
     { skip: organizationDetailTab !== "admins"}
   );
+   
+   const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+
   const { data: organizationDetails, isLoading } = useGetOrganizationDetailsQuery(
     {
-      id: organizationId,
+      organizationId: organizationId
     },
     { skip: !organizationId }
   );
 
   const param = {
     organizationId: organizationId,
-    name:searchTerm,
+    name:debouncedSearchTerm,
     pageNumber: page,
     pageSize: 300,
   }
 
-  const {data: searchResult,isLoading: isloadingSearch} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !searchTerm})
+  const {data: searchResult,isLoading: isloadingSearch, isFetching:isSearchFetching} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !debouncedSearchTerm})
 
   const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);
 
     useEffect(() => {
-      if (searchTerm && searchResult && searchResult.data) {
+      if (debouncedSearchTerm && searchResult && searchResult.data) {
         const admins = searchResult?.data?.body
         setAdminList(admins);
         setPageNumber(searchResult?.data?.pageNumber)
         setTotalPage(searchResult?.data?.totalPages)
         hasNextPage(searchResult?.data?.hasNextPage)
-      } else if (!searchTerm && adminData && adminData?.data) {
+      } else if (!debouncedSearchTerm&& adminData && adminData?.data) {
         const admins = adminData?.data?.body;
         setAdminList(admins);
         setPageNumber( adminData?.data?.pageNumber)
         setTotalPage(adminData?.data?.totalPages)
         hasNextPage(adminData?.data?.hasNextPage)
       }
-    },[searchTerm, searchResult,adminData]);
+    },[debouncedSearchTerm, searchResult,adminData]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value);
@@ -110,6 +114,7 @@ const OrganizationDetails = () => {
 
   const handleBackClick = () => {
     if (notification === "notification"){
+       store.dispatch(setCurrentNavbarItem("Notification"))
       router.push(`/notifications/notification/${notificationId}`);
   } else {
     router.push("/organizations");
@@ -141,7 +146,7 @@ const OrganizationDetails = () => {
               : "bg-[#FEF6E8] text-[#66440A]"
           }`}
         >
-          {organizationDetails?.data.status}
+          {capitalizeFirstLetters(organizationDetails?.data.status?.toLowerCase())}
         </span>
       ),
     },
@@ -158,31 +163,28 @@ const OrganizationDetails = () => {
       label: "Number of loanees",
       value: organizationDetails?.data.numberOfLoanees,
     },
-    { label: "Still in training", value: "0" },
+    { label: "Still in training", value: organizationDetails?.data?.stillInTraining },
   ];
 
   const loanDetail = [
-    { detail: "Number of loan requests", value: "0" },
-    { detail: "Pending loan offers", value: "0" },
-    { detail: "Number of performing loans", value: "0" },
-    { detail: "Number of non-performing loans", value: "0" },
+    { detail: "Number of loan requests", value: organizationDetails?.data?.loanRequestCount },
+    { detail: "Pending loan offers", value: organizationDetails?.data?.pendingLoanOfferCount },
+    { detail: "Number of performing loans", value: "" },
+    { detail: "Number of non-performing loans", value: "" },
     {
       detail: "Historical debt",
-      value: organizationDetails?.data.totalHistoricalDebt,
+      value: formatAmount(organizationDetails?.data.totalAmountReceived),
     },
     {
       detail: "Amount repaid (in percent)",
       value:
-        formatAmount(organizationDetails?.data.totalDebtRepaid) +
+        formatAmount(organizationDetails?.data.totalDebtRepaid,false) +
         " " +
-        `(${organizationDetails?.data.repaymentRate})` +
-        "%",
+        (`(${formatToTwoDecimals(organizationDetails?.data.repaymentRate)+ "%"})`) 
+        ,
     },
-    { detail: "Amount outstanding", value: formatAmount("0") },
-    {
-      detail: "Moratorium (in percent)",
-      value: formatAmount("0") + " " + "(0)" + "%",
-    },
+    { detail: "Amount outstanding", value: formatAmount(organizationDetails?.data?.totalCurrentDebt) }
+    
   ];
 
   const adminsHeader = [
@@ -289,12 +291,14 @@ const OrganizationDetails = () => {
             <div className="w-full mb-4">
             <section id="bannerSection" className={"relative"}>
               {organizationDetails?.data.bannerImage ? (
-                <Image
-                  id="bannerImage"
-                  src={organizationDetails.data.bannerImage}
-                  alt="banner"
-                  height={134}
-                  width={351}
+                <SafeImage
+                id="bannerImage"
+                src={organizationDetails.data.bannerImage}
+                alt="banner"
+                height={134}
+                width={351}
+                priority={true}
+                imageType="banner"
                 />
               ) : (
                 <Image
@@ -314,14 +318,16 @@ const OrganizationDetails = () => {
               >
                 {
                   organizationDetails?.data.logoImage ?(
-                   <Image
-                   id="organizationLogo"
-                   src={organizationDetails?.data.logoImage}
-                   alt={"organization logo"}
-                   height={70}
-                   width={70}
-                   className={""}
-                 />
+                <SafeImage
+                id="organizationLogo"
+                src={organizationDetails?.data.logoImage}
+                alt={"organization logo"}
+                height={70}
+                width={70}
+                priority={true}
+                imageType="logo"
+                orgName={firstCharInName}
+                />
                   ) :( <div className="flex justify-center items-center font-extrabold text-4xl">{firstCharInName}</div>)
 
                 }
@@ -411,6 +417,10 @@ const OrganizationDetails = () => {
               gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             }}
           >
+            {
+               !isTyping && debouncedSearchTerm  && adminList.length === 0?  <div>
+                 <SearchEmptyState icon={MdSearch} name={"Search"} />
+               </div> :
             <Table
               tableData={adminList}
               tableHeader={adminsHeader}
@@ -427,8 +437,9 @@ const OrganizationDetails = () => {
               pageNumber={page}
               setPageNumber={setPageNumber}
               totalPages={totalPage}
-              isLoading={isloadingAdmin || isloadingSearch}
+              isLoading={isloadingAdmin || isloadingSearch || isFetching || isSearchFetching}
             />
+            }
           </div>
 
           {/* <InviteAdminDialog

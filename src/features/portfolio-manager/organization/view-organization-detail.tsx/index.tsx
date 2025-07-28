@@ -7,10 +7,9 @@ import Image from "next/image";
 import { Button } from '@/components/ui/button';
 import { DetailsTabContainer } from "@/reuseable/details/DetailsTabContainer";
 import SearchInput from "@/reuseable/Input/SearchInput";
-import LoanProductTable from "@/reuseable/table/LoanProductTable";
+// import LoanProductTable from "@/reuseable/table/LoanProductTable";
 import { Book } from "lucide-react";
-// import { getItemSessionStorage } from "@/utils/storage";
-import { formatAmount } from "@/utils/Format";
+import { formatAmount,formatToTwoDecimals } from "@/utils/Format";
 import {  useGetDetailsOfOrganizationQuery } from '@/service/admin/organization';
 import TableModal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
@@ -19,52 +18,68 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
 import { useViewOrganizationAdminQuery } from '@/service/admin/organization';
 import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage';
-
-
-
-
+import { useDebounce } from '@/hooks/useDebounce';
+import Table from "@/reuseable/table/Table";
+import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
+import { MdSearch } from 'react-icons/md'
+import { SafeImage } from "@/reuseable/images/Safe-image";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode ;
 }
 
-interface adminProps extends TableRowData  {
- fullName: string,
-  email: string,
-  status: string
-}
-
-// type viewAllEmployees = adminProps & tableRowData
-
+// interface adminProps extends TableRowData  {
+//  fullName: string,
+//   email: string,
+//   status: string
+// }
 
 const ViewOrganizationDetail = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {data:organizationDetail} = useGetDetailsOfOrganizationQuery({})
   const [searchTerm, setSearchTerm] = useState('');
-  // const [adminEmployees, setAdminEmployees] = useState<viewAllEmployees[]>([])
-  const [adminList, setAdminList] = useState<adminProps[]>([])
-  const[] = useState('');
-  const {data: searchResults} =  useSearchOrganisationAdminByNameQuery(searchTerm,{skip: !searchTerm})
+  const [hasNextPage,setNextPage] = useState(false)
+  const [totalPage,setTotalPage] = useState(0)
+  const [pageNumber,setPageNumber] = useState(0)
+   const [pageSearchNumber,setPageSearchNumber] = useState(0)
+   const [searchHasNextPage,setSearchHasNextPage]  = useState(false)
 
-  
+     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+
+  const searchDataElement = {
+    name:debouncedSearchTerm,
+    pageNumber: pageSearchNumber,
+    pageSize: 10
+  }
+
+  const {data: searchResults,isLoading: isloading,isFetching: isfetching} =  useSearchOrganisationAdminByNameQuery(searchDataElement,{skip: !searchTerm})
+
   const dataElement = {
-    pageNumber: 0,
-    pageSize: 300
+    pageNumber:pageNumber,
+    pageSize: 10
 }
-  const {data: adminData,isLoading} = useViewOrganizationAdminQuery(dataElement)
-  // console.log(adminData);
-    
+
+  const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
 
   useEffect(()=> {
     if(searchTerm && searchResults && searchResults?.data){
-        const adminEmployees = searchResults.data
-        setAdminList(adminEmployees)
+      setSearchHasNextPage(searchResults?.data?.hasNextPage)
+      setTotalPage(searchResults?.data?.totalPages)
+      setPageSearchNumber(searchResults?.data?.pageNumber) 
     }
    else if(!searchTerm && adminData && adminData?.data  ){
-       const adminEmployees = adminData?.data?.body
-        setAdminList(adminEmployees)
+    setNextPage(adminData?.data?.hasNextPage)
+    setTotalPage(adminData?.data?.totalPages)
+    setPageNumber(adminData?.data?.pageNumber)
     }
   },[adminData,searchTerm,searchResults])
+
+  const getTableData = () => {
+    if (!adminData?.data?.body) return [];
+    if (debouncedSearchTerm) return searchResults?.data?.body || [];
+    return adminData?.data?.body;
+}
+
 
 
   const handleInviteClick = () => {
@@ -108,31 +123,28 @@ const ViewOrganizationDetail = () => {
       label: "Number of loanees",
       value: organizationDetail?.data.numberOfLoanees,
     },
-    { label: "Still in training", value: "0" },
+    { label: "Still in training", value: organizationDetail?.data?.stillInTraining },
   ];
 
   const loanDetail = [
-    { detail: "Number of loan requests", value: "0" },
-    { detail: "Pending loan offers", value: "0" },
+    { detail: "Number of loan requests", value:organizationDetail?.data?.loanRequestCount },
+    { detail: "Pending loan offers", value:organizationDetail?.data?.pendingLoanOfferCount },
     { detail: "Number of performing loans", value: "0" },
     { detail: "Number of non-performing loans", value: "0" },
     {
       detail: "Historical debt",
-      value: organizationDetail?.data.totalHistoricalDebt,
+      value: formatAmount(organizationDetail?.data.totalAmountReceived),
     },
     {
       detail: "Amount repaid (in percent)",
       value:
         formatAmount(organizationDetail?.data.totalDebtRepaid) +
-        " " +
-        `(${organizationDetail?.data.repaymentRate})` +
-        "%",
+        " " + (`(${formatToTwoDecimals(organizationDetail?.data.repaymentRate)+ "%"})`) 
+
+        ,
     },
-    { detail: "Amount outstanding", value: formatAmount("0") },
-    {
-      detail: "Moratorium (in percent)",
-      value: formatAmount("0") + " " + "(0)" + "%",
-    },
+    { detail: "Amount outstanding", value: formatAmount(organizationDetail?.data?.totalCurrentDebt) },
+   
   ];
 
   // const adminsHeader = [
@@ -256,13 +268,15 @@ const ViewOrganizationDetail = () => {
             
             <section id="bannerSection" className={"relative"}>
               {organizationDetail?.data.bannerImage ? (
-                <Image
+                 <SafeImage
                   id="bannerImage"
                   src={organizationDetail.data.bannerImage}
                   alt="banner"
                   height={134}
                   width={351}
-                />
+                  priority={true}
+                  imageType="banner"
+                  />
               ) : (
                 <Image
                   id="bannerImage"
@@ -281,14 +295,16 @@ const ViewOrganizationDetail = () => {
               >
                 {
                   organizationDetail?.data.logoImage ?(
-                   <Image
-                   id="organizationLogo"
-                   src={organizationDetail?.data.logoImage}
-                   alt={"organization logo"}
-                   height={70}
-                   width={70}
-                   className={""}
-                 />
+                   <SafeImage
+                    id="organizationLogo"
+                    src={organizationDetail?.data.logoImage}
+                    alt={"organization logo"}
+                    height={70}
+                    width={70}
+                    priority={true}
+                    imageType="logo"
+                    orgName={firstCharInName}
+                    />
                   ) :( <div className="flex justify-center items-center font-extrabold text-4xl">{firstCharInName}</div>)
 
                 }
@@ -364,20 +380,25 @@ const ViewOrganizationDetail = () => {
               gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             }}
           >
-            <LoanProductTable
-              tableData={adminList.slice().reverse()}
-              tableHeader={adminsHeader}
-              staticHeader={"Full name"}
-              staticColunm={"fullName"}
-              tableHeight={42}
-              handleRowClick={() => {}}
-              // sx='cursor-pointer'
-              icon={Book}
-              sideBarTabName="Admin"
-              optionalRowsPerPage={10}
-              tableCellStyle="h-12"
-              condition={true}
-            />
+         { 
+           !isTyping && debouncedSearchTerm && searchResults?.data?.body.length === 0? <div><SearchEmptyState icon={MdSearch} name='Colleague'/></div> : 
+          <Table
+          tableData={getTableData()}
+          tableHeader={adminsHeader}
+          handleRowClick={()=>{}}
+          tableHeight={48}
+          icon={<Book/>}
+          condition={true}
+          sideBarTabName='colleague'
+          staticHeader={"Full name"}
+          staticColunm={"fullName"}
+          isLoading={isLoading ||  isloading || isFetching || isfetching}
+          hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPage}
+          pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}
+          setPageNumber={searchTerm !== ""? setPageSearchNumber : setPageNumber}
+          totalPages={ totalPage}
+         />
+}
           </div>
 
           

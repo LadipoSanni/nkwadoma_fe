@@ -19,7 +19,9 @@ import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 import { store } from '@/redux/store'
 import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization} from '@/redux/slice/create/cohortSlice'
-
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
+import { resetNotificationCohortId } from '@/redux/slice/create/cohortSlice'
 
 
 interface allCohortsProps extends TableRowData {
@@ -53,10 +55,11 @@ interface cohortList {
   totalPages: number;
   pageNumber: number
   handlePageChange:  (value: React.SetStateAction<number>, tabType?: string) => void;
+  isTyping?: boolean
 }
 
 
-const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,searchTerm,userRole,currentTab,hasNextPage,totalPages,handlePageChange,pageNumber}:cohortList) => {
+const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,searchTerm,userRole,currentTab,hasNextPage,totalPages,handlePageChange,pageNumber,isTyping}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
   // const [programId, setProgramId] = React.useState("")
@@ -100,6 +103,7 @@ useEffect(() => {
           expectedEndDate: details?.expectedEndDate || "",
       })
   }
+  store.dispatch(resetNotificationCohortId())
 }, [cohortDetails]);
 
   const router = useRouter()
@@ -151,8 +155,9 @@ useEffect(() => {
      if(userRole === "PORTFOLIO_MANAGER"){
          const cohort = {name: String(row?.name),id: String(row?.id)}
          store.dispatch(setSelectedCohortInOrganization(cohort))
-      router.push('/organizations/loanees/uploaded')
+         router.push('/organizations/loanees/uploaded')
      }else {
+      store.dispatch(setcohortOrProgramRoute("cohort"))
       router.push('/cohort/cohort-details')
      }
      setItemSessionStorage("programsId", String(row.programId))
@@ -166,8 +171,11 @@ useEffect(() => {
       setItemSessionStorage("programsId", String(row.programId))
       store.dispatch(setcohortId(String(row.id)))
       if(userRole === "PORTFOLIO_MANAGER"){
-        router.push('')
+        const cohort = {name: String(row?.name),id: String(row?.id)}
+        store.dispatch(setSelectedCohortInOrganization(cohort))
+        router.push('/organizations/loanees/uploaded')
        }else {
+         store.dispatch(setcohortOrProgramRoute("cohort"))
         router.push('/cohort/cohort-details')
        }
   }
@@ -187,29 +195,36 @@ useEffect(() => {
     }
   }
 
-  // useEffect(()=> {
-  //   const id = getItemSessionStorage("programsId")
-  //   if (id) {
-  //     setProgramId(id)
-  //   }
-  // },[])
+
 
   
   
   const ProgramHeader = [
-    { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => row.name },
-    { title: <div className='relative lg:right-2 lg:left-2'>Start date</div>, sortable: true, id: 'expectedEndDate', selector: (row:TableRowData ) => formatMonthInDate(row?.startDate)},
-    { title: 'No. of loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => row.numberOfLoanees || 0 },
-    { title: <div className='lg:w-28'>Tuition</div>, sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => formatAmount(row.tuitionAmount)},
-    { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => <div className=''>{formatAmount(row.amountRecieved)}</div> },
-    { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => <div className=''>{formatAmount(row.amountRequested)}</div> },
-    { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  <div className=''>{formatAmount(row.amountOutstanding)}</div> },
+    { title: 'Cohort', sortable: true, id: 'name', selector: (row:TableRowData ) => <div className="truncate">{capitalizeFirstLetters(row.name?.toString())}</div> },
+    { title: <div className='relative lg:right-2 lg:left-2'>Start date</div>, sortable: true, id: 'startDate', selector: (row:TableRowData ) =>(
+      <div className="truncate">{formatMonthInDate(row?.startDate)}</div>
+    )},
+    { title: 'No. of loanees', sortable: true, id: 'numberOfLoanees', selector: (row:TableRowData) => (
+      <div className="truncate">{row.numberOfLoanees || 0}</div>
+    ) },
+    { title: <div className='lg:w-28'>Tuition</div>, sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => (
+      <div className="truncate">{formatAmount(row.tuitionAmount)}</div>
+    )},
+    { title: 'Amount received', sortable: true, id: 'amountReceived', selector: (row:TableRowData) => (
+      <div className="truncate">{formatAmount(row.amountReceived)}</div>
+    )},
+    { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => (
+      <div className="truncate">{formatAmount(row.amountRequested)}</div>
+    ) },
+    { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row:TableRowData) =>  (
+      <div className="truncate">{formatAmount(row.amountOutstanding)}</div>
+    ) },
 
   ]
 
 
   const renderTable = (tabValue: string) => {
-        const isEmpty = searchTerm && listOfCohorts.length === 0
+        const isEmpty =!isTyping && searchTerm && listOfCohorts.length === 0
         const emptyStateName = `${tabValue.charAt(0).toUpperCase() + tabValue.slice(1)} cohort`;
 
         return isEmpty ? (

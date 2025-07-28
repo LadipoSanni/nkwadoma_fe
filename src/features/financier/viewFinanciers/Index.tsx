@@ -25,7 +25,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useAppSelector } from '@/redux/store';
 import { setFinancierStatusTab } from '@/redux/slice/financier/financier';
-
+import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 
 
 interface TableRowData {
@@ -79,8 +79,8 @@ const ViewFinanciers = () => {
     }
 
 
-    const {data, isLoading, refetch} = useGetAllActiveAndInvitedFinanciersQuery(param)
-    const {data:searchData, isLoading: searchIsLoading} = useSearchFinancierQuery({name:searchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !searchTerm})
+    const {data, isLoading, refetch,isFetching} = useGetAllActiveAndInvitedFinanciersQuery(param)
+    const {data:searchData, isLoading: searchIsLoading,isFetching: isSearchFetching} = useSearchFinancierQuery({name:searchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !searchTerm})
 
     useEffect(()=>{
         if(searchTerm && searchData && searchData?.data){
@@ -107,6 +107,8 @@ const ViewFinanciers = () => {
             }));
            
         }
+        store.dispatch(resetAll())
+       store.dispatch(clearSaveCreateInvestmentField())
     },[searchTerm, searchData,data,tabType])
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -212,7 +214,7 @@ const ViewFinanciers = () => {
                                     tableData={financiers}
                                     tableHeader={financierHeader}
                                     handleRowClick={handleRowClick}
-                                    tableHeight={58}
+                                    tableHeight={55}
                                     icon={MdOutlineBusinessCenter }
                                     sideBarTabName='financier'
                                     condition={true}
@@ -223,7 +225,8 @@ const ViewFinanciers = () => {
                                     pageNumber={currentTabState.pageNumber}
                                     setPageNumber={handlePageChange}
                                     totalPages={currentTabState.totalPages}
-                                    isLoading={isLoading || searchIsLoading}
+                                    isLoading={isLoading || searchIsLoading || isFetching || isSearchFetching}
+                                    tableCellStyle={'h-12'}
                                 />
                             )}
                         </div>
@@ -234,7 +237,7 @@ const ViewFinanciers = () => {
                             tableData={financiers}
                             tableHeader={financierHeader}
                             handleRowClick={handleRowClick}
-                            tableHeight={58}
+                            tableHeight={55}
                             icon={MdOutlineBusinessCenter }
                             sideBarTabName='financier'
                             condition={true}
@@ -245,7 +248,8 @@ const ViewFinanciers = () => {
                             pageNumber={currentTabState.pageNumber}
                             setPageNumber={handlePageChange}
                             totalPages={currentTabState.totalPages}
-                            isLoading={isLoading || searchIsLoading}
+                            isLoading={isLoading || searchIsLoading || isFetching || isSearchFetching}
+                            tableCellStyle={'h-12'}
                         />
 
                     </TabsContent>

@@ -1,18 +1,18 @@
 import EditCohortForm from "@/components/cohort/EditCohortForm";
-import { render, fireEvent, screen,cleanup, waitFor } from '@testing-library/react';
+import { render, fireEvent, screen,cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Providers } from "@/app/provider";
 
+
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+    usePathname: () => jest.fn(),
+}));
 describe('EditCohort', () => {
 
-    const mockCohortData = {
-  cohortId: '1',
-  cohortName: 'Test Cohort',
-  startDate: '2024-10-01',
-  endDate: '2024-12-01',
-  cohortDescription: 'This is a test cohort description',
-  cohortImage: 'https://via.placeholder.com/150',
-     };
+    
 
     afterEach(() => {
         jest.clearAllMocks();

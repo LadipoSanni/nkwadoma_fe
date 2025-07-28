@@ -11,10 +11,11 @@ import {jwtDecode} from "jwt-decode";
 import {setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {ADMIN_ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
-import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
+import {setCurrentNavbarItem,setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
 import { setMarketInvestmentVehicleId } from '@/redux/slice/investors/MarketPlaceSlice';
 import {encryptText} from "@/utils/encrypt";
+import {setLoanReferralId,setCohortLoaneeId } from "@/redux/slice/loan/selected-loan";
 
 
 
@@ -66,30 +67,52 @@ const CreatePassword = () => {
     const remainingCriteria = criteriaMessages.filter((_, index) => !criteriaStatus[index]);
 
 
-   
+
     const getUserToken = () => {
         if (searchParams) {
-          const rawToken = searchParams.get("token");
-      
-          if (rawToken?.includes("?investmentVehicleId=")) {
-            const [token, vehicleId] = rawToken.split("?investmentVehicleId=");
+            const rawToken = searchParams.get("token");
+            const loanReferralId = searchParams.get("loanReferralId");
+            if(rawToken?.includes("?loanReferralId")){
+                const [token, loanReferralId] = rawToken.split("?loanReferralId=");
+                return {
+                    token: token,
+                    investmentVehicleId: null,
+                    loanReferralId: loanReferralId
+                };
+
+            }
+            if (rawToken?.includes("?investmentVehicleId=")) {
+                const [token, vehicleId] = rawToken.split("?investmentVehicleId=");
+                return {
+                    token: token,
+                    investmentVehicleId: vehicleId || null,
+                    loanReferralId: loanReferralId
+                };
+            }
+            if (rawToken?.includes(('?cohortLoaneeId='))){
+                const [token, cohortLoaneeId] = rawToken.split("?cohortLoaneeId=");
+                return {
+                    token: token,
+                    investmentVehicleId: null,
+                    loanReferralId: loanReferralId,
+                    cohortLoaneeId:cohortLoaneeId,
+                };
+            }
+
             return {
-              token: token,
-              investmentVehicleId: vehicleId || null, 
+                token: rawToken,
+                investmentVehicleId: null,
+                loanReferralId: loanReferralId,
+                cohortLoaneeId: null,
             };
-          }
-      
-          return {
-            token: rawToken,
-            investmentVehicleId: null, 
-          };
         }
-      
+
         return {
-          token: null,
-          investmentVehicleId: null,
+            token: null,
+            investmentVehicleId: null,
+            loanReferralId: "",
         };
-      };
+    };
 
      
     const getUserRoles = (returnsRole: string) => {
@@ -120,7 +143,15 @@ const CreatePassword = () => {
     const routeUserToTheirDashboard = async (userRole?: string) => {
         switch (userRole) {
             case 'LOANEE' :
-                store.dispatch(setCurrentNavbarItem("overview"))
+                const { loanReferralId, cohortLoaneeId } = getUserToken();
+                if (loanReferralId) {
+                    store.dispatch(setLoanReferralId(loanReferralId))
+                }
+                if (cohortLoaneeId){
+                    store.dispatch(setCohortLoaneeId(cohortLoaneeId));
+                }
+                store.dispatch(setCurrentNavbarItem("Verification"))
+                store.dispatch(setCurrentNavBottomItem('Verification'))
                 router.push("/onboarding")
                 break;
             case 'ORGANIZATION_ADMIN':
@@ -149,7 +180,6 @@ const CreatePassword = () => {
         e?.preventDefault()
         setDisableButton(true)
         const { token } = getUserToken();
-
         try {
             const response = await createPassword({token: token
                 , password: encryptedPassword}).unwrap()
