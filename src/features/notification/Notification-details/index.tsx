@@ -99,7 +99,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
 
 
   return (
-    <div className={`w-full pr-9 md:pr-16 py-4 px-4 md:px-0 ${inter.className}`}>
+    <div className={`w-full pr-9 md:pr-2 py-4 px-4 md:px-0 ${inter.className}`}>
 
       {!notificationId ? <div className='flex justify-center items-center'>Not found</div> : isLoading? <div><SkeletonforNotificationDetails/></div> :
       <div>
@@ -132,6 +132,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                             </div>
                            </div>
                          </div>
+                         <div className='max-h-[57vh] w-full  overflow-y-auto'>
                          <div className='mb-4'>
                            Hello <span>
                              {notification?.data?.firstName}
@@ -164,6 +165,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                              
                            </Button>
                           {/* //  :  "" }  */}
+                         </div>
                          </div>
                         </div>
     </div>
