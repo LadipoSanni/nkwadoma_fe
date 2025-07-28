@@ -36,6 +36,7 @@ export interface LoaneeBasicDetails
     "programName": string,
     "organizationName": string,
     amountRepaid: number,
+    interestIncurred: string,
 }
 
 interface props{
@@ -92,7 +93,7 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
                         </div>
                         <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
                             <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? Math.ceil(data?.interestRate) : 0} valueType={'percentage'} />
-                            <Details isLoading={isLoading} id={'interestIncured'}    maxWidth={'100%'} name={'Incurred interest'} value={0} valueType={'percentage'}  />
+                            <Details isLoading={isLoading} id={'interestIncured'}    maxWidth={'100%'} name={'Incurred interest'} value={data?.interestIncurred ?  Math.ceil(Number(data?.interestIncurred)) : 0} valueType={'percentage'}  />
                         </div>
                         <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
                             <Details isLoading={isLoading} id={'deptPercentage'}    maxWidth={'100%'} name={'Debt percentage'} value={Math.ceil(Number(data?.debtPercentage))} valueType={'percentage'} />

@@ -5,7 +5,7 @@ import {customFetchBaseQuery} from "@/service/customFetchBaseQuery"
 export const loaneeApi = createApi({
     reducerPath: 'loaneeApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['loanee', 'accept-loan-offer'],
+    tagTypes: ['loanee', 'accept-loan-offer','loanOffer'],
     endpoints: (builder) => ({
 
         verifyIdentity: builder.mutation({
@@ -75,7 +75,8 @@ export const loaneeApi = createApi({
             query: (loanId: string) =>({
                 url: `/loan/loan-disbursals/${loanId}`,
                 method: 'GET'
-            })
+            }),
+            providesTags: ['loanOffer']
         }),
         viewAllLoanRefferals: builder.query({
             query: () => ({
