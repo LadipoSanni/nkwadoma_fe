@@ -132,7 +132,14 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                             </div>
                            </div>
                          </div>
-                         <div className='max-h-[57vh] w-full  overflow-y-auto'>
+                         <div 
+                         className='max-h-[57vh] w-full  overflow-y-auto'
+                         style={{
+                          scrollbarWidth: 'none',
+                          msOverflowStyle: 'none',
+
+                      }}
+                         >
                          <div className='mb-4'>
                            Hello <span>
                              {notification?.data?.firstName}
