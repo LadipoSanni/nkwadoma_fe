@@ -175,7 +175,7 @@ const LoanOfferDetails = () => {
                 description: response?.error?.data?.message
             })
         } else {
-            store.dispatch(setCurrentTab('Loan offer'))
+            store.dispatch(setCurrentTab('Loan offers'))
             router.push("/loan/loan-offer")
             toast({
                 status: 'success',
