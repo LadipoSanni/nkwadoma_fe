@@ -24,18 +24,17 @@ export interface initialFormValue {
 interface Props {
   initialFormValue: initialFormValue
   handleSubmit:  (values:  initialFormValue) => void
+  nextOfCountryCode?: string;
+  setNextOfCountryCode?: (code: string) => void;
+  countryCode?: string;
+  setCountryCode?: (code: string) => void;
   
 }
 
-function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
- 
-  const [countryCode, setCountryCode] = useState("NG")
+function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCode,setNextOfCountryCode,countryCode,setCountryCode}:Props) {
   const [isRelationshipSelectOpen, setIsRelationshipSelectOpen] = useState(false);
-  const [nextOfCountryCode, setNextOfCountryCod] = useState("NG")
   const [isPhoneNumberError,setPhoneNumberError] = useState(false)
   const [isAltPhoneNumberError,setAltPhoneNumberError] = useState(false)
-
-
 
   return (
     <div>
@@ -79,7 +78,11 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
               
                 <PhoneNumberSelect
                   selectedCountryCode={countryCode}
-                  setSelectedCountryCode={(code) => setCountryCode(code)}
+                  setSelectedCountryCode={(code) => {
+                    if(setCountryCode){
+                      setCountryCode(code)
+                    }
+                    }}
                   phoneNumber={values.alternatePhoneNumber}
                   setPhoneNumber={(num) => setFieldValue('alternatePhoneNumber', num)}
                 label="Alternate phone number"
@@ -188,7 +191,11 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
                 <div className={'grid gap-2'}>
                 <PhoneNumberSelect
                   selectedCountryCode={nextOfCountryCode}
-                  setSelectedCountryCode={(code) => setNextOfCountryCod(code)}
+                  setSelectedCountryCode={(code) => {
+                      if(setNextOfCountryCode){
+                        setNextOfCountryCode(code)
+                      }
+                   }}
                   phoneNumber={values.phoneNumber}
                   setPhoneNumber={(num) => setFieldValue('phoneNumber', num)}
                 label="Next of kin's phone number"
@@ -198,7 +205,6 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit}:Props) {
                  name="phoneNumber"
                  onBlur={handleBlur}
                  setError={setAltPhoneNumberError}
-                // selectedCountryCode={countryCode}
                 // setSelectedCountryCode={setCountryCode}
                 />
                   {/* {errors.phoneNumber && touched.phoneNumber && (

@@ -5,13 +5,16 @@ interface totalNumberOfNotification {
     refetchTrigger: number,
     setNotification: string,
     setNotificationId: string
+    notificationFlag: string
+  
 }
 
 const initialState: totalNumberOfNotification = {
     totalNotifications: 0,
     refetchTrigger: 0,
     setNotification: "",
-    setNotificationId: ""
+    setNotificationId: "",
+    notificationFlag: ""
 }
 
 export const notificationSlice = createSlice({
@@ -33,10 +36,14 @@ export const notificationSlice = createSlice({
         },
         resetNotification: (state) => {
             state.setNotification = "";
-            state.setNotificationId = ""
+            state.setNotificationId = "";
+            state.notificationFlag = ""
+        },
+        setNotificationFlag: (state, action: PayloadAction<string>) => {
+            state.notificationFlag = action.payload;
         },
     }
 })
 
-export const {setCurrentTotalNotification,triggerRefetch,setNotification,resetNotification,setNotificationId} = notificationSlice.actions;
+export const {setCurrentTotalNotification,triggerRefetch,setNotification,resetNotification,setNotificationId,setNotificationFlag} = notificationSlice.actions;
 export default notificationSlice.reducer;

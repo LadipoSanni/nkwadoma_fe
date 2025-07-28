@@ -21,6 +21,7 @@ import { store } from '@/redux/store'
 import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization} from '@/redux/slice/create/cohortSlice'
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
+import { resetNotificationCohortId } from '@/redux/slice/create/cohortSlice'
 
 
 interface allCohortsProps extends TableRowData {
@@ -102,6 +103,7 @@ useEffect(() => {
           expectedEndDate: details?.expectedEndDate || "",
       })
   }
+  store.dispatch(resetNotificationCohortId())
 }, [cohortDetails]);
 
   const router = useRouter()

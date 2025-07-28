@@ -124,9 +124,11 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
     };
   }, [selectedCountry?.code, phoneNumber, validatePhoneNumber]);
 
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, '');
-    setPhoneNumber(raw);
+     setPhoneNumber(raw);
+
     if (localError) {
       setLocalError(null);
       setFieldError(name, undefined);
@@ -235,10 +237,6 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
 PhoneNumberSelect.displayName = 'PhoneNumberSelect';
 
 export default PhoneNumberSelect;
-
-
-
-
 
 
 
