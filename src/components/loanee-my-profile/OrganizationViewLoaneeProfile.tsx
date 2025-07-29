@@ -11,10 +11,11 @@ import { useViewLoaneeInACohortDetailsQuery} from "@/service/users/Loanee_query"
 const OrganizationViewLoaneeProfile = () => {
     const id =  useAppSelector(state => state.organization.loaneeId)
     const cohortId = useAppSelector(state => state.cohort.setCohortId)
+    const notificationCohortId = useAppSelector((state) => state.cohort?.notificationCohortId)
     const router = useRouter()
     const  props = {
         loaneeId: id,
-        cohortId: cohortId,
+        cohortId: notificationCohortId ||  cohortId,
     }
     const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props)
     const  handleBack = () => {
