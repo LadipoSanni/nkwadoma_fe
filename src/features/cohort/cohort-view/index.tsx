@@ -441,7 +441,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
              <div className='md:mt-0 mt-4'>
                <Button variant={"secondary"}
                   size={"lg"}
-                  className={`${inter.className}   h-12 flex justify-center items-center w-full ${user_role === "PORTFOLIO_MANAGER" && organisationTabStatus !== "active"? "bg-gray text-grey150" : "bg-meedlBlue text-meedlWhite"}`}
+                  className={`${inter.className}   h-12 flex justify-center items-center w-full ${user_role === "PORTFOLIO_MANAGER" && organisationTabStatus !== "active"? "bg-gray text-grey150 hover:bg-gray" : "bg-meedlBlue text-meedlWhite"}`}
                   id='createProgramModal'
                    onClick={handleModalOpen}
                    disabled={user_role === "PORTFOLIO_MANAGER" && organisationTabStatus !== "active" ? true : false}
