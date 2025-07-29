@@ -36,9 +36,9 @@ const LoaneeLoanDetails = ({data, isLoading}:props ) => {
                              <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.loanAmountRepaid ? data?.loanAmountRepaid : 0} valueType={'currency'}  />
                          </div>
                          <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
-                             <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? data?.interestRate : 0 } valueType={'percentage'} />
+                             <Details isLoading={isLoading} id={'interest'}    maxWidth={'100%'} name={'Interest'} value={data?.interestRate ? data?.interestRate?.toFixed(2) : 0 } valueType={'percentage'} />
                              {/*<Details isLoading={isLoading}  id={'interestIncured'}    maxWidth={'100%'} name={'Interest incurred'} value={data?.interestIncurred ?data?.interestIncurred : 0} valueType={'percentage'}  />*/}
-                             <Details isLoading={isLoading}  id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={data?.repaymentRate ?data?.repaymentRate : 0} valueType={'percentage'}  />
+                             <Details isLoading={isLoading}  id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={data?.repaymentRate ?data?.repaymentRate?.toFixed(2) : 0} valueType={'percentage'}  />
 
                          </div>
                          <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
