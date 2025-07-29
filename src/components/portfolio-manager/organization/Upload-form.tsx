@@ -15,12 +15,14 @@ import { notificationApi } from '@/service/notification/notification_query';
 interface FormValues {
   loaneeFile: File | null;
   repaymentFile: File | null;
+ 
 }
 
 interface Props {
   uploadType?: "loaneeData" | "repaymentData";
   setIsOpen?: (e: boolean) => void;
   loaneeRefetch?: (() => void) | null;
+  notificationCohortId?: string
 }
 
 interface ApiError {
@@ -30,7 +32,7 @@ interface ApiError {
     };
   }
 
-function UploadForm({ setIsOpen, uploadType,loaneeRefetch }: Props) {
+function UploadForm({ setIsOpen, uploadType,loaneeRefetch, notificationCohortId }: Props) {
 //   const userData = useAppSelector(store => store?.csv?.userdataFile)
 //   const repaymentData = useAppSelector(store => store?.csv?.repaymentFile)
   const cohortDetails = useAppSelector((state) => state.cohort?.selectedCohortInOrganization)
@@ -58,14 +60,14 @@ function UploadForm({ setIsOpen, uploadType,loaneeRefetch }: Props) {
   });
 
   const handleSubmit =  async  (values: FormValues) => {
-     
+       
    try {
     if (uploadType === "loaneeData"  &&  values.loaneeFile) {
         const csvData = await convertSpreadsheetToCsv(values.loaneeFile);
         const formData = new FormData(); 
         formData.append("file", csvData, csvData.name); 
         const uploadData = {
-            cohortId:cohortId,
+            cohortId: notificationCohortId? notificationCohortId : cohortId,
             formData 
         }
         const uploadUserFile = await uploadLoaneeFile(uploadData).unwrap()
@@ -89,7 +91,7 @@ function UploadForm({ setIsOpen, uploadType,loaneeRefetch }: Props) {
         const formData = new FormData(); 
         formData.append("file", csvData, csvData.name); 
         const uploadData = {
-            cohortId:cohortId,
+            cohortId:notificationCohortId? notificationCohortId : cohortId,
             formData 
         }
         const uploadFile = await uploadLRepaymentFile(uploadData).unwrap()

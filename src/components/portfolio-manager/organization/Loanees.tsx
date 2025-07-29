@@ -187,7 +187,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
           const formData = {
             loaneeIds: Array.from(selectedRows),
             loaneeStatus:condition || "",
-            cohortId: cohortId || ""
+            cohortId: notificationCohortId || cohortId || ""
           }
         try {
          const updateStatus =  await updateLoaneeStatus(formData).unwrap()
@@ -253,7 +253,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
             const formData = {
               loaneeIds: [loaneeId],
               loaneeStatus: condition || "",
-              cohortId: cohortId || ""
+              cohortId: notificationCohortId || cohortId || ""
             };
             
             const result = await updateLoaneeStatus(formData).unwrap();
@@ -367,6 +367,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         loaneeRefetch={refetch}
         isLoaneeEmpty={data?.data?.body?.length === 0 ? true : false}
         isInvitedLoanee={invitedData?.data?.body?.length === 0 ? true : false}
+        notificationCohortId={notificationCohortId}
         />
         </Modal>
        </div>
