@@ -30,7 +30,7 @@ function Index() {
         organizationId: clickedOrganizationId?.id ? clickedOrganizationId?.id?.toString() : '',
     }
 
-    const {data, isLoading } = useViewAllLoanDisbursalQuery(request)
+    const {data, isLoading } = useViewAllLoanDisbursalQuery(request,{refetchOnMountOrArgChange: true})
 
 
 
