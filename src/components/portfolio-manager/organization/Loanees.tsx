@@ -74,6 +74,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
     const cohortDetails = useAppSelector((state) => state.cohort.selectedCohortInOrganization)
      const notificationCohortId = useAppSelector((state) => state.cohort?.notificationCohortId)
      const notificationFlag = useAppSelector((state) => state?.notification?.notificationFlag)
+     const organisationTabStatus = useAppSelector(store => store?.organization?.organizationStatusTab)
     const cohortId = cohortDetails?.id;
     const [page,setPageNumber] = useState(0);
     const [totalPage,setTotalPage] = useState(0)
@@ -315,8 +316,9 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         {  tabType === "All" &&
           <Button
           variant={`secondary`}
-          className='h-[45px] w-full'
+          className={`h-[45px] w-full ${organisationTabStatus !== "active"? "bg-gray text-grey150 hover:bg-gray" : ""}`}
           onClick={handleModalOpen}
+          disabled={organisationTabStatus !== "active" ? true : false}
           >
             Upload csv
           </Button>
@@ -343,7 +345,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         pageNumber={page}
         setPageNumber={setPageNumber}
         totalPages={totalPage}
-        enableRowSelection={tabType === 'All' || tabType === 'Archived' ? true : false}
+        enableRowSelection={organisationTabStatus === "active" && (tabType === 'All' || tabType === 'Archived')  ? true : false}
         enableButton={() =>setEnableButton(true) }
         disabledButton={()=> setEnableButton(false) }
         handleSelectedRow={handleSelectedRow}
