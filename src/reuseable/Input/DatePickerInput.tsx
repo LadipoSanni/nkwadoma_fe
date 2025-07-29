@@ -63,10 +63,10 @@ function DatePickerInput({
         newMonth.setMonth(monthIndex);
         setCurrentMonth(newMonth);
 
-        if (tempDate) {
-            const newDate = new Date(tempDate);
+        if (selectedDate && !isNaN(selectedDate.getTime())) {
+            const newDate = new Date(selectedDate);
             newDate.setMonth(monthIndex);
-            setTempDate(newDate);
+            onDateChange(newDate);
         }
     };
 
@@ -76,22 +76,25 @@ function DatePickerInput({
         newMonth.setFullYear(year);
         setCurrentMonth(newMonth);
 
-        if (tempDate) {
-            const newDate = new Date(tempDate);
+        if (selectedDate && !isNaN(selectedDate.getTime())) {
+            const newDate = new Date(selectedDate);
             newDate.setFullYear(year);
-            setTempDate(newDate);
+            onDateChange(newDate);
         }
     };
 
     const handleDateSelect = (date: Date | undefined) => {
-        setTempDate(date || undefined);
+        // setTempDate(date || undefined);
+        if (date && !isNaN(date.getTime())) {
+            onDateChange(date); 
+        }
     };
 
     const handleDone = () => {
-        if (tempDate) {
-            onDateChange(tempDate);
+        // if (tempDate) {
+        //     onDateChange(tempDate);
             setIsOpen(false);
-        }
+        // }
     };
 
     const handleClear = () => {
@@ -123,8 +126,8 @@ function DatePickerInput({
                     onClick={() => setIsOpen(true)}
                     disabled={disabled}
                 > */}
-                    {tempDate && !isNaN(tempDate.getTime()) ? (
-                       <span className='text-black'>{format(tempDate, 'dd-MM-yyyy')}</span> 
+                    {selectedDate && !isNaN(selectedDate.getTime()) ? (
+                       <span className='text-black'>{format(selectedDate, 'dd-MM-yyyy')}</span> 
                     ) : (
                         <span className="text-grey400">{placeholder}</span>
                     )}
