@@ -16,6 +16,8 @@ import { useUploadLoaneeFileMutation } from "@/service/admin/loan_book";
 import DownloadTemplate from "./Download-template";
 import { convertSpreadsheetToCsv } from "@/utils/convert-csv";
 import DatePickerInput from "@/reuseable/Input/DatePickerInput";
+import { notificationApi } from '@/service/notification/notification_query';
+import { store } from "@/redux/store";
 
 interface createCohortProps {
   setIsOpen?: (e: boolean) => void;
@@ -193,6 +195,9 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
             if(uploadFile) {
               resetForm();
               handleCloseModal()
+               setTimeout(() => {
+                            store.dispatch(notificationApi.util.invalidateTags(['notification']));
+                }, 2000);
               if(cohortRefetch)cohortRefetch()
               toast({
                 description: result.message + "and " +  uploadFile.message,
