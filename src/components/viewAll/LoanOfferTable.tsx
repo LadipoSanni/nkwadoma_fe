@@ -17,16 +17,7 @@ import { store } from "@/redux/store";
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
-// interface viewAllLoanOfferProps{
-//     id: string,
-//     amountRequested: number,
-//     amountApproved: number,
-//     dateOffered: string,
-//     loanProductName: string,
-//     firstName: string,
-//     lastName: string,
-//     loanOfferResponse: string
-// }
+
 
 const Index = () => {
     const router = useRouter();
@@ -37,14 +28,6 @@ const Index = () => {
         organizationId: clickedOrganization?.id || "",
     }
     const { data, isLoading} = useViewAllLoanOfferQuery(request,{refetchOnMountOrArgChange: true})
-    // const requestBody = {
-    //     pageNumber: 0,
-    //     pageSize: 100,
-    //     organizationId: clickedOrganization?.id
-    // }
-    // const {data: viewAllLoanOffersInAnOrganizationData, isLoading:isLoadingOrganizationLoanOffer } = useViewLoanInAnOrganizationQuery(requestBody, {skip:!clickedOrganization})
-    // const sortedViewAllLoanOffer = (data?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
-    // const sortedViewAllLoanOfferInAnOrg = (viewAllLoanOffersInAnOrganizationData?.data?.body.slice() ?? []).sort((a:viewAllLoanOfferProps, b:viewAllLoanOfferProps) => new Date(b.dateOffered).getTime() - new Date(a.dateOffered).getTime())
 
     useEffect(()=> {
        store.dispatch(resetNotification()) 
@@ -68,7 +51,6 @@ const Index = () => {
 
     return (
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
-            //  className={`grid md:px-3 md:overflow-hidden  md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
             {isLoading  ? (
                 <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
