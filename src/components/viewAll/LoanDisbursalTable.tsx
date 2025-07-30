@@ -85,7 +85,7 @@ function Index() {
                 <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
                     <SkeletonForTable/>
                 </div>
-            ) : data?.data?.body?.length === 0 ?
+            ) : data?.data?.body?.length === 0 || !data ?
                 (
                     <TableEmptyState name={"loan disbursal"}   icon={
                         <Icon
