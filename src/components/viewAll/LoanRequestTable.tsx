@@ -58,6 +58,7 @@ const Index = () => {
     ];
 
 
+    console.log('data: ',data)
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
         router.push(`/loan-request-details?id=${ID}`);
@@ -72,7 +73,7 @@ const Index = () => {
                     <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
                         <SkeletonForTable />
                     </div>
-                ) : data?.data?.body?.length === 0 ?
+                ) : data?.data?.body?.length === 0 || !data ?
                     (
                         <TableEmptyState name={"loan request"}   icon={
                             <Icon
