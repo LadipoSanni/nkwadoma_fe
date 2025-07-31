@@ -2,11 +2,14 @@ import React from 'react';
 import {cleanup, render, screen} from '@testing-library/react';
 import BalanceCard from '@/reuseable/cards/BalanceCard/Index';
 import { Providers } from '@/app/provider';
+const mockUsePathname = jest.fn();
 
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(() => ({
         push: jest.fn(),
     })),
+    usePathname: () => mockUsePathname,
+
 }));
 
 const loaneeCardData = [
@@ -18,6 +21,14 @@ describe('BalanceCard Component', () => {
     beforeEach(() => {
         cleanup();
     });
+
+    
+    beforeEach(() => {
+        jest.clearAllMocks();
+        jest.spyOn(console, 'log').mockReturnValue();
+        jest.spyOn(console, 'warn').mockReturnValue();
+        jest.spyOn(console, 'error').mockReturnValue();
+      });
 
     test('renders BalanceCard component', () => {
         render(

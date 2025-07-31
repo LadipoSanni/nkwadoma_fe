@@ -34,7 +34,7 @@ describe('ResponsiveRedirect Component', () => {
 
     test('Renders children if on mobile view', () => {
         window.matchMedia = jest.fn().mockImplementation(query => ({
-            matches: query === '(max-width: 767px)',
+            matches: query === '(max-width: 959px)',
             addEventListener: jest.fn(),
             removeEventListener: jest.fn(),
         }));
@@ -50,7 +50,7 @@ describe('ResponsiveRedirect Component', () => {
 
     test('Does not render children if not on mobile view', () => {
         window.matchMedia = jest.fn().mockImplementation(query => ({
-            matches: query !== '(max-width: 767px)',
+            matches: query !== '(max-width: 959px)',
             addEventListener: jest.fn(),
             removeEventListener: jest.fn(),
         }));
@@ -67,7 +67,7 @@ describe('ResponsiveRedirect Component', () => {
     test('Redirects to mobilePath when on mobile view', () => {
         // Set up a mobile view
         window.matchMedia = jest.fn().mockImplementation(query => ({
-            matches: query === '(max-width: 767px)',
+            matches: query === '(max-width: 959px)',
             addEventListener: jest.fn(),
             removeEventListener: jest.fn(),
         }));
@@ -83,7 +83,7 @@ describe('ResponsiveRedirect Component', () => {
 
     test('Redirects to webPath when not on mobile view', () => {
         window.matchMedia = jest.fn().mockImplementation(query => ({
-            matches: query !== '(max-width: 767px)',
+            matches: query !== '(max-width: 959px)',
             addEventListener: jest.fn(),
             removeEventListener: jest.fn(),
         }));

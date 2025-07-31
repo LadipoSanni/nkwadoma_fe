@@ -17,6 +17,8 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 import UploadCSV from './Upload-csv';
 import {setLoaneeId} from "@/redux/slice/organization/organization";
 import { store } from '@/redux/store';
+import { useDebounce } from '@/hooks/useDebounce';
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -61,9 +63,18 @@ const Loanees = dynamic(
   };
 }
 
+
+     interface rowData {
+      [key: string]: string | number | null | React.ReactNode | object;
+     }
+
+
 function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: Props) {
     const [searchTerm, setSearchTerm] = useState("");
     const cohortDetails = useAppSelector((state) => state.cohort.selectedCohortInOrganization)
+     const notificationCohortId = useAppSelector((state) => state.cohort?.notificationCohortId)
+     const notificationFlag = useAppSelector((state) => state?.notification?.notificationFlag)
+     const organisationTabStatus = useAppSelector(store => store?.organization?.organizationStatusTab)
     const cohortId = cohortDetails?.id;
     const [page,setPageNumber] = useState(0);
     const [totalPage,setTotalPage] = useState(0)
@@ -77,38 +88,57 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
     const router = useRouter();
      const [isOpen, setIsOpen] = useState(false);
 
-      const {data, isLoading,refetch} = useViewAllLoaneeQuery({
-            cohortId: cohortId,
+
+      const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+
+      const {data, isLoading,refetch,isFetching} = useViewAllLoaneeQuery({
+            cohortId: notificationCohortId || cohortId,
             pageSize: size,
             pageNumber: page,
             status: status,
             uploadedStatus: uploadedStatus
         })
 
-      const {data: searchResults, isLoading: isLoadingSearch} = useSearchForLoaneeInACohortQuery({
-                 loaneeName: searchTerm,
-                 cohortId: cohortId,
+        const {data: invitedData} = useViewAllLoaneeQuery({
+          cohortId:notificationCohortId || cohortId,
+          pageSize:  size,               
+          pageNumber: 0,             
+          uploadedStatus: "INVITED"    
+        }, {
+          skip: !(notificationCohortId || cohortId) &&  tabType === "Invited",            
+          refetchOnMountOrArgChange: true
+        });
+
+      const {data: searchResults, isLoading: isLoadingSearch, isFetching: isfetching} = useSearchForLoaneeInACohortQuery({
+                 loaneeName: debouncedSearchTerm,
+                 cohortId: notificationCohortId || cohortId,
                  status: status,
                  pageSize: size,
                  pageNumber: page,
              },
-             {skip: !searchTerm || !cohortId})
+             {skip: !debouncedSearchTerm ||  !notificationCohortId || !cohortId})
             
       useEffect(() => {
-         if(searchTerm && searchResults && searchResults?.data){
+         if(debouncedSearchTerm && searchResults && searchResults?.data){
           setNextPage(searchResults?.data?.hasNextPage)
           setTotalPage(searchResults?.data?.totalPages)
           setPageNumber(searchResults?.data?.pageNumber)
          }
-        else if(!searchTerm && data && data?.data) {
+        else if(!debouncedSearchTerm && data && data?.data) {
           setNextPage(data?.data?.hasNextPage)
           setTotalPage(data?.data?.totalPages)
           setPageNumber(data?.data?.pageNumber)
         }
-      },[searchTerm,data,searchResults])      
+      },[debouncedSearchTerm,data,searchResults]) 
+      
+      useEffect(() => {
+        if(notificationCohortId && uploadedStatus === "ADDED" && notificationFlag === "LOANEE_DATA_UPLOAD_SUCCESS"){
+          refetch()
+        }
+      },[refetch,notificationCohortId,uploadedStatus,notificationFlag])
 
       const tableHeaderintegrated = [
-              {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
+              {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + row?.userIdentity?.lastName},
               {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) =>  formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
               {title: "Status", sortable: true, id: "loaneeStatus", selector: (row: viewAllLoanees) =>  <span  className={`${row?.loaneeStatus === "ACTIVE" ? 'text-[#063F1A] bg-[#E7F5EC]' : 'text-[#142854] bg-[#FEF6E8]'} rounded-[32px] px-2 py-1`}>{row?.loaneeStatus === "ACTIVE"? "Active" : "Pending"}</span> },
               {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountRequested))},
@@ -131,20 +161,18 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
                router.push('/organizations/view-loanee-profile')
         }
       
-        // const dropDownOption = [
+        const dropDownOption = [
   
-        //   {
-        //     name: "Archive",
-        //     id: "1"
-        //   }
+          {
+            name: "Archive",
+            id: "1"
+          }
         
-        // ]
+        ]
 
-        // const handleDropdown = (id:string,row: rowData) => {
-        //  if(id === "1"){
-        //   setSelectedRows(row?.id)
-        //  }
-        // }
+    
+
+        
       
        const handleModalOpen = () => {
           setIsOpen(!isOpen)
@@ -152,15 +180,15 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
 
         const getTableData = () => {
           if (!data?.data?.body) return [];
-         else if (searchTerm) return searchResults?.data?.body || [];
+         else if (debouncedSearchTerm) return searchResults?.data?.body || [];
          else return data?.data?.body;
       }
 
       const handleClick= async () => {
-          setSelectedRows(new Set()); 
           const formData = {
             loaneeIds: Array.from(selectedRows),
-            loaneeStatus:condition || ""
+            loaneeStatus:condition || "",
+            cohortId: notificationCohortId || cohortId || ""
           }
         try {
          const updateStatus =  await updateLoaneeStatus(formData).unwrap()
@@ -172,7 +200,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
             setSelectedRows(new Set());
             setEnableButton(false)
             if(status === "ARCHIVE"){
-              router.push("/organizations/loanees/uploaded")
+              router.push("/organizations/loanees/invited")
             }else {
               router.push("/organizations/loanees/archived")
             }
@@ -190,9 +218,13 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
       }
 
       const handleInvite = async () => {
-         const loaneeId = Array.from(selectedRows)
+        //  const loaneeId = Array.from(selectedRows)
+           const formData = {
+            loaneeIds : Array.from(selectedRows),
+            cohortId : notificationCohortId || cohortId
+           }
          try {
-          const inviteLoanees = await inviteLoanee(loaneeId).unwrap()
+          const inviteLoanees = await inviteLoanee(formData).unwrap()
           if(inviteLoanees){
             setSelectedRows(new Set());
             setEnableButton(false)
@@ -211,6 +243,38 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
           })
          }
       }
+
+
+      const handleDropdown = async (id: string, row: rowData) => {
+        if (id === "1") {
+          const loaneeId = String(row?.id);
+          setSelectedRows(new Set([loaneeId]));
+      
+          try {
+            const formData = {
+              loaneeIds: [loaneeId],
+              loaneeStatus: condition || "",
+              cohortId: notificationCohortId || cohortId || ""
+            };
+            
+            const result = await updateLoaneeStatus(formData).unwrap();
+            if(result){
+              toast({
+                description: `Loanee archived successfully`,
+                status: "success",
+              });
+              setSelectedRows(new Set()); 
+              router.push("/organizations/loanees/archived");
+            }
+           
+          } catch (err) {
+            const error = err as ApiError;
+            toast({ description: error?.data?.message, status: "error" });
+            setSelectedRows(new Set()); 
+          }
+        }
+      };
+       
 
   return (
     <main>
@@ -252,8 +316,9 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         {  tabType === "All" &&
           <Button
           variant={`secondary`}
-          className='h-[45px] w-full'
+          className={`h-[45px] w-full ${organisationTabStatus !== "active"? "bg-gray text-grey150 hover:bg-gray" : ""}`}
           onClick={handleModalOpen}
+          disabled={organisationTabStatus !== "active" ? true : false}
           >
             Upload csv
           </Button>
@@ -261,11 +326,11 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         </div>
       </div>
       <div className='mt-4'>
-       { searchTerm && searchResults?.data?.body?.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanees'/></div> :
+       { !isTyping && debouncedSearchTerm  && searchResults?.data?.body?.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanees'/></div> :
         
         <CheckBoxTable
         // tableData={!data?.data?.body ? [] : searchTerm ? searchResults?.data : data?.data?.body}
-        tableData={tabType === 'Invited'? [] : getTableData()}
+        tableData={getTableData()}
         tableHeader={tabType === 'Invited'? tableHeaderintegrated : tableHeader}
         handleRowClick={handleRowClick}
         staticHeader="Loanee"
@@ -273,21 +338,21 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         icon={MdOutlinePerson}
         sideBarTabName="loanees"
         tableCellStyle="h-12"
-        isLoading={isLoading || isLoadingSearch}
+        isLoading={isLoading || isLoadingSearch || isFetching || isfetching}
         condition={true}
         tableHeight={40}
         hasNextPage={hasNextPage}
         pageNumber={page}
         setPageNumber={setPageNumber}
         totalPages={totalPage}
-        // enableRowSelection={tabType === 'All' || tabType === 'Archived' ? true : false}
-        enableRowSelection={false}
+        enableRowSelection={organisationTabStatus === "active" && (tabType === 'All' || tabType === 'Archived')  ? true : false}
         enableButton={() =>setEnableButton(true) }
         disabledButton={()=> setEnableButton(false) }
         handleSelectedRow={handleSelectedRow}
          sx='cursor-pointer'
-        //  kirkBabDropdownOption={tabType === 'Invited' ? dropDownOption : undefined}
-        //  showKirkBabel={tabType === 'Invited' ? true: false}
+         kirkBabDropdownOption={tabType === 'Invited' ? dropDownOption : undefined}
+         showKirkBabel={tabType === 'Invited' ? true: false}
+        handleDropDownClick={handleDropdown}
         />}
       </div>
        <div>
@@ -302,6 +367,9 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         <UploadCSV 
         setIsOpen={setIsOpen}
         loaneeRefetch={refetch}
+        isLoaneeEmpty={data?.data?.body?.length === 0 ? true : false}
+        isInvitedLoanee={invitedData?.data?.body?.length === 0 ? true : false}
+        notificationCohortId={notificationCohortId}
         />
         </Modal>
        </div>

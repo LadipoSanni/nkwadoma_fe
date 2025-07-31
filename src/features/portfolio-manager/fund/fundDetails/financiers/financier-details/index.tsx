@@ -12,6 +12,8 @@ import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-f
 import { capitalizeFirstLetters } from "@/utils/GlobalMethods";
 import { getInitial } from '@/utils/GlobalMethods';
 import { formatAmount } from '@/utils/Format';
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import {store} from "@/redux/store";
 
 const FinancierDetails = () => {
     const currentFinancierId = useAppSelector(state => (state.financier.currentFinancierId))
@@ -28,10 +30,12 @@ const FinancierDetails = () => {
         if(financierMode === "platform"){
             router.push("/financier");
         } else if (notification === "notification"){
+             store.dispatch(setCurrentNavbarItem("Notification"))
             router.push(`/notifications/notification/${notificationId}`);
         }
         else {
           router.push("/vehicle/financiers");
+           store.dispatch(setCurrentNavbarItem("Investment vehicle"))
         }
     }
     // const initial = getInitials(`${details?.data.firstName} ${details?.data.lastName}`);

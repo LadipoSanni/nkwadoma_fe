@@ -1,11 +1,19 @@
 import FinancierDetails from "@/features/portfolio-manager/fund/fundDetails/financiers/financier-details";
-import {render, screen} from '@testing-library/react'
+import {render, screen,cleanup} from '@testing-library/react'
 import {Providers} from "@/app/provider";
 
 jest.mock('next/navigation', ()=> ({
-    useRouter: jest.fn()
+    useRouter: jest.fn(),
+    usePathname: () => jest.fn(),
 }));
 describe('testing financier details page', () => {
+      beforeEach(() => {
+             cleanup()
+               jest.spyOn(console,'log').mockReturnValue()
+               jest.spyOn(console,'warn').mockReturnValue()
+               jest.spyOn(console,'error').mockReturnValue()
+           });
+
     beforeEach(()=> {
         render(
             <Providers>

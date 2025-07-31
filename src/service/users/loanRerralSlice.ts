@@ -6,12 +6,18 @@ interface LoanReferralState {
     currentStep: number;
     isLoaneeIdentityVerified: boolean;
     loaneeCurrentInfo : LoaneeCurentInformation ;
+    isFormSubmitting : boolean;
+    isAdditionalDetailComplete : boolean;
+    isidentityVerified : boolean
 }
 
 const initialState: LoanReferralState = {
     loanReferralStatus: '',
     currentStep: 0,
     isLoaneeIdentityVerified: false,
+    isFormSubmitting: false,
+    isAdditionalDetailComplete: false,
+    isidentityVerified: false,
     loaneeCurrentInfo : {
         firstName: "",
         lastName: "",
@@ -22,6 +28,7 @@ const initialState: LoanReferralState = {
         alternateEmail: "",
         alternatePhoneNumber: "",
         alternateContactAddress: "",
+        
     },
 };
 
@@ -40,9 +47,39 @@ const loanReferralSlice = createSlice({
         },
         setLoaneeCurrentInfo(state, action: PayloadAction<LoaneeCurentInformation >) {
             state.loaneeCurrentInfo = action.payload;
+        },
+        cleartLoaneeCurrentFieldInfo: (state) => {
+            state.loaneeCurrentInfo = {
+                firstName: "",
+                lastName: "",
+                email: "",
+                phoneNumber: "",
+                nextOfKinRelationship: "",
+                contactAddress: "",
+                alternateEmail: "",
+                alternatePhoneNumber: "",
+                alternateContactAddress: "",
+            }
+        },
+        setIsFormSubmited: (state, action: PayloadAction<boolean>) => {
+            state.isFormSubmitting = action.payload
+        },
+        setIsAdditionalDetailComplete: (state, action: PayloadAction<boolean>) => {
+            state.isAdditionalDetailComplete =  action.payload
+        },
+        setIsidentityVerified: (state, action: PayloadAction<boolean>) => {
+            state.isidentityVerified =  action.payload
         }
+
     },
 });
 
-export const { setLoanReferralStatus, setCurrentStep,setLoaneeCurrentInfo, setLoaneeIdentityVerifiedStatus } = loanReferralSlice.actions;
+export const { setLoanReferralStatus, 
+              setCurrentStep,setLoaneeCurrentInfo,
+               setLoaneeIdentityVerifiedStatus,
+               setIsFormSubmited,cleartLoaneeCurrentFieldInfo,
+               setIsAdditionalDetailComplete,setIsidentityVerified} = loanReferralSlice.actions;
+
+export type { LoanReferralState };
+
 export default loanReferralSlice.reducer;

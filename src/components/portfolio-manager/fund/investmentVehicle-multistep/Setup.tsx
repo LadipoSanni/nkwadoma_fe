@@ -21,6 +21,7 @@ import {useAppSelector} from "@/redux/store";
 import { setCreateInvestmentField,clearSaveCreateInvestmentField,setDraftId,clearDraftId, setInvestmentVehicleType} from '@/redux/slice/vehicle/vehicle';
 import { validationSchema,draftValidationSchema } from '@/utils/validation-schema';
 import PdfAndDocFileUpload from '@/reuseable/Input/Pdf&docx-fileupload';
+import BankSelectField from '@/reuseable/Input/Bank-select-field';
 
 interface ApiError {
     status: number;
@@ -47,6 +48,7 @@ function Setup({investmentVehicleType}: Props) {
       const [createInvestmentVehicle, { isLoading }] = useCreateInvestmentVehicleMutation();
       const { toast } = useToast();
        const router = useRouter();
+      
      
     const initialFormValue = {
       id: draftId || "",
@@ -260,17 +262,23 @@ function Setup({investmentVehicleType}: Props) {
                 <div>
                 <Label htmlFor="name" className='text-[14px]'>Start date</Label>
               <DatePickerInput
-              selectedDate={parseISO(values.startDate ?? "")}
+              // selectedDate={values.startDate ? parseISO(values.startDate) : undefined}
+              selectedDate={ parseISO(values.startDate) }
               // onDateChange={(date) => {
               //   const formattedDate = format(date, "yyyy-MM-dd");
               //   setFieldValue("startDate", formattedDate).then(() => {
               //     saveToRedux({ ...values, startDate: formattedDate });
               //   });
               // }}
-              onDateChange={(date) =>
-                setFieldValue("startDate", format(date, "yyyy-MM-dd"))
+              onDateChange={(date) => {
+                if (date) {
+                  const formattedDate = format(date, "yyyy-MM-dd");
+                  setFieldValue("startDate", formattedDate); 
+                } else {
+                  setFieldValue("startDate", ""); 
                 }
-                 className="p-6 mt-2 text-[14px] text-[#6A6B6A]"
+              }}
+                 className="p-6 mt-2 text-[14px] text-[#6A6B6A] h-[49px]"
                 //  disabledDate={
                 //       (date) => date && date.getTime() < new Date().setHours(0, 0, 0, 0)
                 //     }
@@ -400,10 +408,10 @@ function Setup({investmentVehicleType}: Props) {
                       )}
                   </div>
                 </div>
-                <div className='md:flex gap-4 relative md:bottom-9'>
+                <div className='md:grid md:grid-cols-2 gap-4 relative md:bottom-9'>
                    <div className="relative bottom-10  md:bottom-0">
                     <Label htmlFor="name">Bank partner</Label>
-                    <Field
+                    {/* <Field
                     id="bankPartner"
                     name="bankPartner"
                     placeholder="Enter bank partner"
@@ -414,7 +422,19 @@ function Setup({investmentVehicleType}: Props) {
                           e.target.value.replace(/[^a-zA-Z\s]/g, "")
                         )
                       }
-                    />
+                    /> */}
+                    <div className='relative bottom-1'>
+                    <BankSelectField
+                      triggerId='bankTriggerId'
+                      id='bankId'
+                      value={values.bankPartner}
+                      onChange={(value: string) => setFieldValue("bankPartner", value)}
+                      bankName="bankPartner"
+                       placeHolder='Select bank'
+                       className='h-[3.0rem]'
+                     />
+                    </div>
+                    
                     {errors.bankPartner && touched.bankPartner && (
                     <ErrorMessage
                         name="bankPartner"
@@ -530,7 +550,7 @@ function Setup({investmentVehicleType}: Props) {
                         >
                             {
                             vehicleTypeStatus === "SAVE-AND-CONTINUE" &&
-                             isLoading ? <Isloading /> : "Save and continue"}
+                             isLoading ? <Isloading /> : "Continue"}
                         </Button>
                     </div>
             </div>

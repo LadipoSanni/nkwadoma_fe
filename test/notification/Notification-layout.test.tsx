@@ -1,10 +1,11 @@
-import { cleanup,fireEvent, screen, render} from "@testing-library/react";
+import { cleanup, screen, render} from "@testing-library/react";
 import NotificationLayout from "@/layout/notification-layout.tsx";
 import { useRouter } from 'next/navigation';
 import { Providers } from "@/app/provider";
 
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
+    usePathname: () => jest.fn(),
   }));
 
   function Wrapper() {

@@ -73,19 +73,22 @@ const Barcharts = () => {
     const changeLoanYear = (year: string) => {
         console.log(year)
     }
+    const timeStamp = Date.now()
+    const dateStamp = new Date(timeStamp)
+    const year = dateStamp.getFullYear()
     const LoanLifeSpan = [
-        '2023',
+        year?.toString(),
 
     ]
     const AumLifeSpan = [
-        '2023',
+        year?.toString(),
     ]
 
     return (
         <div className={` w-full md:w-full grid md:flex flex-col-2 md: gap-6 `}>
             <BarChartWithDate id={'AUMPortfolioGrowthRate'}
                               years={AumLifeSpan}
-                              currentYear={'2023'}
+                              currentYear={year?.toString()}
                               displayDates={barChartTabContent}
                               currentMonthDate={currentAumPortfolioGrowth}
                               cardTile={'AUM portfolio growth rate'}
@@ -96,7 +99,7 @@ const Barcharts = () => {
             />
             <BarChartWithDate id={'LoanBookPortfolioGrowthRate'}
                               years={LoanLifeSpan}
-                              currentYear={'2023'}
+                              currentYear={year?.toString()}
                               displayDates={barChartTabContent}
                               currentMonthDate={currentLoanBookPortfolioGrowth}
                               cardTile={'Loan book portfolio growth rate'}

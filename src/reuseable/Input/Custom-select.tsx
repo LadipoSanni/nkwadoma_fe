@@ -58,7 +58,7 @@ function CustomSelect({
                 <SelectTrigger
                     id={triggerId}
                     className={`min-w-0 h-[3.2rem] w-full border focus:ring-0 focus:outline-none shadow-none flex justify-between ${className}`}
-                    role="button"
+                     role="button"
                 >
                     <SelectValue className="" data-testid="SelectContent" placeholder={placeHolder} id={`selectId${id}`} />
                     <div className="">

@@ -5,6 +5,7 @@ import Isloading from "@/reuseable/display/Isloading";
 import { MdThumbUpOffAlt, MdCheckCircle } from "react-icons/md";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 interface CapturePhotoWithTipsProps {
     onCapture: (imageSrc: File) => void;
@@ -567,18 +568,22 @@ const CapturePhotoWithTips: React.FC<CapturePhotoWithTipsProps> = ({ onCapture }
             <>
                 {step === 'preview' ? (
                     <div className="md:flex grid md:justify-between gap-2">
-                        <button
+                        <Button
+                            type="button"
                             onClick={handleRetake}
                             className="md:w-[8.75rem] h-[61px]  w-full py-5 px-4 bg-white border border-meedlBlue  rounded-md text-meedlBlue text-sm"
+                            variant={'outline'}
                         >
                             Retake selfie
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                             onClick={handleProceed}
                             className="md:w-[12.063rem] h-[61px] w-full py-2 px-4 bg-meedlBlue rounded-md text-white text-sm"
+                            type="submit"
+                            variant={'secondary'}
                         >
                             Proceed with this selfie
-                        </button>
+                        </Button>
                     </div>
                 ) : (
                     <section className=" bg-yellow150 border-[0.5px] border-yellow850 rounded py-3 px-5 grid gap-4">

@@ -2,7 +2,12 @@ import { cleanup, screen, render,fireEvent} from "@testing-library/react";
 import FiinancierStep from "@/components/portfolio-manager/fund/financier/financiers-step";
 import { Providers } from "@/app/provider";
 
-
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+  usePathname: () => jest.fn(),
+}));
 
 describe("Invite financier", () => {
     

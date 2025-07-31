@@ -12,7 +12,7 @@ const Layout : React.FC<Props> = ({children}) => {
             <MeedlLayout>
                {children}
             </MeedlLayout>
-        </Authentication>
+         </Authentication>
     );
 };
 

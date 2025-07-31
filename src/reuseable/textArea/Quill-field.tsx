@@ -94,6 +94,18 @@ const QuillFieldEditor = ({ name, errorMessage, errors, touched }: FieldName) =>
                         right: auto !important;
                         transform: translateX(-20%) !important; 
                     }
+                          .ql-editor.ql-blank::before {
+      font-style: normal !important;
+    //   color: #9CA3AF !important; 
+    }
+    .ql-toolbar .ql-picker-label {
+      min-width: 0 !important; 
+    }
+    .ql-tooltip {
+      left: 13% !important; 
+      right: auto !important;
+      transform: translateX(-20%) !important; 
+    }
                 `}
             </style>
             <ReactQuill

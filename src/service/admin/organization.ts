@@ -78,11 +78,12 @@ export const organizationApi = createApi({
         }),
 
         getOrganizationDetails: builder.query({
-            query:({id}) => ({
-                url: `/organization/${id}`,
+            query:(param: {organizationId?: string}) => ({
+                url: `/organization/details`,
                 method: "GET",
+                params:param
             }),
-            providesTags: (result, error, arg) => [{ type: 'organization', id: arg.id }],
+            providesTags: [ 'organization'],
         }),
         getDetailsOfOrganization: builder.query({
             query:() => ({
@@ -92,10 +93,10 @@ export const organizationApi = createApi({
              providesTags: [ "organization"]
         }),
         searchOrganisationAdminByName: builder.query({
-            query: (name) => ({
+            query: (param:{name: string,pageNumber: number,pageSize:number}) => ({
                 url: '/organization/search/admin',
                 method: 'GET',
-                params: {name},
+                params: param,
             }),
         }),
         deactivateOrganization: builder.mutation({

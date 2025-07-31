@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage/session';
-import appReducer from '@/redux/reducer';
+import rootReducer from '@/redux/reducer';
 import { authApi } from '@/service/auths/api';
 import { programApi } from '@/service/admin/program_query';
 import { cohortApi } from '@/service/admin/cohort_query';
@@ -20,17 +20,18 @@ import { financierApi } from '@/service/admin/financier';
 import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
 import {marketplaceApi} from "@/service/financier/marketplace";
 import {portfolioOverviewApi} from '@/service/admin/overview'
-import {publicInvestmentApi} from "@/service/unauthorized/view-investment";
 import { loanBookApi } from '@/service/admin/loan_book';
+import {unauthorizedApis} from "@/service/unauthorized/action";
+import { countryApi } from '@/service/admin/external-api/countryCalling_code_query';
 
 
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep', 'loanReferral', 'kycForm','notification','organization','cohort','csv'],
+    whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle', 'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep', 'loanReferral', 'kycForm','notification','organization','cohort','csv','loanOffer'],
 };
 
-const persistedReducer = persistReducer(persistConfig, appReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
     reducer: persistedReducer,
@@ -55,8 +56,9 @@ export const store = configureStore({
             financierOnboardingAndDashboardApi.middleware,
             marketplaceApi.middleware,
             portfolioOverviewApi.middleware,
-            publicInvestmentApi.middleware,
+            unauthorizedApis.middleware,
             loanBookApi.middleware,
+            countryApi.middleware
         ]),
 });
 

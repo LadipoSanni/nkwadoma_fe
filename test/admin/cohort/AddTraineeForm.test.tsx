@@ -3,10 +3,21 @@ import AddTraineeForm from "@/components/cohort/AddTraineeForm";
 import userEvent from '@testing-library/user-event';
 import { Providers } from "@/app/provider";
 
-
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+    usePathname: () => jest.fn(),
+}));
 describe("AddTraineeForm", () => {
     beforeEach(() => {
         cleanup()
+        global.fetch = jest.fn(() =>
+            Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }))
+        );
         jest.spyOn(console,'log').mockReturnValue();
         jest.spyOn(console,'warn').mockReturnValue();
         jest.spyOn(console,'error').mockReturnValue();

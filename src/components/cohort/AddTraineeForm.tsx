@@ -198,9 +198,15 @@ function AddTraineeForm({setIsOpen, tuitionFee,cohortId }: Props) {
                 validateOnMount
             >
                 {({ errors, isValid, touched, setFieldValue }) => (
-                    <Form className={`${inter.className}`}>
+                    <Form className={`${inter.className} md:max-h-[67.5vh] overflow-y-auto`}
+                    style={{
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none',
+
+                    }}
+                    >
                         {step === 1 ? (
-                            <div className="grid grid-cols-1 gap-y-4  md:max-h-[67.5vh] overflow-y-auto px-2">
+                            <div className="grid grid-cols-1 gap-y-4  px-2">
                                 <div>
                                     <Label htmlFor="firstName">First name</Label>
                                     <Field

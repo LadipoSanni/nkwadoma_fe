@@ -5,14 +5,12 @@ import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent  } from 
 
 interface Props {
     componentId?: string;
-    maxWidth: string;
-    maxHeight: string;
     chartData: {month: string, value: number}[];
     dataKey: string;
     // chartConfig: {}
 }
 
-const MeedlBarChart = ({componentId, dataKey,chartData, maxHeight, maxWidth}: Props) => {
+const MeedlBarChart = ({componentId, dataKey,chartData}: Props) => {
 
 
 
@@ -25,11 +23,11 @@ const MeedlBarChart = ({componentId, dataKey,chartData, maxHeight, maxWidth}: Pr
     return (
             <div id={componentId}
                  data-testid={componentId}
-                 className={`  w-full h-fit   `}
+                 className={`  w-full h-fit md:w-full   `}
             >
 
-                <ChartContainer config={chartConfig} className={ ` mr-auto  ml-auto min-h-[200px] h-[300px] w-[80vw]  sm:w-[ md:w-[${maxWidth}] max-h-[${maxHeight ? maxHeight : '100%'}]  `}>
-                    <BarChart accessibilityLayer  data={chartData}>
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+            <BarChart accessibilityLayer data={chartData}>
                         <XAxis
                             dataKey="month"
                             tickLine={false}
@@ -40,8 +38,8 @@ const MeedlBarChart = ({componentId, dataKey,chartData, maxHeight, maxWidth}: Pr
                         />
                         <ChartTooltip content={<ChartTooltipContent />} />
                         <Bar  dataKey={dataKey} fill="var(--color-desktop)" radius={0} />
-                    </BarChart>
-                </ChartContainer>
+            </BarChart>
+        </ChartContainer>
             </div>
     );
 };

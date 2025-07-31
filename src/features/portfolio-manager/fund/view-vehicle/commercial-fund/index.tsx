@@ -8,77 +8,86 @@ import Table from '@/reuseable/table/Table';
 import {store} from "@/redux/store";
 import {setCurrentVehicleId,setVehicleType} from "@/redux/slice/vehicle/vehicle";
 import {formatMonthInDate} from '@/utils/Format';
-import {formatAmount} from '@/utils/Format';
+import {formatAmount,formatToTwoDecimals} from '@/utils/Format';
 import {MdOutlinePayments} from 'react-icons/md';
 import {useRouter} from 'next/navigation'
 import {useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,useSearchInvestmentVehicleByNameAndTypeQuery} from "@/service/admin/fund_query";
 import { setInvestmentVehicleType } from '@/redux/slice/vehicle/vehicle';
-import { resetAll} from '@/redux/slice/vehicle/vehicle';
+import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import { clearAll} from '@/redux/slice/multiselect/vehicle-multiselect';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
 
-interface investmentVehicleProps     {
-    id: string,
-    name: string,
-    investmentVehicleType: string,
-    mandate: string,
-    sponsors: string,
-    tenure: number,
-    size: number,
-    rate: number,
-    fundRaisingStatus?: string,
-    totalAmountInInvestmentVehicle: number,
-    amountRaised?: string,
-    amountDisbursed?: string,
-    totalAvailableAmount?: number,
-    totalIncomeGenerated?: string,
-    netAssetValue?: string
-}
+// interface investmentVehicleProps     {
+//     id: string,
+//     name: string,
+//     investmentVehicleType: string,
+//     mandate: string,
+//     sponsors: string,
+//     tenure: number,
+//     size: number,
+//     rate: number,
+//     fundRaisingStatus?: string,
+//     totalAmountInInvestmentVehicle: number,
+//     amountRaised?: string,
+//     amountDisbursed?: string,
+//     totalAvailableAmount?: number,
+//     totalIncomeGenerated?: string,
+//     netAssetValue?: string
+// }
 
 
 function CommercialFund() {
     const [searchTerm, setSearchTerm] = useState('');
        const [pageNumber,setPageNumber] = useState(0)
-        const [viewAllInvestmentVehicle, setViewAllInvestmentVehicle] = useState<investmentVehicleProps[]>([]);
         const [hasNextPage,setNextPage] = useState(false)
         const [totalPage,setTotalPage] = useState(0)
+        const [pageSearchNumber,setPageSearchNumber] = useState(0)
+        
+        const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+        
         const param = {
             investmentVehicleType: "COMMERCIAL",
              investmentVehicleStatus: "PUBLISHED",
             pageSize: 10,
-            pageNumber: pageNumber
+            pageNumber: pageSearchNumber
         }
         const router = useRouter()
+        
     
-        const {data:investmentVehicleData,isLoading} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
+        const {data:investmentVehicleData,isLoading,isFetching} = useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
             pageSize: 10,
             pageNumber: pageNumber,
             investmentVehicleType: 'COMMERCIAL',
             investmentVehicleStatus: "PUBLISHED"
         })
         
-         const {data: searchData} = useSearchInvestmentVehicleByNameAndTypeQuery({ investmentVehicleName: searchTerm,param},{skip: !searchTerm})
+         const {data: searchData,isFetching: isfetching,isLoading: isSearchLoading} = useSearchInvestmentVehicleByNameAndTypeQuery({ investmentVehicleName: debouncedSearchTerm,param},{skip: !debouncedSearchTerm})
+
+         const getTableData = () => {
+            if (!investmentVehicleData?.data?.body) return [];
+            if (debouncedSearchTerm) return searchData?.data?.body || [];
+            return investmentVehicleData?.data?.body;
+        }
     
          useEffect(() => {
-                 if (searchTerm && searchData && searchData?.data) {
-                     const result = searchData?.data?.body
-                     setViewAllInvestmentVehicle(result)
+                 if (debouncedSearchTerm && searchData && searchData?.data) {
                      setNextPage(searchData?.data?.hasNextPage)
                      setTotalPage(searchData?.data?.totalPages)
-                     setPageNumber(searchData?.data?.pageNumber)
-                 } else if (!searchTerm && investmentVehicleData && investmentVehicleData.data) {
-                     setViewAllInvestmentVehicle(investmentVehicleData?.data?.body)
+                     setPageSearchNumber(searchData?.data?.pageNumber)
+                 } else if (!debouncedSearchTerm && investmentVehicleData && investmentVehicleData.data) {
                     setNextPage(investmentVehicleData?.data?.hasNextPage)
                     setTotalPage(investmentVehicleData?.data?.totalPages)
                     setPageNumber(investmentVehicleData?.data?.pageNumber)
                  }
                  store.dispatch(resetAll())
                  store.dispatch(clearAll())
-             }, [searchTerm, searchData, investmentVehicleData])
+                 store.dispatch(clearSaveCreateInvestmentField())
+             }, [debouncedSearchTerm, searchData, investmentVehicleData])
     
     
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,8 +95,6 @@ function CommercialFund() {
     };
 
     const handleCommercialFundDraftClick = () => {
-        // setModalType("draft")
-        // setIsModalOpen(true);
         router.push("/vehicle/draft")
         store.dispatch(setVehicleType("commercial"))
         store.dispatch(setInvestmentVehicleType("COMMERCIAL"))    
@@ -95,8 +102,6 @@ function CommercialFund() {
     }
 
     const handleCreateInvestmentVehicleClick = () => {
-        // setModalType("createInvestmentVehicle")
-        // setIsModalOpen(true);
         router.push("/vehicle/setup")
         store.dispatch(setVehicleType("commercial"))
         store.dispatch(setInvestmentVehicleType("COMMERCIAL"))    
@@ -108,9 +113,7 @@ function CommercialFund() {
                 router.push('/vehicle/details')
     }
 
-    const tableData = viewAllInvestmentVehicle as unknown as TableRowData[]
-        
-    
+
         const fundHeader = [
                 {
                     title: <div className='h-11 flex justify-center items-center'>Vehicle</div>,
@@ -124,36 +127,36 @@ function CommercialFund() {
                     id: 'startDate',
                     selector: (row: TableRowData) => formatMonthInDate(row?.startDate)
                 },
-                {title: 'Tenure(months)', sortable: true, id: 'tenure', selector: (row: TableRowData) => row.tenure},
+                {title: 'Tenure', sortable: true, id: 'tenure', selector: (row: TableRowData) => row.tenure},
                 {
                     title: <div className='md:pr-5 md:pl-8 relative md:right-6 '>Vehicle size</div>,
                     sortable: true,
                     id: 'size',
-                    selector: (row: TableRowData) => <div className=''>{formatAmount(row.size)}</div>
+                    selector: (row: TableRowData) => <div className="truncate">{formatAmount(row.size)}</div>
                 },
                 {
                     title: 'Interest rate(%)',
                     sortable: true,
                     id: ' rate',
-                    selector: (row: TableRowData) => <div>{row.rate}</div>
+                    selector: (row: TableRowData) => <div className="truncate">{formatToTwoDecimals(row.rate)}</div>
                 },
                 {
                     title: 'Amount collected',
                     sortable: true,
                     id: 'amountRaised',
-                    selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountRaised)}</div>
+                    selector: (row: TableRowData) => <div  className="truncate">{formatAmount(row.amountRaised)}</div>
                 },
                 {
                     title: 'Amount disbursed',
                     sortable: true,
                     id: ' amountDisbursed',
-                    selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountDisbursed)}</div>
+                    selector: (row: TableRowData) => <div className="truncate">{formatAmount(row.amountDisbursed)}</div>
                 },
                 {
                     title: 'Amount available',
                     sortable: true,
                     id: 'amountAvailable',
-                    selector: (row: TableRowData) => <div className=''>{formatAmount(row.totalAvailableAmount)}</div>
+                    selector: (row: TableRowData) => <div className="truncate">{formatAmount(row.totalAvailableAmount)}</div>
                 },
             ]
 
@@ -170,11 +173,11 @@ function CommercialFund() {
                 />
       </div>
       <div>
-            { searchTerm && viewAllInvestmentVehicle.length === 0? <div>
+            { !isTyping && debouncedSearchTerm && searchData?.data?.body.length === 0? <div>
                 <SearchEmptyState icon={MdSearch} name='Commercial vehicle'/>
             </div> : <div  className='mt-6'>
                 <Table
-                tableData={tableData} 
+                tableData={getTableData()} 
                 tableHeader={fundHeader}
                 handleRowClick={handleRowClick}
                 tableHeight={54}
@@ -187,10 +190,10 @@ function CommercialFund() {
                 staticHeader={"Vehicle"}
                 staticColunm={'name'}
                 hasNextPage={hasNextPage}
-                pageNumber={pageNumber}
-                setPageNumber={setPageNumber}
+                pageNumber={searchTerm !== ""? pageSearchNumber : pageNumber}
+                setPageNumber={searchTerm !== ""? setPageSearchNumber :  setPageNumber}
                  totalPages={totalPage}
-                 isLoading={isLoading}
+                 isLoading={isLoading || isSearchLoading || isFetching || isfetching}
                 />
                 </div>}
         </div>

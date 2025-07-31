@@ -32,7 +32,7 @@ const Index = () => {
         router.push('/loan/loan-disbursal')
     }
 
-    const breakDown = details?.data.loaneeLoanBreakDowns.map((item: LoaneeLoanBreakDown) => ({
+    const breakDown = details?.data?.loaneeLoanBreakDowns?.map((item: LoaneeLoanBreakDown) => ({
         itemName: item.itemName,
         itemAmount: `₦${item.itemAmount.toLocaleString()}`,
     })) || [];
@@ -48,14 +48,14 @@ const Index = () => {
     }
 
     const basicDetails = [
-        {label: 'Gender', value: details?.data.userIdentity.gender},
-        {label: 'Email address', value: details?.data.userIdentity.email},
-        {label: 'Phone number', value: details?.data.userIdentity.phoneNumber},
-        {label: 'Date of birth', value: details?.data.userIdentity.dateOfBirth},
-        {label: 'Marital status', value: details?.data.userIdentity.maritalStatus},
-        {label: 'Nationality', value: details?.data.userIdentity.nationality},
-        {label: 'State of origin', value: details?.data.userIdentity.stateOfOrigin},
-        {label: 'State of residence', value: details?.data.userIdentity.stateOfResidence},
+        {label: 'Gender', value: details?.dataa?.userIdentity?.gender},
+        {label: 'Email address', value: details?.data?.userIdentity?.email},
+        {label: 'Phone number', value: details?.data?.userIdentity?.phoneNumber},
+        {label: 'Date of birth', value: details?.data?.userIdentity?.dateOfBirth},
+        {label: 'Marital status', value: details?.data?.userIdentity?.maritalStatus},
+        {label: 'Nationality', value: details?.data?.userIdentity?.nationality},
+        {label: 'State of origin', value: details?.data?.userIdentity?.stateOfOrigin},
+        {label: 'State of residence', value: details?.data?.userIdentity?.stateOfResidence},
         {label: 'Residential address', value: details?.deta?.userIdentity?.residentialAddress},
     ];
     const startDate = dayjs(details?.data.startData?.toString()).format('MMM D, YYYY');
@@ -73,7 +73,7 @@ const Index = () => {
                     disabled={true}
                     prefix={'₦'}
                     className='bg-grey105 flex md:place-items-end '
-                    value={details?.data.tuitionAmount}
+                    value={details?.data?.tuitionAmount}
                 />
         },
         { label: 'Start date', value: startDate},
@@ -87,7 +87,7 @@ const Index = () => {
                 fixedDecimalScale={true}
                 disabled={true}
                 prefix={'₦'}
-                value={details?.data.loanAmountRequested}
+                value={details?.data?.loanAmountRequested}
                 className='bg-grey105 flex md:place-items-end'
             />
         },
@@ -100,7 +100,7 @@ const Index = () => {
                 decimalScale={2}
                 fixedDecimalScale={true}
                 prefix={'₦'}
-                value={details?.data.initialDeposit}
+                value={details?.data?.initialDeposit}
                 disabled={true}
                 className='bg-grey105 flex md:place-items-end'
             />
@@ -111,16 +111,16 @@ const Index = () => {
     ]
 
     const alternate = [
-        {label: 'Alternate email address', value: details?.data.userIdentity.alternateEmail},
-        {label: 'Alternate phone number', value: details?.data.userIdentity.alternatePhoneNumber},
-        {label: 'Alternate residential address', value: details?.data.userIdentity.alternateContactAddress},
+        {label: 'Alternate email address', value: details?.data?.userIdentity?.alternateEmail},
+        {label: 'Alternate phone number', value: details?.data?.userIdentity?.alternatePhoneNumber},
+        {label: 'Alternate residential address', value: details?.data?.userIdentity?.alternateContactAddress},
         {
             label: 'Next of kin name',
-            value: `${details?.data.nextOfKin.firstName} ${details?.data.nextOfKin.lastName}`
+            value: `${details?.data?.nextOfKin?.firstName} ${details?.data?.nextOfKin?.lastName}`
         },
-        {label: 'Next of kin email address', value: details?.data.nextOfKin.email},
-        {label: 'Next of kin phone number', value: details?.data.nextOfKin.phoneNumber},
-        {label: 'Next of kin relationship', value: details?.data.nextOfKin.nextOfKinRelationship},
+        {label: 'Next of kin email address', value: details?.data?.nextOfKin?.email},
+        {label: 'Next of kin phone number', value: details?.data?.nextOfKin?.phoneNumber},
+        {label: 'Next of kin relationship', value: details?.data?.nextOfKin?.nextOfKinRelationship},
     ];
 
     const getCurrentDataList = () => {
@@ -148,10 +148,10 @@ const Index = () => {
     const initial = getInitials(`${details?.data.firstName} ${details?.data.lastName}`);
 
     return (
-        <>{isLoading ? (<SkeletonForDetailPage/>) : (
+        <div id={'disbursedLoanMainContainer'} data-testid={'disbursedLoanMainContainer'}>{isLoading ? (<SkeletonForDetailPage/>) : (
             <div
                 id={'disbursedLoanMainContainer'}
-                data-testid={'disbursedLoanMainContainer'}
+                data-testid={'disbursedLoanMainContainers'}
                 className={'md:px-8 w-full max:h-96  px-3 pt-4 md:pt-4'}
             >
                 <BackButton handleClick={backToViewAllDisbursedLoan} iconBeforeLetters={true} text={"Back to disbursed loan"}
@@ -244,7 +244,7 @@ const Index = () => {
                 </div>
             </div>
         )}
-        </>
+        </div>
     );
 };
 

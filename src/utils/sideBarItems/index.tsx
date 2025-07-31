@@ -14,16 +14,18 @@ import {
 import React from "react";
 import {GearIcon} from "@radix-ui/react-icons";
 import {LuLogOut} from "react-icons/lu";
+import { useAppSelector } from "@/redux/store";
 
 
 const currentTextLiterals = `text-meedlBlue md:text-meedlBlue`;
 const textLiterals = `text-[#626F8C] md:text-[#626F8C] `;
 
 
-export const getPortfolioManagerSideBarItems =  (currentItem: string) => {
+export const usePortfolioManagerSideBarItems =  (currentItem: string) => {
+    const currentTabRoute = useAppSelector(state => state.selectedLoan?.currentTabRoute)
     const items: navbarRouterItemsProps[] = [
         { icon: <MdOutlineHome color={currentItem === 'Overview' ? '#142854' : '#939cb0'} className={` h-[1.2rem] w-[1.2em] `}/>, id: 'Overview', name: 'Overview', isActive: true,route: '/Overview'},
-        {id: 'loan', name: 'Loan', route: '/loan/loan-request', isActive: true, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={currentItem === 'Loan' ? '#142854' : '#939cb0'}></Icon>},
+        {id: 'loan', name: 'Loan', route: `/loan/${currentTabRoute || 'loan-request'}`, isActive: true, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={currentItem === 'Loan' ? '#142854' : '#939cb0'}></Icon>},
         {id: 'loanProduct', name: 'Loan product', route: '/loan-product', isActive: true, icon: <MdOutlineInventory2 color={currentItem === 'Loan product' ? '#142854' : '#939CB0'}></MdOutlineInventory2>},
         {id: 'repayment', name: 'Repayment', route:'/repayment', icon: <MdOutlineLibraryBooks color={currentItem === 'Repayment' ? '#142854' : '#939CB0'}  />, isActive: true,},
         {id: 'organizations', name: 'Organizations', route: '/organizations', isActive: true, icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={currentItem === 'Organizations' ? '#142854' : '#939CB0'}></MdOutlineAccountBalance>},
@@ -41,10 +43,10 @@ export const getPortfolioManagerSideBarItems =  (currentItem: string) => {
 export const getLoaneeSideBarItems = (currentItem: string, isLoaneeIdentityVerified: boolean) => {
 
     const items : navbarRouterItemsProps[] = [
-        {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem]  ${isLoaneeIdentityVerified ? `${currentItem === 'Overview' ? currentTextLiterals : textLiterals} ` : 'text-[#d7d7d7] md:text-[#d7d7d7]'} `}/>, id: 'overview', isActive: isLoaneeIdentityVerified, name: "Overview", route: '/Overview'},
+        {icon: <MdOutlineHome className={` h-[1.2rem] w-[1.2rem]  ${isLoaneeIdentityVerified ? `${currentItem === 'Overview' ? 'text-meedlBlue md:text-meedlBlue' : 'text-[#626F8C] md:text-[#626F8C]'} ` : 'text-[#d7d7d7] md:text-[#d7d7d7]'} `}/>, id: 'overview', isActive: true, name: "Overview", route: '/Overview'},
         {icon: <MdOutlineAccountBalanceWallet className={` h-[1.2rem] w-[1.2rem] text-[#d7d7d7] md:text-[#d7d7d7`}/>, id: 'wallet', name: "Wallet", isActive: false, route: '/wallet'},
         // {icon: <Icon icon='iconoir:hand-cash' color={'#d7d7d7'} height={"1.2rem"} width={"1.3rem"}/>, id: 'repayment', isActive: true, name: "My profile", route: '/repayment'}, className={` h-[1.2rem] w-[1.2rem]  ${isLoaneeIdentityVerified ? `${currentItem === 'My profile' ? currentTextLiterals : textLiterals} ` : 'text-navbarIconColor md:text-navbarIconColor'} `}
-        {icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={'d7d7d7'}></Icon>, id: 'myLoan', isActive: false, name: "My loan", route: '/myLoan'},
+        {icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={'d7d7d7'}></Icon>, id: 'myLoan', isActive: true, name: "My loans", route: '/my-loans'},
     ]
     return items;
 }

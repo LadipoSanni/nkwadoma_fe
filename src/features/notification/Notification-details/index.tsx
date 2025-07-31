@@ -9,10 +9,14 @@ import { useRouter } from 'next/navigation';
 import { useViewNotificationDetailsQuery } from '@/service/notification/notification_query';
 import {store} from "@/redux/store";
 import { setCurrentFinancierId} from '@/redux/slice/financier/financier';
-import { setNotification,resetNotification,setNotificationId } from '@/redux/slice/notification/notification';
+import { setNotification,resetNotification,setNotificationId,setNotificationFlag } from '@/redux/slice/notification/notification';
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
 import { setOrganizationId,setOrganizationDetail} from '@/redux/slice/organization/organization';
-
+import { setLoanOfferId } from '@/redux/slice/loan/loan-offer';
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import { setLoanReferralId } from '@/redux/slice/loan/selected-loan';
+import {setCurrentStep} from "@/service/users/loanRerralSlice";
+import { setNotificationCohortId,resetSelectedCohortInOrganization } from '@/redux/slice/create/cohortSlice';
 // interface NotificationDetailsPageProps{
 //     notification?: NotificationProps
 // }
@@ -40,17 +44,42 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
       store.dispatch(setNotificationId(notification?.data?.id))
      if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
         store.dispatch(setCurrentFinancierId(notification?.data?.contentId))
+        store.dispatch(setCurrentNavbarItem("Financier"))
         router.push("/funds/financier-details")
      }else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE") {
          store.dispatch(setMarketInvestmentVehicleId({marketInvestmentVehicleId:notification?.data?.contentId }))
+         store.dispatch(setCurrentNavbarItem("Investment vehicle"))
          router.push("/marketplace/details");
      }else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION") {
       store.dispatch(setOrganizationId(notification?.data?.contentId))
       store.dispatch(setOrganizationDetail("details"))
+      store.dispatch(setCurrentNavbarItem("Organizations"))
       router.push("/organizations/details");
+  } else if (notification?.data?.notificationFlag === "LOAN_OFFER"){
+      store.dispatch(setLoanOfferId(notification?.data?.contentId))
+      store.dispatch(setCurrentNavbarItem("Loan offer"))
+      router.push("/accept-loan-offer");
+  } else if(notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
+     store.dispatch(setCurrentNavbarItem("Loan"))
+     router.push(`/loan-offer-details?id=${notification?.data?.contentId}`);
+  } else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
+    store.dispatch(setCurrentNavbarItem("Loan refferral"))
+    store.dispatch(setLoanReferralId(notification?.data?.contentId))
+       router.push(`/onboarding`);
+       store.dispatch(setCurrentStep(0))
+  } else if( notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_SUCCESS" || notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_FAILURE"){
+    store.dispatch(setNotificationCohortId(notification?.data?.contentId))
+    store.dispatch(resetSelectedCohortInOrganization())
+    store.dispatch(setCurrentNavbarItem("Organizations"))
+    store.dispatch(setNotificationFlag(notification?.data?.notificationFlag))
+    router.push(`/organizations/loanees/uploaded`);
+   
+  } else if(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_SUCCESS" ){
+    store.dispatch(setCurrentNavbarItem("Repayment"))
+    router.push(`/repayment`);
   }
   }
-//LOAN_OFFER_DECISION
+
    const buttonName = () => {
     if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
       return "financier"
@@ -58,13 +87,19 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
       return "investment vehicle"
    } else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION"){
     return "organization"
- }
-  
+ }else if (notification?.data?.notificationFlag === "LOAN_OFFER"){
+   return "loan offer"
+ }else if (notification?.data?.notificationFlag === "LOAN_OFFER_DECISION"){
+  return "loan offer"
+} else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
+  return "loan Referral"
+} 
+    
    }
 
 
   return (
-    <div className={`w-full pr-9 md:pr-16 py-4 px-4 md:px-0 ${inter.className}`}>
+    <div className={`w-full pr-9 md:pr-2 py-4 px-4 md:px-0 ${inter.className}`}>
 
       {!notificationId ? <div className='flex justify-center items-center'>Not found</div> : isLoading? <div><SkeletonforNotificationDetails/></div> :
       <div>
@@ -97,6 +132,14 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                             </div>
                            </div>
                          </div>
+                         <div 
+                         className='max-h-[57vh] w-full  overflow-y-auto'
+                         style={{
+                          scrollbarWidth: 'none',
+                          msOverflowStyle: 'none',
+
+                      }}
+                         >
                          <div className='mb-4'>
                            Hello <span>
                              {notification?.data?.firstName}
@@ -105,24 +148,31 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
                         <div>
                         <p className=" lowercase first-letter:uppercase">
                          {/* {getPaginatedDatas.find((item) => item.type === activeTab)?.message} */}
-                         {notification?.data?.contentDetail}
+                         {notification?.data?.contentDetail}.
                          </p>
                         </div>
                         <div className='mt-4 mb-4'>
-                         {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"? (<p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>): ""}
-                         <p>If you have any question or further assistance, our customer service team is here to help you</p>
+                        {!(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_FAILURE" || 
+   notification?.data?.notificationFlag === "LOANEE_DATA_UPLOAD_FAILURE") ? 
+  <p className='mb-4'>Click on the button to view the full details of the <span className='lowercase'>{notification?.data?.title}</span></p>
+  : ""
+}
+                         <p>If you have any questions or need further assistance, our customer service team is here to help</p>
                         </div>
                          <div>
-                          {notification?.data?.notificationFlag !== "LOAN_OFFER_DECISION"?
+                         {notification?.data?.notificationFlag !== "REPAYMENT_UPLOAD_FAILURE"? 
                           <Button 
+                           type='button'
+                           variant={'secondary'}
                            onClick={handleRoute}
-                           className='bg-[#142854] hover:bg-[#142854] h-[45px] text-[14px]'
+                           className='h-[45px] text-[14px]'
                             // className='bg-[#F9F9F9] hover:bg-[#F9F9F9] text-grey100 h-[45px] text-[14px] cursor-none shadow-none'
                            >
                              View <span className='lowercase ml-1'> {buttonName()}</span>
                              
                            </Button>
-                           : notification?.data?.notificationFlag === null && "" }
+                          :  "" } 
+                         </div>
                          </div>
                         </div>
     </div>

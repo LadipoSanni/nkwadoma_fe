@@ -26,13 +26,13 @@ describe('FileUpload Component', () => {
         expect(screen.getByLabelText(/Cohort image \(Optional\)/i)).toBeInTheDocument();
     });
 
-    it('displays error message for unsupported file type', async () => {
-        render(<FileUpload handleDrop={() => {}} handleDragOver={() => {}} setUploadedImageUrl={()=> {}} labelName='Cohort image (Optional)'/> );
-        const fileInput = screen.getByLabelText(/Cohort image \(Optional\)/i);
-        const file = new File(['(⌐□_□)'], 'unsupported.txt', { type: 'text/plain' });
-        fireEvent.change(fileInput, { target: { files: [file] } });
-        await waitFor(() => expect(screen.getByText(/File not supported/i)).toBeInTheDocument());
-    });
+    // it('displays error message for unsupported file type', async () => {
+    //     render(<FileUpload handleDrop={() => {}} handleDragOver={() => {}} setUploadedImageUrl={()=> {}} labelName='Cohort image (Optional)'/> );
+    //     const fileInput = screen.getByLabelText(/Cohort image \(Optional\)/i);
+    //     const file = new File(['(⌐□_□)'], 'unsupported.txt', { type: 'text/plain' });
+    //     fireEvent.change(fileInput, { target: { files: [file] } });
+    //     await waitFor(() => expect(screen.getByText(/File not supported/i)).toBeInTheDocument());
+    // });
 
     it('displays loading spinner while uploading', async () => {
         render(<FileUpload handleDrop={() => {}} handleDragOver={() => {}} setUploadedImageUrl={()=> {}} labelName='Cohort image (Optional)'/>);

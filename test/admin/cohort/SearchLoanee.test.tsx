@@ -4,8 +4,23 @@ import {LoaneeInCohortView} from "@/features/cohort/cohort-details/LoaneeInCohor
 import {Providers} from "@/app/provider";
 import {Input} from "@/components/ui/input";
 
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+    usePathname: () => jest.fn(),
+}));
 describe("LoaneeInCohortView - Search Functionality (Integration)", () => {
+    beforeEach(() => {
+        global.fetch = jest.fn(() =>
+            Promise.resolve(new Response(JSON.stringify({ data: [] }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            }))
+        );
+    })
     it("should test that search input placeholder is search",  () => {
+
         render(
             <Providers>
             <LoaneeInCohortView />

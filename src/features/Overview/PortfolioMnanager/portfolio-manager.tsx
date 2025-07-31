@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import styles from '@/features/Overview/index.module.css';
 import PortfolioManagerOverviewCard from "@/reuseable/cards/portfoliomanagerOverview/PortfolioManagerOverviewCard";
 import Barcharts from "@/features/Overview/PortfolioMnanager/Barcharts";
@@ -7,21 +7,24 @@ import {useRouter} from "next/navigation";
 import {store} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem} from "@/redux/slice/layout/adminLayout";
 import {useViewMeedlPortfolioQuery} from "@/service/admin/overview";
+import {setCurrentTab, setCurrentTabStatus} from "@/redux/slice/loan/selected-loan";
+import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
+import SkeletonForGrid from '@/reuseable/Skeleton-loading-state/Skeleton-for-grid';
 
 const PortfolioManager = () => {
 
     const router = useRouter();
     const {data, isFetching, isLoading } = useViewMeedlPortfolioQuery({})
     const cardData1 = [
-        {title: "Total investment vehicles", amount: `${data?.data?.totalNumberOfInvestmentVehicle ? data?.data?.totalNumberOfInvestmentVehicle?.toString() : '0'}`,},
-        {title: "Commercial funds", amount: `${data?.data?.totalNumberOfCommercialFundsInvestmentVehicle ? data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
-        {title: "Endowment", amount: `${data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle ? data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
+        {title: `Total investment vehicles`, amount: `${data?.data?.totalNumberOfInvestmentVehicle ? data?.data?.totalNumberOfInvestmentVehicle?.toString() : '0'}`,},
+        {title: `${Number(data?.data?.totalNumberOfCommercialFundsInvestmentVehicle) > 1 ? `Commercial funds` : `Commercial fund`}`, amount: `${data?.data?.totalNumberOfCommercialFundsInvestmentVehicle ? data?.data?.totalNumberOfCommercialFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
+        {title: `${Number(data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle) > 1  ? `Endowment funds` : `Endowment fund`}`, amount: `${data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle ? data?.data?.totalNumberOfEndowmentFundsInvestmentVehicle?.toString() : '0'}`,showIcon: true},
     ]
 
     const cardData2 = [
-        {title: "Total number of financier", amount: `${data?.data?.totalNumberOfFinancier ?data?.data?.totalNumberOfFinancier?.toString() : '0'}`,},
-        {title: "Individual", amount: `${data?.data?.totalNumberOfIndividualFinancier ? data?.data?.totalNumberOfIndividualFinancier?.toString() : '0'}`,showIcon: true},
-        {title: "Corporate", amount: `${data?.data?.totalNumberOfLoans ? data?.data?.totalNumberOfInstitutionalFinancier?.toString() : '0'}`,showIcon: true},
+        {title: "Total number of financiers", amount: `${data?.data?.totalNumberOfFinancier ?data?.data?.totalNumberOfFinancier?.toString() : '0'}`,},
+        {title: `${Number(data?.data?.totalNumberOfIndividualFinancier) > 1 ? `Individuals` : `Individual`} `, amount: `${data?.data?.totalNumberOfIndividualFinancier ? data?.data?.totalNumberOfIndividualFinancier?.toString() : '0'}`,showIcon: true},
+        {title: `${Number(data?.data?.totalNumberOfInstitutionalFinancier) > 1 ? `Corporates` : `Corporate`}`, amount: `${data?.data?.totalNumberOfLoans ? data?.data?.totalNumberOfInstitutionalFinancier?.toString() : '0'}`,showIcon: true},
     ]
     const cardData3 = [
         {title: "Total number of loans", amount: `${data?.data?.totalNumberOfLoans ? data?.data?.totalNumberOfLoans?.toString() : '0'}`,},
@@ -48,10 +51,15 @@ const PortfolioManager = () => {
     //     { month: "September", value: 214,  },
     // ]
 
+     useEffect(() => {
+         store.dispatch(resetAll())
+         store.dispatch(clearSaveCreateInvestmentField())
+     },[])
+
     const loanData = [
         {title: "Loan referrals", amount: `${ data?.data?.loanReferralPercentage ? Math.round(Number(data?.data?.loanReferralPercentage?.toString()))  : '0'}`,textColor: 'text-[#66440A]',bgColor: 'bg-[#FEF6E8]',},
         {title: "Loan offers", amount:  `${ data?.data?.loanOfferPercentage ? Math.round(Number(data?.data?.loanOfferPercentage?.toString()))  : '0'}`,textColor: 'text-[#142854]',bgColor: 'bg-[#D9EAFF]',},
-        {title: "Disbursed loan", amount: `${ data?.data?.loanDisbursalPercentage ? Math.round(Number(data?.data?.loanDisbursalPercentage?.toString()))  : '0'}`,textColor: 'text-[#0e4c23]',bgColor: 'bg-[#E6F2EA]',},
+        {title: "Disbursed loans", amount: `${ data?.data?.loanDisbursalPercentage ? Math.round(Number(data?.data?.loanDisbursalPercentage?.toString()))  : '0'}`,textColor: 'text-[#0e4c23]',bgColor: 'bg-[#E6F2EA]',},
 
     ]
 
@@ -73,11 +81,16 @@ const PortfolioManager = () => {
     const routeToLoans = () => {
         store.dispatch(setCurrentNavBottomItem('Loan'))
         store.dispatch(setCurrentNavbarItem('Loan'))
+        store.dispatch(setCurrentTab('Loan requests'))
+        store.dispatch(setCurrentTabStatus('LOAN_REQUEST'))
         router.push('/loan/loan-request')
     }
 
     return (
-       <div className={` pl-3 pt-8 w-full  h-[84vh]  ${styles.container} `}>
+        <div>
+
+     { isLoading || isFetching ? <div className='py-2'><SkeletonForGrid/></div> : 
+        <div className={` pl-3 pt-8 w-full  h-[84vh]  ${styles.container} `}>
            <section className={`  mb-6  flex gap-4  overflow-scroll ${styles.overviewCard} `}>
                <PortfolioManagerOverviewCard isFetching={isFetching} isLoading={isLoading} id={'vehicleCard'} cardData={cardData1} clickView={routeToInvestmentVehicle}/>
                <PortfolioManagerOverviewCard isFetching={isFetching} isLoading={isLoading} id={'vehicleCard2'} cardData={cardData2} clickView={routeToFinancier}/>
@@ -95,6 +108,8 @@ const PortfolioManager = () => {
                    <PerformanceCard id={'ownership'} isSmall={true} showContainerBorder={true} percentage={'0'} showPerformancePercentage={false} maxWidth={'50%'} title={'Total fund manager fee'} value={0} isFigure={false} isValueInPercentage={false} showMonthPick={false} didValueIncrease={true}/>
                </div>
            {/*</div>*/}
+       </div>
+       } 
        </div>
     );
 };
