@@ -74,9 +74,7 @@ function UploadForm({ setIsOpen, uploadType,loaneeRefetch, notificationCohortId 
         if(uploadUserFile) {
             handleCloseModal()
             store.dispatch(resetCsvStatus()) 
-            setTimeout(() => {
               store.dispatch(notificationApi.util.invalidateTags(['notification']));
-            }, 2000);
             if(loaneeRefetch ){
                 loaneeRefetch()
             }
@@ -98,9 +96,7 @@ function UploadForm({ setIsOpen, uploadType,loaneeRefetch, notificationCohortId 
         if(uploadFile) {
             handleCloseModal()
             store.dispatch(resetRepaymentdata())
-            setTimeout(() => {
               store.dispatch(notificationApi.util.invalidateTags(['notification']));
-            }, 2000);
             if(loaneeRefetch ){
                 loaneeRefetch()
             }
