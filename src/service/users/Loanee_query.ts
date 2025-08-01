@@ -77,7 +77,7 @@ export const loaneeApi = createApi({
                 url: `/loan/loan-disbursals/${loanId}`,
                 method: 'GET'
             }),
-            providesTags: ['loanOffer']
+            providesTags: ['loanOffer','upload-repayment']
         }),
         viewAllLoanRefferals: builder.query({
             query: () => ({
