@@ -38,7 +38,7 @@ const ReviewLoan = () => {
                         <DetailItem id={'amountOutstanding'} label="Amount outstanding" value={<NumericFormat value={response?.amountOutstanding ? response?.amountOutstanding : 0} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
                         <DetailItem id={"amountRepaid"} label="Amount repaid" value={<NumericFormat value={response?.amountRepaid ? response?.amountRepaid : 0} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
                         <DetailItem id={'interest'} label="Interest" value={response?.interestRate ? `${response?.interestRate}%` : `0%`} />
-                        <DetailItem id={`interestIncurred`} label="Interest incurred" value={response?.interestIncurred ? `${response?.interestIncurred}` : `0`} />
+                        <DetailItem id={`interestIncurred`} label="Interest incurred" value={response?.interestIncurred ? `₦${response?.interestIncurred}` : `₦0`} />
            </div>
 
         </div>

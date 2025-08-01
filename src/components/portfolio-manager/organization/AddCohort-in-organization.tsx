@@ -200,7 +200,7 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                 }, 2000);
               if(cohortRefetch)cohortRefetch()
               toast({
-                description: result.message + "and " +  uploadFile.message,
+                description: result.message + " " + "and " +  uploadFile.message,
                 status: "success",
               });
             }

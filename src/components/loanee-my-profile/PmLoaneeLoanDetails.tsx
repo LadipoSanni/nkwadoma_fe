@@ -96,8 +96,8 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
                             <Details isLoading={isLoading} id={'interestIncured'}    maxWidth={'100%'} name={'Incurred interest'} value={data?.interestIncurred ?  Number(data?.interestIncurred)?.toFixed(2) : 0} valueType={'currency'}  />
                         </div>
                         <div className={` md:flex md:gap-4 grid gap-4 w-full  `}>
-                            <Details isLoading={isLoading} id={'deptPercentage'}    maxWidth={'100%'} name={'Debt percentage'} value={data?.debtPercentage ? Number(data?.debtPercentage)?.toFixed(2) : ''} valueType={'percentage'} />
-                            <Details isLoading={isLoading} id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={data?.repaymentPercentage ? Number(data?.repaymentPercentage)?.toFixed(2) : ''} valueType={'percentage'}  />
+                            <Details isLoading={isLoading} id={'deptPercentage'}    maxWidth={'100%'} name={'Debt percentage'} value={data?.debtPercentage ? Number(data?.debtPercentage)?.toFixed(2) :  "0.00"} valueType={'percentage'} />
+                            <Details isLoading={isLoading} id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={data?.repaymentPercentage ? Number(data?.repaymentPercentage)?.toFixed(2) : "0.00"} valueType={'percentage'}  />
                         </div>
                     </TabsContent>
                     <TabsContent className={'  py-0 h-full  '} value={'repayment'}>

@@ -221,7 +221,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         //  const loaneeId = Array.from(selectedRows)
            const formData = {
             loaneeIds : Array.from(selectedRows),
-            cohortId : cohortId
+            cohortId : notificationCohortId || cohortId
            }
          try {
           const inviteLoanees = await inviteLoanee(formData).unwrap()
