@@ -51,7 +51,7 @@ function Financiers() {
      const [totalPage,setTotalPage] = useState(0)
      const [pageNumber,setPageNumber] = useState(0)
      const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
-     const isDisabled = true;
+     const isDisabled = false;
     const param = {
       pageNumber: pageNumber,
       pageSize: 10,
