@@ -60,7 +60,7 @@ const ViewFinanciers = () => {
     const [financiers, setFinanciers] = useState<viewAllfinancier[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter()
-    const isDisabled = true;
+    const isDisabled = false;
 
     const [tabStates, setTabStates] = useState<Record<string, TabState>>({
             active: { pageNumber: 0, totalPages: 0, hasNextPage: false },
