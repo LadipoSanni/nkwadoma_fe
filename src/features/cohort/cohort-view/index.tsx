@@ -100,7 +100,7 @@ const CohortView = () => {
    const user_role = getUserDetailsFromStorage('user_role');
    const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
    const organizationId = useAppSelector(state => state?.organization?.setOrganizationId)
-  const organisationTabStatus = useAppSelector(store => store?.organization?.organizationStatusTab)
+  const organizationStatus = useAppSelector(store => store?.organization?.organizationStatus)
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
     incoming: { pageNumber: 0, totalPages: 0, hasNextPage: false },
     current: { pageNumber: 0, totalPages: 0, hasNextPage: false },
@@ -403,7 +403,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                             ...prev,
                             [cohortTab]: {
                               pageNumber: 0,  
-                              totalPages: cohortData?.data?.totalPages || 0,  // Restore original total pages
+                              totalPages: cohortData?.data?.totalPages || 0,  
                               hasNextPage: cohortData?.data?.hasNextPage || false
                             }
                           }));
@@ -441,10 +441,10 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
              <div className='md:mt-0 mt-4'>
                <Button variant={"secondary"}
                   size={"lg"}
-                  className={`${inter.className}   h-12 flex justify-center items-center w-full ${user_role === "PORTFOLIO_MANAGER" && organisationTabStatus !== "active"? "bg-gray text-grey150 hover:bg-gray" : "bg-meedlBlue text-meedlWhite"}`}
+                  className={`${inter.className}   h-12 flex justify-center items-center w-full ${user_role === "PORTFOLIO_MANAGER" && organizationStatus !== "ACTIVE"? "bg-gray text-grey150 hover:bg-gray" : "bg-meedlBlue text-meedlWhite"}`}
                   id='createProgramModal'
                    onClick={handleModalOpen}
-                   disabled={user_role === "PORTFOLIO_MANAGER" && organisationTabStatus !== "active" ? true : false}
+                   disabled={user_role === "PORTFOLIO_MANAGER" && organizationStatus !== "ACTIVE" ? true : false}
                   >
                    {user_role === "PORTFOLIO_MANAGER"? "Add cohort" : "Create cohort"}
                 </Button>
