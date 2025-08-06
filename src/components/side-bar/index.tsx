@@ -13,7 +13,8 @@ import {
     getInstituteAdminSideBarItems,
     getLoaneeSideBarItems, getLogoutItem,
     usePortfolioManagerSideBarItems,
-    getSettingItem
+    getSettingItem,
+    getSuperAdminSideBarItems,
 } from "@/utils/sideBarItems";
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
@@ -31,16 +32,15 @@ const SideBar = () => {
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
     const currentTab = useAppSelector(state => state.selectedLoan?.currentTab)
     const [logout] = useLogoutMutation()
-    const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role')  : "user role";
-    const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
+    const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role') : "user role";
+    const {isLoaneeIdentityVerified} = useSelector((state: RootState) => state.loanReferral);
 
-    
 
     useEffect(() => {
         if (userRole === "PORTFOLIO_MANAGER" && !currentTab) {
             store.dispatch(setCurrentTab('Loan requests'));
             store.dispatch(setcurrentTabRoute('loan-request'));
-          }
+        }
     }, [userRole, currentTab])
 
 
@@ -48,17 +48,17 @@ const SideBar = () => {
         store.dispatch(setShowMobileSideBar(false))
     }
 
-    const handleClick = ()=> {
+    const handleClick = () => {
         router.push('/settings/team')
         store.dispatch(setCurrentNavBottomItem("Settings"))
         store.dispatch(setCurrentNavbarItem('Settings'))
     }
 
     const clickNavbar = (name: string, route?: string, isActive?: boolean) => {
-        if (isActive){
+        if (isActive) {
             store.dispatch(setCurrentNavBottomItem(name))
             store.dispatch(setCurrentNavbarItem(name))
-            if(route){
+            if (route) {
                 router.push(route)
             }
             closeSideBar()
@@ -66,7 +66,7 @@ const SideBar = () => {
 
     }
 
-    const handleLogout =  async () => {
+    const handleLogout = async () => {
         await logout({})
         router.push("/auth/login")
         store.dispatch(setCurrentNavBottomItem("Logout"))
@@ -80,12 +80,10 @@ const SideBar = () => {
     }
 
 
-    const settingItem = getSettingItem( currentNavBottom, handleClick, userRole)
-    const logoutItem = getLogoutItem(currentNavBottom,handleLogout)
+    const settingItem = getSettingItem(currentNavBottom, handleClick, userRole)
+    const logoutItem = getLogoutItem(currentNavBottom, handleLogout)
 
     const navbarContainerItems: navbarItemsProps[] = [...settingItem, logoutItem];
-
-
 
 
     const getUserSideBarByRole = (userrole?: string): navbarRouterItemsProps[] | undefined => {
@@ -102,12 +100,10 @@ const SideBar = () => {
     const sideBarContent = [
         {name: "PORTFOLIO_MANAGER", value: usePortfolioManagerSideBarItems(current)},
         {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
-        {name: 'LOANEE', value: getLoaneeSideBarItems(current, isLoaneeIdentityVerified) },
+        {name: 'LOANEE', value: getLoaneeSideBarItems(current, isLoaneeIdentityVerified)},
         {name: 'FINANCIER', value: getFinancierSideBarItems(current)},
+        {name: "SUPER_ADMIN", value: getSuperAdminSideBarItems(current)},
     ]
-
-
-
 
 
     return (
@@ -136,7 +132,7 @@ const SideBar = () => {
                             <NavbarRouter currentTab={current} handleClick={clickNavbar}
                                           navbarItems={getUserSideBarByRole(userRole)}/>
 
-                            < NavbarContainer current={currentNavBottom} items={navbarContainerItems} />
+                            < NavbarContainer current={currentNavBottom} items={navbarContainerItems}/>
                         </div>
                     </div>
                     <button data-testid="blurry" id="sideBarblurBackground"
@@ -173,11 +169,10 @@ const SideBar = () => {
                 </div>
 
             </aside>
-
-
-
         </div>
     );
-};
+}
 
 export default SideBar;
+
+  
