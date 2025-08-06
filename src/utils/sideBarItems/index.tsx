@@ -39,6 +39,14 @@ export const usePortfolioManagerSideBarItems =  (currentItem: string) => {
 }
 
 
+export const getSuperAdminSideBarItems = (currentItem: string) => {
+    const items:navbarRouterItemsProps[] = [
+        { icon: <MdOutlineHome color={currentItem === 'Overview' ? '#142854' : '#939cb0'} className={` h-[1.2rem] w-[1.2em] `}/>, id: 'Overview', name: 'Overview', isActive: true,route: '/Overview'},
+        
+    ]
+    return items;
+
+}
 
 export const getLoaneeSideBarItems = (currentItem: string, isLoaneeIdentityVerified: boolean) => {
 

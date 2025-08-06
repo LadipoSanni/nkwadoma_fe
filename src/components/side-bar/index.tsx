@@ -18,10 +18,6 @@ import {
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
 import NavbarContainer from "@/reuseable/ui/Navbar";
-// import { resetTab } from '@/redux/slice/loan/selected-loan';
-// import { resetOrganizationDetailsStatus,resetOrganizationId } from '@/redux/slice/organization/organization';
-// import { resetcohortId } from '@/redux/slice/create/cohortSlice';
-// import { clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import { resetAllState } from '@/redux/reducer';
 import { notificationApi } from '@/service/notification/notification_query';
 import {setCurrentTab,setcurrentTabRoute} from "@/redux/slice/loan/selected-loan";
@@ -74,19 +70,12 @@ const SideBar = () => {
         await logout({})
         router.push("/auth/login")
         store.dispatch(setCurrentNavBottomItem("Logout"))
-        // store.dispatch(resetTab())
-        // store.dispatch(resetOrganizationDetailsStatus())
-        // store.dispatch(resetcohortId())
-        // store.dispatch(resetOrganizationId())
-        // store.dispatch(clearSaveCreateInvestmentField())
         store.dispatch(setCurrentNavBottomItem(""))
         store.dispatch(resetAllState());
         await persistor.purge();
 
         store.dispatch(notificationApi.util.resetApiState())
         clearData()
-
-        // window.location.href = '/auth/login';
 
     }
 
