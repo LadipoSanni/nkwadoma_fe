@@ -31,6 +31,9 @@ const ViewLoaneeLoans = () => {
         {organizationName: 'Semicolon Africa Master',loanAmount: 2000,amountOutstanding: 2000,amountRepaid: 2000 ,id: 'loan1'},
 
     ]
+    const onCardClick = (id: string) => {
+        router.push(`/loanees/loans/details?id=${id}`);
+    }
     return (
         <div
             id={'viewLoaneeLoans'}
@@ -84,7 +87,7 @@ const ViewLoaneeLoans = () => {
                            </div>
                            <div className={`flex w-full  pt-3 pb-1 justify-end`}>
                                <button
-                                   // onClick={() => {handleClick(loan?.id)}}
+                                   onClick={() => {onCardClick(loan?.id)}}
                                    className={`text-[14px] hover:bg-[#E8EAEE] focus:bg-[#E8EAEE] ${inter700.className} border border-meedlBlue w-fit h-fit px-4 py-2 rounded-md text-meedlBlue `}>View details</button>
                            </div>
                        </div>
