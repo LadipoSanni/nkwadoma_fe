@@ -6,7 +6,7 @@ import DetailItem from "@/reuseable/details/detail-Item/Index";
 import { format, isValid } from 'date-fns';
 import { NumericFormat } from 'react-number-format';
 import {useAppSelector} from "@/redux/store";
-import ReviewLoan from "@/features/loanee/review-loan";
+import ReviewLoan from "@/features/loaneeViews/review-loan";
 
 interface LoanApplicationDetailsProps {
     loaneeLoanDetail: LoaneeLoanDetail | undefined;

@@ -1,7 +1,7 @@
 import '@testing-library/react'
 import {screen, render} from '@testing-library/react'
 import {Providers} from "@/app/provider";
-import ReviewLoan from '@/features/loanee/review-loan'
+import ReviewLoan from '@/features/loaneeViews/review-loan'
 
 jest.mock("next/navigation", () => ({
     useRouter: () => ({
