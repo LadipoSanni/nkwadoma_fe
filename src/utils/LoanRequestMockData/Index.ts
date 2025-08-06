@@ -495,7 +495,7 @@ export const fund = [
       "Email": "adaobi.nwachukwu@example.com",
       "Role": "admin",
       "Status": "Active",
-      "DateInvited": "2025-07-10T16:45:00Z"
+      "DateInvited": "2025-07-10"
     },
     {
       "Name": "Musa Abubakar",
