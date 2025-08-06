@@ -52,7 +52,7 @@ const ViewLoaneeLoans = () => {
                    onChange={handleSearchChange}
                />
                <div
-                   className={`h-full md:h-[43vh] mt-4 grid ${styles.verticalScrollbar} gap-4 md:grid md:grid-cols-3 bg-white py-4 w-full `}
+                   className={`h-full md:h-[43vh] mt-4 pr-3  grid ${styles.verticalScrollbar} gap-4 md:grid md:grid-cols-3 bg-white py-4 w-full `}
                >
                    {loans?.map((loan) => (
                        <div  key={"key"+loan?.organizationName} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>

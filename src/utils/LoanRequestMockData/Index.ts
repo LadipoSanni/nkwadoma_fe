@@ -431,4 +431,169 @@ export const fund = [
       "amountAvailable": "₦20,000,000.00"
     }
   ]
+
+
+  export const allStaff = [
+    {
+      "Name": "Zainab Ibrahim",
+      "Email": "zainab.ibrahim@example.com",
+      "Role": "admin",
+      "Status": "Active",
+      "DateInvited": "2025-07-15"
+    },
+    {
+      "Name": "David Okonkwo",
+      "Email": "david.okonkwo@example.com",
+      "Role": "portfolio manager",
+      "Status": "Pending",
+      "DateInvited": "2025-06-11"
+    },
+    {
+      "Name": "Chinenye Obi",
+      "Email": "chinenye.obi@example.com",
+      "Role": "super admin",
+      "Status": "Active",
+      "DateInvited": "2025-05-02"
+    },
+    {
+      "Name": "James Ogunleye",
+      "Email": "james.ogunleye@example.com",
+      "Role": "admin",
+      "Status": "Deactivated",
+      "DateInvited": "2025-04-29"
+    },
+    {
+      "Name": "Amaka Eze",
+      "Email": "amaka.eze@example.com",
+      "Role": "portfolio manager",
+      "Status": "Active",
+      "DateInvited": "2025-08-01"
+    },
+    {
+      "Name": "Taiwo Adegbite",
+      "Email": "taiwo.adegbite@example.com",
+      "Role": "admin",
+      "Status": "Pending",
+      "DateInvited": "2025-08-03"
+    },
+    {
+      "Name": "Nneka Umeh",
+      "Email": "nneka.umeh@example.com",
+      "Role": "super admin",
+      "Status": "Deactivated",
+      "DateInvited": "2025-07-22"
+    },
+    {
+      "Name": "Kennedy Ojo",
+      "Email": "kennedy.ojo@example.com",
+      "Role": "portfolio manager",
+      "Status": "Active",
+      "DateInvited": "2025-08-02"
+    },
+    {
+      "Name": "Adaobi Nwachukwu",
+      "Email": "adaobi.nwachukwu@example.com",
+      "Role": "admin",
+      "Status": "Active",
+      "DateInvited": "2025-07-10"
+    },
+    {
+      "Name": "Musa Abubakar",
+      "Email": "musa.abubakar@example.com",
+      "Role": "super admin",
+      "Status": "Pending",
+      "DateInvited": "2025-06-08"
+    },
+    {
+      "Name": "Grace Oladipo",
+      "Email": "grace.oladipo@example.com",
+      "Role": "portfolio manager",
+      "Status": "Active",
+      "DateInvited": "2025-07-29"
+    },
+    {
+      "Name": "Femi Afolabi",
+      "Email": "femi.afolabi@example.com",
+      "Role": "admin",
+      "Status": "Deactivated",
+      "DateInvited": "2025-07-05"
+    },
+    {
+      "Name": "Bukola Balogun",
+      "Email": "bukola.balogun@example.com",
+      "Role": "super admin",
+      "Status": "Active",
+      "DateInvited": "2025-06-25"
+    },
+    {
+      "Name": "Samson Eze",
+      "Email": "samson.eze@example.com",
+      "Role": "portfolio manager",
+      "Status": "Pending",
+      "DateInvited": "2025-08-04"
+    },
+    {
+      "Name": "Ngozi Anyaegbunam",
+      "Email": "ngozi.anyaegbunam@example.com",
+      "Role": "admin",
+      "Status": "Active",
+      "DateInvited": "2025-06-18"
+    },
+    {
+      "Name": "Ifeanyi Uzo",
+      "Email": "ifeanyi.uzo@example.com",
+      "Role": "portfolio manager",
+      "Status": "Deactivated",
+      "DateInvited": "2025-07-02"
+    },
+    {
+      "Name": "Chukwuemeka Obi",
+      "Email": "chukwuemeka.obi@example.com",
+      "Role": "super admin",
+      "Status": "Active",
+      "DateInvited": "2025-08-05"
+    },
+    {
+      "Name": "Abiola Mustapha",
+      "Email": "abiola.mustapha@example.com",
+      "Role": "admin",
+      "Status": "Pending",
+      "DateInvited": "2025-05-29"
+    },
+    {
+      "Name": "Josephine Okafor",
+      "Email": "josephine.okafor@example.com",
+      "Role": "portfolio manager",
+      "Status": "Active",
+      "DateInvited": "2025-07-28"
+    },
+    {
+      "Name": "Tunde Akinwale",
+      "Email": "tunde.akinwale@example.com",
+      "Role": "super admin",
+      "Status": "Deactivated",
+      "DateInvited": "2025-08-06"
+    },
+    { "Name": "Zainab Ibrahim", "Email": "zainab.ibrahim@example.com", "Role": "admin", "Status": "Active", "DateInvited": "2025-07-15" },
+    { "Name": "Chinenye Obi", "Email": "chinenye.obi@example.com", "Role": "super admin", "Status": "Active", "DateInvited": "2025-05-02" },
+    { "Name": "Amaka Eze", "Email": "amaka.eze@example.com", "Role": "portfolio manager", "Status": "Active", "DateInvited": "2025-08-01" },
+    { "Name": "Kennedy Ojo", "Email": "kennedy.ojo@example.com", "Role": "portfolio manager", "Status": "Active", "DateInvited": "2025-08-02" },
+    { "Name": "Adaobi Nwachukwu", "Email": "adaobi.nwachukwu@example.com", "Role": "admin", "Status": "Active", "DateInvited": "2025-07-10" },
+    { "Name": "Grace Oladipo", "Email": "grace.oladipo@example.com", "Role": "portfolio manager", "Status": "Active", "DateInvited": "2025-07-29" },
+    { "Name": "Bukola Balogun", "Email": "bukola.balogun@example.com", "Role": "super admin", "Status": "Active", "DateInvited": "2025-06-25" },
+    { "Name": "Ngozi Anyaegbunam", "Email": "ngozi.anyaegbunam@example.com", "Role": "admin", "Status": "Active", "DateInvited": "2025-06-18" },
+    { "Name": "Chukwuemeka Obi", "Email": "chukwuemeka.obi@example.com", "Role": "super admin", "Status": "Active", "DateInvited": "2025-08-05" },
+    { "Name": "David Okonkwo", "Email": "david.okonkwo@example.com", "Role": "portfolio manager", "Status": "Pending", "DateInvited": "2025-06-11" },
+  { "Name": "Taiwo Adegbite", "Email": "taiwo.adegbite@example.com", "Role": "admin", "Status": "Pending", "DateInvited": "2025-08-03" },
+  { "Name": "Musa Abubakar", "Email": "musa.abubakar@example.com", "Role": "super admin", "Status": "Pending", "DateInvited": "2025-06-08" },
+  { "Name": "Samson Eze", "Email": "samson.eze@example.com", "Role": "portfolio manager", "Status": "Pending", "DateInvited": "2025-08-04" },
+  { "Name": "Abiola Mustapha", "Email": "abiola.mustapha@example.com", "Role": "admin", "Status": "Pending", "DateInvited": "2025-05-29" },
+  { "Name": "James Ogunleye", "Email": "james.ogunleye@example.com", "Role": "admin", "Status": "Deactivated", "DateInvited": "2025-04-29" },
+  { "Name": "Nneka Umeh", "Email": "nneka.umeh@example.com", "Role": "super admin", "Status": "Deactivated", "DateInvited": "2025-07-22" },
+  { "Name": "Femi Afolabi", "Email": "femi.afolabi@example.com", "Role": "admin", "Status": "Deactivated", "DateInvited": "2025-07-05" },
+  { "Name": "Ifeanyi Uzo", "Email": "ifeanyi.uzo@example.com", "Role": "portfolio manager", "Status": "Deactivated", "DateInvited": "2025-07-02" },
+  { "Name": "Tunde Akinwale", "Email": "tunde.akinwale@example.com", "Role": "super admin", "Status": "Deactivated", "DateInvited": "2025-08-06" }
+]
+  
+
   
