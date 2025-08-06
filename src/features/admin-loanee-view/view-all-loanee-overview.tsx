@@ -5,8 +5,11 @@ import Details from "@/components/loanee-my-profile/Details";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import {MdOutlinePersonOutline} from "react-icons/md";
 import Table from '@/reuseable/table/Table';
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+// import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount, formateDigits} from "@/utils/Format";
+import {loaneeMockData} from "@/utils/LoanProductMockData";
+import {useRouter} from "next/navigation";
+
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
@@ -17,21 +20,23 @@ const ViewAllLoaneeOverview = () => {
     const [pageNumber,setPageNumber] = useState(0)
     // const [pageSize ] = useState(10)
 
+    const router = useRouter()
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         console.log('searchTerm', searchTerm);
         setSearchTerm(event.target.value);
     };
 
     const tableHeader = [
-        { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => capitalizeFirstLetters(row.firstName?.toString()) + " " + row.lastName  },
-        { title: 'Email address', sortable: true, id: 'emailAddress', selector: (row: TableRowData) =><div>{row?.paymentDateTime}</div>},
-        { title: 'No. of loans', sortable: true, id: 'noOfLoans', selector: (row: TableRowData) => <div className=''>{formateDigits(Number(row.loanAmount))}</div> },
+        { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => row.firstName?.toString()  },
+        { title: 'Email address', sortable: true, id: 'emailAddress', selector: (row: TableRowData) =><div>{row?.emailAddress}</div>},
+        { title: 'No. of loans', sortable: true, id: 'noOfLoans', selector: (row: TableRowData) => <div className=''>{formateDigits(Number(row.noOfLoans))}</div> },
         { title: 'Historical dept', sortable: true, id: 'historicalDept', selector: (row: TableRowData) => <div className={`  `}>{row.historicalDept}</div>},
         { title: 'Total outstanding', sortable: true, id: 'totalOutstanding', selector: (row: TableRowData) =><div className=''>{formatAmount(row.totalOutstanding)}</div> },
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
         console.log(ID)
+        router.push('/loanees/loans')
     };
     return (
         <div
@@ -62,14 +67,11 @@ const ViewAllLoaneeOverview = () => {
                 />
 
                 <Table
-                    tableData={[]}
-                    // tableData={repaymentsData}
+                    tableData={loaneeMockData}
                     tableHeader={tableHeader}
                     handleRowClick={handleRowClick}
                     tableHeight={40}
-                    //   sx='cursor-pointer'
                     tableCellStyle={'h-12'}
-                    // optionalFilterName='endownment'
                     condition={true}
                     searchEmptyState={false}
                     // searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchData?.data?.body?.length < 1 }

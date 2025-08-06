@@ -245,6 +245,7 @@ function DataTable<T extends TableRowData>({
                   {tableData?.map((row, rowIndex) => (
                     <TableRow
                       id={`dynamicTableBodyRow${rowIndex}`}
+                      data-testid={`dynamicTableBodyRow${rowIndex}`}
                       key={rowIndex}
                       // onClick={() => handleRowClick(row)}
                       className={`${sx}`}
@@ -254,6 +255,7 @@ function DataTable<T extends TableRowData>({
                           onClick={() => handleRowClick(row)}
                           key={`${column.id}${rowIndex} `}
                           id={`dynamicTableCell${column.id}${rowIndex}`}
+                          data-testid={`dynamicTableCell${column.id}${rowIndex}`}
                           // className={`px-[12px] py-[10px] text-[#101828] ${column.id === selectedColumn? 'bg-[#fafbfc]' : ''}`}
                           className={`h-1 ${
                             isLastPage ? "border-b border-solid " : ""
