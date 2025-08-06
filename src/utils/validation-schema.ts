@@ -140,3 +140,17 @@ export const LoaneeInformationvalidationSchema = Yup.object().shape({
   contactAddress: Yup.string()
     .required('Contact address is required'),
 });
+
+
+export const validationStaffSchema = Yup.object().shape({
+       name: Yup.string()
+                  .trim()
+                  .required('Name is required')
+                  .matches(/^[^0-9]*$/, 'Numbers are not allowed'),
+        email: Yup.string()
+            .email('Invalid email address')
+            .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
+            .required('Email address is required'),
+        adminRole:Yup.string()
+              .required('Role is required'),
+    })

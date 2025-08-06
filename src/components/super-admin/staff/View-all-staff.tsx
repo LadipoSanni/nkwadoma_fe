@@ -7,6 +7,9 @@ import { allStaff } from '@/utils/LoanRequestMockData/Index';
 import { getPaginatedData } from '@/utils/Mock-paginated-data';
 import { formatMonthInDate } from '@/utils/Format'
 import { MdOutlineAccountBalance } from 'react-icons/md';
+import InviteStaff from './Invite-staff';
+import Modal from '@/reuseable/modals/TableModal';
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -21,10 +24,13 @@ function Staff({status}: Props) {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const filteredStaff = status? allStaff?.filter(staff => staff.Status.toLowerCase() === status.toLowerCase()) : allStaff;
+    const [isOpen,setOpen] = useState(false)
 
     const {hasNextPage,currentPageItems,totalPages} = getPaginatedData(currentPage,10,filteredStaff,setCurrentPage)
     
-
+   const handleOpen =() => {
+    setOpen(true)
+   }
 
 
     const tableHeader = [
@@ -76,12 +82,13 @@ function Staff({status}: Props) {
               id="inviteStaff"
               variant={'secondary'}
               className='h-[45px] w-full font-semibold md:w-[120px]'
+              onClick={handleOpen}
             >
              Invite staff
             </Button>
         </div>
       </div>
-      <div className='mt-6'>
+      <div className='mt-6' data-testid="table">
        <Table 
         tableData={currentPageItems}
         tableHeader={tableHeader}
@@ -98,6 +105,17 @@ function Staff({status}: Props) {
         setPageNumber={setCurrentPage}
        />
       </div>
+      <Modal
+        isOpen={isOpen}
+        closeModal={() => setOpen(false)}
+        className='pb-1'
+        closeOnOverlayClick={true}
+        icon={Cross2Icon}
+        width='36%'
+         headerTitle='Invite staff'
+      >
+        <InviteStaff setIsOpen={setOpen}/>
+      </Modal>
     </div>
   )
 }
