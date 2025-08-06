@@ -55,3 +55,10 @@ export const loaneeTabData = [
     {name: "Archived",value: "/organizations/loanees/archived"}
 ]
 
+export const  staffTabData = [
+    {name: "All", value:"/staff/all"},
+    {name: "Active", value:"/staff/active"},
+    {name: "Pending", value:"/staff/pending"},
+    {name: "Deactivated", value:"/staff/deactivated"},
+]
+
