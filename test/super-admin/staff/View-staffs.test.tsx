@@ -1,4 +1,4 @@
-import { render, screen, fireEvent,cleanup,waitFor} from "@testing-library/react";
+import { render, screen, fireEvent,cleanup} from "@testing-library/react";
 import Staff from "@/components/super-admin/staff/View-all-staff";
 import { Providers } from "@/app/provider";
 
