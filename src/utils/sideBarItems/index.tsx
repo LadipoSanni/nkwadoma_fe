@@ -30,7 +30,7 @@ export const usePortfolioManagerSideBarItems =  (currentItem: string) => {
         {id: 'loanProduct', name: 'Loan product', route: '/loan-product', isActive: true, icon: <MdOutlineInventory2 color={currentItem === 'Loan product' ? '#142854' : '#939CB0'}></MdOutlineInventory2>},
         {id: 'repayment', name: 'Repayment', route:'/repayment', icon: <MdOutlineLibraryBooks color={currentItem === 'Repayment' ? '#142854' : '#939CB0'}  />, isActive: true,},
         {id: 'organizations', name: 'Organizations', route: '/organizations', isActive: true, icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={currentItem === 'Organizations' ? '#142854' : '#939CB0'}></MdOutlineAccountBalance>},
-        {id: 'loanee', name: 'Loanee', isActive: true, icon: <MdOutlinePersonOutline  color={currentItem === 'Loanee' ? '#142854' : '#939CB0'} className={` h-[1.2rem] w-[1.2rem]   `}/>},
+        {id: 'loanee', name: 'Loanees', isActive: true, icon: <MdOutlinePersonOutline  color={currentItem === 'Loanees' ? '#142854' : '#939CB0'} className={` h-[1.2rem] w-[1.2rem]`} />, route:'/loanees'},
         {id: 'vehicle', name: 'Investment vehicle', isActive: true, route: '/vehicle/commercial-vehicle', icon: <MdOutlinePayments color={currentItem === 'Investment vehicle' ? '#142854' : '#939CB0'} className={` h-[1.2rem] w-[1.2rem]  `}/>},
         {id: 'financier', name: 'Financier', route: '/financier', isActive: true, icon: <MdOutlineBusinessCenter  color={currentItem === 'Financier' ? '#142854' : '#939CB0'} className={'h-[1.2rem] w-[1.2rem]'} /> },
 
