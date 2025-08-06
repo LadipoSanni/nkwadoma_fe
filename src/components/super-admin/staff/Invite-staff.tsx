@@ -7,12 +7,12 @@ import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 import { validationStaffSchema } from '@/utils/validation-schema';
 import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
 
-interface ApiError {
-    status: number;
-    data: {
-        message: string;
-    };
-}
+// interface ApiError {
+//     status: number;
+//     data: {
+//         message: string;
+//     };
+// }
 
 
 const initialFormValue = {
