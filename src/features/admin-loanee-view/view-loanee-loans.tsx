@@ -1,19 +1,22 @@
 'use client'
 import React, {useState} from 'react';
 import BackButton from "@/components/back-button";
-import {cabinetGroteskMediumBold, inter, inter500, inter600, inter700} from '@/app/fonts'
+import { cabinetGroteskMediumBold, inter, inter500, inter600, inter700} from '@/app/fonts'
 import styles from '@/features/Overview/index.module.css';
 
 import Details from "@/components/loanee-my-profile/Details";
 import SearchInput from "@/reuseable/Input/SearchInput";
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import {formatAmount} from "@/utils/Format";
+import { useRouter } from 'next/navigation';
+import {Badge} from "@/components/ui/badge";
 // import {LoanType} from "@/types/loan/loan-request.type";
 const ViewLoaneeLoans = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const isLoading = false;
+    const router = useRouter()
     const onBackButtonClick = () => {
-
+        router.push('/loanees')
     }
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         console.log('searchTerm', searchTerm);
@@ -57,9 +60,10 @@ const ViewLoaneeLoans = () => {
                    {loans?.map((loan) => (
                        <div  key={"key"+loan?.organizationName} className={` w-full h-fit pb-4 px-4  bg-[#F9F9F9] rounded-md `}>
                            <div className={` flex gap-2   py-4  `}>
-                               <div className="rounded-full bg-[#ECECEC] flex py-1 px-2  ">
-                                   {loan?.organizationName?.at(0)}
-                               </div>
+                               <Badge className={`h-[40px] w-[40px] hover:bg-[#F6F6F6]    bg-[#F6F6F6] rounded-full `}>
+
+                                   <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto ${inter600.className} text-[#4D4E4D] md:text-[#4D4E4D] text-[16px] `}>{getFirstLetterOfWord(loan?.organizationName) ? getFirstLetterOfWord(loan?.organizationName) : loan?.organizationName?.at(0)?.toUpperCase()}</p>
+                               </Badge>
                                <p id={'loaneeProgram'} data-testid={'loaneeProgram'}
                                   className={`${inter600.className} mt-auto mb-auto text-black text-[16px] `}>{capitalizeFirstLetters(loan?.organizationName)}</p>
                            </div>
