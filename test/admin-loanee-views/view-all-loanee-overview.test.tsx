@@ -25,4 +25,9 @@ describe('test view all loanee overview component', () => {
         expect(screen.getByTestId('totalOutstanding')).toBeInTheDocument();
 
     })
+
+    test('that component should contains search and table', () => {
+        expect(screen.getByTestId('searchField')).toBeInTheDocument();
+        expect(screen.getByTestId('viewAllLoaneesTable')).toBeInTheDocument()
+    })
 })
