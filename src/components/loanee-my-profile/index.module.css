@@ -28,3 +28,11 @@
         visibility: hidden;
     }
 }
+.detailsWidth{
+
+}
+@media only screen and (max-width: 400px) {
+    .detailsWidth{
+        width: 16em;
+    }
+}
