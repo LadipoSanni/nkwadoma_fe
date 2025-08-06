@@ -19,14 +19,23 @@ describe("ViewAllStaff", () => {
 
 
     it('renders all main components', () => {
-        render(<Staff />);
+        render(
+            <Providers>
+            <Staff />
+            </Providers>
+        
+    );
         expect(screen.getByTestId('search-input')).toBeInTheDocument();
         expect(screen.getByText('Invite staff')).toBeInTheDocument();
         expect(screen.getByTestId('table')).toBeInTheDocument();
       });
 
       it('filters table by status when prop provided', () => {
-        const { rerender } = render(<Staff status="Active" />);
+        const { rerender } = render(
+            // <Providers>
+           <Staff status="Active" />
+            // </Providers>
+       );
         
         const statusCells = screen.getAllByText(/Active|Pending|Deactivated/);
         statusCells.forEach(cell => {
@@ -40,7 +49,9 @@ describe("ViewAllStaff", () => {
       });
 
       it('updates search term state', () => {
-        render(<Staff />);
+        render(  <Providers>
+            <Staff />
+            </Providers>);
         const searchInput = screen.getByPlaceholderText('Search');
         
         fireEvent.change(searchInput, { target: { value: 'John' } });
@@ -48,7 +59,9 @@ describe("ViewAllStaff", () => {
       });
 
       it('applies correct CSS classes based on status', () => {
-        render(<Staff />);
+        render(<Providers>
+            <Staff />
+            </Providers>);
         
         const activeStatus = screen.getAllByText('Active')[0];
         expect(activeStatus).toHaveClass('bg-[#E6F2EA]');
@@ -59,7 +72,9 @@ describe("ViewAllStaff", () => {
 
 
     it('renders invite button with correct attributes', () => {
-        render(<Staff />);
+        render(<Providers>
+            <Staff />
+            </Providers>);
         const button = screen.getByText('Invite staff');
         
         expect(button).toBeInTheDocument();
@@ -68,7 +83,9 @@ describe("ViewAllStaff", () => {
       });
 
       it('renders responsive layout correctly', () => {
-        render(<Staff />);
+        render(<Providers>
+            <Staff />
+            </Providers>);
         expect(screen.getByText('Invite staff').parentElement)
           .toHaveClass('md:mt-0');
       });
