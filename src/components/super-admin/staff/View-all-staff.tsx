@@ -81,7 +81,7 @@ function Staff({status}: Props) {
             </Button>
         </div>
       </div>
-      <div className='mt-6'>
+      <div className='mt-6' data-testid="table">
        <Table 
         tableData={currentPageItems}
         tableHeader={tableHeader}
