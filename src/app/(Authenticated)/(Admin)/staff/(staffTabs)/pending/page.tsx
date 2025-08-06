@@ -1,5 +1,5 @@
 import React from 'react'
-import Pending from '@/features/super-admin/staff/staff-tabs/pending'
+import Pending from '@/features/super-admin/staff/staff-tabs/Pending'
 
 function page() {
   return (
