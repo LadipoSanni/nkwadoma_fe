@@ -80,7 +80,7 @@ function ChooseVisibility() {
       pageNumber: pageNumber,
       pageSize: 10,
       }
-    const isPrivateDisabled = true;
+    const isPrivateDisabled = false;
 
     const props = {
         investmentVehicleId: investmentVehicleId,
@@ -312,12 +312,12 @@ function ChooseVisibility() {
            validateForm
         })=> (
             <Form className={`${inter.className}`}>
-             <div className='grid grid-cols-1 gap-y-4 lg:pr-16 rounded-lg  md:max-h-[50vh]  overflow-y-auto'
-                style={{
-                    overflowY: "auto",
-                    marginRight: "-10px",  
-                    paddingRight: "10px",    
-                  }}
+             <div className='grid grid-cols-1 gap-y-4 lg:pr-20 rounded-lg  md:max-h-[50vh]  overflow-y-auto'
+                // style={{
+                //     overflowY: "auto",
+                //     marginRight: "-10px",  
+                //     paddingRight: "10px",    
+                //   }}
              >
               <div 
           className={`py-5  border-[1px] rounded-xl cursor-pointer px-4 ${values.status === 'PUBLIC' ? 'border-[#142854]' : ''}`}
@@ -688,7 +688,7 @@ function ChooseVisibility() {
             <p className='text-[14px] font-normal px-8 text-[#6A6B6A]'>This {vehicleType} fund will be visible to the creator</p>
           </div>
              </div>
-             <div className={`md:flex  w-full mt-4 ${statusType !== "changeVisibility"? "justify-between" : "justify-end"}`}>
+             <div className={`md:flex xl:pr-20  w-full mt-4 ${statusType !== "changeVisibility"? "justify-between" : "justify-end"}`}>
               {  statusType !== "changeVisibility" &&  <Button
                variant={"outline"}
                type="button"

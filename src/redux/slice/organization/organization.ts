@@ -6,6 +6,7 @@ interface OrganizationSliceState {
     setOrganizationId: string,
     organizationDetailTab: string;
     loaneeId: string;
+    organizationStatus: string
 }
 
 const initialState:OrganizationSliceState= {
@@ -13,6 +14,7 @@ const initialState:OrganizationSliceState= {
     setOrganizationId: "",
     organizationDetailTab: "details",
     loaneeId: "",
+    organizationStatus: ""
 }
 
 export const organizationSlice = createSlice({
@@ -36,9 +38,16 @@ export const organizationSlice = createSlice({
         },
         setLoaneeId: ( state, action: PayloadAction<string >) => {
             state.loaneeId = action.payload;
+        },
+        setOrganizationStatus:(state, action: PayloadAction<string >) => {
+            state.organizationStatus = action.payload;
+        },
+        resetOrganizationStatus: (state) => {
+            state.organizationStatus = ""
         }
+
     }
 })
 
-export const {setOrganizationTabStatus,setLoaneeId,resetOrganizationId,setOrganizationId,setOrganizationDetail,resetOrganizationDetailsStatus} = organizationSlice.actions;
+export const {setOrganizationTabStatus,setLoaneeId,resetOrganizationId,setOrganizationId,setOrganizationDetail,resetOrganizationDetailsStatus,setOrganizationStatus,resetOrganizationStatus} = organizationSlice.actions;
 export default organizationSlice.reducer;
