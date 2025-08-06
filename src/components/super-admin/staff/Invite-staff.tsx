@@ -61,7 +61,7 @@ function InviteStaff({setIsOpen}:Props) {
             <Form className={`${inter.className}`}>
            <div className='grid grid-cols-1 gap-y-4 mt-5'>
             <div>
-              <Label htmlFor="Name">Name</Label>  
+              <Label htmlFor="name">Name</Label>  
               <Field
                id="staffName"
                data-testid="staffNameTestId"
@@ -118,6 +118,7 @@ function InviteStaff({setIsOpen}:Props) {
                   name='adminRole'
                   placeHolder='Select a role'
                   selectContent={adminRoleType}
+                  testId='roleTestId'
                 />
                </div>
                   {
@@ -125,7 +126,7 @@ function InviteStaff({setIsOpen}:Props) {
                         <ErrorMessage
                     name="adminRole"
                     component="div"
-                    id='programModeError'
+                    id='adminRoleError'
                     className="text-red-500 text-sm"
                     />
                     )
