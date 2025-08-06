@@ -32,6 +32,7 @@ import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import { MdSearch } from 'react-icons/md';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 import { SafeImage } from "@/reuseable/images/Safe-image";
+import { setOrganizationStatus } from "@/redux/slice/organization/organization";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -99,7 +100,8 @@ const OrganizationDetails = () => {
         setTotalPage(adminData?.data?.totalPages)
         hasNextPage(adminData?.data?.hasNextPage)
       }
-    },[debouncedSearchTerm, searchResult,adminData]);
+      store.dispatch(setOrganizationStatus(organizationDetails?.data.status))
+    },[debouncedSearchTerm, searchResult,adminData,organizationDetails?.data.status]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value);
