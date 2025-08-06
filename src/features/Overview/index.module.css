@@ -14,6 +14,12 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+.verticalScrollbar {
+    overflow-y: scroll;
+
+    /*-ms-overflow-style: none;*/
+    /*scrollbar-width: none;*/
+}
 
 
 .container{

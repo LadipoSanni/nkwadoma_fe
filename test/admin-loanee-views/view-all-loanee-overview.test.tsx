@@ -1,8 +1,8 @@
 import '@testing-library/react';
-import {render,screen} from '@testing-library/react';
+import { render, screen} from '@testing-library/react';
 import ViewAllLoaneeOverview from "@/features/admin-loanee-view/view-all-loanee-overview";
 import {Providers} from '@/app/provider';
-
+// import { useRouter } from 'next/router';
 
 const mockUsePathname = jest.fn();
 
@@ -26,8 +26,16 @@ describe('test view all loanee overview component', () => {
 
     })
 
-    // test('that component should contains search and table', () => {
-    //     expect(screen.getByTestId('searchField')).toBeInTheDocument();
-    //     expect(screen.getByTestId('loanProductTableContainer')).toBeInTheDocument()
-    // })
+    test('that component should contains search and table',async () => {
+        // const tableRow =  screen.getByTestId('dynamicTableCellname0');
+        // fireEvent.click(tableRow)
+        // await expect(screen.getByTestId("detailsPAGE"))
+
+        expect(screen.getByTestId('dynamicTableCellname0')).toBeInTheDocument()
+        // const mockRouter = useRouter();
+        // const tableRow = screen.getByTestId('dynamicTableCellname0')
+        // fireEvent.click(tableRow);
+        // expect(mockRouter.push).toHaveBeenCalledWith('/loanees/loans');
+
+    })
 })

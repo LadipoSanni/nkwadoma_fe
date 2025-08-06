@@ -5,9 +5,11 @@ import Details from "@/components/loanee-my-profile/Details";
 import SearchInput from "@/reuseable/Input/SearchInput";
 import {MdOutlinePersonOutline} from "react-icons/md";
 import Table from '@/reuseable/table/Table';
-import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+// import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount, formateDigits} from "@/utils/Format";
 import {loaneeMockData} from "@/utils/LoanProductMockData";
+import {useRouter} from "next/navigation";
+
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
@@ -18,6 +20,7 @@ const ViewAllLoaneeOverview = () => {
     const [pageNumber,setPageNumber] = useState(0)
     // const [pageSize ] = useState(10)
 
+    const router = useRouter()
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         console.log('searchTerm', searchTerm);
         setSearchTerm(event.target.value);
@@ -33,6 +36,7 @@ const ViewAllLoaneeOverview = () => {
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
         console.log(ID)
+        router.push('/loanees/loans')
     };
     return (
         <div
