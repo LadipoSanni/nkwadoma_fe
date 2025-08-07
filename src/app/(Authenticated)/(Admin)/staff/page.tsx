@@ -1,5 +1,5 @@
 import React from 'react'
-import All from '@/features/super-admin/staff/staff-tabs/All'
+import All from '@/features/super-admin/staff/View-all-staff'
 
 function page() {
   return (

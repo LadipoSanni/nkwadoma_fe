@@ -22,7 +22,8 @@ import NavbarContainer from "@/reuseable/ui/Navbar";
 import { resetAllState } from '@/redux/reducer';
 import { notificationApi } from '@/service/notification/notification_query';
 import {setCurrentTab,setcurrentTabRoute} from "@/redux/slice/loan/selected-loan";
-import { setSideTab } from '@/redux/slice/staff-and-request/staff';
+
+
 
 const SideBar = () => {
     const router = useRouter();
@@ -51,16 +52,12 @@ const SideBar = () => {
         router.push('/settings/team')
         store.dispatch(setCurrentNavBottomItem("Settings"))
         store.dispatch(setCurrentNavbarItem('Settings'))
-
     }
 
     const clickNavbar = (name: string, route?: string, isActive?: boolean) => {
         if (isActive) {
             store.dispatch(setCurrentNavBottomItem(name))
             store.dispatch(setCurrentNavbarItem(name))
-            if(userRole === "MEEDL_SUPER_ADMIN"){
-                store.dispatch(setSideTab(name))
-              }
             if (route) {
                 router.push(route)
             }
