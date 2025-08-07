@@ -8,7 +8,7 @@ interface notificationProps{
 
 function NotificationLayouts({children}: notificationProps) {
   return (
-    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN','LOANEE','FINANCIER']}>
+    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN','LOANEE','FINANCIER','MEEDL_SUPER_ADMIN']}>
     <NotificationLayout
     >{children}
     </NotificationLayout>

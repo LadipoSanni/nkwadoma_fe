@@ -37,6 +37,7 @@ import { loanBookApi } from '@/service/admin/loan_book';
 import CsvReducer from "@/redux/slice/csv/csv"
 import { countryApi } from '@/service/admin/external-api/countryCalling_code_query';
 import LoanOfferReducer from './slice/loan/loan-offer';
+import StaffReducer from "./slice/staff-and-request/staff"
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -57,6 +58,7 @@ const appReducer = combineReducers({
     organization: OrganizationReducer,
     csv: CsvReducer,
     loanOffer: LoanOfferReducer,
+    staff: StaffReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
