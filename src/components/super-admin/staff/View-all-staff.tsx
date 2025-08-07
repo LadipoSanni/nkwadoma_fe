@@ -24,10 +24,14 @@ interface Props{
 function Staff({status}: Props) {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
-    const filteredStaff = status? allStaff?.filter(staff => staff.Status.toLowerCase() === status.toLowerCase()) : allStaff;
+    const filteredStaff = status? allStaff?.filter(staff => staff?.Status?.toLowerCase() === status.toLowerCase()) : allStaff;
     const [isOpen,setOpen] = useState(false)
     const router = useRouter()
-    const {hasNextPage,currentPageItems,totalPages} = getPaginatedData(currentPage,10,filteredStaff,setCurrentPage)
+    const paginationData = React.useMemo(() => {
+      return getPaginatedData(currentPage, 10, filteredStaff);
+    }, [currentPage, filteredStaff]);
+    
+    const { hasNextPage, currentPageItems, totalPages } = paginationData;
     
    const handleOpen =() => {
     setOpen(true)
@@ -110,6 +114,7 @@ function Staff({status}: Props) {
         totalPages={totalPages}
         setPageNumber={setCurrentPage}
          sx='cursor-pointer'
+         condition={true}
        />
       </div>
       <Modal
