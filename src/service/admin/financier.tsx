@@ -19,6 +19,7 @@ export const financierApi = createApi({
                     organizationEmail: string;
                     organizationName: string;
                     financierType: string;
+                    amountToInvest: string
                   }[];
                   investmentVehicleId?: string;
             })=> ({
