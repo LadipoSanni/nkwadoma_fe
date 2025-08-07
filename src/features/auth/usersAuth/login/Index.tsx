@@ -141,6 +141,7 @@ const Login: React.FC = () => {
             case "FINANCIER":
                 await routeFinancier(vehicleId, vehicleType)
                 break;
+
         }
     }
 

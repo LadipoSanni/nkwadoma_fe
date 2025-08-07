@@ -173,6 +173,11 @@ const CreatePassword = () => {
                     router.push('/Overview')
                   }
                 break;
+            case 'MEEDL_SUPER_ADMIN':
+                store.dispatch(setCurrentNavbarItem("Overview"))
+                router.push('/Overview')
+                break;
+
         }
     }
 
@@ -193,8 +198,12 @@ const CreatePassword = () => {
                 const userName = decode_access_token?.name
                 const user_roles = decode_access_token?.realm_access?.roles
                 const user_role = user_roles.filter(getUserRoles).at(0)
+
+                 console.log('user roles: ', user_roles)
+                 console.log('user rol: ', user_role, 'useremail', user_email)
                 clearData()
                 await persistor.purge();
+
                 toast({
                     description: "Password created successfully",
                     status: "success",
@@ -202,7 +211,9 @@ const CreatePassword = () => {
                 if (user_role) {
                     storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
                     setUserRoles(user_roles)
-                    await routeUserToTheirDashboard(user_role)
+                    console.log('user roles: ', user_roles)
+                    console.log('user rol: ', user_role, 'useremail', user_email)
+                    // await routeUserToTheirDashboard(user_role)
     
                 }
              } 
