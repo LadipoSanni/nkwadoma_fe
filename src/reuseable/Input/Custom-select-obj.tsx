@@ -17,10 +17,11 @@ type Props = {
   placeHolder?: string;
   triggerId?: string;
   isItemDisabled?: (item: string | number) => boolean;
-  readonly?: boolean
+  readonly?: boolean;
+  testId?: string
 };
 
-function CustomSelectObj({ value, onChange, className, selectContent, name, placeHolder, id, triggerId, isItemDisabled,readonly }: Props) {
+function CustomSelectObj({ value, onChange, className, selectContent, name, placeHolder, id, triggerId, isItemDisabled,readonly,testId="testId" }: Props) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleDropdownOpen = () => {
@@ -41,6 +42,7 @@ function CustomSelectObj({ value, onChange, className, selectContent, name, plac
           id={triggerId}
           className={`min-w-0 h-[3.2rem] w-full border focus:ring-0 focus:outline-none shadow-none flex justify-between ${className}`}
           role='button'
+          data-testid={testId}
         >
           <SelectValue className='' data-testid='SelectContent' placeholder={placeHolder} id={`selectId${id}`} />
           <div className=''>
