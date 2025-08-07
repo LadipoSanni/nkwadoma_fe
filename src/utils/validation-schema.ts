@@ -143,9 +143,13 @@ export const LoaneeInformationvalidationSchema = Yup.object().shape({
 
 
 export const validationStaffSchema = Yup.object().shape({
-       name: Yup.string()
+       firstName: Yup.string()
                   .trim()
-                  .required('Name is required')
+                  .required('First name is required')
+                  .matches(/^[^0-9]*$/, 'Numbers are not allowed'),
+      lastName: Yup.string()
+                  .trim()
+                  .required('Last name is required')
                   .matches(/^[^0-9]*$/, 'Numbers are not allowed'),
         email: Yup.string()
             .email('Invalid email address')

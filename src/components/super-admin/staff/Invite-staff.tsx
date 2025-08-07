@@ -16,7 +16,8 @@ import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
 
 
 const initialFormValue = {
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     adminRole: ""
 }
@@ -40,6 +41,7 @@ function InviteStaff({setIsOpen}:Props) {
        toast({
         description:"Invited successfully",
         status: "success",
+        duration: 1000
        })
      handleCloseModal()
     }
@@ -59,25 +61,57 @@ function InviteStaff({setIsOpen}:Props) {
      {
         ({errors, isValid, touched, setFieldValue, values}) => (
             <Form className={`${inter.className}`}>
-           <div className='grid grid-cols-1 gap-y-4 mt-5'>
+           <div 
+           className='grid grid-cols-1 gap-y-4 mt-5  md:max-h-[56.5vh] overflow-y-auto'
+           style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+
+        }}
+           >
             <div>
-              <Label htmlFor="name">Name</Label>  
+              <Label htmlFor="firstName">First name</Label>  
               <Field
                id="staffName"
                data-testid="staffNameTestId"
-                name="name"
+                name="firstName"
                   className="w-full p-3 border rounded focus:outline-none mt-2"
                 placeholder="Enter name"
                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const value = e.target.value;
                 const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, '');
-                setFieldValue("name", formattedValue);
+                setFieldValue("firstName", formattedValue);
             }}  
             />
                {
-                errors.name && touched.name && (
+                errors.firstName && touched.firstName && (
                     <ErrorMessage
-                        name="name"
+                        name="firstName"
+                        component="div"
+                        className="text-red-500 text-sm"
+                    />
+                )
+            }
+            </div>
+
+            <div>
+              <Label htmlFor="firstName">Last name</Label>  
+              <Field
+               id="staffLastName"
+               data-testid="staffLastNameTestId"
+                name="lastName"
+                  className="w-full p-3 border rounded focus:outline-none mt-2"
+                placeholder="Enter name"
+                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const value = e.target.value;
+                const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, '');
+                setFieldValue("lastName", formattedValue);
+            }}  
+            />
+               {
+                errors.lastName && touched.lastName && (
+                    <ErrorMessage
+                        name="lastName"
                         component="div"
                         className="text-red-500 text-sm"
                     />
@@ -132,7 +166,8 @@ function InviteStaff({setIsOpen}:Props) {
                     )
                     }
               </div>
-              <div className='mb-4'>
+           </div>
+           <div className='mb-4'>
                 <SubmitAndCancelButton
                   isValid={isValid} 
                   isLoading={false}
@@ -140,7 +175,6 @@ function InviteStaff({setIsOpen}:Props) {
                   submitButtonName='Invite'
                 />
               </div>
-           </div>
             </Form>
         )
      }
