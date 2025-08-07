@@ -1,8 +1,8 @@
 import { render, screen, fireEvent,cleanup,waitFor} from "@testing-library/react";
 import InviteStaff from "@/components/super-admin/staff/Invite-staff";
-import { Providers } from "@/app/provider";
+// import { Providers } from "@/app/provider";
 import { useToast } from '@/hooks/use-toast';
-import { duration } from "moment";
+
 
 jest.mock('@/hooks/use-toast');
 jest.mock('@/reuseable/Input/Custom-select-obj', () => ({
