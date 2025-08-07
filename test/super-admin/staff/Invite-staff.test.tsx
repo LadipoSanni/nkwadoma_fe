@@ -2,6 +2,7 @@ import { render, screen, fireEvent,cleanup,waitFor} from "@testing-library/react
 import InviteStaff from "@/components/super-admin/staff/Invite-staff";
 import { Providers } from "@/app/provider";
 import { useToast } from '@/hooks/use-toast';
+import { duration } from "moment";
 
 jest.mock('@/hooks/use-toast');
 jest.mock('@/reuseable/Input/Custom-select-obj', () => ({
@@ -63,7 +64,7 @@ describe('InviteStaff Component', () => {
         fireEvent.blur(screen.getByTestId('roleTestId'));
     
         await waitFor(() => {
-          expect(screen.getByText('Name is required')).toBeInTheDocument();
+          expect(screen.getByText('First name is required')).toBeInTheDocument();
           expect(screen.getByText('Email address is required')).toBeInTheDocument();
         });
       });
@@ -72,7 +73,10 @@ describe('InviteStaff Component', () => {
         render(<InviteStaff setIsOpen={mockSetIsOpen} />);
         
         fireEvent.change(screen.getByTestId('staffNameTestId'), { 
-          target: { value: 'John Doe' } 
+          target: { value: 'John' } 
+        });
+        fireEvent.change(screen.getByTestId('staffLastNameTestId'), { 
+          target: { value: 'Doe' } 
         });
         fireEvent.change(screen.getByTestId('emailTestId'), { 
           target: { value: 'john@example.com' } 
@@ -86,7 +90,8 @@ describe('InviteStaff Component', () => {
         await waitFor(() => {
           expect(mockToast).toHaveBeenCalledWith({
             description: "Invited successfully",
-            status: "success"
+            status: "success",
+            duration: 1000
           });
           expect(mockSetIsOpen).toHaveBeenCalledWith(false);
         });
