@@ -5,7 +5,7 @@ import OrgAdmin from "@/features/Overview/org-admin";
 import Loanee from "@/features/Overview/loanee";
 import PortfolioManager from "@/features/Overview/PortfolioMnanager/portfolio-manager";
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
-
+import MeedlSuperAdmin from './MeedlSuperAdmin'
 
 
 const Index = () => {
@@ -17,6 +17,7 @@ const Index = () => {
         {role: 'ORGANIZATION_ADMIN', value: <OrgAdmin/>},
         {role: 'LOANEE', value: <Loanee/>},
         {role: 'FINANCIER', value: <Financier/>},
+        {role: 'MEEDL_SUPER_ADMIN', value: <MeedlSuperAdmin/>},
     ]
 
 

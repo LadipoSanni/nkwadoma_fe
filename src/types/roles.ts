@@ -1,4 +1,4 @@
-export const ADMIN_ROLES = [
+export const ROLES = [
     "PORTFOLIO_MANAGER",
     "ORGANIZATION_ADMIN",
     "SPONSOR",
@@ -9,5 +9,7 @@ export const ADMIN_ROLES = [
     "INVESTOR",
     "LOANEE",
     "FINANCIER",
+    "MEEDL_SUPER_ADMIN",
+
 ]
 

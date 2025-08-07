@@ -11,7 +11,7 @@ import {useToast} from "@/hooks/use-toast"
 import {  setUserRoles, storeUserDetails} from "@/features/auth/usersAuth/login/action";
 import {useRouter, useSearchParams} from "next/navigation";
 import {jwtDecode} from "jwt-decode";
-import {ADMIN_ROLES} from "@/types/roles";
+import {ROLES} from "@/types/roles";
 import {persistor, store} from "@/redux/store";
 import {setCurrentNavbarItem} from "@/redux/slice/layout/adminLayout";
 import {clearData} from "@/utils/storage";
@@ -88,9 +88,9 @@ const Login: React.FC = () => {
 
     const getUserRoles = (returnsRole: string) => {
         if (returnsRole) {
-            for (let i = 0; i < ADMIN_ROLES.length; i++) {
-                if (ADMIN_ROLES.at(i) === returnsRole) {
-                    return ADMIN_ROLES.at(i)
+            for (let i = 0; i < ROLES.length; i++) {
+                if (ROLES.at(i) === returnsRole) {
+                    return ROLES.at(i)
                 }
             }
         }
@@ -130,6 +130,10 @@ const Login: React.FC = () => {
             case 'LOANEE' :
                 await routeLoanee(loanOfferId)
                 break;
+            case 'MEEDL_SUPER_ADMIN':
+                store.dispatch(setCurrentNavbarItem('Overview'));
+                router.push("/Overview");
+                break;
             case 'ORGANIZATION_ADMIN':
                 store.dispatch(setCurrentNavbarItem("Program"))
                 router.push("/program")
@@ -141,6 +145,7 @@ const Login: React.FC = () => {
             case "FINANCIER":
                 await routeFinancier(vehicleId, vehicleType)
                 break;
+
         }
     }
 
@@ -160,7 +165,7 @@ const Login: React.FC = () => {
         const user_role = user_roles.filter(getUserRoles).at(0)
         // console.log('access_token: ', access_token, 'decode_access_token:', decode_access_token)
         // const decoded_re = jwtDecode<CustomJwtPayload>(refresh_token)
-        // console.log('decode: ', decode_access_token,'decoded_re: ', decoded_re)
+        // console.log('user_roles: ', user_roles,'user_role: ', user_role)
         return {
             access_token,
             refresh_token,

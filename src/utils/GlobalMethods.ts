@@ -1,5 +1,5 @@
 import {jwtDecode} from "jwt-decode";
-import {ADMIN_ROLES} from "@/types/roles";
+import {ROLES} from "@/types/roles";
 import {isAfter} from "date-fns";
 import {StaticImageData} from "next/image";
 
@@ -45,7 +45,7 @@ export function insertSpaceCapitalized(str: unknown): string {
 
 
 export const isUserAdmin = (role: string) => {
-    return ADMIN_ROLES.includes(role)
+    return ROLES.includes(role)
 }
 
 export const isTokenExpired = (token?: string): boolean => {
