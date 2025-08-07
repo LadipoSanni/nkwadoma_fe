@@ -53,6 +53,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                 data-testid={'loaneeProfileHeader'}
                 className={`w-full h-fit md:h-[13vh]  py-4 border-b border-b-grey-200 px-4  mt-auto mb-auto  flex justify-between `}
            >
+
                {isLoading ?
                    <div className="flex items-center space-x-4">
                        <Skeleton className="h-20 w-20 bg-[#f4f4f5] rounded-full" />
@@ -62,6 +63,13 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                        </div>
                    </div>
                    :
+                   <div className={` grid `}>
+                       {userRole === 'MEEDL_SUPER_ADMIN' &&
+                           (
+                               <div>
+                                   FJIPTJ'PJ[
+                               </div>
+                           )}
                <div
                    id={'cohortAndProgramInfo'}
                    data-testid={'cohortAndProgramInfo'}
@@ -102,6 +110,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                        </div>
                    </div>
                </div>
+                   </div>
 
                }
 

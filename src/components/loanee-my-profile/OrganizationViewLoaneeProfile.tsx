@@ -7,19 +7,26 @@ import PmLoaneeLoanDetails from "@/components/loanee-my-profile/PmLoaneeLoanDeta
 import {useRouter} from "next/navigation";
 import { useAppSelector } from '@/redux/store';
 import { useViewLoaneeInACohortDetailsQuery} from "@/service/users/Loanee_query";
+import {getItemSessionStorage} from "@/utils/storage";
 
 const OrganizationViewLoaneeProfile = () => {
     const id =  useAppSelector(state => state.organization.loaneeId)
     const cohortId = useAppSelector(state => state.cohort.setCohortId)
     const notificationCohortId = useAppSelector((state) => state.cohort?.notificationCohortId)
     const router = useRouter()
+    const userRole  = getItemSessionStorage("user_role")
+
     const  props = {
         loaneeId: id,
         cohortId: notificationCohortId ||  cohortId,
     }
     const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props)
     const  handleBack = () => {
-        router.push('/organizations/loanees/uploaded')
+        if(userRole === 'PORTFOLIO_MANAGER'){
+            router.push('/organizations/loanees/uploaded')
+        }else {
+            router.push('/loanees/loans')
+        }
     }
 
     const userName = data?.data?.firstName + ' '+ data?.data?.lastName

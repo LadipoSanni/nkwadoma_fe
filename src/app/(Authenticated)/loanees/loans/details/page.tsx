@@ -1,8 +1,8 @@
 import React from 'react';
-import LoaneeDetails from "@/pages/loanee/MyProfile/index";
+import OrganizationViewLoaneeProfile from "@/components/loanee-my-profile/OrganizationViewLoaneeProfile";
 const Page = () => {
     return (
-        <LoaneeDetails/>
+        <OrganizationViewLoaneeProfile/>
     );
 };
 
