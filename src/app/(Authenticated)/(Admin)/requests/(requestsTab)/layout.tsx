@@ -9,7 +9,7 @@ type props = {
 
 const layout: React.FC<props> = ({ children }) => {
     return (
-      <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+      <CustomAuthorization authorizedRoles={['MEEDL_SUPER_ADMIN']}>
         <TabSwitch tabData={staffTabData} defaultTab='/staff/all'>
         {children}
         </TabSwitch>
