@@ -46,7 +46,8 @@ function OrganizationLoaneeLayout({children}:props) {
     className={'w-full h-full '}
     >
    { isLoading? <div className='relative top-8 px-4'> <SkeletonForDetail/></div> : 
-    <div> <div
+    <div>
+       <div
       className='md:px-6 md:py-3 px-4 py-4'
      >
      <BackButton id={'backCohorts'} textColor={'meedlBlue'} text={notification === "notification"? "Back to notification" : 'Back to cohort'} iconBeforeLetters={true} handleClick={handleBackButtonClick}/> 
