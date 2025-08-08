@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import {Button} from '@/components/ui/button';
 import {Formik, Form, Field, ErrorMessage} from 'formik'
-import * as Yup from 'yup';
 import {Label} from '@/components/ui/label';
 import {inter} from "@/app/fonts"
 import CustomSelect from '@/reuseable/Input/Custom-select';
@@ -9,34 +8,19 @@ import { notificationApi } from '@/service/notification/notification_query';
 import Isloading from '@/reuseable/display/Isloading';
 import {useInviteOrganizationMutation} from '@/service/admin/organization';
 import {useToast} from "@/hooks/use-toast";
-import { store } from '@/redux/store';
+import { store,useAppSelector } from '@/redux/store';
 import { setOrganizationTabStatus } from '@/redux/slice/organization/organization';
 import PhoneNumberSelect from '@/reuseable/select/phoneNumberSelect/Index';
 import { formatInternationalNumber } from '@/utils/phoneNumber';
-
+import CenterMultistep from '@/reuseable/multiStep-component/Center-multistep';
+import { organizationValidationSchema } from '@/utils/validation-schema';
+import { setOrganizationInitialState } from '@/redux/slice/organization/organization';
 
 interface ApiError {
     status: number;
     data: {
         message: string;
     };
-}
-
-
-const initialFormValue = {
-    name: "",
-    email: "",
-    websiteAddress: "",
-    industry: "",
-    serviceOffering: "",
-    rcNumber: "",
-    tin: "",
-    adminFirstName: "",
-    adminLastName: "",
-    adminEmail: "",
-    logoImage: "",
-    coverImage: "",
-    phoneNumber: "",
 }
 
 interface props {
@@ -46,8 +30,26 @@ interface props {
 }
 
 function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) {
-    // const queryClient = useQueryClient();
+ 
+    const initialValue = useAppSelector((state) => state?.organization?.organizationInitialState)
+
+  const initialFormValue = {
+    name:  initialValue?.name || "",
+    email: initialValue?.email ||  "",
+    websiteAddress: initialValue?.websiteAddress ||  "",
+    industry: initialValue?.industry ||  "",
+    serviceOffering: initialValue?.serviceOffering || "",
+    rcNumber: initialValue?.rcNumber || "",
+    tin:  initialValue?.tin ||  "",
+    adminFirstName: initialValue?.adminFirstName || "",
+    adminLastName: initialValue?.adminLastName || "",
+    adminEmail:initialValue?.adminEmail ||  "",
+    logoImage:initialValue?.logoImage || "",
+    coverImage:initialValue?.coverImage || "",
+    phoneNumber:initialValue?.phoneNumber || "",
+}
     //  const industries = [ "MANUFACTURING", "INSURANCE", "LOGISTIC", "TELECOMMUNICATION", "REAL ESTATE", "AUTOMOBILE", "FASHION", "AVIATION", "AGRICULTURE", "EDUCATION", "HEALTHCARE", "ENTERTAINMENT", "HOSPITALITY", "FMCG", "TECHNOLOGY", "FINANCE" ];
+    const [currentStep, setCurrentStep] = useState(1);
     const industries = ["EDUCATION", "BANKING"]
     const serviceOfferings = ["TRAINING", "FINANCIAL ADVISORY", "INSURANCE SERVICES", "LOAN SERVICES", "ACCOUNTING AND BOOKKEEPING", "INVESTMENT ADVISORY", "RISK MANAGEMENT", "CORPORATE FINANCE", "TAX SERVICES", "BANKING SERVICES", "CRYPTOCURRENCY SERVICES", "SOFTWARE DEVELOPMENT", "WEB DEVELOPMENT", "CLOUD SERVICES", "CYBERSECURITY SERVICES", "DATABASE MANAGEMENT", "AI AND MACHINE LEARNING", "BUSINESS INTELLIGENCE", "DEVOPS SERVICES", "BLOCKCHAIN SERVICES", "DISTRIBUTION SERVICES", "MARKETING AND BRANDING", "SALES SERVICES", "CUSTOMER SERVICE AND SUPPORT", "SUSTAINABILITY SERVICES", "CONSUMER ENGAGEMENT AND LOYALTY", "TECHNOLOGY AND INNOVATION", "HOTEL SERVICES", "RESTAURANT SERVICES", "EVENT PLANNING", "TRAVEL AND TOUR SERVICES", "CORPORATE RETREATS", "SPA AND WELLNESS", "TRANSPORTATION", "FILM AND TELEVISION", "MUSIC", "THEATRE", "SPORTS AND FITNESS", "GAMING", "EVENT AND PARTIES", "TELECOMMUNICATION", "PHOTOGRAPHY"];
      const [countryCode, setCountryCode] = useState("NG")
@@ -64,58 +66,15 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
         }
     }
 
+    const nextStep = () => setCurrentStep(currentStep + 1);
+  const prevStep = () => setCurrentStep(currentStep - 1);
 
-    const validationSchema = Yup.object().shape({
-        name: Yup.string()
-            .trim()
-            .required('Name is required')
-            .matches(/^[^0-9]*$/, 'Numbers are not allowed'),
-        email: Yup.string()
-            .email('Invalid email address')
-            // .matches(/^\S*$/, 'Email address should not contain spaces')
-            .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
-            .required('Email address is required'),
-        industry: Yup.string()
-            .required('Industry is required'),
-        serviceOffering: Yup.string()
-            .required('Service is required'),
-        rcNumber: Yup.string()
-            .trim()
-            .required('Registration number is required')
-            .matches(/^RC\d{7}$/, 'RC Number must start with "RC" followed by 7 digits'),
-        tin: Yup.string()
-            .trim()
-            .required('Tax number is required')
-            .min(9, 'Tax number must be at least 9 characters long')
-            .max(15, 'Must be the length of 15 characters long')
-            .matches(/^[A-Za-z0-9-]*$/, 'Tax number can only contain letters, numbers, and hyphens, and must not start with a hyphen'),
-        adminFirstName: Yup.string()
-            .trim()
-            .required('Admin first name is required'),
-        adminLastName: Yup.string()
-            .trim()
-            .required('Admin last name is required'),
-        phoneNumber: Yup.string(),
-            // .required('Phone number is required')
-            // .matches(/^(0)(70|71|80|81|90|91)\d{8}$/, 'Invalid phone number'),
-        adminEmail: Yup.string()
-            .email('Invalid email address')
-            // .matches(/^\S*$/, 'Email address should not contain spaces')
-            .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
-            .required('Admin email address is required')
-            .test(
-                'email-different', 'Admin email address must be different from company email address',
-                function () {
-                    const {email, adminEmail} = this.parent;
-                    return email !== adminEmail;
-                }),
-        websiteAddress: Yup.string()
-        .matches(
-            /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/,
-            'Enter a valid website URL'
-        )
-        .nullable(),
-    })
+  const handleFormChange = (field: string, value: string) => {
+    store.dispatch(setOrganizationInitialState({
+      ...initialValue,
+      [field]: value
+    }));
+  };
 
     const handleSubmit = async (values: typeof initialFormValue) => {
         if (!navigator.onLine) {
@@ -181,7 +140,7 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                 initialValues={initialFormValue}
                 onSubmit={handleSubmit}
                 validateOnMount={true}
-                validationSchema={validationSchema}
+                validationSchema={organizationValidationSchema}
                 validateOnChange={true}
                 validateOnBlur={true}  
             >
@@ -189,8 +148,12 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                     ({errors, isValid, touched, setFieldValue, values,setFieldTouched,setFieldError,handleBlur}) => (
                         <Form className={`${inter.className}`}>
                             <div >
-                                <div
-                                className='grid grid-cols-1 gap-y-4 md:max-h-[56.5vh] overflow-y-auto'
+                                <div>
+                                <CenterMultistep currentStep={currentStep} totalSteps={2} />
+                                </div>
+                              
+                             {currentStep === 1 ?   <div
+                                className='grid grid-cols-1 gap-y-4 md:max-h-[55.5vh] overflow-y-auto'
                                 style={{
                                     scrollbarWidth: 'none',
                                     msOverflowStyle: 'none',
@@ -223,23 +186,6 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                 </div>
                                 <div className=''>
                                     <Label htmlFor="phoneNumber">Phone number</Label>
-                                    {/* <Field
-                                        id="phoneNumber"
-                                        name="phoneNumber"
-                                        className="w-full p-3 border rounded focus:outline-none mt-2"
-                                        placeholder="Enter phone number"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                            const value = e.target.value;
-                                            const formattedValue = value.replace(/[^0-9]/g, '');
-                                            setFieldValue("phoneNumber", formattedValue);
-                                        }}
-                                    />
-                                    {errors.phoneNumber && touched.phoneNumber && (
-                                        <ErrorMessage
-                                            name="phoneNumber"
-                                            component="div"
-                                            className="text-red-500 text-sm"/>
-                                            )} */}
                                             <div className='relative bottom-3'>
                                        <PhoneNumberSelect
                                        selectedCountryCode={countryCode}
@@ -389,8 +335,12 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                         }
                                     </div>
                                 </div>
-                                <div className='grid md:grid-cols-2 gap-4 w-full relative md:bottom-4 bottom-9'>
-                                    <div className='relative bottom-5'>
+                          
+                                </div> : 
+
+                                <div className='relative  md:h-[55.5vh] h-[40.5vh] overflow-y-auto'>
+                                <div className='grid md:grid-cols-2 gap-4 w-full '>
+                                    <div className=''>
                                         <Label htmlFor="adminFirstName">Admin first name</Label>
                                         <Field
                                             id="adminFirstName"
@@ -412,7 +362,7 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                                 />
                                             )}
                                     </div>
-                                    <div className='relative bottom-5'>
+                                    <div className='relative'>
                                         <Label htmlFor="adminLastName">Admin last name</Label>
                                         <Field
                                             id="adminLastName"
@@ -435,7 +385,7 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                             )}
                                     </div>
                                 </div>
-                                <div className='relative md:bottom-8 bottom-12'>
+                                <div className='relative'>
                                     <Label htmlFor="adminEmail">Admin email address</Label>
                                     <Field
                                         id="adminEmail"
@@ -454,20 +404,31 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                             />
                                         )}
                                 </div>
-                          
-             </div>
-
-                                <div className='md:flex gap-4 justify-end mt-2 md:mb-0 mb-3'>
+                                </div>
+                                }
+                                <div className='w-full border-[#D7D7D7] border-[0.6px]'></div>
+                                <div className='md:flex gap-4 justify-end mt-5 mb-3'>
                                     <Button
                                         variant={'outline'}
                                         type='reset'
                                         className='w-full md:w-36 h-[57px] mb-4 border-solid border-[#142854] text-[#142854]'
-                                        onClick={handleCloseModal}
+                                        onClick={currentStep === 1? handleCloseModal : prevStep}
                                         id='CancelInviteOrganization'
                                     >
-                                        Cancel
+                                       { currentStep === 1? "Cancel" : "Back"}
                                     </Button>
-                                    <Button
+                                  { currentStep === 1? 
+                                  <Button
+                                  id='inviteOrganization'
+                                  variant={'secondary'}
+                                  type='button'
+                                   className={`w-full md:w-36 h-[57px]`}
+                                   onClick={nextStep}
+                                  >
+                                    Continue
+                                  </Button> : 
+                                  
+                                  <Button
                                         id='inviteOrganization'
                                         variant={'secondary'}
                                         className={`w-full md:w-36 h-[57px] ${!isValid || isPhoneNumberError ? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " : " bg-meedlBlue cursor-pointer"}`}
@@ -476,10 +437,10 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
 
                                     >
                                         {isLoading ? (<Isloading/>) : (
-                                            "Invite"
-                                        )}
-
-                                    </Button>
+                                                "Invite"
+                                            )}
+                                        
+                                    </Button>}
                                 </div>
                                 {
                                     <div
