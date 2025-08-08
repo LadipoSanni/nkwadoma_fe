@@ -1,22 +1,22 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 interface StaffProps {
-   setSideTab: string
+   sideTab: string
 }
 
 const initialState: StaffProps = {
-    setSideTab: ""
+    sideTab: ""
 }
 
 export const staffSlice = createSlice({
     name: 'staff',
     initialState,
     reducers: {
-        setCurrentVehicleId: (state, action: PayloadAction<string>) => {
-            state.setSideTab = action.payload;
+        setSideTab: (state, action: PayloadAction<string>) => {
+            state.sideTab = action.payload;
         },
     }
 })
 
-export const {setCurrentVehicleId} = staffSlice.actions
+export const {setSideTab} = staffSlice.actions
 export default staffSlice.reducer

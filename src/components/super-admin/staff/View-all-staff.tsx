@@ -10,7 +10,6 @@ import { MdOutlineAccountBalance } from 'react-icons/md';
 import InviteStaff from './Invite-staff';
 import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { useRouter } from 'next/navigation';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -26,7 +25,6 @@ function Staff({status}: Props) {
     const [currentPage, setCurrentPage] = useState(0);
     const filteredStaff = status? allStaff?.filter(staff => staff?.Status?.toLowerCase() === status.toLowerCase()) : allStaff;
     const [isOpen,setOpen] = useState(false)
-    const router = useRouter()
     const paginationData = React.useMemo(() => {
       return getPaginatedData(currentPage, 10, filteredStaff);
     }, [currentPage, filteredStaff]);
@@ -71,13 +69,13 @@ function Staff({status}: Props) {
         }
       ]
 
-      const handleRowClick = (row: TableRowData) => {
-           console.log(row)
-           router.push('/staff/details')
-      }
+      // const handleRowClick = (row: TableRowData) => {
+      //      console.log(row)
+      //      router.push('/staff/details')
+      // }
 
   return (
-    <div className='mt-7'>
+    <div className='mt-8 px-6'>
       <div className='md:flex justify-between items-center'>
         <SearchInput
           testId='search-input'
@@ -102,13 +100,13 @@ function Staff({status}: Props) {
        <Table 
         tableData={currentPageItems}
         tableHeader={tableHeader}
-        handleRowClick={handleRowClick}
+        handleRowClick={() => {}}
         staticHeader='Name'
         staticColunm='Name'
         icon={MdOutlineAccountBalance}
         sideBarTabName='staff'
         tableCellStyle="h-12"
-        tableHeight={55}
+        tableHeight={58}
         hasNextPage={hasNextPage}
         pageNumber={currentPage}
         totalPages={totalPages}

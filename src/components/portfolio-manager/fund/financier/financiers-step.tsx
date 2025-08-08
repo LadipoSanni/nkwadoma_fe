@@ -149,7 +149,7 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
        organizationEmail: values.organizationEmail,
        organizationName: values.organizationName,
        financierType: values.financierType,
-       
+       amountToInvest: values.amountCommited
 
   }
     const formData = {
@@ -163,6 +163,7 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
         toast({
             description: result.message,
             status: "success",
+            duration: 1000
         });
         if (setIsOpen) {
             setIsOpen(false);

@@ -1,12 +1,12 @@
 import React from 'react'
 import Staff from '@/components/super-admin/staff/View-all-staff'
 
-function Pending() {
+function All() {
   return (
     <div>
-      <Staff status='Pending'/>
+     <Staff/> 
     </div>
   )
 }
 
-export default Pending
+export default All
