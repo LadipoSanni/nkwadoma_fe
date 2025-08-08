@@ -6,12 +6,14 @@ interface SearchInputProps {
     id: string,
     value: string,
     onChange: React.ChangeEventHandler<HTMLInputElement>;
-    style?: string
-    testId?: string
+    style?: string,
+    testId?: string,
+    placeholder?: string,
+
     
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({id,value,onChange,style,testId}: SearchInputProps) => {
+const SearchInput: React.FC<SearchInputProps> = ({id,value,onChange,style,testId, placeholder}: SearchInputProps) => {
     return (
         <div
             className={`${inter.className} ${style} md:w-[20.25rem] w-full text-[14px] h-[2.8125rem] flex items-center gap-2 border border-neutral650 rounded-md p-3`}
@@ -20,7 +22,7 @@ const SearchInput: React.FC<SearchInputProps> = ({id,value,onChange,style,testId
             <input
                 id={id}
                 type="text"
-                placeholder="Search"
+                placeholder={placeholder}
                 className="flex-grow outline-none bg-transparent h-full text-grey450"
                 value={value}
                 onChange={onChange}

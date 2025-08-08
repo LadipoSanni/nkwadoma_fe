@@ -103,7 +103,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
 
                            <Badge id={'loaneeUserName'} variant={"secondary"}
                                   className={`h-[70px] w-[70px] bg-[#E7F5EC] hover:bg-[#E7F5EC] ${cabinetGroteskBold.className} text-[#063F1A] md:text-[#063F1A]  text-[24px] rounded-full `}>
-                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto `}>{userName?.length > 0 ? getFirstLetterOfWord(userName) : ''}</p>
+                               <p className={` w-fit h-fit mt-auto mb-auto mr-auto ml-auto `}>{userName ? getFirstLetterOfWord(userName) : ''}</p>
                            </Badge>
                        }
                    </div>

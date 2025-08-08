@@ -90,6 +90,12 @@ export const loaneeApi = createApi({
                 url: `loanee/loan/detail?cohortLoaneeId=${cohortLoaneeId}`,
                 method: 'GET'
             })
+        }),
+        viewAllLoaneeByAdmins : builder.query({
+            query: (data:{pageSize: number, name?: string}) => ({
+                url: `/loanee/all?${data.name ? `name=${data.name}&` : ''}pageSize=${data.pageSize}&pageNumber=0`,
+                method: 'GET'
+            })
         })
     })
 })
@@ -98,6 +104,7 @@ export const loaneeApi = createApi({
 
 export const {
     // useIsIdentityVerifiedQuery,
+    useViewAllLoaneeByAdminsQuery,
     useViewLoanDetailsOnOnboardingQuery,
     useCheckLoaneeStatusQuery,
      useSaveNextOfKinDetailsMutation,
