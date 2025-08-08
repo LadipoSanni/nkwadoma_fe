@@ -72,11 +72,11 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
     ]
 
     return (
-        <div className={`md:max-h-fit md:w-[55%] sm:w-[100%] w-[100%] px-4 pb-6 md:border-r md:border-r-grey-200 `}>
-            <Tabs  defaultValue={'loanInfo'}>
-              <div className={` py-4 `}>
+        <div className={`  ${styles.containerDiv}  md:w-[55%] sm:w-[100%] w-[100%] px-4 pb-6 md:border-r md:border-r-grey-200 `}>
+            <Tabs className={` grid w-full  grid-rows-2 `} defaultValue={'loanInfo'}>
+              <div className={` py-4 col-span-2  `}>
                   <TabsList className="w-full md:w-fit lg:w-fit ">
-                    <div className={`w-full ${styles.container}  flex h-fit `}>
+                    <div className={`w-full ${styles.tab}  flex h-full `}>
                         <TabsTrigger id={'loanInfo'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanInfo">Loan Information</TabsTrigger>
                         <TabsTrigger id={'repayment'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="repayment">Repayment</TabsTrigger>
                         <TabsTrigger id={'bioDetail'} className={`w-fit ${inter.className} md:hidden lg:hidden flex text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="bioDetails">Bio details</TabsTrigger>
@@ -84,8 +84,8 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
                     </div>
                   </TabsList>
               </div>
-                <div className={`md:max-h-[55vh]  py-0  grid gap-4 w-full  ${styles.container} `}>
-                    <TabsContent value={'loanInfo'} className={` grid gap-3 `}>
+                <div className={`   grid gap-4 w-full h-[100%]  `}>
+                    <TabsContent value={'loanInfo'} className={` bg-blue-50 w-full   grid gap-3 `}>
                         <Details id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.amountReceived} valueType={'currency'} />
                         <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>
                             <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.amountOutstanding} valueType={'currency'} />
@@ -100,10 +100,10 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
                             <Details isLoading={isLoading} id={'repaymentPercentage'}    maxWidth={'100%'} name={'Repayment percentage'} value={data?.repaymentPercentage ? Number(data?.repaymentPercentage)?.toFixed(2) : "0.00"} valueType={'percentage'}  />
                         </div>
                     </TabsContent>
-                    <TabsContent className={'  py-0 h-full  '} value={'repayment'}>
+                    <TabsContent className={'   '} value={'repayment'}>
                         <LoaneeRepayment loaneeId={loaneeId}/>
                     </TabsContent>
-                        <TabsContent value={'bioDetails'} className={` md:w-full flex lg:hidden md:hidden pt-3 w-full   `}>
+                        <TabsContent value={'bioDetails'} className={` md:w-full flex lg:hidden md:hidden w-full   `}>
                             <div className={` bg-grey105 ${isLoading ? 'animate-pulse ' : ''}  w-full rounded-md  `}>
                                 {basicDetails?.map((item, index) => (
                                     <li key={"key" + index} className={'p-4  grid gap-9 rounded-md'}>

@@ -5,6 +5,23 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+.containerDiv{
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    height: 56vh;
+    /*grid-template-columns: 200px;*/
+    grid-template-rows: repeat(6, 1fr);
+
+}
+
+.containerTop{
+
+    grid-row: 2 / 4;
+}
+.containerBottom{
+
+}
 
 .tab{
     display: flex;
