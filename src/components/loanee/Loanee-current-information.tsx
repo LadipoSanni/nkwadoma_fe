@@ -250,6 +250,11 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
                   { id: "3", name: "Brother" },
                   { id: "4", name: "Sister" },
                   { id: "5", name: "Friend" },
+                  { id: "6", name: "Spouse" },
+                   { id: "7", name: "Aunt" },
+                   { id: "8", name: "Uncle" },
+                  { id: "9", name: "Niece" },
+                  { id: "10", name: "Nephew" },
                 ]}
                 setId={(id: string) => {
                   const selected = [
@@ -258,6 +263,11 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
                     { id: "3", name: "Brother" },
                     { id: "4", name: "Sister" },
                     { id: "5", name: "Friend" },
+                    { id: "6", name: "Spouse" },
+                    { id: "7", name: "Aunt" },
+                    { id: "8", name: "Uncle" },
+                    { id: "9", name: "Niece" },
+                    { id: "10", name: "Nephew" },
                   ].find(opt => opt.id === id);
                   if (selected) {
                     setFieldValue('nextOfKinRelationship', selected.name);
