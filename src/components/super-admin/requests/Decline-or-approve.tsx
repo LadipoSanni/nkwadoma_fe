@@ -9,11 +9,11 @@ interface Props{
     setOpen: (condition: boolean) => void
 }
 
-function DeclineOrApprove({requestedBy,invitee,id,role,setOpen}:Props) {
+function DeclineOrApprove({requestedBy,invitee,role,setOpen}:Props) {
 
     const handleClose =() => {
         setOpen(false)
-        id
+        
     }
   return (
     <div className='mt-6'>
