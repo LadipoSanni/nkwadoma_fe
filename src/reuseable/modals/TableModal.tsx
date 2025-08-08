@@ -15,11 +15,12 @@ interface Props {
     icon?: ElementType;
     description?: string;
     width?: string;
+    styeleType?: string
 }   
 
 
 
-export default function TableModal({isOpen, children, closeModal, closeOnOverlayClick,className,style, headerTitle,icon:Icon,description,width}: Props) {
+export default function TableModal({isOpen, children, closeModal, closeOnOverlayClick,className,style, headerTitle,icon:Icon,description,width,styeleType = "styleBody"}: Props) {
 
   
   return (
@@ -33,7 +34,7 @@ export default function TableModal({isOpen, children, closeModal, closeOnOverlay
       onClick={!closeOnOverlayClick ? closeModal : undefined}
       >
       <Dialog.DialogContent
-       className={`${styles.body} ${className || ""} px-5`}
+       className={`${styeleType === "styleBody"? styles.body : styles.bodyTwo} ${className || ""} px-5`}
        style={{ ...style, "--modal-width": width} as React.CSSProperties}
       >
         <div className="mt-3 ">

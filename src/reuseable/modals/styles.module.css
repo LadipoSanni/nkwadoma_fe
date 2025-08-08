@@ -213,14 +213,14 @@
   
     .bodyTwo {
       /* width: var(--modal-width, 30%);  */
-      width: 40%;
+      width: 35%;
     }
   }
 
   @media (min-width: 1280px) {
 
     .bodyTwo {
-      width: 33%;  
+      width: 29%;  
     }
   }
   

@@ -1,7 +1,6 @@
 "use client"
 import React,{useState} from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
-import { Button } from '@/components/ui/button';
 import Table from '@/reuseable/table/Table';
 import { getPaginatedData } from '@/utils/Mock-paginated-data';
 import { formatMonthInDate } from '@/utils/Format'
@@ -9,6 +8,7 @@ import {MdOutlineAssignmentTurnedIn} from 'react-icons/md';
 import Modal from '@/reuseable/modals/TableModal';
 import { requests } from '@/utils/LoanRequestMockData/Index';
 import { Cross2Icon } from "@radix-ui/react-icons";
+import DeclineOrApprove from './Decline-or-approve';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -18,16 +18,20 @@ function ViewAllRequests() {
    const [searchTerm, setSearchTerm] = useState("");
    const [currentPage, setCurrentPage] = useState(0);
    const [isOpen,setOpen] = useState(false)
-   const [name, setName] = useState("")
+   const [requestedBy, setRequestedBy] = useState("")
+   const [invitee, setInvitee] = useState("")
+   const [id,setId] = useState("")
+   const [role,setRole] = useState("")
 
    const { hasNextPage, currentPageItems, totalPages } = getPaginatedData(currentPage, 10, requests);
   
 
        const handleRowClick = (row: TableRowData) => {
-           console.log(row)
            setOpen(true)
-           setName(row?.requested_by as string)
-          
+           setRequestedBy(row?.requested_by as string)
+           setInvitee(row?.invitee as string)
+           setId(row?.id as string)
+           setRole(row?.role as string)
       }
    
        const tableHeader = [
@@ -83,8 +87,8 @@ function ViewAllRequests() {
         tableData={currentPageItems}
         tableHeader={tableHeader}
         handleRowClick={handleRowClick}
-        staticHeader='Name'
-        staticColunm='Name'
+        staticHeader='Requested by'
+        staticColunm='requested_by'
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='requests'
         tableCellStyle="h-12"
@@ -106,9 +110,17 @@ function ViewAllRequests() {
         closeOnOverlayClick={true}
         icon={Cross2Icon}
         headerTitle='Request'
+        styeleType={"styleBodyTwo"}
         >
 
-        {name}
+        <DeclineOrApprove
+          requestedBy={requestedBy}
+          invitee={invitee}
+          id={id}
+          role={role}
+          setOpen={setOpen}
+        />
+         
         </Modal>
       </div>
     </div>

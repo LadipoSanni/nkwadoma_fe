@@ -619,7 +619,7 @@ export const requests = [
     requested_by: "Obinna Nwachukwu",
     invitee: "Chinenye Obi",
     email: "chinenye.obi@example.com",
-    role: "super admin",
+    role: "associate", // Changed from super admin
     status: "Active",
     date_invited: "2025-05-02"
   },
@@ -655,7 +655,7 @@ export const requests = [
     requested_by: "Yusuf Bello",
     invitee: "Nneka Umeh",
     email: "nneka.umeh@example.com",
-    role: "super admin",
+    role: "associate", // Changed from super admin
     status: "Deactivated",
     date_invited: "2025-07-22"
   },
@@ -682,7 +682,7 @@ export const requests = [
     requested_by: "Fatima Yusuf",
     invitee: "Musa Abubakar",
     email: "musa.abubakar@example.com",
-    role: "super admin",
+    role: "associate", // Changed from super admin
     status: "Pending",
     date_invited: "2025-06-08"
   },
@@ -709,7 +709,7 @@ export const requests = [
     requested_by: "Aisha Balogun",
     invitee: "Bukola Balogun",
     email: "bukola.balogun@example.com",
-    role: "super admin",
+    role: "associate", // Changed from super admin
     status: "Active",
     date_invited: "2025-06-25"
   },
@@ -745,7 +745,7 @@ export const requests = [
     requested_by: "Ebere Uche",
     invitee: "Chukwuemeka Obi",
     email: "chukwuemeka.obi@example.com",
-    role: "super admin",
+    role: "associate", // Changed from super admin
     status: "Active",
     date_invited: "2025-08-05"
   },
@@ -772,7 +772,7 @@ export const requests = [
     requested_by: "Oluwaseun Adeyemi",
     invitee: "Tunde Akinwale",
     email: "tunde.akinwale@example.com",
-    role: "super admin",
+    role: "associate", // Changed from super admin
     status: "Deactivated",
     date_invited: "2025-08-06"
   }
