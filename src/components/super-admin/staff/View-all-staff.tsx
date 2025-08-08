@@ -59,7 +59,7 @@ function Staff({status}: Props) {
           title: "Status",  
           sortable: true, 
           id: "Status", 
-          selector: (row: TableRowData) => <span className={`${row.Status === "Active"? "bg-[#E6F2EA] text-[#045620] " :row.Status === "Pending"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#FBE9E9] text-[#971B17] "} rounded-lg  px-3 `}>{row.Status}</span> 
+          selector: (row: TableRowData) => <span className={`${row.Status === "Active"? "bg-[#E6F2EA] text-[#045620] " :row.Status === "Pending"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#FBE9E9] text-[#971B17] "} rounded-lg  px-2 `}>{row.Status}</span> 
         },
         { 
           title: "Invited",  
@@ -106,13 +106,14 @@ function Staff({status}: Props) {
         icon={MdOutlineAccountBalance}
         sideBarTabName='staff'
         tableCellStyle="h-12"
-        tableHeight={58}
+        tableHeight={59}
         hasNextPage={hasNextPage}
         pageNumber={currentPage}
         totalPages={totalPages}
         setPageNumber={setCurrentPage}
          sx='cursor-pointer'
          condition={true}
+         showKirkBabel={true}
        />
       </div>
       <Modal

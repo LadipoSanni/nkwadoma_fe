@@ -594,6 +594,189 @@ export const fund = [
   { "Name": "Ifeanyi Uzo", "Email": "ifeanyi.uzo@example.com", "Role": "portfolio manager", "Status": "Deactivated", "DateInvited": "2025-07-02" },
   { "Name": "Tunde Akinwale", "Email": "tunde.akinwale@example.com", "Role": "super admin", "Status": "Deactivated", "DateInvited": "2025-08-06" }
 ]
+
+export const requests = [
+  {
+    id: 1,
+    requested_by: "Adebayo Johnson",
+    invitee: "Zainab Ibrahim",
+    email: "zainab.ibrahim@example.com",
+    role: "admin",
+    status: "Active",
+    date_invited: "2025-07-15"
+  },
+  {
+    id: 2,
+    requested_by: "Chioma Eze",
+    invitee: "David Okonkwo",
+    email: "david.okonkwo@example.com",
+    role: "portfolio manager",
+    status: "Pending",
+    date_invited: "2025-06-11"
+  },
+  {
+    id: 3,
+    requested_by: "Obinna Nwachukwu",
+    invitee: "Chinenye Obi",
+    email: "chinenye.obi@example.com",
+    role: "associate", // Changed from super admin
+    status: "Active",
+    date_invited: "2025-05-02"
+  },
+  {
+    id: 4,
+    requested_by: "Folake Adebayo",
+    invitee: "James Ogunleye",
+    email: "james.ogunleye@example.com",
+    role: "admin",
+    status: "Deactivated",
+    date_invited: "2025-04-29"
+  },
+  {
+    id: 5,
+    requested_by: "Emeka Okafor",
+    invitee: "Amaka Eze",
+    email: "amaka.eze@example.com",
+    role: "portfolio manager",
+    status: "Active",
+    date_invited: "2025-08-01"
+  },
+  {
+    id: 6,
+    requested_by: "Ngozi Onyema",
+    invitee: "Taiwo Adegbite",
+    email: "taiwo.adegbite@example.com",
+    role: "admin",
+    status: "Pending",
+    date_invited: "2025-08-03"
+  },
+  {
+    id: 7,
+    requested_by: "Yusuf Bello",
+    invitee: "Nneka Umeh",
+    email: "nneka.umeh@example.com",
+    role: "associate", // Changed from super admin
+    status: "Deactivated",
+    date_invited: "2025-07-22"
+  },
+  {
+    id: 8,
+    requested_by: "Amina Mohammed",
+    invitee: "Kennedy Ojo",
+    email: "kennedy.ojo@example.com",
+    role: "portfolio manager",
+    status: "Active",
+    date_invited: "2025-08-02"
+  },
+  {
+    id: 9,
+    requested_by: "Segun Adeleke",
+    invitee: "Adaobi Nwachukwu",
+    email: "adaobi.nwachukwu@example.com",
+    role: "admin",
+    status: "Active",
+    date_invited: "2025-07-10"
+  },
+  {
+    id: 10,
+    requested_by: "Fatima Yusuf",
+    invitee: "Musa Abubakar",
+    email: "musa.abubakar@example.com",
+    role: "associate", // Changed from super admin
+    status: "Pending",
+    date_invited: "2025-06-08"
+  },
+  {
+    id: 11,
+    requested_by: "Kunle Adebisi",
+    invitee: "Grace Oladipo",
+    email: "grace.oladipo@example.com",
+    role: "portfolio manager",
+    status: "Active",
+    date_invited: "2025-07-29"
+  },
+  {
+    id: 12,
+    requested_by: "Bola Tinubu",
+    invitee: "Femi Afolabi",
+    email: "femi.afolabi@example.com",
+    role: "admin",
+    status: "Deactivated",
+    date_invited: "2025-07-05"
+  },
+  {
+    id: 13,
+    requested_by: "Aisha Balogun",
+    invitee: "Bukola Balogun",
+    email: "bukola.balogun@example.com",
+    role: "associate", // Changed from super admin
+    status: "Active",
+    date_invited: "2025-06-25"
+  },
+  {
+    id: 14,
+    requested_by: "Tunde Lawal",
+    invitee: "Samson Eze",
+    email: "samson.eze@example.com",
+    role: "portfolio manager",
+    status: "Pending",
+    date_invited: "2025-08-04"
+  },
+  {
+    id: 15,
+    requested_by: "Chidinma Okoro",
+    invitee: "Ngozi Anyaegbunam",
+    email: "ngozi.anyaegbunam@example.com",
+    role: "admin",
+    status: "Active",
+    date_invited: "2025-06-18"
+  },
+  {
+    id: 16,
+    requested_by: "Mohammed Sani",
+    invitee: "Ifeanyi Uzo",
+    email: "ifeanyi.uzo@example.com",
+    role: "portfolio manager",
+    status: "Deactivated",
+    date_invited: "2025-07-02"
+  },
+  {
+    id: 17,
+    requested_by: "Ebere Uche",
+    invitee: "Chukwuemeka Obi",
+    email: "chukwuemeka.obi@example.com",
+    role: "associate", // Changed from super admin
+    status: "Active",
+    date_invited: "2025-08-05"
+  },
+  {
+    id: 18,
+    requested_by: "Gbenga Ojo",
+    invitee: "Abiola Mustapha",
+    email: "abiola.mustapha@example.com",
+    role: "admin",
+    status: "Pending",
+    date_invited: "2025-05-29"
+  },
+  {
+    id: 19,
+    requested_by: "Halima Abubakar",
+    invitee: "Josephine Okafor",
+    email: "josephine.okafor@example.com",
+    role: "portfolio manager",
+    status: "Active",
+    date_invited: "2025-07-28"
+  },
+  {
+    id: 20,
+    requested_by: "Oluwaseun Adeyemi",
+    invitee: "Tunde Akinwale",
+    email: "tunde.akinwale@example.com",
+    role: "associate", // Changed from super admin
+    status: "Deactivated",
+    date_invited: "2025-08-06"
+  }
+];
   
 
   
