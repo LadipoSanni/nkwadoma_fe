@@ -10,6 +10,7 @@ import { MdOutlineAccountBalance } from 'react-icons/md';
 import InviteStaff from './Invite-staff';
 import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
+import Detail from './Detail';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -28,12 +29,29 @@ function Staff({status}: Props) {
     const paginationData = React.useMemo(() => {
       return getPaginatedData(currentPage, 10, filteredStaff);
     }, [currentPage, filteredStaff]);
-    
     const { hasNextPage, currentPageItems, totalPages } = paginationData;
+    const [modal,setModal] = useState("invite")
+    // const [id,setId] = useState("")
+     const [role,setRole] = useState("")
+     const [stat,setStatus] = useState('')
+     const [email,setEmail] = useState('')
+     const [name,setName] = useState('')
     
    const handleOpen =() => {
+    setModal('invite')
     setOpen(true)
    }
+
+
+   const handleRowClick = (row: TableRowData) => {
+    setModal('detail')
+    setOpen(true)
+    setStatus(row?.Status as string)
+    setName(row?.Name as string)
+    setEmail(row?.Email as string)
+    setRole(row?.Role  as string)
+}
+
 
 
     const tableHeader = [
@@ -69,10 +87,6 @@ function Staff({status}: Props) {
         }
       ]
 
-      // const handleRowClick = (row: TableRowData) => {
-      //      console.log(row)
-      //      router.push('/staff/details')
-      // }
 
   return (
     <div className='mt-8 px-6'>
@@ -100,7 +114,7 @@ function Staff({status}: Props) {
        <Table 
         tableData={currentPageItems}
         tableHeader={tableHeader}
-        handleRowClick={() => {}}
+        handleRowClick={handleRowClick}
         staticHeader='Name'
         staticColunm='Name'
         icon={MdOutlineAccountBalance}
@@ -123,9 +137,20 @@ function Staff({status}: Props) {
         closeOnOverlayClick={true}
         icon={Cross2Icon}
         width='36%'
-         headerTitle='Invite staff'
+         headerTitle={modal === "invite"?'Invite staff' : ""}
+         styeleType={modal === "invite"? "styleBody" : "styleBodyTwo"}
       >
-        <InviteStaff setIsOpen={setOpen}/>
+       { modal === "invite" ?
+        <InviteStaff setIsOpen={setOpen}/> : 
+         <div className='mt-10'>
+          <Detail
+          role={role}
+          name={name}
+          email={email}
+          status={stat}
+          />
+          </div>
+        }
       </Modal>
     </div>
   )

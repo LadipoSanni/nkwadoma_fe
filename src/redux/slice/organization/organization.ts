@@ -14,6 +14,8 @@ interface initialFormValue{
     logoImage: string,
     coverImage: string,
     phoneNumber: string,
+    countryCode: string
+
 }
 
 interface OrganizationSliceState {
@@ -22,7 +24,7 @@ interface OrganizationSliceState {
     organizationDetailTab: string;
     loaneeId: string;
     organizationStatus: string;
-    organizationInitialState: initialFormValue | null
+    organizationInitialState: initialFormValue
 }
 
 const initialState:OrganizationSliceState= {
@@ -31,7 +33,22 @@ const initialState:OrganizationSliceState= {
     organizationDetailTab: "details",
     loaneeId: "",
     organizationStatus: "",
-    organizationInitialState: null
+    organizationInitialState: {
+        name:  "",
+        email:  "",
+        websiteAddress: "",
+        industry:  "",
+        serviceOffering:  "",
+        rcNumber:  "",
+        tin:   "",
+        adminFirstName:  "",
+        adminLastName: "",
+        adminEmail: "",
+        logoImage:"",
+        coverImage: "",
+        phoneNumber: "",
+        countryCode: "NG"
+    }
 }
 
 export const organizationSlice = createSlice({
@@ -66,7 +83,22 @@ export const organizationSlice = createSlice({
            state.organizationInitialState = action.payload
         },
         resetOrganizationInitialState:(state) => {
-            state.organizationInitialState = null 
+            state.organizationInitialState =  {
+                name:  "",
+                email:  "",
+                websiteAddress: "",
+                industry:  "",
+                serviceOffering:  "",
+                rcNumber:  "",
+                tin:   "",
+                adminFirstName:  "",
+                adminLastName: "",
+                adminEmail: "",
+                logoImage:"",
+                coverImage: "",
+                phoneNumber: "",
+                countryCode: "NG"
+            }
         }
 
     }

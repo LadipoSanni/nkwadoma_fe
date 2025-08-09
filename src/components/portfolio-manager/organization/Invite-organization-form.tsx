@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import {Button} from '@/components/ui/button';
 import {Formik, Form, Field, ErrorMessage} from 'formik'
 import {Label} from '@/components/ui/label';
@@ -13,8 +13,8 @@ import { setOrganizationTabStatus } from '@/redux/slice/organization/organizatio
 import PhoneNumberSelect from '@/reuseable/select/phoneNumberSelect/Index';
 import { formatInternationalNumber } from '@/utils/phoneNumber';
 import CenterMultistep from '@/reuseable/multiStep-component/Center-multistep';
-import { organizationValidationSchema } from '@/utils/validation-schema';
-import { setOrganizationInitialState } from '@/redux/slice/organization/organization';
+import { organizationValidationSchema,stepTwo1ValidationSchema } from '@/utils/validation-schema';
+import { setOrganizationInitialState,resetOrganizationInitialState } from '@/redux/slice/organization/organization';
 
 interface ApiError {
     status: number;
@@ -52,7 +52,7 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
     const [currentStep, setCurrentStep] = useState(1);
     const industries = ["EDUCATION", "BANKING"]
     const serviceOfferings = ["TRAINING", "FINANCIAL ADVISORY", "INSURANCE SERVICES", "LOAN SERVICES", "ACCOUNTING AND BOOKKEEPING", "INVESTMENT ADVISORY", "RISK MANAGEMENT", "CORPORATE FINANCE", "TAX SERVICES", "BANKING SERVICES", "CRYPTOCURRENCY SERVICES", "SOFTWARE DEVELOPMENT", "WEB DEVELOPMENT", "CLOUD SERVICES", "CYBERSECURITY SERVICES", "DATABASE MANAGEMENT", "AI AND MACHINE LEARNING", "BUSINESS INTELLIGENCE", "DEVOPS SERVICES", "BLOCKCHAIN SERVICES", "DISTRIBUTION SERVICES", "MARKETING AND BRANDING", "SALES SERVICES", "CUSTOMER SERVICE AND SUPPORT", "SUSTAINABILITY SERVICES", "CONSUMER ENGAGEMENT AND LOYALTY", "TECHNOLOGY AND INNOVATION", "HOTEL SERVICES", "RESTAURANT SERVICES", "EVENT PLANNING", "TRAVEL AND TOUR SERVICES", "CORPORATE RETREATS", "SPA AND WELLNESS", "TRANSPORTATION", "FILM AND TELEVISION", "MUSIC", "THEATRE", "SPORTS AND FITNESS", "GAMING", "EVENT AND PARTIES", "TELECOMMUNICATION", "PHOTOGRAPHY"];
-     const [countryCode, setCountryCode] = useState("NG")
+     const [countryCode, setCountryCode] = useState(initialValue?.countryCode || "NG")
      const [isPhoneNumberError,setPhoneNumberError] = useState(false)
 
     const [error, setError] = useState("");
@@ -64,6 +64,7 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
         if (setIsOpen) {
             setIsOpen(false);
         }
+        store.dispatch(resetOrganizationInitialState())
     }
 
     const nextStep = () => setCurrentStep(currentStep + 1);
@@ -133,19 +134,31 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
 
 
     }
+    
 
     return (
         <div id='inviteOrganizationForm'>
             <Formik
-                initialValues={initialFormValue}
-                onSubmit={handleSubmit}
-                validateOnMount={true}
-                validationSchema={organizationValidationSchema}
-                validateOnChange={true}
-                validateOnBlur={true}  
+                 initialValues={initialFormValue}
+                 onSubmit={handleSubmit}
+                 validateOnMount={true}
+                 validationSchema={currentStep === 1 ? stepTwo1ValidationSchema : organizationValidationSchema}
+                 validateOnChange={true}
+                 validateOnBlur={true}
+                //  enableReinitialize={true}
             >
                 {
-                    ({errors, isValid, touched, setFieldValue, values,setFieldTouched,setFieldError,handleBlur}) => (
+                    ({errors, isValid, touched, setFieldValue, values,setFieldTouched,setFieldError,handleBlur}) => {
+
+                        useEffect(() => {
+                            if (currentStep === 1) {
+                              Object.entries(initialFormValue).forEach(([key, value]) => {
+                                setFieldValue(key, value);
+                              });
+                            }
+                          }, [currentStep, initialFormValue, setFieldValue]);
+                        
+                        return (
                         <Form className={`${inter.className}`}>
                             <div >
                                 <div>
@@ -172,6 +185,7 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                             const value = e.target.value;
                                             const formattedValue = value.replace(/^[\s]+|[^A-Za-z\s!-]/g, '');
                                             setFieldValue("name", formattedValue);
+                                            handleFormChange("name", formattedValue);
                                         }}
                                     />
                                     {
@@ -189,9 +203,16 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                             <div className='relative bottom-3'>
                                        <PhoneNumberSelect
                                        selectedCountryCode={countryCode}
-                                       setSelectedCountryCode={(code) => setCountryCode(code)}
+                                       setSelectedCountryCode={(code) => {
+                                        setCountryCode(code)
+                                        handleFormChange("countryCode", code);
+
+                                    }}
                                        phoneNumber={values.phoneNumber}
-                                       setPhoneNumber={(num) => setFieldValue('phoneNumber', num)}
+                                       setPhoneNumber={(num) => { 
+                                        setFieldValue('phoneNumber', num)
+                                        handleFormChange("phoneNumber", num);
+                                    }  }
                                      label=''
                                        placeholder="Select code"
                                        id="phoneNumber"
@@ -209,7 +230,10 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                         name="email"
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
                                         placeholder="Enter email address"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("email", e.target.value.replace(/\s+/g, ''))}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            setFieldValue("email", e.target.value.replace(/\s+/g, ''))
+                                            handleFormChange("email", e.target.value);
+                                        }}
                                     />
 
                                     {
@@ -230,6 +254,10 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                         className="w-full p-3 border rounded focus:outline-none mt-2"
                                         placeholder="Enter website"
                                         onFocus={() => setFieldTouched("websiteAddress", true, false)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            setFieldValue("websiteAddress", e.target.value);
+                                            handleFormChange("websiteAddress", e.target.value);
+                                          }}
                                     />
                                       {
                                         errors.websiteAddress && touched.websiteAddress && (
@@ -249,7 +277,10 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                             id='industryId'
                                             selectContent={industries}
                                             value={values.industry}
-                                            onChange={(value) => setFieldValue("industry", value)}
+                                            onChange={(value) => {
+                                                setFieldValue("industry", value)
+                                                handleFormChange("industry", value);
+                                            }}
                                             name="industry"
                                             placeHolder='Select industry'
                                             isItemDisabled={(item) => item !== 'EDUCATION'}
@@ -271,7 +302,10 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                             id='serviceOffering'
                                             selectContent={serviceOfferings}
                                             value={values.serviceOffering}
-                                            onChange={(value) => setFieldValue("serviceOffering", value)}
+                                            onChange={(value) => {
+                                                setFieldValue("serviceOffering", value)
+                                                handleFormChange("serviceOffering", value);
+                                            }}
                                             name="serviceOffering"
                                             placeHolder='Select service'
                                             isItemDisabled={(item) => item !== 'TRAINING'}
@@ -300,6 +334,10 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                             //     const formattedValue = value.replace(/[^0-9]/g, '');
                                             //     setFieldValue("rcNumber", formattedValue);
                                             //    }}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                setFieldValue("rcNumber", e.target.value)
+                                                handleFormChange("rcNumber", e.target.value);
+                                            }}
                                         />
                                         {
                                             errors.rcNumber && touched.rcNumber && (
@@ -318,10 +356,15 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                             name="tin"
                                             className="w-full p-3 border rounded focus:outline-none mt-3"
                                             placeholder="Enter tax number"
+                                            // onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
+                                            //     setFieldTouched("tin", true, false);
+                                            //     setFieldValue("tin", e.target.value, true);
+                                            //   }}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                 const value = e.target.value;
                                                 const formattedValue = value.replace(/[^A-Za-z0-9-]/g, '').replace(/^-/, '');
                                                 setFieldValue("tin", formattedValue);
+                                                handleFormChange("tin", formattedValue);
                                             }}
                                         />
                                         {
@@ -351,6 +394,7 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                                 const value = e.target.value;
                                                 const formattedValue = value.replace(/[^A-Za-z]/g, '');
                                                 setFieldValue("adminFirstName", formattedValue);
+                                                handleFormChange("adminFirstName", formattedValue);
                                             }}
                                         />
                                         {
@@ -373,6 +417,7 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                                 const value = e.target.value;
                                                 const formattedValue = value.replace(/[^A-Za-z]/g, '');
                                                 setFieldValue("adminLastName", formattedValue);
+                                                handleFormChange("adminLastName", formattedValue);
                                             }}
                                         />
                                         {
@@ -392,8 +437,14 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                         name="adminEmail"
                                         className="w-full p-3 border rounded focus:outline-none mt-3"
                                         placeholder="Enter admin email address"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFieldValue("adminEmail", e.target.value.replace(/\s+/g, ''))}
-                                        onFocus={() => setFieldTouched("adminEmail", true, false)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            setFieldValue("adminEmail", e.target.value.replace(/\s+/g, ''))
+                                            handleFormChange("adminEmail",e.target.value);
+                                        }}
+                                        onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
+                                            setFieldTouched("adminEmail", true, false);
+                                            setFieldValue("adminEmail", e.target.value, true); 
+                                          }}
                                     />
                                     {
                                         errors.adminEmail && touched.adminEmail && (
@@ -418,20 +469,26 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                        { currentStep === 1? "Cancel" : "Back"}
                                     </Button>
                                   { currentStep === 1? 
-                                  <Button
-                                  id='inviteOrganization'
-                                  variant={'secondary'}
+                                  <button
+                                  id='continueOrganization'
                                   type='button'
-                                   className={`w-full md:w-36 h-[57px]`}
-                                   onClick={nextStep}
-                                  >
+                                  className={`w-full md:w-36 h-[57px]  rounded-md ${
+                                    !isValid || isPhoneNumberError || !values.phoneNumber ? " cursor-not-allowed bg-[#D7D7D7] hover:bg-[#D7D7D7] text-white "  : "bg-meedlBlue text-meedlWhite hover:bg-[#435376] focus:bg-[#142854]"
+                                  }`}
+                                  onClick={(e) => {
+                                    e.preventDefault();  
+                                    if (isValid && !isPhoneNumberError && values.phoneNumber) {
+                                        nextStep();
+                                      }
+                                }}
+                                  disabled={!isValid || isPhoneNumberError || !values.phoneNumber}
+                                >
                                     Continue
-                                  </Button> : 
+                                  </button> : 
                                   
-                                  <Button
+                                  <button
                                         id='inviteOrganization'
-                                        variant={'secondary'}
-                                        className={`w-full md:w-36 h-[57px] ${!isValid || isPhoneNumberError ? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " : " bg-meedlBlue cursor-pointer"}`}
+                                        className={`w-full md:w-36 h-[57px] rounded-md text-white ${!isValid || isPhoneNumberError ? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " : " bg-meedlBlue cursor-pointer"}`}
                                         type='submit'
                                         disabled={!isValid || isPhoneNumberError}
 
@@ -440,7 +497,7 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                                 "Invite"
                                             )}
                                         
-                                    </Button>}
+                                    </button>}
                                 </div>
                                 {
                                     <div
@@ -449,6 +506,7 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                             </div>
                         </Form>
                     )
+                }
                 }
 
             </Formik>

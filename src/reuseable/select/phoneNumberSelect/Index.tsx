@@ -125,19 +125,47 @@ const PhoneNumberSelect: React.FC<PhoneNumberSelectProps> = ({
   }, [selectedCountry?.code, phoneNumber, validatePhoneNumber]);
 
 
+  // const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const raw = e.target.value.replace(/\D/g, '');
+  //    setPhoneNumber(raw);
+
+  //   if (localError) {
+  //     setLocalError(null);
+  //     setFieldError(name, undefined);
+  //     setError(false);
+  //   }
+  // };
+
+  // const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  //   onBlur(e);
+  //   if (selectedCountry?.code && phoneNumber) {
+  //     validatePhoneNumber(selectedCountry.code, phoneNumber);
+  //   }
+  // };
+
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/\D/g, '');
-     setPhoneNumber(raw);
-
+    setPhoneNumber(raw);
+    
     if (localError) {
       setLocalError(null);
       setFieldError(name, undefined);
       setError(false);
     }
+    
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      if (selectedCountry?.code && raw) {
+        validatePhoneNumber(selectedCountry.code, raw);
+      }
+    }, 300);
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     onBlur(e);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
     if (selectedCountry?.code && phoneNumber) {
       validatePhoneNumber(selectedCountry.code, phoneNumber);
     }
