@@ -21,6 +21,7 @@ const OrganizationViewLoaneeProfile = () => {
         cohortId: notificationCohortId ||  cohortId,
     }
     const  {data, isLoading, isFetching} = useViewLoaneeInACohortDetailsQuery(props)
+
     // const  handleBack = () => {
     //     // if(userRole === 'PORTFOLIO_MANAGER'){
     //     //     router.push('/organizations/loanees/uploaded')

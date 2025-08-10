@@ -96,7 +96,13 @@ export const loaneeApi = createApi({
                 url: `/loanee/all?${data.name ? `name=${data.name}&` : ''}pageSize=${data.pageSize}&pageNumber=0`,
                 method: 'GET'
             })
-        })
+        }),
+        viewAllLoansTotalCountsByAdmins : builder.query({
+           query: () => ({
+               url: `/loan/total`,
+               method: 'GET'
+           })
+        }),
     })
 })
 
@@ -104,6 +110,7 @@ export const loaneeApi = createApi({
 
 export const {
     // useIsIdentityVerifiedQuery,
+    useViewAllLoansTotalCountsByAdminsQuery,
     useViewAllLoaneeByAdminsQuery,
     useViewLoanDetailsOnOnboardingQuery,
     useCheckLoaneeStatusQuery,

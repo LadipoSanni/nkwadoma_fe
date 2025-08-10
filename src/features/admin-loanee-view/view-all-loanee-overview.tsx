@@ -8,7 +8,7 @@ import Table from '@/reuseable/table/Table';
 // import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount, formateDigits} from "@/utils/Format";
 import {useRouter} from "next/navigation";
-import {useViewAllLoaneeByAdminsQuery} from "@/service/users/Loanee_query";
+import {useViewAllLoaneeByAdminsQuery, useViewAllLoansTotalCountsByAdminsQuery} from "@/service/users/Loanee_query";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -24,6 +24,8 @@ const ViewAllLoaneeOverview = () => {
 
     const {data, isLoading, isFetching } = useViewAllLoaneeByAdminsQuery({pageSize, name})
 
+    const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery({})
+    console.log('loanCounts:',loanCounts)
     // const [pageSize ] = useState(10)
     useEffect(() => {
         if(data && data?.data) {
@@ -31,8 +33,11 @@ const ViewAllLoaneeOverview = () => {
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
         }
+        console.log('after settin','nextPage: ', hasNextPage, 'pageNumber: ', pageNumber, 'totalPage: ', totalPage)
 
-    },[data])
+    },[data, data?.data])
+
+    console.log('nextPage: ', hasNextPage, 'pageNumber: ', pageNumber, 'totalPage: ', totalPage)
     const router = useRouter()
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -61,9 +66,11 @@ const ViewAllLoaneeOverview = () => {
                 data-testid={'viewAllLoaneeTotalOverviewContainer'}
                 className={` w-full h-full flex gap-4   ${styles.overviewCard}   `}
             >
-                <Details isLoading={false} sx={`  w-[20em] md:w-[100%]  `} name={'No. of loanees'} valueType={'digit'}  id={'totalNumberOfLoanees'} showAsWholeNumber={false}  value={'0'}/>
-                <Details isLoading={false} sx={` w-[20em] md:w-[100%] `} id={'historicalDept'} showAsWholeNumber={false}    name={'Historical debt'} value={''} valueType={'currency'}  />
-                <Details isLoading={false} sx={` w-[20em] md:w-[100%] `} id={'totalOutstanding'} showAsWholeNumber={false}    name={'Total outstanding'} value={''} valueType={'currency'}  />
+                <Details isLoading={isLoading || isFetching || isLoadingLoanCounts || isFetchingCounts} sx={`  w-[20em] md:w-[100%]  `} name={'No. of loanees'} valueType={'digit'}  id={'totalNumberOfLoanees'} showAsWholeNumber={false}  value={loanCounts?.data ?  loanCounts?.data?.numberOfLoanee :'0'}/>
+                <Details isLoading={isLoading || isFetching || isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={'historicalDept'} showAsWholeNumber={false}    name={'Historical debt'} value={loanCounts?.data ?  loanCounts?.data?.totalAmountReceived : ''} valueType={'currency'}  />
+                <Details isLoading={isLoading || isFetching || isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={'totalOutstanding'} showAsWholeNumber={false}    name={'Total outstanding'} value={loanCounts?.data ?  loanCounts?.data?.totalAmountOutstanding : ''} valueType={'currency'}  />
+                <Details isLoading={isLoading || isFetching || isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={'totalAmountRepaid'} showAsWholeNumber={false}    name={'Total amount repaid'} value={loanCounts?.data ?  loanCounts?.data?.totalAmountRepaid :''} valueType={'currency'}  />
+
             </div>
             <div
                 id={'tableAndSearchContainer'}
@@ -96,7 +103,7 @@ const ViewAllLoaneeOverview = () => {
                     pageNumber={pageNumber}
                     setPageNumber={setPageNumber}
                     totalPages={totalPage}
-                    isLoading={isLoading || isFetching}
+                    isLoading={isLoading || isFetching || isLoadingLoanCounts || isFetchingCounts}
                     // isLoading={isLoading|| isFetching|| isLoadinFetchedData || isFetchingSearchedData}
                 />
             </div>
