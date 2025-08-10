@@ -52,7 +52,7 @@ describe("ViewAllStaff", () => {
         render(  <Providers>
             <Staff />
             </Providers>);
-        const searchInput = screen.getByPlaceholderText('Search');
+        const searchInput = screen.getByTestId('search-input');
         
         fireEvent.change(searchInput, { target: { value: 'John' } });
         expect(searchInput).toHaveValue('John');
