@@ -31,11 +31,13 @@ function Staff({status}: Props) {
     }, [currentPage, filteredStaff]);
     const { hasNextPage, currentPageItems, totalPages } = paginationData;
     const [modal,setModal] = useState("invite")
-    // const [id,setId] = useState("")
+    const [id,setId] = useState("")
      const [role,setRole] = useState("")
      const [stat,setStatus] = useState('')
      const [email,setEmail] = useState('')
      const [name,setName] = useState('')
+     const [date, setInvitedDate] = useState('')
+     const [isSwitch, setSwitch] = useState(false);
     
    const handleOpen =() => {
     setModal('invite')
@@ -50,6 +52,8 @@ function Staff({status}: Props) {
     setName(row?.Name as string)
     setEmail(row?.Email as string)
     setRole(row?.Role  as string)
+    setInvitedDate(row?.DateInvited as string)
+    setId(row?.id as string)
 }
 
 
@@ -77,7 +81,7 @@ function Staff({status}: Props) {
           title: "Status",  
           sortable: true, 
           id: "Status", 
-          selector: (row: TableRowData) => <span className={`${row.Status === "Active"? "bg-[#E6F2EA] text-[#045620] " :row.Status === "Pending"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#FBE9E9] text-[#971B17] "} rounded-lg  px-2 `}>{row.Status}</span> 
+          selector: (row: TableRowData) => <span className={`${row.Status === "Active"? "bg-[#E6F2EA] text-[#045620] " :row.Status === "Pending"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#FBE9E9] text-[#971B17]"} rounded-lg  px-2 `}>{row.Status}</span> 
         },
         { 
           title: "Invited",  
@@ -126,28 +130,36 @@ function Staff({status}: Props) {
         totalPages={totalPages}
         setPageNumber={setCurrentPage}
          sx='cursor-pointer'
-         condition={true}
-         showKirkBabel={true}
+        //  condition={true}
+        //  showKirkBabel={true}
        />
       </div>
       <Modal
         isOpen={isOpen}
-        closeModal={() => setOpen(false)}
+        closeModal={() => {
+          setOpen(false)
+          setSwitch(false)
+        }}
         className='pb-1'
         closeOnOverlayClick={true}
         icon={Cross2Icon}
         width='36%'
-         headerTitle={modal === "invite"?'Invite staff' : ""}
-         styeleType={modal === "invite"? "styleBody" : "styleBodyTwo"}
+         headerTitle={modal === "invite"?'Invite staff' : isSwitch && stat === "Active"? "Deactivate reason" :  isSwitch && stat === "Deactivated"? "Activate reason" : ""}
+         styeleType={modal === "invite" || isSwitch? "styleBody" :  "styleBodyTwo"}
       >
        { modal === "invite" ?
         <InviteStaff setIsOpen={setOpen}/> : 
-         <div className='mt-10'>
+         <div className='mt-16'>
           <Detail
           role={role}
           name={name}
           email={email}
           status={stat}
+          dateInvited={date}
+          setSwitch={setSwitch}
+          isSwitch={isSwitch}
+          id={id}
+          setIsOpen={setOpen}
           />
           </div>
         }

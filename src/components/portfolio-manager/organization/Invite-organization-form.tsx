@@ -148,7 +148,7 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                 //  enableReinitialize={true}
             >
                 {
-                    ({errors, isValid, touched, setFieldValue, values,setFieldTouched,setFieldError,handleBlur}) => {
+                    ({errors, isValid, touched, setFieldValue, values,setFieldTouched,setFieldError,handleBlur,validateForm}) => {
 
                         useEffect(() => {
                             if (currentStep === 1) {
@@ -156,7 +156,10 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                 setFieldValue(key, value);
                               });
                             }
-                          }, [currentStep, initialFormValue, setFieldValue]);
+                            if (currentStep === 2) {
+                                validateForm();
+                              }
+                          }, [currentStep, initialFormValue, setFieldValue,, validateForm]);
                         
                         return (
                         <Form className={`${inter.className}`}>
@@ -356,10 +359,10 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                             name="tin"
                                             className="w-full p-3 border rounded focus:outline-none mt-3"
                                             placeholder="Enter tax number"
-                                            // onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
-                                            //     setFieldTouched("tin", true, false);
-                                            //     setFieldValue("tin", e.target.value, true);
-                                            //   }}
+                                            onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
+                                                setFieldTouched("tin", true, false);
+                                                setFieldValue("tin", e.target.value, true);
+                                              }}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                 const value = e.target.value;
                                                 const formattedValue = value.replace(/[^A-Za-z0-9-]/g, '').replace(/^-/, '');
@@ -489,7 +492,6 @@ function InviteOrganizationForm({setIsOpen,organizationRefetch,tabType}: props) 
                                   <button
                                         id='inviteOrganization'
                                         className={`w-full md:w-36 h-[57px] rounded-md text-white ${!isValid || isPhoneNumberError ? "bg-[#D7D7D7] hover:bg-[#D7D7D7] " : " bg-meedlBlue cursor-pointer"}`}
-                                        type='submit'
                                         disabled={!isValid || isPhoneNumberError}
 
                                     >
