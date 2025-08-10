@@ -92,8 +92,8 @@ export const loaneeApi = createApi({
             })
         }),
         viewAllLoaneeByAdmins : builder.query({
-            query: (data:{pageSize: number, name?: string}) => ({
-                url: `/loanee/all?${data.name ? `name=${data.name}&` : ''}pageSize=${data.pageSize}&pageNumber=0`,
+            query: (data:{pageSize: number, name?: string, pageNumber: number}) => ({
+                url: `/loanee/all?${data.name ? `name=${data.name}&` : ''}pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
                 method: 'GET'
             })
         }),

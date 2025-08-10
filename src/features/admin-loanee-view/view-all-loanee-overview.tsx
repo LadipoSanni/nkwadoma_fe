@@ -18,26 +18,20 @@ const ViewAllLoaneeOverview = () => {
     const [hasNextPage, setNextPage ] = useState(false)
     const [totalPage,setTotalPage] = useState(0)
     const [pageSize] = useState(10)
-
     const [pageNumber,setPageNumber] = useState(0)
     const name = searchTerm ? searchTerm : undefined
-
-    const {data, isLoading, isFetching } = useViewAllLoaneeByAdminsQuery({pageSize, name})
-
+    const {data, isLoading, isFetching } = useViewAllLoaneeByAdminsQuery({pageSize, name, pageNumber})
     const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery({})
-    console.log('loanCounts:',loanCounts)
-    // const [pageSize ] = useState(10)
+
     useEffect(() => {
         if(data && data?.data) {
+            console.log('doon: ', data?.data?.pageNumber)
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
         }
-        console.log('after settin','nextPage: ', hasNextPage, 'pageNumber: ', pageNumber, 'totalPage: ', totalPage)
-
     },[data, data?.data])
 
-    console.log('nextPage: ', hasNextPage, 'pageNumber: ', pageNumber, 'totalPage: ', totalPage)
     const router = useRouter()
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -94,6 +88,7 @@ const ViewAllLoaneeOverview = () => {
                     tableCellStyle={'h-12'}
                     condition={true}
                     searchEmptyState={false}
+                    sx={'cursor-pointer'}
                     // searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
                     sideBarTabName={'loanees'}
                     icon={MdOutlinePersonOutline}
@@ -104,7 +99,6 @@ const ViewAllLoaneeOverview = () => {
                     setPageNumber={setPageNumber}
                     totalPages={totalPage}
                     isLoading={isLoading || isFetching || isLoadingLoanCounts || isFetchingCounts}
-                    // isLoading={isLoading|| isFetching|| isLoadinFetchedData || isFetchingSearchedData}
                 />
             </div>
         </div>
