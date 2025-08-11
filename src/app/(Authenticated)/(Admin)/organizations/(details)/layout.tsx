@@ -1,6 +1,5 @@
 import React from 'react'
-import TabSwitch from '@/layout/tabLayoutTwo'
-import { organizationDetailTabData } from '@/types/tabDataTypes'
+import OrganizationDetailLayout from '@/layout/organization-detail-layout'
 
 type props = {
     children: React.ReactNode;
@@ -9,9 +8,9 @@ type props = {
 const organizationDetailTab: React.FC<props> = ({ children }) => {
   return (
     <div>
-    <TabSwitch tabData={organizationDetailTabData} defaultTab='/organizations/detail'>
+    <OrganizationDetailLayout>
    {children}
-    </TabSwitch>
+    </OrganizationDetailLayout>
   </div>
   )
 }
