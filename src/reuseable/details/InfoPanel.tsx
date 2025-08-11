@@ -15,7 +15,7 @@ type Props = {
 
 function InfoPanel({infoList,className}: Props) {
   return (
-    <div className={`border border-solid flex items-center justify-center w-full px-4  rounded-md text-[14px] mb-4 md:mb-0 mt-5 md:mt-0 ${className}`}>
+    <div className={`border border-solid flex items-center justify-center w-full px-4 py-4  rounded-md text-[14px] mb-4 md:mb-0 mt-5 md:mt-0 ${className}`}>
         <div className='bg-[#F9F9F9] w-full rounded-md pt-4 pb-4 overflow-auto md:max-h-[64vh]'>
            {
             infoList && infoList.map((data,index) => (

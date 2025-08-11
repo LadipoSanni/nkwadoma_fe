@@ -1,6 +1,6 @@
 "use client"
 import React,{useEffect} from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter,usePathname } from "next/navigation";
 import {persistor, RootState, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
 import {navbarItemsProps, navbarRouterItemsProps} from "@/types/Component.type";
@@ -22,11 +22,12 @@ import NavbarContainer from "@/reuseable/ui/Navbar";
 import { resetAllState } from '@/redux/reducer';
 import { notificationApi } from '@/service/notification/notification_query';
 import {setCurrentTab,setcurrentTabRoute} from "@/redux/slice/loan/selected-loan";
-
+import { resetOrganizationInitialState } from '@/redux/slice/organization/organization';
 
 
 const SideBar = () => {
     const router = useRouter();
+    const pathname = usePathname();
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
@@ -37,11 +38,26 @@ const SideBar = () => {
 
 
     useEffect(() => {
-        if (userRole === "PORTFOLIO_MANAGER" && !currentTab) {
-            store.dispatch(setCurrentTab('Loan requests'));
-            store.dispatch(setcurrentTabRoute('loan-request'));
+        if (userRole === "PORTFOLIO_MANAGER") {
+            if (!currentTab) {
+                store.dispatch(setCurrentTab('Loan requests'));
+                store.dispatch(setcurrentTabRoute('loan-request'));
+            }
+            
+            if (!pathname?.startsWith('/organizations')) {
+                const orgFormState = store.getState().organization?.organizationInitialState;
+                
+                const hasFormData = orgFormState && 
+                    Object.values(orgFormState).some(
+                        value => value !== "" && value !== null && value !== undefined
+                    );
+    
+                if (hasFormData) {
+                    store.dispatch(resetOrganizationInitialState());
+                }
+            }
         }
-    }, [userRole, currentTab])
+    }, [userRole, currentTab,pathname])
 
 
     const closeSideBar = () => {

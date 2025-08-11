@@ -26,17 +26,21 @@ interface ApiError {
   interface props {
     setIsOpen? : (e:boolean) => void;
     id: string;
+    setSwitch?: (set: boolean) => void
   }
 
-function DeactivateOrganization({setIsOpen,id}:props) {
+function DeactivateOrganization({setIsOpen,id,setSwitch}:props) {
   const [isError, setError] = useState('')
   const [deactivateOrganization, {isLoading}] = useDeactivateOrganizationMutation();
   const { toast } = useToast();
   const router = useRouter()
 
     const handleCloseModal = () => {
-        if (setIsOpen) {
-          setIsOpen(false);
+        if (setIsOpen ) {
+          setIsOpen(false)
+        }
+        if(setSwitch){
+          setSwitch(false)
         }
       }
 

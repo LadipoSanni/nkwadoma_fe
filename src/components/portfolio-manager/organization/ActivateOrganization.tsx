@@ -27,20 +27,23 @@ interface ApiError {
   interface props {
     setIsOpen? : (e:boolean) => void;
     id: string;
+    setSwitch?: (set: boolean) => void
   }
 
-function ActivateOrganization({setIsOpen,id}:props) {
+function ActivateOrganization({setIsOpen,id,setSwitch}:props) {
   const [isError, setError] = useState('')
   const [activateOrganization, {isLoading}] = useActivateOrganizationMutation();
   const { toast } = useToast();
   const router = useRouter()
 
-    const handleCloseModal = () => {
-        if (setIsOpen) {
-          setIsOpen(false);
-        }
-      }
-
+  const handleCloseModal = () => {
+    if (setIsOpen ) {
+      setIsOpen(false)
+    }
+    if(setSwitch){
+      setSwitch(false)
+    }
+  }
       const validationSchema = Yup.object().shape({
         reason: Yup.string()
          .trim()
