@@ -125,9 +125,9 @@ export const organizationApi = createApi({
         }),
         viewOrganizationAdmin: builder.query({
             query: (param: {
-                // name?: string,
-                // activationStatus?: string,
-                // identityRoles: string[],
+                name?: string,
+                activationStatuses: string[],
+                identityRoles: string[],
                      pageSize: number,
                      pageNumber: number,
                      

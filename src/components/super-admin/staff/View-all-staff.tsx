@@ -11,7 +11,7 @@ import InviteStaff from './Invite-staff';
 import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
 import Detail from './Detail';
-// import { useViewOrganizationAdminQuery } from '@/service/admin/organization';
+import { useViewOrganizationAdminQuery } from '@/service/admin/organization';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -40,19 +40,20 @@ function Staff({status}: Props) {
      const [date, setInvitedDate] = useState('')
      const [isSwitch, setSwitch] = useState(false);
      const adminRoleType = [ { value: "MEEDL_ADMIN", label: "Admin" }, { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" }, { value: "MEEDL_ASSOCIATE", label: "Associate"} ];
-    //   const [hasNextPages,setNextPage] = useState(false)
-    //   const [totalPage,setTotalPage] = useState(0)
-    //   const [pageNumber,setPageNumber] = useState(0)
-    // const [pageSearchNumber,setPageSearchNumber] = useState(0)
-    // const [searchHasNextPages,setSearchNextPage] = useState(false)
+      const [hasNextPages,setNextPage] = useState(false)
+      const [totalPage,setTotalPage] = useState(0)
+      const [pageNumber,setPageNumber] = useState(0)
+    const [pageSearchNumber,setPageSearchNumber] = useState(0)
+    const [searchHasNextPages,setSearchNextPage] = useState(false)
 
-  //   const dataElement = {
-  //     identityRoles:["PORTFOLIO_MANAGER","MEEDL_ADMIN","MEEDL_ASSOCIATE"],
-  //     pageNumber:pageNumber,
-  //     pageSize: 10
-  // }
+    const dataElement = {
+      activationStatuses: ['INVITED',"APPROVED"],
+      identityRoles:["PORTFOLIO_MANAGER","MEEDL_ADMIN","MEEDL_ASSOCIATE"],
+      pageNumber:pageNumber,
+      pageSize: 10
+  }
 
-  //  const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
+   const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
     
    const handleOpen =() => {
     setModal('invite')

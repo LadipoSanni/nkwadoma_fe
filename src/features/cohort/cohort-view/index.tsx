@@ -306,7 +306,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
               onChange={handleSearchChange}
               />
             </div>
-             <div className='z-10'>
+            { user_role !== "PORTFOLIO_MANAGER"? <div className='z-10'>
               <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
                   <Button id='cohortInProgram' variant={'default'} className='w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none' >
@@ -439,7 +439,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                   </Formik>
                 </DropdownMenuContent>
               </DropdownMenu>
-             </div>
+             </div> : ""}
             </div>
              <div className='md:mt-0 mt-4'>
               { 

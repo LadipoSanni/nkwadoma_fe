@@ -35,10 +35,13 @@ function Team() {
 
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
-    const dataElement = {
-      pageNumber:pageNumber,
-      pageSize: 10
-  }
+   const dataElement = {
+    activationStatuses: ['INVITED',"APPROVED"],
+    identityRoles:["PORTFOLIO_MANAGER","MEEDL_ADMIN","MEEDL_ASSOCIATE"],
+    pageNumber:pageNumber,
+    pageSize: 10
+}
+
     const searchDataElement = {
       name:debouncedSearchTerm,
       pageNumber: pageSearchNumber,
