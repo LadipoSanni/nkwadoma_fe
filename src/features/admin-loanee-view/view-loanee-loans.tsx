@@ -11,7 +11,7 @@ import {formatAmount} from "@/utils/Format";
 import { useRouter } from 'next/navigation';
 import {Badge} from "@/components/ui/badge";
 import {LoaneeLoannDetails} from "@/utils/routes";
-import {useAppSelector} from "@/redux/store";
+import {store, useAppSelector} from "@/redux/store";
 import {useViewAllLoansTotalCountsByAdminsQuery, useViewLoaneeLoansByAdminQuery,useSearchLoaneeLoansByAdminQuery} from "@/service/users/Loanee_query";
 import {AdminViewLoanType} from "@/types/loanee";
 import {setcohortId} from "@/redux/slice/create/cohortSlice"
