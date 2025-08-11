@@ -79,7 +79,7 @@ function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRouteP
           ))}
         </TabsList>
         {tabData.map((tab, index) => (
-          <TabsContent key={index} value={tab.value} className='mt-5' >
+          <TabsContent key={index} value={tab.value} className='' >
             {activeTab === tab.value && (
               <div>
                 {children}
