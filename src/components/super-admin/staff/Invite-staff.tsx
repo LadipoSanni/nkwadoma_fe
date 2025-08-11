@@ -60,6 +60,7 @@ function InviteStaff({setIsOpen,roleOptions}:Props) {
           toast({
           description: result.message,
           status: "success",
+          duration: 1000
         });
         handleCloseModal()
       }

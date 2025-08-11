@@ -1,5 +1,8 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { Button } from '@/components/ui/button';
+import { useApproveAdminMutation } from '@/service/admin/organization';
+import {useToast} from "@/hooks/use-toast";
+import Isloading from '@/reuseable/display/Isloading';
 
 interface Props{
     requestedBy: string;
@@ -9,12 +12,44 @@ interface Props{
     setOpen: (condition: boolean) => void
 }
 
-function DeclineOrApprove({requestedBy,invitee,role,setOpen}:Props) {
+interface ApiError {
+  status: number;
+  data: {
+    message: string;
+  };
+}
+
+function DeclineOrApprove({requestedBy,invitee,role,setOpen,id}:Props) {
+    const [approveAdmin, {isLoading}] = useApproveAdminMutation()
+     const { toast } = useToast();
+      const [error, setError] = useState("")
 
     const handleClose =() => {
-        setOpen(false)
-        
+        setOpen(false)    
     }
+
+    const handleApprove = async () => {
+      const param = {
+        organizationEmployeeId: id
+      }
+       try {
+        const approve = await approveAdmin(param).unwrap()
+        if(approve){
+          toast({
+            description: approve?.message,
+            status: "success",
+            duration: 1000
+          });
+          handleClose()
+        }
+        
+       } catch (err) {
+        const error = err as ApiError;
+        setError(error?.data?.message);
+       }
+    }
+
+
   return (
     <div className='mt-6'>
       <p className={`text-[14px] text-[#4D4E4D]`}>
@@ -26,9 +61,9 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen}:Props) {
        <div className='mt-7 md:mb-1 mb-3 md:flex justify-end gap-6  text-[14px]'>
          <div className='mb-3'>
          <button
-            className='w-full md:w-24 h-[50px] border-[#142854] text-[#142854] border-solid border-[1px] rounded-md hover:bg-[#E8EAEE]' 
+            className='w-full md:w-24 h-[50px] border-neutral650 text-neutral650 border-solid border-[1px] rounded-md hover:bg-white' 
             type='button'
-            onClick={handleClose}
+            // onClick={handleClose}
          >
             Decline
         </button>
@@ -38,12 +73,19 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen}:Props) {
          variant={'secondary'} 
          className='w-full md:w-24 h-[50px] '
          type='button'
-         onClick={handleClose}
+         onClick={handleApprove}
          >
-           Approve
+          { isLoading ? <Isloading /> :
+          "Approve"
+          }
         </Button>
          </div>
        </div>
+       <div>
+                {
+                <div className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>
+                 }
+                </div>
     </div>
   )
 }

@@ -6,7 +6,7 @@ import {inter} from "@/app/fonts"
 import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from 'next/navigation'
-import { useActivateOrganizationMutation } from '@/service/admin/organization';
+import { useActivateOrganizationMutation,useReactivateUserMutation } from '@/service/admin/organization';
 import { store } from '@/redux/store';
 import { setOrganizationTabStatus } from '@/redux/slice/organization/organization';
 
@@ -28,11 +28,13 @@ interface ApiError {
     setIsOpen? : (e:boolean) => void;
     id: string;
     setSwitch?: (set: boolean) => void
+    reactivateUser?:string
   }
 
-function ActivateOrganization({setIsOpen,id,setSwitch}:props) {
+function ActivateOrganization({setIsOpen,id,setSwitch,reactivateUser}:props) {
   const [isError, setError] = useState('')
   const [activateOrganization, {isLoading}] = useActivateOrganizationMutation();
+  const [reactivateAUsers,{isLoading: isloading}] = useReactivateUserMutation()
   const { toast } = useToast();
   const router = useRouter()
 
@@ -57,6 +59,16 @@ function ActivateOrganization({setIsOpen,id,setSwitch}:props) {
         }
 
         try {
+          if(reactivateUser === "staff"){
+            const deactivate = await reactivateAUsers(formData).unwrap();
+            if(deactivate){
+             toast({
+               description: deactivate.message,
+               status: "success",
+             })
+           }
+           handleCloseModal()
+         }else {
           const activate = await activateOrganization(formData).unwrap();
           if(activate){
             toast({
@@ -66,6 +78,7 @@ function ActivateOrganization({setIsOpen,id,setSwitch}:props) {
             store.dispatch(setOrganizationTabStatus("active"))
             router.push("/organizations")
           }
+        }
         } catch (err) {
           const error = err as ApiError;
           setError(error?.data?.message);
@@ -115,7 +128,7 @@ function ActivateOrganization({setIsOpen,id,setSwitch}:props) {
                 <div>
               <SubmitAndCancelButton 
                 isValid={isValid} 
-                isLoading={isLoading} 
+                isLoading={isLoading || isloading} 
                 handleCloseModal={handleCloseModal} 
                 submitButtonName='Activate'
                 />
