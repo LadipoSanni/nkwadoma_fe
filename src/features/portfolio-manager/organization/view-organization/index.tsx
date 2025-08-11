@@ -127,7 +127,7 @@ function Organization() {
     const handleRowClick = (row: TableRowData) => {
         store.dispatch(setOrganizationId(String(row.id)))
         store.dispatch(setOrganizationName(String(row?.name)))
-        router.push('/organizations/detail');
+        router.push('/organizations/details');
     };
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
