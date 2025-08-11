@@ -53,7 +53,7 @@ const ViewAllLoaneeOverview = () => {
         <div
             id={'viewAllLoaneeOverviewContainer'}
             data-testid={'viewAllLoaneeOverviewContainer'}
-            className={`w-full h-full grid gap-10 px-4 py-6   `}
+            className={`w-full h-full  grid content-between gap-4 px-4 py-3  `}
         >
             <div
                 id={'viewAllLoaneeTotalOverviewContainer'}
@@ -66,19 +66,21 @@ const ViewAllLoaneeOverview = () => {
                 <Details isLoading={isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={'totalAmountRepaid'} showAsWholeNumber={false}    name={'Total amount repaid'} value={loanCounts?.data ?  loanCounts?.data?.totalAmountRepaid :''} valueType={'currency'}  />
 
             </div>
+
+            <SearchInput
+                id={'searchField'}
+                data-testid={'searchField'}
+                value={searchTerm}
+                placeholder={'Search by name'}
+                onChange={handleSearchChange}
+            />
             <div
                 id={'tableAndSearchContainer'}
                 data-testid={'tableAndSearchContainer'}
-                className={`grid gap-4 `}
+                className={`grid  max-h-[40vh] overflow-y-auto `}
 
             >
-                <SearchInput
-                    id={'searchField'}
-                    data-testid={'searchField'}
-                    value={searchTerm}
-                    placeholder={'Search by name'}
-                    onChange={handleSearchChange}
-                />
+
 
                 <Table
                     tableData={data?.data?.body ? data?.data?.body : []}
