@@ -70,7 +70,7 @@ export const getInstituteAdminSideBarItems = (currentItem: string) => {
         {id: 'program', name: 'Program', route: '/program', isActive: true, icon: <Icon icon="mynaui:book" color={currentItem === 'Program' ? '#142854' : '#667085'} height={"1.3rem"} width={"1.3rem"}>         </Icon>},
         {id: 'cohort', name: 'Cohort', route: '/cohort', isActive: true, icon: <MdOutlinePeopleAlt className={` h-[1.3rem] w-[1.3rem] ${currentItem === 'Cohort' ? currentTextLiterals : textLiterals} `}/>},
         {id: 'loan', name: 'Loan', isActive: false, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.3rem"} color={'#d7d7d7'} className={`h-[1.3rem] w-[1.3rem]`}></Icon>},
-        {id: 'loanee', name: 'Loanee', isActive: false, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={`h-[1.3rem] w-[1.3rem]`}/>},
+        {id: 'loanee', name: 'Loanee', isActive: true, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={`h-[1.3rem] w-[1.3rem]`}/>, route: '/loanees'},
     ]
     return items;
 }

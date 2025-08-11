@@ -21,11 +21,11 @@ const BackButton = ({id,text,sx, textColor, handleClick, iconBeforeLetters}: pro
             onClick={handleClick}
         >
             {iconBeforeLetters &&
-                <MdArrowBack  className={` ${textColor ? `text-[#142854]` : `hover:text-[#435376]`} `} style={{color: `${textColor}`}}/>
+                <MdArrowBack  className={` h-4 w-4 ${textColor ? `text-[#142854]` : `hover:text-[#435376]`} `} style={{color: `${textColor}`}}/>
             }
             <span
                 style={{color: `${textColor}`}}
-                id={ text+`id`} data-testid={ text+`id`} className={` ${inter500.className} text-[14px] ${textColor ? `text-[#142854]` : `hover:text-[#435376]`}   text-${textColor} `}>{text}</span>
+                id={ text+`id`} data-testid={ text+`id`} className={` ${inter500.className} text-[11px] ${textColor ? `text-[#142854]` : `hover:text-[#435376]`}   text-${textColor} `}>{text}</span>
             {!iconBeforeLetters &&
                 <MdArrowForward  className={`${textColor ? `text-[#142854]` : `hover:text-[#435376]`} `} style={{color: `${textColor}`}}/>
             }

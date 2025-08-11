@@ -1,5 +1,5 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from '@/features/Overview/index.module.css';
 import Details from "@/components/loanee-my-profile/Details";
 import SearchInput from "@/reuseable/Input/SearchInput";
@@ -7,31 +7,42 @@ import {MdOutlinePersonOutline} from "react-icons/md";
 import Table from '@/reuseable/table/Table';
 // import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount, formateDigits} from "@/utils/Format";
-import {loaneeMockData} from "@/utils/LoanProductMockData";
 import {useRouter} from "next/navigation";
+import {useViewAllLoaneeByAdminsQuery, useViewAllLoansTotalCountsByAdminsQuery} from "@/service/users/Loanee_query";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 const ViewAllLoaneeOverview = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [hasNextPage] = useState(false)
-    const [totalPage] = useState(0)
+    const [hasNextPage, setNextPage ] = useState(false)
+    const [totalPage,setTotalPage] = useState(0)
+    const [pageSize] = useState(10)
     const [pageNumber,setPageNumber] = useState(0)
-    // const [pageSize ] = useState(10)
+    const name = searchTerm ? searchTerm : undefined
+    const {data, isLoading, isFetching } = useViewAllLoaneeByAdminsQuery({pageSize, name, pageNumber})
+    const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery({})
+
+    useEffect(() => {
+        if(data && data?.data) {
+            console.log('doon: ', data?.data?.pageNumber)
+            setNextPage(data?.data?.hasNextPage)
+            setTotalPage(data?.data?.totalPages)
+            setPageNumber(data?.data?.pageNumber)
+        }
+    },[data, data?.data])
 
     const router = useRouter()
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log('searchTerm', searchTerm);
         setSearchTerm(event.target.value);
     };
 
     const tableHeader = [
-        { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => row.firstName?.toString()  },
-        { title: 'Email address', sortable: true, id: 'emailAddress', selector: (row: TableRowData) =><div>{row?.emailAddress}</div>},
-        { title: 'No. of loans', sortable: true, id: 'noOfLoans', selector: (row: TableRowData) => <div className=''>{formateDigits(Number(row.noOfLoans))}</div> },
-        { title: 'Historical dept', sortable: true, id: 'historicalDept', selector: (row: TableRowData) => <div className={`  `}>{row.historicalDept}</div>},
-        { title: 'Total outstanding', sortable: true, id: 'totalOutstanding', selector: (row: TableRowData) =><div className=''>{formatAmount(row.totalOutstanding)}</div> },
+        { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => <div>{row.firstName?.toString() } {row.lastName?.toString()}</div>  },
+        { title: 'Email address', sortable: true, id: 'emailAddress', selector: (row: TableRowData) =><div>{row?.email}</div>},
+        { title: 'No. of loans', sortable: true, id: 'noOfLoans', selector: (row: TableRowData) => <div className=''>{formateDigits(Number(row.numberOfLoans))}</div> },
+        { title: 'Historical dept', sortable: true, id: 'historicalDept', selector: (row: TableRowData) => <div className={`  `}>{row.historicalDebt}</div>},
+        { title: 'Total outstanding', sortable: true, id: 'totalOutstanding', selector: (row: TableRowData) =><div className=''>{formatAmount(row.totalAmountOutstanding)}</div> },
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
@@ -49,9 +60,11 @@ const ViewAllLoaneeOverview = () => {
                 data-testid={'viewAllLoaneeTotalOverviewContainer'}
                 className={` w-full h-full flex gap-4   ${styles.overviewCard}   `}
             >
-                <Details isLoading={false} sx={`  w-[20em] md:w-[100%]  `} name={'No. of loanees'} valueType={'digit'}  id={'totalNumberOfLoanees'} showAsWholeNumber={false}  value={'0'}/>
-                <Details isLoading={false} sx={` w-[20em] md:w-[100%] `} id={'historicalDept'} showAsWholeNumber={false}    name={'Historical debt'} value={''} valueType={'currency'}  />
-                <Details isLoading={false} sx={` w-[20em] md:w-[100%] `} id={'totalOutstanding'} showAsWholeNumber={false}    name={'Total outstanding'} value={''} valueType={'currency'}  />
+                <Details isLoading={  isLoadingLoanCounts || isFetchingCounts} sx={`  w-[20em] md:w-[100%]  `} name={'No. of loanees'} valueType={'digit'}  id={'totalNumberOfLoanees'} showAsWholeNumber={false}  value={loanCounts?.data ?  loanCounts?.data?.numberOfLoanee :'0'}/>
+                <Details isLoading={ isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={'historicalDept'} showAsWholeNumber={false}    name={'Historical debt'} value={loanCounts?.data ?  loanCounts?.data?.totalAmountReceived : ''} valueType={'currency'}  />
+                <Details isLoading={ isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={'totalOutstanding'} showAsWholeNumber={false}    name={'Total outstanding'} value={loanCounts?.data ?  loanCounts?.data?.totalAmountOutstanding : ''} valueType={'currency'}  />
+                <Details isLoading={isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={'totalAmountRepaid'} showAsWholeNumber={false}    name={'Total amount repaid'} value={loanCounts?.data ?  loanCounts?.data?.totalAmountRepaid :''} valueType={'currency'}  />
+
             </div>
             <div
                 id={'tableAndSearchContainer'}
@@ -62,18 +75,20 @@ const ViewAllLoaneeOverview = () => {
                 <SearchInput
                     id={'searchField'}
                     data-testid={'searchField'}
-                    value={'Search by name'}
+                    value={searchTerm}
+                    placeholder={'Search by name'}
                     onChange={handleSearchChange}
                 />
 
                 <Table
-                    tableData={loaneeMockData}
+                    tableData={data?.data?.body ? data?.data?.body : []}
                     tableHeader={tableHeader}
                     handleRowClick={handleRowClick}
                     tableHeight={40}
                     tableCellStyle={'h-12'}
                     condition={true}
                     searchEmptyState={false}
+                    sx={'cursor-pointer'}
                     // searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
                     sideBarTabName={'loanees'}
                     icon={MdOutlinePersonOutline}
@@ -83,8 +98,7 @@ const ViewAllLoaneeOverview = () => {
                     pageNumber={pageNumber}
                     setPageNumber={setPageNumber}
                     totalPages={totalPage}
-                    isLoading={false}
-                    // isLoading={isLoading|| isFetching|| isLoadinFetchedData || isFetchingSearchedData}
+                    isLoading={isLoading || isFetching || isLoadingLoanCounts || isFetchingCounts}
                 />
             </div>
         </div>
