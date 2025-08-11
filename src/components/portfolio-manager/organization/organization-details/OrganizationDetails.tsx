@@ -1,5 +1,5 @@
 import React from 'react'
-import Detail from "@/components/loanee-my-profile/Details";
+// import Detail from "@/components/loanee-my-profile/Details";
 import style from "@/components/loanee-my-profile/index.module.css"
 
 function OrganizationDetails() {

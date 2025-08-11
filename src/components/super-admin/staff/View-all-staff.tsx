@@ -19,12 +19,9 @@ interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
-interface Props{
-    status?: string
-}
 
 
-function Staff({status}: Props) {
+function Staff() {
     const [searchTerm, setSearchTerm] = useState("");
     // const [currentPage, setCurrentPage] = useState(0);
     // const filteredStaff = status? allStaff?.filter(staff => staff?.Status?.toLowerCase() === status.toLowerCase()) : allStaff;
