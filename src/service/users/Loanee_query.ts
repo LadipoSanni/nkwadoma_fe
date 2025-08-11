@@ -98,18 +98,32 @@ export const loaneeApi = createApi({
             })
         }),
         viewAllLoansTotalCountsByAdmins : builder.query({
-           query: () => ({
-               url: `/loan/total`,
+           query: (loaneeId?: string) => ({
+               url: `/loan/total${loaneeId ? `?loaneeId=${loaneeId}` : ''}`,
                method: 'GET'
            })
         }),
+        viewLoaneeLoansByAdmin : builder.query({
+            query: (data:{loaneeId: string,pageNumber: number, pageSize: number }) => ({
+                url: `/loan/view-all-disbursal?loaneeId=${data.loaneeId}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
+                method: 'GET'
+            })
+        }),
+        searchLoaneeLoansByAdmin : builder.query({
+            query: (data:{loaneeId: string,pageNumber: number, pageSize: number, organizationName: string }) => ({
+                url: `/loan/search/loanee?organizationName=${data?.organizationName}&loaneeId=${data?.loaneeId}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
+                method: 'GET'
+            })
+        })
     })
 })
 
 
 
 export const {
+    useSearchLoaneeLoansByAdminQuery,
     // useIsIdentityVerifiedQuery,
+    useViewLoaneeLoansByAdminQuery,
     useViewAllLoansTotalCountsByAdminsQuery,
     useViewAllLoaneeByAdminsQuery,
     useViewLoanDetailsOnOnboardingQuery,

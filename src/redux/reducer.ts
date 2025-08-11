@@ -25,7 +25,7 @@ import vehicleMultistepReducer from './slice/multiselect/vehicle-multiselect'
 import { financierApi } from '@/service/admin/financier';
 import financierReducer  from '@/redux/slice/financier/financier';
 import MarketPlaceReducer from "./slice/investors/MarketPlaceSlice";
-import kycMultistepReducer from './slice/multiselect/kyc-multiselect'
+import kycMultistepReducer from './slice/multiselect/kyc-multiselect';
 import { UnknownAction } from '@reduxjs/toolkit'; 
 import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
 import {marketplaceApi} from "@/service/financier/marketplace";
@@ -37,7 +37,8 @@ import { loanBookApi } from '@/service/admin/loan_book';
 import CsvReducer from "@/redux/slice/csv/csv"
 import { countryApi } from '@/service/admin/external-api/countryCalling_code_query';
 import LoanOfferReducer from './slice/loan/loan-offer';
-import StaffReducer from "./slice/staff-and-request/staff"
+import StaffReducer from "./slice/staff-and-request/staff";
+import loaneesReducer from "./slice/loan/loanees";
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -59,6 +60,7 @@ const appReducer = combineReducers({
     csv: CsvReducer,
     loanOffer: LoanOfferReducer,
     staff: StaffReducer,
+    loanees: loaneesReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
