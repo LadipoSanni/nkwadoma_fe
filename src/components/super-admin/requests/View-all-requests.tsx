@@ -2,11 +2,11 @@
 import React,{useState,useEffect} from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
 import Table from '@/reuseable/table/Table';
-import { getPaginatedData } from '@/utils/Mock-paginated-data';
+// import { getPaginatedData } from '@/utils/Mock-paginated-data';
 import { formatMonthInDate } from '@/utils/Format'
 import {MdOutlineAssignmentTurnedIn} from 'react-icons/md';
 import Modal from '@/reuseable/modals/TableModal';
-import { requests } from '@/utils/LoanRequestMockData/Index';
+// import { requests } from '@/utils/LoanRequestMockData/Index';
 import { Cross2Icon } from "@radix-ui/react-icons";
 import DeclineOrApprove from './Decline-or-approve';
 import { useViewOrganizationAdminQuery} from '@/service/admin/organization';
@@ -19,7 +19,7 @@ interface TableRowData {
 
 function ViewAllRequests() {
    const [searchTerm, setSearchTerm] = useState("");
-   const [currentPage, setCurrentPage] = useState(0);
+  //  const [currentPage, setCurrentPage] = useState(0);
    const [isOpen,setOpen] = useState(false)
    const [requestedBy, setRequestedBy] = useState("")
    const [invitee, setInvitee] = useState("")
@@ -55,7 +55,7 @@ function ViewAllRequests() {
         }
          },[adminData,debouncedSearchTerm])
 
-   const { hasNextPage, currentPageItems, totalPages } = getPaginatedData(currentPage, 10, requests);
+  //  const { hasNextPage, currentPageItems, totalPages } = getPaginatedData(currentPage, 10, requests);
 
    const getTableData = () => {
     if (!adminData?.data?.body) return [];
