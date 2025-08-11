@@ -20,7 +20,7 @@ interface Props {
 
 function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen,id}:Props) {
 
-    console.log(status)
+    console.log(id)
     
     const dropDownOption = [
       status === "Deactivated"?  {name: 'Activate', id: '1'} : {name: 'Deactivate', id: '2'}
@@ -122,6 +122,7 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
                  id={id}
                  setIsOpen={setIsOpen}
                  setSwitch={setSwitch}
+                 deactivateUser='staff'
                 />
             </div>  
             : 
@@ -130,6 +131,7 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
                  id={id}
                  setIsOpen={setIsOpen}
                  setSwitch={setSwitch}
+                 reactivateUser='staff'
                 />
             </div>
         }

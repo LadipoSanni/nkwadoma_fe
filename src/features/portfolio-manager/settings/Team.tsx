@@ -10,12 +10,13 @@ import {Cross2Icon} from "@radix-ui/react-icons";
 // import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
 import { useViewOrganizationAdminQuery } from '@/service/admin/organization';
 // import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage';
-import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
+// import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
-import { MdSearch } from 'react-icons/md'
+// import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
+// import { MdSearch } from 'react-icons/md'
 import { useDebounce } from '@/hooks/useDebounce';
-import InviteStaff from '@/components/super-admin/staff/Invite-staff';
+import InviteAdmin from '@/components/super-admin/staff/Invite-staff';
+import { formatMonthInDate} from '@/utils/Format'
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -36,28 +37,30 @@ function Team() {
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
    const dataElement = {
-    activationStatuses: ['INVITED',"APPROVED"],
-    identityRoles:["PORTFOLIO_MANAGER","MEEDL_ADMIN","MEEDL_ASSOCIATE"],
+    name:debouncedSearchTerm,
+    activationStatuses: ['DECLINED',"APPROVED","PENDING_APPROVAL","ACTIVE"],
+    identityRoles:["PORTFOLIO_MANAGER","MEEDL_ASSOCIATE"],
     pageNumber:pageNumber,
     pageSize: 10
 }
 
-    const searchDataElement = {
-      name:debouncedSearchTerm,
-      pageNumber: pageSearchNumber,
-      pageSize: 10
-    }
+    // const searchDataElement = {
+    //   name:debouncedSearchTerm,
+    //   pageNumber: pageSearchNumber,
+    //   pageSize: 10
+    // }
 
 
     const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
    
-    const {data: searchResults,isFetching: isfetching,isLoading: isSearchLoading} =  useSearchOrganisationAdminByNameQuery(searchDataElement,{skip: !debouncedSearchTerm})
+    // const {data: searchResults,isFetching: isfetching,isLoading: isSearchLoading} =  useSearchOrganisationAdminByNameQuery(searchDataElement,{skip: !debouncedSearchTerm})
 
     useEffect(()=> {
-      if(debouncedSearchTerm && searchResults && searchResults?.data){
-        setSearchHasNextPage(searchResults?.data?.hasNextPage)
-          setTotalPage(searchResults?.data?.totalPages)
-          setPageSearchNumber(searchResults?.data?.pageNumber)    
+      if(debouncedSearchTerm && adminData && adminData?.data ){
+        setSearchHasNextPage(adminData?.data?.hasNextPage)
+        setTotalPage(adminData?.data?.totalPages)
+        setPageSearchNumber(adminData?.data?.pageNumber)    
+        
       }
      else 
      if(!debouncedSearchTerm && adminData && adminData?.data  ){
@@ -65,11 +68,11 @@ function Team() {
           setTotalPage(adminData?.data?.totalPages)
           setPageNumber(adminData?.data?.pageNumber)
       }
-    },[adminData,debouncedSearchTerm,searchResults])
+    },[adminData,debouncedSearchTerm])
 
     const getTableData = () => {
       if (!adminData?.data?.body) return [];
-      if (debouncedSearchTerm) return searchResults?.data?.body || [];
+      if (debouncedSearchTerm) return adminData?.data?.body || [];
       return adminData?.data?.body;
   }
 
@@ -89,44 +92,74 @@ function Team() {
     
     //   ]
     const adminsHeader = [
-      {
-        title: <div className='md:relative right-4 left-4'>Full name</div>,
-        sortable: true,
-        id: "fullName",
-        selector: (row: TableRowData) =>  <div className='md:relative right-1 left-1 -z-40'>{row.fullName}</div> ,
-      },
+      // {
+      //   title: <div className='md:relative right-4 left-4'>Full name</div>,
+      //   sortable: true,
+      //   id: "fullName",
+      //   selector: (row: TableRowData) =>  <div className='md:relative right-1 left-1 -z-40'>{row.fullName}</div> ,
+      // },
 
-      {
-        title: (
-          <div id="adminStatusHeader" className="">
-            Status
-          </div>
-        ),
-        sortable: true,
-        id: "adminStatus",
-        selector: (row: TableRowData) => (
-          <span
-            id="adminStatus"
-            className={`pt-1 pb-1 pr-3 pl-3  rounded-xl  relative  -z-50 ${
-              row.status === "ACTIVE"
-                ? "text-[#063F1A] bg-[#E7F5EC]"
-                : row.status === "INVITED"
-                ? "text-[#142854] bg-[#F3F8FF]"
-                : "text-[#59100D] bg-[#FBE9E9]"
-            }`}
-          >
-            {capitalizeFirstLetters(String(row.status))}
-          </span>
-        ),
-      },
-      { title: <div className='md:relative md:right-2 md:left-2'>Role</div>,sortable: true, id: 'role', selector: (row: TableRowData) => <div className={`${row.role === "PORTFOLIO_MANAGER"? "text-[#212221] bg-[#ECECEC] ": "text-[#142854] bg-[#EEF5FF]"} rounded-xl w-36 h-6 flex items-center justify-center md:relative md:-right-2   -z-40`}>{capitalizeFirstLetters(String(row.role).replace(/_/g, ' '))}</div> },
+      // {
+      //   title: (
+      //     <div id="adminStatusHeader" className="">
+      //       Status
+      //     </div>
+      //   ),
+      //   sortable: true,
+      //   id: "adminStatus",
+      //   selector: (row: TableRowData) => (
+      //     <span
+      //       id="adminStatus"
+      //       className={`pt-1 pb-1 pr-3 pl-3  rounded-xl  relative  -z-50 ${
+      //         row.status === "ACTIVE"
+      //           ? "text-[#063F1A] bg-[#E7F5EC]"
+      //           : row.status === "INVITED"
+      //           ? "text-[#142854] bg-[#F3F8FF]"
+      //           : "text-[#59100D] bg-[#FBE9E9]"
+      //       }`}
+      //     >
+      //       {capitalizeFirstLetters(String(row.status))}
+      //     </span>
+      //   ),
+      // },
+      // { title: <div className='md:relative md:right-2 md:left-2'>Role</div>,sortable: true, id: 'role', selector: (row: TableRowData) => <div className={`${row.role === "PORTFOLIO_MANAGER"? "text-[#212221] bg-[#ECECEC] ": "text-[#142854] bg-[#EEF5FF]"} rounded-xl w-36 h-6 flex items-center justify-center md:relative md:-right-2   -z-40`}>{capitalizeFirstLetters(String(row.role).replace(/_/g, ' '))}</div> },
      
-       {
-        title:  <div className=''>Email</div>,
-        sortable: true,
-        id: "email",
-        selector: (row: TableRowData) => ( <div className="truncate">{row.email ? row.email : "null"}</div>),
-      },
+      //  {
+      //   title:  <div className=''>Email</div>,
+      //   sortable: true,
+      //   id: "email",
+      //   selector: (row: TableRowData) => ( <div className="truncate">{row.email ? row.email : "null"}</div>),
+      // },
+         { 
+                title: "Name",  
+                sortable: true, 
+                id: "firstName", 
+                selector: (row: TableRowData) => capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
+              },
+              { 
+                title: <div className='md:mr-14'>Email</div>,  
+                sortable: true, 
+                id: "email", 
+                selector: (row: TableRowData) => <div className='truncate'>{row.email}</div> 
+              },
+              { 
+                title: "Role",  
+                sortable: true, 
+                id: "role", 
+                selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
+              },
+              { 
+                title: "Status",  
+                sortable: true, 
+                id: "activationStatus", 
+                selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "PENDING_APPROVAL"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : row.activationStatus === "ACTIVE"? "Active" : "Declined"}</span> 
+              },
+              { 
+                title: "Invited",  
+                sortable: true, 
+                id: "createdAt", 
+                selector: (row: TableRowData) => formatMonthInDate(row.createdAt) 
+              }
     ];
 
   return (
@@ -141,25 +174,27 @@ function Team() {
         />
          
         <div className='w-full mt-5'>
-         {
-         !isTyping && debouncedSearchTerm && searchResults?.data?.body.length === 0? <div><SearchEmptyState icon={MdSearch} name='Colleague'/></div> : 
+         {/* {
+         !isTyping && debouncedSearchTerm && searchResults?.data?.body.length === 0? <div><SearchEmptyState icon={MdSearch} name='Colleague'/></div> :  */}
           <Table
           tableData={getTableData()}
           tableHeader={adminsHeader}
           handleRowClick={()=>{}}
-          tableHeight={48}
+          tableHeight={53}
           icon={<Book/>}
           condition={true}
           sideBarTabName='colleague'
           staticHeader={"Full name"}
-          staticColunm={"fullName"}
-          isLoading={isLoading || isSearchLoading || isFetching || isfetching}
+          staticColunm={"firstName"}
+          isLoading={isLoading || isFetching}
           hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPage}
           pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}
           setPageNumber={searchTerm !== ""? setPageSearchNumber : setPageNumber}
           totalPages={ totalPage}
+          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
+          tableCellStyle="h-12"
          />
-}
+{/* } */}
         </div>
         <div>
         {
@@ -176,7 +211,7 @@ function Team() {
            setIsOpen={setIsModalOpen}
            adminType="PORTFOLIO_MANAGER"
            /> */}
-           <InviteStaff
+           <InviteAdmin
             setIsOpen={setIsModalOpen}
             roleOptions={adminRoleType}
            />
