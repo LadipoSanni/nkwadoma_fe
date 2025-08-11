@@ -1,0 +1,95 @@
+"use client";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { inter } from '@/app/fonts';
+import {BiArrowBack} from "react-icons/bi";
+import { usePathname } from 'next/navigation'; 
+
+type Tab = {
+  name: string;
+  value: string;
+};
+
+type Props = {
+  children: React.ReactNode;
+  tabData: Tab[];
+  defaultTab: string;
+  backClickName?: string;
+  backClickRoutePath?: string;
+  condition?: boolean;
+  disabledTabs?: string[];
+  style?: string
+};
+
+function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRoutePath,condition,disabledTabs,style}: Props) {
+  const navigate = useRouter();
+  const [activeTab, setActiveTab] = useState(defaultTab);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      setActiveTab(url);
+    };
+
+    setActiveTab(window.location.pathname);
+
+    window.addEventListener('popstate', () => handleRouteChange(window.location.pathname));
+
+    return () => {
+      window.removeEventListener('popstate', () => handleRouteChange(window.location.pathname));
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!pathname) return;
+    const matchingTab = tabData.find(tab => tab.value === pathname);
+    setActiveTab(matchingTab ? pathname : defaultTab);
+  }, [pathname, tabData, defaultTab]); 
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    navigate.push(value);
+  };
+
+  const handleRouteBack = () => {
+     navigate.push(backClickRoutePath ?? "")
+  }
+
+  return (
+    <div className={`px-4 md:px-6 ${inter.className} ${style}`}>
+      {!condition? "" :
+       <div className={`flex py-3 space-x-1 text-meedlBlue cursor-pointer`} id={`backClick${backClickName}`} onClick={handleRouteBack}>
+       <BiArrowBack className={`mt-1 cursor-pointer`} id={`backClickIcon`}/>
+       <h1 id={`backClickText`} data-testid={`backClickText `} className='text-[14px] font-medium]'>Back to {backClickName}</h1>
+       </div>
+      }
+      <Tabs value={activeTab} onValueChange={handleTabChange}>
+        <TabsList className={`z-50  w-full bg-white justify-start border-b-[#ECECEC] border-solid border-b-[1px] rounded-none ${!condition? "mt-3" : ""}`}>
+          {tabData.map((tab, index) => (
+            <TabsTrigger 
+            id={`${tab.name}-${index}`} 
+            data-testid={`tabDataName${tab.value}`} 
+            value={tab.value} key={index}
+            disabled={disabledTabs?.includes(tab.value)}
+            className=' rounded-none py-[6px] px-3 data-[state=active]:border-b-[#142854] border-solid data-[state=active]:border-b-[2px] data-[state=active]:text-[#142854] text-[14px]'
+            >
+              {tab.name}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        {tabData.map((tab, index) => (
+          <TabsContent key={index} value={tab.value} className='' >
+            {activeTab === tab.value && (
+              <div>
+                {children}
+              </div>
+            )}
+          </TabsContent>
+        ))}
+      </Tabs>  
+    </div>
+  );
+}
+
+export default TabSwitch;

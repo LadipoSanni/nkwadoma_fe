@@ -125,6 +125,9 @@ export const organizationApi = createApi({
         }),
         viewOrganizationAdmin: builder.query({
             query: (param: {
+                name?: string,
+                activationStatuses: string[],
+                identityRoles: string[],
                      pageSize: number,
                      pageNumber: number,
                      
@@ -169,8 +172,23 @@ export const organizationApi = createApi({
                 method: 'GET',
                 params: param
             })
-        })
+        }),
+        inviteColleague: builder.mutation({
+            query: (data: {
+                email: string;
+                firstName: string;
+                lastName: string;
+                role: string;
+            }) => ({
+                url: `/organization/colleague/invite`,
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['invite', "organization","admin"]
+        }),
+        
+
     })
 })
 
-export const { useViewOrganizationsQuery, useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery,useDeactivateOrganizationMutation,useActivateOrganizationMutation,useViewOrganizationAdminQuery,useSearchOrganizationAsPortfolioManagerQuery,useViewAllOrganizationByStatusQuery} = organizationApi
+export const { useViewOrganizationsQuery, useViewAllOrganizationsQuery,useInviteOrganizationMutation, useSearchOrganisationByNameQuery, useInviteAdminMutation, useViewAllAdminsInOrganizationQuery,useGetOrganizationDetailsQuery, useGetDetailsOfOrganizationQuery,useSearchOrganisationAdminByNameQuery,useDeactivateOrganizationMutation,useActivateOrganizationMutation,useViewOrganizationAdminQuery,useSearchOrganizationAsPortfolioManagerQuery,useViewAllOrganizationByStatusQuery,useInviteColleagueMutation} = organizationApi

@@ -19,6 +19,8 @@ interface Props {
 }
 
 function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen,id}:Props) {
+
+    console.log(status)
     
     const dropDownOption = [
       status === "Deactivated"?  {name: 'Activate', id: '1'} : {name: 'Deactivate', id: '2'}
@@ -53,7 +55,7 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
         </div>
 
         <div>
-       {status !== "Pending" && <DropdownMenu>
+       {status !== "Invited" && <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div
                  id="kebabButton"

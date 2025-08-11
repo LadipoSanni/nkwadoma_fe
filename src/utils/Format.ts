@@ -107,17 +107,21 @@ export function formatMonthInDate(dateStr: ReactNode) {
     return "null";
   }
 
-  const formats = ["DD-MM-YYYY", "YYYY-MM-DD"];
-  let date;
-  for (const format of formats) {
-    if (typeof dateStr !== "string") {
-      dateStr = dateStr.toString();
-    }
-    date = moment(dateStr.toString(), format, true);
-    if (date.isValid()) {
-      return date.format("DD MMM, YYYY");
-    }
+
+  const dateString = typeof dateStr !== "string" ? dateStr.toString() : dateStr;
+
+  
+  const datePart = dateString.includes('T') 
+    ? dateString.split('T')[0] 
+    : dateString;
+
+  const formats = ["DD-MM-YYYY", "YYYY-MM-DD", "YYYY-MM-DDTHH:mm:ss.SSSSSS"];
+  
+  const date = moment(datePart, formats, true);
+  if (date.isValid()) {
+    return date.format("DD MMM, YYYY");
   }
+
   return "null";
 }
 
@@ -239,6 +243,25 @@ export const validateNumberLimit =
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
+  }
+
+  export function formatRoleNames(rolesString: string | ""): string {
+    const roles = rolesString.split(',');
+  
+    const formattedRoles = roles.map(role => {
+    
+      const cleanedRole = role.replace(/^MEEDLE_/, '');
+      
+      let formatted = cleanedRole.toLowerCase().replace(/_/g, ' ');
+      
+      formatted = formatted.split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+      
+      return formatted;
+    });
+  
+    return formattedRoles.join(', ');
   }
 
 //   interface NestedData {

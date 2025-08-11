@@ -3,14 +3,14 @@ import {ROLES} from "@/types/roles";
 import {isAfter} from "date-fns";
 import {StaticImageData} from "next/image";
 
-export  function capitalizeFirstLetters(word: string | null| undefined) {
-    if (word) {
-        return word
-            .toLowerCase()
-            .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1) + ' ')
-    }
-
+export function capitalizeFirstLetters(word: string | null | undefined): string {
+    if (!word) return ""; 
+    
+    return word
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' '); 
 }
 
 export function capitalizeWordsFromArray(arr: unknown): string {

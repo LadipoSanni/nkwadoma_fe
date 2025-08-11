@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import {Formik, Form, Field, ErrorMessage} from 'formik'
 import {Label} from '@/components/ui/label';
 import {inter} from "@/app/fonts"
@@ -6,44 +6,67 @@ import {useToast} from "@/hooks/use-toast";
 import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 import { validationStaffSchema } from '@/utils/validation-schema';
 import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
-
-// interface ApiError {
-//     status: number;
-//     data: {
-//         message: string;
-//     };
-// }
+import { useInviteColleagueMutation } from '@/service/admin/organization';
 
 
 const initialFormValue = {
     firstName: "",
     lastName: "",
     email: "",
-    adminRole: ""
+    role: ""
 }
+
+interface RoleOption {
+  value: string;
+  label: string;
+}
+
 
  interface Props{
     setIsOpen : (e:boolean) => void;
+    roleOptions: RoleOption[];
  }
 
+ interface ApiError {
+  status: number;
+  data: {
+    message: string;
+  };
+}
 
-function InviteStaff({setIsOpen}:Props) {
+
+function InviteStaff({setIsOpen,roleOptions}:Props) {
     
-    const adminRoleType = [ { value: "ADMIN", label: "Admin" }, { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" }, { value: "ASSOCIATE", label: "Associate"} ];
     const { toast } = useToast();
+     const [error, setError] = useState("")
+    const [inviteColleague,{isLoading}] = useInviteColleagueMutation()
 
     const handleCloseModal = () => {
         setIsOpen(false);
     }
 
-    const handleSubmit = (values: typeof initialFormValue) => {
-       console.log(values)
-       toast({
-        description:"Invited successfully",
-        status: "success",
-        duration: 1000
-       })
-     handleCloseModal()
+    const handleSubmit = async  (values: typeof initialFormValue) => {
+
+      const formData = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        role: values.role
+      }
+
+      try {
+        const result = await inviteColleague(formData).unwrap();
+        if(result){
+          toast({
+          description: result.message,
+          status: "success",
+        });
+        handleCloseModal()
+      }
+      } catch (err) {
+        const error = err as ApiError;
+        setError(error?.data?.message);
+      }
     }
 
     
@@ -147,16 +170,16 @@ function InviteStaff({setIsOpen}:Props) {
                 <CustomSelectObj
                   triggerId='roleTriggerId'
                   id='selectRole'
-                  value={values.adminRole}
-                  onChange={(value) => setFieldValue("adminRole", value)} 
-                  name='adminRole'
+                  value={values.role}
+                  onChange={(value) => setFieldValue("role", value)} 
+                  name='role'
                   placeHolder='Select a role'
-                  selectContent={adminRoleType}
+                  selectContent={roleOptions}
                   testId='roleTestId'
                 />
                </div>
                   {
-                    errors.adminRole && touched.adminRole &&  (
+                    errors.role && touched.role &&  (
                         <ErrorMessage
                     name="adminRole"
                     component="div"
@@ -170,10 +193,15 @@ function InviteStaff({setIsOpen}:Props) {
            <div className='mb-4'>
                 <SubmitAndCancelButton
                   isValid={isValid} 
-                  isLoading={false}
+                  isLoading={isLoading}
                   handleCloseModal={handleCloseModal}
                   submitButtonName='Invite'
                 />
+                <div>
+                {
+                <div className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>
+                 }
+                </div>
               </div>
             </Form>
         )

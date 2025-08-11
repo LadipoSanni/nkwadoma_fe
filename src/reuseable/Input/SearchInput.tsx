@@ -13,7 +13,7 @@ interface SearchInputProps {
     
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({id,value,onChange,style,testId, placeholder}: SearchInputProps) => {
+const SearchInput: React.FC<SearchInputProps> = ({id,value,onChange,style,testId, placeholder="search"}: SearchInputProps) => {
     return (
         <div
             className={`${inter.className} ${style} md:w-[20.25rem] w-full text-[14px] h-[2.8125rem] flex items-center gap-2 border border-neutral650 rounded-md p-3`}
