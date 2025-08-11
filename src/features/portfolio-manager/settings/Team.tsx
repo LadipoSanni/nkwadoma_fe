@@ -7,7 +7,7 @@ import { Book } from "lucide-react";
 import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
 // import {  useGetDetailsOfOrganizationQuery } from '@/service/admin/organization';
-import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
+// import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
 import { useViewOrganizationAdminQuery } from '@/service/admin/organization';
 // import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage';
 import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
@@ -15,6 +15,7 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 import { useDebounce } from '@/hooks/useDebounce';
+import InviteStaff from '@/components/super-admin/staff/Invite-staff';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -30,6 +31,7 @@ function Team() {
     const [pageNumber,setPageNumber] = useState(0)
     const [pageSearchNumber,setPageSearchNumber] = useState(0)
     const [searchHasNextPage,setSearchHasNextPage]  = useState(false)
+    const adminRoleType = [  { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" }, { value: "MEEDL_ASSOCIATE", label: "Associate"} ];
 
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
@@ -167,9 +169,13 @@ function Team() {
            icon={Cross2Icon}
             width='36%'
           >
-           <InviteAdmin 
+           {/* <InviteAdmin 
            setIsOpen={setIsModalOpen}
            adminType="PORTFOLIO_MANAGER"
+           /> */}
+           <InviteStaff
+            setIsOpen={setIsModalOpen}
+            roleOptions={adminRoleType}
            />
           
           </TableModal>
