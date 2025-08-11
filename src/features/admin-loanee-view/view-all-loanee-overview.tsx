@@ -9,7 +9,17 @@ import Table from '@/reuseable/table/Table';
 import {formatAmount, formateDigits} from "@/utils/Format";
 import {useRouter} from "next/navigation";
 import {useViewAllLoaneeByAdminsQuery, useViewAllLoansTotalCountsByAdminsQuery} from "@/service/users/Loanee_query";
-
+import {store} from "@/redux/store";
+import {setSelectedLoaneeId,setSelectedLoaneeFirstName ,setSelectedLoaneeLastName} from "@/redux/slice/loan/loanees";
+interface TableRowType {
+    "loaneeId": string,
+    "firstName": string,
+    "lastName": string,
+    "email": string,
+    "historicalDebt": number,
+    "totalAmountOutstanding": number,
+    "numberOfLoans": number
+}
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
@@ -21,11 +31,10 @@ const ViewAllLoaneeOverview = () => {
     const [pageNumber,setPageNumber] = useState(0)
     const name = searchTerm ? searchTerm : undefined
     const {data, isLoading, isFetching } = useViewAllLoaneeByAdminsQuery({pageSize, name, pageNumber})
-    const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery({})
+    const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery(undefined)
 
     useEffect(() => {
         if(data && data?.data) {
-            console.log('doon: ', data?.data?.pageNumber)
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
@@ -46,8 +55,18 @@ const ViewAllLoaneeOverview = () => {
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
-        console.log(ID)
-        router.push('/loanees/loans')
+        if (ID && typeof ID ===  "object" ){
+            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            const row : TableRowType = ID;
+
+            store.dispatch(setSelectedLoaneeId(String(row.loaneeId)))
+            store.dispatch(setSelectedLoaneeLastName(String(row.lastName)))
+            store.dispatch(setSelectedLoaneeFirstName(String(row.firstName)))
+            // store.dispatch(setSelectedLoaneeFullName(`${String(row.firstName)}` + ' ' + `${String(row.lastName)}`))
+            router.push('/loanees/loans')
+        }
+
     };
     return (
         <div
