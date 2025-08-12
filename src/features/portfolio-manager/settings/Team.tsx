@@ -38,7 +38,7 @@ function Team() {
 
    const dataElement = {
     name:debouncedSearchTerm,
-    activationStatuses: ['DECLINED',"APPROVED","PENDING_APPROVAL","ACTIVE"],
+    activationStatuses: ['DECLINED',"APPROVED","PENDING_APPROVAL","ACTIVE","INVITED"],
     identityRoles:["PORTFOLIO_MANAGER","MEEDL_ASSOCIATE"],
     pageNumber:pageNumber,
     pageSize: 10
