@@ -96,7 +96,7 @@ const ViewAllLoaneeOverview = () => {
             <div
                 id={'tableAndSearchContainer'}
                 data-testid={'tableAndSearchContainer'}
-                className={`grid  max-h-[40vh] overflow-y-auto `}
+                className={`grid  max-h-[50vh] overflow-y-auto `}
 
             >
 
