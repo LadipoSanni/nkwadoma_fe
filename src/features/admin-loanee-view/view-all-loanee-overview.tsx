@@ -8,7 +8,11 @@ import Table from '@/reuseable/table/Table';
 // import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import {formatAmount, formateDigits} from "@/utils/Format";
 import {useRouter} from "next/navigation";
-import {useViewAllLoaneeByAdminsQuery, useViewAllLoansTotalCountsByAdminsQuery} from "@/service/users/Loanee_query";
+import {
+    useSearchLoaneeByAdminsQuery,
+    useViewAllLoaneeByAdminsQuery,
+    useViewAllLoansTotalCountsByAdminsQuery
+} from "@/service/users/Loanee_query";
 import {store} from "@/redux/store";
 import {setSelectedLoaneeId,setSelectedLoaneeFirstName ,setSelectedLoaneeLastName} from "@/redux/slice/loan/loanees";
 interface TableRowType {
@@ -29,17 +33,24 @@ const ViewAllLoaneeOverview = () => {
     const [totalPage,setTotalPage] = useState(0)
     const [pageSize] = useState(10)
     const [pageNumber,setPageNumber] = useState(0)
+
     const name = searchTerm ? searchTerm : undefined
     const {data, isLoading, isFetching } = useViewAllLoaneeByAdminsQuery({pageSize, name, pageNumber})
+    const {data: searchData, isLoading:searchDataLoading, isFetching: searchDataIsFetching} = useSearchLoaneeByAdminsQuery({pageSize, name, pageNumber}, {skip: !searchTerm})
     const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery(undefined)
 
     useEffect(() => {
-        if(data && data?.data) {
+        if(searchTerm) {
+            setNextPage(searchData?.data?.hasNextPage)
+            setTotalPage(searchData?.data?.totalPages)
+            setPageNumber(searchData?.data?.pageNumber)
+        }else{
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
         }
-    },[data, data?.data])
+
+    },[data, data?.data, searchData])
 
     const router = useRouter()
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +61,7 @@ const ViewAllLoaneeOverview = () => {
         { title: 'Name', sortable: true, id: 'name', selector: (row: TableRowData) => <div>{row.firstName?.toString() } {row.lastName?.toString()}</div>  },
         { title: 'Email address', sortable: true, id: 'emailAddress', selector: (row: TableRowData) =><div>{row?.email}</div>},
         { title: 'No. of loans', sortable: true, id: 'noOfLoans', selector: (row: TableRowData) => <div className=''>{formateDigits(Number(row.numberOfLoans))}</div> },
-        { title: 'Historical dept', sortable: true, id: 'historicalDept', selector: (row: TableRowData) => <div className={`  `}>{row.historicalDebt}</div>},
+        { title: 'Historical debt', sortable: true, id: 'historicalDebt', selector: (row: TableRowData) => <div className={`  `}>{formateDigits(Number(row.historicalDebt))}</div>},
         { title: 'Total outstanding', sortable: true, id: 'totalOutstanding', selector: (row: TableRowData) =><div className=''>{formatAmount(row.totalAmountOutstanding)}</div> },
     ];
 
@@ -102,7 +113,7 @@ const ViewAllLoaneeOverview = () => {
 
 
                 <Table
-                    tableData={data?.data?.body ? data?.data?.body : []}
+                    tableData={searchTerm ? searchData?.data?.body : data?.data?.body }
                     tableHeader={tableHeader}
                     handleRowClick={handleRowClick}
                     tableHeight={40}
@@ -119,7 +130,7 @@ const ViewAllLoaneeOverview = () => {
                     pageNumber={pageNumber}
                     setPageNumber={setPageNumber}
                     totalPages={totalPage}
-                    isLoading={isLoading || isFetching || isLoadingLoanCounts || isFetchingCounts}
+                    isLoading={isLoading || isFetching || searchDataLoading || searchDataIsFetching}
                 />
             </div>
         </div>

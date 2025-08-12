@@ -97,6 +97,12 @@ export const loaneeApi = createApi({
                 method: 'GET'
             })
         }),
+        searchLoaneeByAdmins : builder.query({
+            query: (data:{pageSize: number, name?: string, pageNumber: number}) => ({
+                url: `/api/v1/loanee/all/search?name=${data.name}&pageSize=${data.pageSize}&pageNumber=${data.pageNumber}`,
+                method: 'GET'
+            })
+        }),
         viewAllLoansTotalCountsByAdmins : builder.query({
            query: (loaneeId?: string) => ({
                url: `/loan/total${loaneeId ? `?loaneeId=${loaneeId}` : ''}`,
@@ -123,6 +129,7 @@ export const loaneeApi = createApi({
 export const {
     useSearchLoaneeLoansByAdminQuery,
     // useIsIdentityVerifiedQuery,
+    useSearchLoaneeByAdminsQuery,
     useViewLoaneeLoansByAdminQuery,
     useViewAllLoansTotalCountsByAdminsQuery,
     useViewAllLoaneeByAdminsQuery,
