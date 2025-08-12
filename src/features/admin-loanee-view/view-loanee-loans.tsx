@@ -69,8 +69,8 @@ const ViewLoaneeLoans = () => {
 
 
     const onCardClick = (item: AdminViewLoanType) => {
-        store.dispatch(setcohortId(''))
-        store.dispatch(setLoaneeId(''))
+        store.dispatch(setcohortId(item?.cohortId))
+        store.dispatch(setLoaneeId(item?.loaneeId))
         router.push(`${LoaneeLoannDetails(item.id)}`);
     }
 
