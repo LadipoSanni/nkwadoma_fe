@@ -72,7 +72,7 @@ const ViewAllLoaneeOverview = () => {
         <div
             id={'viewAllLoaneeOverviewContainer'}
             data-testid={'viewAllLoaneeOverviewContainer'}
-            className={`w-full h-full  grid content-between gap-4 px-4 py-3  `}
+            className={`w-full h-full  grid content-between gap-2 px-4 py-3  `}
         >
             <div
                 id={'viewAllLoaneeTotalOverviewContainer'}
@@ -96,7 +96,7 @@ const ViewAllLoaneeOverview = () => {
             <div
                 id={'tableAndSearchContainer'}
                 data-testid={'tableAndSearchContainer'}
-                className={`grid  max-h-[40vh] overflow-y-auto `}
+                className={`grid  max-h-[50vh] overflow-y-auto `}
 
             >
 

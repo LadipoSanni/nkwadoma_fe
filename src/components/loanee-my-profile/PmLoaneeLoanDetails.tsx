@@ -72,9 +72,9 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
     ]
 
     return (
-        <div className={`  ${styles.containerDiv}  md:w-[55%] sm:w-[100%] w-[100%] px-4 pb-6 md:border-r md:border-r-grey-200 `}>
-            <Tabs className={` grid w-full  grid-rows-2 `} defaultValue={'loanInfo'}>
-              <div className={` py-4 col-span-2  `}>
+        <div className={`   md:w-[55%] sm:w-[100%] w-[100%] px-4 pb-6 md:border-r md:border-r-grey-200 `}>
+            <Tabs className={` grid w-full  `} defaultValue={'loanInfo'}>
+              <div className={` py-4   `}>
                   <TabsList className="w-full md:w-fit lg:w-fit ">
                     <div className={`w-full ${styles.tab}  flex h-full `}>
                         <TabsTrigger id={'loanInfo'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="loanInfo">Loan Information</TabsTrigger>
@@ -84,8 +84,8 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
                     </div>
                   </TabsList>
               </div>
-                <div className={`   grid gap-4 w-full h-[100%]  `}>
-                    <TabsContent value={'loanInfo'} className={` bg-blue-50 w-full   grid gap-3 `}>
+              <div className={`   md:max-h-[54vh] w-full  ${styles.container}  `}>
+                    <TabsContent value={'loanInfo'} className={`  w-full   grid gap-3 `}>
                         <Details id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.amountReceived} valueType={'currency'} />
                         <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>
                             <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.amountOutstanding} valueType={'currency'} />
@@ -121,7 +121,7 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
                                 }
                             </div>
                         </TabsContent>
-                    <TabsContent value={'documents'} className={` grid md:flex pt-3 gap-5  w-full  md:flex-col-2  `}>
+                    <TabsContent value={'documents'} className={` hidden  md:flex pt-3 gap-5  w-full  md:flex-col-2  `}>
                         {/*<Document/>*/}
                         <div className={` w-fit justify-self-center`}>No Document available</div>
                     </TabsContent>

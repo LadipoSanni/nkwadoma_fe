@@ -10,6 +10,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
     height: 56vh;
+    background-color: aqua;
     /*grid-template-columns: 200px;*/
     grid-template-rows: repeat(6, 1fr);
 
