@@ -87,7 +87,7 @@ const PmLoaneeLoanDetails = ({data, loaneeId, isLoading}: props) => {
               <div className={`   md:max-h-[54vh] w-full   ${styles.container}  `}>
                     <TabsContent value={'loanInfo'} className={`  px-2  grid gap-3 `}>
                         <Details id={'loanAmount'} isLoading={isLoading} showAsWholeNumber={true}   maxWidth={'100%'} name={'Loan amount'} value={data?.amountReceived} valueType={'currency'} />
-                        <div className={` md:flex md:gap-4  grid gap-4  w-full  `}>
+                        <div className={` md:flex md:gap-4  grid gap-4    `}>
                             <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={data?.amountOutstanding} valueType={'currency'} />
                             <Details isLoading={isLoading} id={'AmountRepaid'} showAsWholeNumber={true}   maxWidth={'100%'} name={'Amount repaid'} value={data?.amountRepaid} valueType={'currency'}  />
                         </div>
