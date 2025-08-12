@@ -16,7 +16,7 @@ import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethod
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import BackButton from '../back-button';
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 
 interface Props {
     cohort: string,
@@ -34,6 +34,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
     const [modalTitle, setModalTitle] = React.useState('');
     const userRole  = getItemSessionStorage("user_role")
     const router = useRouter()
+    const searchParams = useSearchParams()
 
     const handleOpenModal = (id: string, title: string, buttonText: string) => {
         setModalId(id);
@@ -43,7 +44,16 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
     }
     const handleBack = () => {
         if(userRole === 'PORTFOLIO_MANAGER'){
-            router.push('/organizations/loanees/uploaded')
+            if (searchParams){
+                const id = searchParams.get("id");
+                if (id) {
+                    router.push('/loanees/loans')
+                }else {
+                    router.push('/organizations/loanees/uploaded')
+
+                }
+            }
+
         }else if(userRole?.includes('ADMIN')) {
             router.push('/loanees/loans')
         }else if(userRole === 'LOANEE') {

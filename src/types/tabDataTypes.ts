@@ -9,9 +9,9 @@ export const loanProductTab = [
 ]
 
 export const settingsTab = [
-    { name: "General", value:"/settings/profile"},
-    { name: "Company", value: "/settings/settings"},
-    { name: "Settings", value: "/settings/settings"},
+    { name: "General", value:"/settings/general" },
+    { name: "Company", value: "/settings/company" },
+    // { name: "Settings", value: "/settings/settings"},
     { name: "Team", value: "/settings/team" },
     { name: "Roles & Permissions", value: "/settings/roles-&-permissions" },
 ]
