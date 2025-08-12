@@ -20,7 +20,6 @@ interface Props {
 
 function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen,id}:Props) {
 
-    console.log(id)
     
     const dropDownOption = [
       status === "Deactivated"?  {name: 'Activate', id: '1'} : {name: 'Deactivate', id: '2'}

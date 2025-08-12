@@ -15,9 +15,10 @@ interface Props {
     kebabOptions?: { id: string, name: string }[];
     className?: string;
     icon? : ElementType;
+    contentStyle? : string
 }
 
-const Kebab = ({handleDropDownClick, kebabOptions, className, icon: Icon}: Props) => {
+const Kebab = ({handleDropDownClick, kebabOptions, className, icon: Icon,contentStyle}: Props) => {
     return (
         <div id="kebabWrapper" data-testid="kebab-wrapper" className="relative">
             <Menubar id="menubar" data-testid="menubar">
@@ -43,7 +44,7 @@ const Kebab = ({handleDropDownClick, kebabOptions, className, icon: Icon}: Props
                     <MenubarContent
                         id="menubarContent"
                         data-testid="menubar-content"
-                        className={`${inter.className} pr-8 px-2 mt-0 bg-meedlWhite gap-3 shadow-grey100 rounded-md w-full absolute left-auto right-[-18px] z-10`}
+                        className={`${inter.className} pr-8 px-2 mt-0 bg-meedlWhite gap-3 shadow-grey100 rounded-md w-full absolute left-auto right-[-18px] z-10 ${contentStyle}`}
                     >
                         {kebabOptions?.map((option, index) => (
                             <MenubarItem
