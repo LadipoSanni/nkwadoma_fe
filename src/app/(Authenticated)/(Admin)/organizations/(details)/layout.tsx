@@ -1,5 +1,6 @@
 import React from 'react'
 import OrganizationDetailLayout from '@/layout/organization-detail-layout'
+import CustomAuthorization from "@/features/auth/authorization";
 
 type props = {
     children: React.ReactNode;
@@ -8,9 +9,11 @@ type props = {
 const organizationDetailTab: React.FC<props> = ({ children }) => {
   return (
     <div>
-    <OrganizationDetailLayout>
+      <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER','MEEDL_SUPER_ADMIN']}>
+      <OrganizationDetailLayout>
    {children}
     </OrganizationDetailLayout>
+      </CustomAuthorization>
   </div>
   )
 }

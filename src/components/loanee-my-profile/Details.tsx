@@ -11,11 +11,12 @@ interface Props {
     showAsWholeNumber?: boolean,
     isLoading?: boolean,
     sx?:string,
+    className?: string
 }
 
-const Details = ({id, name, value,sx, valueType,showAsWholeNumber, isLoading}: Props) => {
+const Details = ({id, name, value,sx, valueType,showAsWholeNumber, isLoading,className}: Props) => {
     return (
-        <div id={id} data-testid={id} className={`md:border  h-fit bg-white grid w-full md:w-full lg:w-full   rounded-md px-3 py-4  md:border-grey-200 border border-grey-200 `}>
+        <div id={id} data-testid={id} className={`md:border  h-fit bg-white grid w-fit md:w-full lg:w-full   rounded-md px-3 py-4  md:border-grey-200 border border-grey-200 ${className}`}>
            <div className={`  ${isLoading ? 'animate-pulse bg-[#f4f4f5] h-[6rem]  ' : 'bg-[#f9f9f9]'}    px-4 py-4 grid gap-4  ${sx ? `${sx}` : `w-full `}`}>
                <span id={'detailName:'+ name} className={` ${inter.className} text-[#6A6B6A] text-[14px] ${isLoading ? 'hidden ' : ''} `}>{name}</span>
                <span id={'detailsValue:' + value} className={` ${cabinetGroteskBold.className} ${isLoading ? 'hidden ' : ''}  text-[32px] ${styles.details} max-w-[100%]  text-meedlBlue  `}>

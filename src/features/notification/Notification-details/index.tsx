@@ -11,7 +11,7 @@ import {store} from "@/redux/store";
 import { setCurrentFinancierId} from '@/redux/slice/financier/financier';
 import { setNotification,resetNotification,setNotificationId,setNotificationFlag } from '@/redux/slice/notification/notification';
 import { setMarketInvestmentVehicleId } from "@/redux/slice/investors/MarketPlaceSlice";
-import { setOrganizationId,setOrganizationDetail} from '@/redux/slice/organization/organization';
+import { setOrganizationId} from '@/redux/slice/organization/organization';
 import { setLoanOfferId } from '@/redux/slice/loan/loan-offer';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 import { setLoanReferralId } from '@/redux/slice/loan/selected-loan';
@@ -50,11 +50,11 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
          store.dispatch(setMarketInvestmentVehicleId({marketInvestmentVehicleId:notification?.data?.contentId }))
          store.dispatch(setCurrentNavbarItem("Investment vehicle"))
          router.push("/marketplace/details");
-     }else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION") {
+     }else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION" || notification?.data?.notificationFlag === "ORGANIZATION_DEACTIVATED" || notification?.data?.notificationFlag === "ORGANIZATION_REACTIVATED") {
       store.dispatch(setOrganizationId(notification?.data?.contentId))
-      store.dispatch(setOrganizationDetail("details"))
+      // store.dispatch(setOrganizationDetail("details"))
       store.dispatch(setCurrentNavbarItem("Organizations"))
-      router.push("/organizations/details");
+      router.push("/organizations/detail");
   } else if (notification?.data?.notificationFlag === "LOAN_OFFER"){
       store.dispatch(setLoanOfferId(notification?.data?.contentId))
       store.dispatch(setCurrentNavbarItem("Loan offer"))
@@ -85,7 +85,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
       return "financier"
    } else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE"){
       return "investment vehicle"
-   } else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION"){
+   } else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION"  || notification?.data?.notificationFlag === "ORGANIZATION_DEACTIVATED" || notification?.data?.notificationFlag === "ORGANIZATION_REACTIVATED"){
     return "organization"
  }else if (notification?.data?.notificationFlag === "LOAN_OFFER"){
    return "loan offer"

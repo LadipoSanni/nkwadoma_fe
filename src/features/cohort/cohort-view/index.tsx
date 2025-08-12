@@ -291,10 +291,10 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
 
   return (
     <div className=''>
-        <div id='cohortName' className={` ${user_role === "PORTFOLIO_MANAGER"? "" : "md:px-6 px-4"}`}>
-          <div id='buttonFilterCreate' className={`md:flex justify-between items-center z-50 relative  ${inter.className} ${user_role === "PORTFOLIO_MANAGER"? "top-2" : "top-6  bottom-2"}`}>
-            <div id='buttonFilter' className='flex gap-4'>
-            <div className='relative'>
+        <div id='cohortName' className={` ${user_role === "PORTFOLIO_MANAGER" || user_role === "MEEDL_SUPER_ADMIN" ? "" : "md:px-6 px-4"}`}>
+          <div id='buttonFilterCreate' className={` ${user_role === "PORTFOLIO_MANAGER" || user_role === "MEEDL_SUPER_ADMIN" ? "md:flex top-2" : "flex top-6  bottom-2"} justify-between items-center z-50 relative  ${inter.className} `}>
+            <div id='buttonFilter' className='md:flex gap-4 w-full'>
+            <div className='relative '>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
               <MdSearch className="h-6 w-6 text-grey200" />
             </span>
@@ -306,7 +306,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
               onChange={handleSearchChange}
               />
             </div>
-            { user_role !== "PORTFOLIO_MANAGER"? <div className='z-10'>
+            {!["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN"].includes(user_role || "") ? <div className='z-10'>
               <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
                   <Button id='cohortInProgram' variant={'default'} className='w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none' >
@@ -443,15 +443,15 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
             </div>
              <div className='md:mt-0 mt-4'>
               { 
-                user_role === "PORTFOLIO_MANAGER" && organizationTabStatus === "loanBook"? 
+                ["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN"].includes(user_role || "") && organizationTabStatus === "loanBook"? 
                 <Button variant={"secondary"}
                   size={"lg"}
-                  className={`${inter.className}   h-12 flex justify-center items-center w-full ${user_role === "PORTFOLIO_MANAGER" && organizationStatus !== "ACTIVE"? "bg-gray text-grey150 hover:bg-gray" : "bg-meedlBlue text-meedlWhite"}`}
+                  className={`${inter.className}   h-12 flex justify-center items-center w-full ${["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN"].includes(user_role || "")  && organizationStatus !== "ACTIVE"? "bg-gray text-grey150 hover:bg-gray" : "bg-meedlBlue text-meedlWhite"}`}
                   id='createProgramModal'
                    onClick={handleModalOpen}
-                   disabled={user_role === "PORTFOLIO_MANAGER" && organizationStatus !== "ACTIVE" ? true : false}
+                   disabled={["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN"].includes(user_role || "") && organizationStatus !== "ACTIVE" ? true : false}
                   >
-                   {user_role === "PORTFOLIO_MANAGER"? "Add cohort" : "Create cohort"}
+                   {user_role === "PORTFOLIO_MANAGER" ||  user_role === "MEEDL_SUPER_ADMIN"? "Add cohort" : "Create cohort"}
                 </Button> : ""
                 }
 

@@ -264,6 +264,20 @@ export const validateNumberLimit =
     return formattedRoles.join(', ');
   }
 
+  export const formatNumberWithCommas = (value: number | string | null | undefined): string => {
+    if (value === null || value === undefined || value === "") return "0";
+    
+    const num = typeof value === "string" 
+      ? parseFloat(value.replace(/[^0-9.-]/g, "")) 
+      : Number(value);
+  
+    if (isNaN(num)) return "0";
+    
+    return new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: 0
+    }).format(num);
+  };
+
 //   interface NestedData {
 //     body?: TableRowData[];
 // }
