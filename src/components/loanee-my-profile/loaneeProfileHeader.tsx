@@ -63,7 +63,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                          <Skeleton className="h-5  bg-[#f4f4f5] w-[200px]" />
                      :
                          <h5 className={` text-[24px] ${cabinetGroteskMediumBold.className}  `}>
-                             Michael adeleke
+                             {userName}
                          </h5>
                      }
                  </div>
