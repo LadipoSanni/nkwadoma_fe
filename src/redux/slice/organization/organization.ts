@@ -24,7 +24,9 @@ interface OrganizationSliceState {
     organizationDetailTab: string;
     loaneeId: string;
     organizationStatus: string;
-    organizationInitialState: initialFormValue
+    organizationInitialState: initialFormValue,
+    organizationName: string,
+    organizationDetailTabStatus: string
 }
 
 const initialState:OrganizationSliceState= {
@@ -47,8 +49,10 @@ const initialState:OrganizationSliceState= {
         logoImage:"",
         coverImage: "",
         phoneNumber: "",
-        countryCode: "NG"
-    }
+        countryCode: "NG",
+    },
+    organizationName: "" ,
+    organizationDetailTabStatus: ""
 }
 
 export const organizationSlice = createSlice({
@@ -99,7 +103,14 @@ export const organizationSlice = createSlice({
                 phoneNumber: "",
                 countryCode: "NG"
             }
-        }
+        },
+        setOrganizationName: ( state, action: PayloadAction<string >) => {
+            state.organizationName = action.payload;
+        },
+        setOrganizationDetailTabStatus: ( state, action: PayloadAction<string >) => {
+            state.organizationDetailTabStatus = action.payload;
+        },
+
 
     }
 })
@@ -111,6 +122,9 @@ export const {setOrganizationTabStatus,
              setOrganizationStatus,
              resetOrganizationStatus,
              setOrganizationInitialState,
-             resetOrganizationInitialState
+             resetOrganizationInitialState,
+             setOrganizationName,
+             setOrganizationDetailTabStatus
             } = organizationSlice.actions;
+
 export default organizationSlice.reducer;

@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { Label } from '@/components/ui/label';
 import {inter} from "@/app/fonts"
 import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
-import { useDeactivateOrganizationMutation } from '@/service/admin/organization';
+import { useDeactivateOrganizationMutation,useDeactivateUserMutation } from '@/service/admin/organization';
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from 'next/navigation'
 import { store } from '@/redux/store';
@@ -27,11 +27,13 @@ interface ApiError {
     setIsOpen? : (e:boolean) => void;
     id: string;
     setSwitch?: (set: boolean) => void
+    deactivateUser?:string
   }
 
-function DeactivateOrganization({setIsOpen,id,setSwitch}:props) {
+function DeactivateOrganization({setIsOpen,id,setSwitch,deactivateUser}:props) {
   const [isError, setError] = useState('')
   const [deactivateOrganization, {isLoading}] = useDeactivateOrganizationMutation();
+  const [deactivateAUser,{isLoading: isloading}] = useDeactivateUserMutation()
   const { toast } = useToast();
   const router = useRouter()
 
@@ -57,6 +59,16 @@ function DeactivateOrganization({setIsOpen,id,setSwitch}:props) {
           }
 
           try {
+            if(deactivateUser === "staff"){
+               const deactivate = await deactivateAUser(formData).unwrap();
+               if(deactivate){
+                toast({
+                  description: deactivate.message,
+                  status: "success",
+                })
+              }
+              handleCloseModal()
+            }else {
             const deactivate = await deactivateOrganization(formData).unwrap();
             if(deactivate){
               toast({
@@ -66,6 +78,7 @@ function DeactivateOrganization({setIsOpen,id,setSwitch}:props) {
               store.dispatch(setOrganizationTabStatus("deactivated"))
               router.push("/organizations")
             }
+          }
           } catch (err) {
             const error = err as ApiError;
             setError(error?.data?.message);
@@ -115,7 +128,7 @@ function DeactivateOrganization({setIsOpen,id,setSwitch}:props) {
                 <div>
               <SubmitAndCancelButton 
                 isValid={isValid} 
-                isLoading={isLoading} 
+                isLoading={isLoading || isloading} 
                 handleCloseModal={handleCloseModal} 
                 submitButtonName='Deactivate'
                 />

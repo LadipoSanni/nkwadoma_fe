@@ -155,7 +155,7 @@ export const validationStaffSchema = Yup.object().shape({
             .email('Invalid email address')
             .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
             .required('Email address is required'),
-        adminRole:Yup.string()
+        role:Yup.string()
               .required('Role is required'),
     })
 

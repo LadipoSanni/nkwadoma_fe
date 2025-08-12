@@ -101,11 +101,13 @@ const CohortView = () => {
    const cohortTab = useAppSelector(state => state?.cohort?.cohortStatusTab)
    const organizationId = useAppSelector(state => state?.organization?.setOrganizationId)
   const organizationStatus = useAppSelector(store => store?.organization?.organizationStatus)
+   const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
     incoming: { pageNumber: 0, totalPages: 0, hasNextPage: false },
     current: { pageNumber: 0, totalPages: 0, hasNextPage: false },
     graduated: { pageNumber: 0, totalPages: 0, hasNextPage: false }
 });
+
 
 const currentTabState = tabStates[cohortTab];
 
@@ -124,6 +126,7 @@ const currentTabState = tabStates[cohortTab];
     : {}),pageSize: size, pageNumber: pageNumber }, { skip: !isCreateModalOpen, refetchOnMountOrArgChange: true, })
   const { data: cohortsByProgram, refetch, isLoading: cohortIsLoading } = useGetAllCohortByAParticularProgramQuery({ programId,cohortStatus: cohortTab.toUpperCase(), pageSize: 300, pageNumber: page }, { refetchOnMountOrArgChange: true, skip: !programId });
   const [deleteItem] = useDeleteCohortMutation()
+
  
   const handleModalOpen = () => {
     setIsOpen(!isOpen)
@@ -303,7 +306,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
               onChange={handleSearchChange}
               />
             </div>
-             <div className='z-10'>
+            { user_role !== "PORTFOLIO_MANAGER"? <div className='z-10'>
               <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
                   <Button id='cohortInProgram' variant={'default'} className='w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none' >
@@ -436,10 +439,12 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                   </Formik>
                 </DropdownMenuContent>
               </DropdownMenu>
-             </div>
+             </div> : ""}
             </div>
              <div className='md:mt-0 mt-4'>
-               <Button variant={"secondary"}
+              { 
+                user_role === "PORTFOLIO_MANAGER" && organizationTabStatus === "loanBook"? 
+                <Button variant={"secondary"}
                   size={"lg"}
                   className={`${inter.className}   h-12 flex justify-center items-center w-full ${user_role === "PORTFOLIO_MANAGER" && organizationStatus !== "ACTIVE"? "bg-gray text-grey150 hover:bg-gray" : "bg-meedlBlue text-meedlWhite"}`}
                   id='createProgramModal'
@@ -447,7 +452,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
                    disabled={user_role === "PORTFOLIO_MANAGER" && organizationStatus !== "ACTIVE" ? true : false}
                   >
                    {user_role === "PORTFOLIO_MANAGER"? "Add cohort" : "Create cohort"}
-                </Button>
+                </Button> : ""
+                }
 
              </div>
           </div>

@@ -55,9 +55,12 @@ const ViewOrganizationDetail = () => {
   const {data: searchResults,isLoading: isloading,isFetching: isfetching} =  useSearchOrganisationAdminByNameQuery(searchDataElement,{skip: !searchTerm})
 
   const dataElement = {
+    activationStatuses: ['INVITED',"APPROVED"],
+    identityRoles:["PORTFOLIO_MANAGER","MEEDL_ADMIN","MEEDL_ASSOCIATE"],
     pageNumber:pageNumber,
     pageSize: 10
 }
+
 
   const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
 
