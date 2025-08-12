@@ -1,6 +1,7 @@
 .container{
     /*display: flex;*/
     /*grid-template-columns: max-content;*/
+
     overflow-y: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
