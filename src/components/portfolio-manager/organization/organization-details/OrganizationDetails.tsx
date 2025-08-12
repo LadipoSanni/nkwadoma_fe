@@ -19,6 +19,7 @@ function OrganizationDetails() {
           { skip: !organizationId }
         );
 
+
          useEffect(() => {
         store.dispatch(setOrganizationStatus(organizationDetails?.data.status))
          },[organizationDetails?.data.status])
