@@ -61,7 +61,7 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id}:Props) {
        <div className='mt-7 md:mb-1 mb-3 md:flex justify-end gap-6  text-[14px]'>
          <div className='mb-3'>
          <button
-            className='w-full md:w-24 h-[50px] border-neutral650 text-neutral650 border-solid border-[1px] rounded-md hover:bg-white' 
+            className='w-full md:w-24 h-[50px] border-neutral650 text-neutral650 border-solid border-[1px] rounded-md hover:bg-white cursor-auto' 
             type='button'
             // onClick={handleClose}
          >
