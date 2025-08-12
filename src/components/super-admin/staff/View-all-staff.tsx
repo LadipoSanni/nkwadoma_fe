@@ -92,7 +92,7 @@ function Staff() {
     setEmail(row?.email as string)
     setRole(role as string)
     setInvitedDate(row?.createdAt as string)
-    setId(row?.id as string)
+    setId(row?.userId as string)
 }
 
 

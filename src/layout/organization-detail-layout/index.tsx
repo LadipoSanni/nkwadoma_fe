@@ -7,6 +7,7 @@ import {cabinetGrotesk} from "@/app/fonts";
 import {store, useAppSelector} from "@/redux/store";
 import { useRouter } from 'next/navigation'
 import { organizationDetailTabData } from '@/types/tabDataTypes'
+// import Kebab from "@/reuseable/Kebab/Kebab";
 
 
 interface props {
@@ -29,6 +30,15 @@ function  OrganizationDetailLayout({children}:props) {
          }
              }
 
+        // const dropdownOption = [
+        //     {
+        //         name: "Deactivate"
+        //     },
+        //     {
+        //          name: "Activate"
+        //     }
+        // ]
+
   return (
     <div>
         <div className='px-6 md:px-8 md:py-3  py-4'>
@@ -38,6 +48,7 @@ function  OrganizationDetailLayout({children}:props) {
             {organizationName}
         </div>
         <div>
+            <div></div>
     <TabSwitch tabData={organizationDetailTabData} defaultTab='/organizations/detail'>
    {children}
     </TabSwitch>
