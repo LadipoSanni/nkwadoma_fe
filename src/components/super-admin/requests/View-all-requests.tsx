@@ -79,7 +79,7 @@ function ViewAllRequests() {
              title: "Requested by",  
              sortable: true, 
              id: "requestedBy", 
-             selector: (row: TableRowData) => row.requestedBy
+             selector: (row: TableRowData) => row.requestedBy || "Not provided"
            },
            { 
             title: "Invitee",  
