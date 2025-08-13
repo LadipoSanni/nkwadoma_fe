@@ -34,7 +34,7 @@ function OrganizationLoaneeLayout({children,admin}:props) {
                 router.push(`/notifications/notification/${notificationId}`);
             } else {
             //  store.dispatch(setOrganizationDetail('cohorts'))
-            if( admin === "portfolio-admin"){
+            if( admin === "meedl-backOffice-admin"){
               router.push('/organizations/loanBook')
             } else {
               router.push('/organizations/cohort')
@@ -55,7 +55,7 @@ function OrganizationLoaneeLayout({children,admin}:props) {
        <div
       className='md:px-6 md:py-3 px-4 py-4'
      >
-     <BackButton id={'backCohorts'} textColor={'meedlBlue'} text={notification === "notification"? "Back to notification" : 'Back to loan book'} iconBeforeLetters={true} handleClick={handleBackButtonClick}/> 
+     <BackButton id={'backCohorts'} textColor={'meedlBlue'} text={notification === "notification"? "Back to notification" : admin === "meedl-backOffice-admin"? 'Back to loan book' : 'Back to cohort'} iconBeforeLetters={true} handleClick={handleBackButtonClick}/> 
        <div
                       id={'cohortNameAndInitials'}
                       className={` mt-6 flex gap-4  w-full h-fit `}
@@ -71,7 +71,7 @@ function OrganizationLoaneeLayout({children,admin}:props) {
       </div> 
      </div>
         <div>
-       { admin === "portfolio-admin"?
+       { admin === "meedl-backOffice-admin"?
        
        <TabSwitch tabData={loaneeTabData} defaultTab='/organizations/loanees/uploaded' >
          {children}

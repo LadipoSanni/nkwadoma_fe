@@ -17,7 +17,7 @@ import { setItemSessionStorage } from '@/utils/storage';
 import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
-import { store } from '@/redux/store'
+import { store,useAppSelector } from '@/redux/store'
 import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization} from '@/redux/slice/create/cohortSlice'
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
@@ -62,7 +62,7 @@ interface cohortList {
 const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,searchTerm,userRole,currentTab,hasNextPage,totalPages,handlePageChange,pageNumber,isTyping}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
-  // const [programId, setProgramId] = React.useState("")
+ const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
   const [details, setDetails] = React.useState({
     id: "",
@@ -82,7 +82,6 @@ const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,sear
 const {data: cohortDetails, isLoading: loading, refetch} = useGetCohortDetailsQuery({
   cohortId: cohortId
 }, {skip: !cohortId,refetchOnMountOrArgChange: true});
-
 
 
 useEffect(() => {
@@ -155,7 +154,11 @@ useEffect(() => {
      if(userRole === "PORTFOLIO_MANAGER"){
          const cohort = {name: String(row?.name),id: String(row?.id)}
          store.dispatch(setSelectedCohortInOrganization(cohort))
-         router.push('/organizations/loanees/uploaded')
+         if(organizationTabStatus === "cohort"){
+          router.push('/organizations/cohort/all')
+         } else {
+          router.push('/organizations/loanees/uploaded')
+         }
      }else {
       store.dispatch(setcohortOrProgramRoute("cohort"))
       router.push('/cohort/cohort-details')
