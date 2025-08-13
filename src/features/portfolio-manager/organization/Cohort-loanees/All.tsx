@@ -4,7 +4,9 @@ import LoaneesInCohort from '@/components/portfolio-manager/organization/Loanees
 function All() {
   return (
     <div>
-      <LoaneesInCohort/>
+      <LoaneesInCohort
+     
+      />
     </div>
   )
 }

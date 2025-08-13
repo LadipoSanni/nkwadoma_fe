@@ -1,5 +1,5 @@
 import React from 'react'
-import Archived from '@/features/portfolio-manager/organization/C0ohort-loanees/Archived'
+import Archived from '@/features/portfolio-manager/organization/Cohort-loanees/Archived'
 
 function page() {
   return (

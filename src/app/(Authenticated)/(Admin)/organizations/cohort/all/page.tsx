@@ -1,5 +1,5 @@
 import React from 'react'
-import All from '@/features/portfolio-manager/organization/C0ohort-loanees/All'
+import All from '@/features/portfolio-manager/organization/Cohort-loanees/All'
 
 function page() {
   return (

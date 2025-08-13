@@ -17,7 +17,7 @@ import { setItemSessionStorage } from '@/utils/storage';
 import { useGetCohortDetailsQuery } from '@/service/admin/cohort_query'
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
-import { store } from '@/redux/store'
+import { store,useAppSelector } from '@/redux/store'
 import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization} from '@/redux/slice/create/cohortSlice'
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
@@ -62,7 +62,7 @@ interface cohortList {
 const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,searchTerm,userRole,currentTab,hasNextPage,totalPages,handlePageChange,pageNumber,isTyping}:cohortList) => {
   const [cohortId, setCohortId] =  React.useState("")
   const [isOpen, setIsOpen] = React.useState(false);
-  // const [programId, setProgramId] = React.useState("")
+ const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
   const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
   const [details, setDetails] = React.useState({
     id: "",
@@ -82,7 +82,6 @@ const CohortTabs = ({listOfCohorts = [],handleDelete,isLoading,errorDeleted,sear
 const {data: cohortDetails, isLoading: loading, refetch} = useGetCohortDetailsQuery({
   cohortId: cohortId
 }, {skip: !cohortId,refetchOnMountOrArgChange: true});
-
 
 
 useEffect(() => {
@@ -152,10 +151,14 @@ useEffect(() => {
 
   const handleRowClick = (row: TableRowData) => {
     store.dispatch(setcohortId(String(row.id)))
-     if(userRole === "PORTFOLIO_MANAGER"){
+     if(["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")){
          const cohort = {name: String(row?.name),id: String(row?.id)}
          store.dispatch(setSelectedCohortInOrganization(cohort))
-         router.push('/organizations/loanees/uploaded')
+         if(organizationTabStatus === "cohort"){
+          router.push('/organizations/cohort/all')
+         } else {
+          router.push('/organizations/loanees/uploaded')
+         }
      }else {
       store.dispatch(setcohortOrProgramRoute("cohort"))
       router.push('/cohort/cohort-details')
@@ -170,7 +173,7 @@ useEffect(() => {
     if(id === "1") {
       setItemSessionStorage("programsId", String(row.programId))
       store.dispatch(setcohortId(String(row.id)))
-      if(userRole === "PORTFOLIO_MANAGER"){
+      if(["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")){
         const cohort = {name: String(row?.name),id: String(row?.id)}
         store.dispatch(setSelectedCohortInOrganization(cohort))
         router.push('/organizations/loanees/uploaded')
@@ -234,23 +237,23 @@ useEffect(() => {
         tableData={listOfCohorts}
         handleRowClick={handleRowClick}
         tableHeader={ProgramHeader}
-        tableHeight={userRole === "PORTFOLIO_MANAGER"? 40 : 52}
+        tableHeight={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? 40 : 52}
         sx='cursor-pointer'
         staticColunm='name'
         staticHeader='cohort'
-        showKirkBabel={userRole === "PORTFOLIO_MANAGER"? false : true}
+        showKirkBabel={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? false : true}
         kirkBabDropdownOption={dropDownOption}
         icon={MdOutlinePeople}
         sideBarTabName='cohort'
         optionalFilterName={tabValue}
         handleDropDownClick={handleDropdownClick}
         isLoading={isLoading}
-        condition={userRole === "PORTFOLIO_MANAGER"? false : true}
+        condition={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? false : true}
         hasNextPage={hasNextPage}
         pageNumber={pageNumber}
         setPageNumber={handlePageChange}
         totalPages={totalPages}
-        tableStyle={userRole === "PORTFOLIO_MANAGER"? 'h-8 flex items-center' : ""}
+        tableStyle={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? 'h-8 flex items-center' : ""}
         />
       )
   }
