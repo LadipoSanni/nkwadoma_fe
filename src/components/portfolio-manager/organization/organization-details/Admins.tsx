@@ -10,58 +10,54 @@ import { useSearchOrganizationAsPortfolioManagerQuery } from "@/service/admin/or
 import Table from "@/reuseable/table/Table";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { Book } from "lucide-react";
+import { formatMonthInDate} from '@/utils/Format'
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
 }
 
-interface adminProps extends TableRowData {
-    fullName: string,
-    email: string,
-    status: string
-  }
-
 
 function Admins() {
      const [searchTerm, setSearchTerm] = useState('');
-    const [adminList, setAdminList] = useState<adminProps[]>([])
     const organizationId = useAppSelector(store => store.organization?.setOrganizationId)
-    const [page,setPageNumber] = useState(0);
+    const [pageNumber,setPageNumber] = useState(0);
     const [totalPage,setTotalPage] = useState(0);
-    const [nextPage,hasNextPage] = useState(false)
+     const [pageSearchNumber,setPageSearchNumber] = useState(0)
+    const [hasNextPage,setNextPage] = useState(false)
+     const [searchHasNextPage,setSearchHasNextPage]  = useState(false)
 
     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
-    const { data: adminData,isLoading: isloadingAdmin,isFetching } = useViewAllAdminsInOrganizationQuery(
+    const { data: adminData,isLoading,isFetching } = useViewAllAdminsInOrganizationQuery(
             {
               organizationId: organizationId,
-              pageNumber: page,
-              pageSize: 300,
+              pageNumber:pageNumber,
+              pageSize: 10,
             }
           );
     
     const param = {
         organizationId: organizationId,
         name:debouncedSearchTerm,
-        pageNumber: page,
-        pageSize: 300,
+        pageNumber:pageSearchNumber,
+        pageSize: 10,
       }
     
       const {data: searchResult,isLoading: isloadingSearch, isFetching:isSearchFetching} =  useSearchOrganizationAsPortfolioManagerQuery(param,{skip: !debouncedSearchTerm})
 
        useEffect(() => {
-            if (debouncedSearchTerm && searchResult && searchResult.data) {
-              const admins = searchResult?.data?.body
-              setAdminList(admins);
-              setPageNumber(searchResult?.data?.pageNumber)
+            if (debouncedSearchTerm && searchResult && searchResult.data?.body) {
+              // const admins = searchResult?.data?.body
+              // setAdminList(admins);
+              setSearchHasNextPage(searchResult?.data?.hasNextPage)
               setTotalPage(searchResult?.data?.totalPages)
-              hasNextPage(searchResult?.data?.hasNextPage)
+              setPageSearchNumber(searchResult?.data?.pageNumber)
             } else if (!debouncedSearchTerm&& adminData && adminData?.data) {
-              const admins = adminData?.data?.body;
-              setAdminList(admins);
+              // const admins = adminData?.data?.body;
+              // setAdminList(admins);
               setPageNumber( adminData?.data?.pageNumber)
               setTotalPage(adminData?.data?.totalPages)
-              hasNextPage(adminData?.data?.hasNextPage)
+              setNextPage(adminData?.data?.hasNextPage)
             }
           },[debouncedSearchTerm, searchResult,adminData]);
       
@@ -69,42 +65,44 @@ function Admins() {
             setSearchTerm(event.target.value);
         };
 
+        const getTableData = () => {
+          if (!adminData?.data?.body) return [];
+          if (debouncedSearchTerm) return searchResult?.data?.body || [];
+          return adminData?.data?.body;
+      }
+    
+
         const adminsHeader = [
-            {
-              title: "Full name",
-              sortable: true,
-              id: "fullName",
-              selector: (row: TableRowData) => row.fullName,
-            },
-            {
-              title: <div className="relative md:left-16 md:right-16">Email</div>,
-              sortable: true,
-              id: "email",
-              selector: (row: TableRowData) => ( <div className="relative md:left-12 md:right-12">{row.email ? row.email : "nill"}</div>),
-            },
-            {
-              title: (
-                <div id="adminStatusHeader" className="">
-                  Status
-                </div>
-              ),
-              sortable: true,
-              id: "adminStatus",
-              selector: (row: TableRowData) => (
-                <span
-                  id="adminStatus"
-                  className={`pt-1 pb-1 pr-3 pl-3 rounded-xl relative right-2 ${
-                    row.status === "ACTIVE"
-                      ? "text-[#063F1A] bg-[#E7F5EC]"
-                      : row.status === "INVITED"
-                      ? "text-[#142854] bg-[#F3F8FF]"
-                      : "text-[#59100D] bg-[#FBE9E9]"
-                  }`}
-                >
-                  {capitalizeFirstLetters(String(row.status))}
-                </span>
-              ),
-            },
+             { 
+                            title: "Name",  
+                            sortable: true, 
+                            id: "firstName", 
+                            selector: (row: TableRowData) => capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
+                          },
+                          { 
+                            title: <div className='md:mr-14'>Email</div>,  
+                            sortable: true, 
+                            id: "email", 
+                            selector: (row: TableRowData) => <div className='truncate'>{row.email}</div> 
+                          },
+                          { 
+                            title: "Role",  
+                            sortable: true, 
+                            id: "role", 
+                            selector: (row: TableRowData) => row.role === "ORGANIZATION_ADMIN"? "Organization admin" : row.role === "ORGANIZATION_ASSOCIATE"? "Organization associate" : "Super admin"
+                          },
+                          { 
+                            title: "Status",  
+                            sortable: true, 
+                            id: "activationStatus", 
+                            selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "PENDING_APPROVAL"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : row.activationStatus === "ACTIVE"? "Active" : "Declined"}</span> 
+                          },
+                          { 
+                            title: "Invited",  
+                            sortable: true, 
+                            id: "createdAt", 
+                            selector: (row: TableRowData) => formatMonthInDate(row.createdAt) 
+                          }
           ];
       
 
@@ -127,11 +125,11 @@ function Admins() {
             className={"grid mt-7"}
           >
             {
-               !isTyping && debouncedSearchTerm  && adminList.length === 0?  <div>
+               !isTyping && debouncedSearchTerm  &&  searchResult?.data?.body === 0?  <div>
                  <SearchEmptyState icon={MdSearch} name={"Search"} />
                </div> :
             <Table
-              tableData={adminList}
+            tableData={getTableData()}
               tableHeader={adminsHeader}
               staticHeader={"Full name"}
               staticColunm={"fullName"}
@@ -141,12 +139,12 @@ function Admins() {
               sideBarTabName="Admin"
               // optionalRowsPerPage={10}
               tableCellStyle="h-12"
-              searchEmptyState={true}
-              hasNextPage={nextPage}
-              pageNumber={page}
-              setPageNumber={setPageNumber}
-              totalPages={totalPage}
-              isLoading={isloadingAdmin || isloadingSearch || isFetching || isSearchFetching}
+              isLoading={isLoading || isFetching || isloadingSearch}
+              hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPage}
+              pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}
+              setPageNumber={searchTerm !== ""? setPageSearchNumber : setPageNumber}
+              totalPages={ totalPage}
+              searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
             />
             }
           </div>
