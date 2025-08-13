@@ -151,7 +151,7 @@ useEffect(() => {
 
   const handleRowClick = (row: TableRowData) => {
     store.dispatch(setcohortId(String(row.id)))
-     if(userRole === "PORTFOLIO_MANAGER"){
+     if(["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")){
          const cohort = {name: String(row?.name),id: String(row?.id)}
          store.dispatch(setSelectedCohortInOrganization(cohort))
          if(organizationTabStatus === "cohort"){
@@ -173,7 +173,7 @@ useEffect(() => {
     if(id === "1") {
       setItemSessionStorage("programsId", String(row.programId))
       store.dispatch(setcohortId(String(row.id)))
-      if(userRole === "PORTFOLIO_MANAGER"){
+      if(["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")){
         const cohort = {name: String(row?.name),id: String(row?.id)}
         store.dispatch(setSelectedCohortInOrganization(cohort))
         router.push('/organizations/loanees/uploaded')
@@ -237,23 +237,23 @@ useEffect(() => {
         tableData={listOfCohorts}
         handleRowClick={handleRowClick}
         tableHeader={ProgramHeader}
-        tableHeight={userRole === "PORTFOLIO_MANAGER"? 40 : 52}
+        tableHeight={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? 40 : 52}
         sx='cursor-pointer'
         staticColunm='name'
         staticHeader='cohort'
-        showKirkBabel={userRole === "PORTFOLIO_MANAGER"? false : true}
+        showKirkBabel={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? false : true}
         kirkBabDropdownOption={dropDownOption}
         icon={MdOutlinePeople}
         sideBarTabName='cohort'
         optionalFilterName={tabValue}
         handleDropDownClick={handleDropdownClick}
         isLoading={isLoading}
-        condition={userRole === "PORTFOLIO_MANAGER"? false : true}
+        condition={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? false : true}
         hasNextPage={hasNextPage}
         pageNumber={pageNumber}
         setPageNumber={handlePageChange}
         totalPages={totalPages}
-        tableStyle={userRole === "PORTFOLIO_MANAGER"? 'h-8 flex items-center' : ""}
+        tableStyle={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(userRole|| "")? 'h-8 flex items-center' : ""}
         />
       )
   }

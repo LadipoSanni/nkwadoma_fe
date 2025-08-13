@@ -113,13 +113,13 @@ const currentTabState = tabStates[cohortTab];
 
  const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
    
-   const { data: cohortData,isLoading,refetch:refetchCohortData,isFetching:isfetching  } = useGetAllCohortsByOrganisationQuery({  ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+   const { data: cohortData,isLoading,refetch:refetchCohortData,isFetching:isfetching  } = useGetAllCohortsByOrganisationQuery({  ...( ["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL-ADMIN"].includes(user_role || "") && organizationId 
     ? { organizationId } 
-    : {}),cohortStatus: cohortTab.toUpperCase(),pageSize: 10, pageNumber:currentTabState.pageNumber }, { refetchOnMountOrArgChange: true, })
+    : {}),cohortStatus: cohortTab.toUpperCase(),cohortType: organizationTabStatus === "cohort"? "NON_LOAN_BOOK" : "LOAN_BOOK",pageSize: 10, pageNumber:currentTabState.pageNumber }, { refetchOnMountOrArgChange: true, })
     
-    const { data: searchData, isLoading: searchIsloading, isFetching: isSearchFetching } = useSearchCohortByOrganisationQuery({cohortName: debouncedSearchTerm,...(user_role === "PORTFOLIO_MANAGER" && organizationId 
+    const { data: searchData, isLoading: searchIsloading, isFetching: isSearchFetching } = useSearchCohortByOrganisationQuery({cohortName: debouncedSearchTerm,...(["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL-ADMIN"].includes(user_role || "")  && organizationId 
       ? { organizationId } 
-      : {}),programId: programId,cohortStatus: cohortTab.toUpperCase(), pageSize: size, pageNumber: currentTabState.pageNumber,}, { skip: !debouncedSearchTerm });
+      : {}),programId: programId,cohortType: organizationTabStatus === "cohort"? "NON_LOAN_BOOK" : "LOAN_BOOK",cohortStatus: cohortTab.toUpperCase(), pageSize: size, pageNumber: currentTabState.pageNumber,}, { skip: !debouncedSearchTerm });
 
    const { data: programDatas, isLoading: programIsloading,isFetching } = useGetAllProgramsQuery({ ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
     ? { organizationId } 
@@ -291,8 +291,8 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
 
   return (
     <div className=''>
-        <div id='cohortName' className={` ${user_role === "PORTFOLIO_MANAGER" || user_role === "MEEDL_SUPER_ADMIN" ? "" : "md:px-6 px-4"}`}>
-          <div id='buttonFilterCreate' className={` ${user_role === "PORTFOLIO_MANAGER" || user_role === "MEEDL_SUPER_ADMIN" ? "md:flex top-2" : "flex top-6  bottom-2"} justify-between items-center z-50 relative  ${inter.className} `}>
+        <div id='cohortName' className={` ${ ["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(user_role || "") ? "" : "md:px-6 px-4"}`}>
+          <div id='buttonFilterCreate' className={` ${["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(user_role || "") ? "md:flex top-2" : "flex top-6  bottom-2"} justify-between items-center z-50 relative  ${inter.className} `}>
             <div id='buttonFilter' className='md:flex gap-4 w-full'>
             <div className='relative '>
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -306,7 +306,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
               onChange={handleSearchChange}
               />
             </div>
-            {!["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN"].includes(user_role || "") ? <div className='z-10'>
+            {!["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(user_role || "") ? <div className='z-10'>
               <DropdownMenu onOpenChange={toggleDropdown}>
                 <DropdownMenuTrigger asChild>
                   <Button id='cohortInProgram' variant={'default'} className='w-full text-black  bg-neutral100 h-11 border-1  hover:bg-neutral100 ring-1 ring-neutral650 focus-visible:ring-neutral650 shadow-none' >
@@ -443,15 +443,15 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
             </div>
              <div className='md:mt-0 mt-4'>
               { 
-                ["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN"].includes(user_role || "") && organizationTabStatus === "loanBook"? 
+                ["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE","ORGANIZATION_ADMIN"].includes(user_role || "") && organizationTabStatus !== "cohort"? 
                 <Button variant={"secondary"}
                   size={"lg"}
                   className={`${inter.className}   h-12 flex justify-center items-center w-full ${["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN"].includes(user_role || "")  && organizationStatus !== "ACTIVE"? "bg-gray text-grey150 hover:bg-gray" : "bg-meedlBlue text-meedlWhite"}`}
                   id='createProgramModal'
                    onClick={handleModalOpen}
-                   disabled={["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN"].includes(user_role || "") && organizationStatus !== "ACTIVE" ? true : false}
+                   disabled={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(user_role || "") && organizationStatus !== "ACTIVE" ? true : false}
                   >
-                   {user_role === "PORTFOLIO_MANAGER" ||  user_role === "MEEDL_SUPER_ADMIN"? "Add cohort" : "Create cohort"}
+                   {["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(user_role || "")? "Add cohort" : "Create cohort"}
                 </Button> : ""
                 }
 
@@ -460,7 +460,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
         </div>
         <div>
         </div>
-        <div className={` ${user_role === "PORTFOLIO_MANAGER"? "mt-8" : " mr-auto ml-auto relative w-[96%] mt-12 "}`}>
+        <div className={` ${["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(user_role || "")? "mt-8" : " mr-auto ml-auto relative w-[96%] mt-12 "}`}>
          <CohortTabs 
          isLoading={isLoading || searchIsloading || cohortIsLoading || isfetching || isSearchFetching } 
          listOfCohorts={organisationCohort} 
@@ -483,11 +483,11 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
             closeOnOverlayClick={true}
             closeModal={() => setIsOpen(false)}
              width='36%'
-            headerTitle={user_role === "PORTFOLIO_MANAGER"? "Add cohort" : 'Create cohort'}
+            headerTitle={["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(user_role || "")? "Add cohort" : 'Create cohort'}
              className='pb-1'
               icon={Cross2Icon}
           >
-            {user_role === "PORTFOLIO_MANAGER"? <AddCohortInAnOrganization  setIsOpen={setIsOpen} organizationId={organizationId} cohortRefetch={refetchCohortData}/> : <CreateCohort setIsOpen={setIsOpen}/> }
+            {["PORTFOLIO_MANAGER","MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE"].includes(user_role || "")? <AddCohortInAnOrganization  setIsOpen={setIsOpen} organizationId={organizationId} cohortRefetch={refetchCohortData}/> : <CreateCohort setIsOpen={setIsOpen}/> }
           </Modal>
         </div>
     </div>

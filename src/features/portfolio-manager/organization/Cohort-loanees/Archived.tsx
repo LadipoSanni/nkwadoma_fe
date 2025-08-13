@@ -4,7 +4,9 @@ import LoaneesInCohort from '@/components/portfolio-manager/organization/Loanees
 function Archived() {
   return (
     <div>
-      <LoaneesInCohort/>
+      <LoaneesInCohort
+       status='ARCHIVE'
+      />
     </div>
   )
 }

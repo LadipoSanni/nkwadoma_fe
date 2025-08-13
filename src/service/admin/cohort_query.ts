@@ -94,6 +94,7 @@ export const cohortApi = createApi({
                 organizationId?: string;
                 programId?: string;
                 cohortStatus?: string;
+                cohortType?: string;
                 pageSize?: number;
                 pageNumber?: number;
                  }) => ({
