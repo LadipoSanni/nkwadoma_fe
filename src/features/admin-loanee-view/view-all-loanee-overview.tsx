@@ -30,12 +30,12 @@ interface TableRowData {
 const ViewAllLoaneeOverview = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [hasNextPage, setNextPage ] = useState(false)
-    const [totalPage,setTotalPage] = useState(0)
-    const [pageSize] = useState(10)
-    const [pageNumber,setPageNumber] = useState(0)
+    const [totalPage,setTotalPage] = useState<number>(0)
+    const [pageSize] = useState<number>(10)
+    const [pageNumber,setPageNumber] = useState<number>(0)
 
     const name = searchTerm ? searchTerm : undefined
-    const {data, isLoading, isFetching } = useViewAllLoaneeByAdminsQuery({pageSize, name, pageNumber})
+    const {data, isLoading, isFetching } = useViewAllLoaneeByAdminsQuery({pageSize, pageNumber})
     const {data: searchData, isLoading:searchDataLoading, isFetching: searchDataIsFetching} = useSearchLoaneeByAdminsQuery({pageSize, name, pageNumber}, {skip: !searchTerm})
     const {data: loanCounts, isLoading: isLoadingLoanCounts, isFetching: isFetchingCounts} = useViewAllLoansTotalCountsByAdminsQuery(undefined)
 
@@ -45,9 +45,10 @@ const ViewAllLoaneeOverview = () => {
             setTotalPage(searchData?.data?.totalPages)
             setPageNumber(searchData?.data?.pageNumber)
         }else{
+            console.log('data?.data?.pageNumber', data?.data?.pageNumber)
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
-            setPageNumber(data?.data?.pageNumber)
+            setPageNumber(data?.data?.pageNumber ? data?.data?.pageNumber : 0)
         }
 
     },[data, data?.data, searchData])
