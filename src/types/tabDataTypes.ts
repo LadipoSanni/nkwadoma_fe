@@ -69,3 +69,7 @@ export const loaneeIncohortTab = [
     {name: "Archived", value:"/organizations/cohort/archived"},
 ]
 
+export const requestTab = [
+    {name: "Staff", value:"/requests/staff"},
+    {name: "Organization", value:"/requests/organization"},
+]
