@@ -1,9 +1,13 @@
 'use client'
 import React, {useState} from 'react';
 import SettingTabs from "@/reuseable/tabs/settingTabs";
-import {inter500} from  '@/app/fonts'
+import {inter500, inter, inter700 } from  '@/app/fonts'
 import AuthInputField from "@/reuseable/Input/AuthInputField";
 import AuthInput from "@/reuseable/Input/AuthInputField";
+import AuthButton from "@/reuseable/buttons/AuthButton";
+import { Button } from "@/components/ui/button";
+import ChangePassword from "@/features/portfolio-manager/settings/ChangePassword";
+import Profile from "@/features/portfolio-manager/settings/Profile";
 
 export const Generals = () => {
     const data = [
@@ -11,45 +15,29 @@ export const Generals = () => {
         {name: 'Change password', id: 'changePassword'},
         {name: '2FA Security', id: '2FaSecurity'},
     ]
+    const [currentTab, setCurrentTab] = useState(0)
 
-    const [newPassword, setNewPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-    // const [disableButton, setDisableButton] = useState(true)
-    const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
+    const getCurrentDataList = () => {
+        switch (currentTab) {
+            case 0:
+                return <Profile/>;
+            case 1:
+                return <ChangePassword/>;
+            case 2:
+                return 'alternate';
 
+            default:
+                return [];
+        }
+    };
 
     return (
-        <div className={` w-full  mt-4 flex gap-10`}>
-            <SettingTabs currentIndex={0} id={'settingTab1'} tabElement={data}  />
+        <div className={` w-full md:w-[60%] bg-00 mt-4 grid   md:flex md:justify-between  gap-6 md:gap-0`}>
+            <SettingTabs width={` md:w-[30%] lg:w-[30%] `} tabCurrentTabIndex={currentTab} setTabCurrentTabIndex={setCurrentTab} id={'settingTab1'} tabElement={data}  />
             <div
-                className={` w-full grid gap-4  md:w-fit `}
+                className={` w-full   md:w-[50%] `}
             >
-                <div className={` grid w-full  gap-3 pb-4   border-b border-b-[#D7D7D7]  `}>
-                    <span className={` ${inter500.className} text-[16px] text-black `}>Change password</span>
-                    <span className={` text-[] `}>Update password for enhanced account security</span>
-                </div>
-                <div>
-                    <AuthInput value={newPassword} type={'password'} data-testid={'resetNewPasswordInput'}
-                               label={'New password'}
-                               id={'resetNewPasswordInput'} onChange={handleChangeNewPassword}
-                               endAdornment={'Hide'}
-                               errorMessage={remainingCriteria.length === 1 ? remainingCriteria[0] : ''}
-                               placeholder={'Enter password'}></AuthInput>
-                    <AuthInput value={newPassword} type={'password'} data-testid={'resetNewPasswordInput'}
-                               label={'New password'}
-                               id={'resetNewPasswordInput'} onChange={handleChangeNewPassword}
-                               endAdornment={'Hide'}
-                               errorMessage={'meem'}
-                               // errorMessage={remainingCriteria.length === 1 ? remainingCriteria[0] : ''}
-                               placeholder={'Enter password'}></AuthInput>
-                    {/*<PasswordCriteria id={'createPasswordCriteria'} criteriaStatus={criteriaStatus} />*/}
-                    <AuthInput value={confirmPassword} type={'password'} data-testid={'resetConfirmPasswordInput'}
-                               label={'Confirm password'}
-                               id={'resetPasswordConfirmInput'} onChange={handleChangeConfirmPassword}
-                               endAdornment={'Hide'}
-                               placeholder={'Enter password'}></AuthInput>
-                </div>
-
+                {getCurrentDataList()}
            </div>
         </div>
     );

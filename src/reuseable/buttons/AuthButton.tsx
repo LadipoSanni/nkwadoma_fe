@@ -15,7 +15,9 @@ const AuthButton = ({
                         disable,
                         isLoading,
                         height,
-                        useCabinetGrotesk
+                        useCabinetGrotesk,
+                        showBorder,
+                        borderColor,
                     }: AuthButtonPropsType) => {
     return (
             <Button
@@ -29,9 +31,10 @@ const AuthButton = ({
                     height: `${height ? height : '3rem'}`,
                     width: `${width}`,
                     color: `${textColor}`,
-                    backgroundColor: `${disable ? "#D0D0D0" : backgroundColor}`
+                    backgroundColor: `${disable ? "#D0D0D0" : backgroundColor}`,
+                    borderColor: `${showBorder ? `${borderColor} ` : ``}`
                 }}
-                className={`${useCabinetGrotesk ? cabinetGrotesk.className : inter.className} grid place-content-center rounded font-bold text-sm`}>
+                className={`${useCabinetGrotesk ? cabinetGrotesk.className : inter.className} ${showBorder ? `border border-[${borderColor}]` : ``} grid place-content-center rounded font-bold text-sm`}>
                 {isLoading ? <Isloading/> : buttonText}
 
             </Button>

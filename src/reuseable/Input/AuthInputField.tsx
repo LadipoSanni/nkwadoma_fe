@@ -10,10 +10,11 @@ interface ReusableInputProps extends InputHTMLAttributes<HTMLInputElement> {
     id: string;
     endAdornment?: React.ReactNode | string;
     errorMessage?: string;
+    mediumHeight?: boolean,
 
 }
 
-const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, type, errorMessage, ...props}) => {
+const AuthInputField: React.FC<ReusableInputProps> = ({label, id,mediumHeight, endAdornment, type, errorMessage, ...props}) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const handleToggleVisibility = () => {
@@ -33,12 +34,12 @@ const AuthInputField: React.FC<ReusableInputProps> = ({label, id, endAdornment, 
     };
 
     return (
-        <div id={`custom-input-field-${id}`} className={`${inter.className} grid gap-1`}>
+        <div id={`custom-input-field-${id}`} className={`${inter.className} grid ${mediumHeight ? `gap-1.5` : `gap-1`} `}>
             <Label id={`label-${id}`} htmlFor={id} className="text-labelBlue font-normal leading-4 text-sm  ">
                 {label}
             </Label>
             <div id={`input-container-${id}`}
-                 className={`flex items-center h-[2.7rem] w-full gap-2 rounded-md border-2 border-blue500 neutral700 `}>
+                 className={`flex items-center ${mediumHeight ? `h-[3.3rem]` :`h-[2.7rem]`} w-full gap-2 rounded-md border-2 border-blue500 neutral700 `}>
                 <Input
                     id={id}
                     type={isPasswordVisible ? 'text' : type}
