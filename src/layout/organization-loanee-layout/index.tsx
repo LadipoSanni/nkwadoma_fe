@@ -6,16 +6,17 @@ import { useRouter } from 'next/navigation'
 import BackButton from "@/components/back-button";
 import {cabinetGroteskBold, cabinetGroteskMediumBold} from "@/app/fonts";
 import TabSwitch from '@/layout/tabLayout'
-import { loaneeTabData } from '@/types/tabDataTypes';
+import { loaneeTabData,loaneeIncohortTab } from '@/types/tabDataTypes';
 import {useViewCohortDetailsQuery} from "@/service/admin/cohort_query";
 import SkeletonForDetail from '@/reuseable/Skeleton-loading-state/Skeleton-for-detail';
 import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
 interface props {
     children: React.ReactNode;
+    admin?: string
 }
 
-function OrganizationLoaneeLayout({children}:props) {
+function OrganizationLoaneeLayout({children,admin}:props) {
      const cohortDetails = useAppSelector((state) => state.cohort.selectedCohortInOrganization)
      const notificationCohortId = useAppSelector((state) => state.cohort?.notificationCohortId)
      const cohortName = cohortDetails?.name
@@ -33,7 +34,11 @@ function OrganizationLoaneeLayout({children}:props) {
                 router.push(`/notifications/notification/${notificationId}`);
             } else {
             //  store.dispatch(setOrganizationDetail('cohorts'))
-             router.push('/organizations/loanBook')
+            if( admin === "portfolio-admin"){
+              router.push('/organizations/loanBook')
+            } else {
+              router.push('/organizations/cohort')
+            }
      }
          }
     const initial: string = `${cohortName?.at(0)}${cohortName?.at(1)}` 
@@ -66,9 +71,15 @@ function OrganizationLoaneeLayout({children}:props) {
       </div> 
      </div>
         <div>
-         <TabSwitch tabData={loaneeTabData} defaultTab='/organizations/loanees/uploaded' >
+       { admin === "portfolio-admin"?
+       
+       <TabSwitch tabData={loaneeTabData} defaultTab='/organizations/loanees/uploaded' >
          {children}
-         </TabSwitch>
+         </TabSwitch> : 
+          <TabSwitch tabData={loaneeIncohortTab} defaultTab='/organizations/cohort/all' >
+          {children}
+          </TabSwitch> 
+        }
         </div>
         </div>
         }
