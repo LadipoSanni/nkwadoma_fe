@@ -1,11 +1,6 @@
 'use client'
 import React, {useState} from 'react';
 import SettingTabs from "@/reuseable/tabs/settingTabs";
-import {inter500, inter, inter700 } from  '@/app/fonts'
-import AuthInputField from "@/reuseable/Input/AuthInputField";
-import AuthInput from "@/reuseable/Input/AuthInputField";
-import AuthButton from "@/reuseable/buttons/AuthButton";
-import { Button } from "@/components/ui/button";
 import ChangePassword from "@/features/portfolio-manager/settings/ChangePassword";
 import Profile from "@/features/portfolio-manager/settings/Profile";
 

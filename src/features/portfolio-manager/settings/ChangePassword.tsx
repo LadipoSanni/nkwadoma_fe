@@ -9,10 +9,13 @@ const ChangePassword = () => {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     // const [disableButton, setDisableButton] = useState(true)
-    const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
+    // const [criteriaStatus, setCriteriaStatus] = useState([false, false, false, false]);
 
     const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value)
+        console.log('pa', password)
+        setConfirmPassword(password)
+        setNewPassword(password)
     };
     return (
         <div
