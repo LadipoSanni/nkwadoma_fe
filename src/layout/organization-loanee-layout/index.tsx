@@ -13,10 +13,10 @@ import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
 interface props {
     children: React.ReactNode;
-    admin?: string
+    tab?: string
 }
 
-function OrganizationLoaneeLayout({children,admin}:props) {
+function OrganizationLoaneeLayout({children,tab}:props) {
      const cohortDetails = useAppSelector((state) => state.cohort.selectedCohortInOrganization)
      const notificationCohortId = useAppSelector((state) => state.cohort?.notificationCohortId)
      const cohortName = cohortDetails?.name
@@ -34,7 +34,7 @@ function OrganizationLoaneeLayout({children,admin}:props) {
                 router.push(`/notifications/notification/${notificationId}`);
             } else {
             //  store.dispatch(setOrganizationDetail('cohorts'))
-            if( admin === "meedl-backOffice-admin"){
+            if( tab === "loanBook"){
               router.push('/organizations/loanBook')
             } else {
               router.push('/organizations/cohort')
@@ -55,7 +55,7 @@ function OrganizationLoaneeLayout({children,admin}:props) {
        <div
       className='md:px-6 md:py-3 px-4 py-4'
      >
-     <BackButton id={'backCohorts'} textColor={'meedlBlue'} text={notification === "notification"? "Back to notification" : admin === "meedl-backOffice-admin"? 'Back to loan book' : 'Back to cohort'} iconBeforeLetters={true} handleClick={handleBackButtonClick}/> 
+     <BackButton id={'backCohorts'} textColor={'meedlBlue'} text={notification === "notification"? "Back to notification" : tab === "loanBook"? 'Back to loan book' : 'Back to cohort'} iconBeforeLetters={true} handleClick={handleBackButtonClick}/> 
        <div
                       id={'cohortNameAndInitials'}
                       className={` mt-6 flex gap-4  w-full h-fit `}
@@ -71,7 +71,7 @@ function OrganizationLoaneeLayout({children,admin}:props) {
       </div> 
      </div>
         <div>
-       { admin === "meedl-backOffice-admin"?
+       { tab === "loanBook"?
        
        <TabSwitch tabData={loaneeTabData} defaultTab='/organizations/loanees/uploaded' >
          {children}

@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import BackButton from '../back-button';
 import {useRouter, useSearchParams} from "next/navigation";
+import { useAppSelector} from '@/redux/store';
 
 interface Props {
     cohort: string,
@@ -35,6 +36,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
     const userRole  = getItemSessionStorage("user_role")
     const router = useRouter()
     const searchParams = useSearchParams()
+     const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
 
     const handleOpenModal = (id: string, title: string, buttonText: string) => {
         setModalId(id);
@@ -49,7 +51,12 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                 if (id) {
                     router.push('/loanees/loans')
                 }else {
-                    router.push('/organizations/loanees/uploaded')
+                     if(organizationTabStatus === "cohort"){
+                        router.push('/organizations/cohort/all')
+                     }else {
+                        router.push('/organizations/loanees/uploaded')
+                     }
+                    
 
                 }
             }
