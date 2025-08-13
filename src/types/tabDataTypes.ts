@@ -64,3 +64,8 @@ export const  organizationDetailTabData = [
     {name: "Admin", value:"/organizations/admin"},
 ]
 
+export const loaneeIncohortTab = [
+    {name: "All", value:"/organizations/cohort/all"},
+    {name: "Archived", value:"/organizations/cohort/archived"},
+]
+
