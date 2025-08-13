@@ -40,9 +40,7 @@ export const usePortfolioManagerSideBarItems =  (currentItem: string) => {
 }
 
 
-export const getSuperAdminSideBarItems = (currentItem: string) => {
-    const currentTabRoute = useAppSelector(state => state.selectedLoan?.currentTabRoute)
-
+export const getSuperAdminSideBarItems = (currentItem: string,currentTabRoute: string) => {
     const items:navbarRouterItemsProps[] = [
         { icon: <MdOutlineHome color={currentItem === 'Overview' ? '#142854' : '#939cb0'} className={` h-[1.2rem] w-[1.2em] `}/>, id: 'Overview', name: 'Overview', isActive: true,route: '/Overview'},
         {id: 'loan', name: 'Loan', route: `/loan/${currentTabRoute || 'loan-request'}`, isActive: true, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.2rem"} color={currentItem === 'Loan' ? '#142854' : '#939cb0'}></Icon>},
@@ -54,10 +52,8 @@ export const getSuperAdminSideBarItems = (currentItem: string) => {
         {id: 'financier', name: 'Financier', route: '/financier', isActive: true, icon: <MdOutlineBusinessCenter  color={currentItem === 'Financier' ? '#142854' : '#939CB0'} className={'h-[1.2rem] w-[1.2rem]'} /> },
         {id: 'staff', name: 'Staff', route: '/staff', isActive: true, icon: <MdOutlinePersonOutline className={` h-[1.2rem] w-[1.2em]  `} color={currentItem === 'Staff' ? '#142854' : '#939CB0'}></MdOutlinePersonOutline>},
         {id: 'requests', name: 'Requests', route: '/requests', isActive: true, icon: <MdOutlineAssignmentTurnedIn className={` h-[1.2rem] w-[1.2em]  `} color={currentItem === 'Requests' ? '#142854' : '#939CB0'}></MdOutlineAssignmentTurnedIn>},
-
     ]
     return items;
-
 }
 
 export const getMeedlAdminSideBarItems = (currentItem: string) => {

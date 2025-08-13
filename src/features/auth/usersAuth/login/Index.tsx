@@ -210,7 +210,6 @@ const Login: React.FC = () => {
                             status: "success",
                         });
                         if (user_role) {
-                            console.log(access_token , user_email ,user_role, userName,  )
                             storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
                             setUserRoles(user_roles)
                             await routeUserToTheirDashboard(user_role)
