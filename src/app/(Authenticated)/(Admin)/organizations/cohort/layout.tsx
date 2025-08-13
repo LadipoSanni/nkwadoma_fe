@@ -10,7 +10,7 @@ type props = {
 const layout: React.FC<props> = ({ children }) => {
   return (
     <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER','MEEDL_SUPER_ADMIN',"MEEDL_ADMIN"]} >
-      <OrganizationLoaneeLayout admin="meedl-backOffice-admin">
+      <OrganizationLoaneeLayout admin="organization-admin">
         {children}
       </OrganizationLoaneeLayout>
     </CustomAuthorization>

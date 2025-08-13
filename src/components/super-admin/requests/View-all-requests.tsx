@@ -79,10 +79,10 @@ function ViewAllRequests() {
              title: "Requested by",  
              sortable: true, 
              id: "requestedBy", 
-             selector: (row: TableRowData) => row.requestedBy
+             selector: (row: TableRowData) => row.requestedBy || "Not provided"
            },
            { 
-            title: "Invitee",  
+            title:  "Invitee",  
             sortable: true, 
             id: "firstName", 
             selector: (row: TableRowData) => capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())

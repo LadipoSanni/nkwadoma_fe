@@ -9,6 +9,7 @@ import { setOrganizationStatus } from "@/redux/slice/organization/organization";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { ensureHttpsUrl } from "@/utils/GlobalMethods";
 import { formatNumberWithCommas } from '@/utils/Format';
+import SkeletonForSidebar from '@/reuseable/Skeleton-loading-state/Skeleton-for-sidebar';
 
 function OrganizationDetails() {
       const organizationId = useAppSelector(store => store.organization?.setOrganizationId)
@@ -18,6 +19,7 @@ function OrganizationDetails() {
           },
           { skip: !organizationId }
         );
+
 
          useEffect(() => {
         store.dispatch(setOrganizationStatus(organizationDetails?.data.status))
@@ -80,7 +82,9 @@ function OrganizationDetails() {
       <div className='md:w-[38%] flex items-start pl-4 mt-5 md:mt-0 mb-5 md:mb-0'>
       <div>
       <p className={`text-[16px mb-2 mt-[1] ${inter.className}`}> Organization details</p>
-       <div className={`grid grid-cols-1 gap-y-5 mt-4 ${style.detailContainer}  ${inter.className}`}>
+        
+       { isLoading? <div><SkeletonForSidebar/></div> 
+       : <div className={`grid grid-cols-1 gap-y-5 mt-4 ${style.detailContainer}  ${inter.className}`}>
        {dataList?.map((item, index) => (
   <div 
     id={`data-item-${index}`} 
@@ -109,7 +113,7 @@ function OrganizationDetails() {
     </div>
   </div>
 ))}
-    </div>
+    </div> }
         </div>
       </div>
     </div>

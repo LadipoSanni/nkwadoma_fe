@@ -92,7 +92,7 @@ function Staff() {
     setEmail(row?.email as string)
     setRole(role as string)
     setInvitedDate(row?.createdAt as string)
-    setId(row?.id as string)
+    setId(row?.userId as string)
 }
 
 
@@ -119,7 +119,7 @@ function Staff() {
           title: "Status",  
           sortable: true, 
           id: "activationStatus", 
-          selector: (row: TableRowData) => <span className={`${row.activationStatus === "ACTIVE"? "bg-[#E6F2EA] text-[#045620] " :row.activationStatus === "PENDING"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#FBE9E9] text-[#971B17]"} rounded-lg  px-2 `}>{capitalizeFirstLetters(row.activationStatus?.toString())}</span> 
+          selector: (row: TableRowData) => <span className={`${row.activationStatus === "ACTIVE"? "bg-[#E6F2EA] text-[#045620] " :row.activationStatus === "INVITED"? "bg-[#FEF6E8] text-[#045620] w-20" :  "bg-[#FBE9E9] text-[#971B17]"} rounded-lg  px-2 `}>{capitalizeFirstLetters(row.activationStatus?.toString())}</span> 
         },
         { 
           title: "Invited",  

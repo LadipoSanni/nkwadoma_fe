@@ -138,7 +138,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
       },[refetch,notificationCohortId,uploadedStatus,notificationFlag])
 
       const tableHeaderintegrated = [
-              {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + row?.userIdentity?.lastName},
+              {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + capitalizeFirstLetters(row?.userIdentity?.lastName)},
               {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) =>  formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
               {title: "Status", sortable: true, id: "activationStatus", selector: (row: viewAllLoanees) =>  <span  className={`${row?.activationStatus === "ACTIVE" ? 'text-[#063F1A] bg-[#E7F5EC]' : 'text-[#142854] bg-[#FEF6E8]'} rounded-[32px] px-2 py-1`}>{row?.activationStatus === "ACTIVE"? "Active" : "Pending"}</span> },
               {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountRequested))},
@@ -146,7 +146,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
           ];
 
           const tableHeader = [
-            {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => row?.userIdentity?.firstName + " " + row?.userIdentity?.lastName},
+            {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + capitalizeFirstLetters(row?.userIdentity?.lastName)},
             {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) =>  formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
             {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountRequested))},
             {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountReceived))},
