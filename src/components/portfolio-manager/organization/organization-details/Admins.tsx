@@ -139,7 +139,7 @@ function Admins() {
               sideBarTabName="Admin"
               // optionalRowsPerPage={10}
               tableCellStyle="h-12"
-              isLoading={isLoading || isFetching || isloadingSearch}
+              isLoading={isLoading || isFetching || isloadingSearch || isSearchFetching}
               hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPage}
               pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}
               setPageNumber={searchTerm !== ""? setPageSearchNumber : setPageNumber}
