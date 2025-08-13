@@ -6,6 +6,7 @@ import { setCurrentStep, setLoanReferralStatus } from '@/service/users/loanRerra
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useQueryClient } from '@tanstack/react-query';
 
 const steps = [
     'Loan application details',
@@ -29,23 +30,35 @@ interface VerificationSuccessDialogProps {
 const SuccessDialog: React.FC<VerificationSuccessDialogProps> = ({ showWarningIcon,open, onClose, onContinue, title, message, buttonText, routeToOverview, stopCamera }) => {
     const dispatch = useDispatch();
     const router = useRouter();
+     const queryClient = useQueryClient();
 
-    const handleContinue = () => {
+    const handleContinue = async() => {
         if (stopCamera) {
             stopCamera();
         }
         dispatch(setCurrentStep(steps.length - 1));
         dispatch(setLoanReferralStatus('AUTHORIZED'));
+        await queryClient.invalidateQueries({ 
+            queryKey: ['checkLoaneeStatus'] 
+        });
         onContinue();
         if (routeToOverview) {
             router.push('/overview');
+            onClose(); 
         }
+       
     };
 
     return (
-        <Dialog open={open} onOpenChange={onClose}>
+        <Dialog open={open}  onOpenChange={(isOpen) => !isOpen && onClose()} 
+        >
             {/*<DialogOverlay className="bg-[rgba(52,64,84,0.70)] " />*/}
-            <DialogContent className={'max-w-[350px] md:max-w-[416px] [&>button]:hidden gap-5 py-5 px-5'}>
+            <DialogContent 
+            className={'max-w-[350px] md:max-w-[416px] [&>button]:hidden gap-5 py-5 px-5'}
+            onInteractOutside={(e) => e.preventDefault()} 
+            onEscapeKeyDown={(e) => e.preventDefault()}  
+
+            >
                 <DialogHeader>
                     <DialogTitle className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>
                         {showWarningIcon ?

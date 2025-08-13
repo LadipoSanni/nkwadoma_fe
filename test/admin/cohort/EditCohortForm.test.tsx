@@ -3,6 +3,13 @@ import { render, fireEvent, screen,cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Providers } from "@/app/provider";
 
+
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+    usePathname: () => jest.fn(),
+}));
 describe('EditCohort', () => {
 
     

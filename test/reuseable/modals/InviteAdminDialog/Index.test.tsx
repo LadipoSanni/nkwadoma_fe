@@ -3,8 +3,21 @@ import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { Providers } from '@/app/provider';
 import InviteAdminDialog from '@/reuseable/modals/InviteAdminDialog/Index';
 
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+    usePathname: () => jest.fn(),
+}));
 describe('InviteAdminDialog Component', () => {
     const mockSetIsModalOpen = jest.fn();
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        jest.spyOn(console, 'log').mockReturnValue();
+        jest.spyOn(console, 'warn').mockReturnValue();
+        jest.spyOn(console, 'error').mockReturnValue();
+      });
 
     beforeEach(() => {
         cleanup();

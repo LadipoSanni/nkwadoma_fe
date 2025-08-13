@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Select from "@/reuseable/select/ProgramSelect";
-import DatePicker from "@/reuseable/date/DatePicker";
+// import DatePicker from "@/reuseable/date/DatePicker";
 import FormButtons from "@/reuseable/buttons/FormButtons";
 import { CohortNameInput } from "@/reuseable/Input";
 import { useCreateCohortMutation } from "@/service/admin/cohort_query";
@@ -15,6 +15,9 @@ import SpreadsheetFileUpload from "@/reuseable/Input/RawFile-spreadshitUpload";
 import { useUploadLoaneeFileMutation } from "@/service/admin/loan_book";
 import DownloadTemplate from "./Download-template";
 import { convertSpreadsheetToCsv } from "@/utils/convert-csv";
+import DatePickerInput from "@/reuseable/Input/DatePickerInput";
+import { notificationApi } from '@/service/notification/notification_query';
+import { store } from "@/redux/store";
 
 interface createCohortProps {
   setIsOpen?: (e: boolean) => void;
@@ -192,9 +195,12 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
             if(uploadFile) {
               resetForm();
               handleCloseModal()
+               setTimeout(() => {
+                            store.dispatch(notificationApi.util.invalidateTags(['notification']));
+                }, 2000);
               if(cohortRefetch)cohortRefetch()
               toast({
-                description: result.message,
+                description: result.message + " " + "and " +  uploadFile.message,
                 status: "success",
               });
             }
@@ -257,7 +263,20 @@ const AddCohortInAnOrganization: React.FC<createCohortProps> = ({ setIsOpen,orga
                       loader: isFetching
                     }}
                        />
-                <DatePicker date={startDate} setDate={setDate} />
+                {/* <DatePicker date={startDate} setDate={setDate} /> */}
+                <DatePickerInput  
+                    selectedDate={startDate}
+                   onDateChange={
+                   (date) => {
+                                   if (date) {
+                                     setDate(date);
+                                   }else {
+                                    setDate(undefined)
+                                   }
+                                 }
+                  } 
+                   className="p-6 top-[19px] relative text-[14px] text-[#6A6B6A] h-[54px] rounded-md border-neutral650"
+                />
               </div>
               <div
               id="loanProductAndTuitionContainer"

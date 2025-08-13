@@ -26,7 +26,7 @@ import { financierApi } from '@/service/admin/financier';
 import financierReducer  from '@/redux/slice/financier/financier';
 import MarketPlaceReducer from "./slice/investors/MarketPlaceSlice";
 import kycMultistepReducer from './slice/multiselect/kyc-multiselect'
-
+import { UnknownAction } from '@reduxjs/toolkit'; 
 import {financierOnboardingAndDashboardApi} from "@/service/financier/api";
 import {marketplaceApi} from "@/service/financier/marketplace";
 import {portfolioOverviewApi} from '@/service/admin/overview'
@@ -35,6 +35,8 @@ import {unauthorizedApis} from "@/service/unauthorized/action";
 import OrganizationReducer from "./slice/organization/organization"
 import { loanBookApi } from '@/service/admin/loan_book';
 import CsvReducer from "@/redux/slice/csv/csv"
+import { countryApi } from '@/service/admin/external-api/countryCalling_code_query';
+import LoanOfferReducer from './slice/loan/loan-offer';
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -54,6 +56,7 @@ const appReducer = combineReducers({
     kycForm: kycFormReducer,
     organization: OrganizationReducer,
     csv: CsvReducer,
+    loanOffer: LoanOfferReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
@@ -71,7 +74,26 @@ const appReducer = combineReducers({
     [marketplaceApi.reducerPath]: marketplaceApi.reducer,
     [portfolioOverviewApi.reducerPath]: portfolioOverviewApi.reducer,
     [unauthorizedApis.reducerPath]: unauthorizedApis.reducer,
-    [loanBookApi.reducerPath]: loanBookApi.reducer
+    [loanBookApi.reducerPath]: loanBookApi.reducer,
+    [countryApi.reducerPath]: countryApi.reducer
 });
 
-export default appReducer;
+// export default appReducer;
+
+
+const rootReducer = (
+    state: ReturnType<typeof appReducer> | undefined,
+    action: UnknownAction
+) => {
+    if (action.type === 'RESET_STATE') {
+        return appReducer(undefined, action);
+    }
+    return appReducer(state, action);
+};
+
+export default rootReducer;
+
+export const resetAllState = () => ({
+    type: 'RESET_STATE' as const
+});
+

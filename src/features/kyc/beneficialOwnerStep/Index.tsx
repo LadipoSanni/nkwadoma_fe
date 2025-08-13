@@ -5,7 +5,6 @@ import {inter, cabinetGroteskMediumBold} from '@/app/fonts';
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import {MdAdd, MdDeleteOutline} from "react-icons/md";
-// import {useDispatch} from "react-redux";
 import Entity from "@/features/kyc/beneficialOwnerStep/Entity";
 import Individual from "@/features/kyc/beneficialOwnerStep/Individual";
 import {format} from "date-fns";
@@ -30,7 +29,6 @@ interface Owner {
 
 
 const BeneficialOwnerStep = () => {
-    // const dispatch = useDispatch();
     const [disabledContinueButton, setDisableContinueButton] = useState(true);
     const [error, setError] = useState<string| undefined >(undefined);
 
@@ -136,6 +134,19 @@ const BeneficialOwnerStep = () => {
 
 
     const handleSaveAndContinue = () => {
+
+        // const beneficial = [
+        // // selectedForm: 'entity' | 'individual';
+        // // entityData: {
+        // //     entityName: string;
+        // //     rcNumber: string;
+        // //     country: string | undefined;
+        // //     sections: EntitySection[];
+        // // };
+        // // individualData: {
+        // //     sections: FormSection[];
+        //
+        // ]
         router.push('/kyc/political-exposure');
     };
 

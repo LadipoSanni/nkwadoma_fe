@@ -5,6 +5,8 @@ import { LoaneeLoanDetail } from "@/features/onboarding/stepContent/Index";
 import DetailItem from "@/reuseable/details/detail-Item/Index";
 import { format, isValid } from 'date-fns';
 import { NumericFormat } from 'react-number-format';
+import {useAppSelector} from "@/redux/store";
+import ReviewLoan from "@/features/loanee/review-loan";
 
 interface LoanApplicationDetailsProps {
     loaneeLoanDetail: LoaneeLoanDetail | undefined;
@@ -12,17 +14,30 @@ interface LoanApplicationDetailsProps {
 
 const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeLoanDetail }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const invitedLoaneeFromPmId = useAppSelector(state => state.selectedLoan.cohortLoaneeId)
 
+    if (invitedLoaneeFromPmId) {
+        return (
+            <ReviewLoan/>
+        )
+    }
 
     if (!loaneeLoanDetail) {
         return <div>Loading...</div>;
     }
 
+
+
+
     const { initialDeposit, cohortStartDate, tuitionAmount, loanAmountRequested, referredBy, loaneeLoanBreakdowns = [] } = loaneeLoanDetail;
 
+    let totalValue = 0;
+    loaneeLoanDetail?.loaneeLoanBreakdowns?.forEach((loanAmount) => {
+        totalValue = totalValue +  Number(loanAmount?.itemAmount)
+    })
     const formattedCohortStartDate = isValid(new Date(cohortStartDate)) ? format(new Date(cohortStartDate), 'dd MMM, yyyy') : 'Date not available';
 
-
+    const total = totalValue + Number(tuitionAmount)  -  Number(initialDeposit)
 
     return (
         <div id="loanApplicationDetailsContent" className={'rounded-md grid gap-9 p-5 bg-grey105'}>
@@ -47,14 +62,14 @@ const LoanApplicationDetails: React.FC<LoanApplicationDetailsProps> = ({ loaneeL
                             <DetailItem key={index} label={breakdown.itemName}
                                         value={<NumericFormat value={breakdown.itemAmount} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
                         ))}
-                        <DetailItem label="Initial deposit" value={<NumericFormat value={initialDeposit} displayType={'text'} allowNegative={false} thousandSeparator={true} prefix={'-₦'} decimalScale={2} fixedDecimalScale={true} />} />
+                        <DetailItem label="Initial deposit" value={<NumericFormat value={initialDeposit} displayType={'text'} allowNegative={false} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} />} />
                     </div>
                     <div id="tuitionBreakdownTotalContainer"
                          className={'flex justify-between py-5 px-3 border-t border-t-lightBlue250'}>
                         <h3 id="tuitionBreakdownTotalLabel"
                             className={`text-grey300 font-normal text-[14px] leading-[120%]`}>Total</h3>
                         <p id="tuitionBreakdownTotalValue"
-                           className={`text-black500 text-[14px] font-semibold leading-[150%]`}><NumericFormat value={loanAmountRequested} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} /></p>
+                           className={`text-black500 text-[14px] font-semibold leading-[150%]`}><NumericFormat value={total} displayType={'text'} thousandSeparator={true} prefix={'₦'} decimalScale={2} fixedDecimalScale={true} /></p>
                     </div>
                 </CollapsibleContent>
             </Collapsible>

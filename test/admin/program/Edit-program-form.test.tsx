@@ -2,6 +2,12 @@ import EditProgramForm from "@/components/program/edit-program-form";
 import { render, screen, fireEvent,cleanup, waitFor,} from "@testing-library/react";
 import { Providers } from "@/app/provider";
 
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+    usePathname: () => jest.fn(),
+}));
 describe('EditProgramForm', () => {
     const mockSetIsOpen = jest.fn();
     beforeEach(() => {

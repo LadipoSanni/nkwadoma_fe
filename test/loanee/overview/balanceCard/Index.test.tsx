@@ -22,6 +22,14 @@ describe('BalanceCard Component', () => {
         cleanup();
     });
 
+    
+    beforeEach(() => {
+        jest.clearAllMocks();
+        jest.spyOn(console, 'log').mockReturnValue();
+        jest.spyOn(console, 'warn').mockReturnValue();
+        jest.spyOn(console, 'error').mockReturnValue();
+      });
+
     test('renders BalanceCard component', () => {
         render(
             <Providers>

@@ -15,11 +15,13 @@ import { BellIcon } from '@radix-ui/react-icons';
 import { useRouter } from 'next/navigation';
 import SkeletonForViewNotification from '@/reuseable/Skeleton-loading-state/Skeleton-for-view-notification';
 import { useViewAllNotificationQuery,useDeleteNotificationMutation,useSearchNotificationQuery } from '@/service/notification/notification_query';
-import {useAppSelector} from "@/redux/store";
+import {useAppSelector,store} from "@/redux/store";
 import {useToast} from "@/hooks/use-toast"
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
 import { MdSearch } from 'react-icons/md'
 import { useDebounce } from '@/hooks/useDebounce';
+import { setNotificationPageNumber,setSelectedNotificationId } from '@/redux/slice/notification/notification';
+
 
 interface Props{
     children: ReactNode
@@ -46,13 +48,15 @@ function NotificationLayout({children}: Props) {
        const [selectAll, setSelectAll] = useState(false);
        const [totalSearchedNotification,setTotalSearchedNotification] = useState("")
        const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
-       const [pageNumber,setPageNumber] = useState(0)
+       const notificationPageNumber = useAppSelector((state)=> state?.notification?.notificationPageNumber)
+       const activeNotificationId = useAppSelector((state) => state?.notification?.selectedNotificationId)
+       const [pageNumber,setPageNumber] = useState(notificationPageNumber)
        const pageSize = 10
        const [hasNextPage,setHasNextPage] = useState(false)
       //  const [notificationDatas,setNotificationData]= useState<notificationProp[]>([])
        const [isDeleteOpen, setIsDeleteOpen] = useState(false);
        const [isMobile, setIsMobile] = useState(false);
-       const [activeNotificationId, setActiveNotificationId] = useState<string | null>(null);
+      //  const [activeNotificationId, setActiveNotificationId] = useState<string | null>(null);
        const router = useRouter();
        const {toast} = useToast()
        const [searchHasNextPage,setSearchHasNextPage] = useState(false)
@@ -94,11 +98,11 @@ function NotificationLayout({children}: Props) {
 
        const [deleteNotification,{isLoading:isloading}] = useDeleteNotificationMutation()
       
-       const {data,isLoading} = useViewAllNotificationQuery({pageSize: pageSize,pageNumber: pageNumber},{ refetchOnMountOrArgChange: true })
+       const {data,isLoading} = useViewAllNotificationQuery({pageSize: pageSize,pageNumber: pageNumber})
        const {data: searchData, refetch, isLoading:isSearchLoading,isFetching} = useSearchNotificationQuery({param},{skip: !debouncedSearchTerm})
 
        useEffect(() => {
-        const mediaQuery = window.matchMedia('(max-width: 767px)'); 
+        const mediaQuery = window.matchMedia('(max-width: 959px)'); 
         setIsMobile(mediaQuery.matches);
 
         const handleResize = () => setIsMobile(mediaQuery.matches);
@@ -114,13 +118,14 @@ function NotificationLayout({children}: Props) {
           setSearchPageNumber(searchData?.data?.pageNumber)
           setTotalSearchedNotification(searchData?.data?.totalElement)
           setTotalSearchPage(searchData?.data?.totalPages)
-          setActiveNotificationId("")
+          // setActiveNotificationId("")
         } 
         else  if(!debouncedSearchTerm && data && data?.data){
              setTotalPage(data?.data?.totalPages)
              setHasNextPage(data?.data?.hasNextPage)
-             setPageNumber(data?.data?.pageNumber)
-             setActiveNotificationId("")
+            //  setPageNumber(data?.data?.pageNumber)
+             store.dispatch(setNotificationPageNumber(data?.data?.pageNumber))
+            //  setActiveNotificationId("")
           }
          
          },[debouncedSearchTerm, searchData,data])
@@ -259,9 +264,9 @@ function NotificationLayout({children}: Props) {
                 }
             }
 
-            console.log("The totalElement: ",totalSearchedNotification)
 
             const handleTabClick = (id: string) => {
+                store.dispatch(setSelectedNotificationId(id))
                 router.push(`/notifications/notification/${id}`);
               };
 
@@ -270,7 +275,7 @@ function NotificationLayout({children}: Props) {
             }
 
             const handleClick = (id: string) => {
-              setActiveNotificationId(id);
+              // setActiveNotificationId(id);
                 if (isMobile) {
                     handleMobileClick(id);
                 } else {
@@ -392,7 +397,7 @@ function NotificationLayout({children}: Props) {
                 />
                 </div>
                 <div className='flex-col flex items-start'>
-                  <div className="text-[14px] font-medium text-[#212221] xl:max-w-80 sm:max-w-full max-w-60 whitespace-nowrap overflow-hidden text-ellipsis">{notification.title}</div>
+                  <div className="text-[14px] font-medium text-[#212221]  max-w-60 lg:max-w-80 whitespace-nowrap overflow-hidden text-ellipsis">{notification.title}</div>
                 <div className='font-normal max-w-64 whitespace-nowrap overflow-hidden text-ellipsis'>{notification.contentDetail}</div>
                 </div>
                   

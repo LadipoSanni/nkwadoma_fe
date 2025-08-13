@@ -20,7 +20,8 @@ import {Loader2} from "lucide-react";
 import {useToast} from "@/hooks/use-toast";
 import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
 import CreditScore from "@/features/display/CreditScore";
-
+import { useAppSelector } from '@/redux/store';
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 
 const LoanOfferDetailsContent = dynamic(
     () => Promise.resolve(LoanOfferDetails),
@@ -32,6 +33,8 @@ const LoanOfferDetails = () => {
     const [currentTab, setCurrentsTab] = useState(0);
     const searchParams = useSearchParams()
     const [disburseLoan, {isLoading}] = useDisburseLoanOfferMutation()
+     const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
+      const notification = useAppSelector(state => (state?.notification?.setNotification))
 
     const getId = () => {
         if (searchParams) {
@@ -63,8 +66,13 @@ const LoanOfferDetails = () => {
     const breakDown = getLoaneeLoanBreakdown();
 
     const backToLoanOffer = () => {
+        if (notification === "notification"){
+            store.dispatch(setCurrentNavbarItem("Notification"))
+            router.push(`/notifications/notification/${notificationId}`); 
+        } else {
         store.dispatch(setCurrentTab('Loan offers'))
         router.push("/loan/loan-offer");
+        }
     };
 
     const loanOfferDetailsTab = [
@@ -167,7 +175,7 @@ const LoanOfferDetails = () => {
                 description: response?.error?.data?.message
             })
         } else {
-            store.dispatch(setCurrentTab('Loan offer'))
+            store.dispatch(setCurrentTab('Loan offers'))
             router.push("/loan/loan-offer")
             toast({
                 status: 'success',
@@ -222,7 +230,7 @@ const LoanOfferDetails = () => {
                     data-testid={"loanOfferDetails"}
                     className={`md:px-8 w-full h-full  px-3 pt-4 md:pt-4`}
                 >
-                    <BackButton handleClick={backToLoanOffer} iconBeforeLetters={true} text={"Back to loan offer"}
+                    <BackButton handleClick={backToLoanOffer} iconBeforeLetters={true} text={notification === "notification"? "Back to notification" : "Back to loan offer"}
                                 id={"loanOfferDetailsBackButton"} textColor={'#142854'}/>
 
                     <div
@@ -264,7 +272,13 @@ const LoanOfferDetails = () => {
 
                         </div>
                         <div
-                            className={` ${styles.loanOfferDetails} md:w-fit md:bg-white md:max-w-[60%]   h-full  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}
+                            className={` ${styles.loanOfferDetails}
+                             md:w-fit md:bg-white md:max-w-[60%]  
+                              h-full  w-full md:max-h-[70vh] 
+                              md:h-fit border border-gray500 rounded-md 
+                              md:px-4 grid gap-3 md:grid md:gap-3  overflow-x-auto md:overflow-x-auto
+                              
+                              `}
                         >
 
                             <div
@@ -297,7 +311,7 @@ const LoanOfferDetails = () => {
                                     )}
                                     {currentTab === 0 && (
                                         <section>
-                                            <div className={'px-5'}>
+                                            <div className={'px-5 py-3'}>
                                                 <Breakdown breakDown={breakDown}/>
                                             </div>
                                         </section>

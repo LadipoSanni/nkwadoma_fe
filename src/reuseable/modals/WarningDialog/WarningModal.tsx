@@ -4,8 +4,10 @@ import { useRouter } from 'next/navigation';
 import { cabinetGrotesk, inter } from '@/app/fonts';
 import { setCurrentStep, setLoanReferralStatus } from '@/service/users/loanRerralSlice';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useAppSelector} from '@/redux/store';
+import { useQueryClient } from '@tanstack/react-query';
+
 
 interface VerificationSuccessDialogProps {
     open: boolean;
@@ -27,15 +29,24 @@ const steps = [
 
 const WarningModal = ({ open, onClose, onContinue, title, message, buttonText, routeToOverview, stopCamera }: VerificationSuccessDialogProps) => {
     const dispatch = useDispatch();
+    const queryClient = useQueryClient();
     const router = useRouter();
+     const isAdditionalDetailComplete = useAppSelector(store => store?.loanReferral?.isAdditionalDetailComplete)
 
-    const handleContinue = () => {
+    const handleContinue= async () => {
         if (stopCamera) {
             stopCamera();
         }
-        dispatch(setCurrentStep(steps.length - 1));
+        if(isAdditionalDetailComplete){
+            await queryClient.invalidateQueries({ 
+                queryKey: ['checkLoaneeStatus'] 
+            });
+            router.push('/overview');
+        }else{
+         dispatch(setCurrentStep(steps.length - 1));
+         onContinue();
+        }
         dispatch(setLoanReferralStatus('AUTHORIZED'));
-        onContinue();
         if (routeToOverview) {
             router.push('/overview');
         }
@@ -43,7 +54,11 @@ const WarningModal = ({ open, onClose, onContinue, title, message, buttonText, r
 
     return (
         <Dialog  open={open} onOpenChange={onClose}>
-            <DialogContent id={'warningModalOnVerification'} className={'max-w-[350px] md:max-w-[416px] [&>button]:hidden gap-5 py-5 px-5'}>
+            <DialogContent 
+            id={'warningModalOnVerification'} className={'max-w-[350px] md:max-w-[416px] [&>button]:hidden gap-5 py-5 px-5'}
+            onInteractOutside={(e) => e.preventDefault()} 
+            onEscapeKeyDown={(e) => e.preventDefault()}
+            >
                 <DialogHeader>
                     <DialogTitle  className={`${cabinetGrotesk.className} text-[28px] font-medium text-labelBlue leading-[120%]`}>
                         <Image id={'warningIcon'} data-testid={'warningIcon'} width={70} height={70} src={'/Icon - Warning.svg'} alt={'warning icon'} priority={true} />
@@ -55,9 +70,14 @@ const WarningModal = ({ open, onClose, onContinue, title, message, buttonText, r
                         <p  id={'modalMessage'} className={'text-gray1 text-[14px] leading-[150%] font-normal'}>{message}</p>
                     </div>
                     <div className="flex justify-end">
-                        <Button id={'actionButton'} className="h-[3.5625rem] text-[14px] font-semibold leading-[150%] w-[8.75rem] px-5 py-3 bg-meedlBlue hover:bg-meedlBlue text-white rounded-md" onClick={handleContinue}>
+                        <button 
+                        id={'actionButton'} 
+                        className="h-[3.5625rem] text-[14px] font-semibold leading-[150%] w-[8.75rem] px-5 py-3  text-white rounded-md hover:bg-[#435376] bg-meedlBlue" 
+                        onClick={handleContinue}
+                         type='button'
+                        >
                             {buttonText}
-                        </Button>
+                        </button>
                     </div>
                 </section>
             </DialogContent>

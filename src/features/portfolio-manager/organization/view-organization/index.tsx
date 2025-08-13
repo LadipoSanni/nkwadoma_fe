@@ -9,7 +9,7 @@ import Table from '@/reuseable/table/Table';
 import InviteOrganizationForm from '@/components/portfolio-manager/organization/Invite-organization-form';
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useViewAllOrganizationByStatusQuery, useSearchOrganisationByNameQuery } from "@/service/admin/organization";
-import { formatAmount } from '@/utils/Format';
+import { formatAmount,formatToTwoDecimals } from '@/utils/Format';
 import { useRouter } from 'next/navigation';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import { MdSearch } from 'react-icons/md';
@@ -18,6 +18,7 @@ import { useAppSelector } from '@/redux/store';
 import { store } from "@/redux/store";
 import { resetNotification } from '@/redux/slice/notification/notification';
 import { useDebounce } from '@/hooks/useDebounce';
+import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -42,6 +43,7 @@ interface organizationListPros extends TableRowData {
     invitedDate: string;
     numberOfLoanees: string;
     status: string;
+    totalAmountReceived: string
 }
 
 interface TabState {
@@ -82,8 +84,8 @@ function Organization() {
     }
 
 
-    const { data, isLoading,isFetching} = useViewAllOrganizationByStatusQuery(dataElement, {
-        refetchOnMountOrArgChange: tabType === "active" || tabType === "deactivated"
+    const { data, isLoading,isFetching,refetch} = useViewAllOrganizationByStatusQuery(dataElement, {
+        refetchOnMountOrArgChange: true 
     });
 
     const { data: searchResults, isLoading: isloading, isFetching: isfetching } = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
@@ -113,6 +115,8 @@ function Organization() {
         store.dispatch(resetOrganizationId())
         store.dispatch(resetNotification())
         store.dispatch(resetOrganizationDetailsStatus())
+        store.dispatch(resetAll())
+        store.dispatch(clearSaveCreateInvestmentField())
     }, [debouncedSearchTerm, searchResults, data, tabType]);
 
     const handleInviteOrganizationClick = () => {
@@ -142,8 +146,8 @@ function Organization() {
     const organizationHeader = [
         { title: <div>Name</div>, sortable: true, id: 'name', selector: (row: TableRowData) => row.name },
         { title: "No. of loanees", sortable: true, id: 'numberOfLoanees', selector: (row: TableRowData) => row.numberOfLoanees },
-        { title: "Historical debt", sortable: true, id: 'totalHistoricalDebt', selector: (row: TableRowData) => formatAmount(row.totalHistoricalDebt) },
-        { title: "Repayment rate(%)", sortable: true, id: 'repaymentRate', selector: (row: TableRowData) => row.repaymentRate },
+        { title: "Historical debt", sortable: true, id: 'totalHistoricalDebt', selector: (row: TableRowData) => formatAmount(row.totalAmountReceived) },
+        { title: "Repayment rate(%)", sortable: true, id: 'repaymentRate', selector: (row: TableRowData) => formatToTwoDecimals(row.repaymentRate) },
         { title: "Debt repaid", sortable: true, id: 'totalDebtRepaid', selector: (row: TableRowData) => formatAmount(row.totalDebtRepaid) },
         { title: "Current debt", sortable: true, id: 'totalCurrentDebt', selector: (row: TableRowData) => formatAmount(row.totalCurrentDebt) },
     ];
@@ -232,7 +236,11 @@ function Organization() {
                 icon={Cross2Icon}
                 width='36%'
             >
-                <InviteOrganizationForm setIsOpen={setIsOpen} />
+                <InviteOrganizationForm 
+                setIsOpen={setIsOpen} 
+                organizationRefetch={refetch}
+                tabType={tabType}
+                />
             </TableModal>
         </div>
     );

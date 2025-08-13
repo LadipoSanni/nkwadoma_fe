@@ -100,6 +100,13 @@ describe('program-view Component', () => {
         }))
     );
     beforeEach(() => {
+        cleanup()
+          jest.spyOn(console,'log').mockReturnValue()
+          jest.spyOn(console,'warn').mockReturnValue()
+          jest.spyOn(console,'error').mockReturnValue()
+      });
+
+    beforeEach(() => {
         jest.clearAllMocks();
         cleanup();
 

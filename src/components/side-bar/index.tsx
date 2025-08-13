@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React,{useEffect} from 'react';
 import { useRouter } from "next/navigation";
 import {persistor, RootState, store, useAppSelector} from "@/redux/store";
 import {setCurrentNavbarItem, setCurrentNavBottomItem, setShowMobileSideBar} from "@/redux/slice/layout/adminLayout";
@@ -12,16 +12,19 @@ import {
     getFinancierSideBarItems,
     getInstituteAdminSideBarItems,
     getLoaneeSideBarItems, getLogoutItem,
-    getPortfolioManagerSideBarItems,
+    usePortfolioManagerSideBarItems,
     getSettingItem
 } from "@/utils/sideBarItems";
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
 import NavbarContainer from "@/reuseable/ui/Navbar";
-import { resetTab } from '@/redux/slice/loan/selected-loan';
-import { resetOrganizationDetailsStatus,resetOrganizationId } from '@/redux/slice/organization/organization';
-import { resetcohortId } from '@/redux/slice/create/cohortSlice';
-
+// import { resetTab } from '@/redux/slice/loan/selected-loan';
+// import { resetOrganizationDetailsStatus,resetOrganizationId } from '@/redux/slice/organization/organization';
+// import { resetcohortId } from '@/redux/slice/create/cohortSlice';
+// import { clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
+import { resetAllState } from '@/redux/reducer';
+import { notificationApi } from '@/service/notification/notification_query';
+import {setCurrentTab,setcurrentTabRoute} from "@/redux/slice/loan/selected-loan";
 
 
 
@@ -30,9 +33,19 @@ const SideBar = () => {
     const showMobileSideBar = useAppSelector(state => state.adminLayout.showMobileSideBar)
     const current = useAppSelector(state => state.adminLayout.currentNavbarItem)
     const currentNavBottom = useAppSelector(state => state.adminLayout.currentNavBottomItem)
+    const currentTab = useAppSelector(state => state.selectedLoan?.currentTab)
     const [logout] = useLogoutMutation()
     const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role')  : "user role";
     const {  isLoaneeIdentityVerified } = useSelector((state: RootState) => state.loanReferral);
+
+    
+
+    useEffect(() => {
+        if (userRole === "PORTFOLIO_MANAGER" && !currentTab) {
+            store.dispatch(setCurrentTab('Loan requests'));
+            store.dispatch(setcurrentTabRoute('loan-request'));
+          }
+    }, [userRole, currentTab])
 
 
     const closeSideBar = () => {
@@ -61,13 +74,19 @@ const SideBar = () => {
         await logout({})
         router.push("/auth/login")
         store.dispatch(setCurrentNavBottomItem("Logout"))
-        store.dispatch(resetTab())
-        store.dispatch(resetOrganizationDetailsStatus())
-        store.dispatch(resetcohortId())
-        store.dispatch(resetOrganizationId())
-        clearData()
-        await persistor.purge();
+        // store.dispatch(resetTab())
+        // store.dispatch(resetOrganizationDetailsStatus())
+        // store.dispatch(resetcohortId())
+        // store.dispatch(resetOrganizationId())
+        // store.dispatch(clearSaveCreateInvestmentField())
         store.dispatch(setCurrentNavBottomItem(""))
+        store.dispatch(resetAllState());
+        await persistor.purge();
+
+        store.dispatch(notificationApi.util.resetApiState())
+        clearData()
+
+        // window.location.href = '/auth/login';
 
     }
 
@@ -92,7 +111,7 @@ const SideBar = () => {
 
 
     const sideBarContent = [
-        {name: "PORTFOLIO_MANAGER", value: getPortfolioManagerSideBarItems(current)},
+        {name: "PORTFOLIO_MANAGER", value: usePortfolioManagerSideBarItems(current)},
         {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
         {name: 'LOANEE', value: getLoaneeSideBarItems(current, isLoaneeIdentityVerified) },
         {name: 'FINANCIER', value: getFinancierSideBarItems(current)},

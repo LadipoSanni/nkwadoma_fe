@@ -86,16 +86,35 @@ export interface CohortInfo {
 }
 
 export interface LoaneeDetails {
-
     "id": string,
-    "cohortId": string,
-    "createdBy": string,
+    "firstName": string,
+    "lastName": string,
+    "organizationName": string,
+    "cohortName": string,
+    "programName": string,
+    "amountRequested": string,
+    "offerDate": string,
+    "startDate": string,
+    "initialDeposit": number,
+    "tuitionAmount": number,
+    "loanAmountOutstanding": number,
+    "loanAmountRepaid": number,
+    "interestRate": number,
+    "repaymentRate": number,
+    "debtPercentage": number,
+    "interestIncurred": number,
+    "cohortStartDate": string,
+    "referredBy": string,
+    "status": string,
+    "image": string,
     "creditScore": number,
-    "createdAt":string,
-    "updatedAt": string,
+    "loanAmountRequested": number,
+    "loanAmountApproved": number,
+    "createdDate": string,
+    "dateTimeOffered": string,
     "userIdentity": {
-    "id": string,
-        "email":string,
+        "id": string,
+        "email": string,
         "firstName": string,
         "lastName": string,
         "phoneNumber": string,
@@ -120,31 +139,38 @@ export interface LoaneeDetails {
         "organizationDomain": string,
         "deactivationReason": string,
         "reactivationReason": string,
-        "nextOfKinResponse": string,
+        "additionalDetailsCompleted": boolean,
+        "nextOfKinResponse": null,
         "identityVerified": boolean
-},
-    "loaneeLoanDetail": {
-    "tuitionAmount": string,
-        "initialDeposit": number | string,
-        "amountRequested": string,
-        "amountReceived": string,
-        "amountRepaid": string,
-        "amountOutstanding": string,
-        "loanBreakdown": string
-},
-    "loaneeStatus": string,
-    "highestLevelOfEducation": string,
-    "nameOfPreviousInstitution": string,
-    "programOfStudy": string,
-    "institutionName": string,
-    "programName": string,
-    "cohortName": string,
-    "cohortStartDate": string,
-    "fitnessToWorkRating": string,
-    "loanAmount": string,
-    "interestRate": string,
-    "paymentMoratoriumPeriod": string,
-    "termsAndConditions": string,
-    "tenor": number
+    },
+    "nextOfKin": {
+        "id": string,
+        "firstName": string,
+        "lastName": string,
+        "email": string,
+        "phoneNumber": string,
+        "nextOfKinRelationship": string,
+        "contactAddress": string
+    },
+    "loaneeLoanBreakDowns": [
+        {
+            "loaneeLoanBreakdownId": string,
+            "itemName": string,
+            "itemAmount": number,
+            "currency": string
+        },
+        {
+            "loaneeLoanBreakdownId": string,
+            "itemName": string,
+            "itemAmount": number,
+            "currency": string
+        },
+        {
+            "loaneeLoanBreakdownId": string,
+            "itemName": string,
+            "itemAmount": number,
+            "currency": string
+        }
+    ]
 
 }

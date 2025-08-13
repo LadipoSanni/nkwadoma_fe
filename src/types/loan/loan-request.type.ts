@@ -1,31 +1,77 @@
 
 
-export interface LoanRequestType {
-    id: string,
-    referredBy: string,
-    firstName: string,
-    lastName: string,
-    status: string,
-    image: string,
-    loanAmountRequested: string,
-    alternateEmail: string,
-    alternateContactAddress: string,
-    alternatePhoneNumber: string,
-    createdDate: string,
-    initialDeposit: string,
-    cohortStartDate: string,
-    programName: string,
-    nextOfKin: {
-        id: string,
-        firstName: string,
-        lastName: string,
-        email: string,
-        phoneNumber: string,
-        nextOfKinRelationship: string,
-        contactAddress: string,
-        loanee: string
-    }
+export interface LoanType {
+
+    "id": string,
+    "firstName": string,
+    "lastName": string,
+    "organizationName": string,
+    "cohortName": string,
+    "programName": string,
+    "amountRequested": string,
+    "offerDate": string,
+    "startDate": string,
+    "initialDeposit": number,
+    "tuitionAmount": number,
+    "loanAmountOutstanding": number,
+    "loanAmountRepaid": number,
+    "interestRate": number,
+    "repaymentRate": number,
+    "debtPercentage": number,
+    "interestIncurred": number,
+    "cohortStartDate": string,
+    "referredBy": string,
+    "status": string,
+    "image": string,
+    "creditScore": string,
+    "loanAmountRequested": string,
+    "loanAmountApproved": string,
+    "createdDate": string,
+    "dateTimeOffered": string,
+    "userIdentity": {
+    "id": string,
+        "email": string,
+        "firstName": string,
+        "lastName": string,
+        "phoneNumber": string,
+        "emailVerified": boolean,
+        "enabled": boolean,
+        "createdAt": string,
+        "image": string,
+        "gender": string,
+        "dateOfBirth": string,
+        "stateOfOrigin": string,
+        "maritalStatus": string,
+        "stateOfResidence": string,
+        "nationality": string,
+        "residentialAddress": string,
+        "role": string,
+        "createdBy": string,
+        "alternateEmail": string,
+        "alternatePhoneNumber": string,
+        "alternateContactAddress": string,
+        "accessToken": string,
+        "refreshToken": string,
+        "organizationDomain": string,
+        "deactivationReason": string,
+        "reactivationReason": string,
+        "additionalDetailsCompleted": boolean,
+        "nextOfKinResponse": string,
+        "identityVerified": boolean
+},
+    "nextOfKin": {
+    "id": string,
+        "firstName": string,
+        "lastName": string,
+        "email": string,
+        "phoneNumber": string,
+        "nextOfKinRelationship": string,
+        "contactAddress": string
+},
+    "loaneeLoanBreakDowns": string
+
 }
+
 
 export interface LoanOrganization {
 

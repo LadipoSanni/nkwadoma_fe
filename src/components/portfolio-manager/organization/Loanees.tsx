@@ -40,7 +40,7 @@ interface loaneeLoanDetails {
 interface viewAllLoanee {
     userIdentity: userIdentity;
     loaneeLoanDetail: loaneeLoanDetails;
-    loaneeStatus: string;
+    activationStatus: string;
 }
 type viewAllLoanees = viewAllLoanee & TableRowData;
 
@@ -72,6 +72,9 @@ const Loanees = dynamic(
 function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: Props) {
     const [searchTerm, setSearchTerm] = useState("");
     const cohortDetails = useAppSelector((state) => state.cohort.selectedCohortInOrganization)
+     const notificationCohortId = useAppSelector((state) => state.cohort?.notificationCohortId)
+     const notificationFlag = useAppSelector((state) => state?.notification?.notificationFlag)
+     const organisationTabStatus = useAppSelector(store => store?.organization?.organizationStatusTab)
     const cohortId = cohortDetails?.id;
     const [page,setPageNumber] = useState(0);
     const [totalPage,setTotalPage] = useState(0)
@@ -85,34 +88,35 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
     const router = useRouter();
      const [isOpen, setIsOpen] = useState(false);
 
+
       const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
       const {data, isLoading,refetch,isFetching} = useViewAllLoaneeQuery({
-            cohortId: cohortId,
+            cohortId: notificationCohortId || cohortId,
             pageSize: size,
             pageNumber: page,
             status: status,
             uploadedStatus: uploadedStatus
         })
 
-        // const {data: invitedData} = useViewAllLoaneeQuery({
-        //   cohortId: cohortId,
-        //   pageSize:  size,               
-        //   pageNumber: 0,             
-        //   uploadedStatus: "INVITED"    
-        // }, {
-        //   skip: !cohortId &&  tabType === "Invited",            
-        //   refetchOnMountOrArgChange: true
-        // });
+        const {data: invitedData} = useViewAllLoaneeQuery({
+          cohortId:notificationCohortId || cohortId,
+          pageSize:  size,               
+          pageNumber: 0,             
+          uploadedStatus: "INVITED"    
+        }, {
+          skip: !(notificationCohortId || cohortId) &&  tabType === "Invited",            
+          refetchOnMountOrArgChange: true
+        });
 
       const {data: searchResults, isLoading: isLoadingSearch, isFetching: isfetching} = useSearchForLoaneeInACohortQuery({
                  loaneeName: debouncedSearchTerm,
-                 cohortId: cohortId,
+                 cohortId: notificationCohortId || cohortId,
                  status: status,
                  pageSize: size,
                  pageNumber: page,
              },
-             {skip: !debouncedSearchTerm || !cohortId})
+             {skip: !debouncedSearchTerm ||  !notificationCohortId || !cohortId})
             
       useEffect(() => {
          if(debouncedSearchTerm && searchResults && searchResults?.data){
@@ -125,12 +129,18 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
           setTotalPage(data?.data?.totalPages)
           setPageNumber(data?.data?.pageNumber)
         }
-      },[debouncedSearchTerm,data,searchResults])      
+      },[debouncedSearchTerm,data,searchResults]) 
+      
+      useEffect(() => {
+        if(notificationCohortId && uploadedStatus === "ADDED" && notificationFlag === "LOANEE_DATA_UPLOAD_SUCCESS"){
+          refetch()
+        }
+      },[refetch,notificationCohortId,uploadedStatus,notificationFlag])
 
       const tableHeaderintegrated = [
               {title: "Loanee", sortable: true, id: "firstName", selector: (row: viewAllLoanees) => capitalizeFirstLetters(row?.userIdentity?.firstName) + " " + row?.userIdentity?.lastName},
               {title: "Initial deposit", sortable: true, id: "initialDeposit", selector: (row: viewAllLoanees) =>  formatAmount((row?.loaneeLoanDetail?.initialDeposit))},
-              {title: "Status", sortable: true, id: "loaneeStatus", selector: (row: viewAllLoanees) =>  <span  className={`${row?.loaneeStatus === "ACTIVE" ? 'text-[#063F1A] bg-[#E7F5EC]' : 'text-[#142854] bg-[#FEF6E8]'} rounded-[32px] px-2 py-1`}>{row?.loaneeStatus === "ACTIVE"? "Active" : "Pending"}</span> },
+              {title: "Status", sortable: true, id: "activationStatus", selector: (row: viewAllLoanees) =>  <span  className={`${row?.activationStatus === "ACTIVE" ? 'text-[#063F1A] bg-[#E7F5EC]' : 'text-[#142854] bg-[#FEF6E8]'} rounded-[32px] px-2 py-1`}>{row?.activationStatus === "ACTIVE"? "Active" : "Pending"}</span> },
               {title: "Amount requested", sortable: true, id: "AmountRequested", selector: (row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountRequested))},
               {title: "Amount received", sortable: true, id: "AmountReceived", selector:(row: viewAllLoanees) => formatAmount((row?.loaneeLoanDetail?.amountReceived))},
           ];
@@ -177,7 +187,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
       const handleClick= async () => {
           const formData = {
             loaneeIds: Array.from(selectedRows),
-            loaneeStatus:condition || ""
+            loaneeStatus:condition || "",
+            cohortId: notificationCohortId || cohortId || ""
           }
         try {
          const updateStatus =  await updateLoaneeStatus(formData).unwrap()
@@ -207,9 +218,13 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
       }
 
       const handleInvite = async () => {
-         const loaneeId = Array.from(selectedRows)
+        //  const loaneeId = Array.from(selectedRows)
+           const formData = {
+            loaneeIds : Array.from(selectedRows),
+            cohortId : notificationCohortId || cohortId
+           }
          try {
-          const inviteLoanees = await inviteLoanee(loaneeId).unwrap()
+          const inviteLoanees = await inviteLoanee(formData).unwrap()
           if(inviteLoanees){
             setSelectedRows(new Set());
             setEnableButton(false)
@@ -239,6 +254,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
             const formData = {
               loaneeIds: [loaneeId],
               loaneeStatus: condition || "",
+              cohortId: notificationCohortId || cohortId || ""
             };
             
             const result = await updateLoaneeStatus(formData).unwrap();
@@ -300,8 +316,9 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         {  tabType === "All" &&
           <Button
           variant={`secondary`}
-          className='h-[45px] w-full'
+          className={`h-[45px] w-full ${organisationTabStatus !== "active"? "bg-gray text-grey150 hover:bg-gray" : ""}`}
           onClick={handleModalOpen}
+          disabled={organisationTabStatus !== "active" ? true : false}
           >
             Upload csv
           </Button>
@@ -328,7 +345,7 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         pageNumber={page}
         setPageNumber={setPageNumber}
         totalPages={totalPage}
-        // enableRowSelection={tabType === 'All' || tabType === 'Archived' ? true : false}
+        enableRowSelection={organisationTabStatus === "active" && (tabType === 'All' || tabType === 'Archived')  ? true : false}
         enableButton={() =>setEnableButton(true) }
         disabledButton={()=> setEnableButton(false) }
         handleSelectedRow={handleSelectedRow}
@@ -351,7 +368,8 @@ function LoaneesInACohort({buttonName,tabType,status,condition,uploadedStatus}: 
         setIsOpen={setIsOpen}
         loaneeRefetch={refetch}
         isLoaneeEmpty={data?.data?.body?.length === 0 ? true : false}
-        // isInvitedLoanee={invitedData?.data?.body?.length === 0 ? true : false}
+        isInvitedLoanee={invitedData?.data?.body?.length === 0 ? true : false}
+        notificationCohortId={notificationCohortId}
         />
         </Modal>
        </div>

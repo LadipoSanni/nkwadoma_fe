@@ -20,7 +20,8 @@ import { MdSearch } from 'react-icons/md'
 import { store } from '@/redux/store'
 import {setcohortStatusTab, setcohortId, setSelectedCohortInOrganization} from '@/redux/slice/create/cohortSlice'
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-
+import { setcohortOrProgramRoute } from '@/redux/slice/program/programSlice';
+import { resetNotificationCohortId } from '@/redux/slice/create/cohortSlice'
 
 
 interface allCohortsProps extends TableRowData {
@@ -102,6 +103,7 @@ useEffect(() => {
           expectedEndDate: details?.expectedEndDate || "",
       })
   }
+  store.dispatch(resetNotificationCohortId())
 }, [cohortDetails]);
 
   const router = useRouter()
@@ -155,6 +157,7 @@ useEffect(() => {
          store.dispatch(setSelectedCohortInOrganization(cohort))
          router.push('/organizations/loanees/uploaded')
      }else {
+      store.dispatch(setcohortOrProgramRoute("cohort"))
       router.push('/cohort/cohort-details')
      }
      setItemSessionStorage("programsId", String(row.programId))
@@ -172,6 +175,7 @@ useEffect(() => {
         store.dispatch(setSelectedCohortInOrganization(cohort))
         router.push('/organizations/loanees/uploaded')
        }else {
+         store.dispatch(setcohortOrProgramRoute("cohort"))
         router.push('/cohort/cohort-details')
        }
   }
@@ -191,12 +195,7 @@ useEffect(() => {
     }
   }
 
-  // useEffect(()=> {
-  //   const id = getItemSessionStorage("programsId")
-  //   if (id) {
-  //     setProgramId(id)
-  //   }
-  // },[])
+
 
   
   
@@ -211,8 +210,8 @@ useEffect(() => {
     { title: <div className='lg:w-28'>Tuition</div>, sortable: true, id: 'tuitionAmount', selector: (row:TableRowData) => (
       <div className="truncate">{formatAmount(row.tuitionAmount)}</div>
     )},
-    { title: 'Amount received', sortable: true, id: 'amountRecieved', selector: (row:TableRowData) => (
-      <div className="truncate">{formatAmount(row.amountRecieved)}</div>
+    { title: 'Amount received', sortable: true, id: 'amountReceived', selector: (row:TableRowData) => (
+      <div className="truncate">{formatAmount(row.amountReceived)}</div>
     )},
     { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row:TableRowData) => (
       <div className="truncate">{formatAmount(row.amountRequested)}</div>

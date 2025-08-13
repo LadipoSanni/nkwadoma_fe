@@ -8,7 +8,6 @@ import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {store, useAppSelector} from "@/redux/store";
 import {
-    useViewAllLoanDisbursalByOrgIdQuery,
     useViewAllLoanDisbursalQuery
 } from "@/service/admin/loan/Loan-disbursal-api";
 import {setClickedDisbursedLoanIdNumber} from "@/redux/slice/loan/selected-loan";
@@ -27,19 +26,14 @@ function Index() {
 
     const request = {
         pageSize: 400,
-        pageNumber: 0
+        pageNumber: 0,
+        organizationId: clickedOrganizationId?.id ? clickedOrganizationId?.id?.toString() : '',
     }
 
-    const {data: allDisbursedLoan, isLoading: disbursedLoanIsLoading} = useViewAllLoanDisbursalQuery(request)
+    const {data, isLoading } = useViewAllLoanDisbursalQuery(request,{refetchOnMountOrArgChange: true})
 
-    const {data, isLoading: isLoading} = useViewAllLoanDisbursalByOrgIdQuery(
-        {
-            organizationId: clickedOrganizationId?.id,
-            pageSize: 400,
-            pageNumber: 0,
-        },
-        {refetchOnMountOrArgChange: true, skip:!clickedOrganizationId}
-    );
+
+
 
 
     const loanDisbursalHeader = [
@@ -69,13 +63,13 @@ function Index() {
             title: 'Deposit',
             sortable: true,
             id: 'initialDeposit',
-            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.initialDeposit)}</div>
+            selector: (row: TableRowData) => <div className=''>{formatAmount(row.initialDeposit)}</div>
         },
         {
             title: 'Amount requested',
             sortable: true,
             id: 'amountRequested',
-            selector: (row: TableRowData) => <div className='ml-4'>{formatAmount(row.amountRequested)}</div>
+            selector: (row: TableRowData) => <div className=''>{formatAmount(row.loanAmountRequested)}</div>
         }
     ];
 
@@ -86,13 +80,12 @@ function Index() {
 
     return (
         <div data-testid={'LoanDisbursalMainDivContainer'} id={`LoanDisbursalMainDivContainer`}
-            //  className={`grid md:px-3 md:pb-3 place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
-            {isLoading || disbursedLoanIsLoading ? (
+            {isLoading  ? (
                 <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
                     <SkeletonForTable/>
                 </div>
-            ) : data?.data?.body?.length === 0 || allDisbursedLoan?.data?.body?.length === 0 ?
+            ) : data?.data?.body?.length === 0 || !data ?
                 (
                     <TableEmptyState name={"loan disbursal"}   icon={
                         <Icon
@@ -105,8 +98,8 @@ function Index() {
                 (
                     <div className={``}>
                         <Tables
-                            tableData={clickedOrganizationId?.id ? data?.data?.body.slice().reverse() : allDisbursedLoan?.data?.body.slice().reverse()}
-                            isLoading={isLoading || disbursedLoanIsLoading}
+                            tableData={data?.data?.body}
+                            isLoading={isLoading }
                             handleRowClick={handleRowClick}
                             tableHeader={loanDisbursalHeader}
                             tableHeight={54}

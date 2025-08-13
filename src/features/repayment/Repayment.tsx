@@ -15,6 +15,9 @@ import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {MagnifyingGlassIcon} from "@radix-ui/react-icons";
 import DropdownFilter from "@/reuseable/Dropdown/DropdownFilter";
 import { IoMdClose } from "react-icons/io";
+import { useDebounce } from '@/hooks/useDebounce';
+import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
+import { store } from "@/redux/store";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -31,6 +34,7 @@ const Repayment = () => {
     const [year, setYear] = useState<number | string>('');
     const [displayedYear, setDisplayedYear] = useState('')
     const [displayedMonth, setDisplayedMonth] = useState('')
+     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
     const props =  {
         pageSize: pageSize,
@@ -44,10 +48,10 @@ const Repayment = () => {
         pageNumber: pageNumber,
         month: selectedIndex,
         year: selectedYear,
-        searchTerm: searchTerm,
+        searchTerm: debouncedSearchTerm,
     }
     const  {data:getRepaymentYearRange} = useGetRepaymentHistoryYearRangeQuery({})
-    const {data:searchData, isLoading:isLoadinFetchedData, isFetching:isFetchingSearchedData } = useSearchAllRepaymentHistoryQuery(searchProps,{skip: !searchTerm})
+    const {data:searchData, isLoading:isLoadinFetchedData, isFetching:isFetchingSearchedData } = useSearchAllRepaymentHistoryQuery(searchProps,{skip: !debouncedSearchTerm})
 
 
     const setMonthItem = (value: string | number) => {
@@ -67,17 +71,19 @@ const Repayment = () => {
         }
     }
     useEffect(() => {
-        if(searchTerm && searchData && searchData?.data){
+        if(debouncedSearchTerm && searchData && searchData?.data){
             setNextPage(searchData?.data?.hasNextPage)
             setTotalPage(searchData?.data?.totalPages)
             setPageNumber(searchData?.data?.pageNumber)
         }
-        else if(!searchTerm && data?.data?.body) {
+        else if(!debouncedSearchTerm && data?.data?.body) {
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber)
         }
-    },[searchTerm,data])
+         store.dispatch(resetAll())
+        store.dispatch(clearSaveCreateInvestmentField())
+    },[debouncedSearchTerm,data,searchData])
 
     const getModeOfPayment = (mode?: string |ReactNode) => {
         switch (mode) {
@@ -100,7 +106,7 @@ const Repayment = () => {
         { title: 'Amount paid', sortable: true, id: 'amountPaid', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountPaid)}</div> },
         { title: 'Payment mode', sortable: true, id: 'modeOfPayment', selector: (row: TableRowData) => <div className={`  `}>{getModeOfPayment(row.modeOfPayment)}</div>},
         { title: 'Total amount repaid', sortable: true, id: 'totalAmountRepaid', selector: (row: TableRowData) =><div className=''>{formatAmount(row.totalAmountRepaid)}</div> },
-        { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountOustanding)}</div> },
+        { title: 'Amount outstanding', sortable: true, id: 'amountOutstanding', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountOutstanding)}</div> },
     ];
 
     const handleRowClick = (ID: string | object | React.ReactNode) => {
@@ -180,7 +186,6 @@ const Repayment = () => {
                            setSelectItem={setMonthItem}
                            clearFilter={clearMonthFilter}
                            placeholder={'Month'}
-                           sx={'grid grid-cols-3'}
                        />
 
                        <DropdownFilter
@@ -244,7 +249,7 @@ const Repayment = () => {
                               <IoMdClose className={'mt-auto mb-auto text-[13px]  '} onClick={clearYearFilter} color={'#212221'}/></div>}
                       </div>
                       <Table
-                          tableData={searchTerm?.length > 0 ? searchData?.data?.body : data?.data?.body}
+                          tableData={debouncedSearchTerm?.length > 0 ? searchData?.data?.body : data?.data?.body}
                           // tableData={repaymentsData}
                           tableHeader={tableHeader}
                           handleRowClick={handleRowClick}
@@ -253,7 +258,7 @@ const Repayment = () => {
                           tableCellStyle={'h-12'}
                           // optionalFilterName='endownment'
                           condition={true}
-                          searchEmptyState={searchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
+                          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchData?.data?.body?.length < 1 }
                           sideBarTabName={'repayment'}
                           icon={MdOutlineLibraryBooks}
                           staticHeader={"Name"}

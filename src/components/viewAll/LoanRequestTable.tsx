@@ -4,7 +4,7 @@ import {Icon} from "@iconify/react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/index";
 import {useRouter} from "next/navigation";
-import {useViewAllLoanRequestQuery, useViewLoanRequestsOfCurrentOrganizationQuery} from "@/service/admin/loan/loan-request-api";
+import {useViewAllLoanRequestQuery} from "@/service/admin/loan/loan-request-api";
 import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
@@ -35,19 +35,17 @@ type viewAllLoanees = viewAllLoanee & TableRowData;
 
 const Index = () => {
     const router = useRouter();
-    const request ={
-        pageSize: 100,
-        pageNumber: 0
-    }
     const clickedOrganization = useAppSelector(state => state.selectedLoan.clickedOrganization);
 
-    const { data, isLoading} = useViewAllLoanRequestQuery(request)
-    const requestBody = {
-        pageNumber: 0,
+    const request ={
         pageSize: 100,
-        organizationId: clickedOrganization?.id
+        pageNumber: 0,
+        organizationId: clickedOrganization?.id || '',
     }
-    const {data: viewAllLoanRequestsInAnOrganizationData, isLoading:isLoadingOrganizationLoanRequest } = useViewLoanRequestsOfCurrentOrganizationQuery(requestBody, {skip:!clickedOrganization})
+
+
+    const { data, isLoading} = useViewAllLoanRequestQuery(request,{refetchOnMountOrArgChange: true})
+
 
     const loanRequestHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: viewAllLoanees) =><div className='flex  gap-2 '>{capitalizeFirstLetters(row.userIdentity?.firstName?.toString())} <div className={``}></div>{capitalizeFirstLetters(row.userIdentity?.lastName?.toString())}</div>  },
@@ -70,11 +68,11 @@ const Index = () => {
         <div data-testid={'mainDivContainer'} id={`mainDivContainer`}
             //  className={`grid md:px-3 md:overflow-hidden   place-items-center w-full md:w-full md:h-full md:grid md:place-items-center  h-full `}
         >
-            {isLoading || isLoadingOrganizationLoanRequest ? (
+            {isLoading  ? (
                     <div className={`w-full h-fit pb-5 md:w-full md:h-fit`}>
                         <SkeletonForTable />
                     </div>
-                ) :viewAllLoanRequestsInAnOrganizationData?.data?.body?.length === 0 || data?.data?.body?.length === 0 ?
+                ) : data?.data?.body?.length === 0 || !data ?
                     (
                         <TableEmptyState name={"loan request"}   icon={
                             <Icon
@@ -83,19 +81,12 @@ const Index = () => {
                                 width="2.5rem"
                             />
                         } condition={true} descriptionId={clickedOrganization?.id ? 'There are no loan requests in this organization yet': `There are no loan requests available yet`}/>
-                        // <LoanEmptyState
-                        //     id={'LoanRequestEmptyState'}
-                        //     icon={<Icon icon="material-symbols:money-bag-outline"
-                        //                 height={"2rem"}
-                        //                 width={"2rem"}
-                        //                 color={'#142854'}
-                        //     ></Icon >} iconBg={'#D9EAFF'} title={'Loan request will show here'} description={clickedOrganization?.id ? 'There are no loan requests in this organization yet': `There are no loan requests available yet` } />
-                    ) :
+                     ) :
                (
                     <div className={` pr-2 md:pr-0`}>
                         <Tables
-                            tableData={clickedOrganization?.id  ? viewAllLoanRequestsInAnOrganizationData?.data?.body : data?.data?.body}
-                            isLoading={isLoading || isLoadingOrganizationLoanRequest}
+                            tableData={ data?.data?.body}
+                            isLoading={isLoading }
                             handleRowClick={handleRowClick}
                             tableHeader={loanRequestHeader}
                             tableHeight={54}

@@ -1,5 +1,5 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import BackButton from "@/components/back-button";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
@@ -18,11 +18,22 @@ import {getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import styles from "@/pages/admin/loanOfferDetails/index.module.css";
 import {NumericFormat} from "react-number-format";
 import Isloading from '@/reuseable/display/Isloading'
+import { useAppSelector } from '@/redux/store';
+import SkeletonForDetailPage from "@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage";
+import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
+import {store} from "@/redux/store";
 
 const AcceptLoanOfferDetails = dynamic(
     () => Promise.resolve(AcceptLoanOffer),
     {ssr: false}
 )
+
+interface ApiError {
+    status: number;
+    data: {
+      message: string;
+    };
+  }
 
 const AcceptLoanOffer: React.FC = () => {
     const [currentTab, setCurrentTab] = useState(0);
@@ -42,15 +53,31 @@ const AcceptLoanOffer: React.FC = () => {
             return ""
         }
     }
+     const notificationId = useAppSelector(state => (state?.notification?.setNotificationId))
+      const notification = useAppSelector(state => (state?.notification?.setNotification))
+    const loanOfferIds = useAppSelector((state) => state?.loanOffer?.loanOfferId)
+    
 
     const loanOfferId: string = getUserToken()
 
-    const { data } = useViewLoanOfferDetailsQuery(loanOfferId);
+    const { data,isLoading:isloading,refetch } = useViewLoanOfferDetailsQuery(loanOfferId || loanOfferIds);
     const [respondToLoanOffer, {isLoading}] = useRespondToLoanOfferMutation();
 
-    const backToOverview = () => {
+    const handleBackClick = () => {
+        if (notification === "notification"){
+              store.dispatch(setCurrentNavbarItem("Notification"))
+            router.push(`/notifications/notification/${notificationId}`);
+        } else {
+            store.dispatch(setCurrentNavbarItem("Overview"))
         router.push("/overview");
+        }
     };
+
+    useEffect(() => {
+        if(data?.data?.loaneeResponse === "ACCEPTED" ||  data?.data?.loaneeResponse === "DECLINED") {
+           refetch()
+        }
+    },[refetch,data])
 
     const loanRequestDetailsTab = [
         "Basic details",
@@ -202,7 +229,7 @@ const AcceptLoanOffer: React.FC = () => {
 
     const handleAccept = async () => {
         const payload = {
-            loanOfferId: loanOfferId,
+            loanOfferId: loanOfferId || loanOfferIds,
             loaneeResponse: 'ACCEPTED' as const
         };
 
@@ -223,9 +250,10 @@ const AcceptLoanOffer: React.FC = () => {
             });
             router.push('/overview');
         } catch (error) {
+            const err =  error as ApiError;
             const errorMessage = (error instanceof Error) ? error.message : 'Error occurred, please try again';
             toast({
-                description: errorMessage,
+                description: err?.data?.message ||  errorMessage,
                 status: 'error'
             });
         }
@@ -233,7 +261,7 @@ const AcceptLoanOffer: React.FC = () => {
 
     const handleDecline = async () => {
         const payload = {
-            loanOfferId: loanOfferId,
+            loanOfferId: loanOfferId || loanOfferIds,
             loaneeResponse: 'DECLINED' as const
         };
 
@@ -253,9 +281,10 @@ const AcceptLoanOffer: React.FC = () => {
             });
             router.push('/overview');
         } catch (error) {
+            const err =  error as ApiError;
             const errorMessage = (error instanceof Error) ? error.message : 'Error occurred, please try again';
             toast({
-                description: errorMessage,
+                description: err?.data?.message || errorMessage,
                 status: 'error'
             });
         }
@@ -265,15 +294,17 @@ const AcceptLoanOffer: React.FC = () => {
 
 
     return (
+        <>
+       { isloading ? ( <SkeletonForDetailPage /> ) : (
         <div
             id="loanRequestDetails"
             data-testid="loanRequestDetails"
-            className={`w-full h-full md:px-10 ${inter.className}`}
+            className={`w-full h-full md:px-10 py-5 pr-[10px] lg:pr-0 ${inter.className}`}
         >
             <BackButton
-                handleClick={backToOverview}
+                handleClick={handleBackClick}
                 iconBeforeLetters={true}
-                text="Back to overview"
+                text={notification === "notification"? "Back to notification" : "Back to overview"}
                 id="loanRequestDetailsBackButton"
                 textColor="#142854"
             />
@@ -281,7 +312,7 @@ const AcceptLoanOffer: React.FC = () => {
             <div
                 id="ImageComponentOnLoanRequestDetails"
                 data-testid="ImageComponentOnLoanRequestDetails"
-                className="mt-10 mb-4 grid md:flex gap-3 h-fit md:justify-between md:gap-6 md:w-full md:h-fit"
+                className="mt-10 mb-4 grid md:flex gap-3 h-fit md:justify-between md:gap-6 md:w-full md:h-fit lg:pr-4"
             >
                 <div>
                     <Avatar
@@ -325,7 +356,16 @@ const AcceptLoanOffer: React.FC = () => {
                     </div>
                 </div>
 
-                <div className={`${styles.loanOfferDetails} md:w-fit  h-fit  w-full md:max-h-[70vh] md:h-fit border border-gray500 rounded-md md:px-4 grid gap-3 md:grid md:gap-3`}>
+                <div className={`${styles.loanOfferDetails} 
+                md:w-fit  h-fit  w-full md:max-h-[70vh] 
+                md:h-fit border border-gray500 rounded-md 
+                md:px-4 grid gap-3 md:grid md:gap-3
+                 overflow-hidden        
+                md:overflow-y-auto      
+                relative 
+                px-3
+                
+                `}>
 
                     <div className={` ${styles.tabConnector} md:sticky md:top-0 md:py-3 md:bg-white md:w-fit pl-1 px-3 py-3 h-fit md:h-fit  flex md:flex`}>
                         <TabConnector tabNames={loanRequestDetailsTab} currentTab={currentTab} />
@@ -349,7 +389,7 @@ const AcceptLoanOffer: React.FC = () => {
                                     <div className="px-5">
                                         <Breakdown breakDown={data?.data?.loaneeBreakdown}/>
                                     </div>
-                                    <div className="flex items-start gap-4 bg-grey105 p-5">
+                                   { data?.data?.loaneeResponse === "ACCEPTED" ||  data?.data?.loaneeResponse === "DECLINED"?  <div className='bg-grey105 p-4'></div> : <div className="flex items-start gap-4 bg-grey105 p-5">
                                         <Checkbox
                                             id="confirmCheckbox"
                                             className="data-[state=checked]:bg-[#142854]"
@@ -365,7 +405,7 @@ const AcceptLoanOffer: React.FC = () => {
                                                 Loan terms & conditions
                                             </span>
                                         </label>
-                                    </div>
+                                    </div>}
                                 </section>
                             )}
                         </ul>
@@ -431,6 +471,8 @@ const AcceptLoanOffer: React.FC = () => {
                 </div>
             </div>
         </div>
+    )}
+        </>
     );
 };
 export default AcceptLoanOfferDetails;

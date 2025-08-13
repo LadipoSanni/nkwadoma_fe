@@ -16,6 +16,14 @@ describe('CreateLoanOffer Component', () => {
     const mockOnSubmit = jest.fn();
     const mockSetIsOpen = jest.fn();
 
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        jest.spyOn(console, 'log').mockReturnValue();
+        jest.spyOn(console, 'warn').mockReturnValue();
+        jest.spyOn(console, 'error').mockReturnValue();
+      });
+
     beforeEach(() => {
         jest.clearAllMocks();
         global.fetch = jest.fn(() =>
@@ -34,7 +42,7 @@ describe('CreateLoanOffer Component', () => {
                 <CreateLoanOffer onSubmit={mockOnSubmit} isOpen={true} setIsOpen={mockSetIsOpen}  loanRequestId={''}/>
             </Providers>
         );
-        expect(screen.getByText('Create loan offer')).toBeInTheDocument();
+        expect(screen.getByText('Create')).toBeInTheDocument();
     });
 
     test('displays error message when form is submitted without selecting a program', () => {

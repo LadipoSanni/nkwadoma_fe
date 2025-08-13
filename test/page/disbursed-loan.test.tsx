@@ -1,5 +1,5 @@
 import "@testing-library/react"
-import {render, screen, act, waitFor} from "@testing-library/react";
+import {render, screen, act, waitFor,cleanup} from "@testing-library/react";
 import DisbursedLoanDetails from "../../src/features/portfolio-manager/disbursed-loan-details";
 import {Providers} from "@/app/provider";
 // import {userEvent} from "@testing-library/user-event";
@@ -10,6 +10,13 @@ jest.mock('next/navigation', ()=> ({
 }))
 
 describe('test loan disburse details page', ()=> {
+
+      beforeEach(() => {
+                 cleanup()
+                   jest.spyOn(console,'log').mockReturnValue()
+                   jest.spyOn(console,'warn').mockReturnValue()
+                   jest.spyOn(console,'error').mockReturnValue()
+               });
 
     beforeEach(async () => {
         global.fetch = jest.fn(() =>

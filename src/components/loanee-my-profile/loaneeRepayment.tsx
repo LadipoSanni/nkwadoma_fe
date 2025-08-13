@@ -45,6 +45,7 @@ const LoaneeRepayment = ({loaneeId}:Props) => {
     }
     const {data, isFetching, isLoading} = useViewAllRepaymentHistoryQuery(props)
 
+
     useEffect(() => {
         if(data && data?.data) {
             setNextPage(data?.data?.hasNextPage)
