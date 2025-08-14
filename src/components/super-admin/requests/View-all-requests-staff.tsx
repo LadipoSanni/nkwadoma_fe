@@ -113,9 +113,10 @@ function ViewAllRequests() {
 
        const handleRowClick = (row: TableRowData) => {
           const fullName = capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
+          const requestedBy = capitalizeFirstLetters(row?.requestedBy?.toString())
           const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
            setOpen(true)
-           setRequestedBy(row?.requested_by as string)
+           setRequestedBy(requestedBy)
            setInvitee(fullName)
            setId(row?.id as string)
            setRole(role  as string)
@@ -129,13 +130,13 @@ function ViewAllRequests() {
              selector: (row: TableRowData) => row.requestedBy || "Not provided"
            },
            { 
-            title:  "Invitee",  
+            title:  <div className='md:mr-16'>Invitee</div>,  
             sortable: true, 
             id: "firstName", 
             selector: (row: TableRowData) => capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
           },
            { 
-             title: <div className='mr-28'>Email</div>,  
+             title: <div className='md:mr-32'>Email</div>,  
              sortable: true, 
              id: "email", 
              selector: (row: TableRowData) => row.email 
@@ -189,7 +190,7 @@ function ViewAllRequests() {
         tableHeader={tableHeader}
         handleRowClick={handleRowClick}
         staticHeader='Requested by'
-        staticColunm='requested_by'
+        staticColunm='requestedBy'
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='request'
         tableCellStyle="h-12"
@@ -205,7 +206,7 @@ function ViewAllRequests() {
          sx='cursor-pointer'
          condition={true}
          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
-        
+         optionalFilterName='Pending'
        />
       </div>
    </TabsContent>
@@ -217,7 +218,7 @@ function ViewAllRequests() {
         tableHeader={tableHeader}
         handleRowClick={handleRowClick}
         staticHeader='Requested by'
-        staticColunm='requested_by'
+        staticColunm='requestedBy'
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='request'
         tableCellStyle="h-12"
@@ -252,6 +253,7 @@ function ViewAllRequests() {
           id={id}
           role={role}
           setOpen={setOpen}
+          requestType='staff'
         />
          
         </Modal>
