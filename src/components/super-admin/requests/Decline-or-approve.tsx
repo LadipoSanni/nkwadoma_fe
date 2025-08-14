@@ -1,8 +1,10 @@
 import React,{useState} from 'react'
 import { Button } from '@/components/ui/button';
-import { useApproveAdminMutation } from '@/service/admin/organization';
+import { useApproveOrDeclineAdminMutation } from '@/service/admin/organization';
 import {useToast} from "@/hooks/use-toast";
 import Isloading from '@/reuseable/display/Isloading';
+import { setRequestStatusTab } from '@/redux/slice/staff-and-request/request';
+import { store } from '@/redux/store';
 
 interface Props{
     requestedBy: string;
@@ -21,18 +23,21 @@ interface ApiError {
 }
 
 function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType}:Props) {
-    const [approveAdmin, {isLoading}] = useApproveAdminMutation()
+    const [approveAdmin, {isLoading}] = useApproveOrDeclineAdminMutation()
      const { toast } = useToast();
       const [error, setError] = useState("")
+      const [buttonType,setButtonType] = useState("")
 
     const handleClose =() => {
         setOpen(false)    
     }
 
-    const handleApprove = async () => {
+    const handleApproveOrDecline = async (value: string) => {
       const param = {
-        organizationEmployeeId: id
+        organizationEmployeeId: id,
+        decision: value
       }
+        setButtonType(value)
        try {
         const approve = await approveAdmin(param).unwrap()
         if(approve){
@@ -41,6 +46,9 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType}:Prop
             status: "success",
             duration: 1000
           });
+          if(requestType === "staff" && value === "DECLINED"){
+            store.dispatch(setRequestStatusTab("declined"))
+          }
           handleClose()
         }
         
@@ -62,11 +70,13 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType}:Prop
        <div className='mt-7 md:mb-1 mb-3 md:flex justify-end gap-6  text-[14px]'>
          <div className='mb-3'>
          <button
-            className='w-full md:w-24 h-[50px] border-neutral650 text-neutral650 border-solid border-[1px] rounded-md hover:bg-white cursor-auto' 
+            className='w-full md:w-24 h-[50px] border-meedlBlue text-meedlBlue border-solid border-[1px] rounded-md hover:bg-white  cursor-pointer' 
             type='button'
-            // onClick={handleClose}
+            onClick={()=>handleApproveOrDecline("DECLINED")}
          >
-            Decline
+           { isLoading && buttonType === "DECLINED" ? <Isloading /> :
+          "Decline"
+          }
         </button>
          </div>
          <div>
@@ -74,9 +84,9 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType}:Prop
          variant={'secondary'} 
          className='w-full md:w-24 h-[50px] '
          type='button'
-         onClick={handleApprove}
+         onClick={()=>handleApproveOrDecline("APPROVED")}
          >
-          { isLoading ? <Isloading /> :
+          { isLoading && buttonType === "APPROVED" ? <Isloading /> :
           "Approve"
           }
         </Button>
