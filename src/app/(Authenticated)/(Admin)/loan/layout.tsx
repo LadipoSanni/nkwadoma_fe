@@ -8,7 +8,8 @@ export default function Layout  ({children}: Readonly<{
     children: React.ReactNode;
 }>)  {
     return (
-        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'MEEDL_ASSOCIATE', 'MEEDL_SUPER_ADMIN',
+        'MEEDL_ADMIN']}>
             <SelectedLoan>
                 {children}
            </SelectedLoan>

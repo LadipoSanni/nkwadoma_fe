@@ -4,7 +4,7 @@ import CustomAuthorization from "@/features/auth/authorization";
 
 function page() {
     return (
-        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'MEEDL_ADMIN', 'MEEDL_SUPER_ADMIN','MEEDL_ASSOCIATE']}>
             <LoanProductPage/>
         </CustomAuthorization>
     )

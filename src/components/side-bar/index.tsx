@@ -14,7 +14,7 @@ import {
     getLoaneeSideBarItems, getLogoutItem,
     usePortfolioManagerSideBarItems,
     getSettingItem,
-    getSuperAdminSideBarItems,
+    getSuperAdminSideBarItems, getMeedlAdminSideBarItems,
 } from "@/utils/sideBarItems";
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
@@ -36,6 +36,7 @@ const SideBar = () => {
     const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role') : "user role";
     const {isLoaneeIdentityVerified} = useSelector((state: RootState) => state.loanReferral);
 
+    const currentTabRoute = useAppSelector(state => state.selectedLoan?.currentTabRoute)
 
     useEffect(() => {
         if (userRole === "PORTFOLIO_MANAGER") {
@@ -112,13 +113,24 @@ const SideBar = () => {
         }
     }
 
-
+    // MEEDL_ASSOCIATE,
+    //     MEEDL_SUPER_ADMIN,
+    //     MEEDL_ADMIN,
+    //     PORTFOLIO_MANAGER,
+    //     ORGANIZATION_ADMIN,
+    //     ORGANIZATION_ASSOCIATE,
+    //     ORGANIZATION_SUPER_ADMIN,
     const sideBarContent = [
         {name: "PORTFOLIO_MANAGER", value: usePortfolioManagerSideBarItems(current)},
         {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
         {name: 'LOANEE', value: getLoaneeSideBarItems(current, isLoaneeIdentityVerified)},
         {name: 'FINANCIER', value: getFinancierSideBarItems(current)},
-        {name: "MEEDL_SUPER_ADMIN", value: getSuperAdminSideBarItems(current)},
+        {name: "MEEDL_SUPER_ADMIN", value: getSuperAdminSideBarItems(current,currentTabRoute)},
+        {name: 'MEEDL_ADMIN', value: getMeedlAdminSideBarItems(current)},
+        {name: 'MEEDL_ASSOCIATE', value: usePortfolioManagerSideBarItems(current)},
+        {name: 'ORGANIZATION_ASSOCIATE', value: getInstituteAdminSideBarItems(current)},
+        {name: 'ORGANIZATION_SUPER_ADMIN', value: getInstituteAdminSideBarItems(current)},
+
     ]
 
 

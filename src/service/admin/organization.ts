@@ -129,7 +129,7 @@ export const organizationApi = createApi({
                 activationStatuses: string[],
                 identityRoles: string[],
                      pageSize: number,
-                     pageNumber: number,
+                     pageNumber?: number,
                      
             }) => ({
                 url : `/organization/view-all/admin`,

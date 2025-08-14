@@ -6,37 +6,50 @@ import Table from '@/reuseable/table/Table';
 import { formatMonthInDate } from '@/utils/Format'
 import {MdOutlineAssignmentTurnedIn} from 'react-icons/md';
 import Modal from '@/reuseable/modals/TableModal';
-// import { requests } from '@/utils/LoanRequestMockData/Index';
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import DeclineOrApprove from './Decline-or-approve';
 import { useViewOrganizationAdminQuery} from '@/service/admin/organization';
 import { useDebounce } from '@/hooks/useDebounce';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import { setRequestStatusTab } from '@/redux/slice/staff-and-request/request';
+import { store,useAppSelector } from '@/redux/store';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
 }
 
+interface TabState {
+  pageNumber?: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  pageSearchNumber?: number;
+}
+
 function ViewAllRequests() {
    const [searchTerm, setSearchTerm] = useState("");
-  //  const [currentPage, setCurrentPage] = useState(0);
+  const requestTabStatusType = useAppSelector(state => state?.request?.requestStatusTab)
    const [isOpen,setOpen] = useState(false)
    const [requestedBy, setRequestedBy] = useState("")
    const [invitee, setInvitee] = useState("")
    const [id,setId] = useState("")
    const [role,setRole] = useState("")
-   const [hasNextPages,setNextPage] = useState(false)
-         const [totalPage,setTotalPage] = useState(0)
-         const [pageNumber,setPageNumber] = useState(0)
-       const [pageSearchNumber,setPageSearchNumber] = useState(0)
-       const [searchHasNextPage,setSearchHasNextPage] = useState(false)
-         const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+   const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+
+   const [tabStates, setTabStates] = useState<Record<string, TabState>>({
+                     pending: { pageNumber: 0, totalPages: 0, hasNextPage: false, pageSearchNumber:0 },
+                     declined: { pageNumber: 0, totalPages: 0, hasNextPage: false, pageSearchNumber:0 },
+                     
+                 });
+
+    const currentTabState = tabStates[requestTabStatusType];
+
    
        const dataElement = {
          name: debouncedSearchTerm,
-         activationStatuses: ['DECLINED',"PENDING_APPROVAL"],
+         activationStatuses: requestTabStatusType === "pending"? ["PENDING_APPROVAL"] : ["DECLINED"],
          identityRoles:["PORTFOLIO_MANAGER","MEEDL_ASSOCIATE"],
-         pageNumber:pageNumber,
+         pageNumber: debouncedSearchTerm? currentTabState?.pageSearchNumber : currentTabState?.pageNumber,
          pageSize: 10
      }
    
@@ -45,17 +58,51 @@ function ViewAllRequests() {
 
       useEffect(()=> {
           if(debouncedSearchTerm && adminData && adminData?.data ){
-            setSearchHasNextPage(adminData?.data?.hasNextPage)
-            setTotalPage(adminData?.data?.totalPages)
-            setPageSearchNumber(adminData?.data?.pageNumber)    
+            setTabStates(prev => ({
+              ...prev,
+              [requestTabStatusType]: {
+                pageSearchNumber: adminData?.data.pageNumber,
+                  totalPages: adminData?.data.totalPages,
+                  hasNextPage: adminData?.data.hasNextPage
+              }
+          }));  
           }else  if(!debouncedSearchTerm && adminData && adminData?.data  ){
-            setNextPage(adminData?.data?.hasNextPage)
-            setTotalPage(adminData?.data?.totalPages)
-            setPageNumber(adminData?.data?.pageNumber)
+            setTabStates(prev => ({
+              ...prev,
+              [requestTabStatusType]: {
+                pageNumber: adminData?.data.pageNumber,
+                  totalPages: adminData?.data.totalPages,
+                  hasNextPage: adminData?.data.hasNextPage
+              }
+          }));  
         }
-         },[adminData,debouncedSearchTerm])
+         },[adminData,debouncedSearchTerm,requestTabStatusType])
 
-  //  const { hasNextPage, currentPageItems, totalPages } = getPaginatedData(currentPage, 10, requests);
+  const handlePageChange: React.Dispatch<React.SetStateAction<number>> = (value) => {
+              if(!searchTerm){
+                const newPage = typeof value === 'function' ? value(currentTabState.pageNumber || 0 ) : value;
+                setTabStates(prev => ({
+                    ...prev,
+                    [requestTabStatusType]: {
+                        ...prev[requestTabStatusType],
+                        pageNumber: newPage
+                    }
+                }));
+              }else {
+                const newPage = typeof value === 'function' ? value(currentTabState.pageSearchNumber || 0 ) : value;
+                setTabStates(prev => ({
+                    ...prev,
+                    [requestTabStatusType]: {
+                        ...prev[requestTabStatusType],
+                        pageSearchNumber: newPage
+                    }
+                }));
+              }
+              
+          };
+
+
+          console.log(tabStates)
 
    const getTableData = () => {
     if (!adminData?.data?.body) return [];
@@ -88,7 +135,7 @@ function ViewAllRequests() {
             selector: (row: TableRowData) => capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
           },
            { 
-             title: "Email",  
+             title: <div className='mr-28'>Email</div>,  
              sortable: true, 
              id: "email", 
              selector: (row: TableRowData) => row.email 
@@ -99,12 +146,12 @@ function ViewAllRequests() {
              id: "role", 
              selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
            },
-           { 
-             title: "Status",  
-             sortable: true, 
-             id: "activationStatus", 
-             selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "PENDING_APPROVAL"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : "Declined"}</span> 
-           },
+          //  { 
+          //    title: "Status",  
+          //    sortable: true, 
+          //    id: "activationStatus", 
+          //    selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "PENDING_APPROVAL"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : "Declined"}</span> 
+          //  },
            { 
              title: "Requested on",  
              sortable: true, 
@@ -114,15 +161,29 @@ function ViewAllRequests() {
          ]
   
   return (
-    <div className='mt-8 px-6'>
-       <SearchInput
+    <div className='mt-5'>
+      <Tabs
+       value={requestTabStatusType}
+       onValueChange={(value) => {
+      store.dispatch(setRequestStatusTab(value));}}
+      >
+          
+<TabsList>
+    <TabsTrigger value="pending">Pending</TabsTrigger>
+    <TabsTrigger value="declined">Declined</TabsTrigger>
+</TabsList>
+     <div className='mt-4 '>
+   <div className=''>
+   <SearchInput
           testId='search-input'
           id="staffSearchLoanee"
           value={searchTerm}
            onChange={(e) => setSearchTerm(e.target.value)}
          style="md:w-20 w-full"
-        />
-       <div className='mt-6' data-testid="table">
+   />
+   </div>
+   <TabsContent value="pending">
+       <div className='mt-4' data-testid="table">
        <Table 
         tableData={getTableData()}
         tableHeader={tableHeader}
@@ -130,20 +191,51 @@ function ViewAllRequests() {
         staticHeader='Requested by'
         staticColunm='requested_by'
         icon={MdOutlineAssignmentTurnedIn}
-        sideBarTabName='requests'
+        sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={59}
+        tableHeight={50}
         isLoading={isLoading || isFetching }
-        hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
-        pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}
-        setPageNumber={searchTerm !== ""? setPageSearchNumber : setPageNumber}
-        totalPages={ totalPage}
+        // hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
+        hasNextPage={currentTabState.hasNextPage}
+        pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
+        // setPageNumber={searchTerm !== ""? setPageSearchNumber : setPageNumber}
+        setPageNumber={handlePageChange}
+        // totalPages={ totalPage}
+        totalPages={currentTabState.totalPages}
          sx='cursor-pointer'
          condition={true}
          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
+        
        />
       </div>
-      <div>
+   </TabsContent>
+   </div>
+   <TabsContent value="declined">
+   <div className='mt-4' data-testid="table">
+       <Table 
+        tableData={getTableData()}
+        tableHeader={tableHeader}
+        handleRowClick={handleRowClick}
+        staticHeader='Requested by'
+        staticColunm='requested_by'
+        icon={MdOutlineAssignmentTurnedIn}
+        sideBarTabName='request'
+        tableCellStyle="h-12"
+        tableHeight={50}
+        isLoading={isLoading || isFetching }
+        hasNextPage={currentTabState.hasNextPage}
+        pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
+        setPageNumber={handlePageChange}
+        totalPages={currentTabState.totalPages}
+         sx='cursor-pointer'
+         condition={true}
+         searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
+         optionalFilterName='declined'
+       />
+      </div>
+   </TabsContent>
+   </Tabs>
+   <div>
         <Modal
         isOpen={isOpen}
         closeModal={() => setOpen(false)}
@@ -165,6 +257,7 @@ function ViewAllRequests() {
         </Modal>
       </div>
     </div>
+   
   )
 }
 

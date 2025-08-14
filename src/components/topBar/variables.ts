@@ -1,6 +1,11 @@
 export const DISPLAYUSERROLE = [
     "PORTFOLIO_MANAGER",
     "ORGANIZATION_ADMIN",
+    "MEEDL_SUPER_ADMIN",
+    "MEEDL_ASSOCIATE",
+    "MEEDL_ADMIN",
+    "ORGANIZATION_ASSOCIATE",
+    "ORGANIZATION_SUPER_ADMIN",
 ]
 
 export const TopBarUserInitialColors = [
