@@ -57,9 +57,9 @@ function ViewAllRequestedOrganization() {
         pageSize: 10,
     }
 
-    const { data, isLoading,isFetching} = useViewAllOrganizationByStatusQuery(dataElements);
+    const { data, isLoading,isFetching,refetch} = useViewAllOrganizationByStatusQuery(dataElements);
 
-    const { data: searchResults, isLoading: isSearchloading, isFetching: isSearchfetching } = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
+    const { data: searchResults, isLoading: isSearchloading, isFetching: isSearchfetching,refetch: refetchSearch } = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
    
 
       useEffect(()=> {
@@ -147,18 +147,6 @@ function ViewAllRequestedOrganization() {
              id: "email", 
              selector: (row: TableRowData) => row.email 
            },
-        //    { 
-        //      title: "Requested role",  
-        //      sortable: true, 
-        //      id: "role", 
-        //      selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
-        //    },
-          //  { 
-          //    title: "Status",  
-          //    sortable: true, 
-          //    id: "activationStatus", 
-          //    selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "PENDING_APPROVAL"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : "Declined"}</span> 
-          //  },
            { 
              title: "Requested on",  
              sortable: true, 
@@ -257,6 +245,7 @@ function ViewAllRequestedOrganization() {
           role={role}
           setOpen={setOpen}
           requestType='organization'
+          refetch={refetch || refetchSearch}
         />
          
         </Modal>
