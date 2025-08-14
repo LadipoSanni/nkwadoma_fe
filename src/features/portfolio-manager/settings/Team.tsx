@@ -2,21 +2,15 @@
 import React,{useState,useEffect} from 'react'
 import ButtonAndSearch from '@/reuseable/action-bars/Button-and-search'
 import Table from "@/reuseable/table/Table";
-// import { teamData } from '@/utils/cohort/trainee-details-mock-data/Index';
 import { Book } from "lucide-react";
 import TableModal from '@/reuseable/modals/TableModal';
 import {Cross2Icon} from "@radix-ui/react-icons";
-// import {  useGetDetailsOfOrganizationQuery } from '@/service/admin/organization';
-// import InviteAdmin from '@/components/portfolio-manager/organization/Invite-admin';
 import { useViewOrganizationAdminQuery } from '@/service/admin/organization';
-// import SkeletonForDetailPage from '@/reuseable/Skeleton-loading-state/Skeleton-for-detailPage';
-// import { useSearchOrganisationAdminByNameQuery } from "@/service/admin/organization";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-// import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState'
-// import { MdSearch } from 'react-icons/md'
 import { useDebounce } from '@/hooks/useDebounce';
 import InviteAdmin from '@/components/super-admin/staff/Invite-staff';
 import { formatMonthInDate} from '@/utils/Format'
+import { getUserDetailsFromStorage } from "@/components/topBar/action";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -32,7 +26,9 @@ function Team() {
     const [pageNumber,setPageNumber] = useState(0)
     const [pageSearchNumber,setPageSearchNumber] = useState(0)
     const [searchHasNextPage,setSearchHasNextPage]  = useState(false)
-    const adminRoleType = [  { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" }, { value: "MEEDL_ASSOCIATE", label: "Associate"} ];
+       const user_role = getUserDetailsFromStorage('user_role');
+    const adminRoleType = [  { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" }, { value: "MEEDL_ASSOCIATE", label: "Associate"},{ value: "MEEDL_ADMIN", label: "Admin"} ];
+
 
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
@@ -44,16 +40,9 @@ function Team() {
     pageSize: 10
 }
 
-    // const searchDataElement = {
-    //   name:debouncedSearchTerm,
-    //   pageNumber: pageSearchNumber,
-    //   pageSize: 10
-    // }
-
-
     const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
    
-    // const {data: searchResults,isFetching: isfetching,isLoading: isSearchLoading} =  useSearchOrganisationAdminByNameQuery(searchDataElement,{skip: !debouncedSearchTerm})
+    
 
     useEffect(()=> {
       if(debouncedSearchTerm && adminData && adminData?.data ){
@@ -84,13 +73,6 @@ function Team() {
       setSearchTerm(event.target.value);
   };
 
-    // const teamHeader = [
-    //     { title:  <div className='md:relative right-4 left-4'>Full name</div>, sortable: true, id: 'fullName', selector: (row:TableRowData ) => <div className='md:relative right-1 left-1 -z-40'>{row.fullName}</div> },
-    //     { title: <div className='md:relative right-16 left-16'></div>,sortable: true, id: 'role', selector: (row: TableRowData) => <div className={`${row.role === "Admin"? "text-[#212221] bg-[#ECECEC] ": "text-[#142854] bg-[#EEF5FF]"} rounded-xl w-20 h-6 flex items-center justify-center relative right-10 left-10 -z-40`}>{row.role}</div> },
-    //     { title: <div className='md:relative right-24 left-24'>Status</div>, sortable: true, id: 'status', selector: (row:TableRowData) =>  <div className={`${row.status === "Active"? "text-success900 bg-[#E7F5EC]":   row.status === "Invited" ? "text-[#142854] bg-blue-100" :  "bg-error50 text-error900 pr-14 pl-14"} rounded-xl w-20 h-6 flex items-center justify-center relative md:right-20 md:left-20 right-10 left-10 -z-40`}>{row.status}</div> },
-    //     { title: <div className='md:relative right-40 left-40'>Role</div>, sortable: true, id: 'lastChangedDate', selector: (row:TableRowData ) => <div className='md:relative right-40 left-40 -z-40'>{row.role}</div> },
-    
-    //   ]
     const adminsHeader = [
       // {
       //   title: <div className='md:relative right-4 left-4'>Full name</div>,
@@ -152,7 +134,7 @@ function Team() {
                 title: "Status",  
                 sortable: true, 
                 id: "activationStatus", 
-                selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "PENDING_APPROVAL"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : row.activationStatus === "ACTIVE"? "Active" : "Invited"}</span> 
+                selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "INVITED"? "bg-[#FEF6E8] text-[#68442E] w-20" : row.activationStatus === "PENDING_APPROVAL"? "bg-[#E6F7EE] text-[#039855]" : "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : row.activationStatus === "ACTIVE"? "Active" : row.activationStatus === "DECLINED"? "Declined" : "Invited"}</span> 
               },
               { 
                 title: "Invited",  
@@ -207,13 +189,10 @@ function Team() {
            icon={Cross2Icon}
             width='36%'
           >
-           {/* <InviteAdmin 
-           setIsOpen={setIsModalOpen}
-           adminType="PORTFOLIO_MANAGER"
-           /> */}
            <InviteAdmin
             setIsOpen={setIsModalOpen}
             roleOptions={adminRoleType}
+            isItemDisabled={(item) => user_role === "PORTFOLIO_MANAGER"? item === 'MEEDL_ADMIN' &&  user_role === "PORTFOLIO_MANAGER" : item !== 'MEEDL_ASSOCIATE' &&  user_role === "MEEDL_ASSOCIATE" }
            />
           
           </TableModal>

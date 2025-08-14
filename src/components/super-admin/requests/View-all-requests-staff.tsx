@@ -35,6 +35,7 @@ function ViewAllRequests() {
    const [id,setId] = useState("")
    const [role,setRole] = useState("")
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+   const [status,setStatus] = useState("")
 
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
                      pending: { pageNumber: 0, totalPages: 0, hasNextPage: false, pageSearchNumber:0 },
@@ -102,7 +103,7 @@ function ViewAllRequests() {
           };
 
 
-          console.log(tabStates)
+          
 
    const getTableData = () => {
     if (!adminData?.data?.body) return [];
@@ -120,6 +121,7 @@ function ViewAllRequests() {
            setInvitee(fullName)
            setId(row?.id as string)
            setRole(role  as string)
+           setStatus(row?.activationStatus as string)
       }
    
        const tableHeader = [
@@ -254,6 +256,7 @@ function ViewAllRequests() {
           role={role}
           setOpen={setOpen}
           requestType='staff'
+          status={status}
         />
          
         </Modal>

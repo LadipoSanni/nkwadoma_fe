@@ -25,6 +25,7 @@ interface RoleOption {
  interface Props{
     setIsOpen : (e:boolean) => void;
     roleOptions: RoleOption[];
+    isItemDisabled?: (item: string | number) => boolean;
  }
 
  interface ApiError {
@@ -35,7 +36,7 @@ interface RoleOption {
 }
 
 
-function InviteStaff({setIsOpen,roleOptions}:Props) {
+function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
     
     const { toast } = useToast();
      const [error, setError] = useState("")
@@ -177,6 +178,7 @@ function InviteStaff({setIsOpen,roleOptions}:Props) {
                   placeHolder='Select a role'
                   selectContent={roleOptions}
                   testId='roleTestId'
+                  isItemDisabled={isItemDisabled}
                 />
                </div>
                   {
