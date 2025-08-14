@@ -60,7 +60,7 @@ function ViewAllRequestedOrganization() {
 
     const { data, isLoading,isFetching} = useViewAllOrganizationByStatusQuery(dataElements,{refetchOnMountOrArgChange:requestTabStatusType === "declined"? true : false});
 
-    const { data: searchResults, isLoading: isSearchloading, isFetching: isSearchfetching,refetch: refetchSearch } = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
+    const { data: searchResults, isLoading: isSearchloading, isFetching: isSearchfetching} = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
    
 
       useEffect(()=> {
