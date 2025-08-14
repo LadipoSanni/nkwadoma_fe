@@ -1,5 +1,5 @@
 import React from 'react'
-import All from '@/features/super-admin/staff/View-all-staff'
+import All from '@/features/super-admin-and-admin/staff/View-all-staff'
 import CustomAuthorization from "@/features/auth/authorization";
 
 function page() {

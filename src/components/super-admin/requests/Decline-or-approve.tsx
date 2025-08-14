@@ -10,6 +10,7 @@ interface Props{
     id: string
     role: string
     setOpen: (condition: boolean) => void
+    requestType?: string
 }
 
 interface ApiError {
@@ -19,7 +20,7 @@ interface ApiError {
   };
 }
 
-function DeclineOrApprove({requestedBy,invitee,role,setOpen,id}:Props) {
+function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType}:Props) {
     const [approveAdmin, {isLoading}] = useApproveAdminMutation()
      const { toast } = useToast();
       const [error, setError] = useState("")
@@ -53,7 +54,7 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id}:Props) {
   return (
     <div className='mt-6'>
       <p className={`text-[14px] text-[#4D4E4D]`}>
-       <span className='font-semibold'>{requestedBy}</span> has requested to invite  <span className='font-semibold'>{invitee}</span> to MEEDL as {role === "associate" || role === "admin"? `an ${role}` : `a ${role}`}
+       <span className='font-semibold'>{requestedBy}</span> has requested to invite  <span className='font-semibold'>{invitee}</span> to MEEDL as {requestType === "staff"? (role === "associate" || role === "admin"? `an ${role}` : `a ${role}`) : "an organization"}
       </p>
        <p className='mt-7 text-[14px]'>
        Do you want to approve this invitation?
