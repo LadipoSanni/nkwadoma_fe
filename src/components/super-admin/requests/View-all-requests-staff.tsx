@@ -113,9 +113,10 @@ function ViewAllRequests() {
 
        const handleRowClick = (row: TableRowData) => {
           const fullName = capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
+          const requestedBy = capitalizeFirstLetters(row?.requestedBy?.toString())
           const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
            setOpen(true)
-           setRequestedBy(row?.requestedBy as string)
+           setRequestedBy(requestedBy)
            setInvitee(fullName)
            setId(row?.id as string)
            setRole(role  as string)
@@ -205,7 +206,7 @@ function ViewAllRequests() {
          sx='cursor-pointer'
          condition={true}
          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
-        
+         optionalFilterName='Pending'
        />
       </div>
    </TabsContent>
@@ -252,6 +253,7 @@ function ViewAllRequests() {
           id={id}
           role={role}
           setOpen={setOpen}
+          requestType='staff'
         />
          
         </Modal>
