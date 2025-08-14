@@ -6,6 +6,10 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+
+.switchTabStyle{
+
+}
 .containerDiv{
     overflow-y: auto;
     -ms-overflow-style: none;
@@ -45,6 +49,13 @@
 @media only screen and (max-width: 960px) {
     .containers{
         visibility: hidden;
+    }
+    .switchTabStyle{
+        display: flex;
+        grid-template-columns: max-content;
+        overflow-x: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 }
 .detailsWidth{

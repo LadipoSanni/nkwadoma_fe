@@ -16,6 +16,8 @@ import React from "react";
 import {GearIcon} from "@radix-ui/react-icons";
 import {LuLogOut} from "react-icons/lu";
 import { useAppSelector } from "@/redux/store";
+import {MEEDL_ADMINS_ROLES, MEEDL_ROLES} from "@/types/roles";
+import {MeedlAdminSettingsTabs, settingTabs} from "@/types/tabDataTypes";
 
 
 const currentTextLiterals = `text-meedlBlue md:text-meedlBlue`;
@@ -90,14 +92,17 @@ export const getInstituteAdminSideBarItems = (currentItem: string) => {
     return items;
 }
 
-export const getSettingItem = ( currentNavBottomItem: string,handleClick:()=> void , userRole?: string | undefined) => {
-    const item: navbarItemsProps[] = [];
+export const getSettingItem = ( currentNavBottomItem: string,handleClick:()=> void ) => {
+    const item: navbarItemsProps[] = [
+        {id: 'settings', name: 'Settings', icon: <GearIcon color={currentNavBottomItem === 'Settings' ? '#142854' : '#939CB0'} className={`text-navbarIconColor h-[1.3rem] w-[1.3rem] `}/>, handleClick: handleClick}
 
-    if (userRole === "PORTFOLIO_MANAGER") {
-        item.push(
-            {id: 'settings', name: 'Settings', icon: <GearIcon color={currentNavBottomItem === 'Settings' ? '#142854' : '#939CB0'} className={`text-navbarIconColor h-[1.3rem] w-[1.3rem] `}/>, handleClick: handleClick}
-        );
-    }
+    ];
+
+    // if (userRole === "PORTFOLIO_MANAGER") {
+    //     item.push(
+    //         {id: 'settings', name: 'Settings', icon: <GearIcon color={currentNavBottomItem === 'Settings' ? '#142854' : '#939CB0'} className={`text-navbarIconColor h-[1.3rem] w-[1.3rem] `}/>, handleClick: handleClick}
+    //     );
+    // }
     return item;
 }
 
@@ -135,4 +140,15 @@ export const getFinancierSideBarItems = (currentNavItem: string) => {
         },
     ]
     return item;
+}
+
+export const getUserSettingTabContent = (userRole: string) => {
+    if (MEEDL_ROLES?.includes(userRole)) {
+        return settingTabs;
+    }else if(MEEDL_ADMINS_ROLES?.includes(userRole)) {
+        return MeedlAdminSettingsTabs;
+    }else {
+        return []
+    }
+
 }

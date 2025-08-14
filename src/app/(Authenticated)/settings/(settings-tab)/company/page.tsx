@@ -1,10 +1,10 @@
 import React from 'react';
-import {Generals} from "@/features/portfolio-manager/settings/Generals";
+import Company from "@/features/portfolio-manager/settings/Company";
 
 const Page = () => {
     return (
         <div>
-            <Generals/>
+            <Company/>
         </div>
     );
 };

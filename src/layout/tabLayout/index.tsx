@@ -19,10 +19,11 @@ type Props = {
   backClickRoutePath?: string;
   condition?: boolean;
   disabledTabs?: string[];
-  style?: string
+  style?: string;
+  triggerStyle?: string;
 };
 
-function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRoutePath,condition,disabledTabs,style}: Props) {
+function TabSwitch({ children, tabData,triggerStyle, defaultTab,backClickName,backClickRoutePath,condition,disabledTabs,style}: Props) {
   const navigate = useRouter();
   const [activeTab, setActiveTab] = useState(defaultTab);
   const pathname = usePathname();
@@ -65,18 +66,20 @@ function TabSwitch({ children, tabData, defaultTab,backClickName,backClickRouteP
        </div>
       }
       <Tabs value={activeTab} onValueChange={handleTabChange}>
-        <TabsList className={`z-50 ${!condition? "mt-3" : ""}`}>
-          {tabData.map((tab, index) => (
-            <TabsTrigger 
-            id={`${tab.name}-${index}`} 
-            data-testid={`tabDataName${tab.value}`} 
-            value={tab.value} key={index}
-            disabled={disabledTabs?.includes(tab.value)}
-            >
-              {tab.name}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+        <div className={`${triggerStyle} `}>
+            <TabsList className={`z-50  ${!condition? "mt-3" : ""}`}>
+                {tabData.map((tab, index) => (
+                    <TabsTrigger
+                        id={`${tab.name}-${index}`}
+                        data-testid={`tabDataName${tab.value}`}
+                        value={tab.value} key={index}
+                        disabled={disabledTabs?.includes(tab.value)}
+                    >
+                        {tab.name}
+                    </TabsTrigger>
+                ))}
+            </TabsList>
+        </div>
         {tabData.map((tab, index) => (
           <TabsContent key={index} value={tab.value} className='mt-5' >
             {activeTab === tab.value && (

@@ -66,7 +66,7 @@ const SideBar = () => {
     }
 
     const handleClick = () => {
-        router.push('/settings/team')
+        router.push('/settings/general')
         store.dispatch(setCurrentNavBottomItem("Settings"))
         store.dispatch(setCurrentNavbarItem('Settings'))
     }
@@ -97,7 +97,7 @@ const SideBar = () => {
     }
 
 
-    const settingItem = getSettingItem(currentNavBottom, handleClick, userRole)
+    const settingItem = getSettingItem(currentNavBottom, handleClick)
     const logoutItem = getLogoutItem(currentNavBottom, handleLogout)
 
     const navbarContainerItems: navbarItemsProps[] = [...settingItem, logoutItem];
@@ -113,13 +113,7 @@ const SideBar = () => {
         }
     }
 
-    // MEEDL_ASSOCIATE,
-    //     MEEDL_SUPER_ADMIN,
-    //     MEEDL_ADMIN,
-    //     PORTFOLIO_MANAGER,
-    //     ORGANIZATION_ADMIN,
-    //     ORGANIZATION_ASSOCIATE,
-    //     ORGANIZATION_SUPER_ADMIN,
+
     const sideBarContent = [
         {name: "PORTFOLIO_MANAGER", value: usePortfolioManagerSideBarItems(current)},
         {name: "ORGANIZATION_ADMIN", value: getInstituteAdminSideBarItems(current)},
