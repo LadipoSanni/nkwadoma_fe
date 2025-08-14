@@ -186,7 +186,7 @@ export const organizationApi = createApi({
             }),
             invalidatesTags: ['invite', "organization","admin"]
         }),
-        approveOrganization: builder.mutation({
+        approveOrDeclineOrganization: builder.mutation({
             query: (data: {
                 organizationId: string;
                 activationStatus: string;
@@ -241,5 +241,5 @@ export const { useViewOrganizationsQuery, useViewAllOrganizationsQuery,
      useSearchOrganisationAdminByNameQuery,useDeactivateOrganizationMutation,
      useActivateOrganizationMutation,useViewOrganizationAdminQuery,
      useSearchOrganizationAsPortfolioManagerQuery,useViewAllOrganizationByStatusQuery,
-     useInviteColleagueMutation,useApproveOrganizationMutation,useDeactivateUserMutation,
+     useInviteColleagueMutation,useApproveOrDeclineOrganizationMutation,useDeactivateUserMutation,
     useReactivateUserMutation, useApproveOrDeclineAdminMutation} = organizationApi

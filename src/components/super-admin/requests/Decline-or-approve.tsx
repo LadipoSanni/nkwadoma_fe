@@ -1,10 +1,11 @@
 import React,{useState} from 'react'
 import { Button } from '@/components/ui/button';
-import { useApproveOrDeclineAdminMutation } from '@/service/admin/organization';
+import { useApproveOrDeclineAdminMutation,useApproveOrDeclineOrganizationMutation } from '@/service/admin/organization';
 import {useToast} from "@/hooks/use-toast";
 import Isloading from '@/reuseable/display/Isloading';
-import { setRequestStatusTab } from '@/redux/slice/staff-and-request/request';
+import { setRequestStatusTab,setrequestOrganizationStatusTab } from '@/redux/slice/staff-and-request/request';
 import { store } from '@/redux/store';
+
 
 interface Props{
     requestedBy: string;
@@ -13,6 +14,7 @@ interface Props{
     role: string
     setOpen: (condition: boolean) => void
     requestType?: string
+    refetch?: (() => void) | null;
 }
 
 interface ApiError {
@@ -22,8 +24,9 @@ interface ApiError {
   };
 }
 
-function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType}:Props) {
+function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType,refetch}:Props) {
     const [approveAdmin, {isLoading}] = useApproveOrDeclineAdminMutation()
+    const [approveOrDeclineOrg, {isLoading:isloading}] = useApproveOrDeclineOrganizationMutation()
      const { toast } = useToast();
       const [error, setError] = useState("")
       const [buttonType,setButtonType] = useState("")
@@ -37,21 +40,44 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType}:Prop
         organizationEmployeeId: id,
         decision: value
       }
+
+      const formData = {
+        organizationId: id,
+        activationStatus: value
+      }
         setButtonType(value)
        try {
-        const approve = await approveAdmin(param).unwrap()
-        if(approve){
-          toast({
-            description: approve?.message,
-            status: "success",
-            duration: 1000
-          });
-          if(requestType === "staff" && value === "DECLINED"){
-            store.dispatch(setRequestStatusTab("declined"))
+         if(requestType === "staff"){
+          const approve = await approveAdmin(param).unwrap()
+          if(approve){
+            toast({
+              description: approve?.message,
+              status: "success",
+              duration: 1000
+            });
+            if(requestType === "staff" && value === "DECLINED"){
+              store.dispatch(setRequestStatusTab("declined"))
+            }
+            handleClose()
           }
-          handleClose()
-        }
-        
+          
+         }else {
+          const approveOrDecline = await approveOrDeclineOrg(formData).unwrap()
+           if(approveOrDecline){
+            toast({
+              description: approveOrDecline?.message,
+              status: "success",
+              duration: 1000
+            });
+            if(requestType === "organization" && value === "DECLINED"){
+              store.dispatch(setrequestOrganizationStatusTab("declined"))
+            }
+            if(refetch){
+              refetch()
+              }
+            handleClose()
+           }
+         }
        } catch (err) {
         const error = err as ApiError;
         setError(error?.data?.message);
@@ -74,7 +100,7 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType}:Prop
             type='button'
             onClick={()=>handleApproveOrDecline("DECLINED")}
          >
-           { isLoading && buttonType === "DECLINED" ? <Isloading /> :
+           { isLoading || isloading && buttonType === "DECLINED" ? <Isloading /> :
           "Decline"
           }
         </button>
@@ -86,7 +112,7 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType}:Prop
          type='button'
          onClick={()=>handleApproveOrDecline("APPROVED")}
          >
-          { isLoading && buttonType === "APPROVED" ? <Isloading /> :
+          { isLoading || isloading && buttonType === "APPROVED" ? <Isloading /> :
           "Approve"
           }
         </Button>
