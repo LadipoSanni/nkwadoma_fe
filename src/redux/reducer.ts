@@ -39,6 +39,7 @@ import { countryApi } from '@/service/admin/external-api/countryCalling_code_que
 import LoanOfferReducer from './slice/loan/loan-offer';
 import StaffReducer from "./slice/staff-and-request/staff";
 import loaneesReducer from "./slice/loan/loanees";
+import requestReducer from "./slice/staff-and-request/request"
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -61,6 +62,7 @@ const appReducer = combineReducers({
     loanOffer: LoanOfferReducer,
     staff: StaffReducer,
     loanees: loaneesReducer,
+    request: requestReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
