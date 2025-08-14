@@ -21,7 +21,7 @@ const Profile = () => {
     return (
         <div
             data-testid={'userProfile'}
-            className={`w-full  grid gap-3  `}
+            className={`w-full md:min-w-fit md:w-[40%]  grid gap-3  `}
             id={'userProfile'}>
             <div
                 className={` flex gap-3 pb-5 border-b border-b-[#D7D7D7]  `}
@@ -46,7 +46,7 @@ const Profile = () => {
             <div className={`full grid gap-4  `}>
                 {userDetails?.map((item: {details: string, value: string, id: string}, index: number) => (
                     <div key={item.id + index}
-                         className={` w-full  grid gap-2 `}
+                         className={` w-full md:min-w-fit   grid gap-2 `}
                          id={item.id} data-testid={item.id}>
                         <p className={` ${inter500.className} text-[14px] `}>{item.details}</p>
                         <div

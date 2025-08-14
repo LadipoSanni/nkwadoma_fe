@@ -27,10 +27,10 @@ export const Generals = () => {
     };
 
     return (
-        <div className={` w-full md:w-[60%] bg-00 mt-4 grid   md:flex md:justify-between  gap-6 md:gap-0`}>
+        <div className={` w-full  bg-00 py-4 grid md:gap-20  md:flex md:justify-between  gap-6 `}>
             <SettingTabs width={` md:w-[30%] lg:w-[30%] `} tabCurrentTabIndex={currentTab} setTabCurrentTabIndex={setCurrentTab} id={'settingTab1'} tabElement={data}  />
             <div
-                className={` w-full   md:w-[50%] `}
+                className={` w-full    `}
             >
                 {getCurrentDataList()}
            </div>

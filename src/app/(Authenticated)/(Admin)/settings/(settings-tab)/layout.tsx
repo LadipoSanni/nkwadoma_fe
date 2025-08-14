@@ -11,7 +11,7 @@ type props = {
 const layout: React.FC<props> = ({ children }) => {
   return (
     <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
-        <TabSwitch tabData={settingsTab} defaultTab="/settings/team" disabledTabs={["/settings/profile","/settings/roles-&-permissions"]}>
+        <TabSwitch tabData={settingsTab} defaultTab="/settings/general" disabledTabs={["/settings/profile","/settings/roles-&-permissions"]}>
             {children}
         </TabSwitch>
     </CustomAuthorization>
