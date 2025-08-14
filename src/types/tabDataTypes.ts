@@ -8,13 +8,18 @@ export const loanProductTab = [
     { name: "Loanees", value: "/loan-product/loan-product-loanees" },
 ]
 
-export const settingsTab = [
+export const MeedlAdminSettingsTabs = [
     { name: "General", value:"/settings/general" },
     { name: "Company", value: "/settings/company" },
     // { name: "Settings", value: "/settings/settings"},
     { name: "Team", value: "/settings/team" },
     { name: "Roles & Permissions", value: "/settings/roles-&-permissions" },
 ]
+
+export const settingTabs = [
+    { name: "General", value:"/settings/general" },
+]
+
 
 export const vehicleTab = [
     {name: "Commercial ", value: "/vehicle/commercial-vehicle"},

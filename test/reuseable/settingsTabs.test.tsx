@@ -11,7 +11,7 @@ describe('setting tabs', () =>{
             {name: 'Strategy', id: 'Strategy'},
         ]
         render(
-            <SettingTabs id={'settingTab1'} currentIndex={0} tabElement={data} />
+            <SettingTabs id={'settingTab1'} setTabCurrentTabIndex={(num:number) => {console.log(num)}}  tabCurrentTabIndex={0} tabElement={data} />
         )
         expect(screen.getByTestId('settingTab1'))
     })
@@ -22,7 +22,7 @@ describe('setting tabs', () =>{
             {name: 'Strategy', id: 'Strategy'},
         ]
         render(
-            <SettingTabs currentIndex={0} id={'settingTab1'} tabElement={data}  />
+            <SettingTabs setTabCurrentTabIndex={(num:number) => {console.log(num)}}  tabCurrentTabIndex={0} id={'settingTab1'} tabElement={data}  />
         )
         expect(screen.getByText('Profession'))
         expect(screen.getByText('Strategy'))
@@ -33,7 +33,7 @@ describe('setting tabs', () =>{
             {name: 'Strategy', id: 'Strategy'},
         ]
         render(
-            <SettingTabs currentIndex={0} id={'settingTab1'} tabElement={data}  />
+            <SettingTabs tabCurrentTabIndex={0} setTabCurrentTabIndex={(num:number) => {console.log(num)}}  id={'settingTab1'} tabElement={data}  />
         )
         expect(screen.getByText('Profession'))
         expect(screen.getByText('Strategy'))
@@ -47,7 +47,7 @@ describe('setting tabs', () =>{
         ]
 
         render(
-            <SettingTabs currentIndex={0} id={'settingTab1'} tabElement={data}  />
+            <SettingTabs setTabCurrentTabIndex={(num:number) => {console.log(num)}} tabCurrentTabIndex={0} id={'settingTab1'} tabElement={data}  />
         )
         expect(screen.getByText('Profession'))
 
