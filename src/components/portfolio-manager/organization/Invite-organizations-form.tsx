@@ -1,7 +1,6 @@
 import React,{useState} from 'react'
 import {Button} from '@/components/ui/button';
 import {Formik, Form, Field, ErrorMessage} from 'formik'
-import * as Yup from 'yup';
 import {Label} from '@/components/ui/label';
 import {inter} from "@/app/fonts"
 import { notificationApi } from '@/service/notification/notification_query';
@@ -52,9 +51,6 @@ function InviteOrganizationsForm({setIsOpen,organizationRefetch,tabType}: props)
     const [isPhoneNumberError,setPhoneNumberError] = useState(false)
      const [countryCode, setCountryCode] = useState("NG")
      const [currentStep, setCurrentStep] = useState(1);
-     const [lastName,setLastName] = useState("")
-     const [firstName,setFirstName] = useState("")
-     const [email,setEmail] = useState('')
      const industries = [
         { value: "EDUCATION", label: "Education" },
         { value: "BANKING", label: "Banking" }
@@ -207,7 +203,7 @@ function InviteOrganizationsForm({setIsOpen,organizationRefetch,tabType}: props)
         validateOnChange={true}
         validateOnBlur={true} 
       >
-        {({errors, isValid, touched, setFieldValue, values,setFieldTouched,setFieldError,handleBlur, validateForm}) => (
+        {({errors, isValid, touched, setFieldValue, values,setFieldTouched,setFieldError,handleBlur}) => (
         <Form className={`${inter.className}`}>
          <div >
          <CenterMultistep currentStep={currentStep} totalSteps={2} />
