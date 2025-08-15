@@ -99,7 +99,7 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
         <div className='text-[14px] grid grid-cols-1 gap-y-6 mt-6 mb-6'>
             <div className='' > 
                 <p className='text-[#6A6B6A]'>Status</p>
-                <p className={`${status === "Active"? "bg-[#E6F2EA] text-[#045620] w-14 " :status === "Pending"? "bg-[#FEF6E8] text-[#68442E] w-16" :  "bg-[#FBE9E9] text-[#971B17] w-24"} flex items-center justify-center rounded-lg mt-2`}>{status}</p>
+                <p className={`${status === "Active"? "bg-[#E6F2EA] text-[#045620] w-12 " :status === "Deactivated"? "bg-[#FBE9E9] text-[#971B17] w-24" :  "bg-[#FEF6E8] text-[#045620] w-16"} flex items-center justify-center rounded-lg mt-2`}>{status}</p>
             </div>
 
             <div className='' > 
