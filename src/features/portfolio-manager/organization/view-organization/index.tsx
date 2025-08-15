@@ -6,10 +6,10 @@ import OrganizationActionBar from '@/components/portfolio-manager/organization/O
 import { MdOutlineAccountBalance } from 'react-icons/md';
 import TableModal from '@/reuseable/modals/TableModal';
 import Table from '@/reuseable/table/Table';
-import InviteOrganizationForm from '@/components/portfolio-manager/organization/Invite-organization-form';
+// import InviteOrganizationForm from '@/components/portfolio-manager/organization/Invite-organization-form';
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useViewAllOrganizationByStatusQuery, useSearchOrganisationByNameQuery } from "@/service/admin/organization";
-import { formatAmount,formatToTwoDecimals } from '@/utils/Format';
+import { formatAmount,formatToTwoDecimals,formatNumberWithCommas } from '@/utils/Format';
 import { useRouter } from 'next/navigation';
 import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
 import { MdSearch } from 'react-icons/md';
@@ -19,6 +19,9 @@ import { store } from "@/redux/store";
 import { resetNotification } from '@/redux/slice/notification/notification';
 import { useDebounce } from '@/hooks/useDebounce';
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
+import InviteOrganizationForm from '@/components/portfolio-manager/organization/Invite-organizations-form';
+import {resetOrganizationInitialState } from '@/redux/slice/organization/organization';
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -146,8 +149,8 @@ function Organization() {
     };
     
     const organizationHeader = [
-        { title: <div>Name</div>, sortable: true, id: 'name', selector: (row: TableRowData) => row.name },
-        { title: "No. of loanees", sortable: true, id: 'numberOfLoanees', selector: (row: TableRowData) => row.numberOfLoanees },
+        { title: <div>Name</div>, sortable: true, id: 'name', selector: (row: TableRowData) => capitalizeFirstLetters(row.name as string) },
+        { title: "No. of loanees", sortable: true, id: 'numberOfLoanees', selector: (row: TableRowData) => formatNumberWithCommas(row.numberOfLoanees as number) },
         { title: "Historical debt", sortable: true, id: 'totalHistoricalDebt', selector: (row: TableRowData) => formatAmount(row.totalAmountReceived) },
         { title: "Repayment rate(%)", sortable: true, id: 'repaymentRate', selector: (row: TableRowData) => formatToTwoDecimals(row.repaymentRate) },
         { title: "Debt repaid", sortable: true, id: 'totalDebtRepaid', selector: (row: TableRowData) => formatAmount(row.totalDebtRepaid) },
@@ -231,7 +234,11 @@ function Organization() {
 
             <TableModal
                 isOpen={isOpen}
-                closeModal={() => setIsOpen(false)}
+                closeModal={() => {
+                    setIsOpen(false)
+                    store.dispatch(resetOrganizationInitialState())
+                }
+                }
                 className='pb-1'
                 headerTitle='Invite organization'
                 closeOnOverlayClick={true}
