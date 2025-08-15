@@ -34,7 +34,7 @@ const AuthButton = ({
                     backgroundColor: `${disable ? "#D0D0D0" : backgroundColor}`,
                     borderColor: `${showBorder ? `${borderColor} ` : ``}`
                 }}
-                className={`${useCabinetGrotesk ? cabinetGrotesk.className : inter.className} ${showBorder ? `border border-[${borderColor}]` : ``} grid place-content-center rounded font-bold text-sm`}>
+                className={`${useCabinetGrotesk ? cabinetGrotesk.className : inter.className} ${showBorder ? `border border-[${borderColor}]` : ``} ${disable ? `cursor-not-allowed ` : ''} grid place-content-center rounded font-bold text-sm`}>
                 {isLoading ? <Isloading/> : buttonText}
 
             </Button>

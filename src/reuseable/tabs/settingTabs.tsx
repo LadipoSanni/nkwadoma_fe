@@ -15,7 +15,7 @@ const SettingTabs = ({id,tabElement,tabCurrentTabIndex,setTabCurrentTabIndex}: I
         <div
             id={id}
             data-testid={id}
-            className={` w-full md:min-w-fit  md:w-[20%]   grid gap-2 px-4 py-4 h-fit  border border-[#D7D7D7] rounded-md `}
+            className={` w-full md:min-w-fit  md:w-[25%]   grid gap-2 px-4 py-4 h-fit  border border-[#D7D7D7] rounded-md `}
         >
             {tabElement?.map((item, i) => (
                 <div
