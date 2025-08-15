@@ -36,12 +36,12 @@ function OrganizationDetails() {
                <span
                  id="status"
                  className={`rounded-[32px] h-[21px] w-[58px] flex items-center justify-center ${
-                   organizationDetails?.data.status === "ACTIVE"
+                   organizationDetails?.data.activationStatus === "ACTIVE"
                      ? "bg-[#E7F5EC] text-[#063F1A]"
                      : "bg-[#FEF6E8] text-[#66440A]"
                  }`}
                >
-                 {capitalizeFirstLetters(organizationDetails?.data.status?.toLowerCase())}
+                 {capitalizeFirstLetters(organizationDetails?.data.activationStatus?.toLowerCase())}
                </span>
              ),
            },

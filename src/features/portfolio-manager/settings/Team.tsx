@@ -184,7 +184,7 @@ function Team() {
            isOpen={isModalOpen}
            closeModal={()=> setIsModalOpen(false)}
            className='pb-1'
-           headerTitle='Invite Colleague'
+           headerTitle='Invite colleague'
            closeOnOverlayClick={true}
            icon={Cross2Icon}
             width='36%'
