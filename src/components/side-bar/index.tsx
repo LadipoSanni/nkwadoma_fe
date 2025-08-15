@@ -69,6 +69,7 @@ const SideBar = () => {
         router.push('/settings/general')
         store.dispatch(setCurrentNavBottomItem("Settings"))
         store.dispatch(setCurrentNavbarItem('Settings'))
+        store.dispatch(setShowMobileSideBar(false))
     }
 
     const clickNavbar = (name: string, route?: string, isActive?: boolean) => {

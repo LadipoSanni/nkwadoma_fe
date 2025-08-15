@@ -8,3 +8,11 @@ export interface LoginFailProps  {
     }
 }
 }
+export interface Error {
+    status: number,
+        data : {
+        message: string,
+        timeStamp: string,
+        statusCode: string
+    }
+}
