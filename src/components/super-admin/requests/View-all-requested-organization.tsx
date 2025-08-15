@@ -33,6 +33,7 @@ function ViewAllRequestedOrganization() {
    const [invitee, setInvitee] = useState("")
    const [id,setId] = useState("")
    const [role,setRole] = useState("")
+   const [status,setStatus] = useState("")
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
@@ -57,9 +58,9 @@ function ViewAllRequestedOrganization() {
         pageSize: 10,
     }
 
-    const { data, isLoading,isFetching,refetch} = useViewAllOrganizationByStatusQuery(dataElements);
+    const { data, isLoading,isFetching} = useViewAllOrganizationByStatusQuery(dataElements,{refetchOnMountOrArgChange:requestTabStatusType === "declined"? true : false});
 
-    const { data: searchResults, isLoading: isSearchloading, isFetching: isSearchfetching,refetch: refetchSearch } = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
+    const { data: searchResults, isLoading: isSearchloading, isFetching: isSearchfetching} = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
    
 
       useEffect(()=> {
@@ -126,6 +127,7 @@ function ViewAllRequestedOrganization() {
            setInvitee(fullName)
            setId(row?.id as string)
            setRole(role  as string)
+           setStatus(row?.activationStatus as string)
       }
    
        const tableHeader = [
@@ -245,7 +247,7 @@ function ViewAllRequestedOrganization() {
           role={role}
           setOpen={setOpen}
           requestType='organization'
-          refetch={refetch || refetchSearch}
+          status={status}
         />
          
         </Modal>

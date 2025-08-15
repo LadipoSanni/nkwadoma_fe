@@ -5,6 +5,7 @@ import {useToast} from "@/hooks/use-toast";
 import Isloading from '@/reuseable/display/Isloading';
 import { setRequestStatusTab,setrequestOrganizationStatusTab } from '@/redux/slice/staff-and-request/request';
 import { store } from '@/redux/store';
+import { organizationApi } from '@/service/admin/organization';
 
 
 interface Props{
@@ -14,7 +15,7 @@ interface Props{
     role: string
     setOpen: (condition: boolean) => void
     requestType?: string
-    refetch?: (() => void) | null;
+    status?:string
 }
 
 interface ApiError {
@@ -24,7 +25,7 @@ interface ApiError {
   };
 }
 
-function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType,refetch}:Props) {
+function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType,status}:Props) {
     const [approveAdmin, {isLoading}] = useApproveOrDeclineAdminMutation()
     const [approveOrDeclineOrg, {isLoading:isloading}] = useApproveOrDeclineOrganizationMutation()
      const { toast } = useToast();
@@ -36,6 +37,7 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType,refet
     }
 
     const handleApproveOrDecline = async (value: string) => {
+      setButtonType(value)
       const param = {
         organizationEmployeeId: id,
         decision: value
@@ -45,7 +47,6 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType,refet
         organizationId: id,
         activationStatus: value
       }
-        setButtonType(value)
        try {
          if(requestType === "staff"){
           const approve = await approveAdmin(param).unwrap()
@@ -69,12 +70,10 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType,refet
               status: "success",
               duration: 1000
             });
+            store.dispatch(organizationApi.util.invalidateTags(['organization']))
             if(requestType === "organization" && value === "DECLINED"){
               store.dispatch(setrequestOrganizationStatusTab("declined"))
             }
-            if(refetch){
-              refetch()
-              }
             handleClose()
            }
          }
@@ -96,11 +95,11 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType,refet
        <div className='mt-7 md:mb-1 mb-3 md:flex justify-end gap-6  text-[14px]'>
          <div className='mb-3'>
          <button
-            className='w-full md:w-24 h-[50px] border-meedlBlue text-meedlBlue border-solid border-[1px] rounded-md hover:bg-white  cursor-pointer' 
+            className={`w-full md:w-24 h-[50px] ${status !== "DECLINED"? "border-meedlBlue text-meedlBlue hover:bg-[#E8EAEE] cursor-pointer" : "border-[#ECECEC] text-[#A8A8A8] hover:bg-white cursor-auto"} border-solid border-[1px] rounded-md `} 
             type='button'
-            onClick={()=>handleApproveOrDecline("DECLINED")}
+            onClick={()=>status !== "DECLINED" && handleApproveOrDecline("DECLINED")}
          >
-           { isLoading || isloading && buttonType === "DECLINED" ? <Isloading /> :
+           { (isLoading || isloading) && buttonType === "DECLINED" ? <Isloading /> :
           "Decline"
           }
         </button>
@@ -112,7 +111,7 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType,refet
          type='button'
          onClick={()=>handleApproveOrDecline("APPROVED")}
          >
-          { isLoading || isloading && buttonType === "APPROVED" ? <Isloading /> :
+          { (isLoading || isloading) && buttonType === "APPROVED" ? <Isloading /> :
           "Approve"
           }
         </Button>
