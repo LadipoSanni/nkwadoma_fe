@@ -8,7 +8,7 @@ import PasswordCriteria from '@/components/passwordCriteria/Index';
 import { useChangePasswordMutation } from '@/service/users/api';
 import {useToast} from "@/hooks/use-toast";
 import {Error} from "@/types/auth";
-
+import styles from '@/components/loanee-my-profile/index.module.css'
 const ChangePassword = () => {
     const [currentPassword, setCurrentPassword] = useState("")
     const [password, setPassword] = useState("")
@@ -106,7 +106,7 @@ const ChangePassword = () => {
                 <p className={` ${inter500.className} text-[16px] text-black `}>Change password</p>
                 <p className={` text-[14px] ${inter.className} text-[#4D4E4D]   `}>Update password for enhanced account security</p>
             </div>
-            <div className={` grid gap-4 `}>
+            <div className={` grid gap-4 ${styles.container} `}>
                 <AuthInput value={currentPassword} type={'password'} data-testid={'resetNewPasswordInput'}
                            label={'Current password'}
                            id={'resetNewPasswordInput'}
