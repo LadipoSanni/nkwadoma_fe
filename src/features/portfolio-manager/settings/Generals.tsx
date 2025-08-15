@@ -27,7 +27,7 @@ export const Generals = () => {
     };
 
     return (
-        <div className={` w-full  bg-00 py-4 grid md:gap-20  md:flex md:justify-between  gap-6 `}>
+        <div className={` w-full  bg-00 py-4 grid md:gap-[10vw]  md:flex md:justify-between  gap-6 `}>
             <SettingTabs width={` md:w-[30%] lg:w-[30%] `} tabCurrentTabIndex={currentTab} setTabCurrentTabIndex={setCurrentTab} id={'settingTab1'} tabElement={data}  />
             <div
                 className={` w-full    `}
