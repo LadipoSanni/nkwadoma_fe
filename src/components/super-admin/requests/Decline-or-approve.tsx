@@ -95,7 +95,7 @@ function DeclineOrApprove({requestedBy,invitee,role,setOpen,id,requestType,statu
        <div className='mt-7 md:mb-1 mb-3 md:flex justify-end gap-6  text-[14px]'>
          <div className='mb-3'>
          <button
-            className={`w-full md:w-24 h-[50px] ${status !== "DECLINED"? "border-meedlBlue text-meedlBlue hover:bg-[#A8A8A8] cursor-pointer" : "border-[#ECECEC] text-[#A8A8A8] hover:bg-white cursor-auto"} border-solid border-[1px] rounded-md `} 
+            className={`w-full md:w-24 h-[50px] ${status !== "DECLINED"? "border-meedlBlue text-meedlBlue hover:bg-[#E8EAEE] cursor-pointer" : "border-[#ECECEC] text-[#A8A8A8] hover:bg-white cursor-auto"} border-solid border-[1px] rounded-md `} 
             type='button'
             onClick={()=>status !== "DECLINED" && handleApproveOrDecline("DECLINED")}
          >
