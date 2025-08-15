@@ -5,6 +5,7 @@ import {Button} from "@/components/ui/button";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import {encryptText} from "@/utils/encrypt";
 import PasswordCriteria from '@/components/passwordCriteria/Index';
+import { useChangePasswordMutation } from '@/service/users/api';
 
 const ChangePassword = () => {
     const [currentPassword, setCurrentPassword] = useState("")
@@ -15,7 +16,7 @@ const ChangePassword = () => {
     const encryptedPassword =  encryptText(password)
     const encryptedCurrentPassword = encryptText(currentPassword)
 
-
+    const [changePassword] = useChangePasswordMutation()
 
     const disable = !criteriaStatus.every(Boolean) || password !== confirmPassword || !currentPassword ;
     const validatePassword = (password: string) => {
