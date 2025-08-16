@@ -2,6 +2,7 @@
 import React from 'react';
 import {inter, inter500} from "@/app/fonts";
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 const BankDetails = () => {
     const [bank, setBank ] = React.useState('')
@@ -9,6 +10,7 @@ const BankDetails = () => {
 
     const handleAccountNumberInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
+
 
     }
 
@@ -23,7 +25,7 @@ const BankDetails = () => {
             </span>
             <div className={` grid gap-4 `}>
                <div>
-                   <label>Bank </label>
+                   <label className={` ${inter500.className} text-[#101828] text-[14px] `}>Bank </label>
                    <Input
                        id={'bank'}
                        data-testid={'bank'}
@@ -33,7 +35,7 @@ const BankDetails = () => {
                    />
                </div>
                 <div>
-                    <label>Account number </label>
+                    <label className={` ${inter500.className} text-[#101828] text-[14px] `} >Account number </label>
                     <Input
                         className={` focus:ring focus:ring-[#D0D5DD] `}
                         type={'number'}
@@ -44,6 +46,9 @@ const BankDetails = () => {
                         onChange={(e) => handleAccountNumberInputChange(e)}
                     />
                 </div>
+                <Button
+                    className={` text-white bg-meedlBlue`}
+                >Save</Button>
             </div>
         </section>
     );
