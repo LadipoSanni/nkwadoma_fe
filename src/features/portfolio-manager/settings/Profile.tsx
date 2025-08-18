@@ -2,7 +2,7 @@ import React from 'react';
 import {inter, inter500} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import {getItemSessionStorage} from "@/utils/storage";
-
+import styles from './index.module.css'
 const Profile = () => {
 
     const  userFullName = getItemSessionStorage('user_name')
@@ -21,7 +21,7 @@ const Profile = () => {
     return (
         <div
             data-testid={'userProfile'}
-            className={`w-full md:min-w-fit md:w-[40%]  grid gap-3  `}
+            className={`w-full md:min-w-fit md:w-[40%] ${styles.scrollab} grid gap-3  `}
             id={'userProfile'}>
             <div
                 className={` flex gap-3 pb-5 border-b border-b-[#D7D7D7]  `}
