@@ -18,7 +18,7 @@ const ChangePassword = () => {
     const encryptedPassword =  encryptText(password) ? encryptText(password) : '';
     const encryptedCurrentPassword = encryptText(currentPassword) ? encryptText(currentPassword): ''
 
-    const [changePassword, {isLoading, isError, error, isSuccess}] = useChangePasswordMutation()
+    const [changePassword, {isLoading,  error}] = useChangePasswordMutation()
 
     const disable = !criteriaStatus.every(Boolean) || password !== confirmPassword || !currentPassword ;
     const validatePassword = (password: string) => {
@@ -70,27 +70,22 @@ const ChangePassword = () => {
         e?.preventDefault();
         const props = {password: encryptedCurrentPassword,newPassword:encryptedPassword};
         const response =  await changePassword(props);
-        // console.log('props: ', props)
-        // console.log('response:',response)
-        // console.log('error: ', error)
-        clear()
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         const changePasswordError : Error = error
-        if (isError){
-            console.log('error has occured')
+        if (response?.error){
             toast({
                 description: changePasswordError?.data?.message,
                 status: "error",
             })
         }
-        if (isSuccess){
+        if (response){
             toast({
-                description: response?.data?.message,
+                description: response?.data?.data,
                 status: "success",
             })
         }
-
+        clear()
 
     }
 

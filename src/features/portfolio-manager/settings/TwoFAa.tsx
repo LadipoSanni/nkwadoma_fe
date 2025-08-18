@@ -6,7 +6,7 @@ import {getItemSessionStorage} from "@/utils/storage";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import {validateEmailInput} from "@/utils/GlobalMethods";
 import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
-
+import styles from './index.module.css'
 const TwoFAa = () => {
     const [twoFactorType, setTwoFactorType] = React.useState<string>('')
     const userEmail = getItemSessionStorage('user_email')
@@ -58,7 +58,7 @@ const TwoFAa = () => {
 
         return (
         <div
-            className={`md:min-w-fit md:max-w-[45%] h-full   grid gap-6 `}
+            className={`md:min-w-fit md:max-w-[45%] h-full ${styles.scrollab}  grid gap-6 `}
         >
             <span className={` grid w-full  gap-1 pb-4   border-b border-b-[#D7D7D7]  `}>
                 <p className={` ${inter500.className} text-[16px] text-black `}>2FA Security2FA Security</p>

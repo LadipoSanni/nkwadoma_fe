@@ -122,7 +122,7 @@ const SideBar = () => {
         {name: 'FINANCIER', value: getFinancierSideBarItems(current)},
         {name: "MEEDL_SUPER_ADMIN", value: getSuperAdminSideBarItems(current,currentTabRoute)},
         {name: 'MEEDL_ADMIN', value: getMeedlAdminSideBarItems(current)},
-        {name: 'MEEDL_ASSOCIATE', value: usePortfolioManagerSideBarItems(current)},
+        {name: 'PORTFOLIO_MANAGER_ASSOCIATE', value: usePortfolioManagerSideBarItems(current)},
         {name: 'ORGANIZATION_ASSOCIATE', value: getInstituteAdminSideBarItems(current)},
         {name: 'ORGANIZATION_SUPER_ADMIN', value: getInstituteAdminSideBarItems(current)},
 

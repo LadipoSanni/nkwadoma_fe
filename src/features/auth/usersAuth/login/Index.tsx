@@ -145,7 +145,7 @@ const Login: React.FC = () => {
             case "FINANCIER":
                 await routeFinancier(vehicleId, vehicleType)
                 break;
-            case 'MEEDL_ASSOCIATE' :
+            case 'PORTFOLIO_MANAGER_ASSOCIATE' :
                 store.dispatch(setCurrentNavbarItem('Overview'));
                 router.push("/Overview");
                 break;

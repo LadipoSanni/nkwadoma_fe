@@ -3,6 +3,7 @@ import React from 'react';
 import {inter, inter500, inter700} from "@/app/fonts";
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import styles from './index.module.css'
 
 const BankDetails = () => {
     const [bank, setBank ] = React.useState('')
@@ -31,7 +32,7 @@ const BankDetails = () => {
     return (
         <section
             id={'bankDetails'}
-            className={` md:min-w-fit md:w-[45%]  grid gap-6 `}
+            className={` md:min-w-fit ${styles.scrollab} md:w-[45%]  grid gap-6 `}
         >
             <span className={` grid w-full  gap-1 pb-4   border-b border-b-[#D7D7D7]  `}>
                 <p className={` ${inter500.className} text-[16px] text-black `}>Bank details</p>
