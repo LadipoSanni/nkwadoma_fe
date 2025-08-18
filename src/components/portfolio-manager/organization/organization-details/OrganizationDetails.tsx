@@ -22,8 +22,8 @@ function OrganizationDetails() {
 
 
          useEffect(() => {
-        store.dispatch(setOrganizationStatus(organizationDetails?.data.status))
-         },[organizationDetails?.data.status])
+        store.dispatch(setOrganizationStatus(organizationDetails?.data?.activationStatus))
+         },[organizationDetails?.data?.activationStatus])
 
           const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);
 

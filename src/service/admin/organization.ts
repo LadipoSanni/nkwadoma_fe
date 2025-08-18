@@ -230,6 +230,15 @@ export const organizationApi = createApi({
             }),
             invalidatesTags: ['invite', "organization","admin"]
         }),
+        viewStaffDetails: builder.query({
+            query: (param:{
+                employeeId: string;
+            }) => ({
+                url: `organization/view/employee/details`,
+                method: 'GET',
+                params: param
+            }),
+        }),
          
     })
 })
@@ -242,4 +251,4 @@ export const { useViewOrganizationsQuery, useViewAllOrganizationsQuery,
      useActivateOrganizationMutation,useViewOrganizationAdminQuery,
      useSearchOrganizationAsPortfolioManagerQuery,useViewAllOrganizationByStatusQuery,
      useInviteColleagueMutation,useApproveOrDeclineOrganizationMutation,useDeactivateUserMutation,
-    useReactivateUserMutation, useApproveOrDeclineAdminMutation} = organizationApi
+    useReactivateUserMutation, useApproveOrDeclineAdminMutation,useViewStaffDetailsQuery} = organizationApi

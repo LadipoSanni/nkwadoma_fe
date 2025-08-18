@@ -107,7 +107,10 @@ const CohortView = () => {
     current: { pageNumber: 0, totalPages: 0, hasNextPage: false },
     graduated: { pageNumber: 0, totalPages: 0, hasNextPage: false }
 });
-
+ 
+console.log(organizationStatus )
+console.log(user_role)
+//ORGANIZATION_ADMIN
 
 const currentTabState = tabStates[cohortTab];
 
@@ -115,11 +118,11 @@ const currentTabState = tabStates[cohortTab];
    
    const { data: cohortData,isLoading,refetch:refetchCohortData,isFetching:isfetching  } = useGetAllCohortsByOrganisationQuery({  ...( ["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL-ADMIN"].includes(user_role || "") && organizationId 
     ? { organizationId } 
-    : {}),cohortStatus: cohortTab.toUpperCase(),cohortType: organizationTabStatus === "cohort"? "NON_LOAN_BOOK" : "LOAN_BOOK",pageSize: 10, pageNumber:currentTabState.pageNumber }, { refetchOnMountOrArgChange: true, })
+    : {}),cohortStatus: cohortTab.toUpperCase(),cohortType: ["ORGANIZATION_ADMIN","ORGANIZATION_SUPER_ADMIN","ORGANIZATION_ASSOCIATE"].includes(user_role || "")? "NON_LOAN_BOOK" : organizationTabStatus === "cohort"? "NON_LOAN_BOOK" : "LOAN_BOOK",pageSize: 10, pageNumber:currentTabState.pageNumber }, { refetchOnMountOrArgChange: true, })
     
     const { data: searchData, isLoading: searchIsloading, isFetching: isSearchFetching } = useSearchCohortByOrganisationQuery({cohortName: debouncedSearchTerm,...(["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL-ADMIN"].includes(user_role || "")  && organizationId 
       ? { organizationId } 
-      : {}),programId: programId,cohortType: organizationTabStatus === "cohort"? "NON_LOAN_BOOK" : "LOAN_BOOK",cohortStatus: cohortTab.toUpperCase(), pageSize: size, pageNumber: currentTabState.pageNumber,}, { skip: !debouncedSearchTerm });
+      : {}),programId: programId,cohortType: ["ORGANIZATION_ADMIN","ORGANIZATION_SUPER_ADMIN","ORGANIZATION_ASSOCIATE"].includes(user_role || "")? "NON_LOAN_BOOK" :  organizationTabStatus === "cohort"? "NON_LOAN_BOOK" : "LOAN_BOOK",cohortStatus: cohortTab.toUpperCase(), pageSize: size, pageNumber: currentTabState.pageNumber,}, { skip: !debouncedSearchTerm });
 
    const { data: programDatas, isLoading: programIsloading,isFetching } = useGetAllProgramsQuery({ ...(user_role === "PORTFOLIO_MANAGER" && organizationId 
     ? { organizationId } 

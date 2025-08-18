@@ -143,7 +143,7 @@ function InviteOrganizationsForm({setIsOpen,organizationRefetch,tabType}: props)
                   adminLastName: values.adminLastName,
                   adminEmail: values.adminEmail,
                   phoneNumber:formattedPhone || values.phoneNumber,
-                  adminRole: "ORGANIZATION_ADMIN",
+                  adminRole: "ORGANIZATION_SUPER_ADMIN",
                   serviceOfferings: [
                       {
                           industry: values.industry,
