@@ -2,7 +2,6 @@
 import React, {useState} from 'react';
 import SettingTabs from "@/reuseable/tabs/settingTabs";
 import Profile from "@/features/portfolio-manager/settings/Profile";
-import ChangePassword from "@/features/portfolio-manager/settings/ChangePassword";
 import BankDetails from "@/features/portfolio-manager/settings/bankDetails";
 
 const Company = () => {
