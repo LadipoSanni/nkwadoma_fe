@@ -68,7 +68,7 @@ const ChangePassword = () => {
 
     const handlePasswordChanged = async (e?:React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => {
         e?.preventDefault();
-        const props = {password: encryptedPassword,newPassword:encryptedCurrentPassword};
+        const props = {password: encryptedCurrentPassword,newPassword:encryptedPassword};
         const response =  await changePassword(props);
         // console.log('props: ', props)
         // console.log('response:',response)
