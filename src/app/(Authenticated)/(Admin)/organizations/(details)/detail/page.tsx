@@ -1,5 +1,5 @@
 import React from 'react'
-import Details from '@/features/portfolio-manager/organization/details/Details'
+import Details from '@/features/portfolio-manager/organization/meedleBackoffice-org-details/Details'
 import CustomAuthorization from "@/features/auth/authorization";
 
 function page() {
