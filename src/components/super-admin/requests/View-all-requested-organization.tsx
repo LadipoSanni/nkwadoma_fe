@@ -13,6 +13,8 @@ import { useDebounce } from '@/hooks/useDebounce';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setrequestOrganizationStatusTab} from '@/redux/slice/staff-and-request/request';
 import { store,useAppSelector } from '@/redux/store';
+import { setIsRequestedOrganizationOpen,resetRequestedOrganizationId} from '@/redux/slice/staff-and-request/request';
+
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -27,8 +29,8 @@ interface TabState {
 
 function ViewAllRequestedOrganization() {
    const [searchTerm, setSearchTerm] = useState("");
-  const requestTabStatusType = useAppSelector(state => state?.request?.requestOrganizationStatusTab)
-   const [isOpen,setOpen] = useState(false)
+   const requestTabStatusType = useAppSelector(state => state?.request?.requestOrganizationStatusTab)
+   const isrequestedOrganizationOpen = useAppSelector(state => state?.request?.isRequestedOrganizationOpen)
    const [requestedBy, setRequestedBy] = useState("")
    const [invitee, setInvitee] = useState("")
    const [id,setId] = useState("")
@@ -58,7 +60,7 @@ function ViewAllRequestedOrganization() {
         pageSize: 10,
     }
 
-    const { data, isLoading,isFetching} = useViewAllOrganizationByStatusQuery(dataElements,{refetchOnMountOrArgChange:requestTabStatusType === "declined"? true : false});
+    const { data, isLoading,isFetching,refetch} = useViewAllOrganizationByStatusQuery(dataElements,{refetchOnMountOrArgChange:requestTabStatusType === "declined"? true : false});
 
     const { data: searchResults, isLoading: isSearchloading, isFetching: isSearchfetching} = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
    
@@ -122,7 +124,8 @@ function ViewAllRequestedOrganization() {
           const fullName = capitalizeFirstLetters(row?.name?.toString())
           const requestedBy = capitalizeFirstLetters(row?.requestedBy?.toString())
           const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
-           setOpen(true)
+          store.dispatch(setIsRequestedOrganizationOpen(true))
+          store.dispatch(resetRequestedOrganizationId())
            setRequestedBy(requestedBy)
            setInvitee(fullName)
            setId(row?.id as string)
@@ -231,8 +234,9 @@ function ViewAllRequestedOrganization() {
    </Tabs>
    <div>
         <Modal
-        isOpen={isOpen}
-        closeModal={() => setOpen(false)}
+        isOpen={isrequestedOrganizationOpen}
+        closeModal={()=> {store.dispatch(setIsRequestedOrganizationOpen(false))
+                   store.dispatch(resetRequestedOrganizationId())}}
        className='pb-1'
         closeOnOverlayClick={true}
         icon={Cross2Icon}
@@ -245,7 +249,7 @@ function ViewAllRequestedOrganization() {
           invitee={invitee}
           id={id}
           role={role}
-          setOpen={setOpen}
+          refetches={refetch}
           requestType='organization'
           status={status}
         />

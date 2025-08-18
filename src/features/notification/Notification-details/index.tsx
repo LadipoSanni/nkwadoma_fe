@@ -17,16 +17,16 @@ import { setCurrentNavbarItem } from "@/redux/slice/layout/adminLayout";
 import { setLoanReferralId } from '@/redux/slice/loan/selected-loan';
 import {setCurrentStep} from "@/service/users/loanRerralSlice";
 import { setNotificationCohortId,resetSelectedCohortInOrganization } from '@/redux/slice/create/cohortSlice';
-// interface NotificationDetailsPageProps{
-//     notification?: NotificationProps
-// }
+import { getUserDetailsFromStorage } from "@/components/topBar/action";
+import { setRequestStatusTab,setIsRequestedStaffOpen,setRequestedStaffId,setIsRequestedOrganizationOpen,setrequestOrganizationStatusTab,setRequestedOrganizationId } from '@/redux/slice/staff-and-request/request';
+
 
 interface notificationIdProp {
   notificationId: string;
 }
 
 function NotificationDetailPage({notificationId}: notificationIdProp) {
-  
+   const user_role = getUserDetailsFromStorage('user_role');
   const router = useRouter();
   const handleBack = () => {
     router.back()
@@ -77,8 +77,19 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   } else if(notification?.data?.notificationFlag === "REPAYMENT_UPLOAD_SUCCESS" ){
     store.dispatch(setCurrentNavbarItem("Repayment"))
     router.push(`/repayment`);
+  }else if((user_role === "MEEDL_SUPER_ADMIN" || user_role === "MEEDL_ADMIN") && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
+    store.dispatch(setRequestStatusTab("pending"))
+    store.dispatch(setIsRequestedStaffOpen(true))
+    store.dispatch(setRequestedStaffId(notification?.data?.contentId))
+    router.push(`/requests/staff`);
+  }else if(notification?.data?.notificationFlag === "APPROVE_INVITE_ORGANIZATION"){
+    store.dispatch(setrequestOrganizationStatusTab("pending"))
+    store.dispatch(setIsRequestedOrganizationOpen(true))
+    store.dispatch(setRequestedOrganizationId(notification?.data?.contentId))
+    router.push(`/requests/organization`);
   }
   }
+
 
    const buttonName = () => {
     if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
@@ -93,7 +104,11 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
   return "loan offer"
 } else if(notification?.data?.notificationFlag === "LOAN_REFERRAL"){
   return "loan Referral"
-} 
+} else if((user_role === "MEEDL_SUPER_ADMIN" || user_role === "MEEDL_ADMIN") && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
+  return "Request"
+}else if((user_role === "MEEDL_SUPER_ADMIN" || user_role === "MEEDL_ADMIN") && notification?.data?.notificationFlag === "APPROVE_INVITE_ORGANIZATION" ){
+  return "Request"
+}
     
    }
 

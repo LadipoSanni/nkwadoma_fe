@@ -14,6 +14,9 @@ import { useDebounce } from '@/hooks/useDebounce';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setRequestStatusTab } from '@/redux/slice/staff-and-request/request';
 import { store,useAppSelector } from '@/redux/store';
+import { setIsRequestedStaffOpen,resetRequestedStaffId} from '@/redux/slice/staff-and-request/request';
+
+
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -29,7 +32,7 @@ interface TabState {
 function ViewAllRequests() {
    const [searchTerm, setSearchTerm] = useState("");
   const requestTabStatusType = useAppSelector(state => state?.request?.requestStatusTab)
-   const [isOpen,setOpen] = useState(false)
+  const isrequestedStaffOpen = useAppSelector(state => state?.request?.isRequestedStaffOpen)
    const [requestedBy, setRequestedBy] = useState("")
    const [invitee, setInvitee] = useState("")
    const [id,setId] = useState("")
@@ -116,14 +119,15 @@ function ViewAllRequests() {
           const fullName = capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
           const requestedBy = capitalizeFirstLetters(row?.requestedBy?.toString())
           const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
-           setOpen(true)
+          store.dispatch(setIsRequestedStaffOpen(true))
+          store.dispatch(resetRequestedStaffId())
            setRequestedBy(requestedBy)
            setInvitee(fullName)
            setId(row?.id as string)
            setRole(role  as string)
            setStatus(row?.activationStatus as string)
       }
-   
+        
        const tableHeader = [
            { 
              title: "Requested by",  
@@ -149,12 +153,6 @@ function ViewAllRequests() {
              id: "role", 
              selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
            },
-          //  { 
-          //    title: "Status",  
-          //    sortable: true, 
-          //    id: "activationStatus", 
-          //    selector: (row: TableRowData) => <span className={`${row.activationStatus === "DECLINED"? " bg-[#FBE9E9] text-[#971B17] " :row.activationStatus === "PENDING_APPROVAL"? "bg-[#FEF6E8] text-[#68442E] w-20" :  "bg-[#E6F2EA] text-[#045620]"} rounded-lg  px-2 `}>{row.activationStatus === "PENDING_APPROVAL"? "Pending" : "Declined"}</span> 
-          //  },
            { 
              title: "Requested on",  
              sortable: true, 
@@ -240,8 +238,10 @@ function ViewAllRequests() {
    </Tabs>
    <div>
         <Modal
-        isOpen={isOpen}
-        closeModal={() => setOpen(false)}
+        isOpen={isrequestedStaffOpen}
+        closeModal={() => {store.dispatch(setIsRequestedStaffOpen(false))
+           store.dispatch(resetRequestedStaffId())}
+        }
        className='pb-1'
         closeOnOverlayClick={true}
         icon={Cross2Icon}
@@ -254,7 +254,6 @@ function ViewAllRequests() {
           invitee={invitee}
           id={id}
           role={role}
-          setOpen={setOpen}
           requestType='staff'
           status={status}
         />
