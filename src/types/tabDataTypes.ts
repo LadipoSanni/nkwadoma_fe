@@ -78,3 +78,9 @@ export const requestTab = [
     {name: "Staff", value:"/requests/staff"},
     {name: "Organization", value:"/requests/organization"},
 ]
+
+export const organizationDetailTab =  [
+    {name: "Detail", value:"/organizations/organizations-details/details"},
+    {name: "Admin", value:"/organizations/organizations-details/admins"}]
+
+

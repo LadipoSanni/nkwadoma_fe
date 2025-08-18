@@ -1,5 +1,5 @@
 import React from 'react'
-import OrganizationDetails from '@/components/portfolio-manager/organization/organization-details/OrganizationDetails'
+import OrganizationDetails from '@/components/portfolio-manager/organization/meedleBackoffice-organization-details/OrganizationDetails'
 
 function Details() {
   return (

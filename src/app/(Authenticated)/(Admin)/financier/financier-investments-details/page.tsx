@@ -4,7 +4,7 @@ import FinancierInvestmentVehiclesDetails from "@/features/financier/details/inv
 
 const Page = () => {
     return (
-        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER','ORGANIZATION_SUPER_ADMIN','ORGANIZATION_ASSOCIATE']}>
             <FinancierInvestmentVehiclesDetails/>
         </CustomAuthorization>
 

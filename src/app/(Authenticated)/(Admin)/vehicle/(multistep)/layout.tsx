@@ -9,7 +9,7 @@ type props = {
 
 const MultistepInvestmentVehicleLayout: React.FC<props> =({children}) => {
   return (
-    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+    <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER','PORTFOLIO_MANAGER_ASSOCIATE','MEEDL_SUPER_ADMIN']}>
       <MultistepLayout>
         {children}
       </MultistepLayout>

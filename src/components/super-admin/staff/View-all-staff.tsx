@@ -38,7 +38,7 @@ function Staff() {
      const [name,setName] = useState('')
      const [date, setInvitedDate] = useState('')
      const [isSwitch, setSwitch] = useState(false);
-     const adminRoleType = [ { value: "MEEDL_ADMIN", label: "Admin" }, { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" }, { value: "MEEDL_ASSOCIATE", label: "Associate"} ];
+     const adminRoleType = [ { value: "MEEDL_ADMIN", label: "Admin" }, { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" } ];
       const [hasNextPages,setNextPage] = useState(false)
       const [totalPage,setTotalPage] = useState(0)
       const [pageNumber,setPageNumber] = useState(0)

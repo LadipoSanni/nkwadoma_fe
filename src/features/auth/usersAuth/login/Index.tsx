@@ -149,6 +149,14 @@ const Login: React.FC = () => {
                 store.dispatch(setCurrentNavbarItem('Overview'));
                 router.push("/Overview");
                 break;
+            case 'ORGANIZATION_SUPER_ADMIN':
+                store.dispatch(setCurrentNavbarItem("Program"))
+                router.push("/program")
+                break;
+             case 'ORGANIZATION_ASSOCIATE':
+                store.dispatch(setCurrentNavbarItem("Program"))
+                router.push("/program")
+                break;
 
         }
     }
