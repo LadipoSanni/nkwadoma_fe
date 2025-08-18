@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React,{useEffect} from 'react';
 import style from "../index.module.css";
 import Details from "@/components/loanee-my-profile/Details";
 import { inter } from '@/app/fonts';
@@ -8,10 +8,16 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { ensureHttpsUrl } from "@/utils/GlobalMethods";
 import { formatNumberWithCommas } from '@/utils/Format';
 import SkeletonForSidebar from '@/reuseable/Skeleton-loading-state/Skeleton-for-sidebar';
+import { setOrganizationName } from '@/redux/slice/organization/organization';
+import { store } from '@/redux/store';
 
 function Detail() {
       const {data:organizationDetails, isLoading} = useGetDetailsOfOrganizationQuery({})
        const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);
+
+       useEffect(() => {
+        store.dispatch(setOrganizationName(organizationDetails?.data?.name))
+       },[organizationDetails?.data?.name])
 
     const dataList = [
      { label: "Website", value: organizationLink || "Not provided" },

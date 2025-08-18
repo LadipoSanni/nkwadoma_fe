@@ -149,7 +149,7 @@ const TopBar = () => {
                                 {getFirstLetterOfWord(displayName)}
                             </div>
                         </div>
-                        <button onClick={toggleArrow} className={`${user_role === 'ORGANIZATION_ADMIN' ? 'cursor-pointer' : 'cursor-text'} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
+                        <button onClick={toggleArrow} className={`${['ORGANIZATION_ADMIN','ORGANIZATION_SUPER_ADMIN','ORGANIZATION_ASSOCIATE'].includes(user_role || "") ? 'cursor-pointer' : 'cursor-text'} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
                             <p className={`text-black500 ${inter500.className} flex justify-start mt-auto mb-auto  text-sm `}>{capitalizeFirstLetters(displayName)}</p>
                             {DISPLAYUSERROLE?.includes(userRole) ?
                                 <p className={`text-black400 ${inter.className}  flex justify-start text-sm`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
@@ -158,7 +158,7 @@ const TopBar = () => {
                             }
                         </button>
                         <div id={'toggleArrowDiv'} className={``}>
-                            {user_role === 'ORGANIZATION_ADMIN' && (
+                            {['ORGANIZATION_ADMIN','ORGANIZATION_SUPER_ADMIN','ORGANIZATION_ASSOCIATE'].includes(user_role || "") && (
                                 <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                                     <PopoverTrigger asChild>
                                         {arrowToggled ? (

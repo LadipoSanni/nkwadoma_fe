@@ -56,7 +56,7 @@ const cohortSlice = createSlice({
     setBackOfficeAdmin: ( state, action: PayloadAction<string >) => {
       state.backOfficeAdmin= action.payload;
   },
-    
+  
   },
 });
 

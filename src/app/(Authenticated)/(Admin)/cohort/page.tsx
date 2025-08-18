@@ -4,7 +4,7 @@ import CustomAuthorization from "@/features/auth/authorization";
 
 const page = () => {
   return (
-    <CustomAuthorization authorizedRoles={['ORGANIZATION_ADMIN']}>
+    <CustomAuthorization authorizedRoles={['ORGANIZATION_ADMIN','ORGANIZATION_SUPER_ADMIN','ORGANIZATION_ASSOCIATE']}>
           <CohortView/>
     </CustomAuthorization>
   )

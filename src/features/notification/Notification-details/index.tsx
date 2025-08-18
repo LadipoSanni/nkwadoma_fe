@@ -89,16 +89,21 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     store.dispatch(setRequestedOrganizationId(notification?.data?.contentId))
     store.dispatch(setCurrentNavbarItem("Requests"))
     router.push(`/requests/organization`);
+  }else if(notification?.data?.notificationFlag === "ORGANIZATION_INVITATION_DECLINED"  || notification?.data?.notificationFlag ===  "ORGANIZATION_INVITATION_APPROVED"){
+    store.dispatch(setOrganizationId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Organizations"))
+    router.push("/organizations/detail");
   }
   }
-
+   
+  
 
    const buttonName = () => {
     if(notification?.data?.notificationFlag === "INVITE_FINANCIER"){
       return "financier"
    } else if (notification?.data?.notificationFlag === "INVESTMENT_VEHICLE"){
       return "investment vehicle"
-   } else if (notification?.data?.notificationFlag === "INVITE_ORGANIZATION"  || notification?.data?.notificationFlag === "ORGANIZATION_DEACTIVATED" || notification?.data?.notificationFlag === "ORGANIZATION_REACTIVATED"){
+   } else if (["INVITE_ORGANIZATION","ORGANIZATION_DEACTIVATED","ORGANIZATION_REACTIVATED","ORGANIZATION_INVITATION_DECLINED","ORGANIZATION_INVITATION_APPROVED"].includes(notification?.data?.notificationFlag)){
     return "organization"
  }else if (notification?.data?.notificationFlag === "LOAN_OFFER"){
    return "loan offer"
