@@ -14,7 +14,7 @@
     overflow-y: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    height: 66vh;
+    height: 60vh;
     grid-template-rows: repeat(6, 1fr);
 }
 

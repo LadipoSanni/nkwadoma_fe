@@ -202,7 +202,7 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
                 />
                 <div>
                 {
-                <div className={`text-error500 flex justify-center items-center text-center relative bottom-5`}>{error}</div>
+                <div className={`text-error500 flex justify-center items-center text-center relative bottom-2`}>{error}</div>
                  }
                 </div>
               </div>

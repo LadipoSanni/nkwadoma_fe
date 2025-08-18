@@ -13,6 +13,9 @@ import { Book } from "lucide-react";
 import { formatMonthInDate} from '@/utils/Format'
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import { Button } from '@/components/ui/button';
+import Modal from '@/reuseable/modals/TableModal';
+import InviteAdmin from '@/components/super-admin/staff/Invite-staff';
+import {Cross2Icon} from "@radix-ui/react-icons";
 
 interface TableRowData {
   [key: string]: string | number | null | React.ReactNode;
@@ -31,10 +34,10 @@ function Admins() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
-    console.log(isModalOpen)
+    const adminRoleType = [  { value: "ORGANIZATION_ADMIN", label: "Admin" }, { value: "ORGANIZATION_ASSOCIATE", label: "Associate"} ];
 
     const dataElement = {
-        activationStatuses: ['INVITED',"APPROVED"],
+        activationStatuses: ['INVITED',"APPROVED","PENDING_APPROVAL","DEACTIVATED"],
         identityRoles: "ORGANIZATION_SUPER_ADMIN" === user_role? ["ORGANIZATION_ADMIN","ORGANIZATION_SUPER_ADMIN","ORGANIZATION_ASSOCIATE"] : "ORGANIZATION_ADMIN" === user_role? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : ["ORGANIZATION_ASSOCIATE"],
         pageNumber:pageNumber,
         pageSize: 10
@@ -53,14 +56,10 @@ function Admins() {
 
        useEffect(() => {
             if (debouncedSearchTerm && searchResult && searchResult.data?.body) {
-              // const admins = searchResult?.data?.body
-              // setAdminList(admins);
               setSearchHasNextPage(searchResult?.data?.hasNextPage)
               setTotalPage(searchResult?.data?.totalPages)
               setPageSearchNumber(searchResult?.data?.pageNumber)
             } else if (!debouncedSearchTerm&& adminData && adminData?.data) {
-              // const admins = adminData?.data?.body;
-              // setAdminList(admins);
               setPageNumber( adminData?.data?.pageNumber)
               setTotalPage(adminData?.data?.totalPages)
               setNextPage(adminData?.data?.hasNextPage)
@@ -157,7 +156,6 @@ function Admins() {
               handleRowClick={() => {}}
               icon={<Book/>}
               sideBarTabName="Admin"
-              // optionalRowsPerPage={10}
               tableCellStyle="h-12"
               isLoading={isLoading || isFetching || isloadingSearch || isSearchFetching}
               hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPage}
@@ -168,6 +166,26 @@ function Admins() {
             />
             }
           </div>
+          <div>
+        {
+          <Modal
+           isOpen={isModalOpen}
+           closeModal={()=> setIsModalOpen(false)}
+           className='pb-1'
+           headerTitle='Invite colleague'
+           closeOnOverlayClick={true}
+           icon={Cross2Icon}
+            width='36%'
+          >
+           <InviteAdmin
+            setIsOpen={setIsModalOpen}
+            roleOptions={adminRoleType}
+            isItemDisabled={(item) => user_role === "ORGANIZATION_ASSOCIATE" && item === 'ORGANIZATION_ADMIN' }
+           />
+          
+          </Modal>
+        }
+      </div>
     </div>
     
   )
