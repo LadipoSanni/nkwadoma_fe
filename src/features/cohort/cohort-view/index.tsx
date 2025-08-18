@@ -107,10 +107,7 @@ const CohortView = () => {
     current: { pageNumber: 0, totalPages: 0, hasNextPage: false },
     graduated: { pageNumber: 0, totalPages: 0, hasNextPage: false }
 });
- 
-console.log(organizationStatus )
-console.log(user_role)
-//ORGANIZATION_ADMIN
+
 
 const currentTabState = tabStates[cohortTab];
 
