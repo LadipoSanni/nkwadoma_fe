@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import SettingTabs from "@/reuseable/tabs/settingTabs";
 import ChangePassword from "@/features/portfolio-manager/settings/ChangePassword";
 import Profile from "@/features/portfolio-manager/settings/Profile";
+import TwoFAa from "@/features/portfolio-manager/settings/TwoFAa";
 
 export const Generals = () => {
     const data = [
@@ -19,7 +20,7 @@ export const Generals = () => {
             case 1:
                 return <ChangePassword/>;
             case 2:
-                return 'alternate';
+                return <TwoFAa/>;
 
             default:
                 return [];
