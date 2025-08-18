@@ -2,11 +2,8 @@
 import React,{useState,useEffect} from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
 import { useDebounce } from '@/hooks/useDebounce';
-import SearchEmptyState from '@/reuseable/emptyStates/SearchEmptyState';
-import { MdSearch } from 'react-icons/md';
 import {useViewOrganizationAdminQuery} from "@/service/admin/organization";
 import {  useAppSelector } from "@/redux/store";  
-import { useSearchOrganizationAsPortfolioManagerQuery } from "@/service/admin/organization";
 import Table from "@/reuseable/table/Table";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { Book } from "lucide-react";
