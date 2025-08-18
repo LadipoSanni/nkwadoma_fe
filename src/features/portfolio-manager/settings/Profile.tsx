@@ -3,6 +3,8 @@ import {inter, inter500} from "@/app/fonts";
 import {Button} from "@/components/ui/button";
 import {getItemSessionStorage} from "@/utils/storage";
 import styles from './index.module.css'
+import { FaCircleUser } from "react-icons/fa6";
+
 const Profile = () => {
 
     const  userFullName = getItemSessionStorage('user_name')
@@ -11,13 +13,7 @@ const Profile = () => {
         {details: 'Full name', value: userFullName ? userFullName : '', id: 'userFullName'},
         {details: 'Email address', value: userEmail ? userEmail :'', id: 'userEmail'},
     ]
-    function extractFirstCharacters(text: string ): string {
-        return text
-            .split(" ")
-            .map(word => word[0])
-            .join("")
-            .toUpperCase();
-    }
+
     return (
         <div
             data-testid={'userProfile'}
@@ -26,13 +22,7 @@ const Profile = () => {
             <div
                 className={` flex gap-3 pb-5 border-b border-b-[#D7D7D7]  `}
             >
-                <div
-                    id={'userIcon'}
-                    data-testid={'userIcon'}
-                    className={` w-[4rem] h-[4rem] flex  items-center justify-center  text-[#D42620]   rounded-full bg-red-200 items`}
-                >
-                    <p id={'userIntials'} data-testid={'userInitials'} className={` text-error450  `}>{extractFirstCharacters(userFullName ? userFullName : '')}</p>
-                </div>
+                <FaCircleUser className={` w-20 h-20 text-[#ececec] `} />
                 <div className={` grid gap-3 `}>
                    <div>
                        <p className={` text-[14px] ${inter500.className} text-black `}>Upload image</p>

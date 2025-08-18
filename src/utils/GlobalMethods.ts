@@ -13,6 +13,15 @@ export function capitalizeFirstLetters(word: string | null | undefined): string 
         .join(' '); 
 }
 
+export  function extractFirstCharacters(text: string ): string {
+    return text
+        .split(" ")
+        .map(word => word[0])
+        .join("")
+        .toUpperCase();
+}
+
+
 export function capitalizeWordsFromArray(arr: unknown): string {
     if (!Array.isArray(arr)) return '';
 
