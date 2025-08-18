@@ -35,13 +35,13 @@ function OrganizationDetails() {
              value: (
                <span
                  id="status"
-                 className={`rounded-[32px] h-[21px] w-[58px] flex items-center justify-center ${
-                   organizationDetails?.data.status === "ACTIVE"
-                     ? "bg-[#E7F5EC] text-[#063F1A]"
-                     : "bg-[#FEF6E8] text-[#66440A]"
+                 className={`rounded-[32px] h-[21px]  flex items-center justify-center ${
+                   organizationDetails?.data.activationStatus === "ACTIVE"
+                     ? "bg-[#E7F5EC] text-[#063F1A] w-16"
+                     : organizationDetails?.data.activationStatus === "DECLINED" ||  organizationDetails?.data.activationStatus === "DEACTIVATED"? " bg-[#FBE9E9] text-[#971B17] w-24" : "bg-[#FEF6E8] text-[#66440A] w-16"
                  }`}
                >
-                 {capitalizeFirstLetters(organizationDetails?.data.status?.toLowerCase())}
+                 {capitalizeFirstLetters(organizationDetails?.data.activationStatus?.toLowerCase())}
                </span>
              ),
            },
