@@ -6,6 +6,7 @@ export const userApi = createApi({
 
     reducerPath: 'userApi',
     baseQuery: customFetchBaseQuery,
+    tagTypes: ['userDetail'],
     endpoints: (builder) => ({
         logout: builder.mutation({
             query:() => ({
@@ -19,8 +20,26 @@ export const userApi = createApi({
                 method: 'POST',
                 body:body
             })
-        })
+        }),
+        addUserImage: builder.mutation({
+            query: (props:{imageUrl: string}) => ({
+                url: `/user/upload/image`,
+                method: 'POST',
+                body: props,
+            }),
+            invalidatesTags: ['userDetail']
+
+        }),
+        getUserDetails : builder.query({
+            query: () => ({
+                url: `/auth/userDetail`,
+                method: 'GET'
+            }),
+            providesTags: ['userDetail']
+
+        }),
+
     })
 })
 
-export const { useLogoutMutation , useChangePasswordMutation} = userApi;
+export const { useLogoutMutation , useChangePasswordMutation, useAddUserImageMutation, useGetUserDetailsQuery} = userApi;
