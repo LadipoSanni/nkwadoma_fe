@@ -81,11 +81,13 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     store.dispatch(setRequestStatusTab("pending"))
     store.dispatch(setIsRequestedStaffOpen(true))
     store.dispatch(setRequestedStaffId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Requests"))
     router.push(`/requests/staff`);
   }else if(notification?.data?.notificationFlag === "APPROVE_INVITE_ORGANIZATION"){
     store.dispatch(setrequestOrganizationStatusTab("pending"))
     store.dispatch(setIsRequestedOrganizationOpen(true))
     store.dispatch(setRequestedOrganizationId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Requests"))
     router.push(`/requests/organization`);
   }
   }

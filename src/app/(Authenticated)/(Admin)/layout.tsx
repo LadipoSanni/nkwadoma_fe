@@ -13,7 +13,7 @@ const Layout: React.FC<props> = ({ children }) => {
 
     return (
         <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN','MEEDL_SUPER_ADMIN',
-            'MEEDL_ADMIN', 'MEEDL_ASSOCIATE']}>
+            'MEEDL_ADMIN', 'PORTFOLIO_MANAGER_ASSOCIATE']}>
             {/*<MeedlLayout>*/}
                 {children}
             {/*</MeedlLayout>*/}

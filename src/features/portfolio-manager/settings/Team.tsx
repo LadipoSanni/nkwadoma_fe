@@ -27,7 +27,7 @@ function Team() {
     const [pageSearchNumber,setPageSearchNumber] = useState(0)
     const [searchHasNextPage,setSearchHasNextPage]  = useState(false)
        const user_role = getUserDetailsFromStorage('user_role');
-    const adminRoleType = [  { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" }, { value: "MEEDL_ASSOCIATE", label: "Associate"},{ value: "MEEDL_ADMIN", label: "Admin"} ];
+    const adminRoleType = [  { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" }, { value: "PORTFOLIO_MANAGER_ASSOCIATE", label: "Associate"},{ value: "MEEDL_ADMIN", label: "Admin"} ];
 
 
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
@@ -192,7 +192,7 @@ function Team() {
            <InviteAdmin
             setIsOpen={setIsModalOpen}
             roleOptions={adminRoleType}
-            isItemDisabled={(item) => user_role === "PORTFOLIO_MANAGER"? item === 'MEEDL_ADMIN' &&  user_role === "PORTFOLIO_MANAGER" : item !== 'MEEDL_ASSOCIATE' &&  user_role === "MEEDL_ASSOCIATE" }
+            isItemDisabled={(item) => user_role === "PORTFOLIO_MANAGER"? item === 'MEEDL_ADMIN' &&  user_role === "PORTFOLIO_MANAGER" : item !== 'PORTFOLIO_MANAGER_ASSOCIATE' &&  user_role === "PORTFOLIO_MANAGER_ASSOCIATE" }
            />
           
           </TableModal>
