@@ -7,11 +7,14 @@ import AuthButton from "@/reuseable/buttons/AuthButton";
 import {validateEmailInput} from "@/utils/GlobalMethods";
 import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
 import styles from './index.module.css'
+import {useToast} from "@/hooks/use-toast";
+import { useEnableTwoFAMutation } from '@/service/users/api';
 const TwoFAa = () => {
     const [twoFactorType, setTwoFactorType] = React.useState<string>('')
     const userEmail = getItemSessionStorage('user_email')
     const [phoneNumber, setPhoneNumber] = React.useState<string>('')
     const [email, setEmail] = React.useState(userEmail ? userEmail : '')
+    const [enableTwoFa, {isLoading}] = useEnableTwoFAMutation()
 
     const [disable, setDisable]= React.useState(true)
 
@@ -47,9 +50,45 @@ const TwoFAa = () => {
         // setCurrentPassword(event.target.value)
 
     }
+    const {toast} = useToast()
 
     const enableTwoFA = async (e?:React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => {
       e?.preventDefault();
+      if (twoFactorType === 'phoneNumber') {
+          const prop = {
+              mfaPhoneNumber:phoneNumber ,
+              mfaType: "PHONE_NUMBER_MFA"
+          }
+          const response = await enableTwoFa(prop);
+          if (response?.data){
+              toast({
+                  description: response?.data?.message,
+                  status: "success",
+              })
+          }else{
+              toast({
+                  description: 'error occurred',
+                  status: "error",
+              })
+          }
+      }else {
+
+          const prop = {
+              mfaType: "EMAIL_MFA"
+          }
+          const response = await enableTwoFa(prop);
+          if (response?.data){
+              toast({
+                  description: response?.data?.message,
+                  status: "success",
+              })
+          }else{
+              toast({
+                  description: 'error occurred',
+                  status: "error",
+              })
+          }
+      }
 
     }
     const handle = () => {
@@ -129,7 +168,7 @@ const TwoFAa = () => {
                 id={"enable2fASecurity"}
                 data-testid={`enable2fASecurity`}
                 buttonText={"Enable 2FA security"} width={"fit"}
-                isLoading={false}
+                isLoading={isLoading}
                 handleClick={(e) => {enableTwoFA(e)}}>
 
 

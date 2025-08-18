@@ -23,9 +23,6 @@ const Profile = () => {
                 className={` flex gap-3 pb-5 border-b border-b-[#D7D7D7]  `}
             >
 
-                    {/*<Button*/}
-                    {/*    className={`w-fit h-fit py-2 px-4  border border-meedlBlue text-meedlBlue  `}*/}
-                    {/*>Upload</Button>*/}
                     <UploadButton  />
             </div>
             <div className={`full grid gap-4  `}>

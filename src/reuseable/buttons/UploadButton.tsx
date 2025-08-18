@@ -90,6 +90,14 @@ const UploadButton = () => {
             setItemToLocalStorage('ee', ee)
             setUploadedImageUrl('')
         }
+        if (response?.error){
+            toast({
+                description: 'error occurred',
+                status: "error",
+            })
+            setItemToLocalStorage('ee', ee)
+            setUploadedImageUrl('')
+        }
 
 
     }

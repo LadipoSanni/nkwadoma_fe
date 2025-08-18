@@ -38,8 +38,18 @@ export const userApi = createApi({
             providesTags: ['userDetail']
 
         }),
+        enableTwoFA: builder.mutation({
+            query: (data) => ({
+                url : '/auth/manageMFA',
+                body: data
+            })
+        })
 
     })
 })
 
-export const { useLogoutMutation , useChangePasswordMutation, useAddUserImageMutation, useGetUserDetailsQuery} = userApi;
+export const { useLogoutMutation , useChangePasswordMutation,
+    useAddUserImageMutation, useGetUserDetailsQuery,
+    useEnableTwoFAMutation,
+
+} = userApi;
