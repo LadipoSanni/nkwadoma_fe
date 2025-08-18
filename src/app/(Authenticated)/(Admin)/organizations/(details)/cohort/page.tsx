@@ -1,5 +1,5 @@
 import React from 'react'
-import Cohorts from '@/features/portfolio-manager/organization/details/Cohorts'
+import Cohorts from '@/features/portfolio-manager/organization/meedleBackoffice-org-details/Cohorts'
 
 function page() {
   return (
