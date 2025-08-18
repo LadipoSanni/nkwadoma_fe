@@ -3,7 +3,6 @@ import React,{useState,useEffect} from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
 import { useDebounce } from '@/hooks/useDebounce';
 import {useViewOrganizationAdminQuery} from "@/service/admin/organization";
-import {  useAppSelector } from "@/redux/store";  
 import Table from "@/reuseable/table/Table";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { Book } from "lucide-react";
@@ -21,7 +20,6 @@ interface TableRowData {
 
 function Admins() {
      const [searchTerm, setSearchTerm] = useState('');
-    const organizationId = useAppSelector(store => store.organization?.setOrganizationId)
     const [pageNumber,setPageNumber] = useState(0);
     const [totalPage,setTotalPage] = useState(0);
      const [pageSearchNumber,setPageSearchNumber] = useState(0)
