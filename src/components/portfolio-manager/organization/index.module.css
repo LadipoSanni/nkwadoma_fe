@@ -9,3 +9,15 @@
 .detailContainer::-webkit-scrollbar {
     display: none;
 }
+
+.orgDetailContainer{
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    height: 66vh;
+    grid-template-rows: repeat(6, 1fr);
+}
+
+.orgDetailContainer::-webkit-scrollbar {
+    display: none;
+}

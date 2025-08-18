@@ -11,7 +11,6 @@ import SkeletonForSidebar from '@/reuseable/Skeleton-loading-state/Skeleton-for-
 
 function Detail() {
       const {data:organizationDetails, isLoading} = useGetDetailsOfOrganizationQuery({})
-   
        const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);
 
     const dataList = [
@@ -53,7 +52,7 @@ return (
   
    <div className={` md:w-[62%] md:border-r md:border-r-gray-200 pr-4`}>
      <p className={`text-[16px mb-2 mt-[1] ${inter.className}`}>Loan details</p>
-      <div className={`${style.detailContainer}`}>
+      <div className={`${style.orgDetailContainer}`}>
       <div className='grid grid-cols-1 gap-y-5 mt-2'>
      <Details isLoading={isLoading}  id={'historicalDebt'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Historical debt'} value={organizationDetails?.data.totalAmountReceived} valueType={'currency'} className='w-full'/>
      <Details isLoading={isLoading}  id={'amountRepaid '}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount repaid '} value={organizationDetails?.data.totalDebtRepaid} valueType={'currency'}  className='w-full'/>
@@ -71,7 +70,7 @@ return (
    <p className={`text-[16px mb-2 mt-[1] ${inter.className}`}> Organization details</p>
      
     { isLoading? <div><SkeletonForSidebar/></div> 
-    : <div className={`grid grid-cols-1 gap-y-5 mt-4 ${style.detailContainer}  ${inter.className}`}>
+    : <div className={`grid grid-cols-1 gap-y-5 mt-4 ${style.orgDetailContainer}  ${inter.className}`}>
     {dataList?.map((item, index) => (
 <div 
  id={`data-item-${index}`} 
