@@ -31,6 +31,8 @@ function Admins() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
+    console.log(isModalOpen)
+
     const dataElement = {
         activationStatuses: ['INVITED',"APPROVED"],
         identityRoles: "ORGANIZATION_SUPER_ADMIN" === user_role? ["ORGANIZATION_ADMIN","ORGANIZATION_SUPER_ADMIN","ORGANIZATION_ASSOCIATE"] : "ORGANIZATION_ADMIN" === user_role? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : ["ORGANIZATION_ASSOCIATE"],

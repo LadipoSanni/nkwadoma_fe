@@ -1,5 +1,5 @@
 'use client'
-import React,{useEffect} from 'react';
+import React from 'react';
 import style from "../index.module.css";
 import Details from "@/components/loanee-my-profile/Details";
 import { inter } from '@/app/fonts';
