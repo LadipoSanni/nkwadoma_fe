@@ -40,7 +40,7 @@ const IdentificationStep = () => {
             { 
                 nin: savedData.individual.nin, 
                 bvn: savedData.individual.bvn, 
-                taxId: savedData.individual.tin || '' 
+                taxId: savedData.individual.tin ,
             } : 
             { nin: '', bvn: '', taxId: '' }
     });
@@ -63,6 +63,7 @@ const IdentificationStep = () => {
     };
 
     const onIndividualSubmit = (data: IndividualFormInputs) => {
+        console.log('data: ', data)
         const mappedData = {
             ...data,
             tin: data.taxId
