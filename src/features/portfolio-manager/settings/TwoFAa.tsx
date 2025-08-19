@@ -107,7 +107,7 @@ const TwoFAa = () => {
             <div
                 className={` w-full h-fit py-4 px-4 grid gap-3 rounded-md border ${twoFactorType === 'email' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}   `}
             >
-               <div
+               <button
                    onClick={() => handleBoxClick('email')}
 
                >
@@ -121,7 +121,7 @@ const TwoFAa = () => {
                            <div className={` w-full h-full ${twoFactorType === 'email' ? 'bg-meedlBlue' : 'bg-white' } rounded-full    `}></div>
                        </div>
                    </div>
-               </div>
+               </button>
                 {twoFactorType === 'email' &&(
                     <AuthInput
                         value={email} type={'email'} data-testid={'email'}
@@ -140,7 +140,7 @@ const TwoFAa = () => {
             <div
                 className={` w-full h-fit py-4 px-4 grid gap-3 rounded-md border ${twoFactorType === 'phoneNumber' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}   `}
             >
-                <div
+                <button
                     onClick={() => handleBoxClick('phoneNumber')}
 
                 >
@@ -154,7 +154,7 @@ const TwoFAa = () => {
                             <div className={` w-full h-full ${twoFactorType === 'phoneNumber' ? 'bg-meedlBlue' : 'bg-white' } rounded-full    `}></div>
                         </div>
                     </div>
-                </div>
+                </button>
                 {twoFactorType === 'phoneNumber' &&(
                     <PhoneNumberSelect
                         selectedCountryCode={'NG'}
