@@ -15,7 +15,7 @@ import {
     usePortfolioManagerSideBarItems,
     getSettingItem,
     getSuperAdminSideBarItems, getMeedlAdminSideBarItems,
-    getInstituteSuperAdminSideBarItems
+    getInstituteSuperAdminSideBarItems,getCoperateFinancierSuperAdminSideBarItems
 } from "@/utils/sideBarItems";
 import Image from "next/image"
 import NavbarRouter from "../../reuseable/ui/navbarRouter";
@@ -126,6 +126,8 @@ const SideBar = () => {
         {name: 'PORTFOLIO_MANAGER_ASSOCIATE', value: usePortfolioManagerSideBarItems(current)},
         {name: 'ORGANIZATION_ASSOCIATE', value: getInstituteAdminSideBarItems(current)},
         {name: 'ORGANIZATION_SUPER_ADMIN', value:  getInstituteSuperAdminSideBarItems(current)},
+        {name: 'COOPERATE_FINANCIER_SUPER_ADMIN', value:  getCoperateFinancierSuperAdminSideBarItems(current)},
+        {name: 'COOPERATE_FINANCIER_ADMIN', value: getFinancierSideBarItems(current)},
     ]
 
 

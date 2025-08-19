@@ -158,6 +158,36 @@ export const getFinancierSideBarItems = (currentNavItem: string) => {
     return item;
 }
 
+export const getCoperateFinancierSuperAdminSideBarItems = (currentNavItem: string) => {
+    const item: navbarRouterItemsProps[] = [
+        {
+            icon: <MdOutlineHome
+                className={` h-[1.2rem] w-[1.2rem] ${currentNavItem === 'Overview' ? currentTextLiterals : textLiterals} `}/>,
+            id: 'overview',
+            isActive: true,
+            name: "Overview",
+            route: '/Overview'
+        },
+        {
+            id: 'marketplace',
+            name: 'Marketplace',
+            route: '/marketplace',
+            isActive: true,
+            icon: <MdOutlineAccountBalance className={` h-[1.2rem] w-[1.2em]  `} color={ currentNavItem === 'Marketplace' ? '#142854':'#626F8C'}/>
+        },
+        {
+            icon: <Icon icon='iconoir:hand-cash' color={ currentNavItem === 'My Investment' ? '#142854':'#626F8C'} height={"1.2rem"} width={"1.3rem"}/>,
+            id: 'myInvestment',
+            isActive: true,
+            name: "My Investment",
+            route: '/my-investment'
+        },
+        {id: 'staff', name: 'Staff', route: '/staff', isActive: true, icon: <MdOutlinePersonOutline className={` h-[1.2rem] w-[1.2em]  `} color={currentNavItem === 'Staff' ? '#142854' : '#939CB0'}></MdOutlinePersonOutline>},
+        {id: 'requests', name: 'Requests', route: '/requests/staff', isActive: true, icon: <MdOutlineAssignmentTurnedIn className={` h-[1.2rem] w-[1.2em]  `} color={currentNavItem === 'Requests' ? '#142854' : '#939CB0'}></MdOutlineAssignmentTurnedIn>},
+    ]
+    return item;
+}
+
 export const getUserSettingTabContent = (userRole: string) => {
     if (MEEDL_ROLES?.includes(userRole)) {
         return settingTabs;
