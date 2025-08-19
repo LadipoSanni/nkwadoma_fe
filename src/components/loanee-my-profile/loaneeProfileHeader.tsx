@@ -1,5 +1,5 @@
 'use client'
-import {cabinetGroteskBold, inter, cabinetGroteskMediumBold} from '@/app/fonts';
+import {cabinetGroteskBold, inter} from '@/app/fonts';
 import React from 'react';
 import { MdMoreHoriz } from "react-icons/md";
 import {
