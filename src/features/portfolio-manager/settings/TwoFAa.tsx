@@ -101,27 +101,28 @@ const TwoFAa = () => {
             className={`md:min-w-fit md:max-w-[45%] h-full ${styles.scrollab}  grid gap-6 `}
         >
             <span className={` grid w-full  gap-1 pb-4   border-b border-b-[#D7D7D7]  `}>
-                <p className={` ${inter500.className} text-[16px] text-black `}>2FA Security2FA Security</p>
+                <p className={` ${inter500.className} text-[16px] text-black `}>2FA Security</p>
                 <p className={` text-[14px] ${inter.className} text-[#4D4E4D]   `}>Enable two-factor authentication to your account</p>
             </span>
             <div
                 className={` w-full h-fit py-4 px-4 grid gap-3 rounded-md border ${twoFactorType === 'email' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}   `}
             >
-               <button
+               <div
                    onClick={() => handleBoxClick('email')}
-
+                   className={`text-[16px] h-fit   ${twoFactorType === 'email' ? `` : ''} w-full flex justify-between`}
                >
-                   <p className={`text-[16px] ${inter600.className}`}>Email code</p>
+                   <article
+                       className={` grid    `}
+                      >
+                       <p className={`text-[16px] place-self-start ${inter600.className}`}>Email code</p>
+                       <p className={` w-[70%] text-[14px] ${inter.className} `}>Get a temporary verification code sent to your email for added security</p>
+                   </article>
                    <div
-                       className={`text-[16px] h-fit   ${twoFactorType === 'email' ? `` : ''} w-full flex justify-between`}>
-                       <p className={`w-[70%] text-[14px] ${inter.className} `}>Get a temporary verification code sent to your email for added security</p>
-                       <div
-                           className={` w-4 h-4 bg-white px-0.5 py-0.5 rounded-full  border ${twoFactorType === 'email' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}  `}
-                       >
-                           <div className={` w-full h-full ${twoFactorType === 'email' ? 'bg-meedlBlue' : 'bg-white' } rounded-full    `}></div>
-                       </div>
+                       className={` w-4 h-4 bg-white px-0.5 py-0.5 rounded-full  border ${twoFactorType === 'email' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}  `}
+                   >
+                       <div className={` w-full h-full ${twoFactorType === 'email' ? 'bg-meedlBlue' : 'bg-white' } rounded-full    `}></div>
                    </div>
-               </button>
+               </div>
                 {twoFactorType === 'email' &&(
                     <AuthInput
                         value={email} type={'email'} data-testid={'email'}
@@ -140,21 +141,20 @@ const TwoFAa = () => {
             <div
                 className={` w-full h-fit py-4 px-4 grid gap-3 rounded-md border ${twoFactorType === 'phoneNumber' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}   `}
             >
-                <button
+                <div
                     onClick={() => handleBoxClick('phoneNumber')}
-
+                    className={`text-[16px] h-fit   w-full flex justify-between`}
                 >
-                    <p className={`text-[16px] ${inter600.className}`}>SMS code</p>
+                   <span className={` grid    `}>
+                       <p className={`text-[16px] place-self-start ${inter600.className}`}>SMS code</p>
+                       <p className={` text-[14px] w-[60%] place-self-start ${inter.className} `}>Receive a one-time verification code via SMS to enter during login</p>
+                   </span>
                     <div
-                        className={`text-[16px] h-fit   ${twoFactorType === 'email' ? `` : ''} w-full flex justify-between`}>
-                        <p className={`w-[70%] text-[14px] ${inter.className} `}>Receive a one-time verification code via SMS to enter during login</p>
-                        <div
-                            className={` w-4 h-4 bg-white px-0.5 py-0.5 rounded-full  border ${twoFactorType === 'phoneNumber' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}  `}
-                        >
-                            <div className={` w-full h-full ${twoFactorType === 'phoneNumber' ? 'bg-meedlBlue' : 'bg-white' } rounded-full    `}></div>
-                        </div>
+                        className={` w-4 h-4 bg-white px-0.5 py-0.5 rounded-full mt-auto mb-auto   border ${twoFactorType === 'phoneNumber' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}  `}
+                    >
+                        <div className={` w-full h-full ${twoFactorType === 'phoneNumber' ? 'bg-meedlBlue' : 'bg-white' } rounded-full    `}></div>
                     </div>
-                </button>
+                </div>
                 {twoFactorType === 'phoneNumber' &&(
                     <PhoneNumberSelect
                         selectedCountryCode={'NG'}
