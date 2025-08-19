@@ -162,7 +162,6 @@ const Details = () => {
       };
       
       const { type: statusTypes, value: statusValue } = getVehicleStatus();
-    console.log('statusTypes: ',statusValue)
 
     return (
         <div className={`${styles.container} `}>
