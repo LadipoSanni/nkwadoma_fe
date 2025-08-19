@@ -1,9 +1,8 @@
 import React from 'react';
 import {inter, inter500} from "@/app/fonts";
-import {Button} from "@/components/ui/button";
 import {getItemSessionStorage} from "@/utils/storage";
 import styles from './index.module.css'
-import { FaCircleUser } from "react-icons/fa6";
+import UploadButton from "@/reuseable/buttons/UploadButton";
 
 const Profile = () => {
 
@@ -14,6 +13,7 @@ const Profile = () => {
         {details: 'Email address', value: userEmail ? userEmail :'', id: 'userEmail'},
     ]
 
+
     return (
         <div
             data-testid={'userProfile'}
@@ -22,16 +22,8 @@ const Profile = () => {
             <div
                 className={` flex gap-3 pb-5 border-b border-b-[#D7D7D7]  `}
             >
-                <FaCircleUser className={` w-20 h-20 text-[#ececec] `} />
-                <div className={` grid gap-3 `}>
-                   <div>
-                       <p className={` text-[14px] ${inter500.className} text-black `}>Upload image</p>
-                       <p className={`text-[14px] ${inter.className} text-[#6A6B6A]`}>PNG or JPG (max. 800x400px) </p>
-                   </div>
-                    <Button
-                        className={`w-fit h-fit py-2 px-4  border border-meedlBlue text-meedlBlue  `}
-                    >Upload</Button>
-                </div>
+
+                    <UploadButton  />
             </div>
             <div className={`full grid gap-4  `}>
                 {userDetails?.map((item: {details: string, value: string, id: string}, index: number) => (

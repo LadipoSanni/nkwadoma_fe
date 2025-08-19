@@ -7,11 +7,14 @@ import AuthButton from "@/reuseable/buttons/AuthButton";
 import {validateEmailInput} from "@/utils/GlobalMethods";
 import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
 import styles from './index.module.css'
+import {useToast} from "@/hooks/use-toast";
+import { useEnableTwoFAMutation } from '@/service/users/api';
 const TwoFAa = () => {
     const [twoFactorType, setTwoFactorType] = React.useState<string>('')
     const userEmail = getItemSessionStorage('user_email')
     const [phoneNumber, setPhoneNumber] = React.useState<string>('')
     const [email, setEmail] = React.useState(userEmail ? userEmail : '')
+    const [enableTwoFa, {isLoading}] = useEnableTwoFAMutation()
 
     const [disable, setDisable]= React.useState(true)
 
@@ -47,9 +50,46 @@ const TwoFAa = () => {
         // setCurrentPassword(event.target.value)
 
     }
+    const {toast} = useToast()
 
     const enableTwoFA = async (e?:React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => {
       e?.preventDefault();
+      if (twoFactorType === 'phoneNumber') {
+          const prop = {
+              mfaPhoneNumber:phoneNumber ,
+              mfaType: "PHONE_NUMBER_MFA"
+          }
+          const response = await enableTwoFa(prop);
+          if (response?.data){
+              toast({
+                  description: response?.data?.message,
+                  status: "success",
+              })
+              setTwoFactorType("")
+          }else{
+              toast({
+                  description: 'error occurred',
+                  status: "error",
+              })
+          }
+      }else {
+
+          const prop = {
+              mfaType: "EMAIL_MFA"
+          }
+          const response = await enableTwoFa(prop);
+          if (response?.data){
+              toast({
+                  description: response?.data?.message,
+                  status: "success",
+              })
+          }else{
+              toast({
+                  description: 'error occurred',
+                  status: "error",
+              })
+          }
+      }
 
     }
     const handle = () => {
@@ -67,7 +107,7 @@ const TwoFAa = () => {
             <div
                 className={` w-full h-fit py-4 px-4 grid gap-3 rounded-md border ${twoFactorType === 'email' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}   `}
             >
-               <div
+               <button
                    onClick={() => handleBoxClick('email')}
 
                >
@@ -75,9 +115,13 @@ const TwoFAa = () => {
                    <div
                        className={`text-[16px] h-fit   ${twoFactorType === 'email' ? `` : ''} w-full flex justify-between`}>
                        <p className={`w-[70%] text-[14px] ${inter.className} `}>Get a temporary verification code sent to your email for added security</p>
-                       <input  className={` mt-auto mb-auto  peer-checked:bg-meedlBlue peer-checked:border-meedlBlue `} type="radio" id="email" name="email" value="email" checked={twoFactorType === 'email'} />
+                       <div
+                           className={` w-4 h-4 bg-white px-0.5 py-0.5 rounded-full  border ${twoFactorType === 'email' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}  `}
+                       >
+                           <div className={` w-full h-full ${twoFactorType === 'email' ? 'bg-meedlBlue' : 'bg-white' } rounded-full    `}></div>
+                       </div>
                    </div>
-               </div>
+               </button>
                 {twoFactorType === 'email' &&(
                     <AuthInput
                         value={email} type={'email'} data-testid={'email'}
@@ -96,7 +140,7 @@ const TwoFAa = () => {
             <div
                 className={` w-full h-fit py-4 px-4 grid gap-3 rounded-md border ${twoFactorType === 'phoneNumber' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}   `}
             >
-                <div
+                <button
                     onClick={() => handleBoxClick('phoneNumber')}
 
                 >
@@ -104,9 +148,13 @@ const TwoFAa = () => {
                     <div
                         className={`text-[16px] h-fit   ${twoFactorType === 'email' ? `` : ''} w-full flex justify-between`}>
                         <p className={`w-[70%] text-[14px] ${inter.className} `}>Receive a one-time verification code via SMS to enter during login</p>
-                        <input  className={` mt-auto mb-auto  peer-checked:bg-meedlBlue peer-checked:border-meedlBlue `} type="radio" id="email" name="email" value="email" checked={twoFactorType === 'phoneNumber'} />
+                        <div
+                            className={` w-4 h-4 bg-white px-0.5 py-0.5 rounded-full  border ${twoFactorType === 'phoneNumber' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}  `}
+                        >
+                            <div className={` w-full h-full ${twoFactorType === 'phoneNumber' ? 'bg-meedlBlue' : 'bg-white' } rounded-full    `}></div>
+                        </div>
                     </div>
-                </div>
+                </button>
                 {twoFactorType === 'phoneNumber' &&(
                     <PhoneNumberSelect
                         selectedCountryCode={'NG'}
@@ -129,7 +177,7 @@ const TwoFAa = () => {
                 id={"enable2fASecurity"}
                 data-testid={`enable2fASecurity`}
                 buttonText={"Enable 2FA security"} width={"fit"}
-                isLoading={false}
+                isLoading={isLoading}
                 handleClick={(e) => {enableTwoFA(e)}}>
 
 
