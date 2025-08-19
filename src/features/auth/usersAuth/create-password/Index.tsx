@@ -186,6 +186,10 @@ const CreatePassword = () => {
                 store.dispatch(setCurrentNavbarItem('Overview'));
                 router.push("/Overview");
                 break;
+            case 'MEEDL_ADMIN':
+                store.dispatch(setCurrentNavbarItem('Overview'));
+                router.push("/Overview");
+                break;
             case 'PORTFOLIO_MANAGER_ASSOCIATE' :
                 store.dispatch(setCurrentNavbarItem('Overview'));
                 router.push("/Overview");
