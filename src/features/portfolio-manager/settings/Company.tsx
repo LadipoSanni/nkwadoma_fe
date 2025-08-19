@@ -1,15 +1,22 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import SettingTabs from "@/reuseable/tabs/settingTabs";
 import Profile from "@/features/portfolio-manager/settings/Profile";
 import BankDetails from "@/features/portfolio-manager/settings/bankDetails";
+import {store, useAppSelector} from '@/redux/store';
+import {setSelectedCompanyTab} from "@/redux/slice/loan/selected-loan";
 
 const Company = () => {
     const data = [
         {name: 'Profile', id: 'profile',},
         {name: 'Bank details', id: 'bankDetails',},
     ]
-    const [currentTab, setCurrentTab] = useState(0)
+    const selectedCompanyTab = useAppSelector(state => state.selectedLoan.companySelectedTab)
+    const [currentTab, setCurrentTab] = useState(selectedCompanyTab)
+    useEffect(() => {
+        store.dispatch(setSelectedCompanyTab(currentTab))
+    }, [currentTab]);
+
 
     const getCurrentDataList = () => {
         switch (currentTab) {

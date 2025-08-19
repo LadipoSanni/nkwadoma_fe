@@ -1,9 +1,11 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import SettingTabs from "@/reuseable/tabs/settingTabs";
 import ChangePassword from "@/features/portfolio-manager/settings/ChangePassword";
 import Profile from "@/features/portfolio-manager/settings/Profile";
 import TwoFAa from "@/features/portfolio-manager/settings/TwoFAa";
+import { setSelectedGeneralTab } from '@/redux/slice/loan/selected-loan';
+import {store, useAppSelector} from '@/redux/store';
 
 export const Generals = () => {
     const data = [
@@ -11,7 +13,12 @@ export const Generals = () => {
         {name: 'Change password', id: 'changePassword'},
         {name: '2FA Security', id: '2FaSecurity'},
     ]
-    const [currentTab, setCurrentTab] = useState(0)
+    const selectedCompanyTab = useAppSelector(state => state.selectedLoan.selectedGeneralTab)
+    const [currentTab, setCurrentTab] = useState(selectedCompanyTab)
+
+    useEffect(() => {
+        store.dispatch(setSelectedGeneralTab(currentTab))
+    }, [currentTab])
 
     const getCurrentDataList = () => {
         switch (currentTab) {
