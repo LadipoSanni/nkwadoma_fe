@@ -41,6 +41,7 @@ export const userApi = createApi({
         enableTwoFA: builder.mutation({
             query: (data) => ({
                 url : '/auth/manageMFA',
+                method: 'POST',
                 body: data
             })
         })

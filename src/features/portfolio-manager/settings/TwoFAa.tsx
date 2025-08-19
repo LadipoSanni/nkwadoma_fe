@@ -65,6 +65,7 @@ const TwoFAa = () => {
                   description: response?.data?.message,
                   status: "success",
               })
+              setTwoFactorType("")
           }else{
               toast({
                   description: 'error occurred',
@@ -114,7 +115,11 @@ const TwoFAa = () => {
                    <div
                        className={`text-[16px] h-fit   ${twoFactorType === 'email' ? `` : ''} w-full flex justify-between`}>
                        <p className={`w-[70%] text-[14px] ${inter.className} `}>Get a temporary verification code sent to your email for added security</p>
-                       <input  className={` mt-auto mb-auto  peer-checked:bg-meedlBlue peer-checked:border-meedlBlue `} type="radio" id="email" name="email" value="email" checked={twoFactorType === 'email'} />
+                       <div
+                           className={` w-4 h-4 bg-white px-0.5 py-0.5 rounded-full  border ${twoFactorType === 'email' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}  `}
+                       >
+                           <div className={` w-full h-full ${twoFactorType === 'email' ? 'bg-meedlBlue' : 'bg-white' } rounded-full    `}></div>
+                       </div>
                    </div>
                </div>
                 {twoFactorType === 'email' &&(
@@ -143,7 +148,11 @@ const TwoFAa = () => {
                     <div
                         className={`text-[16px] h-fit   ${twoFactorType === 'email' ? `` : ''} w-full flex justify-between`}>
                         <p className={`w-[70%] text-[14px] ${inter.className} `}>Receive a one-time verification code via SMS to enter during login</p>
-                        <input  className={` mt-auto mb-auto  peer-checked:bg-meedlBlue peer-checked:border-meedlBlue `} type="radio" id="email" name="email" value="email" checked={twoFactorType === 'phoneNumber'} />
+                        <div
+                            className={` w-4 h-4 bg-white px-0.5 py-0.5 rounded-full  border ${twoFactorType === 'phoneNumber' ? 'border-meedlBlue' : 'border-[#D7D7D7]'}  `}
+                        >
+                            <div className={` w-full h-full ${twoFactorType === 'phoneNumber' ? 'bg-meedlBlue' : 'bg-white' } rounded-full    `}></div>
+                        </div>
                     </div>
                 </div>
                 {twoFactorType === 'phoneNumber' &&(
