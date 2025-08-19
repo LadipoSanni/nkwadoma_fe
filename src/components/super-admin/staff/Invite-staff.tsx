@@ -61,7 +61,7 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
           toast({
           description: result.message,
           status: "success",
-          duration: 1000
+          duration: 2000
         });
         handleCloseModal()
       }

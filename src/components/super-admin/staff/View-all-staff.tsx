@@ -14,6 +14,7 @@ import Detail from './Detail';
 import { useViewOrganizationAdminQuery} from '@/service/admin/organization';
 import { useDebounce } from '@/hooks/useDebounce';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import { getUserDetailsFromStorage } from "@/components/topBar/action";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -38,7 +39,8 @@ function Staff() {
      const [name,setName] = useState('')
      const [date, setInvitedDate] = useState('')
      const [isSwitch, setSwitch] = useState(false);
-     const adminRoleType = [ { value: "MEEDL_ADMIN", label: "Admin" }, { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" } ];
+     const user_role = getUserDetailsFromStorage('user_role');
+     const adminRoleType = user_role === "ORGANIZATION_SUPER_ADMIN"? [ { value: "ORGANIZATION_ADMIN", label: "Admin" }, { value: "ORGANIZATION_ASSOCIATE", label: "Associate" } ] :[ { value: "MEEDL_ADMIN", label: "Admin" }, { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" } ];
       const [hasNextPages,setNextPage] = useState(false)
       const [totalPage,setTotalPage] = useState(0)
       const [pageNumber,setPageNumber] = useState(0)
@@ -49,13 +51,13 @@ function Staff() {
     const dataElement = {
       name: debouncedSearchTerm,
       activationStatuses: ['INVITED',"APPROVED","ACTIVE","DEACTIVATED"],
-      identityRoles:["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"],
+      identityRoles:user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : ["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"],
       pageNumber:pageNumber,
       pageSize: 10
   }
 
 
-   const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
+   const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement,{refetchOnMountOrArgChange: true})
 
    useEffect(()=> {
     if(debouncedSearchTerm && adminData && adminData?.data ){
@@ -113,7 +115,7 @@ function Staff() {
           title: "Role",  
           sortable: true, 
           id: "role", 
-          selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
+          selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN" || row.role === "ORGANIZATION_ADMIN"? "Admin" : "Associate"
         },
         { 
           title: "Status",  

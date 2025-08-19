@@ -28,19 +28,19 @@ function Admins() {
     const user_role = getUserDetailsFromStorage('user_role');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
-
+     console.log(user_role)
     const adminRoleType = [  { value: "ORGANIZATION_ADMIN", label: "Admin" }, { value: "ORGANIZATION_ASSOCIATE", label: "Associate"} ];
 
     const dataElement = {
         name:debouncedSearchTerm,
-        activationStatuses: ['INVITED',"APPROVED","PENDING_APPROVAL","DEACTIVATED"],
+        activationStatuses: ['INVITED',"APPROVED","PENDING_APPROVAL","DEACTIVATED","ACTIVE"],
         identityRoles: ["ORGANIZATION_SUPER_ADMIN","ORGANIZATION_ADMIN"].includes(user_role || "")? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"]  : ["ORGANIZATION_ASSOCIATE"],
         pageNumber:pageNumber,
         pageSize: 10
     }
     
     
-      const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
+      const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement,{refetchOnMountOrArgChange: true})
     
        useEffect(() => {
         if(debouncedSearchTerm && adminData && adminData?.data ){
@@ -88,7 +88,7 @@ function Admins() {
                             title: "Role",  
                             sortable: true, 
                             id: "role", 
-                            selector: (row: TableRowData) => row.role === "ORGANIZATION_ADMIN"? "Organization admin" : row.role === "ORGANIZATION_ASSOCIATE"? "Organization associate" : "Super admin"
+                            selector: (row: TableRowData) => row.role === "ORGANIZATION_ADMIN"? "Admin" : row.role === "ORGANIZATION_ASSOCIATE"? "Associate" : "Super admin"
                           },
                           { 
                             title: "Status",  
@@ -118,7 +118,7 @@ function Admins() {
               value={searchTerm}
               onChange={handleSearchChange}
             />
-            <Button
+          { user_role === "ORGANIZATION_ADMIN" && <Button
               id="inviteAdminButton"
               className={
                 "h-[2.8125rem] md:w-[10.375rem] w-full rounded-md bg-meedlBlue hover:bg-meedlBlue text-meedlWhite text-[0.875rem] font-semibold leading-[150%] "
@@ -126,7 +126,7 @@ function Admins() {
               onClick={handleInviteClick}
             >
               Invite admin
-            </Button>
+            </Button>}
           </section>
     <div
             id="adminListView"

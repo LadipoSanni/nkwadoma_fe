@@ -93,6 +93,12 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     store.dispatch(setOrganizationId(notification?.data?.contentId))
     store.dispatch(setCurrentNavbarItem("Organizations"))
     router.push("/organizations/detail");
+  }else if(user_role === "ORGANIZATION_SUPER_ADMIN"  && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
+    store.dispatch(setRequestStatusTab("pending"))
+    store.dispatch(setIsRequestedStaffOpen(true))
+    store.dispatch(setRequestedStaffId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Requests"))
+    router.push(`/organizations/request`);
   }
   }
    
@@ -114,6 +120,8 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
 } else if((user_role === "MEEDL_SUPER_ADMIN" || user_role === "MEEDL_ADMIN") && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
   return "Request"
 }else if((user_role === "MEEDL_SUPER_ADMIN" || user_role === "MEEDL_ADMIN") && notification?.data?.notificationFlag === "APPROVE_INVITE_ORGANIZATION" ){
+  return "Request"
+}else if(user_role === "ORGANIZATION_SUPER_ADMIN" && notification?.data?.notificationFlag === "INVITE_COLLEAGUE" ){
   return "Request"
 }
     
