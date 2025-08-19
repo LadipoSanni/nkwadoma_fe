@@ -14,7 +14,7 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setrequestOrganizationStatusTab} from '@/redux/slice/staff-and-request/request';
 import { store,useAppSelector } from '@/redux/store';
 import { setIsRequestedOrganizationOpen,resetRequestedOrganizationId} from '@/redux/slice/staff-and-request/request';
-
+import styles from "../staff/index.module.css"
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -172,7 +172,7 @@ function ViewAllRequestedOrganization() {
     <TabsTrigger value="pending">Pending</TabsTrigger>
     <TabsTrigger value="declined">Declined</TabsTrigger>
 </TabsList>
-     <div className='mt-4 '>
+     <div className={`mt-4 max-h-[69vh]   ${!(isLoading || isFetching || isSearchfetching || isSearchloading) && styles.container} `}>
    <div className=''>
    <SearchInput
           testId='search-input'
@@ -193,7 +193,7 @@ function ViewAllRequestedOrganization() {
         icon={MdOutlineAssignmentTurnedIn}
          sideBarTabName='Organization'
         tableCellStyle="h-12"
-        tableHeight={50}
+        tableHeight={53}
         isLoading={isLoading || isFetching || isSearchfetching || isSearchloading}
         hasNextPage={currentTabState.hasNextPage}
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
@@ -206,7 +206,7 @@ function ViewAllRequestedOrganization() {
        />
       </div>
    </TabsContent>
-   </div>
+  
    <TabsContent value="declined">
    <div className='mt-4' data-testid="table">
        <Table 
@@ -218,7 +218,7 @@ function ViewAllRequestedOrganization() {
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='Organization'
         tableCellStyle="h-12"
-        tableHeight={50}
+        tableHeight={53}
         isLoading={isLoading || isFetching || isSearchfetching || isSearchloading }
         hasNextPage={currentTabState.hasNextPage}
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
@@ -231,6 +231,7 @@ function ViewAllRequestedOrganization() {
        />
       </div>
    </TabsContent>
+   </div>
    </Tabs>
    <div>
         <Modal
