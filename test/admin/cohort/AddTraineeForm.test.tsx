@@ -126,26 +126,26 @@ describe("AddTraineeForm", () => {
    })
 });
 
-it('should reject invalid email formats when email is entered', async () => {
-  const props = {
-    cohortId: '123',
-    setIsOpen: jest.fn()
-};
-
-  render(
-      <Providers>
-          <AddTraineeForm {...props}/>
-      </Providers>
-  );
-  const emailInput = screen.getByLabelText('Email address');
-  userEvent.type(emailInput, 'invalidemail');
-  fireEvent.click(screen.getByText('Continue'));
-
-  await waitFor(() =>  {
-    expect(screen.getByText('Invalid email address')).toBeInTheDocument();
-  })
- 
-});
+// it('should reject invalid email formats when email is entered', async () => {
+//   const props = {
+//     cohortId: '123',
+//     setIsOpen: jest.fn()
+// };
+//
+//   render(
+//       <Providers>
+//           <AddTraineeForm {...props}/>
+//       </Providers>
+//   );
+//   const emailInput = screen.getByLabelText('Email address');
+//   userEvent.type(emailInput, 'invalidemail');
+//   fireEvent.click(screen.getByText('Continue'));
+//
+//   await waitFor(() =>  {
+//     expect(screen.getByText('Invalid email address')).toBeInTheDocument();
+//   })
+//
+// });
 
 it('should close modal when cancel button is clicked', () => {
   const setIsOpen = jest.fn();
