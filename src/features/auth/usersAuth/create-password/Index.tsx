@@ -1,7 +1,7 @@
 'use client'
 import React, { useState} from 'react';
 import AuthInputField from "@/reuseable/Input/AuthInputField";
-import { cabinetGrotesk } from "@/app/fonts";
+import { cabinetGrotesk,inter } from "@/app/fonts";
 import PasswordCriteria from "@/components/passwordCriteria/Index";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import {useCreatePasswordMutation} from "@/service/auths/api";
@@ -16,7 +16,14 @@ import {clearData} from "@/utils/storage";
 import { setMarketInvestmentVehicleId } from '@/redux/slice/investors/MarketPlaceSlice';
 import {encryptText} from "@/utils/encrypt";
 import {setLoanReferralId,setCohortLoaneeId } from "@/redux/slice/loan/selected-loan";
+import Link from 'next/link'
 
+interface ApiError {
+    status: number;
+    data: {
+        message: string;
+    };
+}
 
 
 const CreatePassword = () => {
@@ -28,7 +35,7 @@ const CreatePassword = () => {
     const [disableButton, setDisableButton] = useState(false)
     const [createPassword, { isLoading}] = useCreatePasswordMutation()
     const encryptedPassword =  encryptText(password)
-
+    const [errorMessage, setErrorMessage] = useState("")
     const disable = !criteriaStatus.every(Boolean) || password !== confirmPassword || disableButton;
 
 
@@ -141,6 +148,7 @@ const CreatePassword = () => {
 
 
     const routeUserToTheirDashboard = async (userRole?: string) => {
+        const { investmentVehicleId } = getUserToken();
         switch (userRole) {
             case 'LOANEE' :
                 const { loanReferralId, cohortLoaneeId } = getUserToken();
@@ -163,7 +171,8 @@ const CreatePassword = () => {
                 router.push("/Overview")
                 break;
             case "FINANCIER":
-                const { investmentVehicleId } = getUserToken(); 
+            case "COOPERATE_FINANCIER_SUPER_ADMIN":
+            case "COOPERATE_FINANCIER_ADMIN": 
                 if (investmentVehicleId) {
                      store.dispatch(setMarketInvestmentVehicleId({marketInvestmentVehicleId: investmentVehicleId }))
                     store.dispatch(setCurrentNavbarItem("Marketplace"));
@@ -216,6 +225,7 @@ const CreatePassword = () => {
                 toast({
                     description: "Password created successfully",
                     status: "success",
+                    duration: 1000
                 });
                 if (user_role) {
                     storeUserDetails(access_token, user_email, user_role, userName, refreshToken)
@@ -226,12 +236,16 @@ const CreatePassword = () => {
              } 
 
         }catch (error){
-            toast({
-                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                description: error?.data?.message,
-                status: "error",
-            })
+            const err = error as ApiError;
+            if (err?.data?.message) {
+                setErrorMessage(err?.data?.message);
+                toast({
+                    description: errorMessage? "User has added password before" : "User has added password before",
+                    status: "error",
+                    duration: 1000
+                });
+
+            }
         }
         setDisableButton(false)
     }
@@ -275,6 +289,13 @@ const CreatePassword = () => {
                 width={'100%'}
                 isLoading={isLoading}
             />
+            <div>
+            <p className={`${inter.className} flex items-center justify-center text-sm text-forgetPasswordBlue leading-4 mt-2`}>
+            Already have an account? <Link id={'resetPasswordLinkFromLogin'} href={"/auth/login"}
+                                               className="font-medium text-meedlBlue ml-1  underline">Login
+                        here</Link>
+                    </p>  
+            </div>
         </form>
     );
 };

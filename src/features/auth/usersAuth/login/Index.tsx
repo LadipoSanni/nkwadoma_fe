@@ -153,11 +153,16 @@ const Login: React.FC = () => {
                 store.dispatch(setCurrentNavbarItem("Program"))
                 router.push("/program")
                 break;
-             case 'ORGANIZATION_ASSOCIATE':
+            case 'ORGANIZATION_ASSOCIATE':
                 store.dispatch(setCurrentNavbarItem("Program"))
                 router.push("/program")
                 break;
-
+            case "COOPERATE_FINANCIER_SUPER_ADMIN":
+                await routeFinancier(vehicleId, vehicleType)
+                break;
+            case "COOPERATE_FINANCIER_ADMIN":
+                await routeFinancier(vehicleId, vehicleType)
+                break;
         }
     }
 
@@ -216,6 +221,7 @@ const Login: React.FC = () => {
                         toast({
                             description: "Login successful",
                             status: "success",
+                            duration: 1000
                         });
                         if (user_role) {
                             storeUserDetails(access_token, user_email, user_role, userName, refresh_token)
@@ -230,6 +236,7 @@ const Login: React.FC = () => {
                         toast({
                             description: errorMessage || "Invalid email or password",
                             status: "error",
+                            duration: 1000
                         });
 
                     }
