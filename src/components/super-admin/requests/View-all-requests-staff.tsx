@@ -52,7 +52,7 @@ function ViewAllRequests() {
        const dataElement = {
          name: debouncedSearchTerm,
          activationStatuses: requestTabStatusType === "pending"? ["PENDING_APPROVAL"] : ["DECLINED"],
-         identityRoles:["PORTFOLIO_MANAGER","MEEDL_ASSOCIATE"],
+         identityRoles:["PORTFOLIO_MANAGER","PORTFOLIO_MANAGER_ASSOCIATE"],
          pageNumber: debouncedSearchTerm? currentTabState?.pageSearchNumber : currentTabState?.pageNumber,
          pageSize: 10
      }

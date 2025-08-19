@@ -49,7 +49,7 @@ function Staff() {
     const dataElement = {
       name: debouncedSearchTerm,
       activationStatuses: ['INVITED',"APPROVED","ACTIVE","DEACTIVATED"],
-      identityRoles:["PORTFOLIO_MANAGER","MEEDL_ADMIN","MEEDL_ASSOCIATE"],
+      identityRoles:["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"],
       pageNumber:pageNumber,
       pageSize: 10
   }
