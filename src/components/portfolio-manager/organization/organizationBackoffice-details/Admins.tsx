@@ -28,13 +28,13 @@ function Admins() {
     const user_role = getUserDetailsFromStorage('user_role');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
-     console.log(user_role)
+    
     const adminRoleType = [  { value: "ORGANIZATION_ADMIN", label: "Admin" }, { value: "ORGANIZATION_ASSOCIATE", label: "Associate"} ];
 
     const dataElement = {
         name:debouncedSearchTerm,
         activationStatuses: ['INVITED',"APPROVED","PENDING_APPROVAL","DEACTIVATED","ACTIVE"],
-        identityRoles: ["ORGANIZATION_SUPER_ADMIN","ORGANIZATION_ADMIN"].includes(user_role || "")? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"]  : ["ORGANIZATION_ASSOCIATE"],
+        identityRoles:  ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] ,
         pageNumber:pageNumber,
         pageSize: 10
     }
