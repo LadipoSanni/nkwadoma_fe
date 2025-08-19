@@ -12,6 +12,16 @@ export function capitalizeFirstLetters(word: string | null | undefined): string 
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' '); 
 }
+export function removeSpecialCharacterFromString(str: string | undefined): string {
+    if (!str) return "";
+
+    const cleaned = str
+        .toLowerCase()
+        .replaceAll('_', " ");
+
+    return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+
+}
 
 export  function extractFirstCharacters(text: string ): string {
     return text
