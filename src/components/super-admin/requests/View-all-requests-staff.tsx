@@ -16,6 +16,7 @@ import { setRequestStatusTab } from '@/redux/slice/staff-and-request/request';
 import { store,useAppSelector } from '@/redux/store';
 import { setIsRequestedStaffOpen,resetRequestedStaffId} from '@/redux/slice/staff-and-request/request';
 import {getUserDetailsFromStorage} from "@/components/topBar/action";
+import styles from "../staff/index.module.css"
 
 
 interface TableRowData {
@@ -175,7 +176,7 @@ function ViewAllRequests() {
     <TabsTrigger value="pending">Pending</TabsTrigger>
     <TabsTrigger value="declined">Declined</TabsTrigger>
 </TabsList>
-     <div className={`${userRole === "ORGANIZATION_SUPER_ADMIN"? 'mt-6' : 'mt-4'}`}>
+     <div className={`${userRole === "ORGANIZATION_SUPER_ADMIN"? 'mt-6 max-h-[72vh]' : 'mt-4 max-h-[69vh]'} ${!(isLoading || isFetching ) && styles.container}  `}>
    <div className=''>
    <SearchInput
           testId='search-input'
@@ -196,7 +197,7 @@ function ViewAllRequests() {
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={userRole === "ORGANIZATION_SUPER_ADMIN"? 55 : 50}
+        tableHeight={userRole === "ORGANIZATION_SUPER_ADMIN"? 58 : 53}
         isLoading={isLoading || isFetching }
         // hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
         hasNextPage={currentTabState.hasNextPage}
@@ -212,7 +213,7 @@ function ViewAllRequests() {
        />
       </div>
    </TabsContent>
-   </div>
+   
    <TabsContent value="declined">
    <div className='mt-4' data-testid="table">
        <Table 
@@ -224,7 +225,7 @@ function ViewAllRequests() {
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={userRole === "ORGANIZATION_SUPER_ADMIN"? 55 : 50}
+        tableHeight={userRole === "ORGANIZATION_SUPER_ADMIN"? 58 : 53}
         isLoading={isLoading || isFetching }
         hasNextPage={currentTabState.hasNextPage}
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
@@ -237,6 +238,7 @@ function ViewAllRequests() {
        />
       </div>
    </TabsContent>
+   </div>
    </Tabs>
    <div>
         <Modal

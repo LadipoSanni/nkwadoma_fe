@@ -11,7 +11,7 @@ type props = {
 const FundTabs: React.FC<props> = ({ children }) => {
 
     return (
-        <CustomAuthorization authorizedRoles={['ORGANIZATION_ADMIN']}>
+        <CustomAuthorization authorizedRoles={['ORGANIZATION_ADMIN','ORGANIZATION_SUPER_ADMIN','ORGANIZATION_ASSOCIATE']}>
             <TabSwitch tabData={programDetailTab} defaultTab="/program/program-details" backClickRoutePath="/program" backClickName="programs" condition={true}>
                 {children}
             </TabSwitch>

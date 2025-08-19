@@ -15,6 +15,7 @@ import { useViewOrganizationAdminQuery} from '@/service/admin/organization';
 import { useDebounce } from '@/hooks/useDebounce';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
+import styles from "./index.module.css"
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -133,7 +134,7 @@ function Staff() {
 
 
   return (
-    <div className='mt-8 px-6'>
+    <div className={`mt-8 px-6 max-h-[80vh] ${styles.container}`}>
       <div className='md:flex justify-between items-center'>
         <SearchInput
           testId='search-input'
@@ -164,7 +165,7 @@ function Staff() {
         icon={MdOutlineAccountBalance}
         sideBarTabName='staff'
         tableCellStyle="h-12"
-        tableHeight={59}
+        tableHeight={62}
         isLoading={isLoading || isFetching }
         hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
         pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}
