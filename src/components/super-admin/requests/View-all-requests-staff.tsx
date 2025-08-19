@@ -15,7 +15,7 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setRequestStatusTab } from '@/redux/slice/staff-and-request/request';
 import { store,useAppSelector } from '@/redux/store';
 import { setIsRequestedStaffOpen,resetRequestedStaffId} from '@/redux/slice/staff-and-request/request';
-
+import {getUserDetailsFromStorage} from "@/components/topBar/action";
 
 
 interface TableRowData {
@@ -39,6 +39,8 @@ function ViewAllRequests() {
    const [role,setRole] = useState("")
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
    const [status,setStatus] = useState("")
+   const userRole = getUserDetailsFromStorage('user_role') 
+   console.log(userRole)
 
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
                      pending: { pageNumber: 0, totalPages: 0, hasNextPage: false, pageSearchNumber:0 },
@@ -52,13 +54,13 @@ function ViewAllRequests() {
        const dataElement = {
          name: debouncedSearchTerm,
          activationStatuses: requestTabStatusType === "pending"? ["PENDING_APPROVAL"] : ["DECLINED"],
-         identityRoles:["PORTFOLIO_MANAGER","PORTFOLIO_MANAGER_ASSOCIATE"],
+         identityRoles:userRole === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : ["PORTFOLIO_MANAGER","PORTFOLIO_MANAGER_ASSOCIATE"],
          pageNumber: debouncedSearchTerm? currentTabState?.pageSearchNumber : currentTabState?.pageNumber,
          pageSize: 10
      }
    
    
-      const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
+      const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement,{refetchOnMountOrArgChange: true})
 
       useEffect(()=> {
           if(debouncedSearchTerm && adminData && adminData?.data ){
@@ -151,7 +153,7 @@ function ViewAllRequests() {
              title: "Role",  
              sortable: true, 
              id: "role", 
-             selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
+             selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN" ||row.role === "ORGANIZATION_ADMIN" ? "Admin" : "Associate"
            },
            { 
              title: "Requested on",  
@@ -162,7 +164,7 @@ function ViewAllRequests() {
          ]
   
   return (
-    <div className='mt-5'>
+    <div className={`mt-5 ${userRole === "ORGANIZATION_SUPER_ADMIN"? "px-5" : ""}`}>
       <Tabs
        value={requestTabStatusType}
        onValueChange={(value) => {
@@ -173,7 +175,7 @@ function ViewAllRequests() {
     <TabsTrigger value="pending">Pending</TabsTrigger>
     <TabsTrigger value="declined">Declined</TabsTrigger>
 </TabsList>
-     <div className='mt-4 '>
+     <div className={`${userRole === "ORGANIZATION_SUPER_ADMIN"? 'mt-6' : 'mt-4'}`}>
    <div className=''>
    <SearchInput
           testId='search-input'
@@ -194,7 +196,7 @@ function ViewAllRequests() {
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={50}
+        tableHeight={userRole === "ORGANIZATION_SUPER_ADMIN"? 55 : 50}
         isLoading={isLoading || isFetching }
         // hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
         hasNextPage={currentTabState.hasNextPage}
@@ -222,7 +224,7 @@ function ViewAllRequests() {
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={50}
+        tableHeight={userRole === "ORGANIZATION_SUPER_ADMIN"? 55 : 50}
         isLoading={isLoading || isFetching }
         hasNextPage={currentTabState.hasNextPage}
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}

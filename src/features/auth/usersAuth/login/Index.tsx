@@ -134,6 +134,10 @@ const Login: React.FC = () => {
                 store.dispatch(setCurrentNavbarItem('Overview'));
                 router.push("/Overview");
                 break;
+            case 'MEEDL_ADMIN':
+                store.dispatch(setCurrentNavbarItem('Overview'));
+                router.push("/Overview");
+                break;
             case 'ORGANIZATION_ADMIN':
                 store.dispatch(setCurrentNavbarItem("Program"))
                 router.push("/program")

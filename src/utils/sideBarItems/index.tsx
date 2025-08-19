@@ -103,7 +103,7 @@ export const getInstituteSuperAdminSideBarItems = (currentItem: string) => {
         {id: 'loan', name: 'Loan', isActive: false, icon: <Icon icon="material-symbols:money-bag-outline" height={"1.2rem"} width={"1.3rem"} color={'#d7d7d7'} className={`h-[1.3rem] w-[1.3rem]`}></Icon>},
         {id: 'loanee', name: 'Loanee', isActive: true, icon: <MdOutlinePersonOutline color={'#d7d7d7'} className={`h-[1.3rem] w-[1.3rem]`}/>, route: '/loanees'},
         {id: 'staff', name: 'Staff', route: '/staff', isActive: true, icon: <MdOutlinePersonOutline className={` h-[1.2rem] w-[1.2em]  `} color={currentItem === 'Staff' ? '#142854' : '#939CB0'}></MdOutlinePersonOutline>},
-        {id: 'requests', name: 'Requests', route: '/requests/staff', isActive: true, icon: <MdOutlineAssignmentTurnedIn className={` h-[1.2rem] w-[1.2em]  `} color={currentItem === 'Requests' ? '#142854' : '#939CB0'}></MdOutlineAssignmentTurnedIn>},
+        {id: 'requests', name: 'Requests', route: '/organizations/request', isActive: true, icon: <MdOutlineAssignmentTurnedIn className={` h-[1.2rem] w-[1.2em]  `} color={currentItem === 'Requests' ? '#142854' : '#939CB0'}></MdOutlineAssignmentTurnedIn>},
     ]
     return items;
 }

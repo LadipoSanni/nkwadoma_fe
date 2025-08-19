@@ -443,7 +443,7 @@ const handleDeleteCohortByOrganisation = async (id: string) => {
             </div>
              <div className='md:mt-0 mt-4'>
               { 
-                ["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE","ORGANIZATION_ADMIN"].includes(user_role || "") && organizationTabStatus !== "cohort"? 
+                ["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN","MEEDL_ADMIN","MEEDL_ASSOCIATE","ORGANIZATION_ADMIN","ORGANIZATION_SUPER_ADMIN","ORGANIZATION_ASSOCIATE"].includes(user_role || "") && organizationTabStatus !== "cohort"? 
                 <Button variant={"secondary"}
                   size={"lg"}
                   className={`${inter.className}   h-12 flex justify-center items-center w-full ${["PORTFOLIO_MANAGER", "MEEDL_SUPER_ADMIN"].includes(user_role || "")  && organizationStatus !== "ACTIVE"? "bg-gray text-grey150 hover:bg-gray" : "bg-meedlBlue text-meedlWhite"}`}

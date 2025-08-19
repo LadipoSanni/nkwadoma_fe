@@ -35,12 +35,12 @@ function Team() {
    const dataElement = {
     name:debouncedSearchTerm,
     activationStatuses: ['DECLINED',"APPROVED","PENDING_APPROVAL","ACTIVE","INVITED"],
-    identityRoles:["PORTFOLIO_MANAGER","MEEDL_ASSOCIATE"],
+    identityRoles:["PORTFOLIO_MANAGER","PORTFOLIO_MANAGER_ASSOCIATE"],
     pageNumber:pageNumber,
     pageSize: 10
 }
 
-    const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement)
+    const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement,{refetchOnMountOrArgChange: true})
    
     
 

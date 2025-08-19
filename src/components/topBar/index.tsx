@@ -39,7 +39,7 @@ const TopBar = () => {
     const [displayName, setDisplayName] = useState(storedOrgName || user_name || '');
     const [userRole] = useState(user_role ? user_role : '');
 
-    const { data} = useNumberOfNotificationQuery({});
+    const { data,refetch} = useNumberOfNotificationQuery({});
 
     useEffect(() => {
         if (user_role === "FINANCIER" && isSuccess && financierData?.data) {
@@ -56,12 +56,12 @@ const TopBar = () => {
         if (data?.data?.allNotificationsCount !== undefined) {
             store.dispatch(setCurrentTotalNotification(data.data.allNotificationsCount));
         }
-        //  refetch()
+        refetch()
         if (user_role === "FINANCIER" && pathname?.startsWith("/kyc")) {
             store.dispatch(setCurrentNavbarItem("KYC verification"));
         }
 
-    },[data,pathname, user_role])
+    },[data,pathname, user_role,refetch])
 
 
     const toggleArrow = () => {
