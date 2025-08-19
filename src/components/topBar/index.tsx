@@ -5,7 +5,7 @@ import { IoMdMenu } from "react-icons/io";
 import { setShowMobileSideBar } from "@/redux/slice/layout/adminLayout";
 import { inter500, inter } from "@/app/fonts";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
-import { capitalizeFirstLetters, getFirstLetterOfWord } from "@/utils/GlobalMethods";
+import {capitalizeFirstLetters, getFirstLetterOfWord, removeSpecialCharacterFromString} from "@/utils/GlobalMethods";
 import { store, useAppSelector } from "@/redux/store";
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import AdminProfile from "@/features/profile/adminProfile/Index";
@@ -152,7 +152,10 @@ const TopBar = () => {
                         <button onClick={toggleArrow} className={`${['ORGANIZATION_ADMIN','ORGANIZATION_SUPER_ADMIN','ORGANIZATION_ASSOCIATE'].includes(user_role || "") ? 'cursor-pointer' : 'cursor-text'} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
                             <p className={`text-black500 ${inter500.className} flex justify-start mt-auto mb-auto  text-sm `}>{capitalizeFirstLetters(displayName)}</p>
                             {DISPLAYUSERROLE?.includes(userRole) ?
-                                <p className={`text-black400 ${inter.className}  flex justify-start text-sm`}>{capitalizeFirstLetters(user_role?.replace("_", " "))}</p>
+                                <p className={`text-black400 ${inter.className}  flex justify-start text-sm`}>
+                                    {/*{capitalizeFirstLetters(user_role?.replace("_", " "))}*/}
+                                    {removeSpecialCharacterFromString(user_role)}
+                                </p>
                             :
                                 null
                             }

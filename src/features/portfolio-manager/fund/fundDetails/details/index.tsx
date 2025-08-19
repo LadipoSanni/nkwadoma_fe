@@ -270,7 +270,7 @@ const Details = () => {
                                       {/* <p className='text-[14px] truncate max-w-[120px] md:max-w-[180px] lg:max-w-[180px] lg:whitespace-normal '>{capitalizeFirstLetters(data?.data?.investmentVehicleVisibility)}</p> */}
                                       <p
                                           className='text-[14px]   lg:max-w-[180px] xl:max-w-[250px] lg:whitespace-normal '
-                                      >{statusTypes } <span className='border-solid border-[#B4E5C8] border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1'><span className='text-[12px] text-[#0D9B48] bg-[#E7F7ED] px-1 rounded-md'>{capitalizeFirstLetters(statusValue) }</span></span> </p>
+                                      >{statusTypes } <span className={`border-solid ${statusValue === 'CLOSE' ? 'border-error450' : 'border-[#B4E5C8]'}  border-[1px] px-[2px] font-medium rounded-md py-[1px] ml-1`}><span className={`text-[12px] ${statusValue === 'CLOSE' ? 'text-error450 bg-error50' : 'text-[#0D9B48] bg-[#E7F7ED]' }  px-1 rounded-md`}>{capitalizeFirstLetters(statusValue) }</span></span> </p>
                                   </div>
 
                                   <Button
