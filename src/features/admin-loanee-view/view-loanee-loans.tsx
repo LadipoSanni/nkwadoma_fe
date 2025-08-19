@@ -85,23 +85,26 @@ const ViewLoaneeLoans = () => {
            <div className={` h-fit w-full grid gap-4 `}>
                <BackButton id={'backToAllLoanee'} textColor={'#142854'} iconBeforeLetters={true} text={'Back'} handleClick={onBackButtonClick}/>
                <span className={` text-[24px] text-black ${cabinetGroteskMediumBold.className}  `}>{selectedLoanFullName}</span>
-               <div className={`w-full h-fit flex gap-6   ${styles.overviewCard}`}>
-                   <Details isLoading={isLoadingLoanCounts || isFetchingCounts} sx={`  w-[20em] md:w-[100%]  `} name={'Total loan amount'} valueType={'currency'}  id={'totalLoanAmount'} showAsWholeNumber={false}  value={loanCounts?.data ? loanCounts?.data?.totalAmountReceived :''}/>
-                   <Details isLoading={isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={'TotalAmountOutstanding'} showAsWholeNumber={false}    name={'Total amount outstanding'} value={loanCounts?.data ? loanCounts?.data?.totalAmountOutstanding :''} valueType={'currency'}  />
-                   <Details isLoading={isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={"totalAmountRepaid"} showAsWholeNumber={false}    name={'Total amount repaid'} value={loanCounts?.data ? loanCounts?.data?.totalAmountRepaid : ''} valueType={'currency'}  />
-
-               </div>
            </div>
-           <div className={` h-fit g2  `}>
-               <SearchInput
-                   id={'searchField'}
-                   data-testid={'searchField'}
-                   placeholder={'Search by organization'}
-                   value={searchTerm}
-                   onChange={handleSearchChange}
-               />
-               <div
-                   className={`h-full md:max-h-[30vh] md:h-[30vh]  mt-4 pr-3  grid ${styles.verticalScrollbar}  bg-white py-4 w-full `}
+           <div className={` md:max-h-[70vh] h-full grid gap-2  pr-3  ${styles.verticalScrollbar}   `}>
+               <section
+                   className={`  grid gap-4 `}
+               >
+                   <div className={`w-full h-fit flex gap-6 mb-5  ${styles.overviewCard}`}>
+                       <Details isLoading={isLoadingLoanCounts || isFetchingCounts} sx={`  w-[20em] md:w-[100%]  `} name={'Total loan amount'} valueType={'currency'}  id={'totalLoanAmount'} showAsWholeNumber={false}  value={loanCounts?.data ? loanCounts?.data?.totalAmountReceived :''}/>
+                       <Details isLoading={isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={'TotalAmountOutstanding'} showAsWholeNumber={false}    name={'Total amount outstanding'} value={loanCounts?.data ? loanCounts?.data?.totalAmountOutstanding :''} valueType={'currency'}  />
+                       <Details isLoading={isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={"totalAmountRepaid"} showAsWholeNumber={false}    name={'Total amount repaid'} value={loanCounts?.data ? loanCounts?.data?.totalAmountRepaid : ''} valueType={'currency'}  />
+                   </div>
+                   <SearchInput
+                       id={'searchField'}
+                       data-testid={'searchField'}
+                       placeholder={'Search by organization'}
+                       value={searchTerm}
+                       onChange={handleSearchChange}
+                   />
+               </section>
+               <section
+                   className={`h-full   grid  bg-white py-4 w-full `}
                >
                    { searchTerm && fetchData?.length === 0 ?
                        (
@@ -158,7 +161,7 @@ const ViewLoaneeLoans = () => {
                    </div>
                    }
 
-               </div>
+               </section>
            </div>
 
         </div>
