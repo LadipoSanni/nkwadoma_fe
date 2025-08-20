@@ -41,7 +41,6 @@ function ViewAllRequests() {
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
    const [status,setStatus] = useState("")
    const userRole = getUserDetailsFromStorage('user_role') 
-   console.log(userRole)
 
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
                      pending: { pageNumber: 0, totalPages: 0, hasNextPage: false, pageSearchNumber:0 },
@@ -55,7 +54,7 @@ function ViewAllRequests() {
        const dataElement = {
          name: debouncedSearchTerm,
          activationStatuses: requestTabStatusType === "pending"? ["PENDING_APPROVAL"] : ["DECLINED"],
-         identityRoles:userRole === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : ["PORTFOLIO_MANAGER","PORTFOLIO_MANAGER_ASSOCIATE"],
+         identityRoles:userRole === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : userRole === "COOPERATE_FINANCIER_SUPER_ADMIN"? ['COOPERATE_FINANCIER_ADMIN'] :["PORTFOLIO_MANAGER","PORTFOLIO_MANAGER_ASSOCIATE"],
          pageNumber: debouncedSearchTerm? currentTabState?.pageSearchNumber : currentTabState?.pageNumber,
          pageSize: 10
      }
@@ -165,7 +164,7 @@ function ViewAllRequests() {
          ]
   
   return (
-    <div className={`mt-5 ${userRole === "ORGANIZATION_SUPER_ADMIN"? "px-5" : ""}`}>
+    <div className={`mt-5 ${["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "")? "px-5" : ""}`}>
       <Tabs
        value={requestTabStatusType}
        onValueChange={(value) => {
@@ -176,7 +175,7 @@ function ViewAllRequests() {
     <TabsTrigger value="pending">Pending</TabsTrigger>
     <TabsTrigger value="declined">Declined</TabsTrigger>
 </TabsList>
-     <div className={`${userRole === "ORGANIZATION_SUPER_ADMIN"? 'mt-6 max-h-[72vh]' : 'mt-4 max-h-[69vh]'} ${!(isLoading || isFetching ) && styles.container}  `}>
+     <div className={`${["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "")? 'mt-6 max-h-[72vh]' : 'mt-4 max-h-[69vh]'} ${!(isLoading || isFetching ) && styles.container}  `}>
    <div className=''>
    <SearchInput
           testId='search-input'
@@ -197,7 +196,7 @@ function ViewAllRequests() {
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={userRole === "ORGANIZATION_SUPER_ADMIN"? 58 : 53}
+        tableHeight={["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "")? 58 : 53}
         isLoading={isLoading || isFetching }
         // hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
         hasNextPage={currentTabState.hasNextPage}
