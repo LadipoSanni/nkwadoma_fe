@@ -200,7 +200,18 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
            financierType={values.financierType || ""}
            handleCloseModal={handleCloseModal}
            handleContinue={handleContinue}
-           setFieldValue={setFieldValue}
+           setFieldValue={(field, value, shouldValidate) => {
+            if (field === 'financierType' && value !== values.financierType) {
+              setFieldValue('organizationName', '');
+              setFieldValue('organizationEmail', '');
+              setFieldValue('firstName', '');
+              setFieldValue('lastName', '');
+              setFieldValue('email', '');
+              setFieldValue('investmentVehicleDesignation', []);
+              setFieldValue('amountCommited', '');
+            }
+            setFieldValue(field, value, shouldValidate);
+          }}
            context={context}
           />
         </div>
