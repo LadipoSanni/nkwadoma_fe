@@ -6,8 +6,8 @@ import UploadButton from "@/reuseable/buttons/UploadButton";
 
 interface PrpfileProps {
     whoseProfile: "company" | "user",
-    userName: string,
-    userEmail: string,
+    userName: string | undefined,
+    userEmail: string | undefined,
 }
 
 const Profile = ({whoseProfile, userEmail, userName}: PrpfileProps) => {

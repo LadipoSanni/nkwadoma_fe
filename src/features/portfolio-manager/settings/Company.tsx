@@ -5,6 +5,7 @@ import Profile from "@/features/portfolio-manager/settings/Profile";
 import BankDetails from "@/features/portfolio-manager/settings/bankDetails";
 import {store, useAppSelector} from '@/redux/store';
 import {setSelectedCompanyTab} from "@/redux/slice/loan/selected-loan";
+import {useGetOrganizationDetailsQuery} from "@/service/admin/organization";
 
 const Company = () => {
     const data = [
@@ -17,11 +18,14 @@ const Company = () => {
         store.dispatch(setSelectedCompanyTab(currentTab))
     }, [currentTab]);
 
+    const {data:    organizationData} = useGetOrganizationDetailsQuery({})
+
+    console.log('data', organizationData)
 
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
-                return <Profile/>;
+                return <Profile whoseProfile={'company'} userName={''} userEmail={''}/>;
             case 1:
                 return <BankDetails/>;
             default:
