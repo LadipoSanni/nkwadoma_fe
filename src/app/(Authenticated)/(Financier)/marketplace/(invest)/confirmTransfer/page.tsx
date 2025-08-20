@@ -4,7 +4,7 @@ import CustomAuthorization from "@/features/auth/authorization";
 
 const Page = () => {
     return (
-        <CustomAuthorization authorizedRoles={['FINANCIER']}>
+        <CustomAuthorization authorizedRoles={['FINANCIER','COOPERATE_FINANCIER_SUPER_ADMIN','COOPERATE_FINANCIER_ADMIN']}>
             <ConfirmTransfer/>
         </CustomAuthorization>
     );
