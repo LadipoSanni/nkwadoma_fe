@@ -35,7 +35,6 @@ const BankDetails = () => {
             bankNumber: accountNumber
         }
         const response = await addAccountBankDetails(data)
-        console.log('response', response)
         if (response?.data){
             toast({
                 description: response?.data?.message,
