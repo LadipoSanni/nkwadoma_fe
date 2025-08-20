@@ -7,14 +7,8 @@ import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 import { validationStaffSchema } from '@/utils/validation-schema';
 import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
 import { useInviteColleagueMutation } from '@/service/admin/organization';
-
-
-const initialFormValue = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    role: ""
-}
+import { getUserDetailsFromStorage } from "@/components/topBar/action";
+import { useInviteFinancierColleagueMutation } from '@/service/admin/financier';
 
 interface RoleOption {
   value: string;
@@ -37,10 +31,18 @@ interface RoleOption {
 
 
 function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
-    
+     const user_role = getUserDetailsFromStorage('user_role');
     const { toast } = useToast();
      const [error, setError] = useState("")
     const [inviteColleague,{isLoading}] = useInviteColleagueMutation()
+    const [inviteFinancierColleague,{isLoading:colleagueLoading}] = useInviteFinancierColleagueMutation()
+
+    const initialFormValue = {
+      firstName: "",
+      lastName: "",
+      email: "",
+      role: user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"? "COOPERATE_FINANCIER_ADMIN" : ""
+  }
 
     const handleCloseModal = () => {
         setIsOpen(false);
@@ -56,6 +58,17 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
       }
 
       try {
+        if(user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"){
+          const result = await inviteFinancierColleague(formData).unwrap();
+          if(result){
+            toast({
+            description: result.message,
+            status: "success",
+            duration: 2000
+          });
+          handleCloseModal()
+        }
+        }else {
         const result = await inviteColleague(formData).unwrap();
         if(result){
           toast({
@@ -65,6 +78,7 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
         });
         handleCloseModal()
       }
+    }
       } catch (err) {
         const error = err as ApiError;
         setError(error?.data?.message);
@@ -166,7 +180,7 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
                 } 
             </div>
 
-              <div>
+             { user_role !== "COOPERATE_FINANCIER_SUPER_ADMIN" && <div>
               <Label htmlFor="role">Role</Label>
                <div>
                 <CustomSelectObj
@@ -191,12 +205,12 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
                     />
                     )
                     }
-              </div>
+              </div>}
            </div>
            <div className='mb-4'>
                 <SubmitAndCancelButton
                   isValid={isValid} 
-                  isLoading={isLoading}
+                  isLoading={isLoading || colleagueLoading}
                   handleCloseModal={handleCloseModal}
                   submitButtonName='Invite'
                 />
