@@ -3,12 +3,15 @@ import React from 'react';
 import {inter, inter500, inter700} from "@/app/fonts";
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import styles from './index.module.css'
+import styles from './index.module.css';
+import {useAddBankDetailsMutation} from '@/service/users/wallet'
+import {useToast} from "@/hooks/use-toast";
 
 const BankDetails = () => {
     const [bank, setBank ] = React.useState('')
     const [accountNumber, setAccountBank ] = React.useState('')
-    const disableButton = accountNumber?.length < 10 || accountNumber?.length > 10 ||  bank?.length < 3
+    const disableButton = accountNumber?.length < 10 || accountNumber?.length > 10 ||  bank?.length < 3;
+    const [addAccountBankDetails, {isLoading} ] = useAddBankDetailsMutation()
 
     const handleAccountNumberInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -19,10 +22,35 @@ const BankDetails = () => {
             setAccountBank(userInput);
         }
     }
+    const {toast} = useToast()
+
 
     const handleBanKInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         setBank(e.target.value)
+    }
+    const saveUserBankDetails = async () => {
+        const data = {
+            bankName: bank,
+            bankNumber: accountNumber
+        }
+        const response = await addAccountBankDetails(data)
+        console.log('response', response)
+        if (response?.data){
+            toast({
+                description: response?.data?.message,
+                status: "success",
+            })
+        }
+        if (response?.error){
+            toast({
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                description: response?.error?.data?.message ,
+                status: "error",
+            })
+        }
+
     }
 
     return (
@@ -60,8 +88,11 @@ const BankDetails = () => {
                 </div>
                 <Button
                     disabled={disableButton}
+                    onClick={saveUserBankDetails}
                     className={` text-white w-full h-fit py-3  ${disableButton ? `bg-[#D7D7D7] ` : ` bg-meedlBlue `} text-[14px] ${inter700.className} `}
-                >Save</Button>
+                >
+                    <p>{isLoading ? 'Saving...' :'Save'}</p>
+                </Button>
             </div>
         </section>
     );
