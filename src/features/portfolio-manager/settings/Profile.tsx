@@ -4,12 +4,17 @@ import {getItemSessionStorage} from "@/utils/storage";
 import styles from './index.module.css'
 import UploadButton from "@/reuseable/buttons/UploadButton";
 
-const Profile = () => {
+interface PrpfileProps {
+    whoseProfile: "company" | "user",
+    userName: string,
+    userEmail: string,
+}
 
-    const  userFullName = getItemSessionStorage('user_name')
-    const userEmail = getItemSessionStorage('user_email')
+const Profile = ({whoseProfile, userEmail, userName}: PrpfileProps) => {
+
+
     const userDetails = [
-        {details: 'Full name', value: userFullName ? userFullName : '', id: 'userFullName'},
+        {details: 'Full name', value: userName ? userName : '', id: 'userFullName'},
         {details: 'Email address', value: userEmail ? userEmail :'', id: 'userEmail'},
     ]
 

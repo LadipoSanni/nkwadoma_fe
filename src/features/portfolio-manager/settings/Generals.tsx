@@ -6,6 +6,7 @@ import Profile from "@/features/portfolio-manager/settings/Profile";
 import TwoFAa from "@/features/portfolio-manager/settings/TwoFAa";
 import { setSelectedGeneralTab } from '@/redux/slice/loan/selected-loan';
 import {store, useAppSelector} from '@/redux/store';
+import {getItemSessionStorage} from "@/utils/storage";
 
 export const Generals = () => {
     const data = [
@@ -16,6 +17,9 @@ export const Generals = () => {
     const selectedCompanyTab = useAppSelector(state => state.selectedLoan.selectedGeneralTab)
     const [currentTab, setCurrentTab] = useState(selectedCompanyTab)
 
+    const  userFullName = getItemSessionStorage('user_name')
+    const userEmail = getItemSessionStorage('user_email')
+
     useEffect(() => {
         store.dispatch(setSelectedGeneralTab(currentTab))
     }, [currentTab])
@@ -23,7 +27,7 @@ export const Generals = () => {
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
-                return <Profile/>;
+                return <Profile whoseProfile={'user'} userEmail={userEmail} userName={userFullName}/>;
             case 1:
                 return <ChangePassword/>;
             case 2:

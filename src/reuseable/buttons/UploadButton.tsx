@@ -7,6 +7,7 @@ import {Avatar, AvatarImage} from '@/components/ui/avatar';
 import { useAddUserImageMutation,useGetUserDetailsQuery } from '@/service/users/api';
 import {useToast} from "@/hooks/use-toast";
 import {setItemToLocalStorage} from "@/utils/storage";
+import {useSearchParams} from "next/navigation";
 
 
 
