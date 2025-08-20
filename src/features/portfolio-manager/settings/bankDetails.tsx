@@ -8,19 +8,15 @@ import styles from './index.module.css'
 const BankDetails = () => {
     const [bank, setBank ] = React.useState('')
     const [accountNumber, setAccountBank ] = React.useState('')
-    // const [disableButton , setDisableButton] = React.useState(true);
-    const disableButton = accountNumber?.length !== 10 && bank?.length !== 3
+    const disableButton = accountNumber?.length < 10 || accountNumber?.length > 10 ||  bank?.length < 3
 
     const handleAccountNumberInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         // /\d/.test(e.target.value)
         // /^\d{10}$/.test(name)
         const userInput = e.target.value
-        const regex = /^\d{10}$/;
-        if (accountNumber?.length !== 10){
-            if (regex.test(userInput)) {
-                setAccountBank(userInput)
-            }
+        if (/^\d*$/.test(userInput) && userInput.length <= 10) {
+            setAccountBank(userInput);
         }
     }
 
@@ -58,7 +54,7 @@ const BankDetails = () => {
                         id={'accountNumber'}
                         data-testid={'accountNumber'}
                         placeholder={''}
-
+                        value={accountNumber}
                         onChange={(e) => handleAccountNumberInputChange(e)}
                     />
                 </div>
