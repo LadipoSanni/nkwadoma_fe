@@ -1,6 +1,5 @@
 import React from 'react';
 import {inter, inter500} from "@/app/fonts";
-import {getItemSessionStorage} from "@/utils/storage";
 import styles from './index.module.css'
 import UploadButton from "@/reuseable/buttons/UploadButton";
 
@@ -8,6 +7,7 @@ interface PrpfileProps {
     whoseProfile: "company" | "user",
     userName: string | undefined,
     userEmail: string | undefined,
+    companyUrl: string ;
 }
 
 const Profile = ({whoseProfile, userEmail, userName}: PrpfileProps) => {
@@ -28,7 +28,7 @@ const Profile = ({whoseProfile, userEmail, userName}: PrpfileProps) => {
                 className={` flex gap-3 pb-5 border-b border-b-[#D7D7D7]  `}
             >
 
-                    <UploadButton  />
+                    <UploadButton whose={whoseProfile} />
             </div>
             <div className={`full grid gap-4  `}>
                 {userDetails?.map((item: {details: string, value: string, id: string}, index: number) => (

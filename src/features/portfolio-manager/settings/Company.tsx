@@ -20,12 +20,11 @@ const Company = () => {
 
     const {data:    organizationData} = useGetOrganizationDetailsQuery({})
 
-    console.log('data', organizationData)
 
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
-                return <Profile whoseProfile={'company'} userName={''} userEmail={''}/>;
+                return <Profile companyUrl={organizationData?.data?.bannerLogo} whoseProfile={'company'} userName={organizationData?.data?.name} userEmail={organizationData?.data?.email}/>;
             case 1:
                 return <BankDetails/>;
             default:
