@@ -38,7 +38,6 @@ function ViewAllFinancierRequests() {
    const [role,setRole] = useState("")
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
    const [status,setStatus] = useState("")
-   const userRole = getUserDetailsFromStorage('user_role') 
 
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
                      pending: { pageNumber: 0, totalPages: 0, hasNextPage: false, pageSearchNumber:0 },
