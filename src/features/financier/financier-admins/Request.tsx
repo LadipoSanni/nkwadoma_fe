@@ -13,7 +13,6 @@ import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { setRequestStatusTab } from '@/redux/slice/staff-and-request/request';
 import { store,useAppSelector } from '@/redux/store';
 import { setIsRequestedStaffOpen,resetRequestedStaffId} from '@/redux/slice/staff-and-request/request';
-import {getUserDetailsFromStorage} from "@/components/topBar/action";
 import styles from "./index.module.css"
 import { useViewFinancierAdminsQuery,useSearchFinancierAdminsQuery } from '@/service/admin/financier';
 
