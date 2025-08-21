@@ -41,7 +41,7 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
       firstName: "",
       lastName: "",
       email: "",
-      role: user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"? "COOPERATE_FINANCIER_ADMIN" : ""
+      role: ["COOPERATE_FINANCIER_SUPER_ADMIN","COOPERATE_FINANCIER_ADMIN"].includes(user_role || "")?  "COOPERATE_FINANCIER_ADMIN" : ""
   }
 
     const handleCloseModal = () => {
@@ -58,7 +58,7 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
       }
 
       try {
-        if(user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"){
+        if(["COOPERATE_FINANCIER_SUPER_ADMIN","COOPERATE_FINANCIER_ADMIN"].includes(user_role || "")){
           const result = await inviteFinancierColleague(formData).unwrap();
           if(result){
             toast({
@@ -180,7 +180,7 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
                 } 
             </div>
 
-             { user_role !== "COOPERATE_FINANCIER_SUPER_ADMIN" && <div>
+             { !["COOPERATE_FINANCIER_SUPER_ADMIN","COOPERATE_FINANCIER_ADMIN"].includes(user_role || "") && <div>
               <Label htmlFor="role">Role</Label>
                <div>
                 <CustomSelectObj

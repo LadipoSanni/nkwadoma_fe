@@ -121,9 +121,9 @@ export const financierApi = createApi({
         }),
         viewFinancierAdmins: builder.query({
             query: (param: {
-                activationStatus?: string
+                activationStatus?: string ;
                 pageSize: number;
-                pageNumber: number;
+                pageNumber?: number;
             }) => ({
                 url: "/cooperate/view/all/staff",
                 method: "GET",
@@ -136,7 +136,7 @@ export const financierApi = createApi({
                 name: string
                 activationStatus?: string
                 pageSize: number;
-                pageNumber: number;
+                pageNumber?: number;
             }) => ({
                 url: "/cooperate/search/staff",
                 method: "GET",
@@ -156,6 +156,17 @@ export const financierApi = createApi({
             }),
             invalidatesTags: ['colleague']
         }),
+        approveOrDeclineFinancierAdminRequest: builder.mutation({
+            query: (data: {
+                cooperateFinancierId: string
+                decision: string
+            }) => ({
+                url: "/financier/respond/colleague/invitation",
+                method: "POST",
+                params: data
+            }),
+            invalidatesTags: ['colleague']
+        }), 
     })
 })
 
@@ -163,5 +174,6 @@ export const {useInviteFinancierMutation,useViewFinanciersByInvestmentmentVehicl
     useSearchFinancierQuery,useViewAllFinanciersQuery, useViewFinancierVehiclesQuery,
     useViewFinancierDetailQuery, useGetAllActiveAndInvitedFinanciersQuery,
     useSearchFinancierVehicleQuery, useFinancierVehicleDetailsQuery,
-    useViewFinancierAdminsQuery,useSearchFinancierAdminsQuery,useInviteFinancierColleagueMutation
+    useViewFinancierAdminsQuery,useSearchFinancierAdminsQuery,useInviteFinancierColleagueMutation,
+    useApproveOrDeclineFinancierAdminRequestMutation
    } = financierApi

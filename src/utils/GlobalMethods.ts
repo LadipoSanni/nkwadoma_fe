@@ -17,6 +17,7 @@ export function removeSpecialCharacterFromString(str: string | undefined): strin
 
     const cleaned = str
         .toLowerCase()
+        .replaceAll('cooperate', 'co')
         .replaceAll('_', " ");
 
     return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
