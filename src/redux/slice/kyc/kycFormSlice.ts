@@ -1,25 +1,22 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-interface FormSection {
-    id: number;
-    firstName: string;
-    lastName: string;
-    dob: string | undefined;
-    relationship: string;
-    ownership: string;
-    proofType: string;
-    proofFile: File | null;
-    proofFileUrl?: string;
-}
 
-interface EntitySection {
-    id: number;
-    entityName: string;
-    rcNumber: string;
-    country: string | undefined;
-    ownership?: string;
-}
 
+export interface BeneficialType {
+    id: number,
+    beneficialOwnerType: string,
+    entityName?: string,
+    beneficialRcNumber: string,
+    countryOfIncorporation?: string,
+    "beneficialOwnerFirstName"?: string,
+    "beneficialOwnerLastName"?: string,
+    "beneficialOwnerRelationship": string,
+    "beneficialOwnerDateOfBirth": string,
+    "percentageOwnershipOrShare": number,
+    "votersCard"?: string,
+    "nationalIdCard"?: string,
+    "driverLicense"?: string
+}
 
 interface KYCFormState {
     identification: {
@@ -36,18 +33,7 @@ interface KYCFormState {
         };
     }
     sourceOfFunds: string[];
-    beneficialOwner: {
-        selectedForm: 'entity' | 'individual';
-        entityData: {
-            entityName: string;
-            rcNumber: string;
-            country: string | undefined;
-            sections: EntitySection[];
-        };
-        individualData: {
-            sections: FormSection[];
-        };
-    };
+    beneficialOwner: BeneficialType[];
     declaration: {
         isPoliticallyExposedPerson: boolean | null;
         politicalPosition?: string;
@@ -72,18 +58,23 @@ const initialState: KYCFormState = {
         },
     },
     sourceOfFunds: [],
-    beneficialOwner: {
-        selectedForm: 'entity',
-        entityData: {
-            entityName: '',
-            rcNumber: '',
-            country: undefined,
-            sections: [],
+    beneficialOwner: [
+        {
+            id: 0,
+            beneficialOwnerType: "",
+            entityName: "",
+            beneficialRcNumber: "",
+            countryOfIncorporation: "",
+            beneficialOwnerFirstName: "",
+            beneficialOwnerLastName: "",
+            beneficialOwnerRelationship: "",
+            beneficialOwnerDateOfBirth: "",
+            percentageOwnershipOrShare: 0,
+            votersCard: "",
+            nationalIdCard: "",
+            driverLicense: ""
         },
-        individualData: {
-            sections: [],
-        },
-    },
+    ],
     declaration: {
         isPoliticallyExposedPerson: null,
         agreedToTerms: false,
@@ -122,8 +113,9 @@ const kycFormSlice = createSlice({
         updateSourceOfFunds: (state, action: PayloadAction<string[]>) => {
             state.sourceOfFunds = action.payload;
         },
-        updateBeneficialOwner: (state, action: PayloadAction<Partial<KYCFormState['beneficialOwner']>>) => {
-            state.beneficialOwner = {...state.beneficialOwner, ...action.payload};
+        updateBeneficialOwner: (state, action: PayloadAction<BeneficialType[]>) => {
+            // state.beneficialOwner = [...state.beneficialOwner, ...action.payload];
+            state.beneficialOwner = action.payload;
         },
         updateDeclaration: (state, action: PayloadAction<Partial<KYCFormState['declaration']>>) => {
             state.declaration = {...state.declaration, ...action.payload};

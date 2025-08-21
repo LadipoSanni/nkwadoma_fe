@@ -8,6 +8,8 @@ import {MdAdd, MdDeleteOutline} from "react-icons/md";
 import Entity from "@/features/kyc/beneficialOwnerStep/Entity";
 import Individual from "@/features/kyc/beneficialOwnerStep/Individual";
 import {format} from "date-fns";
+import { store, useAppSelector } from "@/redux/store";
+import {BeneficialType, updateBeneficialOwner} from "@/redux/slice/kyc/kycFormSlice";
 
 interface Owner {
     firstName?: string,
@@ -31,27 +33,30 @@ interface Owner {
 const BeneficialOwnerStep = () => {
     const [disabledContinueButton, setDisableContinueButton] = useState(true);
     const [error, setError] = useState<string| undefined >(undefined);
+    const filledForm = useAppSelector(state => state.kycForm.beneficialOwner);
+    console.log('filledForm', filledForm);
 
-    const initialData = {
-        firstName: '',
-        lastName: '',
-        dateOfBirth: format(new Date(), "yyyy-MM-dd"),
-        relationShip: '',
-        errorMessage: '',
-        entityError: '',
-        proofType: 'national_id',
-        proofFile: null,
-        proofFileUrl: '',
-        id: Date.now(),
-        name: '',
-        country: '',
-        rcNumber: '',
-        ownership: '',
-        isFormField: false
-    }
+    // const initialData = {
+    //     firstName: '',
+    //     lastName: '',
+    //     dateOfBirth: format(new Date(), "yyyy-MM-dd"),
+    //     relationShip: '',
+    //     errorMessage: '',
+    //     entityError: '',
+    //     proofType: 'national_id',
+    //     proofFile: null,
+    //     proofFileUrl: '',
+    //     id: Date.now(),
+    //     name: '',
+    //     country: '',
+    //     rcNumber: '',
+    //     ownership: '',
+    //     isFormField: false
+    // }
     const router = useRouter();
+    const initial = convertToFormObject(filledForm)
 
-    const [owners, setOwner] = useState<Owner[]>([initialData])
+    const [owners, setOwner] = useState<Owner[]>(initial)
 
     const validateTotalOwnership = (sections: Owner[]) => {
         const array: number[] = [] ;
@@ -134,21 +139,58 @@ const BeneficialOwnerStep = () => {
 
 
     const handleSaveAndContinue = () => {
-
-        // const beneficial = [
-        // // selectedForm: 'entity' | 'individual';
-        // // entityData: {
-        // //     entityName: string;
-        // //     rcNumber: string;
-        // //     country: string | undefined;
-        // //     sections: EntitySection[];
-        // // };
-        // // individualData: {
-        // //     sections: FormSection[];
-        //
-        // ]
+        const converted = []
+        for (const section of owners) {
+            converted.push(covertOwnerToStoreType(section))
+        }
+        store.dispatch(updateBeneficialOwner(converted))
         router.push('/kyc/political-exposure');
     };
+    function convertToFormObject  (obj: BeneficialType[])  {
+        const converted = []
+        for (const section of obj) {
+            converted.push(revertToFormObject(section))
+        }
+        return converted;
+    }
+    const covertOwnerToStoreType = (en: Owner) => {
+        const object : BeneficialType = {
+            id: en.id ? en.id : 0,
+            beneficialOwnerType: '',
+            entityName: en?.name,
+            beneficialRcNumber: en?.rcNumber ? en?.rcNumber.toString() : '',
+            countryOfIncorporation: en?.country,
+            beneficialOwnerFirstName: en?.firstName,
+            beneficialOwnerLastName: en?.lastName,
+            beneficialOwnerRelationship: en?.relationShip ? en?.relationShip.toString() : '',
+            beneficialOwnerDateOfBirth: en?.dateOfBirth ? en?.dateOfBirth.toString() : '',
+            percentageOwnershipOrShare: en?.ownership ? Number(en?.ownership) : 0,
+            votersCard: en?.proofType === 'voters_card' ?  en?.proofFileUrl : '',
+            nationalIdCard: en?.proofType === 'national_id' ? en?.proofFileUrl : '',
+            driverLicense: '',
+        }
+       return object;
+    }
+    const revertToFormObject = (obj: BeneficialType) => {
+        const reverse : Owner = {
+            firstName: obj?.beneficialOwnerFirstName,
+            lastName: obj?.beneficialOwnerLastName,
+            dateOfBirth: obj?.beneficialOwnerDateOfBirth,
+            relationShip: obj?.beneficialOwnerDateOfBirth,
+            errorMessage: '',
+            entityError: '',
+            proofType: obj?.votersCard ? 'voters_card' : 'national_id',
+            proofFile: null,
+            proofFileUrl: obj?.votersCard ? obj.votersCard : obj?.nationalIdCard,
+            id: obj?.id,
+            name: obj?.entityName,
+            country: obj?.countryOfIncorporation,
+            rcNumber: obj?.beneficialRcNumber,
+            ownership: obj?.percentageOwnershipOrShare ?  obj?.percentageOwnershipOrShare.toString() : '',
+            isFormField: !(!obj?.entityName && !obj?.beneficialOwnerLastName)
+        }
+        return reverse;
+    }
 
 
     return (
