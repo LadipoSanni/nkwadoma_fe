@@ -4,13 +4,16 @@ import { Button } from '@/components/ui/button';
 import {FaCircleUser} from "react-icons/fa6";
 import {inter, inter500, inter600} from "@/app/fonts";
 import {Avatar, AvatarImage} from '@/components/ui/avatar';
-import { useAddUserImageMutation,useGetUserDetailsQuery } from '@/service/users/api';
+import {useAddOrganizationImageLogoMutation, useAddUserImageMutation,useGetUserDetailsQuery } from '@/service/users/api';
 import {useToast} from "@/hooks/use-toast";
 import {setItemToLocalStorage} from "@/utils/storage";
 
+interface Props {
+    whose: 'company' | 'user',
+    url?: string,
+}
 
-
-const UploadButton = () => {
+const UploadButton = ({whose, url} : Props) => {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [file, setFile] = useState<File | null>(null);
@@ -21,6 +24,7 @@ const UploadButton = () => {
     const uploadedImage = userDatas?.data?.image;
     const [imageUrl, setUploadedImageUrl] = useState<string>('');
     const [updateUserData, {isLoading}] = useAddUserImageMutation()
+    const [ updateOrg, {isLoading:isLoadingOrg} ] = useAddOrganizationImageLogoMutation()
     const supportedFileTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/webp"];
     const ee = error + fileName
 
@@ -81,7 +85,7 @@ const UploadButton = () => {
     };
     const  handleSaveUser = async  () => {
         const props = {imageUrl: imageUrl ? imageUrl : ''};
-        const response = await updateUserData(props);
+        const response = whose === 'company' ? await  updateOrg(props) : await updateUserData(props);
         if (response?.data){
             toast({
                 description: response?.data?.message,
@@ -105,18 +109,22 @@ const UploadButton = () => {
         setUploadedImageUrl('');
 
     }
+    const user = imageUrl ? imageUrl :uploadedImage;
+    const companyUrl = url
+    const image = whose === 'company' ? companyUrl : user
 
     return (
         <div className={` grid gap-2 `}>
             <div className={` flex  gap-4 h-fit `}>
-                { uploadedImage ?
+                { image  ?
                     <Avatar className={` w-20 h-20 `}>
-                        <AvatarImage className={`w-20 h-20  `} src={imageUrl ? imageUrl :uploadedImage} alt="userImage" />
+                        <AvatarImage className={`w-20 h-20  `} src={image} alt="userImage" />
                     </Avatar>
                     :
-                    <FaCircleUser className={` w-20 h-20 text-[#ececec] ${isLoading ? 'animate-pulse' : ''} `} />
+                    <FaCircleUser className={` w-20 h-20 text-[#ececec] ${isLoading || isLoadingOrg ? 'animate-pulse' : ''} `} />
 
                 }
+
                 <div className={` grid gap-3 h-fit mt-auto mb-auto `}>
                     <div>
                         <p className={` text-[14px] ${inter500.className} text-black `}>Upload image</p>
@@ -127,9 +135,9 @@ const UploadButton = () => {
             {!imageUrl ?
                 <Button
                     className={` w-fit h-fit py-2 px-4 border border-meedlBlue text-meedlBlue `}
-                    onClick={!file ? onClick : undefined}
+                    onClick={ onClick }
                 >
-                    <p> {!loading ? `Upload` : 'Uploading...'}</p>
+                    <p> {!loading || !isLoadingOrg ? `Upload` : 'Uploading...'}</p>
 
                     <input
                         id="fileInput"
@@ -138,7 +146,7 @@ const UploadButton = () => {
                         style={{ display: 'none' }}
                         ref={fileInputRef}
                         onChange={onFileChange}
-                        disabled={loading}
+                        disabled={loading || isLoadingOrg}
                     />
 
                 </Button>
@@ -153,7 +161,7 @@ const UploadButton = () => {
                         className={`text-[16px] ${inter600.className}  py-2 px-4 w-fit h-fit border bg-meedlBlue text-white `}
                     >
 
-                        <p>{isLoading ? 'Saving...' :'Save'}</p>
+                        <p>{isLoading || isLoadingOrg ? 'Saving...' :'Save'}</p>
                     </Button>
                 </div>
 
