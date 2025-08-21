@@ -182,7 +182,7 @@ export const getCoperateFinancierSuperAdminSideBarItems = (currentNavItem: strin
             name: "My Investment",
             route: '/my-investment'
         },
-        {id: 'staff', name: 'Staff', route: '/staff', isActive: true, icon: <MdOutlinePersonOutline className={` h-[1.2rem] w-[1.2em]  `} color={currentNavItem === 'Staff' ? '#142854' : '#939CB0'}></MdOutlinePersonOutline>},
+        {id: 'staff', name: 'Staff', route: '/staffs', isActive: true, icon: <MdOutlinePersonOutline className={` h-[1.2rem] w-[1.2em]  `} color={currentNavItem === 'Staff' ? '#142854' : '#939CB0'}></MdOutlinePersonOutline>},
         {id: 'requests', name: 'Requests', route: '/request', isActive: true, icon: <MdOutlineAssignmentTurnedIn className={` h-[1.2rem] w-[1.2em]  `} color={currentNavItem === 'Requests' ? '#142854' : '#939CB0'}></MdOutlineAssignmentTurnedIn>},
     ]
     return item;
