@@ -78,7 +78,7 @@ describe("Invite financier", () => {
 
      
       test('Displays company financier input field correctly', () => {
-        setup('Company');
+        setup('COOPERATE');
         expect(screen.getByLabelText('Company name')).toBeInTheDocument();
       });
 

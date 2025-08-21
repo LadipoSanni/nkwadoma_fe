@@ -5,7 +5,7 @@ import CustomAuthorization from "@/features/auth/authorization";
 function page() {
   return (
     <div>
-        <CustomAuthorization authorizedRoles={['MEEDL_SUPER_ADMIN','MEEDL_ADMIN','COOPERATE_FINANCIER_SUPER_ADMIN']}>
+        <CustomAuthorization authorizedRoles={['COOPERATE_FINANCIER_SUPER_ADMIN']}>
       <ViewAllRequests/>
       </CustomAuthorization>
     </div>

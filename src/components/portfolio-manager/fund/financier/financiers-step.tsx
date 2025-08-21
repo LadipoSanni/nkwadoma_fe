@@ -51,30 +51,33 @@ function InviteFinanciers({setIsOpen,investmentId,amountCommitedAndDesignationCo
            .trim()
            .matches(/^[A-Za-z]+$/, 'First name should only contain letters')
            .max(100, "First name cannot be more than 50 characters.")
-           .when('financierType', {
-            is: 'INDIVIDUAL', 
-            then: (schema) => schema.required('First name is required'),
-            otherwise: (schema) => schema.notRequired(),
-        }),
+           .required('Last Name is required'),
+        //    .when('financierType', {
+        //     is: 'INDIVIDUAL', 
+        //     then: (schema) => schema.required('First name is required'),
+        //     otherwise: (schema) => schema.notRequired(),
+        // }),
          lastName: Yup.string()
            .trim()
            .matches(/^[A-Za-z]+$/, 'Last name should only contain letters')
            .max(100, "Last name cannot be more than 50 characters.")
-           .when('financierType', {
-            is: 'INDIVIDUAL', 
-            then: (schema) => schema.required('Last Name is required'),
-            otherwise: (schema) => schema.notRequired(),
-        }),
+           .required('Last Name is required'),
+          //  .when('financierType', {
+          //   is: 'INDIVIDUAL', 
+          //   then: (schema) => schema.required('Last Name is required'),
+          //   otherwise: (schema) => schema.notRequired(),
+        // }),
          email: Yup.string()
            .trim()
            .email('Invalid email address')
            .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')
            .required('Email Address is required')
-           .when('financierType', {
-            is: 'INDIVIDUAL', 
-            then: (schema) => schema.required('email is required'),
-            otherwise: (schema) => schema.notRequired(),
-        }),
+           .required('Last Name is required'),
+        //    .when('financierType', {
+        //     is: 'INDIVIDUAL', 
+        //     then: (schema) => schema.required('email is required'),
+        //     otherwise: (schema) => schema.notRequired(),
+        // }),
         organizationEmail: Yup.string()
         .trim()
         .email('Invalid email address')
@@ -197,7 +200,18 @@ const handleSubmit = async  (values: typeof initialFormValue) => {
            financierType={values.financierType || ""}
            handleCloseModal={handleCloseModal}
            handleContinue={handleContinue}
-           setFieldValue={setFieldValue}
+           setFieldValue={(field, value, shouldValidate) => {
+            if (field === 'financierType' && value !== values.financierType) {
+              setFieldValue('organizationName', '');
+              setFieldValue('organizationEmail', '');
+              setFieldValue('firstName', '');
+              setFieldValue('lastName', '');
+              setFieldValue('email', '');
+              setFieldValue('investmentVehicleDesignation', []);
+              setFieldValue('amountCommited', '');
+            }
+            setFieldValue(field, value, shouldValidate);
+          }}
            context={context}
           />
         </div>

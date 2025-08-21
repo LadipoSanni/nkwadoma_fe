@@ -1,5 +1,5 @@
 'use client'
-import {cabinetGroteskBold, inter, cabinetGroteskMediumBold} from '@/app/fonts';
+import {cabinetGroteskBold, inter} from '@/app/fonts';
 import React from 'react';
 import { MdMoreHoriz } from "react-icons/md";
 import {
@@ -73,19 +73,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
                <BackButton id={'backtoMyLoans'} sx={`  `} text={'Back'} handleClick={handleBack}
                         textColor={'meedlBlue'} iconBeforeLetters={true}/>
 
-           {userRole === 'MEEDL_SUPER_ADMIN' &&
-               (
-                 <div>
-                     {isLoading ?
-                         <Skeleton className="h-5  bg-[#f4f4f5] w-[200px]" />
-                     :
-                         <h5 className={` text-[24px] ${cabinetGroteskMediumBold.className}  `}>
-                             {userName}
-                         </h5>
-                     }
-                 </div>
-               )
-           }
+
            <div id={'loaneeProfileHeader'}
                 data-testid={'loaneeProfileHeader'}
                 className={`w-full h-fit md:h-fit     mt-auto mb-auto  flex justify-between `}
