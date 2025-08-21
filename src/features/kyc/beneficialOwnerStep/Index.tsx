@@ -11,7 +11,7 @@ import {format} from "date-fns";
 import { store, useAppSelector } from "@/redux/store";
 import {BeneficialType, updateBeneficialOwner} from "@/redux/slice/kyc/kycFormSlice";
 
-interface Owner {
+export interface Owner {
     firstName?: string,
     lastName?: string,
     dateOfBirth?: string,
@@ -26,7 +26,8 @@ interface Owner {
     name?: string;
     country?: string,
     rcNumber?: string,
-    isFormField: boolean
+    isFormField: boolean,
+    type: string,
 }
 
 
@@ -35,6 +36,47 @@ const BeneficialOwnerStep = () => {
     const [error, setError] = useState<string| undefined >(undefined);
     const filledForm = useAppSelector(state => state.kycForm.beneficialOwner);
     console.log('filledForm', filledForm);
+    const revertToFormObject = (obj: BeneficialType) => {
+        const reverse : Owner = {
+            firstName: obj?.beneficialOwnerFirstName,
+            lastName: obj?.beneficialOwnerLastName,
+            dateOfBirth: obj?.beneficialOwnerDateOfBirth,
+            relationShip: obj?.beneficialOwnerRelationship,
+            errorMessage: '',
+            entityError: '',
+            proofType: obj?.votersCard ? 'voters_card' : 'national_id',
+            proofFile: null,
+            proofFileUrl: obj?.votersCard ? obj.votersCard : obj?.nationalIdCard,
+            id: obj?.id,
+            name: obj?.entityName,
+            country: obj?.countryOfIncorporation === 'UNITED_STATES' ? 'US' : 'NG',
+            rcNumber: obj?.beneficialRcNumber,
+            ownership: obj?.percentageOwnershipOrShare ?  obj?.percentageOwnershipOrShare.toString() : '',
+            isFormField: !(!obj?.entityName && !obj?.beneficialOwnerLastName),
+            type: obj?.beneficialOwnerType === 'COOPERATE' ? 'entity' : 'individual',
+        }
+        return reverse;
+    }
+
+    const covertOwnerToStoreType = (en: Owner) => {
+        const object : BeneficialType = {
+            id: en.id ? en.id : 0,
+            beneficialOwnerType: en?.type === 'entity' ? 'COOPERATE' : 'INDIVIDUAL',
+            entityName: en?.name,
+            beneficialRcNumber: en?.rcNumber ? en?.rcNumber.toString() : '',
+            countryOfIncorporation: en?.country === 'US' ? 'UNITED_STATES' : 'NIGERIA',
+            beneficialOwnerFirstName: en?.firstName,
+            beneficialOwnerLastName: en?.lastName,
+            beneficialOwnerRelationship: en?.relationShip ? en?.relationShip.toString() : '',
+            beneficialOwnerDateOfBirth: en?.dateOfBirth ? en?.dateOfBirth.toString() : '',
+            percentageOwnershipOrShare: en?.ownership ? Number(en?.ownership) : 0,
+            votersCard: en?.proofType === 'voters_card' ?  en?.proofFileUrl : '',
+            nationalIdCard: en?.proofType === 'national_id' ? en?.proofFileUrl : '',
+            driverLicense: '',
+            type: en?.type
+        }
+        return object;
+    }
 
     // const initialData = {
     //     firstName: '',
@@ -54,6 +96,14 @@ const BeneficialOwnerStep = () => {
     //     isFormField: false
     // }
     const router = useRouter();
+    const convertToFormObject = (obj: BeneficialType[]) =>  {
+        const converted = []
+        for (const section of obj) {
+            converted.push(revertToFormObject(section))
+        }
+        return converted;
+    }
+
     const initial = convertToFormObject(filledForm)
 
     const [owners, setOwner] = useState<Owner[]>(initial)
@@ -68,6 +118,7 @@ const BeneficialOwnerStep = () => {
         }
         return undefined;
     };
+    console.log('owner ', owners)
 
     useEffect(() => {
         const response = validateTotalOwnership(owners)
@@ -115,7 +166,8 @@ const BeneficialOwnerStep = () => {
                     country: '',
                     rcNumber: '',
                     ownership: '',
-                    isFormField: false
+                    isFormField: false,
+                    type: ''
                 }
             ]
         ))
@@ -138,6 +190,7 @@ const BeneficialOwnerStep = () => {
     };
 
 
+
     const handleSaveAndContinue = () => {
         const converted = []
         for (const section of owners) {
@@ -146,51 +199,9 @@ const BeneficialOwnerStep = () => {
         store.dispatch(updateBeneficialOwner(converted))
         router.push('/kyc/political-exposure');
     };
-    function convertToFormObject  (obj: BeneficialType[])  {
-        const converted = []
-        for (const section of obj) {
-            converted.push(revertToFormObject(section))
-        }
-        return converted;
-    }
-    const covertOwnerToStoreType = (en: Owner) => {
-        const object : BeneficialType = {
-            id: en.id ? en.id : 0,
-            beneficialOwnerType: '',
-            entityName: en?.name,
-            beneficialRcNumber: en?.rcNumber ? en?.rcNumber.toString() : '',
-            countryOfIncorporation: en?.country,
-            beneficialOwnerFirstName: en?.firstName,
-            beneficialOwnerLastName: en?.lastName,
-            beneficialOwnerRelationship: en?.relationShip ? en?.relationShip.toString() : '',
-            beneficialOwnerDateOfBirth: en?.dateOfBirth ? en?.dateOfBirth.toString() : '',
-            percentageOwnershipOrShare: en?.ownership ? Number(en?.ownership) : 0,
-            votersCard: en?.proofType === 'voters_card' ?  en?.proofFileUrl : '',
-            nationalIdCard: en?.proofType === 'national_id' ? en?.proofFileUrl : '',
-            driverLicense: '',
-        }
-       return object;
-    }
-    const revertToFormObject = (obj: BeneficialType) => {
-        const reverse : Owner = {
-            firstName: obj?.beneficialOwnerFirstName,
-            lastName: obj?.beneficialOwnerLastName,
-            dateOfBirth: obj?.beneficialOwnerDateOfBirth,
-            relationShip: obj?.beneficialOwnerDateOfBirth,
-            errorMessage: '',
-            entityError: '',
-            proofType: obj?.votersCard ? 'voters_card' : 'national_id',
-            proofFile: null,
-            proofFileUrl: obj?.votersCard ? obj.votersCard : obj?.nationalIdCard,
-            id: obj?.id,
-            name: obj?.entityName,
-            country: obj?.countryOfIncorporation,
-            rcNumber: obj?.beneficialRcNumber,
-            ownership: obj?.percentageOwnershipOrShare ?  obj?.percentageOwnershipOrShare.toString() : '',
-            isFormField: !(!obj?.entityName && !obj?.beneficialOwnerLastName)
-        }
-        return reverse;
-    }
+
+
+
 
 
     return (
@@ -207,13 +218,13 @@ const BeneficialOwnerStep = () => {
                         <div key={section.id} className={'relative grid mt-6'}>
                             <Tabs
                                 id={`beneficialOwnerTabs-${section.id}`}
-                                defaultValue={'entity'}
+                                defaultValue={section?.type ? section.type : 'entity'}
                                 className={'grid gap-7'}
                             >
                                 <TabsList id={`beneficialOwnerTabsList-${section.id}`}
                                           className="flex gap-3 bg-transparent p-0 justify-start">
                                     <TabsTrigger
-                                        onClick={()=> {updateOwner('type', 'individual', section.id)}}
+                                        onClick={()=> {updateOwner('type', 'entity', section.id)}}
                                         id={`entityTabTrigger-${section.id}`}
                                         value="entity"
                                         className="rounded-[20px] px-3 py-2 bg-blue50 hover:bg-blue50 data-[state=active]:border data-[state=active]:border-meedlBlue data-[state=active]:bg-blue50 data-[state=active]:text-meedlBlue data-[state=inactive]:text-grey250"
@@ -232,10 +243,10 @@ const BeneficialOwnerStep = () => {
                                 <section
                                     className="grid p-5 gap-5 border rounded-md border-lightBlue250 relative">
                                     <TabsContent id={`entityTabContent-${section.id}`} value="entity">
-                                        <Entity id={section.id} updateOwner={updateOwner}/>
+                                        <Entity currentObj={section} id={section.id} updateOwner={updateOwner}/>
                                     </TabsContent>
                                     <TabsContent id={`individualTabContent-${section.id}`} value="individual">
-                                        <Individual id={section.id} updateOwner={updateOwner}/>
+                                        <Individual currentObj={section} id={section.id} updateOwner={updateOwner}/>
                                     </TabsContent>
                                     {owners.length > 1 && (
                                         <div className={'flex justify-end'}>

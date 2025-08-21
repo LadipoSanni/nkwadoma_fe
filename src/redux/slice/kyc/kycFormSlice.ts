@@ -15,7 +15,8 @@ export interface BeneficialType {
     "percentageOwnershipOrShare": number,
     "votersCard"?: string,
     "nationalIdCard"?: string,
-    "driverLicense"?: string
+    "driverLicense"?: string,
+    type: string,
 }
 
 interface KYCFormState {
@@ -72,7 +73,8 @@ const initialState: KYCFormState = {
             percentageOwnershipOrShare: 0,
             votersCard: "",
             nationalIdCard: "",
-            driverLicense: ""
+            driverLicense: "",
+            type: ''
         },
     ],
     declaration: {
