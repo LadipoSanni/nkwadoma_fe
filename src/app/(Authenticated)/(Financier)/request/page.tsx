@@ -1,12 +1,12 @@
 import React from 'react'
-import ViewAllRequests from '@/components/super-admin/requests/View-all-requests-staff'
 import CustomAuthorization from "@/features/auth/authorization";
+import ViewAllFinancierRequests from '@/features/financier/financier-admins/Request';
 
 function page() {
   return (
     <div>
         <CustomAuthorization authorizedRoles={['COOPERATE_FINANCIER_SUPER_ADMIN']}>
-      <ViewAllRequests/>
+      <ViewAllFinancierRequests/>
       </CustomAuthorization>
     </div>
   )

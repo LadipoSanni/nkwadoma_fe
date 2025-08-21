@@ -12,6 +12,7 @@ import { resetRequestedStaffId,resetRequestedOrganizationId } from '@/redux/slic
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import SkeletonForModal from '@/reuseable/Skeleton-loading-state/Skeleton-for-modal';
 import {useGetOrganizationDetailsQuery} from "@/service/admin/organization";
+import { useApproveOrDeclineFinancierAdminRequestMutation } from '@/service/admin/financier';
 
 interface Props{
     requestedBy: string;
@@ -35,6 +36,7 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
      const requestedOrganizationId = useAppSelector(state => state?.request?.requestedOrganizationId)
     const [approveAdmin, {isLoading}] = useApproveOrDeclineAdminMutation()
     const [approveOrDeclineOrg, {isLoading:isloading}] = useApproveOrDeclineOrganizationMutation()
+    const [approveOrDeclineFinancier, {isLoading:isFinancierLoading}] = useApproveOrDeclineFinancierAdminRequestMutation()
     const {data, isLoading: detailLoading,refetch} = useViewStaffDetailsQuery({employeeId: requestedStaffId},{skip: !requestedStaffId})
      const {data:orgData, isLoading: isOrgLoading, refetch:reFetch} = useGetOrganizationDetailsQuery({organizationId: requestedOrganizationId},{skip: !requestedOrganizationId})
      const { toast } = useToast();
@@ -75,6 +77,11 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
         organizationId:requestedOrganizationId || id,
         activationStatus: value
       }
+
+      const financierParam = {
+        cooperateFinancierId: id,
+        decision: value
+      }
        try {
          if(requestType === "staff"){
           const approve = await approveAdmin(param).unwrap()
@@ -90,7 +97,21 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
             handleClose()
           }
           
-         }else {
+         }else if(requestType === "financier"){
+          const approveOrDecline = await approveOrDeclineFinancier(financierParam).unwrap()
+          if(approveOrDecline){
+           toast({
+             description: approveOrDecline?.message,
+             status: "success",
+             duration: 2000
+           })
+           if(requestType === "financier" && value === "DECLINED"){
+            store.dispatch(setRequestStatusTab("declined"))
+          }
+          handleClose()
+          }
+         } 
+         else {
           const approveOrDecline = await approveOrDeclineOrg(formData).unwrap()
            if(approveOrDecline){
             toast({
@@ -134,7 +155,7 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
             type='button'
             onClick={()=>userStatus !== "DECLINED" && handleApproveOrDecline("DECLINED")}
          >
-           { (isLoading || isloading) && buttonType === "DECLINED" ? <Isloading /> :
+           { (isLoading || isloading || isFinancierLoading) && buttonType === "DECLINED" ? <Isloading /> :
           "Decline"
           }
         </button>
@@ -146,7 +167,7 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
          type='button'
          onClick={()=>handleApproveOrDecline("APPROVED")}
          >
-          { (isLoading || isloading) && buttonType === "APPROVED" ? <Isloading /> :
+          { (isLoading || isloading || isFinancierLoading) && buttonType === "APPROVED" ? <Isloading /> :
           "Approve"
           }
         </Button>

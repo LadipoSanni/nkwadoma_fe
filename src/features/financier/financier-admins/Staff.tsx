@@ -92,7 +92,6 @@ function FinancierStaff() {
     setId(row?.cooperateFinancierId as string)
 }
 
-
     const tableHeader = [
         { 
           title: "Name",  
@@ -123,7 +122,7 @@ function FinancierStaff() {
 
   return (
     <div className={`mt-8 px-6  max-h-[80vh] ${styles.container}`}>
-      <div className='md:flex justify-between items-center'>
+      <div className='md:flex justify-between items-center md:pr-3'>
         <SearchInput
           testId='search-input'
           id="staffSearchLoanee"
@@ -143,7 +142,7 @@ function FinancierStaff() {
             </Button>
         </div>
       </div>
-      <div className='mt-6' data-testid="table">
+      <div className='mt-6 md:pr-3' data-testid="table">
        <Table 
         tableData={getTableData()}
         tableHeader={tableHeader}
