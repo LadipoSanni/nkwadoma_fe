@@ -8,7 +8,6 @@ import { validationStaffSchema } from '@/utils/validation-schema';
 import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
 import { useInviteColleagueMutation } from '@/service/admin/organization';
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
-import { useInviteFinancierColleagueMutation } from '@/service/admin/financier';
 
 interface RoleOption {
   value: string;
@@ -35,7 +34,6 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
     const { toast } = useToast();
      const [error, setError] = useState("")
     const [inviteColleague,{isLoading}] = useInviteColleagueMutation()
-    const [inviteFinancierColleague,{isLoading:colleagueLoading}] = useInviteFinancierColleagueMutation()
 
     const initialFormValue = {
       firstName: "",
@@ -58,17 +56,6 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
       }
 
       try {
-        if(["COOPERATE_FINANCIER_SUPER_ADMIN","COOPERATE_FINANCIER_ADMIN"].includes(user_role || "")){
-          const result = await inviteFinancierColleague(formData).unwrap();
-          if(result){
-            toast({
-            description: result.message,
-            status: "success",
-            duration: 2000
-          });
-          handleCloseModal()
-        }
-        }else {
         const result = await inviteColleague(formData).unwrap();
         if(result){
           toast({
@@ -77,7 +64,7 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
           duration: 2000
         });
         handleCloseModal()
-      }
+    
     }
       } catch (err) {
         const error = err as ApiError;
@@ -207,10 +194,10 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
                     }
               </div>}
            </div>
-           <div className='mb-4'>
+           <div className='mb-4 '>
                 <SubmitAndCancelButton
                   isValid={isValid} 
-                  isLoading={isLoading || colleagueLoading}
+                  isLoading={isLoading}
                   handleCloseModal={handleCloseModal}
                   submitButtonName='Invite'
                 />

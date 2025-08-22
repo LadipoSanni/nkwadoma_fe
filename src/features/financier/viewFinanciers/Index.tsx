@@ -35,6 +35,7 @@ interface TableRowData {
 interface financials {
     financierType: string,
     organizationName: string,
+    totalAmountInvested: string
     userIdentity: {
         email: string,
         firstName: string,
@@ -133,14 +134,14 @@ const ViewFinanciers = () => {
 
 
     const financierHeader = [
-        { title: 'Name', id: 'name', selector: (row: viewAllfinancier) => row?.financierType === "INDIVIDUAL"? row.userIdentity?.firstName + " " + row.userIdentity?.lastName : row?.organizationName},
+        { title: 'Name', id: 'name', selector: (row: viewAllfinancier) => row?.name},
         { title: 'Type', id: 'type', selector: (row: viewAllfinancier) => (
                 <span className={`${row.financierType === "INDIVIDUAL"  ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
             {capitalizeFirstLetters(row.financierType)}
         </span>
             ) },
         { title: 'No. of investments', id: 'investments', selector: (row:viewAllfinancier) => row.investments || 0 },
-        { title: 'Amount invested', id: 'amountInvested', selector: (row:viewAllfinancier) => formatAmount(row.amountInvested) },
+        { title: 'Amount invested', id: 'totalAmountInvested', selector: (row:viewAllfinancier) => formatAmount(row.totalAmountInvested) },
         { title: 'Amount earned', id: 'amountEarned', selector: (row:viewAllfinancier) => formatAmount(row.amountEarned) },
         { title: 'Payout', id: 'payout', selector: (row:viewAllfinancier) => formatAmount(row.payout) },
         { title: 'Portfolio value', id: 'portfolioValue', selector: (row:viewAllfinancier) => formatAmount(row.portfolioValue) }
