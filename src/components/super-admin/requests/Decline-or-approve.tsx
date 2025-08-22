@@ -76,10 +76,6 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
         activationStatus: value
       }
 
-      const financierParam = {
-        cooperateFinancierId: id,
-        decision: value
-      }
        try {
          if(requestType === "staff"){
           const approve = await approveAdmin(param).unwrap()
