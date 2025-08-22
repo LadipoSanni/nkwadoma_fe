@@ -38,7 +38,6 @@ function Team() {
     const user_role = getUserDetailsFromStorage('user_role');
     const adminRoleType = [  { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" }, { value: "PORTFOLIO_MANAGER_ASSOCIATE", label: "Associate"},{ value: "MEEDL_ADMIN", label: "Admin"} ];
      const [modal,setModal] = useState("invite")
-     const [isOpen,setOpen] = useState(false)
       const isStaffOpen = useAppSelector(state => state?.request?.isStaffModalOpen)
 
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
@@ -91,7 +90,6 @@ function Team() {
          const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" :row.role === "PORTFOLIO_MANAGER_ASSOCIATE"? "Associate" : row.role === "ORGANIZATION_ADMIN"? "Admin" :row.role === "ORGANIZATION_ASSOCIATE"? "Associate" : "Admin"
          store.dispatch(setIsStaffOpen(true))
         setModal('detail')
-        setOpen(true)
         setStatus(status)
         setName(fullName)
         setEmail(row?.email as string)
