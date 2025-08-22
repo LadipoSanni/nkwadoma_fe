@@ -52,7 +52,7 @@ function Staff() {
     const dataElement = {
       name: debouncedSearchTerm,
       activationStatuses: ['INVITED',"APPROVED","ACTIVE","DEACTIVATED"],
-      identityRoles:user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : ["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"],
+      identityRoles:user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"? ["COOPERATE_FINANCIER_ADMIN"] : ["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"],
       pageNumber:pageNumber,
       pageSize: 10
   }
@@ -99,7 +99,34 @@ function Staff() {
 }
 
 
-    const tableHeader = [
+    const financierTableHeader = [
+        { 
+          title: "Name",  
+          sortable: true, 
+          id: "firstName", 
+          selector: (row: TableRowData) => capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
+        },
+        { 
+          title: <div className='md:mr-14'>Email</div>,  
+          sortable: true, 
+          id: "email", 
+          selector: (row: TableRowData) => <div className='truncate'>{row.email}</div> 
+        },
+        { 
+          title: "Status",  
+          sortable: true, 
+          id: "activationStatus", 
+          selector: (row: TableRowData) => <span className={`${row.activationStatus === "ACTIVE"? "bg-[#E6F2EA] text-[#045620] " :row.activationStatus === "INVITED"? "bg-[#FEF6E8] text-[#045620] w-20" :  "bg-[#FBE9E9] text-[#971B17]"} rounded-lg  px-2 `}>{capitalizeFirstLetters(row.activationStatus?.toString())}</span> 
+        },
+        { 
+          title: "Invited",  
+          sortable: true, 
+          id: "createdAt", 
+          selector: (row: TableRowData) => formatMonthInDate(row.createdAt) 
+        }
+      ]
+
+      const tableHeader = [
         { 
           title: "Name",  
           sortable: true, 
@@ -133,9 +160,10 @@ function Staff() {
       ]
 
 
+
   return (
-    <div className={`mt-8 px-6 max-h-[80vh] ${styles.container}`}>
-      <div className='md:flex justify-between items-center'>
+    <div className={`mt-8 px-5 max-h-[78vh] ${styles.container}`}>
+      <div className='md:flex justify-between items-center pr-3'>
         <SearchInput
           testId='search-input'
           id="staffSearchLoanee"
@@ -155,17 +183,17 @@ function Staff() {
             </Button>
         </div>
       </div>
-      <div className='mt-6' data-testid="table">
+      <div className='mt-6 pr-3' data-testid="table">
        <Table 
         tableData={getTableData()}
-        tableHeader={tableHeader}
+        tableHeader={user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"? financierTableHeader  : tableHeader}
         handleRowClick={handleRowClick}
         staticHeader='Name'
         staticColunm='firstName'
         icon={MdOutlineAccountBalance}
         sideBarTabName='staff'
         tableCellStyle="h-12"
-        tableHeight={62}
+        tableHeight={adminData?.data?.body?.length < 10 ? 62 : undefined}
         isLoading={isLoading || isFetching }
         hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
         pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}

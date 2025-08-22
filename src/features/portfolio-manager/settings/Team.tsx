@@ -11,8 +11,6 @@ import { useDebounce } from '@/hooks/useDebounce';
 import InviteAdmin from '@/components/super-admin/staff/Invite-staff';
 import { formatMonthInDate} from '@/utils/Format'
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
-import { useViewFinancierAdminsQuery,useSearchFinancierAdminsQuery } from '@/service/admin/financier';
-import { FINANCIER_ADMINS_ROLES,MEEDLE_ORG_ADMIN } from '@/types/roles';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -37,28 +35,12 @@ function Team() {
    const dataElement = {
     name:debouncedSearchTerm,
     activationStatuses: ['DECLINED',"APPROVED","PENDING_APPROVAL","ACTIVE","INVITED"],
-    identityRoles:["PORTFOLIO_MANAGER","PORTFOLIO_MANAGER_ASSOCIATE"],
+    identityRoles:user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : ["COOPERATE_FINANCIER_SUPER_ADMIN","COOPERATE_FINANCIER_ADMIN"].includes( user_role || "")? ["COOPERATE_FINANCIER_ADMIN"] : ["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"],
     pageNumber:pageNumber,
     pageSize: 10
 }
 
-const financierDataElement = {
-  pageNumber:pageNumber,
-  pageSize: 10
-}
-
-const searchElement = {
-  name: debouncedSearchTerm,
-  pageNumber:pageSearchNumber,
-  pageSize: 10
-}
-
- 
-
-    const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement,{refetchOnMountOrArgChange: true,skip: !MEEDLE_ORG_ADMIN.includes(user_role || "")})
-
-    const {data: adminFinancierData,isLoading:isFinancierLoading,isFetching:isFinancierFetching} =useViewFinancierAdminsQuery(financierDataElement,{refetchOnMountOrArgChange: true,skip: !FINANCIER_ADMINS_ROLES.includes(user_role || "")})
-       const {data: searchResult,isLoading:isSearchLoading,isFetching:isfetching} =useSearchFinancierAdminsQuery(searchElement,{refetchOnMountOrArgChange: true,skip: !debouncedSearchTerm })
+    const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement,{refetchOnMountOrArgChange: true})
    
     
 
@@ -77,29 +59,11 @@ const searchElement = {
       }
     },[adminData,debouncedSearchTerm])
 
-    useEffect(()=> {
-        if(searchTerm && searchResult && searchResult?.data ){
-          setSearchHasNextPage(adminData?.data?.hasNextPage)
-          setTotalPage(adminData?.data?.totalPages)
-          setPageSearchNumber(adminData?.data?.pageNumber)    
-        }else  if(!searchTerm && adminFinancierData && adminFinancierData?.data  ){
-          setNextPage(adminFinancierData?.data?.hasNextPage)
-          setTotalPage(adminFinancierData?.data?.totalPages)
-          setPageNumber(adminFinancierData.data?.pageNumber)
-      }
-       },[adminFinancierData,searchTerm,searchResult])
-
     const getTableData = () => {
       if (!adminData?.data?.body) return [];
       if (debouncedSearchTerm) return adminData?.data?.body || [];
       return adminData?.data?.body;
   }
-
-    const getFinancierTableData = () => {
-      if (!adminFinancierData?.data?.body) return [];
-      if (debouncedSearchTerm) return searchResult?.data?.body || [];
-      return adminFinancierData?.data?.body;
-    }
 
     const handleModalOpen =() => {
         setIsModalOpen(true);
@@ -194,30 +158,7 @@ const searchElement = {
         <div className='w-full mt-5'>
          {/* {
          !isTyping && debouncedSearchTerm && searchResults?.data?.body.length === 0? <div><SearchEmptyState icon={MdSearch} name='Colleague'/></div> :  */}
-        { 
-        FINANCIER_ADMINS_ROLES.includes(user_role || "")?
-        <Table 
-        tableData={getFinancierTableData()}
-        tableHeader={adminsHeader}
-        // handleRowClick={handleRowClick}
-        handleRowClick={()=>{}}
-        staticHeader='Name'
-        staticColunm='firstName'
-        icon={<Book/>}
-        sideBarTabName='staff'
-        tableCellStyle="h-12"
-        tableHeight={53}
-        isLoading={isFinancierFetching || isFinancierLoading || isSearchLoading || isfetching}
-        hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPage}
-        pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}
-        setPageNumber={searchTerm !== ""? setPageSearchNumber : setPageNumber}
-        totalPages={ totalPage}
-         sx='cursor-pointer'
-         condition={true}
-        searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchResult?.data?.body?.length < 1 }
-       />
-        :
-        <Table
+          <Table
           tableData={getTableData()}
           tableHeader={adminsHeader}
           handleRowClick={()=>{}}
@@ -234,7 +175,7 @@ const searchElement = {
           totalPages={ totalPage}
           searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
           tableCellStyle="h-12"
-         />}
+         />
 {/* } */}
         </div>
         <div>

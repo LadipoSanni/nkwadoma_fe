@@ -115,7 +115,6 @@ function ViewAllRequests() {
     if (debouncedSearchTerm) return adminData?.data?.body || [];
     return adminData?.data?.body;
 }
-  
 
        const handleRowClick = (row: TableRowData) => {
           const fullName = capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
@@ -153,7 +152,7 @@ function ViewAllRequests() {
              title: "Role",  
              sortable: true, 
              id: "role", 
-             selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN" ||row.role === "ORGANIZATION_ADMIN" ? "Admin" : "Associate"
+             selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN" ||row.role === "ORGANIZATION_ADMIN"  ? "Admin" : "Associate"
            },
            { 
              title: "Requested on",  
@@ -162,9 +161,18 @@ function ViewAllRequests() {
              selector: (row: TableRowData) => formatMonthInDate(row.createdAt) 
            }
          ]
+
+         const isAdmin = ["MEEDL_SUPER_ADMIN","MEEDL_ADMIN"].includes(userRole || "")
   
   return (
-    <div className={`mt-5 ${["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "")? "px-5" : ""}`}>
+    <div 
+    // className={`mt-5 ${["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "") && styles.container? "px-5  max-h-[52vh]" : ""}`}
+    className={`mt-5 ${isAdmin ? `${styles.container} h-[74vh]` : " px-4 md:pl-6 "}`}
+    style={{
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',  
+        }}
+    >
       <Tabs
        value={requestTabStatusType}
        onValueChange={(value) => {
@@ -175,7 +183,13 @@ function ViewAllRequests() {
     <TabsTrigger value="pending">Pending</TabsTrigger>
     <TabsTrigger value="declined">Declined</TabsTrigger>
 </TabsList>
-     <div className={`${["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "")? 'mt-6 max-h-[72vh]' : 'mt-4 max-h-[69vh]'} ${!(isLoading || isFetching ) && styles.container}  `}>
+     <div 
+     className={`${["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "") ? ` ${styles.container} mt-6 max-h-[71vh]` : 'mt-4'} `}
+     style={{
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',  
+        }}
+     >
    <div className=''>
    <SearchInput
           testId='search-input'
@@ -196,7 +210,7 @@ function ViewAllRequests() {
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "")? 58 : 53}
+        tableHeight={adminData?.data?.body?.length < 10 ? 60 : undefined}
         isLoading={isLoading || isFetching }
         // hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
         hasNextPage={currentTabState.hasNextPage}
@@ -224,7 +238,8 @@ function ViewAllRequests() {
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={userRole === "ORGANIZATION_SUPER_ADMIN"? 58 : 53}
+        // tableHeight={userRole === "ORGANIZATION_SUPER_ADMIN"? 58 : 54}
+        tableHeight={adminData?.data?.body?.length < 10 ? 60 : undefined}
         isLoading={isLoading || isFetching }
         hasNextPage={currentTabState.hasNextPage}
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
