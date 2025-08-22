@@ -8,6 +8,8 @@ import { validationStaffSchema } from '@/utils/validation-schema';
 import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
 import { useInviteColleagueMutation } from '@/service/admin/organization';
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
+import { setIsStaffOpen } from '@/redux/slice/staff-and-request/request';
+import { store } from '@/redux/store';
 
 interface RoleOption {
   value: string;
@@ -44,6 +46,7 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
 
     const handleCloseModal = () => {
         setIsOpen(false);
+        store.dispatch(setIsStaffOpen(false))
     }
 
     const handleSubmit = async  (values: typeof initialFormValue) => {

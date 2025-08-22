@@ -5,6 +5,7 @@ import { DropdownMenu,DropdownMenuContent,  DropdownMenuTrigger,DropdownMenuGrou
 import { formatMonthInDate } from '@/utils/Format'
 import ActivateOrganization from "@/components/portfolio-manager/organization/ActivateOrganization";
 import DeactivateOrganization from "@/components/portfolio-manager/organization/DeactivateOrganization";
+import { getUserDetailsFromStorage } from "@/components/topBar/action";
 
 interface Props {
     role : string;
@@ -19,7 +20,7 @@ interface Props {
 }
 
 function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen,id}:Props) {
-
+     const user_role = getUserDetailsFromStorage('user_role');
     
     const dropDownOption = [
       status === "Deactivated"?  {name: 'Activate', id: '1'} : {name: 'Deactivate', id: '2'}
@@ -54,7 +55,7 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
         </div>
 
         <div>
-       {status !== "Invited" && <DropdownMenu>
+       { !["Invited","Pending_approval","Declined"].includes(status) && ["MEEDLE_SUPER_ADMIN","ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN","MEEDL_ADMIN"].includes(user_role || "") && <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div
                  id="kebabButton"
@@ -67,6 +68,7 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
                     className="w-5 h-6 text-[#939CB0]  font-extrabold " 
                     />
                 </div>
+                
             </DropdownMenuTrigger>
             <DropdownMenuContent 
               id="menubarContent"
@@ -99,7 +101,7 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
         <div className='text-[14px] grid grid-cols-1 gap-y-6 mt-6 mb-6'>
             <div className='' > 
                 <p className='text-[#6A6B6A]'>Status</p>
-                <p className={`${status === "Active"? "bg-[#E6F2EA] text-[#045620] w-12 " :status === "Deactivated"? "bg-[#FBE9E9] text-[#971B17] w-24" :  "bg-[#FEF6E8] text-[#045620] w-16"} flex items-center justify-center rounded-lg mt-2`}>{status}</p>
+                <p className={`${status === "Active"? "bg-[#E6F2EA] text-[#045620] w-12 " :status === "Deactivated"? "bg-[#FBE9E9] text-[#971B17] w-24" :status === "Pending_approval"? "bg-[#E6F7EE] text-[#039855] w-16" :status === "Declined"? "bg-[#FBE9E9] text-[#971B17]  w-16" :  "bg-[#FEF6E8] text-[#045620] w-16"} flex items-center justify-center rounded-lg mt-2`}>{status === 'Pending_approval'? "Pending" : status}</p>
             </div>
 
             <div className='' > 
