@@ -212,7 +212,7 @@ function Team() {
             setSwitch(false)
           }}
            className='pb-1'
-           headerTitle={modal === "invite"? "" : 'Invite colleague'}
+           headerTitle={modal === "invite"? "Invite colleague" : ''}
            closeOnOverlayClick={true}
            icon={Cross2Icon}
             width='36%'
