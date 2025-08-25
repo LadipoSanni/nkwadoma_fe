@@ -21,7 +21,6 @@ interface Props {
 
 function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen,id}:Props) {
      const user_role = getUserDetailsFromStorage('user_role');
-    
     const dropDownOption = [
       status === "Deactivated"?  {name: 'Activate', id: '1'} : {name: 'Deactivate', id: '2'}
     ];
@@ -55,7 +54,7 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
         </div>
 
         <div>
-       { !["Invited","Pending_approval","Declined"].includes(status) && ["MEEDLE_SUPER_ADMIN","ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN","MEEDL_ADMIN"].includes(user_role || "") && <DropdownMenu>
+       { !["Invited","Pending_approval","Declined"].includes(status) && ["MEEDL_SUPER_ADMIN","ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN","MEEDL_ADMIN"].includes(user_role || "") && <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div
                  id="kebabButton"
