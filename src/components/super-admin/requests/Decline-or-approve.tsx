@@ -21,6 +21,7 @@ interface Props{
     requestType?: string
     status?:string
     refetches?: () => void
+    user_role?: string
 }
 
 interface ApiError {
@@ -30,7 +31,7 @@ interface ApiError {
   };
 }
 
-function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetches}:Props) {
+function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetches,user_role}:Props) {
      const requestedStaffId = useAppSelector(state => state?.request?.requestedStaffId)
      const requestedOrganizationId = useAppSelector(state => state?.request?.requestedOrganizationId)
     const [approveAdmin, {isLoading}] = useApproveOrDeclineAdminMutation()
@@ -55,7 +56,7 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
        
      const requestedby = data? data?.data?.requestedBy : orgData? orgData?.data?.requestedBy : requestedBy
      const userInvited = data? capitalizeFirstLetters(data?.data?.firstName) + " " +  capitalizeFirstLetters( data?.data?.lastName) : orgData? capitalizeFirstLetters(orgData.data?.name) : invitee
-     const roles =  data?.data?.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : data?.data?.role === "MEEDL_ADMIN"? "Admin" : data?.data?.role === "MEEDL_ASSOCIATE"? "Associate" : data?.data?.role === "COOPERATE_FINANCIER_ADMIN"? "Admin" : orgData?.data?.meedlUser?.role === "ORGANIZATION_ADMIN"? "Admin"   : ""
+     const roles =  data?.data?.role === "PORTFOLIO_MANAGER"? "Portfolio manager" :  ["MEEDL_ADMIN","ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"].includes(data?.data?.role)? "Admin" : data?.data?.role === "MEEDL_ASSOCIATE"? "Associate" : data?.data?.role === "COOPERATE_FINANCIER_ADMIN"? "Admin" : orgData?.data?.meedlUser?.role === "ORGANIZATION_ADMIN"? "Admin"   : ""
      const userRole = roles? roles : role
      const userStatus = data? data?.data?.activationStatus : orgData? orgData?.data?.activationStatus : status
 
@@ -134,6 +135,7 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
        <p className='mt-7 text-[14px]'>
        Do you want to approve this invitation?
        </p>
+     {  user_role === "MEEDL_ADMIN"? "" :
        <div className='mt-7 md:mb-1 mb-3 md:flex justify-end gap-6  text-[14px]'>
          <div className='mb-3'>
          <button
@@ -159,6 +161,7 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
         </Button>
          </div>
        </div>
+       }
        </div>
        }
        <div>

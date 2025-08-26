@@ -6,6 +6,8 @@ import { formatMonthInDate } from '@/utils/Format'
 import ActivateOrganization from "@/components/portfolio-manager/organization/ActivateOrganization";
 import DeactivateOrganization from "@/components/portfolio-manager/organization/DeactivateOrganization";
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
+// import { useAppSelector } from '@/redux/store';
+// import { useViewStaffDetailsQuery } from '@/service/admin/organization';
 
 interface Props {
     role : string;
@@ -21,6 +23,9 @@ interface Props {
 
 function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen,id}:Props) {
      const user_role = getUserDetailsFromStorage('user_role');
+    //  const userId =  useAppSelector(state => state?.request?.requestedStaffId)
+    //   const {data, error:errormessage, isLoading: detailLoading,refetch} = useViewStaffDetailsQuery({employeeId: userId },{skip: !userId})
+
     const dropDownOption = [
       status === "Deactivated"?  {name: 'Activate', id: '1'} : {name: 'Deactivate', id: '2'}
     ];

@@ -234,7 +234,7 @@ function ViewAllRequests() {
        <Table 
         tableData={getTableData()}
         tableHeader={userRole === "COOPERATE_FINANCIER_SUPER_ADMIN"? tableFinancierHeader : tableHeader}
-        handleRowClick={handleRowClick}
+        handleRowClick={userRole !== "MEEDL_ADMIN"? handleRowClick : () => {}}
         staticHeader='Name'
         staticColunm='firstName'
         icon={MdOutlineAssignmentTurnedIn}
@@ -249,7 +249,7 @@ function ViewAllRequests() {
         setPageNumber={handlePageChange}
         // totalPages={ totalPage}
         totalPages={currentTabState.totalPages}
-         sx='cursor-pointer'
+        sx={userRole !== "MEEDL_ADMIN"?'cursor-pointer' : ""}
          condition={true}
          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
          optionalFilterName='Pending'
@@ -262,7 +262,8 @@ function ViewAllRequests() {
        <Table 
         tableData={getTableData()}
         tableHeader={userRole ==="COOPERATE_FINANCIER_SUPER_ADMIN"? tableFinancierHeader : tableHeader}
-        handleRowClick={handleRowClick}
+        // handleRowClick={handleRowClick}
+        handleRowClick={userRole !== "MEEDL_ADMIN"? handleRowClick : () => {}}
         staticHeader='Name'
         staticColunm='firstName'
         icon={MdOutlineAssignmentTurnedIn}
@@ -275,7 +276,7 @@ function ViewAllRequests() {
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
         setPageNumber={handlePageChange}
         totalPages={currentTabState.totalPages}
-         sx='cursor-pointer'
+         sx={userRole !== "MEEDL_ADMIN"?'cursor-pointer' : ""}
          condition={true}
          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
          optionalFilterName='declined'
@@ -304,6 +305,7 @@ function ViewAllRequests() {
           role={role}
           requestType='staff'
           status={status}
+          user_role={userRole}
         />
          
         </Modal>

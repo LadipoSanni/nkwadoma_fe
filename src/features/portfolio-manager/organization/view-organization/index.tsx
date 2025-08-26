@@ -20,7 +20,7 @@ import { resetNotification } from '@/redux/slice/notification/notification';
 import { useDebounce } from '@/hooks/useDebounce';
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
 import InviteOrganizationForm from '@/components/portfolio-manager/organization/Invite-organizations-form';
-import {resetOrganizationInitialState } from '@/redux/slice/organization/organization';
+// import {resetOrganizationInitialState } from '@/redux/slice/organization/organization';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 
 interface TableRowData {
@@ -236,7 +236,7 @@ function Organization() {
                 isOpen={isOpen}
                 closeModal={() => {
                     setIsOpen(false)
-                    store.dispatch(resetOrganizationInitialState())
+                    // store.dispatch(resetOrganizationInitialState())
                 }
                 }
                 className='pb-1'

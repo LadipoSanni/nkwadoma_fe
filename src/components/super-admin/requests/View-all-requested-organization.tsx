@@ -197,7 +197,7 @@ function ViewAllRequestedOrganization() {
        <Table 
         tableData={getTableData()}
         tableHeader={tableHeader}
-        handleRowClick={handleRowClick}
+        handleRowClick={userRole !== "MEEDL_ADMIN"? handleRowClick : () => {}}
         staticHeader='Name'
         staticColunm='name'
         icon={MdOutlineAssignmentTurnedIn}
@@ -212,7 +212,7 @@ function ViewAllRequestedOrganization() {
          condition={true}
          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchResults?.data?.body?.length < 1 }
          optionalFilterName='Pending'
-          sx='cursor-pointer'
+         sx={userRole !== "MEEDL_ADMIN"?'cursor-pointer' : ""}
        />
       </div>
    </TabsContent>
@@ -222,7 +222,7 @@ function ViewAllRequestedOrganization() {
        <Table 
         tableData={getTableData()}
         tableHeader={tableHeader}
-        handleRowClick={handleRowClick}
+        handleRowClick={userRole !== "MEEDL_ADMIN"? handleRowClick : () => {}}
         staticHeader='Name'
         staticColunm='name'
         icon={MdOutlineAssignmentTurnedIn}
@@ -234,7 +234,7 @@ function ViewAllRequestedOrganization() {
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
         setPageNumber={handlePageChange}
         totalPages={currentTabState.totalPages}
-         sx='cursor-pointer'
+        sx={userRole !== "MEEDL_ADMIN"?'cursor-pointer' : ""}
          condition={true}
          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 &&  searchResults?.data?.body?.length < 1 }
          optionalFilterName='declined'
@@ -263,6 +263,7 @@ function ViewAllRequestedOrganization() {
           refetches={refetch}
           requestType='organization'
           status={status}
+          user_role={userRole}
         />
          
         </Modal>

@@ -18,7 +18,7 @@ import { setLoanReferralId } from '@/redux/slice/loan/selected-loan';
 import {setCurrentStep} from "@/service/users/loanRerralSlice";
 import { setNotificationCohortId,resetSelectedCohortInOrganization } from '@/redux/slice/create/cohortSlice';
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
-import { setRequestStatusTab,setIsRequestedStaffOpen,setRequestedStaffId,setIsRequestedOrganizationOpen,setrequestOrganizationStatusTab,setRequestedOrganizationId } from '@/redux/slice/staff-and-request/request';
+import { setRequestStatusTab,setIsRequestedStaffOpen,setRequestedStaffId,setIsRequestedOrganizationOpen,setrequestOrganizationStatusTab,setRequestedOrganizationId,setIsStaffOpen } from '@/redux/slice/staff-and-request/request';
 
 
 interface notificationIdProp {
@@ -105,6 +105,11 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     store.dispatch(setRequestedStaffId(notification?.data?.contentId))
     store.dispatch(setCurrentNavbarItem("Requests"))
     router.push(`/request`);
+  }else if(user_role === "MEEDL_ADMIN"  && ["DECLINE_COLLEAGUE_INVITE","APPROVE_COLLEAGUE_INVITE_"].includes( notification?.data?.notificationFlag) ){
+    store.dispatch(setIsStaffOpen(true))
+    store.dispatch(setRequestedStaffId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Settings"))
+    router.push(`/settings/team`);
   }
   }
    
