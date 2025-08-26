@@ -17,7 +17,6 @@ export const Generals = () => {
     ]
     const selectedCompanyTab = useAppSelector(state => state.selectedLoan.selectedGeneralTab)
     const [currentTab, setCurrentTab] = useState(selectedCompanyTab)
-
     const  userFullName = getItemSessionStorage('user_name')
     const userEmail = getItemSessionStorage('user_email')
 
@@ -28,11 +27,11 @@ export const Generals = () => {
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
-                return <Profile whoseProfile={'user'} userEmail={userEmail} userName={userFullName}/>;
+                return <Profile  whoseProfile={'user'} userEmail={userEmail} userName={userFullName}/>;
             case 1:
                 return <ChangePassword/>;
             case 2:
-                return <TwoFAa/>;
+                return <TwoFAa />;
 
             default:
                 return [];

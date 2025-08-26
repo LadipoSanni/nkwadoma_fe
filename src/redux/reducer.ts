@@ -41,6 +41,7 @@ import StaffReducer from "./slice/staff-and-request/staff";
 import loaneesReducer from "./slice/loan/loanees";
 import requestReducer from "./slice/staff-and-request/request"
 import { walletApi } from '@/service/users/wallet';
+import idsReducer from './slice/id/slice-ids';
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -63,6 +64,7 @@ const appReducer = combineReducers({
     loanOffer: LoanOfferReducer,
     staff: StaffReducer,
     loanees: loaneesReducer,
+    ids: idsReducer,
     request: requestReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,

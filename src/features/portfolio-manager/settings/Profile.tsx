@@ -11,7 +11,7 @@ interface PrpfileProps {
     isLoading?: boolean;
 }
 
-const Profile = ({whoseProfile,isLoading, userEmail, userName,companyUrl}: PrpfileProps) => {
+const Profile = ({whoseProfile ,isLoading, userEmail, userName,companyUrl}: PrpfileProps) => {
 
 
     const userDetails = [
@@ -29,7 +29,7 @@ const Profile = ({whoseProfile,isLoading, userEmail, userName,companyUrl}: Prpfi
                 className={` flex gap-3 pb-5 border-b border-b-[#D7D7D7]  `}
             >
 
-                    <UploadButton url={companyUrl} whose={whoseProfile} />
+                    <UploadButton  url={companyUrl} whose={whoseProfile} />
             </div>
             <div className={`full grid gap-4  `}>
                 {userDetails?.map((item: {details: string, value: string, id: string}, index: number) => (

@@ -8,14 +8,20 @@ import {validateEmailInput} from "@/utils/GlobalMethods";
 import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
 import {useToast} from "@/hooks/use-toast";
 import { useEnableTwoFAMutation } from '@/service/users/api';
+import {useAppSelector} from "@/redux/store";
+
+
 const TwoFAa = () => {
     const [twoFactorType, setTwoFactorType] = React.useState<string>('')
     const userEmail = getItemSessionStorage('user_email')
     const [phoneNumber, setPhoneNumber] = React.useState<string>('')
     const [email, setEmail] = React.useState(userEmail ? userEmail : '')
     const [enableTwoFa, {isLoading}] = useEnableTwoFAMutation()
+    const [buttonText, setButtonText] = React.useState<string>('Enable 2FA security')
+    const user2FState = useAppSelector(state => state.ids.user2faState)
 
     const [disable, setDisable]= React.useState(true)
+    console.log('user2FState', user2FState)
 
     const handleBoxClick = (type: 'email' | 'phoneNumber') => {
         setTwoFactorType(type)
@@ -39,7 +45,8 @@ const TwoFAa = () => {
     }
 
     useEffect(() => {
-        diableButton()
+        diableButton();
+        // if ()
     }, [email, phoneNumber, twoFactorType])
 
     const handleCurrentPasswordInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,7 +181,7 @@ const TwoFAa = () => {
                 backgroundColor={'#142854'} textColor={"white"}
                 id={"enable2fASecurity"}
                 data-testid={`enable2fASecurity`}
-                buttonText={"Enable 2FA security"} width={"fit"}
+                buttonText={buttonText} width={"fit"}
                 isLoading={isLoading}
                 handleClick={(e) => {enableTwoFA(e)}}>
 

@@ -7,6 +7,8 @@ import {Avatar, AvatarImage} from '@/components/ui/avatar';
 import {useAddOrganizationImageLogoMutation, useAddUserImageMutation,useGetUserDetailsQuery } from '@/service/users/api';
 import {useToast} from "@/hooks/use-toast";
 import {setItemToLocalStorage} from "@/utils/storage";
+import { store } from '@/redux/store';
+import {setUser2faState} from "@/redux/slice/id/slice-ids";
 
 interface Props {
     whose: 'company' | 'user',
@@ -44,7 +46,11 @@ const UploadButton = ({whose, url} : Props) => {
             window.addEventListener("resize", handleResize);
             return () => window.removeEventListener("resize", handleResize);
         }
-    }, [file]);
+        if (userDatas){
+            store.dispatch(setUser2faState(userDatas?.data?.mfaType))
+        }
+
+    }, [file, userDatas]);
 
     const validateFile = (file: File): boolean => {
         if (!supportedFileTypes.includes(file.type)) {
