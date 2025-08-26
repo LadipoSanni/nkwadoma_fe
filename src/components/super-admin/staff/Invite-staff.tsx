@@ -8,7 +8,9 @@ import { validationStaffSchema } from '@/utils/validation-schema';
 import SubmitAndCancelButton from '@/reuseable/buttons/Submit-and-cancelButton';
 import { useInviteColleagueMutation } from '@/service/admin/organization';
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
-import { useInviteFinancierColleagueMutation } from '@/service/admin/financier';
+import { setIsStaffOpen } from '@/redux/slice/staff-and-request/request';
+import { store } from '@/redux/store';
+import {formatSentence} from "@/utils/GlobalMethods";
 
 interface RoleOption {
   value: string;
@@ -35,17 +37,17 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
     const { toast } = useToast();
      const [error, setError] = useState("")
     const [inviteColleague,{isLoading}] = useInviteColleagueMutation()
-    const [inviteFinancierColleague,{isLoading:colleagueLoading}] = useInviteFinancierColleagueMutation()
 
     const initialFormValue = {
       firstName: "",
       lastName: "",
       email: "",
-      role: user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"? "COOPERATE_FINANCIER_ADMIN" : ""
+      role: ["COOPERATE_FINANCIER_SUPER_ADMIN","COOPERATE_FINANCIER_ADMIN"].includes(user_role || "")?  "COOPERATE_FINANCIER_ADMIN" : ""
   }
 
     const handleCloseModal = () => {
         setIsOpen(false);
+        store.dispatch(setIsStaffOpen(false))
     }
 
     const handleSubmit = async  (values: typeof initialFormValue) => {
@@ -58,30 +60,21 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
       }
 
       try {
-        if(user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"){
-          const result = await inviteFinancierColleague(formData).unwrap();
-          if(result){
-            toast({
-            description: result.message,
-            status: "success",
-            duration: 2000
-          });
-          handleCloseModal()
-        }
-        }else {
         const result = await inviteColleague(formData).unwrap();
         if(result){
+          const toasts = formatSentence(result.message)
+          console.log(toasts)
           toast({
-          description: result.message,
+          description: toasts,
           status: "success",
-          duration: 2000
+          duration: 3000
         });
         handleCloseModal()
-      }
+    
     }
       } catch (err) {
         const error = err as ApiError;
-        setError(error?.data?.message);
+        setError(formatSentence(error?.data?.message));
       }
     }
 
@@ -180,7 +173,7 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
                 } 
             </div>
 
-             { user_role !== "COOPERATE_FINANCIER_SUPER_ADMIN" && <div>
+             { !["COOPERATE_FINANCIER_SUPER_ADMIN","COOPERATE_FINANCIER_ADMIN"].includes(user_role || "") && <div>
               <Label htmlFor="role">Role</Label>
                <div>
                 <CustomSelectObj
@@ -207,10 +200,10 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
                     }
               </div>}
            </div>
-           <div className='mb-4'>
+           <div className='mb-4 '>
                 <SubmitAndCancelButton
                   isValid={isValid} 
-                  isLoading={isLoading || colleagueLoading}
+                  isLoading={isLoading}
                   handleCloseModal={handleCloseModal}
                   submitButtonName='Invite'
                 />

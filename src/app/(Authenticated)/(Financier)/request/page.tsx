@@ -1,6 +1,7 @@
 import React from 'react'
-import ViewAllRequests from '@/components/super-admin/requests/View-all-requests-staff'
 import CustomAuthorization from "@/features/auth/authorization";
+// import ViewAllFinancierRequests from '@/features/financier/financier-admins/Request';
+import ViewAllRequests from '@/components/super-admin/requests/View-all-requests-staff'
 
 function page() {
   return (

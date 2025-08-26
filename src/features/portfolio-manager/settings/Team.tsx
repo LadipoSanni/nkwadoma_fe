@@ -11,6 +11,10 @@ import { useDebounce } from '@/hooks/useDebounce';
 import InviteAdmin from '@/components/super-admin/staff/Invite-staff';
 import { formatMonthInDate} from '@/utils/Format'
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
+import Detail from '@/components/super-admin/staff/Detail';
+import { setIsStaffOpen } from '@/redux/slice/staff-and-request/request';
+import { store,useAppSelector } from '@/redux/store';
+
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -19,23 +23,29 @@ interface TableRowData {
 
 
 function Team() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
      const [hasNextPage,setNextPage] = useState(false)
-      const [totalPage,setTotalPage] = useState(0)
+    const [totalPage,setTotalPage] = useState(0)
     const [pageNumber,setPageNumber] = useState(0)
     const [pageSearchNumber,setPageSearchNumber] = useState(0)
     const [searchHasNextPage,setSearchHasNextPage]  = useState(false)
-       const user_role = getUserDetailsFromStorage('user_role');
+    const [role,setRole] = useState("")
+    const [stat,setStatus] = useState("")
+    const [email,setEmail] = useState('')
+    const [name,setName] = useState('')
+    const [date, setInvitedDate] = useState('')
+     const [isSwitch, setSwitch] = useState(false);
+    const user_role = getUserDetailsFromStorage('user_role');
     const adminRoleType = [  { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" }, { value: "PORTFOLIO_MANAGER_ASSOCIATE", label: "Associate"},{ value: "MEEDL_ADMIN", label: "Admin"} ];
-
+     const [modal,setModal] = useState("invite")
+      const isStaffOpen = useAppSelector(state => state?.request?.isStaffModalOpen)
 
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
    const dataElement = {
     name:debouncedSearchTerm,
     activationStatuses: ['DECLINED',"APPROVED","PENDING_APPROVAL","ACTIVE","INVITED"],
-    identityRoles:["PORTFOLIO_MANAGER","PORTFOLIO_MANAGER_ASSOCIATE"],
+    identityRoles:user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : ["COOPERATE_FINANCIER_SUPER_ADMIN","COOPERATE_FINANCIER_ADMIN"].includes( user_role || "")? ["COOPERATE_FINANCIER_ADMIN"] : ["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"],
     pageNumber:pageNumber,
     pageSize: 10
 }
@@ -66,12 +76,26 @@ function Team() {
   }
 
     const handleModalOpen =() => {
-        setIsModalOpen(true);
+      store.dispatch(setIsStaffOpen(true))
+      setModal("invite")
     }
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(event.target.value);
   };
+
+     const handleRowClick = (row: TableRowData) => {
+        const fullName = capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
+        const status = capitalizeFirstLetters(row?.activationStatus?.toString()) || "";
+         const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" :row.role === "PORTFOLIO_MANAGER_ASSOCIATE"? "Associate" : row.role === "ORGANIZATION_ADMIN"? "Admin" :row.role === "ORGANIZATION_ASSOCIATE"? "Associate" : "Admin"
+         store.dispatch(setIsStaffOpen(true))
+        setModal('detail')
+        setStatus(status)
+        setName(fullName)
+        setEmail(row?.email as string)
+        setRole(role as string)
+        setInvitedDate(row?.createdAt as string)
+    }
 
     const adminsHeader = [
       // {
@@ -161,7 +185,7 @@ function Team() {
           <Table
           tableData={getTableData()}
           tableHeader={adminsHeader}
-          handleRowClick={()=>{}}
+          handleRowClick={handleRowClick}
           tableHeight={53}
           icon={<Book/>}
           condition={true}
@@ -175,25 +199,46 @@ function Team() {
           totalPages={ totalPage}
           searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
           tableCellStyle="h-12"
+           sx='cursor-pointer'
          />
 {/* } */}
         </div>
         <div>
         {
           <TableModal
-           isOpen={isModalOpen}
-           closeModal={()=> setIsModalOpen(false)}
+           isOpen={isStaffOpen}
+           closeModal={()=> {
+            store.dispatch(setIsStaffOpen(false))
+            setSwitch(false)
+          }}
            className='pb-1'
-           headerTitle='Invite colleague'
+           headerTitle={modal === "invite"? "Invite colleague" : ''}
            closeOnOverlayClick={true}
            icon={Cross2Icon}
             width='36%'
+            styeleType={modal === "invite" || isSwitch? "styleBody" :  "styleBodyTwo"}
           >
-           <InviteAdmin
-            setIsOpen={setIsModalOpen}
-            roleOptions={adminRoleType}
-            isItemDisabled={(item) => user_role === "PORTFOLIO_MANAGER"? item === 'MEEDL_ADMIN' &&  user_role === "PORTFOLIO_MANAGER" : item !== 'PORTFOLIO_MANAGER_ASSOCIATE' &&  user_role === "PORTFOLIO_MANAGER_ASSOCIATE" }
-           />
+          
+                  { modal === "invite" ?
+        <InviteAdmin
+        setIsOpen={()=> {}}
+        roleOptions={adminRoleType}
+        isItemDisabled={(item) => user_role === "PORTFOLIO_MANAGER"? item === 'MEEDL_ADMIN' &&  user_role === "PORTFOLIO_MANAGER" : item !== 'PORTFOLIO_MANAGER_ASSOCIATE' &&  user_role === "PORTFOLIO_MANAGER_ASSOCIATE" }
+       /> : 
+         <div className='mt-16'>
+          <Detail
+          role={role}
+          name={name}
+          email={email}
+          status={stat}
+          dateInvited={date}
+          setSwitch={setSwitch}
+          isSwitch={isSwitch}
+          id={""}
+          setIsOpen={()=> {}}
+          />
+          </div>
+        }
           
           </TableModal>
         }

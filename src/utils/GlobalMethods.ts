@@ -17,6 +17,7 @@ export function removeSpecialCharacterFromString(str: string | undefined): strin
 
     const cleaned = str
         .toLowerCase()
+        .replaceAll('cooperate', 'co')
         .replaceAll('_', " ");
 
     return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
@@ -227,4 +228,38 @@ export const ensureHttpsUrl = (url: string | null | undefined): string | undefin
   export const toTitleCase = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
+
+
+  export function convertRole(roleKey: string) {
+    if (!roleKey) return 'Unknown';
+  
+    const roleMap = {
+      'COOPERATE_FINANCIER_SUPER_ADMIN': 'Super admin',
+      'COOPERATE_FINANCIER_ADMIN': 'Admin',
+      'FINANCIER': 'Financier',
+      'MEEDL_SUPER_ADMIN': 'Super admin',
+      'MEEDL_ADMIN': 'Admin',
+      'PORTFOLIO_MANAGER': 'Portfolio manager',
+      'PORTFOLIO_MANAGER_ASSOCIATE': 'Associate',
+      'ORGANIZATION_SUPER_ADMIN': 'Super admin',
+      'ORGANIZATION_ADMIN': 'Admin',
+      'LOANEE': 'Loanee',
+      'ORGANIZATION_ASSOCIATE': 'Associate'
+    } as const; 
+  
+    type RoleKey = keyof typeof roleMap;
+  
+    return roleMap[roleKey as RoleKey] || 'Unknown Role';
+  }
+
+
+  export function formatSentence(sentence: string | null | undefined): string {
+    if (!sentence) return "";
+    
+    return sentence
+        .toLowerCase()    
+        .replace(/_/g, ' ')
+        .replace(/^\w/, (firstChar) => firstChar.toUpperCase()); 
+}
+  
   

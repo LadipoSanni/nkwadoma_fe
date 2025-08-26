@@ -15,6 +15,7 @@ import { setrequestOrganizationStatusTab} from '@/redux/slice/staff-and-request/
 import { store,useAppSelector } from '@/redux/store';
 import { setIsRequestedOrganizationOpen,resetRequestedOrganizationId} from '@/redux/slice/staff-and-request/request';
 import styles from "../staff/index.module.css"
+import {getUserDetailsFromStorage} from "@/components/topBar/action";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -37,6 +38,7 @@ function ViewAllRequestedOrganization() {
    const [role,setRole] = useState("")
    const [status,setStatus] = useState("")
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+   const userRole = getUserDetailsFromStorage('user_role')
 
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
                      pending: { pageNumber: 0, totalPages: 0, hasNextPage: false, pageSearchNumber:0 },
@@ -159,9 +161,17 @@ function ViewAllRequestedOrganization() {
              selector: (row: TableRowData) =>  row?.invitedDate ? formatMonthInDate(row.invitedDate) : formatMonthInDate(new Date().toISOString())
            }
          ]
+
+      const isAdmin = ["MEEDL_SUPER_ADMIN","MEEDL_ADMIN"].includes(userRole || "")
   
   return (
-    <div className='mt-5'>
+    <div 
+    className={`mt-5 ${isAdmin ? `${styles.container} h-[74vh]` : ""}`}
+    style={{
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',  
+        }}
+    >
       <Tabs
        value={requestTabStatusType}
        onValueChange={(value) => {
@@ -172,7 +182,7 @@ function ViewAllRequestedOrganization() {
     <TabsTrigger value="pending">Pending</TabsTrigger>
     <TabsTrigger value="declined">Declined</TabsTrigger>
 </TabsList>
-     <div className={`mt-4 max-h-[69vh]   ${!(isLoading || isFetching || isSearchfetching || isSearchloading) && styles.container} `}>
+     <div className={`mt-4 `}>
    <div className=''>
    <SearchInput
           testId='search-input'
@@ -187,13 +197,13 @@ function ViewAllRequestedOrganization() {
        <Table 
         tableData={getTableData()}
         tableHeader={tableHeader}
-        handleRowClick={handleRowClick}
+        handleRowClick={userRole !== "MEEDL_ADMIN"? handleRowClick : () => {}}
         staticHeader='Name'
         staticColunm='name'
         icon={MdOutlineAssignmentTurnedIn}
          sideBarTabName='Organization'
         tableCellStyle="h-12"
-        tableHeight={53}
+        tableHeight={data?.data?.body?.length < 10 || searchResults?.data?.body?.length < 10 ? 60 : undefined}
         isLoading={isLoading || isFetching || isSearchfetching || isSearchloading}
         hasNextPage={currentTabState.hasNextPage}
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
@@ -202,7 +212,7 @@ function ViewAllRequestedOrganization() {
          condition={true}
          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchResults?.data?.body?.length < 1 }
          optionalFilterName='Pending'
-          sx='cursor-pointer'
+         sx={userRole !== "MEEDL_ADMIN"?'cursor-pointer' : ""}
        />
       </div>
    </TabsContent>
@@ -212,19 +222,19 @@ function ViewAllRequestedOrganization() {
        <Table 
         tableData={getTableData()}
         tableHeader={tableHeader}
-        handleRowClick={handleRowClick}
+        handleRowClick={userRole !== "MEEDL_ADMIN"? handleRowClick : () => {}}
         staticHeader='Name'
         staticColunm='name'
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='Organization'
         tableCellStyle="h-12"
-        tableHeight={53}
+        tableHeight={data?.data?.body?.length < 10 || searchResults?.data?.body?.length  ? 60 : undefined}
         isLoading={isLoading || isFetching || isSearchfetching || isSearchloading }
         hasNextPage={currentTabState.hasNextPage}
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
         setPageNumber={handlePageChange}
         totalPages={currentTabState.totalPages}
-         sx='cursor-pointer'
+        sx={userRole !== "MEEDL_ADMIN"?'cursor-pointer' : ""}
          condition={true}
          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 &&  searchResults?.data?.body?.length < 1 }
          optionalFilterName='declined'
@@ -253,6 +263,7 @@ function ViewAllRequestedOrganization() {
           refetches={refetch}
           requestType='organization'
           status={status}
+          user_role={userRole}
         />
          
         </Modal>

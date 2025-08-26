@@ -115,12 +115,11 @@ function ViewAllRequests() {
     if (debouncedSearchTerm) return adminData?.data?.body || [];
     return adminData?.data?.body;
 }
-  
 
        const handleRowClick = (row: TableRowData) => {
           const fullName = capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
           const requestedBy = capitalizeFirstLetters(row?.requestedBy?.toString())
-          const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
+          const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : row.role === "COOPERATE_FINANCIER_ADMIN"? "Admin" : "Associate"
           store.dispatch(setIsRequestedStaffOpen(true))
           store.dispatch(resetRequestedStaffId())
            setRequestedBy(requestedBy)
@@ -131,12 +130,7 @@ function ViewAllRequests() {
       }
         
        const tableHeader = [
-           { 
-             title: "Requested by",  
-             sortable: true, 
-             id: "requestedBy", 
-             selector: (row: TableRowData) => row.requestedBy || "Not provided"
-           },
+          
            { 
             title:  <div className='md:mr-16'>Invitee</div>,  
             sortable: true, 
@@ -150,10 +144,16 @@ function ViewAllRequests() {
              selector: (row: TableRowData) => row.email 
            },
            { 
+            title: "Requested by",  
+            sortable: true, 
+            id: "requestedBy", 
+            selector: (row: TableRowData) => row.requestedBy || "Not provided"
+          },
+           { 
              title: "Role",  
              sortable: true, 
              id: "role", 
-             selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN" ||row.role === "ORGANIZATION_ADMIN" ? "Admin" : "Associate"
+             selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN" ||row.role === "ORGANIZATION_ADMIN"  ? "Admin" : "Associate"
            },
            { 
              title: "Requested on",  
@@ -162,9 +162,47 @@ function ViewAllRequests() {
              selector: (row: TableRowData) => formatMonthInDate(row.createdAt) 
            }
          ]
+
+         const tableFinancierHeader = [
+          
+          { 
+           title:  <div className='md:mr-16'>Invitee</div>,  
+           sortable: true, 
+           id: "firstName", 
+           selector: (row: TableRowData) => capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
+         },
+          { 
+            title: <div className='md:mr-32'>Email</div>,  
+            sortable: true, 
+            id: "email", 
+            selector: (row: TableRowData) => row.email 
+          },
+          { 
+           title: "Requested by",  
+           sortable: true, 
+           id: "requestedBy", 
+           selector: (row: TableRowData) => row.requestedBy || "Not provided"
+         },
+          
+          { 
+            title: "Requested on",  
+            sortable: true, 
+            id: "createdAt", 
+            selector: (row: TableRowData) => formatMonthInDate(row.createdAt) 
+          }
+        ]
+
+         const isAdmin = ["MEEDL_SUPER_ADMIN","MEEDL_ADMIN"].includes(userRole || "")
   
   return (
-    <div className={`mt-5 ${["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "")? "px-5" : ""}`}>
+    <div 
+    // className={`mt-5 ${["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "") && styles.container? "px-5  max-h-[52vh]" : ""}`}
+    className={`mt-5 ${isAdmin ? `${styles.container} h-[74vh]` : " px-4 md:pl-6 "}`}
+    style={{
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',  
+        }}
+    >
       <Tabs
        value={requestTabStatusType}
        onValueChange={(value) => {
@@ -175,7 +213,13 @@ function ViewAllRequests() {
     <TabsTrigger value="pending">Pending</TabsTrigger>
     <TabsTrigger value="declined">Declined</TabsTrigger>
 </TabsList>
-     <div className={`${["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "")? 'mt-6 max-h-[72vh]' : 'mt-4 max-h-[69vh]'} ${!(isLoading || isFetching ) && styles.container}  `}>
+     <div 
+     className={`${["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "") ? ` ${styles.container} mt-6 max-h-[71vh]` : 'mt-4'} `}
+     style={{
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',  
+        }}
+     >
    <div className=''>
    <SearchInput
           testId='search-input'
@@ -189,14 +233,14 @@ function ViewAllRequests() {
        <div className='mt-4' data-testid="table">
        <Table 
         tableData={getTableData()}
-        tableHeader={tableHeader}
-        handleRowClick={handleRowClick}
-        staticHeader='Requested by'
-        staticColunm='requestedBy'
+        tableHeader={userRole === "COOPERATE_FINANCIER_SUPER_ADMIN"? tableFinancierHeader : tableHeader}
+        handleRowClick={userRole !== "MEEDL_ADMIN"? handleRowClick : () => {}}
+        staticHeader='Name'
+        staticColunm='firstName'
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={["ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN"].includes(userRole || "")? 58 : 53}
+        tableHeight={adminData?.data?.body?.length < 10 ? 60 : undefined}
         isLoading={isLoading || isFetching }
         // hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
         hasNextPage={currentTabState.hasNextPage}
@@ -205,7 +249,7 @@ function ViewAllRequests() {
         setPageNumber={handlePageChange}
         // totalPages={ totalPage}
         totalPages={currentTabState.totalPages}
-         sx='cursor-pointer'
+        sx={userRole !== "MEEDL_ADMIN"?'cursor-pointer' : ""}
          condition={true}
          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
          optionalFilterName='Pending'
@@ -217,20 +261,22 @@ function ViewAllRequests() {
    <div className='mt-4' data-testid="table">
        <Table 
         tableData={getTableData()}
-        tableHeader={tableHeader}
-        handleRowClick={handleRowClick}
-        staticHeader='Requested by'
-        staticColunm='requestedBy'
+        tableHeader={userRole ==="COOPERATE_FINANCIER_SUPER_ADMIN"? tableFinancierHeader : tableHeader}
+        // handleRowClick={handleRowClick}
+        handleRowClick={userRole !== "MEEDL_ADMIN"? handleRowClick : () => {}}
+        staticHeader='Name'
+        staticColunm='firstName'
         icon={MdOutlineAssignmentTurnedIn}
         sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={userRole === "ORGANIZATION_SUPER_ADMIN"? 58 : 53}
+        // tableHeight={userRole === "ORGANIZATION_SUPER_ADMIN"? 58 : 54}
+        tableHeight={adminData?.data?.body?.length < 10 ? 60 : undefined}
         isLoading={isLoading || isFetching }
         hasNextPage={currentTabState.hasNextPage}
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
         setPageNumber={handlePageChange}
         totalPages={currentTabState.totalPages}
-         sx='cursor-pointer'
+         sx={userRole !== "MEEDL_ADMIN"?'cursor-pointer' : ""}
          condition={true}
          searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
          optionalFilterName='declined'
@@ -259,6 +305,7 @@ function ViewAllRequests() {
           role={role}
           requestType='staff'
           status={status}
+          user_role={userRole}
         />
          
         </Modal>
