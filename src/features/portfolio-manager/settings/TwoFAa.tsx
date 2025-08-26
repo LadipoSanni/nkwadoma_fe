@@ -6,7 +6,6 @@ import {getItemSessionStorage} from "@/utils/storage";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import {validateEmailInput} from "@/utils/GlobalMethods";
 import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
-import styles from './index.module.css'
 import {useToast} from "@/hooks/use-toast";
 import { useEnableTwoFAMutation } from '@/service/users/api';
 const TwoFAa = () => {
@@ -19,27 +18,27 @@ const TwoFAa = () => {
     const [disable, setDisable]= React.useState(true)
 
     const handleBoxClick = (type: 'email' | 'phoneNumber') => {
-        if (twoFactorType === 'email' || twoFactorType === 'phoneNumber') {
-            setTwoFactorType('');
-        }else{
-            setTwoFactorType(type)
-
-        }
+        setTwoFactorType(type)
     }
+
     const diableButton = () => {
         if (twoFactorType === 'phoneNumber') {
-            if (phoneNumber?.length > 11 ){
+            if (phoneNumber?.replaceAll(" ", '')?.length > 11 || phoneNumber?.replaceAll(" ", '')?.length < 11 ) {
+                setDisable(true)
+            }else {
                 setDisable(false)
             }
         }else if(twoFactorType === 'email'){
             if (validateEmailInput(email)){
                 setDisable(false)
+            }else {
+                setDisable(true)
             }
-        }else {
-            setDisable(true)
         }
 
     }
+
+    console.log('phoneNumber', phoneNumber, 'length: ', phoneNumber.length, )
     useEffect(() => {
         diableButton()
     }, [email, phoneNumber, twoFactorType])
@@ -56,7 +55,7 @@ const TwoFAa = () => {
       e?.preventDefault();
       if (twoFactorType === 'phoneNumber') {
           const prop = {
-              mfaPhoneNumber:phoneNumber ,
+              mfaPhoneNumber:phoneNumber?.replaceAll(' ', '') ,
               mfaType: "PHONE_NUMBER_MFA"
           }
           const response = await enableTwoFa(prop);
@@ -98,7 +97,7 @@ const TwoFAa = () => {
 
         return (
         <div
-            className={`md:min-w-fit md:max-w-[45%] h-full ${styles.scrollab}  grid gap-6 `}
+            className={`md:min-w-fit md:max-w-[45%] h-[100%]   grid gap-6 `}
         >
             <span className={` grid w-full  gap-1 pb-4   border-b border-b-[#D7D7D7]  `}>
                 <p className={` ${inter500.className} text-[16px] text-black `}>2FA Security</p>
@@ -159,8 +158,8 @@ const TwoFAa = () => {
                     <PhoneNumberSelect
                         selectedCountryCode={'NG'}
                         phoneNumber={phoneNumber}
-                        setPhoneNumber={(num) => setPhoneNumber( num)}
-                        label="Next of kin's phone number"
+                        setPhoneNumber={(num) => setPhoneNumber(num)}
+                        label=""
                         placeholder="Select code"
                         id="phoneNumber"
                         setFieldError={handle}
