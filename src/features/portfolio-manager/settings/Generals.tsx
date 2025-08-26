@@ -31,7 +31,7 @@ export const Generals = () => {
             case 1:
                 return <ChangePassword/>;
             case 2:
-                return <TwoFAa />;
+                return <TwoFAa  setCurrentTab={setCurrentTab}/>;
 
             default:
                 return [];

@@ -6,7 +6,7 @@ export const userApi = createApi({
 
     reducerPath: 'userApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['userDetail', 'organization'],
+    tagTypes: ['userDetail', 'organization', 'userDetail'],
     endpoints: (builder) => ({
         logout: builder.mutation({
             query:() => ({
@@ -51,7 +51,8 @@ export const userApi = createApi({
                 url : '/auth/manageMFA',
                 method: 'POST',
                 body: data
-            })
+            }),
+            invalidatesTags: ['userDetail']
         })
 
     })
