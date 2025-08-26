@@ -157,9 +157,10 @@ const ViewFinanciers = () => {
 
     return (
         <main className={'mt-7 w-[100%] md:px-4 '}>
-            <div className={'md:flex w-full justify-between grid gap-4'}>
-                <div className={'flex gap-2 w-full '}>
-                    <SearchInput id={'financiersSearch'} style='w-70' value={searchTerm} onChange={handleSearchChange} />
+            
+            <div className={'md:flex w-full justify-between  gap-4'}>
+                <div className={'flex gap-4 pr-3 md:pr-0'}>
+                    <SearchInput id={'financiersSearch'} value={searchTerm} onChange={handleSearchChange} />
                     <CustomSelect
                         id="financierId"
                         value={selectedFinancier}
@@ -173,9 +174,10 @@ const ViewFinanciers = () => {
                         selectContent={["Individual", "Cooperate", "Reset"]}
                         placeHolder="Type"
                         triggerId="financierSelectId"
-                        className="h-11 md:w-28 w-full  mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
+                        className="h-11 w-28  mt-0 bg-[#F7F7F7] border border-[#D0D5DD]"
                     />
                 </div>
+                <div className='pr-3 md:pr-0'>
                 <Button
                     variant={"secondary"}
                     size={"lg"}
@@ -186,9 +188,10 @@ const ViewFinanciers = () => {
                 >
                     Invite financier
                 </Button>
+                </div>
             </div>
 
-            <div className={`pt-2`}>
+            <div className={`pt-2 md:mt-0 mt-4`}>
                 <Tabs value={tabType} onValueChange={(value) => {
     store.dispatch(setFinancierStatusTab(value));
   }} >
@@ -211,6 +214,7 @@ const ViewFinanciers = () => {
                                     <SearchEmptyState icon={MdSearch} name="Financier" />
                                 </div>
                             ) : (
+                                <div className='pr-3 md:pr-0'>
                                 <Table
                                     tableData={financiers}
                                     tableHeader={financierHeader}
@@ -229,11 +233,13 @@ const ViewFinanciers = () => {
                                     isLoading={isLoading || searchIsLoading || isFetching || isSearchFetching}
                                     tableCellStyle={'h-12'}
                                 />
+                                </div>
                             )}
                         </div>
                     </TabsContent>
 
                     <TabsContent value={"invited"} className={`pt-3`}>
+                    <div className='pr-3 md:pr-0'>
                         <Table
                             tableData={financiers}
                             tableHeader={financierHeader}
@@ -252,7 +258,7 @@ const ViewFinanciers = () => {
                             isLoading={isLoading || searchIsLoading || isFetching || isSearchFetching}
                             tableCellStyle={'h-12'}
                         />
-
+               </div>
                     </TabsContent>
 
                 </Tabs>

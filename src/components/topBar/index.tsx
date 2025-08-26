@@ -5,7 +5,7 @@ import { IoMdMenu } from "react-icons/io";
 import { setShowMobileSideBar } from "@/redux/slice/layout/adminLayout";
 import { inter500, inter } from "@/app/fonts";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
-import {capitalizeFirstLetters, getFirstLetterOfWord, removeSpecialCharacterFromString} from "@/utils/GlobalMethods";
+import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import { store, useAppSelector } from "@/redux/store";
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import AdminProfile from "@/features/profile/adminProfile/Index";
@@ -21,6 +21,7 @@ import { setCurrentTotalNotification,resetNotificationPageNumber } from '@/redux
 import {DISPLAYUSERROLE} from "@/components/topBar/variables";
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
 import { getItemFromLocalStorage, setItemToLocalStorage } from '@/utils/storage';
+import { convertRole } from '@/utils/GlobalMethods';
 
 const TopBar = () => {
     const [arrowToggled, setArrowToggled] = useState(false);
@@ -154,7 +155,7 @@ const TopBar = () => {
                             {DISPLAYUSERROLE?.includes(userRole) ?
                                 <p className={`text-black400 ${inter.className}  flex justify-start text-sm`}>
                                     {/*{capitalizeFirstLetters(user_role?.replace("_", " "))}*/}
-                                    {removeSpecialCharacterFromString(user_role)}
+                                    {convertRole(user_role as string)}
                                 </p>
                             :
                                 null

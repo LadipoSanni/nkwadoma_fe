@@ -173,21 +173,21 @@ function Staff() {
         />
 
         <div className='md:mt-0 mt-4'>
-            <Button
+          {user_role === "MEEDL_ADMIN" ? "" :  <Button
               id="inviteStaff"
               variant={'secondary'}
               className='h-[45px] w-full font-semibold md:w-[120px]'
               onClick={handleOpen}
             >
              Invite staff
-            </Button>
+            </Button>}
         </div>
       </div>
       <div className='mt-6 pr-3' data-testid="table">
        <Table 
         tableData={getTableData()}
         tableHeader={user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"? financierTableHeader  : tableHeader}
-        handleRowClick={handleRowClick}
+        handleRowClick={user_role !== "MEEDL_ADMIN"? handleRowClick : () => {}}
         staticHeader='Name'
         staticColunm='firstName'
         icon={MdOutlineAccountBalance}
@@ -199,7 +199,7 @@ function Staff() {
         pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}
         setPageNumber={searchTerm !== ""? setPageSearchNumber : setPageNumber}
         totalPages={ totalPage}
-         sx='cursor-pointer'
+         sx={user_role !== "MEEDL_ADMIN"? 'cursor-pointer' : ''}
          condition={true}
         //  showKirkBabel={true}
         searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }

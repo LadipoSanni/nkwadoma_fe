@@ -5,7 +5,7 @@ import Details from "@/components/loanee-my-profile/Details";
 import { inter } from '@/app/fonts';
 import {useGetOrganizationDetailsQuery} from "@/service/admin/organization";
 import { store, useAppSelector } from "@/redux/store";
-import { setOrganizationStatus } from "@/redux/slice/organization/organization";
+import { setOrganizationStatus,setOrganizationName } from "@/redux/slice/organization/organization";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { ensureHttpsUrl } from "@/utils/GlobalMethods";
 import { formatNumberWithCommas } from '@/utils/Format';
@@ -23,6 +23,7 @@ function OrganizationDetails() {
 
          useEffect(() => {
         store.dispatch(setOrganizationStatus(organizationDetails?.data?.activationStatus))
+         store.dispatch(setOrganizationName(organizationDetails?.data?.name))
          },[organizationDetails?.data?.activationStatus])
 
           const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);

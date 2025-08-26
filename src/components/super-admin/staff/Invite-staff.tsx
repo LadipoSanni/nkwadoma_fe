@@ -10,6 +10,7 @@ import { useInviteColleagueMutation } from '@/service/admin/organization';
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import { setIsStaffOpen } from '@/redux/slice/staff-and-request/request';
 import { store } from '@/redux/store';
+import {formatSentence} from "@/utils/GlobalMethods";
 
 interface RoleOption {
   value: string;
@@ -61,17 +62,19 @@ function InviteStaff({setIsOpen,roleOptions,isItemDisabled}:Props) {
       try {
         const result = await inviteColleague(formData).unwrap();
         if(result){
+          const toasts = formatSentence(result.message)
+          console.log(toasts)
           toast({
-          description: result.message,
+          description: toasts,
           status: "success",
-          duration: 2000
+          duration: 3000
         });
         handleCloseModal()
     
     }
       } catch (err) {
         const error = err as ApiError;
-        setError(error?.data?.message);
+        setError(formatSentence(error?.data?.message));
       }
     }
 
