@@ -15,7 +15,6 @@ const FinancierDetails = () => {
     const  {data, isLoading} = useViewFinancierDetailQuery({financierId:currentFinancierId},{skip : !currentFinancierId})
 
     const initial = getInitial(data?.data?.name );
-    const companyInitial = getInitial(data?.data?.name)
 
 
     const basicDetails = [
