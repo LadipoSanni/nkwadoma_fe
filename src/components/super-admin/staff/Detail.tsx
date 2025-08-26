@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { inter,cabinetGrotesk } from '@/app/fonts';
 import { FiMoreVertical } from 'react-icons/fi';
 import { DropdownMenu,DropdownMenuContent,  DropdownMenuTrigger,DropdownMenuGroup,DropdownMenuItem } from '@radix-ui/react-dropdown-menu';
@@ -6,8 +6,10 @@ import { formatMonthInDate } from '@/utils/Format'
 import ActivateOrganization from "@/components/portfolio-manager/organization/ActivateOrganization";
 import DeactivateOrganization from "@/components/portfolio-manager/organization/DeactivateOrganization";
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
-// import { useAppSelector } from '@/redux/store';
-// import { useViewStaffDetailsQuery } from '@/service/admin/organization';
+import { useAppSelector } from '@/redux/store';
+import { useViewStaffDetailsQuery } from '@/service/admin/organization';
+import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
+import SkeletonForModal from '@/reuseable/Skeleton-loading-state/Skeleton-for-modal';
 
 interface Props {
     role : string;
@@ -23,18 +25,36 @@ interface Props {
 
 function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen,id}:Props) {
      const user_role = getUserDetailsFromStorage('user_role');
-    //  const userId =  useAppSelector(state => state?.request?.requestedStaffId)
-    //   const {data, error:errormessage, isLoading: detailLoading,refetch} = useViewStaffDetailsQuery({employeeId: userId },{skip: !userId})
+     const userId =  useAppSelector(state => state?.request?.requestedStaffId)
+      const {data,isLoading: detailLoading,refetch} = useViewStaffDetailsQuery({employeeId: userId },{skip: !userId})
+
+
+           const userInvited = data? capitalizeFirstLetters(data?.data?.firstName) + " " +  capitalizeFirstLetters( data?.data?.lastName) : name
+           const roles =  data?.data?.role === "PORTFOLIO_MANAGER"? "Portfolio manager" :  ["MEEDL_ADMIN","ORGANIZATION_ADMIN"].includes(data?.data?.role)? "Admin" : [ "MEEDL_ASSOCIATE","ORGANIZATION_ASSOCIATE"].includes(data?.data?.role)? "Associate" : data?.data?.role === "COOPERATE_FINANCIER_ADMIN"? "Admin"  : ""
+           const userRole = roles? roles : role
+           const userStatus =  data?.data?.activationStatus === "INVITED"? "Invited" : data?.data?.activationStatus === "ACTIVE"? "Active" : data?.data?.activationStatus === "DEACTIVATED"? "Deactivated" : data?.data?.activationStatus === "PENDING_APPROVAL"? "Pending_approval" :data?.data?.activationStatus === "DECLINED"? "Declined" :  status
+           const invitedDate = data? data?.data?.createdAt : dateInvited
+           const staffEmail = data? data?.data?.email : email
+
 
     const dropDownOption = [
       status === "Deactivated"?  {name: 'Activate', id: '1'} : {name: 'Deactivate', id: '2'}
     ];
 
+     useEffect(() => {
+          if(userId){
+            refetch()
+          }
+        },[refetch,userId])
+    
+
     const handleDropdownClick = () => {
         setSwitch(true)
     }
   return (
-    <div className=''>
+    <div>
+{  detailLoading  ? <SkeletonForModal/>  : 
+ <div className=''>
      {  !isSwitch? 
         <div>
         <div className='flex justify-between items-center'>
@@ -44,7 +64,7 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
         className={` rounded-full h-12 w-12 flex items-center justify-center text-[20px] bg-[#FEF6F0] text-[#68442E] text-sm font-semibold uppercase ${cabinetGrotesk.className}`}
       >
        {
-        name
+        userInvited
             ?.split(" ")
             .filter((word: string) => word.trim() !== "") 
             .filter((_: string, i: number, arr: string[]) => i === 0 || i === arr.length - 1)
@@ -53,13 +73,13 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
         }
       </p>
       <div className={`text-[#212221] ${inter.className}`}>
-        <p className='font-medium text-[16px]'>{name}</p>
-         <p className='text-[14px]'>{role}</p>
+        <p className='font-medium text-[16px]'>{userInvited}</p>
+         <p className='text-[14px]'>{userRole}</p>
       </div>
         </div>
 
         <div>
-       { !["Invited","Pending_approval","Declined"].includes(status) && ["MEEDL_SUPER_ADMIN","ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN","MEEDL_ADMIN"].includes(user_role || "") && <DropdownMenu>
+       { !["Invited","Pending_approval","Declined"].includes(userStatus) && ["MEEDL_SUPER_ADMIN","ORGANIZATION_SUPER_ADMIN","COOPERATE_FINANCIER_SUPER_ADMIN","MEEDL_ADMIN"].includes(user_role || "") && <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div
                  id="kebabButton"
@@ -105,23 +125,23 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
         <div className='text-[14px] grid grid-cols-1 gap-y-6 mt-6 mb-6'>
             <div className='' > 
                 <p className='text-[#6A6B6A]'>Status</p>
-                <p className={`${status === "Active"? "bg-[#E6F2EA] text-[#045620] w-12 " :status === "Deactivated"? "bg-[#FBE9E9] text-[#971B17] w-24" :status === "Pending_approval"? "bg-[#E6F7EE] text-[#039855] w-16" :status === "Declined"? "bg-[#FBE9E9] text-[#971B17]  w-16" :  "bg-[#FEF6E8] text-[#045620] w-16"} flex items-center justify-center rounded-lg mt-2`}>{status === 'Pending_approval'? "Pending" : status}</p>
+                <p className={`${userStatus === "Active"? "bg-[#E6F2EA] text-[#045620] w-12 " :userStatus === "Deactivated"? "bg-[#FBE9E9] text-[#971B17] w-24" :userStatus === "Pending_approval"? "bg-[#E6F7EE] text-[#039855] w-16" :userStatus === "Declined"? "bg-[#FBE9E9] text-[#971B17]  w-16" :  "bg-[#FEF6E8] text-[#045620] w-16"} flex items-center justify-center rounded-lg mt-2`}>{userStatus === 'Pending_approval'? "Pending" : userStatus}</p>
             </div>
 
             <div className='' > 
                 <p className='text-[#6A6B6A]'>Email address</p>
-                <p className={``}>{email}</p>
+                <p className={``}>{staffEmail}</p>
             </div>
 
             <div className='' > 
                 <p className='text-[#6A6B6A]'>Date invited</p>
-                <p className={``}>{formatMonthInDate(dateInvited)}</p>
+                <p className={``}>{formatMonthInDate(invitedDate)}</p>
             </div>
         </div>
         <div className='w-80'> </div>
     </div> : <div>
         {
-            status === "Active"? 
+            userStatus === "Active"? 
             <div>
                 <DeactivateOrganization
                  id={id}
@@ -142,6 +162,7 @@ function Detail({role,status,email,name,dateInvited,isSwitch,setSwitch,setIsOpen
         }
     </div>
     }
+    </div>}
     </div>
   )
 }

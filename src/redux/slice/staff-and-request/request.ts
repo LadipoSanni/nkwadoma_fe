@@ -8,6 +8,7 @@ interface StaffProps {
     requestedStaffId:string,
     requestedOrganizationId: string,
     isStaffModalOpen: boolean,
+    modalType: string
 }
 
 const initialState: StaffProps = {
@@ -17,7 +18,8 @@ const initialState: StaffProps = {
     isRequestedOrganizationOpen: false,
     requestedStaffId:"",
     requestedOrganizationId:"",
-    isStaffModalOpen: false
+    isStaffModalOpen: false,
+    modalType:"invite"
 }
 
 export const requestSlice = createSlice({
@@ -51,8 +53,11 @@ export const requestSlice = createSlice({
         setIsStaffOpen:(state, action: PayloadAction<boolean>) => {
             state.isStaffModalOpen = action.payload
           },
+        setModalType: (state, action: PayloadAction<string>) => {
+            state.modalType = action.payload;
+        },
     }
 })
 
-export const {setRequestStatusTab,setrequestOrganizationStatusTab,setIsRequestedStaffOpen,setIsRequestedOrganizationOpen,setRequestedOrganizationId,setRequestedStaffId,resetRequestedStaffId,resetRequestedOrganizationId,setIsStaffOpen} =requestSlice.actions
+export const {setRequestStatusTab,setrequestOrganizationStatusTab,setIsRequestedStaffOpen,setIsRequestedOrganizationOpen,setRequestedOrganizationId,setRequestedStaffId,resetRequestedStaffId,resetRequestedOrganizationId,setIsStaffOpen,setModalType} =requestSlice.actions
 export default requestSlice.reducer

@@ -14,7 +14,8 @@ import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import Detail from '@/components/super-admin/staff/Detail';
 import { setIsStaffOpen } from '@/redux/slice/staff-and-request/request';
 import { store,useAppSelector } from '@/redux/store';
-
+import { setModalType } from '@/redux/slice/staff-and-request/request';
+import { resetRequestedStaffId} from '@/redux/slice/staff-and-request/request';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -29,6 +30,7 @@ function Team() {
     const [pageNumber,setPageNumber] = useState(0)
     const [pageSearchNumber,setPageSearchNumber] = useState(0)
     const [searchHasNextPage,setSearchHasNextPage]  = useState(false)
+    const modal = useAppSelector(state => state?.request?.modalType)
     const [role,setRole] = useState("")
     const [stat,setStatus] = useState("")
     const [email,setEmail] = useState('')
@@ -37,7 +39,6 @@ function Team() {
      const [isSwitch, setSwitch] = useState(false);
     const user_role = getUserDetailsFromStorage('user_role');
     const adminRoleType = [  { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" }, { value: "PORTFOLIO_MANAGER_ASSOCIATE", label: "Associate"},{ value: "MEEDL_ADMIN", label: "Admin"} ];
-     const [modal,setModal] = useState("invite")
       const isStaffOpen = useAppSelector(state => state?.request?.isStaffModalOpen)
 
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
@@ -77,7 +78,7 @@ function Team() {
 
     const handleModalOpen =() => {
       store.dispatch(setIsStaffOpen(true))
-      setModal("invite")
+       store.dispatch(setModalType('invite'))
     }
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +90,8 @@ function Team() {
         const status = capitalizeFirstLetters(row?.activationStatus?.toString()) || "";
          const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" :row.role === "PORTFOLIO_MANAGER_ASSOCIATE"? "Associate" : row.role === "ORGANIZATION_ADMIN"? "Admin" :row.role === "ORGANIZATION_ASSOCIATE"? "Associate" : "Admin"
          store.dispatch(setIsStaffOpen(true))
-        setModal('detail')
+         store.dispatch(setModalType('detail'))
+         store.dispatch(resetRequestedStaffId())
         setStatus(status)
         setName(fullName)
         setEmail(row?.email as string)
@@ -210,6 +212,7 @@ function Team() {
            closeModal={()=> {
             store.dispatch(setIsStaffOpen(false))
             setSwitch(false)
+            store.dispatch(resetRequestedStaffId())
           }}
            className='pb-1'
            headerTitle={modal === "invite"? "Invite colleague" : ''}
