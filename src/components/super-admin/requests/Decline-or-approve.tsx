@@ -35,11 +35,14 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
      const requestedOrganizationId = useAppSelector(state => state?.request?.requestedOrganizationId)
     const [approveAdmin, {isLoading}] = useApproveOrDeclineAdminMutation()
     const [approveOrDeclineOrg, {isLoading:isloading}] = useApproveOrDeclineOrganizationMutation()
-    const {data, isLoading: detailLoading,refetch} = useViewStaffDetailsQuery({employeeId: requestedStaffId},{skip: !requestedStaffId})
+    const {data, error:errormessage, isLoading: detailLoading,refetch} = useViewStaffDetailsQuery({employeeId: requestedStaffId},{skip: !requestedStaffId})
      const {data:orgData, isLoading: isOrgLoading, refetch:reFetch} = useGetOrganizationDetailsQuery({organizationId: requestedOrganizationId},{skip: !requestedOrganizationId})
      const { toast } = useToast();
       const [error, setError] = useState("")
       const [buttonType,setButtonType] = useState("")   
+
+      const errorMessage = errormessage as ApiError
+
 
     useEffect(() => {
       if(requestedStaffId){
@@ -52,9 +55,10 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
        
      const requestedby = data? data?.data?.requestedBy : orgData? orgData?.data?.requestedBy : requestedBy
      const userInvited = data? capitalizeFirstLetters(data?.data?.firstName) + " " +  capitalizeFirstLetters( data?.data?.lastName) : orgData? capitalizeFirstLetters(orgData.data?.name) : invitee
-     const roles =  data?.data?.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : data?.data?.role === "MEEDL_ADMIN"? "Admin" : data?.data?.role === "MEEDL_ASSOCIATE"? "Associate" : orgData?.data?.meedlUser?.role === "SUPER_ORGANIZATION_ADMIN" && "Super organization admin" 
+     const roles =  data?.data?.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : data?.data?.role === "MEEDL_ADMIN"? "Admin" : data?.data?.role === "MEEDL_ASSOCIATE"? "Associate" : data?.data?.role === "COOPERATE_FINANCIER_ADMIN"? "Admin" : orgData?.data?.meedlUser?.role === "ORGANIZATION_ADMIN"? "Admin"   : ""
      const userRole = roles? roles : role
      const userStatus = data? data?.data?.activationStatus : orgData? orgData?.data?.activationStatus : status
+
 
 
     const handleClose =() => {
@@ -119,12 +123,13 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
 
   return (
     <div className='mt-6'>
-    { detailLoading || isOrgLoading ? <SkeletonForModal/> 
+    { detailLoading || isOrgLoading ? <SkeletonForModal/>  :
+     errorMessage?  <p className='mb-4 flex items-center justify-center text-error500'>{errorMessage?.data?.message }</p> 
     : userStatus === "INVITED"? <div className={`text-[14px] text-[#4D4E4D] mb-8`}>
-      <span className='font-semibold'>{userInvited}</span> requested by   <span className='font-semibold'>{requestedby}</span> has already being approved as {requestType === "staff"? (userRole === "associate" || userRole === "admin"? `an ${userRole}` : `a ${userRole}`) : "an organization super admin"}
+      <span className='font-semibold'>{userInvited}</span> requested by   <span className='font-semibold'>{requestedby}</span> has already being approved as {requestType === "staff"? (userRole === "Associate" || userRole === "Admin"? `an ${userRole}` : `a ${userRole}`) : "an organization super admin"}
     </div> : <div>
       <p className={`text-[14px] text-[#4D4E4D]`}>
-       <span className='font-semibold'>{requestedby}</span> has requested to invite  <span className='font-semibold'>{userInvited}</span> to MEEDL as {requestType === "staff"? (userRole === "associate" || userRole === "admin"? `an ${userRole}` : `a ${userRole}`) : "an super organization admin"}
+       <span className='font-semibold'>{requestedby}</span> has requested to invite  <span className='font-semibold'>{userInvited}</span> to MEEDL as {requestType === "staff"? (userRole === "Associate" || userRole === "Admin"? `an ${userRole}` : `a ${userRole}`) : "an super organization admin"}
       </p>
        <p className='mt-7 text-[14px]'>
        Do you want to approve this invitation?

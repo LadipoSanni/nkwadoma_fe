@@ -103,6 +103,7 @@ function NotificationDetailPage({notificationId}: notificationIdProp) {
     store.dispatch(setRequestStatusTab("pending"))
     store.dispatch(setIsRequestedStaffOpen(true))
     store.dispatch(setRequestedStaffId(notification?.data?.contentId))
+    store.dispatch(setCurrentNavbarItem("Requests"))
     router.push(`/request`);
   }
   }

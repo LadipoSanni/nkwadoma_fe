@@ -10,7 +10,7 @@ type props = {
 const FinancialTabs: React.FC<props> = ({ children }) => {
 
     return (
-        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER','MEEDL_SUPER_ADMIN']}>
             <TabSwitch tabData={financierTabData} defaultTab="/financier/details" backClickRoutePath="/financier" backClickName="financiers"  condition={true}>
                 {children}
             </TabSwitch>
