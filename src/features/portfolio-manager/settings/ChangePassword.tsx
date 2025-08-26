@@ -73,6 +73,7 @@ const ChangePassword = () => {
         //eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         const changePasswordError : Error = error
+        console.log('error: ', changePasswordError)
         if (response?.error){
             toast({
                 description: changePasswordError?.data?.message,

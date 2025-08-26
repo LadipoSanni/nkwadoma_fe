@@ -38,7 +38,6 @@ const TwoFAa = () => {
 
     }
 
-    console.log('phoneNumber', phoneNumber, 'length: ', phoneNumber.length, )
     useEffect(() => {
         diableButton()
     }, [email, phoneNumber, twoFactorType])
