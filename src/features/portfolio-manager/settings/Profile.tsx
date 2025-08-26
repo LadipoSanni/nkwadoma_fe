@@ -8,9 +8,10 @@ interface PrpfileProps {
     userName: string | undefined,
     userEmail: string | undefined,
     companyUrl?: string ;
+    isLoading?: boolean;
 }
 
-const Profile = ({whoseProfile, userEmail, userName,companyUrl}: PrpfileProps) => {
+const Profile = ({whoseProfile,isLoading, userEmail, userName,companyUrl}: PrpfileProps) => {
 
 
     const userDetails = [
@@ -37,7 +38,7 @@ const Profile = ({whoseProfile, userEmail, userName,companyUrl}: PrpfileProps) =
                          id={item.id} data-testid={item.id}>
                         <p className={` ${inter500.className} text-[14px] `}>{item.details}</p>
                         <div
-                            className={`w-full pl-3 mo  h-fit py-3 text-[14px] ${inter.className} border border-[#D7D7D7] rounded-md `}
+                            className={`w-full ${isLoading ? 'bg-[#D7D7D7] animate-pulse  py-6 '  : 'border py-3 border-[#D7D7D7] '} pl-3 mo  h-fit  text-[14px] ${inter.className}  rounded-md `}
                         >
                             {item.value}
                         </div>

@@ -23,6 +23,7 @@ const UploadButton = ({whose, url} : Props) => {
     const {data: userDatas} = useGetUserDetailsQuery({})
     const uploadedImage = userDatas?.data?.image;
     const [imageUrl, setUploadedImageUrl] = useState<string>('');
+    const [uploadedOrgUrl, setUploadedOrgUrl] = useState<string>('');
     const [updateUserData, {isLoading}] = useAddUserImageMutation()
     const [ updateOrg, {isLoading:isLoadingOrg} ] = useAddOrganizationImageLogoMutation()
     const supportedFileTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/webp"];
@@ -68,6 +69,7 @@ const UploadButton = ({whose, url} : Props) => {
         try {
             const uploadedFileUrl = await uploadImageToCloudinary(selectedFile, "user_image");
             setUploadedImageUrl(uploadedFileUrl);
+            setUploadedOrgUrl(uploadedOrgUrl);
         } catch (uploadError) {
             setError("Failed to upload image");
             console.error(uploadError);
@@ -110,7 +112,7 @@ const UploadButton = ({whose, url} : Props) => {
 
     }
     const user = imageUrl ? imageUrl :uploadedImage;
-    const companyUrl = url
+    const companyUrl = imageUrl ? uploadedOrgUrl : url
     const image = whose === 'company' ? companyUrl : user
 
     return (
