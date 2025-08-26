@@ -14,8 +14,8 @@ const FinancierDetails = () => {
 
     const  {data, isLoading} = useViewFinancierDetailQuery({financierId:currentFinancierId},{skip : !currentFinancierId})
 
-    const initial = getInitial(data?.data?.firstName ,data?.data?.lastName);
-    const companyInitial = getInitial(data?.data?.organizationName )
+    const initial = getInitial(data?.data?.name );
+    const companyInitial = getInitial(data?.data?.name)
 
 
     const basicDetails = [
@@ -50,7 +50,7 @@ const FinancierDetails = () => {
 
                             <div
                                 className={` ${cabinetGroteskMediumBold.className} md:text-[28px] w-32 h-32 md:w-20 md:h-20 text-[#885A3C]  flex bg-[#F6F6F6] rounded-full justify-center items-center`}>
-                                {data?.data?.organizationName === null? initial : companyInitial}
+                                {initial }
                             </div>
                             <div
                                 className={`grid gap-2 mt-4`}
@@ -58,7 +58,7 @@ const FinancierDetails = () => {
                                 <div id={'financierName'}
                                      data-testid={'financierName'}
                                      className={`${cabinetGroteskMediumBold.className} text-black text-xl md:text-[28px]  `}>
-                                    {data?.data?.organizationName === null? data?.data?.firstName  + " " +  data?.data?.lastName : data?.data?.organizationName}
+                                    {data?.data?.name}
                                 </div>
                                 <span id={'financierEmail'}
                                       data-testid={'financierEmail'}
