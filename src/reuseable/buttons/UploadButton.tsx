@@ -7,6 +7,8 @@ import {Avatar, AvatarImage} from '@/components/ui/avatar';
 import {useAddOrganizationImageLogoMutation, useAddUserImageMutation,useGetUserDetailsQuery } from '@/service/users/api';
 import {useToast} from "@/hooks/use-toast";
 import {setItemToLocalStorage} from "@/utils/storage";
+import { store } from '@/redux/store';
+import {setUser2faState} from "@/redux/slice/id/slice-ids";
 
 interface Props {
     whose: 'company' | 'user',
@@ -23,6 +25,7 @@ const UploadButton = ({whose, url} : Props) => {
     const {data: userDatas} = useGetUserDetailsQuery({})
     const uploadedImage = userDatas?.data?.image;
     const [imageUrl, setUploadedImageUrl] = useState<string>('');
+    const [uploadedOrgUrl, setUploadedOrgUrl] = useState<string>('');
     const [updateUserData, {isLoading}] = useAddUserImageMutation()
     const [ updateOrg, {isLoading:isLoadingOrg} ] = useAddOrganizationImageLogoMutation()
     const supportedFileTypes = ["image/svg+xml", "image/png", "image/jpg", "image/jpeg", "image/webp"];
@@ -43,7 +46,11 @@ const UploadButton = ({whose, url} : Props) => {
             window.addEventListener("resize", handleResize);
             return () => window.removeEventListener("resize", handleResize);
         }
-    }, [file]);
+        if (userDatas){
+            store.dispatch(setUser2faState(userDatas?.data?.mfaType))
+        }
+
+    }, [file, userDatas]);
 
     const validateFile = (file: File): boolean => {
         if (!supportedFileTypes.includes(file.type)) {
@@ -68,6 +75,7 @@ const UploadButton = ({whose, url} : Props) => {
         try {
             const uploadedFileUrl = await uploadImageToCloudinary(selectedFile, "user_image");
             setUploadedImageUrl(uploadedFileUrl);
+            setUploadedOrgUrl(uploadedOrgUrl);
         } catch (uploadError) {
             setError("Failed to upload image");
             console.error(uploadError);
@@ -110,7 +118,7 @@ const UploadButton = ({whose, url} : Props) => {
 
     }
     const user = imageUrl ? imageUrl :uploadedImage;
-    const companyUrl = url
+    const companyUrl = imageUrl ? uploadedOrgUrl : url
     const image = whose === 'company' ? companyUrl : user
 
     return (

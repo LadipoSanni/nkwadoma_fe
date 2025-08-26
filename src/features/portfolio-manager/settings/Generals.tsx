@@ -7,6 +7,7 @@ import TwoFAa from "@/features/portfolio-manager/settings/TwoFAa";
 import { setSelectedGeneralTab } from '@/redux/slice/loan/selected-loan';
 import {store, useAppSelector} from '@/redux/store';
 import {getItemSessionStorage} from "@/utils/storage";
+import styles from './index.module.css'
 
 export const Generals = () => {
     const data = [
@@ -16,7 +17,6 @@ export const Generals = () => {
     ]
     const selectedCompanyTab = useAppSelector(state => state.selectedLoan.selectedGeneralTab)
     const [currentTab, setCurrentTab] = useState(selectedCompanyTab)
-
     const  userFullName = getItemSessionStorage('user_name')
     const userEmail = getItemSessionStorage('user_email')
 
@@ -27,11 +27,11 @@ export const Generals = () => {
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
-                return <Profile whoseProfile={'user'} userEmail={userEmail} userName={userFullName}/>;
+                return <Profile  whoseProfile={'user'} userEmail={userEmail} userName={userFullName}/>;
             case 1:
                 return <ChangePassword/>;
             case 2:
-                return <TwoFAa/>;
+                return <TwoFAa  setCurrentTab={setCurrentTab}/>;
 
             default:
                 return [];
@@ -42,7 +42,7 @@ export const Generals = () => {
         <div className={` w-full  bg-00 py-4 grid md:gap-[10vw]  md:flex md:justify-between  gap-6 `}>
             <SettingTabs width={` md:w-[30%] lg:w-[30%] `} tabCurrentTabIndex={currentTab} setTabCurrentTabIndex={setCurrentTab} id={'settingTab1'} tabElement={data}  />
             <div
-                className={` w-full    `}
+                className={` w-full h-full ${styles.scrollab} max-h-[70vh]  overflow-y-scroll   `}
             >
                 {getCurrentDataList()}
            </div>

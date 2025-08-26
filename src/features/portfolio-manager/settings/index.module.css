@@ -1,5 +1,5 @@
 .scrollab{
-    overflow-y: auto;
+    overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
