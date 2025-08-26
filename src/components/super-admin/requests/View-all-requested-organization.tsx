@@ -158,7 +158,7 @@ function ViewAllRequestedOrganization() {
              title: "Requested on",  
              sortable: true, 
              id: "invitedDate", 
-             selector: (row: TableRowData) =>  row?.invitedDate ? formatMonthInDate(row.invitedDate) : formatMonthInDate(new Date().toISOString())
+             selector: (row: TableRowData) =>  row?.requestedInvitationDate ? formatMonthInDate(row?.requestedInvitationDate) : formatMonthInDate(new Date().toISOString())
            }
          ]
 

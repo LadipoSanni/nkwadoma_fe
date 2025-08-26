@@ -42,7 +42,7 @@ function OrganizationDetails() {
                      : organizationDetails?.data.activationStatus === "DECLINED" ||  organizationDetails?.data.activationStatus === "DEACTIVATED"? " bg-[#FBE9E9] text-[#971B17] w-24" : "bg-[#FEF6E8] text-[#66440A] w-16"
                  }`}
                >
-                 {capitalizeFirstLetters(organizationDetails?.data.activationStatus?.toLowerCase())}
+                 {capitalizeFirstLetters(organizationDetails?.data.activationStatus === "PENDING_APPROVAL"? "Pending" : organizationDetails?.data.activationStatus?.toLowerCase())}
                </span>
              ),
            },

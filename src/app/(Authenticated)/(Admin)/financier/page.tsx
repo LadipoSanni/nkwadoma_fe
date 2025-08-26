@@ -4,7 +4,7 @@ import CustomAuthorization from "@/features/auth/authorization";
 
 const Page = () => {
     return (
-        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER','MEEDL_ASSOCIATE', 'MEEDL_ADMIN', 'MEEDL_SUPER_ADMIN']}>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER','PORTFOLIO_MANAGER_ASSOCIATE', 'MEEDL_ADMIN', 'MEEDL_SUPER_ADMIN']}>
             <ViewFinanciers/>
         </CustomAuthorization>
 

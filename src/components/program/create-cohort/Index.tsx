@@ -169,7 +169,7 @@ const CreateCohortInProgram: React.FC<createCohortProps> = ({ setIsOpen }) => {
 
                 <form
                     id="cohortForm"
-                    // className={`grid gap-5 ${inter.className} pr-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`}
+                    // className={` gap-5 ${inter.className} pr-2 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-10rem)]`}
                     className='grid gap-5 grid-cols-1 gap-y-4 md:max-h-[57vh] max-h-[55vh] overflow-y-auto  pr-2'
                     style={{
                         scrollbarWidth: 'none',
