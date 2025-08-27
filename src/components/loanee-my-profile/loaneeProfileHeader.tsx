@@ -38,6 +38,8 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
     const searchParams = useSearchParams()
      const organizationTabStatus = useAppSelector(store => store?.organization?.organizationDetailTabStatus)
 
+     
+
     const handleOpenModal = (id: string, title: string, buttonText: string) => {
         setModalId(id);
         setModalTitle(title);
@@ -45,7 +47,7 @@ const LoaneeProfileHeader = ({cohort ,userName,institutionName, program, isLoadi
         setOpenModal(true);
     }
     const handleBack = () => {
-        if(userRole === 'PORTFOLIO_MANAGER'){
+        if(['PORTFOLIO_MANAGER','MEEDL_SUPER_ADMIN','PORTFOLIO_MANAGER_ASSOCIATE'].includes(userRole || "")){
             if (searchParams){
                 const id = searchParams.get("id");
                 if (id) {
