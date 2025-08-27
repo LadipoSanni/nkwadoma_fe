@@ -5,7 +5,7 @@ import { IoMdMenu } from "react-icons/io";
 import { setShowMobileSideBar } from "@/redux/slice/layout/adminLayout";
 import { inter500, inter } from "@/app/fonts";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
-import {capitalizeFirstLetters, getFirstLetterOfWord, removeSpecialCharacterFromString} from "@/utils/GlobalMethods";
+import {capitalizeFirstLetters, getFirstLetterOfWord} from "@/utils/GlobalMethods";
 import { store, useAppSelector } from "@/redux/store";
 import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import AdminProfile from "@/features/profile/adminProfile/Index";
@@ -21,6 +21,7 @@ import { setCurrentTotalNotification,resetNotificationPageNumber } from '@/redux
 import {DISPLAYUSERROLE} from "@/components/topBar/variables";
 import { useViewFinancierDashboardQuery } from '@/service/financier/api';
 import { getItemFromLocalStorage, setItemToLocalStorage } from '@/utils/storage';
+import { convertRole } from '@/utils/GlobalMethods';
 
 const TopBar = () => {
     const [arrowToggled, setArrowToggled] = useState(false);
@@ -39,7 +40,7 @@ const TopBar = () => {
     const [displayName, setDisplayName] = useState(storedOrgName || user_name || '');
     const [userRole] = useState(user_role ? user_role : '');
 
-    const { data} = useNumberOfNotificationQuery({});
+    const { data,refetch} = useNumberOfNotificationQuery({});
 
     useEffect(() => {
         if (user_role === "FINANCIER" && isSuccess && financierData?.data) {
@@ -56,12 +57,12 @@ const TopBar = () => {
         if (data?.data?.allNotificationsCount !== undefined) {
             store.dispatch(setCurrentTotalNotification(data.data.allNotificationsCount));
         }
-        //  refetch()
+        refetch()
         if (user_role === "FINANCIER" && pathname?.startsWith("/kyc")) {
             store.dispatch(setCurrentNavbarItem("KYC verification"));
         }
 
-    },[data,pathname, user_role])
+    },[data,pathname, user_role,refetch])
 
 
     const toggleArrow = () => {
@@ -149,12 +150,12 @@ const TopBar = () => {
                                 {getFirstLetterOfWord(displayName)}
                             </div>
                         </div>
-                        <button onClick={toggleArrow} className={`${['ORGANIZATION_ADMIN','ORGANIZATION_SUPER_ADMIN','ORGANIZATION_ASSOCIATE'].includes(user_role || "") ? 'cursor-pointer' : 'cursor-text'} hidden md:grid md:gap-0 md:h-fit  w-fit object-contain`}>
+                        <button onClick={toggleArrow} className={`${['ORGANIZATION_ADMIN','ORGANIZATION_SUPER_ADMIN','ORGANIZATION_ASSOCIATE'].includes(user_role || "") ? 'cursor-pointer' : 'cursor-text'} hidden md:grid md:gap-0 md:h-fit  object-contain`}>
                             <p className={`text-black500 ${inter500.className} flex justify-start mt-auto mb-auto  text-sm `}>{capitalizeFirstLetters(displayName)}</p>
                             {DISPLAYUSERROLE?.includes(userRole) ?
                                 <p className={`text-black400 ${inter.className}  flex justify-start text-sm`}>
                                     {/*{capitalizeFirstLetters(user_role?.replace("_", " "))}*/}
-                                    {removeSpecialCharacterFromString(user_role)}
+                                    {convertRole(user_role as string)}
                                 </p>
                             :
                                 null

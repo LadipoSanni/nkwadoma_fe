@@ -6,43 +6,65 @@ import {getItemSessionStorage} from "@/utils/storage";
 import AuthButton from "@/reuseable/buttons/AuthButton";
 import {validateEmailInput} from "@/utils/GlobalMethods";
 import PhoneNumberSelect from "@/reuseable/select/phoneNumberSelect/Index";
-import styles from './index.module.css'
 import {useToast} from "@/hooks/use-toast";
 import { useEnableTwoFAMutation } from '@/service/users/api';
-const TwoFAa = () => {
+import { useAppSelector} from "@/redux/store";
+
+
+interface Props {
+    setCurrentTab: (tabIndex: number) => void;
+}
+const TwoFAa = ({setCurrentTab}:Props) => {
     const [twoFactorType, setTwoFactorType] = React.useState<string>('')
     const userEmail = getItemSessionStorage('user_email')
     const [phoneNumber, setPhoneNumber] = React.useState<string>('')
     const [email, setEmail] = React.useState(userEmail ? userEmail : '')
     const [enableTwoFa, {isLoading}] = useEnableTwoFAMutation()
+    const [buttonText, setButtonText] = React.useState<string>('Enable 2FA security')
+    const user2FState = useAppSelector(state => state.ids.user2faState)
 
     const [disable, setDisable]= React.useState(true)
 
     const handleBoxClick = (type: 'email' | 'phoneNumber') => {
-        if (twoFactorType === 'email' || twoFactorType === 'phoneNumber') {
-            setTwoFactorType('');
-        }else{
-            setTwoFactorType(type)
-
-        }
+        setTwoFactorType(type)
     }
+
     const diableButton = () => {
-        if (twoFactorType === 'phoneNumber') {
-            if (phoneNumber?.length > 11 ){
-                setDisable(false)
-            }
-        }else if(twoFactorType === 'email'){
-            if (validateEmailInput(email)){
-                setDisable(false)
-            }
-        }else {
-            setDisable(true)
-        }
+       if (user2FState === 'PHONE_NUMBER_MFA' || user2FState === 'EMAIL_MFA'){
+           setDisable(false)
+       }else {
+           if (twoFactorType === 'phoneNumber') {
+               if (phoneNumber?.replaceAll(" ", '')?.length > 11 || phoneNumber?.replaceAll(" ", '')?.length < 11 ) {
+                   setDisable(true)
+               }else {
+                   setDisable(false)
+               }
+           }else if(twoFactorType === 'email'){
+               if (validateEmailInput(email)){
+                   setDisable(false)
+               }else {
+                   setDisable(true)
+               }
+           }
+       }
 
     }
+    const updateButtonText = () => {
+        if (user2FState === 'PHONE_NUMBER_MFA' ){
+            setButtonText('Disable phone number 2FA security')
+        }else if(user2FState === 'EMAIL_MFA'){
+            setButtonText('Disable email 2FA security')
+        } else{
+            setButtonText('Enable 2FA security')
+        }
+    }
+
+
     useEffect(() => {
-        diableButton()
-    }, [email, phoneNumber, twoFactorType])
+        updateButtonText()
+        diableButton();
+
+    }, [email, phoneNumber, twoFactorType, user2FState])
 
     const handleCurrentPasswordInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         event?.preventDefault()
@@ -53,43 +75,35 @@ const TwoFAa = () => {
     const {toast} = useToast()
 
     const enableTwoFA = async (e?:React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => {
-      e?.preventDefault();
-      if (twoFactorType === 'phoneNumber') {
-          const prop = {
-              mfaPhoneNumber:phoneNumber ,
-              mfaType: "PHONE_NUMBER_MFA"
-          }
-          const response = await enableTwoFa(prop);
-          if (response?.data){
-              toast({
-                  description: response?.data?.message,
-                  status: "success",
-              })
-              setTwoFactorType("")
-          }else{
-              toast({
-                  description: 'error occurred',
-                  status: "error",
-              })
-          }
-      }else {
+        e?.preventDefault();
+        const phoneNumberProp = {
+            mfaPhoneNumber: phoneNumber?.replaceAll(' ', ''),
+            mfaType: "PHONE_NUMBER_MFA"
+        }
+        const emailProp = {
+            mfaType: "EMAIL_MFA"
+        }
+        const disableProp = {
+            mfaType: 'MFA_DISABLED'
+        }
+        const enableProps = twoFactorType === 'phoneNumber' ? phoneNumberProp : emailProp;
+        const props = user2FState === 'EMAIL_MFA' || user2FState === 'PHONE_NUMBER_MFA' ? disableProp : enableProps;
+            const response = await enableTwoFa(props);
+            if (response?.data){
+                toast({
+                    description: response?.data?.message,
+                    status: "success",
+                })
+            }else{
+                toast({
+                    //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-expect-error
+                    description: response?.error?.data?.message,
+                    status: "error",
+                })
+            }
+        setCurrentTab(0)
 
-          const prop = {
-              mfaType: "EMAIL_MFA"
-          }
-          const response = await enableTwoFa(prop);
-          if (response?.data){
-              toast({
-                  description: response?.data?.message,
-                  status: "success",
-              })
-          }else{
-              toast({
-                  description: 'error occurred',
-                  status: "error",
-              })
-          }
-      }
 
     }
     const handle = () => {
@@ -98,7 +112,7 @@ const TwoFAa = () => {
 
         return (
         <div
-            className={`md:min-w-fit md:max-w-[45%] h-full ${styles.scrollab}  grid gap-6 `}
+            className={`md:min-w-fit md:max-w-[45%] h-[100%]   grid gap-6 `}
         >
             <span className={` grid w-full  gap-1 pb-4   border-b border-b-[#D7D7D7]  `}>
                 <p className={` ${inter500.className} text-[16px] text-black `}>2FA Security</p>
@@ -159,8 +173,8 @@ const TwoFAa = () => {
                     <PhoneNumberSelect
                         selectedCountryCode={'NG'}
                         phoneNumber={phoneNumber}
-                        setPhoneNumber={(num) => setPhoneNumber( num)}
-                        label="Next of kin's phone number"
+                        setPhoneNumber={(num) => setPhoneNumber(num)}
+                        label=""
                         placeholder="Select code"
                         id="phoneNumber"
                         setFieldError={handle}
@@ -176,7 +190,7 @@ const TwoFAa = () => {
                 backgroundColor={'#142854'} textColor={"white"}
                 id={"enable2fASecurity"}
                 data-testid={`enable2fASecurity`}
-                buttonText={"Enable 2FA security"} width={"fit"}
+                buttonText={buttonText} width={"fit"}
                 isLoading={isLoading}
                 handleClick={(e) => {enableTwoFA(e)}}>
 

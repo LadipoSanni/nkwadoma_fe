@@ -63,8 +63,8 @@ function  OrganizationDetailLayout({children}:props) {
         <div className={`md:px-10 px-8 text-[28px] font-medium ${cabinetGrotesk.className}`}>
             {organizationName}
         </div>
-        <div className={`relative  ${["MEEDL_ADMIN", "MEEDL_SUPER_ADMIN"].includes(user_role || "") &&  organizationTabStatus !== "INVITED" ?  "bottom-10" : "bottom-0"}`}>
-          {["MEEDL_ADMIN", "MEEDL_SUPER_ADMIN"].includes(user_role || "") &&  organizationTabStatus !== "INVITED"  &&  <div className='flex justify-end px-6 relative '>
+        <div className={`relative  ${["MEEDL_SUPER_ADMIN"].includes(user_role || "") &&  organizationTabStatus !== "INVITED" ?  "bottom-10" : "bottom-0"}`}>
+          {[ "MEEDL_SUPER_ADMIN"].includes(user_role || "") &&  organizationTabStatus !== "INVITED"  &&  <div className='flex justify-end px-6 relative '>
                 <div className='bg-[#F6F6F6] rounded-full w-8 h-8 flex items-center justify-center'>
                 <Kebab
                 handleDropDownClick={handleDropdownClick}

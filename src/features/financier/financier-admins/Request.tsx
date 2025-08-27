@@ -2,20 +2,19 @@
 import React,{useState,useEffect} from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
 import Table from '@/reuseable/table/Table';
-import { useViewAllOrganizationByStatusQuery, useSearchOrganisationByNameQuery } from "@/service/admin/organization";
 import { formatMonthInDate } from '@/utils/Format'
 import {MdOutlineAssignmentTurnedIn} from 'react-icons/md';
 import Modal from '@/reuseable/modals/TableModal';
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import DeclineOrApprove from './Decline-or-approve';
+import DeclineOrApprove from '@/components/super-admin/requests/Decline-or-approve';
 import { useDebounce } from '@/hooks/useDebounce';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-import { setrequestOrganizationStatusTab} from '@/redux/slice/staff-and-request/request';
+import { setRequestStatusTab } from '@/redux/slice/staff-and-request/request';
 import { store,useAppSelector } from '@/redux/store';
-import { setIsRequestedOrganizationOpen,resetRequestedOrganizationId} from '@/redux/slice/staff-and-request/request';
-import styles from "../staff/index.module.css"
-import {getUserDetailsFromStorage} from "@/components/topBar/action";
+import { setIsRequestedStaffOpen,resetRequestedStaffId} from '@/redux/slice/staff-and-request/request';
+import styles from "./index.module.css"
+import { useViewFinancierAdminsQuery,useSearchFinancierAdminsQuery } from '@/service/admin/financier';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -28,17 +27,16 @@ interface TabState {
   pageSearchNumber?: number;
 }
 
-function ViewAllRequestedOrganization() {
+function ViewAllFinancierRequests() {
    const [searchTerm, setSearchTerm] = useState("");
-   const requestTabStatusType = useAppSelector(state => state?.request?.requestOrganizationStatusTab)
-   const isrequestedOrganizationOpen = useAppSelector(state => state?.request?.isRequestedOrganizationOpen)
+  const requestTabStatusType = useAppSelector(state => state?.request?.requestStatusTab)
+  const isrequestedStaffOpen = useAppSelector(state => state?.request?.isRequestedStaffOpen)
    const [requestedBy, setRequestedBy] = useState("")
    const [invitee, setInvitee] = useState("")
    const [id,setId] = useState("")
    const [role,setRole] = useState("")
-   const [status,setStatus] = useState("")
    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
-   const userRole = getUserDetailsFromStorage('user_role')
+   const [status,setStatus] = useState("")
 
    const [tabStates, setTabStates] = useState<Record<string, TabState>>({
                      pending: { pageNumber: 0, totalPages: 0, hasNextPage: false, pageSearchNumber:0 },
@@ -48,46 +46,46 @@ function ViewAllRequestedOrganization() {
 
     const currentTabState = tabStates[requestTabStatusType];
 
-
-     const dataElements = {
-         pageNumber: currentTabState.pageNumber ?? 0,
-         pageSize: 10,
-        status: requestTabStatusType === "pending"?'PENDING_APPROVAL' : 'DECLINED',
-    };
-
-    const searchElement = {
-        name:debouncedSearchTerm,
-        status: requestTabStatusType === "pending"?'PENDING_APPROVAL' : 'DECLINED',
-        pageNumber: currentTabState.pageSearchNumber ?? 0,
-        pageSize: 10,
-    }
-
-    const { data, isLoading,isFetching,refetch} = useViewAllOrganizationByStatusQuery(dataElements,{refetchOnMountOrArgChange:requestTabStatusType === "declined"? true : false});
-
-    const { data: searchResults, isLoading: isSearchloading, isFetching: isSearchfetching} = useSearchOrganisationByNameQuery(searchElement, { skip: !debouncedSearchTerm });
    
+       const dataElement = {
+         activationStatus: requestTabStatusType === "pending"? "PENDING_APPROVAL" : "DECLINED",
+         pageNumber: debouncedSearchTerm? currentTabState?.pageSearchNumber : currentTabState?.pageNumber,
+         pageSize: 10
+     }
+
+       
+     const dataSearchElement = {
+        name: debouncedSearchTerm,
+        activationStatus: requestTabStatusType === "pending"? "PENDING_APPROVAL" : "DECLINED",
+         pageNumber: debouncedSearchTerm? currentTabState?.pageSearchNumber : currentTabState?.pageNumber,
+         pageSize: 10
+    }
+   
+   
+      const {data: adminData,isLoading,isFetching} =useViewFinancierAdminsQuery(dataElement,{refetchOnMountOrArgChange: true})
+        const {data: searchResult,isLoading:isSearchLoading,isFetching:isfetching} =useSearchFinancierAdminsQuery(dataSearchElement,{refetchOnMountOrArgChange: true,skip: !debouncedSearchTerm})
 
       useEffect(()=> {
-          if(debouncedSearchTerm && searchResults && searchResults?.data ){
+          if(searchTerm && searchResult && searchResult?.data ){
             setTabStates(prev => ({
               ...prev,
               [requestTabStatusType]: {
-                pageSearchNumber: searchResults?.data.pageNumber,
-                  totalPages: searchResults?.data.totalPages,
-                  hasNextPage: searchResults?.data.hasNextPage
+                pageSearchNumber: searchResult?.data.pageNumber,
+                  totalPages: searchResult?.data.totalPages,
+                  hasNextPage: searchResult?.data.hasNextPage
               }
           }));  
-          }else  if(!debouncedSearchTerm && data && data?.data  ){
+          }else  if(!searchTerm && adminData && adminData?.data  ){
             setTabStates(prev => ({
               ...prev,
               [requestTabStatusType]: {
-                pageNumber: data?.data.pageNumber,
-                  totalPages: data?.data.totalPages,
-                  hasNextPage: data?.data.hasNextPage
+                pageNumber: adminData?.data.pageNumber,
+                  totalPages: adminData?.data.totalPages,
+                  hasNextPage: adminData?.data.hasNextPage
               }
           }));  
         }
-         },[searchResults,data,debouncedSearchTerm,requestTabStatusType])
+         },[adminData,debouncedSearchTerm,requestTabStatusType,searchResult])
 
   const handlePageChange: React.Dispatch<React.SetStateAction<number>> = (value) => {
               if(!searchTerm){
@@ -113,76 +111,76 @@ function ViewAllRequestedOrganization() {
           };
 
 
-
+          
 
    const getTableData = () => {
-    if (!data?.data?.body) return [];
-    if (debouncedSearchTerm) return searchResults?.data?.body || [];
-    return data?.data?.body;
+    if (!adminData?.data?.body) return [];
+    if (debouncedSearchTerm) return searchResult?.data?.body || [];
+    return adminData?.data?.body;
 }
   
 
        const handleRowClick = (row: TableRowData) => {
-          const fullName = capitalizeFirstLetters(row?.name?.toString())
-          const requestedBy = capitalizeFirstLetters(row?.requestedBy?.toString())
+          const fullName = capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
+          const requestedBy = capitalizeFirstLetters(row?.inviteeName?.toString())
           const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" : "Associate"
-          store.dispatch(setIsRequestedOrganizationOpen(true))
-          store.dispatch(resetRequestedOrganizationId())
+          store.dispatch(setIsRequestedStaffOpen(true))
+          store.dispatch(resetRequestedStaffId())
            setRequestedBy(requestedBy)
            setInvitee(fullName)
-           setId(row?.id as string)
+           setId(row?.cooperateFinancierId as string)
            setRole(role  as string)
            setStatus(row?.activationStatus as string)
       }
-   
+        
        const tableHeader = [
            { 
-             title: "Name",  
+             title: "Requested by",  
              sortable: true, 
-             id: "name", 
-             selector: (row: TableRowData) => row.name || "Not provided"
+             id: "inviteeName", 
+             selector: (row: TableRowData) => row.inviteeName || "Not provided"
            },
            { 
-            title:  <div>Invited by</div>,  
+            title:  <div className='md:mr-16'>Invitee</div>,  
             sortable: true, 
-            id: "requestedBy", 
-            selector: (row: TableRowData) => capitalizeFirstLetters(row?.requestedBy?.toString())
+            id: "firstName", 
+            selector: (row: TableRowData) => capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
           },
            { 
-             title: <div className='md:mr-20'>Email</div>,  
+             title: <div className='md:mr-32'>Email</div>,  
              sortable: true, 
              id: "email", 
              selector: (row: TableRowData) => row.email 
            },
            { 
+             title: "Role",  
+             sortable: true, 
+             id: "role", 
+             selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN" ||row.role === "ORGANIZATION_ADMIN" ? "Admin" : "Associate"
+           },
+           { 
              title: "Requested on",  
              sortable: true, 
-             id: "invitedDate", 
-             selector: (row: TableRowData) =>  row?.requestedInvitationDate ? formatMonthInDate(row?.requestedInvitationDate) : formatMonthInDate(new Date().toISOString())
+             id: "createdAt", 
+             selector: (row: TableRowData) => formatMonthInDate(row.createdAt) 
            }
          ]
-
-      const isAdmin = ["MEEDL_SUPER_ADMIN","MEEDL_ADMIN"].includes(userRole || "")
   
   return (
-    <div 
-    className={`mt-5 ${isAdmin ? `${styles.container} h-[74vh]` : ""}`}
-    style={{
-      scrollbarWidth: 'none',
-      msOverflowStyle: 'none',  
-        }}
-    >
+    <div className={` py-5`}>
       <Tabs
        value={requestTabStatusType}
        onValueChange={(value) => {
-      store.dispatch(setrequestOrganizationStatusTab(value));}}
+      store.dispatch(setRequestStatusTab(value));}}
       >
-          
+    <div className='px-3 md:px-6'>    
 <TabsList>
     <TabsTrigger value="pending">Pending</TabsTrigger>
     <TabsTrigger value="declined">Declined</TabsTrigger>
 </TabsList>
-     <div className={`mt-4 `}>
+</div> 
+     <div className={`mt-6 max-h-[73vh] ${!(isLoading || isFetching ) && styles.container}  `}>
+    <div className='md:pl-6 pl-3 pr-4'>
    <div className=''>
    <SearchInput
           testId='search-input'
@@ -197,57 +195,60 @@ function ViewAllRequestedOrganization() {
        <Table 
         tableData={getTableData()}
         tableHeader={tableHeader}
-        handleRowClick={userRole !== "MEEDL_ADMIN"? handleRowClick : () => {}}
-        staticHeader='Name'
-        staticColunm='name'
+        handleRowClick={handleRowClick}
+        staticHeader='Requested by'
+        staticColunm='inviteeName'
         icon={MdOutlineAssignmentTurnedIn}
-         sideBarTabName='Organization'
+        sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={data?.data?.body?.length < 10 || searchResults?.data?.body?.length < 10 ? 60 : undefined}
-        isLoading={isLoading || isFetching || isSearchfetching || isSearchloading}
+        tableHeight={57}
+        isLoading={isLoading || isFetching || isSearchLoading || isfetching }
         hasNextPage={currentTabState.hasNextPage}
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
         setPageNumber={handlePageChange}
         totalPages={currentTabState.totalPages}
+         sx='cursor-pointer'
          condition={true}
-         searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchResults?.data?.body?.length < 1 }
+         searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchResult?.data?.body?.length < 1 }
          optionalFilterName='Pending'
-         sx={userRole !== "MEEDL_ADMIN"?'cursor-pointer' : ""}
        />
       </div>
    </TabsContent>
-  
+   
    <TabsContent value="declined">
    <div className='mt-4' data-testid="table">
        <Table 
         tableData={getTableData()}
         tableHeader={tableHeader}
-        handleRowClick={userRole !== "MEEDL_ADMIN"? handleRowClick : () => {}}
-        staticHeader='Name'
-        staticColunm='name'
+        handleRowClick={handleRowClick}
+        staticHeader='Requested by'
+        staticColunm='inviteeName'
         icon={MdOutlineAssignmentTurnedIn}
-        sideBarTabName='Organization'
+        sideBarTabName='request'
         tableCellStyle="h-12"
-        tableHeight={data?.data?.body?.length < 10 || searchResults?.data?.body?.length  ? 60 : undefined}
-        isLoading={isLoading || isFetching || isSearchfetching || isSearchloading }
+        tableHeight={ 57}
+        isLoading={isLoading || isFetching  || isSearchLoading || isfetching}
         hasNextPage={currentTabState.hasNextPage}
         pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
         setPageNumber={handlePageChange}
         totalPages={currentTabState.totalPages}
-        sx={userRole !== "MEEDL_ADMIN"?'cursor-pointer' : ""}
+         sx='cursor-pointer'
          condition={true}
-         searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 &&  searchResults?.data?.body?.length < 1 }
+         searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && searchResult?.data?.body?.length < 1 }
          optionalFilterName='declined'
        />
       </div>
+      
    </TabsContent>
+   </div>
    </div>
    </Tabs>
    <div>
         <Modal
-        isOpen={isrequestedOrganizationOpen}
-        closeModal={()=> {store.dispatch(setIsRequestedOrganizationOpen(false))
-                   store.dispatch(resetRequestedOrganizationId())}}
+        isOpen={isrequestedStaffOpen}
+        closeModal={() => {store.dispatch(setIsRequestedStaffOpen(false))
+           store.dispatch(resetRequestedStaffId())}
+        }
        className='pb-1'
         closeOnOverlayClick={true}
         icon={Cross2Icon}
@@ -260,20 +261,15 @@ function ViewAllRequestedOrganization() {
           invitee={invitee}
           id={id}
           role={role}
-          refetches={refetch}
-          requestType='organization'
+          requestType='financier'
           status={status}
-          user_role={userRole}
         />
          
         </Modal>
       </div>
-      
     </div>
    
   )
 }
 
-export default ViewAllRequestedOrganization
-
-
+export default ViewAllFinancierRequests

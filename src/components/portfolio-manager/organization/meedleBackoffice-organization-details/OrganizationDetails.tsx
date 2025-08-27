@@ -5,7 +5,7 @@ import Details from "@/components/loanee-my-profile/Details";
 import { inter } from '@/app/fonts';
 import {useGetOrganizationDetailsQuery} from "@/service/admin/organization";
 import { store, useAppSelector } from "@/redux/store";
-import { setOrganizationStatus } from "@/redux/slice/organization/organization";
+import { setOrganizationStatus,setOrganizationName } from "@/redux/slice/organization/organization";
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
 import { ensureHttpsUrl } from "@/utils/GlobalMethods";
 import { formatNumberWithCommas } from '@/utils/Format';
@@ -23,6 +23,7 @@ function OrganizationDetails() {
 
          useEffect(() => {
         store.dispatch(setOrganizationStatus(organizationDetails?.data?.activationStatus))
+         store.dispatch(setOrganizationName(organizationDetails?.data?.name))
          },[organizationDetails?.data?.activationStatus])
 
           const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);
@@ -41,7 +42,7 @@ function OrganizationDetails() {
                      : organizationDetails?.data.activationStatus === "DECLINED" ||  organizationDetails?.data.activationStatus === "DEACTIVATED"? " bg-[#FBE9E9] text-[#971B17] w-24" : "bg-[#FEF6E8] text-[#66440A] w-16"
                  }`}
                >
-                 {capitalizeFirstLetters(organizationDetails?.data.activationStatus?.toLowerCase())}
+                 {capitalizeFirstLetters(organizationDetails?.data.activationStatus === "PENDING_APPROVAL"? "Pending" : organizationDetails?.data.activationStatus?.toLowerCase())}
                </span>
              ),
            },

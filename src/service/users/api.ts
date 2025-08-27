@@ -6,7 +6,7 @@ export const userApi = createApi({
 
     reducerPath: 'userApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['userDetail'],
+    tagTypes: ['userDetail', 'organization', 'userDetail'],
     endpoints: (builder) => ({
         logout: builder.mutation({
             query:() => ({
@@ -30,6 +30,14 @@ export const userApi = createApi({
             invalidatesTags: ['userDetail']
 
         }),
+        addOrganizationImageLogo : builder.mutation({
+            query : (props:{imageUrl: string}) => ({
+                url: '/organization/upload/image',
+                method: 'POST',
+                body: props
+            }),
+            invalidatesTags: ['organization']
+        }),
         getUserDetails : builder.query({
             query: () => ({
                 url: `/auth/userDetail`,
@@ -43,7 +51,8 @@ export const userApi = createApi({
                 url : '/auth/manageMFA',
                 method: 'POST',
                 body: data
-            })
+            }),
+            invalidatesTags: ['userDetail']
         })
 
     })
@@ -51,6 +60,7 @@ export const userApi = createApi({
 
 export const { useLogoutMutation , useChangePasswordMutation,
     useAddUserImageMutation, useGetUserDetailsQuery,
+    useAddOrganizationImageLogoMutation,
     useEnableTwoFAMutation,
 
 } = userApi;

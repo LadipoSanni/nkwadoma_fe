@@ -5,6 +5,8 @@ import Profile from "@/features/portfolio-manager/settings/Profile";
 import BankDetails from "@/features/portfolio-manager/settings/bankDetails";
 import {store, useAppSelector} from '@/redux/store';
 import {setSelectedCompanyTab} from "@/redux/slice/loan/selected-loan";
+import {useGetOrganizationDetailsQuery} from "@/service/admin/organization";
+import styles from './index.module.css'
 
 const Company = () => {
     const data = [
@@ -17,11 +19,13 @@ const Company = () => {
         store.dispatch(setSelectedCompanyTab(currentTab))
     }, [currentTab]);
 
+    const {data:organizationData, isFetching ,isLoading} = useGetOrganizationDetailsQuery({})
+
 
     const getCurrentDataList = () => {
         switch (currentTab) {
             case 0:
-                return <Profile/>;
+                return <Profile isLoading={isLoading || isFetching} companyUrl={organizationData?.data?.bannerImage} whoseProfile={'company'} userName={organizationData?.data?.name} userEmail={organizationData?.data?.email}/>;
             case 1:
                 return <BankDetails/>;
             default:
@@ -33,7 +37,7 @@ const Company = () => {
         <div className={` w-full  bg-00 py-4 grid md:gap-[10vw]  md:flex md:justify-between  gap-6 `}>
             <SettingTabs width={` md:w-[30%] lg:w-[30%] `} tabCurrentTabIndex={currentTab} setTabCurrentTabIndex={setCurrentTab} id={'settingTab1'} tabElement={data}  />
             <div
-                className={` w-full    `}
+                className={` w-full ${styles.scrollab} max-h-[70vh]   `}
             >
                 {getCurrentDataList()}
             </div>

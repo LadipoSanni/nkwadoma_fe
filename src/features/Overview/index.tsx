@@ -13,10 +13,10 @@ const Index = () => {
     const userRole = getUserDetailsFromStorage('user_role') ? getUserDetailsFromStorage('user_role')  : "user role";
 
     const overviews = [
-        {role: ['PORTFOLIO_MANAGER', 'MEEDL_ASSOCIATE', 'MEEDL_ADMIN','MEEDL_SUPER_ADMIN'], value: <PortfolioManager/>},
+        {role: ['PORTFOLIO_MANAGER', 'PORTFOLIO_MANAGER_ASSOCIATE', 'MEEDL_ADMIN','MEEDL_SUPER_ADMIN'], value: <PortfolioManager/>},
         {role: ['ORGANIZATION_ADMIN'], value: <OrgAdmin/>},
         {role: ['LOANEE'], value: <Loanee/>},
-        {role: ['FINANCIER'], value: <Financier/>},
+        {role: ['FINANCIER','COOPERATE_FINANCIER_SUPER_ADMIN','COOPERATE_FINANCIER_ADMIN'], value: <Financier/>},
         {role: ['MEEDL_SUPER_ADMIN'], value: <MeedlSuperAdmin/>},
     ]
 

@@ -5,7 +5,7 @@ import {createApi} from "@reduxjs/toolkit/query/react";
 export const financierApi = createApi({
     reducerPath: 'financierApi',
     baseQuery: customFetchBaseQuery,
-    tagTypes: ['financier'],
+    tagTypes: ['financier','colleague'],
     endpoints: (builder) => ({
         inviteFinancier: builder.mutation({
             query: (data:{
@@ -118,11 +118,62 @@ export const financierApi = createApi({
                 method: "GET",
                 params: param
             })
-        })
+        }),
+        viewFinancierAdmins: builder.query({
+            query: (param: {
+                activationStatus?: string ;
+                pageSize: number;
+                pageNumber?: number;
+            }) => ({
+                url: "/cooperate/view/all/staff",
+                method: "GET",
+                params: param
+            }),
+            providesTags: ['colleague']
+        }),
+        searchFinancierAdmins: builder.query({
+            query: (param: {
+                name: string
+                activationStatus?: string
+                pageSize: number;
+                pageNumber?: number;
+            }) => ({
+                url: "/cooperate/search/staff",
+                method: "GET",
+                params: param
+            })
+        }),
+        inviteFinancierColleague: builder.mutation({
+            query: (data:{
+                firstName: string
+                lastName: string
+                role: string;
+                email: string;
+            })=> ({
+                url: '/invite/colleague/financier',
+                method: 'POST',
+                body: data
+            }),
+            invalidatesTags: ['colleague']
+        }),
+        approveOrDeclineFinancierAdminRequest: builder.mutation({
+            query: (data: {
+                cooperateFinancierId: string
+                decision: string
+            }) => ({
+                url: "/financier/respond/colleague/invitation",
+                method: "POST",
+                params: data
+            }),
+            invalidatesTags: ['colleague']
+        }), 
     })
 })
 
 export const {useInviteFinancierMutation,useViewFinanciersByInvestmentmentVehicleQuery,
     useSearchFinancierQuery,useViewAllFinanciersQuery, useViewFinancierVehiclesQuery,
     useViewFinancierDetailQuery, useGetAllActiveAndInvitedFinanciersQuery,
-    useSearchFinancierVehicleQuery, useFinancierVehicleDetailsQuery} = financierApi
+    useSearchFinancierVehicleQuery, useFinancierVehicleDetailsQuery,
+    useViewFinancierAdminsQuery,useSearchFinancierAdminsQuery,useInviteFinancierColleagueMutation,
+    useApproveOrDeclineFinancierAdminRequestMutation
+   } = financierApi

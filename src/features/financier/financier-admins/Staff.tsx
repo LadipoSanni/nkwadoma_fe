@@ -3,19 +3,16 @@ import React,{useState,useEffect} from 'react'
 import SearchInput from "@/reuseable/Input/SearchInput";
 import { Button } from '@/components/ui/button';
 import Table from '@/reuseable/table/Table';
-// import { allStaff } from '@/utils/LoanRequestMockData/Index';
-// import { getPaginatedData } from '@/utils/Mock-paginated-data';
 import { formatMonthInDate} from '@/utils/Format'
 import { MdOutlineAccountBalance } from 'react-icons/md';
-import InviteStaff from './Invite-staff';
+import InviteStaff from '@/components/super-admin/staff/Invite-staff';
 import Modal from '@/reuseable/modals/TableModal';
 import { Cross2Icon } from "@radix-ui/react-icons";
-import Detail from './Detail';
-import { useViewOrganizationAdminQuery} from '@/service/admin/organization';
+import Detail from '@/components/super-admin/staff/Detail';
 import { useDebounce } from '@/hooks/useDebounce';
 import {capitalizeFirstLetters} from "@/utils/GlobalMethods";
-import { getUserDetailsFromStorage } from "@/components/topBar/action";
 import styles from "./index.module.css"
+import { useViewFinancierAdminsQuery,useSearchFinancierAdminsQuery } from '@/service/admin/financier';
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -23,25 +20,18 @@ interface TableRowData {
 
 
 
-function Staff() {
+function FinancierStaff() {
     const [searchTerm, setSearchTerm] = useState("");
-    // const [currentPage, setCurrentPage] = useState(0);
-    // const filteredStaff = status? allStaff?.filter(staff => staff?.Status?.toLowerCase() === status.toLowerCase()) : allStaff;
     const [isOpen,setOpen] = useState(false)
-    // const paginationData = React.useMemo(() => {
-    //   return getPaginatedData(currentPage, 10, filteredStaff);
-    // }, [currentPage, filteredStaff]);
-    // const { hasNextPage, currentPageItems, totalPages } = paginationData;
     const [modal,setModal] = useState("invite")
     const [id,setId] = useState("")
-     const [role,setRole] = useState("")
-     const [stat,setStatus] = useState("")
-     const [email,setEmail] = useState('')
-     const [name,setName] = useState('')
-     const [date, setInvitedDate] = useState('')
-     const [isSwitch, setSwitch] = useState(false);
-     const user_role = getUserDetailsFromStorage('user_role');
-     const adminRoleType = user_role === "ORGANIZATION_SUPER_ADMIN"? [ { value: "ORGANIZATION_ADMIN", label: "Admin" }, { value: "ORGANIZATION_ASSOCIATE", label: "Associate" } ] :[ { value: "MEEDL_ADMIN", label: "Admin" }, { value: "PORTFOLIO_MANAGER", label: "Portfolio manager" } ];
+    const [role,setRole] = useState("")
+    const [stat,setStatus] = useState("")
+    const [email,setEmail] = useState('')
+    const [name,setName] = useState('')
+    const [date, setInvitedDate] = useState('')
+    const [isSwitch, setSwitch] = useState(false);
+    const adminRoleType = [ { value: "COOPERATE_FINANCIER_ADMIN", label: "Admin" } ] ;
       const [hasNextPages,setNextPage] = useState(false)
       const [totalPage,setTotalPage] = useState(0)
       const [pageNumber,setPageNumber] = useState(0)
@@ -50,31 +40,35 @@ function Staff() {
       const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
 
     const dataElement = {
-      name: debouncedSearchTerm,
-      activationStatuses: ['INVITED',"APPROVED","ACTIVE","DEACTIVATED"],
-      identityRoles:user_role === "ORGANIZATION_SUPER_ADMIN"? ["ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"] : user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"? ["COOPERATE_FINANCIER_ADMIN"] : ["PORTFOLIO_MANAGER","MEEDL_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"],
       pageNumber:pageNumber,
       pageSize: 10
   }
 
+  const searchElement = {
+      name: debouncedSearchTerm,
+      pageNumber:pageSearchNumber,
+      pageSize: 10
+  }
 
-   const {data: adminData,isLoading,isFetching} = useViewOrganizationAdminQuery(dataElement,{refetchOnMountOrArgChange: true})
+
+   const {data: adminData,isLoading,isFetching} =useViewFinancierAdminsQuery(dataElement,{refetchOnMountOrArgChange: true})
+   const {data: searchResult,isLoading:isSearchLoading,isFetching:isfetching} =useSearchFinancierAdminsQuery(searchElement,{refetchOnMountOrArgChange: true,skip: !debouncedSearchTerm})
 
    useEffect(()=> {
-    if(debouncedSearchTerm && adminData && adminData?.data ){
+    if(searchTerm && searchResult && searchResult?.data ){
       setSearchHasNextPage(adminData?.data?.hasNextPage)
       setTotalPage(adminData?.data?.totalPages)
       setPageSearchNumber(adminData?.data?.pageNumber)    
-    }else  if(!debouncedSearchTerm && adminData && adminData?.data  ){
+    }else  if(!searchTerm && adminData && adminData?.data  ){
       setNextPage(adminData?.data?.hasNextPage)
       setTotalPage(adminData?.data?.totalPages)
       setPageNumber(adminData?.data?.pageNumber)
   }
-   },[adminData,debouncedSearchTerm])
+   },[adminData,searchTerm,searchResult])
 
    const getTableData = () => {
     if (!adminData?.data?.body) return [];
-    if (debouncedSearchTerm) return adminData?.data?.body || [];
+    if (debouncedSearchTerm) return searchResult?.data?.body || [];
     return adminData?.data?.body;
 }
     
@@ -87,7 +81,7 @@ function Staff() {
    const handleRowClick = (row: TableRowData) => {
     const fullName = capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
     const status = capitalizeFirstLetters(row?.activationStatus?.toString()) || "";
-     const role =  row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN"? "Admin" :row.role === "PORTFOLIO_MANAGER_ASSOCIATE"? "Associate" : row.role === "ORGANIZATION_ADMIN"? "Admin" :row.role === "ORGANIZATION_ASSOCIATE"? "Associate" : "Admin"
+     const role =  row.role === "COOPERATE_FINANCIER_ADMIN"? "Admin" : ""
     setModal('detail')
     setOpen(true)
     setStatus(status)
@@ -95,11 +89,10 @@ function Staff() {
     setEmail(row?.email as string)
     setRole(role as string)
     setInvitedDate(row?.createdAt as string)
-    setId(row?.userId as string)
+    setId(row?.cooperateFinancierId as string)
 }
 
-
-    const financierTableHeader = [
+    const tableHeader = [
         { 
           title: "Name",  
           sortable: true, 
@@ -125,45 +118,11 @@ function Staff() {
           selector: (row: TableRowData) => formatMonthInDate(row.createdAt) 
         }
       ]
-
-      const tableHeader = [
-        { 
-          title: "Name",  
-          sortable: true, 
-          id: "firstName", 
-          selector: (row: TableRowData) => capitalizeFirstLetters(row?.firstName?.toString())  + " " + capitalizeFirstLetters(row.lastName?.toString())
-        },
-        { 
-          title: <div className='md:mr-14'>Email</div>,  
-          sortable: true, 
-          id: "email", 
-          selector: (row: TableRowData) => <div className='truncate'>{row.email}</div> 
-        },
-        { 
-          title: "Role",  
-          sortable: true, 
-          id: "role", 
-          selector: (row: TableRowData) => row.role === "PORTFOLIO_MANAGER"? "Portfolio manager" : row.role === "MEEDL_ADMIN" || row.role === "ORGANIZATION_ADMIN"? "Admin" : "Associate"
-        },
-        { 
-          title: "Status",  
-          sortable: true, 
-          id: "activationStatus", 
-          selector: (row: TableRowData) => <span className={`${row.activationStatus === "ACTIVE"? "bg-[#E6F2EA] text-[#045620] " :row.activationStatus === "INVITED"? "bg-[#FEF6E8] text-[#045620] w-20" :  "bg-[#FBE9E9] text-[#971B17]"} rounded-lg  px-2 `}>{capitalizeFirstLetters(row.activationStatus?.toString())}</span> 
-        },
-        { 
-          title: "Invited",  
-          sortable: true, 
-          id: "createdAt", 
-          selector: (row: TableRowData) => formatMonthInDate(row.createdAt) 
-        }
-      ]
-
 
 
   return (
-    <div className={`mt-8 px-5 max-h-[78vh] ${styles.container}`}>
-      <div className='md:flex justify-between items-center pr-3'>
+    <div className={`mt-8 px-6  max-h-[80vh] ${styles.container}`}>
+      <div className='md:flex justify-between items-center md:pr-3'>
         <SearchInput
           testId='search-input'
           id="staffSearchLoanee"
@@ -173,35 +132,34 @@ function Staff() {
         />
 
         <div className='md:mt-0 mt-4'>
-          {user_role === "MEEDL_ADMIN" ? "" :  <Button
+            <Button
               id="inviteStaff"
               variant={'secondary'}
               className='h-[45px] w-full font-semibold md:w-[120px]'
               onClick={handleOpen}
             >
              Invite staff
-            </Button>}
+            </Button>
         </div>
       </div>
-      <div className='mt-6 pr-3' data-testid="table">
+      <div className='mt-6 md:pr-3' data-testid="table">
        <Table 
         tableData={getTableData()}
-        tableHeader={user_role === "COOPERATE_FINANCIER_SUPER_ADMIN"? financierTableHeader  : tableHeader}
-        handleRowClick={user_role !== "MEEDL_ADMIN"? handleRowClick : () => {}}
+        tableHeader={tableHeader}
+        handleRowClick={handleRowClick}
         staticHeader='Name'
         staticColunm='firstName'
         icon={MdOutlineAccountBalance}
         sideBarTabName='staff'
         tableCellStyle="h-12"
-        tableHeight={adminData?.data?.body?.length < 10 ? 62 : undefined}
-        isLoading={isLoading || isFetching }
+        tableHeight={62}
+        isLoading={isLoading || isFetching || isSearchLoading || isfetching}
         hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
         pageNumber={searchTerm !== ""? pageSearchNumber :pageNumber}
         setPageNumber={searchTerm !== ""? setPageSearchNumber : setPageNumber}
         totalPages={ totalPage}
-         sx={user_role !== "MEEDL_ADMIN"? 'cursor-pointer' : ''}
+         sx='cursor-pointer'
          condition={true}
-        //  showKirkBabel={true}
         searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
        />
       </div>
@@ -242,4 +200,6 @@ function Staff() {
   )
 }
 
-export default Staff
+export default FinancierStaff
+
+

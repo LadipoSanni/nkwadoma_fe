@@ -10,7 +10,7 @@ interface props {
 function RequestLayout({children}:props) {
   return (
     <div>
-      <CustomAuthorization authorizedRoles={['MEEDL_SUPER_ADMIN','MEEDL_ADMIN','ORGANIZATION_SUPER_ADMIN']}>
+      <CustomAuthorization authorizedRoles={['MEEDL_SUPER_ADMIN','MEEDL_ADMIN']}>
         <TabSwitch tabData={requestTab} defaultTab='/requests/staff'>
         {children}
         </TabSwitch>

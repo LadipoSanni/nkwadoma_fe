@@ -23,6 +23,7 @@ import {portfolioOverviewApi} from '@/service/admin/overview'
 import { loanBookApi } from '@/service/admin/loan_book';
 import {unauthorizedApis} from "@/service/unauthorized/action";
 import { countryApi } from '@/service/admin/external-api/countryCalling_code_query';
+import { walletApi } from '@/service/users/wallet';
 
 
 const persistConfig = {
@@ -31,7 +32,7 @@ const persistConfig = {
     whitelist: ['adminLayout', 'selectedLoan', 'adminLayout', 'vehicle',
         'program','vehicleMultistep','financier', `marketPlace`, 'kycMultistep',
         'loanReferral', 'kycForm','notification','organization','cohort','csv','loanOffer',
-        'staff', 'loanees','request'],
+        'staff', 'loanees','request', 'ids'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -61,7 +62,8 @@ export const store = configureStore({
             portfolioOverviewApi.middleware,
             unauthorizedApis.middleware,
             loanBookApi.middleware,
-            countryApi.middleware
+            countryApi.middleware,
+            walletApi.middleware,
         ]),
 });
 

@@ -131,6 +131,7 @@ const SideBar = () => {
     ]
 
 
+
     return (
         <div className={` absolute bottom-0 grid md:static   `}>
             {showMobileSideBar &&

@@ -55,7 +55,7 @@ function CustomSelectObj({ value, onChange, className, selectContent, name, plac
         </SelectTrigger>
         <SelectContent
           id='generalSelectContent'
-          className='border-none border-[#FAFBFC] text-[#404653] text-sm'
+          className='border-none border-[#FAFBFC] text-[#404653] text-sm '
           style={{ zIndex: 1000 }}
           
         >

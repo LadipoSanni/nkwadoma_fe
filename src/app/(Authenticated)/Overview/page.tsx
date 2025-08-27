@@ -7,7 +7,7 @@ const Page = () => {
         <CustomAuthorization authorizedRoles={
             ['PORTFOLIO_MANAGER', 'ORGANIZATION_ADMIN', 'LOANEE',
             'FINANCIER', 'MEEDL_SUPER_ADMIN',
-              'MEEDL_ASSOCIATE', 'MEEDL_ADMIN']} >
+              'PORTFOLIO_MANAGER_ASSOCIATE', 'MEEDL_ADMIN','ORGANIZATION_SUPER_ADMIN','ORGANIZATION_ASSOCIATE','COOPERATE_FINANCIER_SUPER_ADMIN','COOPERATE_FINANCIER_ADMIN']} >
             <Index/>
         </CustomAuthorization>
 
