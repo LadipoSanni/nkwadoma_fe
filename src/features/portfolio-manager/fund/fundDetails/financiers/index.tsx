@@ -100,7 +100,7 @@ function Financiers() {
         }
 
     const financierHeader = [
-      { title: 'Financier', sortable: true, id: 'name', selector: (row:viewAllfinancier ) => row?.financierType === "INDIVIDUAL"? row.userIdentity?.firstName + " " + row.userIdentity?.lastName : row?.organizationName},
+      { title: 'Financier', sortable: true, id: 'name', selector: (row:viewAllfinancier ) => row?.name},
       { title: <div className='relative md:left-4'>Type</div>, id: 'type', selector: (row:viewAllfinancier) => (
         <span className={`${row.financierType ===  "INDIVIDUAL" ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] px-2 h-5`}>
     {capitalizeFirstLetters(row.financierType)}

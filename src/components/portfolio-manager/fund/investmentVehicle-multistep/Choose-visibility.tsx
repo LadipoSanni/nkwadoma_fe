@@ -44,6 +44,7 @@ interface Financier {
 interface Financials {
   id: string,
   organizationName: string,
+  name: string
   userIdentity: {
     firstName: string,
     lastName: string,
