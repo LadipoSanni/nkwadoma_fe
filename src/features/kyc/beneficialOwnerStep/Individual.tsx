@@ -9,6 +9,7 @@ import FileUpload from "../../../reuseable/Input/FileUpload";
 import {validateEntityOwnership, validateName} from "@/utils/GlobalMethods";
 import {MdOutlineDateRange} from "react-icons/md";
 import {format} from "date-fns";
+import {Owner} from "@/features/kyc/beneficialOwnerStep/Index";
 
 interface IndividualData {
     firstName: string,
@@ -25,21 +26,23 @@ interface IndividualData {
 }
 interface IndividualProps  {
     id?: number;
-    updateOwner :( field: string, value: string | File| boolean, id?: number) => void
+    updateOwner :( field: string, value: string | File| boolean, id?: number) => void;
+    currentObj: Owner,
+
 }
-const Individual = ({id, updateOwner}: IndividualProps) => {
+const Individual = ({id, updateOwner,currentObj}: IndividualProps) => {
     const [date, setDate] = React.useState<Date | undefined>(new Date())
-    const initialIndividualData = {
-        firstName: '',
-        lastName: '',
-        dateOfBirth: date,
-        relationShip: '',
-        errorMessage: '',
-        entityError: '',
-        proofType: 'national_id',
-        proofFile:  null,
-        proofFileUrl: '',
-        ownership: '',
+    const initialIndividualData : IndividualData  = {
+        firstName: currentObj?.firstName ? currentObj.firstName :  '',
+        lastName: currentObj?.lastName ? currentObj.lastName :  '',
+        dateOfBirth: currentObj?.dateOfBirth ? new Date (currentObj?.dateOfBirth) : date,
+        relationShip: currentObj?.relationShip ? currentObj.relationShip :  '',
+        errorMessage: currentObj?.errorMessage ? currentObj.errorMessage :  '',
+        entityError: currentObj?.entityError ? currentObj.entityError : '',
+        proofType: currentObj?.proofType ? currentObj?.proofType : 'national_id',
+        proofFile: currentObj?.proofFile ? currentObj?.proofFile : null,
+        proofFileUrl: currentObj?.proofFileUrl ? currentObj.proofFileUrl :    '',
+        ownership: currentObj?.ownership ? currentObj?.ownership :  '',
     }
 
     const [individualData, setIndividualData] = React.useState<IndividualData>(initialIndividualData)

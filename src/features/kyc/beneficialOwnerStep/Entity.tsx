@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {Input} from "@/components/ui/input";
 import CountrySelectPopover from "@/reuseable/select/countrySelectPopover/Index";
 import {validateEntityOwnership, validateName, validateRcNumber} from "@/utils/GlobalMethods";
+import {Owner} from "@/features/kyc/beneficialOwnerStep/Index";
 
 interface EntityData {
     name: string,
@@ -14,16 +15,17 @@ interface EntityData {
 }
 interface IndividualProps  {
     id?: number;
-    updateOwner :( field: string, value: string | File| boolean,id?: number) => void
+    updateOwner :( field: string, value: string | File| boolean,id?: number) => void,
+    currentObj: Owner,
 }
-const Entity = ({id, updateOwner}: IndividualProps) => {
+const Entity = ({id, updateOwner, currentObj}: IndividualProps) => {
     const initialEntityDate = {
-        name: '',
-        country: '',
-        rcNumber: '',
-        ownership: '',
-        entityError: '',
-        errorMessage: ''
+        name: currentObj?.name ? currentObj.name :  '',
+        country: currentObj?.country ? currentObj?.country :'',
+        rcNumber: currentObj?.rcNumber  ? currentObj?.rcNumber :'',
+        ownership: currentObj?.ownership ? currentObj?.ownership : '',
+        entityError: currentObj?.entityError ? currentObj?.entityError : '',
+        errorMessage: currentObj?.errorMessage ? currentObj?.errorMessage : '',
 
     }
 
