@@ -131,10 +131,12 @@ function DeactivateOrganization({setIsOpen,id,setSwitch,deactivateUser}:props) {
                 isLoading={isLoading || isloading} 
                 handleCloseModal={handleCloseModal} 
                 submitButtonName='Deactivate'
+                buttonStyle='bg-[#D42620]'
+                disabledButtonStyle='bg-[#D42620] opacity-15'
                 />
                 </div>
                  </div>
-                 <p className={`text-error500 flex justify-center items-center ${isError? "mb-3" : ""}`}>{isError}</p>
+                 <p className={`text-error500 flex justify-center items-center  ${isError? "mb-3" : ""}`}>{isError}</p>
                 </Form>
               )  
             }
