@@ -50,7 +50,7 @@ const BeneficialOwnerStep = () => {
             id: obj?.id,
             name: obj?.entityName,
             country: obj?.countryOfIncorporation === 'UNITED_STATES' ? 'US' : 'NG',
-            rcNumber: obj?.beneficialRcNumber,
+            rcNumber: obj?.beneficialRcNumber.slice(2),
             ownership: obj?.percentageOwnershipOrShare ?  obj?.percentageOwnershipOrShare.toString() : '',
             isFormField: !(!obj?.entityName && !obj?.beneficialOwnerLastName),
             type: obj?.beneficialOwnerType === 'COOPERATE' ? 'entity' : 'individual',
@@ -75,26 +75,26 @@ const BeneficialOwnerStep = () => {
             driverLicense: '',
             type: en?.type
         }
-        return object;
+        const objectWithoutRelationShip : BeneficialType = {
+            id: en.id ? en.id : 0,
+            beneficialOwnerType: en?.type === 'entity' ? 'COOPERATE' : 'INDIVIDUAL',
+            entityName: en?.name,
+            beneficialRcNumber: en?.rcNumber ? 'RC'+en?.rcNumber.toString() : '',
+            countryOfIncorporation: en?.country === 'US' ? 'UNITED_STATES' : 'NIGERIA',
+            beneficialOwnerFirstName: en?.firstName,
+            beneficialOwnerLastName: en?.lastName,
+            // beneficialOwnerRelationship: en?.relationShip ? en?.relationShip.toString()?.toUpperCase() : '',
+            beneficialOwnerDateOfBirth: en?.dateOfBirth ? en?.dateOfBirth.toString() : '',
+            votersCard: en?.proofType === 'voters_card' ?  en?.proofFileUrl : '',
+            percentageOwnershipOrShare: en?.ownership ? Number(en?.ownership) : 0,
+            nationalIdCard: en?.proofType === 'national_id' ? en?.proofFileUrl : '',
+            driverLicense: '',
+            type: en?.type
+        }
+        return en?.relationShip ? object : objectWithoutRelationShip;
     }
 
-    // const initialData = {
-    //     firstName: '',
-    //     lastName: '',
-    //     dateOfBirth: format(new Date(), "yyyy-MM-dd"),
-    //     relationShip: '',
-    //     errorMessage: '',
-    //     entityError: '',
-    //     proofType: 'national_id',
-    //     proofFile: null,
-    //     proofFileUrl: '',
-    //     id: Date.now(),
-    //     name: '',
-    //     country: '',
-    //     rcNumber: '',
-    //     ownership: '',
-    //     isFormField: false
-    // }
+
     const router = useRouter();
     const convertToFormObject = (obj: BeneficialType[]) =>  {
         const converted = []
