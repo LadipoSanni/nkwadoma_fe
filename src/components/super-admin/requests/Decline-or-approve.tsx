@@ -53,14 +53,25 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
       }
     },[refetch,requestedStaffId,reFetch,requestedOrganizationId])
 
+
+    useEffect(() =>{
+      if(requestedStaffId){
+         if(data?.data?.activationStatus === "DECLINED" ){
+          store.dispatch(setRequestStatusTab("declined"))
+         }
+      }else if(requestedOrganizationId){
+        if(orgData?.data?.activationStatus  === "DECLINED"){
+          store.dispatch(setrequestOrganizationStatusTab("declined"))  
+        }
+      }
+    },[requestedStaffId, requestedOrganizationId, data?.data?.activationStatus, orgData?.data?.activationStatus])
+
        
      const requestedby = data? data?.data?.requestedBy : orgData? orgData?.data?.requestedBy : requestedBy
      const userInvited = data? capitalizeFirstLetters(data?.data?.firstName) + " " +  capitalizeFirstLetters( data?.data?.lastName) : orgData? capitalizeFirstLetters(orgData.data?.name) : invitee
      const roles =  data?.data?.role === "PORTFOLIO_MANAGER"? "Portfolio manager" :  ["MEEDL_ADMIN","ORGANIZATION_ADMIN","ORGANIZATION_ASSOCIATE"].includes(data?.data?.role)? "Admin" : data?.data?.role === "MEEDL_ASSOCIATE"? "Associate" : data?.data?.role === "COOPERATE_FINANCIER_ADMIN"? "Admin" : orgData?.data?.meedlUser?.role === "ORGANIZATION_ADMIN"? "Admin"   : ""
      const userRole = roles? roles : role
      const userStatus = data? data?.data?.activationStatus : orgData? orgData?.data?.activationStatus : status
-
-
 
     const handleClose =() => {
         store.dispatch(setIsRequestedStaffOpen(false)) 
@@ -126,7 +137,7 @@ function DeclineOrApprove({requestedBy,invitee,role,id,requestType,status,refetc
     <div className='mt-6'>
     { detailLoading || isOrgLoading ? <SkeletonForModal/>  :
      errorMessage?  <p className='mb-4 flex items-center justify-center text-error500'>{errorMessage?.data?.message }</p> 
-    : userStatus === "INVITED"? <div className={`text-[14px] text-[#4D4E4D] mb-8`}>
+    : ["INVITED","ACTIVE"].includes(userStatus || '') ? <div className={`text-[14px] text-[#4D4E4D] mb-8`}>
       <span className='font-semibold'>{userInvited}</span> requested by   <span className='font-semibold'>{requestedby}</span> has already being approved as {requestType === "staff"? (userRole === "Associate" || userRole === "Admin"? `an ${userRole}` : `a ${userRole}`) : "an organization super admin"}
     </div> : <div>
       <p className={`text-[14px] text-[#4D4E4D]`}>
