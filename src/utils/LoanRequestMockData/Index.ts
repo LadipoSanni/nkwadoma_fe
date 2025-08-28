@@ -221,15 +221,15 @@ export const LoanRequestTable = [
 ]
 
 export const loanReferralTable = [
-    {
-        id: 1,
-        firstName: 'Anoluwapo',
-        lastName: 'Ogungbemi',
-        dateReferred: '2024-12-16T16:17:42.934384',
-        requestDate: '2024-12-16T16:17:42.934384',
-        initialDeposit: '30000000',
-        amountReferred: '30000000'
-    },
+    // {
+    //     id: 1,
+    //     firstName: 'Anoluwapo',
+    //     lastName: 'Ogungbemi',
+    //     dateReferred: '2024-12-16T16:17:42.934384',
+    //     requestDate: '2024-12-16T16:17:42.934384',
+    //     initialDeposit: '30000000',
+    //     amountReferred: '30000000'
+    // },
 
 
 ]
