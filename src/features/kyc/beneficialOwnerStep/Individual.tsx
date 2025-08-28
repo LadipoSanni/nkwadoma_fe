@@ -5,7 +5,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {Button} from "@/components/ui/button";
 import {Calendar} from "@/components/ui/calendar";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import FileUpload from "../../../reuseable/Input/FileUpload";
+import FileUpload from "../../../reuseable/Input/FileUploadTwo";
 import {validateEntityOwnership, validateName} from "@/utils/GlobalMethods";
 import {MdOutlineDateRange} from "react-icons/md";
 import {format} from "date-fns";
@@ -289,6 +289,7 @@ const Individual = ({id, updateOwner,currentObj}: IndividualProps) => {
                 handleDrop={(e) => handleDrop( e)}
                 handleDragOver={(e) => e.preventDefault()}
                 setUploadedImageUrl={(url) => handleSetUploadedImageUrl( url)}
+                initialImageUrl={individualData?.proofFileUrl}
             />
         </div>
 
