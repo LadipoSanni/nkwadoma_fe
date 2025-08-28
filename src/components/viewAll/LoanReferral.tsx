@@ -6,6 +6,7 @@ import {formatAmount} from "@/utils/Format";
 import dayjs from "dayjs";
 import {loanReferralTable} from "@/utils/LoanRequestMockData/Index";
 import {Icon} from "@iconify/react";
+import { useViewAllLoanReferralQuery } from '@/service/admin/loan/loan-request-api';
 
 interface viewAllType {
     programName: string
@@ -20,6 +21,12 @@ interface viewAllType {
 const LoanReferral = () => {
 
     const [pageNumber, setPageNumber] = React.useState(0);
+    const [pageSize] = React.useState(10);
+    const viewAllProps = {
+        pageSize:pageSize,
+        pageNumber:pageNumber
+    }
+    const {data, isLoading, isFetching} =  useViewAllLoanReferralQuery(viewAllProps)
     const tableHeader =  [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: viewAllType) =><div className='flex  gap-2 '>{capitalizeFirstLetters(row?.firstName?.toString())} <div className={``}></div>{capitalizeFirstLetters(row?.lastName?.toString())}</div>  },
         { title: 'Initial deposit', sortable: true, id: 'initialDeposit', selector: (row:  viewAllType) => <div className=''>{formatAmount(row.initialDeposit)}</div>},
@@ -27,6 +34,8 @@ const LoanReferral = () => {
         { title: 'Date referred', sortable: true, id: 'dateReferred', selector: (row: viewAllType) =><div>{dayjs(row.dateReferred?.toString()).format('MMM D, YYYY')}</div> },
 
     ]
+
+
     const handleRowClick = (ID: string | object | React.ReactNode) => {
         // router.push(`/loan-request-details?id=${ID}`);
         console.log(pageNumber, ID)
@@ -40,31 +49,24 @@ const LoanReferral = () => {
         >
 
             <Table
-                tableData={loanReferralTable}
+                tableData={data?.data?.body}
+                //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 tableHeader={ tableHeader}
                 handleRowClick={handleRowClick }
-                staticHeader='Loanee'
-                staticColunm='Loanee'
+                staticHeader='firstName'
+                staticColunm='firstName'
                 icon={<Icon icon="material-symbols:money-bag-outline" height={"2rem"} width={"2rem"} color={ '#142854' }></Icon>}
-                sideBarTabName='Loan offer'
+                sideBarTabName='Loan referral'
                 tableCellStyle="h-12"
                 tableHeight={loanReferralTable?.length < 10 ? 58 : undefined}
-                // tableHeight={adminData?.data?.body?.length < 10 ? 60 : undefined}
-                // isLoading={isLoading || isFetching }
-                isLoading={false}
-                // hasNextPage={searchTerm !== ""? searchHasNextPage : hasNextPages}
-                // hasNextPage={currentTabState.hasNextPage}
-                hasNextPage={false}
-                // pageNumber={searchTerm !== ""? currentTabState.pageSearchNumber ?? 0 :currentTabState.pageNumber ?? 0}
-                pageNumber={10}
+                isLoading={isLoading || isFetching}
+                hasNextPage={data?.data?.hasNextPage}
+                pageNumber={pageNumber}
                 setPageNumber={setPageNumber}
-                // totalPages={ totalPage}
-                // totalPages={currentTabState.totalPages}
-                totalPages={100}
-                // sx={userRole !== "MEEDL_ADMIN"?'cursor-pointer' : ""}
+                totalPages={data?.data?.totalPages}
                 condition={true}
                 searchEmptyState={false}
-                // searchEmptyState={!isTyping && debouncedSearchTerm?.length > 0 && adminData?.data?.body?.length < 1 }
                 optionalFilterName=''
             />
         </div>
