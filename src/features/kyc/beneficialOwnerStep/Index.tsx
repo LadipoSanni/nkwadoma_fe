@@ -10,6 +10,7 @@ import Individual from "@/features/kyc/beneficialOwnerStep/Individual";
 import {format} from "date-fns";
 import { store, useAppSelector } from "@/redux/store";
 import {BeneficialType, updateBeneficialOwner} from "@/redux/slice/kyc/kycFormSlice";
+import { useRef } from "react";
 
 export interface Owner {
     firstName?: string,
@@ -35,6 +36,8 @@ const BeneficialOwnerStep = () => {
     const [disabledContinueButton, setDisableContinueButton] = useState(true);
     const [error, setError] = useState<string| undefined >(undefined);
     const filledForm = useAppSelector(state => state.kycForm.beneficialOwner);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
     const revertToFormObject = (obj: BeneficialType) => {
         const reverse : Owner = {
             firstName: obj?.beneficialOwnerFirstName,
@@ -58,6 +61,7 @@ const BeneficialOwnerStep = () => {
     }
 
     const covertOwnerToStoreType = (en: Owner) => {
+        console.log('oen: ', en)
         const object : BeneficialType = {
             id: en.id ? en.id : 0,
             beneficialOwnerType: en?.type === 'entity' ? 'COOPERATE' : 'INDIVIDUAL',
@@ -138,7 +142,14 @@ const BeneficialOwnerStep = () => {
     }, [owners, disabledContinueButton]);
 
 
-
+    useEffect(() => {
+        if (containerRef.current) {
+            containerRef.current.scrollTo({
+                top: containerRef.current.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+    }, [owners]);
 
 
     const handleBackClick = () => {
@@ -165,10 +176,11 @@ const BeneficialOwnerStep = () => {
                     rcNumber: '',
                     ownership: '',
                     isFormField: false,
-                    type: ''
+                    type: 'entity'
                 }
             ]
         ))
+
     }
 
 
@@ -181,6 +193,7 @@ const BeneficialOwnerStep = () => {
                     : owner
             )
         );
+        console.log('owners: ', owners);
     };
 
     const handleDeleteSection = (id?: number) => {
@@ -209,8 +222,11 @@ const BeneficialOwnerStep = () => {
                 <h1 id="beneficialOwnerTitle"
                     className="text-meedlBlack text-[24px] leading-[120%] font-medium">Beneficial owner</h1>
             </div>
-            <div id="beneficialOwnerSection"
-                     className={'md:max-w-[30rem] w-full md:mx-auto h-[calc(100vh-250px)] pt-1 overflow-y-auto pr-3'}>
+            <div
+                ref={containerRef}
+
+                id="beneficialOwnerSection"
+                     className={'md:max-w-[30rem] w-full md:mx-auto max-h-[calc(100vh-250px)] h-[calc(100vh-250px)]  pt-1 overflow-y-auto pr-3'}>
                 <main id="entityFormMain" className="grid gap-6">
                     {owners?.map((section) => (
                         <div key={section.id} className={'relative grid mt-6'}>

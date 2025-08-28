@@ -62,7 +62,7 @@ const initialState: KYCFormState = {
     beneficialOwner: [
         {
             id: 0,
-            beneficialOwnerType: "",
+            beneficialOwnerType: "COOPERATE",
             entityName: "",
             beneficialRcNumber: "",
             countryOfIncorporation: "",
