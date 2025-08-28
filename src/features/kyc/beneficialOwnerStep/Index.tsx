@@ -61,7 +61,6 @@ const BeneficialOwnerStep = () => {
     }
 
     const covertOwnerToStoreType = (en: Owner) => {
-        console.log('oen: ', en)
         const object : BeneficialType = {
             id: en.id ? en.id : 0,
             beneficialOwnerType: en?.type === 'entity' ? 'COOPERATE' : 'INDIVIDUAL',
@@ -110,6 +109,7 @@ const BeneficialOwnerStep = () => {
     const initial = convertToFormObject(filledForm)
 
     const [owners, setOwner] = useState<Owner[]>(initial)
+    const prevLength = useRef(owners.length);
 
     const validateTotalOwnership = (sections: Owner[]) => {
         const array: number[] = [] ;
@@ -143,11 +143,13 @@ const BeneficialOwnerStep = () => {
 
 
     useEffect(() => {
-        if (containerRef.current) {
-            containerRef.current.scrollTo({
-                top: containerRef.current.scrollHeight,
-                behavior: "smooth",
-            });
+        if(owners?.length > prevLength.current){
+            if (containerRef.current) {
+                containerRef.current.scrollTo({
+                    top: containerRef.current.scrollHeight,
+                    behavior: "smooth",
+                });
+            }
         }
     }, [owners]);
 
@@ -193,7 +195,6 @@ const BeneficialOwnerStep = () => {
                     : owner
             )
         );
-        console.log('owners: ', owners);
     };
 
     const handleDeleteSection = (id?: number) => {
