@@ -116,7 +116,6 @@ const kycFormSlice = createSlice({
             state.sourceOfFunds = action.payload;
         },
         updateBeneficialOwner: (state, action: PayloadAction<BeneficialType[]>) => {
-            // state.beneficialOwner = [...state.beneficialOwner, ...action.payload];
             state.beneficialOwner = action.payload;
         },
         updateDeclaration: (state, action: PayloadAction<Partial<KYCFormState['declaration']>>) => {

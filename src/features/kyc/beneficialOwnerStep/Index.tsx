@@ -35,7 +35,6 @@ const BeneficialOwnerStep = () => {
     const [disabledContinueButton, setDisableContinueButton] = useState(true);
     const [error, setError] = useState<string| undefined >(undefined);
     const filledForm = useAppSelector(state => state.kycForm.beneficialOwner);
-    console.log('filledForm', filledForm);
     const revertToFormObject = (obj: BeneficialType) => {
         const reverse : Owner = {
             firstName: obj?.beneficialOwnerFirstName,
@@ -118,7 +117,6 @@ const BeneficialOwnerStep = () => {
         }
         return undefined;
     };
-    console.log('owner ', owners)
 
     useEffect(() => {
         const response = validateTotalOwnership(owners)
