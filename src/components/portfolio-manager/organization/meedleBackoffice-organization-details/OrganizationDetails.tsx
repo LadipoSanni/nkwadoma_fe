@@ -24,7 +24,7 @@ function OrganizationDetails() {
          useEffect(() => {
         store.dispatch(setOrganizationStatus(organizationDetails?.data?.activationStatus))
          store.dispatch(setOrganizationName(organizationDetails?.data?.name))
-         },[organizationDetails?.data?.activationStatus])
+         },[organizationDetails?.data?.activationStatus,organizationDetails?.data?.name])
 
           const organizationLink = ensureHttpsUrl(organizationDetails?.data.websiteAddress);
 
@@ -69,8 +69,8 @@ function OrganizationDetails() {
         <p className={`text-[16px mb-2 mt-[1] ${inter.className}`}>Loan details</p>
          <div className={`${style.detailContainer}`}>
          <div className='grid grid-cols-1 gap-y-5 mt-2'>
-        <Details isLoading={isLoading}  id={'historicalDebt'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Historical debt'} value={organizationDetails?.data.totalAmountReceived} valueType={'currency'} className='w-full'/>
-        <Details isLoading={isLoading}  id={'amountRepaid '}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount repaid '} value={organizationDetails?.data.totalDebtRepaid} valueType={'currency'}  className='w-full'/>
+        <Details isLoading={isLoading}  id={'historicalDebt'}    maxWidth={'100%'} name={'Historical debt'} value={organizationDetails?.data.totalAmountReceived} valueType={'currency'} className='w-full'/>
+        <Details isLoading={isLoading}  id={'amountRepaid '}    maxWidth={'100%'} name={'Amount repaid '} value={organizationDetails?.data.totalDebtRepaid} valueType={'currency'}  className='w-full'/>
         <Details isLoading={isLoading}  id={'amountOutstanding'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Amount outstanding'} value={organizationDetails?.data?.totalCurrentDebt} valueType={'currency'}  className='w-full'/>
         <Details isLoading={isLoading}  id={'repaymentRate'}  showAsWholeNumber={true}  maxWidth={'100%'} name={'Repayment rate'} value={organizationDetails?.data?.repaymentRate?.toFixed(2)} valueType={'percentage'}  className='w-full'/>
          <div className='grid grid-cols-1 md:grid-cols-2 gap-y-5 md:gap-4'>

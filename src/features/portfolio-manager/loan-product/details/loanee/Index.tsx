@@ -20,7 +20,7 @@ interface TableRowData {
 // }
 
 export function Loanees() {
-    const id = useAppSelector(state => (state.selectedLoan.clickedLoanProductId))
+    const id = useAppSelector(state => (state?.loanProduct?.loanProductId))
     const [loanProductId] = useState(id);
     // const [loanees, setLoanees] = useState<loanDetails[]>([])
     const [searchTerm, setSearchTerm] = useState('');
@@ -62,7 +62,7 @@ export function Loanees() {
             setTotalPage( allLoanee?.data?.totalPages)
             setPageNumber( allLoanee?.data?.pageNumber)
         }
-    }, [debouncedSearchTerm, searchResults?.data?.body, allLoanee?.data?.body]);
+    }, [debouncedSearchTerm, searchResults, allLoanee]);
 
     const getTableData = () => {
         if (!allLoanee?.data?.body) return [];

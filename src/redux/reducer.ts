@@ -42,6 +42,7 @@ import loaneesReducer from "./slice/loan/loanees";
 import requestReducer from "./slice/staff-and-request/request"
 import { walletApi } from '@/service/users/wallet';
 import idsReducer from './slice/id/slice-ids';
+import loanProductReducer from "./slice/loan-product/Loan-product"
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
@@ -66,6 +67,7 @@ const appReducer = combineReducers({
     loanees: loaneesReducer,
     ids: idsReducer,
     request: requestReducer,
+    loanProduct: loanProductReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
