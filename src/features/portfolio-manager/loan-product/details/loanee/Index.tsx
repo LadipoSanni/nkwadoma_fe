@@ -20,7 +20,7 @@ interface TableRowData {
 // }
 
 export function Loanees() {
-    const id = useAppSelector(state => (state.selectedLoan.clickedLoanProductId))
+    const id = useAppSelector(state => (state?.loanProduct?.loanProductId))
     const [loanProductId] = useState(id);
     // const [loanees, setLoanees] = useState<loanDetails[]>([])
     const [searchTerm, setSearchTerm] = useState('');

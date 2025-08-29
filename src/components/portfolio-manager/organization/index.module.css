@@ -21,3 +21,15 @@
 .orgDetailContainer::-webkit-scrollbar {
     display: none;
 }
+
+.loanDetailContainer{
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    /* height: 62vh; */
+    grid-template-rows: repeat(6, 1fr);
+}
+
+.loanDetailContainer::-webkit-scrollbar {
+    display: none;
+}
