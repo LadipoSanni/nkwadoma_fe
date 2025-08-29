@@ -62,7 +62,7 @@ export function Loanees() {
             setTotalPage( allLoanee?.data?.totalPages)
             setPageNumber( allLoanee?.data?.pageNumber)
         }
-    }, [debouncedSearchTerm, searchResults?.data?.body, allLoanee?.data?.body]);
+    }, [debouncedSearchTerm, searchResults, allLoanee]);
 
     const getTableData = () => {
         if (!allLoanee?.data?.body) return [];
