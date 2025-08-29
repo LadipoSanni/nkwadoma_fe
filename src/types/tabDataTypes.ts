@@ -20,6 +20,11 @@ export const settingTabs = [
     { name: "General", value:"/settings/general" },
 ]
 
+export const loaneeView = [
+    {name: 'Loan', value:"/loanees" },
+    {name: 'Demography', value: '/demography' },
+]
+
 
 export const vehicleTab = [
     {name: "Commercial ", value: "/vehicle/commercial-vehicle"},
