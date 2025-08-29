@@ -155,7 +155,7 @@ const LoanProductPage = () => {
 
             <div 
             id={`table`} 
-            className={` max-h-[68vh] mt-8 ${styles.container}`}
+            className={` max-h-[67vh] mt-8 ${styles.container}`}
             style={{
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',  
