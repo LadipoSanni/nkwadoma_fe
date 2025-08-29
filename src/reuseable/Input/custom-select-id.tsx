@@ -78,7 +78,7 @@ function CustomSelectId({
 
   const getDisplayValue = (id: string) => {
     const item = selectContent.find(item => String(item.id) === id);
-    return displayName ? item?.name : item?.organizationName || `${item?.userIdentity?.firstName} ${item?.userIdentity?.lastName}`;
+    return displayName ? item?.name : item?.name || item?.organizationName || `${item?.userIdentity?.firstName} ${item?.userIdentity?.lastName}`;
   };
 
   return (
@@ -171,7 +171,7 @@ function CustomSelectId({
                 disabled={disabled}
               >
                 <div className="flex items-center justify-end w-full whitespace-nowrap">
-                  <span className='w-full'>{displayName ? item?.name :item.organizationName? item.organizationName : item.userIdentity?.firstName + " " + item.userIdentity?.lastName }</span>
+                  <span className='w-full'>{displayName ? item?.name :item?.name? item?.name :item.organizationName? item.organizationName : item.userIdentity?.firstName + " " + item.userIdentity?.lastName }</span>
                   <div className='flex items-center justify-center absolute right-2 '>
                   {(disabled || selected) && (
                     <MdCheck className="h-4 w-4 text-[#BABABA] ml-2 " />
@@ -199,7 +199,7 @@ function CustomSelectId({
                 disabled={disabled}
               >
                 <div className="flex items-center justify-end w-full whitespace-nowrap">
-                  <span className='w-full'>{displayName ? item?.name :item.organizationName? item.organizationName : item.userIdentity?.firstName + " " + item.userIdentity?.lastName }</span>
+                  <span className='w-full'>{displayName ? item?.name :item?.name? item?.name  :item.organizationName? item.organizationName : item.userIdentity?.firstName + " " + item.userIdentity?.lastName }</span>
                   <div className='flex items-center justify-center absolute right-2 '>
                   {(disabled || selected) && (
                     <MdCheck className="h-4 w-4 text-[#BABABA] ml-2 " />

@@ -220,16 +220,16 @@ export const LoanRequestTable = [
 
 ]
 
-export const loanOfferTable = [
-    {
-        id: 1,
-        loanee: 'Anoluwapo Ogungbemi',
-        loanProduct: 'Software Engineering',
-        offerDate: '12 Dec, 2021',
-        requestDate: '12 Jan, 2022',
-        amountRequested: '#3,000,0000',
-        amountApproved: '#3,000,0000'
-    },
+export const loanReferralTable = [
+    // {
+    //     id: 1,
+    //     firstName: 'Anoluwapo',
+    //     lastName: 'Ogungbemi',
+    //     dateReferred: '2024-12-16T16:17:42.934384',
+    //     requestDate: '2024-12-16T16:17:42.934384',
+    //     initialDeposit: '30000000',
+    //     amountReferred: '30000000'
+    // },
 
 
 ]
