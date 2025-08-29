@@ -195,7 +195,7 @@ function DataTable<T extends TableRowData>({
           </div>
 
       ) : (
-        <div>
+        <div className="mb-3">
           <div
             id="loanProductTableBorder"
             className="border-[1px] border-[#D0D5DD] border-solid rounded-md hidden md:block "

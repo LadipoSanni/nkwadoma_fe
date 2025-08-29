@@ -93,7 +93,7 @@ function NigeriaStatesSelect({ value, onChange, className,  name, placeHolder, i
                 style={{ zIndex: 1000 }}
                 
               >
-                <SelectGroup className='selectgroup'>
+                <SelectGroup className='selectgroup max-h-72'>
                   {nigerianStates?.map((content, index) => (
                     <div key={content.value} id={`${content.value}`}>
                       <SelectItem
