@@ -1,6 +1,6 @@
 import React, { useState,useEffect  } from 'react';
 import { inter } from '@/app/fonts';
-import { FileText, ExternalLink } from "lucide-react";
+import { FileText} from "lucide-react";
 
 interface objProps {
     label: string;
@@ -29,7 +29,6 @@ const useIsMobile = (breakpoint = 960) => {
   };
 
 function ViewDocument({ listOfDocument }: Props) {
-    const [isVerifying, setIsVerifying] = useState(false);
     const [docError, setDocError] = useState<string | null>(null);
     const [currentDocUrl, setCurrentDocUrl] = useState<string>('');
 
@@ -64,8 +63,6 @@ function ViewDocument({ listOfDocument }: Props) {
         event.preventDefault(); 
         
         if (!docUrl) return;
-        
-        setIsVerifying(true);
         setDocError(null);
         setCurrentDocUrl(docUrl);
         
@@ -91,9 +88,8 @@ function ViewDocument({ listOfDocument }: Props) {
         } catch (error) {
             setDocError('Error opening document');
             console.error('Document open error:', error);
-        } finally {
-            setIsVerifying(false);
-        }
+        } 
+
     };
 
     const truncateFilename = (filename: string, maxLength: number = 25): string => {
