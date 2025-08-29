@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from "react";
+import React from "react";
 import {useGetLoanProductDetailsByIdQuery} from "@/service/admin/loan_product";
 import {useAppSelector} from "@/redux/store";
 import style from "@/components/portfolio-manager/organization/index.module.css"
