@@ -1,6 +1,5 @@
 "use client"
 import {PieCharts} from "@/reuseable/pieChart/index";
-import styles from '@/features/Overview/index.module.css';
 
 export const description = "A pie chart with a legend"
 
