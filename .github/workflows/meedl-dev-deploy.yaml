@@ -1,0 +1,78 @@
+name: 🚀 Meedl dev Deployment
+
+on:
+  push:
+    branches:
+      - dev
+
+env:
+  CONTAINER_NAME: meedl-frontend-dev
+  IMAGE_NAME: meedl-frontend-dev
+  HOST_PORT: 3042         # external port (host)
+  CONTAINER_PORT: 3000     # internal port (container)
+  S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+  S3_ENV_FILE_PATH: semicolon-delivery/nkwadoma/frontend/dev/nkwadomafrontend.env
+  AWS_REGION: eu-west-1
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, nkwadoma-FE]
+
+    steps:
+      # ======================
+      # 1. ENVIRONMENT CLEANUP
+      # ======================
+      - name: ✅ Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 🧹 Clean Existing Docker Container
+        run: |
+          docker rm -f $CONTAINER_NAME 2>/dev/null || echo "No existing container to remove"
+          docker container prune -f
+
+      # ======================
+      # 2. DOWNLOAD ENV FROM S3
+      # ======================
+      - name: 📥 Download .env file from S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          echo "Downloading env file from s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH"
+          aws s3 cp s3://$S3_BUCKET_NAME/$S3_ENV_FILE_PATH .env
+          echo "✅ Downloaded .env file"
+
+      # ======================
+      # 3. BUILD AND DEPLOY
+      # ======================
+      - name: 🐳 Build Docker Image
+        run: |
+          docker build -t $IMAGE_NAME . || (echo "❌ Build failed" && exit 1)
+          echo "✅ Image built successfully"
+
+      - name: 🚀 Deploy Application
+        run: |
+          docker run -d \
+            --name $CONTAINER_NAME \
+            -p ${HOST_PORT}:${CONTAINER_PORT} \
+            --env-file .env \
+            --restart unless-stopped \
+            $IMAGE_NAME || (echo "❌ Deployment failed" && exit 1)
+
+          echo "✅ Container started successfully"
+          echo "=== Basic Verification ==="
+          echo "Container status: $(docker inspect -f '{{.State.Status}}' $CONTAINER_NAME)"
+          echo "Port mapping: $(docker port $CONTAINER_NAME)"
+
+      # ======================
+      # 4. FINAL VERIFICATION
+      # ======================
+      - name: 🔍 Quick Container Check
+        run: |
+          echo "=== Deployment Summary ==="
+          echo "Container ID: $(docker ps -q --filter "name=$CONTAINER_NAME")"
+          echo "Logs tail:"
+          docker logs --tail=20 $CONTAINER_NAME
+          echo "Network status:"
+          docker inspect $CONTAINER_NAME | jq -r '.[].NetworkSettings.Ports'
