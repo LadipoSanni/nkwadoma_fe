@@ -4,7 +4,7 @@ import {Loanees} from "@/features/portfolio-manager/loan-product/details/loanee/
 
 function page() {
     return (
-        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER']}>
+        <CustomAuthorization authorizedRoles={['PORTFOLIO_MANAGER',"MEEDL_SUPER_ADMIN","PORTFOLIO_MANAGER_ASSOCIATE"]}>
             <Loanees/>
         </CustomAuthorization>
     )

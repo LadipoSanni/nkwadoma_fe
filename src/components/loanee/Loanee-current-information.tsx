@@ -7,6 +7,8 @@ import PhoneNumberSelect from '@/reuseable/select/phoneNumberSelect/Index';
 import GoogleLocationsearch from '@/reuseable/google-location/Google-location-search';
 import Select from "@/reuseable/select/ProgramSelect";
 import { Button } from "@/components/ui/button";
+import NigeriaStatesSelect from '@/reuseable/select/NigeriaStatesSelect';
+import CustomSelectObj from '@/reuseable/Input/Custom-select-obj';
 
 
 export interface initialFormValue {
@@ -19,6 +21,8 @@ export interface initialFormValue {
   alternateEmail: string;
   alternatePhoneNumber: string;
   alternateContactAddress: string;
+  stateOfResidence: string;
+  levelOfEducation: string
 }
 
 interface Props {
@@ -56,7 +60,31 @@ function LoaneeCurrentInformation({initialFormValue,handleSubmit,nextOfCountryCo
           <Form
           className={`${inter.className}`}
           >
-            <div className='grid gap-3 z-50 relative'>
+            <div className='md:grid gap-3 z-50 relative'>
+              <div className={'grid lg:grid-cols-2 gap-4'}>
+                <div className={''}>
+                <Label htmlFor="stateOfResidence" className="block text-sm font-medium text-labelBlue">State of residence</Label>
+                 <NigeriaStatesSelect
+                   triggerId='selectStateTriggerId'
+                   id='stateId'
+                   value={values.stateOfResidence}
+                   onChange={(value)=> {setFieldValue("stateOfResidence", value)}}
+                   name='stateOfResidence'
+                  placeHolder='Select state of residence'
+                 />
+                </div>
+                <div className={''}>
+                <Label htmlFor="levelOfEducation" className="block text-sm font-medium text-labelBlue">State of residence</Label>
+                 <NigeriaStatesSelect
+                   triggerId='selectlevelOfEducationTriggerId'
+                   id='levelOfEducationId'
+                   value={values.levelOfEducation}
+                   onChange={(value)=> {setFieldValue("levelOfEducation", value)}}
+                   name='levelOfEducation'
+                  placeHolder='Select state of residence'
+                 />
+                </div>
+              </div>
               <div className={'grid gap-2'}>
               <Label htmlFor="alternateEmail" className="block text-sm font-medium text-labelBlue">Alternate
                email address</Label>

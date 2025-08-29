@@ -33,6 +33,8 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         alternateEmail: currentLoaneeInfo.alternateEmail,
         alternatePhoneNumber: currentLoaneeInfo.alternatePhoneNumber,
         alternateContactAddress: currentLoaneeInfo.alternateContactAddress,
+        stateOfResidence: currentLoaneeInfo.stateOfResidence,
+        levelOfEducation:  currentLoaneeInfo.levelOfEducation
       }
 
 
@@ -57,6 +59,8 @@ const CurrentInformation: React.FC<CurrentInformationProps> = ({ setCurrentStep 
         alternateEmail: values.alternateEmail,
         alternatePhoneNumber: alternateFormattedPhoneNumber || values.alternatePhoneNumber,
         alternateContactAddress: values.alternateContactAddress,
+        stateOfResidence: values.stateOfResidence,
+        levelOfEducation:  values.levelOfEducation
         }
         store.dispatch(setLoaneeCurrentInfo(additionalLoaneeInfo)) 
     }
