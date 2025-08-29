@@ -26,6 +26,7 @@ import CustomSelect from "@/reuseable/Input/Custom-select";
 import { useAppSelector } from '@/redux/store';
 import { setFinancierStatusTab } from '@/redux/slice/financier/financier';
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
+import { useDebounce } from '@/hooks/useDebounce';
 
 
 interface TableRowData {
@@ -63,6 +64,8 @@ const ViewFinanciers = () => {
     const router = useRouter()
     const isDisabled = false;
 
+    const [debouncedSearchTerm, isTyping] = useDebounce(searchTerm, 1000);
+
     const [tabStates, setTabStates] = useState<Record<string, TabState>>({
             active: { pageNumber: 0, totalPages: 0, hasNextPage: false },
             invited: { pageNumber: 0, totalPages: 0, hasNextPage: false },
@@ -81,10 +84,10 @@ const ViewFinanciers = () => {
 
 
     const {data, isLoading, refetch,isFetching} = useGetAllActiveAndInvitedFinanciersQuery(param)
-    const {data:searchData, isLoading: searchIsLoading,isFetching: isSearchFetching} = useSearchFinancierQuery({name:searchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !searchTerm})
+    const {data:searchData, isLoading: searchIsLoading,isFetching: isSearchFetching} = useSearchFinancierQuery({name:debouncedSearchTerm, pageNumber: currentTabState.pageNumber, pageSize: 10, financierType: selectedFinancier.toUpperCase(), activationStatus: tabType.toUpperCase()},{skip: !debouncedSearchTerm})
 
     useEffect(()=>{
-        if(searchTerm && searchData && searchData?.data){
+        if(debouncedSearchTerm && searchData && searchData?.data){
             const result = searchData?.data?.body
             setFinanciers(result)
             setTabStates(prev => ({
@@ -110,10 +113,20 @@ const ViewFinanciers = () => {
         }
         store.dispatch(resetAll())
        store.dispatch(clearSaveCreateInvestmentField())
-    },[searchTerm, searchData,data,tabType])
+    },[debouncedSearchTerm, searchData,data,tabType])
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
+        if(!isTyping ){
+            setTabStates(prev => ({
+                ...prev,
+                [tabType]: {
+                    ...prev[tabType],
+                    pageNumber: 0
+                }
+            }));
+        }
+       
     };
 
     const handleReset = () => {
@@ -209,7 +222,7 @@ const ViewFinanciers = () => {
                                 gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
                             }}
                         >
-                            {searchTerm && financiers.length === 0 ? (
+                            {!isTyping && debouncedSearchTerm?.length > 0 && searchTerm && financiers.length === 0 ? (
                                 <div className={`flex justify-center items-center text-center md:h-[32vh] h-[40%] w-full mt-32`}>
                                     <SearchEmptyState icon={MdSearch} name="Financier" />
                                 </div>

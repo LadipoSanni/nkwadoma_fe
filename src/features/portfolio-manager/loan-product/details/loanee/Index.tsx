@@ -7,22 +7,17 @@ import {useAppSelector} from "@/redux/store";
 import {useGetAllLoaneeInALoanProductQuery, useSearchLoaneesInALoanProductQuery} from "@/service/admin/loan_product";
 import { useDebounce } from '@/hooks/useDebounce';
 import Table from '@/reuseable/table/Table';
+import { formatAmount,formatToTwoDecimals } from '@/utils/Format';
+import styles from "@/components/super-admin/staff/index.module.css"
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode ;
 }
 
-// interface loanDetails extends TableRowData{
-//     firstName: string;
-//     lastName: string;
-//     performance: string;
-//     instituteName: string;
-// }
 
 export function Loanees() {
     const id = useAppSelector(state => (state?.loanProduct?.loanProductId))
     const [loanProductId] = useState(id);
-    // const [loanees, setLoanees] = useState<loanDetails[]>([])
     const [searchTerm, setSearchTerm] = useState('');
     const [page,setPageNumber] = useState(0);
     const [pageSearchNumber, setSearchPageNumber] = useState(0)
@@ -73,22 +68,47 @@ export function Loanees() {
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
+
+    const getLoanStatusDisplay = (row: string): string => {
+        if (!row) return "Non performing";
+        switch (row) {
+          case "NON_PERFORMING":
+            return "Non performing";
+          case "PERFORMING":
+            return "Performing";
+          case "IN_MORATORIUM":
+            return "In moratorium";
+          default:
+            return row; 
+        }
+      };
+
+
     const LoanProductLoaneeHeader = [
         {title: "Name", sortable: true, id: "name",
             selector: (row: TableRowData) =>
                 `${(row.firstName as string).charAt(0).toUpperCase()}${(row.firstName as string).slice(1).toLowerCase()} ${(row.lastName as string).charAt(0).toUpperCase()}${(row.lastName as string).slice(1).toLowerCase()}`
         },
-        {title: <div className='md:relative left-3'>Status</div>, sortable: true, id: "performance", selector: (row: TableRowData) => <span
-                className={` pt-1 pb-1 pr-3 pl-3   rounded-xl ${row.performance  === "PERFORMANCE" ? "text-success600 bg-success50" : "text-error600 bg-error50"} `}>
-                {row.performance ?? "No record"}
+        {title: "Organization", sortable: true, id: "instituteName", selector: (row: TableRowData) => row.instituteName},
+        {title: <div className=''>Loan status</div>, sortable: true, id: "performance", selector: (row: TableRowData) => <span
+                className={` pt-1 pb-1 pr-3 pl-3 truncate  rounded-xl ${row.performance  === "PERFORMING" ? "text-[#063F1A] bg-[#D0D5DD]" : row.performance  === "IN_MORATORIUM" ?  "bg-[#FEF6E8] text-[#66440A]" : "text-[#C1231D] bg-[#FBE9E9]" } `}>
+                {getLoanStatusDisplay(row.performance as string) }
             </span>
         },
-        {title: "Organization", sortable: true, id: "instituteName", selector: (row: TableRowData) => row.instituteName},
+        {title: <div className='md:relative left-6 z-50'>Interest earned(%)</div>, sortable: true, id: "interestEarned", selector: (row: TableRowData) => <div className='truncate md:relative left-6 z-10'>{formatToTwoDecimals(row?.interestEarned)}</div>},
+        {title: "Amount disbursed", sortable: true, id: "amountDisbursed", selector: (row: TableRowData) => formatAmount(row?.amountDisbursed)},
+        {title: "Loan outstanding", sortable: true, id: "loanOutstanding", selector: (row: TableRowData) => formatAmount(row?.loanOutstanding)},
 
     ];
     return (
-        <div>
-            <div id={`loanProductTab2`} className={'grid gap-4'}>
+        <div 
+        className={` max-h-[63vh] ${styles.container}`}
+        style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',  
+              }}
+        >
+            <div id={`loanProductTab2`} className={'grid gap-4 mt-5'}>
                 <SearchInput id={'loanProductLoaneeSearch'} value={searchTerm} onChange={handleSearchChange}/>
                 <div>
                     {!isTyping && debouncedSearchTerm && searchResults?.data.body.length === 0 ? <div><SearchEmptyState icon={MdSearch} name='loanee'/></div> :
@@ -97,7 +117,7 @@ export function Loanees() {
                             tableHeader={LoanProductLoaneeHeader}
                             staticHeader={'loanee'}
                             staticColunm={'name'}
-                            tableHeight={53}
+                            tableHeight={44}
                             icon={MdOutlinePerson}
                             sideBarTabName={"loanee"}
                             handleRowClick={() => {
