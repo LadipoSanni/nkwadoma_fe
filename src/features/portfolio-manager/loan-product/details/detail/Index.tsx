@@ -35,23 +35,27 @@ const Details = () => {
         {
         value: "basicDetails",
         name: "Basic details",
-        component: <div className={`px-2 ${style.detailContainer} max-h-[56vh] `}>
+        component: <div className={`px-2 ${style.detailContainer} max-h-[52vh] `}>
+              <div className="mb-8">
               <BasicDetail dataList={dataList} isLoading={loading}/>
+              </div>
                 </div>
        },
        {
         value: "documents",
         name: "Documents",
-        component: <div className={`px-2 relative top-3 ${style.detailContainer} max-h-[56vh] `}>
+        component: <div className={`px-2 relative top-3 ${style.detailContainer} max-h-[52vh] `}>
+               <div className="mb-8">
                <ViewDocument listOfDocument={documentData}/>
+               </div>
                  </div>
        }
 ]
 
 
     return (
-        <div className='md:flex h-full mt-3'>
-        <div className={` md:w-[62%] md:border-r md:border-r-gray-200 pr-4`}>
+        <div className='md:flex h-full mt-3 mb-4'>
+        <div className={` md:w-[62%] md:border-r md:border-r-gray-200 pr-4 mb-7`}>
         <div className={`max-h-[62vh] ${style.loanDetailContainer}`}>
          <div  className='grid grid-cols-1 gap-y-5 mt-2'>
          <Detail  isLoading={loading}  id={'loanProductSize'}  showAsWholeNumber={false}  maxWidth={'100%'} name={'Loan product size'} value={loanProduct?.data?.loanProductSize} valueType={'currency'} className='w-full' />
