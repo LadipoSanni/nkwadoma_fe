@@ -45,7 +45,6 @@ const ViewAllLoaneeOverview = () => {
             setTotalPage(searchData?.data?.totalPages)
             setPageNumber(searchData?.data?.pageNumber)
         }else{
-            console.log('data?.data?.pageNumber', data?.data?.pageNumber)
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber ? data?.data?.pageNumber : 0)
@@ -76,7 +75,7 @@ const ViewAllLoaneeOverview = () => {
             store.dispatch(setSelectedLoaneeLastName(String(row.lastName)))
             store.dispatch(setSelectedLoaneeFirstName(String(row.firstName)))
             // store.dispatch(setSelectedLoaneeFullName(`${String(row.firstName)}` + ' ' + `${String(row.lastName)}`))
-            router.push('/loanees/loans')
+            router.push('/loans')
         }
 
     };
@@ -84,7 +83,7 @@ const ViewAllLoaneeOverview = () => {
         <div
             id={'viewAllLoaneeOverviewContainer'}
             data-testid={'viewAllLoaneeOverviewContainer'}
-            className={`w-full h-full  grid content-between gap-2  `}
+            className={`w-full h-full  grid content-between gap-8  `}
         >
             <div
                 id={'viewAllLoaneeTotalOverviewContainer'}

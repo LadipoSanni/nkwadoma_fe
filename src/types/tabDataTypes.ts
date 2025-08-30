@@ -22,7 +22,7 @@ export const settingTabs = [
 
 export const loaneeView = [
     {name: 'Loan', value:"/loanees" },
-    {name: 'Demography', value: '/demography' },
+    {name: 'Demography', value: '/loanees/demography' },
 ]
 
 

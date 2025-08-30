@@ -1,2 +1,2 @@
 
-export const LoaneeLoannDetails = (id: string)=> `/loanees/loans/details?id=${id}`
+export const LoaneeLoannDetails = (id: string)=> `/loans/details?id=${id}`
