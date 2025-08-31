@@ -92,7 +92,7 @@ const Investment = () => {
                />
            </div>
 
-           <div className={` grid grid-cols-2  gap-4   w-full `}>
+           <div className={` grid md:grid-cols-2  gap-4   w-full `}>
                <BarChartWithDate id={'AUMPortfolioGrowthRate'}
                                  years={AumLifeSpan}
                                  currentYear={year?.toString()}
@@ -107,9 +107,9 @@ const Investment = () => {
 
                />
                <div className={` grid gap-3 `}>
-                   <Details  isLoading={false} sx={` w-[20em] md:w-[100%] `} id={'netAumReturn'} showAsWholeNumber={false}    name={'Net AUM return'} value={'92500000'} valueType={'currency'}  />
-                   <Details  isLoading={false} sx={` w-[20em] md:w-[100%] `} id={'totalCustodian'} showAsWholeNumber={false}    name={'Total custodian/trustee fee'} value={'92500000'} valueType={'currency'}  />
-                   <Details  isLoading={false} sx={` w-[20em] md:w-[100%] `} id={'totalFundManager'} showAsWholeNumber={false}    name={'Total fund manager fee'} value={'92500000'} valueType={'currency'}  />
+                   <Details  isLoading={false} sx={` w-full md:w-[100%] `} id={'netAumReturn'} showAsWholeNumber={false}    name={'Net AUM return'} value={'92500000'} valueType={'currency'}  />
+                   <Details  isLoading={false} sx={` w-full md:w-[100%] `} id={'totalCustodian'} showAsWholeNumber={false}    name={'Total custodian/trustee fee'} value={'92500000'} valueType={'currency'}  />
+                   <Details  isLoading={false} sx={` w-full md:w-[100%] `} id={'totalFundManager'} showAsWholeNumber={false}    name={'Total fund manager fee'} value={'92500000'} valueType={'currency'}  />
 
                </div>
 

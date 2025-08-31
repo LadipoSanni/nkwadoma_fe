@@ -44,18 +44,18 @@ export function PieCharts({title, chartData, dataKey}: PieChartProps) {
     const chartConfig = generateChartConfig(chartData) satisfies  ChartConfig;
 
     return (
-       <div className={`grid border h-fit overflow-y-hidden py-3 px-2 rounded-md  border-[#D7D7D7] bg-white w-full `}>
-               <div className={` w-full rounded-md h-fit py-2 px-2  bg-[#F9F9F9] `}>
+       <div className={`grid border max-h-fit h-full overflow-y-hidden py-3 px-2 rounded-md  border-[#D7D7D7] bg-white w-full `}>
+               <div className={` w-full rounded-md overflow-y-hidden py-2 px-2  bg-[#F9F9F9] `}>
                    <div id={'chartDescription'} data-testid={'chartDescription'} className={`  py-3  md:text-[24px] text-black ${cabinetGroteskMediumBold.className} `}>{title}</div>
                    <div className={` flex  w-full h-full   `}>
                        <Card
                            id={'pieChart'+ dataKey}
                            data-testid={'pieChart'+ dataKey}
-                           className="flex bg-[#F9F9F9] flex-col">
-                           <CardContent className="flex-1 flex  items-center pb-0">
+                           className="flex w-fit bg-[#F9F9F9] flex-col">
+                           <CardContent className="flex-1 flex w-fit   items-start pb-0">
                                <ChartContainer
                                    config={chartConfig}
-                                   className="mx-auto aspect-square   max-h-[300px] md:min-h-[300px]"
+                                   className="mx-auto aspect-square   min-h-[300px] md:min-h-[300px]"
                                >
                                    <PieChart id={'pieChart'} className={' '} data-testid={'pieChart'}>
                                        <Pie data={chartData} dataKey="visitors" />
