@@ -89,6 +89,7 @@ const Loan = () => {
                               changeCurrentMonth={handleBarChartTabChange}
                               performanceValue={0}
                               onChange={changeAumYear}
+                              mediumHeightOnWebview={true}
             />
             
         </div>

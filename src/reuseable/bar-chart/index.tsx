@@ -27,7 +27,7 @@ const MeedlBarChart = ({componentId, dataKey,chartData,maxHeight}: Props) => {
                  className={`  w-full h-fit md:w-full   `}
             >
 
-        <ChartContainer config={chartConfig} className={`min-h-[200px] md:max-h-[200px] md:h-[100px] ${maxHeight ? maxHeight : ''}  w-full`}>
+        <ChartContainer config={chartConfig} className={`min-h-[200px]  ${maxHeight ? maxHeight : ''}  w-full`}>
             <BarChart accessibilityLayer data={chartData}>
                         <XAxis
                             dataKey="month"
