@@ -56,12 +56,12 @@ export function PieCharts({title, chartData, dataKey}: PieChartProps) {
                     <CardHeader className="items-center pb-0">
                         <CardDescription id={'chartDescription'} data-testid={'chartDescription'} className={` md:text-[24px] text-black ${cabinetGroteskMediumBold.className} `}>{title}</CardDescription>
                     </CardHeader>
-                    <CardContent className="flex-1 pb-0">
+                    <CardContent className="flex-1 flex  items-center pb-0">
                         <ChartContainer
                             config={chartConfig}
-                            className="mx-auto aspect-square max-h-[300px] md:min-h-[300px]"
+                            className="mx-auto aspect-square   max-h-[300px] md:min-h-[300px]"
                         >
-                            <PieChart id={'pieChart'} data-testid={'pieChart'}>
+                            <PieChart id={'pieChart'} className={' '} data-testid={'pieChart'}>
                                 <Pie data={chartData} dataKey="visitors" />
                             </PieChart>
                         </ChartContainer>
