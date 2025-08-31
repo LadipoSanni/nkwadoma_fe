@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import {PieCharts} from "@/reuseable/pieChart";
 import BarChartWithDate from "@/reuseable/cards/BarChartWithDate";
+import Details from "@/components/loanee-my-profile/Details";
 
 const Loan = () => {
     const initialDates = [
@@ -91,7 +92,18 @@ const Loan = () => {
                               onChange={changeAumYear}
                               mediumHeightOnWebview={true}
             />
-            
+
+            <Details showIcon={true} isLoading={false} sx={` w-[20em] md:w-[100%] `} id={'historicalDebt'} showAsWholeNumber={false}    name={'Historical debt'} value={'92500000'} valueType={'currency'}  />
+            <Details showIcon={true} isLoading={false } sx={` w-[20em] md:w-[100%] `} id={'disbursedLoan'} showAsWholeNumber={false}    name={'Disbursed loan'} value={'59500000'} valueType={'currency'}  />
+            <div className={` flex gap-3  `}>
+                <Details showIcon={false} isLoading={false } sx={` w-[20em] md:w-[100%] `} id={'totalLoanee'} showAsWholeNumber={true}    name={'Total loanee'} value={'5900'} valueType={'digit'}  />
+                <Details showIcon={false} isLoading={false } sx={` w-[20em] md:w-[100%] `} id={'totalOrganizations'} showAsWholeNumber={true}    name={'Total organizations'} value={'46'} valueType={'digit'}  />
+            </div>
+            <Details showIcon={true} isLoading={false } sx={` w-[20em] md:w-[100%] `} id={'totalamountEarned'} showAsWholeNumber={false}    name={'Total amount earned'} value={'329087787'} valueType={'currency'}  />
+            <Details showIcon={true} isLoading={false } sx={` w-[20em] md:w-[100%] `} id={'netLaonPortfolioReturn'} showAsWholeNumber={false}    name={'Net loan portfolio return'} value={'59500000'} valueType={'currency'}  />
+            <div className={` w-full md:w-[50%] sm:w-[50%]  `}>
+                <Details showIcon={true} isLoading={false } sx={` w-[20em] md:w-[100%] `} id={'totalLoanProduct'} showAsWholeNumber={false}    name={'Total loan products'} value={'32'} valueType={'digit'}  />
+            </div>
         </div>
     );
 };

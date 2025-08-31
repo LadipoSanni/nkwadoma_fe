@@ -3,7 +3,11 @@ import React from 'react';
 
 const Investment = () => {
     return (
-        <div>
+        <div
+            id={'investmentOverview'}
+            data-testid={'investmentOverview'}
+            className={` grid md:grid-cols-2 gap-4 `}
+        >
             
         </div>
     );
