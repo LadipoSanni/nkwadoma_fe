@@ -45,7 +45,6 @@ const ViewAllLoaneeOverview = () => {
             setTotalPage(searchData?.data?.totalPages)
             setPageNumber(searchData?.data?.pageNumber)
         }else{
-            console.log('data?.data?.pageNumber', data?.data?.pageNumber)
             setNextPage(data?.data?.hasNextPage)
             setTotalPage(data?.data?.totalPages)
             setPageNumber(data?.data?.pageNumber ? data?.data?.pageNumber : 0)
@@ -76,7 +75,7 @@ const ViewAllLoaneeOverview = () => {
             store.dispatch(setSelectedLoaneeLastName(String(row.lastName)))
             store.dispatch(setSelectedLoaneeFirstName(String(row.firstName)))
             // store.dispatch(setSelectedLoaneeFullName(`${String(row.firstName)}` + ' ' + `${String(row.lastName)}`))
-            router.push('/loanees/loans')
+            router.push('/loans')
         }
 
     };
@@ -84,12 +83,12 @@ const ViewAllLoaneeOverview = () => {
         <div
             id={'viewAllLoaneeOverviewContainer'}
             data-testid={'viewAllLoaneeOverviewContainer'}
-            className={`w-full h-full  grid content-between gap-2 px-4 py-3  `}
+            className={`w-full h-full  grid content-between gap-8  `}
         >
             <div
                 id={'viewAllLoaneeTotalOverviewContainer'}
                 data-testid={'viewAllLoaneeTotalOverviewContainer'}
-                className={` w-full h-full flex gap-4   ${styles.overviewCard}   `}
+                className={` w-full h-full flex gap-8   ${styles.overviewCard}   `}
             >
                 <Details isLoading={  isLoadingLoanCounts || isFetchingCounts} sx={`  w-[20em] md:w-[100%]  `} name={'No. of loanees'} valueType={'digit'}  id={'totalNumberOfLoanees'} showAsWholeNumber={false}  value={loanCounts?.data ?  loanCounts?.data?.numberOfLoanee :'0'}/>
                 <Details isLoading={ isLoadingLoanCounts || isFetchingCounts} sx={` w-[20em] md:w-[100%] `} id={'historicalDept'} showAsWholeNumber={false}    name={'Historical debt'} value={loanCounts?.data ?  loanCounts?.data?.totalAmountReceived : ''} valueType={'currency'}  />
