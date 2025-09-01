@@ -207,7 +207,7 @@ function DataTable<T extends TableRowData>({
               <Table id="dynamicTable" className="">
                 <TableHeader
                   id="dynamicTableHead"
-                  className={`bg-[#F0F2F4] sticky top-0  hover:bg-[#F0F2F4]`}
+                  className={`bg-[#F0F2F4] sticky top-0  hover:bg-[#F0F2F4] z-50`}
                 >
                   <TableRow
                     id="dynamicTableHeadRow"

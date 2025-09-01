@@ -10,6 +10,7 @@ import Individual from "@/features/kyc/beneficialOwnerStep/Individual";
 import {format} from "date-fns";
 import { store, useAppSelector } from "@/redux/store";
 import {BeneficialType, updateBeneficialOwner} from "@/redux/slice/kyc/kycFormSlice";
+import { useRef } from "react";
 
 export interface Owner {
     firstName?: string,
@@ -35,7 +36,8 @@ const BeneficialOwnerStep = () => {
     const [disabledContinueButton, setDisableContinueButton] = useState(true);
     const [error, setError] = useState<string| undefined >(undefined);
     const filledForm = useAppSelector(state => state.kycForm.beneficialOwner);
-    console.log('filledForm', filledForm);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
     const revertToFormObject = (obj: BeneficialType) => {
         const reverse : Owner = {
             firstName: obj?.beneficialOwnerFirstName,
@@ -107,6 +109,7 @@ const BeneficialOwnerStep = () => {
     const initial = convertToFormObject(filledForm)
 
     const [owners, setOwner] = useState<Owner[]>(initial)
+    const prevLength = useRef(owners.length);
 
     const validateTotalOwnership = (sections: Owner[]) => {
         const array: number[] = [] ;
@@ -118,7 +121,6 @@ const BeneficialOwnerStep = () => {
         }
         return undefined;
     };
-    console.log('owner ', owners)
 
     useEffect(() => {
         const response = validateTotalOwnership(owners)
@@ -140,7 +142,16 @@ const BeneficialOwnerStep = () => {
     }, [owners, disabledContinueButton]);
 
 
-
+    useEffect(() => {
+        if(owners?.length > prevLength.current){
+            if (containerRef.current) {
+                containerRef.current.scrollTo({
+                    top: containerRef.current.scrollHeight,
+                    behavior: "smooth",
+                });
+            }
+        }
+    }, [owners]);
 
 
     const handleBackClick = () => {
@@ -167,10 +178,11 @@ const BeneficialOwnerStep = () => {
                     rcNumber: '',
                     ownership: '',
                     isFormField: false,
-                    type: ''
+                    type: 'entity'
                 }
             ]
         ))
+
     }
 
 
@@ -211,8 +223,11 @@ const BeneficialOwnerStep = () => {
                 <h1 id="beneficialOwnerTitle"
                     className="text-meedlBlack text-[24px] leading-[120%] font-medium">Beneficial owner</h1>
             </div>
-            <div id="beneficialOwnerSection"
-                     className={'md:max-w-[30rem] w-full md:mx-auto h-[calc(100vh-250px)] pt-1 overflow-y-auto pr-3'}>
+            <div
+                ref={containerRef}
+
+                id="beneficialOwnerSection"
+                     className={'md:max-w-[30rem] w-full md:mx-auto max-h-[calc(100vh-250px)] h-[calc(100vh-250px)]  pt-1 overflow-y-auto pr-3'}>
                 <main id="entityFormMain" className="grid gap-6">
                     {owners?.map((section) => (
                         <div key={section.id} className={'relative grid mt-6'}>

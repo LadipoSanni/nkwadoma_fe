@@ -14,9 +14,11 @@ import CreateLoanProduct from "@/components/portfolio-manager/loan-product/Index
 import SkeletonForTable from "@/reuseable/Skeleton-loading-state/Skeleton-for-table";
 import SearchEmptyState from "@/reuseable/emptyStates/SearchEmptyState";
 import {store} from "@/redux/store";
-import {setClickedLoanProductId} from "@/redux/slice/loan/selected-loan";
+// import {setClickedLoanProductId} from "@/redux/slice/loan/selected-loan";
 import { useDebounce } from '@/hooks/useDebounce';
 import { resetAll,clearSaveCreateInvestmentField} from '@/redux/slice/vehicle/vehicle';
+import { setLoanProductId,setLoanProductName } from "@/redux/slice/loan-product/Loan-product";
+import styles from "../index.module.css"
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -64,11 +66,13 @@ const LoanProductPage = () => {
 
 
     const handleCreateButton = () => {
-        setCreateProduct(true);
+        setCreateProduct(true)
+        // router.push('/loan-product/stepOne');
     };
 
     const handleRowClick = (row: TableRowData) => {
-        store.dispatch(setClickedLoanProductId(String(row?.id)))
+        store.dispatch(setLoanProductId(String(row?.id)))
+        store.dispatch(setLoanProductName(String(row?.name)))
         router.push('/loan-product/loan-product-details');
     };
 
@@ -89,7 +93,7 @@ const LoanProductPage = () => {
             title: 'Interest rate (%)',
             sortable: true,
             id: "interestRate",
-            selector: (row: TableRowData) => row.interestRate
+            selector: (row: TableRowData) => formatToTwoDecimals(row.interestRate)
         },
         {
             title: 'No. of loanee',
@@ -98,7 +102,7 @@ const LoanProductPage = () => {
             selector: (row: TableRowData) => row.totalNumberOfLoanee
         },
         {
-            title: 'Cost of vehicle (%)',
+            title: 'Cost of fund (%)',
             sortable: true,
             id: 'costOfFund',
             selector: (row: TableRowData) => formatToTwoDecimals(row.costOfFund)
@@ -149,7 +153,14 @@ const LoanProductPage = () => {
                 </div>
             </div>
 
-            <div id={`table`} className={`pt-8`}>
+            <div 
+            id={`table`} 
+            className={` max-h-[67vh] mt-8 ${styles.container}`}
+            style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',  
+                  }}
+            >
                 {isLoading ? (
                     <div className={`w-full h-fit md:w-full md:h-full`}>
                         <SkeletonForTable />
@@ -163,7 +174,7 @@ const LoanProductPage = () => {
                         tableData={getTableData()}
                         handleRowClick={handleRowClick}
                         tableHeader={loanProductHeader}
-                        tableHeight={58}
+                        tableHeight={59}
                         sx='cursor-pointer'
                         staticColunm="name"
                         staticHeader="loan product"
