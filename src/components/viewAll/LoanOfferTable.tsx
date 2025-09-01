@@ -93,8 +93,6 @@ const Index = () => {
                             tableData={data?.data?.body}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
-                            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-expect-error
                             tableHeader={loanOfferHeader}
                             tableHeight={54}
                             sx='cursor-pointer'
