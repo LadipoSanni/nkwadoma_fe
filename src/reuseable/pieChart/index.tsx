@@ -5,8 +5,6 @@ import { Pie, PieChart } from "recharts"
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardHeader,
 } from "@/components/ui/card"
 import {
     ChartConfig,
@@ -44,44 +42,43 @@ export function PieCharts({title, chartData, dataKey}: PieChartProps) {
 
 
     const chartConfig = generateChartConfig(chartData) satisfies  ChartConfig;
-    console.log('chartConfig', chartConfig);
 
     return (
-        <div className={`flex border py-2 px-2 rounded-md  border-[#D7D7D7] bg-white w-full justify-between `}>
-            <div className={` flex rounded-md w-full h-full bg-[#F9F9F9]  `}>
-                <Card
-                    id={'pieChart'+ dataKey}
-                    data-testid={'pieChart'+ dataKey}
-                    className="flex bg-[#F9F9F9]  flex-col">
-                    <CardHeader className="items-center pb-0">
-                        <CardDescription id={'chartDescription'} data-testid={'chartDescription'} className={` md:text-[24px] text-black ${cabinetGroteskMediumBold.className} `}>{title}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-1 pb-0">
-                        <ChartContainer
-                            config={chartConfig}
-                            className="mx-auto aspect-square max-h-[300px] md:min-h-[300px]"
-                        >
-                            <PieChart id={'pieChart'} data-testid={'pieChart'}>
-                                <Pie data={chartData} dataKey="visitors" />
-                            </PieChart>
-                        </ChartContainer>
-                    </CardContent>
-                </Card>
-                <div id={'chartDataDescription'} data-testid={'chartDataDescription'} className={`  grid gap-2  w-full pr-4  mt-auto mb-auto `}>
-                    {chartData?.map((item, index) => (
-                        <div className={`  flex justify-between `} key={index}>
-                            <div className={` flex  gap-2 `}>
-                                <div
-                                    style={{backgroundColor: item?.fill}}
-                                    className={` aspect-square rounded-full mt-auto mb-auto w-2 h-2  md:w-2.5 md:h-2.5  `}></div>
-                                <p className={` text-[12px] text-[#6A6B6A]  ${inter.className} `}>{item?.browser}</p>
-                            </div>
-                            <span className={`text-black text-[12px] ${inter500.className}`}>{item?.visitors} %</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
+       <div className={`grid border max-h-fit h-full overflow-y-hidden py-3 px-2 rounded-md  border-[#D7D7D7] bg-white w-full `}>
+               <div className={` w-full rounded-md overflow-y-hidden py-2 px-2  bg-[#F9F9F9] `}>
+                   <div id={'chartDescription'} data-testid={'chartDescription'} className={`  py-3  md:text-[24px] text-black ${cabinetGroteskMediumBold.className} `}>{title}</div>
+                   <div className={` flex  w-full h-full   `}>
+                       <Card
+                           id={'pieChart'+ dataKey}
+                           data-testid={'pieChart'+ dataKey}
+                           className="flex w-fit bg-[#F9F9F9] flex-col">
+                           <CardContent className="flex-1 flex w-fit   items-start pb-0">
+                               <ChartContainer
+                                   config={chartConfig}
+                                   className="mx-auto aspect-square   min-h-[300px] md:min-h-[300px]"
+                               >
+                                   <PieChart id={'pieChart'} className={' '} data-testid={'pieChart'}>
+                                       <Pie data={chartData} dataKey="visitors" />
+                                   </PieChart>
+                               </ChartContainer>
+                           </CardContent>
+                       </Card>
+                       <div id={'chartDataDescription'} data-testid={'chartDataDescription'} className={` bg-red-100  grid gap-2  w-full  mt-auto mb-auto `}>
+                           {chartData?.map((item, index) => (
+                               <div className={`  w-full  flex justify-between `} key={index}>
+                                   <div className={` flex  gap-2 `}>
+                                       <div
+                                           style={{backgroundColor: item?.fill}}
+                                           className={` aspect-square rounded-full mt-auto mb-auto w-2 h-2  md:w-2.5 md:h-2.5  `}></div>
+                                       <p className={` text-[12px] text-[#6A6B6A]  ${inter.className} `}>{item?.browser}</p>
+                                   </div>
+                                   <span className={`text-black text-[12px] ${inter500.className}`}>{item?.visitors} %</span>
+                               </div>
+                           ))}
+                       </div>
+                   </div>
+               </div>
+       </div>
 
     )
 }
