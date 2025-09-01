@@ -36,7 +36,6 @@ const Index = () => {
 
 
     const getLoanOfferStatus = (mode?: string |ReactNode) => {
-        console.log('mode: ', mode)
         switch (mode) {
             case 'ACCEPTED' :
                 return <span className={` ${inter.className} bg-[#E6F2EA] text-[14px] text-[#045620] rounded-full w-fit h-fit py-1 px-2 `} >Accepted</span>

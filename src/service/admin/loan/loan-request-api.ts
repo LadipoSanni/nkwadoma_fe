@@ -37,6 +37,12 @@ export const loanRequestApi = createApi({
                 params: data
             }),
         }),
+        withdrawLoanOffer: builder.mutation({
+            query: (data: {loanOfferId : string,loanOfferStatus: string }) => ({
+                url: `/loan/withdraw/loan-offer?loanOfferId=${data.loanOfferId}&loanOfferStatus=${data.loanOfferStatus}`,
+                method: 'POST'
+            })
+        })
 
 
 
@@ -48,4 +54,5 @@ export const {
     useViewLoanRequestDetailsQuery,
     useRespondToLoanRequestMutation,
     useViewAllLoanReferralQuery,
+    useWithdrawLoanOfferMutation,
 } = loanRequestApi;
