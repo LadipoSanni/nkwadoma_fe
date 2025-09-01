@@ -8,7 +8,7 @@ interface Props {
     chartData: {month: string, value: number}[];
     dataKey: string;
     // chartConfig: {}
-    maxHeight:string;
+    maxHeight?:string;
 }
 
 const MeedlBarChart = ({componentId, dataKey,chartData,maxHeight}: Props) => {

@@ -63,9 +63,9 @@ export function PieCharts({title, chartData, dataKey}: PieChartProps) {
                                </ChartContainer>
                            </CardContent>
                        </Card>
-                       <div id={'chartDataDescription'} data-testid={'chartDataDescription'} className={`  grid gap-2  w-full pr-4  mt-auto mb-auto `}>
+                       <div id={'chartDataDescription'} data-testid={'chartDataDescription'} className={` bg-red-100  grid gap-2  w-full  mt-auto mb-auto `}>
                            {chartData?.map((item, index) => (
-                               <div className={`  flex justify-between `} key={index}>
+                               <div className={`  w-full  flex justify-between `} key={index}>
                                    <div className={` flex  gap-2 `}>
                                        <div
                                            style={{backgroundColor: item?.fill}}
