@@ -51,7 +51,7 @@ export function PieCharts({title, chartData, dataKey}: PieChartProps) {
                               <Pie data={chartData} dataKey="visitors" />
                            </PieChart>
                        </ChartContainer>
-                       <div id={'chartDataDescription'} data-testid={'chartDataDescription'} className={` bg-red-100  grid gap-2 self-end w-[50%]  mt-auto mb-auto `}>
+                       <div id={'chartDataDescription'} data-testid={'chartDataDescription'} className={`   grid gap-2 self-end w-[50%]  mt-auto mb-auto `}>
                            {chartData?.map((item, index) => (
                                <div className={`  w-full  flex justify-between `} key={'key'+index}>
                                    <div className={` flex w-fit gap-2 `}>
