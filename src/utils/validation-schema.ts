@@ -139,6 +139,10 @@ export const LoaneeInformationvalidationSchema = Yup.object().shape({
     .required('Relationship is required'), 
   contactAddress: Yup.string()
     .required('Contact address is required'),
+  stateOfResidence: Yup.string()
+    .required('State of residence is required'),
+  levelOfEducation:  Yup.string()
+  .required('Level of education is required'),
 });
 
 

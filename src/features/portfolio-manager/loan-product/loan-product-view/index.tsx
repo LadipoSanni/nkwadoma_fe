@@ -174,7 +174,7 @@ const LoanProductPage = () => {
                         tableData={getTableData()}
                         handleRowClick={handleRowClick}
                         tableHeader={loanProductHeader}
-                        tableHeight={59}
+                        tableHeight={56}
                         sx='cursor-pointer'
                         staticColunm="name"
                         staticHeader="loan product"
