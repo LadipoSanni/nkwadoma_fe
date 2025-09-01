@@ -1,5 +1,5 @@
 "use client"
-import React,{useEffect} from "react";
+import React, {ReactNode, useEffect} from "react";
 import {MdOutlinePeople} from "react-icons/md";
 import Tables from "@/reuseable/table/index";
 import {useRouter} from "next/navigation";
@@ -13,6 +13,7 @@ import TableEmptyState from "@/reuseable/emptyStates/TableEmptyState";
 import {Icon} from "@iconify/react";
 import { resetNotification } from '@/redux/slice/notification/notification';
 import { store } from "@/redux/store";
+import {inter} from "@/app/fonts";
 
 interface TableRowData {
     [key: string]: string | number | null | React.ReactNode;
@@ -34,8 +35,27 @@ const Index = () => {
     })
 
 
+    const getLoanOfferStatus = (mode?: string |ReactNode) => {
+        console.log('mode: ', mode)
+        switch (mode) {
+            case 'ACCEPTED' :
+                return <span className={` ${inter.className} bg-[#E6F2EA] text-[14px] text-[#045620] rounded-full w-fit h-fit py-1 px-2 `} >Accepted</span>
+            case 'DECLINED':
+                return <span className={` ${inter.className}  bg-[#FBE9E9] text-[14px] text-[#971B17] rounded-full w-fit h-fit py-1 px-2 `} >Declined</span>
+            case 'OFFERED':
+                return <span className={` ${inter.className} bg-[#FEF6E8] text-[14px] text-[#68442E] rounded-full w-fit h-fit py-1 px-2`}>Pending</span>
+            case 'WITHDRAW':
+                return <span className={`${inter.className}  bg-[#FBE9E9] text-[14px] text-[#971B17] rounded-full w-fit h-fit py-1 px-2  `}>Withdraw</span>
+            default:
+                return 'ttt';
+        }
+    }
+
+
+
     const loanOfferHeader = [
         { title: 'Loanee', sortable: true, id: 'firstName', selector: (row: TableRowData) =><div className='flex gap-2 '>{capitalizeFirstLetters(row.firstName?.toString())} <div className={``}></div>{row.lastName}</div>  },
+        { title: 'Status', sortable: true, id: 'status', selector: (row: TableRowData) =><div>{getLoanOfferStatus(row.status)}</div> },
         { title: 'Loan product', sortable: true, id: 'loanProduct', selector: (row: TableRowData) =>row.loanProductName },
         { title: 'Offer date', sortable: true, id: 'offerDate', selector: (row: TableRowData) => <div>{dayjs(row.dateOffered?.toString()).format('MMM D, YYYY')}</div> },
         { title: 'Amount requested', sortable: true, id: 'amountRequested', selector: (row: TableRowData) => <div className=''>{formatAmount(row.amountRequested)}</div>},
@@ -73,6 +93,8 @@ const Index = () => {
                             tableData={data?.data?.body}
                             isLoading={isLoading}
                             handleRowClick={handleRowClick}
+                            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-expect-error
                             tableHeader={loanOfferHeader}
                             tableHeight={54}
                             sx='cursor-pointer'
