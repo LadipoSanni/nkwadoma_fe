@@ -57,7 +57,7 @@ export function PieCharts({title, chartData, dataKey}: PieChartProps) {
                                    <div className={` flex w-fit gap-2 `}>
                                        <div
                                            style={{backgroundColor: item?.fill}}
-                                           className={` aspect-square rounded-full bg-red-500 mt-auto mb-auto w-2 h-2  md:w-2.5 md:h-2.5  `}></div>
+                                           className={` aspect-square rounded-full  mt-auto mb-auto w-2 h-2  md:w-2.5 md:h-2.5  `}></div>
                                        <p className={` text-[12px]  text-[#6A6B6A]  ${inter.className} `}>{item?.browser}</p>
                                    </div>
                                    <span className={` text-black w-fit text-[12px] ${inter500.className}`}>{item?.visitors} %</span>
