@@ -7,9 +7,9 @@ import {Button} from '@/components/ui/button';
 import React, {useEffect, useState} from "react";
 // import CustomSelect from "@/reuseable/Input/Custom-select";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
-import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
+// import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
-import ToastPopUp from "@/reuseable/notification/ToastPopUp";
+// import ToastPopUp from "@/reuseable/notification/ToastPopUp";
 import {
     useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
 } from "@/service/admin/fund_query";
@@ -18,8 +18,8 @@ import 'react-quill-new/dist/quill.snow.css'
 import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
 import {store, useAppSelector} from "@/redux/store";
 import {formatAmount} from "@/utils/Format";
-import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
-import styles from "@/features/market-place/Index.module.css";
+// import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
+// import styles from "@/features/market-place/Index.module.css";
 import SelectWithAmount from "@/reuseable/select/SelectWithAmount";
 import { MultiSelect } from "@/reuseable/mult-select/customMultiselectWithId/Multiselect-withId";
 import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
@@ -52,8 +52,8 @@ function StepOne() {
     const [fundProductId,setFundProductId] = useState("")
     const [financierPageNumber, setFinancierPageNumber] = useState(0);
     const [financiers,setFinanciers] = useState<viewAllProps[]>([]);
-
-    const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
+    const isLoading = false
+    // const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
     const { data: investmentVehicleData, isFetching, isLoading: isFundLoading } =
         useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
             pageSize: 10,
@@ -67,7 +67,7 @@ function StepOne() {
             investmentVehicleId: fundProductId
             }
     
-   const {data,isLoading:isFinancierLoading,isFetching:isfetching} = useViewFinanciersByInvestmentmentVehicleQuery(param,{skip: !fundProductId})
+   const {data,isFetching:isfetching} = useViewFinanciersByInvestmentmentVehicleQuery(param,{skip: !fundProductId})
 
     useEffect(() => {
         if (investmentVehicleData?.data) {
@@ -226,15 +226,15 @@ function StepOne() {
     });
 
 
-    const toastPopUp = ToastPopUp({
-        description: "Loan product Created successfully.",
-        status: "success"
-    });
+    // const toastPopUp = ToastPopUp({
+    //     description: "Loan product Created successfully.",
+    //     status: "success"
+    // });
 
-    const networkPopUp = ToastPopUp({
-        description: "No internet connection",
-        status: "error",
-    });
+    // const networkPopUp = ToastPopUp({
+    //     description: "No internet connection",
+    //     status: "error",
+    // });
 
     const handleSubmit = async (values: typeof initialFormValue) => {
         console.log(values)
@@ -271,13 +271,13 @@ function StepOne() {
     };
 
 
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-    };
+    // const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    //     event.preventDefault();
+    // };
 
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-    };
+    // const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    //     event.preventDefault();
+    // };
 
   return (
     <div className={`${inter.className} `}>
@@ -359,6 +359,7 @@ function StepOne() {
                             onValueChange={(values) => setFieldValue("sponsor",values)}
                             placeholder="Select sponsor"
                             defaultValue={values.sponsor}
+                            
                             infinityScroll={{
                                 hasMore:hasNextfinancierPage,
                                 loadMore: loadMoreFinancier,
