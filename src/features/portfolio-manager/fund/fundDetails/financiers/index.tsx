@@ -106,8 +106,8 @@ function Financiers() {
     {capitalizeFirstLetters(row.financierType)}
 </span>
     ) },
-      { title: 'No. of investments', sortable: true, id: 'number_of_investments', selector: (row:viewAllfinancier) => row.number_of_investments|| 0 },
-      { title: 'Amount invested', sortable: true, id: 'amount_invested', selector: (row:viewAllfinancier) => formatAmount(row.amount_invested)},
+      { title: 'No. of investments', sortable: true, id: 'number_of_investments', selector: (row:viewAllfinancier) => row.totalNumberOfInvestment|| 0 },
+      { title: 'Amount invested', sortable: true, id: 'amount_invested', selector: (row:viewAllfinancier) => formatAmount(row.totalAmountInvested)},
       { title: 'Amount earned', sortable: true, id: 'amount_earned', selector: (row:viewAllfinancier) =>formatAmount(row.amount_earned)},
       { title: 'Payout', sortable: true, id: 'payout', selector: (row:viewAllfinancier) => formatAmount(row.payout)},
       { title: 'Portfolio value', sortable: true, id: 'portfolio_value', selector: (row:viewAllfinancier) => formatAmount(row.portfolio_value)},
