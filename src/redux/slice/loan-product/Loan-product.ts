@@ -1,13 +1,52 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+interface SponsorsObj{
+    id: string,
+    name: string
+ }
+
+ interface Obj{
+    product: string,
+    vendorName: string,
+    costOfService: string,
+    duration: string
+ }
+
+interface CreateLoanProductField{
+    id?:string,
+    productName: string,
+    investmentVehicleId: string,
+    costOfFunds: string,
+    tenor: string,
+    loanProductSize: string,
+    minimumRepaymentAmount: string,
+    moratorium: string,
+    interest: string,
+    obligorLimit: string,
+    loanProductMandate: string,
+    loanProductTermsAndCondition: string,
+    fundProduct: string | null,
+    sponsors: SponsorsObj[],
+}
+
+interface CreateLoanProductFieldStepTwo{
+    disbursementTerms: string,
+    vendor: Obj[],
+    bankPartner: string,
+}
+
 interface LoanProduct {
     loanProductId: string,
-    loanProductName: string
+    loanProductName: string,
+    createLoanProductField: CreateLoanProductField | null,
+    createLoanProductFieldStepTwo: CreateLoanProductFieldStepTwo | null
 }
 
 const initialState: LoanProduct = {
     loanProductId: "",
-    loanProductName: ""
+    loanProductName: "",
+    createLoanProductField: null,
+    createLoanProductFieldStepTwo:  null
 }
 
 export const LoanProductSlice = createSlice({
@@ -20,8 +59,18 @@ export const LoanProductSlice = createSlice({
         setLoanProductName: (state, action: PayloadAction<string>) => {
             state.loanProductName = action.payload;
         },
+        setLoanProductField: (state, action: PayloadAction<CreateLoanProductField>) => {
+            state.createLoanProductField = action.payload;
+        },
+        clearLoanProductField: (state) => {
+            state.createLoanProductField= null;
+            state.createLoanProductFieldStepTwo = null
+        },
+        setLoanProductFieldStepTwo: (state, action: PayloadAction<CreateLoanProductFieldStepTwo>) => {
+            state.createLoanProductFieldStepTwo = action.payload;
+        },
     }})
 
-    export const {setLoanProductId,setLoanProductName} = LoanProductSlice.actions;
+    export const {setLoanProductId,setLoanProductName,setLoanProductField,clearLoanProductField, setLoanProductFieldStepTwo} = LoanProductSlice.actions;
 
     export default LoanProductSlice.reducer;

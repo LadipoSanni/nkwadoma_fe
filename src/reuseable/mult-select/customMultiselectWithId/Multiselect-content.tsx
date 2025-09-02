@@ -15,6 +15,8 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 import { InfiniteScrollProps } from '@/types/Component.type';
 import SkeletonForLoanOrg from '../../Skeleton-loading-state/Skeleton-for-loan-organizations';
+import GeneralEmptyState from '@/reuseable/emptyStates/General-emptystate';
+import { Book } from 'lucide-react';
 
 interface MultiSelectContentProps {
   options: { id: string; name: string; icon?: React.ComponentType<{ className?: string }> }[];
@@ -28,6 +30,7 @@ interface MultiSelectContentProps {
   restrictedItems?: string[];
   infinityScroll?: InfiniteScrollProps;
   isLoading?: boolean;
+  emptyState? : string
 }
 
 export const MultiSelectContent = ({
@@ -42,6 +45,7 @@ export const MultiSelectContent = ({
   restrictedItems = [],
   infinityScroll,
   isLoading = false,
+  emptyState = "No sponsor available"
 }: MultiSelectContentProps) => {
   const handleItemClick = (callback: () => void) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -94,6 +98,17 @@ export const MultiSelectContent = ({
           
           {isLoading ? (
             <div><SkeletonForLoanOrg/></div>
+          ) : options?.length === 0 ? (
+            <div className="relative bottom-10">
+              <GeneralEmptyState
+                icon={Book}
+                iconSize='1.6rem'
+                iconContainerClass='w-[30px] h-[30px]'
+                message={<div className='relative bottom-2'>
+                  <p className="text-[14px]">{emptyState}</p>
+                </div>}
+              />
+            </div>
           ) : (
             <div 
               className={`w-full ${infinityScroll ? "" : "max-h-[26.5vh] overflow-y-auto"}`}

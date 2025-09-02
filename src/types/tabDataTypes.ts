@@ -89,8 +89,8 @@ export const organizationDetailTab =  [
     {name: "Admin", value:"/organizations/organizations-details/admins"}]
 
 export const createLoanProductSteps = [
-        { id: 'stepOne', title: 'Step 1' },
-        { id: 'stepTwo', title: 'Step 2' },
+        { id: 'step-one', title: 'Step 1' },
+        { id: 'step-two', title: 'Step 2' },
         
       ];
 

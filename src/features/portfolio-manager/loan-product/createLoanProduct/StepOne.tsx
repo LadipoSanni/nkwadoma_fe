@@ -5,55 +5,49 @@ import {inter} from "@/app/fonts"
 import {Label} from '@/components/ui/label';
 import {Button} from '@/components/ui/button';
 import React, {useEffect, useState} from "react";
-// import CustomSelect from "@/reuseable/Input/Custom-select";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
-// import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
-import Isloading from "@/reuseable/display/Isloading";
-// import ToastPopUp from "@/reuseable/notification/ToastPopUp";
-import {
-    useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,
-} from "@/service/admin/fund_query";
+import { useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery,} from "@/service/admin/fund_query";
 import CustomInputField from "@/reuseable/Input/CustomNumberFormat"
 import 'react-quill-new/dist/quill.snow.css'
 import { setFundProductAvailableAmount } from "@/redux/slice/loan/selected-loan";
 import {store, useAppSelector} from "@/redux/store";
 import {formatAmount} from "@/utils/Format";
-// import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
-// import styles from "@/features/market-place/Index.module.css";
+import PdfAndDocFileUpload from "@/reuseable/Input/Pdf&docx-fileupload";
 import SelectWithAmount from "@/reuseable/select/SelectWithAmount";
-import { MultiSelect } from "@/reuseable/mult-select/customMultiselectWithId/Multiselect-withId";
+import { MultiSelect } from "@/reuseable/mult-select/customMultiselectWithId/Multiselect-object";
 import { useViewFinanciersByInvestmentmentVehicleQuery } from '@/service/admin/financier';
+import {useRouter } from 'next/navigation';
+import { setLoanProductField } from "@/redux/slice/loan-product/Loan-product";
 
-
-
-interface ApiError {
-    status: number;
-    data: {
-        message: string;
-    };
-}
 
 interface viewAllProps {
     id: string;
     name: string;
-    size?: number
+    size?: number;
+    totalAvailableAmount?: number;
+  }
+
+  interface SponsorsObj{
+     id: string,
+     name: string
   }
 
 function StepOne() {
     const fundProductAvailableAmount = useAppSelector(state => (state.selectedLoan.fundProductAvailableAmount))
+    const loanProductField = useAppSelector(state => (state?.loanProduct?.createLoanProductField))
     const [selectCurrency, setSelectCurrency] = useState('NGN');
     const [error, setError] = useState('');
     const [fundPageNumber, setFundPageNumber] = useState(0);
     const [hasNextfundPage, setHasNextfundPage] = useState(true);
     const [hasNextfinancierPage, setHasNextfinancierPage] = useState(true);
     const [investmentVehicleFund, setInvestmentVehicleFund] = useState<viewAllProps[]>([]);
-    const [selectedFund, setSelectedFund] = useState<string | null>(null);
+    const [selectedFund, setSelectedFund] = useState<string | null>(loanProductField?.fundProduct || null);
     const [isSelectOpen, setIsSelectOpen] = useState(false);
-    const [fundProductId,setFundProductId] = useState("")
+    const [fundProductId,setFundProductId] = useState(loanProductField?.investmentVehicleId || "")
     const [financierPageNumber, setFinancierPageNumber] = useState(0);
     const [financiers,setFinanciers] = useState<viewAllProps[]>([]);
-    const isLoading = false
-    // const [createLoanProduct, {isLoading}] = useCreateLoanProductMutation();
+    const [showSponsorError, setShowSponsorError] = useState(false);
+     const router = useRouter();
     const { data: investmentVehicleData, isFetching, isLoading: isFundLoading } =
         useGetInvestmentVehiclesByTypeAndStatusAndFundRaisingQuery({
             pageSize: 10,
@@ -67,7 +61,7 @@ function StepOne() {
             investmentVehicleId: fundProductId
             }
     
-   const {data,isFetching:isfetching} = useViewFinanciersByInvestmentmentVehicleQuery(param,{skip: !fundProductId})
+   const {data,isLoading:isFinancierLoading,isFetching:isfetching} = useViewFinanciersByInvestmentmentVehicleQuery(param,{skip: !fundProductId})
 
     useEffect(() => {
         if (investmentVehicleData?.data) {
@@ -113,21 +107,38 @@ function StepOne() {
      }
   }
 
-
-
     const initialFormValue = {
-        productName: "",
-        investmentVehicleId: "",
-        costOfFunds: "",
-        tenor: "",
-        loanProductSize: "",
-        minimumRepaymentAmount: "",
-        moratorium: "",
-        interest: "",
-        obligorLimit: "",
-        loanProductMandate: "",
-        loanProductTermsAndCondition: "",
-        sponsor: []
+        productName: loanProductField?.productName || "",
+        investmentVehicleId: loanProductField?.investmentVehicleId || "",
+        costOfFunds:loanProductField?.costOfFunds ||  "",
+        tenor: loanProductField?.tenor || "",
+        loanProductSize: loanProductField?.loanProductSize || "",
+        minimumRepaymentAmount: loanProductField?.minimumRepaymentAmount || "",
+        moratorium: loanProductField?.moratorium || "",
+        interest: loanProductField?.interest || "",
+        obligorLimit:loanProductField?.obligorLimit || "",
+        loanProductMandate: loanProductField?.loanProductMandate || "",
+        loanProductTermsAndCondition: loanProductField?.loanProductTermsAndCondition || "",
+        sponsors: loanProductField?.sponsors || [] as SponsorsObj[]
+    }
+
+    const saveToRedux = (values: typeof initialFormValue) => {
+        const createLoanProductData = {
+        productName: values?.productName,
+        investmentVehicleId: values?.investmentVehicleId ,
+        costOfFunds:values?.costOfFunds ,
+        tenor: values?.tenor,
+        loanProductSize: values?.loanProductSize ,
+        minimumRepaymentAmount: values?.minimumRepaymentAmount ,
+        moratorium: values?.moratorium ,
+        interest: values?.interest ,
+        obligorLimit:values?.obligorLimit,
+        loanProductMandate: values?.loanProductMandate,
+        loanProductTermsAndCondition: values?.loanProductTermsAndCondition,
+        sponsors: values?.sponsors,
+        fundProduct: selectedFund
+        }
+        store.dispatch(setLoanProductField(createLoanProductData))
     }
 
 
@@ -148,6 +159,18 @@ function StepOne() {
         investmentVehicleId: Yup.string()
             .trim()
             .required("Fund product is required"),
+        sponsors: Yup.array()
+            // .of(Yup.string())
+            // .min(1, "At least one sponsor is required")
+            // .required("Fund product sponsor is required"),
+            .of(
+                Yup.object().shape({
+                id: Yup.string().required(),
+                name: Yup.string().required()
+                })
+            )
+            .min(1, "At least one sponsor is required")
+            .required("Fund product sponsor is required"),
         costOfFunds: Yup.string()
             .trim()
             .transform((original) => original?.replace(/,/g, ""))
@@ -225,59 +248,23 @@ function StepOne() {
             }),
     });
 
-
-    // const toastPopUp = ToastPopUp({
-    //     description: "Loan product Created successfully.",
-    //     status: "success"
-    // });
-
-    // const networkPopUp = ToastPopUp({
-    //     description: "No internet connection",
-    //     status: "error",
-    // });
+    const handleBackRoute =() => {
+        router.push("/loan-product")
+    }
 
     const handleSubmit = async (values: typeof initialFormValue) => {
-        console.log(values)
-       
-
-        // const formData = {
-        //     name: values.productName,
-        //     // sponsors: [values.productSponsor],
-        //     investmentVehicleId: values.investmentVehicleId,
-        //     costOfFund: Number(values.costOfFunds),
-        //     tenor: Number(values.tenor),
-        //     loanProductSize: Number(values.loanProductSize),
-        //     minRepaymentAmount: Number(values.minimumRepaymentAmount),
-        //     moratorium: Number(values.moratorium),
-        //     interestRate: Number(values.interest),
-        //     obligorLoanLimit: Number(values.obligorLimit),
-        //     mandate: values.loanProductMandate,
-        //     termsAndCondition: values.loanProductTermsAndCondition,
-        // };
-
-
-         try {
-        //     const create = await createLoanProduct(formData).unwrap();
-        //     if (create) {
-        //         toastPopUp.showToast();
-        //         // if (setIsOpen) {
-        //         //     setIsOpen(false);
-        //         // }
-        // }
-        } catch (err) {
-            const error = err as ApiError;
-            setError(error ? error?.data?.message : "Error occurred");
-        }
+        saveToRedux(values);
+        router.push("/loan-product/step-two")
     };
 
 
-    // const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    //     event.preventDefault();
-    // };
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+    };
 
-    // const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    //     event.preventDefault();
-    // };
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+    };
 
   return (
     <div className={`${inter.className} `}>
@@ -335,11 +322,12 @@ function StepOne() {
                                         setFieldValue("investmentVehicleId", value);
                                         setFundProductId(value)
                                         const selectedVehicle = investmentVehicleData?.data?.body?.find(
-                                            (vehicle: { name: string }) => vehicle.name === value
-                                        );
-                                        if (selectedVehicle) {
+                                            (vehicle: { id: string }) => vehicle.id === value 
+                                          );
+                                          if (selectedVehicle) {
                                             store.dispatch(setFundProductAvailableAmount(selectedVehicle.totalAvailableAmount))
-                                        }
+                                          }
+                                          
                                     }}
                                     placeholder='Select fund'
                                     isLoading={isFundLoading}
@@ -356,16 +344,30 @@ function StepOne() {
                         <Label htmlFor="FundProductSponsor">Fund product sponsor</Label>   
                          <MultiSelect
                             options={financiers}
-                            onValueChange={(values) => setFieldValue("sponsor",values)}
+                            onValueChange={(values) => {
+                                setFieldValue("sponsors",values)
+                                setShowSponsorError(false);
+                            }}
                             placeholder="Select sponsor"
-                            defaultValue={values.sponsor}
-                            
+                            defaultValue={values.sponsors}
                             infinityScroll={{
                                 hasMore:hasNextfinancierPage,
                                 loadMore: loadMoreFinancier,
                                 loader: isfetching
                              }}
+                             canOpen={!!values.investmentVehicleId} 
+                        onClick={() => {
+                            if (!values.investmentVehicleId) {
+                            setShowSponsorError(true);
+                            }
+                        }}
+                        isLoading={isFinancierLoading}
                          />
+                         {showSponsorError && !values.investmentVehicleId && (
+                            <div className="text-red-500 text-sm mt-1">
+                                Please select a fund product first before choosing sponsors
+                            </div>
+                            )}
                         </div>
                         <div className={``}>
                                         <Label htmlFor="loanProductSize"
@@ -514,160 +516,237 @@ function StepOne() {
                                         </div>
                                     </div>
                                  
-                                 <div className="grid md:grid-cols-2 gap-4 items-center">
-                                  <div className="grid grid-cols-2 gap-3 relative bottom-14">
-                                  <div>
-                                  <Label htmlFor="interest">Interest</Label> 
-                                  <div className="border border-solid flex items-center rounded-md relative top-3 md:w-28 h-12">
-                                  <div className={`pt-2 flex relative bottom-1  `}>
-                                    <p className="bg-[#F9F9F9] flex items-center w-9 justify-center rounded-md ml-1">%</p>
-                                        <Field
-                                            id="interest"
-                                            data-testid="interest"
-                                            name="interest"
-                                            type="number"
-                                            className="w-16 p-3 border border-none rounded focus:outline-none  text-sm"
-                                            placeholder="0"
-                                            step="0.01"
-                                            onWheel={(e: {
-                                                currentTarget: { blur: () => string; };
-                                            }) => e.currentTarget.blur()}
-                                            onChange={(e: { target: { value: string; }; }) => {
-                                                const value = e.target.value;
-                                                if (/^\d*\.?\d*$/.test(value) && Number(value) <= 100) {
-                                                    setFieldValue("interest", value);
-                                                }
-                                            }}
-                                        /> 
-                                 </div> 
-                                 </div>
-                                 <div className="mt-2">
-                                 {
-                                            errors.interest && touched.interest && (
-                                                <ErrorMessage
-                                                    name="interest"
-                                                    id='interestId'
-                                                    component="div"
-                                                    className="text-red-500 text-sm "
-                                                />)
-                                        }
-                                 </div>
-                                </div> 
+                                    <div className="grid  gap-6 relative bottom-12">
+                                        {/* Interest and Cost of Funds */}
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {/* Interest */}
+                                            <div>
+                                                <Label htmlFor="interest">Interest</Label>
+                                                <div className="flex items-center border rounded-md h-12 mt-2">
+                                                    <div className="bg-[#F9F9F9] flex items-center justify-center w-10 h-full rounded-l">
+                                                        <span>%</span>
+                                                    </div>
+                                                    <Field
+                                                        id="interest"
+                                                        data-testid="interest"
+                                                        name="interest"
+                                                        type="number"
+                                                        className="w-full p-3 border-none rounded-r focus:outline-none text-sm"
+                                                        placeholder="0"
+                                                        step="0.01"
+                                                        onWheel={(e: React.WheelEvent<HTMLInputElement>) => e.currentTarget.blur()}
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                            const value = e.target.value;
+                                                            if (/^\d*\.?\d*$/.test(value) && Number(value) <= 100) {
+                                                                setFieldValue("interest", value);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                {errors.interest && touched.interest && (
+                                                    <ErrorMessage
+                                                        name="interest"
+                                                        id='interestId'
+                                                        component="div"
+                                                        className="text-red-500 text-sm mt-1"
+                                                    />
+                                                )}
+                                            </div>
 
-                                <div>
-                                  <Label  htmlFor="costOfFunds">Cost of fund</Label> 
-                                  <div className="border border-solid flex items-center rounded-md relative top-3 md:w-28 h-12">
-                                  <div className={`pt-2 flex relative bottom-1  `}>
-                                   <p className="bg-[#F9F9F9] flex items-center w-9 justify-center rounded-md ml-1">%</p>
-                                        <Field
-                                             id="costOfFunds"
-                                            data-testid="costOfFunds"
-                                             name="costOfFunds"
-                                            type="number"
-                                            className="w-16 p-3 border border-none rounded focus:outline-none  text-sm"
-                                            placeholder="0"
-                                            step="0.01"
-                                            onWheel={(e: {
-                                                currentTarget: { blur: () => string; };
-                                            }) => e.currentTarget.blur()}
-                                            onChange={(e: { target: { value: string; }; }) => {
-                                                const value = e.target.value;
-                                                if (/^\d*\.?\d*$/.test(value) && Number(value) <= 100) {
-                                                    setFieldValue("costOfFunds", value);
-                                                }
-                                            }}
-                                        /> 
-                                 </div> 
-                                 </div>
-                               
-                                 <div className="mt-5">
-                                 {
-                                            errors.costOfFunds && touched.costOfFunds && (
+                                            {/* Cost of Funds */}
+                                            <div>
+                                                <Label htmlFor="costOfFunds">Cost of fund</Label>
+                                                <div className="flex items-center border rounded-md h-12 mt-2">
+                                                    <div className="bg-[#F9F9F9] flex items-center justify-center w-10 h-full rounded-l">
+                                                        <span>%</span>
+                                                    </div>
+                                                    <Field
+                                                        id="costOfFunds"
+                                                        data-testid="costOfFunds"
+                                                        name="costOfFunds"
+                                                        type="number"
+                                                        className="w-full p-3 border-none rounded-r focus:outline-none text-sm"
+                                                        placeholder="0"
+                                                        step="0.01"
+                                                        onWheel={(e: React.WheelEvent<HTMLInputElement>) => e.currentTarget.blur()}
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                            const value = e.target.value;
+                                                            if (/^\d*\.?\d*$/.test(value) && Number(value) <= 100) {
+                                                                setFieldValue("costOfFunds", value);
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                                {errors.costOfFunds && touched.costOfFunds && (
+                                                    <ErrorMessage
+                                                        name="costOfFunds"
+                                                        id='costOfFundsId'
+                                                        component="div"
+                                                        className="text-red-500 text-sm mt-1"
+                                                    />
+                                                )}
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+                                    <div className="relative bottom-12 grid  gap-3 ">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                            <Label htmlFor="tenor">Tenor (month)</Label>
+                                            <Field
+                                                id="tenor"
+                                                data-testid="tenor"
+                                                name="tenor"
+                                                type="number"
+                                                className="w-full p-3 border rounded focus:outline-none mt-2 h-12 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                placeholder="0"
+                                                onWheel={(e: React.WheelEvent<HTMLInputElement>) => e.currentTarget.blur()}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                    let rawValue = e.target.value.replace(/,/g, "");
+                                                    if (/^(?!0$)\d*$/.test(rawValue)) {
+                                                        rawValue = parseInt(rawValue).toString();
+                                                        setFieldValue("tenor", rawValue);
+                                                    }
+                                                }}
+                                            />
+                                            {errors.tenor && touched.tenor && (
                                                 <ErrorMessage
-                                                    name="costOfFunds"
-                                                    id='interestId'
+                                                    name="tenor"
+                                                    id='tenorId'
                                                     component="div"
-                                                    className="text-red-500 text-sm "
-                                                />)
-                                        }
-                                 </div>
-                                </div>  
-                                </div>  
-                                  <div className={`w-full relative bottom-[58px]`}>
-                                                                       <div>
-                                                                           <Label htmlFor="tenor">Tenor (month)</Label>
-                                                                       </div>
-                                                                       <div>
-                                                                           <Field
-                                                                               id="tenor"
-                                                                               data-testid="tenor"
-                                                                               name="tenor"
-                                                                               type={"number"}
-                                                                               className="w-full h-12 p-3 border rounded focus:outline-none mt-3 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                                                               placeholder="0"
-                                                                               onWheel={(e: {
-                                                                                   currentTarget: { blur: () => string; };
-                                                                               }) => e.currentTarget.blur()}
-                                                                               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                                                   let rawValue = e.target.value.replace(/,/g, "");
-                                                                                   if (/^(?!0$)\d*$/.test(rawValue)) {
-                                                                                       rawValue = parseInt(rawValue).toString();
-                                                                                       let formattedValue = Number(rawValue).toLocaleString();
-                                                                                       formattedValue += ".00";
-                                                                                       setFieldValue("tenor", rawValue);
-                                                                                       e.target.value = formattedValue;
-                                                                                   }
-                                                                               }}
-                                                                           />
-                                                                       </div>
-                               
-                                                                       <div className={`mb-[2%]`}>
-                                                                           {
-                                                                               errors.tenor && touched.tenor && (
-                                                                                   <ErrorMessage
-                                                                                       name="tenor"
-                                                                                       id='tenorId'
-                                                                                       component="div"
-                                                                                       className="text-red-500 text-sm"
-                                                                                   />
-                                                                               )
-                                                                           }
-                                                                       </div>
-                                                                   </div>
-                                 </div>
-                            </div> 
-                            <div className={`flex justify-end pt-5 gap-3 pb-5`}>
-                                    <Button
-                                        className={`text-meedlBlue border border-meedlBlue h-12 w-32`}
+                                                    className="text-red-500 text-sm mt-1"
+                                                />
+                                            )}
+                                            </div>
+
+                                            <div className={``}>
+                                                 <Label htmlFor="moratorium"
+                                                    style={{
+                                                        display: 'inline-block',
+                                                        WebkitOverflowScrolling: 'touch'
+                                                    }}>Moratorium (month)</Label>
+                                            <Field
+                                                id="moratorium"
+                                                data-testid="moratorium"
+                                                name="moratorium"
+                                                type={"number"}
+                                                className="w-full p-3 border rounded focus:outline-none mt-2 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                placeholder="0"
+                                                onWheel={(e: {
+                                                    currentTarget: { blur: () => string; };
+                                                }) => e.currentTarget.blur()}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                    let rawValue = e.target.value.replace(/,/g, "");
+                                                    if (/^(?!0$)\d*$/.test(rawValue)) {
+                                                        rawValue = parseInt(rawValue).toString();
+                                                        let formattedValue = Number(rawValue).toLocaleString();
+                                                        formattedValue += ".00";
+                                                        setFieldValue("moratorium", rawValue);
+                                                        e.target.value = formattedValue;
+                                                    }
+                                                }}
+                                            />
+                                            {
+                                                errors.moratorium && touched.moratorium && (
+                                                    <ErrorMessage
+                                                        name="moratorium"
+                                                        id='moratorium'
+                                                        component="div"
+                                                        className="text-red-500 text-sm"
+                                                    />)
+                                            }
+                                        </div>
+                                        </div> 
+                                        </div>
+                                    <div className={`relative bottom-12`}>
+                                    <Label htmlFor="loanProductMandate">Loan product mandate</Label>
+                                   <div className={`pt-3`}>
+                                       <PdfAndDocFileUpload
+                                           handleDrop={handleDrop}
+                                           handleDragOver={handleDragOver}
+                                           setUploadedDocUrl={(url: string | null) =>
+                                               setFieldValue("loanProductMandate", url)
+                                           }
+                                           initialDocUrl={values.loanProductMandate}
+                                           cloudinaryFolderName='loan-product-mandate'
+                                       />
+                                   </div>
+                                    {errors.loanProductMandate && touched.loanProductMandate && (
+                                        <ErrorMessage
+                                            name="loanProductMandate"
+                                            component="div"
+                                            id="loanProductMandateError"
+                                            className="text-red-500 text-sm"
+                                        />
+                                    )}
+                                </div>
+
+                                <div className="relative bottom-11">
+                                    <Label htmlFor="loanProductTermsAndConditionId" className={`pb-5`}>Loan product
+                                        terms and
+                                        conditions</Label>
+                                    <div className={`pt-3`}>
+                                        <PdfAndDocFileUpload
+                                            handleDrop={handleDrop}
+                                            handleDragOver={handleDragOver}
+                                            setUploadedDocUrl={(url: string | null) =>
+                                                setFieldValue("loanProductTermsAndCondition", url)
+                                            }
+                                            initialDocUrl={values.loanProductTermsAndCondition}
+                                            cloudinaryFolderName='loan-product-terms-and-conditions'
+                                        />
+                                    </div>
+                                    {errors.loanProductTermsAndCondition && touched.loanProductTermsAndCondition && (
+                                        <ErrorMessage
+                                            name="loanProductTermsAndCondition"
+                                            component="div"
+                                            id="loanProductTermsAndConditionError"
+                                            className="text-red-500 text-sm"
+                                        />
+                                    )}
+                                </div>
+                                {/* <div className="mt-6 p-4 bg-gray-100 rounded-md">
+  <h3 className="text-sm font-medium mb-2">Form Values (Debug):</h3>
+  <pre className="text-xs bg-white p-3 rounded border overflow-auto max-h-40">
+    {JSON.stringify(values, null, 2)}
+  </pre>
+  <p>{JSON.stringify(values.sponsors, null, 2)}</p>
+</div> */}
+       
+                                </div>
+                                
+                            <div className={`md:flex justify-between pt-5 gap-3 pb-5 lg:pr-12 `}>
+                                  <div>
+                                  <Button
+                                        className={`text-meedlBlue border border-meedlBlue h-12 md:w-32 w-full`}
                                         variant={"outline"}
-                                        type={"reset"}
-                            
+                                        type={"button"}
+                                        onClick={handleBackRoute}
                                     >
-                                        Cancel
+                                        Back
                                     </Button>
+                                  </div >
+                                  <div className="mt-3 md:mt-0">
                                     <Button
-                                        className={`h-12 w-32 ${!isValid ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7] text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
+                                        className={`h-12 md:w-40 w-full ${!isValid ? 'bg-[#D7D7D7] hover:bg-[#D7D7D7] text-meedlWhite cursor-not-allowed ' : 'bg-meedlBlue text-meedlWhite cursor-pointer'}`}
                                         variant={"secondary"}
                                         type={"submit"}
                                         disabled={!isValid}
                                     >
-                                        {isLoading ? (<Isloading/>) : (
-                                            "Create"
-                                        )}
+                                           continue
                                     </Button>
-                                </div>
-                                {error && (
-                                    <div className="text-red-500 text-sm mt-2 text-center">
-                                        {error}
                                     </div>
-                                )}
+                                </div>
+                               
                             </div>
+                            
                         </Form>
                     )
                 }
             </Formik>
        </div>
         </div>
+        
     </div>
   )
 }
