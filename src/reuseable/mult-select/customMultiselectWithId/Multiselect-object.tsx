@@ -1,4 +1,3 @@
-
 "use client";
 import * as React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -7,21 +6,35 @@ import { MultiSelectContent } from "./Multiselect-content";
 import { type VariantProps } from "class-variance-authority";
 import { InfiniteScrollProps } from '@/types/Component.type';
 
+interface Option {
+  id: string;
+  name: string;
+  icon?: React.ComponentType<{ className?: string }>;
+}
+
+interface SelectedValue {
+  id: string;
+  name: string;
+}
+
 interface MultiSelectProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'defaultValue'>, // Remove defaultValue from button props
     VariantProps<typeof multiSelectVariants> {
-  options: { id: string; name: string; icon?: React.ComponentType<{ className?: string }> }[];
-  onValueChange: (value: string[]) => void;
-  defaultValue?: string[];
+  options: Option[];
+  onValueChange: (value: SelectedValue[]) => void;
+  defaultValue?: SelectedValue[]; 
   placeholder?: string;
   animation?: number;
   modalPopover?: boolean;
   className?: string;
-  id?: string
-  selcetButtonId?: string
+  id?: string;
+  selcetButtonId?: string;
   restrictedItems?: string[];
   horizontalScroll?: boolean;
   infinityScroll?: InfiniteScrollProps;
+  canOpen: boolean;
+  emptyState? : string;
+  isLoading?: boolean;
 }
 
 export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
@@ -40,22 +53,41 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       restrictedItems,
       horizontalScroll,
       infinityScroll,
+      canOpen = true,
+      emptyState,
+      isLoading,
       ...props
-     
     },
     ref
   ) => {
-    const [selectedValues, setSelectedValues] = React.useState<string[]>(defaultValue);
+    const [selectedValues, setSelectedValues] = React.useState<SelectedValue[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const triggerRef = React.useRef<HTMLButtonElement>(null);
     const contentRef = React.useRef<HTMLDivElement>(null);
 
     React.useImperativeHandle(ref, () => triggerRef.current!);
 
-    const toggleOption = (option: string) => {
-      const newSelectedValues = selectedValues.includes(option)
-        ? selectedValues.filter((value) => value !== option)
-        : [...selectedValues, option];
+    const handleOpenChange = (open: boolean) => {
+      if (open && !canOpen) {
+        return; 
+      }
+      setIsPopoverOpen(open);
+    };
+
+    const toggleOption = (optionId: string) => {
+      const option = options.find(opt => opt.id === optionId);
+      if (!option) return;
+
+      const isAlreadySelected = selectedValues.some(value => value.id === optionId);
+      
+      let newSelectedValues: SelectedValue[];
+      
+      if (isAlreadySelected) {
+        newSelectedValues = selectedValues.filter(value => value.id !== optionId);
+      } else {
+        newSelectedValues = [...selectedValues, { id: option.id, name: option.name }];
+      }
+      
       setSelectedValues(newSelectedValues);
       onValueChange(newSelectedValues);
     };
@@ -65,28 +97,29 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       onValueChange([]);
     };
 
-
     const toggleAll = () => {
       if (selectedValues.length === options.length) {
         handleClear();
       } else {
-        const allValues = options.map((option) => option.id);
+        const allValues = options.map(option => ({ id: option.id, name: option.name }));
         setSelectedValues(allValues);
         onValueChange(allValues);
       }
     };
 
+    const selectedIds = selectedValues.map(value => value.id);
+
     return (
-      <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen} modal={modalPopover}>
+      <Popover open={isPopoverOpen} onOpenChange={handleOpenChange} modal={modalPopover}>
         <PopoverTrigger asChild id={"popoverId"}>
           <MultiSelectTrigger
             ref={triggerRef}
             options={options}
-            selectedValues={selectedValues}
+            selectedValues={selectedIds} 
             variant={variant}
             placeholder={placeholder}
             animation={animation}
-            onToggleOption={toggleOption}
+            onToggleOption={toggleOption} 
             isOpen={isPopoverOpen}
             className={className}
             selectButtonId={selcetButtonId}
@@ -104,14 +137,16 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
         >
           <MultiSelectContent
             options={options}
-            selectedValues={selectedValues}
-            onToggleOption={toggleOption}
+            selectedValues={selectedIds} 
+            onToggleOption={toggleOption} 
             onClear={handleClear}
             onClose={() => setIsPopoverOpen(false)}
             onToggleAll={toggleAll}
             id={id}
             restrictedItems={restrictedItems}
             infinityScroll={infinityScroll}
+            emptyState={emptyState}
+            isLoading={isLoading}
           />
         </PopoverContent>
       </Popover>

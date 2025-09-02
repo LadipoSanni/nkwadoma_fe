@@ -164,6 +164,7 @@ function InviteOrganizationsForm({setIsOpen,organizationRefetch,tabType}: props)
                       toast({
                           description: result.message,
                           status: "success",
+                          duration: 2000
                       });
                       handleCloseModal()
                       

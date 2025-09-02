@@ -13,7 +13,7 @@ interface props {
 function CreateLoanProductStep({children}:props) {
    const pathname = usePathname();
    const router = useRouter();
-   const currentStep = pathname?.split('/').pop() || 'stepOne';
+   const currentStep = pathname?.split('/').pop() || 'step-one';
    const currentIndex =createLoanProductSteps.findIndex(step => step.id === currentStep);
    const completedSteps = createLoanProductSteps.slice(0, currentIndex).map(step => step.id);
 

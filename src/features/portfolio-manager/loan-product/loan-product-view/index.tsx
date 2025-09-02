@@ -66,8 +66,8 @@ const LoanProductPage = () => {
 
 
     const handleCreateButton = () => {
-        setCreateProduct(true)
-        // router.push('/loan-product/stepOne');
+        // setCreateProduct(true)
+        router.push('/loan-product/step-one');
     };
 
     const handleRowClick = (row: TableRowData) => {
