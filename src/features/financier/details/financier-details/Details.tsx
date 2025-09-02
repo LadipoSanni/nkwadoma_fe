@@ -21,8 +21,20 @@ const FinancierDetails = () => {
         { label: 'Financier type', value: <span className={`${data?.data?.financierType ===  "INDIVIDUAL" ? 'text-[#66440A] bg-[#FEF6E8]' : 'text-[#142854] bg-[#EEF5FF]'} rounded-[32px] p-2 h-5`}>{capitalizeFirstLetters(data?.data?.financierType)}</span>},
         {label: 'phone number', value:  data?.data?.phoneNumber ?? "Not provided"},
         {label: 'Address', value: data?.data?.address ?? "Not provided"},
-        {label: 'Organization admin name', value: data?.data?.firstName  + " " +  data?.data?.lastName },
-        {label: 'Organization admin email address', value: data?.data?.email ?? "Not provided"},
+        {label: 'Organization admin name', value: data?.data?.cooperateAdminName || "Not provided" },
+        {label: 'Organization admin email address', value: data?.data?.cooperateAdminEmail ?? "Not provided"},
+        // {label: 'Organization admin phone number', value:  ``?? "Not provided"},
+        {label: 'No. of investments', value: data?.data?.totalNumberOfInvestment ?? `Not provided`},
+        {label: 'Total amount invested', value:  formatAmount(data?.data?.totalNumberOfInvestment) ?? `Not provided`},
+        {label: 'Total income earned', value: formatAmount(data?.data?.totalIncomeEarned) ?? `Not provided`},
+        {label: 'Portfolio value', value: formatAmount(data?.data?.portfolioValue) ?? `Not provided`},
+
+    ]
+
+    const basicIndividualDetails = [
+        { label: 'Financier type', value: <span className={`text-[#66440A] bg-[#FEF6E8]  rounded-[32px] p-2 h-5`}>{capitalizeFirstLetters(data?.data?.financierType)}</span>},
+        {label: 'phone number', value:  data?.data?.phoneNumber ?? "Not provided"},
+        {label: 'Address', value: data?.data?.address ?? "Not provided"},
         // {label: 'Organization admin phone number', value:  ``?? "Not provided"},
         {label: 'No. of investments', value: data?.data?.totalNumberOfInvestment ?? `Not provided`},
         {label: 'Total amount invested', value:  formatAmount(data?.data?.totalNumberOfInvestment) ?? `Not provided`},
@@ -76,7 +88,16 @@ const FinancierDetails = () => {
                             </div>
                             <div className={`px `}>
                                 <div className={`bg-grey105 ${styles.container} min-h-[45vh] md:h-[48vh]  overflow-x-hidden md:overflow-y-auto`}>
-                                    {basicDetails.map((item, index) => (
+                                    { data?.data?.financierType === "COOPERATE"? basicDetails.map((item, index) => (
+                                        <li key={"key" + index} className={'p-4  grid gap-4 rounded-md'}>
+                                            <div
+                                                className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-9 '}>
+                                                <div className={` ${inter.className}text-black300 md:text-black300 md:text-[14px] text-[14px] `}>{item.label}</div>
+                                                <div
+                                                    className={` ${inter.className}  md:max-w-[40%] md:text-[14px] md:text-black500  md:break-all break-all text-black500 text-[14px] `}> {item?.value } </div>
+                                            </div>
+                                        </li>
+                                    )) : basicIndividualDetails.map((item, index) => (
                                         <li key={"key" + index} className={'p-4  grid gap-4 rounded-md'}>
                                             <div
                                                 className={'md:flex md:justify-between md:items-center md:gap-0 grid gap-9 '}>
