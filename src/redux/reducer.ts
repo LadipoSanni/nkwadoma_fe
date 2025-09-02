@@ -43,6 +43,7 @@ import requestReducer from "./slice/staff-and-request/request"
 import { walletApi } from '@/service/users/wallet';
 import idsReducer from './slice/id/slice-ids';
 import loanProductReducer from "./slice/loan-product/Loan-product"
+import createLoanOfferReducer from './slice/create/createLoanOfferSlice'
 
 const appReducer = combineReducers({
     adminLayout: adminLayoutReducer,
