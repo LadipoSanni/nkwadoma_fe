@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import {inter} from "@/app/fonts"
 import {Label} from '@/components/ui/label';
 import {Button} from '@/components/ui/button';
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import CurrencySelectInput from "@/reuseable/Input/CurrencySelectInput";
 import {useCreateLoanProductMutation} from "@/service/admin/loan_product";
 import Isloading from "@/reuseable/display/Isloading";
@@ -147,7 +147,7 @@ function StepTwo() {
 
     const handleInsuranceChange = (
         checked: boolean | string, 
-        setFieldValue: (field: string, value: any) => void, 
+        setFieldValue: (field: string, value: string | number | boolean | Obj[] | null | undefined) => void, 
         values: typeof initialFormValue,
         insuranceType: string,
     ) => {
@@ -169,7 +169,7 @@ function StepTwo() {
      
 
     const updateVendorField = (
-        setFieldValue: (field: string, value: any) => void,
+        setFieldValue: (field: string, value:string | number | boolean | Obj[] | null | undefined) => void,
         values: typeof initialFormValue,
         insuranceType: string,
         fieldName: keyof Obj,
