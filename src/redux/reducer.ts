@@ -68,6 +68,7 @@ const appReducer = combineReducers({
     ids: idsReducer,
     request: requestReducer,
     loanProduct: loanProductReducer,
+    createLoanOffer: createLoanOfferReducer,
     [userApi.reducerPath]: userApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [programApi.reducerPath]: programApi.reducer,
