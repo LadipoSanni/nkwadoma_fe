@@ -16,7 +16,7 @@ const Overview = () => {
                        <TabsTrigger id={'investment'} className={`w-fit ${inter.className} text-[14px] text-[#6A6B6A] data-[state=active]:text-[#212221] data-[state=active]:border data-[state=active]:border-grey-200 data-[state=active]:${inter500.className} `} value="investment">Investment</TabsTrigger>
                    </TabsList>
                </div>
-                <div className={` w-full h-[76vh] ${styles.container} `}>
+                <div className={` w-full pb-4  h-[76vh] ${styles.container} `}>
                     <TabsContent value={'loan'}>
                         <Loan/>
                     </TabsContent>

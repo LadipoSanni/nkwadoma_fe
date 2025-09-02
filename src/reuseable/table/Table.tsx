@@ -202,7 +202,7 @@ function DataTable<T extends TableRowData>({
           >
             <TableContainer
               id="loanProductTableScrollbar"
-              style={{ height: `${tableHeight}vh`, overflow: "auto" }}
+              style={{ height: `${tableHeight}vh`, overflow: "scroll" }}
             >
               <Table id="dynamicTable" className="">
                 <TableHeader
