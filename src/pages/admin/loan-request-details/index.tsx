@@ -222,6 +222,11 @@ function LoanDetails() {
         setOpenDeclineLoanRequestModal(value)
     }
 
+    const handleCreateLoanOfferFlow = () => {
+        router.push('/create-loan-offer')
+
+    }
+
 
     // const userFirstLetter: string | undefined = data?.data?.userIdentity?.firstName ? getFirstLetterOfWord(data?.data?.userIdentity?.firstName) + "" + getFirstLetterOfWord(data?.data?.userIdentity?.lastName) : ''
     const userFirstLetter = data?.data?.userIdentity?.firstName ?  getInitial(data?.data?.userIdentity?.firstName,data?.data?.userIdentity?.lastName) : ""
@@ -341,7 +346,7 @@ function LoanDetails() {
                                            <MenubarItem 
                                              id={'loanRequestDetailsApproveLoanRequestButton'}
                                              data-testid={'loanRequestDetailsApproveLoanRequestButton'}
-                                             onClick={() => setOpenCreateLoanOffer(true)}
+                                             onClick={handleCreateLoanOfferFlow}
                                              className="text-meedlBlue hover:!cursor-pointer  hover:!bg-[#EEF5FF] rounded-md"
                                            >
                                              Approve loan request

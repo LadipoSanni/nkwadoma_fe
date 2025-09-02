@@ -1,10 +1,9 @@
 import React from 'react';
+import Index from "@/components/createloanoffer";
 
 const Page = () => {
     return (
-        <div>
-            
-        </div>
+        <Index/>
     );
 };
 
