@@ -60,8 +60,8 @@ const FinancierDetails = () => {
             label: 'Company email address',
             value:  data?.data?.email
         },
-        {label: 'Organization admin name', value: data?.data?.firstName  + " " +  data?.data?.lastName || "Not provided" },
-        {label: 'Organization admin email address', value: ''},
+        {label: 'Organization admin name', value: data?.data?.cooperateAdminName || "Not provided" },
+        {label: 'Organization admin email address', value: data?.data?.cooperateAdminEmail},
 
     ]
 
@@ -78,51 +78,15 @@ const FinancierDetails = () => {
     const investmentDetails  = [
         {label: 'No. of investments', value: data?.data?.totalNumberOfInvestment},
         {label: 'Total amount invested', value:  formatAmount(data?.data?.totalAmountInvested)
-        // <NumericFormat
-        //         id={'totalAmountInvested'}
-        //         name={'totalAmountInvested'}
-        //         type="text"
-        //         disabled={true}
-        //         thousandSeparator=","
-        //         decimalScale={2}
-        //         fixedDecimalScale={true}
-        //         prefix={'₦'}
-        //         value={data?.data?.totalNumberOfInvestment}
-        //         className='bg-grey105 flex md:place-items-end'
-
-        //     />
+       
         },
         {label: 'Total income earned', value: formatAmount(data?.data?.totalIncomeEarned)
-            //  <NumericFormat
-            //     id={'totalAmountInvested'}
-            //     name={'totalAmountInvested'}
-            //     type="text"
-            //     disabled={true}
-            //     thousandSeparator=","
-            //     decimalScale={2}
-            //     fixedDecimalScale={true}
-            //     prefix={'₦'}
-            //     value={'0'}
-            //     className='bg-grey105 flex md:place-items-end'
-
-            // />
+            
         },
         {
             label: 'Portfolio value',
             value: formatAmount(data?.data?.portfolioValue)
-            // <NumericFormat
-            //     id={'totalAmountInvested'}
-            //     name={'totalAmountInvested'}
-            //     type="text"
-            //     disabled={true}
-            //     thousandSeparator=","
-            //     decimalScale={2}
-            //     fixedDecimalScale={true}
-            //     prefix={'₦'}
-            //     value={'0'}
-            //     className='bg-grey105 flex md:place-items-end'
-
-            // />
+            
         },
 
     ]
