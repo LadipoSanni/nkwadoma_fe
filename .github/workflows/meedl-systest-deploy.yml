@@ -1,4 +1,4 @@
-name: 🚀 Meedl dev Deployment
+name: 🚀 Meedl Systest Deployment
 
 on:
   push:
