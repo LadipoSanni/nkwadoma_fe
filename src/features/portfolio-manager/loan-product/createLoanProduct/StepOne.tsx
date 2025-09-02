@@ -36,7 +36,6 @@ function StepOne() {
     const fundProductAvailableAmount = useAppSelector(state => (state.selectedLoan.fundProductAvailableAmount))
     const loanProductField = useAppSelector(state => (state?.loanProduct?.createLoanProductField))
     const [selectCurrency, setSelectCurrency] = useState('NGN');
-    const [error, setError] = useState('');
     const [fundPageNumber, setFundPageNumber] = useState(0);
     const [hasNextfundPage, setHasNextfundPage] = useState(true);
     const [hasNextfinancierPage, setHasNextfinancierPage] = useState(true);
